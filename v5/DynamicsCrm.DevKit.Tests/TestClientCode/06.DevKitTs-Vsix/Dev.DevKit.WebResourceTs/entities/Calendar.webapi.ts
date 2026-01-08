@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Calendar
- * All fields return string representation of their values
- */
-export interface ICalendarFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly CalendarId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly HolidayScheduleCalendarId: string;
-	readonly IsShared: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly PrimaryUserId: string;
-	readonly Type: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Calendar WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICalendarApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICalendarFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICalendarApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the business unit with which the calendar is associated. */
 	BusinessUnitId: DevKit.Guid | null;
 	/** Unique identifier of the calendar. */

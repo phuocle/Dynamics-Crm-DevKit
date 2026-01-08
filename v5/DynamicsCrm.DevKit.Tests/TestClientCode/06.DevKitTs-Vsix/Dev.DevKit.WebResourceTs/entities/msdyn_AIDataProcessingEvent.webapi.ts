@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_AIDataProcessingEvent
- * All fields return string representation of their values
- */
-export interface Imsdyn_AIDataProcessingEventFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AIDataProcessingEventId: string;
-	readonly msdyn_CustomData: string;
-	readonly msdyn_InputData_name: string;
-	readonly msdyn_InputDataFormat: string;
-	readonly msdyn_Name: string;
-	readonly msdyn_ProcessedData: string;
-	readonly msdyn_ProcessingStatus: string;
-	readonly msdyn_ProcessorName: string;
-	readonly msdyn_ProcessorType: string;
-	readonly msdyn_ReceivedDate_TimezoneDateOnly: string;
-	readonly msdyn_UpdatedDate_UtcDateAndTime: string;
-	readonly msdyn_ValidationResult: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_AIDataProcessingEvent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_AIDataProcessingEventApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_AIDataProcessingEventFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_AIDataProcessingEventApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

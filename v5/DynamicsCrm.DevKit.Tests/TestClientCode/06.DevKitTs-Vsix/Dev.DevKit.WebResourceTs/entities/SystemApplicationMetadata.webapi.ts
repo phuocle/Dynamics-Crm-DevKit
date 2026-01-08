@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemApplicationMetadata
- * All fields return string representation of their values
- */
-export interface ISystemApplicationMetadataFormattedValue {
-	readonly AssociatedEntityLogicalName: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly Dependency: string;
-	readonly DisplayName: string;
-	readonly FormFactor: string;
-	readonly IsDefault: string;
-	readonly Lcid: string;
-	readonly MetadataSubtype: string;
-	readonly MetadataType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly SourceId: string;
-	readonly State: string;
-	readonly SystemApplicationMetadataId: string;
-	readonly Version: string;
-}
-
-/**
  * SystemApplicationMetadata WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemApplicationMetadataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemApplicationMetadataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemApplicationMetadataApi, 'FormattedValue'>]: string };
 	/** The logical name of the entity this application metadata is associated with. */
 	AssociatedEntityLogicalName: string | null;
 	/** Unique identifier of the user who created the record. */

@@ -6,58 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for workqueue
- * All fields return string representation of their values
- */
-export interface IworkqueueFormattedValue {
-	readonly allowupdateinputwhileprocessing: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly continueprocessingifslaviolated: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly defaultitemtimetoliveinminutes: string;
-	readonly description: string;
-	readonly ImportSequenceNumber: string;
-	readonly inputschema: string;
-	readonly inputschematype: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly itemmaxrequeuecount: string;
-	readonly itemmaxretrycount: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly prioritytype: string;
-	readonly slathresholdinpercentage: string;
-	readonly slathresholdmodifiedon_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly workqueueId: string;
-	readonly workqueuekey: string;
-	readonly WorkQueueType: string;
-}
-
-/**
  * workqueue WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IworkqueueApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IworkqueueFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IworkqueueApi, 'FormattedValue'>]: string };
 	/** Indicates whether updating the input while the item is in processing is allowed. Default value is NotSet. */
 	allowupdateinputwhileprocessing: number | null;
 	/** For internal use only. */

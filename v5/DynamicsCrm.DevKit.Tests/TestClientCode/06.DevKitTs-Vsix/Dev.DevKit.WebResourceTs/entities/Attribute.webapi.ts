@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Attribute
- * All fields return string representation of their values
- */
-export interface IAttributeFormattedValue {
-	readonly AttributeId: string;
-	readonly AttributeOf: string;
-	readonly AttributeTypeId: string;
-	readonly ComponentState: string;
-	readonly ExternalName: string;
-	readonly LogicalName: string;
-	readonly ManagedPropertyLogicalName: string;
-	readonly ManagedPropertyParentAttributeName: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PhysicalName: string;
-	readonly SolutionId: string;
-	readonly TableColumnName: string;
-	readonly ValidForReadAPI: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Attribute WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAttributeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAttributeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAttributeApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the attribute. */
 	AttributeId: DevKit.Guid | null;
 	/** Attribute Of */

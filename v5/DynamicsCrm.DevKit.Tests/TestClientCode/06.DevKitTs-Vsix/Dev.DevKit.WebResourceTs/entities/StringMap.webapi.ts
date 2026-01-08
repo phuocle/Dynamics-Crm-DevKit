@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StringMap
- * All fields return string representation of their values
- */
-export interface IStringMapFormattedValue {
-	readonly AttributeName: string;
-	readonly AttributeValue: string;
-	readonly DisplayOrder: string;
-	readonly LangId: string;
-	readonly OrganizationId: string;
-	readonly StringMapId: string;
-	readonly Value: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StringMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStringMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStringMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStringMapApi, 'FormattedValue'>]: string };
 	readonly AttributeName: string | null;
 	readonly AttributeValue: number | null;
 	DisplayOrder: number | null;

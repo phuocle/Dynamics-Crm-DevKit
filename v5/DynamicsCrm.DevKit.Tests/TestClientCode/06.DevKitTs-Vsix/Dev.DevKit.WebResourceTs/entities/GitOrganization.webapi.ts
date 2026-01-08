@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for GitOrganization
- * All fields return string representation of their values
- */
-export interface IGitOrganizationFormattedValue {
-	readonly GitOrganizationId: string;
-	readonly OrganizationName: string;
-}
-
-/**
  * GitOrganization WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGitOrganizationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGitOrganizationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGitOrganizationApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	GitOrganizationId: DevKit.Guid | null;
 	/** The name of the Git organization. */

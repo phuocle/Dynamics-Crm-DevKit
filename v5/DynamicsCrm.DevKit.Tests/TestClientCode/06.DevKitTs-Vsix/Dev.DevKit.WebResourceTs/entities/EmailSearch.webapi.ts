@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EmailSearch
- * All fields return string representation of their values
- */
-export interface IEmailSearchFormattedValue {
-	readonly EmailAddress: string;
-	readonly EmailSearchId: string;
-	readonly ParentObjectId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EmailSearch WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEmailSearchApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEmailSearchFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEmailSearchApi, 'FormattedValue'>]: string };
 	/** The email address */
 	EmailAddress: string | null;
 	/** Unique identifier of the email search entry. */

@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SubscriptionSyncEntryOffline
- * All fields return string representation of their values
- */
-export interface ISubscriptionSyncEntryOfflineFormattedValue {
-	readonly ObjectId: string;
-	readonly ObjectTypeCode: string;
-	readonly SubscriptionId: string;
-	readonly SyncState: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SubscriptionSyncEntryOffline WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionSyncEntryOfflineApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionSyncEntryOfflineFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionSyncEntryOfflineApi, 'FormattedValue'>]: string };
 	/** Object Id */
 	ObjectId: DevKit.Guid | null;
 	/** Entity object type code */

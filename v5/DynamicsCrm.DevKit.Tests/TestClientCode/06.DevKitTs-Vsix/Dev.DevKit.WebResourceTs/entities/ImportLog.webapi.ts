@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImportLog
- * All fields return string representation of their values
- */
-export interface IImportLogFormattedValue {
-	readonly AdditionalInfo: string;
-	readonly ColumnValue: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ErrorDescription: string;
-	readonly ErrorNumber: string;
-	readonly HeaderColumn: string;
-	readonly ImportDataId: string;
-	readonly ImportFileId: string;
-	readonly ImportLogId: string;
-	readonly LineNumber: string;
-	readonly LogPhaseCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SequenceNumber: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-}
-
-/**
  * ImportLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImportLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImportLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImportLogApi, 'FormattedValue'>]: string };
 	/** Additional information related to the error. */
 	AdditionalInfo: string | null;
 	/** Value in the column. */

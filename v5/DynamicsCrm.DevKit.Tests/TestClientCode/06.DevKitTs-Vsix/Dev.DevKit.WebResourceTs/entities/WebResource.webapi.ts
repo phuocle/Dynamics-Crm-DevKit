@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for WebResource
- * All fields return string representation of their values
- */
-export interface IWebResourceFormattedValue {
-	readonly CanBeDeleted: string;
-	readonly ComponentState: string;
-	readonly Content: string;
-	readonly ContentFileRef_name: string;
-	readonly ContentJson: string;
-	readonly ContentJsonFileRef_name: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DependencyXml: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly IntroducedVersion: string;
-	readonly IsAvailableForMobileOffline: string;
-	readonly IsCustomizable: string;
-	readonly IsEnabledForMobileClient: string;
-	readonly IsHidden: string;
-	readonly IsManaged: string;
-	readonly LanguageCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SilverlightVersion: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-	readonly WebResourceId: string;
-	readonly WebResourceIdUnique: string;
-	readonly WebResourceType: string;
-}
-
-/**
  * WebResource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWebResourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWebResourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWebResourceApi, 'FormattedValue'>]: string };
 	/** Information that specifies whether this component can be deleted. */
 	CanBeDeleted: string | null;
 	/** For internal use only. */

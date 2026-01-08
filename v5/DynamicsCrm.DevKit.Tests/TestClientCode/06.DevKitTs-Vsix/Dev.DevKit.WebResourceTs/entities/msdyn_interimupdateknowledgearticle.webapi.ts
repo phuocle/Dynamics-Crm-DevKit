@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_interimupdateknowledgearticle
- * All fields return string representation of their values
- */
-export interface Imsdyn_interimupdateknowledgearticleFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_compliancestatecode: string;
-	readonly msdyn_content: string;
-	readonly msdyn_creationmode: string;
-	readonly msdyn_interimupdateknowledgearticleId: string;
-	readonly msdyn_relatedrecord: string;
-	readonly msdyn_sourceofcreation: string;
-	readonly msdyn_statecode: string;
-	readonly msdyn_statuscode: string;
-	readonly msdyn_targetknowledgearticleid: string;
-	readonly msdyn_title: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_interimupdateknowledgearticle WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_interimupdateknowledgearticleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_interimupdateknowledgearticleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_interimupdateknowledgearticleApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

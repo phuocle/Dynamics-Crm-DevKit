@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for backgroundoperation
- * All fields return string representation of their values
- */
-export interface IbackgroundoperationFormattedValue {
-	readonly backgroundoperationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DisplayName: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly ErrorCode: string;
-	readonly ErrorMessage: string;
-	readonly ImportSequenceNumber: string;
-	readonly InputParameters: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OutputParameters: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly Priority: string;
-	readonly RetryCount: string;
-	readonly RunAs: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * backgroundoperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IbackgroundoperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IbackgroundoperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IbackgroundoperationApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	backgroundoperationId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the record. */

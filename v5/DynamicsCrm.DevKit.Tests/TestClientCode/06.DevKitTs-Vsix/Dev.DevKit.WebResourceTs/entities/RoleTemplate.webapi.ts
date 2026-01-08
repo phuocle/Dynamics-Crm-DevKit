@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RoleTemplate
- * All fields return string representation of their values
- */
-export interface IRoleTemplateFormattedValue {
-	readonly Name: string;
-	readonly RoleTemplateId: string;
-	readonly Upgrading: string;
-}
-
-/**
  * RoleTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRoleTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRoleTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRoleTemplateApi, 'FormattedValue'>]: string };
 	/** Name of the role template. */
 	Name: string | null;
 	/** Unique identifier of the role template. */

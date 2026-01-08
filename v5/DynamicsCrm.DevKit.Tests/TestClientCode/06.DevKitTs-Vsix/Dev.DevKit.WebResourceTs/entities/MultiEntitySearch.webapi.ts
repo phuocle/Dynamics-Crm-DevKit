@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MultiEntitySearch
- * All fields return string representation of their values
- */
-export interface IMultiEntitySearchFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly MultiEntitySearchId: string;
-	readonly Name: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MultiEntitySearch WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMultiEntitySearchApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMultiEntitySearchFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMultiEntitySearchApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

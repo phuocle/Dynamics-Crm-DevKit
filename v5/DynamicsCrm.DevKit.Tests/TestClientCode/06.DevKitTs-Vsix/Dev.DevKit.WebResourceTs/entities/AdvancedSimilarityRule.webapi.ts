@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AdvancedSimilarityRule
- * All fields return string representation of their values
- */
-export interface IAdvancedSimilarityRuleFormattedValue {
-	readonly AdvancedSimilarityRuleId: string;
-	readonly AdvancedSimilarityRuleIdUnique: string;
-	readonly AzureServiceConnectionId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly Entity2: string;
-	readonly ExactMatchList: string;
-	readonly FetchXmlList: string;
-	readonly FilterResultByStatus: string;
-	readonly FilterResultByStatusDisplayName: string;
-	readonly IsAzureMLRequired: string;
-	readonly IsManaged: string;
-	readonly MaxNumberKeyphrases: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly NgramSize: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-}
-
-/**
  * AdvancedSimilarityRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAdvancedSimilarityRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAdvancedSimilarityRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAdvancedSimilarityRuleApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AdvancedSimilarityRuleId: DevKit.Guid | null;
 	/** Unique identifier of the Advanced Similarity Rule used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */

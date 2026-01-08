@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CalendarRule
- * All fields return string representation of their values
- */
-export interface ICalendarRuleFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly CalendarId: string;
-	readonly CalendarRuleId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly Duration: string;
-	readonly EffectiveIntervalEnd_UtcDateOnly: string;
-	readonly EffectiveIntervalStart_UtcDateOnly: string;
-	readonly Effort: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly ExtentCode: string;
-	readonly GroupDesignator: string;
-	readonly InnerCalendarId: string;
-	readonly IsModified: string;
-	readonly IsSelected: string;
-	readonly IsSimple: string;
-	readonly IsVaried: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly Offset: string;
-	readonly OrganizationId: string;
-	readonly Pattern: string;
-	readonly Rank: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly SubCode: string;
-	readonly TimeCode: string;
-	readonly TimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CalendarRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICalendarRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICalendarRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICalendarRuleApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the business unit with which the calendar rule is associated. */
 	readonly BusinessUnitId: DevKit.Guid | null;
 	/** Unique identifier of the calendar with which the calendar rule is associated. */

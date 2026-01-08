@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OrgInsightsMetric
- * All fields return string representation of their values
- */
-export interface IOrgInsightsMetricFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly InternalName: string;
-	readonly MetricType: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OrgInsightsMetricId: string;
-}
-
-/**
  * OrgInsightsMetric WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOrgInsightsMetricApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOrgInsightsMetricFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOrgInsightsMetricApi, 'FormattedValue'>]: string };
 	/** Date and time when the organization insights metric was created */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** Name of the metric which is used for retrieving the data */

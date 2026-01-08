@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerbireport
- * All fields return string representation of their values
- */
-export interface IpowerbireportFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DatasetId: string;
-	readonly Etag: string;
-	readonly ImportPowerBIComponentSequenceNumber: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Package_name: string;
-	readonly powerbireportId: string;
-	readonly ReportObjectId: string;
-	readonly ReportOriginalObjectId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WorkspaceObjectId: string;
-}
-
-/**
  * powerbireport WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IpowerbireportApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpowerbireportFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IpowerbireportApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

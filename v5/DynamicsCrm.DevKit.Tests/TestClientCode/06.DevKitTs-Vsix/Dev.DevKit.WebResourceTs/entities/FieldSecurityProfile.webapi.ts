@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for FieldSecurityProfile
- * All fields return string representation of their values
- */
-export interface IFieldSecurityProfileFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly FieldSecurityProfileId: string;
-	readonly FieldSecurityProfileIdUnique: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * FieldSecurityProfile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFieldSecurityProfileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFieldSecurityProfileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFieldSecurityProfileApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the profile. */

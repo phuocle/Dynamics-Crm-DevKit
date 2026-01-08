@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CustomerRelationship
- * All fields return string representation of their values
- */
-export interface ICustomerRelationshipFormattedValue {
-	readonly ConverseRelationshipId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomerId: string;
-	readonly CustomerRelationshipId: string;
-	readonly CustomerRoleDescription: string;
-	readonly CustomerRoleId: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartnerId: string;
-	readonly PartnerRoleDescription: string;
-	readonly PartnerRoleId: string;
-	readonly UniqueDscId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CustomerRelationship WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICustomerRelationshipApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICustomerRelationshipFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICustomerRelationshipApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the converse relationship of the customer relationship. */
 	ConverseRelationshipId: DevKit.Guid | null;
 	/** Shows who created the record. */

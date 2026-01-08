@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for supportusertable
- * All fields return string representation of their values
- */
-export interface IsupportusertableFormattedValue {
-	readonly AADUserObjectId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EnabledforSoftDelete: string;
-	readonly ExpiryDateTime_UtcDateAndTime: string;
-	readonly IdentityProvider: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsActive: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly supportusertableId: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UPN: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * supportusertable WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsupportusertableApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsupportusertableFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsupportusertableApi, 'FormattedValue'>]: string };
 	/** AAD ObjectId of the support user. */
 	AADUserObjectId: string | null;
 	/** Unique identifier of the user who created the record. */

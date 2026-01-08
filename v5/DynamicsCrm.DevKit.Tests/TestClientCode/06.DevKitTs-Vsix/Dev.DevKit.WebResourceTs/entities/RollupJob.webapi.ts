@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RollupJob
- * All fields return string representation of their values
- */
-export interface IRollupJobFormattedValue {
-	readonly DepthProcessed: string;
-	readonly PostponeUntil_UtcDateAndTime: string;
-	readonly RecordCreatedOn_UtcDateAndTime: string;
-	readonly RegardingObjectId: string;
-	readonly RetryCount: string;
-	readonly RollupJobId2: string;
-	readonly RollupPropertiesId: string;
-	readonly SourceEntityTypeCode: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-}
-
-/**
  * RollupJob WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRollupJobApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRollupJobFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRollupJobApi, 'FormattedValue'>]: string };
 	readonly DepthProcessed: number | null;
 	readonly PostponeUntil_UtcDateAndTime: Date | null;
 	readonly RecordCreatedOn_UtcDateAndTime: Date | null;

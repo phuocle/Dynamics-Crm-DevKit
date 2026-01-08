@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_pmrecording
- * All fields return string representation of their values
- */
-export interface Imsdyn_pmrecordingFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_iterationid: string;
-	readonly msdyn_lasterrors: string;
-	readonly msdyn_name: string;
-	readonly msdyn_normalizedrecording: string;
-	readonly msdyn_parenttask: string;
-	readonly msdyn_pmrecordingId: string;
-	readonly msdyn_publishingstatus: string;
-	readonly msdyn_sourceworkflow: string;
-	readonly msdyn_type: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_pmrecording WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_pmrecordingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_pmrecordingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_pmrecordingApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

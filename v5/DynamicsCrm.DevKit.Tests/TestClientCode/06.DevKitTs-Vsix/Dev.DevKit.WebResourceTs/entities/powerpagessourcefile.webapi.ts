@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerpagessourcefile
- * All fields return string representation of their values
- */
-export interface IpowerpagessourcefileFormattedValue {
-	readonly codetype: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly filecontent_name: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly powerpagesiteid: string;
-	readonly powerpagessourcefileId: string;
-	readonly searchcontent: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerpagessourcefile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IpowerpagessourcefileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpowerpagessourcefileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IpowerpagessourcefileApi, 'FormattedValue'>]: string };
 	/** Type of source file */
 	codetype: number | null;
 	/** For internal use only. */

@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for usermobileofflineprofilemembership
- * All fields return string representation of their values
- */
-export interface IusermobileofflineprofilemembershipFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly HasMobileOfflineProfileIdConflict: string;
-	readonly ImportSequenceNumber: string;
-	readonly MobileOfflineProfileId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SystemUserId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly usermobileofflineprofilemembershipId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * usermobileofflineprofilemembership WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IusermobileofflineprofilemembershipApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IusermobileofflineprofilemembershipFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IusermobileofflineprofilemembershipApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

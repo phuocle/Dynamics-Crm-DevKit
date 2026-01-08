@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for IntegrationStatus
- * All fields return string representation of their values
- */
-export interface IIntegrationStatusFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IntegrationEntryId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectId: string;
-	readonly OrganizationId: string;
-	readonly StateCode: string;
-	readonly StateDescription: string;
-	readonly StatusCode: string;
-	readonly StatusDescription: string;
-	readonly SystemName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * IntegrationStatus WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IIntegrationStatusApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IIntegrationStatusFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IIntegrationStatusApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the integration status. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the integration status was created. */

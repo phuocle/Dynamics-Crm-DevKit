@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Subject
- * All fields return string representation of their values
- */
-export interface ISubjectFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedByExternalParty: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly FeatureMask: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedByExternalParty: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ParentSubject: string;
-	readonly SubjectId: string;
-	readonly Title: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Subject WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubjectApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubjectFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubjectApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the subject. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the external party who created the record. */

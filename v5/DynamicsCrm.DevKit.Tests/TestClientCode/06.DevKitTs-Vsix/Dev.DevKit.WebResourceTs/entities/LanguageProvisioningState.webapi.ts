@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for LanguageProvisioningState
- * All fields return string representation of their values
- */
-export interface ILanguageProvisioningStateFormattedValue {
-	readonly ApplicationVersion: string;
-	readonly LanguageId: string;
-	readonly LanguageProvisioningStateId: string;
-	readonly ProvisioningStage: string;
-	readonly SolutionFileVersion: string;
-	readonly SolutionUniqueName: string;
-}
-
-/**
  * LanguageProvisioningState WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ILanguageProvisioningStateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ILanguageProvisioningStateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ILanguageProvisioningStateApi, 'FormattedValue'>]: string };
 	/** Application Version */
 	ApplicationVersion: string | null;
 	/** Language Id */

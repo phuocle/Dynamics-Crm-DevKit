@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for agentmemory
- * All fields return string representation of their values
- */
-export interface IagentmemoryFormattedValue {
-	readonly agenticscenario: string;
-	readonly AgentId: string;
-	readonly agentmemoryId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly SessionId: string;
-	readonly SourceId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * agentmemory WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IagentmemoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IagentmemoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IagentmemoryApi, 'FormattedValue'>]: string };
 	/** Agentic Scenario */
 	agenticscenario: DevKit.Guid | null;
 	/** Agent Id */

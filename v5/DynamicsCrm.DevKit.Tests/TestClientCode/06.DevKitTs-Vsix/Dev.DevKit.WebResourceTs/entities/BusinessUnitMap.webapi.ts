@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BusinessUnitMap
- * All fields return string representation of their values
- */
-export interface IBusinessUnitMapFormattedValue {
-	readonly BusinessId: string;
-	readonly BusinessUnitMapId: string;
-	readonly SubBusinessId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BusinessUnitMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBusinessUnitMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBusinessUnitMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBusinessUnitMapApi, 'FormattedValue'>]: string };
 	BusinessId: DevKit.Guid | null;
 	/** Unique identifier of the business unit. */
 	BusinessUnitMapId: DevKit.Guid | null;

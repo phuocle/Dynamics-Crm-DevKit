@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for retentionoperationdetail
- * All fields return string representation of their values
- */
-export interface IretentionoperationdetailFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityLogicalName: string;
-	readonly FailedCount: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsRootEntity: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly RetentionCount: string;
-	readonly retentionoperationdetailId: string;
-	readonly RetentionOperationId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * retentionoperationdetail WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IretentionoperationdetailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IretentionoperationdetailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IretentionoperationdetailApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

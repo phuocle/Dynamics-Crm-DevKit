@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EnvironmentVariableDefinition
- * All fields return string representation of their values
- */
-export interface IEnvironmentVariableDefinitionFormattedValue {
-	readonly ApiId: string;
-	readonly ComponentState: string;
-	readonly ConnectionReferenceId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultValue: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly EnvironmentVariableDefinitionId: string;
-	readonly EnvironmentVariableDefinitionIdUnique: string;
-	readonly Hint: string;
-	readonly ImportSequenceNumber: string;
-	readonly InputControlConfig: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsRequired: string;
-	readonly LearnMoreUrl: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParameterKey: string;
-	readonly ParentDefinitionId: string;
-	readonly SchemaName: string;
-	readonly SecretStore: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Type: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly ValueSchema: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EnvironmentVariableDefinition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEnvironmentVariableDefinitionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEnvironmentVariableDefinitionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEnvironmentVariableDefinitionApi, 'FormattedValue'>]: string };
 	/** API Id */
 	ApiId: string | null;
 	/** For internal use only. */

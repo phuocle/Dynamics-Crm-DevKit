@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserQuery
- * All fields return string representation of their values
- */
-export interface IUserQueryFormattedValue {
-	readonly AdvancedGroupBy: string;
-	readonly ColumnSetXml: string;
-	readonly ConditionalFormatting: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EnableCrossPartition: string;
-	readonly FetchXml: string;
-	readonly LayoutJson: string;
-	readonly LayoutXml: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OfflineSqlQuery: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentQueryId: string;
-	readonly QueryType: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly UserQueryId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * UserQuery WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserQueryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserQueryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserQueryApi, 'FormattedValue'>]: string };
 	/** Type the column name that will be used to group the results from the data collected across multiple records from a user view. */
 	AdvancedGroupBy: string | null;
 	/** Shows the columns and sorting criteria for the saved view, stored in XML format. */

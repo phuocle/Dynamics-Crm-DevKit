@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for reconciliationentityinfo
- * All fields return string representation of their values
- */
-export interface IreconciliationentityinfoFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Criteria: string;
-	readonly EntityLogicalName: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastDeltaConvertedVersion: string;
-	readonly LastSuccessfullReconciledVersion: string;
-	readonly Message: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly reconciliationentityinfoId: string;
-	readonly ReconciliationInfoId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * reconciliationentityinfo WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IreconciliationentityinfoApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IreconciliationentityinfoFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IreconciliationentityinfoApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

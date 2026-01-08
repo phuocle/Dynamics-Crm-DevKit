@@ -6,75 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SocialActivity
- * All fields return string representation of their values
- */
-export interface ISocialActivityFormattedValue {
-	readonly ActivityAdditionalParams: string;
-	readonly ActivityId: string;
-	readonly ActualDurationMinutes: string;
-	readonly ActualEnd_UtcDateAndTime: string;
-	readonly ActualStart_UtcDateAndTime: string;
-	readonly Community: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DirectionCode: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly InResponseTo: string;
-	readonly IsBilled: string;
-	readonly IsRegularActivity: string;
-	readonly IsWorkflowCreated: string;
-	readonly LastOnHoldTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OnHoldTime: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PostAuthor: string;
-	readonly PostAuthorAccount: string;
-	readonly PostedOn_UtcDateAndTime: string;
-	readonly PostFromProfileId: string;
-	readonly PostId: string;
-	readonly PostMessageType: string;
-	readonly PostToProfileId: string;
-	readonly PostURL: string;
-	readonly PriorityCode: string;
-	readonly ProcessId: string;
-	readonly RegardingObjectId: string;
-	readonly ScheduledDurationMinutes: string;
-	readonly ScheduledEnd_UtcDateAndTime: string;
-	readonly ScheduledStart_UtcDateAndTime: string;
-	readonly SentimentValue: string;
-	readonly SLAId: string;
-	readonly SLAInvokedId: string;
-	readonly SocialAdditionalParams: string;
-	readonly SortDate_UtcDateAndTime: string;
-	readonly StageId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subject: string;
-	readonly ThreadId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SocialActivity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISocialActivityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISocialActivityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISocialActivityApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	ActivityAdditionalParams: string | null;
 	/** Unique identifier of the activity. */

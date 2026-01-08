@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerpagecomponent_mspp_webrole_contact
- * All fields return string representation of their values
- */
-export interface Ipowerpagecomponent_mspp_webrole_contactFormattedValue {
-	readonly contactid: string;
-	readonly powerpagecomponent_mspp_webrole_contactId: string;
-	readonly powerpagecomponentid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerpagecomponent_mspp_webrole_contact WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ipowerpagecomponent_mspp_webrole_contactApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ipowerpagecomponent_mspp_webrole_contactFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ipowerpagecomponent_mspp_webrole_contactApi, 'FormattedValue'>]: string };
 	readonly contactid: DevKit.Guid | null;
 	readonly powerpagecomponent_mspp_webrole_contactId: DevKit.Guid | null;
 	readonly powerpagecomponentid: DevKit.Guid | null;

@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AttributeMap
- * All fields return string representation of their values
- */
-export interface IAttributeMapFormattedValue {
-	readonly AttributeMapId: string;
-	readonly AttributeMapIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityMapId: string;
-	readonly IsManaged: string;
-	readonly IsSystem: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ParentAttributeMapId: string;
-	readonly SolutionId: string;
-	readonly SourceAttributeName: string;
-	readonly SupportingSolutionId: string;
-	readonly TargetAttributeName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AttributeMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAttributeMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAttributeMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAttributeMapApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the attribute map. */
 	AttributeMapId: DevKit.Guid | null;
 	/** For internal use only. */

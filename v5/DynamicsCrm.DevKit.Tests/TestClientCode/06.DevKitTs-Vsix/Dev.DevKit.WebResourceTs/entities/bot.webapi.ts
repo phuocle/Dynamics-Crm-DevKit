@@ -6,63 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for bot
- * All fields return string representation of their values
- */
-export interface IbotFormattedValue {
-	readonly accesscontrolpolicy: string;
-	readonly applicationmanifestinformation: string;
-	readonly authenticationconfiguration: string;
-	readonly authenticationmode: string;
-	readonly authenticationtrigger: string;
-	readonly authorizedsecuritygroupids: string;
-	readonly botId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Configuration: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly iconbase64: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly Language: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly Origin: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ProviderConnectionReferenceId: string;
-	readonly publishedby: string;
-	readonly publishedon_UtcDateAndTime: string;
-	readonly RuntimeProvider: string;
-	readonly SchemaName: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportedLanguages: string;
-	readonly SupportingSolutionId: string;
-	readonly SynchronizationStatus: string;
-	readonly Template: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * bot WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IbotApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IbotFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IbotApi, 'FormattedValue'>]: string };
 	/** Defines which users may interact with the bot. */
 	accesscontrolpolicy: number | null;
 	/** Stores information with application manifest data such as Teams application information. */

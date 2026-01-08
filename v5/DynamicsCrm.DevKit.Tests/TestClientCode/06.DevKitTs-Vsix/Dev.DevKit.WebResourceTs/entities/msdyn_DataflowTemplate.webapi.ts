@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_DataflowTemplate
- * All fields return string representation of their values
- */
-export interface Imsdyn_DataflowTemplateFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_Category: string;
-	readonly msdyn_Configuration: string;
-	readonly msdyn_DataflowTemplateId: string;
-	readonly msdyn_Description: string;
-	readonly msdyn_HelpLink: string;
-	readonly msdyn_IsDisabled: string;
-	readonly msdyn_MashupDocument: string;
-	readonly msdyn_TemplateIcon: string;
-	readonly msdyn_TemplateIconId: string;
-	readonly msdyn_TemplateName: string;
-	readonly msdyn_TemplateState: string;
-	readonly msdyn_TemplateVersion: string;
-	readonly msdyn_UniqueName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_DataflowTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_DataflowTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_DataflowTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_DataflowTemplateApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

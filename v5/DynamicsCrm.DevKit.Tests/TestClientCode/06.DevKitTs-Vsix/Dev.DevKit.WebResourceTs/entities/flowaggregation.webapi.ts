@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowaggregation
- * All fields return string representation of their values
- */
-export interface IflowaggregationFormattedValue {
-	readonly aggregationtype: string;
-	readonly aggregationvalue: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly errorcode: string;
-	readonly flowaggregationId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsTopLevelRun: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly status: string;
-	readonly timeend_UtcDateAndTime: string;
-	readonly timestart_UtcDateAndTime: string;
-	readonly triggertype: string;
-	readonly TTLInSeconds: string;
-	readonly value: string;
-	readonly VersionNumber: string;
-	readonly WorkflowCategory: string;
-	readonly workflowid: string;
-}
-
-/**
  * flowaggregation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IflowaggregationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IflowaggregationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IflowaggregationApi, 'FormattedValue'>]: string };
 	/** Aggregation Type */
 	aggregationtype: string | null;
 	/** Aggregation value */

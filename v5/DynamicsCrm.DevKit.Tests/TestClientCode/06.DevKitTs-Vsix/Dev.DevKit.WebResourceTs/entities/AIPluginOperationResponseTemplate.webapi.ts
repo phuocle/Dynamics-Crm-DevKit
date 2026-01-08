@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AIPluginOperationResponseTemplate
- * All fields return string representation of their values
- */
-export interface IAIPluginOperationResponseTemplateFormattedValue {
-	readonly AIPluginOperationResponseTemplateId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AIPluginOperationResponseTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAIPluginOperationResponseTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAIPluginOperationResponseTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAIPluginOperationResponseTemplateApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AIPluginOperationResponseTemplateId: DevKit.Guid | null;
 	/** For internal use only. */

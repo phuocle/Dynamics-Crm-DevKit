@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for unstructuredfilesearchrecord
- * All fields return string representation of their values
- */
-export interface IunstructuredfilesearchrecordFormattedValue {
-	readonly AttributeType: string;
-	readonly CitationLink: string;
-	readonly ColumnName: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Filedata_name: string;
-	readonly FileId: string;
-	readonly FileName: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RecordId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UnstructuredFileSearchEntityId: string;
-	readonly unstructuredfilesearchrecordId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * unstructuredfilesearchrecord WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IunstructuredfilesearchrecordApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IunstructuredfilesearchrecordFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IunstructuredfilesearchrecordApi, 'FormattedValue'>]: string };
 	/** AttributeType */
 	AttributeType: number | null;
 	/** URL link to the source file data. */

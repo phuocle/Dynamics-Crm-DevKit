@@ -6,54 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ManagedIdentity
- * All fields return string representation of their values
- */
-export interface IManagedIdentityFormattedValue {
-	readonly ApplicationId: string;
-	readonly ClientSecret: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CredentialSource: string;
-	readonly IdentityType: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly KeyVaultReferenceId: string;
-	readonly ManagedIdentityId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly ObjectId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SubjectScope: string;
-	readonly SupportingSolutionId: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ManagedIdentity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IManagedIdentityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IManagedIdentityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IManagedIdentityApi, 'FormattedValue'>]: string };
 	/** Application Id */
 	ApplicationId: DevKit.Guid | null;
 	/** Contains a secret for the Azure Active Directory application. Once set, it cannot be read except by Dataverse. */

@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for HierarchySecurityConfiguration
- * All fields return string representation of their values
- */
-export interface IHierarchySecurityConfigurationFormattedValue {
-	readonly EntityName2: string;
-	readonly HierarchySecurityModelingSettingId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * HierarchySecurityConfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IHierarchySecurityConfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IHierarchySecurityConfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IHierarchySecurityConfigurationApi, 'FormattedValue'>]: string };
 	/** Logical entity name of the entity that is configured for hierarchy security. */
 	EntityName2: string | null;
 	/** Shows the entity used for the Hierarchy Security Modeling Configuration. */

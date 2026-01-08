@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_kalanguagesetting
- * All fields return string representation of their values
- */
-export interface Imsdyn_kalanguagesettingFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_agentid: string;
-	readonly msdyn_kalanguagesettingId: string;
-	readonly msdyn_languagelocaleid: string;
-	readonly msdyn_name: string;
-	readonly msdyn_useOrgUILanguage: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_kalanguagesetting WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_kalanguagesettingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_kalanguagesettingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_kalanguagesettingApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

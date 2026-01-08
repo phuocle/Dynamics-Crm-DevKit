@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PostFollow
- * All fields return string representation of their values
- */
-export interface IPostFollowFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PostFollowId: string;
-	readonly PostToYammer: string;
-	readonly RegardingObjectId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly YammerPostState: string;
-	readonly YammerRetryCount: string;
-}
-
-/**
  * PostFollow WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPostFollowApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPostFollowFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPostFollowApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

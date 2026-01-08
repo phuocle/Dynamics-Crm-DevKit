@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ChannelAccessProfileRuleItem
- * All fields return string representation of their values
- */
-export interface IChannelAccessProfileRuleItemFormattedValue {
-	readonly AssociatedChannelAccessProfile: string;
-	readonly ChannelAccessProfileRuleId: string;
-	readonly ChannelAccessProfileRuleItemId: string;
-	readonly ChannelAccessProfileRuleItemIdUnique: string;
-	readonly ComponentState: string;
-	readonly ConditionXml: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly SequenceNumber: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ChannelAccessProfileRuleItem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IChannelAccessProfileRuleItemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IChannelAccessProfileRuleItemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IChannelAccessProfileRuleItemApi, 'FormattedValue'>]: string };
 	/** Choose the channel access profile that the item is assigned to. */
 	AssociatedChannelAccessProfile: DevKit.Guid | null;
 	/** Shows the channel access profile rule associated with this channel access profile rule item. */

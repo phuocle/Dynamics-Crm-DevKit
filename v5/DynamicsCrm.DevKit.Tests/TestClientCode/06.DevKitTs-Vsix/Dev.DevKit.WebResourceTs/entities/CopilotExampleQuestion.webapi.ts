@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CopilotExampleQuestion
- * All fields return string representation of their values
- */
-export interface ICopilotExampleQuestionFormattedValue {
-	readonly AppContext: string;
-	readonly Comment: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CopilotExampleQuestionId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomDimension: string;
-	readonly CustomField: string;
-	readonly DynamicKnowledge: string;
-	readonly EntityScope: string;
-	readonly EntityScopeColumn: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly Knowledge: string;
-	readonly knowledgetype: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwningBusinessUnit: string;
-	readonly Question: string;
-	readonly Rephrase: string;
-	readonly Skill: string;
-	readonly SkillId: string;
-	readonly SolutionId: string;
-	readonly SQLCorrectness: string;
-	readonly StandardSQL: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CopilotExampleQuestion WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICopilotExampleQuestionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICopilotExampleQuestionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICopilotExampleQuestionApi, 'FormattedValue'>]: string };
 	/** AppContext for distinguishing between apps within the organization. */
 	AppContext: string | null;
 	/** Explanation of the question. */

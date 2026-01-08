@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ACIViewMapper
- * All fields return string representation of their values
- */
-export interface IACIViewMapperFormattedValue {
-	readonly ACIViewMapperId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly statecode: string;
-	readonly StatusCode: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly ViewName: string;
-	readonly WebApplicationEndPoint: string;
-}
-
-/**
  * ACIViewMapper WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IACIViewMapperApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IACIViewMapperFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IACIViewMapperApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	ACIViewMapperId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the display string. */

@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DataPerformance
- * All fields return string representation of their values
- */
-export interface IDataPerformanceFormattedValue {
-	readonly AnyOptimizationApplied: string;
-	readonly AnyOptimizationAvailable: string;
-	readonly Component: string;
-	readonly Count: string;
-	readonly DataPerformanceId: string;
-	readonly Entity2: string;
-	readonly EstimatedOptimizationImpact: string;
-	readonly ExecutionPeriod: string;
-	readonly LastActionResult: string;
-	readonly LastOptimizationDate_UtcDateAndTime: string;
-	readonly MaxTime: string;
-	readonly MedianTime: string;
-	readonly MinTime: string;
-	readonly Operation: string;
-	readonly OptimizationStatus: string;
-	readonly OptimizationStorage: string;
-	readonly OrganizationId: string;
-	readonly RealizedOptimizationImpact: string;
-	readonly Solution: string;
-	readonly Weight: string;
-}
-
-/**
  * DataPerformance WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDataPerformanceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDataPerformanceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDataPerformanceApi, 'FormattedValue'>]: string };
 	/** An internal state which indicates whether at least one optimization is applied. */
 	readonly AnyOptimizationApplied: boolean | null;
 	/** An internal state which indicates whether at least one optimization is available for this record. */

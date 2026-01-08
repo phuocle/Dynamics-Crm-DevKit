@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OrganizationUI
- * All fields return string representation of their values
- */
-export interface IOrganizationUIFormattedValue {
-	readonly ComponentState: string;
-	readonly FieldXml: string;
-	readonly FormId: string;
-	readonly FormIdUnique: string;
-	readonly FormXml: string;
-	readonly GridIcon: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly LargeEntityIcon: string;
-	readonly OrganizationId: string;
-	readonly OutlookShortcutIcon: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PreviewColumnsetXml: string;
-	readonly PreviewXml: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * OrganizationUI WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOrganizationUIApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOrganizationUIFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOrganizationUIApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** For internal use only. */

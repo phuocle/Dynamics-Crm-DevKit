@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for workflowcardconnections
- * All fields return string representation of their values
- */
-export interface IworkflowcardconnectionsFormattedValue {
-	readonly cardid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-	readonly workflowcardconnectionsId: string;
-	readonly workflowid: string;
-}
-
-/**
  * workflowcardconnections WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IworkflowcardconnectionsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IworkflowcardconnectionsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IworkflowcardconnectionsApi, 'FormattedValue'>]: string };
 	readonly cardid: DevKit.Guid | null;
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;

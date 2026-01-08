@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RecommendedDocument
- * All fields return string representation of their values
- */
-export interface IRecommendedDocumentFormattedValue {
-	readonly AbsoluteUrl: string;
-	readonly AssociatedRecordName: string;
-	readonly Author: string;
-	readonly ContentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EditUrl: string;
-	readonly ExchangeRate: string;
-	readonly ExternalDocumentId: string;
-	readonly ExternalModifiedBy: string;
-	readonly FileSize: string;
-	readonly FileType: string;
-	readonly FullName: string;
-	readonly IconClassName: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly ReadUrl: string;
-	readonly RecommendedDocumentId: string;
-	readonly RegardingObjectId: string;
-	readonly Source: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RecommendedDocument WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRecommendedDocumentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRecommendedDocumentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRecommendedDocumentApi, 'FormattedValue'>]: string };
 	/** Type the URL where the recommended document is located. */
 	readonly AbsoluteUrl: string | null;
 	/** Shows the associated record name of the recommended document. */

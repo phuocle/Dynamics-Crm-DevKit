@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Theme
- * All fields return string representation of their values
- */
-export interface IThemeFormattedValue {
-	readonly AccentColor: string;
-	readonly BackgroundColor: string;
-	readonly ControlBorder: string;
-	readonly ControlShade: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultCustomEntityColor: string;
-	readonly DefaultEntityColor: string;
-	readonly ExchangeRate: string;
-	readonly GlobalLinkColor: string;
-	readonly HeaderColor: string;
-	readonly HoverLinkEffect: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsDefaultTheme: string;
-	readonly LogoId: string;
-	readonly LogoToolTip: string;
-	readonly MainColor: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NavBarBackgroundColor: string;
-	readonly NavBarShelfColor: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PageHeaderBackgroundColor: string;
-	readonly PanelHeaderBackgroundColor: string;
-	readonly ProcessControlColor: string;
-	readonly SelectedLinkEffect: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly ThemeId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly Type: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Theme WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IThemeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IThemeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IThemeApi, 'FormattedValue'>]: string };
 	/** Choose the Unified Interface secondary theme color to be used on the process control */
 	AccentColor: string | null;
 	/** For internal use only. */

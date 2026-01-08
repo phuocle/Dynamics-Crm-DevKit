@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserBusinessUnitEntityMap
- * All fields return string representation of their values
- */
-export interface ISystemUserBusinessUnitEntityMapFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly ReadPrivilegeDepth: string;
-	readonly SystemUserBusinessUnitEntityMapId: string;
-	readonly SystemUserId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemUserBusinessUnitEntityMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserBusinessUnitEntityMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserBusinessUnitEntityMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserBusinessUnitEntityMapApi, 'FormattedValue'>]: string };
 	readonly BusinessUnitId: DevKit.Guid | null;
 	readonly ReadPrivilegeDepth: number | null;
 	/** Unique identifier of the SystemUserBusinessUnitEntityMap . */

@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ChannelAccessProfileEntityAccessLevel
- * All fields return string representation of their values
- */
-export interface IChannelAccessProfileEntityAccessLevelFormattedValue {
-	readonly ChannelAccessProfileEntityAccessLevelId: string;
-	readonly ChannelAccessProfileEntityAccessLevelIdUnique: string;
-	readonly ChannelAccessProfileId: string;
-	readonly ComponentState: string;
-	readonly EntityAccessLevelDepthMask: string;
-	readonly EntityAccessLevelId: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ChannelAccessProfileEntityAccessLevel WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IChannelAccessProfileEntityAccessLevelApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IChannelAccessProfileEntityAccessLevelFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IChannelAccessProfileEntityAccessLevelApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the entity access level associated with the channel access profile. */
 	ChannelAccessProfileEntityAccessLevelId: DevKit.Guid | null;
 	/** For internal use only. */

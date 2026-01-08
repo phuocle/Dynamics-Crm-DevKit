@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SyncAttributeMappingProfile
- * All fields return string representation of their values
- */
-export interface ISyncAttributeMappingProfileFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly SyncAttributeMappingProfileId: string;
-	readonly SyncAttributeMappingProfileIdUnique: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SyncAttributeMappingProfile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISyncAttributeMappingProfileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISyncAttributeMappingProfileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISyncAttributeMappingProfileApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the profile. */

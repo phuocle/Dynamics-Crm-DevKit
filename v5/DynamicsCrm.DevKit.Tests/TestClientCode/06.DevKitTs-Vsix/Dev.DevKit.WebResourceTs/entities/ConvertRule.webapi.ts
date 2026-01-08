@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ConvertRule
- * All fields return string representation of their values
- */
-export interface IConvertRuleFormattedValue {
-	readonly AllowUnknownSender: string;
-	readonly ChannelPropertyGroupId: string;
-	readonly CheckActiveEntitlement: string;
-	readonly CheckBlockedSocialProfile: string;
-	readonly CheckDirectMessages: string;
-	readonly CheckIfResolved: string;
-	readonly ComponentState: string;
-	readonly ConvertRuleId: string;
-	readonly ConvertRuleIdUnique: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly QueueId: string;
-	readonly RecordVersion: string;
-	readonly ResolvedSince: string;
-	readonly ResponseTemplateId: string;
-	readonly SendAutomaticResponse: string;
-	readonly SolutionId: string;
-	readonly SourceTypeCode: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-	readonly WorkflowId: string;
-}
-
-/**
  * ConvertRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IConvertRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IConvertRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IConvertRuleApi, 'FormattedValue'>]: string };
 	/** Choose whether items from unknown senders should be converted to records. */
 	AllowUnknownSender: boolean | null;
 	/** channel property group associated with the convert rule. */

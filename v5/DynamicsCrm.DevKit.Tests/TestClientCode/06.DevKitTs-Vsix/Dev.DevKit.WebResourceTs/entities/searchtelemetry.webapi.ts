@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for searchtelemetry
- * All fields return string representation of their values
- */
-export interface IsearchtelemetryFormattedValue {
-	readonly CorrelationId: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly EyesOnAnalyticsAllowed: string;
-	readonly FeedbackData: string;
-	readonly PartitionId: string;
-	readonly RequestId: string;
-	readonly ScenarioName: string;
-	readonly searchtelemetryId: string;
-	readonly SessionId: string;
-	readonly TTLInSeconds: string;
-	readonly UserQuery: string;
-	readonly versionnumber: string;
-}
-
-/**
  * searchtelemetry WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsearchtelemetryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsearchtelemetryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsearchtelemetryApi, 'FormattedValue'>]: string };
 	/** CorrelationId for the search */
 	CorrelationId: string | null;
 	/** Date and time when the record was created. */

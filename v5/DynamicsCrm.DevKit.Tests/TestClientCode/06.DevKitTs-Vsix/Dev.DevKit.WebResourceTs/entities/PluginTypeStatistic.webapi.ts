@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PluginTypeStatistic
- * All fields return string representation of their values
- */
-export interface IPluginTypeStatisticFormattedValue {
-	readonly AverageExecuteTimeInMilliseconds: string;
-	readonly CrashContributionPercent: string;
-	readonly CrashCount: string;
-	readonly CrashPercent: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExecuteCount: string;
-	readonly FailureCount: string;
-	readonly FailurePercent: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PluginTypeId: string;
-	readonly PluginTypeStatisticId: string;
-	readonly TerminateCpuContributionPercent: string;
-	readonly TerminateHandlesContributionPercent: string;
-	readonly TerminateMemoryContributionPercent: string;
-	readonly TerminateOtherContributionPercent: string;
-}
-
-/**
  * PluginTypeStatistic WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPluginTypeStatisticApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPluginTypeStatisticFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPluginTypeStatisticApi, 'FormattedValue'>]: string };
 	/** The average execution time (in milliseconds) for the plug-in type. */
 	readonly AverageExecuteTimeInMilliseconds: number | null;
 	/** The plug-in type percentage contribution to crashes. */

@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for GitProject
- * All fields return string representation of their values
- */
-export interface IGitProjectFormattedValue {
-	readonly GitProjectId: string;
-	readonly OrganizationName: string;
-	readonly ProjectName: string;
-}
-
-/**
  * GitProject WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGitProjectApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGitProjectFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGitProjectApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	GitProjectId: DevKit.Guid | null;
 	/** Name of the Git Organization associated with Git Project. */

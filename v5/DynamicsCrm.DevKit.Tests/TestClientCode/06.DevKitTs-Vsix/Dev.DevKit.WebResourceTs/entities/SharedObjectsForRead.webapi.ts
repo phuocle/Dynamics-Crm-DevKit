@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SharedObjectsForRead
- * All fields return string representation of their values
- */
-export interface ISharedObjectsForReadFormattedValue {
-	readonly ObjectId: string;
-	readonly ObjectTypeCode: string;
-	readonly SharedObjectsForReadId: string;
-	readonly UserIds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SharedObjectsForRead WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISharedObjectsForReadApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISharedObjectsForReadFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISharedObjectsForReadApi, 'FormattedValue'>]: string };
 	readonly ObjectId: DevKit.Guid | null;
 	readonly ObjectTypeCode: number | null;
 	readonly SharedObjectsForReadId: DevKit.Guid | null;

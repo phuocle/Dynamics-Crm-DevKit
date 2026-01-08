@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for adx_webformsession
- * All fields return string representation of their values
- */
-export interface Iadx_webformsessionFormattedValue {
-	readonly adx_anonymousidentification: string;
-	readonly adx_contact: string;
-	readonly adx_currentstepindex: string;
-	readonly adx_name: string;
-	readonly adx_primaryrecordentitykeyname: string;
-	readonly adx_primaryrecordentitylogicalname: string;
-	readonly adx_primaryrecordid: string;
-	readonly adx_stephistory: string;
-	readonly adx_systemuser: string;
-	readonly adx_userhostaddress: string;
-	readonly adx_useridentityname: string;
-	readonly adx_webformsessionId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly mspp_webformid: string;
-	readonly mspp_webformstepid: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * adx_webformsession WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iadx_webformsessionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iadx_webformsessionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iadx_webformsessionApi, 'FormattedValue'>]: string };
 	/** Anonymous Identification */
 	adx_anonymousidentification: string | null;
 	/** Unique identifier for Contact associated with Multistep Form Session. */

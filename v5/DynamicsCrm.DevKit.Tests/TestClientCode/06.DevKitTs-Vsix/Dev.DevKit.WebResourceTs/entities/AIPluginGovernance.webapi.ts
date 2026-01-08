@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AIPluginGovernance
- * All fields return string representation of their values
- */
-export interface IAIPluginGovernanceFormattedValue {
-	readonly AICopilot: string;
-	readonly AIPlugin: string;
-	readonly AIPluginGovernanceId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Enable: string;
-	readonly ExternalKey: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AIPluginGovernance WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAIPluginGovernanceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAIPluginGovernanceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAIPluginGovernanceApi, 'FormattedValue'>]: string };
 	/** AI Copilot */
 	AICopilot: DevKit.Guid | null;
 	/** AI Plugin */

@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RelationshipRoleMap
- * All fields return string representation of their values
- */
-export interface IRelationshipRoleMapFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly RelationshipRoleId: string;
-	readonly RelationshipRoleMapId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RelationshipRoleMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRelationshipRoleMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRelationshipRoleMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRelationshipRoleMapApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the relationship role map. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the relationship role map was created. */

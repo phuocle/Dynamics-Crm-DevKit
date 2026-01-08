@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerbimashupparameter
- * All fields return string representation of their values
- */
-export interface IpowerbimashupparameterFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DatasetId: string;
-	readonly EnvironmentVariableId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsNotRequired: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParameterLiteralValue: string;
-	readonly ParameterName: string;
-	readonly ParameterValueSource: string;
-	readonly powerbimashupparameterId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerbimashupparameter WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IpowerbimashupparameterApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpowerbimashupparameterFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IpowerbimashupparameterApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

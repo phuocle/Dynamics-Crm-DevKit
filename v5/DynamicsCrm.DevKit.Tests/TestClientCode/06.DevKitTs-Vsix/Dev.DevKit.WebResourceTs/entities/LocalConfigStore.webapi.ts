@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for LocalConfigStore
- * All fields return string representation of their values
- */
-export interface ILocalConfigStoreFormattedValue {
-	readonly AssemblyName: string;
-	readonly Id: string;
-	readonly IsValueSet: string;
-	readonly KeyName: string;
-	readonly PublicToken: string;
-	readonly Value: string;
-}
-
-/**
  * LocalConfigStore WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ILocalConfigStoreApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ILocalConfigStoreFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ILocalConfigStoreApi, 'FormattedValue'>]: string };
 	/** Assembly Name */
 	readonly AssemblyName: string | null;
 	/** Unique identifier of LocalConfigStore entry. */

@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SocialInsightsConfiguration
- * All fields return string representation of their values
- */
-export interface ISocialInsightsConfigurationFormattedValue {
-	readonly ControlId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly FormId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly RegardingObjectId: string;
-	readonly SocialDataItemId: string;
-	readonly SocialDataItemType: string;
-	readonly SocialDataParameters: string;
-	readonly SocialInsightsConfigurationId: string;
-}
-
-/**
  * SocialInsightsConfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISocialInsightsConfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISocialInsightsConfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISocialInsightsConfigurationApi, 'FormattedValue'>]: string };
 	/** Id of the control. */
 	ControlId: string | null;
 	/** Unique identifier of the user who created the record. */

@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BulkDeleteOperation
- * All fields return string representation of their values
- */
-export interface IBulkDeleteOperationFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly BulkDeleteOperationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly FailureCount: string;
-	readonly IsRecurring: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NextRun_UtcDateAndTime: string;
-	readonly OrderedQuerySetXml: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly ProcessingQEIndex: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SuccessCount: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * BulkDeleteOperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBulkDeleteOperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBulkDeleteOperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBulkDeleteOperationApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the system job that created this record */
 	readonly AsyncOperationId: DevKit.Guid | null;
 	/** Unique identifier of the bulk deletion job. */

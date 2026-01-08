@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserSearchFacet
- * All fields return string representation of their values
- */
-export interface IUserSearchFacetFormattedValue {
-	readonly AttributeName: string;
-	readonly EntityName2: string;
-	readonly FacetOrder: string;
-	readonly SystemUserId: string;
-	readonly UserSearchFacetId: string;
-}
-
-/**
  * UserSearchFacet WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserSearchFacetApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserSearchFacetFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserSearchFacetApi, 'FormattedValue'>]: string };
 	AttributeName: string | null;
 	EntityName2: string | null;
 	FacetOrder: number | null;

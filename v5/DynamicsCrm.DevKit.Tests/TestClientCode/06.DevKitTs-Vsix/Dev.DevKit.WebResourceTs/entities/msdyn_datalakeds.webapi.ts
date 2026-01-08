@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_datalakeds
- * All fields return string representation of their values
- */
-export interface Imsdyn_datalakedsFormattedValue {
-	readonly msdyn_datalakedsId: string;
-	readonly msdyn_name: string;
-}
-
-/**
  * msdyn_datalakeds WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_datalakedsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_datalakedsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_datalakedsApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	msdyn_datalakedsId: DevKit.Guid | null;
 	/** The name of the custom entity. */

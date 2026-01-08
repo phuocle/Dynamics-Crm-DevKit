@@ -6,121 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_entityform
- * All fields return string representation of their values
- */
-export interface Imspp_entityformFormattedValue {
-	readonly mspp_appendquerystring: string;
-	readonly mspp_associatecurrentportaluser: string;
-	readonly mspp_attachfile: string;
-	readonly mspp_attachfileaccept: string;
-	readonly mspp_attachfileacceptextensions: string;
-	readonly mspp_attachfileallowmultiple: string;
-	readonly mspp_attachfilelabel: string;
-	readonly mspp_attachfilemaxsize: string;
-	readonly mspp_attachfilerequired: string;
-	readonly mspp_attachfilerequirederrormessage: string;
-	readonly mspp_attachfilerestrictaccept: string;
-	readonly mspp_attachfilesaveoption: string;
-	readonly mspp_attachfilesizeerrormessage: string;
-	readonly mspp_attachfilestoragelocation: string;
-	readonly mspp_attachfiletypeerrormessage: string;
-	readonly mspp_autogeneratesteps: string;
-	readonly mspp_captcharequired: string;
-	readonly mspp_containername: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_entityformId: string;
-	readonly mspp_entityname: string;
-	readonly mspp_entitypermissionsenabled: string;
-	readonly mspp_entitysourcetype: string;
-	readonly mspp_forceallfieldsrequired: string;
-	readonly mspp_formname: string;
-	readonly mspp_geolocation_addresslinefieldname: string;
-	readonly mspp_geolocation_cityfieldname: string;
-	readonly mspp_geolocation_countryfieldname: string;
-	readonly mspp_geolocation_countyfieldname: string;
-	readonly mspp_geolocation_displaymap: string;
-	readonly mspp_geolocation_enabled: string;
-	readonly mspp_geolocation_formattedaddressfieldname: string;
-	readonly mspp_geolocation_latitudefieldname: string;
-	readonly mspp_geolocation_longitudefieldname: string;
-	readonly mspp_geolocation_maptype: string;
-	readonly mspp_geolocation_neighborhoodfieldname: string;
-	readonly mspp_geolocation_postalcodefieldname: string;
-	readonly mspp_geolocation_statefieldname: string;
-	readonly mspp_hideformonsuccess: string;
-	readonly mspp_instructions: string;
-	readonly mspp_maximumnooffiles: string;
-	readonly mspp_mode: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_nextbuttoncssclass: string;
-	readonly mspp_nextbuttontext: string;
-	readonly mspp_onsuccess: string;
-	readonly mspp_populatereferenceentitylookupfield: string;
-	readonly mspp_portaluserlookupattributeisactivityparty: string;
-	readonly mspp_previousbuttoncssclass: string;
-	readonly mspp_previousbuttontext: string;
-	readonly mspp_primarykeyname: string;
-	readonly mspp_provisionedlanguages: string;
-	readonly mspp_recommendedfieldsrequired: string;
-	readonly mspp_recordidquerystringparametername: string;
-	readonly mspp_recordnotfoundmessage: string;
-	readonly mspp_recordsourceallowcreateonnull: string;
-	readonly mspp_recordsourceentitylogicalname: string;
-	readonly mspp_recordsourcerelationshipname: string;
-	readonly mspp_redirecturl: string;
-	readonly mspp_redirecturlappendentityidquerystring: string;
-	readonly mspp_redirecturlcustomquerystring: string;
-	readonly mspp_redirecturlquerystringattribute: string;
-	readonly mspp_redirecturlquerystringattributeparamname: string;
-	readonly mspp_redirecturlquerystringname: string;
-	readonly mspp_redirectwebpage: string;
-	readonly mspp_referenceentitylogicalname: string;
-	readonly mspp_referenceentityprimarykeylogicalname: string;
-	readonly mspp_referenceentityreadonlyformname: string;
-	readonly mspp_referenceentityrelationshipname: string;
-	readonly mspp_referenceentityshowreadonlyform: string;
-	readonly mspp_referenceentitysourcetype: string;
-	readonly mspp_referencequeryattributelogicalname: string;
-	readonly mspp_referencequerystringisprimarykey: string;
-	readonly mspp_referencequerystringname: string;
-	readonly mspp_referencerecordsourcerelationshipname: string;
-	readonly mspp_referencetargetlookupattributelogicalname: string;
-	readonly mspp_registerstartupscript: string;
-	readonly mspp_renderwebresourcesinline: string;
-	readonly mspp_setentityreference: string;
-	readonly mspp_settings: string;
-	readonly mspp_showcaptchaforauthenticatedusers: string;
-	readonly mspp_showownerfields: string;
-	readonly mspp_showunsupportedfields: string;
-	readonly mspp_storageaccountname: string;
-	readonly mspp_submitbuttonbusytext: string;
-	readonly mspp_submitbuttoncssclass: string;
-	readonly mspp_submitbuttontext: string;
-	readonly mspp_successmessage: string;
-	readonly mspp_tabname: string;
-	readonly mspp_targetentityportaluserlookupattribute: string;
-	readonly mspp_tooltipenabled: string;
-	readonly mspp_validationgroup: string;
-	readonly mspp_validationsummarycssclass: string;
-	readonly mspp_validationsummaryheadertext: string;
-	readonly mspp_validationsummarylinksenabled: string;
-	readonly mspp_validationsummarylinktext: string;
-	readonly mspp_websiteid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_entityform WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_entityformApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_entityformFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_entityformApi, 'FormattedValue'>]: string };
 	/** Append Query String */
 	mspp_appendquerystring: boolean | null;
 	/** Associate Current Portal User */

@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for makerfewshot
- * All fields return string representation of their values
- */
-export interface ImakerfewshotFormattedValue {
-	readonly Comment: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityScope: string;
-	readonly EntityScopeColumn: string;
-	readonly ImportSequenceNumber: string;
-	readonly makerfewshotId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly Query: string;
-	readonly Rephrase: string;
-	readonly SQLCorrectness: string;
-	readonly StandardSQL: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * makerfewshot WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ImakerfewshotApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ImakerfewshotFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ImakerfewshotApi, 'FormattedValue'>]: string };
 	/** Explanation of the query. */
 	Comment: string | null;
 	/** Unique identifier of the user who created the record. */

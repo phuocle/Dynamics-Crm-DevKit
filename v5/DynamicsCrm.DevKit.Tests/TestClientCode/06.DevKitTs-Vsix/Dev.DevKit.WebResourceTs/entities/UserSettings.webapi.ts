@@ -6,127 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserSettings
- * All fields return string representation of their values
- */
-export interface IUserSettingsFormattedValue {
-	readonly AddressBookSyncInterval: string;
-	readonly AdvancedFindStartupMode: string;
-	readonly AllowEmailCredentials: string;
-	readonly AMDesignator: string;
-	readonly AutoCaptureUserStatus: string;
-	readonly AutoCreateContactOnPromote: string;
-	readonly BusinessUnitId: string;
-	readonly CalendarType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CurrencyDecimalPrecision: string;
-	readonly CurrencyFormatCode: string;
-	readonly CurrencySymbol: string;
-	readonly D365AutoInstallAttemptStatus: string;
-	readonly DataValidationModeForExportToExcel: string;
-	readonly DateFormatCode: string;
-	readonly DateFormatString: string;
-	readonly DateSeparator: string;
-	readonly DecimalSymbol: string;
-	readonly DefaultCalendarView: string;
-	readonly DefaultCountryCode: string;
-	readonly DefaultDashboardId: string;
-	readonly DefaultSearchExperience: string;
-	readonly EmailPassword: string;
-	readonly EmailUsername: string;
-	readonly EntityFormMode: string;
-	readonly FullNameConventionCode: string;
-	readonly GetStartedPaneContentEnabled: string;
-	readonly HelpLanguageId: string;
-	readonly HomepageArea: string;
-	readonly HomepageLayout: string;
-	readonly HomepageSubarea: string;
-	readonly IgnoreUnsolicitedEmail: string;
-	readonly IncomingEmailFilteringMethod: string;
-	readonly IsAppsForCrmAlertDismissed: string;
-	readonly IsAutoDataCaptureEnabled: string;
-	readonly IsDefaultCountryCodeCheckEnabled: string;
-	readonly IsDuplicateDetectionEnabledWhenGoingOnline: string;
-	readonly IsEmailConversationViewEnabled: string;
-	readonly IsGuidedHelpEnabled: string;
-	readonly IsResourceBookingExchangeSyncEnabled: string;
-	readonly IsSendAsAllowed: string;
-	readonly LastAlertsViewedTime_UtcDateAndTime: string;
-	readonly LastModifiedTimeForViewPersonalizationSettings_UtcDateAndTime: string;
-	readonly LocaleId: string;
-	readonly LongDateFormatCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly NegativeCurrencyFormatCode: string;
-	readonly NegativeFormatCode: string;
-	readonly NextTrackingNumber: string;
-	readonly NumberGroupFormat: string;
-	readonly NumberSeparator: string;
-	readonly OfflineSyncInterval: string;
-	readonly OutlookSyncInterval: string;
-	readonly PagingLimit: string;
-	readonly PersonalizationSettings: string;
-	readonly PMDesignator: string;
-	readonly PreferredSolution: string;
-	readonly PricingDecimalPrecision: string;
-	readonly ReleaseChannel: string;
-	readonly ReportScriptErrors: string;
-	readonly ResourceBookingExchangeSyncVersion: string;
-	readonly SelectedGlobalFilterId: string;
-	readonly ShowWeekNumber: string;
-	readonly SplitViewState: string;
-	readonly SyncContactCompany: string;
-	readonly SystemUserId: string;
-	readonly TableScopedDVSearchFeatureTeachingBubbleViews: string;
-	readonly TableScopedDVSearchQuickFindTeachingBubbleViews: string;
-	readonly TimeFormatCode: string;
-	readonly TimeFormatString: string;
-	readonly TimeSeparator: string;
-	readonly TimeZoneBias: string;
-	readonly TimeZoneCode: string;
-	readonly TimeZoneDaylightBias: string;
-	readonly TimeZoneDaylightDay: string;
-	readonly TimeZoneDaylightDayOfWeek: string;
-	readonly TimeZoneDaylightHour: string;
-	readonly TimeZoneDaylightMinute: string;
-	readonly TimeZoneDaylightMonth: string;
-	readonly TimeZoneDaylightSecond: string;
-	readonly TimeZoneDaylightYear: string;
-	readonly TimeZoneStandardBias: string;
-	readonly TimeZoneStandardDay: string;
-	readonly TimeZoneStandardDayOfWeek: string;
-	readonly TimeZoneStandardHour: string;
-	readonly TimeZoneStandardMinute: string;
-	readonly TimeZoneStandardMonth: string;
-	readonly TimeZoneStandardSecond: string;
-	readonly TimeZoneStandardYear: string;
-	readonly TrackingTokenId: string;
-	readonly TransactionCurrencyId: string;
-	readonly TryToggleSets: string;
-	readonly TryToggleStatus: string;
-	readonly UILanguageId: string;
-	readonly UseCrmFormForAppointment: string;
-	readonly UseCrmFormForContact: string;
-	readonly UseCrmFormForEmail: string;
-	readonly UseCrmFormForTask: string;
-	readonly UseImageStrips: string;
-	readonly UserProfile: string;
-	readonly VersionNumber: string;
-	readonly VisualizationPaneLayout: string;
-	readonly WorkdayStartTime: string;
-	readonly WorkdayStopTime: string;
-}
-
-/**
  * UserSettings WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserSettingsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserSettingsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserSettingsApi, 'FormattedValue'>]: string };
 	/** Normal polling frequency used for address book synchronization in Microsoft Office Outlook. */
 	AddressBookSyncInterval: number | null;
 	/** Default mode, such as simple or detailed, for advanced find. */

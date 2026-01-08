@@ -6,32 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ExpanderEvent
- * All fields return string representation of their values
- */
-export interface IExpanderEventFormattedValue {
-	readonly ContextUri: string;
-	readonly CorrelationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExpanderEventId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly Registrations: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ExpanderEvent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IExpanderEventApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IExpanderEventFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IExpanderEventApi, 'FormattedValue'>]: string };
 	/** The URI where the context is stored. */
 	ContextUri: string | null;
 	/** Unique identifier used to correlate between expander events and SDK message invocations. */

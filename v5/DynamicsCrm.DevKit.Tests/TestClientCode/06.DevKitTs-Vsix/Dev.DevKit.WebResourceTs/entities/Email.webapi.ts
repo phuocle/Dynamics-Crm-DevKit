@@ -6,119 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Email
- * All fields return string representation of their values
- */
-export interface IEmailFormattedValue {
-	readonly AcceptingEntityId: string;
-	readonly ActivityAdditionalParams: string;
-	readonly ActivityId: string;
-	readonly ActualDurationMinutes: string;
-	readonly ActualEnd_UtcDateOnly: string;
-	readonly ActualStart_UtcDateOnly: string;
-	readonly AttachmentCount: string;
-	readonly AttachmentOpenCount: string;
-	readonly BaseConversationIndexHash: string;
-	readonly Category: string;
-	readonly Compressed: string;
-	readonly ConversationIndex: string;
-	readonly ConversationTrackingId: string;
-	readonly CorrelatedActivityId: string;
-	readonly correlatedsubjectchanged: string;
-	readonly CorrelationMethod: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DelayedEmailSendTime_UtcDateAndTime: string;
-	readonly DeliveryAttempts: string;
-	readonly DeliveryPriorityCode: string;
-	readonly DeliveryReceiptRequested: string;
-	readonly Description: string;
-	readonly DescriptionBlobId_name: string;
-	readonly DirectionCode: string;
-	readonly EmailReminderExpiryTime_UtcDateAndTime: string;
-	readonly EmailReminderStatus: string;
-	readonly EmailReminderText: string;
-	readonly EmailReminderType: string;
-	readonly EmailSender: string;
-	readonly EmailTrackingId: string;
-	readonly ExchangeRate: string;
-	readonly FollowEmailUserPreference: string;
-	readonly ImportSequenceNumber: string;
-	readonly InReplyTo: string;
-	readonly InternetMessageHeaders: string;
-	readonly IsBilled: string;
-	readonly IsDuplicateSenderUnresolved: string;
-	readonly IsEmailFollowed: string;
-	readonly IsEmailReminderSet: string;
-	readonly IsRegularActivity: string;
-	readonly IsSafeDescriptionTruncated: string;
-	readonly IsUnsafe: string;
-	readonly IsWorkflowCreated: string;
-	readonly LastOnHoldTime_UtcDateAndTime: string;
-	readonly LastOpenedTime_UtcDateAndTime: string;
-	readonly LinksClickedCount: string;
-	readonly MessageId: string;
-	readonly MessageIdDupCheck: string;
-	readonly MimeType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Notifications: string;
-	readonly OnHoldTime: string;
-	readonly OpenCount: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentActivityId: string;
-	readonly ParentSensitivityLabelId: string;
-	readonly PostponeEmailProcessingUntil_UtcDateAndTime: string;
-	readonly PriorityCode: string;
-	readonly ProcessId: string;
-	readonly PurviewRights: string;
-	readonly ReadReceiptRequested: string;
-	readonly ReceivingMailboxId: string;
-	readonly RegardingObjectId: string;
-	readonly ReminderActionCardId: string;
-	readonly ReplyCount: string;
-	readonly ReservedForInternalUse: string;
-	readonly ScheduledDurationMinutes: string;
-	readonly ScheduledEnd_UtcDateAndTime: string;
-	readonly ScheduledStart_UtcDateAndTime: string;
-	readonly Sender: string;
-	readonly SenderMailboxId: string;
-	readonly SendersAccount: string;
-	readonly SensitivityLabelId: string;
-	readonly SensitivityLabelInfo: string;
-	readonly SentOn_UtcDateAndTime: string;
-	readonly SLAId: string;
-	readonly SLAInvokedId: string;
-	readonly SortDate_UtcDateAndTime: string;
-	readonly StageId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subcategory: string;
-	readonly Subject: string;
-	readonly SubmittedBy: string;
-	readonly TemplateId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly ToRecipients: string;
-	readonly TrackingToken: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Email WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEmailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEmailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEmailApi, 'FormattedValue'>]: string };
 	/** The Entity that Accepted the Email */
 	AcceptingEntityId: DevKit.Guid | null;
 	/** For internal use only. */

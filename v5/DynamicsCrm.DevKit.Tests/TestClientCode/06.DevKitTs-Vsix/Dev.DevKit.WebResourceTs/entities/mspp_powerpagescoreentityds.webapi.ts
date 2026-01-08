@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_powerpagescoreentityds
- * All fields return string representation of their values
- */
-export interface Imspp_powerpagescoreentitydsFormattedValue {
-	readonly mspp_name: string;
-	readonly mspp_powerpagescoreentitydsId: string;
-}
-
-/**
  * mspp_powerpagescoreentityds WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_powerpagescoreentitydsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_powerpagescoreentitydsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_powerpagescoreentitydsApi, 'FormattedValue'>]: string };
 	/** Name */
 	mspp_name: string | null;
 	/** Unique identifier for entity instances */

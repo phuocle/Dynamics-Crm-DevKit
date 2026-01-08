@@ -6,59 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CustomAPI
- * All fields return string representation of their values
- */
-export interface ICustomAPIFormattedValue {
-	readonly AllowedCustomProcessingStepType: string;
-	readonly BindingType: string;
-	readonly BoundEntityLogicalName: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomAPIId: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly ExecutePrivilegeName: string;
-	readonly FxExpressionId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsFunction: string;
-	readonly IsManaged: string;
-	readonly IsPrivate: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PluginTypeId: string;
-	readonly PowerfxRuleId: string;
-	readonly SdkMessageId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WorkflowSdkStepEnabled: string;
-}
-
-/**
  * CustomAPI WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICustomAPIApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICustomAPIFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICustomAPIApi, 'FormattedValue'>]: string };
 	/** The type of custom processing step allowed */
 	AllowedCustomProcessingStepType: number | null;
 	/** The binding type of the custom API */

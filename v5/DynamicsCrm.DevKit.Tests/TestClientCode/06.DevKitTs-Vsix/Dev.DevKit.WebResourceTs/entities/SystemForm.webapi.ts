@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemForm
- * All fields return string representation of their values
- */
-export interface ISystemFormFormattedValue {
-	readonly AncestorFormId: string;
-	readonly CanBeDeleted: string;
-	readonly ComponentState: string;
-	readonly Description: string;
-	readonly FormActivationState: string;
-	readonly FormId: string;
-	readonly FormIdUnique: string;
-	readonly FormJson: string;
-	readonly FormPresentation: string;
-	readonly FormXml: string;
-	readonly FormXmlManaged: string;
-	readonly IntroducedVersion: string;
-	readonly IsAIRMerged: string;
-	readonly IsCustomizable: string;
-	readonly IsDefault: string;
-	readonly IsDesktopEnabled: string;
-	readonly IsManaged: string;
-	readonly IsTabletEnabled: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PublishedOn_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly Type: string;
-	readonly UniqueName: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemForm WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemFormApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemFormFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemFormApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the parent form. */
 	AncestorFormId: DevKit.Guid | null;
 	/** Information that specifies whether this component can be deleted. */

@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TextAnalyticsEntityMapping
- * All fields return string representation of their values
- */
-export interface ITextAnalyticsEntityMappingFormattedValue {
-	readonly AdvancedSimilarityRuleId: string;
-	readonly ComponentState: string;
-	readonly Entity2: string;
-	readonly EntityDisplayName: string;
-	readonly EntityPickList: string;
-	readonly Field: string;
-	readonly FieldDisplayName: string;
-	readonly FieldPickList: string;
-	readonly IsManaged: string;
-	readonly IsTextMatchMapping: string;
-	readonly KnowledgeSearchModelId: string;
-	readonly ModelType: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RelationshipName: string;
-	readonly SimilarityRuleId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TextAnalyticsEntityMappingId: string;
-	readonly TextAnalyticsEntityMappingIdUnique: string;
-}
-
-/**
  * TextAnalyticsEntityMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITextAnalyticsEntityMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITextAnalyticsEntityMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITextAnalyticsEntityMappingApi, 'FormattedValue'>]: string };
 	/** Advanced Similarity RuleId associated with entity mapping. */
 	AdvancedSimilarityRuleId: DevKit.Guid | null;
 	/** For internal use only. */

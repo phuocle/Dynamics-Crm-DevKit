@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TransactionCurrency
- * All fields return string representation of their values
- */
-export interface ITransactionCurrencyFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CurrencyName: string;
-	readonly CurrencyPrecision: string;
-	readonly CurrencySymbol: string;
-	readonly CurrencyType: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly ISOCurrencyCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TransactionCurrencyId: string;
-	readonly UniqueDscId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TransactionCurrency WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITransactionCurrencyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITransactionCurrencyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITransactionCurrencyApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the transaction currency. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the transaction currency was created. */

@@ -6,55 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Feedback
- * All fields return string representation of their values
- */
-export interface IFeedbackFormattedValue {
-	readonly adx_approved: string;
-	readonly adx_authorurl: string;
-	readonly Adx_ContactEmail: string;
-	readonly Adx_ContactUsername: string;
-	readonly Adx_CreatedByContact: string;
-	readonly ClosedBy: string;
-	readonly ClosedOn_UtcDateAndTime: string;
-	readonly Comments: string;
-	readonly CreatedBy: string;
-	readonly CreatedByContact: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CreatedOnBehalfByContact: string;
-	readonly ExchangeRate: string;
-	readonly FeedbackId: string;
-	readonly ImportSequenceNumber: string;
-	readonly MaxRating: string;
-	readonly MinRating: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_ContextObjectId: string;
-	readonly NormalizedRating: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Rating: string;
-	readonly RegardingObjectId: string;
-	readonly Source: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Feedback WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFeedbackApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFeedbackFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFeedbackApi, 'FormattedValue'>]: string };
 	/** Shows whether the feedback is approved for display. */
 	adx_approved: boolean | null;
 	/** The URL of the author’s home page/blog. */

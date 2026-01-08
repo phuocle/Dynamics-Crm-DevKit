@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspcat_PackageStore
- * All fields return string representation of their values
- */
-export interface Imspcat_PackageStoreFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly mspcat_AsyncOperationId: string;
-	readonly mspcat_IntendedDeploymentType: string;
-	readonly mspcat_Name: string;
-	readonly mspcat_Operation: string;
-	readonly mspcat_PackageFile_name: string;
-	readonly mspcat_PackageStoreId: string;
-	readonly mspcat_ProcessingMessage: string;
-	readonly mspcat_SolutionUniqueName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * mspcat_PackageStore WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspcat_PackageStoreApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspcat_PackageStoreFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspcat_PackageStoreApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

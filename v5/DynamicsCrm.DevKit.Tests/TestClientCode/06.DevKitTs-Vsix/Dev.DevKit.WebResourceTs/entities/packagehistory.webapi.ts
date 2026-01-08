@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for packagehistory
- * All fields return string representation of their values
- */
-export interface IpackagehistoryFormattedValue {
-	readonly ApplicationId: string;
-	readonly ApplicationName: string;
-	readonly CatalogId: string;
-	readonly CorrelationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DeployAsUserId: string;
-	readonly DeploymentLog_name: string;
-	readonly DeploymentMessageId: string;
-	readonly ExecutionName: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsClusterOperation: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OperationId: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PackageFile_name: string;
-	readonly packagehistoryId: string;
-	readonly PackageId: string;
-	readonly PackageInstanceId: string;
-	readonly PackageType: string;
-	readonly Priority: string;
-	readonly PublisherId: string;
-	readonly PublisherName: string;
-	readonly Settings: string;
-	readonly StageValue: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly StatusMessage: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * packagehistory WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IpackagehistoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpackagehistoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IpackagehistoryApi, 'FormattedValue'>]: string };
 	/** Unique identifier for the application installed */
 	ApplicationId: DevKit.Guid | null;
 	/** The application name of the target for installation */

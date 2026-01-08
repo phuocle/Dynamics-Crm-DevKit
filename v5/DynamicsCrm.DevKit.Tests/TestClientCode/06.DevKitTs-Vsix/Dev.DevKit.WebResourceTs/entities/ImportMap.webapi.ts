@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImportMap
- * All fields return string representation of their values
- */
-export interface IImportMapFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EntitiesPerFile: string;
-	readonly ImportMapId: string;
-	readonly ImportMapIdUnique: string;
-	readonly ImportMapType: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly IsValidForImport: string;
-	readonly IsWizardCreated: string;
-	readonly MapCustomizations: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly Source: string;
-	readonly SourceType: string;
-	readonly SourceUserIdentifierForSourceCRMUserLink: string;
-	readonly SourceUserIdentifierForSourceDataSourceUserLink: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TargetEntity: string;
-	readonly TargetUserIdentifierForSourceCRMUserLink: string;
-}
-
-/**
  * ImportMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImportMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImportMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImportMapApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Shows who created the record. */

@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SubscriptionClients
- * All fields return string representation of their values
- */
-export interface ISubscriptionClientsFormattedValue {
-	readonly ClientId: string;
-	readonly IsPrimaryClient: string;
-	readonly MachineName: string;
-	readonly SubscriptionClientId: string;
-	readonly SubscriptionId: string;
-}
-
-/**
  * SubscriptionClients WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionClientsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionClientsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionClientsApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ClientId: DevKit.Guid | null;
 	/** For internal use only. */

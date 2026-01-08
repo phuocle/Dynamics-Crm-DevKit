@@ -6,61 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedRelationship
- * All fields return string representation of their values
- */
-export interface IStagedRelationshipFormattedValue {
-	readonly CascadeArchive: string;
-	readonly CascadeAssign: string;
-	readonly CascadeDelete: string;
-	readonly CascadeLinkMask: string;
-	readonly CascadeMerge: string;
-	readonly CascadeReparent: string;
-	readonly CascadeRollupView: string;
-	readonly CascadeShare: string;
-	readonly CascadeUnShare: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityKeyId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomRelationship: string;
-	readonly IsLogical: string;
-	readonly IsRelationshipAttributeDenormalized: string;
-	readonly IsValidForAdvancedFind: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly RecordId: string;
-	readonly ReferencedAttributeId: string;
-	readonly ReferencedEntityId: string;
-	readonly ReferencingAttributeId: string;
-	readonly ReferencingEntityId: string;
-	readonly RelationshipRowId: string;
-	readonly RelationshipType: string;
-	readonly SolutionId: string;
-	readonly StagedRelationshipId: string;
-	readonly StagingExecutionContextId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedRelationship WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedRelationshipApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedRelationshipFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedRelationshipApi, 'FormattedValue'>]: string };
 	/** Cascade archive behavior. */
 	CascadeArchive: number | null;
 	/** Cascade assign behavior. */

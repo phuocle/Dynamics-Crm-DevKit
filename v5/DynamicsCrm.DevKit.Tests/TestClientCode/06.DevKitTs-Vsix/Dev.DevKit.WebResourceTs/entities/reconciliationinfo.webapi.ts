@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for reconciliationinfo
- * All fields return string representation of their values
- */
-export interface IreconciliationinfoFormattedValue {
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly Message: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ProfileId: string;
-	readonly reconciliationinfoId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SubmittedOn_UtcDateAndTime: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * reconciliationinfo WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IreconciliationinfoApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IreconciliationinfoFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IreconciliationinfoApi, 'FormattedValue'>]: string };
 	/** Date and time when reconciliation operation completed. */
 	CompletedOn_UtcDateAndTime: Date | null;
 	/** Unique identifier of the user who created the record. */

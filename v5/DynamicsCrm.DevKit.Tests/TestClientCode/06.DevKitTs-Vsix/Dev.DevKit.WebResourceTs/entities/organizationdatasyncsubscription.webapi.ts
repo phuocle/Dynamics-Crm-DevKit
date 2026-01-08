@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for organizationdatasyncsubscription
- * All fields return string representation of their values
- */
-export interface IorganizationdatasyncsubscriptionFormattedValue {
-	readonly AadApplicationId: string;
-	readonly BlobPartitionBy: string;
-	readonly CanSyncAllMetadata: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataEndpointPostingType: string;
-	readonly DataProcessingType: string;
-	readonly EndpointSettings: string;
-	readonly EntityFilters: string;
-	readonly EntitySettings: string;
-	readonly FullSyncOnly: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsOutOfBoxSubscription: string;
-	readonly MigrationState: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly NeedCopyAttachmentsToBlob: string;
-	readonly NeedToCopyFilesToBlob: string;
-	readonly NewEntities: string;
-	readonly NewFnoTables: string;
-	readonly organizationdatasyncsubscriptionId: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartnerPrefix: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SubscribedToAllEntities: string;
-	readonly SubscriptionEndpointStatus: string;
-	readonly SubscriptionEntities: string;
-	readonly SubscriptionFnoTables: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UnsubscribedEntities: string;
-	readonly UnsubscribedFnoTables: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * organizationdatasyncsubscription WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IorganizationdatasyncsubscriptionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IorganizationdatasyncsubscriptionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IorganizationdatasyncsubscriptionApi, 'FormattedValue'>]: string };
 	/** AadApplicationId */
 	AadApplicationId: string | null;
 	/** BlobPartitionBy */

@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BusinessUnitNewsArticle
- * All fields return string representation of their values
- */
-export interface IBusinessUnitNewsArticleFormattedValue {
-	readonly ActiveOn_UtcDateOnly: string;
-	readonly ActiveUntil_UtcDateOnly: string;
-	readonly ArticleTitle: string;
-	readonly ArticleTypeCode: string;
-	readonly ArticleUrl: string;
-	readonly BusinessUnitNewsArticleId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly NewsArticle: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ShowOnHomepage: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BusinessUnitNewsArticle WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBusinessUnitNewsArticleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBusinessUnitNewsArticleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBusinessUnitNewsArticleApi, 'FormattedValue'>]: string };
 	/** Date and time for the announcement to become active. */
 	ActiveOn_UtcDateOnly: Date | null;
 	/** Date and time of the last day the announcement is active. */

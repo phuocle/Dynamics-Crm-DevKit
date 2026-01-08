@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for fabricaiskill
- * All fields return string representation of their values
- */
-export interface IfabricaiskillFormattedValue {
-	readonly AiPluginOperationId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Context: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomApiId: string;
-	readonly Description: string;
-	readonly fabricaiskillId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly Keywords: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Uri: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WorkspaceId: string;
-}
-
-/**
  * fabricaiskill WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IfabricaiskillApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IfabricaiskillFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IfabricaiskillApi, 'FormattedValue'>]: string };
 	/** Ai Plugin Operation Id */
 	AiPluginOperationId: DevKit.Guid | null;
 	/** For internal use only. */

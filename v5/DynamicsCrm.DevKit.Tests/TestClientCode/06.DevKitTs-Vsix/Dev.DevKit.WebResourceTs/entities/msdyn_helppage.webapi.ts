@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_helppage
- * All fields return string representation of their values
- */
-export interface Imsdyn_helppageFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_content: string;
-	readonly msdyn_contenttype: string;
-	readonly msdyn_displayname: string;
-	readonly msdyn_helppageId: string;
-	readonly msdyn_locale: string;
-	readonly msdyn_path: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_helppage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_helppageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_helppageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_helppageApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_columnpermission
- * All fields return string representation of their values
- */
-export interface Imspp_columnpermissionFormattedValue {
-	readonly mspp_columnname: string;
-	readonly mspp_columnpermissionId: string;
-	readonly mspp_columnpermissionprofileid: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_permissions: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_columnpermission WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_columnpermissionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_columnpermissionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_columnpermissionApi, 'FormattedValue'>]: string };
 	/** The name of the custom entity. */
 	mspp_columnname: string | null;
 	/** Unique identifier for entity instances */

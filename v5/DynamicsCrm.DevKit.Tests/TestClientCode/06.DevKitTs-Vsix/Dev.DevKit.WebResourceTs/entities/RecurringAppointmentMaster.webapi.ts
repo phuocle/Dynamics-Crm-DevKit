@@ -6,94 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RecurringAppointmentMaster
- * All fields return string representation of their values
- */
-export interface IRecurringAppointmentMasterFormattedValue {
-	readonly ActivityId: string;
-	readonly Category: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DayOfMonth: string;
-	readonly DaysOfWeekMask: string;
-	readonly DeletedExceptionsList: string;
-	readonly Description: string;
-	readonly Duration: string;
-	readonly EffectiveEndDate_UtcDateAndTime: string;
-	readonly EffectiveStartDate_UtcDateOnly: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly ExchangeRate: string;
-	readonly ExpansionStateCode: string;
-	readonly FirstDayOfWeek: string;
-	readonly GlobalObjectId: string;
-	readonly GroupId: string;
-	readonly ImportSequenceNumber: string;
-	readonly Instance: string;
-	readonly InstanceTypeCode: string;
-	readonly Interval: string;
-	readonly IsAllDayEvent: string;
-	readonly IsBilled: string;
-	readonly IsMapiPrivate: string;
-	readonly IsNthMonthly: string;
-	readonly IsNthYearly: string;
-	readonly IsOnlineMeeting: string;
-	readonly IsRegenerate: string;
-	readonly IsRegularActivity: string;
-	readonly IsUnsafe: string;
-	readonly IsWeekDayPattern: string;
-	readonly IsWorkflowCreated: string;
-	readonly LastExpandedInstanceDate_UtcDateAndTime: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly MonthOfYear: string;
-	readonly NextExpansionInstanceDate_UtcDateAndTime: string;
-	readonly Occurrences: string;
-	readonly OnlineMeetingChatId: string;
-	readonly OnlineMeetingId: string;
-	readonly OnlineMeetingJoinUrl: string;
-	readonly OnlineMeetingType: string;
-	readonly OutlookOwnerApptId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PatternEndDate_UtcDateOnly: string;
-	readonly PatternEndType: string;
-	readonly PatternStartDate_UtcDateOnly: string;
-	readonly PriorityCode: string;
-	readonly ProcessId: string;
-	readonly RecurrencePatternType: string;
-	readonly RegardingObjectId: string;
-	readonly RuleId: string;
-	readonly ScheduledEnd_UtcDateAndTime: string;
-	readonly ScheduledStart_UtcDateAndTime: string;
-	readonly SeriesStatus: string;
-	readonly SortDate_UtcDateAndTime: string;
-	readonly StageId: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subcategory: string;
-	readonly Subject: string;
-	readonly SubscriptionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RecurringAppointmentMaster WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRecurringAppointmentMasterApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRecurringAppointmentMasterFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRecurringAppointmentMasterApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the recurring appointment series. */
 	ActivityId: DevKit.Guid | null;
 	/** Type a category to identify the recurring appointment type, such as status meeting or service call, to tie the appointment to a business group or function. */

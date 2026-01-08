@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_connectordatasource
- * All fields return string representation of their values
- */
-export interface Imsdyn_connectordatasourceFormattedValue {
-	readonly msdyn_appsenvironment: string;
-	readonly msdyn_clientid: string;
-	readonly msdyn_clientsecret: string;
-	readonly msdyn_connectionreference: string;
-	readonly msdyn_ConnectionReferenceId: string;
-	readonly msdyn_connectordatasourceId: string;
-	readonly msdyn_connectortype: string;
-	readonly msdyn_dataset_unresolvedvalue: string;
-	readonly msdyn_dataset_value: string;
-	readonly msdyn_hasacling: string;
-	readonly msdyn_host: string;
-	readonly msdyn_name: string;
-	readonly msdyn_resource: string;
-	readonly msdyn_tenant: string;
-	readonly msdyn_userauth: string;
-}
-
-/**
  * msdyn_connectordatasource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_connectordatasourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_connectordatasourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_connectordatasourceApi, 'FormattedValue'>]: string };
 	/** appsenvironment */
 	msdyn_appsenvironment: string | null;
 	/** clientid */

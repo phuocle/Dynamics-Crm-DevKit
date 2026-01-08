@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KnowledgeBaseRecord
- * All fields return string representation of their values
- */
-export interface IKnowledgeBaseRecordFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExchangeRate: string;
-	readonly KnowledgeBaseRecordId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PrivateUrl: string;
-	readonly PublicUrl: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly UniqueId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * KnowledgeBaseRecord WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKnowledgeBaseRecordApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKnowledgeBaseRecordFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKnowledgeBaseRecordApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

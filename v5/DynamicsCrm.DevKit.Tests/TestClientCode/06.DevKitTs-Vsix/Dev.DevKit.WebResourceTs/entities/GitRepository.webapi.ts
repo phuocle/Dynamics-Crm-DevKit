@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for GitRepository
- * All fields return string representation of their values
- */
-export interface IGitRepositoryFormattedValue {
-	readonly DefaultBranch: string;
-	readonly GitRepositoryId: string;
-	readonly OrganizationName: string;
-	readonly ProjectName: string;
-	readonly RepositoryName: string;
-}
-
-/**
  * GitRepository WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGitRepositoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGitRepositoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGitRepositoryApi, 'FormattedValue'>]: string };
 	/** Name of Git Default Git Branch with Git Repository. */
 	DefaultBranch: string | null;
 	/** Unique identifier for entity instances */

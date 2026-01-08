@@ -6,32 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for FileAttachment
- * All fields return string representation of their values
- */
-export interface IFileAttachmentFormattedValue {
-	readonly Body: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly FileAttachmentId: string;
-	readonly FileName: string;
-	readonly FilePointer: string;
-	readonly FileSizeInBytes: string;
-	readonly IsCommitted: string;
-	readonly MimeType: string;
-	readonly ObjectId: string;
-	readonly Prefix: string;
-	readonly RegardingFieldName: string;
-	readonly StoragePointer: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * FileAttachment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFileAttachmentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFileAttachmentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFileAttachmentApi, 'FormattedValue'>]: string };
 	/** Body */
 	readonly Body: string | null;
 	/** Date and time when the attachment was created. */

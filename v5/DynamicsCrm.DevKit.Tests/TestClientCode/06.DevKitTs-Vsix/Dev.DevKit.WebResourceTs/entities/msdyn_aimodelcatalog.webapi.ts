@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_aimodelcatalog
- * All fields return string representation of their values
- */
-export interface Imsdyn_aimodelcatalogFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_aimodelcatalogId: string;
-	readonly msdyn_basemodelname: string;
-	readonly msdyn_canuseconnection: string;
-	readonly msdyn_connectionreferenceid: string;
-	readonly msdyn_modelconfiguration: string;
-	readonly msdyn_modeldescription: string;
-	readonly msdyn_modelsubmissiontype: string;
-	readonly msdyn_modeltasktype: string;
-	readonly msdyn_name: string;
-	readonly msdyn_providertype: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_aimodelcatalog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_aimodelcatalogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_aimodelcatalogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_aimodelcatalogApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

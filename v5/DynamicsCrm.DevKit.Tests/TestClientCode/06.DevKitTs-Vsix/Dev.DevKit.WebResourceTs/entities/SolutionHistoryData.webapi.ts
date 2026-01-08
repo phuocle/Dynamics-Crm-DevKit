@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SolutionHistoryData
- * All fields return string representation of their values
- */
-export interface ISolutionHistoryDataFormattedValue {
-	readonly ActivityId: string;
-	readonly CorrelationId: string;
-	readonly Description: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly ErrorCode: string;
-	readonly ExceptionMessage: string;
-	readonly ExceptionStack: string;
-	readonly IsManaged: string;
-	readonly IsMicrosoftPublisher: string;
-	readonly IsOverwriteCustomizations: string;
-	readonly IsPatch: string;
-	readonly Operation: string;
-	readonly PackageName: string;
-	readonly PackageVersion: string;
-	readonly PublisherName: string;
-	readonly Result: string;
-	readonly SolutionHistoryDataId: string;
-	readonly SolutionId: string;
-	readonly SolutionName: string;
-	readonly SolutionVersion: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly Status: string;
-	readonly SubOperation: string;
-}
-
-/**
  * SolutionHistoryData WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISolutionHistoryDataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISolutionHistoryDataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISolutionHistoryDataApi, 'FormattedValue'>]: string };
 	/** The Activity Id. */
 	ActivityId: DevKit.Guid | null;
 	/** The Correlation Id. */

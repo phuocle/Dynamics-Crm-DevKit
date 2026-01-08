@@ -6,62 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for connector
- * All fields return string representation of their values
- */
-export interface IconnectorFormattedValue {
-	readonly Capabilities: string;
-	readonly ComponentState: string;
-	readonly ConnectionParameters: string;
-	readonly ConnectionParameterSets: string;
-	readonly connectorId: string;
-	readonly ConnectorIdUnique: string;
-	readonly ConnectorInternalId: string;
-	readonly ConnectorType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomCodeBlobContent: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly ExtensionAssemblyId: string;
-	readonly IconBlob: string;
-	readonly IconBlobId: string;
-	readonly IconBrandColor: string;
-	readonly ImportSequenceNumber: string;
-	readonly Interfaces: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OpenApiDefinition: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PolicyTemplateInstances: string;
-	readonly ScriptOperations: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * connector WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IconnectorApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IconnectorFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IconnectorApi, 'FormattedValue'>]: string };
 	/** Capabilities */
 	Capabilities: Array<number> | null;
 	/** For internal use only. */

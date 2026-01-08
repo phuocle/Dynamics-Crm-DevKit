@@ -6,69 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for datalakefolder
- * All fields return string representation of their values
- */
-export interface IdatalakefolderFormattedValue {
-	readonly AccessType: string;
-	readonly CDMPath: string;
-	readonly ComplianceLakeLocation: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly containerendpoint: string;
-	readonly ContributorSecurityGroupId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly datalakefolder_UniqueName: string;
-	readonly datalakefolderId: string;
-	readonly deltaLakePath: string;
-	readonly extendedproperties: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsComplianceLake: string;
-	readonly iscustomercapacity: string;
-	readonly IsCustomizable: string;
-	readonly isdeepcopyenabled: string;
-	readonly IsExternalLake: string;
-	readonly IsExternalLakeReadOnly: string;
-	readonly IsManaged: string;
-	readonly isprivate: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly owningappid: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly parentfolderid: string;
-	readonly path: string;
-	readonly ReaderSecurityGroupId: string;
-	readonly ResourceGroup: string;
-	readonly sharedforreadaccess: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly Subscription: string;
-	readonly SupportingSolutionId: string;
-	readonly SynchronizeSchemaToDataverse: string;
-	readonly SynchronizeSchemaToSynapseDb: string;
-	readonly Tenant: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * datalakefolder WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IdatalakefolderApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IdatalakefolderFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IdatalakefolderApi, 'FormattedValue'>]: string };
 	/** Azure Data Lake Access Type. */
 	AccessType: string | null;
 	/** Path to the CDM file. */

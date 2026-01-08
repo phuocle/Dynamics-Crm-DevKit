@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_flow_basicapprovalmodel_systemuser
- * All fields return string representation of their values
- */
-export interface Imsdyn_flow_basicapprovalmodel_systemuserFormattedValue {
-	readonly msdyn_flow_basicapprovalmodel_systemuserId: string;
-	readonly msdyn_flow_basicapprovalmodelid: string;
-	readonly systemuserid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_flow_basicapprovalmodel_systemuser WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_flow_basicapprovalmodel_systemuserApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_flow_basicapprovalmodel_systemuserFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_flow_basicapprovalmodel_systemuserApi, 'FormattedValue'>]: string };
 	readonly msdyn_flow_basicapprovalmodel_systemuserId: DevKit.Guid | null;
 	readonly msdyn_flow_basicapprovalmodelid: DevKit.Guid | null;
 	readonly systemuserid: DevKit.Guid | null;

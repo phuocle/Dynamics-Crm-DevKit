@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PluginAssembly
- * All fields return string representation of their values
- */
-export interface IPluginAssemblyFormattedValue {
-	readonly AuthType: string;
-	readonly ComponentState: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Culture: string;
-	readonly CustomizationLevel: string;
-	readonly Description: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsHidden: string;
-	readonly IsManaged: string;
-	readonly IsolationMode: string;
-	readonly IsPasswordSet: string;
-	readonly Major: string;
-	readonly ManagedIdentityId: string;
-	readonly Minor: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PackageId: string;
-	readonly Password: string;
-	readonly Path: string;
-	readonly PluginAssemblyId: string;
-	readonly PluginAssemblyIdUnique: string;
-	readonly PublicKeyToken: string;
-	readonly SolutionId: string;
-	readonly SourceHash: string;
-	readonly SourceType: string;
-	readonly SupportingSolutionId: string;
-	readonly Url: string;
-	readonly UserName: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PluginAssembly WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPluginAssemblyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPluginAssemblyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPluginAssemblyApi, 'FormattedValue'>]: string };
 	/** Specifies mode of authentication with web sources like WebApp */
 	AuthType: number | null;
 	/** For internal use only. */

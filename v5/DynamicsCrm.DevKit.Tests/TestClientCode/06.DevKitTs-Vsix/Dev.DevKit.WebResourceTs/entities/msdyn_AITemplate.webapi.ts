@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_AITemplate
- * All fields return string representation of their values
- */
-export interface Imsdyn_AITemplateFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AITemplateId: string;
-	readonly msdyn_AITemplateIdUnique: string;
-	readonly msdyn_DataBinding: string;
-	readonly msdyn_defaultrunschedulingoptions: string;
-	readonly msdyn_IsTrainable: string;
-	readonly msdyn_ModelAction: string;
-	readonly msdyn_ResourceInfo: string;
-	readonly msdyn_RunConfigSchema: string;
-	readonly msdyn_RunDataSpecification: string;
-	readonly msdyn_TemplateVersion: string;
-	readonly msdyn_TrainingConfigSchema: string;
-	readonly msdyn_TrainingDataSpecification: string;
-	readonly msdyn_UniqueName: string;
-	readonly msdyn_UXConfiguration: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_AITemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_AITemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_AITemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_AITemplateApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the record. */

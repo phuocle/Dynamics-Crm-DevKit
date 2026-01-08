@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_solutioncomponentcountdatasource
- * All fields return string representation of their values
- */
-export interface Imsdyn_solutioncomponentcountdatasourceFormattedValue {
-	readonly msdyn_name: string;
-	readonly msdyn_solutioncomponentcountdatasourceId: string;
-	readonly OrganizationId: string;
-}
-
-/**
  * msdyn_solutioncomponentcountdatasource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_solutioncomponentcountdatasourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_solutioncomponentcountdatasourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_solutioncomponentcountdatasourceApi, 'FormattedValue'>]: string };
 	/** msdyn_name */
 	msdyn_name: string | null;
 	/** Unique identifier for entity instances */

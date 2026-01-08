@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OwnerMapping
- * All fields return string representation of their values
- */
-export interface IOwnerMappingFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportMapId: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerMappingId: string;
-	readonly OwnerMappingIdUnique: string;
-	readonly ProcessCode: string;
-	readonly SolutionId: string;
-	readonly SourceSystemUserName: string;
-	readonly SourceUserValueForSourceCRMUserLink: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TargetSystemUserDomainName: string;
-	readonly TargetSystemUserId: string;
-	readonly TargetUserValueForSourceCRMUserLink: string;
-}
-
-/**
  * OwnerMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOwnerMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOwnerMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOwnerMappingApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the owner mapping. */

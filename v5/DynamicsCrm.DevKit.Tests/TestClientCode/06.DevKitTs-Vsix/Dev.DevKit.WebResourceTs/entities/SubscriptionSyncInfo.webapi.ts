@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SubscriptionSyncInfo
- * All fields return string representation of their values
- */
-export interface ISubscriptionSyncInfoFormattedValue {
-	readonly ClientVersion: string;
-	readonly DataSize: string;
-	readonly DeleteObjectCount: string;
-	readonly EndTime_UtcDateOnly: string;
-	readonly InsertObjectCount: string;
-	readonly StartTime_UtcDateOnly: string;
-	readonly SubscriptionId: string;
-	readonly SubscriptionSyncInfoId2: string;
-	readonly SyncResult: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * SubscriptionSyncInfo WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionSyncInfoApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionSyncInfoFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionSyncInfoApi, 'FormattedValue'>]: string };
 	/** Client (subscriber) version number. */
 	ClientVersion: string | null;
 	/** For internal use only. */

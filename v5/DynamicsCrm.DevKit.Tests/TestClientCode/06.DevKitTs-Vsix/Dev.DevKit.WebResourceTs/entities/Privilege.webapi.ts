@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Privilege
- * All fields return string representation of their values
- */
-export interface IPrivilegeFormattedValue {
-	readonly AccessRight: string;
-	readonly CanBeBasic: string;
-	readonly CanBeDeep: string;
-	readonly CanBeEntityReference: string;
-	readonly CanBeGlobal: string;
-	readonly CanBeLocal: string;
-	readonly CanBeParentEntityReference: string;
-	readonly CanBeRecordFilter: string;
-	readonly ComponentState: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsDisabledWhenIntegrated: string;
-	readonly IsManaged: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PrivilegeId: string;
-	readonly PrivilegeRowId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Privilege WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrivilegeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrivilegeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrivilegeApi, 'FormattedValue'>]: string };
 	/** Rights a user has to an instance of an entity. */
 	AccessRight: number | null;
 	/** Information that specifies whether the privilege applies to the user, the user's team, or objects shared by the user. */

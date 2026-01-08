@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for botcomponent_botcomponent
- * All fields return string representation of their values
- */
-export interface Ibotcomponent_botcomponentFormattedValue {
-	readonly botcomponent_botcomponentId: string;
-	readonly botcomponentidOne: string;
-	readonly botcomponentidTwo: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * botcomponent_botcomponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ibotcomponent_botcomponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ibotcomponent_botcomponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ibotcomponent_botcomponentApi, 'FormattedValue'>]: string };
 	readonly botcomponent_botcomponentId: DevKit.Guid | null;
 	readonly botcomponentidOne: DevKit.Guid | null;
 	readonly botcomponentidTwo: DevKit.Guid | null;

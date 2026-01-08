@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DelveActionHub
- * All fields return string representation of their values
- */
-export interface IDelveActionHubFormattedValue {
-	readonly CardType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CreatedTime_UtcDateAndTime: string;
-	readonly DelveActionHubId: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly IconClassName: string;
-	readonly MailWebLink: string;
-	readonly MessageId: string;
-	readonly MessageTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ModifiedTime_UtcDateAndTime: string;
-	readonly OrganizationId: string;
-	readonly RecordId: string;
-	readonly RegardingObjectId: string;
-	readonly RelatedMailIds: string;
-	readonly Sender: string;
-	readonly SenderEntityId: string;
-	readonly SenderEntityObjectTypeCode: string;
-	readonly SenderImageUrl: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subject: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DelveActionHub WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDelveActionHubApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDelveActionHubFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDelveActionHubApi, 'FormattedValue'>]: string };
 	/** Shows the type of the message. */
 	readonly CardType: number | null;
 	/** Shows who created the record. */

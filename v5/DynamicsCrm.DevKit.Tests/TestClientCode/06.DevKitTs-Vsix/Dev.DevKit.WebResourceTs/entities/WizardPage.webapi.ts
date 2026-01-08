@@ -6,32 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for WizardPage
- * All fields return string representation of their values
- */
-export interface IWizardPageFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PageDataToPost: string;
-	readonly PageSequenceNumber: string;
-	readonly PageUrl: string;
-	readonly VersionNumber: string;
-	readonly WebWizardId: string;
-	readonly WizardPageId: string;
-}
-
-/**
  * WizardPage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWizardPageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWizardPageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWizardPageApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the wizard page. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the wizard page was created. */

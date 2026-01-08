@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonClientMetadata
- * All fields return string representation of their values
- */
-export interface IRibbonClientMetadataFormattedValue {
-	readonly ComponentState: string;
-	readonly EntityLogicalName: string;
-	readonly RibbonContext: string;
-	readonly RibbonId: string;
-	readonly RibbonIdUnique: string;
-	readonly RibbonJson: string;
-	readonly RibbonJsonFileRef_name: string;
-	readonly SolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RibbonClientMetadata WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonClientMetadataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonClientMetadataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonClientMetadataApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Entity logical name */

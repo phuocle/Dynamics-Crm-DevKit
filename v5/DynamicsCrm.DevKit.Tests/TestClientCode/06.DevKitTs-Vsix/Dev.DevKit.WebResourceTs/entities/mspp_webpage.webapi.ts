@@ -6,65 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_webpage
- * All fields return string representation of their values
- */
-export interface Imspp_webpageFormattedValue {
-	readonly mspp_alloworigin: string;
-	readonly mspp_category: string;
-	readonly mspp_copy: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdbyipaddress: string;
-	readonly mspp_createdbyusername: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_customcss: string;
-	readonly mspp_customjavascript: string;
-	readonly mspp_displaydate_UtcDateAndTime: string;
-	readonly mspp_displayorder: string;
-	readonly mspp_editorialcomments: string;
-	readonly mspp_enablerating: string;
-	readonly mspp_entityform: string;
-	readonly mspp_entitylist: string;
-	readonly mspp_excludefromsearch: string;
-	readonly mspp_expirationdate_UtcDateAndTime: string;
-	readonly mspp_feedbackpolicy: string;
-	readonly mspp_hiddenfromsitemap: string;
-	readonly mspp_image: string;
-	readonly mspp_imageurl: string;
-	readonly mspp_isofflinecached: string;
-	readonly mspp_isroot: string;
-	readonly mspp_masterwebpageid: string;
-	readonly mspp_meta_description: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedbyipaddress: string;
-	readonly mspp_modifiedbyusername: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_navigation: string;
-	readonly mspp_pagetemplateid: string;
-	readonly mspp_parentpageid: string;
-	readonly mspp_partialurl: string;
-	readonly mspp_publishingstateid: string;
-	readonly mspp_releasedate_UtcDateAndTime: string;
-	readonly mspp_rootwebpageid: string;
-	readonly mspp_sharedpageconfiguration: string;
-	readonly mspp_summary: string;
-	readonly mspp_title: string;
-	readonly mspp_webform: string;
-	readonly mspp_webpageId: string;
-	readonly mspp_webpagelanguageid: string;
-	readonly mspp_websiteid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_webpage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_webpageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_webpageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_webpageApi, 'FormattedValue'>]: string };
 	/** Defines CORS header Access-Control-Allow-Origin for cross origin requests. */
 	mspp_alloworigin: string | null;
 	/** Category */

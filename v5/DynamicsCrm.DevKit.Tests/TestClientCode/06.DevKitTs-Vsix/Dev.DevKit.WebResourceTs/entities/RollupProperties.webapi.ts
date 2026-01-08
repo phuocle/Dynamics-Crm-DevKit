@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RollupProperties
- * All fields return string representation of their values
- */
-export interface IRollupPropertiesFormattedValue {
-	readonly AggregateAttributeLogicalName: string;
-	readonly AggregateEntityLogicalName: string;
-	readonly AggregateEntityTypeCode: string;
-	readonly AggregateFilterAttributes: string;
-	readonly AggregateRelationshipName: string;
-	readonly AggregateType: string;
-	readonly AllowHierarchyOnSource: string;
-	readonly BootstrapCurrentDepth: string;
-	readonly BootstrapRetryCount: string;
-	readonly BootstrapRollupAsyncJobId: string;
-	readonly BootstrapStepNumber: string;
-	readonly BootstrapTargetPointer: string;
-	readonly DataType: string;
-	readonly IncrementalRollupAsyncJobId: string;
-	readonly InitialValueCalculationStatus: string;
-	readonly IsActivityPartyIncluded: string;
-	readonly LastCalculationTime_UtcDateAndTime: string;
-	readonly RollupAttributeLogicalName: string;
-	readonly RollupEntityBaseTableName: string;
-	readonly RollupEntityLogicalName: string;
-	readonly RollupEntityPrimaryKeyPhysicalName: string;
-	readonly RollupEntityTypeCode: string;
-	readonly RollupFilterAttributes: string;
-	readonly RollupPropertiesId: string;
-	readonly RollupStateAttributePhysicalName: string;
-	readonly SourceHierarchicalRelationshipName: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RollupProperties WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRollupPropertiesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRollupPropertiesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRollupPropertiesApi, 'FormattedValue'>]: string };
 	/** Logical name of target attribute */
 	readonly AggregateAttributeLogicalName: string | null;
 	/** Logical name of target entity */

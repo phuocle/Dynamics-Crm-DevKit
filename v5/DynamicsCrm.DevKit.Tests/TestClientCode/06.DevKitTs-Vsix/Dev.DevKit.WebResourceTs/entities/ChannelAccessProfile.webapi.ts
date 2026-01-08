@@ -6,58 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ChannelAccessProfile
- * All fields return string representation of their values
- */
-export interface IChannelAccessProfileFormattedValue {
-	readonly ChannelAccessProfileId: string;
-	readonly ChannelAccessProfileIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EmailAccess: string;
-	readonly ExchangeRate: string;
-	readonly FacebookAccess: string;
-	readonly HavePrivilegesChanged: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsGuestProfile: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PhoneAccess: string;
-	readonly RateKnowledgeArticles: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SubmitFeedback: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly TwitterAccess: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly ViewArticleRating: string;
-	readonly ViewKnowledgeArticles: string;
-	readonly WebAccess: string;
-}
-
-/**
  * ChannelAccessProfile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IChannelAccessProfileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IChannelAccessProfileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IChannelAccessProfileApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	ChannelAccessProfileId: DevKit.Guid | null;
 	/** Unique identifier of the Channel Access Profile used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */

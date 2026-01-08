@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SdkMessageProcessingStepSecureConfig
- * All fields return string representation of their values
- */
-export interface ISdkMessageProcessingStepSecureConfigFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationLevel: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly SdkMessageProcessingStepSecureConfigId: string;
-	readonly SdkMessageProcessingStepSecureConfigIdUnique: string;
-	readonly SecureConfig: string;
-}
-
-/**
  * SdkMessageProcessingStepSecureConfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISdkMessageProcessingStepSecureConfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISdkMessageProcessingStepSecureConfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISdkMessageProcessingStepSecureConfigApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the SDK message processing step. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the SDK message processing step was created. */

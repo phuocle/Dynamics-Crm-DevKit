@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DelegatedAuthorization
- * All fields return string representation of their values
- */
-export interface IDelegatedAuthorizationFormattedValue {
-	readonly BotId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DelegatedAuthorizationId: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ProviderType: string;
-	readonly RoadmapProjectId: string;
-	readonly SharePointListId: string;
-	readonly SharePointSite: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DelegatedAuthorization WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDelegatedAuthorizationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDelegatedAuthorizationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDelegatedAuthorizationApi, 'FormattedValue'>]: string };
 	/** Identifier for MCS Bot */
 	BotId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the record. */

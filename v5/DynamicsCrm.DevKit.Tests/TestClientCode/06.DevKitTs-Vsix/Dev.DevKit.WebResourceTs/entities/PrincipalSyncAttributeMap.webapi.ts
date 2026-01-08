@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrincipalSyncAttributeMap
- * All fields return string representation of their values
- */
-export interface IPrincipalSyncAttributeMapFormattedValue {
-	readonly AllowedSyncDirection: string;
-	readonly AttributeCRMDisplayName: string;
-	readonly AttributeCRMName: string;
-	readonly AttributeExchangeDisplayName: string;
-	readonly AttributeExchangeName: string;
-	readonly ComputedProperties: string;
-	readonly DefaultSyncDirection: string;
-	readonly IsComputed: string;
-	readonly MappingName: string;
-	readonly OrganizationId: string;
-	readonly ParentPrincipalSyncAttributeMappingId: string;
-	readonly PrincipalId: string;
-	readonly PrincipalSyncAttributeMapId: string;
-	readonly SyncDirection: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrincipalSyncAttributeMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrincipalSyncAttributeMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrincipalSyncAttributeMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrincipalSyncAttributeMapApi, 'FormattedValue'>]: string };
 	/** Specifies allowed sync directions. */
 	AllowedSyncDirection: number | null;
 	/** CRM Attribute Display Name. */

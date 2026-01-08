@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SdkMessage
- * All fields return string representation of their values
- */
-export interface ISdkMessageFormattedValue {
-	readonly AutoTransact: string;
-	readonly Availability: string;
-	readonly CategoryName: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationLevel: string;
-	readonly ExecutePrivilegeName: string;
-	readonly Expand: string;
-	readonly IntroducedVersion: string;
-	readonly IsActive: string;
-	readonly IsManaged: string;
-	readonly IsPrivate: string;
-	readonly IsReadOnly: string;
-	readonly IsValidForExecuteAsync: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SdkMessageId: string;
-	readonly SdkMessageIdUnique: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly Template: string;
-	readonly ThrottleSettings: string;
-	readonly VersionNumber: string;
-	readonly WorkflowSdkStepEnabled: string;
-}
-
-/**
  * SdkMessage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISdkMessageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISdkMessageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISdkMessageApi, 'FormattedValue'>]: string };
 	/** Information about whether the SDK message is automatically transacted. */
 	AutoTransact: boolean | null;
 	/** Identifies where a method will be exposed. 0 - Server, 1 - Client, 2 - both. */

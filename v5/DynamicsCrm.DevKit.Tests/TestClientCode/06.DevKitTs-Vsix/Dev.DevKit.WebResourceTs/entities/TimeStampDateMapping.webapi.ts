@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TimeStampDateMapping
- * All fields return string representation of their values
- */
-export interface ITimeStampDateMappingFormattedValue {
-	readonly Date_UtcDateOnly: string;
-	readonly TimeStamp: string;
-	readonly TimeStampDateMappingId: string;
-}
-
-/**
  * TimeStampDateMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITimeStampDateMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITimeStampDateMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITimeStampDateMappingApi, 'FormattedValue'>]: string };
 	readonly Date_UtcDateOnly: Date | null;
 	readonly TimeStamp: number | null;
 	TimeStampDateMappingId: DevKit.Guid | null;

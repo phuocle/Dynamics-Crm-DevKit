@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ProvisionLanguageForUser
- * All fields return string representation of their values
- */
-export interface IProvisionLanguageForUserFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly Lcid: string;
-	readonly Name: string;
-	readonly OperationStatus: string;
-	readonly OrganizationId: string;
-	readonly ProvisionLanguageForUserId: string;
-	readonly UserId: string;
-}
-
-/**
  * ProvisionLanguageForUser WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IProvisionLanguageForUserApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IProvisionLanguageForUserFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IProvisionLanguageForUserApi, 'FormattedValue'>]: string };
 	/** AsyncOperationId */
 	AsyncOperationId: DevKit.Guid | null;
 	/** Lcid */

@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for indexedtrait
- * All fields return string representation of their values
- */
-export interface IindexedtraitFormattedValue {
-	readonly AlternativeKey: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DetailedContents: string;
-	readonly FilterCriteria: string;
-	readonly ImportSequenceNumber: string;
-	readonly indexedtraitId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly Properties: string;
-	readonly SearchContents: string;
-	readonly TraitType: string;
-	readonly TTLInSeconds: string;
-	readonly UserId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * indexedtrait WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IindexedtraitApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IindexedtraitFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IindexedtraitApi, 'FormattedValue'>]: string };
 	/** AlternativeKey */
 	AlternativeKey: string | null;
 	/** Unique identifier of the user who created the record. */

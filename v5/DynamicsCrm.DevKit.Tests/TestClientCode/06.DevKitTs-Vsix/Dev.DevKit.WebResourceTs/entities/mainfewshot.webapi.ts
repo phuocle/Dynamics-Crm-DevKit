@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mainfewshot
- * All fields return string representation of their values
- */
-export interface ImainfewshotFormattedValue {
-	readonly Category: string;
-	readonly Comment: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityType: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly mainfewshotId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectPartitionId: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly Query: string;
-	readonly Rephrase: string;
-	readonly SavedQueryVersionNumber: string;
-	readonly SavedQueryViewId: string;
-	readonly SolutionId: string;
-	readonly StandardSQL: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * mainfewshot WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ImainfewshotApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ImainfewshotFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ImainfewshotApi, 'FormattedValue'>]: string };
 	/** Main Fewshot Category: Default, FNO, IOM etc. */
 	Category: string | null;
 	/** Explanation of the query. */

@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ActionCardUserState
- * All fields return string representation of their values
- */
-export interface IActionCardUserStateFormattedValue {
-	readonly ActionCardId: string;
-	readonly ActionCardUserStateId: string;
-	readonly ExchangeRate: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly StartDate_UtcDateAndTime: string;
-	readonly State: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ActionCardUserState WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IActionCardUserStateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IActionCardUserStateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IActionCardUserStateApi, 'FormattedValue'>]: string };
 	/** Parent ActionCard Id. */
 	ActionCardId: DevKit.Guid | null;
 	/** Unique identifier for entity instances */

@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DuplicateRecord
- * All fields return string representation of their values
- */
-export interface IDuplicateRecordFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly BaseRecordId: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly DuplicateId: string;
-	readonly DuplicateRecordId2: string;
-	readonly DuplicateRuleId: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-}
-
-/**
  * DuplicateRecord WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDuplicateRecordApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDuplicateRecordFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDuplicateRecordApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the system job that created this record. */
 	readonly AsyncOperationId: DevKit.Guid | null;
 	/** Unique identifier of the base record. */

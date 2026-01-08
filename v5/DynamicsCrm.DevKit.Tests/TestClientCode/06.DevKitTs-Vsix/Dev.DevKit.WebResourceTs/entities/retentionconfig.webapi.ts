@@ -6,54 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for retentionconfig
- * All fields return string representation of their values
- */
-export interface IretentionconfigFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Criteria: string;
-	readonly EntityLogicalName: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NextRun_UtcDateAndTime: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Recurrence: string;
-	readonly ReferenceConfigId: string;
-	readonly retentionconfigId: string;
-	readonly SolutionId: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly ViewId: string;
-}
-
-/**
  * retentionconfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IretentionconfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IretentionconfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IretentionconfigApi, 'FormattedValue'>]: string };
 	/** For internal use only. Tracks the status of Retention Policy Execution */
 	AsyncOperationId: string | null;
 	/** For internal use only. */

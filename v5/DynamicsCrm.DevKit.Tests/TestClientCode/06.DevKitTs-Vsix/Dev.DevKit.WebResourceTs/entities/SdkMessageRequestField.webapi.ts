@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SdkMessageRequestField
- * All fields return string representation of their values
- */
-export interface ISdkMessageRequestFieldFormattedValue {
-	readonly ClrParser: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationLevel: string;
-	readonly FieldMask: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly Optional: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ParameterBindingInformation: string;
-	readonly Parser: string;
-	readonly Position: string;
-	readonly PublicName: string;
-	readonly SdkMessageRequestFieldId: string;
-	readonly SdkMessageRequestFieldIdUnique: string;
-	readonly SdkMessageRequestId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SdkMessageRequestField WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISdkMessageRequestFieldApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISdkMessageRequestFieldFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISdkMessageRequestFieldApi, 'FormattedValue'>]: string };
 	/** Common language runtime (CLR)-based parser for the SDK message request field. */
 	ClrParser: string | null;
 	/** For internal use only. */

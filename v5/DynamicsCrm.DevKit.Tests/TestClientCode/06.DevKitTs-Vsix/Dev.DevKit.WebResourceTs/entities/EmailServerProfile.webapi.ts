@@ -6,100 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EmailServerProfile
- * All fields return string representation of their values
- */
-export interface IEmailServerProfileFormattedValue {
-	readonly AadResourceId: string;
-	readonly ACSEmailServiceName: string;
-	readonly ACSEnabledForOutgoingEmail: string;
-	readonly ACSEndpointUrl: string;
-	readonly ACSManagedIdentityId: string;
-	readonly ACSResourceGroupName: string;
-	readonly ACSSubscriptionId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultServerLocation: string;
-	readonly Description: string;
-	readonly EmailServerProfileId: string;
-	readonly EmailServerTypeName: string;
-	readonly EncodingCodePage: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly ExchangeOnlineTenantId: string;
-	readonly ExchangeVersion: string;
-	readonly IncomingAuthenticationProtocol: string;
-	readonly IncomingCredentialRetrieval: string;
-	readonly IncomingPartnerApplication: string;
-	readonly IncomingPassword: string;
-	readonly IncomingPortNumber: string;
-	readonly IncomingServerLocation: string;
-	readonly IncomingUseImpersonation: string;
-	readonly IncomingUserName: string;
-	readonly IncomingUseSSL: string;
-	readonly IsIncomingPasswordSet: string;
-	readonly IsOauthClientSecretSet: string;
-	readonly IsOutgoingPasswordSet: string;
-	readonly keyvaultreferenceid: string;
-	readonly LastAuthorizationStatus: string;
-	readonly LastCrmMessage: string;
-	readonly LastTestExecutionStatus: string;
-	readonly LastTestRequest: string;
-	readonly LastTestResponse: string;
-	readonly LastTestStartTime_UtcDateAndTime: string;
-	readonly LastTestTotalExecutionTime: string;
-	readonly LastTestValidationStatus: string;
-	readonly managedidentityid: string;
-	readonly MaxConcurrentConnections: string;
-	readonly MinPollingIntervalInMinutes: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly MoveUndeliveredEmails: string;
-	readonly Name: string;
-	readonly OauthClientId: string;
-	readonly OauthClientSecret: string;
-	readonly OrganizationId: string;
-	readonly OutgoingAuthenticationProtocol: string;
-	readonly OutgoingAutoGrantDelegateAccess: string;
-	readonly OutgoingCredentialRetrieval: string;
-	readonly OutgoingPartnerApplication: string;
-	readonly OutgoingPassword: string;
-	readonly OutgoingPortNumber: string;
-	readonly OutgoingServerLocation: string;
-	readonly OutgoingUseImpersonation: string;
-	readonly OutgoingUsername: string;
-	readonly OutgoingUseSSL: string;
-	readonly OwnerEmailAddress: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ProcessEmailsReceivedAfter_UtcDateAndTime: string;
-	readonly PurviewManagedIdentityId: string;
-	readonly SendEmailAlert: string;
-	readonly ServerAuthority: string;
-	readonly ServerType: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TimeoutMailboxConnection: string;
-	readonly TimeoutMailboxConnectionAfterAmount: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UseAutoDiscover: string;
-	readonly UseDefaultTenantId: string;
-	readonly UseSameSettingsForOutgoingConnections: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EmailServerProfile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEmailServerProfileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEmailServerProfileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEmailServerProfileApi, 'FormattedValue'>]: string };
 	/** Microsoft Entra resource ID used for OAuth athentication scheme */
 	AadResourceId: string | null;
 	/** The name of the email service resource associated with the Azure Communication Service. */

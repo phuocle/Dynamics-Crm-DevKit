@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Category
- * All fields return string representation of their values
- */
-export interface ICategoryFormattedValue {
-	readonly CategoryId: string;
-	readonly CategoryNumber: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentCategoryId: string;
-	readonly SequenceNumber: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Category WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICategoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICategoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICategoryApi, 'FormattedValue'>]: string };
 	/** Shows the category. */
 	CategoryId: DevKit.Guid | null;
 	/** Shows the category number for customer reference. */

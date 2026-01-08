@@ -6,69 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_entityformmetadata
- * All fields return string representation of their values
- */
-export interface Imspp_entityformmetadataFormattedValue {
-	readonly mspp_adddescription: string;
-	readonly mspp_attributelogicalname: string;
-	readonly mspp_constantsummaximumtotal: string;
-	readonly mspp_constantsumminimumtotal: string;
-	readonly mspp_constantsumvalidationerrormessage: string;
-	readonly mspp_controlstyle: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_cssclass: string;
-	readonly mspp_description: string;
-	readonly mspp_descriptionposition: string;
-	readonly mspp_entityform: string;
-	readonly mspp_entityformforcreate: string;
-	readonly mspp_entityformmetadataId: string;
-	readonly mspp_fieldisrequired: string;
-	readonly mspp_geolocationvalidatorerrormessage: string;
-	readonly mspp_groupname: string;
-	readonly mspp_ignoredefaultvalue: string;
-	readonly mspp_label: string;
-	readonly mspp_maxmultiplechoiceselectedcount: string;
-	readonly mspp_minmultiplechoiceselectedcount: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_multiplechoicevalidationerrormessage: string;
-	readonly mspp_name: string;
-	readonly mspp_notes_settings: string;
-	readonly mspp_onsavefromattribute: string;
-	readonly mspp_onsavetype: string;
-	readonly mspp_onsavevalue: string;
-	readonly mspp_prepopulatefromattribute: string;
-	readonly mspp_prepopulatetype: string;
-	readonly mspp_prepopulatevalue: string;
-	readonly mspp_provisionedlanguages: string;
-	readonly mspp_randomizeoptionsetvalues: string;
-	readonly mspp_rangevalidationerrormessage: string;
-	readonly mspp_rankordernotiesvalidationerrormessage: string;
-	readonly mspp_requiredfieldvalidationerrormessage: string;
-	readonly mspp_sectionname: string;
-	readonly mspp_setvalueonsave: string;
-	readonly mspp_subgrid_name: string;
-	readonly mspp_subgrid_settings: string;
-	readonly mspp_tabname: string;
-	readonly mspp_timeline_settings: string;
-	readonly mspp_type: string;
-	readonly mspp_useattributedescriptionproperty: string;
-	readonly mspp_validationerrormessage: string;
-	readonly mspp_validationregularexpression: string;
-	readonly mspp_validationregularexpressionerrormessage: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_entityformmetadata WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_entityformmetadataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_entityformmetadataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_entityformmetadataApi, 'FormattedValue'>]: string };
 	/** Add Description */
 	mspp_adddescription: boolean | null;
 	/** Attribute Logical Name */

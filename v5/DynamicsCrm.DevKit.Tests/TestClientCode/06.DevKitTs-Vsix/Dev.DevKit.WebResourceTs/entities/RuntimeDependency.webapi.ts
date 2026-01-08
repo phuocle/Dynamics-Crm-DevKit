@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RuntimeDependency
- * All fields return string representation of their values
- */
-export interface IRuntimeDependencyFormattedValue {
-	readonly CreatedTime_UtcDateAndTime: string;
-	readonly DependencyId: string;
-	readonly DependentComponentNodeId: string;
-	readonly DependentComponentType: string;
-	readonly IsPublished: string;
-	readonly RequiredComponentModifiedTime_UtcDateAndTime: string;
-	readonly RequiredComponentNodeId: string;
-	readonly RequiredComponentType: string;
-}
-
-/**
  * RuntimeDependency WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRuntimeDependencyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRuntimeDependencyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRuntimeDependencyApi, 'FormattedValue'>]: string };
 	/** Date and time when the record was created. */
 	readonly CreatedTime_UtcDateAndTime: Date | null;
 	/** Unique identifier of a dependency. */

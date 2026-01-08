@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for agentconversationmessage
- * All fields return string representation of their values
- */
-export interface IagentconversationmessageFormattedValue {
-	readonly agentconversationmessageId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly Message: string;
-	readonly MessageContext: string;
-	readonly MessageSender: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RegardingObjectId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * agentconversationmessage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IagentconversationmessageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IagentconversationmessageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IagentconversationmessageApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	agentconversationmessageId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the record. */

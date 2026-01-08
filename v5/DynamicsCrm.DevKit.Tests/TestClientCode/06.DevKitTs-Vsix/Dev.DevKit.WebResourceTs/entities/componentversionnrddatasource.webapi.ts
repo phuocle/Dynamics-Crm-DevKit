@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for componentversionnrddatasource
- * All fields return string representation of their values
- */
-export interface IcomponentversionnrddatasourceFormattedValue {
-	readonly ChangeSummary: string;
-	readonly Component: string;
-	readonly componentversionname: string;
-	readonly componentversionnrddatasourceId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Operation: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly Payload_name: string;
-	readonly RestoredFromVersion: string;
-	readonly SystemChangeSummary: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * componentversionnrddatasource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcomponentversionnrddatasourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcomponentversionnrddatasourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcomponentversionnrddatasourceApi, 'FormattedValue'>]: string };
 	/** Change Summary */
 	ChangeSummary: string | null;
 	/** Owning component. */

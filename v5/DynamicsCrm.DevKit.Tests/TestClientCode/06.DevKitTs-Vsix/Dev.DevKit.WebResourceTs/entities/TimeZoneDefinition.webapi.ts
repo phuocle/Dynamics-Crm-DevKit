@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TimeZoneDefinition
- * All fields return string representation of their values
- */
-export interface ITimeZoneDefinitionFormattedValue {
-	readonly Bias: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DaylightName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly RetiredOrder: string;
-	readonly StandardName: string;
-	readonly TimeZoneCode: string;
-	readonly TimeZoneDefinitionId: string;
-	readonly UserInterfaceName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TimeZoneDefinition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITimeZoneDefinitionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITimeZoneDefinitionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITimeZoneDefinitionApi, 'FormattedValue'>]: string };
 	/** Base time bias of the time zone. */
 	Bias: number | null;
 	/** Unique identifier of the user who created the time zone record. */

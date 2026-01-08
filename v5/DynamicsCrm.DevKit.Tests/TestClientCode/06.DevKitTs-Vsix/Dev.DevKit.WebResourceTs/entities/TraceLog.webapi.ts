@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TraceLog
- * All fields return string representation of their values
- */
-export interface ITraceLogFormattedValue {
-	readonly CanBeDeleted: string;
-	readonly CollationLevel: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ErrorDetails: string;
-	readonly ErrorTypeDisplay: string;
-	readonly IsUnique: string;
-	readonly Level: string;
-	readonly MachineName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly ParentTraceLogId: string;
-	readonly RegardingObjectId: string;
-	readonly RegardingObjectOwnerId: string;
-	readonly RegardingObjectOwningBusinessUnit: string;
-	readonly Text: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TraceActionXml: string;
-	readonly TraceCode: string;
-	readonly TraceDetailXml: string;
-	readonly TraceLogId: string;
-	readonly TraceParameterHash: string;
-	readonly TraceParameterXml: string;
-	readonly TraceRegardingId: string;
-	readonly TraceStatus: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * TraceLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITraceLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITraceLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITraceLogApi, 'FormattedValue'>]: string };
 	/** Indicates if this trace log can be deleted. */
 	CanBeDeleted: boolean | null;
 	/** Indicates the collation level */

@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_timelinepin
- * All fields return string representation of their values
- */
-export interface Imsdyn_timelinepinFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_formrecordid: string;
-	readonly msdyn_name: string;
-	readonly msdyn_pinnedrecordid: string;
-	readonly msdyn_pinnedrecordlogicalname: string;
-	readonly msdyn_timelinecontrolid: string;
-	readonly msdyn_timelinepinId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_timelinepin WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_timelinepinApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_timelinepinFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_timelinepinApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

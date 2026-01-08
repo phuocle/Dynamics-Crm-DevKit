@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserProfiles
- * All fields return string representation of their values
- */
-export interface ISystemUserProfilesFormattedValue {
-	readonly FieldSecurityProfileId: string;
-	readonly SystemUserId: string;
-	readonly SystemUserProfileId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemUserProfiles WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserProfilesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserProfilesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserProfilesApi, 'FormattedValue'>]: string };
 	readonly FieldSecurityProfileId: DevKit.Guid | null;
 	readonly SystemUserId: DevKit.Guid | null;
 	/** For internal use only. */

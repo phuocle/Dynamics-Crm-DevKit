@@ -6,90 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_entitylist
- * All fields return string representation of their values
- */
-export interface Imspp_entitylistFormattedValue {
-	readonly mspp_calendar_alldayfieldname: string;
-	readonly mspp_calendar_descriptionfieldname: string;
-	readonly mspp_calendar_enabled: string;
-	readonly mspp_calendar_enddatefieldname: string;
-	readonly mspp_calendar_initialdate_UtcDateOnly: string;
-	readonly mspp_calendar_initialview: string;
-	readonly mspp_calendar_locationfieldname: string;
-	readonly mspp_calendar_organizerfieldname: string;
-	readonly mspp_calendar_startdatefieldname: string;
-	readonly mspp_calendar_style: string;
-	readonly mspp_calendar_summaryfieldname: string;
-	readonly mspp_calendar_timezone: string;
-	readonly mspp_calendar_timezonemode: string;
-	readonly mspp_createbuttonlabel: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_detailsbuttonlabel: string;
-	readonly mspp_emptylisttext: string;
-	readonly mspp_entitylistId: string;
-	readonly mspp_entityname: string;
-	readonly mspp_entitypermissionsenabled: string;
-	readonly mspp_filter_applybuttonlabel: string;
-	readonly mspp_filter_definition: string;
-	readonly mspp_filter_enabled: string;
-	readonly mspp_filter_orientation: string;
-	readonly mspp_filteraccount: string;
-	readonly mspp_filterportaluser: string;
-	readonly mspp_filterwebsite: string;
-	readonly mspp_idquerystringparametername: string;
-	readonly mspp_iscodecomponent: string;
-	readonly mspp_key: string;
-	readonly mspp_map_credentials: string;
-	readonly mspp_map_distanceunits: string;
-	readonly mspp_map_distancevalues: string;
-	readonly mspp_map_enabled: string;
-	readonly mspp_map_infoboxdescriptionfieldname: string;
-	readonly mspp_map_infoboxoffsetx: string;
-	readonly mspp_map_infoboxoffsety: string;
-	readonly mspp_map_infoboxtitlefieldname: string;
-	readonly mspp_map_latitude: string;
-	readonly mspp_map_latitudefieldname: string;
-	readonly mspp_map_longitude: string;
-	readonly mspp_map_longitudefieldname: string;
-	readonly mspp_map_pushpinheight: string;
-	readonly mspp_map_pushpinurl: string;
-	readonly mspp_map_pushpinwidth: string;
-	readonly mspp_map_resturl: string;
-	readonly mspp_map_type: string;
-	readonly mspp_map_zoom: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_odata_enabled: string;
-	readonly mspp_odata_entitysetname: string;
-	readonly mspp_odata_entitytypename: string;
-	readonly mspp_odata_view: string;
-	readonly mspp_pagesize: string;
-	readonly mspp_primarykeyname: string;
-	readonly mspp_provisionedlanguages: string;
-	readonly mspp_registerstartupscript: string;
-	readonly mspp_searchenabled: string;
-	readonly mspp_searchplaceholdertext: string;
-	readonly mspp_searchtooltiptext: string;
-	readonly mspp_settings: string;
-	readonly mspp_view: string;
-	readonly mspp_views: string;
-	readonly mspp_webpageforcreate: string;
-	readonly mspp_webpagefordetailsview: string;
-	readonly mspp_websiteid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_entitylist WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_entitylistApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_entitylistFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_entitylistApi, 'FormattedValue'>]: string };
 	/** Is All Day Field Name */
 	mspp_calendar_alldayfieldname: string | null;
 	/** Description Field Name */

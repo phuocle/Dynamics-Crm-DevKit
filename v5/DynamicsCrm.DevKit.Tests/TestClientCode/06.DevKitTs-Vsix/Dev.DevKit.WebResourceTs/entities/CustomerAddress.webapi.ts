@@ -6,61 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CustomerAddress
- * All fields return string representation of their values
- */
-export interface ICustomerAddressFormattedValue {
-	readonly AddressNumber: string;
-	readonly AddressTypeCode: string;
-	readonly City: string;
-	readonly Composite: string;
-	readonly Country: string;
-	readonly County: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomerAddressId: string;
-	readonly ExchangeRate: string;
-	readonly Fax: string;
-	readonly FreightTermsCode: string;
-	readonly ImportSequenceNumber: string;
-	readonly Latitude: string;
-	readonly Line1: string;
-	readonly Line2: string;
-	readonly Line3: string;
-	readonly Longitude: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly ParentId: string;
-	readonly PostalCode: string;
-	readonly PostOfficeBox: string;
-	readonly PrimaryContactName: string;
-	readonly ShippingMethodCode: string;
-	readonly StateOrProvince: string;
-	readonly Telephone1: string;
-	readonly Telephone2: string;
-	readonly Telephone3: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UPSZone: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly UTCOffset: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CustomerAddress WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICustomerAddressApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICustomerAddressFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICustomerAddressApi, 'FormattedValue'>]: string };
 	/** Shows the number of the address, to indicate whether the address is the primary, secondary, or other address for the customer. */
 	AddressNumber: number | null;
 	/** Select the address type, such as primary or billing. */

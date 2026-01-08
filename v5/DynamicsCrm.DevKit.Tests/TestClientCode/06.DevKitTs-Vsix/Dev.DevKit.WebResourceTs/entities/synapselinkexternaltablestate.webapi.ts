@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for synapselinkexternaltablestate
- * All fields return string representation of their values
- */
-export interface IsynapselinkexternaltablestateFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly datalakefolder: string;
-	readonly EntityName2: string;
-	readonly ImportSequenceNumber: string;
-	readonly LakehouseShortcutState: string;
-	readonly LastSynchronizedOn_UtcDateAndTime: string;
-	readonly LastSyncState: string;
-	readonly MaxRecordVersion: string;
-	readonly MetadataVersion: string;
-	readonly MinSyncedDataVersion: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly RecordCount: string;
-	readonly SchemaModifiedOn_UtcDateAndTime: string;
-	readonly SourceRecordCount: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SynapseDatabaseName: string;
-	readonly synapselinkexternaltablestateId: string;
-	readonly SynapseWorkspaceName: string;
-	readonly TableState: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TrinoState: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * synapselinkexternaltablestate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsynapselinkexternaltablestateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsynapselinkexternaltablestateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsynapselinkexternaltablestateApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

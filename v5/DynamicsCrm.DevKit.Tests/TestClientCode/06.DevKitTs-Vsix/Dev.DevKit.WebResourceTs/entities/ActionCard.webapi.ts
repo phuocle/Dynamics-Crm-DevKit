@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ActionCard
- * All fields return string representation of their values
- */
-export interface IActionCardFormattedValue {
-	readonly ActionCardId: string;
-	readonly CardType: string;
-	readonly CardTypeId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly ExpiryDate_UtcDateAndTime: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentRegardingObjectId: string;
-	readonly ParentRegardingObjectIdData: string;
-	readonly Priority: string;
-	readonly RecordId: string;
-	readonly RecordIdObjectTypeCode2: string;
-	readonly ReferenceTokens: string;
-	readonly RegardingObjectId: string;
-	readonly Source: string;
-	readonly StartDate_UtcDateAndTime: string;
-	readonly State: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-	readonly Visibility: string;
-}
-
-/**
  * ActionCard WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IActionCardApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IActionCardFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IActionCardApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the action card. */
 	ActionCardId: DevKit.Guid | null;
 	/** The CardType ENUM value. */

@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Role
- * All fields return string representation of their values
- */
-export interface IRoleFormattedValue {
-	readonly ApplicationId: string;
-	readonly AppliesTo: string;
-	readonly BusinessUnitId: string;
-	readonly CanBeDeleted: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsAutoAssigned: string;
-	readonly IsCustomizable: string;
-	readonly IsInherited: string;
-	readonly IsManaged: string;
-	readonly IsSystemGenerated: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ParentRoleId: string;
-	readonly ParentRootRoleId: string;
-	readonly RoleId: string;
-	readonly RoleIdUnique: string;
-	readonly RoleTemplateId: string;
-	readonly SolutionId: string;
-	readonly SummaryofCoreTablePermissions: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Role WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRoleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRoleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRoleApi, 'FormattedValue'>]: string };
 	/** Application Id of user who created the role */
 	ApplicationId: DevKit.Guid | null;
 	/** Personas/Licenses the security role applies to */

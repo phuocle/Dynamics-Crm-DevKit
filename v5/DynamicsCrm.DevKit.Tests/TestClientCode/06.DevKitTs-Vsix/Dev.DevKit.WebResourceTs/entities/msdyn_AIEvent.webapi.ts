@@ -6,55 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_AIEvent
- * All fields return string representation of their values
- */
-export interface Imsdyn_AIEventFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AIConfigurationId: string;
-	readonly msdyn_AIEventId: string;
-	readonly msdyn_AIModelId: string;
-	readonly msdyn_ApprovalId: string;
-	readonly msdyn_AutomationLink: string;
-	readonly msdyn_AutomationName: string;
-	readonly msdyn_ConsumptionSource: string;
-	readonly msdyn_CreditConsumed: string;
-	readonly msdyn_DataInfo: string;
-	readonly msdyn_DataInfoFile_name: string;
-	readonly msdyn_DataType: string;
-	readonly msdyn_EventData: string;
-	readonly msdyn_Name: string;
-	readonly msdyn_Output: string;
-	readonly msdyn_OutputFile_name: string;
-	readonly msdyn_PartnerSource: string;
-	readonly msdyn_ProcessingDate_UtcDateAndTime: string;
-	readonly msdyn_ProcessingStatus: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly QuickTest: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_AIEvent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_AIEventApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_AIEventFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_AIEventApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

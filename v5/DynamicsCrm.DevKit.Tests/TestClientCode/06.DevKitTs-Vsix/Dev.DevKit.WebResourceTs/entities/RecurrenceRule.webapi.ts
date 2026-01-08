@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RecurrenceRule
- * All fields return string representation of their values
- */
-export interface IRecurrenceRuleFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DayOfMonth: string;
-	readonly DaysOfWeekMask: string;
-	readonly Duration: string;
-	readonly EffectiveEndDate_UtcDateAndTime: string;
-	readonly EffectiveStartDate_UtcDateOnly: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly FirstDayOfWeek: string;
-	readonly Instance: string;
-	readonly Interval: string;
-	readonly IsNthMonthly: string;
-	readonly IsNthYearly: string;
-	readonly IsRegenerate: string;
-	readonly IsWeekDayPattern: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly MonthOfYear: string;
-	readonly ObjectId: string;
-	readonly Occurrences: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PatternEndDate_UtcDateAndTime: string;
-	readonly PatternEndType: string;
-	readonly PatternStartDate_UtcDateAndTime: string;
-	readonly RecurrencePatternType: string;
-	readonly RuleId: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RecurrenceRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRecurrenceRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRecurrenceRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRecurrenceRuleApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the recurrence rule. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the recurrence rule was created. */

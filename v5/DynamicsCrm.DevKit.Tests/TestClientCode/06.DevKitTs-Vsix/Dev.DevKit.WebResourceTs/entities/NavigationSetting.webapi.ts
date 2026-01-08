@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for NavigationSetting
- * All fields return string representation of their values
- */
-export interface INavigationSettingFormattedValue {
-	readonly AdvancedSettingOrder: string;
-	readonly AppConfigId: string;
-	readonly AppConfigIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly GroupName: string;
-	readonly IconResourceId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NavigationSettingId: string;
-	readonly NavigationSettingIdUnique: string;
-	readonly ObjectTypeCode: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PageUrl: string;
-	readonly ParentNavigationSettingId: string;
-	readonly Privileges: string;
-	readonly ProgressState: string;
-	readonly QuickSettingOrder: string;
-	readonly ResourceId: string;
-	readonly SettingType: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-}
-
-/**
  * NavigationSetting WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface INavigationSettingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: INavigationSettingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<INavigationSettingApi, 'FormattedValue'>]: string };
 	/** Enter the position of this NavigationSetting as it should appear within its group in the Advanced Setup menu. */
 	AdvancedSettingOrder: number | null;
 	/** Enter the App Config record that this Navigation Setting is associated with. */

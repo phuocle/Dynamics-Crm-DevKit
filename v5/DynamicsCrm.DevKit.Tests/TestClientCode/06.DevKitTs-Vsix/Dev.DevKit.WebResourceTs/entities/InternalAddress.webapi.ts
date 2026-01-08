@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for InternalAddress
- * All fields return string representation of their values
- */
-export interface IInternalAddressFormattedValue {
-	readonly AddressNumber: string;
-	readonly AddressTypeCode: string;
-	readonly BusinessUnitId: string;
-	readonly City: string;
-	readonly Composite: string;
-	readonly Country: string;
-	readonly County: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Fax: string;
-	readonly InternalAddressId: string;
-	readonly Latitude: string;
-	readonly Line1: string;
-	readonly Line2: string;
-	readonly Line3: string;
-	readonly Longitude: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly ParentId: string;
-	readonly PostalCode: string;
-	readonly PostOfficeBox: string;
-	readonly ShippingMethodCode: string;
-	readonly StateOrProvince: string;
-	readonly Telephone1: string;
-	readonly Telephone2: string;
-	readonly Telephone3: string;
-	readonly UPSZone: string;
-	readonly UTCOffset: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * InternalAddress WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IInternalAddressApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IInternalAddressFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IInternalAddressApi, 'FormattedValue'>]: string };
 	/** Information about which internal address is applicable. */
 	AddressNumber: number | null;
 	/** Type of address for the internal address. */

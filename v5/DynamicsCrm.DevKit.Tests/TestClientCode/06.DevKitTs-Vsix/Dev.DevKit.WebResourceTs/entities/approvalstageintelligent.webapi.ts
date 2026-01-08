@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for approvalstageintelligent
- * All fields return string representation of their values
- */
-export interface IapprovalstageintelligentFormattedValue {
-	readonly AiModelId: string;
-	readonly Approval: string;
-	readonly approvalstageintelligentId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly Inputs_name: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NextSteps: string;
-	readonly NextStepsResult: string;
-	readonly NextStepsResultValue: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PredictionRationale: string;
-	readonly PredictionResponse: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * approvalstageintelligent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IapprovalstageintelligentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IapprovalstageintelligentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IapprovalstageintelligentApi, 'FormattedValue'>]: string };
 	/** The prompt id. */
 	AiModelId: string | null;
 	/** Approval */

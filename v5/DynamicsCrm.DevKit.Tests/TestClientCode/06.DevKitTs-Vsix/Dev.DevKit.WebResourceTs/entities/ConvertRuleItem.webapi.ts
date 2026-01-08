@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ConvertRuleItem
- * All fields return string representation of their values
- */
-export interface IConvertRuleItemFormattedValue {
-	readonly ComponentState: string;
-	readonly ConditionId: string;
-	readonly ConditionXml: string;
-	readonly ConvertRuleId: string;
-	readonly ConvertRuleItemId: string;
-	readonly ConvertRuleItemIdUnique: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly PropertiesXml: string;
-	readonly QueueId: string;
-	readonly SequenceNumber: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-	readonly WorkflowId: string;
-}
-
-/**
  * ConvertRuleItem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IConvertRuleItemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IConvertRuleItemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IConvertRuleItemApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Identifies the step of the associated workflow */

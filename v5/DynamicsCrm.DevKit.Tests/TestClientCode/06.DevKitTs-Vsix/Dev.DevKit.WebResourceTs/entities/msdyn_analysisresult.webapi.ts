@@ -6,62 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_analysisresult
- * All fields return string representation of their values
- */
-export interface Imsdyn_analysisresultFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AnalysisComponentId: string;
-	readonly msdyn_AnalysisComponentType: string;
-	readonly msdyn_AnalysisJobId: string;
-	readonly msdyn_analysisresultId: string;
-	readonly msdyn_Category: string;
-	readonly msdyn_ComponentType: string;
-	readonly msdyn_EntityName: string;
-	readonly msdyn_FileUri: string;
-	readonly msdyn_HasResolution: string;
-	readonly msdyn_helplink: string;
-	readonly msdyn_Level: string;
-	readonly msdyn_Line: string;
-	readonly msdyn_Member: string;
-	readonly msdyn_Message: string;
-	readonly msdyn_MessageArguments: string;
-	readonly msdyn_MessageId: string;
-	readonly msdyn_Module: string;
-	readonly msdyn_name: string;
-	readonly msdyn_RepairIssueType: string;
-	readonly msdyn_ReturnStatus: string;
-	readonly msdyn_RuleId: string;
-	readonly msdyn_RuleReferenceUri: string;
-	readonly msdyn_Severity: string;
-	readonly msdyn_Snippet: string;
-	readonly msdyn_SolutionHealthMessage: string;
-	readonly msdyn_Type: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_analysisresult WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_analysisresultApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_analysisresultFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_analysisresultApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

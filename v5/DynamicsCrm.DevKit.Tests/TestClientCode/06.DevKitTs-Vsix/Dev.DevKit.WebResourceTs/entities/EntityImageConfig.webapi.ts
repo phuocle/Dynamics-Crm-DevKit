@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityImageConfig
- * All fields return string representation of their values
- */
-export interface IEntityImageConfigFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly EntityImageConfigId: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly ParentEntityLogicalName: string;
-	readonly PrimaryImageAttribute: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EntityImageConfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityImageConfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityImageConfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityImageConfigApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

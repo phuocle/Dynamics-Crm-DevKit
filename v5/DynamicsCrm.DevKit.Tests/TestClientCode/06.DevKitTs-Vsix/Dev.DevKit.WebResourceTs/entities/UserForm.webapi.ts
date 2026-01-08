@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserForm
- * All fields return string representation of their values
- */
-export interface IUserFormFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly FormJson: string;
-	readonly FormXml: string;
-	readonly IsTabletEnabled: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Type: string;
-	readonly UserFormId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * UserForm WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserFormApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserFormFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserFormApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

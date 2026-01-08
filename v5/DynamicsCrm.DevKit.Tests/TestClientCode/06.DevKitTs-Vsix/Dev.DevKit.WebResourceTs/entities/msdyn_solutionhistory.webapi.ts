@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_solutionhistory
- * All fields return string representation of their values
- */
-export interface Imsdyn_solutionhistoryFormattedValue {
-	readonly msdyn_activityid: string;
-	readonly msdyn_correlationid: string;
-	readonly msdyn_endtime_UtcDateAndTime: string;
-	readonly msdyn_errorcode: string;
-	readonly msdyn_exceptionmessage: string;
-	readonly msdyn_exceptionstack: string;
-	readonly msdyn_ismanaged: string;
-	readonly msdyn_isoverwritecustomizations: string;
-	readonly msdyn_ispatch: string;
-	readonly msdyn_maxretries: string;
-	readonly msdyn_name: string;
-	readonly msdyn_operation: string;
-	readonly msdyn_packagename: string;
-	readonly msdyn_packageversion: string;
-	readonly msdyn_publisherid: string;
-	readonly msdyn_publishername: string;
-	readonly msdyn_result: string;
-	readonly msdyn_retrycount: string;
-	readonly msdyn_solutionhistorydescription: string;
-	readonly msdyn_solutionhistoryId: string;
-	readonly msdyn_solutionid: string;
-	readonly msdyn_solutionversion: string;
-	readonly msdyn_starttime_UtcDateAndTime: string;
-	readonly msdyn_status: string;
-	readonly msdyn_suboperation: string;
-	readonly msdyn_totaltime: string;
-}
-
-/**
  * msdyn_solutionhistory WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_solutionhistoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_solutionhistoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_solutionhistoryApi, 'FormattedValue'>]: string };
 	/** Activity Id */
 	msdyn_activityid: string | null;
 	/** Correlation Id */

@@ -6,54 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ProcessSession
- * All fields return string representation of their values
- */
-export interface IProcessSessionFormattedValue {
-	readonly ActivityName: string;
-	readonly CanceledBy: string;
-	readonly CanceledOn_UtcDateAndTime: string;
-	readonly Comments: string;
-	readonly CompletedBy: string;
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ErrorCode: string;
-	readonly ExecutedBy: string;
-	readonly ExecutedOn_UtcDateAndTime: string;
-	readonly InputArguments: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NextLinkedSessionId: string;
-	readonly OriginatingSessionId: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PreviousLinkedSessionId: string;
-	readonly ProcessId: string;
-	readonly ProcessSessionId: string;
-	readonly ProcessStageName: string;
-	readonly ProcessState: string;
-	readonly ProtectionKey: string;
-	readonly RegardingObjectId: string;
-	readonly StartedBy: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly StepName: string;
-}
-
-/**
  * ProcessSession WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IProcessSessionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IProcessSessionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IProcessSessionApi, 'FormattedValue'>]: string };
 	/** Name of the activity that is being executed. */
 	ActivityName: string | null;
 	/** Unique identifier of the user who canceled the dialog session. */

@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RoleTemplatePrivileges
- * All fields return string representation of their values
- */
-export interface IRoleTemplatePrivilegesFormattedValue {
-	readonly IsBasic: string;
-	readonly IsDeep: string;
-	readonly IsGlobal: string;
-	readonly IsLocal: string;
-	readonly PrivilegeId: string;
-	readonly RoleTemplateId: string;
-	readonly RoleTemplatePrivilegeId: string;
-	readonly Upgrading: string;
-}
-
-/**
  * RoleTemplatePrivileges WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRoleTemplatePrivilegesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRoleTemplatePrivilegesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRoleTemplatePrivilegesApi, 'FormattedValue'>]: string };
 	/** Information about whether the role in the template applies to the user, the user's team, or objects shared by the user. */
 	IsBasic: boolean | null;
 	/** Information about whether the role in the template applies to child business units of the business unit associated with the user. */

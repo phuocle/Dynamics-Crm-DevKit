@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_weblink
- * All fields return string representation of their values
- */
-export interface Imspp_weblinkFormattedValue {
-	readonly mspp_createdby: string;
-	readonly mspp_createdbyipaddress: string;
-	readonly mspp_createdbyusername: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_description: string;
-	readonly mspp_disablepagevalidation: string;
-	readonly mspp_displayimageonly: string;
-	readonly mspp_displayorder: string;
-	readonly mspp_displaypagechildlinks: string;
-	readonly mspp_externalurl: string;
-	readonly mspp_imagealttext: string;
-	readonly mspp_imageheight: string;
-	readonly mspp_imageurl: string;
-	readonly mspp_imagewidth: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedbyipaddress: string;
-	readonly mspp_modifiedbyusername: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_openinnewwindow: string;
-	readonly mspp_pageid: string;
-	readonly mspp_parentweblinkid: string;
-	readonly mspp_publishingstateid: string;
-	readonly mspp_robotsfollowlink: string;
-	readonly mspp_weblinkId: string;
-	readonly mspp_weblinksetid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_weblink WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_weblinkApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_weblinkFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_weblinkApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	mspp_createdby: DevKit.Guid | null;
 	/** Created By IP Address */

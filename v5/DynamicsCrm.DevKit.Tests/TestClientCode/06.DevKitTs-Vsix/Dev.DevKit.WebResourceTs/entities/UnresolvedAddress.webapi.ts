@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UnresolvedAddress
- * All fields return string representation of their values
- */
-export interface IUnresolvedAddressFormattedValue {
-	readonly EMailAddress: string;
-	readonly FullName: string;
-	readonly Telephone: string;
-	readonly UnresolvedAddressId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * UnresolvedAddress WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUnresolvedAddressApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUnresolvedAddressFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUnresolvedAddressApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	EMailAddress: string | null;
 	/** For internal use only. */

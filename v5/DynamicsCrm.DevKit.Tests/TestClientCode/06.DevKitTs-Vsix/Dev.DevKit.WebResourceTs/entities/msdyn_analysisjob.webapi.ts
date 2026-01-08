@@ -6,58 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_analysisjob
- * All fields return string representation of their values
- */
-export interface Imsdyn_analysisjobFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_analysisjobId: string;
-	readonly msdyn_AnalysisJobsReport_name: string;
-	readonly msdyn_CustomDetails: string;
-	readonly msdyn_DisplayStatus: string;
-	readonly msdyn_EndTime_UtcDateAndTime: string;
-	readonly msdyn_ErrorCount: string;
-	readonly msdyn_Exception: string;
-	readonly msdyn_InAppNotificationEnabled: string;
-	readonly msdyn_name: string;
-	readonly msdyn_RuleFailCount: string;
-	readonly msdyn_RulePassCount: string;
-	readonly msdyn_RuleRunCount: string;
-	readonly msdyn_RunCorrelationId: string;
-	readonly msdyn_sevcriticalcount: string;
-	readonly msdyn_sevhighcount: string;
-	readonly msdyn_sevlowcount: string;
-	readonly msdyn_sevmediumcount: string;
-	readonly msdyn_StartTime_UtcDateAndTime: string;
-	readonly msdyn_SuggestionCount: string;
-	readonly msdyn_TenantId: string;
-	readonly msdyn_TriggerType: string;
-	readonly msdyn_WarningCount: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_analysisjob WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_analysisjobApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_analysisjobFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_analysisjobApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

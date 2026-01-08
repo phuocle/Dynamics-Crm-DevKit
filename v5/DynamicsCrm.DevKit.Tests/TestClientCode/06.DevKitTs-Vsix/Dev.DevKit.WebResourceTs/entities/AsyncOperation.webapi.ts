@@ -6,71 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AsyncOperation
- * All fields return string representation of their values
- */
-export interface IAsyncOperationFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly BreadcrumbId: string;
-	readonly CallerOrigin: string;
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CorrelationId: string;
-	readonly CorrelationUpdatedTime_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly DataBlobId_name: string;
-	readonly DependencyToken: string;
-	readonly Depth: string;
-	readonly ErrorCode: string;
-	readonly ExecutionTimeSpan: string;
-	readonly ExpanderStartTime_UtcDateAndTime: string;
-	readonly FriendlyMessage: string;
-	readonly HostId: string;
-	readonly IsWaitingForEvent: string;
-	readonly Message: string;
-	readonly MessageName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OperationType: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningExtensionId: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentPluginExecutionId: string;
-	readonly PostponeUntil_UtcDateAndTime: string;
-	readonly RecurrencePattern: string;
-	readonly RecurrenceStartTime_UtcDateOnly: string;
-	readonly RegardingObjectId: string;
-	readonly RequestId: string;
-	readonly RetainJobHistory: string;
-	readonly RetryCount: string;
-	readonly RootExecutionContext: string;
-	readonly Sequence: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subtype: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly WorkflowActivationId: string;
-	readonly WorkflowIsBlocked: string;
-	readonly WorkflowStageName: string;
-	readonly WorkflowState: string;
-	readonly Workload: string;
-}
-
-/**
  * AsyncOperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAsyncOperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAsyncOperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAsyncOperationApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the system job. */
 	AsyncOperationId: DevKit.Guid | null;
 	/** The breadcrumb record ID. */

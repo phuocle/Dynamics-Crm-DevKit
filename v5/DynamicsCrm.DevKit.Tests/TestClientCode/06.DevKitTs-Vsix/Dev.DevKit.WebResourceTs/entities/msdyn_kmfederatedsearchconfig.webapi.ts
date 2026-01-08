@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_kmfederatedsearchconfig
- * All fields return string representation of their values
- */
-export interface Imsdyn_kmfederatedsearchconfigFormattedValue {
-	readonly ConnectionId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_Description: string;
-	readonly msdyn_kmfederatedsearchconfigId: string;
-	readonly msdyn_Name: string;
-	readonly Organization: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SearchType: string;
-	readonly SharepointURL: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_kmfederatedsearchconfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_kmfederatedsearchconfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_kmfederatedsearchconfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_kmfederatedsearchconfigApi, 'FormattedValue'>]: string };
 	/** Unique identifier when you create a connector in Microsoft search, please check the documentation above. */
 	ConnectionId: string | null;
 	/** Unique identifier of the user who created the record. */

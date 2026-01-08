@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Queue
- * All fields return string representation of their values
- */
-export interface IQueueFormattedValue {
-	readonly AllowEmailCredentials: string;
-	readonly BusinessUnitId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultMailbox: string;
-	readonly Description: string;
-	readonly EMailAddress: string;
-	readonly EmailPassword: string;
-	readonly EmailRouterAccessApproval: string;
-	readonly EmailUsername: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly ExchangeRate: string;
-	readonly IgnoreUnsolicitedEmail: string;
-	readonly ImportSequenceNumber: string;
-	readonly IncomingEmailDeliveryMethod: string;
-	readonly IncomingEmailFilteringMethod: string;
-	readonly IsEmailAddressApprovedByO365Admin: string;
-	readonly IsFaxQueue: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NumberOfItems: string;
-	readonly NumberOfMembers: string;
-	readonly OrganizationId: string;
-	readonly OutgoingEmailDeliveryMethod: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PrimaryUserId: string;
-	readonly QueueId: string;
-	readonly QueueTypeCode: string;
-	readonly QueueViewType: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Queue WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IQueueApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IQueueFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IQueueApi, 'FormattedValue'>]: string };
 	/** This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute. */
 	readonly AllowEmailCredentials: boolean | null;
 	/** Unique identifier of the business unit with which the queue is associated. */

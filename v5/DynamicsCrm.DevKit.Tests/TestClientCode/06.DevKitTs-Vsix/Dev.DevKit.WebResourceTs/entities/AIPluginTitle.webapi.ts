@@ -6,58 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AIPluginTitle
- * All fields return string representation of their values
- */
-export interface IAIPluginTitleFormattedValue {
-	readonly AccentColor: string;
-	readonly AIPluginTitleId: string;
-	readonly BaseArtifactId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DeveloperName: string;
-	readonly DisplayName: string;
-	readonly Icon: string;
-	readonly IconsColorImage: string;
-	readonly IconsColorImageId: string;
-	readonly IconsOutlineImage: string;
-	readonly IconsOutlineImageId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustom: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly PluginTitleVersion: string;
-	readonly PrivacyURL: string;
-	readonly ShortDescription: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TermsOfUseUrl: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WebsiteUrl: string;
-}
-
-/**
  * AIPluginTitle WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAIPluginTitleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAIPluginTitleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAIPluginTitleApi, 'FormattedValue'>]: string };
 	/** Accent Color */
 	AccentColor: string | null;
 	/** Unique identifier for entity instances */

@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for v4_Sql_DataSource
- * All fields return string representation of their values
- */
-export interface Iv4_Sql_DataSourceFormattedValue {
-	readonly v4_Sql_DataSourceId: string;
-	readonly v4_Sql_DataSourceName: string;
-}
-
-/**
  * v4_Sql_DataSource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iv4_Sql_DataSourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iv4_Sql_DataSourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iv4_Sql_DataSourceApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	v4_Sql_DataSourceId: DevKit.Guid | null;
 	/** Sql DataSource */

@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for sa_SuggestedActionCriteria
- * All fields return string representation of their values
- */
-export interface Isa_SuggestedActionCriteriaFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly sa_AppID: string;
-	readonly sa_CriteriaList: string;
-	readonly sa_SuggestedActionCriteriaId: string;
-	readonly sa_TableId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * sa_SuggestedActionCriteria WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Isa_SuggestedActionCriteriaApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Isa_SuggestedActionCriteriaFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Isa_SuggestedActionCriteriaApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

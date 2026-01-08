@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ConnectionInstance
- * All fields return string representation of their values
- */
-export interface IConnectionInstanceFormattedValue {
-	readonly AccountName: string;
-	readonly AllowSharing: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly ConnectionInstanceDisplayName: string;
-	readonly ConnectionInstanceId: string;
-	readonly ConnectionInstanceLogicalName: string;
-	readonly ConnectionInternalId: string;
-	readonly ConnectionMetadata: string;
-	readonly ConnectionParametersConfig: string;
-	readonly ConnectionParameterSetConfig: string;
-	readonly ConnectionReferenceId: string;
-	readonly ConnectionStatus: string;
-	readonly ConnectionVersion: string;
-	readonly ConnectorId: string;
-	readonly ConnectorInternalId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CredentialId: string;
-	readonly IconUri: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TestConnectionLinks: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ConnectionInstance WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IConnectionInstanceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IConnectionInstanceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IConnectionInstanceApi, 'FormattedValue'>]: string };
 	/** The name for the account */
 	AccountName: string | null;
 	/** Whether or not allow sharing is enabled for the connection */

@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MobileOfflineProfileItemAssociation
- * All fields return string representation of their values
- */
-export interface IMobileOfflineProfileItemAssociationFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly IsValidated: string;
-	readonly MobileOfflineProfileItemAssociationId: string;
-	readonly MobileOfflineProfileItemAssociationIdUnique: string;
-	readonly MobileOfflineProfileItemId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ProcessId: string;
-	readonly ProfileItemAssociationEntityFilter: string;
-	readonly PublishedOn_UtcDateAndTime: string;
-	readonly RelationshipData: string;
-	readonly RelationshipDisplayName: string;
-	readonly RelationshipId: string;
-	readonly RelationshipName: string;
-	readonly SelectedRelationShipsSchema: string;
-	readonly SolutionId: string;
-	readonly StageId: string;
-	readonly SupportingSolutionId: string;
-	readonly TraversedPath: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MobileOfflineProfileItemAssociation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMobileOfflineProfileItemAssociationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMobileOfflineProfileItemAssociationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMobileOfflineProfileItemAssociationApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Shows who created the record. */

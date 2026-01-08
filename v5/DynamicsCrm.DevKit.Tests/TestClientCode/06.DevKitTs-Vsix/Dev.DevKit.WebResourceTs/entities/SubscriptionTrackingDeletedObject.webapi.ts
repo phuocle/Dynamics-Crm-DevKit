@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SubscriptionTrackingDeletedObject
- * All fields return string representation of their values
- */
-export interface ISubscriptionTrackingDeletedObjectFormattedValue {
-	readonly CrmCreatedOn_UtcDateAndTime: string;
-	readonly DeleteTime_UtcDateAndTime: string;
-	readonly IsArchivalDelete: string;
-	readonly IsLogicalDelete: string;
-	readonly ObjectId: string;
-	readonly TimeStamp: string;
-}
-
-/**
  * SubscriptionTrackingDeletedObject WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionTrackingDeletedObjectApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionTrackingDeletedObjectFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionTrackingDeletedObjectApi, 'FormattedValue'>]: string };
 	/** Shows the date and time when the record was created in CRM. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 	CrmCreatedOn_UtcDateAndTime: Date | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

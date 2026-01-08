@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ActivityMimeAttachment
- * All fields return string representation of their values
- */
-export interface IActivityMimeAttachmentFormattedValue {
-	readonly ActivityId: string;
-	readonly ActivityMimeAttachmentId: string;
-	readonly ActivityMimeAttachmentIdUnique: string;
-	readonly ActivitySubject: string;
-	readonly AnonymousLink: string;
-	readonly AttachmentContentId: string;
-	readonly AttachmentId: string;
-	readonly AttachmentNumber: string;
-	readonly Body: string;
-	readonly ComponentState: string;
-	readonly FileName: string;
-	readonly FileSize: string;
-	readonly IsFollowed: string;
-	readonly IsManaged: string;
-	readonly MimeType: string;
-	readonly ObjectId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly Subject: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ActivityMimeAttachment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IActivityMimeAttachmentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IActivityMimeAttachmentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IActivityMimeAttachmentApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the activity with which the attachment is associated. */
 	ActivityId: DevKit.Guid | null;
 	/** Unique identifier of the attachment. */

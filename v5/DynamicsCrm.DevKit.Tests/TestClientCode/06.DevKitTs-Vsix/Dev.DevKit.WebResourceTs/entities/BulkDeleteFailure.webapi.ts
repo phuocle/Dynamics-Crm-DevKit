@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BulkDeleteFailure
- * All fields return string representation of their values
- */
-export interface IBulkDeleteFailureFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly BulkDeleteFailureId: string;
-	readonly BulkDeleteOperationId: string;
-	readonly ErrorDescription: string;
-	readonly ErrorNumber: string;
-	readonly OrderedQueryIndex: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly RegardingObjectId: string;
-}
-
-/**
  * BulkDeleteFailure WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBulkDeleteFailureApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBulkDeleteFailureFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBulkDeleteFailureApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the system job that created this record. */
 	readonly AsyncOperationId: DevKit.Guid | null;
 	/** Unique identifier of the bulk deletion failure record. */

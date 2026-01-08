@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SyncError
- * All fields return string representation of their values
- */
-export interface ISyncErrorFormattedValue {
-	readonly Action: string;
-	readonly ActionData: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ErrorCode: string;
-	readonly ErrorDetail: string;
-	readonly ErrorMessage: string;
-	readonly ErrorTime_UtcDateAndTime: string;
-	readonly ErrorType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RegardingObjectId: string;
-	readonly RequestData: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SyncErrorId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SyncError WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISyncErrorApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISyncErrorFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISyncErrorApi, 'FormattedValue'>]: string };
 	/** Action Name for which sync error has occurred */
 	Action: string | null;
 	/** Show the action data */

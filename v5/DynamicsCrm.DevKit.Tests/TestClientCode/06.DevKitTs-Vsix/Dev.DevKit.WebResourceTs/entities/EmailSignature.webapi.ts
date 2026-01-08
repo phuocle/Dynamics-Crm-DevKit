@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EmailSignature
- * All fields return string representation of their values
- */
-export interface IEmailSignatureFormattedValue {
-	readonly Body: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EmailSignatureId: string;
-	readonly GenerationTypeCode: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsDefault: string;
-	readonly IsPersonal: string;
-	readonly LanguageCode: string;
-	readonly MimeType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PresentationXml: string;
-	readonly SafeHtml: string;
-	readonly Title: string;
-}
-
-/**
  * EmailSignature WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEmailSignatureApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEmailSignatureFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEmailSignatureApi, 'FormattedValue'>]: string };
 	/** Body text of the email signature. */
 	Body: string | null;
 	/** For internal use only. */

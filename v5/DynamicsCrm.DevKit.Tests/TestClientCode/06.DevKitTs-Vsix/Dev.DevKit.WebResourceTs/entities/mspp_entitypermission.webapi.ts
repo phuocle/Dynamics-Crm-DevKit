@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_entitypermission
- * All fields return string representation of their values
- */
-export interface Imspp_entitypermissionFormattedValue {
-	readonly mspp_accountrelationship: string;
-	readonly mspp_append: string;
-	readonly mspp_appendto: string;
-	readonly mspp_contactrelationship: string;
-	readonly mspp_create: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_delete: string;
-	readonly mspp_entitylogicalname: string;
-	readonly mspp_entityname: string;
-	readonly mspp_entitypermissionId: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_parententitypermission: string;
-	readonly mspp_parentrelationship: string;
-	readonly mspp_read: string;
-	readonly mspp_scope: string;
-	readonly mspp_websiteid: string;
-	readonly mspp_write: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_entitypermission WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_entitypermissionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_entitypermissionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_entitypermissionApi, 'FormattedValue'>]: string };
 	/** Account Relationship */
 	mspp_accountrelationship: string | null;
 	/** Controls whether the user can attach another record to the specified record. The Append and Append To permissions work in combination. */

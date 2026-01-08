@@ -6,84 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Appointment
- * All fields return string representation of their values
- */
-export interface IAppointmentFormattedValue {
-	readonly ActivityAdditionalParams: string;
-	readonly ActivityId: string;
-	readonly ActualDurationMinutes: string;
-	readonly ActualEnd_UtcDateAndTime: string;
-	readonly ActualStart_UtcDateAndTime: string;
-	readonly AttachmentCount: string;
-	readonly AttachmentErrors: string;
-	readonly Category: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly FormattedScheduledEnd_TimezoneDateAndTime: string;
-	readonly FormattedScheduledStart_TimezoneDateAndTime: string;
-	readonly GlobalObjectId: string;
-	readonly ImportSequenceNumber: string;
-	readonly InstanceTypeCode: string;
-	readonly IsAllDayEvent: string;
-	readonly IsBilled: string;
-	readonly IsDraft: string;
-	readonly IsMapiPrivate: string;
-	readonly IsOnlineMeeting: string;
-	readonly IsRegularActivity: string;
-	readonly IsUnsafe: string;
-	readonly IsWorkflowCreated: string;
-	readonly LastOnHoldTime_UtcDateAndTime: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedFieldsMask: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OnHoldTime: string;
-	readonly OnlineMeetingChatId: string;
-	readonly OnlineMeetingId: string;
-	readonly OnlineMeetingJoinUrl: string;
-	readonly OnlineMeetingType: string;
-	readonly OriginalStartDate_UtcDateAndTime: string;
-	readonly OutlookOwnerApptId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PriorityCode: string;
-	readonly ProcessId: string;
-	readonly RegardingObjectId: string;
-	readonly ScheduledDurationMinutes: string;
-	readonly ScheduledEnd_UtcDateAndTime: string;
-	readonly ScheduledStart_UtcDateAndTime: string;
-	readonly SeriesId: string;
-	readonly SLAId: string;
-	readonly SLAInvokedId: string;
-	readonly SortDate_UtcDateAndTime: string;
-	readonly StageId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subcategory: string;
-	readonly Subject: string;
-	readonly SubscriptionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Appointment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppointmentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppointmentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppointmentApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	ActivityAdditionalParams: string | null;
 	/** Unique identifier of the appointment. */

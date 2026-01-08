@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KnowledgeArticleViews
- * All fields return string representation of their values
- */
-export interface IKnowledgeArticleViewsFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly KnowledgeArticleId: string;
-	readonly KnowledgeArticleView: string;
-	readonly KnowledgeArticleViewsId: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly ViewDate_UtcDateOnly: string;
-}
-
-/**
  * KnowledgeArticleViews WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKnowledgeArticleViewsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKnowledgeArticleViewsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKnowledgeArticleViewsApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TeamSyncAttributeMappingProfiles
- * All fields return string representation of their values
- */
-export interface ITeamSyncAttributeMappingProfilesFormattedValue {
-	readonly SyncAttributeMappingProfileId: string;
-	readonly TeamId: string;
-	readonly TeamSyncAttributeMappingProfileId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TeamSyncAttributeMappingProfiles WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITeamSyncAttributeMappingProfilesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITeamSyncAttributeMappingProfilesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITeamSyncAttributeMappingProfilesApi, 'FormattedValue'>]: string };
 	readonly SyncAttributeMappingProfileId: DevKit.Guid | null;
 	readonly TeamId: DevKit.Guid | null;
 	/** For internal use only. */

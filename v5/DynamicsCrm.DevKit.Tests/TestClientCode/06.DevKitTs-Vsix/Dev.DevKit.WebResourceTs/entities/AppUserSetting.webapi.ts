@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppUserSetting
- * All fields return string representation of their values
- */
-export interface IAppUserSettingFormattedValue {
-	readonly AppUserSettingId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DisplayName: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ParentAppModuleId: string;
-	readonly SettingDefinitionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UserId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly Value: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AppUserSetting WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppUserSettingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppUserSettingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppUserSettingApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AppUserSettingId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the record. */

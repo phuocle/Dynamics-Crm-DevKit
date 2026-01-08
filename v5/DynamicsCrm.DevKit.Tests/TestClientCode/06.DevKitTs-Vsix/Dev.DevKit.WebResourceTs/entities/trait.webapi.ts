@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for trait
- * All fields return string representation of their values
- */
-export interface ItraitFormattedValue {
-	readonly AlternativeKey: string;
-	readonly Contents: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly Properties: string;
-	readonly traitId: string;
-	readonly TraitType: string;
-	readonly TTLInSeconds: string;
-	readonly UserId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * trait WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ItraitApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ItraitFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ItraitApi, 'FormattedValue'>]: string };
 	/** AlternativeKey */
 	AlternativeKey: string | null;
 	/** Contents */

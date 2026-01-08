@@ -6,58 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for synapselinkprofileentitystate
- * All fields return string representation of their values
- */
-export interface IsynapselinkprofileentitystateFormattedValue {
-	readonly AdditionTime_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CrmRecordCount: string;
-	readonly CrmRecordCountModifiedTime_UtcDateAndTime: string;
-	readonly EntityName2: string;
-	readonly EntitySource: string;
-	readonly EntityType: string;
-	readonly ImportSequenceNumber: string;
-	readonly InitialSyncDataCompletedTime_UtcDateAndTime: string;
-	readonly InitialSyncMetadataCreatedTime_UtcDateAndTime: string;
-	readonly InitialSyncProcessCompletedTime_UtcDateAndTime: string;
-	readonly InitialSyncState: string;
-	readonly LakeRecordCount: string;
-	readonly LakeRecordCountModifiedTime_UtcDateAndTime: string;
-	readonly LastSyncedDataTime_UtcDateAndTime: string;
-	readonly LastSyncedDataVersion: string;
-	readonly LastSyncedMetadataTime_UtcDateAndTime: string;
-	readonly LastSyncedMetadataVersion: string;
-	readonly MetadataState: string;
-	readonly MinSyncedDataVersion: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly profile: string;
-	readonly profileentity: string;
-	readonly SourceRecordCount: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly synapselinkprofileentitystateId: string;
-	readonly SynapseTableCreationState: string;
-	readonly SyncState: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * synapselinkprofileentitystate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsynapselinkprofileentitystateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsynapselinkprofileentitystateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsynapselinkprofileentitystateApi, 'FormattedValue'>]: string };
 	/** Addition time of entity */
 	AdditionTime_UtcDateAndTime: Date | null;
 	/** Unique identifier of the user who created the record. */

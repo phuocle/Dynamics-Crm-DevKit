@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EmailHash
- * All fields return string representation of their values
- */
-export interface IEmailHashFormattedValue {
-	readonly ActivityId: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly EmailHashId: string;
-	readonly Hash: string;
-	readonly HashType: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EmailHash WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEmailHashApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEmailHashFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEmailHashApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the activity with which the hash is associated. */
 	ActivityId: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. */

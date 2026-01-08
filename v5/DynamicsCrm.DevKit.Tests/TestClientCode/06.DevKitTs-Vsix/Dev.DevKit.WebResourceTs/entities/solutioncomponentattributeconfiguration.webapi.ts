@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for solutioncomponentattributeconfiguration
- * All fields return string representation of their values
- */
-export interface IsolutioncomponentattributeconfigurationFormattedValue {
-	readonly AttributeId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomManagedBehaviorType: string;
-	readonly DependencyRemovalCapability: string;
-	readonly EncodingFormat: string;
-	readonly FileExtension: string;
-	readonly ImportSequenceNumber: string;
-	readonly InvokeSubstitutionForAttribute: string;
-	readonly IsCustomizable: string;
-	readonly IsEnabledForDependencyExtraction: string;
-	readonly IsExportDisabled: string;
-	readonly IsExportedAsFile: string;
-	readonly IsManaged: string;
-	readonly IsPrefixedByTemplate: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly solutioncomponentattributeconfigurationId: string;
-	readonly SolutionComponentConfigurationId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * solutioncomponentattributeconfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsolutioncomponentattributeconfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsolutioncomponentattributeconfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsolutioncomponentattributeconfigurationApi, 'FormattedValue'>]: string };
 	/** Unique identifier for Attribute associated with Solution Component Attribute Configuration. */
 	AttributeId: DevKit.Guid | null;
 	/** For internal use only. */

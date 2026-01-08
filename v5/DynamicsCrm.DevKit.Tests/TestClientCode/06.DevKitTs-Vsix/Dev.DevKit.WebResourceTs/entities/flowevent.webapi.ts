@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowevent
- * All fields return string representation of their values
- */
-export interface IfloweventFormattedValue {
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly eventcode: string;
-	readonly eventcontent: string;
-	readonly EventDuration: string;
-	readonly eventtype: string;
-	readonly ExpiryDate_UtcDateAndTime: string;
-	readonly floweventId: string;
-	readonly ImportSequenceNumber: string;
-	readonly level: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly parentobjectid: string;
-	readonly parentobjectlogicalname: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * flowevent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IfloweventApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IfloweventFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IfloweventApi, 'FormattedValue'>]: string };
 	/** Date and time when the event finished. */
 	readonly CompletedOn_UtcDateAndTime: Date | null;
 	/** Unique identifier of the user who created the record. */

@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SLAKPIInstance
- * All fields return string representation of their values
- */
-export interface ISLAKPIInstanceFormattedValue {
-	readonly ApplicableFromValue_UtcDateAndTime: string;
-	readonly ComputedFailureTime_UtcDateAndTime: string;
-	readonly ComputedWarningTime_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ElapsedTime: string;
-	readonly ExchangeRate: string;
-	readonly FailureTime_UtcDateAndTime: string;
-	readonly LastResumeTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_ActionExecutionStatus: string;
-	readonly msdyn_activeduration: string;
-	readonly msdyn_calendarid: string;
-	readonly msdyn_prevslakpiinstanceid: string;
-	readonly msdyn_slaitemid: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PausedOn_UtcDateAndTime: string;
-	readonly Regarding: string;
-	readonly RegardingEntityID: string;
-	readonly SLAKPIInstanceId: string;
-	readonly Status: string;
-	readonly SucceededOn_UtcDateAndTime: string;
-	readonly SuccessCheckedAt_TimezoneDateAndTime: string;
-	readonly TerminalStateReached: string;
-	readonly TerminalStateTime_UtcDateAndTime: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-	readonly WarningTime_UtcDateAndTime: string;
-	readonly WarningTimeReached: string;
-}
-
-/**
  * SLAKPIInstance WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISLAKPIInstanceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISLAKPIInstanceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISLAKPIInstanceApi, 'FormattedValue'>]: string };
 	/** Applicable From Value */
 	ApplicableFromValue_UtcDateAndTime: Date | null;
 	/** Computed Failure Date and time */

@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BusinessDataLocalizedLabel
- * All fields return string representation of their values
- */
-export interface IBusinessDataLocalizedLabelFormattedValue {
-	readonly BusinessDataLocalizedLabelId: string;
-	readonly Label: string;
-	readonly LanguageId: string;
-	readonly ObjectColumnName: string;
-	readonly ObjectColumnNumber: string;
-	readonly ObjectId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BusinessDataLocalizedLabel WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBusinessDataLocalizedLabelApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBusinessDataLocalizedLabelFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBusinessDataLocalizedLabelApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the Business Data Localized Label. */
 	BusinessDataLocalizedLabelId: DevKit.Guid | null;
 	/** Label */

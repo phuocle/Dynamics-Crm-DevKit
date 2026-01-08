@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ActionCardUserSettings
- * All fields return string representation of their values
- */
-export interface IActionCardUserSettingsFormattedValue {
-	readonly ActionCardUserSettingsId: string;
-	readonly BoolCardOption: string;
-	readonly CardType: string;
-	readonly CardTypeId: string;
-	readonly IntCardOption: string;
-	readonly IsEnabled: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly StringCardOption: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ActionCardUserSettings WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IActionCardUserSettingsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IActionCardUserSettingsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IActionCardUserSettingsApi, 'FormattedValue'>]: string };
 	/** Unique identifier user entity */
 	ActionCardUserSettingsId: DevKit.Guid | null;
 	/** Bolean option for a cardtype. */

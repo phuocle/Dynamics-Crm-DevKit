@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for retentioncleanupinfo
- * All fields return string representation of their values
- */
-export interface IretentioncleanupinfoFormattedValue {
-	readonly AdditionalDetails: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityLogicalName: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastDeletionVersion: string;
-	readonly LastReconciliationVersion: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly retentioncleanupinfoId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * retentioncleanupinfo WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IretentioncleanupinfoApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IretentioncleanupinfoFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IretentioncleanupinfoApi, 'FormattedValue'>]: string };
 	/** Additional details during cleanup operations. */
 	AdditionalDetails: string | null;
 	/** Unique identifier of the user who created the record. */

@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerpagecomponent_powerpagecomponent
- * All fields return string representation of their values
- */
-export interface Ipowerpagecomponent_powerpagecomponentFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly powerpagecomponent_powerpagecomponentId: string;
-	readonly powerpagecomponentidOne: string;
-	readonly powerpagecomponentidTwo: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerpagecomponent_powerpagecomponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ipowerpagecomponent_powerpagecomponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ipowerpagecomponent_powerpagecomponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ipowerpagecomponent_powerpagecomponentApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

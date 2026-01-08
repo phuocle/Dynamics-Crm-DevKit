@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DependencyFeature
- * All fields return string representation of their values
- */
-export interface IDependencyFeatureFormattedValue {
-	readonly ComponentState: string;
-	readonly DependencyFeatureId: string;
-	readonly DependencyFeatureIdUnique: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-}
-
-/**
  * DependencyFeature WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDependencyFeatureApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDependencyFeatureFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDependencyFeatureApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of a dependency feature. */

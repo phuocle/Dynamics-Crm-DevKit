@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonCommand
- * All fields return string representation of their values
- */
-export interface IRibbonCommandFormattedValue {
-	readonly Command: string;
-	readonly CommandDefinition: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Entity2: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RibbonCommandId: string;
-	readonly RibbonCommandUniqueId: string;
-	readonly RibbonCustomizationId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RibbonCommand WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonCommandApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonCommandFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonCommandApi, 'FormattedValue'>]: string };
 	/** The command's Id */
 	Command: string | null;
 	/** The JScript library and function to run when this command is executed. */

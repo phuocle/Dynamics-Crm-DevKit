@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Relationship
- * All fields return string representation of their values
- */
-export interface IRelationshipFormattedValue {
-	readonly CascadeArchive: string;
-	readonly ComponentState: string;
-	readonly EntityKeyId: string;
-	readonly IsRelationshipAttributeDenormalized: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RelationshipId: string;
-	readonly SolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Relationship WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRelationshipApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRelationshipFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRelationshipApi, 'FormattedValue'>]: string };
 	/** Cascade archive setting */
 	readonly CascadeArchive: number | null;
 	/** For internal use only. */

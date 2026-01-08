@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MsGraphResourceToSubscription
- * All fields return string representation of their values
- */
-export interface IMsGraphResourceToSubscriptionFormattedValue {
-	readonly CreatedInGraphOn_TimezoneDateAndTime: string;
-	readonly ImportSequenceNumber: string;
-	readonly MsGraphResourceToSubscriptionId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ResourceId: string;
-	readonly ResourceType: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SubscriptionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MsGraphResourceToSubscription WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMsGraphResourceToSubscriptionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMsGraphResourceToSubscriptionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMsGraphResourceToSubscriptionApi, 'FormattedValue'>]: string };
 	/** For internal use only. Date and time when the record was created in Graph. */
 	CreatedInGraphOn_TimezoneDateAndTime: Date | null;
 	/** Sequence number of the import that created this record. */

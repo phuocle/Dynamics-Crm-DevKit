@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_webform
- * All fields return string representation of their values
- */
-export interface Imspp_webformFormattedValue {
-	readonly mspp_authenticationrequired: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_editexistingrecordpermitted: string;
-	readonly mspp_editexpiredmessage: string;
-	readonly mspp_editexpiredstatecode: string;
-	readonly mspp_editexpiredstatuscode: string;
-	readonly mspp_editnotpermittedmessage: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_multiplerecordsperuserpermitted: string;
-	readonly mspp_name: string;
-	readonly mspp_progressindicatorenabled: string;
-	readonly mspp_progressindicatorignorelaststep: string;
-	readonly mspp_progressindicatorposition: string;
-	readonly mspp_progressindicatorprependstepnum: string;
-	readonly mspp_progressindicatortype: string;
-	readonly mspp_provisionedlanguages: string;
-	readonly mspp_savechangeswarningmessage: string;
-	readonly mspp_savechangeswarningonclose: string;
-	readonly mspp_startnewsessiononload: string;
-	readonly mspp_startstep: string;
-	readonly mspp_webformId: string;
-	readonly mspp_websiteid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_webform WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_webformApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_webformFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_webformApi, 'FormattedValue'>]: string };
 	/** Redirect to sign in if the user is anonymous. */
 	mspp_authenticationrequired: boolean | null;
 	/** Shows who created the record. */

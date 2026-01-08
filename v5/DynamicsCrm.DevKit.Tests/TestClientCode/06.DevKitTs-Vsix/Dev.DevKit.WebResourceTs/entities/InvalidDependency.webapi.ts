@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for InvalidDependency
- * All fields return string representation of their values
- */
-export interface IInvalidDependencyFormattedValue {
-	readonly ExistingComponentId: string;
-	readonly ExistingComponentType: string;
-	readonly ExistingDependencyType: string;
-	readonly InvalidDependencyId: string;
-	readonly IsExistingNodeRequiredComponent: string;
-	readonly MissingComponentId: string;
-	readonly MissingComponentInfo: string;
-	readonly MissingComponentLookupType: string;
-	readonly MissingComponentType: string;
-}
-
-/**
  * InvalidDependency WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IInvalidDependencyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IInvalidDependencyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IInvalidDependencyApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the object that has an invalid dependency */
 	readonly ExistingComponentId: DevKit.Guid | null;
 	/** Component type of the object that has an invalid dependency */

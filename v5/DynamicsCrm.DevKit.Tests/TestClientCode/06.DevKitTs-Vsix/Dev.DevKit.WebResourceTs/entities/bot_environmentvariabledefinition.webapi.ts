@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for bot_environmentvariabledefinition
- * All fields return string representation of their values
- */
-export interface Ibot_environmentvariabledefinitionFormattedValue {
-	readonly bot_environmentvariabledefinitionId: string;
-	readonly botid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly environmentvariabledefinitionid: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * bot_environmentvariabledefinition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ibot_environmentvariabledefinitionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ibot_environmentvariabledefinitionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ibot_environmentvariabledefinitionApi, 'FormattedValue'>]: string };
 	readonly bot_environmentvariabledefinitionId: DevKit.Guid | null;
 	readonly botid: DevKit.Guid | null;
 	/** For internal use only. */

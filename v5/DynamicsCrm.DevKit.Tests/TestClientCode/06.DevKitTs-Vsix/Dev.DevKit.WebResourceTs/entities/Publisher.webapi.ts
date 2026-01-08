@@ -6,82 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Publisher
- * All fields return string representation of their values
- */
-export interface IPublisherFormattedValue {
-	readonly Address1_AddressId: string;
-	readonly Address1_AddressTypeCode: string;
-	readonly Address1_City: string;
-	readonly Address1_Country: string;
-	readonly Address1_County: string;
-	readonly Address1_Fax: string;
-	readonly Address1_Latitude: string;
-	readonly Address1_Line1: string;
-	readonly Address1_Line2: string;
-	readonly Address1_Line3: string;
-	readonly Address1_Longitude: string;
-	readonly Address1_Name: string;
-	readonly Address1_PostalCode: string;
-	readonly Address1_PostOfficeBox: string;
-	readonly Address1_ShippingMethodCode: string;
-	readonly Address1_StateOrProvince: string;
-	readonly Address1_Telephone1: string;
-	readonly Address1_Telephone2: string;
-	readonly Address1_Telephone3: string;
-	readonly Address1_UPSZone: string;
-	readonly Address1_UTCOffset: string;
-	readonly Address2_AddressId: string;
-	readonly Address2_AddressTypeCode: string;
-	readonly Address2_City: string;
-	readonly Address2_Country: string;
-	readonly Address2_County: string;
-	readonly Address2_Fax: string;
-	readonly Address2_Latitude: string;
-	readonly Address2_Line1: string;
-	readonly Address2_Line2: string;
-	readonly Address2_Line3: string;
-	readonly Address2_Longitude: string;
-	readonly Address2_Name: string;
-	readonly Address2_PostalCode: string;
-	readonly Address2_PostOfficeBox: string;
-	readonly Address2_ShippingMethodCode: string;
-	readonly Address2_StateOrProvince: string;
-	readonly Address2_Telephone1: string;
-	readonly Address2_Telephone2: string;
-	readonly Address2_Telephone3: string;
-	readonly Address2_UPSZone: string;
-	readonly Address2_UTCOffset: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationOptionValuePrefix: string;
-	readonly CustomizationPrefix: string;
-	readonly Description: string;
-	readonly EMailAddress: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly FriendlyName: string;
-	readonly IsReadonly: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PinpointPublisherDefaultLocale: string;
-	readonly PinpointPublisherId: string;
-	readonly PublisherId: string;
-	readonly SupportingWebsiteUrl: string;
-	readonly UniqueName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Publisher WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPublisherApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPublisherFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPublisherApi, 'FormattedValue'>]: string };
 	/** Unique identifier for address 1. */
 	Address1_AddressId: DevKit.Guid | null;
 	/** Type of address for address 1, such as billing, shipping, or primary address. */

@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BusinessProcessLinkedArtifact
- * All fields return string representation of their values
- */
-export interface IBusinessProcessLinkedArtifactFormattedValue {
-	readonly ArtifactId: string;
-	readonly ArtifactType: string;
-	readonly BusinessProcess: string;
-	readonly BusinessProcessLinkedArtifactId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PlanArtifact: string;
-	readonly PlanLink: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BusinessProcessLinkedArtifact WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBusinessProcessLinkedArtifactApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBusinessProcessLinkedArtifactFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBusinessProcessLinkedArtifactApi, 'FormattedValue'>]: string };
 	/** Artifact Id */
 	ArtifactId: string | null;
 	/** Artifact Type */

@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for sharedworkspaceaccesstoken2
- * All fields return string representation of their values
- */
-export interface Isharedworkspaceaccesstoken2FormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectPartitionId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly sharedworkspaceaccesstoken2Id: string;
-	readonly SharedWorkspaceId: string;
-	readonly SystemUserId: string;
-	readonly TenantId: string;
-	readonly TokenId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * sharedworkspaceaccesstoken2 WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Isharedworkspaceaccesstoken2Api extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Isharedworkspaceaccesstoken2FormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Isharedworkspaceaccesstoken2Api, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when entity was created. */

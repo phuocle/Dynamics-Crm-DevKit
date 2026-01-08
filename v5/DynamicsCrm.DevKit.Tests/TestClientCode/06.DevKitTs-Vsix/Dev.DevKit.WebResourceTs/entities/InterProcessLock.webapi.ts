@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for InterProcessLock
- * All fields return string representation of their values
- */
-export interface IInterProcessLockFormattedValue {
-	readonly InterProcessLockId: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly Token: string;
-}
-
-/**
  * InterProcessLock WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IInterProcessLockApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IInterProcessLockFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IInterProcessLockApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the Inter Process Lock record. */
 	InterProcessLockId: DevKit.Guid | null;
 	/** Date and time when the record was last modified. */

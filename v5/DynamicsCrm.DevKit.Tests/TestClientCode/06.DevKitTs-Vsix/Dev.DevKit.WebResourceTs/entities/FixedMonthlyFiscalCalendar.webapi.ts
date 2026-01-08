@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for FixedMonthlyFiscalCalendar
- * All fields return string representation of their values
- */
-export interface IFixedMonthlyFiscalCalendarFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EffectiveOn_UtcDateOnly: string;
-	readonly ExchangeRate: string;
-	readonly FiscalPeriodType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Period1: string;
-	readonly Period1_Base: string;
-	readonly Period10: string;
-	readonly Period10_Base: string;
-	readonly Period11: string;
-	readonly Period11_Base: string;
-	readonly Period12: string;
-	readonly Period12_Base: string;
-	readonly Period13: string;
-	readonly Period13_Base: string;
-	readonly Period2: string;
-	readonly Period2_Base: string;
-	readonly Period3: string;
-	readonly Period3_Base: string;
-	readonly Period4: string;
-	readonly Period4_Base: string;
-	readonly Period5: string;
-	readonly Period5_Base: string;
-	readonly Period6: string;
-	readonly Period6_Base: string;
-	readonly Period7: string;
-	readonly Period7_Base: string;
-	readonly Period8: string;
-	readonly Period8_Base: string;
-	readonly Period9: string;
-	readonly Period9_Base: string;
-	readonly SalesPersonId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserFiscalCalendarId: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * FixedMonthlyFiscalCalendar WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFixedMonthlyFiscalCalendarApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFixedMonthlyFiscalCalendarFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFixedMonthlyFiscalCalendarApi, 'FormattedValue'>]: string };
 	/** Business unit responsible for the quota associated with this calendar. */
 	readonly BusinessUnitId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the fiscal calendar. */

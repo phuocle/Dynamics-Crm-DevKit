@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrincipalObjectAccessReadSnapshot
- * All fields return string representation of their values
- */
-export interface IPrincipalObjectAccessReadSnapshotFormattedValue {
-	readonly ChildUserPrincipalsCount: string;
-	readonly Count: string;
-	readonly CountPercentOfTotalRows: string;
-	readonly ObjectTypeCode: string;
-	readonly PrincipalId: string;
-	readonly PrincipalObjectAccessReadSnapshotId: string;
-	readonly PrincipalTypeCode: string;
-	readonly RecordCountForOwnerID: string;
-	readonly RecordCountForOwnerIDPercentOfTotalRows: string;
-	readonly RecordCountForOwningBU: string;
-	readonly RecordCountForOwningBUPercentOfTotalRows: string;
-	readonly TeamPrincipalsCount: string;
-}
-
-/**
  * PrincipalObjectAccessReadSnapshot WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrincipalObjectAccessReadSnapshotApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrincipalObjectAccessReadSnapshotFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrincipalObjectAccessReadSnapshotApi, 'FormattedValue'>]: string };
 	readonly ChildUserPrincipalsCount: number | null;
 	readonly Count: number | null;
 	readonly CountPercentOfTotalRows: number | null;

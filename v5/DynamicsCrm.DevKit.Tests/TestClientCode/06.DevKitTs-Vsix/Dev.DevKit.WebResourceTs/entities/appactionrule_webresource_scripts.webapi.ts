@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for appactionrule_webresource_scripts
- * All fields return string representation of their values
- */
-export interface Iappactionrule_webresource_scriptsFormattedValue {
-	readonly appactionrule_webresource_scriptsId: string;
-	readonly appactionruleid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-	readonly webresourceid: string;
-}
-
-/**
  * appactionrule_webresource_scripts WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iappactionrule_webresource_scriptsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iappactionrule_webresource_scriptsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iappactionrule_webresource_scriptsApi, 'FormattedValue'>]: string };
 	readonly appactionrule_webresource_scriptsId: DevKit.Guid | null;
 	readonly appactionruleid: DevKit.Guid | null;
 	/** For internal use only. */

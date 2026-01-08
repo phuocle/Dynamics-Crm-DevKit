@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityDataSource
- * All fields return string representation of their values
- */
-export interface IEntityDataSourceFormattedValue {
-	readonly ComponentState: string;
-	readonly ConnectionDefinition: string;
-	readonly ConnectionDefinitionSecrets: string;
-	readonly Description: string;
-	readonly EntityDataProviderId: string;
-	readonly EntityDataSourceId: string;
-	readonly EntityDataSourceIdUnique: string;
-	readonly EntityName2: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-}
-
-/**
  * EntityDataSource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityDataSourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityDataSourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityDataSourceApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** JSON data representing values from a data source entity as individual fields. */

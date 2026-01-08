@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for agentfeeditem
- * All fields return string representation of their values
- */
-export interface IagentfeeditemFormattedValue {
-	readonly agentfeeditemId: string;
-	readonly AssignedTo: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Priority: string;
-	readonly State: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly Tasks: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * agentfeeditem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IagentfeeditemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IagentfeeditemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IagentfeeditemApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	agentfeeditemId: DevKit.Guid | null;
 	/** Assigned To */

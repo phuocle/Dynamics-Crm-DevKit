@@ -6,54 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SLA
- * All fields return string representation of their values
- */
-export interface ISLAFormattedValue {
-	readonly AllowPauseResume: string;
-	readonly ApplicableFrom: string;
-	readonly ApplicableFromPickList: string;
-	readonly BusinessHoursId: string;
-	readonly ChangedAttributeList: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly IsDefault: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly ObjectTypeCode: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PrimaryEntityOTC: string;
-	readonly SLAId: string;
-	readonly SLAIdUnique: string;
-	readonly SLAType: string;
-	readonly slaversion: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-	readonly WorkflowId: string;
-}
-
-/**
  * SLA WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISLAApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISLAFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISLAApi, 'FormattedValue'>]: string };
 	/** Select whether this SLA will allow pausing and resuming during the time calculation. */
 	AllowPauseResume: boolean | null;
 	/** Select the field that specifies the date and time from which the SLA items will be calculated for the case record. For example, if you select the Case Created On field, SLA calculation will begin from the time the case is created.  */

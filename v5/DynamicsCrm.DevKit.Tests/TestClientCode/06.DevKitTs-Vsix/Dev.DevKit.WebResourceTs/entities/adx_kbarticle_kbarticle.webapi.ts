@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for adx_kbarticle_kbarticle
- * All fields return string representation of their values
- */
-export interface Iadx_kbarticle_kbarticleFormattedValue {
-	readonly adx_kbarticle_kbarticleId: string;
-	readonly kbarticleidOne: string;
-	readonly kbarticleidTwo: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * adx_kbarticle_kbarticle WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iadx_kbarticle_kbarticleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iadx_kbarticle_kbarticleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iadx_kbarticle_kbarticleApi, 'FormattedValue'>]: string };
 	readonly adx_kbarticle_kbarticleId: DevKit.Guid | null;
 	readonly kbarticleidOne: DevKit.Guid | null;
 	readonly kbarticleidTwo: DevKit.Guid | null;

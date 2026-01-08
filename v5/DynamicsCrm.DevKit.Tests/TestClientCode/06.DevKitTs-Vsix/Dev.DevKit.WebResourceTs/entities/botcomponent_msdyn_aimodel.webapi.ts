@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for botcomponent_msdyn_aimodel
- * All fields return string representation of their values
- */
-export interface Ibotcomponent_msdyn_aimodelFormattedValue {
-	readonly botcomponent_msdyn_aimodelId: string;
-	readonly botcomponentid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly msdyn_aimodelid: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * botcomponent_msdyn_aimodel WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ibotcomponent_msdyn_aimodelApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ibotcomponent_msdyn_aimodelFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ibotcomponent_msdyn_aimodelApi, 'FormattedValue'>]: string };
 	readonly botcomponent_msdyn_aimodelId: DevKit.Guid | null;
 	readonly botcomponentid: DevKit.Guid | null;
 	/** For internal use only. */

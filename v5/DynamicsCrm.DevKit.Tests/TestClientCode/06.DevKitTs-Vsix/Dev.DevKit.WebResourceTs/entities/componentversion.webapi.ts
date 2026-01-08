@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for componentversion
- * All fields return string representation of their values
- */
-export interface IcomponentversionFormattedValue {
-	readonly ChangeSummary: string;
-	readonly Component: string;
-	readonly componentversionId: string;
-	readonly componentversionname: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Operation: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RestoredFromVersion: string;
-	readonly SystemChangeSummary: string;
-}
-
-/**
  * componentversion WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcomponentversionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcomponentversionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcomponentversionApi, 'FormattedValue'>]: string };
 	/** Change Summary */
 	ChangeSummary: string | null;
 	/** Owning component. */

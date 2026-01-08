@@ -6,76 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CanvasApp
- * All fields return string representation of their values
- */
-export interface ICanvasAppFormattedValue {
-	readonly AADCreatedById: string;
-	readonly AADLastModifiedById: string;
-	readonly AADLastPublishedById: string;
-	readonly AdminControlBypassConsent: string;
-	readonly AppComponentDependencies: string;
-	readonly AppComponents: string;
-	readonly AppOpenUri: string;
-	readonly AppVersion: string;
-	readonly Assets_name: string;
-	readonly AuthorizationReferences: string;
-	readonly BackgroundColor: string;
-	readonly BackgroundImage_name: string;
-	readonly BypassConsent: string;
-	readonly CanConsumeAppPass: string;
-	readonly CanvasAppId: string;
-	readonly CanvasAppRowId: string;
-	readonly CanvasAppType: string;
-	readonly CdsDependencies: string;
-	readonly CommitMessage: string;
-	readonly ComponentState: string;
-	readonly ConnectionReferences: string;
-	readonly CreatedByClientVersion: string;
-	readonly CreatedTime_UtcDateAndTime: string;
-	readonly DatabaseReferences: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly Document_name: string;
-	readonly EmbeddedApp: string;
-	readonly GalleryItemId: string;
-	readonly IntroducedVersion: string;
-	readonly IsCdsUpgraded: string;
-	readonly IsCustomizable: string;
-	readonly IsFeaturedApp: string;
-	readonly IsHeroApp: string;
-	readonly IsHidden: string;
-	readonly IsManaged: string;
-	readonly LargeIcon_name: string;
-	readonly LastModifiedTime_UtcDateAndTime: string;
-	readonly LastPublishTime_UtcDateAndTime: string;
-	readonly MediumIcon_name: string;
-	readonly MinClientVersion: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Publisher: string;
-	readonly SmallIcon_name: string;
-	readonly SolutionId: string;
-	readonly Status: string;
-	readonly SupportingSolutionId: string;
-	readonly Tags: string;
-	readonly TeamsIcon_name: string;
-	readonly UniqueCanvasAppId: string;
-	readonly VersionNumber: string;
-	readonly WideIcon_name: string;
-}
-
-/**
  * CanvasApp WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICanvasAppApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICanvasAppFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICanvasAppApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the canvas app. */
 	AADCreatedById: string | null;
 	/** Unique identifier of the user who last modified the application. */

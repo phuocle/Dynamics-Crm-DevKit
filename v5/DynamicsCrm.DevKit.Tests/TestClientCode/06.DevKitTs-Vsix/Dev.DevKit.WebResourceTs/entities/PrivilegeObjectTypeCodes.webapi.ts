@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrivilegeObjectTypeCodes
- * All fields return string representation of their values
- */
-export interface IPrivilegeObjectTypeCodesFormattedValue {
-	readonly ComponentState: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PrivilegeId: string;
-	readonly PrivilegeObjectTypeCodeId: string;
-	readonly PrivilegeObjectTypeCodeRowId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrivilegeObjectTypeCodes WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrivilegeObjectTypeCodesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrivilegeObjectTypeCodesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrivilegeObjectTypeCodesApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Version in which the component is introduced. */

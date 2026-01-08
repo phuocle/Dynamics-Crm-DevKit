@@ -6,59 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SavedQuery
- * All fields return string representation of their values
- */
-export interface ISavedQueryFormattedValue {
-	readonly AdvancedGroupBy: string;
-	readonly CanBeDeleted: string;
-	readonly ColumnSetXml: string;
-	readonly ComponentState: string;
-	readonly ConditionalFormatting: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EnableCrossPartition: string;
-	readonly FetchXml: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustom: string;
-	readonly IsCustomizable: string;
-	readonly IsDefault: string;
-	readonly IsManaged: string;
-	readonly IsPrivate: string;
-	readonly IsQuickFindQuery: string;
-	readonly IsUserDefined: string;
-	readonly LayoutJson: string;
-	readonly LayoutXml: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OfflineSqlQuery: string;
-	readonly OrganizationId: string;
-	readonly OrganizationTabOrder: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly QueryAPI: string;
-	readonly QueryAppUsage: string;
-	readonly QueryType: string;
-	readonly RoleDisplayConditionsXml: string;
-	readonly SavedQueryId: string;
-	readonly SavedQueryIdUnique: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SavedQuery WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISavedQueryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISavedQueryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISavedQueryApi, 'FormattedValue'>]: string };
 	/** Type the column name that will be used to group the results from the data collected across multiple records from a system view. */
 	AdvancedGroupBy: string | null;
 	/** Tells whether the view can be deleted. */

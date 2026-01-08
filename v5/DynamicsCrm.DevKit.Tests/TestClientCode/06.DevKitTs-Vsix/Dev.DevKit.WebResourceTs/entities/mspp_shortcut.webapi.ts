@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_shortcut
- * All fields return string representation of their values
- */
-export interface Imspp_shortcutFormattedValue {
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_description: string;
-	readonly mspp_disabletargetvalidation: string;
-	readonly mspp_displayorder: string;
-	readonly mspp_externalurl: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_parentpage_webpageid: string;
-	readonly mspp_shortcutId: string;
-	readonly mspp_title: string;
-	readonly mspp_webfileid: string;
-	readonly mspp_webpageid: string;
-	readonly mspp_websiteid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_shortcut WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_shortcutApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_shortcutFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_shortcutApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	mspp_createdby: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. */

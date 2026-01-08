@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_aiodlabel_msdyn_aiconfiguration
- * All fields return string representation of their values
- */
-export interface Imsdyn_aiodlabel_msdyn_aiconfigurationFormattedValue {
-	readonly msdyn_aiconfigurationid: string;
-	readonly msdyn_aiodlabel_msdyn_aiconfigurationId: string;
-	readonly msdyn_aiodlabelid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_aiodlabel_msdyn_aiconfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_aiodlabel_msdyn_aiconfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_aiodlabel_msdyn_aiconfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_aiodlabel_msdyn_aiconfigurationApi, 'FormattedValue'>]: string };
 	readonly msdyn_aiconfigurationid: DevKit.Guid | null;
 	readonly msdyn_aiodlabel_msdyn_aiconfigurationId: DevKit.Guid | null;
 	readonly msdyn_aiodlabelid: DevKit.Guid | null;

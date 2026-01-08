@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for package_solution
- * All fields return string representation of their values
- */
-export interface Ipackage_solutionFormattedValue {
-	readonly package_solutionId: string;
-	readonly packageid: string;
-	readonly solutionid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * package_solution WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ipackage_solutionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ipackage_solutionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ipackage_solutionApi, 'FormattedValue'>]: string };
 	readonly package_solutionId: DevKit.Guid | null;
 	readonly packageid: DevKit.Guid | null;
 	readonly solutionid: DevKit.Guid | null;

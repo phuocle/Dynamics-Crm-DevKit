@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppConfigInstance
- * All fields return string representation of their values
- */
-export interface IAppConfigInstanceFormattedValue {
-	readonly AppConfigId: string;
-	readonly AppConfigIdUnique: string;
-	readonly AppConfigInstanceId: string;
-	readonly AppConfigInstanceIdUnique: string;
-	readonly AppConfigMasterId: string;
-	readonly ComponentState: string;
-	readonly ComponentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectId: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly Value: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AppConfigInstance WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppConfigInstanceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppConfigInstanceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppConfigInstanceApi, 'FormattedValue'>]: string };
 	/** System-calculated App Configuration unique identifier. */
 	AppConfigId: DevKit.Guid | null;
 	/** Enter the App Configuration unique identifier of AppConfig entity for which this customization belongs. */

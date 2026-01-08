@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MultiEntitySearchEntities
- * All fields return string representation of their values
- */
-export interface IMultiEntitySearchEntitiesFormattedValue {
-	readonly EntityName2: string;
-	readonly EntityOrder: string;
-	readonly MultiEntitySearchEntityId: string;
-	readonly MultiEntitySearchId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MultiEntitySearchEntities WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMultiEntitySearchEntitiesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMultiEntitySearchEntitiesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMultiEntitySearchEntitiesApi, 'FormattedValue'>]: string };
 	/** Logical entity name of the entity participating in the multi entity search. */
 	readonly EntityName2: string | null;
 	/** Order of the entity in the result collection. */

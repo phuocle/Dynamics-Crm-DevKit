@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CardType
- * All fields return string representation of their values
- */
-export interface ICardTypeFormattedValue {
-	readonly Actions: string;
-	readonly AdaptiveCardTemplate: string;
-	readonly BoolCardOption: string;
-	readonly CardName: string;
-	readonly CardType2: string;
-	readonly CardTypeIcon: string;
-	readonly CardTypeId: string;
-	readonly ClientAvailability: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExchangeRate: string;
-	readonly GroupCategory: string;
-	readonly GroupType: string;
-	readonly HasSnoozeDismiss: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntCardOption: string;
-	readonly IsBaseCard: string;
-	readonly IsEnabled: string;
-	readonly IsLiveOnly: string;
-	readonly IsPreviewCard: string;
-	readonly LastSyncTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly Priority: string;
-	readonly PublisherName: string;
-	readonly ScheduleTime_TimezoneDateAndTime: string;
-	readonly SoftTitle: string;
-	readonly StringCardOption: string;
-	readonly SummaryText: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CardType WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICardTypeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICardTypeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICardTypeApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	Actions: string | null;
 	/** AdaptiveCard template. */

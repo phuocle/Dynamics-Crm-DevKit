@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ReplicationBacklog
- * All fields return string representation of their values
- */
-export interface IReplicationBacklogFormattedValue {
-	readonly Data: string;
-	readonly ReplicationBacklogId: string;
-	readonly ReplicationBacklogType: string;
-	readonly TargetDatacenterId: string;
-	readonly TargetObjectId: string;
-}
-
-/**
  * ReplicationBacklog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IReplicationBacklogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IReplicationBacklogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IReplicationBacklogApi, 'FormattedValue'>]: string };
 	/** Additional data related to the replication backlog entry. For internal use only. */
 	readonly Data: string | null;
 	/** Unique identifier of the replication backlog entry. */

@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TeamMembership
- * All fields return string representation of their values
- */
-export interface ITeamMembershipFormattedValue {
-	readonly SystemUserId: string;
-	readonly TeamId: string;
-	readonly TeamMembershipId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TeamMembership WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITeamMembershipApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITeamMembershipFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITeamMembershipApi, 'FormattedValue'>]: string };
 	readonly SystemUserId: DevKit.Guid | null;
 	readonly TeamId: DevKit.Guid | null;
 	/** Unique identifier of the team membership. */

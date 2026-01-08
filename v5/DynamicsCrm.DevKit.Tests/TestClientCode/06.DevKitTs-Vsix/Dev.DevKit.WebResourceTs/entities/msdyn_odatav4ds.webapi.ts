@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_odatav4ds
- * All fields return string representation of their values
- */
-export interface Imsdyn_odatav4dsFormattedValue {
-	readonly msdyn_description: string;
-	readonly msdyn_isparameter10header: string;
-	readonly msdyn_isparameter1header: string;
-	readonly msdyn_isparameter2header: string;
-	readonly msdyn_isparameter3header: string;
-	readonly msdyn_isparameter4header: string;
-	readonly msdyn_isparameter5header: string;
-	readonly msdyn_isparameter6header: string;
-	readonly msdyn_isparameter7header: string;
-	readonly msdyn_isparameter8header: string;
-	readonly msdyn_isparameter9header: string;
-	readonly msdyn_name: string;
-	readonly msdyn_odatav4dsId: string;
-	readonly msdyn_paginationmode: string;
-	readonly msdyn_paginationtype: string;
-	readonly msdyn_parameter10name: string;
-	readonly msdyn_parameter10value: string;
-	readonly msdyn_parameter1name: string;
-	readonly msdyn_parameter1value: string;
-	readonly msdyn_parameter2name: string;
-	readonly msdyn_parameter2value: string;
-	readonly msdyn_parameter3name: string;
-	readonly msdyn_parameter3value: string;
-	readonly msdyn_parameter4name: string;
-	readonly msdyn_parameter4value: string;
-	readonly msdyn_parameter5name: string;
-	readonly msdyn_parameter5value: string;
-	readonly msdyn_parameter6name: string;
-	readonly msdyn_parameter6value: string;
-	readonly msdyn_parameter7name: string;
-	readonly msdyn_parameter7value: string;
-	readonly msdyn_parameter8name: string;
-	readonly msdyn_parameter8value: string;
-	readonly msdyn_parameter9name: string;
-	readonly msdyn_parameter9value: string;
-	readonly msdyn_returninlinecount: string;
-	readonly msdyn_timeout: string;
-	readonly msdyn_uri: string;
-}
-
-/**
  * msdyn_odatav4ds WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_odatav4dsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_odatav4dsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_odatav4dsApi, 'FormattedValue'>]: string };
 	/** Type additional information to describe this OData v4 data source. What environment does this data source target and what is the purpose of this system ? */
 	msdyn_description: string | null;
 	/** Parameter10 Type */

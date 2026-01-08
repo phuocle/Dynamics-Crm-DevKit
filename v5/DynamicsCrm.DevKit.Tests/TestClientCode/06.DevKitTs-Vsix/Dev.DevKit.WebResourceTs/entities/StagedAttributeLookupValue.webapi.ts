@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedAttributeLookupValue
- * All fields return string representation of their values
- */
-export interface IStagedAttributeLookupValueFormattedValue {
-	readonly AttributeId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityId: string;
-	readonly ImportSequenceNumber: string;
-	readonly MetadataDescription: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly StagedAttributeLookupValueId: string;
-	readonly StagingExecutionContextId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedAttributeLookupValue WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedAttributeLookupValueApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedAttributeLookupValueFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedAttributeLookupValueApi, 'FormattedValue'>]: string };
 	/** Identifier of the lookup attribute. */
 	AttributeId: DevKit.Guid | null;
 	/** Solution component state of attribute lookup value. */

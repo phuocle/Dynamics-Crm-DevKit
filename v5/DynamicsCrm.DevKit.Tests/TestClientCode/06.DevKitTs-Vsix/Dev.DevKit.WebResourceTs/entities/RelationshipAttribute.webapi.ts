@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RelationshipAttribute
- * All fields return string representation of their values
- */
-export interface IRelationshipAttributeFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly ReferencedAttributeId: string;
-	readonly ReferencingAttributeId: string;
-	readonly RelationshipAttributeId: string;
-	readonly RelationshipId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly versionnumber: string;
-}
-
-/**
  * RelationshipAttribute WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRelationshipAttributeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRelationshipAttributeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRelationshipAttributeApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

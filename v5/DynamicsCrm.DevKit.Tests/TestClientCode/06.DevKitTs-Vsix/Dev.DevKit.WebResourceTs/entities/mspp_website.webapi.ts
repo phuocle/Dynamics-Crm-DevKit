@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_website
- * All fields return string representation of their values
- */
-export interface Imspp_websiteFormattedValue {
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_defaultlanguage: string;
-	readonly mspp_footerwebtemplateid: string;
-	readonly mspp_headerwebtemplateid: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_parentwebsiteid: string;
-	readonly mspp_partialurl: string;
-	readonly mspp_primarydomainname: string;
-	readonly mspp_website_language: string;
-	readonly mspp_website_version: string;
-	readonly mspp_websiteId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_website WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_websiteApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_websiteFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_websiteApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	mspp_createdby: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. */

@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for solutioncomponentrelationshipconfiguration
- * All fields return string representation of their values
- */
-export interface IsolutioncomponentrelationshipconfigurationFormattedValue {
-	readonly AddRelatedComponents: string;
-	readonly CascadeRemoveComponents: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityRelationshipId: string;
-	readonly ForceAddingManagedRelatedComponents: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly NoMissingDependencyForApiManagedSolution: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly PrimaryEntityDependencyType: string;
-	readonly RespectParentRootComponentBehavior: string;
-	readonly SecondaryEntityDependencyType: string;
-	readonly solutioncomponentrelationshipconfigurationId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * solutioncomponentrelationshipconfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsolutioncomponentrelationshipconfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsolutioncomponentrelationshipconfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsolutioncomponentrelationshipconfigurationApi, 'FormattedValue'>]: string };
 	/** Add Related Components */
 	AddRelatedComponents: boolean | null;
 	/** Cascade Remove Components */

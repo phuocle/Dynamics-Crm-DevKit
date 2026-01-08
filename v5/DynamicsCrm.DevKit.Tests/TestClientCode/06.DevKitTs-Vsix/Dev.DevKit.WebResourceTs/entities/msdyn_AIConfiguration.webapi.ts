@@ -6,70 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_AIConfiguration
- * All fields return string representation of their values
- */
-export interface Imsdyn_AIConfigurationFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AIConfigurationId: string;
-	readonly msdyn_AIConfigurationIdUnique: string;
-	readonly msdyn_AIModelId: string;
-	readonly msdyn_ConnectionReferenceId: string;
-	readonly msdyn_CreatedFromConfigurationId: string;
-	readonly msdyn_CustomConfiguration: string;
-	readonly msdyn_DataBinding: string;
-	readonly msdyn_lasterrors: string;
-	readonly msdyn_lasttrainorrundate_TimezoneDateAndTime: string;
-	readonly msdyn_MajorIterationNumber: string;
-	readonly msdyn_MinorIterationNumber: string;
-	readonly msdyn_Model_name: string;
-	readonly msdyn_ModelAction: string;
-	readonly msdyn_ModelData: string;
-	readonly msdyn_modelglobalexplainability: string;
-	readonly msdyn_ModelPerformance: string;
-	readonly msdyn_ModelProvisioningMetadata: string;
-	readonly msdyn_ModelProvisioningStatus: string;
-	readonly msdyn_ModelRunDataSpecification: string;
-	readonly msdyn_Name: string;
-	readonly msdyn_ResourceInfo: string;
-	readonly msdyn_RunConfiguration: string;
-	readonly msdyn_SchedulingOptions: string;
-	readonly msdyn_TemplateVersion: string;
-	readonly msdyn_TrainedModelAIConfigurationPareId: string;
-	readonly msdyn_Type: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwnerIdType: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_AIConfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_AIConfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_AIConfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_AIConfigurationApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the record. */

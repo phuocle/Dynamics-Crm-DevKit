@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonCustomization
- * All fields return string representation of their values
- */
-export interface IRibbonCustomizationFormattedValue {
-	readonly ComponentState: string;
-	readonly Entity2: string;
-	readonly IsManaged: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PublishedOn_UtcDateAndTime: string;
-	readonly RibbonCustomizationId: string;
-	readonly RibbonCustomizationUniqueId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RibbonCustomization WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonCustomizationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonCustomizationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonCustomizationApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Specifies which entity's ribbons this customization applies to. If null, then the customizations apply to the global ribbons. */

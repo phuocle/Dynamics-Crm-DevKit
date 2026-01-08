@@ -6,54 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for purviewlabelinfo
- * All fields return string representation of their values
- */
-export interface IpurviewlabelinfoFormattedValue {
-	readonly ApplicableTo: string;
-	readonly ApplicationMode: string;
-	readonly Color: string;
-	readonly ContentFormats: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultSubLabelId: string;
-	readonly Description: string;
-	readonly HasProtection: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsActive: string;
-	readonly IsApplicable: string;
-	readonly IsDataverseProtected: string;
-	readonly IsDefault: string;
-	readonly IsEnabled: string;
-	readonly IsEndpointProtectionEnabled: string;
-	readonly IsParent: string;
-	readonly IsSmimeEncryptEnabled: string;
-	readonly IsSmimeSignEnabled: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ParentLabelId: string;
-	readonly Priority: string;
-	readonly purviewlabelinfoId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Tooltip: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * purviewlabelinfo WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IpurviewlabelinfoApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpurviewlabelinfoFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IpurviewlabelinfoApi, 'FormattedValue'>]: string };
 	/** Applicable To */
 	ApplicableTo: string | null;
 	/** Application Mode */

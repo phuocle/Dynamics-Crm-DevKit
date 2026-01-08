@@ -6,61 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppModule
- * All fields return string representation of their values
- */
-export interface IAppModuleFormattedValue {
-	readonly aiappdescription: string;
-	readonly aidescriptiongeneratedon_UtcDateAndTime: string;
-	readonly appgraph: string;
-	readonly AppModuleId: string;
-	readonly AppModuleIdUnique: string;
-	readonly AppModuleVersion: string;
-	readonly AppModuleXmlManaged: string;
-	readonly ClientType: string;
-	readonly ComponentState: string;
-	readonly ConfigXML: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly Descriptor: string;
-	readonly EventHandlers: string;
-	readonly FormFactor: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsDefault: string;
-	readonly IsFeatured: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NavigationType: string;
-	readonly OptimizedFor: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PublishedOn_UtcDateAndTime: string;
-	readonly PublisherId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly UniqueName: string;
-	readonly URL: string;
-	readonly VersionNumber: string;
-	readonly WebResourceId: string;
-	readonly WelcomePageId: string;
-}
-
-/**
  * AppModule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppModuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppModuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppModuleApi, 'FormattedValue'>]: string };
 	/** This field is used to store AI generated Description for Model-driven App */
 	aiappdescription: string | null;
 	/** This field stores the Time when last AI App Description was generated. */

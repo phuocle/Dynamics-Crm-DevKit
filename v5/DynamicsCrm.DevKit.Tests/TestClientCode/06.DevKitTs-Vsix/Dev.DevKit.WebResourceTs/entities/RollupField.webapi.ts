@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RollupField
- * All fields return string representation of their values
- */
-export interface IRollupFieldFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DateAttribute: string;
-	readonly GoalAttribute: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsStateParentEntityAttribute: string;
-	readonly MetricId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly RollupFieldId: string;
-	readonly SourceAttribute: string;
-	readonly SourceState: string;
-	readonly SourceStatus: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RollupField WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRollupFieldApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRollupFieldFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRollupFieldApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

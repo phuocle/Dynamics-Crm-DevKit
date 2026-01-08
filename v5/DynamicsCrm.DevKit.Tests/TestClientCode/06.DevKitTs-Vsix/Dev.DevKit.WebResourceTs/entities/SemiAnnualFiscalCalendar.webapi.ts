@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SemiAnnualFiscalCalendar
- * All fields return string representation of their values
- */
-export interface ISemiAnnualFiscalCalendarFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EffectiveOn_UtcDateOnly: string;
-	readonly ExchangeRate: string;
-	readonly FiscalPeriodType: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Period1: string;
-	readonly Period1_Base: string;
-	readonly Period7: string;
-	readonly Period7_Base: string;
-	readonly SalesPersonId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserFiscalCalendarId: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * SemiAnnualFiscalCalendar WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISemiAnnualFiscalCalendarApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISemiAnnualFiscalCalendarFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISemiAnnualFiscalCalendarApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the business unit with which the calendar is associated. */
 	readonly BusinessUnitId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the semiannual fiscal calendar. */

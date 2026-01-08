@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MCPServer
- * All fields return string representation of their values
- */
-export interface IMCPServerFormattedValue {
-	readonly Audience: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Configuration: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly Icon: string;
-	readonly IconId: string;
-	readonly ImportSequenceNumber: string;
-	readonly Instructions: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsRemote: string;
-	readonly MCPServerId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RelativePath: string;
-	readonly Scope: string;
-	readonly ServerType: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MCPServer WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMCPServerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMCPServerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMCPServerApi, 'FormattedValue'>]: string };
 	/** Audience associated with the MCP Server. */
 	Audience: string | null;
 	/** For internal use only. */

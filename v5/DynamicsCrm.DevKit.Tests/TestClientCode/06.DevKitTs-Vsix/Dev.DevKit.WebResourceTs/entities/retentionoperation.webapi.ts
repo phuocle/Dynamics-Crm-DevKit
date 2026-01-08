@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for retentionoperation
- * All fields return string representation of their values
- */
-export interface IretentionoperationFormattedValue {
-	readonly AdditionalDetails: string;
-	readonly AsyncOperationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Criteria: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly FailedCount: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastMarkedVersionNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PagingCookie: string;
-	readonly RetentionConfigId: string;
-	readonly RetentionCount: string;
-	readonly retentionoperationId: string;
-	readonly RootEntityLogicalName: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * retentionoperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IretentionoperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IretentionoperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IretentionoperationApi, 'FormattedValue'>]: string };
 	/** Addintional details. */
 	AdditionalDetails: string | null;
 	/** For internal use only. */

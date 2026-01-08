@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for QuarterlyFiscalCalendar
- * All fields return string representation of their values
- */
-export interface IQuarterlyFiscalCalendarFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EffectiveOn_UtcDateOnly: string;
-	readonly ExchangeRate: string;
-	readonly FiscalPeriodType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Period1: string;
-	readonly Period1_Base: string;
-	readonly Period10: string;
-	readonly Period10_Base: string;
-	readonly Period4: string;
-	readonly Period4_Base: string;
-	readonly Period7: string;
-	readonly Period7_Base: string;
-	readonly SalesPersonId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserFiscalCalendarId: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * QuarterlyFiscalCalendar WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IQuarterlyFiscalCalendarApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IQuarterlyFiscalCalendarFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IQuarterlyFiscalCalendarApi, 'FormattedValue'>]: string };
 	readonly BusinessUnitId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the quarterly fiscal calendar. */
 	readonly CreatedBy: DevKit.Guid | null;

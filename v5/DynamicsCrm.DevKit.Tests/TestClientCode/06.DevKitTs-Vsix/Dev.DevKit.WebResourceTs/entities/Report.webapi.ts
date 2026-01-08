@@ -6,81 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Report
- * All fields return string representation of their values
- */
-export interface IReportFormattedValue {
-	readonly ApplicationId: string;
-	readonly BodyBinary: string;
-	readonly BodyText: string;
-	readonly BodyUrl: string;
-	readonly CdsDatasetId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedInMajorVersion: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomReportXml: string;
-	readonly DefaultFilter: string;
-	readonly DependentModelReportId: string;
-	readonly Description: string;
-	readonly FileContent_name: string;
-	readonly FileName: string;
-	readonly FileSize: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsCustomReport: string;
-	readonly IsManaged: string;
-	readonly IsPersonal: string;
-	readonly IsScheduledReport: string;
-	readonly LanguageCode: string;
-	readonly ManagedType: string;
-	readonly MimeType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OriginalBodyText: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentReportId: string;
-	readonly PowerBiDatasetId: string;
-	readonly PowerBiFeatureTag: string;
-	readonly PowerBiReportId: string;
-	readonly PowerBiReportInternalState: string;
-	readonly PowerBiReportName: string;
-	readonly PowerBiWorkspaceInfo: string;
-	readonly QueryInfo: string;
-	readonly RdlHash: string;
-	readonly ReportId: string;
-	readonly ReportIdUnique: string;
-	readonly ReportNameOnSRS: string;
-	readonly ReportStatus: string;
-	readonly ReportTypeCode: string;
-	readonly ReportVersion: string;
-	readonly ScheduleXml: string;
-	readonly SignatureDate_UtcDateOnly: string;
-	readonly SignatureId: string;
-	readonly SignatureLcid: string;
-	readonly SignatureMajorVersion: string;
-	readonly SignatureMinorVersion: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Report WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IReportApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IReportFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IReportApi, 'FormattedValue'>]: string };
 	/** Represents the application id to which a CDS powerbi report belongs to. */
 	readonly ApplicationId: string | null;
 	/** Binary report contents (base-64 encoded). */

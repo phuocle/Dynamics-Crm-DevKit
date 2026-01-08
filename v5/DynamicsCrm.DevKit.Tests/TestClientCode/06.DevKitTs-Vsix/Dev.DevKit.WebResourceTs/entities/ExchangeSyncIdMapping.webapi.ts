@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ExchangeSyncIdMapping
- * All fields return string representation of their values
- */
-export interface IExchangeSyncIdMappingFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly ExchangeEntryId: string;
-	readonly ExchangeSyncIdmappingId: string;
-	readonly FromCrmChangeType: string;
-	readonly IsDeletedInExchange: string;
-	readonly IsUnlinkedInCRM: string;
-	readonly ItemSubject: string;
-	readonly LastSyncError: string;
-	readonly LastSyncErrorCode: string;
-	readonly LastSyncErrorOccurredOn_UtcDateAndTime: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ObjectId: string;
-	readonly ObjectTypeCode: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Retries: string;
-	readonly ToCrmChangeType: string;
-	readonly UserDecision: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ExchangeSyncIdMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IExchangeSyncIdMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IExchangeSyncIdMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IExchangeSyncIdMappingApi, 'FormattedValue'>]: string };
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** Exchange Id */

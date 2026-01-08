@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ConnectionRoleAssociation
- * All fields return string representation of their values
- */
-export interface IConnectionRoleAssociationFormattedValue {
-	readonly AssociatedConnectionRoleId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly ConnectionRoleAssociationId: string;
-	readonly ConnectionRoleId: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ConnectionRoleAssociation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IConnectionRoleAssociationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IConnectionRoleAssociationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IConnectionRoleAssociationApi, 'FormattedValue'>]: string };
 	AssociatedConnectionRoleId: DevKit.Guid | null;
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;

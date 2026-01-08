@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppModuleMetadataOperationLog
- * All fields return string representation of their values
- */
-export interface IAppModuleMetadataOperationLogFormattedValue {
-	readonly AppModuleId: string;
-	readonly AppModuleMetadataOperationLogId: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly RetryCount: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly State: string;
-}
-
-/**
  * AppModuleMetadataOperationLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppModuleMetadataOperationLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppModuleMetadataOperationLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppModuleMetadataOperationLogApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	AppModuleId: DevKit.Guid | null;
 	/** For internal use only. */

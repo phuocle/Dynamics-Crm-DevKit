@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_flow_approvalrequest
- * All fields return string representation of their values
- */
-export interface Imsdyn_flow_approvalrequestFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_flow_approvalrequest_allowreassignment: string;
-	readonly msdyn_flow_approvalrequest_approval: string;
-	readonly msdyn_flow_approvalrequest_approvalstagekey: string;
-	readonly msdyn_flow_approvalrequest_dueon_UtcDateAndTime: string;
-	readonly msdyn_flow_approvalrequest_expireson_UtcDateAndTime: string;
-	readonly msdyn_flow_approvalrequest_lastnotifiedon_UtcDateAndTime: string;
-	readonly msdyn_flow_approvalrequest_name: string;
-	readonly msdyn_flow_approvalrequest_notificationfrequency: string;
-	readonly msdyn_flow_approvalrequest_options: string;
-	readonly msdyn_flow_approvalrequest_partnermetadata: string;
-	readonly msdyn_flow_approvalrequest_reassignedfrom: string;
-	readonly msdyn_flow_approvalrequest_responseoptions: string;
-	readonly msdyn_flow_approvalrequest_responseoptionstype: string;
-	readonly msdyn_flow_approvalrequest_stage: string;
-	readonly msdyn_flow_approvalrequest_stepnumber: string;
-	readonly msdyn_flow_approvalrequestId: string;
-	readonly msdyn_flow_approvalrequestidx_approvalid: string;
-	readonly msdyn_flow_approvalrequestidx_owninguserid: string;
-	readonly msdyn_flow_approvalrequestidx_reassignedfromid: string;
-	readonly msdyn_flow_approvalrequestidx_stage: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly StageNumber: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_flow_approvalrequest WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_flow_approvalrequestApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_flow_approvalrequestFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_flow_approvalrequestApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

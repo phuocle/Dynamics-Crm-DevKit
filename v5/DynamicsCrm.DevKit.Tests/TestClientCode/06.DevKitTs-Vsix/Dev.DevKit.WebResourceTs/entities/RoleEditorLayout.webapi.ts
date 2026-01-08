@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RoleEditorLayout
- * All fields return string representation of their values
- */
-export interface IRoleEditorLayoutFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DisplayName: string;
-	readonly EntityLogicalName: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsPrivacyRelated: string;
-	readonly ItemType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly PrivilegeName: string;
-	readonly RoleEditorLayoutHierarchyId: string;
-	readonly RoleEditorLayoutId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TabOrder: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * RoleEditorLayout WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRoleEditorLayoutApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRoleEditorLayoutFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRoleEditorLayoutApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

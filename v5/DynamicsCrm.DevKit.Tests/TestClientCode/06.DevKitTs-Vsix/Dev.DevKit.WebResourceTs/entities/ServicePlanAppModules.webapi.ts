@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ServicePlanAppModules
- * All fields return string representation of their values
- */
-export interface IServicePlanAppModulesFormattedValue {
-	readonly AppModuleId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly ServicePlanAppModulesId: string;
-	readonly ServicePlanId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ServicePlanAppModules WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IServicePlanAppModulesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IServicePlanAppModulesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IServicePlanAppModulesApi, 'FormattedValue'>]: string };
 	readonly AppModuleId: DevKit.Guid | null;
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;

@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for agenthubinsight
- * All fields return string representation of their values
- */
-export interface IagenthubinsightFormattedValue {
-	readonly agenthubinsightId: string;
-	readonly AgentIds: string;
-	readonly AggregationWindow: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Details: string;
-	readonly GoalId: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Payload: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Type: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * agenthubinsight WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IagenthubinsightApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IagenthubinsightFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IagenthubinsightApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	agenthubinsightId: DevKit.Guid | null;
 	/** Agent Ids */

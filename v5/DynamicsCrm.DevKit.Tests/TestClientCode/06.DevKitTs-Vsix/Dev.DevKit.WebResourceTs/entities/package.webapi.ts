@@ -1,51 +1,17 @@
 ﻿/**
- * package.webapi.ts - package WebApi for early-bound style coding
+ * _package.webapi.ts - _package WebApi for early-bound style coding
  * Generated file - DO NOT MODIFY MANUALLY
  */
 
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for package
- * All fields return string representation of their values
- */
-export interface IpackageFormattedValue {
-	readonly AppId: string;
-	readonly ApplicationName: string;
-	readonly CatalogId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DeploymentLog_name: string;
-	readonly ImportSequenceNumber: string;
-	readonly InstalledOn_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly packageId: string;
-	readonly PackageInstanceId: string;
-	readonly PackageInstanceOperationId: string;
-	readonly PackageUniqueName: string;
-	readonly PackageVersion: string;
-	readonly PublisherId: string;
-	readonly PublisherName: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TPSPackageId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
- * package WebApi entity interface
+ * _package WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
-export interface IpackageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpackageFormattedValue;
+export interface I_packageApi extends DevKit.IWebApiEntity {
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<I_packageApi, 'FormattedValue'>]: string };
 	/** AppId */
 	AppId: DevKit.Guid | null;
 	/** ApplicationName */
@@ -102,7 +68,7 @@ export interface IpackageApi extends DevKit.IWebApiEntity {
 	readonly VersionNumber: number | null;
 }
 
-const packageFieldConfig: DevKit.IWebApiFieldConfigMap = {
+const _packageFieldConfig: DevKit.IWebApiFieldConfigMap = {
 	AppId: { logicalName: 'appid' },
 	ApplicationName: { logicalName: 'applicationname' },
 	CatalogId: { logicalName: 'catalogid' },
@@ -133,15 +99,15 @@ const packageFieldConfig: DevKit.IWebApiFieldConfigMap = {
 };
 
 /**
- * package WebApi class for early-bound style coding
- * Usage: const package = new packageApi(entity);
+ * _package WebApi class for early-bound style coding
+ * Usage: const _package = new _packageApi(entity);
  * @param entity The entity object from OData response (optional for create operations)
  */
-export class packageApi {
+export class _packageApi {
 	constructor(entity?: Record<string, any>) {
-		const webApiEntity = createWebApiEntity<IpackageApi>(entity, 'package', 'packages', packageFieldConfig);
+		const webApiEntity = createWebApiEntity<I_packageApi>(entity, 'package', 'packages', _packageFieldConfig);
 		Object.defineProperties(this, Object.getOwnPropertyDescriptors(webApiEntity));
 	}
 }
 
-export interface packageApi extends IpackageApi { }
+export interface _packageApi extends I_packageApi { }

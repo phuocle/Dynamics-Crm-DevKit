@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonDiff
- * All fields return string representation of their values
- */
-export interface IRibbonDiffFormattedValue {
-	readonly ComponentState: string;
-	readonly ContextGroupId: string;
-	readonly DiffId: string;
-	readonly DiffType: string;
-	readonly Entity2: string;
-	readonly IsAppAware: string;
-	readonly IsManaged: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RDX: string;
-	readonly RibbonCustomizationId: string;
-	readonly RibbonDiffId: string;
-	readonly RibbonDiffUniqueId: string;
-	readonly Sequence: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TabId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RibbonDiff WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonDiffApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonDiffFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonDiffApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the context group for this tab. If this ribbon definition adds a new tab, then it is a contextual tab. */

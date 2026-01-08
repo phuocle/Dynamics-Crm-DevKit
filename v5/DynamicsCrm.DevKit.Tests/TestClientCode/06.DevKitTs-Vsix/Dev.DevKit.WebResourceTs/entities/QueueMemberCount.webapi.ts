@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for QueueMemberCount
- * All fields return string representation of their values
- */
-export interface IQueueMemberCountFormattedValue {
-	readonly QueueId: string;
-	readonly QueueMemberCountId: string;
-}
-
-/**
  * QueueMemberCount WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IQueueMemberCountApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IQueueMemberCountFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IQueueMemberCountApi, 'FormattedValue'>]: string };
 	readonly QueueId: DevKit.Guid | null;
 	readonly QueueMemberCountId: DevKit.Guid | null;
 }

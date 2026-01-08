@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_solutionhistorydatasource
- * All fields return string representation of their values
- */
-export interface Imsdyn_solutionhistorydatasourceFormattedValue {
-	readonly msdyn_name: string;
-	readonly msdyn_solutionhistorydatasourceId: string;
-}
-
-/**
  * msdyn_solutionhistorydatasource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_solutionhistorydatasourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_solutionhistorydatasourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_solutionhistorydatasourceApi, 'FormattedValue'>]: string };
 	/** Name */
 	msdyn_name: string | null;
 	/** Unique identifier for entity instances */

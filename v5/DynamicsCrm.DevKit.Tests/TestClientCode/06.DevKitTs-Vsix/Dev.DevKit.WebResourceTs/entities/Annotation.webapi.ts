@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Annotation
- * All fields return string representation of their values
- */
-export interface IAnnotationFormattedValue {
-	readonly AnnotationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DocumentBody: string;
-	readonly DummyFileName: string;
-	readonly DummyRegarding: string;
-	readonly FileName: string;
-	readonly FilePointer: string;
-	readonly FileSize: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsDocument: string;
-	readonly IsPrivate: string;
-	readonly LangId: string;
-	readonly MimeType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly NoteText: string;
-	readonly ObjectId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Prefix: string;
-	readonly StepId: string;
-	readonly StoragePointer: string;
-	readonly Subject: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Annotation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAnnotationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAnnotationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAnnotationApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the note. */
 	AnnotationId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the note. */

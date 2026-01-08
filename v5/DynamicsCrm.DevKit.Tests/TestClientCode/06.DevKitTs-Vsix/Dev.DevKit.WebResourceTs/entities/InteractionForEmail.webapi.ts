@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for InteractionForEmail
- * All fields return string representation of their values
- */
-export interface IInteractionForEmailFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EmailActivityId: string;
-	readonly EmailAddress: string;
-	readonly EmailInteractionReplyId: string;
-	readonly EmailInteractionTime_UtcDateAndTime: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly InteractedComponentText: string;
-	readonly InteractionForEmailId: string;
-	readonly InteractionLocation: string;
-	readonly InteractionPartyId: string;
-	readonly InteractionPartyTypecode: string;
-	readonly InteractionRepliedBy: string;
-	readonly InteractionReplyId: string;
-	readonly InteractionType: string;
-	readonly InteractionUserAgent: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * InteractionForEmail WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IInteractionForEmailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IInteractionForEmailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IInteractionForEmailApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

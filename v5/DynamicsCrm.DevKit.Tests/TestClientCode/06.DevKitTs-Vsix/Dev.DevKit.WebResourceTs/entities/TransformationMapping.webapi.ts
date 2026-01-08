@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TransformationMapping
- * All fields return string representation of their values
- */
-export interface ITransformationMappingFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportMapId: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ProcessCode: string;
-	readonly SolutionId: string;
-	readonly SourceEntityName: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TargetEntityName: string;
-	readonly TransformationMappingId: string;
-	readonly TransformationMappingIdUnique: string;
-	readonly TransformationTypeName: string;
-}
-
-/**
  * TransformationMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITransformationMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITransformationMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITransformationMappingApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the transformation mapping. */

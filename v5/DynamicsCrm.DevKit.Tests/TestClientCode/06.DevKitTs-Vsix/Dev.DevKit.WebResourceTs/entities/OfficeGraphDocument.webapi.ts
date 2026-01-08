@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OfficeGraphDocument
- * All fields return string representation of their values
- */
-export interface IOfficeGraphDocumentFormattedValue {
-	readonly AuthorNames: string;
-	readonly CreatedBy: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CreatedTime_UtcDateAndTime: string;
-	readonly DocumentId: string;
-	readonly DocumentLastModifiedBy: string;
-	readonly DocumentLastModifiedOn_UtcDateAndTime: string;
-	readonly DocumentPreviewMetadata: string;
-	readonly ExchangeRate: string;
-	readonly FileExtension: string;
-	readonly FileType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ModifiedTime_UtcDateAndTime: string;
-	readonly OfficeGraphDocumentId: string;
-	readonly OrganizationId: string;
-	readonly PreviewImageUrl: string;
-	readonly QueryType: string;
-	readonly Rank: string;
-	readonly ReadUrl: string;
-	readonly SecondaryFileExtension: string;
-	readonly SiteTitle: string;
-	readonly SiteUrl: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly ViewCount: string;
-	readonly WebLocationUrl: string;
-}
-
-/**
  * OfficeGraphDocument WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOfficeGraphDocumentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOfficeGraphDocumentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOfficeGraphDocumentApi, 'FormattedValue'>]: string };
 	/** Shows Author Names of Office Graph Document. */
 	readonly AuthorNames: string | null;
 	/** Shows Created By of Office Graph Document. */

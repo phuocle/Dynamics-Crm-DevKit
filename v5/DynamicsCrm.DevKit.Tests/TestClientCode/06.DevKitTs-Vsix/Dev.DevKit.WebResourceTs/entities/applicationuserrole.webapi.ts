@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for applicationuserrole
- * All fields return string representation of their values
- */
-export interface IapplicationuserroleFormattedValue {
-	readonly applicationuserid: string;
-	readonly applicationuserroleId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly roleid: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * applicationuserrole WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IapplicationuserroleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IapplicationuserroleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IapplicationuserroleApi, 'FormattedValue'>]: string };
 	readonly applicationuserid: DevKit.Guid | null;
 	readonly applicationuserroleId: DevKit.Guid | null;
 	/** For internal use only. */

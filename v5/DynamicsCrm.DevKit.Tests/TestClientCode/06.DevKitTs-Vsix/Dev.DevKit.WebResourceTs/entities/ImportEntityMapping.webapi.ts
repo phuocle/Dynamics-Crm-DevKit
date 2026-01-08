@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImportEntityMapping
- * All fields return string representation of their values
- */
-export interface IImportEntityMappingFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DeDupe: string;
-	readonly ImportEntityMappingId: string;
-	readonly ImportEntityMappingIdUnique: string;
-	readonly ImportMapId: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ProcessCode: string;
-	readonly SolutionId: string;
-	readonly SourceEntityName: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TargetEntityName: string;
-}
-
-/**
  * ImportEntityMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImportEntityMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImportEntityMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImportEntityMappingApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the import entity mapping. */

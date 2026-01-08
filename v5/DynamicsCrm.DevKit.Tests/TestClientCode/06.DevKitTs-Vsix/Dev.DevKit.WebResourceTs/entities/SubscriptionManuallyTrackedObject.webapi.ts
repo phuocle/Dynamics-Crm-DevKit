@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SubscriptionManuallyTrackedObject
- * All fields return string representation of their values
- */
-export interface ISubscriptionManuallyTrackedObjectFormattedValue {
-	readonly ObjectId: string;
-	readonly SubscriptionId: string;
-	readonly SubscriptionManuallyTrackedObjectId: string;
-	readonly Track: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SubscriptionManuallyTrackedObject WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionManuallyTrackedObjectApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionManuallyTrackedObjectFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionManuallyTrackedObjectApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the object with which the subscription is associated. */
 	ObjectId: DevKit.Guid | null;
 	/** Unique identifier of the subscription. */

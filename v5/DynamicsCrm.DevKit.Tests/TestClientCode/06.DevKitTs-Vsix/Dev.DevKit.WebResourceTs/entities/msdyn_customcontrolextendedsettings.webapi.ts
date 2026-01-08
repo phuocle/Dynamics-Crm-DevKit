@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_customcontrolextendedsettings
- * All fields return string representation of their values
- */
-export interface Imsdyn_customcontrolextendedsettingsFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_copilothub_settings: string;
-	readonly msdyn_customcontrolextendedsettingsId: string;
-	readonly msdyn_name: string;
-	readonly msdyn_rte_userpersonalizationsettings: string;
-	readonly msdyn_timeline_displaylayoutoption: string;
-	readonly msdyn_timelineWall_bookmarks: string;
-	readonly msdyn_timelineWall_isAutoExpanded: string;
-	readonly msdyn_timelineWall_isFilterPaneOpen: string;
-	readonly msdyn_timelineWall_isSortOrderNewerToOlder: string;
-	readonly msdyn_timelineWall_searchTermApplied: string;
-	readonly msdyn_timelineWall_userFilters: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_customcontrolextendedsettings WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_customcontrolextendedsettingsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_customcontrolextendedsettingsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_customcontrolextendedsettingsApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for QueueItem
- * All fields return string representation of their values
- */
-export interface IQueueItemFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EnteredOn_UtcDateAndTime: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectId: string;
-	readonly ObjectTypeCode: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly Priority: string;
-	readonly QueueId: string;
-	readonly QueueItemId: string;
-	readonly Sender: string;
-	readonly State: string;
-	readonly StateCode: string;
-	readonly Status: string;
-	readonly StatusCode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly ToRecipients: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WorkerId: string;
-	readonly WorkerIdModifiedOn_UtcDateOnly: string;
-}
-
-/**
  * QueueItem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IQueueItemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IQueueItemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IQueueItemApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

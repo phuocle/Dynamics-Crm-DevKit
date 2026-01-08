@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for holidaywrapper
- * All fields return string representation of their values
- */
-export interface IholidaywrapperFormattedValue {
-	readonly CalendarId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Duration: string;
-	readonly enddatetime: string;
-	readonly EndTime_UtcDateOnly: string;
-	readonly holidaywrapperId: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly SelectedYear: string;
-	readonly startdatetime: string;
-	readonly StartTime_UtcDateOnly: string;
-	readonly startTime_DateOnlyForView_TimezoneDateOnly: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * holidaywrapper WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IholidaywrapperApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IholidaywrapperFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IholidaywrapperApi, 'FormattedValue'>]: string };
 	/** CalendarId */
 	CalendarId: string | null;
 	/** Unique identifier of the user who created the record. */

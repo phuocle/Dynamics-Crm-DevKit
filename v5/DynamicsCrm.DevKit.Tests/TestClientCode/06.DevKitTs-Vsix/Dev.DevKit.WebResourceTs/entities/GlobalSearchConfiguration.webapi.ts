@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for GlobalSearchConfiguration
- * All fields return string representation of their values
- */
-export interface IGlobalSearchConfigurationFormattedValue {
-	readonly ComponentState: string;
-	readonly GlobalSearchConfigurationId: string;
-	readonly GlobalSearchConfigurationidUnique: string;
-	readonly IsEnabled: string;
-	readonly IsLocalized: string;
-	readonly IsManaged: string;
-	readonly IsSearchBoxVisible: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SearchProviderName: string;
-	readonly SearchProviderResultsPage: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-}
-
-/**
  * GlobalSearchConfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGlobalSearchConfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGlobalSearchConfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGlobalSearchConfigurationApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	GlobalSearchConfigurationId: DevKit.Guid | null;

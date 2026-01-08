@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AIPlugin
- * All fields return string representation of their values
- */
-export interface IAIPluginFormattedValue {
-	readonly AIPluginId: string;
-	readonly AIPluginTitle: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Connector: string;
-	readonly ContactEmail: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly HumanDescription: string;
-	readonly HumanName: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly LegalInfoUrl: string;
-	readonly ModelDescription: string;
-	readonly ModelName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PluginAuthId: string;
-	readonly PluginSubType: string;
-	readonly PluginType: string;
-	readonly PrivacyPolicyUrl: string;
-	readonly SchemaVersion: string;
-	readonly SharedConnector: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UpsertSwagger: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AIPlugin WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAIPluginApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAIPluginFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAIPluginApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AIPluginId: DevKit.Guid | null;
 	AIPluginTitle: DevKit.Guid | null;

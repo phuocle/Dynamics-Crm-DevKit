@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OfficeDocument
- * All fields return string representation of their values
- */
-export interface IOfficeDocumentFormattedValue {
-	readonly ClientData: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DocumentType: string;
-	readonly FileLockState: string;
-	readonly FileSize: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly ObjectId: string;
-	readonly OfficeDocumentId: string;
-	readonly OwnerId: string;
-	readonly SHA256: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * OfficeDocument WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOfficeDocumentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOfficeDocumentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOfficeDocumentApi, 'FormattedValue'>]: string };
 	/** Client data regarding this office document. */
 	ClientData: string | null;
 	/** Bytes of the office document. */

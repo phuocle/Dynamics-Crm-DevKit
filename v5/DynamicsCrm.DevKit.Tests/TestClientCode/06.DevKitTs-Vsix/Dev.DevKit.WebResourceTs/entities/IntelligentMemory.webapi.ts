@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for IntelligentMemory
- * All fields return string representation of their values
- */
-export interface IIntelligentMemoryFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntelligentMemoryId: string;
-	readonly IntelligentMemoryName: string;
-	readonly MemoryKind: string;
-	readonly MemorySource: string;
-	readonly MemoryType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly Predicate: string;
-	readonly PrivacyLevel: string;
-	readonly RecordVersion: string;
-	readonly SourceId: string;
-	readonly Subject: string;
-	readonly TargetObject: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * IntelligentMemory WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IIntelligentMemoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IIntelligentMemoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IIntelligentMemoryApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

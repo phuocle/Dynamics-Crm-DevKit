@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PostRole
- * All fields return string representation of their values
- */
-export interface IPostRoleFormattedValue {
-	readonly OrganizationId: string;
-	readonly PostId: string;
-	readonly PostRoleId: string;
-	readonly RegardingObjectId: string;
-	readonly Type: string;
-}
-
-/**
  * PostRole WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPostRoleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPostRoleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPostRoleApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the organization associated with the solution. */
 	readonly OrganizationId: DevKit.Guid | null;
 	/** Unique identifier of the post with which the post role is associated. */

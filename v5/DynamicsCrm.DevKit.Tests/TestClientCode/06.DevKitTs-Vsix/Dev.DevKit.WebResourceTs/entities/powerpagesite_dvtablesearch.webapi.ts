@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerpagesite_dvtablesearch
- * All fields return string representation of their values
- */
-export interface Ipowerpagesite_dvtablesearchFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly dvtablesearchid: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly powerpagesite_dvtablesearchId: string;
-	readonly powerpagesiteid: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerpagesite_dvtablesearch WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ipowerpagesite_dvtablesearchApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ipowerpagesite_dvtablesearchFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ipowerpagesite_dvtablesearchApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

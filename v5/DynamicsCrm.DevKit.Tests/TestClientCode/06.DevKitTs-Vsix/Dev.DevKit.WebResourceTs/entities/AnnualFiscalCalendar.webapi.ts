@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AnnualFiscalCalendar
- * All fields return string representation of their values
- */
-export interface IAnnualFiscalCalendarFormattedValue {
-	readonly BusinessUnitId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EffectiveOn_UtcDateOnly: string;
-	readonly ExchangeRate: string;
-	readonly FiscalPeriodType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Period1: string;
-	readonly Period1_Base: string;
-	readonly SalesPersonId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserFiscalCalendarId: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * AnnualFiscalCalendar WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAnnualFiscalCalendarApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAnnualFiscalCalendarFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAnnualFiscalCalendarApi, 'FormattedValue'>]: string };
 	readonly BusinessUnitId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the quota for the annual fiscal calendar. */
 	readonly CreatedBy: DevKit.Guid | null;

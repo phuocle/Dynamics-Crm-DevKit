@@ -6,75 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowsession
- * All fields return string representation of their values
- */
-export interface IflowsessionFormattedValue {
-	readonly AdditionalContext_name: string;
-	readonly CallbackUrl: string;
-	readonly ClientTrackingId: string;
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly ConnectionId: string;
-	readonly Context: string;
-	readonly CorrelationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Credentials: string;
-	readonly ErrorCode: string;
-	readonly ErrorDetails: string;
-	readonly ErrorInnerError: string;
-	readonly ErrorMessage: string;
-	readonly flowsessionId: string;
-	readonly Gateway: string;
-	readonly ImportSequenceNumber: string;
-	readonly Inputs_name: string;
-	readonly MachineGroupId: string;
-	readonly MachineId: string;
-	readonly MachinePercentCpuUsage: string;
-	readonly MachinePercentRamUsage: string;
-	readonly MachineRamUsage: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly Outputs_name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentCloudFlowRunSequenceId: string;
-	readonly ParentDesktopFlowRunGuid: string;
-	readonly ParentDesktopFlowRunId: string;
-	readonly ParentWorkflowId: string;
-	readonly ProcessVersion: string;
-	readonly RegardingObjectId: string;
-	readonly RunDetails: string;
-	readonly RunDuration: string;
-	readonly RunExecutionDuration: string;
-	readonly RunMode: string;
-	readonly RunSessionMode: string;
-	readonly RunWaitDuration: string;
-	readonly SessionUsername: string;
-	readonly SessionUserSID: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SubCategory: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TriggerType: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * flowsession WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IflowsessionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IflowsessionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IflowsessionApi, 'FormattedValue'>]: string };
 	/** Additional context about flow session. */
 	readonly AdditionalContext_name: string | null;
 	/** URL that will be called once the flow session is complete. */

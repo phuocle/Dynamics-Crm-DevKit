@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserPrincipals
- * All fields return string representation of their values
- */
-export interface ISystemUserPrincipalsFormattedValue {
-	readonly PrincipalId: string;
-	readonly SystemUserId: string;
-	readonly SystemUserPrincipalId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemUserPrincipals WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserPrincipalsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserPrincipalsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserPrincipalsApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	PrincipalId: DevKit.Guid | null;
 	/** For internal use only. */

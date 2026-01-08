@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrincipalObjectAttributeAccess
- * All fields return string representation of their values
- */
-export interface IPrincipalObjectAttributeAccessFormattedValue {
-	readonly AttributeId: string;
-	readonly ObjectId: string;
-	readonly OrganizationId: string;
-	readonly PrincipalId: string;
-	readonly PrincipalObjectAttributeAccessId: string;
-	readonly ReadAccess: string;
-	readonly UpdateAccess: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrincipalObjectAttributeAccess WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrincipalObjectAttributeAccessApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrincipalObjectAttributeAccessFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrincipalObjectAttributeAccessApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the shared secured field */
 	AttributeId: DevKit.Guid | null;
 	/** Unique identifier of the entity instance with shared secured field */

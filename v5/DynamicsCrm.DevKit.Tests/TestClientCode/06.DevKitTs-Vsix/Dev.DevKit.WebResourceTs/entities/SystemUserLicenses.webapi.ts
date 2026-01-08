@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserLicenses
- * All fields return string representation of their values
- */
-export interface ISystemUserLicensesFormattedValue {
-	readonly LicenseId: string;
-	readonly SystemUserId: string;
-	readonly SystemUserLicenseId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemUserLicenses WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserLicensesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserLicensesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserLicensesApi, 'FormattedValue'>]: string };
 	readonly LicenseId: DevKit.Guid | null;
 	readonly SystemUserId: DevKit.Guid | null;
 	/** Unique identifier of the user licenses. */

@@ -6,54 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for organizationdatasyncfnostate
- * All fields return string representation of their values
- */
-export interface IorganizationdatasyncfnostateFormattedValue {
-	readonly continuefromlastdeltasync: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly currentfullsyncfetchxml: string;
-	readonly currentfullsyncstate: string;
-	readonly entityname: string;
-	readonly fullsynconly: string;
-	readonly fullsyncpagesdata: string;
-	readonly implicitlastdataversion: string;
-	readonly ImportSequenceNumber: string;
-	readonly lastdataversion: string;
-	readonly lastmetadataversion: string;
-	readonly lockexpiretimestamp_UtcDateAndTime: string;
-	readonly lockowner: string;
-	readonly minactiverowversion: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly nullstatedate_UtcDateOnly: string;
-	readonly organizationdatasyncfnostateId: string;
-	readonly organizationdatasyncsubscriptionid: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly pagenumber: string;
-	readonly paginationcookie: string;
-	readonly pagingcookie: string;
-	readonly partitionid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly usepagingcookiemax: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * organizationdatasyncfnostate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IorganizationdatasyncfnostateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IorganizationdatasyncfnostateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IorganizationdatasyncfnostateApi, 'FormattedValue'>]: string };
 	/** Continue from last delta sync */
 	continuefromlastdeltasync: boolean | null;
 	/** Unique identifier of the user who created the record. */

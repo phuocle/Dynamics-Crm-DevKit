@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EventExpanderBreadcrumb
- * All fields return string representation of their values
- */
-export interface IEventExpanderBreadcrumbFormattedValue {
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CorrelationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly DataBlobId: string;
-	readonly ErrorCode: string;
-	readonly EventExpanderBreadcrumbId: string;
-	readonly ExpanderStartTime_UtcDateAndTime: string;
-	readonly FriendlyMessage: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OperationType: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly PostponeUntil_UtcDateAndTime: string;
-	readonly RetryCount: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-	readonly Workload: string;
-}
-
-/**
  * EventExpanderBreadcrumb WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEventExpanderBreadcrumbApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEventExpanderBreadcrumbFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEventExpanderBreadcrumbApi, 'FormattedValue'>]: string };
 	/** Date and time when the event expander breadcrumb was completed. */
 	CompletedOn_UtcDateAndTime: Date | null;
 	/** Unique identifier used to correlate. */

@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CustomControlDefaultConfig
- * All fields return string representation of their values
- */
-export interface ICustomControlDefaultConfigFormattedValue {
-	readonly ComponentState: string;
-	readonly ControlDescriptionJson: string;
-	readonly ControlDescriptionXML: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomControlDefaultConfigId: string;
-	readonly CustomControlDefaultConfigIdUnique: string;
-	readonly EventsXml: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CustomControlDefaultConfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICustomControlDefaultConfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICustomControlDefaultConfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICustomControlDefaultConfigApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Custom control configuration data in JSON format. */

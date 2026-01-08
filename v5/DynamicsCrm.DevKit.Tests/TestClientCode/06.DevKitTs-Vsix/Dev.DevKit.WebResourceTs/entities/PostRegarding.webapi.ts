@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PostRegarding
- * All fields return string representation of their values
- */
-export interface IPostRegardingFormattedValue {
-	readonly LatestAutoPostModifiedOn_UtcDateAndTime: string;
-	readonly LatestManualPostModifiedOn_UtcDateAndTime: string;
-	readonly PostRegardingId: string;
-	readonly RegardingObjectId: string;
-	readonly RegardingObjectOwnerId: string;
-	readonly RegardingObjectOwningBusinessUnit: string;
-}
-
-/**
  * PostRegarding WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPostRegardingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPostRegardingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPostRegardingApi, 'FormattedValue'>]: string };
 	/** Date of Latest Auto Post on the Regarding entity */
 	readonly LatestAutoPostModifiedOn_UtcDateAndTime: Date | null;
 	/** Date of Latest Manual Post on the Regarding entity */

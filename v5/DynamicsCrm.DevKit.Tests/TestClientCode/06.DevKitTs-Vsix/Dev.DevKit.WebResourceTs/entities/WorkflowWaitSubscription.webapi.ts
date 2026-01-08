@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for WorkflowWaitSubscription
- * All fields return string representation of their values
- */
-export interface IWorkflowWaitSubscriptionFormattedValue {
-	readonly AsyncOperationId: string;
-	readonly Data: string;
-	readonly EntityId: string;
-	readonly EntityName2: string;
-	readonly IsDeleted: string;
-	readonly IsModified: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly WaitOnAttributeList: string;
-	readonly WorkflowWaitSubscriptionId: string;
-}
-
-/**
  * WorkflowWaitSubscription WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWorkflowWaitSubscriptionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWorkflowWaitSubscriptionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWorkflowWaitSubscriptionApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the asynchronous operation with which the subscription is associated. */
 	AsyncOperationId: DevKit.Guid | null;
 	/** Unstructured data associated with the subscription. */

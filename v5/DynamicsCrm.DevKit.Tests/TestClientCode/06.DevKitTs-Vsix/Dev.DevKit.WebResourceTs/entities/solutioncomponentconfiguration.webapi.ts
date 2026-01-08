@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for solutioncomponentconfiguration
- * All fields return string representation of their values
- */
-export interface IsolutioncomponentconfigurationFormattedValue {
-	readonly AllowExportKeyWithoutPrefix: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DependencyRemovalDisabledForComponents: string;
-	readonly EntityId: string;
-	readonly FileFormat: string;
-	readonly FileScope: string;
-	readonly ImportSequenceNumber: string;
-	readonly InvokeSubstitution: string;
-	readonly IsCustomizable: string;
-	readonly isdisplayable: string;
-	readonly IsManaged: string;
-	readonly IsOneToOneChildComponent: string;
-	readonly IsSoftDeleteEnabled: string;
-	readonly IsVersioningEnabled: string;
-	readonly KeepActiveCustomizationAfterConversion: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly solutioncomponentconfigurationId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * solutioncomponentconfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsolutioncomponentconfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsolutioncomponentconfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsolutioncomponentconfigurationApi, 'FormattedValue'>]: string };
 	/** Boolean that indicates if an export key without a prefix is allowed. */
 	AllowExportKeyWithoutPrefix: boolean | null;
 	/** For internal use only. */

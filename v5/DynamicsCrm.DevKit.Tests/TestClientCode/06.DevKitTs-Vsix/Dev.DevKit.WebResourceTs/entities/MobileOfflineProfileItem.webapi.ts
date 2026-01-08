@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MobileOfflineProfileItem
- * All fields return string representation of their values
- */
-export interface IMobileOfflineProfileItemFormattedValue {
-	readonly CanBeFollowed: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityObjectTypeCode: string;
-	readonly GetRelatedEntityRecords: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly IsValidated: string;
-	readonly IsVisibleInGrid: string;
-	readonly MobileOfflineProfileItemId: string;
-	readonly MobileOfflineProfileItemIdUnique: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ProcessId: string;
-	readonly ProfileItemEntityFilter: string;
-	readonly ProfileItemRule: string;
-	readonly PublishedOn_UtcDateAndTime: string;
-	readonly RecordDistributionCriteria: string;
-	readonly RecordsOwnedByMe: string;
-	readonly RecordsOwnedByMyBusinessUnit: string;
-	readonly RecordsOwnedByMyTeam: string;
-	readonly RegardingObjectId: string;
-	readonly RelationshipData: string;
-	readonly SelectedColumns: string;
-	readonly SelectedEntityMetadata: string;
-	readonly SolutionId: string;
-	readonly StageId: string;
-	readonly SupportingSolutionId: string;
-	readonly SyncIntervalInMinutes: string;
-	readonly TraversedPath: string;
-	readonly VersionNumber: string;
-	readonly ViewQuery: string;
-}
-
-/**
  * MobileOfflineProfileItem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMobileOfflineProfileItemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMobileOfflineProfileItemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMobileOfflineProfileItemApi, 'FormattedValue'>]: string };
 	/** Specifies whether records of this entity can be followed. */
 	CanBeFollowed: boolean | null;
 	/** For internal use only. */

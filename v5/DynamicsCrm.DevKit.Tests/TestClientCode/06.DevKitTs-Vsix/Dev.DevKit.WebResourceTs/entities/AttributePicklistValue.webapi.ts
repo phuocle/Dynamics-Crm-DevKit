@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AttributePicklistValue
- * All fields return string representation of their values
- */
-export interface IAttributePicklistValueFormattedValue {
-	readonly AttributePicklistValueId: string;
-	readonly ComponentState: string;
-	readonly IsHidden: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AttributePicklistValue WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAttributePicklistValueApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAttributePicklistValueFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAttributePicklistValueApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the AttributePicklistValue */
 	AttributePicklistValueId: DevKit.Guid | null;
 	/** For internal use only. */

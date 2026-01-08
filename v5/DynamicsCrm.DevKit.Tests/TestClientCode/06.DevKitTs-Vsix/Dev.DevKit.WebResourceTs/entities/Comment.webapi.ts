@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Comment
- * All fields return string representation of their values
- */
-export interface ICommentFormattedValue {
-	readonly Anchor: string;
-	readonly ArtifactId: string;
-	readonly ArtifactType: string;
-	readonly Body: string;
-	readonly CommentId: string;
-	readonly Container: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly Kind: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OriginalAuthorAadId: string;
-	readonly OriginalAuthorEmail: string;
-	readonly OriginalAuthorFullName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Parent: string;
-	readonly State: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Comment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICommentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICommentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICommentApi, 'FormattedValue'>]: string };
 	/** Anchor context for the record within the maker artifact */
 	Anchor: string | null;
 	/** Unique identifier of the maker artifact */

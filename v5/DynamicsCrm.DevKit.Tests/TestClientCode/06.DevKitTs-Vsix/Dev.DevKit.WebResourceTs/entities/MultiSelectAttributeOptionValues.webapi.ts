@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MultiSelectAttributeOptionValues
- * All fields return string representation of their values
- */
-export interface IMultiSelectAttributeOptionValuesFormattedValue {
-	readonly MultiSelectFullTextIdKey: string;
-	readonly ObjectColumnNumber: string;
-	readonly ObjectId: string;
-	readonly SelectedOptionValues: string;
-}
-
-/**
  * MultiSelectAttributeOptionValues WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMultiSelectAttributeOptionValuesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMultiSelectAttributeOptionValuesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMultiSelectAttributeOptionValuesApi, 'FormattedValue'>]: string };
 	readonly MultiSelectFullTextIdKey: number | null;
 	/** Object Column Number */
 	readonly ObjectColumnNumber: number | null;

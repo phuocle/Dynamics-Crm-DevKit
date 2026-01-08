@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppModuleMetadataDependency
- * All fields return string representation of their values
- */
-export interface IAppModuleMetadataDependencyFormattedValue {
-	readonly AppModuleMetadataDependencyId: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly DependentComponentId: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly RequiredComponentId: string;
-	readonly RequiredComponentInternalId: string;
-	readonly RequiredComponentSubType: string;
-	readonly RequiredComponentType: string;
-	readonly RequiredComponentVersion: string;
-	readonly State: string;
-}
-
-/**
  * AppModuleMetadataDependency WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppModuleMetadataDependencyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppModuleMetadataDependencyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppModuleMetadataDependencyApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	AppModuleMetadataDependencyId: DevKit.Guid | null;
 	/** Date and time when the record was created. */

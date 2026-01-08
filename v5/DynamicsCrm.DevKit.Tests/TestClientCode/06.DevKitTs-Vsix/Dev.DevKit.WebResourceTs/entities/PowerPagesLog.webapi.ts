@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PowerPagesLog
- * All fields return string representation of their values
- */
-export interface IPowerPagesLogFormattedValue {
-	readonly ClientIP: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly PortalId: string;
-	readonly PowerPagesLogId: string;
-	readonly RequestPath: string;
-	readonly RequestUrl: string;
-	readonly TTLInSeconds: string;
-	readonly Type: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PowerPagesLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPowerPagesLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPowerPagesLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPowerPagesLogApi, 'FormattedValue'>]: string };
 	/** Client IP */
 	ClientIP: string | null;
 	/** Content */

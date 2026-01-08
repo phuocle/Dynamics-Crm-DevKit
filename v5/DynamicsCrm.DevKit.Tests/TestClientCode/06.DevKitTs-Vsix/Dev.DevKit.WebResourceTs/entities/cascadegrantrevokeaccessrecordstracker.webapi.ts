@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for cascadegrantrevokeaccessrecordstracker
- * All fields return string representation of their values
- */
-export interface IcascadegrantrevokeaccessrecordstrackerFormattedValue {
-	readonly cascadegrantrevokeaccessrecordstrackerId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ProcessedRecords: string;
-	readonly RecordsAttachment_name: string;
-	readonly RecordsJson: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SyncTrackerId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TotalRecords: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * cascadegrantrevokeaccessrecordstracker WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcascadegrantrevokeaccessrecordstrackerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcascadegrantrevokeaccessrecordstrackerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcascadegrantrevokeaccessrecordstrackerApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	cascadegrantrevokeaccessrecordstrackerId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the record. */

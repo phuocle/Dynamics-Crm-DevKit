@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MailboxStatistics
- * All fields return string representation of their values
- */
-export interface IMailboxStatisticsFormattedValue {
-	readonly AsyncEventId: string;
-	readonly CrmItemsBacklog: string;
-	readonly IndividualStepDurations: string;
-	readonly ItemsFailed: string;
-	readonly ItemsProcessed: string;
-	readonly MachineName: string;
-	readonly MailboxId: string;
-	readonly MailboxProcessCompletedOn_UtcDateAndTime: string;
-	readonly MailboxProcessScheduledOn_UtcDateAndTime: string;
-	readonly MailboxProcessStartedOn_UtcDateAndTime: string;
-	readonly MailboxStatisticsId: string;
-	readonly OperationTypeId: string;
-	readonly OrganizationId: string;
-	readonly ProcessResult: string;
-	readonly ProcessTimeIntervalInMinutes: string;
-	readonly ScheduledTimeIntervalInMinutes: string;
-}
-
-/**
  * MailboxStatistics WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMailboxStatisticsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMailboxStatisticsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMailboxStatisticsApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly AsyncEventId: DevKit.Guid | null;
 	/** Items remaining in CRM to process after this synchronization cycle. */

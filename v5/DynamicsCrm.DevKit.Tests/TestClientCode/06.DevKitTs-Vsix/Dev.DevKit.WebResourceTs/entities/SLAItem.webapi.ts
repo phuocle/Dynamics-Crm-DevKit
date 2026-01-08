@@ -6,59 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SLAItem
- * All fields return string representation of their values
- */
-export interface ISLAItemFormattedValue {
-	readonly actionflowuniquename: string;
-	readonly ActionURL: string;
-	readonly AllowPauseResume: string;
-	readonly ApplicableEntity: string;
-	readonly ApplicableWhenXml: string;
-	readonly BusinessHoursId: string;
-	readonly ChangedAttributeList: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly FailureAfter: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AdvancedPauseConfiguration: string;
-	readonly msdyn_CustomTimeCalculation: string;
-	readonly msdyn_CustomTimeCalculationWorkflowId: string;
-	readonly msdyn_PauseConfigurationXml: string;
-	readonly msdyn_slakpiid: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly RelatedField: string;
-	readonly SequenceNumber: string;
-	readonly SLAId: string;
-	readonly SLAItemId: string;
-	readonly SLAItemIdUnique: string;
-	readonly SolutionId: string;
-	readonly SuccessConditionsXml: string;
-	readonly SupportingSolutionId: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-	readonly WarnAfter: string;
-	readonly WorkflowId: string;
-}
-
-/**
  * SLAItem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISLAItemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISLAItemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISLAItemApi, 'FormattedValue'>]: string };
 	/** Action Flow Unique Name */
 	actionflowuniquename: string | null;
 	/** Action URL */

@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CustomControl
- * All fields return string representation of their values
- */
-export interface ICustomControlFormattedValue {
-	readonly AuthoringManifest: string;
-	readonly ClientJson: string;
-	readonly CompatibleDataTypes: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomControlId: string;
-	readonly CustomControlIdUnique: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly Manifest: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportedPlatform: string;
-	readonly SupportingSolutionId: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CustomControl WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICustomControlApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICustomControlFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICustomControlApi, 'FormattedValue'>]: string };
 	/** Authoring Manifest of the CustomControl. */
 	AuthoringManifest: string | null;
 	/** Custom control data in JSON format. */

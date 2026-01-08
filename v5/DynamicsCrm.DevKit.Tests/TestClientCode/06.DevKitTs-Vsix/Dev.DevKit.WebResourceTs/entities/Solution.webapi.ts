@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Solution
- * All fields return string representation of their values
- */
-export interface ISolutionFormattedValue {
-	readonly ConfigurationPageId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EnabledForSourceControlIntegration: string;
-	readonly FileId_name: string;
-	readonly FriendlyName: string;
-	readonly InstalledOn_UtcDateOnly: string;
-	readonly IsApiManaged: string;
-	readonly IsInternal: string;
-	readonly IsManaged: string;
-	readonly IsVisible: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly ParentSolutionId: string;
-	readonly PinpointAssetId: string;
-	readonly PinpointPublisherId: string;
-	readonly PinpointSolutionDefaultLocale: string;
-	readonly PinpointSolutionId: string;
-	readonly PublisherId: string;
-	readonly SolutionId: string;
-	readonly SolutionPackageVersion: string;
-	readonly SolutionType: string;
-	readonly SourceControlSyncStatus: string;
-	readonly TemplateSuffix: string;
-	readonly Thumbprint: string;
-	readonly UniqueName: string;
-	readonly UpdatedOn_UtcDateAndTime: string;
-	readonly UpgradeInfo: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Solution WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISolutionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISolutionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISolutionApi, 'FormattedValue'>]: string };
 	/** A link to an optional configuration page for this solution. */
 	ConfigurationPageId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the solution. */

@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserEntityInstanceData
- * All fields return string representation of their values
- */
-export interface IUserEntityInstanceDataFormattedValue {
-	readonly CommonEnd_UtcDateAndTime: string;
-	readonly CommonStart_UtcDateAndTime: string;
-	readonly DueDate_UtcDateAndTime: string;
-	readonly FlagDueBy_UtcDateAndTime: string;
-	readonly FlagRequest: string;
-	readonly FlagStatus: string;
-	readonly ObjectId: string;
-	readonly ObjectTypeCode: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PersonalCategories: string;
-	readonly ReminderSet: string;
-	readonly ReminderTime_UtcDateAndTime: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly ToDoItemFlags: string;
-	readonly ToDoOrdinalDate_UtcDateAndTime: string;
-	readonly ToDoSubOrdinal: string;
-	readonly ToDoTitle: string;
-	readonly UserEntityInstanceDataId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * UserEntityInstanceData WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserEntityInstanceDataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserEntityInstanceDataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserEntityInstanceDataApi, 'FormattedValue'>]: string };
 	/** Common end date */
 	CommonEnd_UtcDateAndTime: Date | null;
 	/** Common start date */

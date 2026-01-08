@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TraceAssociation
- * All fields return string representation of their values
- */
-export interface ITraceAssociationFormattedValue {
-	readonly OrganizationId: string;
-	readonly RegardingObjectId: string;
-	readonly TraceAssociationId: string;
-	readonly TraceLogId: string;
-}
-
-/**
  * TraceAssociation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITraceAssociationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITraceAssociationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITraceAssociationApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the organization associated with the trace association. */
 	readonly OrganizationId: DevKit.Guid | null;
 	/** Unique identifier of the object the trace association is regarding. */

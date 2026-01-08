@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PluginTraceLog
- * All fields return string representation of their values
- */
-export interface IPluginTraceLogFormattedValue {
-	readonly Configuration: string;
-	readonly CorrelationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Depth: string;
-	readonly ExceptionDetails: string;
-	readonly IsSystemCreated: string;
-	readonly MessageBlock: string;
-	readonly MessageName: string;
-	readonly Mode: string;
-	readonly OperationType: string;
-	readonly OrganizationId: string;
-	readonly PerformanceConstructorDuration: string;
-	readonly PerformanceConstructorStartTime_UtcDateAndTime: string;
-	readonly PerformanceExecutionDuration: string;
-	readonly PerformanceExecutionStartTime_UtcDateAndTime: string;
-	readonly PersistenceKey: string;
-	readonly PluginStepId: string;
-	readonly PluginTraceLogId: string;
-	readonly PrimaryEntity: string;
-	readonly Profile: string;
-	readonly RequestId: string;
-	readonly SecureConfiguration: string;
-	readonly TypeName: string;
-}
-
-/**
  * PluginTraceLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPluginTraceLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPluginTraceLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPluginTraceLogApi, 'FormattedValue'>]: string };
 	/** Unsecured configuration for the plug-in trace log. */
 	readonly Configuration: string | null;
 	/** Unique identifier for tracking plug-in or custom workflow activity execution. */

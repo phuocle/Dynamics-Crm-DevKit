@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DeletedItemReference
- * All fields return string representation of their values
- */
-export interface IDeletedItemReferenceFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DeletedItemReferenceId: string;
-	readonly DeletedLogicalNames_name: string;
-	readonly DeletedObject: string;
-	readonly DeletedRecords_name: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ProcessedRecords: string;
-	readonly RegardingObjectId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TotalRecords: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly ValidForRestore: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DeletedItemReference WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDeletedItemReferenceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDeletedItemReferenceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDeletedItemReferenceApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who deleted the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was deleted. */

@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for adx_externalidentity
- * All fields return string representation of their values
- */
-export interface Iadx_externalidentityFormattedValue {
-	readonly adx_contactid: string;
-	readonly adx_externalidentityId: string;
-	readonly adx_identityprovidername: string;
-	readonly adx_username: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * adx_externalidentity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iadx_externalidentityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iadx_externalidentityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iadx_externalidentityApi, 'FormattedValue'>]: string };
 	/** Unique identifier for Contact associated with External Identity. */
 	adx_contactid: DevKit.Guid | null;
 	/** Shows the entity instances. */

@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Dependency
- * All fields return string representation of their values
- */
-export interface IDependencyFormattedValue {
-	readonly DependencyId: string;
-	readonly DependencyType: string;
-	readonly DependentComponentBaseSolutionId: string;
-	readonly DependentComponentNodeId: string;
-	readonly DependentComponentObjectId: string;
-	readonly DependentComponentParentId: string;
-	readonly DependentComponentType: string;
-	readonly RequiredComponentBaseSolutionId: string;
-	readonly RequiredComponentIntroducedVersion: string;
-	readonly RequiredComponentNodeId: string;
-	readonly RequiredComponentObjectId: string;
-	readonly RequiredComponentParentId: string;
-	readonly RequiredComponentType: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Dependency WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDependencyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDependencyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDependencyApi, 'FormattedValue'>]: string };
 	/** Unique identifier of a dependency. */
 	readonly DependencyId: DevKit.Guid | null;
 	/** The dependency type of the dependency. */

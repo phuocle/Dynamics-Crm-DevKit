@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for FederatedKnowledgeCitation
- * All fields return string representation of their values
- */
-export interface IFederatedKnowledgeCitationFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly FederatedKnowledgeCitationId: string;
-	readonly federatedknowledgecitationname: string;
-	readonly federatedknowledgecitationurl: string;
-	readonly federatedknowledgerecordid: string;
-	readonly federatedknowledgeresults: string;
-	readonly federatedknowledgesearchid: string;
-	readonly federatedknowledgesearchtimestamp_UtcDateOnly: string;
-	readonly federatedknowledgesourcename: string;
-	readonly federatedknowledgeuserid: string;
-	readonly ImportSequenceNumber: string;
-	readonly knowledgesourcetablename: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * FederatedKnowledgeCitation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFederatedKnowledgeCitationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFederatedKnowledgeCitationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFederatedKnowledgeCitationApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

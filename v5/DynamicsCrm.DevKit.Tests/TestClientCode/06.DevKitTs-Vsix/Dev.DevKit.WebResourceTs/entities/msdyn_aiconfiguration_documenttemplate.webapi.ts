@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_aiconfiguration_documenttemplate
- * All fields return string representation of their values
- */
-export interface Imsdyn_aiconfiguration_documenttemplateFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly msdyn_aiconfiguration_documenttemplateId: string;
-	readonly msdyn_aiconfigurationid: string;
-	readonly msdyn_aidocumenttemplateid: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_aiconfiguration_documenttemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_aiconfiguration_documenttemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_aiconfiguration_documenttemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_aiconfiguration_documenttemplateApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

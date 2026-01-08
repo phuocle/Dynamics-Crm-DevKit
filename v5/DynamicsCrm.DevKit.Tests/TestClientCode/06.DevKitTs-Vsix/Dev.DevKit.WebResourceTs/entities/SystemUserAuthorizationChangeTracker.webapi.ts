@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserAuthorizationChangeTracker
- * All fields return string representation of their values
- */
-export interface ISystemUserAuthorizationChangeTrackerFormattedValue {
-	readonly ChangedOn_UtcDateAndTime: string;
-	readonly ChangedVersionNumber: string;
-	readonly ComputedOn_UtcDateAndTime: string;
-	readonly ComputedVersionNumber: string;
-	readonly SystemUserId: string;
-}
-
-/**
  * SystemUserAuthorizationChangeTracker WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserAuthorizationChangeTrackerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserAuthorizationChangeTrackerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserAuthorizationChangeTrackerApi, 'FormattedValue'>]: string };
 	/** Date and time when the column ChangedVersionNumber was changed. */
 	readonly ChangedOn_UtcDateAndTime: Date | null;
 	/** Database time stamp when user authorization settings were changed */

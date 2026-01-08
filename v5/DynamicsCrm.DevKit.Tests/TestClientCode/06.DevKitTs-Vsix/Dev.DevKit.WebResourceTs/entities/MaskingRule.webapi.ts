@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MaskingRule
- * All fields return string representation of their values
- */
-export interface IMaskingRuleFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly MaskedCharacter: string;
-	readonly MaskedRichTestData: string;
-	readonly MaskedTestData: string;
-	readonly MaskingRuleId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly RegularExpression: string;
-	readonly RichTestData: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TestData: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * MaskingRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMaskingRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMaskingRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMaskingRuleApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

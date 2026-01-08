@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_connectordatasource_environmentva
- * All fields return string representation of their values
- */
-export interface Imsdyn_connectordatasource_environmentvaFormattedValue {
-	readonly environmentvariabledefinitionid: string;
-	readonly msdyn_connectordatasource_environmentvaId: string;
-	readonly msdyn_connectordatasourceid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_connectordatasource_environmentva WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_connectordatasource_environmentvaApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_connectordatasource_environmentvaFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_connectordatasource_environmentvaApi, 'FormattedValue'>]: string };
 	readonly environmentvariabledefinitionid: DevKit.Guid | null;
 	readonly msdyn_connectordatasource_environmentvaId: DevKit.Guid | null;
 	readonly msdyn_connectordatasourceid: DevKit.Guid | null;

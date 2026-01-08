@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PickListMapping
- * All fields return string representation of their values
- */
-export interface IPickListMappingFormattedValue {
-	readonly ColumnMappingId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PickListMappingId: string;
-	readonly PickListMappingIdUnique: string;
-	readonly ProcessCode: string;
-	readonly SolutionId: string;
-	readonly SourceValue: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TargetValue: string;
-}
-
-/**
  * PickListMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPickListMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPickListMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPickListMappingApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the column mapping with which this list value mapping is associated. */
 	ColumnMappingId: DevKit.Guid | null;
 	/** For internal use only. */

@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DependencyNode
- * All fields return string representation of their values
- */
-export interface IDependencyNodeFormattedValue {
-	readonly BaseSolutionId: string;
-	readonly ComponentType: string;
-	readonly DependencyNodeId: string;
-	readonly IntroducedVersion: string;
-	readonly IsSharedComponent: string;
-	readonly ObjectId: string;
-	readonly ParentId: string;
-	readonly TopSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DependencyNode WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDependencyNodeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDependencyNodeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDependencyNodeApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the solution */
 	readonly BaseSolutionId: DevKit.Guid | null;
 	/** The type code of the component. */

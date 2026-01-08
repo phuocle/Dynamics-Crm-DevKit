@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedAttributePicklistValue
- * All fields return string representation of their values
- */
-export interface IStagedAttributePicklistValueFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly MetadataDescription: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OptionSetId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly StagedAttributePicklistValueId: string;
-	readonly StagingExecutionContextId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedAttributePicklistValue WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedAttributePicklistValueApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedAttributePicklistValueFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedAttributePicklistValueApi, 'FormattedValue'>]: string };
 	/** Solution component state of attribute picklist value. */
 	ComponentState: number | null;
 	/** Unique identifier of the user who created the record. */

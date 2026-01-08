@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for synapselinkprofileentity
- * All fields return string representation of their values
- */
-export interface IsynapselinkprofileentityFormattedValue {
-	readonly AppendOnlyMode: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Enabled: string;
-	readonly EntityName2: string;
-	readonly EntitySource: string;
-	readonly EntityType: string;
-	readonly ExtendedProperties: string;
-	readonly GenerateParquet: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly PartitionStrategy: string;
-	readonly profile: string;
-	readonly RecordCountPerBlock: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly synapselinkprofileentityId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * synapselinkprofileentity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsynapselinkprofileentityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsynapselinkprofileentityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsynapselinkprofileentityApi, 'FormattedValue'>]: string };
 	/** Is append only mode */
 	AppendOnlyMode: boolean | null;
 	/** For internal use only. */

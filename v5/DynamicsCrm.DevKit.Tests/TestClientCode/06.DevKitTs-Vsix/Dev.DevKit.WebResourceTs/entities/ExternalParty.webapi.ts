@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ExternalParty
- * All fields return string representation of their values
- */
-export interface IExternalPartyFormattedValue {
-	readonly CorrelationKey: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EmailAddress: string;
-	readonly ExchangeRate: string;
-	readonly ExternalPartyId: string;
-	readonly ExternalPartyIdUnique: string;
-	readonly FirstName: string;
-	readonly FullName: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastDisabledOn_UtcDateOnly: string;
-	readonly LastEnabledOn_UtcDateOnly: string;
-	readonly LastName: string;
-	readonly MiddleName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly Type: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly YomiFirstName: string;
-	readonly YomiFullName: string;
-	readonly YomiLastName: string;
-	readonly YomiMiddleName: string;
-}
-
-/**
  * ExternalParty WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IExternalPartyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IExternalPartyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IExternalPartyApi, 'FormattedValue'>]: string };
 	/** Contains the value that is used to detect and avoid duplicate external party records. */
 	CorrelationKey: string | null;
 	/** Unique identifier of the user who created the record. */

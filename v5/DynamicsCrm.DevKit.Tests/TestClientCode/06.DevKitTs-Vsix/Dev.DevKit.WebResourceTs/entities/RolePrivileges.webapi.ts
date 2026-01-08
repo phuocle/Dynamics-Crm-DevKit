@@ -6,32 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RolePrivileges
- * All fields return string representation of their values
- */
-export interface IRolePrivilegesFormattedValue {
-	readonly CanBeDeleted: string;
-	readonly ComponentState: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PrivilegeDepthMask: string;
-	readonly PrivilegeId: string;
-	readonly RecordFilterId: string;
-	readonly RoleId: string;
-	readonly RolePrivilegeId: string;
-	readonly RolePrivilegeIdUnique: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RolePrivileges WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRolePrivilegesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRolePrivilegesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRolePrivilegesApi, 'FormattedValue'>]: string };
 	/** Tells whether the role privilege can be deleted. */
 	CanBeDeleted: string | null;
 	/** For internal use only. */

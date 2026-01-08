@@ -6,55 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_dataflow
- * All fields return string representation of their values
- */
-export interface Imsdyn_dataflowFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_dataflowId: string;
-	readonly msdyn_Description: string;
-	readonly msdyn_DestinationADLS: string;
-	readonly msdyn_EmailSettings: string;
-	readonly msdyn_GatewayObjectId: string;
-	readonly msdyn_InternalVersion: string;
-	readonly msdyn_MashupDocument: string;
-	readonly msdyn_MashupSettings: string;
-	readonly msdyn_name: string;
-	readonly msdyn_OriginalDataflowId: string;
-	readonly msdyn_RefreshHistory: string;
-	readonly msdyn_RefreshSettings: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_dataflow WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_dataflowApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_dataflowFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_dataflowApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

@@ -6,28 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrincipalObjectAccess
- * All fields return string representation of their values
- */
-export interface IPrincipalObjectAccessFormattedValue {
-	readonly AccessRightsMask: string;
-	readonly ChangedOn_UtcDateOnly: string;
-	readonly InheritedAccessRightsMask: string;
-	readonly ObjectId: string;
-	readonly PrincipalId: string;
-	readonly PrincipalObjectAccessId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrincipalObjectAccess WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrincipalObjectAccessApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrincipalObjectAccessFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrincipalObjectAccessApi, 'FormattedValue'>]: string };
 	AccessRightsMask: number | null;
 	ChangedOn_UtcDateOnly: Date | null;
 	InheritedAccessRightsMask: number | null;

@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SocialProfile
- * All fields return string representation of their values
- */
-export interface ISocialProfileFormattedValue {
-	readonly Blocked: string;
-	readonly Community: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomerId: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly InfluenceScore: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ProfileFullName: string;
-	readonly ProfileLink: string;
-	readonly ProfileName: string;
-	readonly SocialProfileId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UniqueProfileID: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SocialProfile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISocialProfileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISocialProfileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISocialProfileApi, 'FormattedValue'>]: string };
 	/** Identifies if the social profile has been blocked. */
 	Blocked: boolean | null;
 	/** Identifies where the social profile originated from, such as Twitter, or Facebook. */

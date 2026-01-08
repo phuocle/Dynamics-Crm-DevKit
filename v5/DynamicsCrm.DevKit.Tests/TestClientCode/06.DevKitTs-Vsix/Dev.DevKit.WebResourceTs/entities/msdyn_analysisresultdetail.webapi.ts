@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_analysisresultdetail
- * All fields return string representation of their values
- */
-export interface Imsdyn_analysisresultdetailFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AnalysisResult: string;
-	readonly msdyn_analysisresultdetailId: string;
-	readonly msdyn_CanOpenEntityRecord: string;
-	readonly msdyn_EntityName: string;
-	readonly msdyn_Message: string;
-	readonly msdyn_name: string;
-	readonly msdyn_ResultEntityId: string;
-	readonly msdyn_ResultEntityLogicalName: string;
-	readonly msdyn_ResultEntityPrimaryKey: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_analysisresultdetail WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_analysisresultdetailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_analysisresultdetailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_analysisresultdetailApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

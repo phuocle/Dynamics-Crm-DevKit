@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PluginType
- * All fields return string representation of their values
- */
-export interface IPluginTypeFormattedValue {
-	readonly AssemblyName: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Culture: string;
-	readonly CustomizationLevel: string;
-	readonly CustomWorkflowActivityInfo: string;
-	readonly Description: string;
-	readonly FriendlyName: string;
-	readonly IsManaged: string;
-	readonly IsWorkflowActivity: string;
-	readonly Major: string;
-	readonly Minor: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PluginAssemblyId: string;
-	readonly PluginTypeExportKey: string;
-	readonly PluginTypeId: string;
-	readonly PluginTypeIdUnique: string;
-	readonly PublicKeyToken: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TypeName: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-	readonly WorkflowActivityGroupName: string;
-}
-
-/**
  * PluginType WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPluginTypeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPluginTypeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPluginTypeApi, 'FormattedValue'>]: string };
 	/** Full path name of the plug-in assembly. */
 	readonly AssemblyName: string | null;
 	/** For internal use only. */

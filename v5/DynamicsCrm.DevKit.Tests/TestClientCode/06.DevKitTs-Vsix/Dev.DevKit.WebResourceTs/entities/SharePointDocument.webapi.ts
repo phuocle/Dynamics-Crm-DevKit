@@ -6,67 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SharePointDocument
- * All fields return string representation of their values
- */
-export interface ISharePointDocumentFormattedValue {
-	readonly AbsoluteUrl: string;
-	readonly AppCreatedBy: string;
-	readonly AppModifiedBy: string;
-	readonly Author: string;
-	readonly BusinessUnitId: string;
-	readonly CheckedOutTo: string;
-	readonly CheckInComment: string;
-	readonly ChildFolderCount: string;
-	readonly ChildItemCount: string;
-	readonly ContentType: string;
-	readonly ContentTypeId: string;
-	readonly CopySource: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DocumentId: string;
-	readonly DocumentLocationType: string;
-	readonly Edit: string;
-	readonly EditUrl: string;
-	readonly ExchangeRate: string;
-	readonly FileSize: string;
-	readonly FileType: string;
-	readonly FullName: string;
-	readonly IconClassName: string;
-	readonly IsCheckedOut: string;
-	readonly IsFolder: string;
-	readonly IsRecursiveFetch: string;
-	readonly LocationId: string;
-	readonly LocationName: string;
-	readonly Modified_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ReadUrl: string;
-	readonly RegardingObjectId: string;
-	readonly RelativeLocation: string;
-	readonly ServiceType: string;
-	readonly SharePointCreatedOn_UtcDateAndTime: string;
-	readonly SharePointDocumentId: string;
-	readonly SharePointModifiedBy: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly Version: string;
-}
-
-/**
  * SharePointDocument WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISharePointDocumentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISharePointDocumentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISharePointDocumentApi, 'FormattedValue'>]: string };
 	/** Type the URL where the SharePoint document is located. */
 	readonly AbsoluteUrl: string | null;
 	/** Name of the person who created the application. */

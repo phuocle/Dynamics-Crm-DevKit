@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedEntity
- * All fields return string representation of their values
- */
-export interface IStagedEntityFormattedValue {
-	readonly CollectionName: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataproviderId: string;
-	readonly DatasourceId: string;
-	readonly EntityDescription: string;
-	readonly EntitySetName: string;
-	readonly ExternalCollectionName: string;
-	readonly ExternalName: string;
-	readonly ImportSequenceNumber: string;
-	readonly LogicalCollectionName: string;
-	readonly LogicalName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OriginalLocalizedCollectionName: string;
-	readonly OriginalLocalizedDescription: string;
-	readonly OriginalLocalizedName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PhysicalName: string;
-	readonly StagedEntityId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedEntity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedEntityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedEntityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedEntityApi, 'FormattedValue'>]: string };
 	/** The collection name of the staged entity. */
 	CollectionName: string | null;
 	/** Unique identifier of the user who created the record. */

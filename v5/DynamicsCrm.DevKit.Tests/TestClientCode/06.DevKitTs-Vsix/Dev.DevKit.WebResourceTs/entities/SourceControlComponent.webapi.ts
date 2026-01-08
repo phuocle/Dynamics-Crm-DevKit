@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SourceControlComponent
- * All fields return string representation of their values
- */
-export interface ISourceControlComponentFormattedValue {
-	readonly Action: string;
-	readonly ComponentDisplayName: string;
-	readonly ComponentId: string;
-	readonly ComponentPath: string;
-	readonly ComponentType: string;
-	readonly ComponentTypeName: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCommitted: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly SolutionComponentState: string;
-	readonly SourceControlComponentId: string;
-	readonly SourceControlComponentPayloadId: string;
-	readonly TTLInSeconds: string;
-	readonly UserAction: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SourceControlComponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISourceControlComponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISourceControlComponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISourceControlComponentApi, 'FormattedValue'>]: string };
 	/** Describes an action after syncing from git. */
 	Action: number | null;
 	/** Component Display Name */

@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DocumentIndex
- * All fields return string representation of their values
- */
-export interface IDocumentIndexFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DocumentId: string;
-	readonly DocumentIndexId: string;
-	readonly DocumentTypeCode: string;
-	readonly IsLatestVersion: string;
-	readonly IsPublished: string;
-	readonly KeyWords: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Number: string;
-	readonly OrganizationId: string;
-	readonly SearchText: string;
-	readonly SubjectId: string;
-	readonly Title: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DocumentIndex WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDocumentIndexApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDocumentIndexFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDocumentIndexApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the indexed article. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the indexed article was created. */

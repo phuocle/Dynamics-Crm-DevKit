@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_flow_awaitallactionapprovalmodel_user
- * All fields return string representation of their values
- */
-export interface Imsdyn_flow_awaitallactionapprovalmodel_userFormattedValue {
-	readonly msdyn_flow_awaitallactionapprovalmodel_userId: string;
-	readonly msdyn_flow_awaitallactionapprovalmodelid: string;
-	readonly systemuserid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_flow_awaitallactionapprovalmodel_user WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_flow_awaitallactionapprovalmodel_userApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_flow_awaitallactionapprovalmodel_userFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_flow_awaitallactionapprovalmodel_userApi, 'FormattedValue'>]: string };
 	readonly msdyn_flow_awaitallactionapprovalmodel_userId: DevKit.Guid | null;
 	readonly msdyn_flow_awaitallactionapprovalmodelid: DevKit.Guid | null;
 	readonly systemuserid: DevKit.Guid | null;

@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OfflineCommandDefinition
- * All fields return string representation of their values
- */
-export interface IOfflineCommandDefinitionFormattedValue {
-	readonly CommandDefinition: string;
-	readonly CommandDefinitionId: string;
-	readonly CommandName: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PrimaryEntityLogicalName: string;
-	readonly SolutionName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * OfflineCommandDefinition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOfflineCommandDefinitionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOfflineCommandDefinitionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOfflineCommandDefinitionApi, 'FormattedValue'>]: string };
 	/** Command Definition of Non Crud Command */
 	CommandDefinition: string | null;
 	/** Unique identifier of the Command Definition for the Microsoft Dynamics 365. */

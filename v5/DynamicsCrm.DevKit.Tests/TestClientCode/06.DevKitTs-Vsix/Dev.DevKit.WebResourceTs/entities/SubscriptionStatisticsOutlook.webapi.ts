@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SubscriptionStatisticsOutlook
- * All fields return string representation of their values
- */
-export interface ISubscriptionStatisticsOutlookFormattedValue {
-	readonly FullSyncRequired: string;
-	readonly ObjectTypeCode: string;
-	readonly SubscriptionId: string;
-}
-
-/**
  * SubscriptionStatisticsOutlook WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionStatisticsOutlookApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionStatisticsOutlookFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionStatisticsOutlookApi, 'FormattedValue'>]: string };
 	/** Is full sync required or not */
 	FullSyncRequired: boolean | null;
 	/** Entity object type code */

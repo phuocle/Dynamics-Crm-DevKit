@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TeamRoles
- * All fields return string representation of their values
- */
-export interface ITeamRolesFormattedValue {
-	readonly RoleId: string;
-	readonly TeamId: string;
-	readonly TeamRoleId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TeamRoles WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITeamRolesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITeamRolesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITeamRolesApi, 'FormattedValue'>]: string };
 	readonly RoleId: DevKit.Guid | null;
 	readonly TeamId: DevKit.Guid | null;
 	/** For internal use only. */

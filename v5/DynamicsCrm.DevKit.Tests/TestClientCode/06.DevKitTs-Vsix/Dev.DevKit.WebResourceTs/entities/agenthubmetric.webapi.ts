@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for agenthubmetric
- * All fields return string representation of their values
- */
-export interface IagenthubmetricFormattedValue {
-	readonly agenthubmetricId: string;
-	readonly AggregationMethod: string;
-	readonly AggregationQuery: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataSourceConfig: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * agenthubmetric WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IagenthubmetricApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IagenthubmetricFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IagenthubmetricApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	agenthubmetricId: DevKit.Guid | null;
 	/** Aggregation Method */

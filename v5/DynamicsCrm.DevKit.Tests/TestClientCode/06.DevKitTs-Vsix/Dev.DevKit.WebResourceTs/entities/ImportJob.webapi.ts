@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImportJob
- * All fields return string representation of their values
- */
-export interface IImportJobFormattedValue {
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly ImportContext: string;
-	readonly ImportJobId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OperationContext: string;
-	readonly OrganizationId: string;
-	readonly Progress: string;
-	readonly SolutionId: string;
-	readonly SolutionName: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * ImportJob WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImportJobApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImportJobFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImportJobApi, 'FormattedValue'>]: string };
 	/** Date and time when the import job was completed. */
 	readonly CompletedOn_UtcDateAndTime: Date | null;
 	/** Unique identifier of the user who created the importJob. */

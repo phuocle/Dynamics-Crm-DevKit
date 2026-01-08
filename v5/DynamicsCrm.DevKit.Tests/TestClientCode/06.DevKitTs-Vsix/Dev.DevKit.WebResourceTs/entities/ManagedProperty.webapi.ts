@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ManagedProperty
- * All fields return string representation of their values
- */
-export interface IManagedPropertyFormattedValue {
-	readonly ComponentState: string;
-	readonly EnablesAttributeName: string;
-	readonly EnablesEntityName: string;
-	readonly LogicalName: string;
-	readonly ManagedPropertyId: string;
-	readonly ManagedPropertyRowId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-}
-
-/**
  * ManagedProperty WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IManagedPropertyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IManagedPropertyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IManagedPropertyApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Enables Attribute Name of this Managed Property. */

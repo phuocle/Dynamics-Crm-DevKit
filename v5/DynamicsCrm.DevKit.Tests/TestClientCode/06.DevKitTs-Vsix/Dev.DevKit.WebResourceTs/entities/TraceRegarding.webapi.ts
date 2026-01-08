@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TraceRegarding
- * All fields return string representation of their values
- */
-export interface ITraceRegardingFormattedValue {
-	readonly RegardingObjectId: string;
-	readonly RegardingObjectOwnerId: string;
-	readonly RegardingObjectOwningBusinessUnit: string;
-	readonly TraceRegardingId: string;
-}
-
-/**
  * TraceRegarding WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITraceRegardingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITraceRegardingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITraceRegardingApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the regarding object. */
 	RegardingObjectId: DevKit.Guid | null;
 	/** Unique identifier of the user or team who owns the regarding object. */

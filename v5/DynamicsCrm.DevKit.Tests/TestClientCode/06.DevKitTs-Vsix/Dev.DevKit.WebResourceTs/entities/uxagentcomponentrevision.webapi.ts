@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for uxagentcomponentrevision
- * All fields return string representation of their values
- */
-export interface IuxagentcomponentrevisionFormattedValue {
-	readonly AgentMessage: string;
-	readonly AgentMessageTime_TimezoneDateAndTime: string;
-	readonly ComponentId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RevisionCompiledCode_name: string;
-	readonly RevisionCompiledCodeString: string;
-	readonly RevisionGeneratedCode: string;
-	readonly RevisionManifest: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UserAttachment_name: string;
-	readonly UserMessage: string;
-	readonly UserMessageTime_TimezoneDateAndTime: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly uxagentcomponentrevisionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * uxagentcomponentrevision WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IuxagentcomponentrevisionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IuxagentcomponentrevisionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IuxagentcomponentrevisionApi, 'FormattedValue'>]: string };
 	/** Agent Message */
 	AgentMessage: string | null;
 	/** Agent Message Time */

@@ -6,59 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for unstructuredfilesearchrecordstatus
- * All fields return string representation of their values
- */
-export interface IunstructuredfilesearchrecordstatusFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly FileId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IndexingIssueDetails: string;
-	readonly IndexingIssueType: string;
-	readonly IndexingStatus: string;
-	readonly IngestionBatchId: string;
-	readonly IngestionIssueDetails: string;
-	readonly IngestionIssueType: string;
-	readonly IngestionStatus: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly LastIndexingTimestamp_UtcDateAndTime: string;
-	readonly LastIngestionTimestamp_UtcDateAndTime: string;
-	readonly LastSuccessfulIndexingTimestamp_UtcDateAndTime: string;
-	readonly LastSuccessfulIngestionTimestamp_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SearchConfigurationId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UnstructuredFileSearchRecordId: string;
-	readonly unstructuredfilesearchrecordstatusId: string;
-	readonly UnstructuredFileSearchRecordStatusName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * unstructuredfilesearchrecordstatus WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IunstructuredfilesearchrecordstatusApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IunstructuredfilesearchrecordstatusFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IunstructuredfilesearchrecordstatusApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

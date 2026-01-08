@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Attachment
- * All fields return string representation of their values
- */
-export interface IAttachmentFormattedValue {
-	readonly AttachmentId: string;
-	readonly Body: string;
-	readonly FileName: string;
-	readonly FilePointer: string;
-	readonly FileSize: string;
-	readonly MimeType: string;
-	readonly Prefix: string;
-	readonly StoragePointer: string;
-	readonly Subject: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Attachment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAttachmentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAttachmentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAttachmentApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the attachment. */
 	AttachmentId: DevKit.Guid | null;
 	/** Contents of the attachment. */

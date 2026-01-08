@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImageDescriptor
- * All fields return string representation of their values
- */
-export interface IImageDescriptorFormattedValue {
-	readonly ColorDepthBits: string;
-	readonly FileId_name: string;
-	readonly FileLocation: string;
-	readonly FileName: string;
-	readonly FileSizeBytes: string;
-	readonly FileType: string;
-	readonly FullImageData: string;
-	readonly FullImageURL: string;
-	readonly ImageData: string;
-	readonly ImageDescription: string;
-	readonly ImageDescriptorId: string;
-	readonly ImagePixelHeight: string;
-	readonly ImagePixelWidth: string;
-	readonly ImageTags: string;
-	readonly ImageTimestamp: string;
-	readonly ImageURL: string;
-	readonly MimeType: string;
-	readonly ObjectId: string;
-	readonly Size: string;
-	readonly Title: string;
-	readonly versionnumber: string;
-}
-
-/**
  * ImageDescriptor WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImageDescriptorApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImageDescriptorFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImageDescriptorApi, 'FormattedValue'>]: string };
 	ColorDepthBits: number | null;
 	/** Lookup to FileAttachment */
 	readonly FileId_name: string | null;

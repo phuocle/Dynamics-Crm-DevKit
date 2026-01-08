@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OptionSet
- * All fields return string representation of their values
- */
-export interface IOptionSetFormattedValue {
-	readonly ComponentState: string;
-	readonly Name: string;
-	readonly OptionSetId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-}
-
-/**
  * OptionSet WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOptionSetApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOptionSetFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOptionSetApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** The name of this OptionSet. */

@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ServiceEndpoint
- * All fields return string representation of their values
- */
-export interface IServiceEndpointFormattedValue {
-	readonly AuthType: string;
-	readonly AuthValue: string;
-	readonly ComponentState: string;
-	readonly ConnectionMode: string;
-	readonly Contract: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly IntroducedVersion: string;
-	readonly IsAuthValueSet: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsSASKeySet: string;
-	readonly IsSASTokenSet: string;
-	readonly KeyVaultReferenceId: string;
-	readonly ManagedIdentityId: string;
-	readonly MessageCharset: string;
-	readonly MessageFormat: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly NamespaceAddress: string;
-	readonly NamespaceFormat: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly Path: string;
-	readonly RuntimeIntegrationProperties: string;
-	readonly SASKey: string;
-	readonly SASKeyName: string;
-	readonly SASToken: string;
-	readonly SchemaType: string;
-	readonly ServiceEndpointId: string;
-	readonly ServiceEndpointIdUnique: string;
-	readonly SolutionId: string;
-	readonly SolutionNamespace: string;
-	readonly SupportingSolutionId: string;
-	readonly Url: string;
-	readonly UseKeyVaultConfiguration: string;
-	readonly UserClaim: string;
-}
-
-/**
  * ServiceEndpoint WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IServiceEndpointApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IServiceEndpointFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IServiceEndpointApi, 'FormattedValue'>]: string };
 	/** Specifies mode of authentication with SB */
 	AuthType: number | null;
 	/** Authentication Value */

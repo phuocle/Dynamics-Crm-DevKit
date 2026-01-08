@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppConfig
- * All fields return string representation of their values
- */
-export interface IAppConfigFormattedValue {
-	readonly AppConfigId: string;
-	readonly AppConfigIdUnique: string;
-	readonly AppConfigImportXml: string;
-	readonly AppModuleId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AppConfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppConfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppConfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppConfigApi, 'FormattedValue'>]: string };
 	/** System-populated app configuration ID. */
 	readonly AppConfigId: DevKit.Guid | null;
 	/** System-populated app configuration unique ID. */

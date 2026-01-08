@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BulkArchiveOperationDetail
- * All fields return string representation of their values
- */
-export interface IBulkArchiveOperationDetailFormattedValue {
-	readonly ArchivedCount: string;
-	readonly BulkArchiveOperationDetailId: string;
-	readonly BulkArchiveOperationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityLogicalName: string;
-	readonly FailedCount: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsRootEntity: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BulkArchiveOperationDetail WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBulkArchiveOperationDetailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBulkArchiveOperationDetailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBulkArchiveOperationDetailApi, 'FormattedValue'>]: string };
 	/** ArchivedCount */
 	ArchivedCount: number | null;
 	/** Unique identifier for entity instances */

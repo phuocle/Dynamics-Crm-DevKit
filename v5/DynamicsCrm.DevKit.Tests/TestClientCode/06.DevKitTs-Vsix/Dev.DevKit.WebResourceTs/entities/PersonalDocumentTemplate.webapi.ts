@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PersonalDocumentTemplate
- * All fields return string representation of their values
- */
-export interface IPersonalDocumentTemplateFormattedValue {
-	readonly ClientData: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DocumentType: string;
-	readonly LanguageCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PersonalDocumentTemplateId: string;
-	readonly Status: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PersonalDocumentTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPersonalDocumentTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPersonalDocumentTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPersonalDocumentTemplateApi, 'FormattedValue'>]: string };
 	/** Client data regarding this personal document template. */
 	ClientData: string | null;
 	/** Bytes of the personal document template. */

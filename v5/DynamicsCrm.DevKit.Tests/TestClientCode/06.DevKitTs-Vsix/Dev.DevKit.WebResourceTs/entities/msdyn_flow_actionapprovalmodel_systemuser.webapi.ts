@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_flow_actionapprovalmodel_systemuser
- * All fields return string representation of their values
- */
-export interface Imsdyn_flow_actionapprovalmodel_systemuserFormattedValue {
-	readonly msdyn_flow_actionapprovalmodel_systemuserId: string;
-	readonly msdyn_flow_actionapprovalmodelid: string;
-	readonly systemuserid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_flow_actionapprovalmodel_systemuser WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_flow_actionapprovalmodel_systemuserApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_flow_actionapprovalmodel_systemuserFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_flow_actionapprovalmodel_systemuserApi, 'FormattedValue'>]: string };
 	readonly msdyn_flow_actionapprovalmodel_systemuserId: DevKit.Guid | null;
 	readonly msdyn_flow_actionapprovalmodelid: DevKit.Guid | null;
 	readonly systemuserid: DevKit.Guid | null;

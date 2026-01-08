@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SourceControlBranchConfiguration
- * All fields return string representation of their values
- */
-export interface ISourceControlBranchConfigurationFormattedValue {
-	readonly BranchName: string;
-	readonly BranchSyncedCommitId: string;
-	readonly BranchSyncedTime_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly RootFolderPath: string;
-	readonly SourceControlBranchConfigurationId: string;
-	readonly SourceControlConfigurationId: string;
-	readonly StatusCode: string;
-	readonly TTLInSeconds: string;
-	readonly UpstreamBranchName: string;
-	readonly UpstreamBranchSyncedCommitId: string;
-	readonly UpstreamBranchSyncedTime_UtcDateAndTime: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SourceControlBranchConfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISourceControlBranchConfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISourceControlBranchConfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISourceControlBranchConfigurationApi, 'FormattedValue'>]: string };
 	/** Name of the branch associated with the organization or solution */
 	BranchName: string | null;
 	/** Git commit id of the branch which was last synced in the organization */

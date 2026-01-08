@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SourceControlComponentPayload
- * All fields return string representation of their values
- */
-export interface ISourceControlComponentPayloadFormattedValue {
-	readonly ComponentId: string;
-	readonly ComponentPayload_name: string;
-	readonly ComponentPayloadInGit_name: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly GitHashId: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastSyncHashId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly ReferringSolutions: string;
-	readonly SourceControlComponentPayloadId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SourceControlComponentPayload WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISourceControlComponentPayloadApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISourceControlComponentPayloadFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISourceControlComponentPayloadApi, 'FormattedValue'>]: string };
 	/** Component id of the component */
 	ComponentId: DevKit.Guid | null;
 	/** Payload of the component */

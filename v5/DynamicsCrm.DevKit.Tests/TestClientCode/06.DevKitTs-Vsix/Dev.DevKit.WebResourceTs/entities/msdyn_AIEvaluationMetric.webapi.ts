@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_AIEvaluationMetric
- * All fields return string representation of their values
- */
-export interface Imsdyn_AIEvaluationMetricFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AIEvaluationMetricId: string;
-	readonly msdyn_AIEvaluatorName: string;
-	readonly msdyn_AIObjectId: string;
-	readonly msdyn_AIObjectType: string;
-	readonly msdyn_EvalAvgScore: string;
-	readonly msdyn_EvalP50Score: string;
-	readonly msdyn_EvalP75Score: string;
-	readonly msdyn_EvalP95Score: string;
-	readonly msdyn_LastCalculatedAt_UtcDateAndTime: string;
-	readonly msdyn_LookBackWindowDurationInMinutes: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_AIEvaluationMetric WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_AIEvaluationMetricApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_AIEvaluationMetricFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_AIEvaluationMetricApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

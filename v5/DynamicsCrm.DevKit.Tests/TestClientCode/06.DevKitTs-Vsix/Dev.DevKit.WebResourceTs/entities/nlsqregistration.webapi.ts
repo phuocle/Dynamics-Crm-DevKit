@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for nlsqregistration
- * All fields return string representation of their values
- */
-export interface InlsqregistrationFormattedValue {
-	readonly AllowedEntityList: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityList: string;
-	readonly ErrorMessage: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly nlsqregistrationId: string;
-	readonly ObjectId: string;
-	readonly ObjectPartitionId: string;
-	readonly ObjectType: string;
-	readonly ObjectTypeDisplayName: string;
-	readonly ObjectTypeId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly RegistrationStatus: string;
-	readonly Skill: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * nlsqregistration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface InlsqregistrationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: InlsqregistrationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<InlsqregistrationApi, 'FormattedValue'>]: string };
 	/** The NL2SQ service allowed entity list to be fetched for this organization. (Deprecated) */
 	AllowedEntityList: string | null;
 	/** Unique identifier of the user who created the record. */

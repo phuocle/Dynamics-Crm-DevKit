@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ProcessStage
- * All fields return string representation of their values
- */
-export interface IProcessStageFormattedValue {
-	readonly ClientData: string;
-	readonly Connector: string;
-	readonly IsTrigger: string;
-	readonly OperationId: string;
-	readonly OperationKind: string;
-	readonly OperationType: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly ParameterName: string;
-	readonly ParameterValue: string;
-	readonly ParentProcessStageId: string;
-	readonly ProcessId: string;
-	readonly ProcessStageId: string;
-	readonly StageCategory: string;
-	readonly StageName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ProcessStage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IProcessStageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IProcessStageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IProcessStageApi, 'FormattedValue'>]: string };
 	/** Step metadata for process stage */
 	readonly ClientData: string | null;
 	/** The connector associated with the stage. */

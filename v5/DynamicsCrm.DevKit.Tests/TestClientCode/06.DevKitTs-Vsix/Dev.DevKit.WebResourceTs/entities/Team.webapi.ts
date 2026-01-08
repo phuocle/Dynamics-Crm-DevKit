@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Team
- * All fields return string representation of their values
- */
-export interface ITeamFormattedValue {
-	readonly AdministratorId: string;
-	readonly AzureActiveDirectoryObjectId: string;
-	readonly BusinessUnitId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DelegatedAuthorizationId: string;
-	readonly Description: string;
-	readonly EMailAddress: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsDefault: string;
-	readonly IsSasTokenSet: string;
-	readonly MembershipType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ProcessId: string;
-	readonly QueueId: string;
-	readonly RegardingObjectId: string;
-	readonly SasToken: string;
-	readonly ShareLinkQualifier: string;
-	readonly StageId: string;
-	readonly SystemManaged: string;
-	readonly TeamId: string;
-	readonly TeamTemplateId: string;
-	readonly TeamType: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly VersionNumber: string;
-	readonly YomiName: string;
-}
-
-/**
  * Team WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITeamApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITeamFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITeamApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user primary responsible for the team. */
 	AdministratorId: DevKit.Guid | null;
 	/** The object Id for a group. */

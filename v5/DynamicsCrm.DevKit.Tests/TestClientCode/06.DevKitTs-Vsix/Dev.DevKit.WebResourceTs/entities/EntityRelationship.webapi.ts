@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityRelationship
- * All fields return string representation of their values
- */
-export interface IEntityRelationshipFormattedValue {
-	readonly ComponentState: string;
-	readonly EntityRelationshipId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SchemaName: string;
-	readonly SolutionId: string;
-}
-
-/**
  * EntityRelationship WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityRelationshipApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityRelationshipFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityRelationshipApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the entity relationship. */

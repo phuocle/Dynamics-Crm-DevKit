@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SimilarityRule
- * All fields return string representation of their values
- */
-export interface ISimilarityRuleFormattedValue {
-	readonly ActiveRuleFetchXML: string;
-	readonly BaseEntityName: string;
-	readonly BaseEntityTypeCode: string;
-	readonly ComponentState: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly ExcludeInactiveRecords: string;
-	readonly FetchXmlList: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly MatchingEntityName: string;
-	readonly MatchingEntityTypeCode: string;
-	readonly MaxKeyWords: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly NgramSize: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RuleConditionXml: string;
-	readonly SimilarityRuleId: string;
-	readonly SimilarityRuleIdUnique: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SimilarityRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISimilarityRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISimilarityRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISimilarityRuleApi, 'FormattedValue'>]: string };
 	/** Generated Fetch xml from Active rule and rule conditions. */
 	ActiveRuleFetchXML: string | null;
 	/** Record type of the record being evaluated for potential similarities. */

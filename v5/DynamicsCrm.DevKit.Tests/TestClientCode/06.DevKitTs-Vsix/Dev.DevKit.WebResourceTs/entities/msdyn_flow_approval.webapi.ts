@@ -6,69 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_flow_approval
- * All fields return string representation of their values
- */
-export interface Imsdyn_flow_approvalFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CurrentStage: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_flow_approval_additionalfields: string;
-	readonly msdyn_flow_approval_allowreassign: string;
-	readonly msdyn_flow_approval_approvalstagekey: string;
-	readonly msdyn_flow_approval_basicapprovalmodel: string;
-	readonly msdyn_flow_approval_category: string;
-	readonly msdyn_flow_approval_completedon_UtcDateAndTime: string;
-	readonly msdyn_flow_approval_currentstepnumber: string;
-	readonly msdyn_flow_approval_details: string;
-	readonly msdyn_flow_approval_dueon_UtcDateAndTime: string;
-	readonly msdyn_flow_approval_expireson_UtcDateAndTime: string;
-	readonly msdyn_flow_approval_itemlink: string;
-	readonly msdyn_flow_approval_itemlinkdescription: string;
-	readonly msdyn_flow_approval_itemlinkhash: string;
-	readonly msdyn_flow_approval_modelid: string;
-	readonly msdyn_flow_approval_modeltype: string;
-	readonly msdyn_flow_approval_name: string;
-	readonly msdyn_flow_approval_partneridhash: string;
-	readonly msdyn_flow_approval_partnermetadata: string;
-	readonly msdyn_flow_approval_priority: string;
-	readonly msdyn_flow_approval_requesttype: string;
-	readonly msdyn_flow_approval_result: string;
-	readonly msdyn_flow_approval_sendemail: string;
-	readonly msdyn_flow_approval_source: string;
-	readonly msdyn_flow_approval_stage: string;
-	readonly msdyn_flow_approval_tags: string;
-	readonly msdyn_flow_approval_templateformid: string;
-	readonly msdyn_flow_approval_templateid: string;
-	readonly msdyn_flow_approval_templateresponseId: string;
-	readonly msdyn_flow_approval_title: string;
-	readonly msdyn_flow_approvalId: string;
-	readonly new_msdyn_flow_approval_allowcancel: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ProcessId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_flow_approval WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_flow_approvalApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_flow_approvalFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_flow_approvalApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

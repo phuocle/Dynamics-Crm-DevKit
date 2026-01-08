@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ChannelProperty
- * All fields return string representation of their values
- */
-export interface IChannelPropertyFormattedValue {
-	readonly Applicationsource: string;
-	readonly ChannelPropertyId: string;
-	readonly ChannelPropertyIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataType: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RegardingObjectId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ChannelProperty WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IChannelPropertyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IChannelPropertyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IChannelPropertyApi, 'FormattedValue'>]: string };
 	/** Type the name of the application that the property is associated with. */
 	Applicationsource: string | null;
 	/** Unique identifier of the channel property */

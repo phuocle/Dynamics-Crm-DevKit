@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DocumentTemplate
- * All fields return string representation of their values
- */
-export interface IDocumentTemplateFormattedValue {
-	readonly ClientData: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DocumentTemplateId: string;
-	readonly DocumentType: string;
-	readonly LanguageCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly Status: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DocumentTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDocumentTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDocumentTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDocumentTemplateApi, 'FormattedValue'>]: string };
 	/** Client data regarding this document template. */
 	ClientData: string | null;
 	/** Bytes of the document template. */

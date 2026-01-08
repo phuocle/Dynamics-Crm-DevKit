@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TransformationParameterMapping
- * All fields return string representation of their values
- */
-export interface ITransformationParameterMappingFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly DataTypeCode: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ParameterArrayIndex: string;
-	readonly ParameterSequence: string;
-	readonly ParameterTypeCode: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TransformationMappingId: string;
-	readonly TransformationParameterMappingId: string;
-	readonly TransformationParameterMappingIdUnique: string;
-}
-
-/**
  * TransformationParameterMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITransformationParameterMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITransformationParameterMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITransformationParameterMappingApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the user who created the parameter mapping. */

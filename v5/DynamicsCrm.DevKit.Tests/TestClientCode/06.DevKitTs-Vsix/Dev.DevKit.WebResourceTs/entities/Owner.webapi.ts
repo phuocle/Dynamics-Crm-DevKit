@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Owner
- * All fields return string representation of their values
- */
-export interface IOwnerFormattedValue {
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly VersionNumber: string;
-	readonly YomiName: string;
-}
-
-/**
  * Owner WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOwnerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOwnerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOwnerApi, 'FormattedValue'>]: string };
 	/** Name of the Owner. */
 	readonly Name: string | null;
 	/** Unique identifier for the Owner: systemuserid or teamid. */

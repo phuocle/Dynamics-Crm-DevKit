@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for recentlyused
- * All fields return string representation of their values
- */
-export interface IrecentlyusedFormattedValue {
-	readonly AppId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImageUrl: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastAccessed_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly ObjectId: string;
-	readonly ObjectPartitionId: string;
-	readonly ObjectType: string;
-	readonly ObjectTypeDisplayName: string;
-	readonly ObjectTypeId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly recentlyusedId: string;
-	readonly RecordUrl: string;
-	readonly SubTitle: string;
-	readonly Title: string;
-	readonly TTLInSeconds: string;
-	readonly UserId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * recentlyused WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IrecentlyusedApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IrecentlyusedFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IrecentlyusedApi, 'FormattedValue'>]: string };
 	/** Source application Identifier for MRU record */
 	AppId: string | null;
 	/** Unique identifier of the user who created the record. */

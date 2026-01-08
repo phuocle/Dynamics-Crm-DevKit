@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for LookUpMapping
- * All fields return string representation of their values
- */
-export interface ILookUpMappingFormattedValue {
-	readonly ColumnMappingId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly LookUpAttributeName: string;
-	readonly LookUpEntityName: string;
-	readonly LookUpMappingId: string;
-	readonly LookUpMappingIdUnique: string;
-	readonly LookUpSourceCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ProcessCode: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TransformationParameterMappingId: string;
-}
-
-/**
  * LookUpMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ILookUpMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ILookUpMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ILookUpMappingApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the column mapping with which this lookup mapping is associated. */
 	ColumnMappingId: DevKit.Guid | null;
 	/** For internal use only. */

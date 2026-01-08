@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KbArticleComment
- * All fields return string representation of their values
- */
-export interface IKbArticleCommentFormattedValue {
-	readonly CommentText: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly KbArticleCommentId: string;
-	readonly KbArticleId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly Title: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * KbArticleComment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKbArticleCommentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKbArticleCommentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKbArticleCommentApi, 'FormattedValue'>]: string };
 	/** Comment text for the knowledge base article. */
 	CommentText: string | null;
 	/** Unique identifier of the user who created the knowledge base article comment. */

@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for License
- * All fields return string representation of their values
- */
-export interface ILicenseFormattedValue {
-	readonly InstalledOn_UtcDateOnly: string;
-	readonly LicenseId: string;
-	readonly LicenseKey: string;
-	readonly LicenseType: string;
-	readonly OrganizationId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * License WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ILicenseApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ILicenseFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ILicenseApi, 'FormattedValue'>]: string };
 	/** Date and time when the license was installed. */
 	InstalledOn_UtcDateOnly: Date | null;
 	/** Unique identifier of the license. */

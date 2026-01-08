@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowrun
- * All fields return string representation of their values
- */
-export interface IflowrunFormattedValue {
-	readonly CallingProductResourceId: string;
-	readonly CallingProductRunId: string;
-	readonly CallingProductType: string;
-	readonly ClientTrackingId: string;
-	readonly ConversationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DurationInMs: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly ErrorCode: string;
-	readonly ErrorMessage: string;
-	readonly flowrunId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsPrimary: string;
-	readonly ModernFlowType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly parentRunId: string;
-	readonly PartitionId: string;
-	readonly resourceId: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly Status: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TriggerType: string;
-	readonly TTLInSeconds: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly Workflow: string;
-	readonly WorkflowId: string;
-}
-
-/**
  * flowrun WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IflowrunApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IflowrunFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IflowrunApi, 'FormattedValue'>]: string };
 	/** The resource id of the caller */
 	CallingProductResourceId: string | null;
 	/** The run id of the caller */

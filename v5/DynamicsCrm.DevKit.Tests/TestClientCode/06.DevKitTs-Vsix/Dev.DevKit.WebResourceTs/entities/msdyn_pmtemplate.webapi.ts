@@ -6,59 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_pmtemplate
- * All fields return string representation of their values
- */
-export interface Imsdyn_pmtemplateFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_author: string;
-	readonly msdyn_category: string;
-	readonly msdyn_configuration: string;
-	readonly msdyn_description: string;
-	readonly msdyn_icon: string;
-	readonly msdyn_iconname: string;
-	readonly msdyn_isprivatetemplate: string;
-	readonly msdyn_locale: string;
-	readonly msdyn_mashupscript: string;
-	readonly msdyn_name: string;
-	readonly msdyn_pmtemplateId: string;
-	readonly msdyn_subcategory: string;
-	readonly msdyn_templategroupid: string;
-	readonly msdyn_templateversion: string;
-	readonly msdyn_type: string;
-	readonly msdyn_UniqueName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_pmtemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_pmtemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_pmtemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_pmtemplateApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

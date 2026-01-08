@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MailMergeTemplate
- * All fields return string representation of their values
- */
-export interface IMailMergeTemplateFormattedValue {
-	readonly Body: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultFilter: string;
-	readonly Description: string;
-	readonly DocumentFormat: string;
-	readonly ExchangeRate: string;
-	readonly FileName: string;
-	readonly FileSize: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsPersonal: string;
-	readonly LanguageCode: string;
-	readonly MailMergeTemplateId: string;
-	readonly MailMergeTemplateIdUnique: string;
-	readonly MailMergeType: string;
-	readonly MimeType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParameterXml: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MailMergeTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMailMergeTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMailMergeTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMailMergeTemplateApi, 'FormattedValue'>]: string };
 	/** Body text of the mail merge template. */
 	Body: string | null;
 	/** For internal use only. */

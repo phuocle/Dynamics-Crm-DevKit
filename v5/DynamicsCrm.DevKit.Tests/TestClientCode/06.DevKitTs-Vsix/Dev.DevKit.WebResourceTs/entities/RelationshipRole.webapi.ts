@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RelationshipRole
- * All fields return string representation of their values
- */
-export interface IRelationshipRoleFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly RelationshipRoleId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RelationshipRole WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRelationshipRoleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRelationshipRoleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRelationshipRoleApi, 'FormattedValue'>]: string };
 	/** Unique Identifier of the user who created the relationship role. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the relationship role was created. */

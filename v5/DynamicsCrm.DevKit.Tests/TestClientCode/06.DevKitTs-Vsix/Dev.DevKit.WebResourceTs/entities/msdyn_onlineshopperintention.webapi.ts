@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_onlineshopperintention
- * All fields return string representation of their values
- */
-export interface Imsdyn_onlineshopperintentionFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_Administrative: string;
-	readonly msdyn_Administrative_Duration: string;
-	readonly msdyn_BounceRates: string;
-	readonly msdyn_Browser: string;
-	readonly msdyn_ExitRates: string;
-	readonly msdyn_Informational: string;
-	readonly msdyn_Informational_Duration: string;
-	readonly msdyn_Month: string;
-	readonly msdyn_name: string;
-	readonly msdyn_onlineshopperintentionId: string;
-	readonly msdyn_OperatingSystems: string;
-	readonly msdyn_PageValues: string;
-	readonly msdyn_ProductRelated: string;
-	readonly msdyn_ProductRelated_Duration: string;
-	readonly msdyn_Region: string;
-	readonly msdyn_Revenue: string;
-	readonly msdyn_SpecialDay: string;
-	readonly msdyn_TrafficType: string;
-	readonly msdyn_VisitorType: string;
-	readonly msdyn_Weekend: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_onlineshopperintention WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_onlineshopperintentionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_onlineshopperintentionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_onlineshopperintentionApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityIndex
- * All fields return string representation of their values
- */
-export interface IEntityIndexFormattedValue {
-	readonly ComponentState: string;
-	readonly IndexId: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RecordId: string;
-	readonly SequentialKeyStatus: string;
-	readonly SolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EntityIndex WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityIndexApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityIndexFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityIndexApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the index id */

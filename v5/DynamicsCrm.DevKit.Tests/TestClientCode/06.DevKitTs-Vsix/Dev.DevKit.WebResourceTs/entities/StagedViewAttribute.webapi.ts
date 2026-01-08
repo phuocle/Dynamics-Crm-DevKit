@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedViewAttribute
- * All fields return string representation of their values
- */
-export interface IStagedViewAttributeFormattedValue {
-	readonly AttributeId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly MetadataDescription: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly RelationshipId: string;
-	readonly RemoteAttributeId: string;
-	readonly SolutionId: string;
-	readonly StagedViewAttributeId: string;
-	readonly StagingExecutionContextId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedViewAttribute WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedViewAttributeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedViewAttributeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedViewAttributeApi, 'FormattedValue'>]: string };
 	/** Identifier of the attribute. */
 	AttributeId: DevKit.Guid | null;
 	/** Solution component state of view attribute. */

@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserMapping
- * All fields return string representation of their values
- */
-export interface IUserMappingFormattedValue {
-	readonly ClaimType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExchangeRate: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PartnerApplicationType: string;
-	readonly SystemUserAttributeName: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserMappingId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * UserMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserMappingApi, 'FormattedValue'>]: string };
 	/** The Claim Type */
 	ClaimType: string | null;
 	/** Unique identifier of the user who created the record. */

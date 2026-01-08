@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StatusMap
- * All fields return string representation of their values
- */
-export interface IStatusMapFormattedValue {
-	readonly IsDefault: string;
-	readonly OrganizationId: string;
-	readonly State: string;
-	readonly Status: string;
-	readonly StatusMapId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StatusMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStatusMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStatusMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStatusMapApi, 'FormattedValue'>]: string };
 	IsDefault: boolean | null;
 	readonly OrganizationId: DevKit.Guid | null;
 	readonly State: number | null;

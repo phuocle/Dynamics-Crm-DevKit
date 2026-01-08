@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserQueryVisualization
- * All fields return string representation of their values
- */
-export interface IUserQueryVisualizationFormattedValue {
-	readonly ChartType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataDescription: string;
-	readonly Description: string;
-	readonly EnableCrossPartition: string;
-	readonly IsDefault: string;
-	readonly isNLGenerated: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PresentationDescription: string;
-	readonly UserQueryVisualizationId: string;
-	readonly VersionNumber: string;
-	readonly WebResourceId: string;
-}
-
-/**
  * UserQueryVisualization WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserQueryVisualizationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserQueryVisualizationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserQueryVisualizationApi, 'FormattedValue'>]: string };
 	/** Indicates the library used to render the visualization. */
 	ChartType: number | null;
 	/** Shows who created the record. */

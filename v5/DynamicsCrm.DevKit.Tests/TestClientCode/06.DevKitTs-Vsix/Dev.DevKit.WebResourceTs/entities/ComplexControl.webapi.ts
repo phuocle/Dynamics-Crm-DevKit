@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ComplexControl
- * All fields return string representation of their values
- */
-export interface IComplexControlFormattedValue {
-	readonly ComplexControlId: string;
-	readonly ComplexControlIdUnique: string;
-	readonly ComplexControlXml: string;
-	readonly ComponentState: string;
-	readonly Description: string;
-	readonly IntroducedVersion: string;
-	readonly IsManaged: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly Type: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ComplexControl WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IComplexControlApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IComplexControlFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IComplexControlApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the complex control. */
 	ComplexControlId: DevKit.Guid | null;
 	/** Unique identifier of the form used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook. */

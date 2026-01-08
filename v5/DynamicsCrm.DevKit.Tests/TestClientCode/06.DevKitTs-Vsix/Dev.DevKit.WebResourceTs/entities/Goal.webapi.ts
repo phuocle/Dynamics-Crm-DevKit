@@ -6,101 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Goal
- * All fields return string representation of their values
- */
-export interface IGoalFormattedValue {
-	readonly ActualDecimal: string;
-	readonly ActualInteger: string;
-	readonly ActualMoney: string;
-	readonly ActualMoney_Base: string;
-	readonly ActualString: string;
-	readonly AmountDataType: string;
-	readonly ComputedTargetAsOfTodayDecimal: string;
-	readonly ComputedTargetAsOfTodayInteger: string;
-	readonly ComputedTargetAsOfTodayMoney: string;
-	readonly ComputedTargetAsOfTodayMoney_Base: string;
-	readonly ComputedTargetAsOfTodayPercentageAchieved: string;
-	readonly ConsiderOnlyGoalOwnersRecords: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomRollupFieldDecimal: string;
-	readonly CustomRollupFieldInteger: string;
-	readonly CustomRollupFieldMoney: string;
-	readonly CustomRollupFieldMoney_Base: string;
-	readonly CustomRollupFieldString: string;
-	readonly Depth: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly ExchangeRate: string;
-	readonly FiscalPeriod: string;
-	readonly FiscalYear: string;
-	readonly GoalEndDate_UtcDateOnly: string;
-	readonly GoalId: string;
-	readonly GoalOwnerId: string;
-	readonly GoalStartDate_UtcDateOnly: string;
-	readonly GoalWithErrorId: string;
-	readonly ImportSequenceNumber: string;
-	readonly InProgressDecimal: string;
-	readonly InProgressInteger: string;
-	readonly InProgressMoney: string;
-	readonly InProgressMoney_Base: string;
-	readonly InProgressString: string;
-	readonly IsAmount: string;
-	readonly IsFiscalPeriodGoal: string;
-	readonly IsOverridden: string;
-	readonly IsOverride: string;
-	readonly LastRolledupDate_UtcDateAndTime: string;
-	readonly MetricId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentGoalId: string;
-	readonly Percentage: string;
-	readonly RollupErrorCode: string;
-	readonly RollupOnlyFromChildGoals: string;
-	readonly RollUpQueryActualDecimalId: string;
-	readonly RollupQueryActualIntegerId: string;
-	readonly RollUpQueryActualMoneyId: string;
-	readonly RollUpQueryCustomDecimalId: string;
-	readonly RollUpQueryCustomIntegerId: string;
-	readonly RollUpQueryCustomMoneyId: string;
-	readonly RollUpQueryInprogressDecimalId: string;
-	readonly RollUpQueryInprogressIntegerId: string;
-	readonly RollUpQueryInprogressMoneyId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly StretchTargetDecimal: string;
-	readonly StretchTargetInteger: string;
-	readonly StretchTargetMoney: string;
-	readonly StretchTargetMoney_Base: string;
-	readonly StretchTargetString: string;
-	readonly TargetDecimal: string;
-	readonly TargetInteger: string;
-	readonly TargetMoney: string;
-	readonly TargetMoney_Base: string;
-	readonly TargetString: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly TreeId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Goal WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGoalApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGoalFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGoalApi, 'FormattedValue'>]: string };
 	/** Shows the actual value (Decimal type) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount and the amount data type is Decimal. */
 	ActualDecimal: number | null;
 	/** Shows the actual value (integer) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount or Count and the amount data type is Integer. */

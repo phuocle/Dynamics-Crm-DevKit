@@ -6,94 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BusinessUnit
- * All fields return string representation of their values
- */
-export interface IBusinessUnitFormattedValue {
-	readonly Address1_AddressId: string;
-	readonly Address1_AddressTypeCode: string;
-	readonly Address1_City: string;
-	readonly Address1_Country: string;
-	readonly Address1_County: string;
-	readonly Address1_Fax: string;
-	readonly Address1_Latitude: string;
-	readonly Address1_Line1: string;
-	readonly Address1_Line2: string;
-	readonly Address1_Line3: string;
-	readonly Address1_Longitude: string;
-	readonly Address1_Name: string;
-	readonly Address1_PostalCode: string;
-	readonly Address1_PostOfficeBox: string;
-	readonly Address1_ShippingMethodCode: string;
-	readonly Address1_StateOrProvince: string;
-	readonly Address1_Telephone1: string;
-	readonly Address1_Telephone2: string;
-	readonly Address1_Telephone3: string;
-	readonly Address1_UPSZone: string;
-	readonly Address1_UTCOffset: string;
-	readonly Address2_AddressId: string;
-	readonly Address2_AddressTypeCode: string;
-	readonly Address2_City: string;
-	readonly Address2_Country: string;
-	readonly Address2_County: string;
-	readonly Address2_Fax: string;
-	readonly Address2_Latitude: string;
-	readonly Address2_Line1: string;
-	readonly Address2_Line2: string;
-	readonly Address2_Line3: string;
-	readonly Address2_Longitude: string;
-	readonly Address2_Name: string;
-	readonly Address2_PostalCode: string;
-	readonly Address2_PostOfficeBox: string;
-	readonly Address2_ShippingMethodCode: string;
-	readonly Address2_StateOrProvince: string;
-	readonly Address2_Telephone1: string;
-	readonly Address2_Telephone2: string;
-	readonly Address2_Telephone3: string;
-	readonly Address2_UPSZone: string;
-	readonly Address2_UTCOffset: string;
-	readonly BusinessUnitId: string;
-	readonly CalendarId: string;
-	readonly CostCenter: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CreditLimit: string;
-	readonly Description: string;
-	readonly DisabledReason: string;
-	readonly DivisionName: string;
-	readonly EMailAddress: string;
-	readonly ExchangeRate: string;
-	readonly FileAsName: string;
-	readonly FtpSiteUrl: string;
-	readonly ImportSequenceNumber: string;
-	readonly InheritanceMask: string;
-	readonly IsDisabled: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ParentBusinessUnitId: string;
-	readonly Picture: string;
-	readonly StockExchange: string;
-	readonly TickerSymbol: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserGroupId: string;
-	readonly UTCOffset: string;
-	readonly VersionNumber: string;
-	readonly WebSiteUrl: string;
-	readonly WorkflowSuspended: string;
-}
-
-/**
  * BusinessUnit WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBusinessUnitApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBusinessUnitFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBusinessUnitApi, 'FormattedValue'>]: string };
 	/** Unique identifier for address 1. */
 	Address1_AddressId: DevKit.Guid | null;
 	/** Type of address for address 1, such as billing, shipping, or primary address. */

@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityAnalyticsConfig
- * All fields return string representation of their values
- */
-export interface IEntityAnalyticsConfigFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly EntityAnalyticsConfigId: string;
-	readonly EntityDataSource: string;
-	readonly IsEnabledForADLS: string;
-	readonly IsEnabledForTimeSeries: string;
-	readonly IsManaged: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly ParentEntityId: string;
-	readonly ParentEntityLogicalName: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * EntityAnalyticsConfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityAnalyticsConfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityAnalyticsConfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityAnalyticsConfigApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

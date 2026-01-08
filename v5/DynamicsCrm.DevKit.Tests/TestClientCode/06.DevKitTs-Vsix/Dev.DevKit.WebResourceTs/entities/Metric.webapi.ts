@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Metric
- * All fields return string representation of their values
- */
-export interface IMetricFormattedValue {
-	readonly AmountDataType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsAmount: string;
-	readonly IsStretchTracked: string;
-	readonly MetricId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Metric WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMetricApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMetricFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMetricApi, 'FormattedValue'>]: string };
 	/** Data type of the amount. */
 	AmountDataType: number | null;
 	/** Unique identifier of the user who created the record. */

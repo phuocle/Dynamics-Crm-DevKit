@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for componentchangesetversion
- * All fields return string representation of their values
- */
-export interface IcomponentchangesetversionFormattedValue {
-	readonly changeset: string;
-	readonly component: string;
-	readonly componentchangesetversionId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly Operation: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly payload: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * componentchangesetversion WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcomponentchangesetversionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcomponentchangesetversionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcomponentchangesetversionApi, 'FormattedValue'>]: string };
 	/** Changeset */
 	changeset: string | null;
 	/** Component */

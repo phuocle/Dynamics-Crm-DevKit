@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UserEntityUISettings
- * All fields return string representation of their values
- */
-export interface IUserEntityUISettingsFormattedValue {
-	readonly InsertIntoEmailMRUXml: string;
-	readonly LastViewedFormXml: string;
-	readonly LookupMRUXml: string;
-	readonly MRUXml: string;
-	readonly ObjectTypeCode: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ReadingPaneXml: string;
-	readonly RecentlyViewedXml: string;
-	readonly ShowInAddressBook: string;
-	readonly TabOrderXml: string;
-	readonly UserEntityUISettingsId: string;
-	readonly VersionNumber: string;
-	readonly ViewPersonalizationSettings: string;
-}
-
-/**
  * UserEntityUISettings WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUserEntityUISettingsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUserEntityUISettingsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUserEntityUISettingsApi, 'FormattedValue'>]: string };
 	/** Describes which entities are most recently inserted into email for this entity */
 	InsertIntoEmailMRUXml: string | null;
 	/** Describes which forms are most recently viewed for this entity. */

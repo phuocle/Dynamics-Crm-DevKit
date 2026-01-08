@@ -6,47 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_webfile
- * All fields return string representation of their values
- */
-export interface Imspp_webfileFormattedValue {
-	readonly mspp_alloworigin: string;
-	readonly mspp_cloudblobaddress: string;
-	readonly mspp_contentdisposition: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdbyipaddress: string;
-	readonly mspp_createdbyusername: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_displaydate_UtcDateAndTime: string;
-	readonly mspp_displayorder: string;
-	readonly mspp_excludefromsearch: string;
-	readonly mspp_expirationdate_UtcDateAndTime: string;
-	readonly mspp_hiddenfromsitemap: string;
-	readonly mspp_masterwebfileid: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedbyipaddress: string;
-	readonly mspp_modifiedbyusername: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_parentpageid: string;
-	readonly mspp_partialurl: string;
-	readonly mspp_publishingstateid: string;
-	readonly mspp_releasedate_UtcDateAndTime: string;
-	readonly mspp_summary: string;
-	readonly mspp_title: string;
-	readonly mspp_webfileId: string;
-	readonly mspp_websiteid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_webfile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_webfileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_webfileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_webfileApi, 'FormattedValue'>]: string };
 	/** Defines CORS header Access-Control-Allow-Origin for cross origin requests. */
 	mspp_alloworigin: string | null;
 	/** Cloud Blob Address */

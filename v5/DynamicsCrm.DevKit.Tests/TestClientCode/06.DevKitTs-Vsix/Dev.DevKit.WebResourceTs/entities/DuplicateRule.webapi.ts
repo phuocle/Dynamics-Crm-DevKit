@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DuplicateRule
- * All fields return string representation of their values
- */
-export interface IDuplicateRuleFormattedValue {
-	readonly BaseEntityMatchCodeTable: string;
-	readonly BaseEntityName: string;
-	readonly BaseEntityTypeCode: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DuplicateRuleId: string;
-	readonly ExcludeInactiveRecords: string;
-	readonly IsCaseSensitive: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly MatchingEntityMatchCodeTable: string;
-	readonly MatchingEntityName: string;
-	readonly MatchingEntityTypeCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * DuplicateRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDuplicateRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDuplicateRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDuplicateRuleApi, 'FormattedValue'>]: string };
 	/** Database table that stores match codes for the record type being evaluated for potential duplicates. */
 	readonly BaseEntityMatchCodeTable: string | null;
 	/** Record type of the record being evaluated for potential duplicates. */

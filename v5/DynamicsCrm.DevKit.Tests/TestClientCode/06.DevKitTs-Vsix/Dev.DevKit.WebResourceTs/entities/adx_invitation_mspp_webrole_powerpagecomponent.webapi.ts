@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for adx_invitation_mspp_webrole_powerpagecomponent
- * All fields return string representation of their values
- */
-export interface Iadx_invitation_mspp_webrole_powerpagecomponentFormattedValue {
-	readonly adx_invitation_mspp_webrole_powerpagecomponentId: string;
-	readonly adx_invitationid: string;
-	readonly powerpagecomponentid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * adx_invitation_mspp_webrole_powerpagecomponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iadx_invitation_mspp_webrole_powerpagecomponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iadx_invitation_mspp_webrole_powerpagecomponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iadx_invitation_mspp_webrole_powerpagecomponentApi, 'FormattedValue'>]: string };
 	readonly adx_invitation_mspp_webrole_powerpagecomponentId: DevKit.Guid | null;
 	readonly adx_invitationid: DevKit.Guid | null;
 	readonly powerpagecomponentid: DevKit.Guid | null;

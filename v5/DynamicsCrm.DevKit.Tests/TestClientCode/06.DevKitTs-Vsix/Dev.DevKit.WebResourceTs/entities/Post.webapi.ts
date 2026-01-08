@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Post
- * All fields return string representation of their values
- */
-export interface IPostFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly LargeText: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PostId: string;
-	readonly PostRegardingId: string;
-	readonly PostToYammer: string;
-	readonly RegardingObjectId: string;
-	readonly RegardingObjectOwnerId: string;
-	readonly RegardingObjectOwningBusinessUnit: string;
-	readonly Source: string;
-	readonly Text: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Type: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly YammerPostState: string;
-	readonly YammerRetryCount: string;
-}
-
-/**
  * Post WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPostApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPostFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPostApi, 'FormattedValue'>]: string };
 	/** Shows who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for textdatarecordsindexingstatus
- * All fields return string representation of their values
- */
-export interface ItextdatarecordsindexingstatusFormattedValue {
-	readonly AttributeName: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityName2: string;
-	readonly ImportSequenceNumber: string;
-	readonly IndexingStatus: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly ObjectTypeCode: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly RecordCreatedOnInCrm: string;
-	readonly RecordId: string;
-	readonly RecordModifiedOnInCrm: string;
-	readonly RecordSizeInBytesInCrm: string;
-	readonly RecordSizeInBytesInTextDataIndex: string;
-	readonly RecordVersionNumber: string;
-	readonly TextDataIndexName: string;
-	readonly textdatarecordsindexingstatusId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * textdatarecordsindexingstatus WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ItextdatarecordsindexingstatusApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ItextdatarecordsindexingstatusFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ItextdatarecordsindexingstatusApi, 'FormattedValue'>]: string };
 	/** Attribute name. */
 	AttributeName: string | null;
 	/** Unique identifier of the user who created the record. */

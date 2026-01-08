@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for viewasexamplequestion
- * All fields return string representation of their values
- */
-export interface IviewasexamplequestionFormattedValue {
-	readonly Comment: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly Query: string;
-	readonly Rephrase: string;
-	readonly SavedQueryVersionNumber: string;
-	readonly SavedQueryViewId: string;
-	readonly StandardSQL: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly viewasexamplequestionId: string;
-}
-
-/**
  * viewasexamplequestion WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IviewasexamplequestionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IviewasexamplequestionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IviewasexamplequestionApi, 'FormattedValue'>]: string };
 	/** Explanation of the query. */
 	Comment: string | null;
 	/** Unique identifier of the user who created the record. */

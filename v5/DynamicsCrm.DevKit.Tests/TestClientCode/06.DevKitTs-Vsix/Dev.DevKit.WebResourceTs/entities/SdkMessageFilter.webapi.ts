@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SdkMessageFilter
- * All fields return string representation of their values
- */
-export interface ISdkMessageFilterFormattedValue {
-	readonly Availability: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationLevel: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomProcessingStepAllowed: string;
-	readonly IsManaged: string;
-	readonly IsVisible: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RestrictionLevel: string;
-	readonly SdkMessageFilterId: string;
-	readonly SdkMessageFilterIdUnique: string;
-	readonly SdkMessageId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-	readonly WorkflowSdkStepEnabled: string;
-}
-
-/**
  * SdkMessageFilter WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISdkMessageFilterApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISdkMessageFilterFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISdkMessageFilterApi, 'FormattedValue'>]: string };
 	/** Identifies where a method will be exposed. 0 - Server, 1 - Client, 2 - both. */
 	Availability: number | null;
 	/** For internal use only. */

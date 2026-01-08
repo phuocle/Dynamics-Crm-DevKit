@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DuplicateRuleCondition
- * All fields return string representation of their values
- */
-export interface IDuplicateRuleConditionFormattedValue {
-	readonly BaseAttributeName: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DuplicateRuleConditionId: string;
-	readonly IgnoreBlankValues: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly MatchingAttributeName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OperatorCode: string;
-	readonly OperatorParam: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly RegardingObjectId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly UniqueRuleName: string;
-}
-
-/**
  * DuplicateRuleCondition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDuplicateRuleConditionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDuplicateRuleConditionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDuplicateRuleConditionApi, 'FormattedValue'>]: string };
 	/** Field that is being compared. */
 	BaseAttributeName: string | null;
 	/** For internal use only. */

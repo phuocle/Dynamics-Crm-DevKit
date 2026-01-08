@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ReportLink
- * All fields return string representation of their values
- */
-export interface IReportLinkFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly LinkedReportId: string;
-	readonly LinkedReportName: string;
-	readonly LinkTypeCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly ReportId: string;
-	readonly ReportLinkId: string;
-	readonly ReportLinkIdUnique: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ReportLink WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IReportLinkApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IReportLinkFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IReportLinkApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the report link. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the report link record was created. */

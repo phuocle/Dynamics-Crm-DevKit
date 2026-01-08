@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for FederatedKnowledgeMetadataRefresh
- * All fields return string representation of their values
- */
-export interface IFederatedKnowledgeMetadataRefreshFormattedValue {
-	readonly connectorid: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly federatedjobtype: string;
-	readonly FederatedKnowledgeMetadataRefreshId: string;
-	readonly ImportSequenceNumber: string;
-	readonly issuetype: string;
-	readonly jobmessageid: string;
-	readonly lastmetadatarefreshtimestamp_UtcDateAndTime: string;
-	readonly lastsuccessfulmetadatarefreshtimestamp_UtcDateAndTime: string;
-	readonly metadatarefreshstatus: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly numoffiledatacompleted: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly searchconfigurationid: string;
-	readonly searchconfigurationname: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly totalfiledatacount: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * FederatedKnowledgeMetadataRefresh WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFederatedKnowledgeMetadataRefreshApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFederatedKnowledgeMetadataRefreshFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFederatedKnowledgeMetadataRefreshApi, 'FormattedValue'>]: string };
 	/** Connector Id */
 	connectorid: string | null;
 	/** Unique identifier of the user who created the record. */

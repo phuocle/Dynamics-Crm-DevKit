@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for adx_invitation_redeemedcontacts
- * All fields return string representation of their values
- */
-export interface Iadx_invitation_redeemedcontactsFormattedValue {
-	readonly adx_invitation_redeemedcontactsId: string;
-	readonly adx_invitationid: string;
-	readonly contactid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * adx_invitation_redeemedcontacts WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iadx_invitation_redeemedcontactsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iadx_invitation_redeemedcontactsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iadx_invitation_redeemedcontactsApi, 'FormattedValue'>]: string };
 	readonly adx_invitation_redeemedcontactsId: DevKit.Guid | null;
 	readonly adx_invitationid: DevKit.Guid | null;
 	readonly contactid: DevKit.Guid | null;

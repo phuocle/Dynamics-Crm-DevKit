@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityKey
- * All fields return string representation of their values
- */
-export interface IEntityKeyFormattedValue {
-	readonly ComponentState: string;
-	readonly EntityKeyId: string;
-	readonly IsSecondaryKey: string;
-	readonly LogicalName: string;
-	readonly Name: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly SolutionId: string;
-}
-
-/**
  * EntityKey WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityKeyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityKeyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityKeyApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Unique identifier of the entity key. */

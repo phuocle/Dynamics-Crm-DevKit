@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_FormMapping
- * All fields return string representation of their values
- */
-export interface Imsdyn_FormMappingFormattedValue {
-	readonly AllowedOperations: string;
-	readonly BaseEntity: string;
-	readonly CardId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomApiId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_Context: string;
-	readonly msdyn_FormMappingId: string;
-	readonly msdyn_formname: string;
-	readonly msdyn_RequestedColumns: string;
-	readonly Operation: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_FormMapping WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_FormMappingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_FormMappingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_FormMappingApi, 'FormattedValue'>]: string };
 	/** AllowedOperations */
 	AllowedOperations: Array<number> | null;
 	/** The base entity that will be created or updated. Relationships to other entities will be described with respect to this entity. */

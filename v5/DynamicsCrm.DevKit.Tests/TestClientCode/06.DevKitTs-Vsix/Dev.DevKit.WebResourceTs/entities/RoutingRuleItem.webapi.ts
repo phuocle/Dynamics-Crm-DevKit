@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RoutingRuleItem
- * All fields return string representation of their values
- */
-export interface IRoutingRuleItemFormattedValue {
-	readonly AssignObjectId: string;
-	readonly AssignObjectIdModifiedOn_UtcDateOnly: string;
-	readonly ComponentState: string;
-	readonly ConditionXml: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly RoutedQueueId: string;
-	readonly RoutingRuleId: string;
-	readonly RoutingRuleItemId: string;
-	readonly RoutingRuleItemIdUnique: string;
-	readonly SequenceNumber: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RoutingRuleItem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRoutingRuleItemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRoutingRuleItemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRoutingRuleItemApi, 'FormattedValue'>]: string };
 	/** Show who is assigned on item. */
 	AssignObjectId: DevKit.Guid | null;
 	/** Shows the date and time when the item was last assigned to a user. */

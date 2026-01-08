@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KnowledgeArticlesCategories
- * All fields return string representation of their values
- */
-export interface IKnowledgeArticlesCategoriesFormattedValue {
-	readonly CategoryId: string;
-	readonly KnowledgeArticleCategoryId: string;
-	readonly KnowledgeArticleId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * KnowledgeArticlesCategories WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKnowledgeArticlesCategoriesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKnowledgeArticlesCategoriesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKnowledgeArticlesCategoriesApi, 'FormattedValue'>]: string };
 	readonly CategoryId: DevKit.Guid | null;
 	/** Unique identifier of the Category for the knowledge article. */
 	KnowledgeArticleCategoryId: DevKit.Guid | null;

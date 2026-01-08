@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for credential
- * All fields return string representation of their values
- */
-export interface IcredentialFormattedValue {
-	readonly certificate: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly connectiontype: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly credentialId: string;
-	readonly credentials: string;
-	readonly credentialtype: string;
-	readonly cyberarkapplicationid: string;
-	readonly cyberarkobject: string;
-	readonly cyberarksafe: string;
-	readonly cyberarkusername: string;
-	readonly defaultcredential: string;
-	readonly description: string;
-	readonly groupmapping: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly logincontext: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly password: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly usagetype: string;
-	readonly username: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * credential WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcredentialApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcredentialFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcredentialApi, 'FormattedValue'>]: string };
 	/** Certificate used for authentication */
 	certificate: DevKit.Guid | null;
 	/** For internal use only. */

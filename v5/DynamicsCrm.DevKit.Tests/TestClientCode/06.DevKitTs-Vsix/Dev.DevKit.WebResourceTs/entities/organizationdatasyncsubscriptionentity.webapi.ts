@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for organizationdatasyncsubscriptionentity
- * All fields return string representation of their values
- */
-export interface IorganizationdatasyncsubscriptionentityFormattedValue {
-	readonly BlobPartitionBy: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly InheritsFromOtc: string;
-	readonly IsActivity: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly ObjectTypeCode: string;
-	readonly OrganizationDataSyncSubscriptioId: string;
-	readonly OrganizationDataSyncSubscription: string;
-	readonly organizationdatasyncsubscriptionentityId: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * organizationdatasyncsubscriptionentity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IorganizationdatasyncsubscriptionentityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IorganizationdatasyncsubscriptionentityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IorganizationdatasyncsubscriptionentityApi, 'FormattedValue'>]: string };
 	/** BlobPartitionBy */
 	BlobPartitionBy: number | null;
 	/** Unique identifier of the user who created the record. */

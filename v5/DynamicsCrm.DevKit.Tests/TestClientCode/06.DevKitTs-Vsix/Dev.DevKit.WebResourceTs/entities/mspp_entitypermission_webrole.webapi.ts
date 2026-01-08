@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_entitypermission_webrole
- * All fields return string representation of their values
- */
-export interface Imspp_entitypermission_webroleFormattedValue {
-	readonly mspp_entitypermission_webroleId: string;
-	readonly mspp_entitypermissionid: string;
-	readonly mspp_webroleid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * mspp_entitypermission_webrole WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_entitypermission_webroleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_entitypermission_webroleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_entitypermission_webroleApi, 'FormattedValue'>]: string };
 	readonly mspp_entitypermission_webroleId: DevKit.Guid | null;
 	readonly mspp_entitypermissionid: DevKit.Guid | null;
 	readonly mspp_webroleid: DevKit.Guid | null;

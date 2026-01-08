@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonMetadataToProcess
- * All fields return string representation of their values
- */
-export interface IRibbonMetadataToProcessFormattedValue {
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly EntityName2: string;
-	readonly ExceptionMessage: string;
-	readonly IsDbUpdate: string;
-	readonly ProcessedOn_UtcDateAndTime: string;
-	readonly RetryCount: string;
-	readonly RibbonMetadataRowId: string;
-	readonly SolutionId: string;
-	readonly SolutionName: string;
-	readonly Status: string;
-}
-
-/**
  * RibbonMetadataToProcess WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonMetadataToProcessApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonMetadataToProcessFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonMetadataToProcessApi, 'FormattedValue'>]: string };
 	/** Shows the date and time when the ribbon entity record has finished processing. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 	readonly CompletedOn_UtcDateAndTime: Date | null;
 	/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */

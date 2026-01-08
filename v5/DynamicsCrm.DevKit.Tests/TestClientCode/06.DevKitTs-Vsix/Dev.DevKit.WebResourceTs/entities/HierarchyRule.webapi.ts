@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for HierarchyRule
- * All fields return string representation of their values
- */
-export interface IHierarchyRuleFormattedValue {
-	readonly ComponentState: string;
-	readonly Description: string;
-	readonly HierarchyRuleID: string;
-	readonly HierarchyRuleIDUnique: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PrimaryEntityFormID: string;
-	readonly PrimaryEntityLogicalName: string;
-	readonly PublishedOn_UtcDateAndTime: string;
-	readonly RelatedEntityFormId: string;
-	readonly RelatedEntityLogicalName: string;
-	readonly ShowDisabled: string;
-	readonly SolutionId: string;
-	readonly SortBy: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * HierarchyRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IHierarchyRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IHierarchyRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IHierarchyRuleApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** Description of the hierarchy rule. */

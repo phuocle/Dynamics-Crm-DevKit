@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for searchcustomanalyzer
- * All fields return string representation of their values
- */
-export interface IsearchcustomanalyzerFormattedValue {
-	readonly analyzers_name: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly searchcustomanalyzerId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * searchcustomanalyzer WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsearchcustomanalyzerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsearchcustomanalyzerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsearchcustomanalyzerApi, 'FormattedValue'>]: string };
 	/** analyzers */
 	readonly analyzers_name: string | null;
 	/** Unique identifier of the user who created the record. */

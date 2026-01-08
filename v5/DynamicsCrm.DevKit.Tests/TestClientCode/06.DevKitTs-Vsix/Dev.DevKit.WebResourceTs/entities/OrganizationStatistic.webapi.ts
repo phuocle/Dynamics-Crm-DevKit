@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OrganizationStatistic
- * All fields return string representation of their values
- */
-export interface IOrganizationStatisticFormattedValue {
-	readonly Hour: string;
-	readonly OrganizationStatisticId: string;
-	readonly ServerName: string;
-	readonly StatisticType: string;
-	readonly StatisticValue: string;
-}
-
-/**
  * OrganizationStatistic WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOrganizationStatisticApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOrganizationStatisticFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOrganizationStatisticApi, 'FormattedValue'>]: string };
 	/** Hour that the statistic measurement was taken. */
 	readonly Hour: number | null;
 	/** Unique identifier of the record. */

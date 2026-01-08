@@ -6,71 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowmachinegroup
- * All fields return string representation of their values
- */
-export interface IflowmachinegroupFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DisconnectionPlannedOn_UtcDateAndTime: string;
-	readonly DomainSetting: string;
-	readonly FlowGroupType: string;
-	readonly flowmachinegroupId: string;
-	readonly flowmachineimage: string;
-	readonly flowmachinenetwork: string;
-	readonly GroupMetadata: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly KeyCreationDate_TimezoneDateAndTime: string;
-	readonly KeyExpiryGracePeriod: string;
-	readonly KeyValidityPeriod: string;
-	readonly LastRunDate_UtcDateAndTime: string;
-	readonly ManagedVersion: string;
-	readonly ManagementType: string;
-	readonly MaxManagedMachineCount: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PasswordChangedBy: string;
-	readonly PasswordChangedDate_UtcDateAndTime: string;
-	readonly PreferredQueuingType: string;
-	readonly PrimaryKeyPackage: string;
-	readonly PrimaryPublicKey: string;
-	readonly ProvisioningError: string;
-	readonly ProvisioningState: string;
-	readonly RotationStartedBy: string;
-	readonly SecondaryKeyPackage: string;
-	readonly SecondaryPublicKey: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly trytoreusewindowssession: string;
-	readonly UsageType: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * flowmachinegroup WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IflowmachinegroupApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IflowmachinegroupFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IflowmachinegroupApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

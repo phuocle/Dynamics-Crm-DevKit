@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MailboxTrackingCategory
- * All fields return string representation of their values
- */
-export interface IMailboxTrackingCategoryFormattedValue {
-	readonly CategoryOnboardingStatus: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly ExchangeCategoryColor: string;
-	readonly ExchangeCategoryId: string;
-	readonly ExchangeCategoryName: string;
-	readonly MailboxId: string;
-	readonly MailboxTrackingCategoryId: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-}
-
-/**
  * MailboxTrackingCategory WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMailboxTrackingCategoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMailboxTrackingCategoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMailboxTrackingCategoryApi, 'FormattedValue'>]: string };
 	/** Information to indicate whether the category has been created in Exchange or not. */
 	CategoryOnboardingStatus: number | null;
 	/** Date and time when the entry was created. */

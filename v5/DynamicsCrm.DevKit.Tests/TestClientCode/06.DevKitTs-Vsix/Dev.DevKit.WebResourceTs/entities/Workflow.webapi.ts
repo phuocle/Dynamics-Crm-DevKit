@@ -6,105 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Workflow
- * All fields return string representation of their values
- */
-export interface IWorkflowFormattedValue {
-	readonly ActiveWorkflowId: string;
-	readonly AsyncAutoDelete: string;
-	readonly BillingContext: string;
-	readonly BusinessProcessType: string;
-	readonly Category: string;
-	readonly Claims: string;
-	readonly ClientData: string;
-	readonly ClientDataIsCompressed: string;
-	readonly ComponentState: string;
-	readonly ConnectionReferences: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CreateMetadata: string;
-	readonly CreateStage: string;
-	readonly Credentials: string;
-	readonly Definition: string;
-	readonly DeleteStage: string;
-	readonly Dependencies: string;
-	readonly Description: string;
-	readonly DesktopFlowModules: string;
-	readonly DynamicsSolutionContext: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly FormId: string;
-	readonly InputParameters: string;
-	readonly Inputs: string;
-	readonly IntroducedVersion: string;
-	readonly IsCrmUIWorkflow: string;
-	readonly IsCustomizable: string;
-	readonly IsCustomProcessingStepAllowedForOtherPublishers: string;
-	readonly IsManaged: string;
-	readonly IsTransacted: string;
-	readonly LanguageCode: string;
-	readonly Licensee: string;
-	readonly LicenseEntitledBy: string;
-	readonly Metadata: string;
-	readonly Mode: string;
-	readonly ModernFlowType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ModifyMetadata: string;
-	readonly Name: string;
-	readonly OnDemand: string;
-	readonly Outputs: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentWorkflowId: string;
-	readonly PlanVerified: string;
-	readonly PluginTypeId: string;
-	readonly ProcessOrder: string;
-	readonly ProcessRoleAssignment: string;
-	readonly ProcessTriggerFormId: string;
-	readonly ProcessTriggerScope: string;
-	readonly Rank: string;
-	readonly ResourceContainer: string;
-	readonly ResourceId: string;
-	readonly RunAs: string;
-	readonly SchemaVersion: string;
-	readonly Scope: string;
-	readonly SdkMessageId: string;
-	readonly SolutionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subprocess: string;
-	readonly SupportingSolutionId: string;
-	readonly SuspensionReasonDetails: string;
-	readonly SyncWorkflowLogOnFailure: string;
-	readonly ThrottlingBehavior: string;
-	readonly TriggerOnCreate: string;
-	readonly TriggerOnDelete: string;
-	readonly TriggerOnUpdateAttributeList: string;
-	readonly TrustedAccess: string;
-	readonly Type: string;
-	readonly UIData: string;
-	readonly UIFlowType: string;
-	readonly UniqueName: string;
-	readonly UpdateStage: string;
-	readonly VersionNumber: string;
-	readonly WorkflowId: string;
-	readonly WorkflowIdUnique: string;
-	readonly Xaml: string;
-}
-
-/**
  * Workflow WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWorkflowApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWorkflowFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWorkflowApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the latest activation record for the process. */
 	readonly ActiveWorkflowId: DevKit.Guid | null;
 	/** Indicates whether the asynchronous system job is automatically deleted on completion. */

@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PartnerApplication
- * All fields return string representation of their values
- */
-export interface IPartnerApplicationFormattedValue {
-	readonly ApplicationRole: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly MetadataUrl: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly PartnerApplicationId: string;
-	readonly PrincipalId: string;
-	readonly Realm: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UseAuthorizationServer: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PartnerApplication WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPartnerApplicationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPartnerApplicationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPartnerApplicationApi, 'FormattedValue'>]: string };
 	/** Indicates the application role. */
 	ApplicationRole: number | null;
 	/** Unique identifier of the user who created the record. */

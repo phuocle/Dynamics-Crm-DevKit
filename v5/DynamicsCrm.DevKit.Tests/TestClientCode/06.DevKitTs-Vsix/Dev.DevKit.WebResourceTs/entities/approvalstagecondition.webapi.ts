@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for approvalstagecondition
- * All fields return string representation of their values
- */
-export interface IapprovalstageconditionFormattedValue {
-	readonly Approval: string;
-	readonly approvalstageconditionId: string;
-	readonly ConditionalLogic: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ResultInfo: string;
-	readonly ResultType: string;
-	readonly ResultValue: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * approvalstagecondition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IapprovalstageconditionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IapprovalstageconditionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IapprovalstageconditionApi, 'FormattedValue'>]: string };
 	/** The linked approval */
 	Approval: DevKit.Guid | null;
 	/** Unique identifier for entity instances */

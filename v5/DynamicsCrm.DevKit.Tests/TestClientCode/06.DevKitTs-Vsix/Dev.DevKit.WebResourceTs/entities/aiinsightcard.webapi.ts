@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for aiinsightcard
- * All fields return string representation of their values
- */
-export interface IaiinsightcardFormattedValue {
-	readonly aiinsightcardId: string;
-	readonly aiskillid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly controlconfig: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly description: string;
-	readonly entityid: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly surface: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * aiinsightcard WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IaiinsightcardApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IaiinsightcardFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IaiinsightcardApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	aiinsightcardId: DevKit.Guid | null;
 	/** The related AI Skill Config record */

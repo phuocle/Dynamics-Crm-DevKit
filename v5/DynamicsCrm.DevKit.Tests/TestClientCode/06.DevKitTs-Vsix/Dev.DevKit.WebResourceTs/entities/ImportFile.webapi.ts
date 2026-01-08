@@ -6,65 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImportFile
- * All fields return string representation of their values
- */
-export interface IImportFileFormattedValue {
-	readonly AdditionalHeaderRow: string;
-	readonly CompletedOn_UtcDateOnly: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataDelimiterCode: string;
-	readonly EnableDuplicateDetection: string;
-	readonly EntityKeyId: string;
-	readonly FailureCount: string;
-	readonly FieldDelimiterCode: string;
-	readonly FileTypeCode: string;
-	readonly HeaderRow: string;
-	readonly ImportFileId: string;
-	readonly ImportId: string;
-	readonly ImportMapId: string;
-	readonly IsFirstRowHeader: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParsedTableColumnPrefix: string;
-	readonly ParsedTableColumnsNumber: string;
-	readonly ParsedTableName: string;
-	readonly PartialFailureCount: string;
-	readonly ProcessCode: string;
-	readonly ProcessingStatus: string;
-	readonly ProgressCounter: string;
-	readonly RecordsOwnerId: string;
-	readonly RelatedEntityColumns: string;
-	readonly Size: string;
-	readonly Source: string;
-	readonly SourceEntityName: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SuccessCount: string;
-	readonly TargetEntityName: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TotalCount: string;
-	readonly UpsertModeCode: string;
-	readonly UseSystemMap: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * ImportFile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImportFileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImportFileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImportFileApi, 'FormattedValue'>]: string };
 	/** Shows the secondary column headers. The additional headers are used during the process of transforming the import file into import data records. */
 	readonly AdditionalHeaderRow: string | null;
 	/** Shows the date and time when the import associated with the import file was completed. */

@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerpagesite_dvfilesearch
- * All fields return string representation of their values
- */
-export interface Ipowerpagesite_dvfilesearchFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly dvfilesearchid: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly powerpagesite_dvfilesearchId: string;
-	readonly powerpagesiteid: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerpagesite_dvfilesearch WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ipowerpagesite_dvfilesearchApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ipowerpagesite_dvfilesearchFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ipowerpagesite_dvfilesearchApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrivilegeCheckerLog
- * All fields return string representation of their values
- */
-export interface IPrivilegeCheckerLogFormattedValue {
-	readonly CheckedPrivilege: string;
-	readonly CheckedUser: string;
-	readonly CheckType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImpersonatingUser: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly PrivilegeCheckerLogId: string;
-	readonly PrivilegeCheckerRunId: string;
-	readonly PrivilegeDepth: string;
-	readonly Request: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingCaller: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrivilegeCheckerLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrivilegeCheckerLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrivilegeCheckerLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrivilegeCheckerLogApi, 'FormattedValue'>]: string };
 	/** The checked privilege. */
 	readonly CheckedPrivilege: DevKit.Guid | null;
 	/** The user whose privilege was checked. */

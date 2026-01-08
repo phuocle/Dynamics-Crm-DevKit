@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Audit
- * All fields return string representation of their values
- */
-export interface IAuditFormattedValue {
-	readonly Action: string;
-	readonly AdditionalInfo: string;
-	readonly AttributeMask: string;
-	readonly AuditId: string;
-	readonly CallingUserId: string;
-	readonly ChangeData: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly ObjectId: string;
-	readonly Operation: string;
-	readonly RegardingObjectId: string;
-	readonly TimeToLiveInSeconds: string;
-	readonly TransactionId: string;
-	readonly UserAdditionalInfo: string;
-	readonly UserId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Audit WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAuditApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAuditFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAuditApi, 'FormattedValue'>]: string };
 	/** Actions the user can perform that cause a change */
 	readonly Action: number | null;
 	/** Additional Info for Audit */

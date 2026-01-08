@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SharePointData
- * All fields return string representation of their values
- */
-export interface ISharePointDataFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly IsValid: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly NextPageToken: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PageNumber: string;
-	readonly PreviousPageToken: string;
-	readonly RegardingObjectId: string;
-	readonly SharePointDataId: string;
-	readonly UserId: string;
-}
-
-/**
  * SharePointData WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISharePointDataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISharePointDataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISharePointDataApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the SharePoint Data. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the SharePoint Data was created. */

@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for agenttask
- * All fields return string representation of their values
- */
-export interface IagenttaskFormattedValue {
-	readonly AgentFeedItemId: string;
-	readonly agenticscenario: string;
-	readonly agenttaskId: string;
-	readonly AssignedTo: string;
-	readonly Context: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PartitionId: string;
-	readonly Priority: string;
-	readonly RequestedBy: string;
-	readonly State: string;
-	readonly Title: string;
-	readonly TTLInSeconds: string;
-	readonly Type: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * agenttask WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IagenttaskApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IagenttaskFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IagenttaskApi, 'FormattedValue'>]: string };
 	/** Lookup to Agent Feed Item */
 	AgentFeedItemId: DevKit.Guid | null;
 	/** Agentic Scenario */

@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppModuleComponent
- * All fields return string representation of their values
- */
-export interface IAppModuleComponentFormattedValue {
-	readonly AppModuleComponentId: string;
-	readonly AppModuleComponentIdUnique: string;
-	readonly AppModuleIdUnique: string;
-	readonly ComponentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExchangeRate: string;
-	readonly IntroducedVersion: string;
-	readonly IsDefault: string;
-	readonly IsMetadata: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RootAppModuleComponentId: string;
-	readonly RootComponentBehavior: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AppModuleComponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppModuleComponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppModuleComponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppModuleComponentApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AppModuleComponentId: DevKit.Guid | null;
 	/** Unique identifier of the Application Component used when synchronizing customizations for the Microsoft Dynamics 365 client for Outlook */

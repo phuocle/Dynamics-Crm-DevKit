@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_adplacement
- * All fields return string representation of their values
- */
-export interface Imspp_adplacementFormattedValue {
-	readonly mspp_adplacementId: string;
-	readonly mspp_createdby: string;
-	readonly mspp_createdon_UtcDateAndTime: string;
-	readonly mspp_modifiedby: string;
-	readonly mspp_modifiedon_UtcDateAndTime: string;
-	readonly mspp_name: string;
-	readonly mspp_websiteid: string;
-	readonly mspp_webtemplateid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-}
-
-/**
  * mspp_adplacement WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_adplacementApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_adplacementFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_adplacementApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	mspp_adplacementId: DevKit.Guid | null;
 	/** Shows who created the record. */

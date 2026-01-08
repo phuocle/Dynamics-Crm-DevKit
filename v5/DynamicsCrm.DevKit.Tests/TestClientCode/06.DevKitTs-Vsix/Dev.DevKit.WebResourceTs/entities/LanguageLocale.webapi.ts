@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for LanguageLocale
- * All fields return string representation of their values
- */
-export interface ILanguageLocaleFormattedValue {
-	readonly Code: string;
-	readonly Language: string;
-	readonly LanguageLocaleId: string;
-	readonly LocaleId: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly Region: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * LanguageLocale WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ILanguageLocaleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ILanguageLocaleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ILanguageLocaleApi, 'FormattedValue'>]: string };
 	/** Code */
 	readonly Code: string | null;
 	/** Language */

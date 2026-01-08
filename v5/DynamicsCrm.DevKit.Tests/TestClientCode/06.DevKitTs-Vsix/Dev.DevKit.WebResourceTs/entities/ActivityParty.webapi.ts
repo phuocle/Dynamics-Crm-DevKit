@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ActivityParty
- * All fields return string representation of their values
- */
-export interface IActivityPartyFormattedValue {
-	readonly ActivityId: string;
-	readonly ActivityPartyId: string;
-	readonly AddressUsed: string;
-	readonly AddressUsedEmailColumnNumber: string;
-	readonly DoNotEmail: string;
-	readonly DoNotFax: string;
-	readonly DoNotPhone: string;
-	readonly DoNotPostalMail: string;
-	readonly Effort: string;
-	readonly ExchangeEntryId: string;
-	readonly ExternalId: string;
-	readonly ExternalIdType: string;
-	readonly InstanceTypeCode: string;
-	readonly IsPartyDeleted: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly ParticipationTypeMask: string;
-	readonly PartyId: string;
-	readonly ScheduledEnd_UtcDateOnly: string;
-	readonly ScheduledStart_UtcDateOnly: string;
-	readonly UnresolvedPartyName: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ActivityParty WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IActivityPartyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IActivityPartyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IActivityPartyApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the activity associated with the activity party. (A "party" is any person who is associated with an activity.) */
 	ActivityId: DevKit.Guid | null;
 	/** Unique identifier of the activity party. */

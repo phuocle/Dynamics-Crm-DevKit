@@ -6,83 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for chat
- * All fields return string representation of their values
- */
-export interface IchatFormattedValue {
-	readonly ActivityAdditionalParams: string;
-	readonly ActivityId: string;
-	readonly ActualDurationMinutes: string;
-	readonly ActualEnd_UtcDateAndTime: string;
-	readonly ActualStart_UtcDateAndTime: string;
-	readonly Community: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DeliveryLastAttemptedOn_UtcDateAndTime: string;
-	readonly DeliveryPriorityCode: string;
-	readonly Description: string;
-	readonly EventsSummary: string;
-	readonly ExchangeItemId: string;
-	readonly ExchangeRate: string;
-	readonly ExchangeWebLink: string;
-	readonly ImportSequenceNumber: string;
-	readonly InstanceTypeCode: string;
-	readonly IsBilled: string;
-	readonly IsMapiPrivate: string;
-	readonly IsRegularActivity: string;
-	readonly IsWorkflowCreated: string;
-	readonly LastOnHoldTime_UtcDateAndTime: string;
-	readonly LastSyncError: string;
-	readonly LeftVoiceMail: string;
-	readonly LinkedBy: string;
-	readonly LinkedOn_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedInTeamsByActivityPartyId: string;
-	readonly ModifiedInTeamsOn_UtcDateAndTime: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OnHoldTime: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PostponeActivityProcessingUntil_UtcDateAndTime: string;
-	readonly PriorityCode: string;
-	readonly ProcessId: string;
-	readonly RegardingObjectId: string;
-	readonly ScheduledDurationMinutes: string;
-	readonly ScheduledEnd_UtcDateAndTime: string;
-	readonly ScheduledStart_UtcDateAndTime: string;
-	readonly SenderMailboxId: string;
-	readonly SentOn_UtcDateAndTime: string;
-	readonly SeriesId: string;
-	readonly SLAId: string;
-	readonly SLAInvokedId: string;
-	readonly SortDate_UtcDateAndTime: string;
-	readonly StageId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subject: string;
-	readonly SyncStatus: string;
-	readonly teamschatid: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly UnLinkedBy: string;
-	readonly UnLinkedOn_UtcDateAndTime: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * chat WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IchatApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IchatFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IchatApi, 'FormattedValue'>]: string };
 	/** Additional information provided by the external application as JSON. For internal use only. */
 	ActivityAdditionalParams: string | null;
 	/** Unique identifier of the activity. */

@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PlannerSyncAction
- * All fields return string representation of their values
- */
-export interface IPlannerSyncActionFormattedValue {
-	readonly Assignments: string;
-	readonly DueDateTime_TimezoneDateAndTime: string;
-	readonly ExternalBucketId: string;
-	readonly ExternalReferences: string;
-	readonly GroupId: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastAttemptedOn_TimezoneDateAndTime: string;
-	readonly LastSyncError: string;
-	readonly Notes: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PendingAttempts: string;
-	readonly PercentComplete: string;
-	readonly PlannerBusinessScenarioId: string;
-	readonly PlannerSyncActionId: string;
-	readonly Priority: string;
-	readonly QueuedOn_TimezoneDateAndTime: string;
-	readonly SourceRecordEntityLogicalName: string;
-	readonly SourceRecordId: string;
-	readonly StartDateTime_TimezoneDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PlannerSyncAction WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPlannerSyncActionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPlannerSyncActionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPlannerSyncActionApi, 'FormattedValue'>]: string };
 	/** Assignments */
 	Assignments: string | null;
 	/** Date and time when the planner task is due. */

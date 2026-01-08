@@ -6,55 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowmachine
- * All fields return string representation of their values
- */
-export interface IflowmachineFormattedValue {
-	readonly AgentVersion: string;
-	readonly ConnectivityConfiguration: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly FlowMachineGroupId: string;
-	readonly flowmachineId: string;
-	readonly FlowMachineImageVersionId: string;
-	readonly FlowMachineNetworkId: string;
-	readonly HostedMachineError: string;
-	readonly HostedMachineState: string;
-	readonly HostingType: string;
-	readonly ImportSequenceNumber: string;
-	readonly KeyDeliveryStatus: string;
-	readonly KeyReceivedDate_UtcDateAndTime: string;
-	readonly LastHeartbeatDate_UtcDateAndTime: string;
-	readonly LastKnownPictureInPictureSupport: string;
-	readonly MachineMetadata: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OvercapacitySince_UtcDateAndTime: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SessionCapacity: string;
-	readonly SnapshotStartedAt_UtcDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * flowmachine WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IflowmachineApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IflowmachineFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IflowmachineApi, 'FormattedValue'>]: string };
 	/** Version installed on the machine */
 	AgentVersion: string | null;
 	/** For Internal Use Only. */

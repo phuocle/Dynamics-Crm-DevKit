@@ -6,32 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Subscription
- * All fields return string representation of their values
- */
-export interface ISubscriptionFormattedValue {
-	readonly ClientVersion: string;
-	readonly CompletedSyncStartedOn_UtcDateOnly: string;
-	readonly CompletedSyncVersionNumber: string;
-	readonly LastSyncStartedOn_UtcDateOnly: string;
-	readonly MachineName: string;
-	readonly ReInitialize: string;
-	readonly ResetForCreate: string;
-	readonly SubscriptionId: string;
-	readonly SubscriptionType: string;
-	readonly SyncEntryTableName: string;
-	readonly SystemUserId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * Subscription WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISubscriptionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISubscriptionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISubscriptionApi, 'FormattedValue'>]: string };
 	/** Client Version. */
 	readonly ClientVersion: string | null;
 	/** UTC time when the last successfully completed synchronization was started. This is the difference between local time and standard Coordinated Universal Time. */

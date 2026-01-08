@@ -6,60 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Template
- * All fields return string representation of their values
- */
-export interface ITemplateFormattedValue {
-	readonly Body: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly GenerationTypeCode: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly IsPersonal: string;
-	readonly IsRecommended: string;
-	readonly LanguageCode: string;
-	readonly MimeType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OpenCount: string;
-	readonly OpenRate: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PresentationXml: string;
-	readonly ReplyCount: string;
-	readonly ReplyRate: string;
-	readonly SafeHtml: string;
-	readonly SolutionId: string;
-	readonly Subject: string;
-	readonly SubjectPresentationXml: string;
-	readonly SubjectSafeHtml: string;
-	readonly SupportingSolutionId: string;
-	readonly TemplateId: string;
-	readonly TemplateIdUnique: string;
-	readonly Title: string;
-	readonly UsedCount: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Template WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITemplateApi, 'FormattedValue'>]: string };
 	/** Body text of the email template. */
 	Body: string | null;
 	/** For internal use only. */

@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedMetadataAsyncOperation
- * All fields return string representation of their values
- */
-export interface IStagedMetadataAsyncOperationFormattedValue {
-	readonly AsyncJobStatus: string;
-	readonly AsyncOperationId: string;
-	readonly ComponentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly ObjectId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly StagedMetadataAsyncOperationId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UnprocessedDependencies: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedMetadataAsyncOperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedMetadataAsyncOperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedMetadataAsyncOperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedMetadataAsyncOperationApi, 'FormattedValue'>]: string };
 	/** Status of the Async Job to process metadata operation. */
 	readonly AsyncJobStatus: number | null;
 	/** Async Job OperationId. */

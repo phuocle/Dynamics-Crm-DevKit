@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for flowlog
- * All fields return string representation of their values
- */
-export interface IflowlogFormattedValue {
-	readonly cloudflowid: string;
-	readonly cloudflowrunid: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly data: string;
-	readonly desktopflowid: string;
-	readonly Duration: string;
-	readonly flowlogId: string;
-	readonly flowmachinegroupid: string;
-	readonly flowmachineid: string;
-	readonly flowsessionid: string;
-	readonly ImportSequenceNumber: string;
-	readonly InputsLocalizedNames: string;
-	readonly level: string;
-	readonly LogIndex: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OutputsLocalizedNames: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly parentobjectid: string;
-	readonly PartitionId: string;
-	readonly TTLInSeconds: string;
-	readonly type: string;
-	readonly VersionNumber: string;
-	readonly workqueueid: string;
-	readonly workqueueitemid: string;
-}
-
-/**
  * flowlog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IflowlogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IflowlogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IflowlogApi, 'FormattedValue'>]: string };
 	/** The Power Automate Cloud Flow Id this log is linked to. */
 	cloudflowid: DevKit.Guid | null;
 	/** The Power Automate Cloud Flow run this log is linked to. */

@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_publishingstatetransitionrule_webrole
- * All fields return string representation of their values
- */
-export interface Imspp_publishingstatetransitionrule_webroleFormattedValue {
-	readonly mspp_publishingstatetransitionrule_webroleId: string;
-	readonly mspp_publishingstatetransitionruleid: string;
-	readonly mspp_webroleid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * mspp_publishingstatetransitionrule_webrole WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_publishingstatetransitionrule_webroleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_publishingstatetransitionrule_webroleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_publishingstatetransitionrule_webroleApi, 'FormattedValue'>]: string };
 	readonly mspp_publishingstatetransitionrule_webroleId: DevKit.Guid | null;
 	readonly mspp_publishingstatetransitionruleid: DevKit.Guid | null;
 	readonly mspp_webroleid: DevKit.Guid | null;

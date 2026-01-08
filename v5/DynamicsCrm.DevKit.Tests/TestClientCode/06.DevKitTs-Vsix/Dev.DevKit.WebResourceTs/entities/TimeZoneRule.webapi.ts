@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TimeZoneRule
- * All fields return string representation of their values
- */
-export interface ITimeZoneRuleFormattedValue {
-	readonly Bias: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DaylightBias: string;
-	readonly DaylightDay: string;
-	readonly DaylightDayOfWeek: string;
-	readonly DaylightHour: string;
-	readonly DaylightMinute: string;
-	readonly DaylightMonth: string;
-	readonly DaylightSecond: string;
-	readonly DaylightYear: string;
-	readonly EffectiveDateTime_UtcDateOnly: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly StandardBias: string;
-	readonly StandardDay: string;
-	readonly StandardDayOfWeek: string;
-	readonly StandardHour: string;
-	readonly StandardMinute: string;
-	readonly StandardMonth: string;
-	readonly StandardSecond: string;
-	readonly StandardYear: string;
-	readonly TimeZoneDefinitionId: string;
-	readonly TimeZoneRuleId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TimeZoneRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITimeZoneRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITimeZoneRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITimeZoneRuleApi, 'FormattedValue'>]: string };
 	/** Base time bias of the time zone rule. */
 	Bias: number | null;
 	/** Unique identifier of the user who created the time zone rule. */

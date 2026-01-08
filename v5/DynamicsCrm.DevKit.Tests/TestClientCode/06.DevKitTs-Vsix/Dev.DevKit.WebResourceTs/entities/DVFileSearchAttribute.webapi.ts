@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for DVFileSearchAttribute
- * All fields return string representation of their values
- */
-export interface IDVFileSearchAttributeFormattedValue {
-	readonly attribute: string;
-	readonly AttributeLogicalName: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DVFileSearchAttributeId: string;
-	readonly dvfilesearchentity: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsFilterable: string;
-	readonly IsManaged: string;
-	readonly IsSearchable: string;
-	readonly IsVectorizable: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * DVFileSearchAttribute WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IDVFileSearchAttributeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IDVFileSearchAttributeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IDVFileSearchAttributeApi, 'FormattedValue'>]: string };
 	/** Unique identifier for Attribute associated with DVFileSearchAttribute. */
 	attribute: DevKit.Guid | null;
 	/** AttributeLogicalName */

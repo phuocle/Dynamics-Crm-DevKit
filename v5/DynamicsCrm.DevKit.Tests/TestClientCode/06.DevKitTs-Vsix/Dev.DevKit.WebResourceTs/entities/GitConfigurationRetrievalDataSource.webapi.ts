@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for GitConfigurationRetrievalDataSource
- * All fields return string representation of their values
- */
-export interface IGitConfigurationRetrievalDataSourceFormattedValue {
-	readonly GitConfigurationRetrievalDataSourceId: string;
-	readonly name: string;
-}
-
-/**
  * GitConfigurationRetrievalDataSource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGitConfigurationRetrievalDataSourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGitConfigurationRetrievalDataSourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGitConfigurationRetrievalDataSourceApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	GitConfigurationRetrievalDataSourceId: DevKit.Guid | null;
 	/** Name */

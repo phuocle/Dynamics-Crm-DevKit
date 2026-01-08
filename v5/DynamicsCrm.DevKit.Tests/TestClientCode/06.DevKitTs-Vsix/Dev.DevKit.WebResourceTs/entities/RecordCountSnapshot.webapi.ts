@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RecordCountSnapshot
- * All fields return string representation of their values
- */
-export interface IRecordCountSnapshotFormattedValue {
-	readonly Count: string;
-	readonly LastUpdated_UtcDateOnly: string;
-	readonly ObjectTypeCode: string;
-	readonly RecordCountSnapshotId: string;
-	readonly VersionNumberConverted: string;
-}
-
-/**
  * RecordCountSnapshot WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRecordCountSnapshotApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRecordCountSnapshotFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRecordCountSnapshotApi, 'FormattedValue'>]: string };
 	readonly Count: number | null;
 	readonly LastUpdated_UtcDateOnly: Date | null;
 	readonly ObjectTypeCode: number | null;

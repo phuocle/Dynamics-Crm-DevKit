@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ExpiredProcess
- * All fields return string representation of their values
- */
-export interface IExpiredProcessFormattedValue {
-	readonly ActiveStageId: string;
-	readonly ActiveStageStartedOn_UtcDateOnly: string;
-	readonly BusinessProcessFlowInstanceId: string;
-	readonly CompletedOn_UtcDateOnly: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Duration: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly KnowledgeArticleId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ProcessId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ExpiredProcess WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IExpiredProcessApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IExpiredProcessFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IExpiredProcessApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the active stage for the Business Process Flow instance. */
 	ActiveStageId: DevKit.Guid | null;
 	/** Date and time when current active stage is started. */

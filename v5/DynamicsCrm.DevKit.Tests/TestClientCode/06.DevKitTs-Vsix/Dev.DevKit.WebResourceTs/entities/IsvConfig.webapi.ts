@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for IsvConfig
- * All fields return string representation of their values
- */
-export interface IIsvConfigFormattedValue {
-	readonly ConfigXML: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IsvConfigId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * IsvConfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IIsvConfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IIsvConfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IIsvConfigApi, 'FormattedValue'>]: string };
 	/** Structured XML data representing the customizations. */
 	ConfigXML: string | null;
 	/** Unique identifier of the user who created the ISV configuration. */

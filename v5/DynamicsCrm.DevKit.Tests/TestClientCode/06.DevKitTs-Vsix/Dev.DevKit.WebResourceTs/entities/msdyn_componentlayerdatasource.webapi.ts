@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_componentlayerdatasource
- * All fields return string representation of their values
- */
-export interface Imsdyn_componentlayerdatasourceFormattedValue {
-	readonly msdyn_componentlayerdatasourceId: string;
-	readonly msdyn_name: string;
-}
-
-/**
  * msdyn_componentlayerdatasource WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_componentlayerdatasourceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_componentlayerdatasourceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_componentlayerdatasourceApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	msdyn_componentlayerdatasourceId: DevKit.Guid | null;
 	/** Name */

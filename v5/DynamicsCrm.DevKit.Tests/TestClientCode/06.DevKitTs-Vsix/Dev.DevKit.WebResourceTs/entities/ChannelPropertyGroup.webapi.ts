@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ChannelPropertyGroup
- * All fields return string representation of their values
- */
-export interface IChannelPropertyGroupFormattedValue {
-	readonly ChannelPropertyGroupId: string;
-	readonly ChannelPropertyGroupIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RegardingTypeCode: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ChannelPropertyGroup WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IChannelPropertyGroupApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IChannelPropertyGroupFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IChannelPropertyGroupApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the channel property group */
 	ChannelPropertyGroupId: DevKit.Guid | null;
 	/** For Internal Use Only */

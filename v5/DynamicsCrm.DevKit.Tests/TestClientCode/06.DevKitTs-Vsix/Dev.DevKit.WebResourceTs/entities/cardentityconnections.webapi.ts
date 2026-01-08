@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for cardentityconnections
- * All fields return string representation of their values
- */
-export interface IcardentityconnectionsFormattedValue {
-	readonly cardentityconnectionsId: string;
-	readonly cardid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly entityid: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * cardentityconnections WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcardentityconnectionsApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcardentityconnectionsFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcardentityconnectionsApi, 'FormattedValue'>]: string };
 	readonly cardentityconnectionsId: DevKit.Guid | null;
 	readonly cardid: DevKit.Guid | null;
 	/** For internal use only. */

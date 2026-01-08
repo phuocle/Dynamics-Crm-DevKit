@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AICopilot_AIPlugin
- * All fields return string representation of their values
- */
-export interface IAICopilot_AIPluginFormattedValue {
-	readonly AICopilot_AIPluginId: string;
-	readonly aicopilotid: string;
-	readonly aipluginid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AICopilot_AIPlugin WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAICopilot_AIPluginApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAICopilot_AIPluginFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAICopilot_AIPluginApi, 'FormattedValue'>]: string };
 	readonly AICopilot_AIPluginId: DevKit.Guid | null;
 	readonly aicopilotid: DevKit.Guid | null;
 	readonly aipluginid: DevKit.Guid | null;

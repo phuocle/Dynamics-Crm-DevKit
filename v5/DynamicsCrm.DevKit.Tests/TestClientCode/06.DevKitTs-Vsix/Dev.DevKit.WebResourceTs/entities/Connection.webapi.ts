@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Connection
- * All fields return string representation of their values
- */
-export interface IConnectionFormattedValue {
-	readonly ConnectionId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EffectiveEnd_UtcDateOnly: string;
-	readonly EffectiveStart_UtcDateOnly: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsMaster: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Record1Id: string;
-	readonly Record1ObjectTypeCode: string;
-	readonly Record1RoleId: string;
-	readonly Record2Id: string;
-	readonly Record2ObjectTypeCode: string;
-	readonly Record2RoleId: string;
-	readonly RelatedConnectionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Connection WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IConnectionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IConnectionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IConnectionApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the connection. */
 	ConnectionId: DevKit.Guid | null;
 	/** Shows who created the record. */

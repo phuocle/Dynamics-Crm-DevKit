@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for appaction_appactionrule_classicrules
- * All fields return string representation of their values
- */
-export interface Iappaction_appactionrule_classicrulesFormattedValue {
-	readonly appaction_appactionrule_classicrulesId: string;
-	readonly appactionid: string;
-	readonly appactionruleid: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * appaction_appactionrule_classicrules WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iappaction_appactionrule_classicrulesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iappaction_appactionrule_classicrulesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iappaction_appactionrule_classicrulesApi, 'FormattedValue'>]: string };
 	readonly appaction_appactionrule_classicrulesId: DevKit.Guid | null;
 	readonly appactionid: DevKit.Guid | null;
 	readonly appactionruleid: DevKit.Guid | null;

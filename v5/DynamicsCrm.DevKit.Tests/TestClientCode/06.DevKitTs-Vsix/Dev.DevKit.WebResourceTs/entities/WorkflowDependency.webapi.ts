@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for WorkflowDependency
- * All fields return string representation of their values
- */
-export interface IWorkflowDependencyFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomEntityName: string;
-	readonly DependentAttributeName: string;
-	readonly DependentEntityName: string;
-	readonly EntityAttributes: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningUser: string;
-	readonly ParameterName: string;
-	readonly ParameterType: string;
-	readonly RelatedAttributeName: string;
-	readonly RelatedEntityName: string;
-	readonly SdkMessageId: string;
-	readonly Type: string;
-	readonly VersionNumber: string;
-	readonly WorkflowDependencyId: string;
-	readonly WorkflowId: string;
-}
-
-/**
  * WorkflowDependency WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWorkflowDependencyApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWorkflowDependencyFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWorkflowDependencyApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the process dependency. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the process dependency was created. */

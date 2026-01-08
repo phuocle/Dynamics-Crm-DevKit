@@ -43,25 +43,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"import {{ createWebApiEntity }} from '../lib/devkit';{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"/**{NEW_LINE}";
-            code += $" * Formatted values interface for {safeSchemaName}{NEW_LINE}";
-            code += $" * All fields return string representation of their values{NEW_LINE}";
-            code += $" */{NEW_LINE}";
-            code += $"export interface I{safeSchemaName}FormattedValue {{{NEW_LINE}";
-            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
-            {
-                if (ShouldSkipAttribute(attribute)) continue;
-                var name = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.tswebapi, EntityMetadata.SchemaName, attribute) + GetSuffix(attribute);
-                code += $"{TAB}readonly {name}: string;{NEW_LINE}";
-            }
-            code += $"}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
-            code += $"/**{NEW_LINE}";
             code += $" * {safeSchemaName} WebApi entity interface{NEW_LINE}";
             code += $" * Provides IntelliSense for early-bound style coding{NEW_LINE}";
             code += $" */{NEW_LINE}";
             code += $"export interface I{safeSchemaName}Api extends DevKit.IWebApiEntity {{{NEW_LINE}";
-            code += $"{TAB}/** Formatted values for all fields */{NEW_LINE}";
-            code += $"{TAB}readonly FormattedValue: I{safeSchemaName}FormattedValue;{NEW_LINE}";
+            code += $"{TAB}/** Formatted values for all fields - auto-mapped to readonly string */{NEW_LINE}";
+            code += $"{TAB}readonly FormattedValue: {{ readonly [K in keyof Omit<I{safeSchemaName}Api, 'FormattedValue'>]: string }};{NEW_LINE}";
 
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {

@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ElasticFileAttachment
- * All fields return string representation of their values
- */
-export interface IElasticFileAttachmentFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly ElasticFileAttachmentId: string;
-	readonly FileName: string;
-	readonly FilePointer: string;
-	readonly FileSizeInBytes: string;
-	readonly ImportSequenceNumber: string;
-	readonly MimeType: string;
-	readonly ObjectId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly Prefix: string;
-	readonly RegardingFieldName: string;
-	readonly StoragePointer: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ElasticFileAttachment WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IElasticFileAttachmentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IElasticFileAttachmentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IElasticFileAttachmentApi, 'FormattedValue'>]: string };
 	/** Date and time when the attachment was created. */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** Unique identifier of the elastic file attachment. */

@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SiteMap
- * All fields return string representation of their values
- */
-export interface ISiteMapFormattedValue {
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EnableCollapsibleGroups: string;
-	readonly IsAppAware: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ShowHome: string;
-	readonly ShowPinned: string;
-	readonly ShowRecents: string;
-	readonly SiteMapId: string;
-	readonly SiteMapIdUnique: string;
-	readonly SiteMapName: string;
-	readonly SiteMapNameUnique: string;
-	readonly SiteMapXml: string;
-	readonly SiteMapXmlManaged: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SiteMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISiteMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISiteMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISiteMapApi, 'FormattedValue'>]: string };
 	/** Component State */
 	readonly ComponentState: number | null;
 	/** Shows who created the record. */

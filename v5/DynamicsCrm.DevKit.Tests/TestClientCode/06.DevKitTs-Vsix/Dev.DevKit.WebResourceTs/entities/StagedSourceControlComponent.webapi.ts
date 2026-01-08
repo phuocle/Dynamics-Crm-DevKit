@@ -6,35 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedSourceControlComponent
- * All fields return string representation of their values
- */
-export interface IStagedSourceControlComponentFormattedValue {
-	readonly ComponentId: string;
-	readonly ComponentOperationType: string;
-	readonly ComponentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly StagedSourceControlComponentId: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedSourceControlComponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedSourceControlComponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedSourceControlComponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedSourceControlComponentApi, 'FormattedValue'>]: string };
 	/** Component id of the component */
 	ComponentId: DevKit.Guid | null;
 	/** Component Operation Type */

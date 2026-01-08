@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppModuleMetadata
- * All fields return string representation of their values
- */
-export interface IAppModuleMetadataFormattedValue {
-	readonly AppModuleId: string;
-	readonly AppModuleMetadataId: string;
-	readonly ComponentId: string;
-	readonly ComponentIsDefault: string;
-	readonly ComponentIsQuickFindQuery: string;
-	readonly ComponentIsTabletEnabled: string;
-	readonly ComponentIsUserChart: string;
-	readonly ComponentIsUserForm: string;
-	readonly ComponentIsUserView: string;
-	readonly ComponentStateCode: string;
-	readonly ComponentSubType: string;
-	readonly ComponentType: string;
-	readonly ComponentVersion: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ParentComponentId: string;
-	readonly State: string;
-}
-
-/**
  * AppModuleMetadata WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppModuleMetadataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppModuleMetadataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppModuleMetadataApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	AppModuleId: DevKit.Guid | null;
 	/** For internal use only. */

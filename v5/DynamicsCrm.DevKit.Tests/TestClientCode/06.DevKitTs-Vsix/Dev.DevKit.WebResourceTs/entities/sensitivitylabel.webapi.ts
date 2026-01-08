@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for sensitivitylabel
- * All fields return string representation of their values
- */
-export interface IsensitivitylabelFormattedValue {
-	readonly ApplicableTo: string;
-	readonly Color: string;
-	readonly Description: string;
-	readonly DisplayName: string;
-	readonly IsDefault: string;
-	readonly IsEnabled: string;
-	readonly LabelActions: string;
-	readonly Name: string;
-	readonly ParentSensitivityLabelId: string;
-	readonly Priority: string;
-	readonly sensitivitylabelId: string;
-	readonly Tooltip: string;
-}
-
-/**
  * sensitivitylabel WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsensitivitylabelApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsensitivitylabelFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsensitivitylabelApi, 'FormattedValue'>]: string };
 	/** The formats that the sensitivity label is applicable to. */
 	readonly ApplicableTo: string | null;
 	/** The color of the sensitivity label. */

@@ -6,22 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrincipalEntityMap
- * All fields return string representation of their values
- */
-export interface IPrincipalEntityMapFormattedValue {
-	readonly PrincipalEntityMapId: string;
-	readonly PrincipalId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrincipalEntityMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrincipalEntityMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrincipalEntityMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrincipalEntityMapApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	PrincipalEntityMapId: DevKit.Guid | null;
 	readonly PrincipalId: DevKit.Guid | null;

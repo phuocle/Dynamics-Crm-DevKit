@@ -6,27 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrincipalAttributeAccessMap
- * All fields return string representation of their values
- */
-export interface IPrincipalAttributeAccessMapFormattedValue {
-	readonly AttributeId: string;
-	readonly CreateAccess: string;
-	readonly PrincipalAttributeAccessMapId: string;
-	readonly PrincipalId: string;
-	readonly ReadAccess: string;
-	readonly ReadUnMaskedAccess: string;
-	readonly UpdateAccess: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrincipalAttributeAccessMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrincipalAttributeAccessMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrincipalAttributeAccessMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrincipalAttributeAccessMapApi, 'FormattedValue'>]: string };
 	AttributeId: DevKit.Guid | null;
 	CreateAccess: number | null;
 	/** Unique identifier of the principal attribute access. */

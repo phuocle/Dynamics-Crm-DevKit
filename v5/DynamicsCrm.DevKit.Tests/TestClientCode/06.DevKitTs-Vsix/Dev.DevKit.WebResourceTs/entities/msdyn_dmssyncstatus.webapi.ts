@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_dmssyncstatus
- * All fields return string representation of their values
- */
-export interface Imsdyn_dmssyncstatusFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_dmssyncstatusId: string;
-	readonly msdyn_EndTime_TimezoneDateAndTime: string;
-	readonly msdyn_ErrorDetails: string;
-	readonly msdyn_lookupfield_dmssyncrequest: string;
-	readonly msdyn_StartTime_TimezoneDateAndTime: string;
-	readonly msdyn_StatusUniqueName: string;
-	readonly msdyn_SyncDetails: string;
-	readonly msdyn_SyncStatus: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_dmssyncstatus WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_dmssyncstatusApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_dmssyncstatusFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_dmssyncstatusApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

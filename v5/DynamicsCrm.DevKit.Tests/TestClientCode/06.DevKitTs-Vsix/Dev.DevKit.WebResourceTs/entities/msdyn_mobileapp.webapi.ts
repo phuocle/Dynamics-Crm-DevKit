@@ -6,98 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_mobileapp
- * All fields return string representation of their values
- */
-export interface Imsdyn_mobileappFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_actionButtonHighlight: string;
-	readonly msdyn_adalClientId: string;
-	readonly msdyn_adalRedirectUri: string;
-	readonly msdyn_AndroidAppCenterAPIToken: string;
-	readonly msdyn_AndroidAppCenterAPITokenSaved: string;
-	readonly msdyn_appCenterAppIdAab: string;
-	readonly msdyn_appCenterAppIdApk: string;
-	readonly msdyn_appCenterAppIdIpa: string;
-	readonly msdyn_appIcon1024x1024_name: string;
-	readonly msdyn_appIcon120x120_name: string;
-	readonly msdyn_appIcon152x152_name: string;
-	readonly msdyn_appIcon167x167_name: string;
-	readonly msdyn_appIcon180x180_name: string;
-	readonly msdyn_appIconHdpi_name: string;
-	readonly msdyn_appIconMdpi_name: string;
-	readonly msdyn_appIconXdpi_name: string;
-	readonly msdyn_appIconXxhdpi_name: string;
-	readonly msdyn_appIconXxxhdpi_name: string;
-	readonly msdyn_azureBlobStorageAccountName: string;
-	readonly msdyn_azureBlobStorageContainerName: string;
-	readonly msdyn_branch: string;
-	readonly msdyn_buildDetails: string;
-	readonly msdyn_bundleIdentifier: string;
-	readonly msdyn_buttonColor: string;
-	readonly msdyn_customDimensions: string;
-	readonly msdyn_displayName: string;
-	readonly msdyn_fillColor: string;
-	readonly msdyn_headingTextColor: string;
-	readonly msdyn_hyperLinkColor: string;
-	readonly msdyn_IOSAppCenterAPIToken: string;
-	readonly msdyn_IOSAppCenterAPITokenSaved: string;
-	readonly msdyn_iosEnterpriseSigningEnabled: string;
-	readonly msdyn_isAppSigningEnabled: string;
-	readonly msdyn_keyVaultUri: string;
-	readonly msdyn_launchAppResources_name: string;
-	readonly msdyn_mobileAppDefinitionAndroid_name: string;
-	readonly msdyn_mobileAppDefinitionIOS_name: string;
-	readonly msdyn_mobileappId: string;
-	readonly msdyn_orgName: string;
-	readonly msdyn_platformType: string;
-	readonly msdyn_primaryPublishedAppName: string;
-	readonly msdyn_proDev_customPackage_name: string;
-	readonly msdyn_pushNotificationsAndroidJson_name: string;
-	readonly msdyn_pushNotificationsEnabled_android: string;
-	readonly msdyn_pushNotificationsEnabled_ios: string;
-	readonly msdyn_pushNotificationsIosPlist_name: string;
-	readonly msdyn_recentBuild: string;
-	readonly msdyn_secondaryApps: string;
-	readonly msdyn_secondaryPublishedAppNames: string;
-	readonly msdyn_statusBarContentColorMode: string;
-	readonly msdyn_storageTypeForUpload: string;
-	readonly msdyn_tenantSplashImage_name: string;
-	readonly msdyn_tenantWelcomeImage_name: string;
-	readonly msdyn_UniqueName: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_mobileapp WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_mobileappApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_mobileappFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_mobileappApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

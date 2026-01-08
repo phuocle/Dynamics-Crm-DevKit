@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for sideloadedaiplugin
- * All fields return string representation of their values
- */
-export interface IsideloadedaipluginFormattedValue {
-	readonly AIPlugin: string;
-	readonly AIPluginObject: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly sideloadedaipluginId: string;
-	readonly sideloadedpluginownerid: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * sideloadedaiplugin WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsideloadedaipluginApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsideloadedaipluginFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsideloadedaipluginApi, 'FormattedValue'>]: string };
 	/** Lookup to the parent AIPlugin. */
 	AIPlugin: DevKit.Guid | null;
 	/** A snapshot of the AIPlugin at the time of sideloading. */

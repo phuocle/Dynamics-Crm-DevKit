@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppModuleComponentNode
- * All fields return string representation of their values
- */
-export interface IAppModuleComponentNodeFormattedValue {
-	readonly AppModuleComponentNodeId: string;
-	readonly ComponentDatabaseVersion: string;
-	readonly ComponentObjectId: string;
-	readonly ComponentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly SnapshotVersionNumber: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly ValidationResult: string;
-	readonly ValidationStatus: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AppModuleComponentNode WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppModuleComponentNodeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppModuleComponentNodeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppModuleComponentNodeApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AppModuleComponentNodeId: DevKit.Guid | null;
 	/** ComponentDatabaseVersion */

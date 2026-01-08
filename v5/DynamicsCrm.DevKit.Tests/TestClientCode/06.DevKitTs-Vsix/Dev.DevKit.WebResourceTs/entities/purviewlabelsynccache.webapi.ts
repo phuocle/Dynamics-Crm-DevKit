@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for purviewlabelsynccache
- * All fields return string representation of their values
- */
-export interface IpurviewlabelsynccacheFormattedValue {
-	readonly ContinuationToken: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly isDataMapSyncTriggerPresent: string;
-	readonly LabelSyncTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly purviewlabelsynccacheId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * purviewlabelsynccache WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IpurviewlabelsynccacheApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IpurviewlabelsynccacheFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IpurviewlabelsynccacheApi, 'FormattedValue'>]: string };
 	/** Continuation Token */
 	ContinuationToken: string | null;
 	/** Unique identifier of the user who created the record. */

@@ -6,34 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mobileofflineprofileitemfilter
- * All fields return string representation of their values
- */
-export interface ImobileofflineprofileitemfilterFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly fetchxml: string;
-	readonly IsActivity: string;
-	readonly IsIntersect: string;
-	readonly mobileofflineprofileid: string;
-	readonly mobileofflineprofileitemfilterId: string;
-	readonly mobileofflineprofileitemid: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly Name: string;
-	readonly offlinesql: string;
-	readonly OrganizationId: string;
-	readonly outerFetchXml: string;
-	readonly subtype: string;
-	readonly type: string;
-	readonly versionnumber: string;
-}
-
-/**
  * mobileofflineprofileitemfilter WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ImobileofflineprofileitemfilterApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ImobileofflineprofileitemfilterFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ImobileofflineprofileitemfilterApi, 'FormattedValue'>]: string };
 	/** Date and time when the record was created. */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** FetchXML */

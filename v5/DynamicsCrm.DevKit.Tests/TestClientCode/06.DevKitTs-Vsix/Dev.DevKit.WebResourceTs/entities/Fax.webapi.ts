@@ -6,69 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Fax
- * All fields return string representation of their values
- */
-export interface IFaxFormattedValue {
-	readonly ActivityId: string;
-	readonly ActualDurationMinutes: string;
-	readonly ActualEnd_UtcDateOnly: string;
-	readonly ActualStart_UtcDateOnly: string;
-	readonly BillingCode: string;
-	readonly Category: string;
-	readonly CoverPageName: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly DirectionCode: string;
-	readonly ExchangeRate: string;
-	readonly FaxNumber: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsBilled: string;
-	readonly IsRegularActivity: string;
-	readonly IsWorkflowCreated: string;
-	readonly LastOnHoldTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly NumberOfPages: string;
-	readonly OnHoldTime: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PriorityCode: string;
-	readonly ProcessId: string;
-	readonly RegardingObjectId: string;
-	readonly ScheduledDurationMinutes: string;
-	readonly ScheduledEnd_UtcDateAndTime: string;
-	readonly ScheduledStart_UtcDateAndTime: string;
-	readonly SLAId: string;
-	readonly SLAInvokedId: string;
-	readonly SortDate_UtcDateAndTime: string;
-	readonly StageId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly Subcategory: string;
-	readonly Subject: string;
-	readonly SubscriptionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly TraversedPath: string;
-	readonly Tsid: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Fax WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFaxApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFaxFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFaxApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the fax activity. */
 	ActivityId: DevKit.Guid | null;
 	/** Type the number of minutes spent creating and sending the fax. The duration is used in reporting. */

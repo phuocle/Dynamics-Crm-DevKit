@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserSyncMappingProfiles
- * All fields return string representation of their values
- */
-export interface ISystemUserSyncMappingProfilesFormattedValue {
-	readonly SyncAttributeMappingProfileId: string;
-	readonly SystemUserId: string;
-	readonly SystemUserSyncMappingProfileId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemUserSyncMappingProfiles WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserSyncMappingProfilesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserSyncMappingProfilesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserSyncMappingProfilesApi, 'FormattedValue'>]: string };
 	readonly SyncAttributeMappingProfileId: DevKit.Guid | null;
 	readonly SystemUserId: DevKit.Guid | null;
 	/** For internal use only. */

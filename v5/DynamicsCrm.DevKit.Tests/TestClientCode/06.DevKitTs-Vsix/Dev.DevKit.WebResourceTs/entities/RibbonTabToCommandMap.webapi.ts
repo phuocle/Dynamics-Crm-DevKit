@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonTabToCommandMap
- * All fields return string representation of their values
- */
-export interface IRibbonTabToCommandMapFormattedValue {
-	readonly Command: string;
-	readonly ComponentState: string;
-	readonly ControlId: string;
-	readonly Entity2: string;
-	readonly IsManaged: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RibbonDiffId: string;
-	readonly RibbonTabToCommandMapId: string;
-	readonly RibbonTabToCommandMapUniqueId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TabId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RibbonTabToCommandMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonTabToCommandMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonTabToCommandMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonTabToCommandMapApi, 'FormattedValue'>]: string };
 	/** A command Id of a control within that tab. */
 	Command: string | null;
 	/** For internal use only. */

@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Notification
- * All fields return string representation of their values
- */
-export interface INotificationFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnString: string;
-	readonly EventData: string;
-	readonly EventId: string;
-	readonly NotificationId: string;
-	readonly NotificationNumber: string;
-	readonly OrganizationId: string;
-}
-
-/**
  * Notification WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface INotificationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: INotificationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<INotificationApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** For internal use only. */

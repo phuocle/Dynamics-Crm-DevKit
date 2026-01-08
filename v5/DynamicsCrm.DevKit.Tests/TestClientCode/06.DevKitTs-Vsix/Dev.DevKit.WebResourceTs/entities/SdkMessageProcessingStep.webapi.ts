@@ -6,64 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SdkMessageProcessingStep
- * All fields return string representation of their values
- */
-export interface ISdkMessageProcessingStepFormattedValue {
-	readonly AsyncAutoDelete: string;
-	readonly CanBeBypassed: string;
-	readonly CanUseReadOnlyConnection: string;
-	readonly Category: string;
-	readonly ComponentState: string;
-	readonly Configuration: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationLevel: string;
-	readonly Description: string;
-	readonly EnablePluginProfiler: string;
-	readonly EventExpander: string;
-	readonly EventHandler: string;
-	readonly FilteringAttributes: string;
-	readonly FxExpressionId: string;
-	readonly ImpersonatingUserId: string;
-	readonly IntroducedVersion: string;
-	readonly InvocationSource: string;
-	readonly IsCustomizable: string;
-	readonly IsHidden: string;
-	readonly IsManaged: string;
-	readonly Mode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PluginTypeId: string;
-	readonly PowerfxRuleId: string;
-	readonly Rank: string;
-	readonly RuntimeIntegrationProperties: string;
-	readonly SdkMessageFilterId: string;
-	readonly SdkMessageId: string;
-	readonly SdkMessageProcessingStepId: string;
-	readonly SdkMessageProcessingStepIdUnique: string;
-	readonly SdkMessageProcessingStepSecureConfigId: string;
-	readonly SolutionId: string;
-	readonly Stage: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SupportedDeployment: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SdkMessageProcessingStep WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISdkMessageProcessingStepApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISdkMessageProcessingStepFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISdkMessageProcessingStepApi, 'FormattedValue'>]: string };
 	/** Indicates whether the asynchronous system job is automatically deleted on completion. */
 	AsyncAutoDelete: boolean | null;
 	CanBeBypassed: boolean | null;

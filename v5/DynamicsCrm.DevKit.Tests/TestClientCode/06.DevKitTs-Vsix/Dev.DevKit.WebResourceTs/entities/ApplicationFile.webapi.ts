@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ApplicationFile
- * All fields return string representation of their values
- */
-export interface IApplicationFileFormattedValue {
-	readonly Body: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly FileId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ApplicationFile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IApplicationFileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IApplicationFileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IApplicationFileApi, 'FormattedValue'>]: string };
 	/** Body of application file */
 	Body: string | null;
 	/** Unique identifier of the user who created the application file. */

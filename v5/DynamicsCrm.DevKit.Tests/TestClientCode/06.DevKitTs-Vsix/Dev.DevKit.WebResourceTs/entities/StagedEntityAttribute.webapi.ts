@@ -6,51 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for StagedEntityAttribute
- * All fields return string representation of their values
- */
-export interface IStagedEntityAttributeFormattedValue {
-	readonly AttributeDescription: string;
-	readonly AttributeOf: string;
-	readonly AttributeTypeId: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityId: string;
-	readonly ExternalName: string;
-	readonly HasMultipleLabels: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsLogical: string;
-	readonly IsPKAttribute: string;
-	readonly LogicalName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OriginalLocalizedDescription: string;
-	readonly OriginalLocalizedName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly PhysicalName: string;
-	readonly SolutionId: string;
-	readonly StagedEntityAttributeId: string;
-	readonly StagingExecutionContextId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly ValidForReadAPI: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * StagedEntityAttribute WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IStagedEntityAttributeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IStagedEntityAttributeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IStagedEntityAttributeApi, 'FormattedValue'>]: string };
 	/** The attribute decription with properties for async metadata creation */
 	AttributeDescription: string | null;
 	/** The id of the parent attribute. */

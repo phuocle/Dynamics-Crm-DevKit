@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for UntrackedEmail
- * All fields return string representation of their values
- */
-export interface IUntrackedEmailFormattedValue {
-	readonly ActivityId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeItemId: string;
-	readonly ExchangeRate: string;
-	readonly ExchangeWebLink: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RegardingObjectId: string;
-	readonly Subject: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * UntrackedEmail WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IUntrackedEmailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IUntrackedEmailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IUntrackedEmailApi, 'FormattedValue'>]: string };
 	/** Unique identifier of untracked the email activity. */
 	ActivityId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the activity. */

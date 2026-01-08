@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AzureServiceConnection
- * All fields return string representation of their values
- */
-export interface IAzureServiceConnectionFormattedValue {
-	readonly AccountKey: string;
-	readonly AzureServiceConnectionId: string;
-	readonly ConnectionType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly LastConnectionStatusCode: string;
-	readonly LastConnectionTime_UtcDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly ServiceUri: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-}
-
-/**
  * AzureServiceConnection WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAzureServiceConnectionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAzureServiceConnectionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAzureServiceConnectionApi, 'FormattedValue'>]: string };
 	/** Type the Azure account key. */
 	AccountKey: string | null;
 	/** Unique identifier of the Azure service connection. */

@@ -6,62 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_pminferredtask
- * All fields return string representation of their values
- */
-export interface Imsdyn_pminferredtaskFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_analysisschedule: string;
-	readonly msdyn_automationdata: string;
-	readonly msdyn_automationstatus: string;
-	readonly msdyn_businessprocessid: string;
-	readonly msdyn_datavalidation: string;
-	readonly msdyn_description: string;
-	readonly msdyn_inputdatabinding: string;
-	readonly msdyn_isreportavailable: string;
-	readonly msdyn_iterationid: string;
-	readonly msdyn_lasterrors: string;
-	readonly msdyn_lasterrorsreport_name: string;
-	readonly msdyn_lastreportrefreshdate_TimezoneDateAndTime: string;
-	readonly msdyn_name: string;
-	readonly msdyn_outputdata: string;
-	readonly msdyn_pminferredtaskId: string;
-	readonly msdyn_reportdata: string;
-	readonly msdyn_reportprovisioningstatus: string;
-	readonly msdyn_sharedrecordingmetadata: string;
-	readonly msdyn_source: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_pminferredtask WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_pminferredtaskApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_pminferredtaskFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_pminferredtaskApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

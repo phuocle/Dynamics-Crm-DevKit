@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for datalakeworkspacepermission
- * All fields return string representation of their values
- */
-export interface IdatalakeworkspacepermissionFormattedValue {
-	readonly appid: string;
-	readonly canexecute: string;
-	readonly canread: string;
-	readonly canwrite: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly datalakeworkspacepermission_UniqueName: string;
-	readonly datalakeworkspacepermissionId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly tenantid: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly whitelistedappid: string;
-	readonly workspaceid: string;
-}
-
-/**
  * datalakeworkspacepermission WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IdatalakeworkspacepermissionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IdatalakeworkspacepermissionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IdatalakeworkspacepermissionApi, 'FormattedValue'>]: string };
 	/** Additional application id that needs access to the workspace. */
 	appid: DevKit.Guid | null;
 	/** Indicates whether application id has execute access to the workspace. */

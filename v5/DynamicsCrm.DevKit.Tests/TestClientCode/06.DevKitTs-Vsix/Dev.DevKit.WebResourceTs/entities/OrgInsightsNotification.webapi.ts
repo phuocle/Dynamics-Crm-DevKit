@@ -6,25 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for OrgInsightsNotification
- * All fields return string representation of their values
- */
-export interface IOrgInsightsNotificationFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly InternalName: string;
-	readonly JsonData: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OrgInsightsNotificationId: string;
-}
-
-/**
  * OrgInsightsNotification WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IOrgInsightsNotificationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IOrgInsightsNotificationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IOrgInsightsNotificationApi, 'FormattedValue'>]: string };
 	/** Date and time when the organization insights notification was created */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** Name of the notification which is used for retrieving the data */

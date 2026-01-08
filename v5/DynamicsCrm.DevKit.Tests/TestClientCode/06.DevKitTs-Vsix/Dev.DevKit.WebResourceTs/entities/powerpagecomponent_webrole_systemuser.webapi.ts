@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for powerpagecomponent_webrole_systemuser
- * All fields return string representation of their values
- */
-export interface Ipowerpagecomponent_webrole_systemuserFormattedValue {
-	readonly powerpagecomponent_webrole_systemuserId: string;
-	readonly powerpagecomponentid: string;
-	readonly systemuserid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * powerpagecomponent_webrole_systemuser WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Ipowerpagecomponent_webrole_systemuserApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Ipowerpagecomponent_webrole_systemuserFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Ipowerpagecomponent_webrole_systemuserApi, 'FormattedValue'>]: string };
 	readonly powerpagecomponent_webrole_systemuserId: DevKit.Guid | null;
 	readonly powerpagecomponentid: DevKit.Guid | null;
 	readonly systemuserid: DevKit.Guid | null;

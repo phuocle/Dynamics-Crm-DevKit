@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AuthorizationServer
- * All fields return string representation of their values
- */
-export interface IAuthorizationServerFormattedValue {
-	readonly AuthorizationServerId: string;
-	readonly AuthorizationServerType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Metadata: string;
-	readonly MetadataRefreshedOn_UtcDateAndTime: string;
-	readonly MetadataUrl: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly PrincipalId: string;
-	readonly Realm: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AuthorizationServer WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAuthorizationServerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAuthorizationServerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAuthorizationServerApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	AuthorizationServerId: DevKit.Guid | null;
 	/**  The type of the Authorization Server  */

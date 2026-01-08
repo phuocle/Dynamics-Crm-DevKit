@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_historicalcaseharvestbatch
- * All fields return string representation of their values
- */
-export interface Imsdyn_historicalcaseharvestbatchFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ModuleRunId: string;
-	readonly msdyn_articlescreated: string;
-	readonly msdyn_batchprocessingcompletedon_UtcDateAndTime: string;
-	readonly msdyn_batchsize: string;
-	readonly msdyn_casesskipped: string;
-	readonly msdyn_historicalcaseharvestbatchId: string;
-	readonly msdyn_historicalcaseharvestrunid: string;
-	readonly msdyn_incidentids: string;
-	readonly msdyn_name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_historicalcaseharvestbatch WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_historicalcaseharvestbatchApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_historicalcaseharvestbatchFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_historicalcaseharvestbatchApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

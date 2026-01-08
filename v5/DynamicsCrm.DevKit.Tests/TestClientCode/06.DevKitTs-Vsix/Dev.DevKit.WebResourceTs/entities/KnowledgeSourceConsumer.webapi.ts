@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KnowledgeSourceConsumer
- * All fields return string representation of their values
- */
-export interface IKnowledgeSourceConsumerFormattedValue {
-	readonly Active: string;
-	readonly Channel: string;
-	readonly ConsumerId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ImportSequenceNumber: string;
-	readonly KnowledgeSourceConsumerId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Type: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * KnowledgeSourceConsumer WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKnowledgeSourceConsumerApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKnowledgeSourceConsumerFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKnowledgeSourceConsumerApi, 'FormattedValue'>]: string };
 	/** Active */
 	Active: boolean | null;
 	/** Channel */

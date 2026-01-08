@@ -6,32 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for RibbonContextGroup
- * All fields return string representation of their values
- */
-export interface IRibbonContextGroupFormattedValue {
-	readonly ComponentState: string;
-	readonly ContextGroupId: string;
-	readonly ContextGroupXml: string;
-	readonly Entity2: string;
-	readonly IsManaged: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RibbonContextGroupId: string;
-	readonly RibbonContextGroupUniqueId: string;
-	readonly RibbonCustomizationId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * RibbonContextGroup WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IRibbonContextGroupApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IRibbonContextGroupFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IRibbonContextGroupApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentState: number | null;
 	/** The id of a group of contextual tabs. */

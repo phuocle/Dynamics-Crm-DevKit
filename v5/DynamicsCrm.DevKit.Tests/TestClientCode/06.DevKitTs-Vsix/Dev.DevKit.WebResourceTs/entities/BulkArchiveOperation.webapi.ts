@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BulkArchiveOperation
- * All fields return string representation of their values
- */
-export interface IBulkArchiveOperationFormattedValue {
-	readonly AdditionalDetails: string;
-	readonly ArchivedCount: string;
-	readonly AsyncOperationId: string;
-	readonly BulkArchiveConfigId: string;
-	readonly BulkArchiveOperationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Criteria: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly FailedCount: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastMarkedVersionNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PagingCookie: string;
-	readonly RootEntityLogicalName: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BulkArchiveOperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBulkArchiveOperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBulkArchiveOperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBulkArchiveOperationApi, 'FormattedValue'>]: string };
 	/** AdditionalDetails */
 	AdditionalDetails: string | null;
 	/** ArchivedCount */

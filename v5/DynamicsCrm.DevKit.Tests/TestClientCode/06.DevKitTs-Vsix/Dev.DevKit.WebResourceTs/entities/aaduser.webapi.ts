@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for aaduser
- * All fields return string representation of their values
- */
-export interface IaaduserFormattedValue {
-	readonly aaduserId: string;
-	readonly AccountEnabled: string;
-	readonly BusinessPhones: string;
-	readonly City: string;
-	readonly CompanyName: string;
-	readonly CreatedDateTime_UtcDateAndTime: string;
-	readonly DisplayName: string;
-	readonly GivenName: string;
-	readonly id: string;
-	readonly ImAddresses: string;
-	readonly JobTitle: string;
-	readonly Mail: string;
-	readonly MobilePhone: string;
-	readonly OfficeLocation: string;
-	readonly PostalCode: string;
-	readonly PreferredLanguage: string;
-	readonly StreetAddress: string;
-	readonly surname: string;
-	readonly UserPrincipalName: string;
-	readonly UserType: string;
-}
-
-/**
  * aaduser WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IaaduserApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IaaduserFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IaaduserApi, 'FormattedValue'>]: string };
 	/** Unique identifier of a Microsoft Entra ID. */
 	aaduserId: DevKit.Guid | null;
 	/** Indicates if the Account of an Microsoft Entra ID is enabled. */

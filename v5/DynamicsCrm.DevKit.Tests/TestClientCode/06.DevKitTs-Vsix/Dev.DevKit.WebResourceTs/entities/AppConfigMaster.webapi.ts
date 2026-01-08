@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AppConfigMaster
- * All fields return string representation of their values
- */
-export interface IAppConfigMasterFormattedValue {
-	readonly AppConfigMasterId: string;
-	readonly ConfigType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DefaultValue: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsNavigationSetting: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ParentAppConfigMasterId: string;
-	readonly Validator: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * AppConfigMaster WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAppConfigMasterApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAppConfigMasterFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAppConfigMasterApi, 'FormattedValue'>]: string };
 	/** System-Populated App Configuration instance identifier. */
 	readonly AppConfigMasterId: DevKit.Guid | null;
 	/** Enter the App Configuration and Setting property data type. */

@@ -6,93 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KnowledgeArticle
- * All fields return string representation of their values
- */
-export interface IKnowledgeArticleFormattedValue {
-	readonly ArticlePublicNumber: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly ExpirationDate_UtcDateAndTime: string;
-	readonly ExpirationStateId: string;
-	readonly ExpirationStatusId: string;
-	readonly ExpiredReviewOptions: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsInternal: string;
-	readonly IsLatestVersion: string;
-	readonly IsPrimary: string;
-	readonly IsRootArticle: string;
-	readonly Keywords: string;
-	readonly knowledgearticleId: string;
-	readonly KnowledgeArticleViews: string;
-	readonly KnowledgeArticleViews_Date_UtcDateAndTime: string;
-	readonly KnowledgeArticleViews_State: string;
-	readonly LanguageLocaleId: string;
-	readonly MajorVersionNumber: string;
-	readonly MinorVersionNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_agentreviewstatus: string;
-	readonly msdyn_compliancestatecode: string;
-	readonly msdyn_contentstore_name: string;
-	readonly msdyn_creationmode: string;
-	readonly msdyn_externalreferenceid: string;
-	readonly msdyn_harvestsourceentity: string;
-	readonly msdyn_ingestedarticleurl: string;
-	readonly msdyn_integratedsearchproviderid: string;
-	readonly msdyn_iscontentsyncedtostore: string;
-	readonly msdyn_isingestedarticle: string;
-	readonly msdyn_keywordsdescsuggestioncontrol: string;
-	readonly msdyn_languagecode: string;
-	readonly msdyn_retrycountformigrationtocontentstore: string;
-	readonly msdyn_sourceofcreation: string;
-	readonly msdyn_totalcasesimpacted: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentArticleContentId: string;
-	readonly PreviousArticleContentId: string;
-	readonly primaryauthorid: string;
-	readonly processid: string;
-	readonly PublishOn_UtcDateAndTime: string;
-	readonly PublishStatusId: string;
-	readonly Rating: string;
-	readonly Rating_Count: string;
-	readonly Rating_Date_UtcDateAndTime: string;
-	readonly Rating_State: string;
-	readonly Rating_Sum: string;
-	readonly ReadyForReview: string;
-	readonly Review: string;
-	readonly RootArticleId: string;
-	readonly ScheduledStatusId: string;
-	readonly SetCategoryAssociations: string;
-	readonly stageid: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SubjectId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly traversedpath: string;
-	readonly UpdateContent: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * KnowledgeArticle WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKnowledgeArticleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKnowledgeArticleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKnowledgeArticleApi, 'FormattedValue'>]: string };
 	/** Shows the automatically generated ID exposed to customers, partners, and other external users to reference and look up articles. */
 	ArticlePublicNumber: string | null;
 	/** Shows the body of the article stored in HTML format. */

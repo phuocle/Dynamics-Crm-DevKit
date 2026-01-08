@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for KbArticle
- * All fields return string representation of their values
- */
-export interface IKbArticleFormattedValue {
-	readonly adx_averagerating: string;
-	readonly adx_averagerating_int: string;
-	readonly adx_downvotes: string;
-	readonly adx_ratingcount: string;
-	readonly adx_ratingsum: string;
-	readonly adx_upvotes: string;
-	readonly ArticleXml: string;
-	readonly Comments: string;
-	readonly Content: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly EntityImage: string;
-	readonly EntityImageId: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly KbArticleId: string;
-	readonly KbArticleTemplateId: string;
-	readonly KeyWords: string;
-	readonly LanguageCode: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msa_publishtoweb: string;
-	readonly Number: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly SubjectId: string;
-	readonly Title: string;
-	readonly TransactionCurrencyId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * KbArticle WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IKbArticleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IKbArticleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IKbArticleApi, 'FormattedValue'>]: string };
 	/** The average rating of this article. */
 	adx_averagerating: number | null;
 	/** The average rating of this article, rounded to a whole number (positive integer). */

@@ -6,38 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ImportData
- * All fields return string representation of their values
- */
-export interface IImportDataFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly ErrorType: string;
-	readonly HasError: string;
-	readonly ImportDataId: string;
-	readonly ImportFileId: string;
-	readonly LineNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RecordId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-}
-
-/**
  * ImportData WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IImportDataApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IImportDataFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IImportDataApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the import data. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the import data was created. */

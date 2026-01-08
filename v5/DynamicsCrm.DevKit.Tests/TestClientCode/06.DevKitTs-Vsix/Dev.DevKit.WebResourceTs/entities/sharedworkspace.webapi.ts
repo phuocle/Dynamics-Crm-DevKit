@@ -6,43 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for sharedworkspace
- * All fields return string representation of their values
- */
-export interface IsharedworkspaceFormattedValue {
-	readonly AccessToken: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DiscoveryEndpoint: string;
-	readonly ImportSequenceNumber: string;
-	readonly LastManaged_TimezoneDateAndTime: string;
-	readonly LastUsed_TimezoneDateAndTime: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrdererEndpoint: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly sharedworkspaceId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly StorageEndpoint: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WorkspaceSchema: string;
-	readonly WorkspaceSchemaVersion: string;
-}
-
-/**
  * sharedworkspace WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsharedworkspaceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsharedworkspaceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsharedworkspaceApi, 'FormattedValue'>]: string };
 	/** Access token */
 	readonly AccessToken: string | null;
 	/** Unique identifier of the user who created the record. */

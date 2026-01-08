@@ -6,55 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_entityrefreshhistory
- * All fields return string representation of their values
- */
-export interface Imsdyn_entityrefreshhistoryFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_DataflowHistoryLookup: string;
-	readonly msdyn_DataflowId: string;
-	readonly msdyn_DataflowName: string;
-	readonly msdyn_EndTime_UtcDateAndTime: string;
-	readonly msdyn_EntityName: string;
-	readonly msdyn_entityrefreshhistoryId: string;
-	readonly msdyn_ErrorCount: string;
-	readonly msdyn_ErrorInfoErrorCode: string;
-	readonly msdyn_ErrorInfoErrorMessage: string;
-	readonly msdyn_ErrorInfoEvaluationResultJson: string;
-	readonly msdyn_ErrorInfoEvaluationResultJsonMemo: string;
-	readonly msdyn_ErrorInfoLoadToCdsErrorInfoJson: string;
-	readonly msdyn_ErrorInfoLoadToCdsErrorInfoJsonMemo: string;
-	readonly msdyn_InsertCount: string;
-	readonly msdyn_Name: string;
-	readonly msdyn_RefreshStatus: string;
-	readonly msdyn_StartTime_UtcDateAndTime: string;
-	readonly msdyn_TransactionId: string;
-	readonly msdyn_UpsertCount: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_entityrefreshhistory WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_entityrefreshhistoryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_entityrefreshhistoryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_entityrefreshhistoryApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the record was created. */

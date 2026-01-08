@@ -6,30 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for applicationuserprofile
- * All fields return string representation of their values
- */
-export interface IapplicationuserprofileFormattedValue {
-	readonly applicationuserid: string;
-	readonly applicationuserprofileId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly fieldsecurityprofileid: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * applicationuserprofile WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IapplicationuserprofileApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IapplicationuserprofileFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IapplicationuserprofileApi, 'FormattedValue'>]: string };
 	readonly applicationuserid: DevKit.Guid | null;
 	readonly applicationuserprofileId: DevKit.Guid | null;
 	/** For internal use only. */

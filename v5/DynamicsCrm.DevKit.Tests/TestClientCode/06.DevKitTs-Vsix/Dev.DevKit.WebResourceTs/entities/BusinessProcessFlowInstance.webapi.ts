@@ -6,40 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for BusinessProcessFlowInstance
- * All fields return string representation of their values
- */
-export interface IBusinessProcessFlowInstanceFormattedValue {
-	readonly ActiveStageStartedOn_UtcDateAndTime: string;
-	readonly BusinessProcessFlowInstanceId: string;
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Entity1Id: string;
-	readonly Entity2Id: string;
-	readonly Entity3Id: string;
-	readonly Entity4Id: string;
-	readonly Entity5Id: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly ProcessId: string;
-	readonly ProcessStageId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TraversedPath: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * BusinessProcessFlowInstance WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IBusinessProcessFlowInstanceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IBusinessProcessFlowInstanceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IBusinessProcessFlowInstanceApi, 'FormattedValue'>]: string };
 	/** Date and time when the active stage was started. */
 	readonly ActiveStageStartedOn_UtcDateAndTime: Date | null;
 	/** Unique identifier of the business process flow instance. */

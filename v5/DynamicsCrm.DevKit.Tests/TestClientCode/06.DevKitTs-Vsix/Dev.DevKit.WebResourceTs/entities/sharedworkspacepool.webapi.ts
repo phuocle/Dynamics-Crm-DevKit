@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for sharedworkspacepool
- * All fields return string representation of their values
- */
-export interface IsharedworkspacepoolFormattedValue {
-	readonly Claimed: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DiscoveryEndpoint: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrdererEndpoint: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly sharedworkspacepoolId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly StorageEndpoint: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * sharedworkspacepool WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IsharedworkspacepoolApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IsharedworkspacepoolFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IsharedworkspacepoolApi, 'FormattedValue'>]: string };
 	/** Enabled when the sharedworkspacepool record has been claimed */
 	Claimed: boolean | null;
 	/** Unique identifier of the user who created the record. */

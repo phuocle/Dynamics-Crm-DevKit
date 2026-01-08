@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for EntityDataProvider
- * All fields return string representation of their values
- */
-export interface IEntityDataProviderFormattedValue {
-	readonly ArchivePlugin: string;
-	readonly BulkArchivePlugin: string;
-	readonly BulkRetainPlugin: string;
-	readonly ComponentState: string;
-	readonly CreateMultiplePlugin: string;
-	readonly CreatePlugin: string;
-	readonly DataSourceLogicalName: string;
-	readonly DeleteMultiplePlugin: string;
-	readonly DeletePlugin: string;
-	readonly Description: string;
-	readonly EntityDataProviderId: string;
-	readonly EntityDataProviderIdUnique: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly LookupExpansionEnabled: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PurgeArchivedContentPlugin: string;
-	readonly PurgeRetainedContentPlugin: string;
-	readonly RetainPlugin: string;
-	readonly RetrieveEntityChangesPlugin: string;
-	readonly RetrieveMultiplePlugin: string;
-	readonly RetrievePlugin: string;
-	readonly RollbackRetainPlugin: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly UpdateMultiplePlugin: string;
-	readonly UpdatePlugin: string;
-	readonly UpsertMultiplePlugin: string;
-	readonly UpsertPlugin: string;
-	readonly ValidateArchiveConfigPlugin: string;
-	readonly ValidateRetentionConfigPlugin: string;
-}
-
-/**
  * EntityDataProvider WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityDataProviderApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityDataProviderFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityDataProviderApi, 'FormattedValue'>]: string };
 	/** Contains the archiveplugin id that should be run when Archive is invoked */
 	ArchivePlugin: DevKit.Guid | null;
 	/** Contains the bulkarchiveplugin id that should be run when BulkArchive is invoked */

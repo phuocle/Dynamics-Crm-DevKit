@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for TeamProfiles
- * All fields return string representation of their values
- */
-export interface ITeamProfilesFormattedValue {
-	readonly FieldSecurityProfileId: string;
-	readonly TeamId: string;
-	readonly TeamProfileId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * TeamProfiles WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ITeamProfilesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ITeamProfilesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ITeamProfilesApi, 'FormattedValue'>]: string };
 	readonly FieldSecurityProfileId: DevKit.Guid | null;
 	readonly TeamId: DevKit.Guid | null;
 	/** For internal use only. */

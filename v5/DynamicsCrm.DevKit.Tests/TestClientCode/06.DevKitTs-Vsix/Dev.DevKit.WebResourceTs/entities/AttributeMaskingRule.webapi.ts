@@ -6,39 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AttributeMaskingRule
- * All fields return string representation of their values
- */
-export interface IAttributeMaskingRuleFormattedValue {
-	readonly AttributeLogicalName: string;
-	readonly AttributeMaskingRuleId: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly MaskingRuleId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-}
-
-/**
  * AttributeMaskingRule WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAttributeMaskingRuleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAttributeMaskingRuleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAttributeMaskingRuleApi, 'FormattedValue'>]: string };
 	/** Logical name of the column for which the secured masking rule is used */
 	AttributeLogicalName: string | null;
 	/** Unique identifier for entity instances */

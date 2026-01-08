@@ -6,45 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SdkMessageProcessingStepImage
- * All fields return string representation of their values
- */
-export interface ISdkMessageProcessingStepImageFormattedValue {
-	readonly Attributes: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomizationLevel: string;
-	readonly Description: string;
-	readonly EntityAlias: string;
-	readonly ImageType: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly MessagePropertyName: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly RelatedAttributeName: string;
-	readonly SdkMessageProcessingStepId: string;
-	readonly SdkMessageProcessingStepImageId: string;
-	readonly SdkMessageProcessingStepImageIdUnique: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SdkMessageProcessingStepImage WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISdkMessageProcessingStepImageApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISdkMessageProcessingStepImageFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISdkMessageProcessingStepImageApi, 'FormattedValue'>]: string };
 	/** Comma-separated list of attributes that are to be passed into the SDK message processing step image. */
 	Attributes: string | null;
 	/** For internal use only. */

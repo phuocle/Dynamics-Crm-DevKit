@@ -6,57 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MCPTool
- * All fields return string representation of their values
- */
-export interface IMCPToolFormattedValue {
-	readonly Annotations: string;
-	readonly BackendToolType: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly ConnectorId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomAPIId: string;
-	readonly Description: string;
-	readonly HTTPMethod: string;
-	readonly ImportSequenceNumber: string;
-	readonly InputSchema: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly MCPServerId: string;
-	readonly MCPToolId: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OperationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RelativePath: string;
-	readonly SdkMessagePairId: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Title: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * MCPTool WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMCPToolApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMCPToolFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMCPToolApi, 'FormattedValue'>]: string };
 	/** Annotations for the MCP Tool */
 	Annotations: string | null;
 	/** Backend Tool Type */

@@ -6,29 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_solutioncomponentcountsummary
- * All fields return string representation of their values
- */
-export interface Imsdyn_solutioncomponentcountsummaryFormattedValue {
-	readonly msdyn_componentlogicalname: string;
-	readonly msdyn_componenttype: string;
-	readonly msdyn_name: string;
-	readonly msdyn_primaryentityname: string;
-	readonly msdyn_solutioncomponentcountsummaryId: string;
-	readonly msdyn_solutionid: string;
-	readonly msdyn_subtype: string;
-	readonly msdyn_total: string;
-	readonly msdyn_workflowcategory: string;
-	readonly OrganizationId: string;
-}
-
-/**
  * msdyn_solutioncomponentcountsummary WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_solutioncomponentcountsummaryApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_solutioncomponentcountsummaryFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_solutioncomponentcountsummaryApi, 'FormattedValue'>]: string };
 	/** Component Logical Name */
 	msdyn_componentlogicalname: string | null;
 	/** msdyn_componenttype */

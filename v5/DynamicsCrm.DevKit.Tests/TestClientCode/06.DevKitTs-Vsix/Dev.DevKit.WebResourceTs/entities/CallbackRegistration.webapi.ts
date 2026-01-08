@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for CallbackRegistration
- * All fields return string representation of their values
- */
-export interface ICallbackRegistrationFormattedValue {
-	readonly CallbackRegistrationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityName2: string;
-	readonly FilterExpression: string;
-	readonly FilteringAttributes: string;
-	readonly HardDelete: string;
-	readonly LogicAppsVersion: string;
-	readonly Message: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly PostponeUntil: string;
-	readonly RunAs: string;
-	readonly RuntimeIntegrationProperties: string;
-	readonly Scope: string;
-	readonly SdkMessageName: string;
-	readonly SoftDeleteStatus: string;
-	readonly Url: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * CallbackRegistration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ICallbackRegistrationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ICallbackRegistrationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ICallbackRegistrationApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the callback registration. */
 	CallbackRegistrationId: DevKit.Guid | null;
 	/** Shows who created the record. */

@@ -6,50 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for WorkflowLog
- * All fields return string representation of their values
- */
-export interface IWorkflowLogFormattedValue {
-	readonly ActivityName: string;
-	readonly AsyncOperationId: string;
-	readonly ChildWorkflowInstanceId: string;
-	readonly CompletedOn_UtcDateAndTime: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly Duration: string;
-	readonly ErrorCode: string;
-	readonly ErrorText: string;
-	readonly Inputs_name: string;
-	readonly InteractionActivityResult: string;
-	readonly IterationCount: string;
-	readonly Message: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Outputs_name: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RegardingObjectId: string;
-	readonly RepetitionCount: string;
-	readonly RepetitionId: string;
-	readonly StageName: string;
-	readonly StartedOn_UtcDateAndTime: string;
-	readonly Status: string;
-	readonly StepName: string;
-	readonly WorkflowLogId: string;
-}
-
-/**
  * WorkflowLog WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWorkflowLogApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWorkflowLogFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWorkflowLogApi, 'FormattedValue'>]: string };
 	/** Name of the activity which the process step is currently processing. */
 	ActivityName: string | null;
 	/** Unique identifier of the parent record. */

@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for mspp_webpageaccesscontrolrule_webrole
- * All fields return string representation of their values
- */
-export interface Imspp_webpageaccesscontrolrule_webroleFormattedValue {
-	readonly mspp_webpageaccesscontrolrule_webroleId: string;
-	readonly mspp_webpageaccesscontrolruleid: string;
-	readonly mspp_webroleid: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * mspp_webpageaccesscontrolrule_webrole WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imspp_webpageaccesscontrolrule_webroleApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imspp_webpageaccesscontrolrule_webroleFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imspp_webpageaccesscontrolrule_webroleApi, 'FormattedValue'>]: string };
 	readonly mspp_webpageaccesscontrolrule_webroleId: DevKit.Guid | null;
 	readonly mspp_webpageaccesscontrolruleid: DevKit.Guid | null;
 	readonly mspp_webroleid: DevKit.Guid | null;

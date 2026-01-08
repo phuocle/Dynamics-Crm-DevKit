@@ -6,59 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for AIPluginOperation
- * All fields return string representation of their values
- */
-export interface IAIPluginOperationFormattedValue {
-	readonly AIPlugin: string;
-	readonly AIPluginOperationExportKey: string;
-	readonly AIPluginOperationId: string;
-	readonly AIPluginOperationResponseTemplate: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomAPI: string;
-	readonly Description: string;
-	readonly DVFileSearch: string;
-	readonly DVTableSearch: string;
-	readonly Entity2: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsConsequential: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_AIModel: string;
-	readonly Name: string;
-	readonly OperationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ReferencedOperationId: string;
-	readonly ResponseSemantics: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly Workflow: string;
-}
-
-/**
  * AIPluginOperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IAIPluginOperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IAIPluginOperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IAIPluginOperationApi, 'FormattedValue'>]: string };
 	/** AIPlugin */
 	AIPlugin: DevKit.Guid | null;
 	/** AI Plugin Operation Export Key */

@@ -6,21 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SqlEncryptionAudit
- * All fields return string representation of their values
- */
-export interface ISqlEncryptionAuditFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateOnly: string;
-}
-
-/**
  * SqlEncryptionAudit WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISqlEncryptionAuditApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISqlEncryptionAuditFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISqlEncryptionAuditApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the account. */
 	readonly CreatedBy: DevKit.Guid | null;
 	readonly CreatedOn_UtcDateOnly: Date | null;

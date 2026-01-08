@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ClientUpdate
- * All fields return string representation of their values
- */
-export interface IClientUpdateFormattedValue {
-	readonly ClientUpdateId: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly Description: string;
-	readonly SqlScript: string;
-	readonly VersionNumber: string;
-	readonly WasExecuted: string;
-	readonly WhenExecute: string;
-}
-
-/**
  * ClientUpdate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IClientUpdateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IClientUpdateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IClientUpdateApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the client update. */
 	ClientUpdateId: DevKit.Guid | null;
 	/** For internal use only. Date and time when the ClientUpdate script was created on server. */

@@ -6,42 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for v4_accountbpf
- * All fields return string representation of their values
- */
-export interface Iv4_accountbpfFormattedValue {
-	readonly ActiveStageId: string;
-	readonly ActiveStageStartedOn_UtcDateOnly: string;
-	readonly bpf_accountid: string;
-	readonly bpf_Duration: string;
-	readonly bpf_name: string;
-	readonly BusinessProcessFlowInstanceId: string;
-	readonly CompletedOn_UtcDateOnly: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly ProcessId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TraversedPath: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * v4_accountbpf WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iv4_accountbpfApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iv4_accountbpfFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iv4_accountbpfApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the active stage for the Business Process Flow instance. */
 	ActiveStageId: DevKit.Guid | null;
 	/** Date and time when current active stage is started */

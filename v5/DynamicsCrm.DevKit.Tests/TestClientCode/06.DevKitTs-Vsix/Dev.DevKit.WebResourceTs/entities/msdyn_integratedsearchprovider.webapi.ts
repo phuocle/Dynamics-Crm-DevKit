@@ -6,55 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_integratedsearchprovider
- * All fields return string representation of their values
- */
-export interface Imsdyn_integratedsearchproviderFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_allowedlanguages: string;
-	readonly msdyn_articlepropertiesmapping: string;
-	readonly msdyn_authenticationtype: string;
-	readonly msdyn_clientid: string;
-	readonly msdyn_clientsecret: string;
-	readonly msdyn_datasourcetype: string;
-	readonly msdyn_description: string;
-	readonly msdyn_htmlmetatags: string;
-	readonly msdyn_htmlsample_name: string;
-	readonly msdyn_includedsitemapurls: string;
-	readonly msdyn_integratedsearchproviderId: string;
-	readonly msdyn_isfieldmappingoptionselected: string;
-	readonly msdyn_lastfetchtime_UtcDateAndTime: string;
-	readonly msdyn_lookbackperiod: string;
-	readonly msdyn_name: string;
-	readonly msdyn_refreshschedule: string;
-	readonly msdyn_resourceid: string;
-	readonly msdyn_rooturl: string;
-	readonly msdyn_tenantid: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_integratedsearchprovider WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_integratedsearchproviderApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_integratedsearchproviderFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_integratedsearchproviderApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time of the external search provider creation */

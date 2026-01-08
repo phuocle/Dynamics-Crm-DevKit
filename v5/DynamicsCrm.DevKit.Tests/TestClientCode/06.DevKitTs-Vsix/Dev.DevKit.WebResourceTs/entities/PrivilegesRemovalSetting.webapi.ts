@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for PrivilegesRemovalSetting
- * All fields return string representation of their values
- */
-export interface IPrivilegesRemovalSettingFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ExtensionOfRecordId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsAppendRemoved: string;
-	readonly IsAppendToRemoved: string;
-	readonly IsAssignRemoved: string;
-	readonly IsCreateRemoved: string;
-	readonly IsCustomizable: string;
-	readonly IsDeleteRemoved: string;
-	readonly IsManaged: string;
-	readonly IsReadRemoved: string;
-	readonly IsWriteRemoved: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly PrivilegesRemovalSettingId: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * PrivilegesRemovalSetting WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IPrivilegesRemovalSettingApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IPrivilegesRemovalSettingFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IPrivilegesRemovalSettingApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

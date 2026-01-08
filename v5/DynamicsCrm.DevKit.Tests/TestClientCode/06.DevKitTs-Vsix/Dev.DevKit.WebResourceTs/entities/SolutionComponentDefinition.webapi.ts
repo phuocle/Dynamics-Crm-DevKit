@@ -6,58 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SolutionComponentDefinition
- * All fields return string representation of their values
- */
-export interface ISolutionComponentDefinitionFormattedValue {
-	readonly AllowDeleteBaseSolutionRowAndFakeDelete: string;
-	readonly AllowOverwriteCustomizations: string;
-	readonly AllowRecreateForLogicallyDeletedRow: string;
-	readonly AlwaysRemoveActiveCustomizationsOnUninstall: string;
-	readonly CanBeAddedToSolutionComponents: string;
-	readonly CanBeHidden: string;
-	readonly ComponentState: string;
-	readonly ComponentXPath: string;
-	readonly DescendentIsViewableComponent: string;
-	readonly GroupParentComponentAttributeName: string;
-	readonly GroupParentComponentType: string;
-	readonly HasIsRenameableAttribute: string;
-	readonly ImportSequenceNumber: string;
-	readonly IntroducedVersion: string;
-	readonly IsDependencyDisabled: string;
-	readonly IsDisplayable: string;
-	readonly IsManaged: string;
-	readonly IsMergeable: string;
-	readonly IsMetadata: string;
-	readonly IsViewable: string;
-	readonly LabelTypeCode: string;
-	readonly Name: string;
-	readonly ObjectTypeCode: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ParentAttributeName: string;
-	readonly PrimaryEntityName: string;
-	readonly RemoveActiveCustomizationsBehavior: string;
-	readonly RootAttributeName: string;
-	readonly RootComponent: string;
-	readonly SolutionComponentDefinitionId: string;
-	readonly SolutionComponentDefinitionIdUnique: string;
-	readonly SolutionComponentType: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly UseForceDeleteForSolutionUpdate: string;
-	readonly UseForceUpdateAlways: string;
-	readonly UseSentinelRowInBaseSolution: string;
-	readonly ViewableDescendentComponentType: string;
-}
-
-/**
  * SolutionComponentDefinition WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISolutionComponentDefinitionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISolutionComponentDefinitionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISolutionComponentDefinitionApi, 'FormattedValue'>]: string };
 	/** Boolean identifier for using deleting base layers. */
 	AllowDeleteBaseSolutionRowAndFakeDelete: boolean | null;
 	/** Whether this component allows Overwrite Customizations when update managed solution */

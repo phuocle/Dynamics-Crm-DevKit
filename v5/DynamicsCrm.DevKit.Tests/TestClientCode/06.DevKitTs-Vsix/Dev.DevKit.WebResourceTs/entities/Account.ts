@@ -1,4 +1,5 @@
 ﻿import { Account } from './Account.form';
+import { AccountApi } from './Account.webapi';
 
 //const formAccount = (function () {
 //	"use strict";
@@ -281,6 +282,10 @@ const formAllInOne = (function () {
 	// ========================================================================
 
 	async function UiAddLoaded(executionContext: any): Promise<void> {
+		const accountApi = new AccountApi();
+		var a = accountApi.FormattedValue.AccountCategoryCode;
+
+
 	}
 
 	// END ON LOAD

@@ -6,23 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for IndexAttributes
- * All fields return string representation of their values
- */
-export interface IIndexAttributesFormattedValue {
-	readonly IndexAttributeId: string;
-	readonly IndexId: string;
-	readonly RecordId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * IndexAttributes WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IIndexAttributesApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IIndexAttributesFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IIndexAttributesApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the index attribute */
 	IndexAttributeId: DevKit.Guid | null;
 	/** Unique identifier of the entity index */

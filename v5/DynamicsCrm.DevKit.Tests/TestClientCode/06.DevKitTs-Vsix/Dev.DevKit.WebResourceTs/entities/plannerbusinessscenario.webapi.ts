@@ -6,36 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for plannerbusinessscenario
- * All fields return string representation of their values
- */
-export interface IplannerbusinessscenarioFormattedValue {
-	readonly Buckets: string;
-	readonly DisplayName: string;
-	readonly ImportSequenceNumber: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly plannerbusinessscenarioId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SyncEnabled: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly WebResourceName: string;
-}
-
-/**
  * plannerbusinessscenario WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IplannerbusinessscenarioApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IplannerbusinessscenarioFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IplannerbusinessscenarioApi, 'FormattedValue'>]: string };
 	/** Buckets */
 	Buckets: string | null;
 	/** Display Name */

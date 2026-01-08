@@ -6,48 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for ArchiveCleanupOperation
- * All fields return string representation of their values
- */
-export interface IArchiveCleanupOperationFormattedValue {
-	readonly ArchiveCleanupOperationId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Criteria: string;
-	readonly EndTime_UtcDateAndTime: string;
-	readonly EntityLogicalName: string;
-	readonly FailedCount: string;
-	readonly FromVersion: string;
-	readonly ImportSequenceNumber: string;
-	readonly Message: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OperationName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly RecordCount: string;
-	readonly StartTime_UtcDateAndTime: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly ToVersion: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * ArchiveCleanupOperation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IArchiveCleanupOperationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IArchiveCleanupOperationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IArchiveCleanupOperationApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	ArchiveCleanupOperationId: DevKit.Guid | null;
 	/** Unique identifier of the user who created the record. */

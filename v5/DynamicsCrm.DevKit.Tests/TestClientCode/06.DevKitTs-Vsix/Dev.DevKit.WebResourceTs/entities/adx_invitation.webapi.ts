@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for adx_invitation
- * All fields return string representation of their values
- */
-export interface Iadx_invitationFormattedValue {
-	readonly adx_assignToAccount: string;
-	readonly adx_expiryDate_UtcDateOnly: string;
-	readonly adx_invitationCode: string;
-	readonly adx_invitationId: string;
-	readonly adx_inviteContact: string;
-	readonly adx_invitercontact: string;
-	readonly adx_maximumRedemptions: string;
-	readonly adx_name: string;
-	readonly adx_redeemedContact: string;
-	readonly adx_redemptions: string;
-	readonly adx_redemptionWorkflow: string;
-	readonly adx_type: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly mspp_websiteid: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * adx_invitation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Iadx_invitationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Iadx_invitationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Iadx_invitationApi, 'FormattedValue'>]: string };
 	/** An account record to assign the redeemed contact to. */
 	adx_assignToAccount: DevKit.Guid | null;
 	/** The date the invitation is no longer valid for redemption. */

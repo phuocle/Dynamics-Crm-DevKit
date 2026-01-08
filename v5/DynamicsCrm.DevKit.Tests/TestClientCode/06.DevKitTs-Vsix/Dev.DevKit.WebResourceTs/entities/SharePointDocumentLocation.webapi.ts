@@ -6,49 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SharePointDocumentLocation
- * All fields return string representation of their values
- */
-export interface ISharePointDocumentLocationFormattedValue {
-	readonly AbsoluteURL: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Description: string;
-	readonly ExchangeRate: string;
-	readonly ImportSequenceNumber: string;
-	readonly LocationType: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly ParentSiteOrLocation: string;
-	readonly RegardingObjectId: string;
-	readonly RelativeUrl: string;
-	readonly ServiceType: string;
-	readonly SharePointDocumentLocationId: string;
-	readonly SiteCollectionId: string;
-	readonly StateCode: string;
-	readonly StatusCode: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly TransactionCurrencyId: string;
-	readonly UserId: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SharePointDocumentLocation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISharePointDocumentLocationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISharePointDocumentLocationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISharePointDocumentLocationApi, 'FormattedValue'>]: string };
 	/** Absolute URL of the SharePoint document location. */
 	AbsoluteURL: string | null;
 	/** Unique identifier of the user who created the SharePoint document location record. */

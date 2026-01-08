@@ -6,31 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for WizardAccessPrivilege
- * All fields return string representation of their values
- */
-export interface IWizardAccessPrivilegeFormattedValue {
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly EntityName2: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OrganizationId: string;
-	readonly PrivilegeName: string;
-	readonly VersionNumber: string;
-	readonly WebWizardId: string;
-	readonly WizardAccessPrivilegeId: string;
-}
-
-/**
  * WizardAccessPrivilege WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IWizardAccessPrivilegeApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IWizardAccessPrivilegeFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IWizardAccessPrivilegeApi, 'FormattedValue'>]: string };
 	/** Unique identifier of the user who created the wizard access privilege record. */
 	readonly CreatedBy: DevKit.Guid | null;
 	/** Date and time when the wizard access privilege record was created. */

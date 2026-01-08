@@ -6,37 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for cardstateitem
- * All fields return string representation of their values
- */
-export interface IcardstateitemFormattedValue {
-	readonly Cache: string;
-	readonly CardId: string;
-	readonly CardInstanceId: string;
-	readonly cardstateitemId: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Data: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly PartitionId: string;
-	readonly Scope: string;
-	readonly TTLInSeconds: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * cardstateitem WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IcardstateitemApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IcardstateitemFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IcardstateitemApi, 'FormattedValue'>]: string };
 	/** Cache */
 	Cache: string | null;
 	/** Card ID */

@@ -6,56 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_pmsimulation
- * All fields return string representation of their values
- */
-export interface Imsdyn_pmsimulationFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_description: string;
-	readonly msdyn_end_UtcDateAndTime: string;
-	readonly msdyn_generatelog: string;
-	readonly msdyn_name: string;
-	readonly msdyn_pminferredtaskid: string;
-	readonly msdyn_pmsimulationId: string;
-	readonly msdyn_pmviewid: string;
-	readonly msdyn_psesimulationid: string;
-	readonly msdyn_result: string;
-	readonly msdyn_setting: string;
-	readonly msdyn_start_UtcDateAndTime: string;
-	readonly msdyn_state: string;
-	readonly msdyn_version: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_pmsimulation WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_pmsimulationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_pmsimulationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_pmsimulationApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

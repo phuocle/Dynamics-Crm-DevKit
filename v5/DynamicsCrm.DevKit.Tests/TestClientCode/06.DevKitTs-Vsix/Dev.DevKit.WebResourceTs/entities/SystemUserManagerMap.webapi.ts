@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SystemUserManagerMap
- * All fields return string representation of their values
- */
-export interface ISystemUserManagerMapFormattedValue {
-	readonly HierarchyLevel: string;
-	readonly ParentSystemUserId: string;
-	readonly SystemUserId: string;
-	readonly SystemUserManagerMapId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SystemUserManagerMap WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISystemUserManagerMapApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISystemUserManagerMapFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISystemUserManagerMapApi, 'FormattedValue'>]: string };
 	readonly HierarchyLevel: number | null;
 	/** For internal use only. */
 	ParentSystemUserId: DevKit.Guid | null;

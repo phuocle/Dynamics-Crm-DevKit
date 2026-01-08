@@ -6,44 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for GovernanceConfiguration
- * All fields return string representation of their values
- */
-export interface IGovernanceConfigurationFormattedValue {
-	readonly ConfigurationType: string;
-	readonly ConfigurationValues: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly Enabled: string;
-	readonly GovernanceConfigurationId: string;
-	readonly ImportSequenceNumber: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly Scope: string;
-	readonly ScopeId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly TenantId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly Version: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * GovernanceConfiguration WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IGovernanceConfigurationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IGovernanceConfigurationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IGovernanceConfigurationApi, 'FormattedValue'>]: string };
 	/** ConfigurationType */
 	ConfigurationType: string | null;
 	/** They payload of this configuration */

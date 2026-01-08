@@ -6,77 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for appaction
- * All fields return string representation of their values
- */
-export interface IappactionFormattedValue {
-	readonly appactionId: string;
-	readonly AppModuleId: string;
-	readonly ButtonAccessibilityText: string;
-	readonly ButtonLabelText: string;
-	readonly ButtonSequencePriority: string;
-	readonly ButtonTooltipDescription: string;
-	readonly ButtonTooltipTitle: string;
-	readonly ClientType: string;
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly Context: string;
-	readonly ContextEntity: string;
-	readonly ContextValue: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly FontIcon: string;
-	readonly GroupTitle: string;
-	readonly Hidden: string;
-	readonly IconWebResourceId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsDisabled: string;
-	readonly isGroupTitleHidden: string;
-	readonly IsManaged: string;
-	readonly Location: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly name: string;
-	readonly OnClickEventFormulaComponentLibrary: string;
-	readonly OnClickEventFormulaComponentLibraryId: string;
-	readonly OnClickEventFormulaComponentName: string;
-	readonly OnClickEventFormulaFunctionName: string;
-	readonly OnClickEventJavaScriptFunctionName: string;
-	readonly OnClickEventJavaScriptParameters: string;
-	readonly OnClickEventJavaScriptWebResourceId: string;
-	readonly OnClickEventType: string;
-	readonly OrganizationId: string;
-	readonly Origin: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly ParentAppActionId: string;
-	readonly Sequence: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly Type: string;
-	readonly UniqueName: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-	readonly VisibilityFormulaComponentLibrary: string;
-	readonly VisibilityFormulaComponentLibraryId: string;
-	readonly VisibilityFormulaComponentName: string;
-	readonly VisibilityFormulaFunctionName: string;
-	readonly VisibilityType: string;
-}
-
-/**
  * appaction WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IappactionApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IappactionFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IappactionApi, 'FormattedValue'>]: string };
 	/** Unique identifier for entity instances */
 	appactionId: DevKit.Guid | null;
 	/** Unique identifier for AppModule associated with Modern Command */

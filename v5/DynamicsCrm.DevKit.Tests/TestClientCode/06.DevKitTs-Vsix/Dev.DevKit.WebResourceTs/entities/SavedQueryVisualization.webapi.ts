@@ -6,46 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SavedQueryVisualization
- * All fields return string representation of their values
- */
-export interface ISavedQueryVisualizationFormattedValue {
-	readonly CanBeDeleted: string;
-	readonly ChartType: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly DataDescription: string;
-	readonly Description: string;
-	readonly EnableCrossPartition: string;
-	readonly IntroducedVersion: string;
-	readonly IsCustomizable: string;
-	readonly IsDefault: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly Name: string;
-	readonly OrganizationId: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly PresentationDescription: string;
-	readonly SavedQueryVisualizationId: string;
-	readonly SavedQueryVisualizationIdUnique: string;
-	readonly SolutionId: string;
-	readonly SupportingSolutionId: string;
-	readonly Type: string;
-	readonly VersionNumber: string;
-	readonly WebResourceId: string;
-}
-
-/**
  * SavedQueryVisualization WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISavedQueryVisualizationApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISavedQueryVisualizationFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISavedQueryVisualizationApi, 'FormattedValue'>]: string };
 	/** Tells whether the saved query visualization can be deleted. */
 	CanBeDeleted: string | null;
 	/** Indicates the library used to render the visualization. */

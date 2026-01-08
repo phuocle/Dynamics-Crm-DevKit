@@ -6,53 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_modulerundetail
- * All fields return string representation of their values
- */
-export interface Imsdyn_modulerundetailFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_EndTime_UtcDateAndTime: string;
-	readonly msdyn_IsCompleted: string;
-	readonly msdyn_ModelRunId: string;
-	readonly msdyn_ModuleConfigId: string;
-	readonly msdyn_ModuleConfigIdVersion: string;
-	readonly msdyn_ModuleEndpointResults: string;
-	readonly msdyn_ModuleResultCodes: string;
-	readonly msdyn_modulerundetailId: string;
-	readonly msdyn_OutputModelJsonPath: string;
-	readonly msdyn_QueuedTime_UtcDateAndTime: string;
-	readonly msdyn_StartTime_UtcDateAndTime: string;
-	readonly msdyn_SynapseSchemaSyncJobId: string;
-	readonly msdyn_Version: string;
-	readonly OrganizationId: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_modulerundetail WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_modulerundetailApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_modulerundetailFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_modulerundetailApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */

@@ -6,24 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for FilterTemplate
- * All fields return string representation of their values
- */
-export interface IFilterTemplateFormattedValue {
-	readonly Description: string;
-	readonly FetchXml: string;
-	readonly FilterTemplateId: string;
-	readonly Name: string;
-	readonly QueryType: string;
-}
-
-/**
  * FilterTemplate WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IFilterTemplateApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IFilterTemplateFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IFilterTemplateApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	Description: string | null;
 	/** String that specifies the filter template in Fetch XML language. */

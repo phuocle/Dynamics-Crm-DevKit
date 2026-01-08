@@ -6,41 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for Entity
- * All fields return string representation of their values
- */
-export interface IEntityFormattedValue {
-	readonly AddressTableName: string;
-	readonly BaseTableName: string;
-	readonly CollectionName: string;
-	readonly ComponentState: string;
-	readonly EntityId: string;
-	readonly EntitySetName: string;
-	readonly ExtensionTableName: string;
-	readonly ExternalCollectionName: string;
-	readonly ExternalName: string;
-	readonly IsActivity: string;
-	readonly LogicalCollectionName: string;
-	readonly LogicalName: string;
-	readonly Name: string;
-	readonly ObjectTypeCode: string;
-	readonly OriginalLocalizedCollectionName: string;
-	readonly OriginalLocalizedName: string;
-	readonly OverwriteTime_UtcDateOnly: string;
-	readonly ParentControllingAttributeName: string;
-	readonly PhysicalName: string;
-	readonly ReportViewName: string;
-	readonly SolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * Entity WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IEntityApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IEntityFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IEntityApi, 'FormattedValue'>]: string };
 	/** The address table name of this entity. */
 	AddressTableName: string | null;
 	/** The base table name of this entity. */

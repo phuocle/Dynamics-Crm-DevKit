@@ -6,33 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for SolutionComponent
- * All fields return string representation of their values
- */
-export interface ISolutionComponentFormattedValue {
-	readonly ComponentType: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly IsMetadata: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly ObjectId: string;
-	readonly RootComponentBehavior: string;
-	readonly RootSolutionComponentId: string;
-	readonly SolutionComponentId: string;
-	readonly SolutionId: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * SolutionComponent WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface ISolutionComponentApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: ISolutionComponentFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<ISolutionComponentApi, 'FormattedValue'>]: string };
 	/** The object type code of the component. */
 	readonly ComponentType: number | null;
 	/** Unique identifier of the user who created the solution */

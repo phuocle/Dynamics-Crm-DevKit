@@ -6,26 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for MetadataDifference
- * All fields return string representation of their values
- */
-export interface IMetadataDifferenceFormattedValue {
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly DifferenceXml: string;
-	readonly IntroducedVersion: string;
-	readonly IntroducedVersionString: string;
-	readonly MetadataDifferenceId: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly SolutionId: string;
-}
-
-/**
  * MetadataDifference WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface IMetadataDifferenceApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: IMetadataDifferenceFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<IMetadataDifferenceApi, 'FormattedValue'>]: string };
 	/** Date and time when the metadata difference was created. */
 	readonly CreatedOn_UtcDateAndTime: Date | null;
 	/** Difference Xml */

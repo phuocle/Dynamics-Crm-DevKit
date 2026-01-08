@@ -6,52 +6,12 @@
 import { createWebApiEntity } from '../lib/devkit';
 
 /**
- * Formatted values interface for msdyn_pmbusinessruleautomationconfig
- * All fields return string representation of their values
- */
-export interface Imsdyn_pmbusinessruleautomationconfigFormattedValue {
-	readonly ComponentIdUnique: string;
-	readonly ComponentState: string;
-	readonly CreatedBy: string;
-	readonly CreatedOn_UtcDateAndTime: string;
-	readonly CreatedOnBehalfBy: string;
-	readonly CustomApiId: string;
-	readonly ImportSequenceNumber: string;
-	readonly IsCustomizable: string;
-	readonly IsManaged: string;
-	readonly ModifiedBy: string;
-	readonly ModifiedOn_UtcDateAndTime: string;
-	readonly ModifiedOnBehalfBy: string;
-	readonly msdyn_BusinessRuleId: string;
-	readonly msdyn_IsEnabled: string;
-	readonly msdyn_name: string;
-	readonly msdyn_pmbusinessruleautomationconfigId: string;
-	readonly msdyn_PmInferredTaskId: string;
-	readonly msdyn_SelectedCustomAttributes: string;
-	readonly msdyn_shouldincludeallemitsinnextrun: string;
-	readonly msdyn_UniqueName: string;
-	readonly OverriddenCreatedOn_UtcDateOnly: string;
-	readonly OverwriteTime_UtcDateAndTime: string;
-	readonly OwnerId: string;
-	readonly OwningBusinessUnit: string;
-	readonly OwningTeam: string;
-	readonly OwningUser: string;
-	readonly SolutionId: string;
-	readonly statecode: string;
-	readonly statuscode: string;
-	readonly SupportingSolutionId: string;
-	readonly TimeZoneRuleVersionNumber: string;
-	readonly UTCConversionTimeZoneCode: string;
-	readonly VersionNumber: string;
-}
-
-/**
  * msdyn_pmbusinessruleautomationconfig WebApi entity interface
  * Provides IntelliSense for early-bound style coding
  */
 export interface Imsdyn_pmbusinessruleautomationconfigApi extends DevKit.IWebApiEntity {
-	/** Formatted values for all fields */
-	readonly FormattedValue: Imsdyn_pmbusinessruleautomationconfigFormattedValue;
+	/** Formatted values for all fields - auto-mapped to readonly string */
+	readonly FormattedValue: { readonly [K in keyof Omit<Imsdyn_pmbusinessruleautomationconfigApi, 'FormattedValue'>]: string };
 	/** For internal use only. */
 	readonly ComponentIdUnique: DevKit.Guid | null;
 	/** For internal use only. */
