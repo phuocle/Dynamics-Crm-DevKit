@@ -831,14 +831,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var xdoc = XDocument.Parse(formXml);
             var tabs = from x in xdoc.Descendants("tabs").Elements("tab")
+                       let tabName = x.Attribute("name")?.Value
+                       where !string.IsNullOrEmpty(tabName)
                        select new TabInfo
                        {
-                           Name = x.Attribute("name")?.Value,
+                           Name = tabName,
                            Label = x.Descendants("labels").Descendants("label").FirstOrDefault(l => l.Attribute("languagecode")?.Value == "1033")?.Attribute("description")?.Value,
                            Sections = (from s in x.Descendants("columns").Descendants("column").Descendants("sections").Elements("section")
+                                       let sectionName = s.Attribute("name")?.Value
+                                       where !string.IsNullOrEmpty(sectionName)
                                        select new SectionInfo
                                        {
-                                           Name = s.Attribute("name")?.Value,
+                                           Name = sectionName,
                                            Label = s.Descendants("labels").Descendants("label").FirstOrDefault(l => l.Attribute("languagecode")?.Value == "1033")?.Attribute("description")?.Value
                                        }).ToList()
                        };
