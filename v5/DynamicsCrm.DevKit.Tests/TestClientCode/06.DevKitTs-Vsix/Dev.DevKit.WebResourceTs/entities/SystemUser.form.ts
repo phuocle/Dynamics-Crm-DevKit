@@ -5,7 +5,7 @@
  * Structure:
  * 1. Imports
  * 2. Namespace SystemUser containing form classes: SystemUser.FormClassName
- * 3. Aggregate Form class: SystemUser.Form (contains all fields from all forms)
+ * 3. Aggregate Form class: SystemUser.AllInOne (contains all fields from all forms)
  */
 
 /// <reference path="../lib/devkit.d.ts" />

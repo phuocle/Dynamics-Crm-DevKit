@@ -5,7 +5,7 @@
  * Structure:
  * 1. Imports
  * 2. Namespace Email containing form classes: Email.FormClassName
- * 3. Aggregate Form class: Email.Form (contains all fields from all forms)
+ * 3. Aggregate Form class: Email.AllInOne (contains all fields from all forms)
  */
 
 /// <reference path="../lib/devkit.d.ts" />

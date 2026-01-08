@@ -150,7 +150,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine(" * Structure:");
             code.AppendLine(" * 1. Imports");
             code.AppendLine($" * 2. Namespace {entityMetadata.SchemaName} containing form classes: {entityMetadata.SchemaName}.FormClassName");
-            code.AppendLine($" * 3. Aggregate Form class: {entityMetadata.SchemaName}.Form (contains all fields from all forms)");
+            code.AppendLine($" * 3. Aggregate Form class: {entityMetadata.SchemaName}.{AGGREGATE_FORM_NAME} (contains all fields from all forms)");
             code.AppendLine(" */");
             code.AppendLine();
             code.AppendLine("/// <reference path=\"../lib/devkit.d.ts\" />");
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             foreach (var form in forms.OrderBy(x => x.FormType).ThenBy(x => x.Name))
             {
-                if (form.FormType == FormType.QuickView)
+                if (form.IsQuickCreate || form.FormType == FormType.QuickView)
                 {
                     code.Append(await GetQuickCreateFormTsCodeAsync(form));
                 }
@@ -230,7 +230,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 {
                     code.AppendLine($"{TAB3}/** {comment} */");
                 }
-                code.AppendLine($"{TAB3}{field.LogicalName}: DevKit.Controls.{GetControlType(field)};");
+                code.AppendLine($"{TAB3}{field.SchemaName}: DevKit.Controls.{GetControlType(field)};");
             }
 
             code.AppendLine($"{TAB3}/** Form Tabs */");

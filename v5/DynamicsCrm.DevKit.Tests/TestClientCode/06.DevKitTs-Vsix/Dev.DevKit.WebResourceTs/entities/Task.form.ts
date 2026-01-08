@@ -5,7 +5,7 @@
  * Structure:
  * 1. Imports
  * 2. Namespace Task containing form classes: Task.FormClassName
- * 3. Aggregate Form class: Task.Form (contains all fields from all forms)
+ * 3. Aggregate Form class: Task.AllInOne (contains all fields from all forms)
  */
 
 /// <reference path="../lib/devkit.d.ts" />
@@ -276,14 +276,8 @@ export namespace Task {
 			ScheduledEnd: DevKit.Controls.DateTime;
 			/** Type a short description about the objective or primary topic of the task. */
 			Subject: DevKit.Controls.String;
+			/** Form Tabs */
 			Tab: ITabs;
-		}
-
-		/**
-		 * Header controls interface
-		 * Contains controls displayed in the form header
-		 */
-		export interface IHeader extends DevKit.Controls.IHeader {
 		}
 
 		export interface IcreatetaskTabSections {
@@ -302,40 +296,6 @@ export namespace Task {
 			createtask: IcreatetaskTab;
 		}
 
-		/**
-		 * Grid controls interface
-		 * Contains all subgrid controls on the form
-		 */
-		export interface IGrid {
-		}
-
-		/**
-		 * Navigation interface
-		 * Contains navigation items
-		 */
-		export interface INavigation {
-		}
-
-		/**
-		 * QuickForm interface
-		 * Contains quick view form controls
-		 */
-		export interface IQuickForm {
-		}
-
-		/**
-		 * Process interface
-		 * Contains business process flow definitions
-		 */
-		export interface IProcess extends DevKit.Controls.IProcess {
-		}
-
-		/**
-		 * Dialog interface
-		 * For quick create dialogs or other dialog forms
-		 */
-		export interface IDialog extends DevKit.IDialog {
-		}
 	}
 
 	/**
@@ -343,7 +303,7 @@ export namespace Task {
 	 * Provides typed access to all form controls
 	 * Usage: new Task.Task_quick_create_form(executionContext)
 	 */
-	export class Task_quick_create_form extends FormBase<Task_quick_create_form.IBody, Task_quick_create_form.IHeader, Task_quick_create_form.IGrid, Task_quick_create_form.INavigation, Task_quick_create_form.IQuickForm, Task_quick_create_form.IProcess, Task_quick_create_form.IDialog> {
+	export class Task_quick_create_form extends FormBase<Task_quick_create_form.IBody, undefined, undefined, undefined, undefined, undefined, undefined> {
 		/**
 		 * Creates a Task_quick_create_form Form instance
 		 * @param executionContext The execution context from form event
@@ -378,16 +338,10 @@ export namespace Task {
 			ActualDurationMinutes: DevKit.Controls.Integer;
 			/** Type additional information to describe the task. */
 			Description: DevKit.Controls.Memo;
-			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-			OwnerId: DevKit.Controls.Lookup;
-			/** Select the priority so that preferred customers or critical issues are handled quickly. */
-			PriorityCode: DevKit.Controls.OptionSet;
 			/** Choose the record that the task relates to. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Choose the record that the task relates to. */
 			RegardingObjectId1: DevKit.Controls.Lookup;
-			/** Enter the expected due date and time. */
-			ScheduledEnd: DevKit.Controls.DateTime;
 			/** Type a short description about the objective or primary topic of the task. */
 			Subject: DevKit.Controls.String;
 		}
@@ -446,9 +400,9 @@ export namespace Task {
 		 */
 		constructor(executionContext: any, defaultWebResourceName?: string) {
 			super(executionContext, defaultWebResourceName, {
-				body: ['ActualDurationMinutes', 'Description', 'OwnerId', 'PriorityCode', 'RegardingObjectId', 'RegardingObjectId1', 'ScheduledEnd', 'Subject'],
+				body: ['ActualDurationMinutes', 'Description', 'RegardingObjectId', 'RegardingObjectId1', 'Subject'],
 				header: ['OwnerId', 'PriorityCode', 'ScheduledEnd', 'StateCode'],
-				tab: ['createtask___task', 'createtask___task_2', 'createtask___task_3', 'tab_4___tab_3_section_3', 'tab_4___tab_4_section_2', 'tab_4___tab_4_section_4', 'TASK_TAB___Description', 'TASK_TAB___tab_2_section_2', 'TASK_TAB___TASK', 'TASK_TAB___task details'],
+				tab: ['tab_4___tab_3_section_3', 'tab_4___tab_4_section_2', 'tab_4___tab_4_section_4', 'TASK_TAB___Description', 'TASK_TAB___tab_2_section_2', 'TASK_TAB___TASK', 'TASK_TAB___task details'],
 				grid: [],
 				navigation: [],
 				quick: [],

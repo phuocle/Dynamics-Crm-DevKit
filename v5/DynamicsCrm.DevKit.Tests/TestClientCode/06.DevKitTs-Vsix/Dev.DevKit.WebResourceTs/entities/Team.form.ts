@@ -5,7 +5,7 @@
  * Structure:
  * 1. Imports
  * 2. Namespace Team containing form classes: Team.FormClassName
- * 3. Aggregate Form class: Team.Form (contains all fields from all forms)
+ * 3. Aggregate Form class: Team.AllInOne (contains all fields from all forms)
  */
 
 /// <reference path="../lib/devkit.d.ts" />

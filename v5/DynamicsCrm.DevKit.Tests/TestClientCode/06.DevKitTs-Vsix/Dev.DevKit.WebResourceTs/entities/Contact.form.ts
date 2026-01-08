@@ -5,7 +5,7 @@
  * Structure:
  * 1. Imports
  * 2. Namespace Contact containing form classes: Contact.FormClassName
- * 3. Aggregate Form class: Contact.Form (contains all fields from all forms)
+ * 3. Aggregate Form class: Contact.AllInOne (contains all fields from all forms)
  */
 
 /// <reference path="../lib/devkit.d.ts" />
@@ -1150,14 +1150,8 @@ export namespace Contact {
 			ParentCustomerId: DevKit.Controls.Lookup;
 			/** Type the main phone number for this contact. */
 			Telephone1: DevKit.Controls.String;
+			/** Form Tabs */
 			Tab: ITabs;
-		}
-
-		/**
-		 * Header controls interface
-		 * Contains controls displayed in the form header
-		 */
-		export interface IHeader extends DevKit.Controls.IHeader {
 		}
 
 		export interface Itab_1TabSections {
@@ -1179,42 +1173,6 @@ export namespace Contact {
 			tab_1: Itab_1Tab;
 		}
 
-		/**
-		 * Grid controls interface
-		 * Contains all subgrid controls on the form
-		 */
-		export interface IGrid {
-		}
-
-		/**
-		 * Navigation interface
-		 * Contains navigation items
-		 */
-		export interface INavigation {
-			/** Activities */
-			navActivities: DevKit.Controls.NavigationItem;
-		}
-
-		/**
-		 * QuickForm interface
-		 * Contains quick view form controls
-		 */
-		export interface IQuickForm {
-		}
-
-		/**
-		 * Process interface
-		 * Contains business process flow definitions
-		 */
-		export interface IProcess extends DevKit.Controls.IProcess {
-		}
-
-		/**
-		 * Dialog interface
-		 * For quick create dialogs or other dialog forms
-		 */
-		export interface IDialog extends DevKit.IDialog {
-		}
 	}
 
 	/**
@@ -1222,7 +1180,7 @@ export namespace Contact {
 	 * Provides typed access to all form controls
 	 * Usage: new Contact.Contact_Quick_Create(executionContext)
 	 */
-	export class Contact_Quick_Create extends FormBase<Contact_Quick_Create.IBody, Contact_Quick_Create.IHeader, Contact_Quick_Create.IGrid, Contact_Quick_Create.INavigation, Contact_Quick_Create.IQuickForm, Contact_Quick_Create.IProcess, Contact_Quick_Create.IDialog> {
+	export class Contact_Quick_Create extends FormBase<Contact_Quick_Create.IBody, undefined, undefined, undefined, undefined, undefined, undefined> {
 		/**
 		 * Creates a Contact_Quick_Create Form instance
 		 * @param executionContext The execution context from form event
@@ -1234,7 +1192,7 @@ export namespace Contact {
 				header: [],
 				tab: ['tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1'],
 				grid: [],
-				navigation: ['navActivities'],
+				navigation: [],
 				quick: [],
 				bpf: [],
 				dialog: []
@@ -1477,7 +1435,7 @@ export namespace Contact {
 			super(executionContext, defaultWebResourceName, {
 				body: ['AccountRoleCode', 'ActionCards', 'Address1_AddressTypeCode', 'Address1_City', 'Address1_Composite', 'Address1_Country', 'Address1_FreightTermsCode', 'Address1_Line1', 'Address1_Line2', 'Address1_Line3', 'Address1_Name', 'Address1_PostalCode', 'Address1_ShippingMethodCode', 'Address1_StateOrProvince', 'Address1_Telephone1', 'adx_identity_accessfailedcount', 'adx_identity_emailaddress1confirmed', 'adx_identity_locallogindisabled', 'adx_identity_lockoutenabled', 'adx_identity_lockoutenddate', 'adx_identity_logonenabled', 'adx_identity_mobilephoneconfirmed', 'adx_identity_securitystamp', 'adx_identity_twofactorenabled', 'adx_identity_username', 'Adx_OrganizationName', 'adx_PublicProfileCopy', 'Adx_TimeZone', 'Anniversary', 'AssistantName', 'AssistantPhone', 'BirthDate', 'CreditLimit', 'CreditOnHold', 'Department', 'Description', 'DoNotBulkEMail', 'DoNotEMail', 'DoNotFax', 'DoNotPhone', 'DoNotPostalMail', 'EMailAddress1', 'FamilyStatusCode', 'Fax', 'FirstName', 'FollowEmail', 'FullName', 'GenderCode', 'JobTitle', 'LastName', 'ManagerName', 'ManagerPhone', 'mapcontrol', 'MiddleName', 'MobilePhone', 'mspp_userpreferredlcid', 'NickName', 'notescontrol', 'OwnerId', 'ParentCustomerId', 'PaymentTermsCode', 'PreferredContactMethodCode', 'PreferredContactMethodCode1', 'Salutation', 'SpousesName', 'Telephone1', 'Telephone2', 'TransactionCurrencyId', 'WebSiteUrl', 'YomiFirstName', 'YomiLastName'],
 				header: ['EMailAddress1', 'OwnerId', 'PreferredContactMethodCode'],
-				tab: ['administration___billing information', 'administration___contact methods', 'administration___internal information', 'details___personal information', 'details___professional information', 'DETAILS_TAB___billing information', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___PERSONAL INFORMATION', 'DETAILS_TAB___PERSONAL_NOTES_SECTION', 'DETAILS_TAB___shipping information', 'general___address', 'general___contact_webrole_section', 'general___description', 'general___name', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___CONTACT_INFORMATION', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_4', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_5'],
+				tab: ['administration___billing information', 'administration___contact methods', 'administration___internal information', 'details___personal information', 'details___professional information', 'DETAILS_TAB___billing information', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___PERSONAL INFORMATION', 'DETAILS_TAB___PERSONAL_NOTES_SECTION', 'DETAILS_TAB___shipping information', 'general___address', 'general___contact_webrole_section', 'general___description', 'general___name', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___CONTACT_INFORMATION', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_4', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_5'],
 				grid: ['adx_externalidentity', 'contactactivitiesgrid', 'grid_contact_mspp_webrole'],
 				navigation: ['nav_adx_webrole_contact', 'nav_powerpagecomponent_mspp_webrole_contact', 'navActivities', 'navActivityHistory', 'navAddresses', 'navAsyncOperations', 'navInvoices', 'navOrders', 'navProcessSessions', 'navQuotes', 'navRelationships', 'navSubConts'],
 				quick: [],
