@@ -47,6 +47,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             RootNamespace = rootNamespace;
             var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
 
+            // If no forms exist for this entity, return null to skip file generation
+            if (forms == null || forms.Count == 0)
+            {
+                return (null, null);
+            }
+
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;

@@ -1,0 +1,167 @@
+﻿//@ts-check
+///<reference path="devkit.d.ts" />
+declare namespace DevKit {
+	export class TranslationProcessApi {
+		/**
+		* DynamicsCrm.DevKit TranslationProcessApi
+		* @param entity The entity object from OData response
+		*/
+		constructor(entity?: Record<string, any>)
+		/**
+		 * Get the raw value of an aliased field
+		 * @param alias The alias field name
+		 * @param isMultiOptionSet True if the field is a multi-option set
+		 * @returns The raw value or null if not found
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of an aliased field
+		 * @param alias The alias field name
+		 * @param isMultiOptionSet True if the field is a multi-option set
+		 * @returns The formatted value or empty string if not found
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
+		/** The entity object for Create/Update operations*/
+		readonly Entity: Record<string, any>;
+		/** The OData entity object containing raw data*/
+		readonly ODataEntity: Record<string, any>;
+		/** The entity name */
+		readonly EntityName: string;
+		/** The entity collection name */
+		readonly EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependent on the fields that are retrieved */
+		readonly "@odata.etag": string;
+		/** Unique identifier of the active stage for the Business Process Flow instance. */
+		ActiveStageId: string | null;
+		/** Date and time when current active stage is started. */
+		ActiveStageStartedOn_UtcDateOnly: Date | null;
+		/** Unique identifier for Translation Process bpf entity instances */
+		BusinessProcessFlowInstanceId: string | null;
+		/** Date and time when Business Process Flow instance is completed. */
+		CompletedOn_UtcDateOnly: Date | null;
+		/** Shows who created the record. */
+		readonly CreatedBy: string | null;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+		readonly CreatedOn_UtcDateAndTime: Date | null;
+		/** Shows who created the record on behalf of another user. */
+		readonly CreatedOnBehalfBy: string | null;
+		/** Duration between completed on and started on, used by business process flow. */
+		readonly Duration: number | null;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		readonly ExchangeRate: number | null;
+		/** Unique identifier of the data import or data migration that created this record. */
+		ImportSequenceNumber: number | null;
+		/** Unique identifier of the workflow associated to the Business Process Flow instance. */
+		KnowledgeArticleId: string | null;
+		/** Shows who last updated the record. */
+		readonly ModifiedBy: string | null;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+		readonly ModifiedOn_UtcDateAndTime: Date | null;
+		/** Shows who last updated the record on behalf of another user. */
+		readonly ModifiedOnBehalfBy: string | null;
+		/** Process Name. */
+		Name: string | null;
+		/** Unique identifier of the organization with which the SDK message request is associated. */
+		readonly OrganizationId: string | null;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: Date | null;
+		/** Unique identifier of the workflow associated to the Business Process Flow instance. */
+		ProcessId: string | null;
+		/** Shows whether the Delve action record is pending, completed, or tracking. */
+		StateCode: OptionSet.TranslationProcess.StateCode | null;
+		/** Select the delve action record status. */
+		StatusCode: OptionSet.TranslationProcess.StatusCode | null;
+		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+		TransactionCurrencyId: string | null;
+		/** Traversed Path */
+		TraversedPath: string | null;
+		/** Version number of the business process instance. */
+		readonly VersionNumber: number | null;
+		/**
+		* Formatted values for all fields
+		* Contains the display-formatted values for fields that have formatting applied
+		*/
+		readonly FormattedValue: {
+			/** Unique identifier of the active stage for the Business Process Flow instance. */
+			readonly ActiveStageId: string;
+			/** Date and time when current active stage is started. */
+			readonly ActiveStageStartedOn_UtcDateOnly: string;
+			/** Unique identifier for Translation Process bpf entity instances */
+			readonly BusinessProcessFlowInstanceId: string;
+			/** Date and time when Business Process Flow instance is completed. */
+			readonly CompletedOn_UtcDateOnly: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Duration between completed on and started on, used by business process flow. */
+			readonly Duration: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Unique identifier of the workflow associated to the Business Process Flow instance. */
+			readonly KnowledgeArticleId: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics CRM options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Process Name. */
+			readonly Name: string;
+			/** Unique identifier of the organization with which the SDK message request is associated. */
+			readonly OrganizationId: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Unique identifier of the workflow associated to the Business Process Flow instance. */
+			readonly ProcessId: string;
+			/** Shows whether the Delve action record is pending, completed, or tracking. */
+			readonly StateCode: string;
+			/** Select the delve action record status. */
+			readonly StatusCode: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** Traversed Path */
+			readonly TraversedPath: string;
+			/** Version number of the business process instance. */
+			readonly VersionNumber: string;
+		}
+	}
+}
+declare namespace OptionSet {
+	namespace TranslationProcess {
+		enum StateCode {
+			/** Active = 0*/
+			Active = 0,
+			/** Inactive = 1*/
+			Inactive = 1
+		}
+		enum StatusCode {
+			/** Aborted = 3*/
+			Aborted = 3,
+			/** Active = 1*/
+			Active = 1,
+			/** Finished = 2*/
+			Finished = 2
+		}
+		enum RollupState {
+			/** NotCalculated = 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** Calculated = 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** OverflowError = 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** OtherError = 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** RetryLimitExceeded = 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** HierarchicalRecursionLimitReached = 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** LoopDetected = 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
+	}
+}

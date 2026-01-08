@@ -32,6 +32,10 @@
 	  <None Remove="Nuget\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Remove="DynamicsCrm.DevKit.Cli.code-workspace" />
+	  <None Remove="DynamicsCrm.DevKit.Cli.TsForm.code-workspace" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Content Include="icon.ico" />
 	</ItemGroup>
 	<PropertyGroup>

@@ -1,0 +1,298 @@
+﻿//@ts-check
+///<reference path="devkit.d.ts" />
+declare namespace DevKit {
+	namespace Formmsdyn_slakpi_Information {
+		interface tab_General_Sections {
+			/** Pause Conditions */
+			PauseConfiguration: DevKit.Controls.Section;
+		}
+		/** General */
+		interface tab_General extends DevKit.Controls.ITab {
+			Section: tab_General_Sections;
+		}
+		interface Tabs {
+			/** General */
+			General: tab_General;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Override entity pause configurations? */
+			msdyn_AdvancedPauseConfiguration: DevKit.Controls.Boolean;
+			/** Applicable From */
+			msdyn_ApplicableFromField: DevKit.Controls.String;
+			/** Entity */
+			msdyn_EntityName: DevKit.Controls.String;
+			/** KPI Field */
+			msdyn_KPIField: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			msdyn_pauseconfigurationxml: DevKit.Controls.ActionCards;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			: DevKit.Controls.ELSE3???;//WebResource_preview - 6DC0B71D-E1F9-4118-8347-1CF35C38954D -- FOR DEBUG 
+			WebResource_preview: DevKit.Controls.WebResource;
+		}
+	}
+	export class Formmsdyn_slakpi_Information extends DevKit.IForm {
+		/**
+		* Information [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form msdyn_slakpi_Information */
+		Body: DevKit.Formmsdyn_slakpi_Information.Body;
+	}
+	namespace Formmsdyn_slakpi_New_Form {
+		interface tab_tab_1_Sections {
+			/** Pause Conditions */
+			PauseConfiguration: DevKit.Controls.Section;
+			/** section */
+			tab_1_column_1_section_1: DevKit.Controls.Section;
+			/** section */
+			tab_1_column_2_section_1: DevKit.Controls.Section;
+			/** section */
+			tab_1_column_3_section_1: DevKit.Controls.Section;
+		}
+		/** Tab */
+		interface tab_tab_1 extends DevKit.Controls.ITab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			/** Tab */
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			msdyn_advancedpauseconfiguration: DevKit.Controls.ELSE3???;//msdyn_advancedpauseconfiguration - 67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5EE -- FOR DEBUG 
+			/** Applicable From */
+			msdyn_ApplicableFromField: DevKit.Controls.String;
+			/** Entity */
+			msdyn_EntityName: DevKit.Controls.String;
+			/** KPI Field */
+			msdyn_KPIField: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Controls.String;
+			msdyn_pauseconfigurationxml: DevKit.Controls.ELSE3???;//msdyn_pauseconfigurationxml - F9A8A302-114E-466A-B582-6771B2AE0D93 -- FOR DEBUG 
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			: DevKit.Controls.ELSE3???;//WebResource_preview - 6E4367D6-894A-42A1-BD75-BAE93B2F823D -- FOR DEBUG 
+			: DevKit.Controls.ELSE3???;//WebResource_preview - 9FDF5F91-88B1-47F4-AD53-C11EFC01A01E -- FOR DEBUG 
+		}
+	}
+	export class Formmsdyn_slakpi_New_Form extends DevKit.IForm {
+		/**
+		* New Form [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form msdyn_slakpi_New_Form */
+		Body: DevKit.Formmsdyn_slakpi_New_Form.Body;
+	}
+	export class msdyn_slakpiApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_slakpiApi
+		* @param entity The entity object from OData response
+		*/
+		constructor(entity?: Record<string, any>)
+		/**
+		 * Get the raw value of an aliased field
+		 * @param alias The alias field name
+		 * @param isMultiOptionSet True if the field is a multi-option set
+		 * @returns The raw value or null if not found
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of an aliased field
+		 * @param alias The alias field name
+		 * @param isMultiOptionSet True if the field is a multi-option set
+		 * @returns The formatted value or empty string if not found
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
+		/** The entity object for Create/Update operations*/
+		readonly Entity: Record<string, any>;
+		/** The OData entity object containing raw data*/
+		readonly ODataEntity: Record<string, any>;
+		/** The entity name */
+		readonly EntityName: string;
+		/** The entity collection name */
+		readonly EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependent on the fields that are retrieved */
+		readonly "@odata.etag": string;
+		/** For internal use only. */
+		readonly ComponentIdUnique: string | null;
+		/** For internal use only. */
+		readonly ComponentState: OptionSet.msdyn_slakpi.ComponentState | null;
+		/** Unique identifier of the user who created the record. */
+		readonly CreatedBy: string | null;
+		/** Date and time when the record was created. */
+		readonly CreatedOn_UtcDateAndTime: Date | null;
+		/** Unique identifier of the delegate user who created the record. */
+		readonly CreatedOnBehalfBy: string | null;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: number | null;
+		/** For internal use only. */
+		IsCustomizable: string | null;
+		/** Indicates whether the solution component is part of a managed solution. */
+		readonly IsManaged: boolean | null;
+		/** Unique identifier of the user who modified the record. */
+		readonly ModifiedBy: string | null;
+		/** Date and time when the record was modified. */
+		readonly ModifiedOn_UtcDateAndTime: Date | null;
+		/** Unique identifier of the delegate user who modified the record. */
+		readonly ModifiedOnBehalfBy: string | null;
+		msdyn_AdvancedPauseConfiguration: boolean | null;
+		msdyn_ApplicableFromDisplayName: string | null;
+		msdyn_ApplicableFromField: string | null;
+		msdyn_Description: string | null;
+		msdyn_EntityDisplayName: string | null;
+		msdyn_EntityName: string | null;
+		msdyn_KPIField: string | null;
+		/** The name of the custom entity. */
+		msdyn_name: string | null;
+		msdyn_PauseConfigurationXml: string | null;
+		/** Unique identifier for entity instances */
+		msdyn_slakpiId: string | null;
+		msdyn_WorkflowInfo: string | null;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: Date | null;
+		/** For internal use only. */
+		readonly OverwriteTime_UtcDateAndTime: Date | null;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: string | null;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: string | null;
+		/** Unique identifier for the business unit that owns the record */
+		readonly OwningBusinessUnit: string | null;
+		/** Unique identifier for the team that owns the record. */
+		readonly OwningTeam: string | null;
+		/** Unique identifier for the user that owns the record. */
+		readonly OwningUser: string | null;
+		/** Unique identifier of the associated solution. */
+		readonly SolutionId: string | null;
+		/** Status of the SLAKPI */
+		statecode: OptionSet.msdyn_slakpi.statecode | null;
+		/** Reason for the status of the SLAKPI */
+		statuscode: OptionSet.msdyn_slakpi.statuscode | null;
+		/** For internal use only. */
+		readonly SupportingSolutionId: string | null;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: number | null;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: number | null;
+		/** Version Number */
+		readonly VersionNumber: number | null;
+		/**
+		* Formatted values for all fields
+		* Contains the display-formatted values for fields that have formatting applied
+		*/
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ComponentIdUnique: string;
+			/** For internal use only. */
+			readonly ComponentState: string;
+			/** Unique identifier of the user who created the record. */
+			readonly CreatedBy: string;
+			/** Date and time when the record was created. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who created the record. */
+			readonly CreatedOnBehalfBy: string;
+			/** Sequence number of the import that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** For internal use only. */
+			readonly IsCustomizable: string;
+			/** Indicates whether the solution component is part of a managed solution. */
+			readonly IsManaged: string;
+			/** Unique identifier of the user who modified the record. */
+			readonly ModifiedBy: string;
+			/** Date and time when the record was modified. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Unique identifier of the delegate user who modified the record. */
+			readonly ModifiedOnBehalfBy: string;
+			readonly msdyn_AdvancedPauseConfiguration: string;
+			readonly msdyn_ApplicableFromDisplayName: string;
+			readonly msdyn_ApplicableFromField: string;
+			readonly msdyn_Description: string;
+			readonly msdyn_EntityDisplayName: string;
+			readonly msdyn_EntityName: string;
+			readonly msdyn_KPIField: string;
+			/** The name of the custom entity. */
+			readonly msdyn_name: string;
+			readonly msdyn_PauseConfigurationXml: string;
+			/** Unique identifier for entity instances */
+			readonly msdyn_slakpiId: string;
+			readonly msdyn_WorkflowInfo: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** For internal use only. */
+			readonly OverwriteTime_UtcDateAndTime: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier for the business unit that owns the record */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier for the team that owns the record. */
+			readonly OwningTeam: string;
+			/** Unique identifier for the user that owns the record. */
+			readonly OwningUser: string;
+			/** Unique identifier of the associated solution. */
+			readonly SolutionId: string;
+			/** Status of the SLAKPI */
+			readonly statecode: string;
+			/** Reason for the status of the SLAKPI */
+			readonly statuscode: string;
+			/** For internal use only. */
+			readonly SupportingSolutionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version Number */
+			readonly VersionNumber: string;
+		}
+	}
+}
+declare namespace OptionSet {
+	namespace msdyn_slakpi {
+		enum ComponentState {
+			/** Deleted = 2*/
+			Deleted = 2,
+			/** Deleted_Unpublished = 3*/
+			Deleted_Unpublished = 3,
+			/** Published = 0*/
+			Published = 0,
+			/** Unpublished = 1*/
+			Unpublished = 1
+		}
+		enum statecode {
+			/** Active = 1*/
+			Active = 1,
+			/** Inactive = 0*/
+			Inactive = 0
+		}
+		enum statuscode {
+			/** Active = 2*/
+			Active = 2,
+			/** Inactive = 1*/
+			Inactive = 1
+		}
+		enum RollupState {
+			/** NotCalculated = 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** Calculated = 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** OverflowError = 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** OtherError = 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** RetryLimitExceeded = 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** HierarchicalRecursionLimitReached = 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** LoopDetected = 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
+	}
+}

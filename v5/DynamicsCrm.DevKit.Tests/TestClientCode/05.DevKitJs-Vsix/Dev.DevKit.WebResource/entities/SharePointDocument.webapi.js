@@ -1,0 +1,197 @@
+﻿'use strict';
+/** @namespace DevKit */
+var DevKit;
+(function (DevKit) {
+	DevKit.SharePointDocumentApi = function (e) {
+		const f = '@OData.Community.Display.V1.FormattedValue';
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
+			const l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			const getFormattedValue = function () {
+				if (entity?.[logicalName + f] === undefined || entity?.[logicalName + f] === null) {
+					return '';
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity?.[logicalName + l] === entityLogicalName) {
+						return entity?.[logicalName + f];
+					}
+					return '';
+				}
+				if (type === 'MultiOptionSet') {
+					return entity?.[logicalName + f]?.toString()?.split(';').map(function (item) { return item?.trim(); });
+				}
+				return entity?.[logicalName + f];
+			};
+			const getValue = function () {
+				if (entity?.[logicalName] === undefined || entity?.[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity?.[logicalName + l] === undefined || entity?.[logicalName + l] === entityLogicalName) {
+						return returnGet(entity?.[logicalName], type);
+					}
+					return null;
+				}
+				if (type === 'MultiOptionSet') {
+					return entity?.[logicalName]?.toString()?.split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return returnGet(entity?.[logicalName], type);
+			};
+			const returnGet = function (data, type) {
+				if (data === null || data === undefined) return null;
+				if (type === null || type === undefined) return data;
+				const typeParsers = {
+					DateTime: function (value) {
+						if (value === null || value === undefined) return null;
+						if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+						const trimmedString = String(value).trim();
+						if (trimmedString === '') return null;
+						const timestamp = Date.parse(trimmedString);
+						if (isNaN(timestamp)) return null;
+						const parsedDate = new Date(timestamp);
+						return isNaN(parsedDate.getTime()) ? null : parsedDate;
+					},
+					Integer: function (value) {
+						const parsed = parseInt(value, 10);
+						return isNaN(parsed) ? null : parsed;
+					},
+					Number: function (value) {
+						const parsed = Number(value);
+						return isNaN(parsed) ? null : parsed;
+					},
+					Boolean: function (value) {
+						if (value === null || value === undefined) return null;
+						if (typeof value === 'boolean') return value;
+						if (typeof value === 'number') return value !== 0;
+						const stringValue = String(value).trim().toLowerCase();
+						const trueValues = ["true", "1", "yes", "y"];
+						const falseValues = ["false", "0", "no", "n"];
+						if (trueValues.includes(stringValue)) return true;
+						if (falseValues.includes(stringValue)) return false;
+						return false;
+					}
+				};
+				const parser = typeParsers[type];
+				return parser ? parser(data) : data;
+			};
+			const setValue = function (value) {
+				if (type === 'MultiOptionSet') value = value?.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName?.length > 0) {
+					if (value === null) {
+						upsertEntity[schemaName + '@odata.bind'] = null;
+					}
+					else {
+						const cleanValue = typeof value === 'string' ? value.replace(/[{}]/g, '') : value;
+						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + cleanValue + ')';
+					}
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(obj.FormattedValue, field, {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(obj, field, {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(obj, field, {
+					get: getValue,
+					set: setValue
+				});
+			}
+		}
+		const _sharepointdocument = {
+			AbsoluteUrl: { a: 'absoluteurl', r: true },
+			AppCreatedBy: { a: 'appcreatedby', r: true },
+			AppModifiedBy: { a: 'appmodifiedby', r: true },
+			Author: { a: 'author' },
+			BusinessUnitId: { b: 'businessunitid', a: '_businessunitid_value', c: 'businessunits', d: 'businessunit' },
+			CheckedOutTo: { a: 'checkedoutto', r: true },
+			CheckInComment: { a: 'checkincomment', r: true },
+			ChildFolderCount: { a: 'childfoldercount', r: true, g: 'Integer' },
+			ChildItemCount: { a: 'childitemcount', r: true, g: 'Integer' },
+			ContentType: { a: 'contenttype', r: true },
+			ContentTypeId: { a: 'contenttypeid', r: true, g: 'Integer' },
+			CopySource: { a: 'copysource', r: true },
+			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
+			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true, g: 'DateTime' },
+			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			DocumentId: { a: 'documentid', r: true, g: 'Integer' },
+			DocumentLocationType: { a: 'documentlocationtype', r: true, g: 'Integer' },
+			Edit: { a: 'edit', r: true },
+			EditUrl: { a: 'editurl', r: true },
+			ExchangeRate: { a: 'exchangerate', r: true, g: 'Number' },
+			FileSize: { a: 'filesize', r: true, g: 'Integer' },
+			FileType: { a: 'filetype', r: true },
+			FullName: { a: 'fullname', r: true },
+			IconClassName: { a: 'iconclassname', r: true },
+			IsCheckedOut: { a: 'ischeckedout', r: true, g: 'Boolean' },
+			IsFolder: { a: 'isfolder', r: true, g: 'Boolean' },
+			IsRecursiveFetch: { a: 'isrecursivefetch', r: true, g: 'Boolean' },
+			LocationId: { a: 'locationid', r: true },
+			LocationName: { a: 'locationname', r: true },
+			Modified_UtcDateAndTime: { a: 'modified', r: true, g: 'DateTime' },
+			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
+			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true, g: 'DateTime' },
+			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
+			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
+			ReadUrl: { a: 'readurl', r: true },
+			RelativeLocation: { a: 'relativelocation', r: true },
+			ServiceType: { a: 'servicetype', g: 'Integer' },
+			SharePointCreatedOn_UtcDateAndTime: { a: 'sharepointcreatedon', r: true, g: 'DateTime' },
+			SharePointDocumentId: { a: 'sharepointdocumentid' },
+			SharePointModifiedBy: { a: 'sharepointmodifiedby', r: true },
+			Title: { a: 'title', r: true },
+			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', c: 'transactioncurrencies', d: 'transactioncurrency', r: true },
+			Version: { a: 'version', r: true }
+		};
+		if (e === undefined) e = {};
+		const u = {};
+		const sharepointdocument = {};
+		sharepointdocument.ODataEntity = e;
+		sharepointdocument.FormattedValue = {};
+		for (const field in _sharepointdocument) {
+			const fieldConfig = _sharepointdocument[field];
+			webApiField(sharepointdocument, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);
+		}
+		sharepointdocument.Entity = u;
+		sharepointdocument.EntityName = 'sharepointdocument';
+		sharepointdocument.EntityCollectionName = 'sharepointdocuments';
+		sharepointdocument['@odata.etag'] = e?.['@odata.etag'];
+		sharepointdocument.getAliasedValue = function (alias, isMultiOptionSet = false) {
+			if (e?.[alias] === undefined || e?.[alias] === null) {
+				return null;
+			}
+			if (isMultiOptionSet) {
+				return e?.[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+			}
+			return e?.[alias];
+		};
+		sharepointdocument.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
+			if (e?.[alias + f] === undefined || e?.[alias + f] === null) {
+				return '';
+			}
+			if (isMultiOptionSet) {
+				return e?.[alias + f]?.toString()?.split(';').map(function (item) { return item?.trim(); });
+			}
+			return e?.[alias + f];
+		};
+		return sharepointdocument;
+	};
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.SharePointDocument = {
+		DocumentLocationType: { Dedicated_for_OneNote_Integration: 1, General: 0 },
+		RegardingObjectTypeCode: { },
+		ServiceType: { MS_Teams: 3, OneDrive: 1, Shared_with_me: 2, SharePoint: 0 },
+		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+	};
+})(OptionSet || (OptionSet = {}));

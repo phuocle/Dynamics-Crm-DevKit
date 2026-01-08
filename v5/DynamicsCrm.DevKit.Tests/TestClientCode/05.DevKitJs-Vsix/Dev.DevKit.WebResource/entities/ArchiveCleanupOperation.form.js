@@ -1,0 +1,29 @@
+﻿'use strict';
+/** @namespace DevKit */
+var DevKit;
+(function (DevKit) {
+	'use strict';
+	DevKit.FormArchiveCleanupOperation_Information = function(executionContext, defaultWebResourceName) {
+		const form = {
+			body: ["Name", "OwnerId"],
+			bpf: [],
+			dialog: [],
+			grid: [],
+			header: [],
+			navigation: [],
+			quick: [],
+			tab: []
+		};
+		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
+	};
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.ArchiveCleanupOperation = {
+		OperationName: { Purge: 10, Reconcile: 20 },
+		statecode: { Completed: 2, InProgress: 1, Waiting: 0 },
+		statuscode: { Failed: 31, InProgress: 20, PartialRecordsIdentified: 33, Scheduled: 10, Succeeded: 30 },
+		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+	};
+})(OptionSet || (OptionSet = {}));

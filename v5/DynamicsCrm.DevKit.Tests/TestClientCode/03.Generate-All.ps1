@@ -23,16 +23,19 @@ if (-not (Test-Path $cliPath)) {
 
 $connectionString = "AuthType=ClientSecret;Url=https://dynamics-crm-devkit-v4.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ;"
 
-# Clean up specific files before generation
-$filesToDelete = @(
-    "06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities\Account.ts",
-    "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities\Account.js"
+# Clean up all generated files before generation
+$foldersToClean = @(
+    "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities",
+    "06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities"
 )
 
-foreach ($file in $filesToDelete) {
-    if (Test-Path $file) {
-        Write-Host "Deleting $file..." -ForegroundColor Yellow
-        Remove-Item $file -Force
+foreach ($folder in $foldersToClean) {
+    if (Test-Path $folder) {
+        Write-Host "Cleaning $folder..." -ForegroundColor Yellow
+        Get-ChildItem -Path $folder -Include "*.js", "*.ts", "*.d.ts" -Recurse | Where-Object { $_.Name -ne "devkit.d.ts" } | ForEach-Object {
+            Write-Host "  Deleting $($_.Name)..." -ForegroundColor Gray
+            Remove-Item $_.FullName -Force
+        }
     }
 }
 

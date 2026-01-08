@@ -271,6 +271,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
                     var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+
+                    // Skip if no forms exist for this entity
+                    if (string.IsNullOrEmpty(newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.DarkGray, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}", ConsoleColor.DarkGray, " (no forms)");
+                        i++;
+                        continue;
+                    }
+
                     if (!File.Exists(file))
                     {
                         await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));

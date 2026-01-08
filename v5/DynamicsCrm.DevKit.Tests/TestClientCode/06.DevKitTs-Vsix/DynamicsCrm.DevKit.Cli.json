@@ -90,14 +90,14 @@
       "type": "TsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "Account,Contact"
+      "entities": "*"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "Account,Contact"
+      "entities": "*"
     }
   ],
   "downloadwebresources": [

@@ -177,7 +177,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                 {
                                     foreach (var entityLogicalName in lookup.Targets.Distinct())
                                     {
-                                        var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                        var navigation = EntityMetadata.ManyToOneRelationships?.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
                                         {
                                             var temp = $"{TAB}{TAB}{@readonly}{Helper.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string | null;{NEW_LINE}";
@@ -344,7 +344,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                                 {
                                     foreach (var entityLogicalName in lookup.Targets.Distinct())
                                     {
-                                        var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                        var navigation = EntityMetadata.ManyToOneRelationships?.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
                                         {
                                             var temp = $"{TAB}{TAB}{TAB}{@readonly}{Helper.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, GeneratorType.jswebapi, EntityMetadata.SchemaName, attribute)}: string;{NEW_LINE}";

@@ -172,7 +172,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         {
                             foreach (var entityLogicalName in lookup.Targets.Distinct())
                             {
-                                var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                var navigation = EntityMetadata.ManyToOneRelationships?.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
                                 await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, entityLogicalName);
                                 var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName)?.LogicalCollectionName}'";
