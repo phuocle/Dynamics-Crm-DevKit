@@ -26,28 +26,3 @@ description: Run Cli
 
 ## KHÔNG LÀM
 - Đây là run cli, chỉ cần run, không cần làm bất cứ điều gì khác
-
-## CRITICAL: CÁCH RUN CLI ĐÚNG CÁCH (TRÁNH APP HANG) ##
-> [!CAUTION]
-> **KHÔNG BAO GIỜ** sử dụng `command_status` để theo dõi CLI command!
-
-**Quy tắc bắt buộc:**
-1. Chạy CLI với `WaitMsBeforeAsync=60000` (60 giây đủ để CLI hoàn thành)
-2. **KHÔNG** sử dụng background command cho CLI
-3. **KHÔNG** gọi `command_status` sau khi chạy CLI
-4. Nếu CLI trả về `Background command ID:`, đó là dấu hiệu hang - KHÔNG gọi `command_status`
-5. Sau khi run CLI, chờ output trực tiếp từ `run_command` - KHÔNG poll thêm
-
-**VÍ DỤ ĐÚNG (CLI build):**
-run_command: CommandLine: & "C:...\MSBuild.exe" DynamicsCrm.DevKit.Cli.csproj ... WaitMsBeforeAsync: 60000 SafeToAutoRun: true
-
-**VÍ DỤ ĐÚNG (CLI run profile):**
-run_command: CommandLine: D:...\DynamicsCrm.DevKit.Cli.exe /conn:... /json:... /type:... /profile:... Cwd: <workingDirectory từ launchSettings.json> WaitMsBeforeAsync: 60000 SafeToAutoRun: true
-
-
-**VÍ DỤ SAI (gây hang):**
-run_command -> trả về CommandId command_status(CommandId) -> HANG VÔ TẬN!
-
-
-> [!IMPORTANT]
-> Nếu CLI chạy quá 60 giây và bị timeout, tăng `WaitMsBeforeAsync` lên 120000 (2 phút) hoặc xem xét network/Dataverse connection issue.

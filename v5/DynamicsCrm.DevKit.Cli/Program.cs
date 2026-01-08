@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void ShowHelp(bool showParam = false)
         {
-            var helpColor = ConsoleColor.White;
+            var helpColor = ConsoleColor.Blue;
             var colorBox = ConsoleColor.Green;
             CliLog.SetupCliLog();
             CliLog.Write(colorBox, "╔");
@@ -50,11 +50,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.Write(colorBox, " ╚");
             CliLog.Write(colorBox, new string('═', 112));
             CliLog.Write(colorBox, "╝");
-            CliLog.WriteLine();
-            //CliLog.WriteLine(ConsoleColor.White, "|");
-            //if (showParam)
-            //{
-            //}
+            CliLog.WriteLine(colorBox);
         }
 
         static async Task RunCliAsync(CommandLineArgs arguments)
@@ -64,10 +60,6 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 await CliTask.RunAsync(arguments);
             }
-            //CliLog.WriteLine(ConsoleColor.White, "|");
-//#if DEBUG
-//            //Console.ReadKey();
-//#endif
         }
 
         private static async Task<bool> IsValidAsync(CommandLineArgs arguments)
