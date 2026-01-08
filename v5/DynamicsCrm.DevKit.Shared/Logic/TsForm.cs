@@ -106,10 +106,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         public static async Task<string> GetTsFormCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
         {
-#if DEBUG
-            var stopwatch = Stopwatch.StartNew();
-            Console.WriteLine($"[TsForm] START: {entityMetadata.LogicalName}");
-#endif
+
             FormNames = new List<string>();
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
@@ -189,10 +186,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Close entity namespace
             code.AppendLine("}");
 
-#if DEBUG
-            stopwatch.Stop();
-            Console.WriteLine($"[TsForm] END: {EntityMetadata.LogicalName} - {stopwatch.ElapsedMilliseconds}ms");
-#endif
+
 
             return code.ToString();
         }
@@ -261,10 +255,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var code = new StringBuilder();
 
-#if DEBUG
-            var sw = Stopwatch.StartNew();
-            Console.WriteLine($"{TAB}[MainForm] START: {safeName}");
-#endif
+
 
             // Start nested namespace for interfaces (e.g., Account.Account_DevKitV4)
             code.AppendLine($"{TAB}// ========================================================================");
@@ -283,10 +274,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var bodyFields = GetBodyFields(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] BodyFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Collect fields for aggregate Form (add if not already present)
             foreach (var field in bodyFields)
@@ -320,10 +308,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var headerFields = GetHeaderFields(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] HeaderFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Collect fields for aggregate Form
             foreach (var field in headerFields)
@@ -351,18 +336,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate Tabs interfaces (with extra indentation for nested namespace)
             code.Append(GetTabsInterfacesNested(form.FormXml));
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] TabsInterfaces: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Aggregate tabs
             var tabInfos = GetTabInfos(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] TabInfos: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
             foreach (var tab in tabInfos)
             {
                 if (!AggregateTabInfos.ContainsKey(tab.Name))
@@ -391,10 +370,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var gridFields = GetGridFields(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] GridFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Collect grid fields for aggregate Form
             foreach (var field in gridFields)
@@ -427,10 +403,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var navigationFields = GetNavigationFields(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] NavigationFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Collect navigation fields for aggregate Form
             foreach (var nav in navigationFields)
@@ -457,10 +430,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate IQuickForm interface
             var quickFormFields = await GetQuickFormFieldsAsync(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] QuickFormFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Collect quickform fields for aggregate Form
             foreach (var qf in quickFormFields)
@@ -512,10 +482,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate IProcess interface
             // var processFields = await GetProcessFieldsAsync();
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] ProcessFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
 
             // Collect process fields for aggregate Form
             foreach (var process in processFields)
@@ -588,10 +555,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var dialogFields = GetDialogFields(form.FormXml);
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] DialogFields: {sw.ElapsedMilliseconds}ms");
-            sw.Restart();
-#endif
+
             foreach (var field in dialogFields)
             {
                 code.AppendLine($"{TAB3}/** {field} field for dialog */");
@@ -607,10 +571,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate Form class at entity namespace level (using declaration merging)
             code.Append(await GetFormClassAsync(safeName, form.FormXml, false, processFields));
 
-#if DEBUG
-            Console.WriteLine($"{TAB}[MainForm] FormClass: {sw.ElapsedMilliseconds}ms");
-            sw.Stop();
-#endif
+
             code.AppendLine();
 
             return code.ToString();
