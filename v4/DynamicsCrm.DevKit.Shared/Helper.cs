@@ -77,9 +77,45 @@ namespace DynamicsCrm.DevKit.Shared
             if (value1 == null && value2 == null) return true;
             if (value1 != null && value2 == null) return false;
             if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
+            // Optimized version avoids multiple allocations from chained Replace calls
+            value1 = NormalizeString(value1);
+            value2 = NormalizeString(value2);
             return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NormalizeString(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value?.Trim();
+
+            var sb = new StringBuilder(value.Length);
+            bool lastWasCR = false;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                char c = value[i];
+                if (c == '\r')
+                {
+                    lastWasCR = true;
+                    continue;
+                }
+                if (c == '\n')
+                {
+                    if (lastWasCR)
+                    {
+                        lastWasCR = false;
+                        continue;
+                    }
+                }
+                else
+                {
+                    lastWasCR = false;
+                }
+
+                if (c == '\t' || c == ' ') continue;
+
+                sb.Append(c);
+            }
+            return sb.ToString().Trim();
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
@@ -104,13 +140,14 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetIdentifier(string name)
         {
-            var value = string.Empty;
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            var sb = new StringBuilder(name.Length);
             for (int i = 0; i < name.Length; ++i)
             {
                 if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
-                    value += name[i];
+                    sb.Append(name[i]);
             }
-            return value;
+            return sb.ToString();
         }
 
         public static string SafeIdentifier(string name)
