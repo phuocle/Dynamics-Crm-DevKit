@@ -693,6 +693,44 @@ const Email = {
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
 
+/** SystemUser entity OptionSets */
+const SystemUser = {
+	/** Access Mode */
+	AccessMode: { Administrative: 1, Delegated_Admin: 5, Non_interactive: 4, Read: 2, Read_Write: 0, Support_User: 3 },
+	/** Address 1: Address Type */
+	Address1_AddressTypeCode: { Default_Value: 1 },
+	/** Address 1: Shipping Method */
+	Address1_ShippingMethodCode: { Default_Value: 1 },
+	/** Address 2: Address Type */
+	Address2_AddressTypeCode: { Default_Value: 1 },
+	/** Address 2: Shipping Method */
+	Address2_ShippingMethodCode: { Default_Value: 1 },
+	/** Azure State */
+	AzureState: { Exists: 0, Not_found_or_hard_deleted: 2, Soft_deleted: 1 },
+	/** License Type */
+	CALType: { Administrative: 1, Basic: 2, Device_Basic: 4, Device_Enterprise: 8, Device_Essential: 6, Device_Professional: 3, Enterprise: 7, Essential: 5, Field_Service: 11, Professional: 0, Project_Service: 12, Sales: 9, Service: 10 },
+	/** Deleted State */
+	DeletedState: { Not_deleted: 0, Soft_deleted: 1 },
+	/** Primary Email Status */
+	EmailRouterAccessApproval: { Approved: 1, Empty: 0, Pending_Approval: 2, Rejected: 3 },
+	/** Incoming Email Delivery Method */
+	IncomingEmailDeliveryMethod: { Forward_Mailbox: 3, Microsoft_Dynamics_365_for_Outlook: 1, None: 0, Server_Side_Synchronization_or_Email_Router: 2 },
+	/** Invitation Status */
+	InviteStatusCode: { Invitation_Accepted: 4, Invitation_Expired: 3, Invitation_Near_Expired: 2, Invitation_Not_Sent: 0, Invitation_Rejected: 5, Invitation_Revoked: 6, Invited: 1 },
+	/** Outgoing Email Delivery Method */
+	OutgoingEmailDeliveryMethod: { Microsoft_Dynamics_365_for_Outlook: 1, None: 0, Server_Side_Synchronization_or_Email_Router: 2 },
+	/** Preferred Address */
+	PreferredAddressCode: { Mailing_Address: 1, Other_Address: 2 },
+	/** Preferred Email */
+	PreferredEmailCode: { Default_Value: 1 },
+	/** Preferred Phone */
+	PreferredPhoneCode: { Home_Phone: 3, Main_Phone: 1, Mobile_Phone: 4, Other_Phone: 2 },
+	/** System Managed User Type */
+	SystemManagedUserType: { Agentic_User: 3, C2_User: 1, Entra_User: 0, Impersonable_Stub_User: 2 },
+	/** Rollup State */
+	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+} as const;
+
 /** Task entity OptionSets */
 const Task = {
 	/** Activity Type */
@@ -766,6 +804,7 @@ export const OptionSet = {
 	ActivityParty,
 	Contact,
 	Email,
+	SystemUser,
 	Task,
 	Team
 } as const;

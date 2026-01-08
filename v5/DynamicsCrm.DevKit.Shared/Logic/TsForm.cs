@@ -162,18 +162,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"export namespace {entityMetadata.SchemaName} {{");
             code.AppendLine();
 
-            // Generate main forms (also collects aggregate fields)
-            foreach (var form in forms.Where(x => !x.IsQuickCreate))
-            {
-                code.Append(await GetMainFormTsCodeAsync(form));
-            }
+            var processFields = await GetProcessFieldsAsync();
 
-            // Generate quick create forms
-            foreach (var form in forms.Where(x => x.IsQuickCreate))
-            {
-                code.Append(await GetQuickCreateFormTsCodeAsync(form));
-            }
 
+            if (forms == null || forms.Count == 0)
+            {
+                return null;
+            }
+            foreach (var form in forms.OrderBy(x => x.FormType).ThenBy(x => x.Name))
+            {
+                if (form.FormType == FormType.QuickView)
+                {
+                    code.Append(await GetQuickCreateFormTsCodeAsync(form));
+                }
+                else
+                {
+                    code.Append(await GetMainFormTsCodeAsync(form, processFields));
+                }
+            }
             // Generate aggregate Form class (contains all unique fields from all main forms)
             if (forms.Any(x => !x.IsQuickCreate))
             {
@@ -240,20 +246,25 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate Form class at entity namespace level (using declaration merging)
-            code.Append(await GetFormClassAsync(safeName, form.FormXml, true));
+            code.Append(await GetFormClassAsync(safeName, form.FormXml, true, null));
             code.AppendLine();
 
             return code.ToString();
         }
 
 
-        private static async Task<string> GetMainFormTsCodeAsync(SystemForm form)
+        private static async Task<string> GetMainFormTsCodeAsync(SystemForm form, List<ProcessFields> processFields)
         {
             var formName = Helper.GetFormName(form.Name, EntityMetadata.SchemaName);
             formName = GetUniqueFormName(formName);
             var safeName = Helper.SafeIdentifier(formName);
 
             var code = new StringBuilder();
+
+#if DEBUG
+            var sw = Stopwatch.StartNew();
+            Console.WriteLine($"{TAB}[MainForm] START: {safeName}");
+#endif
 
             // Start nested namespace for interfaces (e.g., Account.Account_DevKitV4)
             code.AppendLine($"{TAB}// ========================================================================");
@@ -271,6 +282,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB2}export interface IBody {{");
 
             var bodyFields = GetBodyFields(form.FormXml);
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] BodyFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
 
             // Collect fields for aggregate Form (add if not already present)
             foreach (var field in bodyFields)
@@ -304,6 +320,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var headerFields = GetHeaderFields(form.FormXml);
 
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] HeaderFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
+
             // Collect fields for aggregate Form
             foreach (var field in headerFields)
             {
@@ -330,8 +351,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate Tabs interfaces (with extra indentation for nested namespace)
             code.Append(GetTabsInterfacesNested(form.FormXml));
 
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] TabsInterfaces: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
+
             // Aggregate tabs
             var tabInfos = GetTabInfos(form.FormXml);
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] TabInfos: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
             foreach (var tab in tabInfos)
             {
                 if (!AggregateTabInfos.ContainsKey(tab.Name))
@@ -359,6 +390,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB2}export interface IGrid {{");
 
             var gridFields = GetGridFields(form.FormXml);
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] GridFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
 
             // Collect grid fields for aggregate Form
             foreach (var field in gridFields)
@@ -391,6 +427,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             var navigationFields = GetNavigationFields(form.FormXml);
 
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] NavigationFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
+
             // Collect navigation fields for aggregate Form
             foreach (var nav in navigationFields)
             {
@@ -415,6 +456,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Generate IQuickForm interface
             var quickFormFields = await GetQuickFormFieldsAsync(form.FormXml);
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] QuickFormFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
 
             // Collect quickform fields for aggregate Form
             foreach (var qf in quickFormFields)
@@ -464,7 +510,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
 
             // Generate IProcess interface
-            var processFields = await GetProcessFieldsAsync();
+            // var processFields = await GetProcessFieldsAsync();
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] ProcessFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
 
             // Collect process fields for aggregate Form
             foreach (var process in processFields)
@@ -536,6 +587,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB2}export interface IDialog extends DevKit.IDialog {{");
 
             var dialogFields = GetDialogFields(form.FormXml);
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] DialogFields: {sw.ElapsedMilliseconds}ms");
+            sw.Restart();
+#endif
             foreach (var field in dialogFields)
             {
                 code.AppendLine($"{TAB3}/** {field} field for dialog */");
@@ -549,14 +605,19 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Generate Form class at entity namespace level (using declaration merging)
-            code.Append(await GetFormClassAsync(safeName, form.FormXml, false));
+            code.Append(await GetFormClassAsync(safeName, form.FormXml, false, processFields));
+
+#if DEBUG
+            Console.WriteLine($"{TAB}[MainForm] FormClass: {sw.ElapsedMilliseconds}ms");
+            sw.Stop();
+#endif
             code.AppendLine();
 
             return code.ToString();
         }
 
 
-        private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate)
+        private static async Task<string> GetFormClassAsync(string formName, string formXml, bool isQuickCreate, List<ProcessFields> processFields = null)
         {
             var code = new StringBuilder();
 
@@ -610,7 +671,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 code.AppendLine($"{TAB4}quick: [{string.Join(", ", quickArray.Select(x => $"'{x}'"))}],");
 
                 // BPF fields
-                var bpfArray = await GetBpfFieldNamesAsync();
+                var bpfArray = GetBpfFieldNames(processFields);
                 code.AppendLine($"{TAB4}bpf: [{string.Join(", ", bpfArray.Select(x => $"'{x}'"))}],");
 
                 // Dialog fields
@@ -1623,7 +1684,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var fieldInfo = new ProcessFieldInfo { Name = fieldLogicalName, DisplayName = null, Type = "String" };
 
-            var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == fieldLogicalName);
+            AttributesByLogicalName.TryGetValue(fieldLogicalName, out var crmAttribute);
             if (crmAttribute != null)
             {
                 fieldInfo.Name = Helper.SafeIdentifier(crmAttribute.SchemaName);
@@ -1849,65 +1910,42 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return fields;
         }
 
-        private static async Task<List<string>> GetBpfFieldNamesAsync()
+        private static List<string> GetBpfFieldNames(List<ProcessFields> processFields)
         {
             var fields = new List<string>();
-            await XrmHelper.EntitiesProcessForm.AddIfNotExistAsync(ServiceClient, EntityMetadata.LogicalName);
-            var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
+            if (processFields == null || processFields.Count == 0) return fields;
 
-            if (processes.Count() == 0) return fields;
-
-            foreach (var process in processes)
+            foreach (var process in processFields)
             {
-                var name = Helper.SafeIdentifier(process.Name);
-                var xdoc = XDocument.Parse(process.xaml);
-                var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
-                var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
-                            select new
-                            {
-                                DisplayName = x.Attribute("DisplayName")?.Value,
-                                InnerText = x.ToString()
-                            };
-
-                var processFields = new List<string>();
+                var processName = process.ProcessName;
                 var usedNames = new Dictionary<string, int>();
 
-                foreach (var row in rows2)
+                var currentProcessFields = new List<string>();
+
+                foreach (var fieldLogicalName in process.Fields)
                 {
-                    var arr = row.DisplayName.Split(' ');
-                    if (arr.Length == 1 || arr[1] != EntityMetadata.LogicalName) continue;
-                    const string pattern = @"DataFieldName=""([^""]+)""";
-                    foreach (Match m in Regex.Matches(row.InnerText, pattern))
+                    if (AttributesByLogicalName.TryGetValue(fieldLogicalName, out var crmAttribute))
                     {
-                        if (m.Groups.Count > 1)
+                        var schemaName = Helper.SafeIdentifier(crmAttribute.SchemaName);
+                        var fullBaseName = $"{processName}___{schemaName}";
+                        string outputName;
+
+                        if (usedNames.ContainsKey(fullBaseName))
                         {
-                            var fieldName = m.Groups[1].Value;
-                            var crmAttribute = EntityMetadata.Attributes.FirstOrDefault(x => x.LogicalName == fieldName);
-                            if (crmAttribute != null)
-                            {
-                                var schemaName = Helper.SafeIdentifier(crmAttribute.SchemaName);
-                                var fullBaseName = $"{name}___{schemaName}";
-                                string outputName;
-
-                                if (usedNames.ContainsKey(fullBaseName))
-                                {
-                                    usedNames[fullBaseName]++;
-                                    outputName = $"{fullBaseName}_{usedNames[fullBaseName]}";
-                                }
-                                else
-                                {
-                                    usedNames[fullBaseName] = 0;
-                                    outputName = fullBaseName;
-                                }
-
-                                processFields.Add(outputName);
-                            }
+                            usedNames[fullBaseName]++;
+                            outputName = $"{fullBaseName}_{usedNames[fullBaseName]}";
                         }
+                        else
+                        {
+                            usedNames[fullBaseName] = 0;
+                            outputName = fullBaseName;
+                        }
+
+                        currentProcessFields.Add(outputName);
                     }
                 }
-
-                processFields.Sort();
-                fields.AddRange(processFields);
+                currentProcessFields.Sort();
+                fields.AddRange(currentProcessFields);
             }
 
             return fields;

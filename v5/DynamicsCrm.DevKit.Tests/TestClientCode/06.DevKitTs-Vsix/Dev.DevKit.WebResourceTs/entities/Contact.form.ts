@@ -1127,31 +1127,37 @@ export namespace Contact {
 		 */
 		export interface IBody {
 			/** Type the city for the primary address. */
-			address1_city: DevKit.Controls.String;
+			Address1_City: DevKit.Controls.String;
 			/** Type the first line of the primary address. */
-			address1_line1: DevKit.Controls.String;
+			Address1_Line1: DevKit.Controls.String;
 			/** Type the second line of the primary address. */
-			address1_line2: DevKit.Controls.String;
+			Address1_Line2: DevKit.Controls.String;
 			/** Type the ZIP Code or postal code for the primary address. */
-			address1_postalcode: DevKit.Controls.String;
+			Address1_PostalCode: DevKit.Controls.String;
 			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
-			description: DevKit.Controls.Memo;
+			Description: DevKit.Controls.Memo;
 			/** Type the primary email address for the contact. */
-			emailaddress1: DevKit.Controls.String;
+			EMailAddress1: DevKit.Controls.String;
 			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			firstname: DevKit.Controls.String;
+			FirstName: DevKit.Controls.String;
 			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			jobtitle: DevKit.Controls.String;
+			JobTitle: DevKit.Controls.String;
 			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
-			lastname: DevKit.Controls.String;
+			LastName: DevKit.Controls.String;
 			/** Type the mobile phone number for the contact. */
-			mobilephone: DevKit.Controls.String;
+			MobilePhone: DevKit.Controls.String;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
-			parentcustomerid: DevKit.Controls.Lookup;
+			ParentCustomerId: DevKit.Controls.Lookup;
 			/** Type the main phone number for this contact. */
-			telephone1: DevKit.Controls.String;
-			/** Form Tabs */
+			Telephone1: DevKit.Controls.String;
 			Tab: ITabs;
+		}
+
+		/**
+		 * Header controls interface
+		 * Contains controls displayed in the form header
+		 */
+		export interface IHeader extends DevKit.Controls.IHeader {
 		}
 
 		export interface Itab_1TabSections {
@@ -1173,6 +1179,42 @@ export namespace Contact {
 			tab_1: Itab_1Tab;
 		}
 
+		/**
+		 * Grid controls interface
+		 * Contains all subgrid controls on the form
+		 */
+		export interface IGrid {
+		}
+
+		/**
+		 * Navigation interface
+		 * Contains navigation items
+		 */
+		export interface INavigation {
+			/** Activities */
+			navActivities: DevKit.Controls.NavigationItem;
+		}
+
+		/**
+		 * QuickForm interface
+		 * Contains quick view form controls
+		 */
+		export interface IQuickForm {
+		}
+
+		/**
+		 * Process interface
+		 * Contains business process flow definitions
+		 */
+		export interface IProcess extends DevKit.Controls.IProcess {
+		}
+
+		/**
+		 * Dialog interface
+		 * For quick create dialogs or other dialog forms
+		 */
+		export interface IDialog extends DevKit.IDialog {
+		}
 	}
 
 	/**
@@ -1180,7 +1222,7 @@ export namespace Contact {
 	 * Provides typed access to all form controls
 	 * Usage: new Contact.Contact_Quick_Create(executionContext)
 	 */
-	export class Contact_Quick_Create extends FormBase<Contact_Quick_Create.IBody, undefined, undefined, undefined, undefined, undefined, undefined> {
+	export class Contact_Quick_Create extends FormBase<Contact_Quick_Create.IBody, Contact_Quick_Create.IHeader, Contact_Quick_Create.IGrid, Contact_Quick_Create.INavigation, Contact_Quick_Create.IQuickForm, Contact_Quick_Create.IProcess, Contact_Quick_Create.IDialog> {
 		/**
 		 * Creates a Contact_Quick_Create Form instance
 		 * @param executionContext The execution context from form event
@@ -1192,7 +1234,7 @@ export namespace Contact {
 				header: [],
 				tab: ['tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1'],
 				grid: [],
-				navigation: [],
+				navigation: ['navActivities'],
 				quick: [],
 				bpf: [],
 				dialog: []
@@ -1435,7 +1477,7 @@ export namespace Contact {
 			super(executionContext, defaultWebResourceName, {
 				body: ['AccountRoleCode', 'ActionCards', 'Address1_AddressTypeCode', 'Address1_City', 'Address1_Composite', 'Address1_Country', 'Address1_FreightTermsCode', 'Address1_Line1', 'Address1_Line2', 'Address1_Line3', 'Address1_Name', 'Address1_PostalCode', 'Address1_ShippingMethodCode', 'Address1_StateOrProvince', 'Address1_Telephone1', 'adx_identity_accessfailedcount', 'adx_identity_emailaddress1confirmed', 'adx_identity_locallogindisabled', 'adx_identity_lockoutenabled', 'adx_identity_lockoutenddate', 'adx_identity_logonenabled', 'adx_identity_mobilephoneconfirmed', 'adx_identity_securitystamp', 'adx_identity_twofactorenabled', 'adx_identity_username', 'Adx_OrganizationName', 'adx_PublicProfileCopy', 'Adx_TimeZone', 'Anniversary', 'AssistantName', 'AssistantPhone', 'BirthDate', 'CreditLimit', 'CreditOnHold', 'Department', 'Description', 'DoNotBulkEMail', 'DoNotEMail', 'DoNotFax', 'DoNotPhone', 'DoNotPostalMail', 'EMailAddress1', 'FamilyStatusCode', 'Fax', 'FirstName', 'FollowEmail', 'FullName', 'GenderCode', 'JobTitle', 'LastName', 'ManagerName', 'ManagerPhone', 'mapcontrol', 'MiddleName', 'MobilePhone', 'mspp_userpreferredlcid', 'NickName', 'notescontrol', 'OwnerId', 'ParentCustomerId', 'PaymentTermsCode', 'PreferredContactMethodCode', 'PreferredContactMethodCode1', 'Salutation', 'SpousesName', 'Telephone1', 'Telephone2', 'TransactionCurrencyId', 'WebSiteUrl', 'YomiFirstName', 'YomiLastName'],
 				header: ['EMailAddress1', 'OwnerId', 'PreferredContactMethodCode'],
-				tab: ['administration___billing information', 'administration___contact methods', 'administration___internal information', 'details___personal information', 'details___professional information', 'DETAILS_TAB___billing information', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___PERSONAL INFORMATION', 'DETAILS_TAB___PERSONAL_NOTES_SECTION', 'DETAILS_TAB___shipping information', 'general___address', 'general___contact_webrole_section', 'general___description', 'general___name', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___CONTACT_INFORMATION', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_4', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_5'],
+				tab: ['administration___billing information', 'administration___contact methods', 'administration___internal information', 'details___personal information', 'details___professional information', 'DETAILS_TAB___billing information', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___PERSONAL INFORMATION', 'DETAILS_TAB___PERSONAL_NOTES_SECTION', 'DETAILS_TAB___shipping information', 'general___address', 'general___contact_webrole_section', 'general___description', 'general___name', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___CONTACT_INFORMATION', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_4', 'web authentication___{f0ef7388-9001-dd11-86da-0003ff48c0db}_section_5'],
 				grid: ['adx_externalidentity', 'contactactivitiesgrid', 'grid_contact_mspp_webrole'],
 				navigation: ['nav_adx_webrole_contact', 'nav_powerpagecomponent_mspp_webrole_contact', 'navActivities', 'navActivityHistory', 'navAddresses', 'navAsyncOperations', 'navInvoices', 'navOrders', 'navProcessSessions', 'navQuotes', 'navRelationships', 'navSubConts'],
 				quick: [],

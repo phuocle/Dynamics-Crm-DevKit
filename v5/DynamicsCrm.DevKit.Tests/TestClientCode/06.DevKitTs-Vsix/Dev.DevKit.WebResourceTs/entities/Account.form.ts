@@ -990,27 +990,33 @@ export namespace Account {
 		 */
 		export interface IBody {
 			/** Type the city for the primary address. */
-			address1_city: DevKit.Controls.String;
+			Address1_City: DevKit.Controls.String;
 			/** Type the first line of the primary address. */
-			address1_line1: DevKit.Controls.String;
+			Address1_Line1: DevKit.Controls.String;
 			/** Type the second line of the primary address. */
-			address1_line2: DevKit.Controls.String;
+			Address1_Line2: DevKit.Controls.String;
 			/** Type the ZIP Code or postal code for the primary address. */
-			address1_postalcode: DevKit.Controls.String;
+			Address1_PostalCode: DevKit.Controls.String;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
-			description: DevKit.Controls.Memo;
+			Description: DevKit.Controls.Memo;
 			/** Type the company or business name. */
-			name: DevKit.Controls.String;
+			Name: DevKit.Controls.String;
 			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
-			numberofemployees: DevKit.Controls.Integer;
+			NumberOfEmployees: DevKit.Controls.Integer;
 			/** Choose the primary contact for the account to provide quick access to contact details. */
-			primarycontactid: DevKit.Controls.Lookup;
+			PrimaryContactId: DevKit.Controls.Lookup;
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
-			revenue: DevKit.Controls.Money;
+			Revenue: DevKit.Controls.Money;
 			/** Type the main phone number for this account. */
-			telephone1: DevKit.Controls.String;
-			/** Form Tabs */
+			Telephone1: DevKit.Controls.String;
 			Tab: ITabs;
+		}
+
+		/**
+		 * Header controls interface
+		 * Contains controls displayed in the form header
+		 */
+		export interface IHeader extends DevKit.Controls.IHeader {
 		}
 
 		export interface Itab_1TabSections {
@@ -1032,6 +1038,59 @@ export namespace Account {
 			tab_1: Itab_1Tab;
 		}
 
+		/**
+		 * Grid controls interface
+		 * Contains all subgrid controls on the form
+		 */
+		export interface IGrid {
+		}
+
+		/**
+		 * Navigation interface
+		 * Contains navigation items
+		 */
+		export interface INavigation {
+			/** Activities */
+			navActivities: DevKit.Controls.NavigationItem;
+		}
+
+		/**
+		 * QuickForm interface
+		 * Contains quick view form controls
+		 */
+		export interface IQuickForm {
+		}
+
+		/**
+		 * Process interface
+		 * Contains business process flow definitions
+		 */
+		export interface IProcess extends DevKit.Controls.IProcess {
+			AccountBPF: IAccountBPF;
+		}
+
+		/**
+		 * AccountBPF Business Process Flow fields interface
+		 */
+		export interface IAccountBPF {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+
+		/**
+		 * Dialog interface
+		 * For quick create dialogs or other dialog forms
+		 */
+		export interface IDialog extends DevKit.IDialog {
+		}
 	}
 
 	/**
@@ -1039,7 +1098,7 @@ export namespace Account {
 	 * Provides typed access to all form controls
 	 * Usage: new Account.Account_Quick_Create(executionContext)
 	 */
-	export class Account_Quick_Create extends FormBase<Account_Quick_Create.IBody, undefined, undefined, undefined, undefined, undefined, undefined> {
+	export class Account_Quick_Create extends FormBase<Account_Quick_Create.IBody, Account_Quick_Create.IHeader, Account_Quick_Create.IGrid, Account_Quick_Create.INavigation, Account_Quick_Create.IQuickForm, Account_Quick_Create.IProcess, Account_Quick_Create.IDialog> {
 		/**
 		 * Creates a Account_Quick_Create Form instance
 		 * @param executionContext The execution context from form event
@@ -1051,9 +1110,9 @@ export namespace Account {
 				header: [],
 				tab: ['tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1'],
 				grid: [],
-				navigation: [],
+				navigation: ['navActivities'],
 				quick: [],
-				bpf: [],
+				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
 				dialog: []
 			});
 		}
@@ -1345,7 +1404,7 @@ export namespace Account {
 			super(executionContext, defaultWebResourceName, {
 				body: ['AccountCategoryCode', 'AccountNumber', 'ActionCards', 'Address1_AddressTypeCode', 'Address1_City', 'Address1_Composite', 'Address1_Country', 'Address1_FreightTermsCode', 'Address1_Line1', 'Address1_Line2', 'Address1_Line3', 'Address1_Name', 'Address1_PostalCode', 'Address1_ShippingMethodCode', 'Address1_StateOrProvince', 'Address1_Telephone1', 'CreditLimit', 'CreditOnHold', 'CustomerTypeCode', 'Description', 'DoNotBulkEMail', 'DoNotEMail', 'DoNotFax', 'DoNotPhone', 'DoNotPostalMail', 'EMailAddress1', 'Fax', 'FollowEmail', 'IFRAME_PhuocLe', 'IndustryCode', 'mapcontrol', 'Name', 'notescontrol', 'NumberOfEmployees', 'OwnerId', 'OwnerId1', 'OwnerId2', 'OwnerId3', 'OwnershipCode', 'ParentAccountId', 'PaymentTermsCode', 'PreferredContactMethodCode', 'PrimaryContactId', 'Revenue', 'SIC', 'Telephone1', 'Telephone2', 'TickerSymbol', 'TransactionCurrencyId', 'v4_Boolean', 'v4_DateOnly', 'v4_DateTime', 'v4_Decimal', 'v4_Double', 'v4_Integer', 'v4_Lookup', 'v4_Lookup1', 'v4_Memo', 'v4_Money', 'v4_MultiOptionSet', 'v4_OptionSet', 'v4_String', 'v4_String1', 'v4_String2', 'WebResource_DevKitV4', 'WebSiteURL'],
 				header: ['CreditLimit', 'NumberOfEmployees', 'OwnerId', 'PreferredContactMethodCode', 'PrimaryContactId', 'Revenue', 'v4_Integer', 'v4_Integer1', 'v4_OptionSet', 'v4_String'],
-				tab: ['administration___contact methods', 'administration___internal information', 'contacts___contacts', 'details___billing information', 'details___description_2', 'details___professional information', 'DETAILS_TAB___BILLING', 'DETAILS_TAB___ChildAccounts', 'DETAILS_TAB___COMPANY_PROFILE', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___DETAILS_TAB_section_6', 'DETAILS_TAB___SHIPPING', 'general___account information', 'general___address', 'general___description', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___ACCOUNT_INFORMATION', 'SUMMARY_TAB___ADDRESS', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___ref_pan_SUMMARY_TAB_section_6', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'SUMMARY_TAB___SUMMARY_TAB_section_6', 'SUMMARY_TAB___Timeline', 'TAB_1___TAB_1_SECTION_1', 'TAB_1___TAB_1_SECTION_2', 'TAB_1___TAB_1_SECTION_3', 'TAB_1___TAB_1_SECTION_4', 'TAB_2___TAB_2_SECTION_1', 'TAB_2___TAB_2_SECTION_2'],
+				tab: ['administration___contact methods', 'administration___internal information', 'contacts___contacts', 'details___billing information', 'details___description_2', 'details___professional information', 'DETAILS_TAB___BILLING', 'DETAILS_TAB___ChildAccounts', 'DETAILS_TAB___COMPANY_PROFILE', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___DETAILS_TAB_section_6', 'DETAILS_TAB___SHIPPING', 'general___account information', 'general___address', 'general___description', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___ACCOUNT_INFORMATION', 'SUMMARY_TAB___ADDRESS', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___ref_pan_SUMMARY_TAB_section_6', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'SUMMARY_TAB___SUMMARY_TAB_section_6', 'SUMMARY_TAB___Timeline', 'tab_1___tab_1_column_1_section_1', 'tab_1___tab_1_column_2_section_1', 'tab_1___tab_1_column_3_section_1', 'TAB_1___TAB_1_SECTION_1', 'TAB_1___TAB_1_SECTION_2', 'TAB_1___TAB_1_SECTION_3', 'TAB_1___TAB_1_SECTION_4', 'TAB_2___TAB_2_SECTION_1', 'TAB_2___TAB_2_SECTION_2'],
 				grid: ['accountactivitiesgrid', 'accountContactsGrid', 'ChildAccounts', 'Contacts'],
 				navigation: ['nav_adx_invitation_assigntoaccount', 'nav_msa_account_managingpartner', 'nav_msa_contact_managingpartner', 'navActivities', 'navActivityHistory', 'navAddresses', 'navAsyncOperations', 'navAudit', 'navCampaignsInSFA', 'navConnections', 'navContacts', 'navProcessSessions', 'navRelationships', 'navSocialprofiles', 'navSubAccts', 'navSubAct'],
 				quick: ['contactquickform___EMailAddress1', 'ContactQuickForm___EMailAddress1', 'ContactQuickForm___FirstName', 'ContactQuickForm___LastName', 'ContactQuickForm___MobilePhone', 'ContactQuickForm___ParentCustomerId', 'contactquickform___Telephone1'],
