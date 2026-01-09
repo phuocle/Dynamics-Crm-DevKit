@@ -2,11 +2,14 @@ using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Logic;
 using EnvDTE;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
@@ -16,6 +19,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private string _TypeScript_ { get; set; } = string.Empty;
         private string _TypeScriptForm_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
+        private ServiceClient ServiceClient { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -41,6 +45,22 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var TypeScriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.ts");
                 TypeScriptFormProjectItem.Remove();
                 TypeScriptProjectItem.ProjectItems.AddFromFile(TypeScriptFormProjectItemFullPath);
+
+                // Generate OptionSet.ts
+                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
+                var currentFolder = selectedItem.FullPath;
+                var optionSetFilePath = Path.Combine(currentFolder, "OptionSet.ts");
+                var existingContent = File.Exists(optionSetFilePath) ? await FileHelper.ReadAllTextAsync(optionSetFilePath) : null;
+                var optionSetCode = await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, new List<EntityMetadata> { EntityMetadata }, existingContent);
+                await FileHelper.ForceWriteAllTextAsync(optionSetFilePath, optionSetCode);
+
+                // Add OptionSet.ts to project if new
+                var optionSetProjectItem = await VsixHelper.GetProjectItemAsync("OptionSet.ts");
+                if (optionSetProjectItem == null)
+                {
+                    await VsixHelper.SelectedItem.AddFileToProjectAsync(optionSetFilePath);
+                }
+
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.form.ts up to date!!!");
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
@@ -58,6 +78,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
+                    ServiceClient = form.ServiceClient;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
                     _TypeScript_ = await XrmHelper.GetDefaultTsFileWithFormAsync(form.ServiceClient, EntityMetadata);
                     replacementsDictionary["$TypeScript$"] = _TypeScript_;
