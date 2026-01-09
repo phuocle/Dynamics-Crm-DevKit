@@ -134,7 +134,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             // Match pattern: /** Entity entity OptionSets */\nconst EntityName = {...} as const;
             // Use regex to find entity blocks
-            var pattern = @"/\*\*\s*(\w+)\s+entity OptionSets\s*\*/\s*\r?\nconst\s+(\w+)\s*=\s*\{";
+            var pattern = @"/\*\*\s*(\w+)\s+entity OptionSets\s*\*/\s+const\s+(\w+)\s*=\s*\{";
             var matches = Regex.Matches(content, pattern, RegexOptions.IgnoreCase);
 
             foreach (Match match in matches)
@@ -165,7 +165,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         {
                             // Find "as const;" after this
                             var remaining = content.Substring(i);
-                            var asConstMatch = Regex.Match(remaining, @"^\s*as\s+const\s*;");
+                            var asConstMatch = Regex.Match(remaining, @"^\}\s*as\s+const\s*;");
                             if (asConstMatch.Success)
                             {
                                 endIndex = i + asConstMatch.Length;
