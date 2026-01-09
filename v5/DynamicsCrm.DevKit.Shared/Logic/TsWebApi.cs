@@ -17,23 +17,18 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
-        public static async Task<(string code, string dts)> GetTsWebApiCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist)
+        public static async Task<string> GetTsWebApiCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata)
         {
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
-            RootNamespace = rootNamespace;
-
-            // dts is empty because we are generating a .ts file which serves as both code and declaration
-            return (await GenerateTsContentAsync(), string.Empty);
+            return await GenerateTsContentAsync();
         }
 
         private static async Task<string> GenerateTsContentAsync()
         {
             var code = string.Empty;
-            var @namespace = Helper.GetNameSpace(RootNamespace);
             var safeSchemaName = Helper.SafeIdentifier(EntityMetadata.SchemaName);
-
             // 1. Header & Imports
             code += $"/**{NEW_LINE}";
             code += $" * {safeSchemaName}.webapi.ts - {safeSchemaName} WebApi for early-bound style coding{NEW_LINE}";
@@ -134,9 +129,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (ShouldSkipAttribute(attribute)) continue;
 
                 var attributeSchemaName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.tswebapi, EntityMetadata.SchemaName, attribute) + GetSuffix(attribute);
-                
+
                 var logicalName = $"logicalName: '{attribute.LogicalName}'";
-                
+
                 var type = "";
                 if (attribute.AttributeType == AttributeTypeCode.Integer || attribute.AttributeType == AttributeTypeCode.BigInt || attribute.AttributeType == AttributeTypeCode.Picklist || attribute.AttributeType == AttributeTypeCode.State || attribute.AttributeType == AttributeTypeCode.Status)
                     type = "type: 'Integer'";
@@ -148,9 +143,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     type = "type: 'DateTime'";
                  else if (attribute is MultiSelectPicklistAttributeMetadata)
                     type = "type: 'MultiOptionSet'";
-                
+
                 var properties = logicalName;
-                
+
                 // ReadOnly
                 if ((attribute.IsValidForCreate == false && attribute.IsValidForUpdate == false) || attribute.IsReadOnly())
                     properties += $", readOnly: true";
@@ -159,7 +154,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (!string.IsNullOrEmpty(type)) properties += $", {type}";
 
 
-                
+
                 // Handle Lookups
                 if (attribute is LookupAttributeMetadata lookup)
                 {
