@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/xrm": "^9.0.87"
+    "@types/xrm": "^9.0.87",
+    "typescript": "^5.9.3"
   }
 }
