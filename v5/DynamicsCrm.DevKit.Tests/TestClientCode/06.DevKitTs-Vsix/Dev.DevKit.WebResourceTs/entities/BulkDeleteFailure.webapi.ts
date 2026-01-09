@@ -28,8 +28,7 @@ export interface IBulkDeleteFailureApi extends DevKit.IWebApiEntity {
 	readonly OwnerId: DevKit.Guid | null;
 	/** Unique identifier of the business unit that owns the bulk deletion failure. */
 	readonly OwningBusinessUnit: DevKit.Guid | null;
-	/** Unique identifier of the user who owns the bulk deletion failure record.
- */
+	/** Unique identifier of the user who owns the bulk deletion failure record.  */
 	readonly OwningUser: DevKit.Guid | null;
 	/** Unique identifier of the record that can not be deleted. */
 	readonly RegardingObjectId: DevKit.Guid | null;

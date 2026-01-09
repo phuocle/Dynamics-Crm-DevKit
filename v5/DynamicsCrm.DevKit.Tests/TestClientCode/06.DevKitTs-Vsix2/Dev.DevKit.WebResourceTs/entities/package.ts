@@ -1,4 +1,4 @@
-﻿import { package } from './package.form';
+﻿import { _package } from './package.form';
 
 //const formpackage_Information = (function () {
 //	"use strict";
@@ -55,10 +55,10 @@
 const formAllInOne = (function () {
 	"use strict";
 
-	let form: package.AllInOne;
+	let form: _package.AllInOne;
 
 	async function onLoad(executionContext: any): Promise<void> {
-		form = new package.AllInOne(executionContext);
+		form = new _package.AllInOne(executionContext);
 		registerEvents();
 		form.UiAddLoaded(UiAddLoaded);
 	}

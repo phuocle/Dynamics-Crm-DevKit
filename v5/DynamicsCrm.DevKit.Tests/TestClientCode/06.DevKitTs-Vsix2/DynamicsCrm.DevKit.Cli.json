@@ -146,7 +146,9 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "language": [ "???" ]
+      "language": [
+        "???"
+      ]
     }
   ]
 }

@@ -30,6 +30,55 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = [];
 
         /// <summary>
+        /// JavaScript reserved words that cannot be used as namespace/identifier names (case-insensitive)
+        /// </summary>
+        private static readonly HashSet<string> JsReservedWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "package", "private", "protected", "public", "static", "yield",
+            "let", "class", "enum", "export", "extends", "import", "super",
+            "implements", "interface", "await", "break", "case", "catch",
+            "continue", "debugger", "default", "delete", "do", "else",
+            "finally", "for", "function", "if", "in", "instanceof", "new",
+            "return", "switch", "this", "throw", "try", "typeof", "var",
+            "void", "while", "with", "const"
+        };
+
+        /// <summary>
+        /// JavaScript reserved words that cannot be used - CASE SENSITIVE for exact match
+        /// </summary>
+        private static readonly HashSet<string> JsReservedWordsExact = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "package", "private", "protected", "public", "static", "yield",
+            "let", "class", "enum", "export", "extends", "import", "super",
+            "implements", "interface", "await", "break", "case", "catch",
+            "continue", "debugger", "default", "delete", "do", "else",
+            "finally", "for", "function", "if", "in", "instanceof", "new",
+            "return", "switch", "this", "throw", "try", "typeof", "var",
+            "void", "while", "with", "const"
+        };
+
+        /// <summary>
+        /// Get safe entity name (escapes reserved words with underscore prefix)
+        /// </summary>
+        private static string GetSafeEntityName(string entityName)
+        {
+            if (JsReservedWords.Contains(entityName))
+            {
+                return $"_{entityName}";
+            }
+            return entityName;
+        }
+
+        /// <summary>
+        /// Check if entity name can be safely used as alias (case differs from reserved word)
+        /// </summary>
+        private static bool CanUseAsAlias(string entityName)
+        {
+            // If exactbly matches reserved word (case-sensitive), cannot use as alias
+            return !JsReservedWordsExact.Contains(entityName);
+        }
+
+        /// <summary>
         /// Retrieves all records using FetchXML with automatic paging.
         /// Handles datasets larger than 5000 records by automatically paging through all results.
         /// </summary>
@@ -841,8 +890,26 @@ namespace DynamicsCrm.DevKit.Shared
                 formClassNames.Add(formName);
             }
 
-            // Generate imports
-            code += $"import {{ {entityMetadata.SchemaName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            // Generate imports - use safe entity name for reserved words
+            var safeEntityName = GetSafeEntityName(entityMetadata.SchemaName);
+            var isReservedWord = safeEntityName != entityMetadata.SchemaName;
+            var canUseAlias = CanUseAsAlias(entityMetadata.SchemaName);
+            if (isReservedWord && canUseAlias)
+            {
+                // Import with alias: import { _Import as Import } from './Import.form';
+                // Only when SchemaName case differs from reserved word (e.g., Import vs import)
+                code += $"import {{ {safeEntityName} as {entityMetadata.SchemaName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            }
+            else if (isReservedWord)
+            {
+                // No alias: import { _package } from './package.form';
+                // When SchemaName exactly matches reserved word (e.g., package)
+                code += $"import {{ {safeEntityName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            }
+            else
+            {
+                code += $"import {{ {entityMetadata.SchemaName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            }
             code += $"{NEW_LINE}";
 
             // Generate IIFE for each form (COMMENTED OUT)
@@ -907,10 +974,14 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"const formAllInOne = (function () {{{NEW_LINE}";
             code += $"{TAB}\"use strict\";{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"{TAB}let form: {entityMetadata.SchemaName}.AllInOne;{NEW_LINE}";
+            // Determine the name to use in code:
+            // - If using alias (e.g., import { _Import as Import }), use the alias (SchemaName)
+            // - If not using alias (e.g., import { _package }), use safeEntityName
+            var namespaceName = (isReservedWord && canUseAlias) ? entityMetadata.SchemaName : safeEntityName;
+            code += $"{TAB}let form: {namespaceName}.AllInOne;{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function onLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}form = new {entityMetadata.SchemaName}.AllInOne(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}form = new {namespaceName}.AllInOne(executionContext);{NEW_LINE}";
             code += $"{TAB}{TAB}registerEvents();{NEW_LINE}";
             code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
