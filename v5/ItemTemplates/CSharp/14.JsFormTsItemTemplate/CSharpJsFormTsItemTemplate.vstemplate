@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>140</SortOrder>
+		<SortOrder>240</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.form.ts">TypeScript.form.ts</ProjectItem>

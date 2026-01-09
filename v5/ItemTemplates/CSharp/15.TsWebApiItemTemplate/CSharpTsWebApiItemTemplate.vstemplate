@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>150</SortOrder>
+		<SortOrder>250</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.webapi.ts">TypeScript.webapi.ts</ProjectItem>
