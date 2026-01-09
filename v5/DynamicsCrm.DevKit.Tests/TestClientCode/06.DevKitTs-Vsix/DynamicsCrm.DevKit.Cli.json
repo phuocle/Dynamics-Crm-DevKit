@@ -109,14 +109,14 @@
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootfolder": "???",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "",
+      "rootfolder": "",
       "entities": "folder"
     }
   ],

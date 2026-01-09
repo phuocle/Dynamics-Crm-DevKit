@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Build script - Build entity .ts files
  * Usage:
  *   npm run release           - Build ALL entities (minified)
@@ -8,7 +8,7 @@
  *
  * Output: All built files are placed in the 'build/' folder
  * Note: devkit.ts is ALWAYS minified (no need to debug framework)
- * 
+ *
  * Architecture:
  *   - devkit.ts is pre-compiled to minified code
  *   - Entity files import devkit functions which get bundled with the minified devkit code
@@ -137,8 +137,10 @@ async function buildEntity(file, devkitCode) {
         const regex = /^export\s*\{\s*([^}]+)\s*\}\s*;?\s*$/gm;
         let match;
         while ((match = regex.exec(content)) !== null) {
+            // Remove block comments
+            const cleanContent = match[1].replace(/\/\*[\s\S]*?\*\//g, '');
             // Split by comma and trim whitespace
-            const names = match[1].split(',').map(n => n.trim()).filter(n => n.length > 0);
+            const names = cleanContent.split(',').map(n => n.trim()).filter(n => n.length > 0);
             exportedNames.push(...names);
         }
         // Fallback if no matches found
@@ -183,10 +185,9 @@ async function buildEntity(file, devkitCode) {
 
         const stats = fs.statSync(outFile);
         const sizeKb = (stats.size / 1024).toFixed(1);
-        const exportList = exportedNames.map(n => `window['${n}']`).join(', ');
         const modeLabel = isDebug ? 'DEBUG' : 'MINIFIED';
         const devkitNote = devkitCode ? ' (devkit: MINIFIED)' : '';
-        console.log(`  ✓ ${name}.js (${sizeKb} KB) [${modeLabel}]${devkitNote} → ${exportList}`);
+        console.log(`  ✓ ${name}.js (${sizeKb} KB) [${modeLabel}]${devkitNote}`);
         return true;
     } catch (error) {
         console.error(`  ✗ ${name}.ts - Build failed:`, error.message);
@@ -262,4 +263,3 @@ build().catch(err => {
     console.error(err);
     process.exit(1);
 });
-
