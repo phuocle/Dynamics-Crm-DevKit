@@ -107,14 +107,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             // Generate optionsets for each new entity
             foreach (var entity in entities)
             {
+                // Use safe name as dictionary key to match ParseExistingEntities behavior
+                var safeName = GetSafeEntityName(entity.SchemaName);
                 if (entity.Attributes == null)
                 {
                     var metadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entity.LogicalName);
-                    existingEntities[entity.SchemaName] = GenerateEntityOptionSet(metadata);
+                    existingEntities[safeName] = GenerateEntityOptionSet(metadata);
                 }
                 else
                 {
-                    existingEntities[entity.SchemaName] = GenerateEntityOptionSet(entity);
+                    existingEntities[safeName] = GenerateEntityOptionSet(entity);
                 }
             }
 
@@ -304,8 +306,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             for (int i = 0; i < entityNames.Count; i++)
             {
                 var comma = i < entityNames.Count - 1 ? "," : "";
-                var safeName = GetSafeEntityName(entityNames[i]);
-                code.AppendLine($"{TAB}{safeName}{comma}");
+                // Keys are already safe names from GetTsOptionSetCodeAsync
+                code.AppendLine($"{TAB}{entityNames[i]}{comma}");
             }
             
             code.AppendLine("} as const;");

@@ -533,13 +533,26 @@ const TimerState = {
 // Entity OptionSets
 // ============================================================================
 
+/** Import entity OptionSets */
+const _Import = {
+	/** Mode */
+	ModeCode: { Create: 0, Update: 1 },
+	/** Status */
+	StateCode: { Active: 0 },
+	/** Status Reason */
+	StatusCode: { Completed: 4, Failed: 5, Importing: 3, Parsing: 1, Submitted: 0, Transforming: 2 },
+	/** Rollup State */
+	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+} as const;
+
 /** OptionSet entity OptionSets */
 const _OptionSet = {
 	/** Component State */
 	ComponentState: { Deleted: 2, Deleted_Unpublished: 3, Published: 0, Unpublished: 1 },
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
-}
+} as const;
+
 /** package entity OptionSets */
 const _package = {
 	/** Status */
@@ -548,7 +561,8 @@ const _package = {
 	statuscode: { Active: 1, Inactive: 2 },
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
-}
+} as const;
+
 /** aaduser entity OptionSets */
 const aaduser = {
 	/** Rollup State */
@@ -3745,18 +3759,6 @@ const ImageDescriptor = {
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
 
-/** Import entity OptionSets */
-const _Import = {
-	/** Mode */
-	ModeCode: { Create: 0, Update: 1 },
-	/** Status */
-	StateCode: { Active: 0 },
-	/** Status Reason */
-	StatusCode: { Completed: 4, Failed: 5, Importing: 3, Parsing: 1, Submitted: 0, Transforming: 2 },
-	/** Rollup State */
-	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
-} as const;
-
 /** ImportData entity OptionSets */
 const ImportData = {
 	/** Error Type */
@@ -6517,14 +6519,6 @@ const OfflineCommandDefinition = {
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
 
-/** OptionSet entity OptionSets */
-const _OptionSet = {
-	/** Component State */
-	ComponentState: { Deleted: 2, Deleted_Unpublished: 3, Published: 0, Unpublished: 1 },
-	/** Rollup State */
-	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
-} as const;
-
 /** Organization entity OptionSets */
 const Organization = {
 	/** Application Based Access Control Mode */
@@ -6717,16 +6711,6 @@ const OwnerMapping = {
 	StateCode: { Active: 0 },
 	/** Status Reason */
 	StatusCode: { Active: 0 },
-	/** Rollup State */
-	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
-} as const;
-
-/** package entity OptionSets */
-const _package = {
-	/** Status */
-	statecode: { Active: 0, Inactive: 1 },
-	/** Status Reason */
-	statuscode: { Active: 1, Inactive: 2 },
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
@@ -9978,6 +9962,7 @@ export const OptionSet = {
 	TabDisplayState,
 	TimerState,
 	// Entity OptionSets
+	_Import,
 	_OptionSet,
 	_package,
 	aaduser,
@@ -10255,7 +10240,6 @@ export const OptionSet = {
 	HierarchySecurityConfiguration,
 	holidaywrapper,
 	ImageDescriptor,
-	_Import,
 	ImportData,
 	ImportEntityMapping,
 	ImportFile,
@@ -10507,7 +10491,6 @@ export const OptionSet = {
 	OfficeDocument,
 	OfficeGraphDocument,
 	OfflineCommandDefinition,
-	_OptionSet,
 	Organization,
 	organizationdatasyncfnostate,
 	organizationdatasyncstate,
@@ -10521,7 +10504,6 @@ export const OptionSet = {
 	OrgInsightsNotification,
 	Owner,
 	OwnerMapping,
-	_package,
 	package_solution,
 	packagehistory,
 	PartnerApplication,

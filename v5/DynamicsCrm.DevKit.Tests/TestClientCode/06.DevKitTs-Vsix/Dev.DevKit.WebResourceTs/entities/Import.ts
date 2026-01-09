@@ -1,4 +1,4 @@
-﻿import { Import } from './Import.form';
+﻿import { _Import as Import } from './Import.form';
 
 //const formImport_Information = (function () {
 //	"use strict";
