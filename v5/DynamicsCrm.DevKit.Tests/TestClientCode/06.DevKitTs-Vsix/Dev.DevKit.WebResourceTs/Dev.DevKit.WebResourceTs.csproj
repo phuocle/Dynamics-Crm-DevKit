@@ -71,9 +71,13 @@
       <DependentUpon>Contact.ts</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\OptionSet.ts" />
-    <TypeScriptCompile Include="entities\Team.form.ts" />
+    <TypeScriptCompile Include="entities\Team.form.ts">
+      <DependentUpon>Team.ts</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Team.ts" />
-    <TypeScriptCompile Include="entities\Team.webapi.ts" />
+    <TypeScriptCompile Include="entities\Team.webapi.ts">
+      <DependentUpon>Team.ts</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="lib\devkit.d.ts" />
     <TypeScriptCompile Include="lib\devkit.ts" />
     <None Include="entities\generator.form.bat" />

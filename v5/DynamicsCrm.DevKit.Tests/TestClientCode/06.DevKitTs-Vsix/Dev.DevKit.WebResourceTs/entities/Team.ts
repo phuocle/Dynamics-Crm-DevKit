@@ -1,4 +1,4 @@
-﻿import { Team } from './Team.form';
+import { Team } from './Team.form';
 
 //const formTeam = (function () {
 //	"use strict";

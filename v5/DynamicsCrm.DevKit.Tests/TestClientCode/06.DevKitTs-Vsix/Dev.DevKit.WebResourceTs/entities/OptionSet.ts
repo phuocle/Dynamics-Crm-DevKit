@@ -588,7 +588,6 @@ const Account = {
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
-
 /** Contact entity OptionSets */
 const Contact = {
 	/** Role */
@@ -648,7 +647,6 @@ const Contact = {
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
-
 /** Team entity OptionSets */
 const Team = {
 	/** Membership Type */
