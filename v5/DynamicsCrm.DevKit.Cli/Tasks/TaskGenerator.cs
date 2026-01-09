@@ -36,11 +36,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
             if (Json.rootfolder == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
@@ -62,6 +57,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
+            }
+            // Skip rootnamespace validation for TsForm and TsWebApi since they no longer use rootnamespace
+            if (Json.type.ToLower() != nameof(GeneratorType.tsform) && Json.type.ToLower() != nameof(GeneratorType.tswebapi))
+            {
+                if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    return false;
+                }
             }
             await Helper.DelayAsync(1);
             return true;
@@ -223,7 +227,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
-                    var (newCode, _) = await TsWebApi.GetTsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
+                    var newCode = await TsWebApi.GetTsWebApiCodeAsync(ServiceClient, entityMetadata);
 
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
@@ -338,7 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
                     var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
-                    var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+                    var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata);
 
                     // Skip if no forms exist for this entity
                     if (string.IsNullOrEmpty(newCode))
@@ -351,7 +355,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
                     if (!File.Exists(file))
                     {
-                        var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace);
+                        var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata);
                         if (!string.IsNullOrEmpty(tsCode))
                         {
                             await FileHelper.ForceWriteAllTextAsync(file, tsCode);

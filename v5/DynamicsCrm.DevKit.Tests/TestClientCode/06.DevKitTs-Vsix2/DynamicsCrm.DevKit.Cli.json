@@ -110,16 +110,16 @@
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "entities": "*"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "entities": "*"
     }
   ],
   "downloadwebresources": [
