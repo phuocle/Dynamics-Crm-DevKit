@@ -72,14 +72,32 @@ namespace DynamicsCrm.DevKit.Shared
             catch { return cipherText; }
         }
 
+        private static string NormalizeString(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return string.Empty;
+            var sb = new StringBuilder(value.Length);
+            for (var i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
+                if (c == '\r')
+                {
+                    if (i + 1 < value.Length && value[i + 1] == '\n')
+                    {
+                        i++; // Skip \n
+                    }
+                    continue; // Skip \r
+                }
+                if (c == '\t' || c == ' ') continue;
+                sb.Append(c);
+            }
+            return sb.ToString().Trim();
+        }
+
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (ReferenceEquals(value1, value2)) return true;
+            if (value1 == null || value2 == null) return false;
+            return string.Equals(NormalizeString(value1), NormalizeString(value2), StringComparison.OrdinalIgnoreCase);
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)
