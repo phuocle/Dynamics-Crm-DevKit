@@ -110,14 +110,14 @@
       "profile": "TS-FORM",
       "type": "TsForm",
       "rootfolder": "",
-      "entities": "folder"
+      "entities": "Account,Contact,Team"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
       "rootnamespace": "",
       "rootfolder": "",
-      "entities": "folder"
+      "entities": "Account,Contact,Team"
     }
   ],
   "downloadwebresources": [
