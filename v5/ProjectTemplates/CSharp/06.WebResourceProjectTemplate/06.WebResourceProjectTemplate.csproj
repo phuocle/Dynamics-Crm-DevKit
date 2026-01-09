@@ -82,6 +82,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="generator.form.bat" />
     <None Include="generator.webapi.bat" />
+    <None Include="jsconfig.json" />
     <None Include="package.json" />
     <None Include="_packages.config" />
     <None Include="ProjectTemplate.csproj" />

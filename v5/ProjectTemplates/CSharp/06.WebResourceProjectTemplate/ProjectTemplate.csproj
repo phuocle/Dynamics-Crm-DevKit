@@ -58,6 +58,7 @@
 	<Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
+    <None Include="jsconfig.config" />
     <None Include="package.json" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />

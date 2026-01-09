@@ -46,7 +46,8 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$generator.form.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.form.ts_bat");
             replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.webapi.bat");
             replacements["$generator.webapi.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.webapi.ts_bat");
-            replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("package.json");
+            replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.package.json");
+            replacements["$jsconfig.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.jsconfig.json");
             replacements["$generator.latebound.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.latebound.bat");
             replacements["$download.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
