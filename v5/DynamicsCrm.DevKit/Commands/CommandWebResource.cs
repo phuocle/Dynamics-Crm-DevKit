@@ -6,6 +6,9 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -30,6 +33,26 @@ namespace DynamicsCrm.DevKit.Commands
             await ShowStatusAsync(url, "Connected");
 
             var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+
+            // Handle TypeScript files: build first, then deploy the resulting .js file
+            var extension = Path.GetExtension(fullFileName).ToLowerInvariant();
+            if (extension == ".ts")
+            {
+                await ShowStatusAsync(url, "Building TypeScript ...");
+                var (buildSuccess, jsFilePath, buildError) = await BuildTypeScriptAsync(fullFileName);
+
+                if (!buildSuccess)
+                {
+                    await VS.StatusBar.ClearAsync();
+                    await ShowStatusAndErrorAsync(url, buildError);
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    return;
+                }
+
+                // Use the built JS file for deployment
+                fullFileName = jsFilePath;
+            }
+
             var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
             var deployWebResourceCache = CacheHelper.GetWebResource(fullFileNameForCrm);
 
@@ -85,6 +108,74 @@ namespace DynamicsCrm.DevKit.Commands
             else
             {
                 await ShowStatusAndErrorAsync(url, $"Deploying Failed with message: {message}");
+            }
+        }
+
+        private static async Task<(bool success, string jsFilePath, string error)> BuildTypeScriptAsync(string tsFilePath)
+        {
+            var directory = Path.GetDirectoryName(tsFilePath);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(tsFilePath);
+
+            // Find the project root directory containing package.json
+            var projectRoot = directory;
+            while (!string.IsNullOrEmpty(projectRoot))
+            {
+                if (File.Exists(Path.Combine(projectRoot, "package.json")))
+                {
+                    break;
+                }
+                projectRoot = Path.GetDirectoryName(projectRoot);
+            }
+
+            if (string.IsNullOrEmpty(projectRoot))
+            {
+                return (false, null, "Could not find package.json in any parent directory");
+            }
+
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c npm run debug {fileNameWithoutExtension}",
+                WorkingDirectory = projectRoot,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using (var process = new Process { StartInfo = processStartInfo })
+            {
+                var output = new StringBuilder();
+                var errorOutput = new StringBuilder();
+
+                process.OutputDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) output.AppendLine(args.Data);
+                };
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data)) errorOutput.AppendLine(args.Data);
+                };
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await Task.Run(() => process.WaitForExit());
+
+                if (process.ExitCode == 0)
+                {
+                    // The .js file is output to the build folder
+                    var jsFilePath = Path.Combine(projectRoot, "build", fileNameWithoutExtension + ".js");
+                    if (File.Exists(jsFilePath))
+                    {
+                        return (true, jsFilePath, null);
+                    }
+                    return (false, null, "Build succeeded but .js file not found");
+                }
+                else
+                {
+                    return (false, null, $"TypeScript build failed:\n{errorOutput}\n{output}");
+                }
             }
         }
 
