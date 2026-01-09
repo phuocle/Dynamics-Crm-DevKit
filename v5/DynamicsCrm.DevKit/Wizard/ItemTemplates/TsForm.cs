@@ -8,12 +8,12 @@ using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
     internal class TsForm : ItemTemplateBase, IWizard
     {
+        private string _TypeScript_ { get; set; } = string.Empty;
         private string _TypeScriptForm_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
 
@@ -29,12 +29,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
         }
 
-        private async Task<bool> IsJsWebApiExistAsync()
-        {
-            var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, $"{ItemName}.webapi.js"));
-        }
-
         public void RunFinished()
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
@@ -44,6 +38,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var TypeScriptFormProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.form.ts");
                 var TypeScriptFormProjectItemFullPath = TypeScriptFormProjectItem.FileNames[0];
                 await FileHelper.ForceWriteAllTextAsync(TypeScriptFormProjectItemFullPath, _TypeScriptForm_);
+                var TypeScriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.ts");
+                TypeScriptFormProjectItem.Remove();
+                TypeScriptProjectItem.ProjectItems.AddFromFile(TypeScriptFormProjectItemFullPath);
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.form.ts up to date!!!");
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
@@ -62,8 +59,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
-                    replacementsDictionary["$TypeScriptForm$"] = _TypeScriptForm_;
+                    _TypeScript_ = await XrmHelper.GetDefaultTsFileWithFormAsync(form.ServiceClient, EntityMetadata);
+                    replacementsDictionary["$TypeScript$"] = _TypeScript_;
+                    _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata);
                     await Replacement.SetAsync(replacementsDictionary, form);
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
@@ -80,6 +78,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             {
                 switch (filePath)
                 {
+                    case "TypeScript.ts":
+                        FilePath = $"{ItemName}.ts";
+                        break;
                     default:
                         FilePath = $"{ItemName}.form.ts";
                         break;

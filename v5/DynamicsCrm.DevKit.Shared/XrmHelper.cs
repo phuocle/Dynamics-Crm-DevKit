@@ -811,7 +811,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        public static async Task<string> GetDefaultTsFileWithFormAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootnamespace)
+        public static async Task<string> GetDefaultTsFileWithFormAsync(ServiceClient serviceClient, EntityMetadata entityMetadata)
         {
             string GetUnquieFormName(List<string> FormNames, string formName)
             {
@@ -832,7 +832,7 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             var formNames = new List<string>();
             var formClassNames = new List<string>();
-             
+
             // Build list of form names first
             foreach (var form in forms)
             {
@@ -956,7 +956,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})();{NEW_LINE}";
             code += $"{NEW_LINE}";
-             
+
             // Generate export
             var exports = string.Join(" ", formClassNames.Select(f => $"/* form{Helper.SafeIdentifier(f)}, */"));
             code += $"export {{ {exports} formAllInOne }};";

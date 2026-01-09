@@ -130,14 +130,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
         }
 
-        public static async Task<string> GetTsFormCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsWebApiExist)
+        public static async Task<string> GetTsFormCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata)
         {
 
             FormNames = new List<string>();
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
-            RootNamespace = rootNamespace;
             var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
 
             // If no forms exist for this entity, return null to skip file generation
