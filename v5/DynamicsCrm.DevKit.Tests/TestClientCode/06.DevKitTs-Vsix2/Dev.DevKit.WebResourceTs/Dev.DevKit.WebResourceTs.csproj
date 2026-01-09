@@ -63,6 +63,9 @@
     <TypeScriptCompile Include="entities\Account.webapi.ts">
       <DependentUpon>Account.ts</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.form.ts">
+      <DependentUpon>Contact.ts</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Contact.ts" />
     <TypeScriptCompile Include="entities\Contact.webapi.ts">
       <DependentUpon>Contact.ts</DependentUpon>
