@@ -55,6 +55,32 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static Dictionary<string, AttributeMetadata> AttributesByLogicalName;
 
         /// <summary>
+        /// JavaScript reserved words that cannot be used as namespace names
+        /// </summary>
+        private static readonly HashSet<string> JsReservedWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "package", "private", "protected", "public", "static", "yield",
+            "let", "class", "enum", "export", "extends", "import", "super",
+            "implements", "interface", "await", "break", "case", "catch",
+            "continue", "debugger", "default", "delete", "do", "else",
+            "finally", "for", "function", "if", "in", "instanceof", "new",
+            "return", "switch", "this", "throw", "try", "typeof", "var",
+            "void", "while", "with", "const"
+        };
+
+        /// <summary>
+        /// Get safe entity name (escapes reserved words)
+        /// </summary>
+        private static string GetSafeEntityName(string entityName)
+        {
+            if (JsReservedWords.Contains(entityName))
+            {
+                return $"_{entityName}";
+            }
+            return entityName;
+        }
+
+        /// <summary>
         /// Cached context for a single form to avoid re-parsing XML multiple times
         /// Parse XML once, reuse for all field extraction methods
         /// </summary>
@@ -156,7 +182,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine();
 
             // Open entity namespace - all forms will be inside this single namespace
-            code.AppendLine($"export namespace {entityMetadata.SchemaName} {{");
+            var safeEntityName = GetSafeEntityName(entityMetadata.SchemaName);
+            code.AppendLine($"export namespace {safeEntityName} {{");
             code.AppendLine();
 
             var processFields = await GetProcessFieldsAsync();
@@ -585,7 +612,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * {formName} Form class");
             code.AppendLine($"{TAB} * Provides typed access to all form controls");
-            code.AppendLine($"{TAB} * Usage: new {EntityMetadata.SchemaName}.{formName}(executionContext)");
+            code.AppendLine($"{TAB} * Usage: new {GetSafeEntityName(EntityMetadata.SchemaName)}.{formName}(executionContext)");
             code.AppendLine($"{TAB} */");
             if (isQuickCreate)
             {
@@ -828,7 +855,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code.AppendLine($"{TAB}/**");
             code.AppendLine($"{TAB} * Aggregate Form class");
             code.AppendLine($"{TAB} * Contains all fields from all forms - useful when form type is unknown at compile time");
-            code.AppendLine($"{TAB} * Usage: new {EntityMetadata.SchemaName}.{AGGREGATE_FORM_NAME}(executionContext)");
+            code.AppendLine($"{TAB} * Usage: new {GetSafeEntityName(EntityMetadata.SchemaName)}.{AGGREGATE_FORM_NAME}(executionContext)");
             code.AppendLine($"{TAB} */");
             code.AppendLine($"{TAB}export class {AGGREGATE_FORM_NAME} extends FormBase<{AGGREGATE_FORM_NAME}.IBody, {AGGREGATE_FORM_NAME}.IHeader, {AGGREGATE_FORM_NAME}.IGrid, {AGGREGATE_FORM_NAME}.INavigation, {AGGREGATE_FORM_NAME}.IQuickForm, {AGGREGATE_FORM_NAME}.IProcess, undefined> {{");
             code.AppendLine($"{TAB2}/**");

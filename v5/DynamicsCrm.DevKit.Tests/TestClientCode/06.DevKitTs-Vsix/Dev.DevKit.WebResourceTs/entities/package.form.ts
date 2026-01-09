@@ -12,7 +12,7 @@
 import { FormBase } from '../lib/devkit';
 import './OptionSet';
 
-export namespace package {
+export namespace _package {
 
 	// ========================================================================
 	// Form: package_Information

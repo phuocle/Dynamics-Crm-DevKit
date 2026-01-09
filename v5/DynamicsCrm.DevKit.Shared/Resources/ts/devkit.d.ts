@@ -666,6 +666,29 @@ declare namespace DevKit {
             Value: Date | null;
         }
 
+        /**
+         * Interface for File controls
+         * Used for file upload fields on forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface File extends IControl {
+            /**
+             * Get/Set the data value for a file attribute
+             */
+            Value: any;
+        }
+
+        /**
+         * Interface for Image controls
+         * Used for image fields on forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface Image extends IControl {
+            /**
+             * Get/Set the data value for an image attribute
+             */
+            Value: any;
+        }
 
         /**
          * Interface for EmailEngagement controls

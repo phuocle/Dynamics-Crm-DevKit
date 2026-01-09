@@ -56,6 +56,40 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         };
 
         /// <summary>
+        /// JavaScript reserved words that cannot be used as variable names
+        /// </summary>
+        private static readonly HashSet<string> JsReservedWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "package", "private", "protected", "public", "static", "yield",
+            "let", "class", "enum", "export", "extends", "import", "super",
+            "implements", "interface", "await", "break", "case", "catch",
+            "continue", "debugger", "default", "delete", "do", "else",
+            "finally", "for", "function", "if", "in", "instanceof", "new",
+            "return", "switch", "this", "throw", "try", "typeof", "var",
+            "void", "while", "with", "const"
+        };
+
+        /// <summary>
+        /// Entity names that conflict with export name
+        /// </summary>
+        private static readonly HashSet<string> ConflictingNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "OptionSet"
+        };
+
+        /// <summary>
+        /// Get safe entity name (escapes reserved words and conflicting names)
+        /// </summary>
+        private static string GetSafeEntityName(string entityName)
+        {
+            if (JsReservedWords.Contains(entityName) || ConflictingNames.Contains(entityName))
+            {
+                return $"_{entityName}";
+            }
+            return entityName;
+        }
+
+        /// <summary>
         /// Generate OptionSet.ts content for the given entities
         /// </summary>
         /// <param name="serviceClient">The service client</param>
@@ -160,9 +194,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GenerateEntityOptionSet(EntityMetadata entityMetadata)
         {
             var code = new StringBuilder();
+            var safeName = GetSafeEntityName(entityMetadata.SchemaName);
             
             code.AppendLine($"/** {entityMetadata.SchemaName} entity OptionSets */");
-            code.AppendLine($"const {entityMetadata.SchemaName} = {{");
+            code.AppendLine($"const {safeName} = {{");
 
             var optionSets = new List<string>();
 
@@ -269,7 +304,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             for (int i = 0; i < entityNames.Count; i++)
             {
                 var comma = i < entityNames.Count - 1 ? "," : "";
-                code.AppendLine($"{TAB}{entityNames[i]}{comma}");
+                var safeName = GetSafeEntityName(entityNames[i]);
+                code.AppendLine($"{TAB}{safeName}{comma}");
             }
             
             code.AppendLine("} as const;");

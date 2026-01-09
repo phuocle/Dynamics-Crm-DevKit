@@ -86,6 +86,7 @@
         JsForm,
         TsForm,
         JsWebApi,
+        TsWebApi,
         Workflow,
         UiTest,
         Test,
