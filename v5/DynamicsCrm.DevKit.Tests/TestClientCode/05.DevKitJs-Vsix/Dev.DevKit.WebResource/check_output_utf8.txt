@@ -1,4 +1,0 @@
-﻿
-> dev.devkit.webresource@1.0.0 check
-> tsc -p jsconfig.json --noEmit
-
