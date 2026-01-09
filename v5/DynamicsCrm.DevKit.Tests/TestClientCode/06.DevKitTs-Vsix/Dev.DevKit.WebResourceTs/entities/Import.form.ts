@@ -12,7 +12,7 @@
 import { FormBase } from '../lib/devkit';
 import './OptionSet';
 
-export namespace Import {
+export namespace _Import {
 
 	// ========================================================================
 	// Form: Import_Information
@@ -89,7 +89,7 @@ export namespace Import {
 	/**
 	 * Import_Information Form class
 	 * Provides typed access to all form controls
-	 * Usage: new Import.Import_Information(executionContext)
+	 * Usage: new _Import.Import_Information(executionContext)
 	 */
 	export class Import_Information extends FormBase<Import_Information.IBody, Import_Information.IHeader, Import_Information.IGrid, Import_Information.INavigation, Import_Information.IQuickForm, Import_Information.IProcess, Import_Information.IDialog> {
 		/**
@@ -172,7 +172,7 @@ export namespace Import {
 	/**
 	 * Aggregate Form class
 	 * Contains all fields from all forms - useful when form type is unknown at compile time
-	 * Usage: new Import.AllInOne(executionContext)
+	 * Usage: new _Import.AllInOne(executionContext)
 	 */
 	export class AllInOne extends FormBase<AllInOne.IBody, AllInOne.IHeader, AllInOne.IGrid, AllInOne.INavigation, AllInOne.IQuickForm, AllInOne.IProcess, undefined> {
 		/**

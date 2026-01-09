@@ -90,7 +90,7 @@
       "type": "TsForm",
       "rootnamespace": "DevKit",
       "rootfolder": "",
-      "entities": "all"
+      "entities": "*"
     },
     {
       "profile": "TS-WEBAPI",

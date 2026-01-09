@@ -70,7 +70,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     Textbox.Visibility = System.Windows.Visibility.Hidden;
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
                     LabelItemName.Content = "Entity";
-                }                
+                }
+                void TsWebApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript WebApi Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -85,6 +96,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.TsForm:
                         TsFormItem();
+                        break;
+                    case ItemType.TsWebApi:
+                        TsWebApiItem();
                         break;
                 }
             }
@@ -132,7 +146,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ItemType == ItemType.LateBound ||
                 ItemType == ItemType.JsForm ||
                 ItemType == ItemType.JsWebApi ||
-                ItemType == ItemType.TsForm
+                ItemType == ItemType.TsForm ||
+                ItemType == ItemType.TsWebApi
                 )
             {
                 StackPanelMain.IsEnabled = false;

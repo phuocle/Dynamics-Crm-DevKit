@@ -77,7 +77,7 @@ export namespace _package {
 	/**
 	 * package_Information Form class
 	 * Provides typed access to all form controls
-	 * Usage: new package.package_Information(executionContext)
+	 * Usage: new _package.package_Information(executionContext)
 	 */
 	export class package_Information extends FormBase<package_Information.IBody, package_Information.IHeader, package_Information.IGrid, package_Information.INavigation, package_Information.IQuickForm, package_Information.IProcess, package_Information.IDialog> {
 		/**
@@ -148,7 +148,7 @@ export namespace _package {
 	/**
 	 * Aggregate Form class
 	 * Contains all fields from all forms - useful when form type is unknown at compile time
-	 * Usage: new package.AllInOne(executionContext)
+	 * Usage: new _package.AllInOne(executionContext)
 	 */
 	export class AllInOne extends FormBase<AllInOne.IBody, AllInOne.IHeader, AllInOne.IGrid, AllInOne.INavigation, AllInOne.IQuickForm, AllInOne.IProcess, undefined> {
 		/**
