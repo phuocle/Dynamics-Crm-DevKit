@@ -1,0 +1,30 @@
+{
+    "folders": [
+        {
+            "path": "../DynamicsCrm.DevKit.Cli"
+        },
+        {
+            "path": "../DynamicsCrm.DevKit.Shared"
+        },
+        {
+            "path": "../DynamicsCrm.DevKit.Docs"
+        },
+        {
+            "path": "../DynamicsCrm.DevKit.Tests/TestClientCode"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/coverage": true,
+            "**/coverage/**": true
+        },
+        "search.exclude": {
+            "**/coverage": true,
+            "**/coverage/**": true
+        },
+        "files.watcherExclude": {
+            "**/coverage": true,
+            "**/coverage/**": true
+        }
+    }
+}
