@@ -85,6 +85,9 @@
     <Compile Include="Lib\Forms\FormReview.xaml.cs">
       <DependentUpon>FormReview.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Forms\FormBuildOutput.xaml.cs">
+      <DependentUpon>FormBuildOutput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,7 @@
     <Compile Include="Lib\T4Callback.cs" />
     <Compile Include="Lib\T4Helper.cs" />
     <Compile Include="Lib\VsixHelper.cs" />
+    <Compile Include="Lib\TypeScriptBuildHelper.cs" />
     <Compile Include="Lib\WpfControls\ExternalBrowserHyperlink.cs" />
     <Compile Include="Lib\WpfControls\UserControlConnection.xaml.cs">
       <DependentUpon>UserControlConnection.xaml</DependentUpon>
@@ -237,6 +241,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Lib\Forms\FormReview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Forms\FormBuildOutput.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

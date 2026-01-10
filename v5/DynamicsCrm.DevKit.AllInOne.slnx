@@ -62,7 +62,7 @@
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
-    <Project Path="ItemTemplates/CSharp/15.TsWebApiItemTemplate/15.TsWebApiItemTemplate.csproj">
+    <Project Path="ItemTemplates/CSharp/15.TsWebApiItemTemplate/15.TsWebApiItemTemplate.csproj" Id="1b81a02c-92ec-4963-b6ff-aad8202044a9">
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
