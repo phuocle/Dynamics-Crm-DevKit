@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Shared
         public const string DynamicsCrmDevKitConfigJson = $"{Const.DynamicsCrmDevKit}.Config.json";
         public static readonly string VersionBuild = $"v.{Version} - Build: {Build}";
         public static readonly string WindowTitle = $"{Const.DynamicsCrmDevKit} { Const.VersionBuild }";
-        public static readonly string[] WEB_RESOURCE_EXTENSIONS = { ".htm", ".html", ".css", ".js", ".xml", ".png", ".jpg", ".gif", ".xap", ".xsl", "xslt.", ".ico", ".svg", ".resx" };
+        public static readonly string[] WEB_RESOURCE_EXTENSIONS = { ".htm", ".html", ".css", ".js", ".xml", ".png", ".jpg", ".gif", ".xap", ".xsl", "xslt.", ".ico", ".svg", ".resx", ".ts" };
         public const string SchemaName = "SchemaName";
         public const string LogicalName = "LogicalName";
         public static readonly HashSet<string> DEFAULTS = new HashSet<string>(StringComparer.OrdinalIgnoreCase)

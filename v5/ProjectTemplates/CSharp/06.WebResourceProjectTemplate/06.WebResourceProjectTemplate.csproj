@@ -45,6 +45,7 @@
     <AssemblyName>CSharpWebResource2ProjectTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
@@ -82,6 +83,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="generator.form.bat" />
     <None Include="generator.webapi.bat" />
+    <None Include="jsconfig.json" />
     <None Include="package.json" />
     <None Include="_packages.config" />
     <None Include="ProjectTemplate.csproj" />

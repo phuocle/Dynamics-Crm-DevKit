@@ -28,8 +28,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                replacementsDictionary["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.d.ts");
-                replacementsDictionary["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("devkit.js");
+                replacementsDictionary["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.d.ts");
+                replacementsDictionary["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.js");
             });
         }
 

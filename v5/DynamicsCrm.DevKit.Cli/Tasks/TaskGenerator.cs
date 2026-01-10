@@ -36,11 +36,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
             if (Json.rootfolder == "???")
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
@@ -53,13 +48,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (
                 Json.type.ToLower() != nameof(GeneratorType.jsform) &&
+                Json.type.ToLower() != nameof(GeneratorType.tsform) &&
                 Json.type.ToLower() != nameof(GeneratorType.jswebapi) &&
+                Json.type.ToLower() != nameof(GeneratorType.tswebapi) &&
                 Json.type.ToLower() != nameof(GeneratorType.csharp) /*&&
                 Json.type.ToLower() != nameof(GeneratorType.earlybound)*/
                 )
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
+            }
+            // Skip rootnamespace validation for TsForm and TsWebApi since they no longer use rootnamespace
+            if (Json.type.ToLower() != nameof(GeneratorType.tsform) && Json.type.ToLower() != nameof(GeneratorType.tswebapi))
+            {
+                if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    return false;
+                }
             }
             await Helper.DelayAsync(1);
             return true;
@@ -82,8 +88,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await GeneratorLateBoundAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
                     await GeneratorJsFormAsync(schemaNames);
+                else if (Json.type.ToLower() == nameof(GeneratorType.tsform))
+                    await GeneratorTsFormAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                     await GeneratorWebApiAsync(schemaNames);
+                else if (Json.type.ToLower() == nameof(GeneratorType.tswebapi))
+                    await GeneratorTsWebApiAsync(schemaNames);
                 //else if (Json.type.ToLower() == nameof(GeneratorType.earlybound))
                 //    await GeneratorEarlyBoundAsync(schemaNames);
             }
@@ -99,6 +109,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 endsWith = ".generated.cs";
             else if (Json.type.ToLower() == nameof(GeneratorType.jsform))
                 endsWith = ".form.js";
+            else if (Json.type.ToLower() == nameof(GeneratorType.tsform))
+                endsWith = ".form.ts";
             else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                 endsWith = ".webapi.js";
             if (Json.entities != null && (Json.entities.Trim().ToLower() == "*" || Json.entities.Trim().ToLower() == "all"))
@@ -157,6 +169,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var (newCode, newDTS) = await JsWebApi.GetJsWebApiCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsFormExist);
+                    if (!File.Exists(file))
+                    {
+                        await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
+                    }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -181,10 +197,52 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            if (!File.Exists(file))
-                            {
-                                await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
-                            }
+                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                }
+
+                i++;
+            }
+        }
+
+        private async Task GeneratorTsWebApiAsync(List<string> schemaNames)
+        {
+            const string endsWith = ".webapi.ts";
+            var totalFiles = schemaNames.Count();
+            var len = totalFiles.ToString().Length;
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            foreach (var schemaName in schemaNames)
+            {
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
+                if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
+                {
+                    var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
+                    var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
+                    var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
+                    var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
+                    var newCode = await TsWebApi.GetTsWebApiCodeAsync(ServiceClient, entityMetadata);
+
+                    if (Helper.IsTheSame(oldCode, newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                    else
+                    {
+                        if (File.Exists(fileEndsWith))
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
@@ -217,6 +275,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldDTS = await FileHelper.ReadAllTextAsync(dtsFile);
                     var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
                     var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
+
+                    // Skip if no forms exist for this entity
+                    if (string.IsNullOrEmpty(newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.DarkGray, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}", ConsoleColor.DarkGray, " (no forms)");
+                        i++;
+                        continue;
+                    }
+
+                    if (!File.Exists(file))
+                    {
+                        await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
+                    }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
@@ -241,10 +312,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            if (!File.Exists(file))
-                            {
-                                await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
-                            }
                             CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
@@ -256,6 +323,90 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 i++;
             }
         }
+
+        private async Task GeneratorTsFormAsync(List<string> schemaNames)
+        {
+            const string endsWith = ".form.ts";
+            var totalFiles = schemaNames.Count();
+            var len = totalFiles.ToString().Length;
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            var processedEntities = new List<EntityMetadata>();
+            foreach (var schemaName in schemaNames)
+            {
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
+                if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
+                {
+                    processedEntities.Add(entityMetadata);
+                    var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
+                    var oldCode = await FileHelper.ReadAllTextAsync(fileEndsWith);
+                    var isJsWebApiExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.webapi.js"));
+                    var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata);
+
+                    // Skip if no forms exist for this entity
+                    if (string.IsNullOrEmpty(newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.DarkGray, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}", ConsoleColor.DarkGray, " (no forms)");
+                        i++;
+                        continue;
+                    }
+
+                    var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
+                    if (!File.Exists(file))
+                    {
+                        var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata);
+                        if (!string.IsNullOrEmpty(tsCode))
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(file, tsCode);
+                        }
+                    }
+
+                    if (Helper.IsTheSame(oldCode, newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                    else
+                    {
+                        if (File.Exists(fileEndsWith))
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                }
+                i++;
+            }
+
+            // Generate OptionSet.ts after processing all entities
+            if (processedEntities.Count > 0)
+            {
+                var optionSetFile = Path.Combine(CurrentFolder, "OptionSet.ts");
+                var existingContent = await FileHelper.ReadAllTextAsync(optionSetFile);
+                var newOptionSetCode = await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, processedEntities, existingContent);
+
+                if (Helper.IsTheSame(existingContent, newOptionSetCode))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", " ") + "  ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "OptionSet.ts");
+                }
+                else
+                {
+                    await FileHelper.ForceWriteAllTextAsync(optionSetFile, newOptionSetCode);
+                    var action = File.Exists(optionSetFile) ? CliAction.UPDATED : CliAction.CREATED;
+                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", " ") + "  ", ConsoleColor.Green, action, ConsoleColor.White, "OptionSet.ts");
+                }
+            }
+        }
+
 
         //private async Task GeneratorEarlyBoundAsync(List<string> schemaNames)
         //{

@@ -6,14 +6,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion></ProductVersion>
+    <ProductVersion>
+    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{b802bdee-baee-4bbc-b7ba-df4396e3c82f}</ProjectGuid>
+    <ProjectGuid>{B802BDEE-BAEE-4BBC-B7BA-DF4396E3C82F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.WebResourceTs</RootNamespace>
     <AssemblyName>Dev.DevKit.WebResourceTs</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -40,27 +42,38 @@
     <OutputPath>..\Release\web\Dev.DevKit.WebResourceTs</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
     <NoWarn>CS8032</NoWarn>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-	<ItemGroup>
-    <Folder Include="html\" />
-    <Folder Include="css\" />
-    <Folder Include="build\" />
-	<Folder Include="entities\" />
-	<Folder Include="lib\" />
-    <Folder Include="images\"/>
-    <Folder Include="resources\"/>
-	<Compile Include="Properties\AssemblyInfo.cs" />
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="tsconfig.json" />
     <Content Include="build.js" />
+    <TypeScriptCompile Include="entities\Account.form.ts" />
+    <TypeScriptCompile Include="entities\Account.ts" />
+    <TypeScriptCompile Include="entities\Contact.form.ts" />
+    <TypeScriptCompile Include="entities\Contact.ts" />
+    <TypeScriptCompile Include="entities\Email.form.ts" />
+    <TypeScriptCompile Include="entities\Email.ts" />
+    <TypeScriptCompile Include="entities\Fax.form.ts" />
+    <TypeScriptCompile Include="entities\Fax.ts" />
+    <TypeScriptCompile Include="entities\OptionSet.ts" />
+    <TypeScriptCompile Include="entities\PhoneCall.form.ts" />
+    <TypeScriptCompile Include="entities\PhoneCall.ts" />
+    <TypeScriptCompile Include="entities\SystemUser.form.ts" />
+    <TypeScriptCompile Include="entities\SystemUser.ts" />
+    <TypeScriptCompile Include="entities\Task.form.ts" />
+    <TypeScriptCompile Include="entities\Task.ts" />
+    <TypeScriptCompile Include="entities\Team.form.ts" />
+    <TypeScriptCompile Include="entities\Team.ts" />
     <TypeScriptCompile Include="lib\devkit.d.ts" />
     <TypeScriptCompile Include="lib\devkit.ts" />
     <None Include="entities\generator.form.bat" />
@@ -70,6 +83,13 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''"/>
+  <ItemGroup>
+    <Folder Include="build\" />
+    <Folder Include="css\" />
+    <Folder Include="html\" />
+    <Folder Include="images\" />
+    <Folder Include="resources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
 <!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->

@@ -28,6 +28,3 @@ lcov.info
 # OS files
 .DS_Store
 Thumbs.db
-
-# Specific test data
-DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegistration/2.after/

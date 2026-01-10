@@ -6,6 +6,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -27,9 +28,21 @@ namespace DynamicsCrm.DevKit.Commands
             }
 
             var url = serviceClient.ConnectedUrl();
-            await ShowStatusAsync(url, "Connected");
+            await TypeScriptBuildHelper.ShowStatusAsync(url, "Connected");
 
             var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+
+            // Handle TypeScript files: build first, then deploy the resulting .js file
+            var (success, deployFilePath, error) = await TypeScriptBuildHelper.ProcessTypeScriptForDeploymentAsync(fullFileName, url);
+            if (!success)
+            {
+                await VS.StatusBar.ClearAsync();
+                await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, error);
+                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                return;
+            }
+            fullFileName = deployFilePath;
+
             var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
             var deployWebResourceCache = CacheHelper.GetWebResource(fullFileNameForCrm);
 
@@ -51,7 +64,7 @@ namespace DynamicsCrm.DevKit.Commands
                 else
                 {
                     await VS.StatusBar.ClearAsync();
-                    await ShowStatusAndErrorAsync(url, "No web resource selected for deployment");
+                    await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, "No web resource selected for deployment");
                 }
             }
 
@@ -63,41 +76,29 @@ namespace DynamicsCrm.DevKit.Commands
             const int wait = 2;
             var url = serviceClient.ConnectedUrl();
 
-            await ShowStatusAsync(url, "Deploying ...");
+            await TypeScriptBuildHelper.ShowStatusAsync(url, "Deploying ...");
             var (ok, message) = await XrmHelper.DeployWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResourceId);
 
             if (ok)
             {
-                await ShowStatusAsync(url, "Deployed");
+                await TypeScriptBuildHelper.ShowStatusAsync(url, "Deployed");
                 await Helper.DelayAsync(wait);
-                await ShowStatusAsync(url, "Publishing ...");
+                await TypeScriptBuildHelper.ShowStatusAsync(url, "Publishing ...");
 
                 var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
                 if (ok2)
                 {
-                    await ShowStatusAsync(url, $"[{fullFileName}] published to: [{deployWebResource.WebResource}]");
+                    await TypeScriptBuildHelper.ShowStatusAsync(url, $"[{fullFileName}] published to: [{deployWebResource.WebResource}]");
                 }
                 else
                 {
-                    await ShowStatusAndErrorAsync(url, $"Publishing Failed with message: {message2}");
+                    await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, $"Publishing Failed with message: {message2}");
                 }
             }
             else
             {
-                await ShowStatusAndErrorAsync(url, $"Deploying Failed with message: {message}");
+                await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, $"Deploying Failed with message: {message}");
             }
-        }
-
-        private static async Task ShowStatusAsync(string url, string message)
-        {
-            await VS.StatusBar.ShowMessageAsync($"[{url}] >>> {message} <<<");
-        }
-
-        private static async Task ShowStatusAndErrorAsync(string url, string message)
-        {
-            var formattedMessage = $"[{url}] >>> {message} <<<";
-            await VS.StatusBar.ShowMessageAsync(formattedMessage);
-            await VS.MessageBox.ShowErrorAsync(formattedMessage);
         }
 
         protected override void BeforeQueryStatus(EventArgs e)

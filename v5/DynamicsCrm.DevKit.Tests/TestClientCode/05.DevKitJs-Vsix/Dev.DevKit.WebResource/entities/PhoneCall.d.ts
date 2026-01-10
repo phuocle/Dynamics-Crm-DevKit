@@ -1,0 +1,478 @@
+﻿//@ts-check
+///<reference path="devkit.d.ts" />
+declare namespace DevKit {
+	namespace FormPhone_Call {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+			StateCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_phonecall_Sections {
+			/** General Information */
+			general_information: DevKit.Controls.Section;
+			/** Description */
+			phone_call_description: DevKit.Controls.Section;
+			/** Phone Call Details */
+			phone_call_details: DevKit.Controls.Section;
+			/** Section */
+			tab_2_section_2: DevKit.Controls.Section;
+		}
+		/** Phone Call */
+		interface tab_phonecall extends DevKit.Controls.ITab {
+			Section: tab_phonecall_Sections;
+		}
+		interface Tabs {
+			/** Phone Call */
+			phonecall: tab_phonecall;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+			Description: DevKit.Controls.String;
+			/** Select the direction of the phone call as incoming or outbound. */
+			DirectionCode: DevKit.Controls.Boolean;
+			/** Enter the account, contact, lead, or user who made the phone call. */
+			from: DevKit.Controls.Lookup;
+			/** Type the phone number. */
+			PhoneNumber: DevKit.Controls.String;
+			/** Choose the record that the phone call relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			Subject: DevKit.Controls.String;
+			/** Enter the account, contact, lead, or user recipients of the phone call. */
+			to: DevKit.Controls.Lookup;
+		}
+	}
+	export class FormPhone_Call extends DevKit.IForm {
+		/**
+		* Phone Call [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Phone_Call */
+		Body: DevKit.FormPhone_Call.Body;
+		/** The Header section of form Phone_Call */
+		Header: DevKit.FormPhone_Call.Header;
+	}
+	namespace FormPhone_Call_for_Interactive_experience {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+			StateCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_tab_2_Sections {
+			/** Regarding */
+			tab_2_section_1: DevKit.Controls.Section;
+			/** Description */
+			tab_2_section_2: DevKit.Controls.Section;
+			/** DETAILS */
+			tab_2_section_4: DevKit.Controls.Section;
+		}
+		/** Phone Call */
+		interface tab_tab_2 extends DevKit.Controls.ITab {
+			Section: tab_tab_2_Sections;
+		}
+		interface Tabs {
+			/** Phone Call */
+			tab_2: tab_tab_2;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+			Description: DevKit.Controls.String;
+			/** Select the direction of the phone call as incoming or outbound. */
+			DirectionCode: DevKit.Controls.Boolean;
+			/** Enter the account, contact, lead, or user who made the phone call. */
+			from: DevKit.Controls.Lookup;
+			/** Type the phone number. */
+			PhoneNumber: DevKit.Controls.String;
+			/** Choose the record that the phone call relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Choose the record that the phone call relates to. */
+			RegardingObjectId1: DevKit.Controls.Lookup;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			Subject: DevKit.Controls.String;
+			/** Enter the account, contact, lead, or user recipients of the phone call. */
+			to: DevKit.Controls.Lookup;
+		}
+	}
+	export class FormPhone_Call_for_Interactive_experience extends DevKit.IForm {
+		/**
+		* Phone Call for Interactive experience [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Phone_Call_for_Interactive_experience */
+		Body: DevKit.FormPhone_Call_for_Interactive_experience.Body;
+		/** The Header section of form Phone_Call_for_Interactive_experience */
+		Header: DevKit.FormPhone_Call_for_Interactive_experience.Header;
+	}
+	namespace FormPhone_call_quick_create_form {
+		interface tab_PhoneCall_Tab_1_Sections {
+			PhoneCall_Description: DevKit.Controls.Section;
+			/** DESCRIPTION */
+			PhoneCall_Description_2: DevKit.Controls.Section;
+			PhoneCall_Description_3: DevKit.Controls.Section;
+		}
+		/** General */
+		interface tab_PhoneCall_Tab_1 extends DevKit.Controls.ITab {
+			Section: tab_PhoneCall_Tab_1_Sections;
+		}
+		interface Tabs {
+			/** General */
+			PhoneCall_Tab_1: tab_PhoneCall_Tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+			Description: DevKit.Controls.String;
+			/** Select the direction of the phone call as incoming or outbound. */
+			DirectionCode: DevKit.Controls.Boolean;
+			/** Enter the account, contact, lead, or user who made the phone call. */
+			from: DevKit.Controls.Lookup;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the phone number. */
+			PhoneNumber: DevKit.Controls.String;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Choose the record that the phone call relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			Subject: DevKit.Controls.String;
+			/** Enter the account, contact, lead, or user recipients of the phone call. */
+			to: DevKit.Controls.Lookup;
+		}
+	}
+	export class FormPhone_call_quick_create_form extends DevKit.IForm {
+		/**
+		* Phone call quick create form. [Quick Create]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Phone_call_quick_create_form */
+		Body: DevKit.FormPhone_call_quick_create_form.Body;
+	}
+	export class PhoneCallApi {
+		/**
+		* DynamicsCrm.DevKit PhoneCallApi
+		* @param entity The entity object from OData response
+		*/
+		constructor(entity?: Record<string, any>)
+		/**
+		 * Get the raw value of an aliased field
+		 * @param alias The alias field name
+		 * @param isMultiOptionSet True if the field is a multi-option set
+		 * @returns The raw value or null if not found
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of an aliased field
+		 * @param alias The alias field name
+		 * @param isMultiOptionSet True if the field is a multi-option set
+		 * @returns The formatted value or empty string if not found
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string | string[];
+		/** The entity object for Create/Update operations*/
+		readonly Entity: Record<string, any>;
+		/** The OData entity object containing raw data*/
+		readonly ODataEntity: Record<string, any>;
+		/** The entity name */
+		readonly EntityName: string;
+		/** The entity collection name */
+		readonly EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependent on the fields that are retrieved */
+		readonly "@odata.etag": string;
+		/** For internal use only. */
+		ActivityAdditionalParams: string | null;
+		/** Unique identifier of the phone call activity. */
+		ActivityId: string | null;
+		/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+		ActualDurationMinutes: number | null;
+		/** Enter the actual end date and time of the phone call. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual duration of the phone call. */
+		ActualEnd_UtcDateOnly: Date | null;
+		/** Enter the actual start date and time for the phone call. By default, it displays the date and time when the activity was created, but can be edited to capture the actual duration of the phone call. */
+		ActualStart_UtcDateOnly: Date | null;
+		/** Type a category to identify the phone call type, such as lead gathering or customer follow-up, to tie the phone call to a business group or function. */
+		Category: string | null;
+		/** Shows who created the record. */
+		readonly CreatedBy: string | null;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		readonly CreatedOn_UtcDateAndTime: Date | null;
+		/** Shows who created the record on behalf of another user. */
+		readonly CreatedOnBehalfBy: string | null;
+		/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+		Description: string | null;
+		/** Select the direction of the phone call as incoming or outbound. */
+		DirectionCode: boolean | null;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		readonly ExchangeRate: number | null;
+		/** Unique identifier of the data import or data migration that created this record. */
+		ImportSequenceNumber: number | null;
+		/** Information which specifies whether the phone call activity was billed as part of resolving a case. */
+		IsBilled: boolean | null;
+		/** Information regarding whether the activity is a regular activity type or event type. */
+		readonly IsRegularActivity: boolean | null;
+		/** Indication which specifies if the phone call activity was created by a workflow rule. */
+		IsWorkflowCreated: boolean | null;
+		/** Contains the date and time stamp of the last on hold time. */
+		LastOnHoldTime_UtcDateAndTime: Date | null;
+		/** Select whether a voice mail was left for the person. */
+		LeftVoiceMail: boolean | null;
+		/** Shows who last updated the record. */
+		readonly ModifiedBy: string | null;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		readonly ModifiedOn_UtcDateAndTime: Date | null;
+		/** Shows who last updated the record on behalf of another user. */
+		readonly ModifiedOnBehalfBy: string | null;
+		/** Shows how long, in minutes, that the record was on hold. */
+		readonly OnHoldTime: number | null;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: Date | null;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: string | null;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: string | null;
+		/** Unique identifier of the business unit that owns the phone call activity. */
+		readonly OwningBusinessUnit: string | null;
+		/** Unique identifier of the team that owns the phone call activity. */
+		readonly OwningTeam: string | null;
+		/** Unique identifier of the user that owns the phone call activity. */
+		readonly OwningUser: string | null;
+		/** Type the phone number. */
+		PhoneNumber: string | null;
+		/** Select the priority so that preferred customers or critical issues are handled quickly. */
+		PriorityCode: OptionSet.PhoneCall.PriorityCode | null;
+		/** Shows the ID of the process. */
+		ProcessId: string | null;
+		/** Scheduled duration of the phone call activity, specified in minutes. */
+		readonly ScheduledDurationMinutes: number | null;
+		/** Enter the expected due date and time. */
+		ScheduledEnd_UtcDateAndTime: Date | null;
+		/** Enter the expected due date and time. */
+		ScheduledStart_UtcDateAndTime: Date | null;
+		/** Choose the service level agreement (SLA) that you want to apply to the Phone Call record. */
+		SLAId: string | null;
+		/** Last SLA that was applied to this Phone Call. This field is for internal use only. */
+		readonly SLAInvokedId: string | null;
+		/** Shows the date and time by which the activities are sorted. */
+		SortDate_UtcDateAndTime: Date | null;
+		/** Shows the ID of the stage. */
+		StageId: string | null;
+		/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+		StateCode: OptionSet.PhoneCall.StateCode | null;
+		/** Select the phone call's status. */
+		StatusCode: OptionSet.PhoneCall.StatusCode | null;
+		/** Type a subcategory to identify the phone call type and relate the activity to a specific product, sales region, business group, or other function. */
+		Subcategory: string | null;
+		/** Type a short description about the objective or primary topic of the phone call. */
+		Subject: string | null;
+		/** For internal use only. */
+		SubscriptionId: string | null;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: number | null;
+		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+		TransactionCurrencyId: string | null;
+		/** For internal use only. */
+		TraversedPath: string | null;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: number | null;
+		/** Version number of the phone call activity. */
+		readonly VersionNumber: number | null;
+		/** The array of object that can cast object to ActivityPartyApi class */
+		ActivityParties: Array<Record<string, any>> | null;
+		/**
+		* Formatted values for all fields
+		* Contains the display-formatted values for fields that have formatting applied
+		*/
+		readonly FormattedValue: {
+			/** For internal use only. */
+			readonly ActivityAdditionalParams: string;
+			/** Unique identifier of the phone call activity. */
+			readonly ActivityId: string;
+			/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+			readonly ActualDurationMinutes: string;
+			/** Enter the actual end date and time of the phone call. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual duration of the phone call. */
+			readonly ActualEnd_UtcDateOnly: string;
+			/** Enter the actual start date and time for the phone call. By default, it displays the date and time when the activity was created, but can be edited to capture the actual duration of the phone call. */
+			readonly ActualStart_UtcDateOnly: string;
+			/** Type a category to identify the phone call type, such as lead gathering or customer follow-up, to tie the phone call to a business group or function. */
+			readonly Category: string;
+			/** Shows who created the record. */
+			readonly CreatedBy: string;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly CreatedOn_UtcDateAndTime: string;
+			/** Shows who created the record on behalf of another user. */
+			readonly CreatedOnBehalfBy: string;
+			/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+			readonly Description: string;
+			/** Select the direction of the phone call as incoming or outbound. */
+			readonly DirectionCode: string;
+			/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+			readonly ExchangeRate: string;
+			/** Unique identifier of the data import or data migration that created this record. */
+			readonly ImportSequenceNumber: string;
+			/** Information which specifies whether the phone call activity was billed as part of resolving a case. */
+			readonly IsBilled: string;
+			/** Information regarding whether the activity is a regular activity type or event type. */
+			readonly IsRegularActivity: string;
+			/** Indication which specifies if the phone call activity was created by a workflow rule. */
+			readonly IsWorkflowCreated: string;
+			/** Contains the date and time stamp of the last on hold time. */
+			readonly LastOnHoldTime_UtcDateAndTime: string;
+			/** Select whether a voice mail was left for the person. */
+			readonly LeftVoiceMail: string;
+			/** Shows who last updated the record. */
+			readonly ModifiedBy: string;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			readonly ModifiedOn_UtcDateAndTime: string;
+			/** Shows who last updated the record on behalf of another user. */
+			readonly ModifiedOnBehalfBy: string;
+			/** Shows how long, in minutes, that the record was on hold. */
+			readonly OnHoldTime: string;
+			/** Date and time that the record was migrated. */
+			readonly OverriddenCreatedOn_UtcDateOnly: string;
+			/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+			readonly OwnerId_systemuser: string;
+			/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+			readonly OwnerId_team: string;
+			/** Unique identifier of the business unit that owns the phone call activity. */
+			readonly OwningBusinessUnit: string;
+			/** Unique identifier of the team that owns the phone call activity. */
+			readonly OwningTeam: string;
+			/** Unique identifier of the user that owns the phone call activity. */
+			readonly OwningUser: string;
+			/** Type the phone number. */
+			readonly PhoneNumber: string;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			readonly PriorityCode: string;
+			/** Shows the ID of the process. */
+			readonly ProcessId: string;
+			/** Scheduled duration of the phone call activity, specified in minutes. */
+			readonly ScheduledDurationMinutes: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledEnd_UtcDateAndTime: string;
+			/** Enter the expected due date and time. */
+			readonly ScheduledStart_UtcDateAndTime: string;
+			/** Choose the service level agreement (SLA) that you want to apply to the Phone Call record. */
+			readonly SLAId: string;
+			/** Last SLA that was applied to this Phone Call. This field is for internal use only. */
+			readonly SLAInvokedId: string;
+			/** Shows the date and time by which the activities are sorted. */
+			readonly SortDate_UtcDateAndTime: string;
+			/** Shows the ID of the stage. */
+			readonly StageId: string;
+			/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+			readonly StateCode: string;
+			/** Select the phone call's status. */
+			readonly StatusCode: string;
+			/** Type a subcategory to identify the phone call type and relate the activity to a specific product, sales region, business group, or other function. */
+			readonly Subcategory: string;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			readonly Subject: string;
+			/** For internal use only. */
+			readonly SubscriptionId: string;
+			/** For internal use only. */
+			readonly TimeZoneRuleVersionNumber: string;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			readonly TransactionCurrencyId: string;
+			/** For internal use only. */
+			readonly TraversedPath: string;
+			/** Time zone code that was in use when the record was created. */
+			readonly UTCConversionTimeZoneCode: string;
+			/** Version number of the phone call activity. */
+			readonly VersionNumber: string;
+		}
+	}
+}
+declare namespace OptionSet {
+	namespace PhoneCall {
+		enum ActivityTypeCode {
+			/** Appointment = 4201*/
+			Appointment = 4201,
+			/** Email = 4202*/
+			Email = 4202,
+			/** Fax = 4204*/
+			Fax = 4204,
+			/** Invite_Redemption = 10407*/
+			Invite_Redemption = 10407,
+			/** Letter = 4207*/
+			Letter = 4207,
+			/** Phone_Call = 4210*/
+			Phone_Call = 4210,
+			/** Portal_Comment = 10408*/
+			Portal_Comment = 10408,
+			/** Recurring_Appointment = 4251*/
+			Recurring_Appointment = 4251,
+			/** Task = 4212*/
+			Task = 4212,
+			/** Teams_chat = 10253*/
+			Teams_chat = 10253
+		}
+		enum PriorityCode {
+			/** High = 2*/
+			High = 2,
+			/** Low = 0*/
+			Low = 0,
+			/** Normal = 1*/
+			Normal = 1
+		}
+		enum RegardingObjectTypeCode {
+		}
+		enum StateCode {
+			/** Canceled = 2*/
+			Canceled = 2,
+			/** Completed = 1*/
+			Completed = 1,
+			/** Open = 0*/
+			Open = 0
+		}
+		enum StatusCode {
+			/** Canceled = 3*/
+			Canceled = 3,
+			/** Made = 2*/
+			Made = 2,
+			/** Open = 1*/
+			Open = 1,
+			/** Received = 4*/
+			Received = 4
+		}
+		enum RollupState {
+			/** NotCalculated = 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** Calculated = 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** OverflowError = 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** OtherError = 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** RetryLimitExceeded = 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** HierarchicalRecursionLimitReached = 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** LoopDetected = 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
+	}
+}

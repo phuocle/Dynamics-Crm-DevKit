@@ -27,11 +27,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var logicalName = Helper.SafeIdentifier(entityMetadata.LogicalName);
             code += $"'use strict';{NEW_LINE}";
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
+            code += $"// @ts-ignore{NEW_LINE}";
             code += $"var {@namespace};{NEW_LINE}";
-            code += $"(function ({@namespace}) {{{NEW_LINE}";
+            code += $"(function (/** @type {{any}} */ {@namespace}) {{{NEW_LINE}";
+            code += $"{TAB}if ({@namespace} === undefined) {@namespace} = {{}};{NEW_LINE}";
             code += $"{TAB}{@namespace}.{entityMetadata.SchemaName}Api = function (e) {{{NEW_LINE}";
             code += $"{TAB}{TAB}const f = '@OData.Community.Display.V1.FormattedValue';{NEW_LINE}";
-            code += $"{await Helper.ReadEmbeddedResourceAsync($"{typeof(JsWebApi).Assembly.GetName().Name}.Resources.WebApi.js")}";
+            code += $"{await Helper.ReadEmbeddedResourceAsync($"{typeof(JsWebApi).Assembly.GetName().Name}.Resources.js.WebApi.js")}";
             code += $"{TAB}{TAB}const _{logicalName} = {{{NEW_LINE}";
             code += $"{await GeneratorCodeAsync()}";
             code += $"{TAB}{TAB}}};{NEW_LINE}";
@@ -69,7 +71,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}};{NEW_LINE}";
             code += $"{TAB}{TAB}return {logicalName};{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
-            code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
+            code += $"}})({@namespace} || ({@namespace} = /** @type {{any}} */ ({{}})));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
             return (code, dts);
         }
@@ -172,7 +174,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         {
                             foreach (var entityLogicalName in lookup.Targets.Distinct())
                             {
-                                var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                var navigation = EntityMetadata.ManyToOneRelationships?.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
                                 await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, entityLogicalName);
                                 var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName)?.LogicalCollectionName}'";

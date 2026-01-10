@@ -43,6 +43,8 @@ function getEntityFiles() {
     const files = fs.readdirSync(entitiesDir);
     return files.filter(file => {
         if (!file.endsWith('.ts')) return false;
+        // Skip .form.ts files - they are imported by main .ts files
+        if (file.endsWith('.form.ts')) return false;
         const filePath = path.join(entitiesDir, file);
         const stat = fs.statSync(filePath);
         return stat.isFile();

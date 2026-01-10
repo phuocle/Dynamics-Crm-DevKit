@@ -14,6 +14,7 @@
     <RootNamespace>$NameSpace$</RootNamespace>
     <AssemblyName>$ProjectName$</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -58,6 +59,7 @@
 	<Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
+    <None Include="jsconfig.json" />
     <None Include="package.json" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />

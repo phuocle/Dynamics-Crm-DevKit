@@ -158,6 +158,7 @@ namespace DynamicsCrm.DevKit.Shared
             return name switch
             {
                 "import" => true,
+                "package" => true,
                 _ => false,
             };
         }
@@ -238,8 +239,9 @@ namespace DynamicsCrm.DevKit.Shared
             const string TAB = "\t";
             var code = string.Empty;
             code += $"/** @namespace OptionSet */{NEW_LINE}";
+            code += $"// @ts-ignore{NEW_LINE}";
             code += $"var OptionSet;{NEW_LINE}";
-            code += $"(function (OptionSet) {{{NEW_LINE}";
+            code += $"(function (/** @type {{any}} */ OptionSet) {{{NEW_LINE}";
             code += $"{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
@@ -265,7 +267,7 @@ namespace DynamicsCrm.DevKit.Shared
             }
             code += $"{TAB}{TAB}RollupState: {{ NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }}{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
-            code += $"}})(OptionSet || (OptionSet = {{}}));";
+            code += $"}})(OptionSet || (OptionSet = /** @type {{any}} */ ({{}})));";
             return code;
         }
 

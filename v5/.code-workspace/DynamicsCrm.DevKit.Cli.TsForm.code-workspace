@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Shared"
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Tests/TestProjectsItems/Dev.DevKit.WebResource"
+		},
+		{
+			"path": "../DynamicsCrm.DevKit.Tests/TestProjectsItems/Dev.DevKit.WebResourceTs"
+		}
+	],
+	"settings": {}
+}

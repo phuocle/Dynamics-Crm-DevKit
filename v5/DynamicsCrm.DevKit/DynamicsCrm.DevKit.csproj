@@ -85,6 +85,9 @@
     <Compile Include="Lib\Forms\FormReview.xaml.cs">
       <DependentUpon>FormReview.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Forms\FormBuildOutput.xaml.cs">
+      <DependentUpon>FormBuildOutput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,7 @@
     <Compile Include="Lib\T4Callback.cs" />
     <Compile Include="Lib\T4Helper.cs" />
     <Compile Include="Lib\VsixHelper.cs" />
+    <Compile Include="Lib\TypeScriptBuildHelper.cs" />
     <Compile Include="Lib\WpfControls\ExternalBrowserHyperlink.cs" />
     <Compile Include="Lib\WpfControls\UserControlConnection.xaml.cs">
       <DependentUpon>UserControlConnection.xaml</DependentUpon>
@@ -108,8 +112,10 @@
     <Compile Include="Wizard\ItemTemplates\CustomAction.cs" />
     <Compile Include="Wizard\ItemTemplates\BatFile.cs" />
     <Compile Include="Wizard\ItemTemplates\DataProvider.cs" />
+    <Compile Include="Wizard\ItemTemplates\TsWebApi.cs" />
     <Compile Include="Wizard\ItemTemplates\ResourceString.cs" />
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
+    <Compile Include="Wizard\ItemTemplates\TsForm.cs" />
     <Compile Include="Wizard\ItemTemplates\UiTest.cs" />
     <Compile Include="Wizard\ItemTemplates\JsDevkit.cs" />
     <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
@@ -238,6 +244,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Lib\Forms\FormBuildOutput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Lib\Forms\FormWebResource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -339,6 +349,20 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\13.BatFileItemTemplate\13.BatFileItemTemplate.csproj">
       <Project>{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}</Project>
       <Name>13.BatFileItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\14.JsFormTsItemTemplate\14.JsFormTsItemTemplate.csproj">
+      <Project>{A3432EFE-5FE3-46F4-9335-703E658C022F}</Project>
+      <Name>14.JsFormTsItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\15.TsWebApiItemTemplate\15.TsWebApiItemTemplate.csproj">
+      <Project>{1B81A02C-92EC-4963-B6FF-AAD8202044A9}</Project>
+      <Name>15.TsWebApiItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
