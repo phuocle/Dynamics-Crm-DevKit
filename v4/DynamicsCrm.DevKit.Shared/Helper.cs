@@ -104,13 +104,15 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetIdentifier(string name)
         {
-            var value = string.Empty;
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            // Optimization: Use StringBuilder to avoid intermediate string allocations in loop
+            var sb = new StringBuilder(name.Length);
             for (int i = 0; i < name.Length; ++i)
             {
                 if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
-                    value += name[i];
+                    sb.Append(name[i]);
             }
-            return value;
+            return sb.ToString();
         }
 
         public static string SafeIdentifier(string name)
