@@ -58,6 +58,14 @@
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
+    <Project Path="ItemTemplates/CSharp/14.JsFormTsItemTemplate/14.JsFormTsItemTemplate.csproj" Id="a3432efe-5fe3-46f4-9335-703e658c022f">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="ItemTemplates/CSharp/15.TsWebApiItemTemplate/15.TsWebApiItemTemplate.csproj">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
   </Folder>
   <Folder Name="/ProjectTemplates/" />
   <Folder Name="/ProjectTemplates/CSharp/">

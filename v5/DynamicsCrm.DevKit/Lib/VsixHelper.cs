@@ -40,6 +40,18 @@ namespace DynamicsCrm.DevKit.Lib
                 var fullFileName = await GetFullFileNameAsync();
                 return Path.GetFileName(fullFileName);
             }
+
+            public static async Task AddFileToProjectAsync(string filePath)
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                var dte = await VS.GetServiceAsync<DTE, DTE>();
+                if (dte?.SelectedItems == null || dte.SelectedItems.Count == 0) return;
+                EnvDTE.SelectedItem dteSelectedItem = dte.SelectedItems.Item(1);
+                ProjectItems rootItems = null;
+                if (dteSelectedItem.Project != null) rootItems = dteSelectedItem.Project.ProjectItems;
+                else if (dteSelectedItem.ProjectItem != null) rootItems = dteSelectedItem.ProjectItem.ProjectItems;
+                rootItems?.AddFromFile(filePath);
+            }
         }
 
         public static async Task<string> GetDynamicsCrmDevKitJsonFullFileNameAsync()

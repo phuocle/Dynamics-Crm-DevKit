@@ -294,8 +294,8 @@ namespace DynamicsCrm.DevKit.Commands
             if (serviceClient == null) return null;
             var crmConnection = CacheHelper.GetCrmConnection();
             if (crmConnection == null) return null;
-            var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.bat");
-            var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("plugin.deploy.debug.only.bat");
+            var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.bat");
+            var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.only.bat");
             var crmConnectionString = Helper.BuildConnectionString(crmConnection);
             plugin_deploy_debug_bat = plugin_deploy_debug_bat
                 .Replace("$ConnectionString$", crmConnectionString)

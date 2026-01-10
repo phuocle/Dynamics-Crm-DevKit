@@ -15,6 +15,10 @@ namespace DynamicsCrm.DevKit.Cli
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Title = Const.WindowTitle;
+            // Enable auto-flush for real-time output (supports AI command_status polling)
+            // Must specify UTF-8 encoding to preserve Unicode box-drawing characters
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput(), System.Text.Encoding.UTF8) { AutoFlush = true });
         }
 
         public static void WriteLine(params object[] values)

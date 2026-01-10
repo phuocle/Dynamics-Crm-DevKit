@@ -15,137 +15,12 @@ namespace DynamicsCrm.DevKit.Cli
     {
         private static ServiceClient ServiceClient { get; set; }
 
-        private static string GetVersionCacheFilePath()
-        {
-            var exePath = Assembly.GetExecutingAssembly().Location;
-            var exeDirectory = Path.GetDirectoryName(exePath);
-            return Path.Combine(exeDirectory, ".version-cache");
-        }
-
-        private static (DateTime lastCheck, string latestVersion) ReadVersionCache()
-        {
-            try
-            {
-                var cacheFile = GetVersionCacheFilePath();
-                if (File.Exists(cacheFile))
-                {
-                    var lines = File.ReadAllLines(cacheFile);
-                    if (lines.Length >= 2)
-                    {
-                        if (DateTime.TryParse(lines[0], out var lastCheck))
-                        {
-                            return (lastCheck, lines[1]);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                // Ignore cache read errors
-            }
-            return (DateTime.MinValue, null);
-        }
-
-        private static void WriteVersionCache(string latestVersion)
-        {
-            try
-            {
-                var cacheFile = GetVersionCacheFilePath();
-                File.WriteAllLines(cacheFile, new[] { DateTime.UtcNow.ToString("O"), latestVersion });
-            }
-            catch
-            {
-                // Ignore cache write errors
-            }
-        }
-
-        private static async Task CheckForUpdatesAsync()
-        {
-            try
-            {
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                var (lastCheck, cachedVersion) = ReadVersionCache();
-                var today = DateTime.UtcNow.Date;
-                var needsCheck = lastCheck.Date < today;
-                string latestVersionString = cachedVersion;
-                if (needsCheck)
-                {
-                    var latestVersion = await NuGetHelper.GetLatestVersionAsync("DynamicsCrm.DevKit.Cli");
-                    if (latestVersion != null)
-                    {
-                        latestVersionString = latestVersion.ToString();
-                        WriteVersionCache(latestVersionString);
-                    }
-                }
-                if (!string.IsNullOrEmpty(latestVersionString))
-                {
-                    var current = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, currentVersion.Revision);
-                    if (Version.TryParse(latestVersionString, out var latest))
-                    {
-                        if (latest > current)
-                        {
-                            ShowUpdateNotification(current.ToString(), latestVersionString);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        private static void ShowUpdateNotification(string currentVersion, string latestVersion)
-        {
-            var colorBox = ConsoleColor.Yellow;
-            var textColor = ConsoleColor.White;
-            var highlightColor = ConsoleColor.Cyan;
-
-            CliLog.Write(colorBox, "╔");
-            CliLog.Write(colorBox, new string('═', 112));
-            CliLog.WriteLine(colorBox, "╗");
-
-            CliLog.WriteLineNoFormat(colorBox, "║", textColor, " UPDATE AVAILABLE", new string(' ', 95), colorBox, "║");
-
-            CliLog.Write(colorBox, "╠");
-            CliLog.Write(colorBox, new string('═', 112));
-            CliLog.WriteLine(colorBox, "╣");
-
-            CliLog.WriteNoFormat(colorBox, "║", textColor, "  A newer version of ");
-            CliLog.WriteNoFormat(ConsoleColor.Green, "DynamicsCrm.DevKit.Cli");
-            CliLog.WriteLineNoFormat(textColor, " is available!", new string(' ', 55), colorBox, "║");
-            CliLog.WriteLineNoFormat(colorBox, "║", textColor, new string(' ', 112), colorBox, "║");
-
-            CliLog.WriteNoFormat(colorBox, "║", textColor, "  Current Version:  ");
-            CliLog.WriteNoFormat(highlightColor, currentVersion);
-            CliLog.WriteLine(colorBox, new string(' ', 112 - 20 - currentVersion.Length) + "║");
-
-            CliLog.WriteNoFormat(colorBox, "║", textColor, "  Latest Version:   ");
-            CliLog.WriteNoFormat(ConsoleColor.Green, latestVersion);
-            CliLog.WriteLine(colorBox, new string(' ', 112 - 20 - latestVersion.Length) + "║");
-
-            CliLog.WriteLineNoFormat(colorBox, "║", textColor, new string(' ', 112), colorBox, "║");
-
-            CliLog.Write(colorBox, "╚");
-            CliLog.Write(colorBox, new string('═', 112));
-            CliLog.WriteLine(colorBox, "╝");
-            Console.WriteLine();
-        }
-
         [STAThread]
         public static async Task Main(string[] args)
         {
-            //var cacheFile = GetVersionCacheFilePath();
-            //var hasCachedVersion = File.Exists(cacheFile);
-            //var versionCheckTask = CheckForUpdatesAsync();
-            //if (!hasCachedVersion)
-            //{
-            //    var timeoutTask = Task.Delay(2000);
-            //    await Task.WhenAny(versionCheckTask, timeoutTask);
-            //}
             if (args.Count() == 0)
             {
                 ShowHelp(true);
-                Console.ReadKey();
             }
             else
             {
@@ -156,30 +31,26 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void ShowHelp(bool showParam = false)
         {
-            var helpColor = ConsoleColor.White;
+            var helpColor = ConsoleColor.Blue;
             var colorBox = ConsoleColor.Green;
             CliLog.SetupCliLog();
             CliLog.Write(colorBox, "╔");
             CliLog.Write(colorBox, new string('═', 112));
             CliLog.WriteLine(colorBox, "╗");
-            CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ", colorBox, "  ║");
-            CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)", colorBox, "  ║");
-            CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |", colorBox, "  ║");
-            CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |", colorBox, "  ║");
-            CliLog.WriteLineNoFormat(colorBox, "║ ", helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|", colorBox, "  ║");
-            CliLog.WriteNoFormat(colorBox, "║ ", helpColor, "        |___/            ", ConsoleColor.Green, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
+            CliLog.WriteLineNoFormat(colorBox, " ║ ", helpColor, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ", colorBox, "  ║");
+            CliLog.WriteLineNoFormat(colorBox, " ║ ", helpColor, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)", colorBox, "  ║");
+            CliLog.WriteLineNoFormat(colorBox, " ║ ", helpColor, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |", colorBox, "  ║");
+            CliLog.WriteLineNoFormat(colorBox, " ║ ", helpColor, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |", colorBox, "  ║");
+            CliLog.WriteLineNoFormat(colorBox, " ║ ", helpColor, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|", colorBox, "  ║");
+            CliLog.WriteNoFormat(colorBox, " ║ ", helpColor, "        |___/            ", ConsoleColor.Green, "https://github.com/phuocle/Dynamics-Crm-DevKit ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Version);
             CliLog.Write(ConsoleColor.Green, " Build: ");
             CliLog.WriteSuccess(ConsoleColor.White, Const.Build);
             CliLog.WriteLine(colorBox, "  ║");
-            CliLog.Write(colorBox, "╚");
+            CliLog.Write(colorBox, " ╚");
             CliLog.Write(colorBox, new string('═', 112));
             CliLog.Write(colorBox, "╝");
-            CliLog.WriteLine(ConsoleColor.Black, "█");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            if (showParam)
-            {
-            }
+            CliLog.WriteLine(colorBox);
         }
 
         static async Task RunCliAsync(CommandLineArgs arguments)
@@ -189,10 +60,6 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 await CliTask.RunAsync(arguments);
             }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-#if DEBUG
-            Console.ReadKey();
-#endif
         }
 
         private static async Task<bool> IsValidAsync(CommandLineArgs arguments)

@@ -1,0 +1,148 @@
+﻿//@ts-check
+///<reference path="devkit.d.ts" />
+declare namespace DevKit {
+	namespace FormTeam {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Unique identifier of the default queue for the team. */
+			QueueId: DevKit.Controls.Lookup;
+		}
+		interface tab_general_Sections {
+			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
+			TeamMembers: DevKit.Controls.Section;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Unique identifier of the user primary responsible for the team. */
+			AdministratorId: DevKit.Controls.Lookup;
+			/** The object Id for a group. */
+			AzureActiveDirectoryObjectId: DevKit.Controls.String;
+			/** Unique identifier of the business unit with which the team is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** Description of the team. */
+			Description: DevKit.Controls.String;
+			MembershipType: DevKit.Controls.OptionSet;
+			/** Name of the team. */
+			Name: DevKit.Controls.String;
+			/** Select the team type. */
+			TeamType: DevKit.Controls.OptionSet;
+		}
+		interface Grid {
+			Members: DevKit.Controls.Grid;
+		}
+	}
+	export class FormTeam extends DevKit.IForm {
+		/**
+		* Team [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Team */
+		Body: DevKit.FormTeam.Body;
+		/** The Header section of form Team */
+		Header: DevKit.FormTeam.Header;
+		/** The Grid of form Team */
+		Grid: DevKit.FormTeam.Grid;
+	}
+	namespace FormTeam_form_Business {
+		interface tab_general_Sections {
+			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
+			TeamMembers: DevKit.Controls.Section;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Unique identifier of the user primary responsible for the team. */
+			AdministratorId: DevKit.Controls.Lookup;
+			/** Unique identifier of the business unit with which the team is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** Description of the team. */
+			Description: DevKit.Controls.String;
+			/** Name of the team. */
+			Name: DevKit.Controls.String;
+			/** Select the team type. */
+			TeamType: DevKit.Controls.OptionSet;
+		}
+		interface Navigation {
+			navAsyncOperations: DevKit.Controls.NavigationItem;
+			navAudit: DevKit.Controls.NavigationItem;
+			navConnections: DevKit.Controls.NavigationItem;
+			navFieldSecurityProfiles: DevKit.Controls.NavigationItem;
+			navMembers: DevKit.Controls.NavigationItem;
+			navProcessSessions: DevKit.Controls.NavigationItem;
+			navRoles: DevKit.Controls.NavigationItem;
+		}
+		interface Grid {
+			Members: DevKit.Controls.Grid;
+		}
+	}
+	export class FormTeam_form_Business extends DevKit.IForm {
+		/**
+		* Team form – Business [Main Form]
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** The Body section of form Team_form_Business */
+		Body: DevKit.FormTeam_form_Business.Body;
+		/** The Navigation of form Team_form_Business */
+		Navigation: DevKit.FormTeam_form_Business.Navigation;
+		/** The Grid of form Team_form_Business */
+		Grid: DevKit.FormTeam_form_Business.Grid;
+	}
+}
+declare namespace OptionSet {
+	namespace Team {
+		enum MembershipType {
+			/** Guests = 3*/
+			Guests = 3,
+			/** Members = 1*/
+			Members = 1,
+			/** Members_and_guests = 0*/
+			Members_and_guests = 0,
+			/** Owners = 2*/
+			Owners = 2
+		}
+		enum RegardingObjectTypeCode {
+		}
+		enum TeamType {
+			/** Access = 1*/
+			Access = 1,
+			/** Office_Group = 3*/
+			Office_Group = 3,
+			/** Owner = 0*/
+			Owner = 0,
+			/** Security_Group = 2*/
+			Security_Group = 2
+		}
+		enum RollupState {
+			/** NotCalculated = 0 - Attribute value is yet to be calculated */
+			NotCalculated,
+			/** Calculated = 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated,
+			/** OverflowError = 2 - Attribute value calculation lead to overflow error */
+			OverflowError,
+			/** OtherError = 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError,
+			/** RetryLimitExceeded = 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded,
+			/** HierarchicalRecursionLimitReached = 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached,
+			/** LoopDetected = 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected
+		}
+	}
+}

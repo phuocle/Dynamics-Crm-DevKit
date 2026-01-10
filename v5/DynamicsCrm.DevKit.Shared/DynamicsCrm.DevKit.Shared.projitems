@@ -16,8 +16,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\TsForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\TsOptionSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\TsWebApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ConfigJson.cs" />
@@ -64,35 +67,37 @@
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.ts_bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.ts_bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.latebound.bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\WebApi.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.ts_bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.form.ts_bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.latebound.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\WebApi.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\plugin.deploy.debug.only.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\plugin.deploy.debug.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\plugin.deploy.debug.only.bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\webresource.deploy.debug.ts_bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.ts_bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.d.ts" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.d.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.form.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.form.bat" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\generator.webapi.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\package.json" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\jsconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\package.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\download.reports.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\download.reports.bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ReportProjectTemplate.rptproj" />
@@ -116,10 +121,10 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\Plugin.tt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\download.webresources.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\download.webresources.bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\deploy.datasource.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\deploy.datasource.bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Helper.cs" />
@@ -137,8 +142,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\build.js" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkit.ts" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\devkitts.d.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\build.js" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.ts" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.d.ts" />
   </ItemGroup>
 </Project>

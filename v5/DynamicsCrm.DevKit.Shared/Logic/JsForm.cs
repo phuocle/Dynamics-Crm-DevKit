@@ -47,20 +47,27 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             RootNamespace = rootNamespace;
             var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
 
+            // If no forms exist for this entity, return null to skip file generation
+            if (forms == null || forms.Count == 0)
+            {
+                return (null, null);
+            }
+
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
 
             code += $"'use strict';{NEW_LINE}";
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
+            code += $"// @ts-ignore{NEW_LINE}";
             code += $"var {@namespace};{NEW_LINE}";
-            code += $"(function ({@namespace}) {{{NEW_LINE}";
+            code += $"(function (/** @type {{any}} */ {@namespace}) {{{NEW_LINE}";
             code += $"{TAB}'use strict';{NEW_LINE}";
             foreach (var form in forms.Where(x => !x.IsQuickCreate))
                 code += await GetMainFormCodeAsync(form, @namespace);
             foreach (var form in forms.Where(x => x.IsQuickCreate))
                 code += GetQuickCreateFormCode(form, @namespace);
-            code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
+            code += $"}})({@namespace} || ({@namespace} = /** @type {{any}} */ ({{}})));{NEW_LINE}";
             code += $"{Helper.GeneratorOptionSet(EntityMetadata)}";
             var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, EntityMetadata, rootNamespace, true, isJsWebApiExist);
             return (code, dts);

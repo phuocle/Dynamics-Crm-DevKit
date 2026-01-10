@@ -1,0 +1,183 @@
+﻿'use strict';
+/** @namespace DevKit */
+// @ts-ignore
+var DevKit;
+(function (/** @type {any} */ DevKit) {
+	if (DevKit === undefined) DevKit = {};
+	DevKit.SocialProfileApi = function (e) {
+		const f = '@OData.Community.Display.V1.FormattedValue';
+		function webApiField(obj, field, entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, type) {
+			const l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			const getFormattedValue = function () {
+				if (entity?.[logicalName + f] === undefined || entity?.[logicalName + f] === null) {
+					return '';
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity?.[logicalName + l] === entityLogicalName) {
+						return entity?.[logicalName + f];
+					}
+					return '';
+				}
+				if (type === 'MultiOptionSet') {
+					return entity?.[logicalName + f]?.toString()?.split(';').map(function (item) { return item?.trim(); });
+				}
+				return entity?.[logicalName + f];
+			};
+			const getValue = function () {
+				if (entity?.[logicalName] === undefined || entity?.[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity?.[logicalName + l] === undefined || entity?.[logicalName + l] === entityLogicalName) {
+						return returnGet(entity?.[logicalName], type);
+					}
+					return null;
+				}
+				if (type === 'MultiOptionSet') {
+					return entity?.[logicalName]?.toString()?.split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return returnGet(entity?.[logicalName], type);
+			};
+			const returnGet = function (data, type) {
+				if (data === null || data === undefined) return null;
+				if (type === null || type === undefined) return data;
+				const typeParsers = {
+					DateTime: function (value) {
+						if (value === null || value === undefined) return null;
+						if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+						const trimmedString = String(value).trim();
+						if (trimmedString === '') return null;
+						const timestamp = Date.parse(trimmedString);
+						if (isNaN(timestamp)) return null;
+						const parsedDate = new Date(timestamp);
+						return isNaN(parsedDate.getTime()) ? null : parsedDate;
+					},
+					Integer: function (value) {
+						const parsed = parseInt(value, 10);
+						return isNaN(parsed) ? null : parsed;
+					},
+					Number: function (value) {
+						const parsed = Number(value);
+						return isNaN(parsed) ? null : parsed;
+					},
+					Boolean: function (value) {
+						if (value === null || value === undefined) return null;
+						if (typeof value === 'boolean') return value;
+						if (typeof value === 'number') return value !== 0;
+						const stringValue = String(value).trim().toLowerCase();
+						const trueValues = ["true", "1", "yes", "y"];
+						const falseValues = ["false", "0", "no", "n"];
+						if (trueValues.includes(stringValue)) return true;
+						if (falseValues.includes(stringValue)) return false;
+						return false;
+					}
+				};
+				const parser = typeParsers[type];
+				return parser ? parser(data) : data;
+			};
+			const setValue = function (value) {
+				if (type === 'MultiOptionSet') value = value?.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName?.length > 0) {
+					if (value === null) {
+						upsertEntity[schemaName + '@odata.bind'] = null;
+					}
+					else {
+						const cleanValue = typeof value === 'string' ? value.replace(/[{}]/g, '') : value;
+						upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + cleanValue + ')';
+					}
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(obj.FormattedValue, field, {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(obj, field, {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(obj, field, {
+					get: getValue,
+					set: setValue
+				});
+			}
+		}
+		const _socialprofile = {
+			Blocked: { a: 'blocked', g: 'Boolean' },
+			Community: { a: 'community', g: 'Integer' },
+			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
+			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true, g: 'DateTime' },
+			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			ExchangeRate: { a: 'exchangerate', r: true, g: 'Number' },
+			ImportSequenceNumber: { a: 'importsequencenumber', g: 'Integer' },
+			InfluenceScore: { a: 'influencescore', g: 'Number' },
+			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
+			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true, g: 'DateTime' },
+			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon', g: 'DateTime' },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
+			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
+			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
+			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			ProfileFullName: { a: 'profilefullname' },
+			ProfileLink: { a: 'profilelink' },
+			ProfileName: { a: 'profilename' },
+			SocialProfileId: { a: 'socialprofileid' },
+			StateCode: { a: 'statecode', g: 'Integer' },
+			StatusCode: { a: 'statuscode', g: 'Integer' },
+			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber', g: 'Integer' },
+			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', c: 'transactioncurrencies', d: 'transactioncurrency' },
+			UniqueProfileID: { a: 'uniqueprofileid' },
+			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode', g: 'Integer' },
+			VersionNumber: { a: 'versionnumber', r: true, g: 'Integer' }
+		};
+		if (e === undefined) e = {};
+		const u = {};
+		const socialprofile = {};
+		socialprofile.ODataEntity = e;
+		socialprofile.FormattedValue = {};
+		for (const field in _socialprofile) {
+			const fieldConfig = _socialprofile[field];
+			webApiField(socialprofile, field, e, fieldConfig.a, fieldConfig.b, fieldConfig.c, fieldConfig.d, fieldConfig.r, u, fieldConfig.g);
+		}
+		socialprofile.Entity = u;
+		socialprofile.EntityName = 'socialprofile';
+		socialprofile.EntityCollectionName = 'socialprofiles';
+		socialprofile['@odata.etag'] = e?.['@odata.etag'];
+		socialprofile.getAliasedValue = function (alias, isMultiOptionSet = false) {
+			if (e?.[alias] === undefined || e?.[alias] === null) {
+				return null;
+			}
+			if (isMultiOptionSet) {
+				return e?.[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+			}
+			return e?.[alias];
+		};
+		socialprofile.getAliasedFormattedValue = function (alias, isMultiOptionSet = false) {
+			if (e?.[alias + f] === undefined || e?.[alias + f] === null) {
+				return '';
+			}
+			if (isMultiOptionSet) {
+				return e?.[alias + f]?.toString()?.split(';').map(function (item) { return item?.trim(); });
+			}
+			return e?.[alias + f];
+		};
+		return socialprofile;
+	};
+})(DevKit || (DevKit = /** @type {any} */ ({})));
+/** @namespace OptionSet */
+// @ts-ignore
+var OptionSet;
+(function (/** @type {any} */ OptionSet) {
+	OptionSet.SocialProfile = {
+		Community: { Facebook: 1, Other: 0, Twitter: 2 },
+		CustomerIdType: { },
+		StateCode: { Active: 0, Inactive: 1 },
+		StatusCode: { Active: 1, Inactive: 2 },
+		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+	};
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

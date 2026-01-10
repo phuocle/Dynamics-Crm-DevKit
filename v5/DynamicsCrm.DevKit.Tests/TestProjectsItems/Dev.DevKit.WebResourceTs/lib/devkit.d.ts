@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -649,6 +649,24 @@ declare namespace DevKit {
 
 
         /**
+         * Interface for EmailEngagement controls
+         * Used for email engagement actions control on Email forms
+         */
+        interface EmailEngagement {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
+         * Interface for EmailRecipient controls
+         * Used for email recipient activity control on Email forms
+         */
+        interface EmailRecipient {
+            /** Get/Set a value that indicates whether the control is currently visible */
+            Visible: boolean;
+        }
+
+        /**
          * Interface for WebResource controls
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
@@ -865,7 +883,7 @@ declare namespace DevKit {
             /** Get/Set whether the column is disabled */
             Disabled: boolean;
             /** Get/Set the required level of the column */
-            RequiredLevel: string;
+            RequiredLevel: OptionSet.FieldRequiredLevel;
             /** Get/Set the value of the column */
             Value: any;
             /** Clear a notification for the column */
@@ -967,7 +985,7 @@ declare namespace DevKit {
              * Get the relationship information for the subgrid
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
              */
-            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
+            readonly Relationship: { attributeName: string; name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
 
             /**
              * Collection of rows in the grid
@@ -1039,6 +1057,32 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
              */
             Focus(): void;
+        }
+
+        /**
+         * Interface for Header section controls
+         * Provides access to header visibility properties
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection
+         */
+        interface IHeader {
+            /**
+             * Get/Set the visibility of the body of the header section
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
+             */
+            BodyVisible: boolean;
+            /**
+             * Get/Set the command bar visibility
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
+             */
+            CommandBarVisible: boolean;
+            /**
+             * Get/Set the tab navigator visibility
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
+             */
+            TabNavigatorVisible: boolean;
         }
 
         /**
@@ -1691,33 +1735,6 @@ declare namespace DevKit {
         }
 
         /**
-         * Interface for Header controls
-
-         */
-        interface IHeader {
-            /**
-             * Get/Set the visibility of header body
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
-             */
-            BodyVisible: boolean;
-
-            /**
-             * Get/Set the command bar visibility
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
-             */
-            CommandBarVisible: boolean;
-
-            /**
-             * Get/Set the tab navigator visibility
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
-             */
-            TabNavigatorVisible: boolean;
-        }
-
-        /**
          * Interface for ActionCards control
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
@@ -1956,6 +1973,12 @@ declare namespace DevKit {
         readonly EntityName: string;
 
         /**
+         * Returns a lookup value that references the record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
+         */
+        readonly EntityReference: EntityReference;
+
+        /**
          * Returns a boolean value indicating if any fields in the form have been modified
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/getisdirty
          */
@@ -2054,7 +2077,7 @@ declare namespace DevKit {
          * Returns the progress of the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
          */
-        readonly Progress: number;
+        readonly Progress: OptionSet.ProcessProgress;
 
         /**
          * Returns whether the step is required
@@ -3733,7 +3756,7 @@ declare namespace DevKit {
          * Returns the progress of the action step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
          */
-        readonly Progress: number;
+        readonly Progress: OptionSet.ProcessProgress;
         /**
          * Returns a boolean value indicating whether the step is required in the business process flow
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/isrequired
@@ -3984,6 +4007,100 @@ declare namespace DevKit {
          */
         GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: SecurityRolePrivilegeInfo }>;
     }
+
+    /**
+     * Interface for SidePane
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/createpane
+     */
+    interface ISidePane {
+        /**
+         * The pane ID
+         */
+        paneId: string;
+        /**
+         * The title of the pane
+         */
+        title: string;
+        /**
+         * The image source of the pane
+         */
+        imageSrc: string;
+        /**
+         * Whether the pane can be closed
+         */
+        canClose: boolean;
+        /**
+         * Whether the pane is initially hidden
+         */
+        hidden: boolean;
+        /**
+         * Whether the pane is always rendered
+         */
+        alwaysRender: boolean;
+        /**
+         * The badge to display on the pane tab
+         */
+        badge: number | string;
+        /**
+         * Whether to keep the badge when the pane is selected
+         */
+        keepBadgeOnSelect: boolean;
+        /**
+         * Closes the side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/close
+         */
+        close(): void;
+        /**
+         * Selects the side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/select
+         */
+        select(): void;
+        /**
+         * Navigates the side pane to a new page
+         * @param pageInput The page input to navigate to
+         * @param navigationOptions The navigation options
+         * @param successCallback The success callback
+         * @param errorCallback The error callback
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/navigate
+         */
+        navigate(pageInput: any, navigationOptions?: any, successCallback?: any, errorCallback?: any): void;
+    }
+
+    /**
+     * Interface for SidePanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+     */
+    interface ISidePanes {
+        /**
+         * The display state of the side canes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+         */
+        DisplayState: OptionSet.SidePaneState;
+        /**
+         * Creates a new side pane
+         * @param paneOptions The options for creating the pane
+         * @param successCallback The success callback (returns promise if not provided)
+         * @param errorCallback The error callback
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/createpane
+         */
+        Create(paneOptions: any, successCallback?: (pane: ISidePane) => void, errorCallback?: ErrorCallback): Promise<ISidePane> | void;
+        /**
+         * Gets a side pane by ID
+         * @param paneId The ID of the pane to get
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getpane
+         */
+        Get(paneId: string): ISidePane;
+        /**
+         * Gets all side panes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getallpanes
+         */
+        GetAll(): Collections<ISidePane>;
+        /**
+         * Gets the currently selected side pane
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getselectedpane
+         */
+        GetSelected(): ISidePane;
+    }
 }
 
 /** DynamicsCrm.DevKit for namespace OptionSet */
@@ -4165,4 +4282,3 @@ declare namespace OptionSet {
      */
     type FullNameConventionCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 }
-

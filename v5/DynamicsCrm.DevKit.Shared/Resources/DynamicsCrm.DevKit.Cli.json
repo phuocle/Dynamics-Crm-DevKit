@@ -103,14 +103,12 @@
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
       "rootfolder": "???",
       "entities": "folder"
     },
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootnamespace": "???",
       "rootfolder": "???",
       "entities": "folder"
     },

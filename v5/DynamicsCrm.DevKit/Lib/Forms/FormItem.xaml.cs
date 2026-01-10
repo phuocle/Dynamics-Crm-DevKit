@@ -49,6 +49,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
                     LabelItemName.Content = "Entity";
                 }
+                void TsFormItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Form-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript Form Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
                 void JsWebApiItem()
                 {
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template");
@@ -59,7 +70,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     Textbox.Visibility = System.Windows.Visibility.Hidden;
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
                     LabelItemName.Content = "Entity";
-                }                
+                }
+                void TsWebApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript WebApi Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -71,7 +93,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.JsWebApi:
                         JsWebApiItem();
-                        break;                        
+                        break;
+                    case ItemType.TsForm:
+                        TsFormItem();
+                        break;
+                    case ItemType.TsWebApi:
+                        TsWebApiItem();
+                        break;
                 }
             }
         }
@@ -117,7 +145,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (
                 ItemType == ItemType.LateBound ||
                 ItemType == ItemType.JsForm ||
-                ItemType == ItemType.JsWebApi
+                ItemType == ItemType.JsWebApi ||
+                ItemType == ItemType.TsForm ||
+                ItemType == ItemType.TsWebApi
                 )
             {
                 StackPanelMain.IsEnabled = false;

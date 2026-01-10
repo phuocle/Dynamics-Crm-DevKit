@@ -30,6 +30,55 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = [];
 
         /// <summary>
+        /// JavaScript reserved words that cannot be used as namespace/identifier names (case-insensitive)
+        /// </summary>
+        private static readonly HashSet<string> JsReservedWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "package", "private", "protected", "public", "static", "yield",
+            "let", "class", "enum", "export", "extends", "import", "super",
+            "implements", "interface", "await", "break", "case", "catch",
+            "continue", "debugger", "default", "delete", "do", "else",
+            "finally", "for", "function", "if", "in", "instanceof", "new",
+            "return", "switch", "this", "throw", "try", "typeof", "var",
+            "void", "while", "with", "const"
+        };
+
+        /// <summary>
+        /// JavaScript reserved words that cannot be used - CASE SENSITIVE for exact match
+        /// </summary>
+        private static readonly HashSet<string> JsReservedWordsExact = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "package", "private", "protected", "public", "static", "yield",
+            "let", "class", "enum", "export", "extends", "import", "super",
+            "implements", "interface", "await", "break", "case", "catch",
+            "continue", "debugger", "default", "delete", "do", "else",
+            "finally", "for", "function", "if", "in", "instanceof", "new",
+            "return", "switch", "this", "throw", "try", "typeof", "var",
+            "void", "while", "with", "const"
+        };
+
+        /// <summary>
+        /// Get safe entity name (escapes reserved words with underscore prefix)
+        /// </summary>
+        private static string GetSafeEntityName(string entityName)
+        {
+            if (JsReservedWords.Contains(entityName))
+            {
+                return $"_{entityName}";
+            }
+            return entityName;
+        }
+
+        /// <summary>
+        /// Check if entity name can be safely used as alias (case differs from reserved word)
+        /// </summary>
+        private static bool CanUseAsAlias(string entityName)
+        {
+            // If exactbly matches reserved word (case-sensitive), cannot use as alias
+            return !JsReservedWordsExact.Contains(entityName);
+        }
+
+        /// <summary>
         /// Retrieves all records using FetchXML with automatic paging.
         /// Handles datasets larger than 5000 records by automatically paging through all results.
         /// </summary>
@@ -762,36 +811,40 @@ namespace DynamicsCrm.DevKit.Shared
                 var formName = Helper.GetFormName(form.Name, entityMetadata.SchemaName);
                 formName = GetUnquieFormName(formNames, formName);
                 var type = $"{@namespace}.Form{Helper.SafeIdentifier(formName)}";
-                code += $"var form{Helper.SafeIdentifier(formName)} = (function () {{{NEW_LINE}";
-                code += $"{TAB}\"use strict\";{NEW_LINE}";
-                code += $"{TAB}/** @type {{{type}}} */{NEW_LINE}";
-                code += $"{TAB}let form;{NEW_LINE}";
-                code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
-                code += $"{TAB}async function onLoad(executionContext) {{{NEW_LINE}";
-                code += $"{TAB}{TAB}form = new {type}(executionContext);{NEW_LINE}";
-                code += $"{TAB}{TAB}registerEvents();{NEW_LINE}";
-                code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
-                code += $"{TAB}}}{NEW_LINE}";
-                code += $"{TAB}function registerEvents() {{{NEW_LINE}";
-                code += $"{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
-                code += $"{TAB}{TAB}}}{NEW_LINE}";
-                code += $"{TAB}}}{NEW_LINE}";
-                code += $"{TAB}//BEGIN ON LOAD ========================================================{NEW_LINE}";
-                code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
-                code += $"{TAB}async function UiAddLoaded(executionContext) {{{NEW_LINE}";
-                code += $"{TAB}}}{NEW_LINE}";
-                code += $"{TAB}//END ON LOAD =========================================================={NEW_LINE}";
-                code += $"{TAB}//BEGIN ON CHANGE ======================================================{NEW_LINE}";
                 code += $"{NEW_LINE}";
-                code += $"{TAB}//END ON CHANGE ========================================================{NEW_LINE}";
-                code += $"{TAB}//BEGIN PRE SEARCH ====================================================={NEW_LINE}";
+                code += $"//var form{Helper.SafeIdentifier(formName)} = (function () {{{NEW_LINE}";
+                code += $"//{TAB}\"use strict\";{NEW_LINE}";
+                code += $"//{TAB}/** @type {{{type}}} */{NEW_LINE}";
+                code += $"//{TAB}let form;{NEW_LINE}";
+                code += $"//{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
+                code += $"//{TAB}async function onLoad(executionContext) {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}form = new {type}(executionContext);{NEW_LINE}";
+                code += $"//{TAB}{TAB}registerEvents();{NEW_LINE}";
+                code += $"//{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{TAB}function registerEvents() {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}}}{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{TAB}//BEGIN ON LOAD ========================================================{NEW_LINE}";
+                code += $"//{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
+                code += $"//{TAB}async function UiAddLoaded(executionContext) {{{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{TAB}//END ON LOAD =========================================================={NEW_LINE}";
+                code += $"//{TAB}//BEGIN ON CHANGE ======================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}//END ON CHANGE ========================================================{NEW_LINE}";
+                code += $"//{TAB}//BEGIN PRE SEARCH ====================================================={NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}//END PRE SEARCH ======================================================={NEW_LINE}";
+                code += $"//{TAB}//BEGIN OTHERS ========================================================={NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}//END OTHERS ==========================================================={NEW_LINE}";
+                code += $"//{TAB}return {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}OnLoad: onLoad{NEW_LINE}";
+                code += $"//{TAB}}};{NEW_LINE}";
+                code += $"//}})();{NEW_LINE}";
                 code += $"{NEW_LINE}";
-                code += $"{TAB}//END PRE SEARCH ======================================================={NEW_LINE}";
-                code += $"{TAB}//BEGIN OTHERS ========================================================={NEW_LINE}";
-                code += $"{NEW_LINE}";
-                code += $"{TAB}//END OTHERS ==========================================================={NEW_LINE}";
-                code += $"{TAB}return {{{NEW_LINE}{TAB}{TAB}OnLoad: onLoad{NEW_LINE}{TAB}}};{NEW_LINE}";
-                code += $"}})();{NEW_LINE}";
             }
             code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             return code;
@@ -804,6 +857,180 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             code += $"//@ts-check{NEW_LINE}";
             code += $"///<reference path=\"{schemaName}.d.ts\" />{NEW_LINE}";
+            return code;
+        }
+
+        public static async Task<string> GetDefaultTsFileWithFormAsync(ServiceClient serviceClient, EntityMetadata entityMetadata)
+        {
+            string GetUnquieFormName(List<string> FormNames, string formName)
+            {
+                if (!FormNames.Contains(formName))
+                {
+                    FormNames.Add(formName);
+                    return formName;
+                }
+                else
+                {
+                    var count = FormNames.Count(x => x == formName) + 1;
+                    FormNames.Add(formName);
+                    return $"{formName}{count}";
+                }
+            }
+            var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
+            if (!forms.Any()) return string.Empty;
+            var code = string.Empty;
+            var formNames = new List<string>();
+            var formClassNames = new List<string>();
+
+            // Build list of form names first
+            foreach (var form in forms)
+            {
+                var formName = Helper.GetFormName(form.Name, entityMetadata.SchemaName);
+                formName = GetUnquieFormName(formNames, formName);
+                formClassNames.Add(formName);
+            }
+
+            // Generate imports - use safe entity name for reserved words
+            var safeEntityName = GetSafeEntityName(entityMetadata.SchemaName);
+            var isReservedWord = safeEntityName != entityMetadata.SchemaName;
+            var canUseAlias = CanUseAsAlias(entityMetadata.SchemaName);
+            if (isReservedWord && canUseAlias)
+            {
+                // Import with alias: import { _Import as Import } from './Import.form';
+                // Only when SchemaName case differs from reserved word (e.g., Import vs import)
+                code += $"import {{ {safeEntityName} as {entityMetadata.SchemaName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            }
+            else if (isReservedWord)
+            {
+                // No alias: import { _package } from './package.form';
+                // When SchemaName exactly matches reserved word (e.g., package)
+                code += $"import {{ {safeEntityName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            }
+            else
+            {
+                code += $"import {{ {entityMetadata.SchemaName} }} from './{entityMetadata.SchemaName}.form';{NEW_LINE}";
+            }
+            code += $"{NEW_LINE}";
+
+            // Generate IIFE for each form (COMMENTED OUT)
+            foreach (var formClassName in formClassNames)
+            {
+                var safeFormName = Helper.SafeIdentifier(formClassName);
+                code += $"//const form{safeFormName} = (function () {{{NEW_LINE}";
+                code += $"//{TAB}\"use strict\";{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}let form: {entityMetadata.SchemaName}.{safeFormName};{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}async function onLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}form = new {entityMetadata.SchemaName}.{safeFormName}(executionContext);{NEW_LINE}";
+                code += $"//{TAB}{TAB}registerEvents();{NEW_LINE}";
+                code += $"//{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}function registerEvents(): void {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}}}{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN ON LOAD{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}async function UiAddLoaded(executionContext: any): Promise<void> {{{NEW_LINE}";
+                code += $"//{TAB}}}{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END ON LOAD{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN ON CHANGE{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END ON CHANGE{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN PRE SEARCH{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END PRE SEARCH{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{TAB}// BEGIN OTHERS{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}// END OTHERS{NEW_LINE}";
+                code += $"//{TAB}// ========================================================================{NEW_LINE}";
+                code += $"//{NEW_LINE}";
+                code += $"//{TAB}return {{{NEW_LINE}";
+                code += $"//{TAB}{TAB}OnLoad: onLoad{NEW_LINE}";
+                code += $"//{TAB}}};{NEW_LINE}";
+                code += $"//}})();{NEW_LINE}";
+                code += $"{NEW_LINE}";
+            }
+
+            // Generate IIFE for AllInOne (UNCOMMENTED)
+            code += $"const formAllInOne = (function () {{{NEW_LINE}";
+            code += $"{TAB}\"use strict\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            // Determine the name to use in code:
+            // - If using alias (e.g., import { _Import as Import }), use the alias (SchemaName)
+            // - If not using alias (e.g., import { _package }), use safeEntityName
+            var namespaceName = (isReservedWord && canUseAlias) ? entityMetadata.SchemaName : safeEntityName;
+            code += $"{TAB}let form: {namespaceName}.AllInOne;{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function onLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}{TAB}form = new {namespaceName}.AllInOne(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}registerEvents();{NEW_LINE}";
+            code += $"{TAB}{TAB}form.UiAddLoaded(UiAddLoaded);{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}function registerEvents(): void {{{NEW_LINE}";
+            code += $"{TAB}{TAB}if (form.ExecutionContext.IsInitialLoad()) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN ON LOAD{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function UiAddLoaded(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END ON LOAD{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN ON CHANGE{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END ON CHANGE{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN PRE SEARCH{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END PRE SEARCH{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{TAB}// BEGIN OTHERS{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}// END OTHERS{NEW_LINE}";
+            code += $"{TAB}// ========================================================================{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}return {{{NEW_LINE}";
+            code += $"{TAB}{TAB}OnLoad: onLoad{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})();{NEW_LINE}";
+            code += $"{NEW_LINE}";
+
+            // Generate export
+            var exports = string.Join(" ", formClassNames.Select(f => $"/* form{Helper.SafeIdentifier(f)}, */"));
+            code += $"export {{ {exports} formAllInOne }};";
             return code;
         }
 
