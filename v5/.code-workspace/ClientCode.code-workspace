@@ -16,15 +16,21 @@
     "settings": {
         "files.exclude": {
             "**/coverage": true,
-            "**/coverage/**": true
+            "**/node_modules": true,
+            "**/build": true,
+            "**/bin": true,
+            "**/obj": true,
+            "**/dist": true,
+            "**/.vs": true,
+            "**/.git": true,
+            "**/*.user": true,
+            "**/TestResults": true
         },
         "search.exclude": {
-            "**/coverage": true,
-            "**/coverage/**": true
+            "**/coverage": true
         },
         "files.watcherExclude": {
-            "**/coverage": true,
-            "**/coverage/**": true
+            "**/coverage": true
         }
     }
 }
