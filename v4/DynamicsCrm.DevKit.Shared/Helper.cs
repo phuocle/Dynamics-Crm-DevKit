@@ -102,17 +102,6 @@ namespace DynamicsCrm.DevKit.Shared
             return fileName;
         }
 
-        private static string GetIdentifier(string name)
-        {
-            var value = string.Empty;
-            for (int i = 0; i < name.Length; ++i)
-            {
-                if (char.IsLetterOrDigit(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '_')
-                    value += name[i];
-            }
-            return value;
-        }
-
         public static string SafeIdentifier(string name)
         {
             if (name == null) return string.Empty;
@@ -125,17 +114,47 @@ namespace DynamicsCrm.DevKit.Shared
                     .Replace("}", string.Empty);
                 return "_" + name;
             }
-            name = GetIdentifier(name);
-            name = name.Trim();
 
-            name = name.Replace("-", "_");
+            var sb = new StringBuilder(name.Length);
+            foreach (var c in name)
+            {
+                if (char.IsLetterOrDigit(c) || c == '_' || c == ' ' || c == '-')
+                {
+                    if (c == 'Đ') sb.Append('D');
+                    else if (c == 'đ') sb.Append('d');
+                    else if (c == '-') sb.Append('_');
+                    else sb.Append(c);
+                }
+            }
 
-            name = name.Replace(" ", "_");
-            name = name.Replace("____", "_");
-            name = name.Replace("___", "_");
-            name = name.Replace("__", "_");
-            name = name.Replace("Đ", "D");
-            name = name.Replace("đ", "d");
+            var leadingSpaces = 0;
+            while (leadingSpaces < sb.Length && sb[leadingSpaces] == ' ') leadingSpaces++;
+            if (leadingSpaces > 0) sb.Remove(0, leadingSpaces);
+
+            while (sb.Length > 0 && sb[sb.Length - 1] == ' ') sb.Length--;
+
+            var sb2 = new StringBuilder(sb.Length);
+            var lastWasUnderscore = false;
+            for (var i = 0; i < sb.Length; i++)
+            {
+                var c = sb[i];
+                if (c == ' ') c = '_';
+
+                if (c == '_')
+                {
+                    if (!lastWasUnderscore)
+                    {
+                        sb2.Append('_');
+                        lastWasUnderscore = true;
+                    }
+                }
+                else
+                {
+                    sb2.Append(c);
+                    lastWasUnderscore = false;
+                }
+            }
+            name = sb2.ToString();
 
             if (name.Length == 0) return "_";
 
