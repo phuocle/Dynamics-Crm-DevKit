@@ -18,5 +18,8 @@
         public const string UNREGISTERED = "[UNREGISTERED] ";
         public const string SIGNED = "[SIGNED] ";
         public const string FLAG = "[FLAG] ";
+        public const string PROCESSING = "[PROCESSING] ";
+        public const string FILE = "[FILE] ";
+        public const string EXPORT = "[EXPORT] ";
     }
 }

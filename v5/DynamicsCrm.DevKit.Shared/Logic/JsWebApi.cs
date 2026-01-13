@@ -3,7 +3,6 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Services.Description;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {

@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Cli;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -9,7 +10,6 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Label = Microsoft.Xrm.Sdk.Label;
-using ParameterCollection = Microsoft.Xrm.Sdk.ParameterCollection;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskDataSource(CommandLineArgs arg, JsonDataSource json) : ITask
@@ -28,60 +28,60 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution.Length == 0 || Json.solution == "???")
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError("'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.displayname.Length == 0 || Json.displayname == "???")
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'displayname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError("'displayname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.pluralname.Length == 0 || Json.pluralname == "???")
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'pluralname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError("'pluralname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.name.Length == 0 || Json.name == "???")
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError("'name' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             var regex = new Regex("^[a-zA-Z][_a-zA-Z0-9\\s,]*$");
             if (!regex.IsMatch(Json.displayname))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'displayname' can only contain alpha-numeric and underscore characters.");
+                SpectreLog.ActionError("'displayname' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
             if (!regex.IsMatch(Json.pluralname))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'pluralname' can only contain alpha-numeric and underscore characters.");
+                SpectreLog.ActionError("'pluralname' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
             if (!regex.IsMatch(Json.name))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can only contain alpha-numeric and underscore characters.");
+                SpectreLog.ActionError("'name' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
             if (Json.name.Contains(" "))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'name' can cannot contain space character.");
+                SpectreLog.ActionError("'name' can cannot contain space character.");
                 return false;
             }
             (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                SpectreLog.ActionError($"solution '{Json.solution}' not exist");
                 return false;
             }
             DataSourceName = Json.name.ToLower().StartsWith(SolutionPrefix.ToLower()) ? Json.name : $"{SolutionPrefix}{Json.name}";
             if (await XrmHelper.IsExistDataSourceAsync(ServiceClient, DataSourceName))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} name '{DataSourceName}' exist");
+                SpectreLog.ActionError($"name '{DataSourceName}' exist");
                 return false;
             }
             return true;
@@ -89,16 +89,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            SpectreLog.WriteLine("START");
+            SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"Creating Data Source: {DataSourceName}...");
-                await RegisterDataSourceAsync();
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"Created Data Source: {DataSourceName}");
+                await SpectreLog.WithStatusAsync($"Creating Data Source: {DataSourceName}", async ctx =>
+                {
+                    await RegisterDataSourceAsync();
+                });
+                SpectreLog.ActionCreated($"Data Source: ", DataSourceName);
             }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
 
         public async Task RegisterDataSourceAsync()

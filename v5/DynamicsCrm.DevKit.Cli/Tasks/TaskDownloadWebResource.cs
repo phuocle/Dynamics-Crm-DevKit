@@ -21,18 +21,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!solutionExists.IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             var folder = Path.Combine(CurrentDirectory, Json.solution);
@@ -43,7 +43,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var files = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories);
                 if (files.Count() > 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Folder '{folder}' have an exsiting file(s). Please delete all file(s) and try it again.");
+                    SpectreLog.ActionError($"Folder '{folder}' have an exsiting file(s).");
+                    SpectreLog.ActionError($"Please delete all file(s) and try it again.");
                     return false;
                 }
             }
@@ -51,21 +52,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            SpectreLog.WriteLine("START");
+            SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
                 var webResourcesFiles = await XrmHelper.GetWebResourcesBySolutionAsync(ServiceClient, Json.solution);
                 if (webResourcesFiles.Count == 0)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource to download");
+                    SpectreLog.WriteLine("Not found any webresource to download");
+                    SpectreLog.WriteLine();
                 }
                 else
                 {
                     var totalDownloadFiles = webResourcesFiles.Count;
                     var len = totalDownloadFiles.ToString().Length;
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " webresources");
-                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    SpectreLog.WriteHighLight("Found: ", $"{totalDownloadFiles}", " webresources");
+                    SpectreLog.WriteLine();
                     var i = 1;
                     foreach (var webResourceFile in webResourcesFiles)
                     {
@@ -74,13 +76,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
                         byte[] decode = Convert.FromBase64String(webResourceFile.Content);
                         File.WriteAllBytes(fileName, decode);
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, webResourceFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.DOWNLOADED, $"{webResourceFile.FileName}", " to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
                         i++;
                     }
                 }
             }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
     }
 }

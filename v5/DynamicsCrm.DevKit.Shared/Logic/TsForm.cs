@@ -1,5 +1,4 @@
 using DynamicsCrm.DevKit.Shared.Models;
-using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;

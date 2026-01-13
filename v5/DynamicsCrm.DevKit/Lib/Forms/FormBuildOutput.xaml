@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Width="800" Height="400" SizeChanged="BaseDialogWindow_SizeChanged" HasMaximizeButton="True" HasMinimizeButton="True"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Width="800" Height="400" HasMaximizeButton="True" HasMinimizeButton="True"
     >
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>
@@ -14,13 +14,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </forms:BaseDialogWindow.Resources>
-    <StackPanel x:Name="stackPanel">
-        <TextBlock Padding="10,5,10,5" Background="#007ACC" x:Name="StatusBlock">
+    <DockPanel x:Name="dockPanel" LastChildFill="True">
+        <TextBlock DockPanel.Dock="Top" Padding="10,5,10,5" Background="#007ACC" x:Name="StatusBlock">
             <Run x:Name="StatusText" Foreground="White" FontWeight="Bold">Building TypeScript...</Run>
         </TextBlock>
-        <TextBox ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Padding="5,5,5,5" Margin="5,5,5,0" Height="300" x:Name="OutputTextbox" TextWrapping="NoWrap" AcceptsReturn="true" AcceptsTab="True" FontFamily="Consolas" FontSize="12" IsReadOnly="True" Background="#1E1E1E" Foreground="#DCDCDC" />
-        <WrapPanel DockPanel.Dock="Bottom" Margin="0,5,5,5" HorizontalAlignment="Right">
-            <Button x:Name="buttonClose" Content="Close" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonClose_Click" Visibility="Collapsed"/>
-        </WrapPanel>
-    </StackPanel>
+        <TextBox DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="5,5,5,5" Margin="5,5,5,5" x:Name="OutputTextbox" TextWrapping="Wrap" AcceptsReturn="true" AcceptsTab="True" FontFamily="Consolas" FontSize="12" IsReadOnly="True" Background="#1E1E1E" Foreground="#DCDCDC" />
+    </DockPanel>
 </forms:BaseDialogWindow>

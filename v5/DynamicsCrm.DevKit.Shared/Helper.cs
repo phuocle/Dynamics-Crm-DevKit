@@ -29,6 +29,7 @@ namespace DynamicsCrm.DevKit.Shared
             string passPhrase = "PL.DynamicsCrm.DevKit";
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+#pragma warning disable SYSLIB0022, SYSLIB0041 // Obsolete: RijndaelManaged and PasswordDeriveBytes
             PasswordDeriveBytes password = new(passPhrase, null);
             byte[] keyBytes = password.GetBytes(keysize / 8);
             RijndaelManaged symmetricKey = new()
@@ -36,13 +37,12 @@ namespace DynamicsCrm.DevKit.Shared
                 Mode = CipherMode.CBC
             };
             ICryptoTransform encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
-            MemoryStream memoryStream = new();
-            CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write);
+#pragma warning restore SYSLIB0022, SYSLIB0041
+            using MemoryStream memoryStream = new();
+            using CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write);
             cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
             cryptoStream.FlushFinalBlock();
             byte[] cipherTextBytes = memoryStream.ToArray();
-            memoryStream.Close();
-            cryptoStream.Close();
             return Convert.ToBase64String(cipherTextBytes);
         }
 
@@ -54,6 +54,7 @@ namespace DynamicsCrm.DevKit.Shared
                 string passPhrase = "PL.DynamicsCrm.DevKit";
                 byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
                 byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
+#pragma warning disable SYSLIB0022, SYSLIB0041 // Obsolete: RijndaelManaged and PasswordDeriveBytes
                 PasswordDeriveBytes password = new(passPhrase, null);
                 byte[] keyBytes = password.GetBytes(keysize / 8);
                 RijndaelManaged symmetricKey = new()
@@ -61,25 +62,51 @@ namespace DynamicsCrm.DevKit.Shared
                     Mode = CipherMode.CBC
                 };
                 ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
-                MemoryStream memoryStream = new(cipherTextBytes);
-                CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);
-                byte[] plainTextBytes = new byte[cipherTextBytes.Length];
-                int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
-                memoryStream.Close();
-                cryptoStream.Close();
-                return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+#pragma warning restore SYSLIB0022, SYSLIB0041
+                using MemoryStream memoryStream = new(cipherTextBytes);
+                using CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);
+                // .NET 6+ breaking change: Read() may not fill entire buffer
+                // Use StreamReader to ensure we read all decrypted text
+                using StreamReader reader = new(cryptoStream, Encoding.UTF8);
+                return reader.ReadToEnd();
             }
             catch { return cipherText; }
         }
 
         public static bool IsTheSame(string value1, string value2)
         {
-            if (value1 == null && value2 == null) return true;
-            if (value1 != null && value2 == null) return false;
-            if (value1 == null && value2 != null) return false;
-            value1 = value1.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            value2 = value2.Replace("\r\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace(" ", string.Empty).Trim();
-            return string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase);
+            if (string.Equals(value1, value2, StringComparison.OrdinalIgnoreCase)) return true;
+            if (string.IsNullOrEmpty(value1) && string.IsNullOrEmpty(value2)) return true;
+            if (string.IsNullOrEmpty(value1) || string.IsNullOrEmpty(value2)) return false;
+            var i = 0;
+            var j = 0;
+            while (i < value1.Length && j < value2.Length)
+            {
+                if (char.IsWhiteSpace(value1[i]))
+                {
+                    i++;
+                    continue;
+                }
+                if (char.IsWhiteSpace(value2[j]))
+                {
+                    j++;
+                    continue;
+                }
+                if (char.ToUpperInvariant(value1[i]) != char.ToUpperInvariant(value2[j])) return false;
+                i++;
+                j++;
+            }
+            while (i < value1.Length)
+            {
+                if (!char.IsWhiteSpace(value1[i])) return false;
+                i++;
+            }
+            while (j < value2.Length)
+            {
+                if (!char.IsWhiteSpace(value2[j])) return false;
+                j++;
+            }
+            return true;
         }
 
         public static async Task<string> ReadEmbeddedResourceAsync(string path)

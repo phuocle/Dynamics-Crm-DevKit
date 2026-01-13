@@ -1,0 +1,840 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="Source LCID" xml:space="preserve">
+    <value>1036</value>
+  </metadata>
+  <metadata name="Source file" xml:space="preserve">
+    <value>devkitv4_1.0.0000.4_managed.zip</value>
+  </metadata>
+  <metadata name="Source package type" xml:space="preserve">
+    <value>Both</value>
+  </metadata>
+  <metadata name="SolutionPackager Version" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgJAAAAAAAAAAAAAAAAAAAACw==</value>
+  </metadata>
+  <metadata name="SolutionPackager Version String" xml:space="preserve">
+    <value>9.0.0.0</value>
+  </metadata>
+  <data name="100000:label,0BFB019660BC9F8CD8F307945D5C6635348442287328C164C9C2CE1CD02E5A0F" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapi\displayname id:</comment>
+  </data>
+  <data name="100000:label,0DFC8E9CF022CB9CED6A89E45DFF676E08A11589C19103CEA426E26B41AB5347" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\description id:</comment>
+  </data>
+  <data name="100000:label,140AB0F7F510438FD259A393A2287D6D36EE7E165E67B2AF622134079E92A772" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\description id:</comment>
+  </data>
+  <data name="100000:label,2066661ED532F4230E0BA2FFB3984E449AB6DE94550F264C218B8A9217AD5F73" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\displayname id:</comment>
+  </data>
+  <data name="100000:label,2D0726654F7625477D9FAAC3CE065AC60C3404FD12368B74C17D23F8C947C67F" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\displayname id:</comment>
+  </data>
+  <data name="100000:label,39696175F116F83724B2D37BE79D1D60C69B6C0FF20AEA27A57B5DD500FD7EF2" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapiresponseproperty\displayname id:</comment>
+  </data>
+  <data name="100000:label,43728B1E8A8072B5E2565EF9A0D50C3C9FBEF2B6708939FD949E91129AD46727" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapiresponseproperty\displayname id:</comment>
+  </data>
+  <data name="100000:label,4E2621D2B171731DF7DBF760F672C53996D42953E786E089839004FBE59D5BAA" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapi\displayname id:</comment>
+  </data>
+  <data name="100000:label,5DA19871167FD7C62F3F77C4431C3C067D323829CD04FA1F4967541F29C08BAD" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapi\description id:</comment>
+  </data>
+  <data name="100000:label,698800D79C5B8002ED545D66C27F1C9DFE6696708DE62F2D45606DB855D31DBD" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\displayname id:</comment>
+  </data>
+  <data name="100000:label,8CAB83DB0D64C81080FBB8351BCBF99BED088948520461B69155A22808D51E76" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\displayname id:</comment>
+  </data>
+  <data name="100000:label,8DE783E33DE2CBCFC38B6AF2A33188FF0573289B03C2F912CE73B8C427605B9D" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\description id:</comment>
+  </data>
+  <data name="100000:label,8EF1BD9E2F8CCB2C8946922110BF203FBB76B5E78450F4FDCAB0FA3DD8F1E347" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapiresponseproperty\description id:</comment>
+  </data>
+  <data name="100000:label,9610870EDD7A52C59E30604A48C9A6B123AC820869123208246BD1E8FF62B1C1" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapiresponseproperty\description id:</comment>
+  </data>
+  <data name="100000:label,A6F46DDBCCA5655BF7D74CA843E6729EF2E20F94F31E99D04C0AD45AB232D36E" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapi\description id:</comment>
+  </data>
+  <data name="100000:label,D7447472E502A1870B291ACEEAB272523AB5242A1BFAC26D90974F8A7BE21E4A" xml:space="preserve">
+    <value />
+    <comment>Relative path in xml: \customapirequestparameter\description id:</comment>
+  </data>
+  <data name="10:Description,bpf_account_v4_accountbpf" xml:space="preserve">
+    <value />
+    <comment>v4_accountbpf Description for EntityRelationship 'bpf_account_v4_accountbpf'</comment>
+  </data>
+  <data name="10:Description,v4_account_Lookup_contact" xml:space="preserve">
+    <value />
+    <comment>Account Description for EntityRelationship 'v4_account_Lookup_contact'</comment>
+  </data>
+  <data name="15062:LocalizedName,devkitv4" xml:space="preserve">
+    <value />
+    <comment> 'devkitv4' : LocalizedName for Solution</comment>
+  </data>
+  <data name="15062:LocalizedName,devkitv4v411111" xml:space="preserve">
+    <value />
+    <comment> 'devkitv4' : LocalizedName for Solution Publisher</comment>
+  </data>
+  <data name="1:Description,AccountBPF{62a7c179-1ef9-4ac9-95c0-b1af46a69abe}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : Description for systemform in Entity FormXml ID: '{62a7c179-1ef9-4ac9-95c0-b1af46a69abe}'</comment>
+  </data>
+  <data name="1:Description,AccountName" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'Name' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_account_v4_boolean" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for OptionSet 'v4_account_v4_boolean' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_AppointmentTime" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_AppointmentTime' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Birthday" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Birthday' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Boolean" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Boolean' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Categories" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Categories' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_DateOnly" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_DateOnly' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_DateTime" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_DateTime' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Decimal" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Decimal' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Double" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Double' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Integer" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Integer' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Lookup" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Lookup' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Memo" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Memo' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_Money" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_Money' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_money_Base" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_money_Base' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_MultiOptionSet" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_MultiOptionSet' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_OptionSet" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_OptionSet' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountv4_String" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'v4_String' on Entity</comment>
+  </data>
+  <data name="1:Description,Account{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for systemform in Entity FormXml ID: '{38c60f9f-e1db-f011-8406-0022480b95a5}'</comment>
+  </data>
+  <data name="1:Description,Sql DataSource{7b4b075c-e6a8-f011-bbd2-0022480965a1}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : Description for SavedQuery on Entity QueryId: '{7b4b075c-e6a8-f011-bbd2-0022480965a1}'</comment>
+  </data>
+  <data name="1:Description,Sql DataSource{a8e134cc-39f8-416e-8e61-f362154a6e03}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : Description for systemform in Entity FormXml ID: '{a8e134cc-39f8-416e-8e61-f362154a6e03}'</comment>
+  </data>
+  <data name="1:Description,Sql DataSource{ca9e78e4-2949-48c5-aa50-9416b06cbd9d}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : Description for systemform in Entity FormXml ID: '{ca9e78e4-2949-48c5-aa50-9416b06cbd9d}'</comment>
+  </data>
+  <data name="1:Description,v4_accountbpfbpf_accountid" xml:space="preserve">
+    <value />
+    <comment>'v4_accountbpf' : Description for Attribute 'bpf_accountid' on Entity</comment>
+  </data>
+  <data name="1:Description,v4_accountbpfentityv4_accountbpf" xml:space="preserve">
+    <value />
+    <comment> 'v4_accountbpf' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4_Sql_DataSourceentityv4_Sql_DataSource" xml:space="preserve">
+    <value />
+    <comment> 'v4_Sql_DataSource' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4_Sql_DataSourcev4_Sql_DataSourceId" xml:space="preserve">
+    <value />
+    <comment>'v4_Sql_DataSource' : Description for Attribute 'v4_Sql_DataSourceId' on Entity</comment>
+  </data>
+  <data name="1:displayname,AccountName" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'Name' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_account_v4_boolean" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for OptionSet 'v4_account_v4_boolean' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_AppointmentTime" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_AppointmentTime' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Birthday" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Birthday' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Boolean" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Boolean' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Categories" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Categories' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_DateOnly" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_DateOnly' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_DateTime" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_DateTime' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Decimal" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Decimal' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Double" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Double' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Integer" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Integer' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Lookup" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Lookup' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Memo" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Memo' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_Money" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_Money' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_money_Base" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_money_Base' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_MultiOptionSet" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_MultiOptionSet' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_OptionSet" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_OptionSet' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountv4_String" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'v4_String' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4_accountbpfbpf_accountid" xml:space="preserve">
+    <value />
+    <comment>'v4_accountbpf' : displayname for Attribute 'bpf_accountid' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4_Sql_DataSourcev4_Sql_DataSourceId" xml:space="preserve">
+    <value />
+    <comment>'v4_Sql_DataSource' : displayname for Attribute 'v4_Sql_DataSourceId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4_Sql_DataSourcev4_Sql_DataSourceName" xml:space="preserve">
+    <value />
+    <comment>'v4_Sql_DataSource' : displayname for Attribute 'v4_Sql_DataSourceName' on Entity</comment>
+  </data>
+  <data name="1:label,Account16e9271c-85cb-4e80-88d8-da5785d6b2c8" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for section in Entity FormXml ID: '16e9271c-85cb-4e80-88d8-da5785d6b2c8'</comment>
+  </data>
+  <data name="1:label,Account9e9f103b-721b-4255-9a06-30a8cbbc72ef" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for section in Entity FormXml ID: '9e9f103b-721b-4255-9a06-30a8cbbc72ef'</comment>
+  </data>
+  <data name="1:label,AccountBPF{0b6026a7-bcd6-4f57-aa27-bee30d1ae69e}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for cell in Entity FormXml ID: '{0b6026a7-bcd6-4f57-aa27-bee30d1ae69e}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{189c88ea-8d76-41c7-9fcd-570117387ec5}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for cell in Entity FormXml ID: '{189c88ea-8d76-41c7-9fcd-570117387ec5}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{32566050-4395-4df6-8451-e79cff94503b}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for tab in Entity FormXml ID: '{32566050-4395-4df6-8451-e79cff94503b}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{44f16ed2-2f7b-4a5c-ae58-7378755e6cd4}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for cell in Entity FormXml ID: '{44f16ed2-2f7b-4a5c-ae58-7378755e6cd4}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{462693d9-43a6-4fbc-a379-fe3c58b45b2d}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for cell in Entity FormXml ID: '{462693d9-43a6-4fbc-a379-fe3c58b45b2d}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{8d43b7c9-152b-4b97-9543-4e0b0c880ecc}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for tab in Entity FormXml ID: '{8d43b7c9-152b-4b97-9543-4e0b0c880ecc}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{cfc8dc30-74dc-e406-6b80-39d44485d384}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for section in Entity FormXml ID: '{cfc8dc30-74dc-e406-6b80-39d44485d384}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{e8f404e9-174f-444c-82fc-03138750c163}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for cell in Entity FormXml ID: '{e8f404e9-174f-444c-82fc-03138750c163}'</comment>
+  </data>
+  <data name="1:label,AccountBPF{f70cfd33-48b6-07e2-cbe7-557dbf9e1753}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : label for section in Entity FormXml ID: '{f70cfd33-48b6-07e2-cbe7-557dbf9e1753}'</comment>
+  </data>
+  <data name="1:label,Accountv4_account_v4_boolean0" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for option '0' on Entity</comment>
+  </data>
+  <data name="1:label,Accountv4_account_v4_boolean1" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for option '1' on Entity</comment>
+  </data>
+  <data name="1:label,Account{0eb92e6c-bcb8-0d52-a188-d81543ddb7cd}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for section in Entity FormXml ID: '{0eb92e6c-bcb8-0d52-a188-d81543ddb7cd}'</comment>
+  </data>
+  <data name="1:label,Account{0F664FFF-E39E-4676-9191-CBA16972B21D}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{0F664FFF-E39E-4676-9191-CBA16972B21D}'</comment>
+  </data>
+  <data name="1:label,Account{11a42c72-9ded-ea04-253d-2143e731b795}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for tab in Entity FormXml ID: '{11a42c72-9ded-ea04-253d-2143e731b795}'</comment>
+  </data>
+  <data name="1:label,Account{1e0e4517-ba6b-1540-53a9-09647d67443a}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for section in Entity FormXml ID: '{1e0e4517-ba6b-1540-53a9-09647d67443a}'</comment>
+  </data>
+  <data name="1:label,Account{1e7aefd9-60de-47e9-a099-ff5d609df35e}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{1e7aefd9-60de-47e9-a099-ff5d609df35e}'</comment>
+  </data>
+  <data name="1:label,Account{317643d6-505e-489a-b0fe-c8879a760752}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{317643d6-505e-489a-b0fe-c8879a760752}'</comment>
+  </data>
+  <data name="1:label,Account{31e02a38-e4d4-4e34-a789-be2843451df0}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{31e02a38-e4d4-4e34-a789-be2843451df0}'</comment>
+  </data>
+  <data name="1:label,Account{3b0b63a9-d379-689a-0ec3-e71eb4c6a841}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for tab in Entity FormXml ID: '{3b0b63a9-d379-689a-0ec3-e71eb4c6a841}'</comment>
+  </data>
+  <data name="1:label,Account{3b55be40-e717-4e75-b3ea-453fb2fbfdae}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{3b55be40-e717-4e75-b3ea-453fb2fbfdae}'</comment>
+  </data>
+  <data name="1:label,Account{42c8b07a-e960-43b9-874e-577bd8439bdd}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{42c8b07a-e960-43b9-874e-577bd8439bdd}'</comment>
+  </data>
+  <data name="1:label,Account{4524106d-88e0-49f3-b981-6da13fd1a4d7}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{4524106d-88e0-49f3-b981-6da13fd1a4d7}'</comment>
+  </data>
+  <data name="1:label,Account{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}'</comment>
+  </data>
+  <data name="1:label,Account{5f577113-1131-4a67-9633-0a3d35d03242}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{5f577113-1131-4a67-9633-0a3d35d03242}'</comment>
+  </data>
+  <data name="1:label,Account{66bc144a-37e1-4d41-8900-1a113976fadd}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{66bc144a-37e1-4d41-8900-1a113976fadd}'</comment>
+  </data>
+  <data name="1:label,Account{6da1a193-3ac2-4ab9-9be5-a2d2ae577a82}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{6da1a193-3ac2-4ab9-9be5-a2d2ae577a82}'</comment>
+  </data>
+  <data name="1:label,Account{730b0779-f243-40c0-900d-0eea752aa1f9}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{730b0779-f243-40c0-900d-0eea752aa1f9}'</comment>
+  </data>
+  <data name="1:label,Account{838fe0ef-88f7-4a90-aea9-f9658168e900}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{838fe0ef-88f7-4a90-aea9-f9658168e900}'</comment>
+  </data>
+  <data name="1:label,Account{86a8d20c-36b4-4965-bca9-a5b05c0ff2c7}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{86a8d20c-36b4-4965-bca9-a5b05c0ff2c7}'</comment>
+  </data>
+  <data name="1:label,Account{87438c42-062c-4e3e-945f-1c8f36abf1c2}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{87438c42-062c-4e3e-945f-1c8f36abf1c2}'</comment>
+  </data>
+  <data name="1:label,Account{8e24c7e3-6a40-5abb-eadb-254eba5478e2}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{8e24c7e3-6a40-5abb-eadb-254eba5478e2}'</comment>
+  </data>
+  <data name="1:label,Account{90b10a76-bbe2-4082-b4d6-01f878f676ca}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{90b10a76-bbe2-4082-b4d6-01f878f676ca}'</comment>
+  </data>
+  <data name="1:label,Account{99ed95bf-c615-4be1-881c-6563f25d50ce}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{99ed95bf-c615-4be1-881c-6563f25d50ce}'</comment>
+  </data>
+  <data name="1:label,Account{9a3d1e31-6693-4739-b7bd-25edd088feed}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{9a3d1e31-6693-4739-b7bd-25edd088feed}'</comment>
+  </data>
+  <data name="1:label,Account{9ca82a1e-452e-4837-8686-3321ec77a1de}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{9ca82a1e-452e-4837-8686-3321ec77a1de}'</comment>
+  </data>
+  <data name="1:label,Account{af08e345-80d2-413b-aaf6-783e1cd36cd4}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{af08e345-80d2-413b-aaf6-783e1cd36cd4}'</comment>
+  </data>
+  <data name="1:label,Account{b7dba52a-d0c6-4518-ad4e-394cd18cdaa3}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{b7dba52a-d0c6-4518-ad4e-394cd18cdaa3}'</comment>
+  </data>
+  <data name="1:label,Account{bcb47ba7-08d8-4e03-8938-1d243ba859ac}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{bcb47ba7-08d8-4e03-8938-1d243ba859ac}'</comment>
+  </data>
+  <data name="1:label,Account{bedc6f5f-9f05-4bf9-ab33-9f4054772b48}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{bedc6f5f-9f05-4bf9-ab33-9f4054772b48}'</comment>
+  </data>
+  <data name="1:label,Account{c0087e2d-5c9f-4bba-af7a-f33faf805e63}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{c0087e2d-5c9f-4bba-af7a-f33faf805e63}'</comment>
+  </data>
+  <data name="1:label,Account{c551f887-754c-4220-83ad-04e899de2ba9}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{c551f887-754c-4220-83ad-04e899de2ba9}'</comment>
+  </data>
+  <data name="1:label,Account{ca8587c5-18c0-cac1-7c34-6c639eade090}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for section in Entity FormXml ID: '{ca8587c5-18c0-cac1-7c34-6c639eade090}'</comment>
+  </data>
+  <data name="1:label,Account{d4c3ee9c-ba71-5cdb-31be-2aa505750472}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for section in Entity FormXml ID: '{d4c3ee9c-ba71-5cdb-31be-2aa505750472}'</comment>
+  </data>
+  <data name="1:label,Account{d4d59684-0148-44dd-af65-4087bba4f22b}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{d4d59684-0148-44dd-af65-4087bba4f22b}'</comment>
+  </data>
+  <data name="1:label,Account{e00b0bb8-0a80-42f2-823e-d6bde9af055e}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{e00b0bb8-0a80-42f2-823e-d6bde9af055e}'</comment>
+  </data>
+  <data name="1:label,Account{e2183bc7-bc1d-4111-a91b-4382919abb43}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{e2183bc7-bc1d-4111-a91b-4382919abb43}'</comment>
+  </data>
+  <data name="1:label,Account{e9bc8c4b-49c4-45b3-9273-57bfec9b80f8}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{e9bc8c4b-49c4-45b3-9273-57bfec9b80f8}'</comment>
+  </data>
+  <data name="1:label,Account{efc9773b-1a71-469b-8fe2-b6910491a2ac}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{efc9773b-1a71-469b-8fe2-b6910491a2ac}'</comment>
+  </data>
+  <data name="1:label,Account{fb872089-4b4c-4df4-a840-2f989e5e2107}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{fb872089-4b4c-4df4-a840-2f989e5e2107}'</comment>
+  </data>
+  <data name="1:label,Account{fd3c5875-1678-4ec2-a568-6be33101606c}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{fd3c5875-1678-4ec2-a568-6be33101606c}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{1fe765a9-8e80-4d22-859d-af898276ce5c}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{1fe765a9-8e80-4d22-859d-af898276ce5c}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{3a9e72a8-f82d-41a9-9060-5dada0a780b8}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for section in Entity FormXml ID: '{3a9e72a8-f82d-41a9-9060-5dada0a780b8}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{5c1f731c-7969-4a27-a87c-5a3f1d1042d3}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{5c1f731c-7969-4a27-a87c-5a3f1d1042d3}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{6dbe4431-1b88-413b-80d5-ccad96ba02ea}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{6dbe4431-1b88-413b-80d5-ccad96ba02ea}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{8508da57-735a-49d7-8d7f-c4f50e37a893}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{8508da57-735a-49d7-8d7f-c4f50e37a893}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{9efa5c1e-1bec-4e6a-8adb-3de60a8f9c11}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{9efa5c1e-1bec-4e6a-8adb-3de60a8f9c11}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{a32a9138-74b7-43fc-ac6d-1aaad2b3b4ef}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for section in Entity FormXml ID: '{a32a9138-74b7-43fc-ac6d-1aaad2b3b4ef}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{aeff357c-8580-48ca-bb5a-fdc82674eb76}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{aeff357c-8580-48ca-bb5a-fdc82674eb76}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{b90fef2d-5654-40a0-939c-dc15b4bd1599}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{b90fef2d-5654-40a0-939c-dc15b4bd1599}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{bcda2d7f-d24c-42ff-b3f4-49db3ac4878c}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{bcda2d7f-d24c-42ff-b3f4-49db3ac4878c}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{c1564733-f643-408a-adb6-df6d90578861}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for section in Entity FormXml ID: '{c1564733-f643-408a-adb6-df6d90578861}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{d35c3d67-2f85-47fe-903c-fe86438699d1}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for tab in Entity FormXml ID: '{d35c3d67-2f85-47fe-903c-fe86438699d1}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{d765b47b-dde5-40e2-996b-efd4c0da5dab}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for tab in Entity FormXml ID: '{d765b47b-dde5-40e2-996b-efd4c0da5dab}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{df1c13e7-2363-4c7b-8480-5e9b9ff3d0a7}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for cell in Entity FormXml ID: '{df1c13e7-2363-4c7b-8480-5e9b9ff3d0a7}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{e4e6c92e-1992-4063-b86a-6cc51bfdaf08}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for tab in Entity FormXml ID: '{e4e6c92e-1992-4063-b86a-6cc51bfdaf08}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{e73c8c2b-3490-403e-a23c-c42a86f015f8}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for section in Entity FormXml ID: '{e73c8c2b-3490-403e-a23c-c42a86f015f8}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{e771d68f-6c53-4dce-b5c1-b21fcfa7fc66}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for section in Entity FormXml ID: '{e771d68f-6c53-4dce-b5c1-b21fcfa7fc66}'</comment>
+  </data>
+  <data name="1:label,Sql DataSource{f7df25c9-f91b-4e3d-a04a-4660623b49ab}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : label for section in Entity FormXml ID: '{f7df25c9-f91b-4e3d-a04a-4660623b49ab}'</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4_accountbpfentityv4_accountbpf" xml:space="preserve">
+    <value />
+    <comment> 'v4_accountbpf' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4_Sql_DataSourceentityv4_Sql_DataSource" xml:space="preserve">
+    <value />
+    <comment> 'v4_Sql_DataSource' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,AccountBPF{62a7c179-1ef9-4ac9-95c0-b1af46a69abe}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : LocalizedName for systemform in Entity FormXml ID: '{62a7c179-1ef9-4ac9-95c0-b1af46a69abe}'</comment>
+  </data>
+  <data name="1:LocalizedName,Account{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : LocalizedName for systemform in Entity FormXml ID: '{38c60f9f-e1db-f011-8406-0022480b95a5}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{2d6b7ce0-ce65-4daf-8399-4e6060fffc78}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{2d6b7ce0-ce65-4daf-8399-4e6060fffc78}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{48e5214f-e14e-4fd0-b924-fbe9c9481cb2}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for systemform in Entity FormXml ID: '{48e5214f-e14e-4fd0-b924-fbe9c9481cb2}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{71572b2d-9ced-4bb1-8ee4-f812f9578e71}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{71572b2d-9ced-4bb1-8ee4-f812f9578e71}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{7185f74a-2f4f-412b-83f8-282c7725264c}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{7185f74a-2f4f-412b-83f8-282c7725264c}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{7afb35f0-9b43-0bf3-800e-37d958327037}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{7afb35f0-9b43-0bf3-800e-37d958327037}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{7b4b075c-e6a8-f011-bbd2-0022480965a1}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{7b4b075c-e6a8-f011-bbd2-0022480965a1}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{a8e134cc-39f8-416e-8e61-f362154a6e03}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for systemform in Entity FormXml ID: '{a8e134cc-39f8-416e-8e61-f362154a6e03}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{ca9e78e4-2949-48c5-aa50-9416b06cbd9d}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for systemform in Entity FormXml ID: '{ca9e78e4-2949-48c5-aa50-9416b06cbd9d}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{d066589d-4a71-4e65-a2e1-310ae3edbac8}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{d066589d-4a71-4e65-a2e1-310ae3edbac8}'</comment>
+  </data>
+  <data name="1:LocalizedName,Sql DataSource{d9800227-1f5f-4b37-9802-9d041c923715}" xml:space="preserve">
+    <value />
+    <comment>'Sql DataSource' : LocalizedName for SavedQuery on Entity QueryId: '{d9800227-1f5f-4b37-9802-9d041c923715}'</comment>
+  </data>
+  <data name="1:LocalizedName,v4_accountbpfentityv4_accountbpf" xml:space="preserve">
+    <value />
+    <comment> 'v4_accountbpf' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,v4_Sql_DataSourceentityv4_Sql_DataSource" xml:space="preserve">
+    <value />
+    <comment> 'v4_Sql_DataSource' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:Title,AccountnavAddresses{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value>Adresses</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navAddresses'</comment>
+  </data>
+  <data name="1:Title,AccountnavAsyncOperations{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value>Workflows</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navAsyncOperations'</comment>
+  </data>
+  <data name="1:Title,AccountnavAudit{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navAudit'</comment>
+  </data>
+  <data name="1:Title,AccountnavCampaignsInSFA{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value>Campagnes</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navCampaignsInSFA'</comment>
+  </data>
+  <data name="1:Title,AccountnavConnections{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navConnections'</comment>
+  </data>
+  <data name="1:Title,AccountnavContacts{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navContacts'</comment>
+  </data>
+  <data name="1:Title,AccountnavProcessSessions{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value>Sessions de dialogue</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navProcessSessions'</comment>
+  </data>
+  <data name="1:Title,AccountnavRelationships{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value>CustomerRelationship</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navRelationships'</comment>
+  </data>
+  <data name="1:Title,AccountnavSocialprofiles{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navSocialprofiles'</comment>
+  </data>
+  <data name="1:Title,AccountnavSubAccts{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value>Comptes</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navSubAccts'</comment>
+  </data>
+  <data name="1:Title,Accountnav_adx_invitation_assigntoaccount{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'nav_adx_invitation_assigntoaccount'</comment>
+  </data>
+  <data name="1:Title,Accountnav_msa_account_managingpartner{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'nav_msa_account_managingpartner'</comment>
+  </data>
+  <data name="1:Title,Accountnav_msa_contact_managingpartner{38c60f9f-e1db-f011-8406-0022480b95a5}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'nav_msa_contact_managingpartner'</comment>
+  </data>
+  <data name="29:label,{0b6026a7-bcd6-4f57-aa27-bee30d1ae69e}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{0b6026a7-bcd6-4f57-aa27-bee30d1ae69e}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:label,{189c88ea-8d76-41c7-9fcd-570117387ec5}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{189c88ea-8d76-41c7-9fcd-570117387ec5}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:label,{32566050-4395-4df6-8451-e79cff94503b}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{32566050-4395-4df6-8451-e79cff94503b}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:label,{44f16ed2-2f7b-4a5c-ae58-7378755e6cd4}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{44f16ed2-2f7b-4a5c-ae58-7378755e6cd4}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:label,{462693d9-43a6-4fbc-a379-fe3c58b45b2d}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{462693d9-43a6-4fbc-a379-fe3c58b45b2d}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:label,{8d43b7c9-152b-4b97-9543-4e0b0c880ecc}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{8d43b7c9-152b-4b97-9543-4e0b0c880ecc}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:label,{e8f404e9-174f-444c-82fc-03138750c163}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF:{e8f404e9-174f-444c-82fc-03138750c163}' : label for Workflow Label</comment>
+  </data>
+  <data name="29:LocalizedName,{6422dc63-3a94-f011-b4cc-000d3aa25840}" xml:space="preserve">
+    <value />
+    <comment>'CustomAction' : LocalizedName for Workflow</comment>
+  </data>
+  <data name="29:LocalizedName,{85691a57-80e0-f011-8406-000d3a34c759}" xml:space="preserve">
+    <value />
+    <comment>'AccountBPF' : LocalizedName for Workflow</comment>
+  </data>
+  <data name="29:LocalizedName,{a4fd954b-3194-f011-b4cc-000d3aa25840}" xml:space="preserve">
+    <value />
+    <comment>'AccountCustomAction' : LocalizedName for Workflow</comment>
+  </data>
+  <data name="80:LocalizedName,v4_DEVKITV4" xml:space="preserve">
+    <value />
+    <comment> 'v4_DEVKITV4' : LocalizedName for AppModule</comment>
+  </data>
+  <data name="81:LocalizedName,v4_DEVKITV4" xml:space="preserve">
+    <value />
+    <comment>'v4_DEVKITV4' : LocalizedName for AppModuleSiteMap</comment>
+  </data>
+  <data name="81:Title,area_b076a264area_b076a264" xml:space="preserve">
+    <value />
+    <comment>Title for Area 'area_b076a264' Area 'area_b076a264'</comment>
+  </data>
+  <data name="81:Title,area_b076a264group_3f12e325" xml:space="preserve">
+    <value />
+    <comment>Title for Area 'area_b076a264' Group 'group_3f12e325'</comment>
+  </data>
+  <data name="9:Description,v4_v4_category" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : Description for OptionSet</comment>
+  </data>
+  <data name="9:Description,v4_v4_category100000000" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : Description for OptionSet Value '100000000'</comment>
+  </data>
+  <data name="9:Description,v4_v4_category100000001" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : Description for OptionSet Value '100000001'</comment>
+  </data>
+  <data name="9:Description,v4_v4_category100000002" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : Description for OptionSet Value '100000002'</comment>
+  </data>
+  <data name="9:Description,v4_v4_category100000003" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : Description for OptionSet Value '100000003'</comment>
+  </data>
+  <data name="9:displayname,v4_v4_category" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : displayname for OptionSet</comment>
+  </data>
+  <data name="9:label,v4_v4_category100000000" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : label for OptionSet Value '100000000'</comment>
+  </data>
+  <data name="9:label,v4_v4_category100000001" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : label for OptionSet Value '100000001'</comment>
+  </data>
+  <data name="9:label,v4_v4_category100000002" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : label for OptionSet Value '100000002'</comment>
+  </data>
+  <data name="9:label,v4_v4_category100000003" xml:space="preserve">
+    <value />
+    <comment>'v4_v4_category' : label for OptionSet Value '100000003'</comment>
+  </data>
+</root>

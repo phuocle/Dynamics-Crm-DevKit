@@ -14,12 +14,13 @@ namespace DynamicsCrm.DevKit.Lib
     public static class TypeScriptBuildHelper
     {
         /// <summary>
-        /// Build a TypeScript file to JavaScript using npm run debug command
+        /// Build a TypeScript file to JavaScript
         /// Shows a modal popup with live build output
         /// </summary>
         /// <param name="tsFilePath">Full path to the .ts file</param>
+        /// <param name="isRelease">True for release mode (minified), false for debug mode (with sourcemap)</param>
         /// <returns>Tuple containing success status, path to built .js file, and error message if failed</returns>
-        public static async Task<(bool success, string jsFilePath, string error)> BuildTypeScriptAsync(string tsFilePath)
+        public static async Task<(bool success, string jsFilePath, string error)> BuildTypeScriptAsync(string tsFilePath, bool isRelease = false)
         {
             var directory = Path.GetDirectoryName(tsFilePath);
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(tsFilePath);
@@ -48,20 +49,25 @@ namespace DynamicsCrm.DevKit.Lib
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var form = new FormBuildOutput(fileName);
+            var buildMode = isRelease ? "Release" : "Debug";
+            var npmCommand = isRelease ? "release" : "debug";
+            var form = new FormBuildOutput(fileName, buildMode);
 
             // Start build process in background
+            bool hasErrors = false;
             var buildTask = Task.Run(async () =>
             {
                 var processStartInfo = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Arguments = $"/c npm run debug {fileNameWithoutExtension}",
+                    Arguments = $"/c chcp 65001 >nul && npm run {npmCommand} {fileNameWithoutExtension}",
                     WorkingDirectory = projectRoot,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
+                    StandardOutputEncoding = System.Text.Encoding.UTF8,
+                    StandardErrorEncoding = System.Text.Encoding.UTF8
                 };
 
                 using (var process = new Process { StartInfo = processStartInfo })
@@ -71,13 +77,28 @@ namespace DynamicsCrm.DevKit.Lib
                         if (!string.IsNullOrEmpty(args.Data))
                         {
                             form.AppendOutput(args.Data);
+                            // Check for specific error indicators in output
+                            // Use specific patterns to avoid false positives like "Checking for TypeScript errors..."
+                            if (args.Data.Contains("✗") || 
+                                args.Data.Contains("error TS") || 
+                                args.Data.Contains(": error") ||
+                                args.Data.Contains("Build failed"))
+                            {
+                                hasErrors = true;
+                            }
                         }
                     };
                     process.ErrorDataReceived += (sender, args) =>
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
-                            form.AppendOutput($"[ERROR] {args.Data}");
+                            // Show stderr output but only set hasErrors for actual error messages
+                            // npm/tsc can output warnings to stderr even on successful builds
+                            form.AppendOutput($"[STDERR] {args.Data}");
+                            if (args.Data.Contains("✗") || args.Data.Contains("error TS") || args.Data.Contains("Error:"))
+                            {
+                                hasErrors = true;
+                            }
                         }
                     };
 
@@ -86,7 +107,14 @@ namespace DynamicsCrm.DevKit.Lib
                     process.BeginErrorReadLine();
                     process.WaitForExit();
 
-                    if (process.ExitCode == 0)
+                    if (process.ExitCode != 0 || hasErrors)
+                    {
+                        errorMessage = hasErrors 
+                            ? "TypeScript build failed - see output for details"
+                            : $"TypeScript build failed with exit code {process.ExitCode}";
+                        form.BuildComplete(false, errorMessage);
+                    }
+                    else
                     {
                         // The .js file is output to the build folder
                         jsFilePath = Path.Combine(projectRoot, "build", fileNameWithoutExtension + ".js");
@@ -100,11 +128,6 @@ namespace DynamicsCrm.DevKit.Lib
                             errorMessage = "Build succeeded but .js file not found";
                             form.BuildComplete(false, errorMessage);
                         }
-                    }
-                    else
-                    {
-                        errorMessage = $"TypeScript build failed with exit code {process.ExitCode}";
-                        form.BuildComplete(false, errorMessage);
                     }
                 }
             });
@@ -141,23 +164,48 @@ namespace DynamicsCrm.DevKit.Lib
         }
 
         /// <summary>
+        /// Check if a file is a deployable TypeScript file
+        /// Excludes generated files like *.form.ts and *.webapi.ts which are not meant to be deployed directly
+        /// </summary>
+        /// <param name="filePath">Full path or filename</param>
+        /// <returns>True if file is a deployable .ts file (not *.form.ts or *.webapi.ts)</returns>
+        public static bool IsDeployableTypeScript(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return false;
+            
+            var fileName = Path.GetFileName(filePath).ToLowerInvariant();
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+            
+            if (extension != ".ts") return false;
+            
+            // Exclude generated TS files that should not be deployed
+            if (fileName.EndsWith(".form.ts") || fileName.EndsWith(".webapi.ts") || fileName == "optionset.ts")
+            {
+                return false;
+            }
+            
+            return true;
+        }
+
+        /// <summary>
         /// Process a TypeScript file for deployment - builds it and returns the .js file path
         /// </summary>
         /// <param name="fullFileName">Full path to the file (can be .ts or .js)</param>
         /// <param name="url">The connected CRM URL for status messages</param>
+        /// <param name="isRelease">True for release mode (minified), false for debug mode (with sourcemap)</param>
         /// <returns>Tuple containing success status, file path to deploy (original or built .js), and error message if failed</returns>
-        public static async Task<(bool success, string deployFilePath, string error)> ProcessTypeScriptForDeploymentAsync(string fullFileName, string url)
+        public static async Task<(bool success, string deployFilePath, string error)> ProcessTypeScriptForDeploymentAsync(string fullFileName, string url, bool isRelease = false)
         {
-            var extension = Path.GetExtension(fullFileName).ToLowerInvariant();
-            
-            if (extension != ".ts")
+            // Check if this is a deployable TypeScript file
+            if (!IsDeployableTypeScript(fullFileName))
             {
-                // Not a TypeScript file, return as-is
+                // Not a deployable TypeScript file, return as-is (for .js, *.form.ts, *.webapi.ts etc.)
                 return (true, fullFileName, null);
             }
 
-            await ShowStatusAsync(url, "Building TypeScript ...");
-            var (buildSuccess, jsFilePath, buildError) = await BuildTypeScriptAsync(fullFileName);
+            var modeText = isRelease ? "Release" : "Debug";
+            await ShowStatusAsync(url, $"Building TypeScript ({modeText}) ...");
+            var (buildSuccess, jsFilePath, buildError) = await BuildTypeScriptAsync(fullFileName, isRelease);
 
             if (!buildSuccess)
             {

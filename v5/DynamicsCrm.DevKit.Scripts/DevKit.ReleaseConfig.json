@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Single source of truth for DynamicsCrm.DevKit release configuration",
+  "version": "4.12.34.56",
+  "placeholders": {
+    "version": "x.xx.xx.xx",
+    "date": "xxxx.yy.zz HH.mm.ss"
+  },
+  "files": {
+    "versionReplacement": [
+      "DynamicsCrm.DevKit.Shared\\Const.cs",
+      "DynamicsCrm.DevKit.Cli\\README.md",
+      "DynamicsCrm.DevKit.Analyzers\\docs\\README.md",
+      "DynamicsCrm.DevKit\\source.extension.cs",
+      "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
+      "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+      "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md"
+    ],
+    "dateReplacement": [
+      "DynamicsCrm.DevKit.Cli\\README.md",
+      "DynamicsCrm.DevKit.Analyzers\\docs\\README.md",
+      "DynamicsCrm.DevKit.Shared\\Const.cs",
+      "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
+      "DynamicsCrm.DevKit\\VSPackage.resx",
+      "DynamicsCrm.DevKit\\source.extension.cs",
+      "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+      "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md"
+    ],
+    "allModified": [
+      "DynamicsCrm.DevKit.Shared\\Const.cs",
+      "DynamicsCrm.DevKit.Cli\\README.md",
+      "DynamicsCrm.DevKit.Analyzers\\docs\\README.md",
+      "DynamicsCrm.DevKit\\source.extension.cs",
+      "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
+      "DynamicsCrm.DevKit\\VSPackage.resx",
+      "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+      "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md"
+    ]
+  },
+  "buildConfig": {
+    "solutionFile": "DynamicsCrm.DevKit.AllInOne.slnx",
+    "publishedRoot": "Published",
+    "annualRelease": {
+      "month": 12,
+      "day": 31,
+      "hour": 23,
+      "minute": 59,
+      "second": 59
+    }
+  }
+}

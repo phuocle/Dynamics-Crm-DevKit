@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="bpf_account_v4_accountbpf" />
+  <EntityRelationship Name="v4_account_Lookup_contact" />
+</EntityRelationships>

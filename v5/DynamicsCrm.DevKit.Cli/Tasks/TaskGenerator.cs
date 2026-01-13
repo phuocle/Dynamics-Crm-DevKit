@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Spectre.Console;
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskGenerator(CommandLineArgs arg, JsonGenerator json) : ITask
@@ -33,17 +34,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.rootfolder == "???")
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.type == "???" || (Json.type != null && Json?.type?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (
@@ -51,11 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Json.type.ToLower() != nameof(GeneratorType.tsform) &&
                 Json.type.ToLower() != nameof(GeneratorType.jswebapi) &&
                 Json.type.ToLower() != nameof(GeneratorType.tswebapi) &&
-                Json.type.ToLower() != nameof(GeneratorType.csharp) /*&&
-                Json.type.ToLower() != nameof(GeneratorType.earlybound)*/
+                Json.type.ToLower() != nameof(GeneratorType.csharp) 
                 )
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             // Skip rootnamespace validation for TsForm and TsWebApi since they no longer use rootnamespace
@@ -63,18 +63,34 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    SpectreLog.ActionError($"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                     return false;
                 }
             }
-            await Helper.DelayAsync(1);
             return true;
         }
 
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            SpectreLog.WriteLine("START");
+            SpectreLog.WriteLine();
+
+//#if DEBUG
+//            // Debug Visualization for CliActions
+//            SpectreLog.WriteLine("[cyan] --- DEBUG VISUALIZATION START --- [/]");
+//            SpectreLog.WriteLine();
+//            var dLen = 1.ToString().Length;
+//            // CliAction.DO_NOTHING (SKIPPED)
+//            SpectreLog.ActionDoNothing("Debug.Skipped.js");
+//            // CliAction.CREATED
+//            SpectreLog.ActionCreated("Debug.Created.js");
+//            // CliAction.UPDATED
+//            SpectreLog.ActionUpdated("Debug.Updated.js");
+//            // CliAction.ERROR
+//            SpectreLog.ActionError("Debug.Error.js simulated error");
+//            SpectreLog.WriteLine();
+//            SpectreLog.WriteLine("[cyan] --- DEBUG VISUALIZATION END --- [/]");
+//#endif
 
             if (await IsValidAsync())
             {
@@ -94,12 +110,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await GeneratorWebApiAsync(schemaNames);
                 else if (Json.type.ToLower() == nameof(GeneratorType.tswebapi))
                     await GeneratorTsWebApiAsync(schemaNames);
-                //else if (Json.type.ToLower() == nameof(GeneratorType.earlybound))
-                //    await GeneratorEarlyBoundAsync(schemaNames);
             }
 
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
 
         private async Task<List<string>> GetSchemaNamesAsync()
@@ -115,23 +129,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 endsWith = ".webapi.js";
             if (Json.entities != null && (Json.entities.Trim().ToLower() == "*" || Json.entities.Trim().ToLower() == "all"))
             {
-                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ");
-                CliLog.WriteSuccess(ConsoleColor.White, "json.entities");
-                CliLog.Write(ConsoleColor.Green, " with values: ");
-                CliLog.WriteSuccess(ConsoleColor.White, Json.entities.Trim());
-                CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                SpectreLog.WriteHighLight("Filter by: ", "json.entities", " with values: ", Json.entities.Trim(), ".");
+                SpectreLog.WriteLine();
                 await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
                 return [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
             }
             else if (Json.entities == null || Json.entities.Trim().Length == 0 || Json.entities.Trim().ToLower() == "folder")
             {
-                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ");
-                CliLog.WriteSuccess(ConsoleColor.White, "current folder");
-                CliLog.Write(ConsoleColor.Green, " with pattern values: ");
-                CliLog.WriteSuccess(ConsoleColor.White, $"*{endsWith}");
-                CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                SpectreLog.WriteHighLight("Filter by: ", "current folder", " with pattern values: ", $"*{endsWith}", ".");
+                SpectreLog.WriteLine();
                 var pattern = $"*{endsWith}";
                 return [.. Directory
                     .GetFiles(CurrentFolder, pattern)
@@ -139,12 +145,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ");
-                CliLog.WriteSuccess(ConsoleColor.White, "json.entities");
-                CliLog.Write(ConsoleColor.Green, " with values: ");
-                CliLog.WriteSuccess(ConsoleColor.White, Json.entities.Trim());
-                CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.White, "|");
+                SpectreLog.WriteHighLight("Filter by: ", "json.entities", " with values: ", Json.entities.Trim(), ".");
+                SpectreLog.WriteLine();
                 return [.. Json.entities.Split(",".ToCharArray())];
             }
         }
@@ -154,11 +156,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             const string endsWith = ".webapi.js";
             var totalFiles = schemaNames.Count();
             var len = totalFiles.ToString().Length;
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            var i = 1;
+            SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
+            SpectreLog.WriteLine();
+            var i = 0;
             foreach (var schemaName in schemaNames)
             {
+                i++;
+                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -173,16 +177,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName));
                     }
+                    SpectreLog.ClearProgress();
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
                         {
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
-                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
                         }
                     }
                     else
@@ -191,22 +196,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
                         }
                     }
                 }
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                    SpectreLog.ClearProgress();
+                    SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
-
-                i++;
             }
         }
 
@@ -215,11 +219,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             const string endsWith = ".webapi.ts";
             var totalFiles = schemaNames.Count();
             var len = totalFiles.ToString().Length;
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            var i = 1;
+            SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
+            SpectreLog.WriteLine();
+            var i = 0;
             foreach (var schemaName in schemaNames)
             {
+                i++;
+                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -229,29 +235,30 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var isJsFormExist = File.Exists(Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.form.js"));
                     var newCode = await TsWebApi.GetTsWebApiCodeAsync(ServiceClient, entityMetadata);
 
+                    SpectreLog.ClearProgress();
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
                     }
                     else
                     {
                         if (File.Exists(fileEndsWith))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
                         }
                     }
                 }
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                    SpectreLog.ClearProgress();
+                    SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
-                i++;
             }
         }
 
@@ -260,11 +267,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             const string endsWith = ".form.js";
             var totalFiles = schemaNames.Count();
             var len = totalFiles.ToString().Length;
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            var i = 1;
+            SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
+            SpectreLog.WriteLine();
+            var i = 0;
             foreach (var schemaName in schemaNames)
             {
+                i++;
+                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -277,10 +286,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var (newCode, newDTS) = await JsForm.GetJsFormCodeAsync(ServiceClient, entityMetadata, Json.rootnamespace, isJsWebApiExist);
 
                     // Skip if no forms exist for this entity
+                    SpectreLog.ClearProgress();
                     if (string.IsNullOrEmpty(newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.DarkGray, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}", ConsoleColor.DarkGray, " (no forms)");
-                        i++;
+                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}", "(no forms)");
                         continue;
                     }
 
@@ -293,11 +302,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
                         {
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
-                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
                         }
                     }
                     else
@@ -306,21 +315,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
                         }
                     }
                 }
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                    SpectreLog.ClearProgress();
+                    SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
-                i++;
             }
         }
 
@@ -329,12 +338,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             const string endsWith = ".form.ts";
             var totalFiles = schemaNames.Count();
             var len = totalFiles.ToString().Length;
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            var i = 1;
+            SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
+            SpectreLog.WriteLine();
             var processedEntities = new List<EntityMetadata>();
+            var i = 0;
             foreach (var schemaName in schemaNames)
             {
+                i++;
+                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -345,10 +356,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var newCode = await TsForm.GetTsFormCodeAsync(ServiceClient, entityMetadata);
 
                     // Skip if no forms exist for this entity
+                    SpectreLog.ClearProgress();
                     if (string.IsNullOrEmpty(newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.DarkGray, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}", ConsoleColor.DarkGray, " (no forms)");
-                        i++;
+                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}", "(no forms)");
                         continue;
                     }
 
@@ -364,27 +375,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
                     }
                     else
                     {
                         if (File.Exists(fileEndsWith))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
                         }
                     }
                 }
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                    SpectreLog.ClearProgress();
+                    SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
-                i++;
             }
 
             // Generate OptionSet.ts after processing all entities
@@ -396,76 +407,31 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                 if (Helper.IsTheSame(existingContent, newOptionSetCode))
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", " ") + "  ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "OptionSet.ts");
+                    SpectreLog.ActionDoNothing("OptionSet.ts");
                 }
                 else
                 {
                     await FileHelper.ForceWriteAllTextAsync(optionSetFile, newOptionSetCode);
-                    var action = File.Exists(optionSetFile) ? CliAction.UPDATED : CliAction.CREATED;
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", " ") + "  ", ConsoleColor.Green, action, ConsoleColor.White, "OptionSet.ts");
+                    if (File.Exists(optionSetFile))
+                        SpectreLog.ActionUpdated("OptionSet.ts");
+                    else
+                        SpectreLog.ActionCreated("OptionSet.ts");
                 }
             }
         }
-
-
-        //private async Task GeneratorEarlyBoundAsync(List<string> schemaNames)
-        //{
-        //    const string endsWith = ".generated.cs";
-        //    var totalFiles = schemaNames.Count();
-        //    var len = totalFiles.ToString().Length;
-        //    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
-        //    CliLog.WriteLine(ConsoleColor.White, "|");
-        //    var i = 1;
-        //    foreach (var schemaName in schemaNames)
-        //    {
-        //        var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
-        //        if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
-        //        {
-        //            var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.cs");
-        //            var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
-        //            var oldCode = await FileHelper.ReadAllTextFromLine6Async(fileEndsWith);
-        //            if (Json.@namespace != null && Json.@namespace.Trim().Length == 0) Json.@namespace = null;
-        //            var _GeneratedClass_ = CSharpEarlyBound.GetCsCode(ServiceClient, entityMetadata, Json.rootnamespace, Json.@namespace);
-        //            var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
-        //            if (File.Exists(fileEndsWith) && Helper.IsTheSame(oldCode, newCode))
-        //            {
-        //                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
-        //            }
-        //            else
-        //            {
-        //                if (File.Exists(fileEndsWith))
-        //                {
-        //                    await FileHelper.ForceWriteAllTextAsync(fileEndsWith, _GeneratedClass_);
-        //                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
-        //                }
-        //                else
-        //                {
-        //                    await FileHelper.ForceWriteAllTextAsync(fileEndsWith, _GeneratedClass_);
-        //                    if (!File.Exists(file))
-        //                    {
-        //                        await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
-        //                    }
-        //                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
-        //        }
-        //        i++;
-        //    }
-        //}
+       
         private async Task GeneratorLateBoundAsync(List<string> schemaNames)
         {
             const string endsWith = ".generated.cs";
             var totalFiles = schemaNames.Count();
             var len = totalFiles.ToString().Length;
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            var i = 1;
+            SpectreLog.WriteHighLight("Found: ", totalFiles.ToString(), " entities");
+            SpectreLog.WriteLine();
+            var i = 0;
             foreach (var schemaName in schemaNames)
             {
+                i++;
+                SpectreLog.WriteProgress(i, totalFiles);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
@@ -475,16 +441,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (Json.@namespace != null && Json.@namespace.Trim().Length == 0) Json.@namespace = null;
                     var _GeneratedClass_ = CSharpLateBound.GetCsCode(ServiceClient, entityMetadata, Json.rootnamespace, Json.@namespace);
                     var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
+                    SpectreLog.ClearProgress();
                     if (File.Exists(fileEndsWith) && Helper.IsTheSame(oldCode, newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
                     }
                     else
                     {
                         if (File.Exists(fileEndsWith))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, _GeneratedClass_);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
                         }
                         else
                         {
@@ -493,15 +460,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             {
                                 await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
                             }
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{schemaName}{endsWith}");
+                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
                         }
                     }
                 }
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.ERROR, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                    SpectreLog.ClearProgress();
+                    SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
-                i++;
             }
         }
 
@@ -511,7 +478,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 using (var cancellationTokenSource = new CancellationTokenSource())
                 {
-                    var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
+                    var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
                         await XrmHelper.ReadEntitiesMetadataAsync(serviceClient, entityFilters);
@@ -528,13 +495,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
-                CliLog.WriteLine();
                 if (Json.type.ToLower() != nameof(GeneratorType.csharp))
                 {
                     IsAll = true;
                     using (var cancellationTokenSource = new CancellationTokenSource())
                     {
-                        var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities FormXml ", cancellationTokenSource.Token), cancellationTokenSource.Token);
+                        var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities FormXml ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                         try
                         {
                             await XrmHelper.ReadEntitiesFormXmlAsync(serviceClient);
@@ -551,9 +517,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             }
                         }
                     }
-                    CliLog.WriteLine();
                 }
-                CliLog.WriteLine(ConsoleColor.White, "|");
             }
         }
     }

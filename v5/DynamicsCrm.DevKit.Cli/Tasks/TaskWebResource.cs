@@ -15,7 +15,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskWebResource(CommandLineArgs arg, JsonWebResource json) : ITask
     {
-        private const string SPACE = "  ";
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.webresources).ToUpper()}]";
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
@@ -29,18 +28,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             if (await IsSupportWebResourceDependencyAsync())
@@ -51,13 +50,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var check = dependency.dependencies.Where(x => x.StartsWith("???_/")).Any();
                     if (check)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
+                        SpectreLog.ActionError($"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
                         return false;
                     }
                     var check2 = dependency.webresources.Where(x => x.StartsWith("???_/")).Any();
                     if (check2)
                     {
-                        CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
+                        SpectreLog.ActionError($"{TaskType} Found ???_/ in webresource dependencies. Please check DynamicsCrm.DevKit.Cli.json file.");
                         return false;
                     }
                 }
@@ -67,16 +66,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployWebResourceFilesAsync()
         {
-            CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES WITH PATTERNS FILES");
+            SpectreLog.WriteLine("DEPLOYING WEBRESOURCES WITH PATTERNS FILES");
             foreach (var pattern in Json.includefiles)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{SPACE}{SPACE}{pattern}");
+                SpectreLog.WriteHighLight(" - ", $"{pattern}", "");
             }
-            CliLog.WriteSeparator();
-            CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
-            CliLog.WriteSuccess(ConsoleColor.Yellow, $" {WebResourceFiles.Count} ");
-            CliLog.WriteLine(ConsoleColor.Green, " webresources");
-            CliLog.WriteSeparator();
+            SpectreLog.WriteLine();
+            SpectreLog.WriteHighLight("Found: ", $"{WebResourceFiles.Count}", " webresources");
+            SpectreLog.WriteLine();
             var i = 1;
             foreach (var webResourceFile in WebResourceFiles)
             {
@@ -87,24 +84,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var dependencies = await GetDependenciesAsync();
             if (await IsSupportWebResourceDependencyAsync() && dependencies.Count > 0)
             {
-                CliLog.WriteSeparator();
-                CliLog.WriteLineWarning(ConsoleColor.Yellow, "DEPLOYING WEBRESOURCES DEPENDENCIES WITH PATTERNS FILES");
+                SpectreLog.WriteLine();
+                SpectreLog.WriteLine("DEPLOYING WEBRESOURCES DEPENDENCIES WITH PATTERNS FILES");
                 foreach (var item in Json.dependencies)
                 {
                     foreach (var webresource in item.webresources)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, $"{SPACE}{SPACE}{webresource}");
+                        SpectreLog.WriteHighLight(" - ", $"{webresource}", "");
                     }
                     foreach (var dependency in item.dependencies)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"{SPACE}{SPACE}{SPACE}{SPACE}{dependency}");
+                        SpectreLog.WriteWithLevel(LogLevel.Level3, $" {dependency}");
                     }
                 }
-                CliLog.WriteSeparator();
-                CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
-                CliLog.WriteSuccess(ConsoleColor.Yellow, $" {dependencies.Count} ");
-                CliLog.WriteLine(ConsoleColor.Green, " dependencies");
-                CliLog.WriteSeparator();
+                SpectreLog.WriteLine();
+                SpectreLog.WriteHighLight("Found: ", $"{dependencies.Count}", " dependencies");
+                SpectreLog.WriteLine();
                 var j = 1;
                 foreach (var dependency in dependencies)
                 {
@@ -128,17 +123,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     "<webresource>" + webresources + "</webresource>" +
                     "</webresources></importexportxml>"
             };
-            CliLog.WriteSeparator();
-            CliLog.WriteLineWarning(ConsoleColor.Yellow, "PUBLISHING WEBRESOURCES");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("PUBLISHING WEBRESOURCES");
             await ServiceClient.ExecuteAsync(publish);
-            CliLog.WriteSeparator();
-            CliLog.WriteLineWarning(ConsoleColor.Yellow, "PUBLISHED WEBRESOURCES");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("PUBLISHED WEBRESOURCES");
         }
 
         private async Task UpdateDependencyAsync(Dependency dependency, int current)
         {
             var dependencies = await GetDependenciesAsync();
-            var len = dependencies.Count.ToString().Length;
             List<string> dependencyList = dependency.dependencies;
             dependencyList = [.. dependencyList.Distinct()];
             dependency.dependencies = dependencyList;
@@ -162,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
                 else
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.NOT_FOUND, ConsoleColor.White, webResourceName);
+                    SpectreLog.ActionError($"{webResourceName}", CliAction.NOT_FOUND);
                     return;
                 }
                 if (!await IsTheSameDependencyXmlAsync(dependency.dependencies, existingDependencyXml))
@@ -172,18 +166,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         ["dependencyxml"] = dependencyXml
                     };
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceName}", ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"{webResourceName}", "dependencies");
                     foreach (var d in foundDependencies)
-                        CliLog.WriteLineWarning(ConsoleColor.White, $"{SPACE}{SPACE}{SPACE}{d}");
+                        SpectreLog.WriteWithLevel(LogLevel.Level2, $"{d}");
                     await ServiceClient.UpdateAsync(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceName, ConsoleColor.Green, " dependencies ", ConsoleColor.White, "with");
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"{webResourceName}", "dependencies");
                     foreach (var d in foundDependencies)
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"{SPACE}{SPACE}{SPACE}{d}");
+                        SpectreLog.WriteWithLevel(LogLevel.Level2, $"{d}");
                 }
             }
         }
@@ -274,7 +268,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployWebResourceFileAsync(WebResourceFile webResourceFile, int current)
         {
-            var len = WebResourceFiles.Count.ToString().Length;
             if (webResourceFile.uniquename.StartsWith("/")) webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
             var fetchData = new
             {
@@ -309,7 +302,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (iscustomizable?.Value == false)
                         {
-                            CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, "Update webresource failed because the setting webresource.iscustomizable = false - ", ConsoleColor.White, webResourceFile.uniquename);
+                            SpectreLog.ActionError($"Update webresource failed because the setting webresource.iscustomizable = false - {webResourceFile.uniquename}");
                             return;
                         }
                     }
@@ -327,7 +320,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             if (iscustomizable?.Value == false)
                             {
-                                CliLog.WriteLineError(ConsoleColor.Yellow, ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, "Update webresource failed because the setting webresource.iscustomizable = false - ", ConsoleColor.White, webResourceFile.uniquename);
+                                SpectreLog.ActionError($"Update webresource failed because the setting webresource.iscustomizable = false - {webResourceFile.uniquename}");
                                 return;
                             }
                         }
@@ -340,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fileContent = Convert.ToBase64String(await FileHelper.ReadAllBytesAsync(webResourceFile.file));
             if (fileContent == content)
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
+                SpectreLog.ActionDoNothing(webResourceFile.file.Substring(CurrentDirectory.Length + 1));
                 await AddWebResourceToSolutionAsync(new Entity("webresource")
                 {
                     ["name"] = webResourceFile.uniquename,
@@ -419,14 +412,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (webResourceId == Guid.Empty)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.CREATED, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    SpectreLog.ActionCreated($"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
                     webResourceId = await ServiceClient.CreateAsync(webResource);
                     webResource["webresourceid"] = webResourceId;
                 }
                 else
                 {
                     webResource["webresourceid"] = webResourceId;
-                    CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", ConsoleColor.Green, CliAction.UPDATED, ConsoleColor.White, $"{webResourceFile.uniquename}", ConsoleColor.Green, " = ", ConsoleColor.White, $"{webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    SpectreLog.ActionUpdated($"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
                     await ServiceClient.UpdateAsync(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);
@@ -466,7 +459,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                 SolutionUniqueName = Json.solution
             };
-            CliLog.WriteLineWarning(SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.ADDED, ConsoleColor.White, $"{webResource["name"]} ", ConsoleColor.Green, "to solution: ", ConsoleColor.White, $"{Json.solution}");
+            SpectreLog.ActionWithLevel(LogLevel.Level3, CliAction.ADDED, $"{webResource["name"]}", $"to solution: ", $"{Json.solution}");
             await ServiceClient.ExecuteAsync(request);
         }
 
@@ -591,7 +584,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 using (var cancellationTokenSource = new CancellationTokenSource())
                 {
-                    var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
+                    var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
                         var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
@@ -617,8 +610,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                     }
                 }
-                CliLog.WriteLine();
-                CliLog.WriteSeparator();
+                SpectreLog.WriteLine();
             }
             foreach (var dependency in dependencies)
             {
@@ -644,30 +636,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            CliLog.WriteSectionHeader("START ");
-            CliLog.WriteSeparator();
+            SpectreLog.WriteLine("START");
+            SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
                 if (WebResourceFiles.Count == 0)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any webresource files to deploy");
+                    SpectreLog.ActionError("Not found any webresource files to deploy");
                 }
                 else
                 {
                     await DeployWebResourceFilesAsync();
                 }
             }
-#if DEBUG
-            CliLog.WriteSeparator();
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_ExecuteAsync: {XrmHelper.COUNT_ExecuteAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveMultipleAsync: {XrmHelper.COUNT_RetrieveMultipleAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_CreateAsync: {XrmHelper.COUNT_CreateAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_DeleteAsync: {XrmHelper.COUNT_DeleteAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveAsync: {XrmHelper.COUNT_RetrieveAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_UpdateAsync: {XrmHelper.COUNT_UpdateAsync}");
-#endif
-            CliLog.WriteSeparator();
-            CliLog.WriteSectionHeader("END ");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
     }
 }

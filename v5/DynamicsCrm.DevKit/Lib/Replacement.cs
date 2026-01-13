@@ -49,6 +49,9 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.package.json");
             replacements["$jsconfig.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.jsconfig.json");
             replacements["$generator.latebound.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.latebound.bat");
+            replacements["$run.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.proxytypes.run.bat");
+            replacements["$Extract-Both.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.solutionpackager.extract.both.bat");
+            replacements["$Pack-Both.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.solutionpackager.pack.both.bat");
             replacements["$download.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");

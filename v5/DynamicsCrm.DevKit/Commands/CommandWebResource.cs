@@ -16,6 +16,9 @@ namespace DynamicsCrm.DevKit.Commands
     {
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
+            // Save current document before processing (equivalent to Ctrl+S)
+            await VsixHelper.ExecuteCommandAsync("File.Save");
+
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
             var serviceClient = await CacheHelper.GetServiceClientAsync();
 
@@ -37,7 +40,7 @@ namespace DynamicsCrm.DevKit.Commands
             if (!success)
             {
                 await VS.StatusBar.ClearAsync();
-                await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, error);
+                await TypeScriptBuildHelper.ShowStatusAsync(url, error);
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 return;
             }
@@ -103,10 +106,31 @@ namespace DynamicsCrm.DevKit.Commands
 
         protected override void BeforeQueryStatus(EventArgs e)
         {
-            this.Command.Visible = ThreadHelper.JoinableTaskFactory.Run(async () =>
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var extension = await VsixHelper.SelectedItem.GetExtensionAsync();
-                return Helper.IsWebResourceExtension(extension);
+                var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+                
+                // Check if file is a valid web resource extension
+                var isVisible = Helper.IsWebResourceExtension(extension);
+                
+                // For .ts files, exclude *.form.ts and *.webapi.ts (generated files, not deployable)
+                if (isVisible && extension.Equals(".ts", StringComparison.OrdinalIgnoreCase))
+                {
+                    isVisible = TypeScriptBuildHelper.IsDeployableTypeScript(fullFileName);
+                }
+                
+                this.Command.Visible = isVisible;
+                
+                // Change label for deployable TypeScript files to indicate Debug mode
+                if (TypeScriptBuildHelper.IsDeployableTypeScript(fullFileName))
+                {
+                    this.Command.Text = "Deploy WebResource (Debug)";
+                }
+                else
+                {
+                    this.Command.Text = "Deploy WebResource";
+                }
             });
         }
     }

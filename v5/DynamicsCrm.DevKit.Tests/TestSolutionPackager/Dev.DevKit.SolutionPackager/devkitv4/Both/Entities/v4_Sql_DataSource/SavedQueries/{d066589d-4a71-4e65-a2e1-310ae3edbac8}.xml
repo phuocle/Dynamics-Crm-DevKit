@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{d066589d-4a71-4e65-a2e1-310ae3edbac8}</savedqueryid>
+    <layoutxml>
+      <grid name="v4_sql_datasources" jump="v4_sql_datasourcename" select="1" icon="1" preview="1">
+        <row name="v4_sql_datasource" id="v4_sql_datasourceid">
+          <cell name="v4_sql_datasourcename" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>2</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="v4_sql_datasource">
+          <attribute name="v4_sql_datasourceid" />
+          <attribute name="v4_sql_datasourcename" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.4</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Sql DataSource Associated View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

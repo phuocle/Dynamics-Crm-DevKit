@@ -1,51 +1,33 @@
-﻿using CmdLine;
+﻿using Spectre.Console.Cli;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System.IO;
+using System.ComponentModel;
 
 namespace DynamicsCrm.DevKit.Shared.Models
 {
-    [CommandLineArguments(Program = "DynamicsCrm.DevKit.Cli", Title = "DynamicsCrm.DevKit.Cli Tasks", Description = "DynamicsCrm.DevKit.Cli automation tasks")]
-    public class CommandLineArgs
+    /// <summary>
+    /// Command settings for legacy Task classes.
+    /// This class serves as a compatibility layer or DTO to pass arguments to existing Task logic (TaskServer, TaskGenerator, etc.).
+    /// Ideally, Task classes should be refactored to use specific CommandArgs or an interface, and this class should be removed.
+    /// Currently, it inherits from DevKitCommandArgs to avoid duplication.
+    /// </summary>
+    public class CommandLineArgs : DevKitCommandArgs
     {
-        [CommandLineParameter(Command = "conn", Name = "Connection", Required = false, Description = "Dynamics 365 Connection String", Default = "")]
-        public string Connection { get; set; }
+        [CommandOption("--type")]
+        [Description("Type task (generators, webresources, plugins, etc.)")]
+        public string Type { get; set; } = string.Empty;
 
-        [CommandLineParameter(Command = "json", Name = "Json", Required = true, Description = "DynamicsCrm.DevKit.Cli json file")]
-        public string Json { get; set; }
+        [CommandOption("--version")]
+        [Description("Version number")]
+        [DefaultValue("1.0.0.0")]
+        public string Version { get; set; } = "1.0.0.0";
 
-        [CommandLineParameter(Command = "type", Name = "Type", Required = true, Description = "Type task")]
-        public string Type { get; set; }
+        [CommandOption("--command")]
+        [Description("Others command")]
+        public string Command { get; set; } = string.Empty;
 
-        [CommandLineParameter(Command = "profile", Name = "Profile", Required = true, Description = "Profile of task")]
-        public string Profile { get; set; }
-
-        [CommandLineParameter(Command = "version", Name = "Version", Required = false, Description = "Version number", Default = "1.0.0.0")]
-        public string Version { get; set; }
-
-        [CommandLineParameter(Command = "command", Name = "Command", Required = false, Description = "Others command", Default = "")]
-        public string Command { get; set; }
-
-        [CommandLineParameter(Command = "sdklogin", Name = "SdkLogin", Required = false, Description = "Login by Sdk OOB dialog", Default = "")]
-        public string SdkLogin { get; set; }
-
-        [CommandLineParameter(Command = "url", Name = "Url", Required = false, Description = "Login by Sdk OOB dialog", Default = "")]
-        public string Url { get; set; }
-
-        [CommandLineParameter(Command = "onlyupdateassembly", Name = "OnlyUpdateAssembly", Required = false, Description = "Fast deploy, only update the assembly", Default = "")]
-        public string OnlyUpdateAssembly { get; set; }
-
-        public string CurrentDirectory => Directory.GetCurrentDirectory();
-
-        public string JsonFile {
-            get
-            {
-                var file = Path.Combine(CurrentDirectory, Json);
-                if (File.Exists(file)) return new FileInfo(file).FullName;
-                return null;
-            }
-        }
-
-        public bool IsSdkLogin => SdkLogin?.ToLower() == "yes";
-        public ServiceClient ServiceClient { get; set; }
+        [CommandOption("--only-assembly")] // Keeping this for backward compatibility if used anywhere else
+        [Description("Fast deploy, only update the assembly")]
+        public bool OnlyUpdateAssembly { get; set; }
     }
 }

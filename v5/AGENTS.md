@@ -36,7 +36,7 @@ Please follow this structure for every response:
 
 CONSTRAINT 1: AI BUILD MODE
 - Status: STRICTLY DEBUG
-- Script to use: .\Release-DynamicsCrm-DevKit-Debug.ps1
+- Script to use: .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1 -Configuration Debug
 - MSBuild Argument: /p:Configuration=Debug
 - Reason: Release mode requires a PFX password (Human operators only).
 

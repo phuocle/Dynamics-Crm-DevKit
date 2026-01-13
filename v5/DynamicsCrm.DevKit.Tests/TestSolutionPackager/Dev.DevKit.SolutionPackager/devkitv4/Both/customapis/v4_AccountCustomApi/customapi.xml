@@ -1,0 +1,19 @@
+<customapi uniquename="v4_AccountCustomApi">
+  <allowedcustomprocessingsteptype>2</allowedcustomprocessingsteptype>
+  <bindingtype>1</bindingtype>
+  <boundentitylogicalname>account</boundentitylogicalname>
+  <description default="v4_AccountCustomApi">
+    <label description="v4_AccountCustomApi" languagecode="1033" />
+  </description>
+  <displayname default="v4_AccountCustomApi">
+    <label description="v4_AccountCustomApi" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isfunction>0</isfunction>
+  <isprivate>0</isprivate>
+  <name>v4_AccountCustomApi</name>
+  <plugintypeid>
+    <plugintypeexportkey>765d189a-e5a8-f011-bbd2-0022480965a1</plugintypeexportkey>
+  </plugintypeid>
+  <workflowsdkstepenabled>1</workflowsdkstepenabled>
+</customapi>

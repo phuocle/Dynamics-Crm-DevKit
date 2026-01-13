@@ -6,10 +6,27 @@
 	<Include href="VSGlobals.vsct"/>
 	<Commands package="DynamicsCrmDevKit">
 		<Groups>
+			<!-- Group chứa submenu "DynamicsCrm.DevKit" trong Solution Explorer -->
+			<Group guid="GuidSetDeployWebResource" id="GroupDynamicsCrmDevKitSubmenu" />
+			<!-- Group chứa các deploy buttons bên trong submenu -->
+			<Group guid="GuidSetDeployWebResource" id="GroupDeployCommands" />
+			<!-- Original groups for Code Editor, CSS, HTML contexts -->
 			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" />
 			<Group guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration" />
 			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" />
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployTypeScriptRelease" />
+			<Group guid="GuidSetDeployWebResource" id="GroupCommandDeployNewTypeScriptRelease" />
 		</Groups>
+		<Menus>
+			<!-- Submenu "DynamicsCrm.DevKit" for Solution Explorer -->
+			<!-- Note: VS does not support icons for submenus (Menu elements), only for Buttons -->
+			<Menu guid="GuidSetDeployWebResource" id="SubMenuDynamicsCrmDevKit" type="Menu" priority="0x0100">
+				<Parent guid="GuidSetDeployWebResource" id="GroupDynamicsCrmDevKitSubmenu"/>
+				<Strings>
+					<ButtonText>DynamicsCrm.DevKit</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
 		<Buttons>
 			<Button guid="GuidSetDeployWebResource" id="CommandDeployWebResource" type="Button" priority="0x0001">
 				<Icon guid="guidImages" id="bmpPic" />
@@ -38,6 +55,24 @@
 					<ButtonText>Deploy New WebResource</ButtonText>
 				</Strings>
 			</Button>
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployTypeScriptRelease" type="Button" priority="0x0004">
+				<Icon guid="guidImages" id="bmpPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy TypeScript (Release)</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="GuidSetDeployWebResource" id="CommandDeployNewTypeScriptRelease" type="Button" priority="0x0005">
+				<Icon guid="guidImages" id="bmpPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy New TypeScript (Release)</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPic"/>
@@ -45,17 +80,36 @@
 	</Commands>
 
 	<CommandPlacements>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
-			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
-		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+		<!-- ============================================================ -->
+		<!-- SOLUTION EXPLORER (IDM_VS_CTXT_ITEMNODE) - Use Submenu -->
+		<!-- ============================================================ -->
+		<!-- GroupDynamicsCrmDevKitSubmenu → Solution Explorer -->
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupDynamicsCrmDevKitSubmenu" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
-			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
+		<!-- GroupDeployCommands → inside SubMenuDynamicsCrmDevKit -->
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupDeployCommands" priority="0x0001">
+			<Parent guid="GuidSetDeployWebResource" id="SubMenuDynamicsCrmDevKit"/>
 		</CommandPlacement>
+		<!-- 4 Deploy buttons → GroupDeployCommands (inside submenu) -->
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001">
+			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" priority="0x0002">
+			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployTypeScriptRelease" priority="0x0003">
+			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
+		</CommandPlacement>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployNewTypeScriptRelease" priority="0x0004">
+			<Parent guid="GuidSetDeployWebResource" id="GroupDeployCommands"/>
+		</CommandPlacement>
+
+		<!-- ============================================================ -->
+		<!-- CODE EDITOR (IDM_VS_CTXT_CODEWIN) - Keep original structure -->
+		<!-- ============================================================ -->
 		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
-			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
 		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployWebResource" priority="0x0001" >
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource"/>
@@ -66,11 +120,25 @@
 		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandAddCrmPluginRegistration" priority="0x0003" >
 			<Parent guid="GuidSetDeployWebResource" id="GroupCommandAddCrmPluginRegistration"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource" priority="0xFFFF">
-			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployTypeScriptRelease" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployNewWebResource" priority="0x0002" >
-			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployNewWebResource"/>
+		<CommandPlacement guid="GuidSetDeployWebResource" id="CommandDeployTypeScriptRelease" priority="0x0004" >
+			<Parent guid="GuidSetDeployWebResource" id="GroupCommandDeployTypeScriptRelease"/>
+		</CommandPlacement>
+
+		<!-- ============================================================ -->
+		<!-- CSS EDITOR - Keep original structure -->
+		<!-- ============================================================ -->
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
+		</CommandPlacement>
+
+		<!-- ============================================================ -->
+		<!-- HTML EDITOR - Keep original structure -->
+		<!-- ============================================================ -->
+		<CommandPlacement guid="GuidSetDeployWebResource" id="GroupCommandDeployWebResource" priority="0xFFFF">
+			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
 		</CommandPlacement>
 	</CommandPlacements>
 
@@ -86,12 +154,22 @@
 			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
 		</GuidSymbol>
 		<GuidSymbol name="GuidSetDeployWebResource" value="{525190A4-9C61-4AA5-8319-7C5FB75DAE58}">
+			<!-- Groups -->
+			<IDSymbol name="GroupDynamicsCrmDevKitSubmenu" value="0x0010" />
+			<IDSymbol name="GroupDeployCommands" value="0x0011" />
 			<IDSymbol name="GroupCommandDeployWebResource" value="0x0001" />
 			<IDSymbol name="GroupCommandAddCrmPluginRegistration" value="0x0003" />
 			<IDSymbol name="GroupCommandDeployNewWebResource" value="0x0002" />
+			<IDSymbol name="GroupCommandDeployTypeScriptRelease" value="0x0004" />
+			<IDSymbol name="GroupCommandDeployNewTypeScriptRelease" value="0x0005" />
+			<!-- Menus -->
+			<IDSymbol name="SubMenuDynamicsCrmDevKit" value="0x2001" />
+			<!-- Commands -->
 			<IDSymbol name="CommandDeployWebResource" value="0x1001" />
 			<IDSymbol name="CommandAddCrmPluginRegistration" value="0x1003" />
 			<IDSymbol name="CommandDeployNewWebResource" value="0x1002" />
+			<IDSymbol name="CommandDeployTypeScriptRelease" value="0x1004" />
+			<IDSymbol name="CommandDeployNewTypeScriptRelease" value="0x1005" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>

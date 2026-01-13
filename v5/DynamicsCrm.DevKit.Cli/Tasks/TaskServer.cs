@@ -1,4 +1,4 @@
-using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -62,47 +62,46 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public async Task RunAsync()
         {
-            CliLog.WriteSectionHeader("START ");
+            SpectreLog.WriteLine("START");
             if (await IsValidAsync())
             {
                 var files = Helper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
                 files.Sort();
                 if (files.Count == 0)
                 {
-                    CliLog.WriteLineError($"Not found any files to deploy. Please double check DynamicsCrm.DevKit.Cli.json section 'servers' with profile: '{Arg.Profile}' again.");
+                    SpectreLog.ActionError($"Not found any files to deploy. Please double check DynamicsCrm.DevKit.Cli.json section 'servers' with profile: '{Arg.Profile}' again.");
                 }
                 else
                 {
                     if (files.Count > 1)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|");
-                        CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ");
-                        CliLog.WriteSuccess(ConsoleColor.White, files.Count);
-                        CliLog.WriteLine(ConsoleColor.Green, " files to deploy");
+                        SpectreLog.WriteLine();
+                        SpectreLog.WriteHighLight($"Found: ",$"{files.Count}", " files to deploy.");
                         foreach (var file in files)
                         {
-                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, $"  - {Path.GetFileName(file)}");
+                            SpectreLog.WriteWithLevel(LogLevel.Level1, $"- {Path.GetFileName(file)}");
                         }
-                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        SpectreLog.WriteLine();
                     }
                     else
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|");
+                        SpectreLog.WriteLine();
                     }
                     await LoadAllObjectTypeCodeAsync();
                     await DeployFilesAsync(files);
                 }
             }
-#if DEBUG
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_ExecuteAsync: {XrmHelper.COUNT_ExecuteAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveMultipleAsync: {XrmHelper.COUNT_RetrieveMultipleAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_CreateAsync: {XrmHelper.COUNT_CreateAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_DeleteAsync: {XrmHelper.COUNT_DeleteAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_RetrieveAsync: {XrmHelper.COUNT_RetrieveAsync}");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, $"Total Dataverse Requests COUNT_UpdateAsync: {XrmHelper.COUNT_UpdateAsync}");
-#endif
-            CliLog.WriteSectionHeader("END ");
+            //#if DEBUG
+            //            SpectreLog.WriteLine();
+            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_ExecuteAsync: ", $"{XrmHelper.COUNT_ExecuteAsync}");
+            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_RetrieveMultipleAsync: ", $"{XrmHelper.COUNT_RetrieveMultipleAsync}");
+            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_CreateAsync: ", $"{XrmHelper.COUNT_CreateAsync}");
+            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_DeleteAsync: ", $"{XrmHelper.COUNT_DeleteAsync}");
+            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_RetrieveAsync: ", $"{XrmHelper.COUNT_RetrieveAsync}");
+            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_UpdateAsync: ", $"{XrmHelper.COUNT_UpdateAsync}");
+            //#endif
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
         private async Task DeployFilesAsync(List<string> files)
         {
@@ -111,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (file.EndsWith(".dll"))
                 {
                     var fileDll = file;
-                    CliLog.WriteFileHeader(Path.GetFileName(fileDll));
+                    SpectreLog.ActionFile(Path.GetFileName(fileDll));
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
@@ -120,19 +119,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         (OK, ERROR) = await Helper.SignAssemblyAsync(signToolPath, fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
-                            CliLog.WriteLineError(ERROR);
-                            CliLog.WriteLineError($"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
+                            SpectreLog.ActionError(ERROR);
+                            SpectreLog.ActionError($"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
                             continue;
                         }
                         else
                         {
-                            CliLog.WriteAssemblyAction(CliAction.SIGNED.Trim(), Path.GetFileName(file), null, false);
+                            SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.SIGNED, $"Assembly {Path.GetFileName(file)}");
                         }
                     }
                     else if (ERROR.Length > 0)
                     {
-                        CliLog.WriteLineError(ERROR);
-                        CliLog.WriteLineError($"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
+                        SpectreLog.ActionError(ERROR);
+                        SpectreLog.ActionError($"Assembly {Path.GetFileName(fileDll)} not signed. Assembly deployment stopped.");
                         continue;
                     }
                     await DeployDllAsync(fileDll, DeployFileType.Dll);
@@ -140,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else if (file.EndsWith(".nupkg"))
                 {
                     var fileNuget = file;
-                    CliLog.WriteFileHeader(Path.GetFileName(fileNuget));
+                    SpectreLog.ActionFile(Path.GetFileName(fileNuget));
                     var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
@@ -148,32 +147,32 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         (OK, ERROR) = await Helper.SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
-                            CliLog.WriteLineError(ERROR);
-                            CliLog.WriteLineError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                            SpectreLog.ActionError(ERROR);
+                            SpectreLog.ActionError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                             continue;
                         }
                         else
                         {
-                            CliLog.WriteAssemblyAction(CliAction.SIGNED.Trim(), Path.GetFileName(file), null, true);
+                            SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.SIGNED, $"Package {Path.GetFileName(file)}");
                         }
                     }
                     else if (ERROR.Length > 0)
                     {
-                        CliLog.WriteLineError(ERROR);
-                        CliLog.WriteLineError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                        SpectreLog.ActionError(ERROR);
+                        SpectreLog.ActionError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                         continue;
                     }
                     ERROR = await DeployPackageAsync(fileNuget);
                     if (ERROR.Length > 0)
                     {
-                        CliLog.WriteLineError(ERROR);
-                        CliLog.WriteLineError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                        SpectreLog.ActionError(ERROR);
+                        SpectreLog.ActionError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
                         continue;
                     }
                     await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
                 }
                 else
-                    CliLog.WriteLineError($"Not support file extension: {new FileInfo(file).Extension}");
+                    SpectreLog.ActionError($"Not support file extension: {new FileInfo(file).Extension}");
             }
         }
         private async Task<string> DeployPackageAsync(string file)
@@ -212,7 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                    CliLog.WriteAssemblyAction(CliAction.REGISTERED.Trim(), Path.GetFileName(file), null, true);
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Package {Path.GetFileName(file)}");
                     PluginPackageId = response.id;
                 }
                 catch (Exception fe)
@@ -226,7 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var oldContent = entity.GetAttributeValue<string>("content");
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, CliAction.DO_NOTHING, ConsoleColor.Blue, " Package ", ConsoleColor.Green, $"{Path.GetFileName(file)}");
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Package {Path.GetFileName(file)}");
                 }
                 else
                 {
@@ -240,7 +239,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
                         XrmHelper.COUNT_ExecuteAsync++;
                         await ServiceClient.ExecuteAsync(request);
-                        CliLog.WriteAssemblyAction(CliAction.UPDATED.Trim(), Path.GetFileName(file), null, true);
+                        SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Package {Path.GetFileName(file)}");
                         PluginPackageId = entity.Id;
                     }
                     catch (Exception fe)
@@ -261,13 +260,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteBindAction(CliAction.REGISTERED.Trim(), Path.GetFileName(file), applicationId, true);
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Bind {Path.GetFileName(file)}", $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    CliLog.WriteBindAction(CliAction.DO_NOTHING.Trim(), Path.GetFileName(file), applicationId, true);
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Bind {Path.GetFileName(file)}", $"ApplicationId: {applicationId}");
                 }
                 else
                 {
@@ -278,7 +277,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteBindAction(CliAction.UPDATED.Trim(), Path.GetFileName(file), applicationId, true);
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Bind {Path.GetFileName(file)}", $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -340,7 +339,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Entities.Count > 0 && rows.Entities.Count != 1)
                 {
-                    CliLog.WriteLineError($"Found more than 1 plugin assembly name {assemblyName}. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Found more than 1 plugin assembly name {assemblyName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -365,7 +364,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = plugin
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.WriteAssemblyAction(CliAction.REGISTERED.Trim(), assemblyName, new List<string> { name_IsolationMode, name_SourceType }, false);
+                SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Assembly {assemblyName}", new List<string> { name_IsolationMode, name_SourceType });
                 XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
@@ -376,7 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginAssemblyId = rows.Entities[0].Id;
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    CliLog.WriteAssemblyStatus(CliAction.DO_NOTHING, assemblyName, new List<string> { name_IsolationMode, name_SourceType }, false);
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Assembly {assemblyName}", new List<string> { name_IsolationMode, name_SourceType });
                 }
                 else
                 {
@@ -386,7 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = plugin
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteAssemblyAction(CliAction.UPDATED.Trim(), assemblyName, new List<string> { name_IsolationMode, name_SourceType }, false);
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Assembly {assemblyName}", new List<string> { name_IsolationMode, name_SourceType });
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -394,7 +393,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (Exception fe)
                     {
-                        CliLog.WriteLineError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                        SpectreLog.ActionError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
                 }
@@ -411,13 +410,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteBindAction(CliAction.REGISTERED.Trim(), assemblyName, applicationId, false);
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Bind {assemblyName}", $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    CliLog.WriteBindAction(CliAction.DO_NOTHING.Trim(), assemblyName, applicationId, false);
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Bind {assemblyName}", $"ApplicationId: {applicationId}");
                 }
                 else
                 {
@@ -428,7 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.WriteBindAction(CliAction.UPDATED.Trim(), assemblyName, applicationId, false);
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Bind {assemblyName}", $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -467,25 +466,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var tool = Helper.FindSignTool();
             if (tool != null) return tool;
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Cyan, "To sign assemblies, you need to install Windows SDK:");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 1: Install Windows 10/11 SDK (Recommended)");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Download: https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  During installation, select:", ConsoleColor.Yellow, " 'Windows SDK Signing Tools for Desktop Apps'");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 2: Install via Visual Studio Installer");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  1. Open Visual Studio Installer");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  2. Click 'Modify' on your Visual Studio installation");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  3. Go to 'Individual Components' tab");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  4. Search for and select:", ConsoleColor.Yellow, " 'Windows 10 SDK' or 'Windows 11 SDK'");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "  5. Click 'Modify' to install");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "Option 3: Install via Chocolatey (Package Manager)");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "  Run: ", ConsoleColor.Yellow, "choco install windows-sdk-10.0");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, "After installation, SignTool.exe will be located at:");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Gray, "  C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteWithLevel(LogLevel.Level0, "To sign assemblies, you need to install Windows SDK:");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteWithLevel(LogLevel.Level0, "Option 1: Install Windows 10/11 SDK (Recommended)");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "Download: ", "https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "During installation, select: ", "'Windows SDK Signing Tools for Desktop Apps'");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteWithLevel(LogLevel.Level0, "Option 2: Install via Visual Studio Installer");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "1. Open Visual Studio Installer");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "2. Click 'Modify' on your Visual Studio installation");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "3. Go to 'Individual Components' tab");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "4. Search for and select: ", "'Windows 10 SDK' or 'Windows 11 SDK'");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "5. Click 'Modify' to install");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteWithLevel(LogLevel.Level0, "Option 3: Install via Chocolatey (Package Manager)");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "Run: ", "choco install windows-sdk-10.0");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteWithLevel(LogLevel.Level0, "After installation, SignTool.exe will be located at:");
+            SpectreLog.WriteWithLevel(LogLevel.Level1, "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
             return tool;
         }
         private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
@@ -522,9 +521,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var request = new CreateRequest { Target = managedIdentity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
+                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Managed Identity App {AppId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
@@ -536,7 +533,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Managed Identity App ", ConsoleColor.Cyan, $"{AppId}");
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Managed Identity App {AppId}");
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
                         _ManagedIdentityId = rows.Entities[0].Id;
@@ -585,23 +582,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                CliLog.WriteLineError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.folder == "???" || (Json.folder != null && Json?.folder?.Trim().Length == 0))
             {
-                CliLog.WriteLineError($"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
-                CliLog.WriteLineError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!IsOk)
             {
-                CliLog.WriteLineError($"{TaskType} solution '{Json.solution}' not exist");
+                SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             return true;
@@ -933,7 +930,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task DeployFileAsync(string file, List<TypeInfo> types, DeployFileType deployFileType)
         {
-            if (!(Arg?.OnlyUpdateAssembly?.Length > 0))
+            if (!Arg.OnlyUpdateAssembly)
             {
                 await LoadAllPluginTypesAsync();
                 await LoadAllPluginStepsAsync();
@@ -945,12 +942,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var dataProviderEvents = new List<DataProviderEvent>();
             var pluginAssemblyId = await DeployAssemblyAsync(file, deployFileType);
             if (pluginAssemblyId == null) return;
-            if (Arg?.OnlyUpdateAssembly?.Length > 0)
+            if (Arg.OnlyUpdateAssembly)
             {
-                CliLog.Write(ConsoleColor.White, "|", SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.FLAG.Trim());
-                CliLog.Write(ConsoleColor.White, " OnlyUpdateAssembly ");
-                CliLog.WriteLine(ConsoleColor.Cyan, "true");
+                SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.FLAG, "OnlyUpdateAssembly", "true");
                 return;
             }
             var sortedTypes = types.OrderBy(type =>
@@ -982,21 +976,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                     if (error == null)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                        CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
-                        CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                        CliLog.WriteLine();
+                        SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {attributes[0].PluginType} {type.FullName}");
                         continue;
                     }
                     else if (error == true)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.Write(" ");
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
-                        CliLog.Write(ConsoleColor.White, $" Type ", ConsoleColor.Blue, attributes[0].PluginType, " ", ConsoleColor.Cyan, type.FullName);
-                        CliLog.WriteLine();
+                        SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.UNREGISTERED, $"Type {attributes[0].PluginType} {type.FullName}");
                         continue;
                     }
                     else
@@ -1024,7 +1009,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    CliLog.WriteLineError($"The message {attribute.Message} of {attribute.Name} not support Image. Assemply deployed, but the deployment of this assembly stopped.");
+                                    SpectreLog.ActionError($"The message {attribute.Message} of {attribute.Name} not support Image. Assemply deployed, but the deployment of this assembly stopped.");
                                     return;
                                 }
                             }
@@ -1036,8 +1021,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 Message = attribute.Message,
                                 DataSource = attribute.DataSource
                             });
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                            CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
+                            SpectreLog.StatusWithLevel(LogLevel.Level3, $"Step {attribute.Message} {attribute.Name}", new List<string> { "MainOperation", "Synchronous" });
                             break;
                         case PluginType.CustomApi:
                             await DeployCustomApiStepAsync(pluginTypeId.Value, type.FullName, attribute);
@@ -1067,19 +1051,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var checkDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource : $"{SolutionPrefix?.ToLower()}{dataSource}";
             if (!await XrmHelper.IsExistDataSourceAsync(ServiceClient, $"{checkDataSource}"))
             {
-                CliLog.WriteLineError($"DataSource {dataSource} with prefix {SolutionPrefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                SpectreLog.ActionError($"DataSource {dataSource} with prefix {SolutionPrefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             var countRetrieve = dataProviderEvents.Count(x => x.Message == "Retrieve" && x.DataSource == dataSource);
             if (countRetrieve != 0 && countRetrieve != 1)
             {
-                CliLog.WriteLineError($"Multiple message Retrieve found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                SpectreLog.ActionError($"Multiple message Retrieve found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             var countRetrieveMultiple = dataProviderEvents.Count(x => x.Message == "RetrieveMultiple" && x.DataSource == dataSource);
             if (countRetrieveMultiple != 0 && countRetrieveMultiple != 1)
             {
-                CliLog.WriteLineError($"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                SpectreLog.ActionError($"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             if (await XrmHelper.IsVirtualTableSupportCRUDAsync(ServiceClient))
@@ -1087,19 +1071,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
                 if (countCreate != 0 && countCreate != 1)
                 {
-                    CliLog.WriteLineError($"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Multiple message Create found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
                 var countUpdate = dataProviderEvents.Count(x => Helper.IsMessageUpdate(x.Message) && x.DataSource == dataSource);
                 if (countUpdate != 0 && countUpdate != 1)
                 {
-                    CliLog.WriteLineError($"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Multiple message Update found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
                 var countDelete = dataProviderEvents.Count(x => x.Message == "Delete" && x.DataSource == dataSource);
                 if (countDelete != 0 && countDelete != 1)
                 {
-                    CliLog.WriteLineError($"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Multiple message Delete found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                     return false;
                 }
             }
@@ -1166,10 +1150,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.Write(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan);
-                CliLog.WriteList(events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList(), true);
+                SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.REGISTERED, $"Type {PluginType.DataSource} {logicalNameDataSource}", events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                 XrmHelper.COUNT_ExecuteAsync++;
                 await ServiceClient.ExecuteAsync(request);
             }
@@ -1193,17 +1174,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = entity
                     };
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan);
-                    CliLog.WriteList(events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList(), true);
+                    SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.UPDATED, $"Type {PluginType.DataSource} {logicalNameDataSource}", events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, $"{PluginType.DataSource} ", ConsoleColor.Cyan, $"{logicalNameDataSource}", ConsoleColor.White, " linked with events ", ConsoleColor.Cyan);
-                    CliLog.WriteList(events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList(), true);
+                    SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {PluginType.DataSource} {logicalNameDataSource}", events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                 }
             }
         }
@@ -1212,15 +1189,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rows = _CustomApisCache.Where(x => x.Key == attribute.Message).Select(x => x.Value).ToList();
             if (rows.Count != 1)
             {
-                CliLog.WriteLineError($"Custom Api with message {attribute.Message} not found. Assemply deployed, but the deployment of this assembly stopped.");
+                SpectreLog.ActionError($"Custom Api with message {attribute.Message} not found. Assemply deployed, but the deployment of this assembly stopped.");
                 return;
             }
             if (rows[0].GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
             {
                 if (attribute.Action == PluginStepOperationEnum.Activate)
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, pluginTypeName);
-                    CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
+                    SpectreLog.StatusWithLevel(LogLevel.Level3, $"Step {attribute.Message} {pluginTypeName}", new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
@@ -1234,18 +1210,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Deactivate)
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING.Trim(), " ");
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
-                    CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
-                    CliLog.WriteLine();
+                    SpectreLog.StatusWithLevel(LogLevel.Level3, $"{CliAction.DEACTIVATED.Trim()} Step {attribute.Message} {pluginTypeName}", new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Step ", ConsoleColor.Blue, attribute.Message, ConsoleColor.White, " ", ConsoleColor.Cyan, pluginTypeName);
-                    CliLog.WriteList(new List<string> { $"MainOperation", $"Synchronous" }, true);
+                    SpectreLog.ActionWithLevel(LogLevel.Level3, CliAction.REGISTERED, $"Step {attribute.Message} {pluginTypeName}", new List<string> { "MainOperation", "Synchronous" });
                     var update = new Entity("customapi", rows[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     XrmHelper.COUNT_UpdateAsync++;
@@ -1276,7 +1245,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Count > 0 && rows.Count != 1)
                 {
-                    CliLog.WriteLineError($"Found more than 1 plugin image name {imageName}. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Found more than 1 plugin image name {imageName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return Guid.Empty;
                 }
             }
@@ -1302,10 +1271,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.Write(ConsoleColor.White, " Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
-                    CliLog.WriteList(imageAttributes, true);
+                    SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -1316,15 +1282,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
-                            CliLog.WriteLineError($"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         else if (fe.Message.Contains("does not support this image type") || fe.Message.Contains("does not support Post Image"))
                         {
-                            CliLog.WriteLineError($"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         else
                         {
-                            CliLog.WriteLineError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"{fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return Guid.Empty;
                     }
@@ -1342,25 +1308,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
-                    CliLog.WriteList(imageAttributes, true);
+                    SpectreLog.StatusWithLevel(LogLevel.Level4, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
                 }
                 else
                 {
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows[0].Id;
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.Write(ConsoleColor.White, " Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
-                        CliLog.WriteList(imageAttributes, true);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
                     }
                     else if (imageAttributes.Length == 0)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.DELETED.Trim());
-                        CliLog.Write(ConsoleColor.White, " Image ", ConsoleColor.Blue, imageType, ConsoleColor.White, $", Name = ", ConsoleColor.Green, imageName, ConsoleColor.White, $", Alias = ", ConsoleColor.Green, imageAliasName, ConsoleColor.White, ", Image Fields =");
-                        CliLog.WriteList(imageAttributes, true);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.DELETED, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
                         XrmHelper.COUNT_DeleteAsync++;
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows[0].Id);
                         return Guid.NewGuid();
@@ -1374,11 +1333,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
-                            CliLog.WriteLineError($"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         if (fe.Message.Contains("does not support this image type") || fe.Message.Contains("does not support Post Image"))
                         {
-                            CliLog.WriteLineError($"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return Guid.Empty;
                     }
@@ -1404,7 +1363,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute?.FilteringAttributes?.Trim().Length == 0)
                 {
-                    CliLog.WriteLineError($"{type.FullName} The {attribute?.Message} message need provide FilteringAttributes value. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"{type.FullName} The {attribute?.Message} message need provide FilteringAttributes value. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (attribute?.FilteringAttributes.Trim() == "*")
@@ -1429,7 +1388,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Count > 0 && rows.Count != 1)
                 {
-                    CliLog.WriteLineError($"Found more than 1 step name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Found more than 1 step name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -1477,15 +1436,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginStep
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                if (attribute.Action == PluginStepOperationEnum.Deactivate)
-                {
-                    CliLog.Write(" ");
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                }
-                CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
+                var actionText = attribute.Action == PluginStepOperationEnum.Deactivate
+                    ? $"{CliAction.REGISTERED.Trim()} {CliAction.DEACTIVATED.Trim()}"
+                    : CliAction.REGISTERED.Trim();
+                SpectreLog.ActionWithLevel(LogLevel.Level3, actionText, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
                 try
@@ -1498,10 +1452,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (fe.Message.Contains("The dependent component Attribute "))
                     {
-                        CliLog.WriteLineError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                        SpectreLog.ActionError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
-                    CliLog.WriteLineError($"Step {attribute.Name} register failed: {fe.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Step {attribute.Name} register failed: {fe.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -1574,21 +1528,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, $"Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
-                        CliLogSecureUnsecure();
-                        CliLogUpdateFields();
+                        SpectreLog.StatusWithLevel(LogLevel.Level3, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                        CliLog.Write(ConsoleColor.Green, CliAction.DO_NOTHING);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
-                        CliLogSecureUnsecure();
-                        CliLogUpdateFields();
+                        SpectreLog.StatusWithLevel(LogLevel.Level3, $"{CliAction.DEACTIVATED.Trim()} Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
+                    CliLogSecureUnsecure();
+                    CliLogUpdateFields();
                 }
                 else
                 {
@@ -1599,38 +1546,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        if (
-                            rows.Count == 1 &&
+                        var needActivate = rows.Count == 1 &&
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate &&
-                            attribute.Action == PluginStepOperationEnum.Activate)
-                        {
-                            CliLog.Write(" ");
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.ACTIVATED.Trim());
-                        }
-                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
-                        CliLogSecureUnsecure();
-                        CliLogUpdateFields();
+                            attribute.Action == PluginStepOperationEnum.Activate;
+                        var actionText = needActivate ? $"{CliAction.UPDATED.Trim()} {CliAction.ACTIVATED.Trim()}" : CliAction.UPDATED.Trim();
+                        SpectreLog.ActionWithLevel(LogLevel.Level3, actionText, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        if (
-                            rows.Count == 1 &&
+                        var needDeactivate = rows.Count == 1 &&
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
-                            attribute.Action == PluginStepOperationEnum.Deactivate)
-                        {
-                            CliLog.Write(" ");
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.DEACTIVATED.Trim());
-                        }
-                        CliLog.Write(ConsoleColor.White, $" Step ", ConsoleColor.Blue, attribute.Message, " ", ConsoleColor.Cyan, attribute.Name);
-                        CliLog.WriteList(new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" }, true);
-                        CliLogSecureUnsecure();
-                        CliLogUpdateFields();
+                            attribute.Action == PluginStepOperationEnum.Deactivate;
+                        var actionText = needDeactivate ? $"{CliAction.UPDATED.Trim()} {CliAction.DEACTIVATED.Trim()}" : CliAction.UPDATED.Trim();
+                        SpectreLog.ActionWithLevel(LogLevel.Level3, actionText, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
+                    CliLogSecureUnsecure();
+                    CliLogUpdateFields();
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -1640,7 +1571,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("The dependent component Attribute "))
                         {
-                            CliLog.WriteLineError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return null;
                     }
@@ -1684,24 +1615,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (rows.Count == 0)
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                        CliLog.Write(ConsoleColor.White, " Update Fields:");
-                        CliLog.WriteList(attribute.FilteringAttributes, true);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                     }
                     else
                     {
                         if (rows[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Update Fields:");
-                            CliLog.WriteList(attribute.FilteringAttributes, true);
+                            SpectreLog.StatusWithLevel(LogLevel.Level4, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                         }
                         else
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                            CliLog.Write(ConsoleColor.White, " Update Fields:");
-                            CliLog.WriteList(attribute.FilteringAttributes, true);
+                            SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                         }
                     }
                 }
@@ -1711,24 +1635,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (rows.Count == 0)
                         {
-                            CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                            CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                            CliLog.Write(ConsoleColor.White, " Create Fields:");
-                            CliLog.WriteList(attribute.FilteringAttributes, true);
+                            SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                         }
                         else
                         {
                             if (rows[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
                             {
-                                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Create Fields:");
-                                CliLog.WriteList(attribute.FilteringAttributes, true);
+                                SpectreLog.StatusWithLevel(LogLevel.Level4, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                             }
                             else
                             {
-                                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                                CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                                CliLog.Write(ConsoleColor.White, " Create Fields:");
-                                CliLog.WriteList(attribute.FilteringAttributes, true);
+                                SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                             }
                         }
                     }
@@ -1738,52 +1655,40 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (SecureConfigurationAction == CliAction.DO_NOTHING)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
+                    SpectreLog.StatusWithLevel(LogLevel.Level4, $"Secure Configuration = {attribute.SecureConfiguration}");
                 }
                 else if (!string.IsNullOrWhiteSpace(SecureConfigurationAction))
                 {
                     if (string.IsNullOrWhiteSpace(attribute.SecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " Secure Configuration", ConsoleColor.Green, attribute.SecureConfiguration);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UNREGISTERED, "Secure Configuration");
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, SecureConfigurationAction.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " Secure Configuration = ", ConsoleColor.Green, attribute.SecureConfiguration);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, SecureConfigurationAction.Trim(), $"Secure Configuration = {attribute.SecureConfiguration}");
                     }
                 }
                 if (rows.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                 {
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                    SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                 }
                 else
                 {
                     if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                        SpectreLog.StatusWithLevel(LogLevel.Level4, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UNREGISTERED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration");
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UNREGISTERED, "UnSecure Configuration");
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE, SPACE, SPACE);
-                        CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                        CliLog.WriteLine(ConsoleColor.White, " UnSecure Configuration = ", ConsoleColor.Green, attribute.UnSecureConfiguration);
+                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                     }
                 }
             }
@@ -1846,7 +1751,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             catch (Exception fe)
             {
-                CliLog.WriteLineError($"Unregister {type.FullName} failed: {fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
+                SpectreLog.ActionError($"Unregister {type.FullName} failed: {fe.Message} Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
             async Task DeletePluginStepsAsync()
@@ -1877,12 +1782,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (rows.Count > 0 && rows.Count != 1)
                 {
-                    CliLog.WriteLineError($"Found more than 1 type name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"Found more than 1 type name {type.FullName}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
                 if (deployFileType == DeployFileType.Nuget)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                    SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {attribute.PluginType} {type.FullName}");
                     return rows[0].Id;
                 }
             }
@@ -1901,9 +1806,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginType
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                CliLog.WriteSuccess(ConsoleColor.White, CliAction.REGISTERED.Trim());
-                CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.REGISTERED, $"Type {attribute.PluginType} {type.FullName}");
                 XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
@@ -1929,13 +1832,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
-                    CliLog.Write(ConsoleColor.White, "|", SPACE, SPACE);
-                    CliLog.WriteSuccess(ConsoleColor.White, CliAction.UPDATED.Trim());
-                    CliLog.WriteLine(ConsoleColor.White, " Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                    SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.UPDATED, $"Type {attribute.PluginType} {type.FullName}");
                 }
                 else
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", SPACE, SPACE, ConsoleColor.Green, CliAction.DO_NOTHING, ConsoleColor.White, ConsoleColor.White, "Type ", ConsoleColor.Blue, attribute.PluginType, " ", ConsoleColor.Cyan, type.FullName);
+                    SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {attribute.PluginType} {type.FullName}");
                 }
             }
             return rows[0].Id;
@@ -1946,7 +1847,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return false;
             if (types.Count == 0)
             {
-                CliLog.WriteLineError($"Not found any valid types to deploy.");
+                SpectreLog.ActionError($"Not found any valid types to deploy.");
                 return false;
             }
             if (!IsValidTypes(types))
@@ -1986,8 +1887,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var typeName = entity.GetAttributeValue<AliasedValue>("plugintype.typename")?.Value.ToString();
                 if (types.Count(x => x.FullName == typeName) == 0)
                 {
-                    CliLog.WriteLineError($"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.");
-                    CliLog.WriteLineError($"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
+                    SpectreLog.ActionError($"Type: '{typeName}' not found in the assembly file. This type: '{typeName}' already registered to CRM/CDS. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"If you need to deploy this assembly. Please manually remove this type from Plugin Registration Tool and try it again.");
                     return false;
                 }
             }
@@ -2002,14 +1903,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (IsWorkflowType(type))
                     {
-                        CliLog.WriteLineError($"Type '{type.FullName}' has multi attribute CrmPluginRegistration. Deploy stopped.");
+                        SpectreLog.ActionError($"Type '{type.FullName}' has multi attribute CrmPluginRegistration. Deploy stopped.");
                         return false;
                     }
                     else
                     {
                         if (attributes.GroupBy(x => x.PluginType).Count() != 1)
                         {
-                            CliLog.WriteLineError($"Type '{type.FullName}' has multi invalid attribute CrmPluginRegistration. Deploy stopped.");
+                            SpectreLog.ActionError($"Type '{type.FullName}' has multi invalid attribute CrmPluginRegistration. Deploy stopped.");
                             return false;
                         }
                     }
@@ -2038,9 +1939,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 _currentAssemblyDirectory = Path.GetDirectoryName(file);
                 var assemblyBytes = File.ReadAllBytes(file);
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-                assembly = Assembly.ReflectionOnlyLoad(assemblyBytes);
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+                assembly = Assembly.Load(assemblyBytes);
+                AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
                 if (assembly != null)
                 {
                     _assemblyCache[fileName] = assembly;
@@ -2048,7 +1949,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             catch (Exception ex)
             {
-                CliLog.WriteLineError($"Failed to load assembly {file}: {ex.Message}");
+                SpectreLog.ActionError($"Failed to load assembly {file}: {ex.Message}");
             }
             return assembly;
         }
@@ -2060,9 +1961,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var types = new List<TypeInfo>();
             try
             {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 var allTypes = assembly.DefinedTypes;
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+                AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
                 foreach (var type in allTypes)
                 {
                     try
@@ -2076,18 +1977,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             catch (ReflectionTypeLoadException ex)
             {
-                CliLog.WriteLineError($"Failed to read types from assembly {file}: {ex.Message}");
+                SpectreLog.ActionError($"Failed to read types from assembly {file}: {ex.Message}");
                 if (ex.LoaderExceptions != null)
                 {
                     foreach (var loaderEx in ex.LoaderExceptions)
                     {
-                        CliLog.WriteLineError($"  LoaderException: {loaderEx?.Message}");
+                        SpectreLog.ActionError($"  LoaderException: {loaderEx?.Message}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                CliLog.WriteLineError($"Failed to read types from assembly {file}: {ex.Message}");
+                SpectreLog.ActionError($"Failed to read types from assembly {file}: {ex.Message}");
             }
             types = [.. types.OrderBy(x => x.FullName)];
             _AttributesCache.Clear();
@@ -2098,7 +1999,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return types;
         }
-        private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             try
             {
@@ -2118,14 +2019,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (File.Exists(localPath))
                     {
                         var assemblyBytes = File.ReadAllBytes(localPath);
-                        var loaded = Assembly.ReflectionOnlyLoad(assemblyBytes);
+                        var loaded = Assembly.Load(assemblyBytes);
                         _assemblyCache[assemblyName + ".dll"] = loaded;
                         return loaded;
                     }
                 }
 
-                // Fall back to standard load
-                return Assembly.ReflectionOnlyLoad(args.Name);
+                // Fall back to standard load by name
+                return Assembly.Load(args.Name);
             }
             catch
             {

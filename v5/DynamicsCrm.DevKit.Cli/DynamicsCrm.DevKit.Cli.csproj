@@ -1,62 +1,76 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<IsPublishable>True</IsPublishable>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyVersion>4.12.34.56</AssemblyVersion>
-		<FileVersion>4.12.34.56</FileVersion>
+		<AssemblyVersion>5.0.0.0</AssemblyVersion>
+		<FileVersion>5.0.0.0</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
 		<Company>PhuocLe</Company>
 		<Product>DynamicsCrm.DevKit.Cli</Product>
 		<Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
 		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-		<Version>4.12.34.56</Version>
+		<Version>5.0.0.0</Version>
 		<OutputType>Exe</OutputType>
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
 		<BaseOutputPath>bin</BaseOutputPath>
 		<DelaySign>False</DelaySign>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<!-- .NET Global Tool Configuration -->
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>devkit</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<PackageId>DynamicsCrm.DevKit.Cli</PackageId>
+		<PackageDescription>CLI tool for DynamicsCrm.DevKit - Generate form, webapi, plugin code and deploy to Dynamics 365</PackageDescription>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>PhuocLe</Authors>
+		<PackageTags>dynamics365;crm;devkit;cli;codegen</PackageTags>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<PlatformTarget>x64</PlatformTarget>
-		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.snk</AssemblyOriginatorKeyFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Nuget\**" />
-	  <EmbeddedResource Remove="Nuget\**" />
 	  <None Remove="Nuget\**" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="DynamicsCrm.DevKit.Cli.code-workspace" />
 	  <None Remove="DynamicsCrm.DevKit.Cli.TsForm.code-workspace" />
+	  <None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="icon.ico" />
+	  <!-- CrmSvcUtil extension DLL for ProxyType generation -->
+	  <Content Include="..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\bin\$(Configuration)\net48\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <Link>DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll</Link>
+	  </Content>
 	</ItemGroup>
 	<PropertyGroup>
-		<NoWarn>CVSTBLD002</NoWarn>
+		<NoWarn>CVSTBLD002;NU1702;NU5100</NoWarn>
 	</PropertyGroup>
+
 	<ItemGroup>
-	  <None Include="Nuget\DynamicsCrm.DevKit.Cli.nuspec" />
-	  <None Include="Nuget\pack.bat" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
-	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
-	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
-	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
+	  <ProjectReference Include="..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj">
+	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+		<NoWarn>NU1702</NoWarn>
+	  </ProjectReference>
+	  <!-- CLI Framework - Spectre.Console -->
+	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
+	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+	  <!-- Dynamics 365 SDK - .NET 6+ compatible versions -->
 	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
-	  <!--<PackageReference Include="Microsoft.PowerPlatform.Dataverse.ModelBuilderLib" Version="2.0.16" />-->
-	  <PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.14.40264" />
+	  <!-- NuGet for package operations -->
 	  <PackageReference Include="NuGet.Packaging" Version="7.0.1" />
 	  <PackageReference Include="NuGet.Protocol" Version="7.0.1" />
-	  <!-- Security fix: Add System.Text.RegularExpressions to override vulnerable transitive dependency -->
-	  <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+	  <!-- CodeDom for .NET 10 compatibility -->
+	  <PackageReference Include="System.CodeDom" Version="10.0.1" />
 	</ItemGroup>
 	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
 </Project>

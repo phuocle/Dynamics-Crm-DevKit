@@ -21,18 +21,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
             if (!solutionExists.IsOk)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
                 return false;
             }
             var folder = Path.Combine(CurrentDirectory, Json.solution);
@@ -43,7 +43,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var files = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories);
                 if (files.Count() > 0)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Folder '{folder}' have an exsiting file(s). Please delete all file(s) and try it again.");
+                    SpectreLog.ActionError($"Folder '{folder}' have an exsiting file(s).");
+                    SpectreLog.ActionError($"Please delete all file(s) and try it again.");
                     return false;
                 }
             }
@@ -52,21 +53,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            SpectreLog.WriteLine("START");
+            SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
                 var reportFiles = await XrmHelper.GetReportsBySolutionAsync(ServiceClient, Json.solution);
                 if (reportFiles.Count == 0)
                 {
-                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");
+                    SpectreLog.WriteLine("Not found any reports to download");
+                    SpectreLog.WriteLine();
                 }
                 else
                 {
                     var totalDownloadFiles = reportFiles.Count;
                     var len = totalDownloadFiles.ToString().Length;
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " reports");
-                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    SpectreLog.WriteHighLight("Found: ", $"{totalDownloadFiles}", " reports");
+                    SpectreLog.WriteLine();
                     var i = 1;
                     reportFiles = [.. reportFiles.OrderBy(x => x.Language)];
                     foreach (var reportFile in reportFiles)
@@ -75,20 +77,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!File.Exists(fileName))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileName, reportFile.Content);
-                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, ".." + fileName.Substring(CurrentDirectory.Length));
+                            SpectreLog.ActionCreated($"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
                         }
                         else
                         {
                             var newFileName = FileHelper.GeNextFileName(fileName);
                             await FileHelper.ForceWriteAllTextAsync(newFileName, reportFile.Content);
-                            CliLog.WriteLineWarning(ConsoleColor.Blue, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DOWNLOADED, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Magenta, $" {CliAction.DUPLICATED}", ConsoleColor.Green, "to: ", ConsoleColor.White, newFileName);
+                            SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.DUPLICATED, $"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{newFileName}");
                         }
                         i++;
                     }
                 }
             }
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
     }
 }

@@ -55,7 +55,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandAddCrmPluginRegistration.cs" />
+    <Compile Include="Commands\CommandNewTypeScriptRelease.cs" />
     <Compile Include="Commands\CommandNewWebResource.cs" />
+    <Compile Include="Commands\CommandTypeScriptRelease.cs" />
     <Compile Include="Commands\CommandWebResource.cs" />
     <Compile Include="DevKitPackageVsct.cs">
       <AutoGen>True</AutoGen>
@@ -140,6 +142,8 @@
     <Compile Include="Wizard\ProjectTemplates\WebResource.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="docs\README.md" />
+    <None Include="README.md" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
       <LastGenOutput>source.extension.cs</LastGenOutput>

@@ -6,10 +6,11 @@ using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
+
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class TaskSolutionPackager(CommandLineArgs arg, JsonSolutionPackager json) : ITask
@@ -27,51 +28,52 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool IsSdkLogin { get; set; } = arg.IsSdkLogin;
         private string Connection { get; set; } = arg.Connection;
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
+
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solution == "???" || (Json.solution != null && Json?.solution?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solutiontype == "???" || (Json.solutiontype != null && Json?.solutiontype?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solutiontype' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solutiontype' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.solutiontype.ToLower() != "Managed".ToLower() &&
                 Json.solutiontype.ToLower() != "Unmanaged".ToLower() &&
                 Json.solutiontype.ToLower() != "Both".ToLower())
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solutiontype' should be: 'Managed' or 'Unmanaged' or 'Both'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'solutiontype' should be: 'Managed' or 'Unmanaged' or 'Both'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.folder == "???" || (Json.folder != null && Json?.folder?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.type == "???" || (Json.folder != null && Json?.type?.Trim().Length == 0))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.type.ToLower() != "Extract".ToLower() &&
                 Json.type.ToLower() != "Pack".ToLower())
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'Extract' or 'Pack'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"{TaskType} 'type' should be: 'Extract' or 'Pack'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.type.ToLower() == "Pack".ToLower())
             {
                 if (!File.Exists(SolutionXmlFile))
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Invalid folder for Pack solution.");
+                    SpectreLog.ActionError($"{TaskType} Invalid folder for Pack solution.");
                     return false;
                 }
             }
@@ -80,13 +82,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var mapfile = Path.Combine(CurrentDirectory, Json.mapfile);
                 if (!File.Exists(mapfile))
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} mapfile '{mapfile}' not exist");
+                    SpectreLog.ActionError($"{TaskType} mapfile '{mapfile}' not exist");
                     return false;
                 }
             }
+
+            // Auto-detect version if not provided
+            if (string.IsNullOrEmpty(Version))
+            {
+                Version = AutoDetectCoreToolsVersion(CurrentDirectory);
+                if (string.IsNullOrEmpty(Version))
+                {
+                    SpectreLog.ActionError($"{TaskType} Cannot auto-detect Microsoft.CrmSdk.CoreTools version. Please ensure the package is installed in the packages folder or specify --version parameter.");
+                    return false;
+                }
+                SpectreLog.ActionWithLevel(LogLevel.Level0, "AUTO-DETECT: ", $"Microsoft.CrmSdk.CoreTools", Version);
+            }
+
             if (!IsExistSolutionPackager(CurrentDirectory))
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Not found CrmSvcUtil.exe file.");
+                SpectreLog.ActionError($"{TaskType} Not found SolutionPackager.exe file.");
                 return false;
             }
             if (Json.type.ToLower() == "Extract".ToLower())
@@ -94,11 +109,42 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
                 if (!IsOk)
                 {
-                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{Json.solution}' not exist");
+                    SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
                     return false;
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// Auto-detect Microsoft.CrmSdk.CoreTools version by scanning packages folder.
+        /// Returns the latest version found or null if not found.
+        /// </summary>
+        private string AutoDetectCoreToolsVersion(string startDirectory)
+        {
+            var directory = startDirectory;
+            while (!string.IsNullOrEmpty(directory))
+            {
+                var packagesFolder = Path.Combine(directory, "packages");
+                if (Directory.Exists(packagesFolder))
+                {
+                    var coreToolsFolders = Directory.GetDirectories(packagesFolder, "Microsoft.CrmSdk.CoreTools.*")
+                        .Select(d => new DirectoryInfo(d).Name)
+                        .Where(n => n.StartsWith("Microsoft.CrmSdk.CoreTools."))
+                        .Select(n => n.Substring("Microsoft.CrmSdk.CoreTools.".Length))
+                        .OrderByDescending(v => v) // Simple string sort, works for semver with same format
+                        .ToList();
+
+                    if (coreToolsFolders.Count > 0)
+                    {
+                        return coreToolsFolders.First();
+                    }
+                }
+                var parentDir = new DirectoryInfo(directory)?.Parent?.FullName;
+                if (parentDir == directory) break;
+                directory = parentDir;
+            }
+            return null;
         }
 
         private async Task<string> GetSolutionZipFileAsync()
@@ -110,7 +156,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await ExportSolutionAsync("Managed");
                     return await ExportSolutionAsync("Unmanaged");
                 }
-                else {
+                else
+                {
                     return await ExportSolutionAsync(Json.solutiontype);
                 }
             }
@@ -131,12 +178,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Managed = solutionType.ToLower() == "Managed".ToLower(),
                 SolutionName = Json.solution
             };
-            using var cancellationTokenSource = new CancellationTokenSource();
-            var waitingTask = Task.Run(() => CliLog.WaitingWithCancellation($"Export {solutionType} solution: {Json.solution} ", cancellationTokenSource.Token));
+
+            SpectreLog.ActionWithLevel(LogLevel.Level0, CliAction.EXPORT, $"{solutionType} solution", Json.solution);
+
             var crmVersion = await GetCrmVersionFromInstanceAsync();
             var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
-            cancellationTokenSource.Cancel();
-            try { await waitingTask; } catch (OperationCanceledException) { }
+
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
             var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
             if (solutionType.ToLower() == "Managed".ToLower())
@@ -145,11 +192,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var dir = Path.GetDirectoryName(solutionFile);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             File.Copy(tempFile, solutionFile, true);
-            CliLog.Write(ConsoleColor.White, " to: ");
-            CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionFile.Substring(CurrentDirectory.Length));
-            CliLog.Write(ConsoleColor.White, " take: ");
-            CliLog.WriteSuccess(ConsoleColor.White, $"{timer.Elapsed:c}");
-            CliLog.WriteLine(ConsoleColor.Black, "|");
+
+            timer.Stop();
+            SpectreLog.ActionCreated($"..{solutionFile.Substring(CurrentDirectory.Length)}", $"({timer.Elapsed:c})");
             return solutionFile;
         }
 
@@ -203,6 +248,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return IsExistSolutionPackager(parentDirectory);
             }
         }
+
         private string CreateCommandArgs(string solutionFile)
         {
             var command = new StringBuilder();
@@ -238,54 +284,47 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            SpectreLog.WriteLine("START");
+            SpectreLog.WriteLine();
 
             if (await IsValidAsync())
             {
+                // Log execution info
+                SpectreLog.ActionWithLevel(LogLevel.Level0, "EXECUTE: ", "SolutionPackager.exe", Version);
+                SpectreLog.ActionWithLevel(LogLevel.Level1, "ACTION: ", Json.type);
+                SpectreLog.ActionWithLevel(LogLevel.Level1, "SOLUTION: ", Json.solution);
+                SpectreLog.ActionWithLevel(LogLevel.Level1, "TYPE: ", Json.solutiontype);
+                SpectreLog.ActionWithLevel(LogLevel.Level1, "FOLDER: ", $"..\\{Json.folder}\\{Json.solutiontype}");
+
                 var solutionZipFile = await GetSolutionZipFileAsync();
                 if (Json.type.ToLower().Trim() == "Pack".ToLower())
                 {
                     if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                     {
-                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
-                        CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFile.Substring(CurrentDirectory.Length));
-                        CliLog.Write(ConsoleColor.White, " and ");
+                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                         var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
-                        CliLog.WriteSuccess(ConsoleColor.White, ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
-                        CliLog.WriteLine(ConsoleColor.Black, "|");
+                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
                     }
                     else
                     {
-                        CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
-                        CliLog.WriteSuccess(ConsoleColor.White, solutionZipFile);
-                        CliLog.WriteLine(ConsoleColor.Black, "|");
+                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                     }
                 }
-                else
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    CliLog.Write(ConsoleColor.White, "| ", ConsoleColor.Green, $"{Json.type}ing", ConsoleColor.White, " solution: ", ConsoleColor.Green, Json.solution, ConsoleColor.White, " to: ");
-                    CliLog.WriteSuccess(ConsoleColor.White, $"..\\{Json.folder}\\{Json.solutiontype}");
-                    CliLog.WriteLine(ConsoleColor.Black, "|");
-                }
 
-                RunSolutionPackager(solutionZipFile);
+                await RunSolutionPackagerAsync(solutionZipFile);
             }
 
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ");
+            SpectreLog.WriteLine();
+            SpectreLog.WriteLine("END");
         }
 
-        private void RunSolutionPackager(string solutionZipFile)
+        private async Task RunSolutionPackagerAsync(string solutionZipFile)
         {
             var command = CreateCommandArgs(solutionZipFile);
             var path = "\"" + SolutionPackagerExe + "\"";
-            CliLog.WriteLine();
-            CliLog.WriteLine();
-            CliLog.WriteLine(ConsoleColor.White, path + " " + command);
-            CliLog.WriteLine();
-            CliLog.WriteLine();
+
+            SpectreLog.WriteWithLevel(LogLevel.Level0, path + " " + command);
+            SpectreLog.WriteLine();
 
             var process = new Process
             {
@@ -298,14 +337,54 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CreateNoWindow = true
                 }
             };
-            process.Start();
-            while (!process.StandardOutput.EndOfStream)
-            {
-                var line = process.StandardOutput.ReadLine();
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.White, line);
-            }
-            process.WaitForExit();
 
+            process.Start();
+
+            // Read output and error asynchronously
+            var outputTask = Task.Run(async () =>
+            {
+                string line;
+                while ((line = await process.StandardOutput.ReadLineAsync()) != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        SpectreLog.WriteProcessOutput(line);
+                    }
+                }
+            });
+
+            var errorTask = Task.Run(async () =>
+            {
+                string line;
+                while ((line = await process.StandardError.ReadLineAsync()) != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        SpectreLog.ActionError(line);
+                    }
+                }
+            });
+
+            await Task.WhenAll(outputTask, errorTask);
+            await Task.Run(() => process.WaitForExit());
+
+            SpectreLog.WriteLine();
+
+            if (process.ExitCode == 0)
+            {
+                if (Json.type.ToLower() == "extract")
+                {
+                    SpectreLog.ActionUpdated("Solution extracted successfully to", $"..\\{Json.folder}\\{Json.solutiontype}");
+                }
+                else
+                {
+                    SpectreLog.ActionUpdated("Solution packed successfully");
+                }
+            }
+            else
+            {
+                SpectreLog.ActionError($"SolutionPackager exited with code {process.ExitCode}");
+            }
         }
     }
 }

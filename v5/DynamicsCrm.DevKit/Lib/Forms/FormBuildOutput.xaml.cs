@@ -1,7 +1,10 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.VisualStudio.Shell;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -14,12 +17,42 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private bool _buildFailed;
         private readonly string _fileName;
 
-        public FormBuildOutput(string fileName)
+        // Win32 API constants and imports for disabling close button
+        private const int GWL_STYLE = -16;
+        private const int WS_SYSMENU = 0x80000;
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        public FormBuildOutput(string fileName, string buildMode = "Debug")
         {
             InitializeComponent();
             _fileName = fileName;
-            Title = $"Building TypeScript: {fileName}";
-            StatusText.Text = $"Building {fileName}...";
+            Title = $"Building TypeScript ({buildMode}): {fileName}";
+            StatusText.Text = $"Building {fileName} ({buildMode})...";
+            Loaded += FormBuildOutput_Loaded;
+        }
+
+        private void FormBuildOutput_Loaded(object sender, RoutedEventArgs e)
+        {
+            DisableCloseButton();
+        }
+
+        private void DisableCloseButton()
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            var style = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, style & ~WS_SYSMENU);
+        }
+
+        private void EnableCloseButton()
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            var style = GetWindowLong(hwnd, GWL_STYLE);
+            SetWindowLong(hwnd, GWL_STYLE, style | WS_SYSMENU);
         }
 
         /// <summary>
@@ -34,8 +67,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else
             {
-                Dispatcher.Invoke(() =>
+                // Switch to UI thread safely using the VS JoinableTaskFactory
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     OutputTextbox.AppendText(line + Environment.NewLine);
                     OutputTextbox.ScrollToEnd();
                 });
@@ -53,7 +88,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             else
             {
-                Dispatcher.Invoke(() => UpdateBuildStatus(success, message));
+                // Switch to UI thread safely using the VS JoinableTaskFactory
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    UpdateBuildStatus(success, message);
+                });
             }
         }
 
@@ -87,18 +127,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     AppendOutput(message);
                 }
-                buttonClose.Visibility = Visibility.Visible;
+                // Enable the X button so user can close after reviewing errors
+                EnableCloseButton();
             }
-        }
-
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = _buildFailed ? false : true;
-        }
-
-        private void BaseDialogWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            OutputTextbox.Height = e.NewSize.Height - 100;
         }
     }
 }

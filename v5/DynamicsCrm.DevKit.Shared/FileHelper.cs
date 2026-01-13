@@ -81,7 +81,14 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true);
                 var buffer = new byte[fileStream.Length];
-                await fileStream.ReadAsync(buffer, 0, buffer.Length);
+                var offset = 0;
+                while (offset < buffer.Length)
+                {
+                    var read = await fileStream.ReadAsync(buffer, offset, buffer.Length - offset);
+                    if (read == 0)
+                        throw new EndOfStreamException();
+                    offset += read;
+                }
                 return buffer;
             }
             catch

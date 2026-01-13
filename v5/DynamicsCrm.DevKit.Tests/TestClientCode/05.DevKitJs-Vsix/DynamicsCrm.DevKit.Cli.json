@@ -117,7 +117,7 @@
       "profile": "ALL",
       "namespace": "???",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "Account"
     }
   ],
   "uploadreports": [

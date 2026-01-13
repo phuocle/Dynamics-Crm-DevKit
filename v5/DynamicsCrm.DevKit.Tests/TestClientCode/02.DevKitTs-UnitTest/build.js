@@ -17,6 +17,7 @@
 const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 // Parse arguments
 const args = process.argv.slice(2);
@@ -123,11 +124,49 @@ function createDevkitPlugin(minifiedCode) {
     };
 }
 
+/**
+ * Check TypeScript errors using tsc --noEmit
+ * esbuild doesn't do type checking, so we need to run tsc separately
+ * Uses the project's tsconfig.json for proper configuration
+ * @param {string} file - The entity file name (e.g., 'Account.ts')
+ * @returns {boolean} - true if no errors, false if errors found
+ */
+function checkTypeScript(file) {
+    const name = path.basename(file, '.ts');
+
+    try {
+        // Run tsc --noEmit using the project's tsconfig.json
+        // This ensures proper lib and target settings are used
+        execSync(`npx tsc --noEmit --project tsconfig.json`, {
+            cwd: tsDir,
+            stdio: 'pipe',
+            encoding: 'utf8'
+        });
+        return true;
+    } catch (error) {
+        // tsc returns exit code 1 when there are errors
+        console.error(`  ✗ ${name}.ts - TypeScript errors:`);
+        if (error.stdout) {
+            console.error(error.stdout);
+        }
+        if (error.stderr) {
+            console.error(error.stderr);
+        }
+        return false;
+    }
+}
+
 async function buildEntity(file, devkitCode) {
     const name = path.basename(file, '.ts');
     const entryPoint = path.join(entitiesDir, file);
     const outFile = path.join(buildDir, `${name}.js`);
     const globalName = `IIFE${name}`;
+
+    // Step 1: Check TypeScript errors first (esbuild doesn't do type checking)
+    console.log(`  Checking ${name}.ts for TypeScript errors...`);
+    if (!checkTypeScript(file)) {
+        return false; // TypeScript errors found, stop build
+    }
 
     // Read the TypeScript file to extract all exported variable names from "export { ... }" statement
     let exportedNames = [];

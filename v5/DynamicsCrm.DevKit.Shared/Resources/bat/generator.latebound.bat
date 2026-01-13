@@ -1,4 +1,23 @@
 @echo off
-for /f "delims=" %%d in ('dir /a:d /o:-n /s ..\..\packages\DynamicsCrm.DevKit.Cli.* /b') do if not defined DynamicsCrmDevKitCli set DynamicsCrmDevKitCli=%%d
+REM Check if devkit is installed
+where devkit >nul 2>nul
+if %ERRORLEVEL% neq 0 (
+    echo.
+    echo ===============================================
+    echo ERROR: DynamicsCrm.DevKit.Cli is not installed
+    echo ===============================================
+    echo.
+    echo Please install the CLI tool first:
+    echo.
+    echo     dotnet tool install -g DynamicsCrm.DevKit.Cli
+    echo.
+    echo The command above has been COPIED to your clipboard.
+    echo Just paste [Ctrl+V] and run it!
+    echo.
+    echo dotnet tool install -g DynamicsCrm.DevKit.Cli | clip
+    pause
+    exit /b 1
+)
+
 set ConnectionString="$ConnectionString$"
-"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%ConnectionString% /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"LATEBOUND"
+devkit generator --conn %ConnectionString% --json "..\..\DynamicsCrm.DevKit.Cli.json" --profile "LATEBOUND"

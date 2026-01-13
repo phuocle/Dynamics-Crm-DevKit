@@ -216,11 +216,11 @@ namespace DynamicsCrm.DevKit.Shared
     <order attribute='filename' />
     <link-entity name='solutioncomponent' from='objectid' to='reportid' link-type='inner' alias='sc'>
       <filter type='and'>
-        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/
+        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/>
       </filter>
       <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
         <filter type='and'>
-          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/
+          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
         </filter>
       </link-entity>
     </link-entity>
@@ -276,6 +276,22 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static async Task<List<EntityMetadata>> GetEntitiesMetadataAsync(ServiceClient serviceClient, List<string> schemaNames)
         {
+            var list = new List<EntityMetadata>();
+            var requests = new List<string>();
+            foreach (var schemaName in schemaNames)
+            {
+                var entityMetadata = EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
+                if (entityMetadata != null)
+                {
+                    list.Add(entityMetadata);
+                }
+                else
+                {
+                    requests.Add(schemaName);
+                }
+            }
+            if (requests.Count == 0) return list;
+
             var request = new ExecuteMultipleRequest()
             {
                 Settings = new ExecuteMultipleSettings()
@@ -285,9 +301,8 @@ namespace DynamicsCrm.DevKit.Shared
                 },
                 Requests = []
             };
-            foreach (var schemaName in schemaNames)
+            foreach (var schemaName in requests)
                 request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
-            var list = new List<EntityMetadata>();
             ExecuteMultipleResponse response = (ExecuteMultipleResponse)await serviceClient.ExecuteAsync(request);
             foreach (var result in response.Responses)
             {

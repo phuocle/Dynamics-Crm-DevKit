@@ -588,6 +588,76 @@ const Account = {
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
+/** Contact entity OptionSets */
+const Contact = {
+	/** Role */
+	AccountRoleCode: { Decision_Maker: 1, Employee: 2, Influencer: 3 },
+	/** Address 1: Address Type */
+	Address1_AddressTypeCode: { Bill_To: 1, Other: 4, Primary: 3, Ship_To: 2 },
+	/** Address 1: Freight Terms */
+	Address1_FreightTermsCode: { FOB: 1, No_Charge: 2 },
+	/** Address 1: Shipping Method */
+	Address1_ShippingMethodCode: { Airborne: 1, DHL: 2, FedEx: 3, Full_Load: 6, Postal_Mail: 5, UPS: 4, Will_Call: 7 },
+	/** Address 2: Address Type */
+	Address2_AddressTypeCode: { Default_Value: 1 },
+	/** Address 2: Freight Terms */
+	Address2_FreightTermsCode: { Default_Value: 1 },
+	/** Address 2: Shipping Method */
+	Address2_ShippingMethodCode: { Default_Value: 1 },
+	/** Address 3: Address Type */
+	Address3_AddressTypeCode: { Default_Value: 1 },
+	/** Address 3: Freight Terms */
+	Address3_FreightTermsCode: { Default_Value: 1 },
+	/** Address 3: Shipping Method */
+	Address3_ShippingMethodCode: { Default_Value: 1 },
+	/** Customer Size */
+	CustomerSizeCode: { Default_Value: 1 },
+	/** Relationship Type */
+	CustomerTypeCode: { Default_Value: 1 },
+	/** Education */
+	EducationCode: { Default_Value: 1 },
+	/** Marital Status */
+	FamilyStatusCode: { Divorced: 3, Married: 2, Single: 1, Widowed: 4 },
+	/** Gender */
+	GenderCode: { Female: 2, Male: 1 },
+	/** Has Children */
+	HasChildrenCode: { Default_Value: 1 },
+	/** Lead Source */
+	LeadSourceCode: { Default_Value: 1 },
+	/** Preferred Language */
+	mspp_userpreferredlcid: { Arabic: 1025, Basque_Basque: 1069, Bulgarian_Bulgaria: 1026, Catalan_Catalan: 1027, Chinese_China: 2052, Chinese_Hong_Kong_SAR: 3076, Chinese_Traditional: 1028, Croatian_Croatia: 1050, Czech_Czech_Republic: 1029, Danish_Denmark: 1030, Dutch_Netherlands: 1043, English: 1033, Estonian_Estonia: 1061, Finnish_Finland: 1035, French_France: 1036, Galician_Spain: 1110, German_Germany: 1031, Greek_Greece: 1032, Hebrew: 1037, Hindi_India: 1081, Hungarian_Hungary: 1038, Indonesian_Indonesia: 1057, Italian_Italy: 1040, Japanese_Japan: 1041, Kazakh_Kazakhstan: 1087, Korean_Korea: 1042, Latvian_Latvia: 1062, Lithuanian_Lithuania: 1063, Malay_Malaysia: 1086, Norwegian_Bokmal_Norway: 1044, Polish_Poland: 1045, Portuguese_Brazil: 1046, Portuguese_Portugal: 2070, Romanian_Romania: 1048, Russian_Russia: 1049, Serbian_Cyrillic_Serbia: 3098, Serbian_Latin_Serbia: 2074, Slovak_Slovakia: 1051, Slovenian_Slovenia: 1060, Spanish_Traditional_Sort_Spain: 3082, Swedish_Sweden: 1053, Thai_Thailand: 1054, Turkish_Turkiye: 1055, Ukrainian_Ukraine: 1058, Vietnamese_Vietnam: 1066 },
+	/** ParentCustomerIdType */
+	ParentCustomerIdType: {},
+	/** Payment Terms */
+	PaymentTermsCode: { _2_10_Net_30: 2, Net_30: 1, Net_45: 3, Net_60: 4 },
+	/** Preferred Day */
+	PreferredAppointmentDayCode: { Friday: 5, Monday: 1, Saturday: 6, Sunday: 0, Thursday: 4, Tuesday: 2, Wednesday: 3 },
+	/** Preferred Time */
+	PreferredAppointmentTimeCode: { Afternoon: 2, Evening: 3, Morning: 1 },
+	/** Preferred Method of Contact */
+	PreferredContactMethodCode: { Any: 1, Email: 2, Fax: 4, Mail: 5, Phone: 3 },
+	/** Shipping Method */
+	ShippingMethodCode: { Default_Value: 1 },
+	/** Status */
+	StateCode: { Active: 0, Inactive: 1 },
+	/** Status Reason */
+	StatusCode: { Active: 1, Inactive: 2 },
+	/** Territory */
+	TerritoryCode: { Default_Value: 1 },
+	/** Rollup State */
+	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+} as const;
+/** Team entity OptionSets */
+const Team = {
+	/** Membership Type */
+	MembershipType: { Guests: 3, Members: 1, Members_and_guests: 0, Owners: 2 },
+	/** RegardingObjectTypeCode */
+	RegardingObjectTypeCode: {},
+	/** Team Type */
+	TeamType: { Access: 1, Office_Group: 3, Owner: 0, Security_Group: 2 },
+	/** Rollup State */
+	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+} as const;
 
 // ============================================================================
 // Export combined OptionSet
@@ -630,6 +700,8 @@ export const OptionSet = {
 	TabDisplayState,
 	TimerState,
 	// Entity OptionSets
-	Account
+	Account,
+	Contact,
+	Team
 } as const;
 

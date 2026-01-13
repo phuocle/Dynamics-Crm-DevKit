@@ -24,6 +24,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public FormConnection()
         {
             InitializeComponent();
+            Loaded += FormConnection_Loaded;
+        }
+
+        private void FormConnection_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
             _ = LoadConnectionsAsync();
         }
         

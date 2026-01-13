@@ -35,11 +35,20 @@ namespace DynamicsCrm.DevKit
         public const int bmpPicPL = 0x0001;
         public const int IDMX_HTM_SOURCE_CSS = 0x0002;
         public const int IDMX_HTM_SOURCE_HTML = 0x0001;
+        // New submenu groups
+        public const int GroupDynamicsCrmDevKitSubmenu = 0x0010;
+        public const int GroupDeployCommands = 0x0011;
+        public const int SubMenuDynamicsCrmDevKit = 0x2001;
+        // Original groups
         public const int GroupCommandDeployWebResource = 0x0001;
         public const int GroupCommandAddCrmPluginRegistration = 0x0003;
         public const int GroupCommandDeployNewWebResource = 0x0002;
+        public const int GroupCommandDeployTypeScriptRelease = 0x0004;
+        public const int GroupCommandDeployNewTypeScriptRelease = 0x0005;
         public const int CommandDeployWebResource = 0x1001;
         public const int CommandAddCrmPluginRegistration = 0x1003;
         public const int CommandDeployNewWebResource = 0x1002;
+        public const int CommandDeployTypeScriptRelease = 0x1004;
+        public const int CommandDeployNewTypeScriptRelease = 0x1005;
     }
 }
