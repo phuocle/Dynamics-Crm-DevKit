@@ -1,1 +1,0 @@
-pac modelbuilder build --outdirectory . -env 85a7e8b9-b3b8-e630-abdc-f097bc673a80 -stf builderSettings.json -ll Off
