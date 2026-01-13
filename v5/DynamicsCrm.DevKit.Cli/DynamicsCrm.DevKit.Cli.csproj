@@ -67,8 +67,8 @@
 	  <!-- Dynamics 365 SDK - .NET 6+ compatible versions -->
 	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
 	  <!-- NuGet for package operations -->
-	  <PackageReference Include="NuGet.Packaging" Version="8.0.0" />
-	  <PackageReference Include="NuGet.Protocol" Version="8.0.0" />
+	  <PackageReference Include="NuGet.Packaging" Version="7.0.1" />
+	  <PackageReference Include="NuGet.Protocol" Version="7.0.1" />
 	  <!-- CodeDom for .NET 10 compatibility -->
 	  <PackageReference Include="System.CodeDom" Version="10.0.1" />
 	</ItemGroup>
