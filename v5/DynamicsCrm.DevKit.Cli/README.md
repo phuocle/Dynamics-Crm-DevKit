@@ -14,20 +14,20 @@ dotnet tool install --global DynamicsCrm.DevKit.Cli
 
 ## Commands
 
-| Command | Description | Legacy `/type:` |
-|---------|-------------|-----------------|
-| `server` | Deploy plugins, workflows, packages to Dataverse | `servers` |
-| `plugin` | Deploy plugins only | `plugins` |
-| `workflow` | Deploy workflows only | `workflows` |
-| `dataprovider` | Deploy data providers | `dataproviders` |
-| `generator` | Generate JS/TS/C# code from entity metadata | `generators` |
-| `webresource` | Deploy web resources | `webresources` |
-| `proxytype` | Generate proxy types using CrmSvcUtil | `proxytypes` |
-| `solution` | Extract/Pack solutions using SolutionPackager | `solutionpackagers` |
-| `downloadreport` | Download reports from a solution | `downloadreports` |
-| `uploadreport` | Upload reports to a solution | `uploadreports` |
-| `downloadwebresource` | Download web resources from a solution | `downloadwebresources` |
-| `datasource` | Create data source entities | `datasources` |
+| Command               | Description                                      |
+| --------------------- | ------------------------------------------------ |
+| `server`              | Deploy plugins, workflows, packages to Dataverse |
+| `plugin`              | Deploy plugins only                              |
+| `workflow`            | Deploy workflows only                            |
+| `dataprovider`        | Deploy data providers                            |
+| `generator`           | Generate JS/TS/C# code from entity metadata      |
+| `webresource`         | Deploy web resources                             |
+| `proxytype`           | Generate proxy types using CrmSvcUtil            |
+| `solution`            | Extract/Pack solutions using SolutionPackager    |
+| `downloadreport`      | Download reports from a solution                 |
+| `uploadreport`        | Upload reports to a solution                     |
+| `downloadwebresource` | Download web resources from a solution           |
+| `datasource`          | Create data source entities                      |
 
 ---
 
@@ -35,63 +35,216 @@ dotnet tool install --global DynamicsCrm.DevKit.Cli
 
 ### Basic Syntax
 ```powershell
-devkit <command> --conn "<connection-string>" --json "<path-to-json>" --profile "<profile-name>"
+devkit <command> --url "<environment-url>" --auth <auth-type> [auth-options] --json "<path-to-json>" --profile "<profile-name>"
 ```
 
-### Examples
+### Quick Examples
 
 ```powershell
-# Deploy server (plugins, workflows, packages)
-devkit server --conn "AuthType=ClientSecret;..." --json ".\DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+# Deploy server with Interactive authentication (browser login with MFA)
+devkit server --url "https://org.crm.dynamics.com" --auth Interactive --json "..\\cli.json" --profile "DEBUG"
+
+# Deploy with FromPac (reuse PAC CLI cached tokens - zero login required!)
+devkit server --auth FromPac --pacprofile "DEVKITV4" --json "..\\cli.json" --profile "DEBUG"
+
+# Deploy with ClientSecret (for CI/CD pipelines)
+devkit server --url "https://org.crm.dynamics.com" --auth ClientSecret --clientid "app-id" --clientsecret "secret" --json "..\\cli.json" --profile "DEBUG"
 
 # Deploy with --onlyupdateassembly (skip step registration)
-devkit server --conn "..." --json "..." --profile "DEBUG" --onlyupdateassembly
+devkit server --url "..." --auth ClientSecret --clientid "..." --clientsecret "..." --json "..." --profile "DEBUG" --onlyupdateassembly
 
 # Generate TypeScript forms
-devkit generator --conn "..." --json "..." --profile "Account"
+devkit generator --url "..." --auth Interactive --json "..." --profile "Account"
 
 # Generate proxy types (auto-detect CrmSdk.CoreTools version)
-devkit proxytype --conn "..." --json "..." --profile "ALL"
-
-# Specify explicit version
-devkit proxytype --conn "..." --json "..." --profile "ALL" --version "9.1.0.179"
+devkit proxytype --url "..." --auth FromPac --json "..." --profile "ALL"
 
 # Extract solution
-devkit solution --conn "..." --json "..." --profile "Extract-Both" --version "9.1.0.179"
+devkit solution --url "..." --auth ClientSecret --clientid "..." --clientsecret "..." --json "..." --profile "Extract-Both"
 
 # Pack solution
-devkit solution --conn "..." --json "..." --profile "Pack-Both"
+devkit solution --url "..." --auth FromPac --json "..." --profile "Pack-Both"
 
 # Download reports
-devkit downloadreport --conn "..." --json "..." --profile "DEBUG"
+devkit downloadreport --url "..." --auth Interactive --json "..." --profile "DEBUG"
 
 # Upload reports
-devkit uploadreport --conn "..." --json "..." --profile "DEBUG"
+devkit uploadreport --url "..." --auth ClientSecret --clientid "..." --clientsecret "..." --json "..." --profile "DEBUG"
 
 # Deploy web resources
-devkit webresource --conn "..." --json "..." --profile "DEBUG"
+devkit webresource --url "..." --auth DeviceCode --json "..." --profile "DEBUG"
 
 # Create data source entity
-devkit datasource --conn "..." --json "..." --profile "DEBUG"
+devkit datasource --url "..." --auth FromPac --json "..." --profile "DEBUG"
 ```
 
-### Legacy Syntax (100% Compatible)
+---
+
+## 🔐 Connection Types (9 Authentication Methods)
+
+The CLI supports **9 flexible authentication methods** via `--auth`, covering every scenario from local development to enterprise CI/CD pipelines:
+
+### Authentication Methods Overview
+
+| Auth Type                | Best For                              | Recommended |
+| ------------------------ | ------------------------------------- | ----------- |
+| `FromPac`                | **Developers** - Reuse PAC CLI tokens | ⭐ **Yes**   |
+| `Interactive`            | Developers with MFA                   | ⭐ **Yes**   |
+| `DeviceCode`             | Headless, SSH, CI containers          | ✅           |
+| `ClientSecret`           | CI/CD pipelines, automation           | ⭐ **Yes**   |
+| `ClientCertificate`      | High-security production              | ✅           |
+| `ManagedIdentity`        | Azure VMs, App Services, Functions    | ⭐ **Yes**   |
+| `DefaultAzureCredential` | Flexible Azure SDK chain              | ✅           |
+| `OAuth`                  | Legacy username/password              | ⚠️ Legacy    |
+| `AD`                     | On-premise Active Directory           | ⚠️ On-prem   |
+
+### Connection Options Reference
+
+| Option           | Description                                   |
+| ---------------- | --------------------------------------------- |
+| `--auth`         | Authentication type (see table above)         |
+| `--url`          | Dynamics 365 environment URL                  |
+| `--clientid`     | Azure AD application (client) ID              |
+| `--clientsecret` | Client secret (plain text or DPAPI encrypted) |
+| `--cert`         | Path to .pfx certificate file                 |
+| `--certpass`     | Certificate password                          |
+| `--pacprofile`   | PAC CLI profile name or 1-indexed number      |
+| `--user`         | Username (for OAuth/AD)                       |
+| `--pass`         | Password (for OAuth/AD)                       |
+
+---
+
+### 1️⃣ FromPac - Reuse PAC CLI Tokens (Recommended for Developers)
+
+**Zero login required!** Reuses cached tokens from Power Platform CLI (`pac auth`).
+
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:servers /profile:DEBUG /onlyupdateassembly:"true"
-DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:generators /profile:Account
+# Use default/active PAC profile
+devkit server --auth FromPac --json "cli.json" --profile "DEBUG"
+
+# Use named PAC profile
+devkit server --auth FromPac --pacprofile "DEVKITV4" --json "cli.json" --profile "DEBUG"
+
+# Use by index (1-indexed from pac auth list)
+devkit server --auth FromPac --pacprofile "11" --json "cli.json" --profile "DEBUG"
+```
+
+> [!TIP]
+> Run `pac auth list` to see available profiles. Perfect for developers who already use PAC CLI!
+
+---
+
+### 2️⃣ Interactive - Browser Login with MFA
+
+Opens browser for Microsoft login. Full MFA/Conditional Access support.
+
+```powershell
+devkit server --url "https://org.crm.dynamics.com" --auth Interactive --json "cli.json" --profile "DEBUG"
+```
+
+> [!NOTE]
+> Tokens are cached securely. Subsequent runs may not require re-login.
+
+---
+
+### 3️⃣ DeviceCode - Headless/SSH Environments
+
+Displays a code to enter at https://microsoft.com/devicelogin. Perfect for SSH sessions and containers.
+
+```powershell
+devkit server --url "https://org.crm.dynamics.com" --auth DeviceCode --json "cli.json" --profile "DEBUG"
+```
+
+---
+
+### 4️⃣ ClientSecret - Service Principal (CI/CD Recommended)
+
+Uses Azure AD App Registration with client secret. Ideal for automated pipelines.
+
+```powershell
+# Plain text secret
+devkit server --url "https://org.crm.dynamics.com" --auth ClientSecret --clientid "1a60a5c2-xxxx-xxxx-xxxx-xxxxxxxxxxxx" --clientsecret "~je8Q~xxxxxxxx" --json "cli.json" --profile "CI"
+
+# DPAPI encrypted secret (Windows only)
+devkit server --url "https://org.crm.dynamics.com" --auth ClientSecret --clientid "..." --clientsecret "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ" --json "cli.json" --profile "CI"
+```
+
+> [!IMPORTANT]
+> For production, use DPAPI-encrypted secrets or Azure Key Vault.
+
+---
+
+### 5️⃣ ClientCertificate - High-Security Production
+
+Uses client certificate for authentication. Most secure option for production.
+
+```powershell
+devkit server --url "https://org.crm.dynamics.com" --auth ClientCertificate --clientid "app-id" --cert "C:\\certs\\app.pfx" --certpass "certificate-password" --json "cli.json" --profile "PROD"
+```
+
+> [!CAUTION]
+> Protect your certificate files and never commit them to source control.
+
+---
+
+### 6️⃣ ManagedIdentity - Azure Native (Zero Secrets)
+
+Uses Azure Managed Identity. No secrets to manage!
+
+```powershell
+# System-assigned managed identity
+devkit server --url "https://org.crm.dynamics.com" --auth ManagedIdentity --json "cli.json" --profile "AZURE"
+
+# User-assigned managed identity
+devkit server --url "https://org.crm.dynamics.com" --auth ManagedIdentity --clientid "user-assigned-identity-client-id" --json "cli.json" --profile "AZURE"
+```
+
+> [!TIP]
+> Perfect for Azure VMs, App Services, Functions, and AKS with Pod Identity.
+
+---
+
+### 7️⃣ DefaultAzureCredential - Automatic Chain
+
+Tries multiple auth methods in order: Environment variables → Managed Identity → Azure CLI → Visual Studio → etc.
+
+```powershell
+devkit server --url "https://org.crm.dynamics.com" --auth DefaultAzureCredential --json "cli.json" --profile "AUTO"
+```
+
+---
+
+### 8️⃣ OAuth - Legacy Username/Password
+
+Traditional username/password authentication. Not recommended for new implementations.
+
+```powershell
+devkit server --url "https://org.crm.dynamics.com" --auth OAuth --user "user@domain.onmicrosoft.com" --pass "password" --json "cli.json" --profile "DEBUG"
+```
+
+> [!WARNING]
+> Username/password auth is less secure and may not work with MFA-enabled accounts.
+
+---
+
+### 9️⃣ AD - On-Premise Active Directory
+
+For on-premise Dynamics CRM with Active Directory authentication.
+
+```powershell
+devkit server --url "https://crm.yourdomain.com" --auth AD --user "DOMAIN\\username" --pass "password" --json "cli.json" --profile "ONPREM"
 ```
 
 ---
 
 ## Command Options
 
-| Option | Description |
-|--------|-------------|
-| `--conn` | Dynamics 365 connection string |
-| `--json` | Path to `DynamicsCrm.DevKit.Cli.json` configuration file |
-| `--profile` | Profile name defined in the JSON file |
-| `--version` | CoreTools version (optional, auto-detected) |
-| `--onlyupdateassembly` | Skip step registration, update assembly only |
+| Option                 | Description                                              |
+| ---------------------- | -------------------------------------------------------- |
+| `--json`               | Path to `DynamicsCrm.DevKit.Cli.json` configuration file |
+| `--profile`            | Profile name defined in the JSON file                    |
+| `--version`            | CoreTools version (optional, auto-detected)              |
+| `--onlyupdateassembly` | Skip step registration, update assembly only             |
 
 ---
 

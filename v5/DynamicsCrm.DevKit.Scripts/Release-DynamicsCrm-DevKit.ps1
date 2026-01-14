@@ -261,7 +261,7 @@ try {
     Write-Host "`nCopying VSIX..." -ForegroundColor Yellow
     $vsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
     if (Test-Path $vsixSource) {
-        $vsixDestName = if ($Configuration -eq "Debug") { "DynamicsCrm.DevKit.$Version-Debug.vsix" } else { "DynamicsCrm.DevKit.$Version.vsix" }
+        $vsixDestName = "DynamicsCrm.DevKit.$Version.vsix"
         $vsixDest = Join-Path $publishDir $vsixDestName
         Copy-Item $vsixSource $vsixDest -Force
         Write-Host "Copied VSIX to $vsixDest" -ForegroundColor Green

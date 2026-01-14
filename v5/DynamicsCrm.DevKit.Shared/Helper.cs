@@ -643,15 +643,30 @@ namespace DynamicsCrm.DevKit.Shared
         public static string BuildConnectionString(CrmConnection crmConnection, bool isEncrypt = false)
         {
             if (crmConnection == null) return string.Empty;
-            var type = crmConnection.Type;
+            var type = crmConnection.Type?.ToUpperInvariant() ?? "OAUTH";
             var url = crmConnection.Url;
             var userName = crmConnection.UserName;
             var password = DecryptString(crmConnection.Password);
             if (isEncrypt) password = Helper.EncryptString(password);
-            switch (type.ToUpperInvariant())
+
+            // Use dedicated ClientSecret field if available, otherwise fallback to Password
+            var clientSecretValue = !string.IsNullOrEmpty(crmConnection.ClientSecret)
+                ? DecryptString(crmConnection.ClientSecret)
+                : password;
+            if (isEncrypt && !string.IsNullOrEmpty(crmConnection.ClientSecret))
+                clientSecretValue = Helper.EncryptString(clientSecretValue);
+
+            switch (type)
             {
                 case "CLIENTSECRET":
-                    return $"AuthType=ClientSecret;Url={url};ClientId={userName};ClientSecret={password};";
+                    // Enhanced: Use dedicated ClientId/ClientSecret fields if available
+                    var csId = !string.IsNullOrEmpty(crmConnection.ClientId) ? crmConnection.ClientId : userName;
+                    var connStr = $"AuthType=ClientSecret;Url={url};ClientId={csId};ClientSecret={clientSecretValue};";
+                    // Add TenantId if specified (Phase 1 enhancement)
+                    if (!string.IsNullOrEmpty(crmConnection.TenantId))
+                        connStr += $"TenantId={crmConnection.TenantId};";
+                    return connStr;
+
                 case "AD":
                     if (string.IsNullOrEmpty(userName) || !userName.Contains("\\"))
                         throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
@@ -661,12 +676,31 @@ namespace DynamicsCrm.DevKit.Shared
                     var domain = parts[0];
                     var user = parts[1];
                     return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={password};";
+
+                // ═══════════════════════════════════════════════════════════════════
+                // NEW CONNECTION TYPES (Placeholders for Phase 2-4)
+                // ═══════════════════════════════════════════════════════════════════
+                case "INTERACTIVE":
+                case "DEVICECODE":
+                case "CLIENTCERTIFICATE":
+                case "MANAGEDIDENTITY":
+                case "DEFAULTAZURECREDENTIAL":
+                case "FROMPAC":
+                    throw new NotImplementedException($"Connection type '{crmConnection.Type}' will be implemented in Phase 2-4. Use OAuth or ClientSecret for now.");
+
                 case "OAUTH":
                 default:
+                    // Enhanced OAuth: Support optional ClientId override (Phase 1 enhancement)
                     var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
+                    
+                    // Use custom ClientId if specified, otherwise use Microsoft default
+                    var appIdToUse = !string.IsNullOrEmpty(crmConnection.ClientId) 
+                        ? crmConnection.ClientId 
+                        : "51f81489-12ee-4a9e-aaae-a2591f45987d";
+                    
                     if (!connectionString.ToLower().Contains("appid="))
                     {
-                        connectionString += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;";
+                        connectionString += $"AppId={appIdToUse};";
                     }
                     if (!connectionString.ToLower().Contains("redirecturi="))
                     {

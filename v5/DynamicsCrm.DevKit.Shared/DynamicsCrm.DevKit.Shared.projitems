@@ -65,6 +65,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
+    <!-- Phase 2: Modern Interactive Authentication -->
+    <Compile Include="$(MSBuildThisFileDirectory)SecureTokenCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\IConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\InteractiveConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\DeviceCodeConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ConnectionBuilderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ClientSecretConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\OAuthConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ADConnectionBuilder.cs" />
+    <!-- Phase 3: Production & Azure Auth -->
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ClientCertificateConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ManagedIdentityConnectionBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\DefaultAzureCredentialConnectionBuilder.cs" />
+    <!-- Phase 4: Integration -->
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\FromPacConnectionBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.ts_bat" />
@@ -87,7 +102,6 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.d.ts" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.js" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.form.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.bat" />

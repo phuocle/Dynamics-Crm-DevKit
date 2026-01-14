@@ -31,4 +31,43 @@ namespace DynamicsCrm.DevKit.Shared
             $"Default - {ItemType.DataProvider} - RetrieveMultiple",
         };
     }
+
+    /// <summary>
+    /// Connection type constants for Dataverse authentication.
+    /// </summary>
+    public static class ConnectionType
+    {
+        // ═══════════════════════════════════════════════════════════════════
+        // EXISTING CONNECTION TYPES (Backward Compatible)
+        // ═══════════════════════════════════════════════════════════════════
+        /// <summary>OAuth with Username/Password (Legacy)</summary>
+        public const string OAuth = "OAuth";
+        
+        /// <summary>Service Principal with Client Secret</summary>
+        public const string ClientSecret = "ClientSecret";
+        
+        /// <summary>Active Directory (On-premises only)</summary>
+        public const string AD = "AD";
+
+        // ═══════════════════════════════════════════════════════════════════
+        // NEW CONNECTION TYPES (Phase 2-4)
+        // ═══════════════════════════════════════════════════════════════════
+        /// <summary>Browser-based OAuth (Phase 2)</summary>
+        public const string Interactive = "Interactive";
+        
+        /// <summary>Device Code Flow for headless environments (Phase 2)</summary>
+        public const string DeviceCode = "DeviceCode";
+        
+        /// <summary>Certificate-based authentication (Phase 3)</summary>
+        public const string ClientCertificate = "ClientCertificate";
+        
+        /// <summary>Azure Managed Identity (Phase 3)</summary>
+        public const string ManagedIdentity = "ManagedIdentity";
+        
+        /// <summary>Azure credential chain (Phase 3)</summary>
+        public const string DefaultAzureCredential = "DefaultAzureCredential";
+        
+        /// <summary>PAC CLI profile integration (Phase 4)</summary>
+        public const string FromPac = "FromPac";
+    }
 }

@@ -66,15 +66,33 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
                     "  [cyan]datasource[/]             Create data source entities\n\n" +
-                    "[green]Options:[/]\n" +
-                    "  --conn [yellow]STRING[/]          Dynamics 365 connection string\n" +
+                    "[green]Connection Options:[/]\n" +
+                    "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
+                    "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +
+                    "  --url [yellow]URL[/]              Dynamics 365 environment URL\n" +
+                    "  --clientid [yellow]GUID[/]        Azure AD application (client) ID\n" +
+                    "  --secret [yellow]SECRET[/]        Client secret (plain or encrypted)\n" +
+                    "  --thumbprint [yellow]HEX[/]       Certificate thumbprint\n" +
+                    "  --pacprofile [yellow]NAME|INDEX[/] PAC CLI profile name or index (1-indexed)\n" +
+                    "  --sdk-login             Use SDK OOB login dialog\n\n" +
+                    "[green]Auth Types (--auth):[/]\n" +
+                    "  [cyan]Interactive[/]            Browser-based login (MFA supported)\n" +
+                    "  [cyan]DeviceCode[/]             Device code flow for headless/SSH\n" +
+                    "  [cyan]ClientSecret[/]           App registration with secret\n" +
+                    "  [cyan]ClientCertificate[/]      App registration with certificate\n" +
+                    "  [cyan]ManagedIdentity[/]        Azure VM/App Service identity\n" +
+                    "  [cyan]DefaultAzureCredential[/] Automatic Azure SDK chain\n" +
+                    "  [cyan]FromPac[/]                Use PAC CLI cached tokens\n" +
+                    "  [cyan]OAuth[/]                  Username/password (legacy)\n" +
+                    "  [cyan]AD[/]                     On-premise Active Directory\n\n" +
+                    "[green]Common Options:[/]\n" +
                     "  --json [yellow]FILE[/]            Path to DynamicsCrm.DevKit.Cli.json\n" +
                     "  --profile [yellow]NAME[/]         Profile name from json file\n" +
-                    "  --url [yellow]URL[/]              Dynamics 365 URL (for SDK login)\n" +
-                    "  --sdk-login            Use SDK OOB login dialog\n" +
                     "  --onlyupdateassembly   Fast deploy, only update the assembly\n\n" +
-                    "[green]Legacy Syntax (backward compatible):[/]\n" +
-                    "  devkit [blue]/type:generators /conn:\"...\" /json:\"...\" /profile:\"...\"[/]\n"
+                    "[green]Examples:[/]\n" +
+                    "  devkit server --auth [cyan]Interactive[/] --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
+                    "  devkit server --auth [cyan]FromPac[/] --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
+                    "  devkit server --auth [cyan]ClientSecret[/] --url URL --clientid ID --secret SEC --json cli.json --profile CI\n"
                 ))
             {
                 Border = BoxBorder.Double,
@@ -432,7 +450,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         #region Table Methods
 
-        public static void WriteTable(List<string[]> rows)
+        public static void WriteTable(List<string[]> rows, int columnWidth = 55)
         {
             var table = new Table().Border(TableBorder.None);
             table.ShowHeaders = false;
@@ -444,7 +462,7 @@ namespace DynamicsCrm.DevKit.Cli
                 {
                     var column = new TableColumn("").NoWrap();
                     if (i == 0)
-                        column.Width(55);
+                        column.Width(columnWidth);
                     table.AddColumn(column);
                 }
             }

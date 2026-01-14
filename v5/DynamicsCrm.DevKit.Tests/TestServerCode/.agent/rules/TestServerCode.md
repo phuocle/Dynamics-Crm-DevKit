@@ -23,6 +23,6 @@ trigger: always_on
 - Nếu không nói gì hết thì hiểu là BUILD CLI (dot net tool) để run profile
 
 # BUILD CLI #
+- Luôn luôn ở mode DEBUG
 - taskkill /F /IM "DynamicsCrm.DevKit.Cli.exe" 2>$null;
 - dotnet build --configuration Release "D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
-
