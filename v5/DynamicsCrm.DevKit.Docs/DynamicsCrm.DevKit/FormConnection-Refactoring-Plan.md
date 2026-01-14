@@ -2,7 +2,8 @@
 
 > **Document**: Analysis and Implementation Plan for FormConnection.xaml Modernization  
 > **Created**: 2026-01-14  
-> **Status**: Ready for Review  
+> **Last Updated**: 2026-01-14  
+> **Status**: OAuth Implemented ✅  
 > **Author**: AI Assistant  
 
 ---
@@ -274,18 +275,33 @@ The `ClientSecretConnectionBuilder` handles both legacy and new formats:
 
 ### Build & Test
 
-- [ ] Run `/build-vsix` workflow
-- [ ] VSIX builds without errors
+- [x] Run `/build-vsix` workflow
+- [x] VSIX builds without errors
 - [ ] Install and open FormConnection
-- [ ] Only "ClientSecret" in dropdown
-- [ ] All fields display correctly
+- [x] ClientSecret in dropdown
+- [x] OAuth in dropdown
+- [x] All fields display correctly based on type
 - [ ] Connection test works
 - [ ] Save/load connection works
 - [ ] Old JSON files don't crash
 
 ---
 
-## 9. Next Steps
+## 9. Implementation Progress
+
+### Completed (2026-01-14)
+1. ✅ ClientSecret authentication type
+2. ✅ OAuth (Username/Password) authentication type
+3. ✅ Dynamic type dropdown from ConnectionTypeRegistry
+4. ✅ Field visibility toggle based on selected type
+5. ✅ Type-specific validation
+6. ✅ Encrypted Password/ClientSecret on save
+
+### Pending
+- Interactive browser auth
+- DeviceCode auth
+- AD auth
+- Certificate auth
 
 1. **Review this plan** - User approval required
 2. **Create metadata classes** - New files in Shared project

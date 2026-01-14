@@ -55,8 +55,10 @@
                                     <RowDefinition Height="Auto"/> <!-- Type -->
                                     <RowDefinition Height="Auto"/> <!-- Name -->
                                     <RowDefinition Height="Auto"/> <!-- Url -->
+                                    <RowDefinition Height="Auto"/> <!-- UserName (OAuth) -->
+                                    <RowDefinition Height="Auto"/> <!-- Password (OAuth) -->
                                     <RowDefinition Height="Auto"/> <!-- Client ID -->
-                                    <RowDefinition Height="Auto"/> <!-- Client Secret -->
+                                    <RowDefinition Height="Auto"/> <!-- Client Secret (ClientSecret type) -->
                                     <RowDefinition Height="Auto"/> <!-- Check Connection button -->
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -65,11 +67,18 @@
                                 <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
-                                <Label Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Client ID" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxClientId" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
-                                <Label Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Client Secret" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <PasswordBox x:Name="textboxClientSecret" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" />
-                                <Button x:Name="buttonCheckConnection" Grid.Row="5" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
+                                <!-- OAuth fields: UserName and Password -->
+                                <Label x:Name="labelUserName" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <TextBox x:Name="textboxUserName" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" Visibility="Collapsed"/>
+                                <Label x:Name="labelPassword" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <PasswordBox x:Name="textboxPassword" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" Visibility="Collapsed"/>
+                                <!-- ClientId: visible for both ClientSecret and OAuth(optional) -->
+                                <Label x:Name="labelClientId" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" Content="Client ID" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <TextBox x:Name="textboxClientId" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
+                                <!-- ClientSecret: visible only for ClientSecret type -->
+                                <Label x:Name="labelClientSecret" Grid.Row="6" Grid.Column="0" Margin="0,0,0,5" Content="Client Secret" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <PasswordBox x:Name="textboxClientSecret" Grid.Row="6" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" />
+                                <Button x:Name="buttonCheckConnection" Grid.Row="7" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
                             </Grid>
                         </Border>
                     </Grid>

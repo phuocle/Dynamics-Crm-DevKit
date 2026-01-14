@@ -1,5 +1,5 @@
 ﻿{
-  "DefaultCrmConnection": "ClientSecret3",
+  "DefaultCrmConnection": "OAuth",
   "CrmConnections": [
     {
       "Name": "ClientSecret",
@@ -23,6 +23,14 @@
       "ClientId": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
       "ClientSecret": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ",
       "CreatedAt": "2026-01-14T10:49:45.7314079Z"
+    },
+    {
+      "Name": "OAuth",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "UserName": "phuocle@phuocle.net",
+      "Password": "",
+      "Type": "OAuth",
+      "CreatedAt": "2026-01-14T12:46:43.4478076Z"
     }
   ]
 }

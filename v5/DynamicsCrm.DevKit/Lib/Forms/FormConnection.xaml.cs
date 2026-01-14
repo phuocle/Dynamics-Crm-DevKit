@@ -18,6 +18,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ERROR_ENTER_URL = "Please enter Dynamics 365 URL";
         private const string ERROR_ENTER_CLIENT_ID = "Please enter Client ID";
         private const string ERROR_ENTER_CLIENT_SECRET = "Please enter Client Secret";
+        private const string ERROR_ENTER_USERNAME = "Please enter Username";
+        private const string ERROR_ENTER_PASSWORD = "Please enter Password";
         private const string ERROR_CONNECTION_FAILED = "Failed to connect create ServiceClient. Please check your connection settings.";
 
         public FormConnection()
@@ -139,23 +141,44 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var selectedType = comboBoxType.SelectedItem as IConnectionTypeMetadata;
             var typeName = selectedType?.Type ?? "ClientSecret";
 
-            return new CrmConnection
+            var connection = new CrmConnection
             {
                 Name = textboxName.Text,
                 Type = typeName,
                 Url = textboxUrl.Text,
-                ClientId = textboxClientId.Text,
-                ClientSecret = textboxClientSecret.Password,
                 CreatedAt = DateTime.UtcNow
             };
+
+            // Set type-specific fields
+            if (typeName == "OAuth")
+            {
+                connection.UserName = textboxUserName.Text;
+                connection.Password = textboxPassword.Password;
+                // ClientId is optional for OAuth
+                if (!string.IsNullOrWhiteSpace(textboxClientId.Text))
+                {
+                    connection.ClientId = textboxClientId.Text;
+                }
+            }
+            else // ClientSecret
+            {
+                connection.ClientId = textboxClientId.Text;
+                connection.ClientSecret = textboxClientSecret.Password;
+            }
+
+            return connection;
         }
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
-            // Encrypt the ClientSecret before saving
+            // Encrypt sensitive fields before saving
             if (!string.IsNullOrEmpty(crmConnection.ClientSecret))
             {
                 crmConnection.ClientSecret = Helper.EncryptString(crmConnection.ClientSecret);
+            }
+            if (!string.IsNullOrEmpty(crmConnection.Password))
+            {
+                crmConnection.Password = Helper.EncryptString(crmConnection.Password);
             }
 
             var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
@@ -176,16 +199,28 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private static void UpdateExistingConnection(CrmConnection existing, CrmConnection updated)
         {
-            // Update to new format
-            existing.ClientId = updated.ClientId;
-            existing.ClientSecret = updated.ClientSecret;
+            // Update common fields
             existing.Type = updated.Type;
             existing.Url = updated.Url;
             existing.ModifiedAt = DateTime.UtcNow;
-            
-            // Clear legacy fields to migrate to new format
-            existing.UserName = null;
-            existing.Password = null;
+
+            // Update type-specific fields based on connection type
+            if (updated.Type == "OAuth")
+            {
+                existing.UserName = updated.UserName;
+                existing.Password = updated.Password;
+                existing.ClientId = updated.ClientId; // Optional for OAuth
+                // Clear ClientSecret fields when switching to OAuth
+                existing.ClientSecret = null;
+            }
+            else // ClientSecret
+            {
+                existing.ClientId = updated.ClientId;
+                existing.ClientSecret = updated.ClientSecret;
+                // Clear OAuth fields when switching to ClientSecret
+                existing.UserName = null;
+                existing.Password = null;
+            }
         }
 
         private async Task ClearFormDataAsync()
@@ -200,6 +235,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUrl.Text = string.Empty;
             textboxClientId.Text = string.Empty;
             textboxClientSecret.Password = string.Empty;
+            textboxUserName.Text = string.Empty;
+            textboxPassword.Password = string.Empty;
         }
 
         private async Task LoadConnectionsAsync()
@@ -228,22 +265,55 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task<bool> IsValidAsync()
         {
-            // Validate required fields for ClientSecret connection
-            var validationRules = new[]
+            var selectedType = comboBoxType.SelectedItem as IConnectionTypeMetadata;
+            var typeName = selectedType?.Type ?? "ClientSecret";
+
+            // Common validation rules
+            var commonRules = new[]
             {
                 new { IsValid = comboBoxType.SelectedItem != null, Message = ERROR_SELECT_TYPE, Control = (System.Windows.FrameworkElement)comboBoxType },
                 new { IsValid = !string.IsNullOrWhiteSpace(textboxName.Text), Message = ERROR_ENTER_NAME, Control = (System.Windows.FrameworkElement)textboxName },
-                new { IsValid = !string.IsNullOrWhiteSpace(textboxUrl.Text), Message = ERROR_ENTER_URL, Control = (System.Windows.FrameworkElement)textboxUrl },
-                new { IsValid = !string.IsNullOrWhiteSpace(textboxClientId.Text), Message = ERROR_ENTER_CLIENT_ID, Control = (System.Windows.FrameworkElement)textboxClientId },
-                new { IsValid = !string.IsNullOrWhiteSpace(textboxClientSecret.Password), Message = ERROR_ENTER_CLIENT_SECRET, Control = (System.Windows.FrameworkElement)textboxClientSecret }
+                new { IsValid = !string.IsNullOrWhiteSpace(textboxUrl.Text), Message = ERROR_ENTER_URL, Control = (System.Windows.FrameworkElement)textboxUrl }
             };
 
-            foreach (var rule in validationRules)
+            foreach (var rule in commonRules)
             {
                 if (!rule.IsValid)
                 {
                     await VS.MessageBox.ShowErrorAsync(rule.Message);
                     rule.Control.Focus();
+                    return false;
+                }
+            }
+
+            // Type-specific validation
+            if (typeName == "OAuth")
+            {
+                if (string.IsNullOrWhiteSpace(textboxUserName.Text))
+                {
+                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_USERNAME);
+                    textboxUserName.Focus();
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(textboxPassword.Password))
+                {
+                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_PASSWORD);
+                    textboxPassword.Focus();
+                    return false;
+                }
+            }
+            else // ClientSecret
+            {
+                if (string.IsNullOrWhiteSpace(textboxClientId.Text))
+                {
+                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_ID);
+                    textboxClientId.Focus();
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(textboxClientSecret.Password))
+                {
+                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_SECRET);
+                    textboxClientSecret.Focus();
                     return false;
                 }
             }
@@ -278,8 +348,60 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ComboBoxType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            // Currently only ClientSecret is supported, so no dynamic field changes needed.
-            // Future: When adding more types, show/hide fields based on IConnectionTypeMetadata.Fields
+            if (comboBoxType.SelectedItem is IConnectionTypeMetadata selectedType)
+            {
+                // First hide all optional fields
+                HideAllOptionalFields();
+
+                // Then show fields based on connection type
+                switch (selectedType.Type)
+                {
+                    case "ClientSecret":
+                        ShowClientSecretFields();
+                        break;
+                    case "OAuth":
+                        ShowOAuthFields();
+                        break;
+                    // Future: Add more cases here
+                    // case "AD":
+                    //     ShowADFields();
+                    //     break;
+                    // case "Interactive":
+                    //     ShowInteractiveFields();
+                    //     break;
+                }
+            }
+        }
+
+        private void HideAllOptionalFields()
+        {
+            // OAuth fields
+            labelUserName.Visibility = System.Windows.Visibility.Collapsed;
+            textboxUserName.Visibility = System.Windows.Visibility.Collapsed;
+            labelPassword.Visibility = System.Windows.Visibility.Collapsed;
+            textboxPassword.Visibility = System.Windows.Visibility.Collapsed;
+
+            // ClientSecret fields
+            labelClientId.Visibility = System.Windows.Visibility.Collapsed;
+            textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
+            labelClientSecret.Visibility = System.Windows.Visibility.Collapsed;
+            textboxClientSecret.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void ShowClientSecretFields()
+        {
+            labelClientId.Visibility = System.Windows.Visibility.Visible;
+            textboxClientId.Visibility = System.Windows.Visibility.Visible;
+            labelClientSecret.Visibility = System.Windows.Visibility.Visible;
+            textboxClientSecret.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void ShowOAuthFields()
+        {
+            labelUserName.Visibility = System.Windows.Visibility.Visible;
+            textboxUserName.Visibility = System.Windows.Visibility.Visible;
+            labelPassword.Visibility = System.Windows.Visibility.Visible;
+            textboxPassword.Visibility = System.Windows.Visibility.Visible;
         }
     }
 }

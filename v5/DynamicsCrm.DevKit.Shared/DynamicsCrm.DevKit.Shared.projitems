@@ -84,6 +84,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\IConnectionTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ConnectionTypeRegistry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ClientSecretTypeMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\OAuthTypeMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.ts_bat" />

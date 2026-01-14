@@ -21,10 +21,12 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             // Phase 1: ClientSecret only
             new ClientSecretTypeMetadata(),
 
+            // Phase 2: OAuth (Username/Password)
+            new OAuthTypeMetadata(),
+
             // Future phases: Uncomment as implemented
             // new InteractiveTypeMetadata(),
             // new DeviceCodeTypeMetadata(),
-            // new OAuthTypeMetadata(),
             // new ADTypeMetadata(),
             // new ClientCertificateTypeMetadata(),
             // new ManagedIdentityTypeMetadata(),

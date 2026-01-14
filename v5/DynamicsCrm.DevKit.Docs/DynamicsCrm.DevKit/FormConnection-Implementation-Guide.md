@@ -151,7 +151,6 @@ public string CertificateStoreLocation { get; set; }
 | ------------ | --------------------------------------- |
 | ClientSecret | Name, Url, Type, ClientId, ClientSecret |
 | OAuth        | Name, Url, Type, UserName, Password     |
-| AD           | Name, Url, Type, UserName, Password     |
 
 ---
 
@@ -224,11 +223,13 @@ Currently the form has static fields for ClientSecret. If new type needs differe
 
 ### Implemented
 - ✅ ClientSecret authentication type
+- ✅ OAuth (Username/Password) authentication type
 - ✅ Dynamic type loading from ConnectionTypeRegistry
 - ✅ Legacy format (UserName/Password) backward compatibility
 - ✅ Migration to new format on save
 - ✅ System.Text.Json with null ignoring
 - ✅ No default values in CrmConnection properties
+- ✅ Dynamic field visibility based on selected type
 
 ### Form Fields (ClientSecret)
 - Type (dropdown)
@@ -237,9 +238,17 @@ Currently the form has static fields for ClientSecret. If new type needs differe
 - Client ID
 - Client Secret
 
+### Form Fields (OAuth)
+- Type (dropdown)
+- Name
+- Url
+- Username
+- Password
+
 ### NOT Implemented Yet
 - Interactive browser auth
 - DeviceCode auth
+- AD auth
 - Certificate auth
 - Managed Identity
 - Dynamic field generation based on metadata
