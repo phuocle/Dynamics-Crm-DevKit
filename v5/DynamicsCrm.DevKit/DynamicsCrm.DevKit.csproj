@@ -51,7 +51,8 @@
     <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <NoWarn>CVSTBLD001;NU1605</NoWarn>
+    <NoWarn>CVSTBLD001;CVSTBLD002;NU1605</NoWarn>
+    <SkipNewtonsoftJsonCheck>true</SkipNewtonsoftJsonCheck>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\CommandAddCrmPluginRegistration.cs" />
@@ -142,7 +143,6 @@
     <Compile Include="Wizard\ProjectTemplates\WebResource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="docs\README.md" />
     <None Include="README.md" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
