@@ -28,9 +28,11 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             // Phase 3: Interactive (Browser Sign-in)
             new InteractiveTypeMetadata(),
 
+            // Phase 4: AD (Active Directory) for on-premises
+            new ADTypeMetadata(),
+
             // Future phases: Uncomment as implemented
             // new DeviceCodeTypeMetadata(),
-            // new ADTypeMetadata(),
             // new ClientCertificateTypeMetadata(),
             // new ManagedIdentityTypeMetadata(),
             // new DefaultAzureCredentialTypeMetadata(),

@@ -154,6 +154,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             switch (typeName)
             {
                 case "OAuth":
+                case "AD":  // AD uses same fields as OAuth
                     connection.UserName = textboxUserName.Text;
                     connection.Password = textboxPassword.Password;
                     break;
@@ -211,9 +212,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             switch (updated.Type)
             {
                 case "OAuth":
+                case "AD":  // AD uses same fields as OAuth
                     existing.UserName = updated.UserName;
                     existing.Password = updated.Password;
-                    // Clear ClientSecret fields when switching to OAuth
+                    // Clear ClientSecret fields
                     existing.ClientId = null;
                     existing.ClientSecret = null;
                     break;
@@ -301,6 +303,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             switch (typeName)
             {
                 case "OAuth":
+                case "AD":  // AD uses same validation as OAuth
                     if (string.IsNullOrWhiteSpace(textboxUserName.Text))
                     {
                         await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_USERNAME);
@@ -375,6 +378,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         ShowClientSecretFields();
                         break;
                     case "OAuth":
+                    case "AD":  // AD uses same fields as OAuth
                         ShowOAuthFields();
                         break;
                     case "Interactive":
@@ -435,6 +439,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     connection.Password = null;
                     break;
                 case "OAuth":
+                case "AD":  // AD uses same fields as OAuth
                     connection.ClientId = null;
                     connection.ClientSecret = null;
                     break;

@@ -9,6 +9,7 @@
     <Import_RootNamespace>DynamicsCrm.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\ADTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\ClientSecretTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\IConnectionTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\InteractiveTypeMetadata.cs" />
