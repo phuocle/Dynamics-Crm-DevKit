@@ -1,23 +1,8 @@
 ﻿{
-  "DefaultCrmConnection": "OAuth",
+  "DefaultCrmConnection": "Interactive",
   "CrmConnections": [
     {
       "Name": "ClientSecret",
-      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
-      "Type": "ClientSecret",
-      "ClientId": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
-      "ClientSecret": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ"
-    },
-    {
-      "Name": "ClientSecret2",
-      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
-      "Type": "ClientSecret",
-      "ClientId": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
-      "ClientSecret": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ",
-      "CreatedAt": "2026-01-14T10:41:50.4834504Z"
-    },
-    {
-      "Name": "ClientSecret3",
       "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
       "Type": "ClientSecret",
       "ClientId": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
@@ -31,6 +16,12 @@
       "Password": "",
       "Type": "OAuth",
       "CreatedAt": "2026-01-14T12:46:43.4478076Z"
+    },
+    {
+      "Name": "Interactive",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "Type": "Interactive",
+      "CreatedAt": "2026-01-14T13:30:46.7695541Z"
     }
   ]
 }

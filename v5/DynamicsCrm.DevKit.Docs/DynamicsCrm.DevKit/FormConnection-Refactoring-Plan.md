@@ -292,15 +292,17 @@ The `ClientSecretConnectionBuilder` handles both legacy and new formats:
 ### Completed (2026-01-14)
 1. ✅ ClientSecret authentication type
 2. ✅ OAuth (Username/Password) authentication type
-3. ✅ Dynamic type dropdown from ConnectionTypeRegistry
-4. ✅ Field visibility toggle based on selected type
-5. ✅ Type-specific validation
-6. ✅ Encrypted Password/ClientSecret on save
+3. ✅ Interactive (Browser Sign-in) authentication type
+4. ✅ Dynamic type dropdown from ConnectionTypeRegistry
+5. ✅ Field visibility toggle based on selected type
+6. ✅ Type-specific validation
+7. ✅ Encrypted Password/ClientSecret on save
+8. ✅ ClearUnusedFieldsForType - prevents data leakage from ConnectionBuilders
+9. ✅ Metadata files moved to `ConnectionBuilder/Metadata/` folder
 
-### Pending
-- Interactive browser auth
+### Pending (Next: AD)
+- AD auth (same fields as OAuth)
 - DeviceCode auth
-- AD auth
 - Certificate auth
 
 1. **Review this plan** - User approval required

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata;
 
 namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 {
@@ -24,8 +25,10 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             // Phase 2: OAuth (Username/Password)
             new OAuthTypeMetadata(),
 
+            // Phase 3: Interactive (Browser Sign-in)
+            new InteractiveTypeMetadata(),
+
             // Future phases: Uncomment as implemented
-            // new InteractiveTypeMetadata(),
             // new DeviceCodeTypeMetadata(),
             // new ADTypeMetadata(),
             // new ClientCertificateTypeMetadata(),

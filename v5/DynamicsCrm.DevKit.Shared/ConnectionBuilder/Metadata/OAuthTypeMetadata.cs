@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
+namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata
 {
     /// <summary>
     /// Metadata for OAuth (Username/Password) authentication.

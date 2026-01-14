@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
+namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata
 {
     /// <summary>
     /// Defines a field in the connection form with its display properties.

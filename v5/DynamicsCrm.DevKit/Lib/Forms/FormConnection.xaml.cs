@@ -1,6 +1,7 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
+using DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
@@ -150,20 +151,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             };
 
             // Set type-specific fields
-            if (typeName == "OAuth")
+            switch (typeName)
             {
-                connection.UserName = textboxUserName.Text;
-                connection.Password = textboxPassword.Password;
-                // ClientId is optional for OAuth
-                if (!string.IsNullOrWhiteSpace(textboxClientId.Text))
-                {
+                case "OAuth":
+                    connection.UserName = textboxUserName.Text;
+                    connection.Password = textboxPassword.Password;
+                    break;
+                case "ClientSecret":
                     connection.ClientId = textboxClientId.Text;
-                }
-            }
-            else // ClientSecret
-            {
-                connection.ClientId = textboxClientId.Text;
-                connection.ClientSecret = textboxClientSecret.Password;
+                    connection.ClientSecret = textboxClientSecret.Password;
+                    break;
+                case "Interactive":
+                    // Interactive only needs Url - browser handles auth
+                    break;
             }
 
             return connection;
@@ -171,6 +171,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
+            // Clear unused fields based on connection type before saving
+            ClearUnusedFieldsForType(crmConnection);
+
             // Encrypt sensitive fields before saving
             if (!string.IsNullOrEmpty(crmConnection.ClientSecret))
             {
@@ -205,21 +208,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             existing.ModifiedAt = DateTime.UtcNow;
 
             // Update type-specific fields based on connection type
-            if (updated.Type == "OAuth")
+            switch (updated.Type)
             {
-                existing.UserName = updated.UserName;
-                existing.Password = updated.Password;
-                existing.ClientId = updated.ClientId; // Optional for OAuth
-                // Clear ClientSecret fields when switching to OAuth
-                existing.ClientSecret = null;
-            }
-            else // ClientSecret
-            {
-                existing.ClientId = updated.ClientId;
-                existing.ClientSecret = updated.ClientSecret;
-                // Clear OAuth fields when switching to ClientSecret
-                existing.UserName = null;
-                existing.Password = null;
+                case "OAuth":
+                    existing.UserName = updated.UserName;
+                    existing.Password = updated.Password;
+                    // Clear ClientSecret fields when switching to OAuth
+                    existing.ClientId = null;
+                    existing.ClientSecret = null;
+                    break;
+                case "ClientSecret":
+                    existing.ClientId = updated.ClientId;
+                    existing.ClientSecret = updated.ClientSecret;
+                    // Clear OAuth fields when switching to ClientSecret
+                    existing.UserName = null;
+                    existing.Password = null;
+                    break;
+                case "Interactive":
+                    // Interactive uses browser - clear all credential fields
+                    existing.UserName = null;
+                    existing.Password = null;
+                    existing.ClientId = null;
+                    existing.ClientSecret = null;
+                    break;
             }
         }
 
@@ -287,35 +298,39 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
 
             // Type-specific validation
-            if (typeName == "OAuth")
+            switch (typeName)
             {
-                if (string.IsNullOrWhiteSpace(textboxUserName.Text))
-                {
-                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_USERNAME);
-                    textboxUserName.Focus();
-                    return false;
-                }
-                if (string.IsNullOrWhiteSpace(textboxPassword.Password))
-                {
-                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_PASSWORD);
-                    textboxPassword.Focus();
-                    return false;
-                }
-            }
-            else // ClientSecret
-            {
-                if (string.IsNullOrWhiteSpace(textboxClientId.Text))
-                {
-                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_ID);
-                    textboxClientId.Focus();
-                    return false;
-                }
-                if (string.IsNullOrWhiteSpace(textboxClientSecret.Password))
-                {
-                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_SECRET);
-                    textboxClientSecret.Focus();
-                    return false;
-                }
+                case "OAuth":
+                    if (string.IsNullOrWhiteSpace(textboxUserName.Text))
+                    {
+                        await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_USERNAME);
+                        textboxUserName.Focus();
+                        return false;
+                    }
+                    if (string.IsNullOrWhiteSpace(textboxPassword.Password))
+                    {
+                        await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_PASSWORD);
+                        textboxPassword.Focus();
+                        return false;
+                    }
+                    break;
+                case "ClientSecret":
+                    if (string.IsNullOrWhiteSpace(textboxClientId.Text))
+                    {
+                        await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_ID);
+                        textboxClientId.Focus();
+                        return false;
+                    }
+                    if (string.IsNullOrWhiteSpace(textboxClientSecret.Password))
+                    {
+                        await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_SECRET);
+                        textboxClientSecret.Focus();
+                        return false;
+                    }
+                    break;
+                case "Interactive":
+                    // Interactive only needs Url - already validated in common rules
+                    break;
             }
 
             // Validate URL format
@@ -362,13 +377,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case "OAuth":
                         ShowOAuthFields();
                         break;
-                    // Future: Add more cases here
-                    // case "AD":
-                    //     ShowADFields();
-                    //     break;
-                    // case "Interactive":
-                    //     ShowInteractiveFields();
-                    //     break;
+                    case "Interactive":
+                        ShowInteractiveFields();
+                        break;
                 }
             }
         }
@@ -402,6 +413,39 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUserName.Visibility = System.Windows.Visibility.Visible;
             labelPassword.Visibility = System.Windows.Visibility.Visible;
             textboxPassword.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void ShowInteractiveFields()
+        {
+            // Interactive only needs Url which is always visible
+            // No additional fields to show
+        }
+
+        /// <summary>
+        /// Clears fields that are not relevant for the connection type.
+        /// This ensures clean JSON output and prevents data leakage from connection builders
+        /// that may modify the connection object during authentication.
+        /// </summary>
+        private static void ClearUnusedFieldsForType(CrmConnection connection)
+        {
+            switch (connection.Type)
+            {
+                case "ClientSecret":
+                    connection.UserName = null;
+                    connection.Password = null;
+                    break;
+                case "OAuth":
+                    connection.ClientId = null;
+                    connection.ClientSecret = null;
+                    break;
+                case "Interactive":
+                    // Interactive uses browser - clear all credential fields
+                    connection.UserName = null;
+                    connection.Password = null;
+                    connection.ClientId = null;
+                    connection.ClientSecret = null;
+                    break;
+            }
         }
     }
 }

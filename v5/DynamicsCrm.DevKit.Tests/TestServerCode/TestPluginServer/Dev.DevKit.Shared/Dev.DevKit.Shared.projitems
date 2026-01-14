@@ -20,6 +20,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
       <DependentUpon>Contact.cs</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SystemUser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\SystemUser.generated.cs">
+      <DependentUpon>SystemUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Team.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Team.generated.cs">
       <DependentUpon>Team.cs</DependentUpon>

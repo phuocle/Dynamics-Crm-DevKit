@@ -198,20 +198,40 @@ private static readonly IConnectionTypeMetadata[] _allTypes = new IConnectionTyp
 
 Verify `{TypeName}ConnectionBuilder.cs` exists in `ConnectionBuilder` folder.
 
-### Step 4: Update FormConnection.xaml (if fields differ)
+### Step 4: Update FormConnection.xaml.cs (CRITICAL CHECKLIST)
 
-Currently the form has static fields for ClientSecret. If new type needs different fields:
-1. Add fields to XAML
-2. Add visibility logic in `ComboBoxType_SelectionChanged`
-3. Update `CreateCrmConnectionFromInput` to populate correct properties
+> [!CAUTION]
+> **ALL** these methods use switch statements and MUST be updated for each new type:
 
-### Step 5: Add to DynamicsCrm.DevKit.Shared.projitems
+| Method                          | Purpose                         | Action for New Type                    |
+| ------------------------------- | ------------------------------- | -------------------------------------- |
+| `ComboBoxType_SelectionChanged` | Show/hide fields                | Add case + `Show{Type}Fields()` method |
+| `CreateCrmConnectionFromInput`  | Map UI → Model                  | Add case to set type-specific fields   |
+| `IsValidAsync`                  | Validate input                  | Add case with type-specific validation |
+| `UpdateExistingConnection`      | Update existing record          | Add case to set/clear fields           |
+| `ClearUnusedFieldsForType`      | Clear unused fields before save | Add case to null unused fields         |
 
-```xml
-<Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\{TypeName}TypeMetadata.cs" />
+**Example for Interactive:**
+```csharp
+// In switch statements:
+case "Interactive":
+    // Interactive only needs Url - browser handles auth
+    break;
 ```
 
-### Step 6: Build and Test
+### Step 5: Add XAML fields if needed
+
+If the type needs different fields than existing ones:
+1. Add fields to `FormConnection.xaml`
+2. Add `Show{Type}Fields()` method in code-behind
+
+### Step 6: Add to DynamicsCrm.DevKit.Shared.projitems
+
+```xml
+<Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\{TypeName}TypeMetadata.cs" />
+```
+
+### Step 7: Build and Test
 
 ```powershell
 & "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe" "DynamicsCrm.DevKit.slnx" /p:Configuration=Debug /t:rebuild
@@ -224,6 +244,7 @@ Currently the form has static fields for ClientSecret. If new type needs differe
 ### Implemented
 - ✅ ClientSecret authentication type
 - ✅ OAuth (Username/Password) authentication type
+- ✅ Interactive (Browser Sign-in) authentication type
 - ✅ Dynamic type loading from ConnectionTypeRegistry
 - ✅ Legacy format (UserName/Password) backward compatibility
 - ✅ Migration to new format on save
@@ -245,8 +266,12 @@ Currently the form has static fields for ClientSecret. If new type needs differe
 - Username
 - Password
 
+### Form Fields (Interactive)
+- Type (dropdown)
+- Name
+- Url
+
 ### NOT Implemented Yet
-- Interactive browser auth
 - DeviceCode auth
 - AD auth
 - Certificate auth
