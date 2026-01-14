@@ -42,11 +42,20 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 
         public string BuildConnectionString(CrmConnection connection)
         {
-            // Decrypt ClientSecret if it's encrypted (auto-detect, same as legacy)
-            var clientSecret = Helper.DecryptString(connection.ClientSecret);
+            // Support both new format (ClientId/ClientSecret) and legacy format (UserName/Password)
+            var clientId = !string.IsNullOrEmpty(connection.ClientId) 
+                ? connection.ClientId 
+                : connection.UserName;
+            
+            var clientSecretEncrypted = !string.IsNullOrEmpty(connection.ClientSecret) 
+                ? connection.ClientSecret 
+                : connection.Password;
+            
+            // Decrypt ClientSecret if it's encrypted (auto-detect)
+            var clientSecret = Helper.DecryptString(clientSecretEncrypted);
 
             // Build connection string
-            var connStr = $"AuthType=ClientSecret;Url={connection.Url};ClientId={connection.ClientId};ClientSecret={clientSecret};";
+            var connStr = $"AuthType=ClientSecret;Url={connection.Url};ClientId={clientId};ClientSecret={clientSecret};";
 
             // Add TenantId if specified
             if (!string.IsNullOrEmpty(connection.TenantId))
@@ -60,10 +69,14 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             if (string.IsNullOrEmpty(connection.Url))
                 return (false, "URL is required for ClientSecret authentication");
 
-            if (string.IsNullOrEmpty(connection.ClientId))
+            // Support both new (ClientId) and legacy (UserName) formats
+            var hasClientId = !string.IsNullOrEmpty(connection.ClientId) || !string.IsNullOrEmpty(connection.UserName);
+            if (!hasClientId)
                 return (false, "ClientId is required for ClientSecret authentication");
 
-            if (string.IsNullOrEmpty(connection.ClientSecret))
+            // Support both new (ClientSecret) and legacy (Password) formats
+            var hasSecret = !string.IsNullOrEmpty(connection.ClientSecret) || !string.IsNullOrEmpty(connection.Password);
+            if (!hasSecret)
                 return (false, "ClientSecret is required for ClientSecret authentication");
 
             if (!Uri.TryCreate(connection.Url, UriKind.Absolute, out _))

@@ -10,16 +10,13 @@ Follow these steps strictly to examine, build, and verify the VSIX project.
 Use these exact paths and configurations. Do not deviate.
 - **Build Mode**: `DEBUG`
 - **MSBuild Path**: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
-- **Project File**: `DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj` (Relative to workspace root `v5`)
+- **Solution File**: `DynamicsCrm.DevKit.slnx` (Relative to workspace root `v5`)
 
 ## 2. Execution Process
 1.  **Pre-check**: Ensure you are in the workspace root (`v5`).
 2.  **Build Command**: Execute MSBuild with the following parameters:
     - Target: `Rebuild`
     - Configuration: `Debug`
-    - **Command Template**:
-      ```powershell
-      & "[MSBuild Path]" "[Project File]" /p:Configuration=Debug /t:rebuild
       ```
 3.  **Error Resolution Loop**:
     - If the build **fails** (exit code != 0 or Errors > 0):

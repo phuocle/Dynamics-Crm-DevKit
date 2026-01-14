@@ -1,5 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -9,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -83,7 +86,8 @@ namespace DynamicsCrm.DevKit.Lib
                 };
             }
             var json = await Task.Run(() => File.ReadAllText(fileName));
-            var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var devKitConnections = JsonSerializer.Deserialize<DevKitConnections>(json, options);
             devKitConnections.CrmConnections ??= [];
             return devKitConnections;
         }
@@ -122,23 +126,57 @@ namespace DynamicsCrm.DevKit.Lib
 
         public static async Task SaveDevKitConnectionsAsync(DevKitConnections connections)
         {
-            var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
+            // Migrate legacy format to new format for ClientSecret connections
+            foreach (var conn in connections.CrmConnections)
+            {
+                if (conn.Type == "ClientSecret")
+                {
+                    // Migrate UserName -> ClientId if needed
+                    if (string.IsNullOrEmpty(conn.ClientId) && !string.IsNullOrEmpty(conn.UserName))
+                    {
+                        conn.ClientId = conn.UserName;
+                        conn.UserName = null;
+                    }
+                    // Migrate Password -> ClientSecret if needed
+                    if (string.IsNullOrEmpty(conn.ClientSecret) && !string.IsNullOrEmpty(conn.Password))
+                    {
+                        conn.ClientSecret = conn.Password;
+                        conn.Password = null;
+                    }
+                }
+            }
+
+            // Use System.Text.Json with options to ignore null values
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            var json = JsonSerializer.Serialize(connections, options);
             var fileName = await GetDynamicsCrmDevKitJsonFullFileNameAsync();
             await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }
 
         public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection)
         {
-            string connectionString = Helper.BuildConnectionString(crmConnection);
             try
             {
+                // Use ConnectionBuilderFactory for supported connection types
+                if (ConnectionBuilderFactory.IsSupported(crmConnection.Type))
+                {
+                    var builder = ConnectionBuilderFactory.GetBuilder(crmConnection.Type);
+                    return await builder.CreateServiceClientAsync(crmConnection);
+                }
+                
+                // Fallback to legacy connection string for unknown types
+                string connectionString = Helper.BuildConnectionString(crmConnection);
                 return new ServiceClient(connectionString);
             }
-            catch
+            catch (Exception ex)
             {
-                await VS.MessageBox.ShowErrorAsync("Failed to connect create ServiceClient. Please check your connection settings.");
+                await VS.MessageBox.ShowErrorAsync($"Failed to connect: {ex.Message}");
+                return null;
             }
-            return null;
         }
 
         public static async Task<string> GetSolutionFolderAsync()

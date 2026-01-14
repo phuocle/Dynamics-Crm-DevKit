@@ -80,6 +80,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\DefaultAzureCredentialConnectionBuilder.cs" />
     <!-- Phase 4: Integration -->
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\FromPacConnectionBuilder.cs" />
+    <!-- Connection Type Metadata for dynamic form generation -->
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\IConnectionTypeMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ConnectionTypeRegistry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ClientSecretTypeMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\generator.webapi.ts_bat" />

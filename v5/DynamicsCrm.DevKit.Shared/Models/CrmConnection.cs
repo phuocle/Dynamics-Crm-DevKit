@@ -56,12 +56,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
         /// <summary>
         /// Certificate store location: CurrentUser or LocalMachine.
         /// </summary>
-        public string CertificateStoreLocation { get; set; } = "CurrentUser";
+        public string CertificateStoreLocation { get; set; }
 
         /// <summary>
         /// Certificate store name: My, Root, CA, Trust.
         /// </summary>
-        public string CertificateStoreName { get; set; } = "My";
+        public string CertificateStoreName { get; set; }
 
         // ═══════════════════════════════════════════════════════════════════
         // MANAGED IDENTITY PROPERTIES

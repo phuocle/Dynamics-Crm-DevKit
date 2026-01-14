@@ -19,6 +19,9 @@
         {
             "name": "ItemTemplates",
             "path": "../ItemTemplates"
+        },
+        {
+            "path": "../DynamicsCrm.DevKit.Docs"
         }
     ],
     "settings": {
