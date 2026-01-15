@@ -34,11 +34,13 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             // Phase 5: DeviceCode for headless/remote environments
             new DeviceCodeTypeMetadata(),
 
+            // Phase 6: FromPac (PAC CLI Profile)
+            new FromPacTypeMetadata(),
+
             // Future phases: Uncomment as implemented
             // new ClientCertificateTypeMetadata(),
             // new ManagedIdentityTypeMetadata(),
             // new DefaultAzureCredentialTypeMetadata(),
-            // new FromPacTypeMetadata(),
         };
 
         /// <summary>

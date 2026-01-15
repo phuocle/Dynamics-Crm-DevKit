@@ -164,10 +164,10 @@ Verify `{TypeName}ConnectionBuilder.cs` exists.
 - ✅ Interactive (Browser Sign-in) authentication type
 - ✅ AD (Active Directory) authentication type
 - ✅ DeviceCode (Remote/Headless) authentication type
+- ✅ FromPac (PAC CLI Profile) - Uses ComboBox for profile selection
  
 ### NOT Implemented Yet
  
-- FromPac (PAC CLI Profile)
 - Certificate auth
 - Managed Identity
  

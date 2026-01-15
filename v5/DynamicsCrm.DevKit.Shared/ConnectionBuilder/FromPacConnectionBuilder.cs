@@ -16,9 +16,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
     /// This allows users to reuse their PAC CLI auth instead of managing credentials separately.
     /// 
     /// Usage:
-    /// - Without --pacprofile: Uses the current/active profile
-    /// - With --pacprofile "Name": Uses profile by name
-    /// - With --pacprofile "11": Uses profile by index
+    /// - With --pacprofile "Name": Uses profile by name (required)
     /// 
     /// Implementation approach (based on Rnwood.Dataverse.Data.PowerShell):
     /// 1. Read authprofiles_v2.json from %LOCALAPPDATA%\Microsoft\PowerAppsCLI
@@ -33,21 +31,25 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 
         public async Task<ServiceClient> CreateServiceClientAsync(CrmConnection connection)
         {
+            if (string.IsNullOrEmpty(connection.PacProfile))
+            {
+                throw new InvalidOperationException(
+                    "PAC CLI profile name is required. Use --pacprofile \"ProfileName\" to specify a profile. " +
+                    "Run 'pac auth list' to see available profiles.");
+            }
+
             // Get environment URL from PAC CLI profiles JSON file
             var environmentUrl = GetEnvironmentUrlFromPacProfiles(connection.PacProfile);
 
             if (string.IsNullOrEmpty(environmentUrl))
             {
                 throw new InvalidOperationException(
-                    string.IsNullOrEmpty(connection.PacProfile)
-                        ? "No current PAC CLI profile found or profile has no environment URL. Run 'pac env select' to select an environment."
-                        : $"PAC CLI profile '{connection.PacProfile}' not found or has no environment URL.");
+                    $"PAC CLI profile '{connection.PacProfile}' not found or has no environment URL.");
             }
 
             // Use DefaultAzureCredential which includes:
             // - AzureCliCredential (shares tokens with Azure CLI)
             // - AzurePowerShellCredential
-            // - ManagedIdentityCredential
             // - EnvironmentCredential
             // This will use cached tokens from Azure CLI/PAC CLI when available
             var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
@@ -59,19 +61,28 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             });
 
             // Create ServiceClient using TokenCredential
+            // IMPORTANT: tokenProviderFunction may be called on UI thread later (when token refresh is needed)
+            // so we must use Task.Run + ConfigureAwait(false) to avoid deadlock
             var serviceClient = new ServiceClient(
                 instanceUrl: new Uri(environmentUrl),
                 tokenProviderFunction: async instanceUrl =>
                 {
-                    var scope = new Uri(new Uri(instanceUrl), "/.default").ToString();
-                    var token = await credential.GetTokenAsync(
-                        new Azure.Core.TokenRequestContext(new[] { scope }));
-                    return token.Token;
+                    // Wrap in Task.Run to ensure we're not on UI thread
+                    // This is critical because this callback is called by ServiceClient
+                    // whenever it needs a token, not just during initial connection
+                    return await Task.Run(async () =>
+                    {
+                        var scope = new Uri(new Uri(instanceUrl), "/.default").ToString();
+                        var token = await credential.GetTokenAsync(
+                            new Azure.Core.TokenRequestContext(new[] { scope }))
+                            .ConfigureAwait(false);
+                        return token.Token;
+                    }).ConfigureAwait(false);
                 },
                 useUniqueInstance: true);
 
             // Wait a moment for connection to stabilize
-            await Task.Delay(100);
+            await Task.Delay(100).ConfigureAwait(false);
 
             if (serviceClient?.IsReady != true)
             {
@@ -82,7 +93,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             return serviceClient;
         }
 
-        private string GetEnvironmentUrlFromPacProfiles(string profileSelector)
+        private string GetEnvironmentUrlFromPacProfiles(string profileName)
         {
             // PAC CLI stores profiles at: %LOCALAPPDATA%\Microsoft\PowerAppsCLI\authprofiles_v2.json
             var profilesPath = Path.Combine(
@@ -123,48 +134,18 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
                     "No profiles found in PAC CLI. Please run 'pac auth create' first.");
             }
 
-            // Find the profile to use
-            PacProfileData profileData = null;
-
-            if (!string.IsNullOrEmpty(profileSelector))
-            {
-                // First try match by name
-                profileData = pacProfiles.Profiles.FirstOrDefault(p =>
-                    !string.IsNullOrEmpty(p.Name) &&
-                    string.Equals(p.Name, profileSelector, StringComparison.OrdinalIgnoreCase));
+            // Find profile by name
+            var profileData = pacProfiles.Profiles.FirstOrDefault(p =>
+                !string.IsNullOrEmpty(p.Name) &&
+                string.Equals(p.Name, profileName, StringComparison.OrdinalIgnoreCase));
 
             if (profileData == null)
-                {
-                    // Try match by index (PAC CLI displays 1-indexed, but array is 0-indexed)
-                    if (int.TryParse(profileSelector, out int userIndex))
-                    {
-                        // Convert from 1-indexed (PAC CLI display) to 0-indexed (array)
-                        int arrayIndex = userIndex - 1;
-                        if (arrayIndex >= 0 && arrayIndex < pacProfiles.Profiles.Count)
-                        {
-                            profileData = pacProfiles.Profiles[arrayIndex];
-                        }
-                    }
-                    
-                    if (profileData == null)
-                    {
-                        // Show available profiles with 1-indexed numbers (matching PAC CLI display)
-                        var availableProfiles = string.Join(", ", 
-                            pacProfiles.Profiles.Select((p, idx) => 
-                                $"[{idx + 1}] {p.Name ?? "Unnamed"} ({p.Resource ?? "no env"})"));
-                        throw new InvalidOperationException(
-                            $"PAC CLI profile '{profileSelector}' not found. Available profiles: {availableProfiles}");
-                    }
-                }
-            }
-            else
             {
-                // Use current/active profile
-                if (pacProfiles.Current?.TryGetValue("UNIVERSAL", out profileData) != true)
-                {
-                    // Fallback to first profile
-                    profileData = pacProfiles.Profiles.FirstOrDefault();
-                }
+                // Show available profiles
+                var availableProfiles = string.Join(", ",
+                    pacProfiles.Profiles.Select(p => p.Name ?? "Unnamed"));
+                throw new InvalidOperationException(
+                    $"PAC CLI profile '{profileName}' not found. Available profiles: {availableProfiles}");
             }
 
             var environmentUrl = profileData?.Resource;
@@ -183,13 +164,17 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         public string BuildConnectionString(CrmConnection connection)
         {
             // FromPac uses PAC CLI tokens, not traditional connection string
-            return string.IsNullOrEmpty(connection.PacProfile)
-                ? "AuthType=FromPac;Profile=<active>;"
-                : $"AuthType=FromPac;Profile={connection.PacProfile};";
+            // Profile name is required
+            return $"AuthType=FromPac;Profile={connection.PacProfile};";
         }
 
         public async Task<(bool isValid, string error)> ValidateAsync(CrmConnection connection)
         {
+            if (string.IsNullOrEmpty(connection.PacProfile))
+            {
+                return (false, "PAC CLI profile name is required. Use --pacprofile \"ProfileName\" to specify a profile.");
+            }
+
             try
             {
                 var url = GetEnvironmentUrlFromPacProfiles(connection.PacProfile);

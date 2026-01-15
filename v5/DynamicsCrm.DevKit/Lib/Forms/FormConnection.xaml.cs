@@ -138,27 +138,34 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (!await IsValidAsync()) return;
 
                 var crmConnection = CreateCrmConnectionFromInput();
+                System.Diagnostics.Debug.WriteLine($"[CheckConnection] Created connection: Name={crmConnection.Name}, Type={crmConnection.Type}, PacProfile={crmConnection.PacProfile}, Url={crmConnection.Url}");
                 
                 // For DeviceCode, don't disable form so user can copy URL/code
                 var isDeviceCode = crmConnection.Type == "DeviceCode";
                 await SetUIBusyStateAsync(true, disableForm: !isDeviceCode);
 
                 var deviceCodeCallback = CreateDeviceCodeCallback(crmConnection.Type);
+                System.Diagnostics.Debug.WriteLine($"[CheckConnection] Calling CreateServiceClientAsync...");
                 var serviceClient = await VsixHelper.CreateServiceClientAsync(crmConnection, deviceCodeCallback);
+                System.Diagnostics.Debug.WriteLine($"[CheckConnection] ServiceClient returned: IsReady={serviceClient?.IsReady}, LastError={serviceClient?.LastError}");
                 
                 if (serviceClient?.IsReady == true)
                 {
+                    System.Diagnostics.Debug.WriteLine($"[CheckConnection] Connection successful, saving...");
                     await SaveConnectionAsync(crmConnection);
                     await LoadConnectionsAsync();
                     await ClearFormDataAsync();
+                    System.Diagnostics.Debug.WriteLine($"[CheckConnection] All done!");
                 }
                 else
                 {
+                    System.Diagnostics.Debug.WriteLine($"[CheckConnection] Connection failed: IsReady=false");
                     await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
                 }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[CheckConnection] Exception: {ex.Message}");
                 await VS.MessageBox.ShowErrorAsync($"An error occurred while testing connection: {ex.Message}");
             }
             finally
@@ -255,6 +262,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "DeviceCode":  // DeviceCode uses same logic as Interactive (Url only)
                     // Only needs Url - browser/device handles auth
                     break;
+                case "FromPac":
+                    // Get selected PAC profile name
+                    if (comboBoxPacProfile.SelectedItem is PacProfileInfo selectedProfile)
+                    {
+                        connection.PacProfile = selectedProfile.Name;
+                        // Get URL from profile for display purposes
+                        connection.Url = selectedProfile.Resource;
+                    }
+                    break;
             }
 
             return connection;
@@ -262,6 +278,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
+            System.Diagnostics.Debug.WriteLine($"[SaveConnection] Saving connection: {crmConnection.Name}, Type: {crmConnection.Type}, PacProfile: {crmConnection.PacProfile}, Url: {crmConnection.Url}");
+            
             // Clear unused fields based on connection type before saving
             ClearUnusedFieldsForType(crmConnection);
 
@@ -281,14 +299,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var existingConnection = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == crmConnection.Name);
             if (existingConnection != null)
             {
+                System.Diagnostics.Debug.WriteLine($"[SaveConnection] Updating existing connection");
                 UpdateExistingConnection(existingConnection, crmConnection);
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine($"[SaveConnection] Adding new connection");
                 devKitConnections.CrmConnections.Add(crmConnection);
             }
 
+            System.Diagnostics.Debug.WriteLine($"[SaveConnection] Calling SaveDevKitConnectionsAsync");
             await VsixHelper.SaveDevKitConnectionsAsync(devKitConnections);
+            System.Diagnostics.Debug.WriteLine($"[SaveConnection] Done!");
         }
 
         private static void UpdateExistingConnection(CrmConnection existing, CrmConnection updated)
@@ -323,6 +345,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     existing.Password = null;
                     existing.ClientId = null;
                     existing.ClientSecret = null;
+                    existing.PacProfile = null;
+                    break;
+                case "FromPac":
+                    existing.PacProfile = updated.PacProfile;
+                    // Clear all credential fields
+                    existing.UserName = null;
+                    existing.Password = null;
+                    existing.ClientId = null;
+                    existing.ClientSecret = null;
                     break;
             }
         }
@@ -341,6 +372,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxClientSecret.Password = string.Empty;
             textboxUserName.Text = string.Empty;
             textboxPassword.Password = string.Empty;
+            comboBoxPacProfile.SelectedIndex = -1;
         }
 
         private async Task LoadConnectionsAsync()
@@ -372,20 +404,27 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var selectedType = comboBoxType.SelectedItem as IConnectionTypeMetadata;
             var typeName = selectedType?.Type ?? "ClientSecret";
 
-            // Common validation rules
-            var commonRules = new[]
+            // Common validation rules (Type and Name always required)
+            if (comboBoxType.SelectedItem == null)
             {
-                new { IsValid = comboBoxType.SelectedItem != null, Message = ERROR_SELECT_TYPE, Control = (System.Windows.FrameworkElement)comboBoxType },
-                new { IsValid = !string.IsNullOrWhiteSpace(textboxName.Text), Message = ERROR_ENTER_NAME, Control = (System.Windows.FrameworkElement)textboxName },
-                new { IsValid = !string.IsNullOrWhiteSpace(textboxUrl.Text), Message = ERROR_ENTER_URL, Control = (System.Windows.FrameworkElement)textboxUrl }
-            };
+                await VS.MessageBox.ShowErrorAsync(ERROR_SELECT_TYPE);
+                comboBoxType.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textboxName.Text))
+            {
+                await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_NAME);
+                textboxName.Focus();
+                return false;
+            }
 
-            foreach (var rule in commonRules)
+            // URL validation (skip for FromPac - URL comes from profile)
+            if (typeName != "FromPac")
             {
-                if (!rule.IsValid)
+                if (string.IsNullOrWhiteSpace(textboxUrl.Text))
                 {
-                    await VS.MessageBox.ShowErrorAsync(rule.Message);
-                    rule.Control.Focus();
+                    await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_URL);
+                    textboxUrl.Focus();
                     return false;
                 }
             }
@@ -426,15 +465,26 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "DeviceCode":  // DeviceCode uses same validation as Interactive
                     // Only needs Url - already validated in common rules
                     break;
+                case "FromPac":
+                    if (comboBoxPacProfile.SelectedItem == null || !(comboBoxPacProfile.SelectedItem is PacProfileInfo))
+                    {
+                        await VS.MessageBox.ShowErrorAsync("Please select a PAC CLI profile");
+                        comboBoxPacProfile.Focus();
+                        return false;
+                    }
+                    break;
             }
 
-            // Validate URL format
-            if (!Uri.TryCreate(textboxUrl.Text, UriKind.Absolute, out var uri) || 
-                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+            // Validate URL format (skip for FromPac - URL comes from profile)
+            if (typeName != "FromPac")
             {
-                await VS.MessageBox.ShowErrorAsync("Please enter a valid URL (e.g., https://yourorg.crm.dynamics.com)");
-                textboxUrl.Focus();
-                return false;
+                if (!Uri.TryCreate(textboxUrl.Text, UriKind.Absolute, out var uri) || 
+                    (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+                {
+                    await VS.MessageBox.ShowErrorAsync("Please enter a valid URL (e.g., https://yourorg.crm.dynamics.com)");
+                    textboxUrl.Focus();
+                    return false;
+                }
             }
 
             return true;
@@ -483,6 +533,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case "DeviceCode":
                         ShowDeviceCodeFields();
                         break;
+                    case "FromPac":
+                        ShowFromPacFields();
+                        break;
                 }
             }
         }
@@ -506,6 +559,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
             labelClientSecret.Visibility = System.Windows.Visibility.Collapsed;
             textboxClientSecret.Visibility = System.Windows.Visibility.Collapsed;
+
+            // PAC Profile fields
+            labelPacProfile.Visibility = System.Windows.Visibility.Collapsed;
+            comboBoxPacProfile.Visibility = System.Windows.Visibility.Collapsed;
+
+            // URL field (visible by default, hidden for FromPac)
+            labelUrl.Visibility = System.Windows.Visibility.Visible;
+            textboxUrl.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void ShowClientSecretFields()
@@ -541,6 +602,48 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxDeviceCode.Text = "Waiting for code...";
         }
 
+        private void ShowFromPacFields()
+        {
+            // FromPac uses ComboBox to select PAC CLI profile
+            // Hide URL field since it comes from the profile
+            labelUrl.Visibility = System.Windows.Visibility.Collapsed;
+            textboxUrl.Visibility = System.Windows.Visibility.Collapsed;
+
+            // Show PAC Profile ComboBox
+            labelPacProfile.Visibility = System.Windows.Visibility.Visible;
+            comboBoxPacProfile.Visibility = System.Windows.Visibility.Visible;
+
+            // Load PAC profiles into ComboBox
+            try
+            {
+                var profiles = PacProfileHelper.GetPacProfiles();
+                
+                if (profiles.Count > 0)
+                {
+                    comboBoxPacProfile.ItemsSource = profiles;
+                    comboBoxPacProfile.DisplayMemberPath = "DisplayText";
+                    comboBoxPacProfile.SelectedIndex = 0;
+                }
+                else
+                {
+                    // No profiles found - show message
+                    comboBoxPacProfile.ItemsSource = null;
+                    comboBoxPacProfile.DisplayMemberPath = null;
+                    comboBoxPacProfile.Items.Clear();
+                    comboBoxPacProfile.Items.Add("No PAC profiles found. Run 'pac auth create' first.");
+                    comboBoxPacProfile.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                comboBoxPacProfile.ItemsSource = null;
+                comboBoxPacProfile.DisplayMemberPath = null;
+                comboBoxPacProfile.Items.Clear();
+                comboBoxPacProfile.Items.Add($"Error loading profiles: {ex.Message}");
+                comboBoxPacProfile.SelectedIndex = 0;
+            }
+        }
+
         /// <summary>
         /// Clears fields that are not relevant for the connection type.
         /// This ensures clean JSON output and prevents data leakage from connection builders
@@ -562,6 +665,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "Interactive":
                 case "DeviceCode":  // DeviceCode uses same logic as Interactive
                     // Uses browser/device - clear all credential fields
+                    connection.UserName = null;
+                    connection.Password = null;
+                    connection.ClientId = null;
+                    connection.ClientSecret = null;
+                    break;
+                case "FromPac":
+                    // FromPac only needs PacProfile - clear all credentials
                     connection.UserName = null;
                     connection.Password = null;
                     connection.ClientId = null;

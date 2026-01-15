@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+  </Configurations>
+  <!-- Core projects only - NO templates for fast build -->
+  <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
+  <Project Path="DynamicsCrm.DevKit/DynamicsCrm.DevKit.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3" />
+</Solution>

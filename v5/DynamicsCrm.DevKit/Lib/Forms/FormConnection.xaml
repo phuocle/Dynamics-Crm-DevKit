@@ -61,13 +61,14 @@
                                     <RowDefinition Height="Auto"/> <!-- Password (OAuth) -->
                                     <RowDefinition Height="Auto"/> <!-- Client ID -->
                                     <RowDefinition Height="Auto"/> <!-- Client Secret (ClientSecret type) -->
+                                    <RowDefinition Height="Auto"/> <!-- PAC Profile (FromPac type) -->
                                     <RowDefinition Height="Auto"/> <!-- Check Connection button -->
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" DisplayMemberPath="DisplayName" SelectionChanged="ComboBoxType_SelectionChanged"/>
                                 <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
-                                <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <Label x:Name="labelUrl" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <!-- Device URL readonly display field (for copy to browser) -->
                                 <Label x:Name="labelDeviceUrl" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Open URL" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
@@ -86,7 +87,10 @@
                                 <!-- ClientSecret: visible only for ClientSecret type -->
                                 <Label x:Name="labelClientSecret" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" Content="Client Secret" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <PasswordBox x:Name="textboxClientSecret" Grid.Row="8" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" />
-                                <Button x:Name="buttonCheckConnection" Grid.Row="9" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
+                                <!-- PAC Profile: visible only for FromPac type -->
+                                <Label x:Name="labelPacProfile" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" Content="PAC Profile" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <ComboBox x:Name="comboBoxPacProfile" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed"/>
+                                <Button x:Name="buttonCheckConnection" Grid.Row="10" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
                             </Grid>
                         </Border>
                     </Grid>
