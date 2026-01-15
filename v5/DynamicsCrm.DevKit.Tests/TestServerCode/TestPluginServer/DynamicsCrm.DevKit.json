@@ -1,5 +1,5 @@
 ﻿{
-  "DefaultCrmConnection": "DeviceCode",
+  "DefaultCrmConnection": "DEVKIT4",
   "CrmConnections": [
     {
       "Name": "ClientSecret",
@@ -36,6 +36,13 @@
       "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
       "Type": "DeviceCode",
       "CreatedAt": "2026-01-15T00:41:53.4323862Z"
+    },
+    {
+      "Name": "DEVKIT4",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com/",
+      "Type": "FromPac",
+      "PacProfile": "DEVKITV4",
+      "CreatedAt": "2026-01-15T03:15:45.7858387Z"
     }
   ]
 }
