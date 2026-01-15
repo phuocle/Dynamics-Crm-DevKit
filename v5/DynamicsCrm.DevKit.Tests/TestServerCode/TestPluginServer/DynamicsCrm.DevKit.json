@@ -1,5 +1,5 @@
 ﻿{
-  "DefaultCrmConnection": "AD",
+  "DefaultCrmConnection": "DeviceCode",
   "CrmConnections": [
     {
       "Name": "ClientSecret",
@@ -30,6 +30,12 @@
       "Password": "",
       "Type": "AD",
       "CreatedAt": "2026-01-14T23:24:49.2258296Z"
+    },
+    {
+      "Name": "DeviceCode",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "Type": "DeviceCode",
+      "CreatedAt": "2026-01-15T00:41:53.4323862Z"
     }
   ]
 }

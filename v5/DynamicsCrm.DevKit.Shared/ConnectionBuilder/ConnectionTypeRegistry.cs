@@ -31,8 +31,10 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             // Phase 4: AD (Active Directory) for on-premises
             new ADTypeMetadata(),
 
+            // Phase 5: DeviceCode for headless/remote environments
+            new DeviceCodeTypeMetadata(),
+
             // Future phases: Uncomment as implemented
-            // new DeviceCodeTypeMetadata(),
             // new ClientCertificateTypeMetadata(),
             // new ManagedIdentityTypeMetadata(),
             // new DefaultAzureCredentialTypeMetadata(),

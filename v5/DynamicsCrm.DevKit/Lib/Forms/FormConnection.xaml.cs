@@ -5,6 +5,7 @@ using DynamicsCrm.DevKit.Shared.ConnectionBuilder.Metadata;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,10 +75,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
                 {
-                    await SetUIBusyStateAsync(true);
+                    // Handle DeviceCode specially to allow user copy code
+                    Action<string> deviceCodeCallback = null;
+                    if (selectedConnection.Type == "DeviceCode")
+                    {
+                        await SetUIBusyStateAsync(true, disableForm: false);
+                        deviceCodeCallback = CreateDeviceCodeCallback(selectedConnection.Type);
+                    }
+                    else
+                    {
+                        await SetUIBusyStateAsync(true);
+                    }
+
                     CrmConnection = selectedConnection;
                     await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);
-                    var serviceClient = await Task.Run(() => VsixHelper.CreateServiceClientAsync(selectedConnection));
+                    
+                    var serviceClient = await Task.Run(() => VsixHelper.CreateServiceClientAsync(selectedConnection, deviceCodeCallback));
+                    
                     if (serviceClient?.IsReady == true)
                     {
                         ServiceClient = serviceClient;
@@ -85,7 +99,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         return;
                     }
 
-                    await SetUIBusyStateAsync(false);
                     await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
                 }
                 else
@@ -95,8 +108,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             catch (Exception ex)
             {
-                await SetUIBusyStateAsync(false);
                 await VS.MessageBox.ShowErrorAsync($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                // Ensure all controls are re-enabled
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                comboBoxSavedConnection.IsEnabled = true;
+                comboBoxType.IsEnabled = true;
+                textboxName.IsEnabled = true;
+                textboxUrl.IsEnabled = true;
+                buttonCheckConnection.IsEnabled = true;
+                buttonOK.IsEnabled = true;
+                buttonCancel.IsEnabled = true;
+                
+                await SetUIBusyStateAsync(false);
             }
         }
 
@@ -112,9 +138,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (!await IsValidAsync()) return;
 
                 var crmConnection = CreateCrmConnectionFromInput();
-                await SetUIBusyStateAsync(true);
+                
+                // For DeviceCode, don't disable form so user can copy URL/code
+                var isDeviceCode = crmConnection.Type == "DeviceCode";
+                await SetUIBusyStateAsync(true, disableForm: !isDeviceCode);
 
-                var serviceClient = await VsixHelper.CreateServiceClientAsync(crmConnection);
+                var deviceCodeCallback = CreateDeviceCodeCallback(crmConnection.Type);
+                var serviceClient = await VsixHelper.CreateServiceClientAsync(crmConnection, deviceCodeCallback);
+                
                 if (serviceClient?.IsReady == true)
                 {
                     await SaveConnectionAsync(crmConnection);
@@ -132,8 +163,66 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
             finally
             {
+                // Ensure all controls are re-enabled (needed if DeviceCode disabled them)
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                comboBoxSavedConnection.IsEnabled = true;
+                comboBoxType.IsEnabled = true;
+                textboxName.IsEnabled = true;
+                textboxUrl.IsEnabled = true;
+                buttonCheckConnection.IsEnabled = true;
+                buttonOK.IsEnabled = true;
+                buttonCancel.IsEnabled = true;
+
                 await SetUIBusyStateAsync(false);
             }
+        }
+
+        /// <summary>
+        /// Creates a callback for DeviceCode authentication that parses the message
+        /// and updates UI with the authentication URL and code.
+        /// </summary>
+        private Action<string> CreateDeviceCodeCallback(string connectionType)
+        {
+            if (connectionType != "DeviceCode") return null;
+
+            return message =>
+            {
+                // Parse message format: "To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code XXXXXXX to authenticate."
+                var url = "https://microsoft.com/devicelogin";
+                var code = "";
+
+                // Extract URL from message
+                var urlMatch = System.Text.RegularExpressions.Regex.Match(message, @"https?://[^\s]+");
+                if (urlMatch.Success)
+                {
+                    url = urlMatch.Value;
+                }
+
+                // Extract code from message (format: "enter the code XXXXXXX")
+                var codeMatch = System.Text.RegularExpressions.Regex.Match(message, @"enter the code ([A-Z0-9]+)");
+                if (codeMatch.Success && codeMatch.Groups.Count > 1)
+                {
+                    code = codeMatch.Groups[1].Value;
+                }
+                // Update UI on main thread
+#pragma warning disable VSSDK007
+                ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    textboxDeviceUrl.Text = url;
+                    textboxDeviceCode.Text = code;
+                    
+                    // Disable other controls so user focuses on copying URL/code
+                    comboBoxSavedConnection.IsEnabled = false;
+                    comboBoxType.IsEnabled = false;
+                    textboxName.IsEnabled = false;
+                    textboxUrl.IsEnabled = false;
+                    buttonCheckConnection.IsEnabled = false;
+                    buttonOK.IsEnabled = false;
+                    buttonCancel.IsEnabled = false;
+                }).FireAndForget();
+#pragma warning restore VSSDK007
+            };
         }
 
         private CrmConnection CreateCrmConnectionFromInput()
@@ -163,7 +252,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     connection.ClientSecret = textboxClientSecret.Password;
                     break;
                 case "Interactive":
-                    // Interactive only needs Url - browser handles auth
+                case "DeviceCode":  // DeviceCode uses same logic as Interactive (Url only)
+                    // Only needs Url - browser/device handles auth
                     break;
             }
 
@@ -227,7 +317,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     existing.Password = null;
                     break;
                 case "Interactive":
-                    // Interactive uses browser - clear all credential fields
+                case "DeviceCode":  // DeviceCode uses same logic as Interactive
+                    // Uses browser/device - clear all credential fields
                     existing.UserName = null;
                     existing.Password = null;
                     existing.ClientId = null;
@@ -332,7 +423,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     }
                     break;
                 case "Interactive":
-                    // Interactive only needs Url - already validated in common rules
+                case "DeviceCode":  // DeviceCode uses same validation as Interactive
+                    // Only needs Url - already validated in common rules
                     break;
             }
 
@@ -348,10 +440,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             return true;
         }
 
-        private async Task SetUIBusyStateAsync(bool isBusy)
+        private async Task SetUIBusyStateAsync(bool isBusy, bool disableForm = true)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            stackPanelForm.IsEnabled = !isBusy;
+            // Only disable form if disableForm is true (skip for DeviceCode)
+            if (disableForm)
+            {
+                stackPanelForm.IsEnabled = !isBusy;
+            }
             progressBar.Visibility = isBusy ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
         }
 
@@ -384,12 +480,21 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     case "Interactive":
                         ShowInteractiveFields();
                         break;
+                    case "DeviceCode":
+                        ShowDeviceCodeFields();
+                        break;
                 }
             }
         }
 
         private void HideAllOptionalFields()
         {
+            // DeviceCode fields
+            labelDeviceUrl.Visibility = System.Windows.Visibility.Collapsed;
+            textboxDeviceUrl.Visibility = System.Windows.Visibility.Collapsed;
+            labelDeviceCode.Visibility = System.Windows.Visibility.Collapsed;
+            textboxDeviceCode.Visibility = System.Windows.Visibility.Collapsed;
+
             // OAuth fields
             labelUserName.Visibility = System.Windows.Visibility.Collapsed;
             textboxUserName.Visibility = System.Windows.Visibility.Collapsed;
@@ -425,6 +530,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             // No additional fields to show
         }
 
+        private void ShowDeviceCodeFields()
+        {
+            // DeviceCode shows readonly fields for displaying URL and code
+            labelDeviceUrl.Visibility = System.Windows.Visibility.Visible;
+            textboxDeviceUrl.Visibility = System.Windows.Visibility.Visible;
+            textboxDeviceUrl.Text = "Click 'Check Connection' to get URL...";
+            labelDeviceCode.Visibility = System.Windows.Visibility.Visible;
+            textboxDeviceCode.Visibility = System.Windows.Visibility.Visible;
+            textboxDeviceCode.Text = "Waiting for code...";
+        }
+
         /// <summary>
         /// Clears fields that are not relevant for the connection type.
         /// This ensures clean JSON output and prevents data leakage from connection builders
@@ -444,7 +560,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     connection.ClientSecret = null;
                     break;
                 case "Interactive":
-                    // Interactive uses browser - clear all credential fields
+                case "DeviceCode":  // DeviceCode uses same logic as Interactive
+                    // Uses browser/device - clear all credential fields
                     connection.UserName = null;
                     connection.Password = null;
                     connection.ClientId = null;

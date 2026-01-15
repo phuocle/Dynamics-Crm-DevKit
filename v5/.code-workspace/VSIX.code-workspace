@@ -22,6 +22,9 @@
         },
         {
             "path": "../DynamicsCrm.DevKit.Docs"
+        },
+        {
+            "path": "../DynamicsCrm.DevKit.Cli"
         }
     ],
     "settings": {

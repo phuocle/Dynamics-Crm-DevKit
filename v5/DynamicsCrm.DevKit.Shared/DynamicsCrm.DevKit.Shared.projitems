@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\ADTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\ClientSecretTypeMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\DeviceCodeTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\IConnectionTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\InteractiveTypeMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\Metadata\OAuthTypeMetadata.cs" />

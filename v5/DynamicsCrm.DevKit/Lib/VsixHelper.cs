@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Lib
             await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }
 
-        public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection)
+        public static async Task<ServiceClient> CreateServiceClientAsync(CrmConnection crmConnection, Action<string> deviceCodeCallback = null)
         {
             try
             {
@@ -165,6 +165,13 @@ namespace DynamicsCrm.DevKit.Lib
                 if (ConnectionBuilderFactory.IsSupported(crmConnection.Type))
                 {
                     var builder = ConnectionBuilderFactory.GetBuilder(crmConnection.Type);
+                    
+                    // Set DeviceCode callback if applicable
+                    if (builder is DeviceCodeConnectionBuilder deviceCodeBuilder && deviceCodeCallback != null)
+                    {
+                        deviceCodeBuilder.DeviceCodeCallback = deviceCodeCallback;
+                    }
+                    
                     return await builder.CreateServiceClientAsync(crmConnection);
                 }
                 

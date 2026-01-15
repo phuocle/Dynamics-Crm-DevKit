@@ -284,7 +284,6 @@ If the type needs different fields than existing ones:
 
 ### NOT Implemented Yet
 
-- DeviceCode auth
 - Certificate auth
 - Managed Identity
 - Dynamic field generation based on metadata
