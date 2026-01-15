@@ -19,5 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-set ConnectionString="$ConnectionString$"
-devkit solution --conn %ConnectionString% --json "..\DynamicsCrm.DevKit.Cli.json" --profile "Pack-Both"
+devkit solution $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "Pack-Both"

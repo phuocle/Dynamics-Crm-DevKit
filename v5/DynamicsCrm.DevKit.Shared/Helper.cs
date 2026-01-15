@@ -643,75 +643,62 @@ namespace DynamicsCrm.DevKit.Shared
         public static string BuildConnectionString(CrmConnection crmConnection, bool isEncrypt = false)
         {
             if (crmConnection == null) return string.Empty;
-            var type = crmConnection.Type?.ToUpperInvariant() ?? "OAUTH";
-            var url = crmConnection.Url;
-            var userName = crmConnection.UserName;
-            var password = DecryptString(crmConnection.Password);
-            if (isEncrypt) password = Helper.EncryptString(password);
 
-            // Use dedicated ClientSecret field if available, otherwise fallback to Password
-            var clientSecretValue = !string.IsNullOrEmpty(crmConnection.ClientSecret)
-                ? DecryptString(crmConnection.ClientSecret)
-                : password;
-            if (isEncrypt && !string.IsNullOrEmpty(crmConnection.ClientSecret))
-                clientSecretValue = Helper.EncryptString(clientSecretValue);
+            // Delegate to ConnectionBuilderFactory for single source of truth
+            // The builders handle connection string generation for each type
+            var type = crmConnection.Type ?? "OAuth";
 
-            switch (type)
+            if (!ConnectionBuilder.ConnectionBuilderFactory.IsSupported(type))
             {
-                case "CLIENTSECRET":
-                    // Enhanced: Use dedicated ClientId/ClientSecret fields if available
-                    var csId = !string.IsNullOrEmpty(crmConnection.ClientId) ? crmConnection.ClientId : userName;
-                    var connStr = $"AuthType=ClientSecret;Url={url};ClientId={csId};ClientSecret={clientSecretValue};";
-                    // Add TenantId if specified (Phase 1 enhancement)
-                    if (!string.IsNullOrEmpty(crmConnection.TenantId))
-                        connStr += $"TenantId={crmConnection.TenantId};";
-                    return connStr;
-
-                case "AD":
-                    if (string.IsNullOrEmpty(userName) || !userName.Contains("\\"))
-                        throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
-                    var parts = userName.Split('\\');
-                    if (parts.Length != 2)
-                        throw new ArgumentException("For AD authentication, username must be in format 'domain\\username'");
-                    var domain = parts[0];
-                    var user = parts[1];
-                    return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={password};";
-
-                // ═══════════════════════════════════════════════════════════════════
-                // NEW CONNECTION TYPES (Placeholders for Phase 2-4)
-                // ═══════════════════════════════════════════════════════════════════
-                case "INTERACTIVE":
-                case "DEVICECODE":
-                case "CLIENTCERTIFICATE":
-                case "MANAGEDIDENTITY":
-                case "DEFAULTAZURECREDENTIAL":
-                case "FROMPAC":
-                    throw new NotImplementedException($"Connection type '{crmConnection.Type}' will be implemented in Phase 2-4. Use OAuth or ClientSecret for now.");
-
-                case "OAUTH":
-                default:
-                    // Enhanced OAuth: Support optional ClientId override (Phase 1 enhancement)
-                    var connectionString = $"AuthType=OAuth;Url={url};Username={userName};Password={password};";
-                    
-                    // Use custom ClientId if specified, otherwise use Microsoft default
-                    var appIdToUse = !string.IsNullOrEmpty(crmConnection.ClientId) 
-                        ? crmConnection.ClientId 
-                        : "51f81489-12ee-4a9e-aaae-a2591f45987d";
-                    
-                    if (!connectionString.ToLower().Contains("appid="))
-                    {
-                        connectionString += $"AppId={appIdToUse};";
-                    }
-                    if (!connectionString.ToLower().Contains("redirecturi="))
-                    {
-                        connectionString += "RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;";
-                    }
-                    if (!connectionString.ToLower().Contains("loginprompt="))
-                    {
-                        connectionString += "LoginPrompt=Auto;";
-                    }
-                    return connectionString;
+                return string.Empty;
             }
+
+            var builder = ConnectionBuilder.ConnectionBuilderFactory.GetBuilder(type);
+            var connectionString = builder.BuildConnectionString(crmConnection);
+
+            // If encryption is requested and we have a connection string with secrets,
+            // encrypt the password/secret values
+            if (isEncrypt && !string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = EncryptConnectionStringSecrets(connectionString);
+            }
+
+            return connectionString;
+        }
+
+        /// <summary>
+        /// Encrypt password and secret values in a connection string.
+        /// </summary>
+        private static string EncryptConnectionStringSecrets(string connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString)) return connectionString;
+
+            var parts = connectionString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            var sb = new StringBuilder();
+
+            foreach (var part in parts)
+            {
+                var kv = part.Split(new[] { '=' }, 2, StringSplitOptions.None);
+                if (kv.Length != 2)
+                {
+                    sb.Append(part).Append(';');
+                    continue;
+                }
+
+                var key = kv[0].Trim();
+                var value = kv[1];
+
+                // Encrypt password and client secret values
+                if (key.Equals("Password", StringComparison.OrdinalIgnoreCase) ||
+                    key.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase))
+                {
+                    value = EncryptString(value);
+                }
+
+                sb.Append($"{key}={value};");
+            }
+
+            return sb.ToString();
         }
 
         /// <summary>

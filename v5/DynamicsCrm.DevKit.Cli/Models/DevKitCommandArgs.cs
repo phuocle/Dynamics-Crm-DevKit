@@ -44,6 +44,20 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("PAC CLI auth profile name or index")]
         public string PacProfile { get; set; } = string.Empty;
 
+        // OAuth Username/Password arguments
+        [CommandOption("--username")]
+        [Description("Username for OAuth authentication")]
+        public string Username { get; set; } = string.Empty;
+
+        [CommandOption("--password")]
+        [Description("Password for OAuth authentication (can be encrypted)")]
+        public string Password { get; set; } = string.Empty;
+
+        // AD (On-premises) arguments
+        [CommandOption("--domain")]
+        [Description("Domain for AD authentication (on-premises)")]
+        public string Domain { get; set; } = string.Empty;
+
         public string CurrentDirectory => Directory.GetCurrentDirectory();
 
         public string JsonFile

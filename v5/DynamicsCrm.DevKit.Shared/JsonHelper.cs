@@ -3,8 +3,24 @@ using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared
 {
-    public class JsonHelper
+    public static class JsonHelper
     {
+        private static readonly System.Text.Json.JsonSerializerOptions Options = new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            ReadCommentHandling = System.Text.Json.JsonCommentHandling.Skip,
+            AllowTrailingCommas = true
+        };
+
+        public static T Deserialize<T>(string json)
+        {
+            return System.Text.Json.JsonSerializer.Deserialize<T>(json, Options);
+        }
+
+        public static string Serialize(object obj)
+        {
+            return System.Text.Json.JsonSerializer.Serialize(obj, Options);
+        }
         private const string INDENT_STRING = "    ";
         public static string FormatJson(string str)
         {

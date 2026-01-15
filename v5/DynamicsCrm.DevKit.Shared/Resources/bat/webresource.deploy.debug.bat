@@ -19,5 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-set ConnectionString="$ConnectionString$"
-devkit webresource --conn %ConnectionString% --json "..\DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+devkit webresource $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"

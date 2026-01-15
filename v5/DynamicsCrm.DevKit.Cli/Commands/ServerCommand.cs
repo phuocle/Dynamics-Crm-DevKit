@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
         protected override async Task RunTaskAsync(ServerCommandArgs settings)
         {
-            var json = SimpleJson.DeserializeObject<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
+            var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
 
             // Determine server type: use arg if provided, otherwise use default for this command
             var serverType = !string.IsNullOrEmpty(settings.ServerType)

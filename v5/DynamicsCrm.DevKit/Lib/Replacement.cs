@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$ProjectName$"] = form.ProjectName;
             replacements["$LogicalProjectName$"] = form.ProjectName.ToLower();
             replacements["$SafeProjectName$"] = form.ProjectName;
-            replacements["$ConnectionString$"] = Helper.BuildConnectionString(form.CrmConnection, true);
+            replacements["$CliConnectionArgs$"] = CliArgsBuilder.Build(form.CrmConnection, true);
             replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
         }
 

@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var configJson = new ConfigJson();
             var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
-            if (File.Exists(fileName)) configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName)));
+            if (File.Exists(fileName)) configJson = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName)));
             var found = configJson.WebResources.Where(x => x?.File == deployWebResource?.File).FirstOrDefault();
             if (found != null)
             {
@@ -120,7 +120,7 @@ namespace DynamicsCrm.DevKit.Lib
                 configJson.WebResources.Add(deployWebResource); 
             }
             configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.WebResource)];
-            var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+            var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
             await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }
 
@@ -454,7 +454,7 @@ namespace DynamicsCrm.DevKit.Lib
             var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
             if (File.Exists(fileName))
             {
-                customTemplates = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).CustomTemplates;
+                customTemplates = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).CustomTemplates;
                 customTemplates = [.. customTemplates.Where(x => x.Type == $"{itemType}")];
             }
             if (itemType == ItemType.Test)
@@ -513,7 +513,7 @@ namespace DynamicsCrm.DevKit.Lib
             var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
             if (File.Exists(fileName))
             {
-                var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName)));
+                var configJson = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName)));
                 var found = configJson.CustomTemplates.Where(x => x.Type == save.Type && x.Title == save.Title).FirstOrDefault();
                 if (found != null)
                 {
@@ -525,7 +525,7 @@ namespace DynamicsCrm.DevKit.Lib
                     configJson.CustomTemplates.Add(save);
                     configJson.CustomTemplates = [.. configJson.CustomTemplates.OrderBy(x => x.Type).ThenBy(x => x.Title)];
                 }
-                var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
                 await FileHelper.ForceWriteAllTextAsync(fileName, json);
             }
             else
@@ -534,7 +534,7 @@ namespace DynamicsCrm.DevKit.Lib
                 {
                     CustomTemplates = [save]
                 };
-                var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
                 await FileHelper.ForceWriteAllTextAsync(fileName, json);
             }
         }        

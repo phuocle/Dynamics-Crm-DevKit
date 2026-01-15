@@ -218,12 +218,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     if (System.IO.File.Exists(fileName))
                     {
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                        var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
+                        var configJson = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
                         foreach(var item in configJson.CustomTemplates.Where(x => x.Type == ItemType.ToString()))
                             item.IsDefault = false;
                         var found = configJson.CustomTemplates.Where(x => x.Type == selected.Type && x.Title == selected.Title).FirstOrDefault();
                         found.IsDefault = true;
-                        var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                        var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
                         await FileHelper.ForceWriteAllTextAsync(fileName, json);
                         Mouse.OverrideCursor = null;
                         await VS.MessageBox.ShowAsync($"Custom template: '{selected.Title}' is default now.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
@@ -260,7 +260,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     var fileName = await VsixHelper.GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
                     if (System.IO.File.Exists(fileName))
                     {                        
-                        var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
+                        var configJson = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
                         if (Const.DEFAULTS.Contains(form.InputValue) || configJson.CustomTemplates.Any(x => x.Title.Equals(form.InputValue, StringComparison.OrdinalIgnoreCase)))
                         {
                             await VS.MessageBox.ShowErrorAsync($"An existing custom template named '{form.InputValue}' was found. The rename action failed.");
@@ -270,7 +270,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         var found = configJson.CustomTemplates.Where(x => x.Type == selected.Type && x.Title == selected.Title).FirstOrDefault();                        
                         found.Title = form.InputValue;
                         configJson.CustomTemplates = [.. configJson.CustomTemplates.OrderBy(x => x.Type).ThenBy(x => x.Title)];
-                        var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                        var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
                         await FileHelper.ForceWriteAllTextAsync(fileName, json);
                         Mouse.OverrideCursor = null;
                         await VS.MessageBox.ShowAsync($"Custom template: '{selected.Title}' renamed to: '{form.InputValue}'.", icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO, buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK, defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
@@ -292,11 +292,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     if (System.IO.File.Exists(fileName))
                     {
                         Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                        var configJson = SimpleJson.DeserializeObject<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
+                        var configJson = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => System.IO.File.ReadAllText(fileName)));
                         var found = configJson.CustomTemplates.Where(x => x.Type == selected.Type && x.Title == selected.Title).FirstOrDefault();
                         if (found != null) configJson.CustomTemplates.Remove(found);
                         configJson.CustomTemplates = [.. configJson.CustomTemplates.OrderBy(x => x.Type).ThenBy(x => x.Title)];
-                        var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(configJson));
+                        var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
                         await FileHelper.ForceWriteAllTextAsync(fileName, json);                        
                         CustomTemplates = await VsixHelper.GetCustomTemplatesAsync(ItemType);
                         var haveDefaultValue = CustomTemplates.FirstOrDefault(x => x.IsDefault);

@@ -462,8 +462,8 @@ namespace DynamicsCrm.DevKit.Shared
                 try
                 {
                     var json = lines[lines.Length - 1];
-                    var oldComment = SimpleJson.DeserializeObject<OldCommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
-                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    var oldComment = JsonHelper.Deserialize<OldCommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    var comment = JsonHelper.Deserialize<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
                     if (oldComment?.JsForm?.Count >= 0)
                     {
                         comment.UseForm = oldComment?.JsForm?.Count > 0;
@@ -1363,7 +1363,7 @@ namespace DynamicsCrm.DevKit.Shared
                     Name = await GetSchemaNameAsync(service, entity.GetAttributeValue<string>("primaryobjecttypecode"))
                 });
             }
-            var json = SimpleJson.SerializeObject(list);
+            var json = JsonHelper.Serialize(list);
             return [.. list
                 .Where(x => x.Name.ToLower() == "none")
                 .Select(x => new NameValue { Name = x.LogicalName })

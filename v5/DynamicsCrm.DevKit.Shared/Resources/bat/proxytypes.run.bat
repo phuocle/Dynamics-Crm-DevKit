@@ -19,5 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-set ConnectionString="$ConnectionString$"
-devkit proxytype --conn %ConnectionString% --json "..\DynamicsCrm.DevKit.Cli.json" --profile "ALL"
+devkit proxytype $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "ALL"

@@ -1,0 +1,48 @@
+﻿{
+  "DefaultCrmConnection": "ClientSecret",
+  "CrmConnections": [
+    {
+      "Name": "ClientSecret",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "Type": "ClientSecret",
+      "ClientId": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
+      "ClientSecret": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ",
+      "CreatedAt": "2026-01-14T10:49:45.7314079Z"
+    },
+    {
+      "Name": "OAuth",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "UserName": "phuocle@phuocle.net",
+      "Password": "",
+      "Type": "OAuth",
+      "CreatedAt": "2026-01-14T12:46:43.4478076Z"
+    },
+    {
+      "Name": "Interactive",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "Type": "Interactive",
+      "CreatedAt": "2026-01-14T13:30:46.7695541Z"
+    },
+    {
+      "Name": "AD",
+      "Url": "https://crm-inter.ttcsugar.com.vn/uatround/main.aspx",
+      "UserName": "",
+      "Password": "",
+      "Type": "AD",
+      "CreatedAt": "2026-01-14T23:24:49.2258296Z"
+    },
+    {
+      "Name": "DeviceCode",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+      "Type": "DeviceCode",
+      "CreatedAt": "2026-01-15T00:41:53.4323862Z"
+    },
+    {
+      "Name": "DEVKIT4",
+      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com/",
+      "Type": "FromPac",
+      "PacProfile": "DEVKITV4",
+      "CreatedAt": "2026-01-15T03:15:45.7858387Z"
+    }
+  ]
+}

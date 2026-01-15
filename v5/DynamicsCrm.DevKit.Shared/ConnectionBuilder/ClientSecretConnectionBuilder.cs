@@ -43,14 +43,14 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         public string BuildConnectionString(CrmConnection connection)
         {
             // Support both new format (ClientId/ClientSecret) and legacy format (UserName/Password)
-            var clientId = !string.IsNullOrEmpty(connection.ClientId) 
-                ? connection.ClientId 
+            var clientId = !string.IsNullOrEmpty(connection.ClientId)
+                ? connection.ClientId
                 : connection.UserName;
-            
-            var clientSecretEncrypted = !string.IsNullOrEmpty(connection.ClientSecret) 
-                ? connection.ClientSecret 
+
+            var clientSecretEncrypted = !string.IsNullOrEmpty(connection.ClientSecret)
+                ? connection.ClientSecret
                 : connection.Password;
-            
+
             // Decrypt ClientSecret if it's encrypted (auto-detect)
             var clientSecret = Helper.DecryptString(clientSecretEncrypted);
 

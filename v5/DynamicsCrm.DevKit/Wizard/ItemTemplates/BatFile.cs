@@ -50,17 +50,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     {
                         case "download.reports.bat":
                             var content = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
-                            content = content.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
+                            content = content.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content);
                             break;
                         case "download.webresources.bat":
                             var content2 = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.webresources.bat");
-                            content2 = content2.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
+                            content2 = content2.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content2);
                             break;
                         case "deploy.datasource.bat":
                             var content3 = await VsixHelper.ReadEmbeddedResourceAsync("bat.deploy.datasource.bat");
-                            content3 = content3.Replace("$ConnectionString$", Helper.BuildConnectionString(form.CrmConnection, true));
+                            content3 = content3.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content3);
                             break;
                         case "Plugin-Managed-Identity.ps1":

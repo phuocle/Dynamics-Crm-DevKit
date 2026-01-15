@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
         protected override async Task RunTaskAsync(ProxyTypeCommandArgs settings)
         {
-            var json = SimpleJson.DeserializeObject<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
+            var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
 
             if (json.proxytypes == null)
             {

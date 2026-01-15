@@ -111,7 +111,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (File.Exists(fileName))
                 {
                     var json = File.ReadAllText(fileName);
-                    var cachedJson = SimpleJson.DeserializeObject<ConfigJson>(json);
+                    var cachedJson = JsonHelper.Deserialize<ConfigJson>(json);
                     var deployWebResource = cachedJson.WebResources.Where(x => x.File == FullFileName).FirstOrDefault();
                     if (deployWebResource != null)
                     {

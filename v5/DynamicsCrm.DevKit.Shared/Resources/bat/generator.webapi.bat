@@ -19,5 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-set ConnectionString="$ConnectionString$"
-devkit generator --conn %ConnectionString% --json "..\..\DynamicsCrm.DevKit.Cli.json" --profile "JS-WEBAPI"
+devkit generator $CliConnectionArgs$ --json "..\..\DynamicsCrm.DevKit.Cli.json" --profile "JS-WEBAPI"
