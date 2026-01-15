@@ -138,34 +138,27 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (!await IsValidAsync()) return;
 
                 var crmConnection = CreateCrmConnectionFromInput();
-                System.Diagnostics.Debug.WriteLine($"[CheckConnection] Created connection: Name={crmConnection.Name}, Type={crmConnection.Type}, PacProfile={crmConnection.PacProfile}, Url={crmConnection.Url}");
                 
                 // For DeviceCode, don't disable form so user can copy URL/code
                 var isDeviceCode = crmConnection.Type == "DeviceCode";
                 await SetUIBusyStateAsync(true, disableForm: !isDeviceCode);
 
                 var deviceCodeCallback = CreateDeviceCodeCallback(crmConnection.Type);
-                System.Diagnostics.Debug.WriteLine($"[CheckConnection] Calling CreateServiceClientAsync...");
                 var serviceClient = await VsixHelper.CreateServiceClientAsync(crmConnection, deviceCodeCallback);
-                System.Diagnostics.Debug.WriteLine($"[CheckConnection] ServiceClient returned: IsReady={serviceClient?.IsReady}, LastError={serviceClient?.LastError}");
                 
                 if (serviceClient?.IsReady == true)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[CheckConnection] Connection successful, saving...");
                     await SaveConnectionAsync(crmConnection);
                     await LoadConnectionsAsync();
                     await ClearFormDataAsync();
-                    System.Diagnostics.Debug.WriteLine($"[CheckConnection] All done!");
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"[CheckConnection] Connection failed: IsReady=false");
                     await VS.MessageBox.ShowErrorAsync(ERROR_CONNECTION_FAILED);
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[CheckConnection] Exception: {ex.Message}");
                 await VS.MessageBox.ShowErrorAsync($"An error occurred while testing connection: {ex.Message}");
             }
             finally
@@ -278,8 +271,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
-            System.Diagnostics.Debug.WriteLine($"[SaveConnection] Saving connection: {crmConnection.Name}, Type: {crmConnection.Type}, PacProfile: {crmConnection.PacProfile}, Url: {crmConnection.Url}");
-            
             // Clear unused fields based on connection type before saving
             ClearUnusedFieldsForType(crmConnection);
 
@@ -299,18 +290,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             var existingConnection = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == crmConnection.Name);
             if (existingConnection != null)
             {
-                System.Diagnostics.Debug.WriteLine($"[SaveConnection] Updating existing connection");
                 UpdateExistingConnection(existingConnection, crmConnection);
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"[SaveConnection] Adding new connection");
                 devKitConnections.CrmConnections.Add(crmConnection);
             }
 
-            System.Diagnostics.Debug.WriteLine($"[SaveConnection] Calling SaveDevKitConnectionsAsync");
             await VsixHelper.SaveDevKitConnectionsAsync(devKitConnections);
-            System.Diagnostics.Debug.WriteLine($"[SaveConnection] Done!");
         }
 
         private static void UpdateExistingConnection(CrmConnection existing, CrmConnection updated)
