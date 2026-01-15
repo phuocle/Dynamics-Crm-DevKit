@@ -302,17 +302,13 @@ The `ClientSecretConnectionBuilder` handles both legacy and new formats:
 10. ✅ ClearUnusedFieldsForType - prevents data leakage from ConnectionBuilders
 11. ✅ Metadata files in `ConnectionBuilder/Metadata/` folder
 
-### Pending
-- Certificate auth
-
-1. **Review this plan** - User approval required
-2. **Create metadata classes** - New files in Shared project
-3. **Refactor FormConnection** - Remove hard-coded types
-4. **Build and test** - Follow `/build-vsix` workflow
-5. **Document completion** - Update walkthrough
+### Removed from Scope (2026-01-15)
+- ~~Certificate auth~~ (Removed - Complexity not justified)
+- ~~Managed Identity~~ (Removed - Only works on Azure-hosted environments)
+- ~~DefaultAzureCredential~~ (Removed - Too "magic", unpredictable)
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: 2026-01-14  
-**Status**: Ready for Implementation
+**Document Version**: 1.1  
+**Last Updated**: 2026-01-15  
+**Status**: Completed ✅

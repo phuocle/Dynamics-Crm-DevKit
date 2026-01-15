@@ -36,43 +36,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string ClientSecret { get; set; }
 
         // ═══════════════════════════════════════════════════════════════════
-        // CLIENT CERTIFICATE PROPERTIES
-        // ═══════════════════════════════════════════════════════════════════
-        /// <summary>
-        /// Path to certificate file (.pfx, .p12).
-        /// </summary>
-        public string CertificatePath { get; set; }
-
-        /// <summary>
-        /// Password for the certificate file.
-        /// </summary>
-        public string CertificatePassword { get; set; }
-
-        /// <summary>
-        /// Certificate thumbprint for store-based lookup.
-        /// </summary>
-        public string CertificateThumbprint { get; set; }
-
-        /// <summary>
-        /// Certificate store location: CurrentUser or LocalMachine.
-        /// </summary>
-        public string CertificateStoreLocation { get; set; }
-
-        /// <summary>
-        /// Certificate store name: My, Root, CA, Trust.
-        /// </summary>
-        public string CertificateStoreName { get; set; }
-
-        // ═══════════════════════════════════════════════════════════════════
-        // MANAGED IDENTITY PROPERTIES
-        // ═══════════════════════════════════════════════════════════════════
-        /// <summary>
-        /// Client ID for user-assigned managed identity.
-        /// Leave empty for system-assigned managed identity.
-        /// </summary>
-        public string ManagedIdentityClientId { get; set; }
-
-        // ═══════════════════════════════════════════════════════════════════
         // PAC CLI PROPERTIES
         // ═══════════════════════════════════════════════════════════════════
         /// <summary>

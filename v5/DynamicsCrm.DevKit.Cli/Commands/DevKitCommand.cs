@@ -286,14 +286,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 ClientId = settings.ClientId,
                 ClientSecret = clientSecret,
                 Type = settings.AuthType,
-                // Phase 3: Certificate properties
-                CertificatePath = settings.CertificatePath,
-                CertificatePassword = settings.CertificatePassword,
-                CertificateThumbprint = settings.CertificateThumbprint,
-                CertificateStoreLocation = settings.CertificateStoreLocation,
-                CertificateStoreName = settings.CertificateStoreName,
-                // Phase 3: ManagedIdentity
-                ManagedIdentityClientId = settings.ManagedIdentityClientId,
                 // Phase 4: FromPac
                 PacProfile = settings.PacProfile
             };

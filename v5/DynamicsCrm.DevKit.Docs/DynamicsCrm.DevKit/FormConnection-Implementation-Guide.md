@@ -166,9 +166,10 @@ Verify `{TypeName}ConnectionBuilder.cs` exists.
 - ✅ DeviceCode (Remote/Headless) authentication type
 - ✅ FromPac (PAC CLI Profile) - Uses ComboBox for profile selection
  
-### NOT Implemented Yet
+### Removed from Scope
  
-- Certificate auth
-- Managed Identity
+- ~~Certificate auth~~ (Removed - Complexity not justified for VSIX/CLI use case)
+- ~~Managed Identity~~ (Removed - Only works on Azure-hosted environments)
+- ~~DefaultAzureCredential~~ (Removed - Too "magic", unpredictable authentication chain)
  
 ---

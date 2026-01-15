@@ -43,32 +43,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Azure AD Client Secret (for ClientSecret auth type)")]
         public string ClientSecret { get; set; } = string.Empty;
 
-        // Phase 3: ClientCertificate arguments
-        [CommandOption("--cert")]
-        [Description("Path to certificate file (.pfx, .p12)")]
-        public string CertificatePath { get; set; } = string.Empty;
-
-        [CommandOption("--certpass")]
-        [Description("Password for certificate file")]
-        public string CertificatePassword { get; set; } = string.Empty;
-
-        [CommandOption("--certthumb")]
-        [Description("Certificate thumbprint for store lookup")]
-        public string CertificateThumbprint { get; set; } = string.Empty;
-
-        [CommandOption("--certstorelocation")]
-        [Description("Certificate store location (CurrentUser, LocalMachine)")]
-        public string CertificateStoreLocation { get; set; } = "CurrentUser";
-
-        [CommandOption("--certstorename")]
-        [Description("Certificate store name (My, Root, CA)")]
-        public string CertificateStoreName { get; set; } = "My";
-
-        // Phase 3: ManagedIdentity arguments
-        [CommandOption("--managedidentityclientid")]
-        [Description("Client ID for user-assigned managed identity")]
-        public string ManagedIdentityClientId { get; set; } = string.Empty;
-
         // Phase 4: FromPac arguments
         [CommandOption("--pacprofile")]
         [Description("PAC CLI auth profile name or index")]

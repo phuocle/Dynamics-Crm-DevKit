@@ -58,15 +58,6 @@ namespace DynamicsCrm.DevKit.Shared
         /// <summary>Device Code Flow for headless environments (Phase 2)</summary>
         public const string DeviceCode = "DeviceCode";
         
-        /// <summary>Certificate-based authentication (Phase 3)</summary>
-        public const string ClientCertificate = "ClientCertificate";
-        
-        /// <summary>Azure Managed Identity (Phase 3)</summary>
-        public const string ManagedIdentity = "ManagedIdentity";
-        
-        /// <summary>Azure credential chain (Phase 3)</summary>
-        public const string DefaultAzureCredential = "DefaultAzureCredential";
-        
         /// <summary>PAC CLI profile integration (Phase 4)</summary>
         public const string FromPac = "FromPac";
     }

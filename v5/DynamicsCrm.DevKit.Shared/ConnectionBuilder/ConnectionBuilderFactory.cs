@@ -31,18 +31,12 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
                 "CLIENTSECRET" => new ClientSecretConnectionBuilder(),
                 "AD" => new ADConnectionBuilder(),
 
-                // Phase 3: Production & Azure Auth
-                "CLIENTCERTIFICATE" => new ClientCertificateConnectionBuilder(),
-                "MANAGEDIDENTITY" => new ManagedIdentityConnectionBuilder(),
-                "DEFAULTAZURECREDENTIAL" => new DefaultAzureCredentialConnectionBuilder(),
-
                 // Phase 4: Integration
                 "FROMPAC" => new FromPacConnectionBuilder(),
 
                 _ => throw new NotSupportedException(
                     $"Connection type '{type}' is not supported. " +
-                    $"Supported types: Interactive, DeviceCode, ClientSecret, ClientCertificate, ManagedIdentity, DefaultAzureCredential, FromPac. " +
-                    $"For legacy auth, use --conn with OAuth or AD.")
+                    $"Supported types: Interactive, DeviceCode, ClientSecret, OAuth, AD, FromPac.")
             };
         }
 
@@ -60,9 +54,6 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
                 "OAUTH" => true,
                 "CLIENTSECRET" => true,
                 "AD" => true,
-                "CLIENTCERTIFICATE" => true,
-                "MANAGEDIDENTITY" => true,
-                "DEFAULTAZURECREDENTIAL" => true,
                 "FROMPAC" => true,
                 _ => false
             };

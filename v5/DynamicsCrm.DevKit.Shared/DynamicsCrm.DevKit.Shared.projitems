@@ -82,10 +82,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ClientSecretConnectionBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\OAuthConnectionBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ADConnectionBuilder.cs" />
-    <!-- Phase 3: Production & Azure Auth -->
-    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ClientCertificateConnectionBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\ManagedIdentityConnectionBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\DefaultAzureCredentialConnectionBuilder.cs" />
     <!-- Phase 4: Integration -->
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionBuilder\FromPacConnectionBuilder.cs" />
     <!-- Connection Type Metadata for dynamic form generation -->
