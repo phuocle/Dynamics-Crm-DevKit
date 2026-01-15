@@ -51,8 +51,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     Profile = settings.Profile,
                     Type = "proxytypes",
                     ServiceClient = settings.ServiceClient,
-                    Version = settings.Version
-                    // CurrentDirectory is inherited from DevKitCommandArgs and auto-computed
+                    Version = settings.Version,
+                    AuthType = settings.AuthType
                 };
                 var proxyType = new TaskProxyType(args, profile);
                 await proxyType.RunAsync();

@@ -25,7 +25,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         private string Version { get; set; } = arg.Version;
         private string SolutionPackagerExe { get; set; }
-        private bool IsSdkLogin { get; set; } = arg.IsSdkLogin;
         private string Connection { get; set; } = arg.Connection;
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
 

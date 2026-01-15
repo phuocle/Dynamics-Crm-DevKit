@@ -22,12 +22,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Profile name from json file")]
         public string Profile { get; set; } = string.Empty;
 
-        [CommandOption("--sdk-login")]
-        [Description("Login by Sdk OOB dialog")]
-        public bool IsSdkLogin { get; set; }
-
         [CommandOption("--url")]
-        [Description("Dynamics 365 URL for SDK login")]
+        [Description("Dynamics 365 URL")]
         public string Url { get; set; } = string.Empty;
 
         // Phase 2: Modern Interactive Authentication arguments

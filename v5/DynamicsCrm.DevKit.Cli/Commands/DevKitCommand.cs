@@ -99,13 +99,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 argRows.Add(new[] { $"{indent}[white] --json[/]", $"[cyan]{Markup.Escape(settings.Json)}[/]" });
                 argRows.Add(new[] { $"{indent}[white] --profile[/]", $"[cyan]{Markup.Escape(settings.Profile)}[/]" });
             }
-            else if (settings.IsSdkLogin)
-            {
-                argRows.Add(new[] { $"{label}[white] --sdk-login[/]", "[cyan]yes[/]" });
-                argRows.Add(new[] { $"{indent}[white] --url[/]", $"[cyan]{Markup.Escape(settings.Url ?? "")}[/]" });
-                argRows.Add(new[] { $"{indent}[white] --json[/]", $"[cyan]{Markup.Escape(settings.Json)}[/]" });
-                argRows.Add(new[] { $"{indent}[white] --profile[/]", $"[cyan]{Markup.Escape(settings.Profile)}[/]" });
-            }
             else
             {
                 // --conn mode needs wider column for long connection string
@@ -138,15 +131,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             await SpectreLog.WithStatusAsync("Connecting to Dynamics 365...", async ctx =>
             {
-                // Phase 2: Modern Interactive Auth via --auth argument
+                // Modern Interactive Auth via --auth argument
                 if (!string.IsNullOrEmpty(settings.AuthType))
                 {
                     serviceClient = await ConnectWithModernAuthAsync(settings);
-                }
-                // Legacy: SDK Login dialog
-                else if (settings.IsSdkLogin)
-                {
-                    serviceClient = await ConnectWithSdkLoginAsync(settings.Url);
                 }
                 // Legacy: Connection string
                 else
@@ -200,50 +188,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             return true;
         }
 
-        /// <summary>
-        /// Connect using SDK OAuth dialog.
-        /// </summary>
-        protected async Task<ServiceClient> ConnectWithSdkLoginAsync(string url)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                throw new Exception("--url: required for SDK login");
-            }
-
-            var serviceClient = new ServiceClient(
-                userId: null,
-                password: null,
-                hostUri: new Uri(url),
-                useUniqueInstance: true,
-                clientId: "51f81489-12ee-4a9e-aaae-a2591f45987d",
-                redirectUri: new Uri("app://58145B91-0C36-4500-8554-080854F2AC97"),
-                promptBehavior: Microsoft.PowerPlatform.Dataverse.Client.Auth.PromptBehavior.Always,
-                useDefaultCreds: false,
-                tokenCacheStorePath: null,
-                logger: null
-            );
-
-            await Task.Delay(100);
-
-            if (serviceClient?.IsReady == true)
-            {
-                return serviceClient;
-            }
-
-            var timeout = TimeSpan.FromSeconds(30);
-            var start = DateTime.Now;
-            while (serviceClient != null && !serviceClient.IsReady && DateTime.Now - start < timeout)
-            {
-                await Task.Delay(500);
-            }
-
-            if (serviceClient?.IsReady == true)
-            {
-                return serviceClient;
-            }
-
-            throw new Exception($"OAuth authentication failed: {serviceClient?.LastError}");
-        }
 
         /// <summary>
         /// Connect using modern authentication (Interactive, DeviceCode).

@@ -23,7 +23,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         private string Version { get; set; } = arg.Version;
         private string CrmSvcUtil { get; set; }
-        private bool IsSdkLogin { get; set; } = arg.IsSdkLogin;
         private string Connection { get; set; } = arg.Connection;
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
@@ -134,7 +133,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgs()
         {
             var command = new StringBuilder();
-            if (IsSdkLogin)
+            // If AuthType is set (modern auth), use /interactivelogin since we already have a valid token
+            // CrmSvcUtil will prompt for credentials, but the user is already authenticated
+            if (!string.IsNullOrEmpty(Arg.AuthType))
             {
                 command.Append("/interactivelogin ");
             }
@@ -163,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgsLog()
         {
             var command = new StringBuilder();
-            if (IsSdkLogin)
+            if (!string.IsNullOrEmpty(Arg.AuthType))
             {
                 command.Append("/interactivelogin ");
             }

@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     Type = "solutionpackagers",
                     ServiceClient = settings.ServiceClient,
                     Version = settings.Version,
-                    IsSdkLogin = settings.IsSdkLogin
+                    AuthType = settings.AuthType
                 };
                 var solutionPackager = new TaskSolutionPackager(args, profile);
                 await solutionPackager.RunAsync();
