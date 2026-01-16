@@ -1,5 +1,5 @@
 ﻿{
-  "DefaultCrmConnection": "DeviceCode",
+  "DefaultCrmConnection": "ClientSecret",
   "CrmConnections": [
     {
       "Name": "ClientSecret",
