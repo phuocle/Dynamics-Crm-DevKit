@@ -172,16 +172,21 @@ function Convert-V4ToV5 {
         # Detect and remove v4 CLI search patterns
         if ($line -match 'for\s+/f.*DynamicsCrm\.DevKit\.Cli') {
             $isV4File = $true
-            # Check if this is a multi-line for loop
-            if ($line -notmatch '\)$' -and $line -notmatch 'set\s+DynamicsCrmDevKitCli') {
-                # Skip until we find the closing
-                continue
-            }
+            continue
+        }
+
+        # Remove Microsoft.CrmSdk.CoreTools version detection (no longer needed in v5)
+        if ($line -match 'for\s+/f.*Microsoft\.CrmSdk\.CoreTools') {
             continue
         }
 
         # Remove set DynamicsCrmDevKitCli lines
         if ($line -match 'set\s+DynamicsCrmDevKitCli\s*=') {
+            continue
+        }
+
+        # Remove set MicrosoftCrmSdkCoreTools lines
+        if ($line -match 'set\s+MicrosoftCrmSdkCoreTools\s*=') {
             continue
         }
 
@@ -192,6 +197,45 @@ function Convert-V4ToV5 {
 
         # Remove :break labels
         if ($line -match '^:break\d*\s*$') {
+            continue
+        }
+
+        # Remove version parsing lines (legacy CrmSdk.CoreTools version extraction)
+        if ($line -match '^set\s+"str1=') {
+            continue
+        }
+        if ($line -match '^set\s+"sstr=') {
+            continue
+        }
+        if ($line -match '^set\s+/a\s+position=') {
+            continue
+        }
+        if ($line -match '^set\s+"sst\d+=') {
+            continue
+        }
+        if ($line -match '^if\s+"%sst\d+%"') {
+            continue
+        }
+        if ($line -match '^set\s+/a\s+"index=') {
+            continue
+        }
+        if ($line -match '^set\s+version=') {
+            continue
+        }
+
+        # Remove setlocal enabledelayedexpansion (combined with @echo off)
+        if ($line -match '@echo\s+off\s*&\s*setlocal\s+enabledelayedexpansion') {
+            # This will be replaced by devkit check block
+            continue
+        }
+
+        # Remove standalone setlocal enabledelayedexpansion
+        if ($line -match '^\s*setlocal\s+enabledelayedexpansion\s*$') {
+            continue
+        }
+
+        # Remove closing parenthesis from multi-line for loops
+        if ($line -match '^\s*\)\s*$') {
             continue
         }
 
