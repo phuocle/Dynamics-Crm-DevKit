@@ -294,6 +294,43 @@ Write-Host "v4 -> v5" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
+# Check if devkit is installed
+Write-Host "Checking devkit installation..." -ForegroundColor Yellow
+$devkitPath = Get-Command devkit -ErrorAction SilentlyContinue
+
+if (-not $devkitPath) {
+    Write-Host "devkit is NOT installed. Installing now..." -ForegroundColor Yellow
+    Write-Host ""
+    
+    try {
+        $installResult = & dotnet tool install -g DynamicsCrm.DevKit.Cli 2>&1
+        Write-Host $installResult -ForegroundColor Gray
+        
+        # Verify installation
+        $devkitPath = Get-Command devkit -ErrorAction SilentlyContinue
+        if (-not $devkitPath) {
+            Write-Host "Error: Failed to install devkit. Please install manually:" -ForegroundColor Red
+            Write-Host "  dotnet tool install -g DynamicsCrm.DevKit.Cli" -ForegroundColor Yellow
+            exit 1
+        }
+        
+        Write-Host "devkit installed successfully!" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "Error installing devkit: $_" -ForegroundColor Red
+        Write-Host "Please install manually: dotnet tool install -g DynamicsCrm.DevKit.Cli" -ForegroundColor Yellow
+        exit 1
+    }
+}
+else {
+    Write-Host "devkit is already installed." -ForegroundColor Green
+}
+
+# Get and display devkit version
+$devkitVersion = & devkit --version 2>&1
+Write-Host "devkit version: $devkitVersion" -ForegroundColor Cyan
+Write-Host ""
+
 if (-not (Test-Path $Path)) {
     Write-Host "Error: Path '$Path' does not exist." -ForegroundColor Red
     exit 1
@@ -370,3 +407,9 @@ Write-Host "Migration Complete" -ForegroundColor Green
 Write-Host "  Migrated: $migratedCount file(s)" -ForegroundColor Green
 Write-Host "  Skipped:  $skippedCount file(s)" -ForegroundColor Yellow
 Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host ""
+
+# Display devkit version at the end
+$finalVersion = & devkit --version 2>&1
+Write-Host "Running devkit version: $finalVersion" -ForegroundColor Cyan
+Write-Host ""
