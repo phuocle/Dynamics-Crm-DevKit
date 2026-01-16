@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
 
-namespace Dev.DevKit.ConsoleCore.OAuth
+namespace $NameSpace$
 {
     public static class App
     {
