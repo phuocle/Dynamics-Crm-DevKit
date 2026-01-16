@@ -2,17 +2,17 @@
 
 ## Status Tracking
 
-| Connection Type  | Test Project Fix | Embedded Resource | VSIX Integration | Status          |
-| ---------------- | ---------------- | ----------------- | ---------------- | --------------- |
-| **ClientSecret** | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| Interactive      | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| DeviceCode       | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | **IN PROGRESS** |
-| FromPac          | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
-| AD               | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| Connection Type  | Test Project Fix | Embedded Resource | VSIX Integration | Status               |
+| ---------------- | ---------------- | ----------------- | ---------------- | -------------------- |
+| **ClientSecret** | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed**      |
+| **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed**      |
+| Interactive      | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed**      |
+| DeviceCode       | ⏸️ Skipped        | ⏸️ Skipped         | ⏸️ Skipped        | ⏸️ **SDK Limitation** |
+| FromPac          | ⏸️ Skipped        | ⏸️ Skipped         | ⏸️ Skipped        | ⏸️ **SDK Limitation** |
+| **AD**           | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed**      |
 
-> **Last Completed:** Interactive
-> **Currently Working On:** DeviceCode
+> **Last Completed:** AD
+> **Currently Working On:** Done
 
 
 ---

@@ -16,7 +16,7 @@ using System.Text;
 //using System.Reflection;
 //using System.Activities;
 
-namespace Dev.DevKit.Console.DeviceCode.Lib
+namespace Dev.DevKit.Console.AD2.Lib
 {
     public static class Helper
     {

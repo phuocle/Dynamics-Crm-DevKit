@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 
-namespace Dev.DevKit.Console.FromPac.Lib
+namespace Dev.DevKit.Console.AD2.Lib
 {
     public class TracingServiceFake : ITracingService
     {

@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.AD.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.Interactive.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.OAuth.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.ClientSecret.cs" />
@@ -183,5 +184,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.config.Interactive" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.config.AD" />
   </ItemGroup>
 </Project>
