@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.AD", "De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.ClientSecret2", "Dev.DevKit.Console.ClientSecret2\Dev.DevKit.Console.ClientSecret2.csproj", "{6EA09C21-08A5-4AD9-BEB1-DB720EC266B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.OAuth2", "Dev.DevKit.Console.OAuth2\Dev.DevKit.Console.OAuth2.csproj", "{7749D707-5841-437E-83A4-CCB1D8832B75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{6EA09C21-08A5-4AD9-BEB1-DB720EC266B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EA09C21-08A5-4AD9-BEB1-DB720EC266B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EA09C21-08A5-4AD9-BEB1-DB720EC266B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7749D707-5841-437E-83A4-CCB1D8832B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7749D707-5841-437E-83A4-CCB1D8832B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7749D707-5841-437E-83A4-CCB1D8832B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7749D707-5841-437E-83A4-CCB1D8832B75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

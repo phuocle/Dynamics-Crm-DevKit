@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.OAuth.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.ClientSecret.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
     <!-- Phase 2: Modern Interactive Authentication -->
@@ -172,5 +173,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.config.ClientSecret" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.config.OAuth" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\runtime.xml" />
   </ItemGroup>
 </Project>

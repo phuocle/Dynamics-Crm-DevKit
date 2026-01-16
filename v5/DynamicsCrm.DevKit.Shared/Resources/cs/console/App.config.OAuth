@@ -2,8 +2,8 @@
 <configuration>
 	<appSettings>
 		<add key="Url" value="$UrlValue$" />
-		<add key="ClientId" value="$ClientIdValue$" />
-		<add key="ClientSecret" value="$ClientSecretValue$" />
+		<add key="UserName" value="$UserNameValue$" />
+		<add key="Password" value="$PasswordValue$" />
 	</appSettings>
 $Runtime$
 </configuration>

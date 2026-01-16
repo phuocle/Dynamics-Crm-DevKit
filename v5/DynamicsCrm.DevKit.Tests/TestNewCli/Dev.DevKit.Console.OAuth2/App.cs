@@ -2,7 +2,7 @@
 using System;
 using System.Configuration;
 
-namespace Dev.DevKit.Console.OAuth
+namespace Dev.DevKit.Console.OAuth2
 {
     public static class App
     {
@@ -17,9 +17,9 @@ namespace Dev.DevKit.Console.OAuth
                 return _Service;
             }
         }
-        private static string Url { get { return ConfigurationManager.AppSettings["Url"]; } }
-        private static string UserName { get { return ConfigurationManager.AppSettings["UserName"]; } }
-        private static string Password { get { return ConfigurationManager.AppSettings["Password"]; } }
+        private static string Url => ConfigurationManager.AppSettings["Url"];
+        private static string UserName => ConfigurationManager.AppSettings["UserName"];
+        private static string Password => ConfigurationManager.AppSettings["Password"];
         private static string ConnectionString => $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
     }
 }

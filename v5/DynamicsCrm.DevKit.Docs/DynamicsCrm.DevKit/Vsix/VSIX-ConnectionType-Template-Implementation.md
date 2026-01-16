@@ -2,17 +2,18 @@
 
 ## Status Tracking
 
-| Connection Type | Test Project Fix | Embedded Resource | VSIX Integration | Status |
-|-----------------|------------------|-------------------|------------------|--------|
-| **ClientSecret** | ✅ Done | ✅ Done | ✅ Done | ✅ **Completed** |
-| **OAuth** | ⏳ Pending | ⏳ Pending | ⏳ Pending | **IN PROGRESS** |
-| Interactive | ⏳ Pending | ⏳ Pending | ⏳ Pending | Pending |
-| DeviceCode | ⏳ Pending | ⏳ Pending | ⏳ Pending | Pending |
-| FromPac | ⏳ Pending | ⏳ Pending | ⏳ Pending | Pending |
-| AD | ⏳ Pending | ⏳ Pending | ⏳ Pending | Pending |
+| Connection Type  | Test Project Fix | Embedded Resource | VSIX Integration | Status          |
+| ---------------- | ---------------- | ----------------- | ---------------- | --------------- |
+| **ClientSecret** | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
+| **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
+| Interactive      | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | **IN PROGRESS** |
+| DeviceCode       | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| FromPac          | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| AD               | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 
-> **Last Completed:** ClientSecret
-> **Currently Working On:** OAuth
+> **Last Completed:** OAuth
+> **Currently Working On:** Interactive
+
 
 ---
 
@@ -74,16 +75,16 @@ Resources/cs/console/
 
 ## Template Placeholders Mapping
 
-| Connection Type | Config Key | Placeholder | Source |
-|-----------------|------------|-------------|--------|
-| ClientSecret | ClientId | `$ClientIdValue$` | `CrmConnection.ClientId` |
-| ClientSecret | ClientSecret | `$ClientSecretValue$` | `CrmConnection.ClientSecret` |
-| OAuth | UserName | `$UserNameValue$` | `CrmConnection.UserName` |
-| OAuth | Password | `$PasswordValue$` | `CrmConnection.Password` |
-| AD | UserName | `$UserNameValue$` | `Domain\UserName` format |
-| AD | Password | `$PasswordValue$` | `CrmConnection.Password` |
-| FromPac | PacProfile | `$PacProfileValue$` | `CrmConnection.PacProfile` |
-| All | Url | `$UrlValue$` | `CrmConnection.Url` |
+| Connection Type | Config Key   | Placeholder           | Source                       |
+| --------------- | ------------ | --------------------- | ---------------------------- |
+| ClientSecret    | ClientId     | `$ClientIdValue$`     | `CrmConnection.ClientId`     |
+| ClientSecret    | ClientSecret | `$ClientSecretValue$` | `CrmConnection.ClientSecret` |
+| OAuth           | UserName     | `$UserNameValue$`     | `CrmConnection.UserName`     |
+| OAuth           | Password     | `$PasswordValue$`     | `CrmConnection.Password`     |
+| AD              | UserName     | `$UserNameValue$`     | `Domain\UserName` format     |
+| AD              | Password     | `$PasswordValue$`     | `CrmConnection.Password`     |
+| FromPac         | PacProfile   | `$PacProfileValue$`   | `CrmConnection.PacProfile`   |
+| All             | Url          | `$UrlValue$`          | `CrmConnection.Url`          |
 
 ---
 
@@ -132,11 +133,11 @@ replacements["$App.config$"] = await VsixHelper.ReadEmbeddedResourceAsync($"cs.c
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `DynamicsCrm.DevKit.Shared/Resources/cs/console/*` | **NEW** - Create embedded resources |
-| `DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.csproj` | Add EmbeddedResource items |
-| `DynamicsCrm.DevKit/Lib/Replacement.cs` | Add new placeholders |
+| File                                                         | Change                              |
+| ------------------------------------------------------------ | ----------------------------------- |
+| `DynamicsCrm.DevKit.Shared/Resources/cs/console/*`           | **NEW** - Create embedded resources |
+| `DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.csproj` | Add EmbeddedResource items          |
+| `DynamicsCrm.DevKit/Lib/Replacement.cs`                      | Add new placeholders                |
 
 ---
 

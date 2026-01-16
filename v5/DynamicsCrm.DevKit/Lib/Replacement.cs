@@ -57,6 +57,9 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("TracingServiceFake.cs");
             
+            // Shared runtime assembly binding redirects
+            replacements["$Runtime$"] = await VsixHelper.ReadEmbeddedResourceAsync("cs.console.runtime.xml");
+            
             // Connection-type-specific App.cs and App.config for Console projects
             if (!string.IsNullOrEmpty(connectionType))
             {
@@ -82,7 +85,7 @@ namespace DynamicsCrm.DevKit.Lib
         {
             foreach (var kvp in replacements)
             {
-                if (!string.IsNullOrEmpty(kvp.Value))
+                if (kvp.Value != null)
                 {
                     content = content.Replace(kvp.Key, kvp.Value);
                 }
