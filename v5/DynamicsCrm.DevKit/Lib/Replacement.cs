@@ -79,6 +79,24 @@ namespace DynamicsCrm.DevKit.Lib
                     replacements["$App.config$"] = appConfigResource;
                 }
             }
+            
+            // Connection-type-specific App.cs and AppSettings.json for Console Core projects
+            if (!string.IsNullOrEmpty(connectionType))
+            {
+                var appCsCoreResource = await VsixHelper.ReadEmbeddedResourceAsync($"cs.consolecore.App.{connectionType}.cs");
+                if (!string.IsNullOrEmpty(appCsCoreResource))
+                {
+                    appCsCoreResource = ApplyReplacements(appCsCoreResource, replacements);
+                    replacements["$AppCore.cs$"] = appCsCoreResource;
+                }
+                
+                var appSettingsResource = await VsixHelper.ReadEmbeddedResourceAsync($"cs.consolecore.AppSettings.{connectionType}.json");
+                if (!string.IsNullOrEmpty(appSettingsResource))
+                {
+                    appSettingsResource = ApplyReplacements(appSettingsResource, replacements);
+                    replacements["$AppSettings.json$"] = appSettingsResource;
+                }
+            }
         }
 
         private static string ApplyReplacements(string content, Dictionary<string, string> replacements)

@@ -3,7 +3,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
 
-namespace Dev.DevKit.ConsoleCore.ClientSecret
+namespace Dev.DevKit.ConsoleCore.ClientSecret2
 {
     public static class App
     {
