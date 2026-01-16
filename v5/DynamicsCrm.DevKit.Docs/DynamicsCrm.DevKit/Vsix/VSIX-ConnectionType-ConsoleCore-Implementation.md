@@ -15,12 +15,12 @@ This document tracks the implementation of connection-type-specific templates fo
 | **ClientSecret** | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | **Interactive**  | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| DeviceCode       | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| DeviceCode       | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | FromPac          | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 | AD               | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 
-> **Last Completed:** Interactive
-> **Currently Working On:** DeviceCode
+> **Last Completed:** DeviceCode
+> **Currently Working On:** FromPac
 
 ---
 

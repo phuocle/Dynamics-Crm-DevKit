@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Dev.DevKit.ConsoleCore.DeviceCode
+namespace $NameSpace$
 {
     public static class App
     {

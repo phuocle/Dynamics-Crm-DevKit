@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Dev.DevKit.ConsoleCore.DeviceCode
+namespace Dev.DevKit.ConsoleCore.DeviceCode2
 {
     public static class App
     {

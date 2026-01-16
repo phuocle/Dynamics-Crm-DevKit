@@ -1,4 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -395,7 +395,15 @@ namespace DynamicsCrm.DevKit.Lib
 
         internal static async Task<string> ReadEmbeddedResourceAsync(string path)
         {
-            return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
+            try
+            {
+                return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
+            }
+            catch
+            {
+                // Resource not found - return null for graceful fallback
+                return null;
+            }
         }
 
         internal static async Task ExecuteCommandAsync(string command)
