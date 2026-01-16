@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Lib
             await AddCommonReplacementsAsync(replacements);
             await AddNuGetAsync(replacements);
             SetConnectionValues(replacements, form.CrmConnection);
-            await SetEmbeddedResourceAsync(replacements);
+            await SetEmbeddedResourceAsync(replacements, form.CrmConnection.Type);
             replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
             replacements["$ProjectName$"] = form.ProjectName;
             replacements["$LogicalProjectName$"] = form.ProjectName.ToLower();
@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
         }
 
-        private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements)
+        private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements, string connectionType = null)
         {
             replacements["$deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.bat");
             replacements["$deploy.debug.only.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.only.bat");
@@ -56,6 +56,38 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("TracingServiceFake.cs");
+            
+            // Connection-type-specific App.cs and App.config for Console projects
+            if (!string.IsNullOrEmpty(connectionType))
+            {
+                var appCsResource = await VsixHelper.ReadEmbeddedResourceAsync($"cs.console.App.{connectionType}.cs");
+                if (!string.IsNullOrEmpty(appCsResource))
+                {
+                    // Apply replacements to embedded resource content
+                    appCsResource = ApplyReplacements(appCsResource, replacements);
+                    replacements["$App.cs$"] = appCsResource;
+                }
+                
+                var appConfigResource = await VsixHelper.ReadEmbeddedResourceAsync($"cs.console.App.config.{connectionType}");
+                if (!string.IsNullOrEmpty(appConfigResource))
+                {
+                    // Apply replacements to embedded resource content
+                    appConfigResource = ApplyReplacements(appConfigResource, replacements);
+                    replacements["$App.config$"] = appConfigResource;
+                }
+            }
+        }
+
+        private static string ApplyReplacements(string content, Dictionary<string, string> replacements)
+        {
+            foreach (var kvp in replacements)
+            {
+                if (!string.IsNullOrEmpty(kvp.Value))
+                {
+                    content = content.Replace(kvp.Key, kvp.Value);
+                }
+            }
+            return content;
         }
 
         private static async Task AddNuGetAsync(Dictionary<string, string> replacements)
@@ -71,8 +103,17 @@ namespace DynamicsCrm.DevKit.Lib
         {
             replacements["$AuthTypeValue$"] = crmConnection.Type;
             replacements["$UrlValue$"] = crmConnection.Url;
+            
+            // Generic placeholders (for backward compatibility)
             replacements["$UserNameValue$"] = crmConnection.UserName ?? string.Empty;
             replacements["$PasswordValue$"] = Helper.DecryptString(crmConnection.Password) ?? string.Empty;
+            
+            // ClientSecret-specific placeholders
+            replacements["$ClientIdValue$"] = crmConnection.ClientId ?? string.Empty;
+            replacements["$ClientSecretValue$"] = Helper.DecryptString(crmConnection.ClientSecret) ?? string.Empty;
+            
+            // FromPac-specific placeholders
+            replacements["$PacProfileValue$"] = crmConnection.PacProfile ?? string.Empty;
         }
 
         private static async Task AddCommonReplacementsAsync(Dictionary<string, string> replacements)

@@ -70,9 +70,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
-
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.ClientSecret.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
     <!-- Phase 2: Modern Interactive Authentication -->
     <Compile Include="$(MSBuildThisFileDirectory)SecureTokenCache.cs" />
@@ -169,5 +169,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\build.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.ts" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.config.ClientSecret" />
   </ItemGroup>
 </Project>
