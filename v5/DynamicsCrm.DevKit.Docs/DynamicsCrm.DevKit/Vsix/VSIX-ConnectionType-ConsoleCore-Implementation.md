@@ -13,14 +13,14 @@ This document tracks the implementation of connection-type-specific templates fo
 | Connection Type  | Test Project Fix | Embedded Resource | VSIX Integration | Status          |
 | ---------------- | ---------------- | ----------------- | ---------------- | --------------- |
 | **ClientSecret** | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| OAuth            | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | **NEXT**        |
-| Interactive      | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
+| **Interactive**  | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | DeviceCode       | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 | FromPac          | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 | AD               | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 
-> **Last Completed:** ClientSecret
-> **Currently Working On:** None (Session paused)
+> **Last Completed:** Interactive
+> **Currently Working On:** DeviceCode
 
 ---
 
@@ -85,8 +85,8 @@ DynamicsCrm.DevKit.Shared/Resources/cs/consolecore/
 - **Connection String:** `AuthType=ClientSecret;Url={Url};ClientId={ClientId};ClientSecret={ClientSecret};`
 
 ### OAuth
-- **Config Keys:** `Url`, `UserName`, `Password`
-- **Connection String:** `AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=...;LoginPrompt=Auto;`
+- **Config Keys**: `Url`, `UserName`, `Password`
+- **Connection String**: `AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=...;RedirectUri=...;LoginPrompt=Auto;` (AppId/RedirectUri hardcoded in App.cs)
 
 ### Interactive
 - **Config Keys:** `Url` only
