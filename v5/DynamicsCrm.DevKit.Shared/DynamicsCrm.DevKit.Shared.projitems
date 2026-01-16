@@ -72,6 +72,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.Interactive.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.OAuth.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.ClientSecret.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.AD.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.Interactive.cs" />
@@ -191,5 +193,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\AppSettings.ClientSecret.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\AppSettings.OAuth.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\AppSettings.Interactive.json" />
   </ItemGroup>
 </Project>
