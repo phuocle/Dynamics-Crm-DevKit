@@ -240,7 +240,20 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     {
                         await VS.MessageBox.ShowErrorAsync("Invalid enter project name");
                         return false;
-                    }                    
+                    }
+                    // Console project (.NET Framework) does not support DeviceCode and FromPac connection types
+                    if (ProjectType == ProjectType.Console && CrmConnection != null)
+                    {
+                        var connectionType = CrmConnection.Type?.ToUpperInvariant();
+                        if (connectionType == "DEVICECODE" || connectionType == "FROMPAC")
+                        {
+                            await VS.MessageBox.ShowErrorAsync(
+                                $"The connection type '{CrmConnection.Type}' is not supported for Console project template (.NET Framework).\n\n" +
+                                "Please use Console Core project template (.NET Core) for DeviceCode or FromPac connection types, " +
+                                "or select a different connection type.");
+                            return false;
+                        }
+                    }
                 }
                 return true;
             }
