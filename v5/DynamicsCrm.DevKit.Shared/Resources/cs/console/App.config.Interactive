@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<appSettings>
+		<add key="Url" value="$UrlValue$" />
+	</appSettings>
+$Runtime$
+</configuration>

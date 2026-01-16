@@ -2,7 +2,7 @@
 using System;
 using System.Configuration;
 
-namespace Dev.DevKit.Console.Interactive
+namespace Dev.DevKit.Console.Interactive2
 {
     public static class App
     {

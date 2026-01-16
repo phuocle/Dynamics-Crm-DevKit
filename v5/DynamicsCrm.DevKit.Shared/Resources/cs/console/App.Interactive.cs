@@ -1,8 +1,8 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Configuration;
 
-namespace Dev.DevKit.Console.Interactive
+namespace $NameSpace$
 {
     public static class App
     {

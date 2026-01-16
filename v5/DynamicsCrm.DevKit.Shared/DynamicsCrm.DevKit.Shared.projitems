@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.Interactive.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.OAuth.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.ClientSecret.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
@@ -179,5 +180,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\runtime.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\console\App.config.Interactive" />
   </ItemGroup>
 </Project>
