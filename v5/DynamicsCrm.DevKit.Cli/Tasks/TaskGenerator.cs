@@ -34,17 +34,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (Json == null)
             {
-                SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"'profile' not found: '{Json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.rootfolder == "???")
             {
-                SpectreLog.ActionError($"{TaskType} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (Json.type == "???" || (Json.type != null && Json?.type?.Trim().Length == 0))
             {
-                SpectreLog.ActionError($"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             if (
@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Json.type.ToLower() != nameof(GeneratorType.csharp) 
                 )
             {
-                SpectreLog.ActionError($"{TaskType} 'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                SpectreLog.ActionError($"'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
             // Skip rootnamespace validation for TsForm and TsWebApi since they no longer use rootnamespace
@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (Json.rootnamespace == "???" || (Json.rootnamespace != null && Json?.rootnamespace?.Trim().Length == 0))
                 {
-                    SpectreLog.ActionError($"{TaskType} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    SpectreLog.ActionError($"'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                     return false;
                 }
             }
@@ -74,24 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             SpectreLog.WriteLine("START");
             SpectreLog.WriteLine();
-
-//#if DEBUG
-//            // Debug Visualization for CliActions
-//            SpectreLog.WriteLine("[cyan] --- DEBUG VISUALIZATION START --- [/]");
-//            SpectreLog.WriteLine();
-//            var dLen = 1.ToString().Length;
-//            // CliAction.DO_NOTHING (SKIPPED)
-//            SpectreLog.ActionDoNothing("Debug.Skipped.js");
-//            // CliAction.CREATED
-//            SpectreLog.ActionCreated("Debug.Created.js");
-//            // CliAction.UPDATED
-//            SpectreLog.ActionUpdated("Debug.Updated.js");
-//            // CliAction.ERROR
-//            SpectreLog.ActionError("Debug.Error.js simulated error");
-//            SpectreLog.WriteLine();
-//            SpectreLog.WriteLine("[cyan] --- DEBUG VISUALIZATION END --- [/]");
-//#endif
-
+            
             if (await IsValidAsync())
             {
                 var schemaNames = await GetSchemaNamesAsync();
