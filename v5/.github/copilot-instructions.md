@@ -1,46 +1,43 @@
-# Copilot Instructions
+# GitHub Copilot Instructions
 
-## About This Project
+> **Purpose**: Instructions for GitHub Copilot when working with DynamicsCrm.DevKit.
 
-**DynamicsCrm.DevKit** is a development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. It provides Visual Studio 2026 extensions, CLI tools, and Roslyn analyzers for accelerating CRM development.
+## Project Overview
+
+**DynamicsCrm.DevKit** is a development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse:
+
+- **VSIX Extension**: 13 project templates, 16 item templates for Visual Studio 2026
+- **CLI Tool**: 12 commands for CI/CD automation (`devkit` global tool)
+- **Roslyn Analyzers**: 21 rules (DEVKIT1001-1021) for CRM development best practices
+- **Client Libraries**: JavaScript and TypeScript runtime for form scripts
 
 ## Response Format
 
-- Start with: "Xin chào anh Phước, rất vui được giúp anh"
-- End with: "Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"
+- Start with: `"Xin chào anh Phước, rất vui được giúp anh"`
+- End with: `"Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"`
 
-## AI Agent Actions
+---
+
+## AI Build Rules
 
 > [!IMPORTANT]
-> When actions are performed by an AI agent, all projects and solutions should be built in **DEBUG mode** instead of Release mode.
-> The Release mode requires PFX signing key password which is only available to human operators.
+> AI agents MUST use **DEBUG mode** for all builds. Release mode requires PFX signing key password (human only).
 
-### AI Build Command
+### Build Commands
+
 ```powershell
-.\Release-DynamicsCrm-DevKit-Debug.ps1
-```
-This script builds in DEBUG mode without requiring PFX password.
-
-### Human Release Command (requires PFX password)
-```powershell
-.\Release-DynamicsCrm-DevKit.ps1
-```
-
-## C# Conventions
-
-- Use `async/await` for async operations
-- Variable naming: `serviceClient` for ServiceClient, `crmService` for IOrganizationService
-- Target frameworks: .NET Framework 4.6.2, 4.8, and .NET Standard 2.0
-- Build after changes to verify no errors
-- Use `try/catch` with specific CRM exceptions: `FaultException<OrganizationServiceFault>`
-
-## Solution Structure
-
-### Build All Projects (DEBUG - for AI)
-```powershell
+# Build all (DEBUG)
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
 & $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
+
+# Build VSIX only
+& $msbuild "DynamicsCrm.DevKit.slnx" /t:Build /p:Configuration=Debug /v:m
+
+# Build CLI only
+& $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Debug /v:m
 ```
+
+> **IMPORTANT**: Use MSBuild, NOT `dotnet build` for VSIX projects.
 
 ### Release Scripts
 
@@ -48,70 +45,95 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 |--------|------|--------------|----------|
 | `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
 | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
-| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official annual release |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official release |
 
-### Project Types
+---
+
+## C# Conventions
+
+- Use `async/await` for async operations
+- Variable naming: `serviceClient` for `ServiceClient`, `crmService` for `IOrganizationService`
+- Target frameworks: .NET Framework 4.6.2, 4.8, and .NET Standard 2.0
+- Use `FaultException<OrganizationServiceFault>` for CRM error handling
+
+---
+
+## Project Structure
 
 | Project | Solution | Purpose |
 |---------|----------|---------|
-| **CLI** | `DynamicsCrm.DevKit.Cli.slnx` | Deployment automation tool |
 | **VSIX** | `DynamicsCrm.DevKit.slnx` | Visual Studio extension |
+| **CLI** | `DynamicsCrm.DevKit.Cli.slnx` | Deployment automation tool |
 | **Analyzers** | `DynamicsCrm.DevKit.Analyzers.csproj` | Roslyn code analyzers |
-| **Tools** | `DynamicsCrm.DevKit.Tools.slnx` | Utility package |
-| **Shared** | (shared project) | Common logic |
+| **Shared** | (shared project) | Common logic, XrmHelper |
+| **Tool** | `DynamicsCrm.DevKit.Tools.slnx` | Utility package |
 
-### Run Analyzer Unit Tests
+---
+
+## CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `devkit generator` | Generate form/webapi code |
+| `devkit server` | Deploy plugins, workflows, custom actions |
+| `devkit plugin` | Deploy plugins only |
+| `devkit workflow` | Deploy workflows only |
+| `devkit dataprovider` | Deploy data providers |
+| `devkit webresource` | Deploy web resources |
+| `devkit proxytype` | Generate proxy types |
+| `devkit solution` | Extract/pack solutions |
+| `devkit downloadreport` | Download reports |
+| `devkit uploadreport` | Upload reports |
+| `devkit downloadwebresource` | Download web resources |
+| `devkit datasource` | Create data sources |
+
+---
+
+## Analyzer Development
+
 ```powershell
+# Unit tests
 cd DynamicsCrm.DevKit.Analyzers
 .\Run-Analyzer-Coverage.ps1
-```
 
-### Run Analyzer VS Integration Tests
-After unit tests pass, verify analyzers work in real Visual Studio:
-
-```powershell
-# Step 1: Build analyzer DLL in Debug mode
+# VS Integration tests
 dotnet build DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental
 
-# Step 2: Copy DLL to packages folder
 Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
-  -Destination "DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
+  -Destination "DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
 
-# Step 3: Build VS test project and capture output
-$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-& $msbuild "DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj" /t:Rebuild /p:Configuration=Debug /v:n
-
-# Step 4: Verify build output contains all DEVKIT warnings (DEVKIT1001-DEVKIT1019)
+& $msbuild "DynamicsCrm.DevKit.Analyzers.Test.Vs\DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj" /t:Rebuild /p:Configuration=Debug /v:n
 ```
 
 > **Note**: Close and reopen VS after copying DLL - VS caches analyzers.
 
-## Build System
-
-> **IMPORTANT**: Use MSBuild, NOT `dotnet build`. The VSIX project requires MSBuild.
-
-- Path: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
-- Always build in Release mode
-- Debug CLI via `launchSettings.json` profiles
+---
 
 ## File Patterns
 
 | Search Term | Look For |
 |-------------|----------|
-| "helper" | `*Helper.cs` files (XrmHelper, FileHelper, JsonHelper) |
-| "config" | `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json` |
-| "task" | `Tasks/*.cs` in CLI project |
-| "wizard" | `Wizard/*.cs` in VSIX project |
-| "analyzer" | `CrmAnalyzers/*.cs` in Analyzers project |
+| `helper` | `*Helper.cs` (XrmHelper, FileHelper, JsonHelper) |
+| `config` | `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json` |
+| `task` | `Tasks/*.cs` in CLI project |
+| `wizard` | `Wizard/*.cs` in VSIX project |
+| `analyzer` | `CrmAnalyzers/*.cs` in Analyzers project |
 
-## DEVKIT Analyzers
+---
 
-This project includes 19 Roslyn analyzers (DEVKIT1001-DEVKIT1019) for CRM-specific patterns:
-- Plugin thread safety (static fields, HttpClient)
-- UseStrict patterns for JavaScript
-- RetrieveMultiple bounded queries
-- Avoid Console/File operations in plugins
-- Context.Depth check for infinite loop prevention
+## DEVKIT Analyzers (21 Rules)
+
+Roslyn analyzers for CRM-specific patterns:
+
+- **Thread Safety**: DEVKIT1001 (stateless plugins), DEVKIT1018 (parallel execution)
+- **I/O Restrictions**: DEVKIT1002 (console), DEVKIT1003 (file I/O)
+- **Performance**: DEVKIT1009 (ColumnSet), DEVKIT1012 (RetrieveMultiple)
+- **Best Practices**: DEVKIT1004 (Depth check), DEVKIT1007 (InvalidPluginExecutionException)
+- **HTTP**: DEVKIT1006 (timeout), DEVKIT1017 (KeepAlive)
+- **Plugin Images**: DEVKIT1011 (filtering attributes), DEVKIT1016 (image config)
+- **Tracing**: DEVKIT1015 (catch blocks), DEVKIT1020 (ITracingService)
+
+---
 
 ## Key Constants
 

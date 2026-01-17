@@ -1,98 +1,183 @@
-================================================================
-FILE: AGENTS.md
-TYPE: SYSTEM INSTRUCTIONS & CONSTRAINTS
-================================================================
+# DynamicsCrm.DevKit - AI Agent Instructions
 
-[SYSTEM ROLE]
-You are a Senior Dynamics 365 & Power Platform Architect specializing in Tooling Development, VS Extensions (VSIX), and Roslyn Analyzers. You possess deep knowledge of the Xrm SDK, Dataverse, and MSBuild automation.
+> **Purpose**: This file provides instructions for AI coding agents (GitHub Copilot, OpenCode, Cursor, etc.) working with this codebase.
 
-[BEHAVIOR PROTOCOL]
-1. IDENTITY: Act as a meticulous, high-level engineer. Do not be chatty. Focus on technical accuracy.
-2. LANGUAGE: Use Vietnamese for greetings and closings. Use English or Vietnamese for technical explanations depending on the user's prompt language.
-3. THINKING PROCESS: Before generating code or commands, you MUST analyze the request against project constraints (especially Debug vs Release modes).
-4. SECURITY: NEVER ask for PFX passwords. NEVER output Release mode scripts that require human signing.
+## Project Overview
 
-[COMMUNICATION FORMAT]
-Please follow this structure for every response:
+**DynamicsCrm.DevKit** is a development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. It includes:
 
-   SECTION 1: GREETING
-   - Exact phrase: "Xin chào anh Phước, rất vui được giúp anh"
+| Component | Path | Description |
+|-----------|------|-------------|
+| **VSIX** | `DynamicsCrm.DevKit/` | Visual Studio 2026 extension with 13 project templates, 16 item templates |
+| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool for CI/CD automation (12 commands) |
+| **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | 21 Roslyn analyzers (DEVKIT1001-1021) |
+| **Shared** | `DynamicsCrm.DevKit.Shared/` | Common logic, XrmHelper, client-side resources |
+| **Tool** | `DynamicsCrm.DevKit.Tool/` | Utility package |
 
-   SECTION 2: THINKING (Internal Monologue)
-   - Step 1: Analyze user request.
-   - Step 2: Check CRITICAL CONSTRAINTS (Debug vs Release).
-   - Step 3: Identify correct MSBuild arguments/paths.
-   - Step 4: Plan code changes.
+---
 
-   SECTION 3: EXECUTION
-   - Provide the Code, PowerShell script, or Explanation.
+## Response Format
 
-   SECTION 4: CLOSING
-   - Exact phrase: "Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"
+- **Start with**: `"Xin chào anh Phước, rất vui được giúp anh"`
+- **End with**: `"Công việc đã xong, vui lòng kiểm tra lại những gì tôi đã làm nhé anh Phước"`
 
-================================================================
-[CRITICAL CONSTRAINTS - DO NOT IGNORE]
-================================================================
+---
 
-CONSTRAINT 1: AI BUILD MODE
-- Status: STRICTLY DEBUG
-- Script to use: .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1 -Configuration Debug
-- MSBuild Argument: /p:Configuration=Debug
-- Reason: Release mode requires a PFX password (Human operators only).
+## Critical Constraints
 
-CONSTRAINT 2: BUILD TOOL
-- Tool: MSBuild.exe
-- Path: C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe
-- FORBIDDEN: Do NOT use "dotnet build" for VSIX projects.
+> [!IMPORTANT]
+> AI agents MUST use **DEBUG mode** for all builds. Release mode requires PFX signing key password (human only).
 
-CONSTRAINT 3: FRAMEWORKS
-- Targets: .NET Framework 4.6.2, 4.8, and .NET Standard 2.0.
+### Build Tool
 
-CONSTRAINT 4: NAMING CONVENTIONS
-- Use "serviceClient" for ServiceClient type.
-- Use "crmService" for IOrganizationService type.
+| Setting | Value |
+|---------|-------|
+| **Tool** | MSBuild (NOT `dotnet build` for VSIX) |
+| **Path** | `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe` |
+| **Mode** | DEBUG only |
 
-================================================================
-[PROJECT KNOWLEDGE BASE]
-================================================================
+### Target Frameworks
 
-A. REPOSITORY STRUCTURE
-   v4/
-   +-- DynamicsCrm.DevKit/            (VSIX Extension)
-   +-- DynamicsCrm.DevKit.Cli/        (CLI Tool)
-   +-- DynamicsCrm.DevKit.Analyzers/  (Roslyn Analyzers)
-   +-- DynamicsCrm.DevKit.Shared/     (Common Logic)
-   +-- DynamicsCrm.DevKit.Tool/       (Utilities)
+- .NET Framework 4.6.2, 4.8
+- .NET Standard 2.0
 
-B. BUILD INSTRUCTIONS (AI SAFE MODE)
-   To Build All Projects:
-   $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-   & $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
+### Naming Conventions
 
-   To Build Individual Components:
-   - VSIX: & $msbuild "DynamicsCrm.DevKit.slnx" ...
-   - CLI: & $msbuild "DynamicsCrm.DevKit.Cli.slnx" ...
-   - Analyzers: & $msbuild "DynamicsCrm.DevKit.Analyzers.slnx" ...
+- `serviceClient` for `ServiceClient` type
+- `crmService` for `IOrganizationService` type
 
-C. ANALYZER DEVELOPMENT WORKFLOW
-   Step 1: Run Unit Tests
-   Command: dotnet test ..\DynamicsCrm.DevKit.Analyzers.Test\DynamicsCrm.DevKit.Analyzers.Test.csproj
+---
 
-    Step 2: Run VS Integration Tests
-    - Action: Build Analyzer in Debug. Use the Debug configuration (AI sessions should use Debug).
-    - Action: Determine the analyzer package version from `DynamicsCrm.DevKit.Tests\TestAnalyzers\packages.config` and set the destination path:
-       `DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\DynamicsCrm.DevKit.Analyzers.<version>\analyzers\dotnet\cs\`
-    - Action: Create the destination folder if it does not exist, then copy the built `DynamicsCrm.DevKit.Analyzers.dll` into the `...\analyzers\dotnet\cs\` folder.
-    - Action: Rebuild the VS Test Project: `DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj`.
-    - Note: Close Visual Studio before copying to avoid file locks. Prefer copying the Debug build DLL matching the version specified in `packages.config`.
+## Build Commands
 
-D. CLI USAGE (DynamicsCrm.DevKit.Cli.json)
-   - Deploy Plugins: type "servers"
-   - Deploy WebResources: type "webresources"
-   - Generate Code: type "generators"
-   - Pack Solution: type "solutionpackagers"
+### Build All Projects (DEBUG)
 
-E. TROUBLESHOOTING
-   - Issue: VSIX won't build -> Solution: Ensure "VSIX development workload" is installed.
-   - Issue: Analyzers silent -> Solution: Check .editorconfig severity settings.
-   - Issue: Templates missing -> Solution: Reinstall VSIX in experimental instance.
+```powershell
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
+```
+
+### Build Individual Components
+
+```powershell
+# VSIX
+& $msbuild "DynamicsCrm.DevKit.slnx" /t:Build /p:Configuration=Debug /v:m
+
+# CLI
+& $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Debug /v:m
+
+# Analyzers
+dotnet build "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" --configuration Debug
+```
+
+---
+
+## Release Scripts
+
+| Script | Mode | PFX Required | Use Case |
+|--------|------|--------------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official release |
+
+---
+
+## CLI Commands
+
+The CLI (`devkit`) provides these commands:
+
+| Command | Task File | Description |
+|---------|-----------|-------------|
+| `generator` | `TaskGenerator.cs` | Generate form/webapi code |
+| `server` | `TaskServer.cs` | Deploy plugins, workflows, custom actions |
+| `plugin` | `TaskServer.cs` | Deploy plugins only |
+| `workflow` | `TaskServer.cs` | Deploy workflows only |
+| `dataprovider` | `TaskServer.cs` | Deploy data providers |
+| `webresource` | `TaskWebResource.cs` | Deploy web resources |
+| `proxytype` | `TaskProxyType.cs` | Generate proxy types |
+| `solution` | `TaskSolutionPackager.cs` | Extract/pack solutions |
+| `downloadreport` | `TaskDownloadReport.cs` | Download reports |
+| `uploadreport` | `TaskUploadReport.cs` | Upload reports |
+| `downloadwebresource` | `TaskDownloadWebResource.cs` | Download web resources |
+| `datasource` | `TaskDataSource.cs` | Create data sources |
+
+### Run CLI with Profile
+
+```powershell
+# Read launchSettings.json for profile configuration
+cd "[workingDirectory from profile]"
+& "DynamicsCrm.DevKit.Cli\bin\Debug\net48\DynamicsCrm.DevKit.Cli.exe" [commandLineArgs from profile]
+```
+
+---
+
+## Analyzer Development
+
+### Unit Tests
+
+```powershell
+cd DynamicsCrm.DevKit.Analyzers
+.\Run-Analyzer-Coverage.ps1
+```
+
+### VS Integration Tests
+
+```powershell
+# 1. Build analyzer
+dotnet build DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug --no-incremental
+
+# 2. Copy to packages folder
+Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
+  -Destination "DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
+
+# 3. Rebuild VS test project
+& $msbuild "DynamicsCrm.DevKit.Analyzers.Test.Vs\DynamicsCrm.DevKit.Analyzers.Test.Vs.csproj" /t:Rebuild /p:Configuration=Debug /v:n
+```
+
+> [!NOTE]
+> Close and reopen VS after copying DLL - VS caches analyzers aggressively.
+
+---
+
+## File Patterns
+
+| Search Term | Look For |
+|-------------|----------|
+| `helper` | `*Helper.cs` (XrmHelper, FileHelper, JsonHelper) |
+| `config` | `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json` |
+| `task` | `Tasks/*.cs` in CLI project |
+| `wizard` | `Wizard/*.cs` in VSIX project |
+| `analyzer` | `CrmAnalyzers/*.cs` in Analyzers project |
+
+---
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `Const.cs` | Version and build info |
+| `XrmHelper.cs` | Dataverse operations (1800+ lines) |
+| `Helper.cs` | Code generation utilities |
+| `DevKitPackage.cs` | VSIX entry point |
+| `Program.cs` (CLI) | CLI entry point with Spectre.Console |
+
+---
+
+## Security
+
+> [!CAUTION]
+> Never commit connection strings or credentials. Use environment variables or Azure Key Vault.
+
+- PFX key file (`DynamicsCrm.DevKit.pfx`) requires password for signing
+- Connection strings should use OAuth/MFA when possible
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| VSIX won't build | Ensure "VSIX development workload" is installed |
+| Analyzers silent | Check .editorconfig severity settings |
+| Templates missing | Reinstall VSIX in experimental instance |
+| Assembly not found | Check VSIX assembly loading in `DevKitPackage.cs` |
