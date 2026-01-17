@@ -16,11 +16,11 @@ This document tracks the implementation of connection-type-specific templates fo
 | **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | **Interactive**  | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | DeviceCode       | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| FromPac          | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| FromPac          | ✅ Done           | ✅ Done            | ⏳ Pending        | In Progress     |
 | AD               | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
 
 > **Last Completed:** DeviceCode
-> **Currently Working On:** FromPac
+> **Currently Working On:** FromPac - Awaiting user verification (Step 2 and Step 4)
 
 ---
 
