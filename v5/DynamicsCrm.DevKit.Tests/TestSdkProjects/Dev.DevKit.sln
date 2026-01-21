@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Package", "Dev.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.DevKit.Console\Dev.DevKit.Console.csproj", "{341A53C7-5811-49ED-A3BF-6A83713DD6B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.2", "Dev.DevKit.Console.2\Dev.DevKit.Console.2.csproj", "{7A4925AC-8ED6-0922-4B27-DEBAB0EDA5C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{341A53C7-5811-49ED-A3BF-6A83713DD6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{341A53C7-5811-49ED-A3BF-6A83713DD6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{341A53C7-5811-49ED-A3BF-6A83713DD6B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A4925AC-8ED6-0922-4B27-DEBAB0EDA5C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A4925AC-8ED6-0922-4B27-DEBAB0EDA5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A4925AC-8ED6-0922-4B27-DEBAB0EDA5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A4925AC-8ED6-0922-4B27-DEBAB0EDA5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

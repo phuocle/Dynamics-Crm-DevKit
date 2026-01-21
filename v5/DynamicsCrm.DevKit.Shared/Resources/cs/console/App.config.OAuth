@@ -5,5 +5,4 @@
 		<add key="UserName" value="$UserNameValue$" />
 		<add key="Password" value="$PasswordValue$" />
 	</appSettings>
-$Runtime$
 </configuration>

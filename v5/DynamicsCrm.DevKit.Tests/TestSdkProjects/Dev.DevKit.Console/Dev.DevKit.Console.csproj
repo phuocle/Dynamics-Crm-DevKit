@@ -37,7 +37,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DynamicsCrm.DevKit.Cli" Version="4.0.0" />
     <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

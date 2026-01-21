@@ -3,5 +3,4 @@
 	<appSettings>
 		<add key="Url" value="$UrlValue$" />
 	</appSettings>
-$Runtime$
 </configuration>
