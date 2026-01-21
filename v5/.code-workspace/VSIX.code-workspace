@@ -25,6 +25,9 @@
         },
         {
             "path": "../DynamicsCrm.DevKit.Tests/TestNewCli"
+        },
+        {
+            "path": "../DynamicsCrm.DevKit.Scripts"
         }
     ],
     "settings": {
