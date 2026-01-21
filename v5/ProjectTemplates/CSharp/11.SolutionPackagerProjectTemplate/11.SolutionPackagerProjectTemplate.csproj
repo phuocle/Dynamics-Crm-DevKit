@@ -56,14 +56,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="AssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Extract-Both.bat" />
     <None Include="Pack-Both.bat" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ProjectTemplate.csproj" />
-    <None Include="_packages.config" />
+    <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpSolutionPackagerProjectTemplate.vstemplate">
