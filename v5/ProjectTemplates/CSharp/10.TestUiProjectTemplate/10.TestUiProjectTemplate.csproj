@@ -60,12 +60,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="AssemblyInfo.cs" />
     <None Include="UiTest.runsettings" />
     <None Include="TestSettings.cs" />
-    <None Include="ProjectTemplate.csproj" />
-    <None Include="_packages.config" />
+    <None Include="ProjectTemplate.csproj.template" />
+    <None Include="App.cs" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpTestUiProjectTemplate.vstemplate">

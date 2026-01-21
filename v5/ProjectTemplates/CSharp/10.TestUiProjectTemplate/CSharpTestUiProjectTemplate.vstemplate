@@ -16,13 +16,11 @@
     <SortOrder>190</SortOrder>
   </TemplateData>
   <TemplateContent>
-	  <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+	  <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="TestSettings.cs">TestSettings.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
 	  <ProjectItem ReplaceParameters="true" TargetFileName="$SafeProjectName$.runsettings">UiTest.runsettings</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.cs">App.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

@@ -122,6 +122,7 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "NSubstitute");
             await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestAdapter");
             await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestFramework");
+            await NuGetHelper.SetReplacementAsync(replacements, "Dynamics365.UIAutomation.Api");
         }
 
         public static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)
