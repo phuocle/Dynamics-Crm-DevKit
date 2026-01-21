@@ -16,11 +16,9 @@
     <SortOrder>110</SortOrder>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="App.cs">App.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Helper.cs">Helper.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>

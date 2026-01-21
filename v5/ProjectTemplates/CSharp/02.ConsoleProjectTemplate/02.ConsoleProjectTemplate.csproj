@@ -80,13 +80,10 @@
     <None Include="App.cs" />
     <None Include="Program.cs" />
     <None Include="Helper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="AssemblyInfo.cs" />
-    <None Include="ProjectTemplate.csproj" />
-    <None Include="_packages.config" />
+    <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpConsoleProjectTemplate.vstemplate">

@@ -1,0 +1,2 @@
+[*.cs]
+dotnet_diagnostic.DEVKIT1019.severity = none
