@@ -305,8 +305,8 @@ namespace DynamicsCrm.DevKit.Lib
                 // Step 2: Remove project from solution
                 dte.Solution.Remove(project);
 
-                // Step 3: Move directory with improved retry logic
-                MoveDirectoryWithRetry(oldProjectFolder, newProjectFolder);
+                // Step 3: Copy directory to new location, then delete old in background
+                CopyDirectoryThenDelete(oldProjectFolder, newProjectFolder);
 
                 // Step 4: Re-add project to solution
                 var newProjectPath = Path.Combine(newProjectFolder, projectFileName);
@@ -320,53 +320,71 @@ namespace DynamicsCrm.DevKit.Lib
             }
         }
 
-        private static void MoveDirectoryWithRetry(string oldPath, string newPath)
+        private static void CopyDirectoryThenDelete(string sourceDir, string destDir)
         {
-            const int maxRetries = 5;
-            const int baseDelayMs = 500;
-            const int maxDelayMs = 5000;
+            // Step 1: Create destination directory
+            Directory.CreateDirectory(destDir);
+
+            // Step 2: Copy all files and subdirectories
+            CopyDirectoryRecursive(sourceDir, destDir);
+
+            // Step 3: Delete source directory in background with retry
+            // This runs on a separate thread so it doesn't block the wizard
+            _ = System.Threading.Tasks.Task.Run(() =>
+            {
+                DeleteDirectoryWithRetry(sourceDir);
+            });
+        }
+
+        private static void CopyDirectoryRecursive(string sourceDir, string destDir)
+        {
+            // Copy all files
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                var destFile = Path.Combine(destDir, Path.GetFileName(file));
+                File.Copy(file, destFile, overwrite: true);
+            }
+
+            // Copy all subdirectories
+            foreach (var dir in Directory.GetDirectories(sourceDir))
+            {
+                var destSubDir = Path.Combine(destDir, Path.GetFileName(dir));
+                Directory.CreateDirectory(destSubDir);
+                CopyDirectoryRecursive(dir, destSubDir);
+            }
+        }
+
+        private static void DeleteDirectoryWithRetry(string path)
+        {
+            const int maxRetries = 10;
+            const int delayMs = 1000;
 
             for (int attempt = 0; attempt < maxRetries; attempt++)
             {
                 try
                 {
-                    // Ensure target directory doesn't exist
-                    if (Directory.Exists(newPath))
-                    {
-                        throw new InvalidOperationException($"Target directory already exists: {newPath}");
-                    }
+                    // Wait before first attempt to let VS release file handles
+                    System.Threading.Thread.Sleep(delayMs);
 
-                    Directory.Move(oldPath, newPath);
-                    return; // Success
-                }
-                catch (IOException ex) when (ex.Message.Contains("being used by another process") && attempt < maxRetries - 1)
-                {
-                    // Calculate exponential backoff delay
-                    var delay = Math.Min(baseDelayMs * (int)Math.Pow(2, attempt), maxDelayMs);
-                    
-                    System.Diagnostics.Debug.WriteLine($"Directory move attempt {attempt + 1} failed, retrying in {delay}ms: {ex.Message}");
-                    
-                    System.Threading.Thread.Sleep(delay);
-                    
                     // Force garbage collection to release any file handles
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
                     GC.Collect();
+
+                    if (Directory.Exists(path))
+                    {
+                        Directory.Delete(path, recursive: true);
+                    }
+                    return; // Success
                 }
                 catch (Exception ex)
                 {
-                    // For non-recoverable exceptions, provide detailed error message
-                    throw new InvalidOperationException(
-                        $"Unable to move project folder from '{oldPath}' to '{newPath}' after {attempt + 1} attempts. " +
-                        $"Error: {ex.Message}. Please ensure no files are in use and try again.", ex);
+                    System.Diagnostics.Debug.WriteLine($"Delete attempt {attempt + 1} failed: {ex.Message}");
+                    // Continue trying
                 }
             }
-
-            // If we get here, all retries failed
-            throw new InvalidOperationException(
-                $"Unable to move project folder after {maxRetries} attempts. " +
-                $"Please close Visual Studio, manually rename the folder from '{oldPath}' to '{newPath}', " +
-                $"and then reopen the solution.");
+            // If all retries fail, log but don't throw - the project is already in the correct location
+            System.Diagnostics.Debug.WriteLine($"Failed to delete old project folder after {maxRetries} attempts: {path}");
         }
 
         internal static void ThrowWizardCancelledException(string OOBDestinationDirectory = null)
