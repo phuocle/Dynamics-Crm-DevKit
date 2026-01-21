@@ -24,12 +24,12 @@
       "CreatedAt": "2026-01-14T13:30:46.7695541Z"
     },
     {
-      "Name": "AD",
-      "Url": "",
-      "UserName": "",
-      "Password": "",
+      "Name": "uatround",
+      "Url": "https://crm-inter.ttcsugar.com.vn/uatround",
+      "UserName": "TTCSUAT\\legacy_crm",
+      "Password": "ttcbh@123",
       "Type": "AD",
-      "CreatedAt": "2026-01-14T23:24:49.2258296Z"
+      "CreatedAt": "2026-01-21T12:23:00.0000000Z"
     },
     {
       "Name": "DeviceCode",

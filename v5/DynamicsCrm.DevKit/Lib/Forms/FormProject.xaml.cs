@@ -249,7 +249,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         {
                             await VS.MessageBox.ShowErrorAsync(
                                 $"The connection type '{CrmConnection.Type}' is not supported for Console project template (.NET Framework).\n\n" +
+                                "DeviceCode and FromPac authentication require modern .NET Core dependencies (Azure.Identity).\n\n" +
                                 "Please use Console Core project template (.NET Core) for DeviceCode or FromPac connection types, " +
+                                "or select a different connection type.");
+                            return false;
+                        }
+                    }
+                    // Console Core project (.NET Core) does not support AD connection type (WCF/ServiceModel limitation)
+                    if (ProjectType == ProjectType.ConsoleCore && CrmConnection != null)
+                    {
+                        var connectionType = CrmConnection.Type?.ToUpperInvariant();
+                        if (connectionType == "AD")
+                        {
+                            await VS.MessageBox.ShowErrorAsync(
+                                $"The connection type 'AD' is not supported for Console Core project template (.NET Core).\n\n" +
+                                "AD authentication requires WCF/ServiceModel which is not fully supported on .NET Core.\n\n" +
+                                "Please use Console project template (.NET Framework) for AD connection type, " +
                                 "or select a different connection type.");
                             return false;
                         }

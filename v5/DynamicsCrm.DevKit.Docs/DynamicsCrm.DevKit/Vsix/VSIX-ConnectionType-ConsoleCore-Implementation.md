@@ -5,8 +5,9 @@
 This document tracks the implementation of connection-type-specific templates for `Console Core` project (.NET Core). Unlike `Console` project (.NET Framework), Console Core:
 
 - Uses `AppSettings.json` instead of `App.config`
-- Supports all connection types including **DeviceCode** and **FromPac**
+- Supports most connection types including **DeviceCode** and **FromPac**
 - Uses modern .NET Core dependencies (Azure.Identity, etc.)
+- ⚠️ **AD authentication is NOT supported** due to WCF/ServiceModel limitations in .NET Core
 
 ## Status Tracking
 
@@ -16,11 +17,11 @@ This document tracks the implementation of connection-type-specific templates fo
 | **OAuth**        | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | **Interactive**  | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
 | DeviceCode       | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
-| FromPac          | ✅ Done           | ✅ Done            | ⏳ Pending        | In Progress     |
-| AD               | ⏳ Pending        | ⏳ Pending         | ⏳ Pending        | Pending         |
+| FromPac          | ✅ Done           | ✅ Done            | ✅ Done           | ✅ **Completed** |
+| AD               | ⛔ N/A            | ⛔ N/A             | ⛔ N/A            | ⛔ **Not Supported** |
 
-> **Last Completed:** DeviceCode
-> **Currently Working On:** FromPac - Awaiting user verification (Step 2 and Step 4)
+> **Last Completed:** FromPac
+> **AD Status:** Not supported on .NET Core - use Console (.NET Framework) for AD authentication
 
 ---
 
