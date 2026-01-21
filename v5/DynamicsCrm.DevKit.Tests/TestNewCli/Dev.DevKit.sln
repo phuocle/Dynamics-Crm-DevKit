@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ConsoleCore.Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ConsoleCore.DeviceCode2", "Dev.DevKit.ConsoleCore.DeviceCode2\Dev.DevKit.ConsoleCore.DeviceCode2.csproj", "{8BA26141-DE29-494D-956E-CE7F2C1DAF20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ConsoleCore.FromPac2", "Dev.DevKit.ConsoleCore.FromPac2\Dev.DevKit.ConsoleCore.FromPac2.csproj", "{7D0C5F5D-11F9-4C00-5A1C-553D79BD0F30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,10 @@ Global
 		{8BA26141-DE29-494D-956E-CE7F2C1DAF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BA26141-DE29-494D-956E-CE7F2C1DAF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BA26141-DE29-494D-956E-CE7F2C1DAF20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D0C5F5D-11F9-4C00-5A1C-553D79BD0F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0C5F5D-11F9-4C00-5A1C-553D79BD0F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0C5F5D-11F9-4C00-5A1C-553D79BD0F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0C5F5D-11F9-4C00-5A1C-553D79BD0F30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

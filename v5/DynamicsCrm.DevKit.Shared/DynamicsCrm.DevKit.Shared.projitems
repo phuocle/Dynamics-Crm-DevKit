@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.FromPac.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.DeviceCode.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.Interactive.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.OAuth.cs" />
@@ -203,5 +204,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\AppSettings.DeviceCode.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\AppSettings.FromPac.json" />
   </ItemGroup>
 </Project>
