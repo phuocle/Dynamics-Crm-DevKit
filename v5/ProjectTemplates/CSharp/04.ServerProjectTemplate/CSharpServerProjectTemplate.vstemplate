@@ -17,7 +17,6 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
