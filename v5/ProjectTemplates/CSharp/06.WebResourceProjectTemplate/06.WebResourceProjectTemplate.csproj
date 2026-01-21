@@ -76,8 +76,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="AssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>
   <ItemGroup>
     <None Include="deploy.debug.bat" />
@@ -85,8 +84,6 @@
     <None Include="generator.webapi.bat" />
     <None Include="jsconfig.json" />
     <None Include="package.json" />
-    <None Include="_packages.config" />
-    <None Include="ProjectTemplate.csproj" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpWebResourceProjectTemplate.vstemplate">

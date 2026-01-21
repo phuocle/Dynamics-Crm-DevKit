@@ -16,7 +16,7 @@
 		<SortOrder>150</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
 			<Folder Name="lib" />
 			<Folder Name="entities" />
 			<Folder Name="images" />
@@ -24,9 +24,7 @@
 			<Folder Name="html" />
 			<Folder Name="css" />
 			<Folder Name="js" />
-			<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="jsconfig.json">jsconfig.json</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="entities\devkit.d.ts">devkit.d.ts</ProjectItem>
