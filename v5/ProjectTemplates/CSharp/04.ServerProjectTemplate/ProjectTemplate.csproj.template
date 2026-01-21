@@ -6,7 +6,6 @@
     <RootNamespace>$NameSpace$</RootNamespace>
     <AssemblyName>$ProjectName$</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <EnableDefaultItems>false</EnableDefaultItems>
     <PlatformTarget>x64</PlatformTarget>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$ProjectName$.snk</AssemblyOriginatorKeyFile>
@@ -37,7 +36,7 @@
     <None Include="$ProjectName$.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+	<None Include="README.md" />
   </ItemGroup>
   <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
 </Project>
