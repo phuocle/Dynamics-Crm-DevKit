@@ -119,7 +119,6 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.Workflow");
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreTools");
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.PowerPlatform.Dataverse.Client");
-            await NuGetHelper.SetReplacementAsync(replacements, "NSubstitute");
         }
 
         public static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)

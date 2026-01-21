@@ -84,7 +84,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ProjectTemplate.csproj" />
+    <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpConsoleCoreProjectTemplate.vstemplate">

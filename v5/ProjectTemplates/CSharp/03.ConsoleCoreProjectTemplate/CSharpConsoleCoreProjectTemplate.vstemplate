@@ -16,7 +16,7 @@
     <SortOrder>120</SortOrder>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true">App.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">AppSettings.json</ProjectItem>
       <ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>
