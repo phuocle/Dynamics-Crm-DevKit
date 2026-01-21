@@ -9,11 +9,7 @@
             "path": "../DynamicsCrm.DevKit.Shared"
         },
         {
-            "name": "DynamicsCrm.DevKit.Docs",
-            "path": "../DynamicsCrm.DevKit.Docs"
-        },
-        {
-            "path": "../DynamicsCrm.DevKit.Tests/TestServerCode"
+            "path": "../DynamicsCrm.DevKit.Tests/TestSdkProjects"
         }
     ],
     "settings": {

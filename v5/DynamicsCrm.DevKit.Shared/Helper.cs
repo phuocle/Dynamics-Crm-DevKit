@@ -897,40 +897,25 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static List<string> GetFiles(string folder, List<string> includePatternFiles, List<string> excludePatternFiles)
         {
-            var includefiles = new List<string>();
-            foreach (var includefile in includePatternFiles)
+            if (!Directory.Exists(folder))
+                return new List<string>();
+
+            var includefiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var pattern in includePatternFiles)
             {
-                if (Directory.Exists(folder))
-                {
-                    includefiles.AddRange([.. Directory.GetFiles(folder, includefile)]);
-                }
+                foreach (var file in Directory.GetFiles(folder, pattern, SearchOption.AllDirectories))
+                    includefiles.Add(file);
             }
-            foreach (var includefile in includePatternFiles)
+
+            var excludefiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var pattern in excludePatternFiles)
             {
-                var other = includefile.Replace("*.", string.Empty);
-                if (Directory.Exists(folder))
-                {
-                    includefiles.AddRange([.. Directory.GetFiles(folder, other)]);
-                }
+                foreach (var file in Directory.GetFiles(folder, pattern, SearchOption.AllDirectories))
+                    excludefiles.Add(file);
             }
-            var excludefiles = new List<string>();
-            foreach (var excludefile in excludePatternFiles)
-            {
-                if (Directory.Exists(folder))
-                {
-                    excludefiles.AddRange([.. Directory.GetFiles(folder, excludefile)]);
-                }
-            }
-            foreach (var excludefile in excludePatternFiles)
-            {
-                var other = excludefile.Replace("*.", string.Empty);
-                if (Directory.Exists(folder))
-                {
-                    excludefiles.AddRange([.. Directory.GetFiles(folder, other)]);
-                }
-            }
-            var files = includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
-            files.Sort();
+
+            var files = includefiles.Where(file => !excludefiles.Contains(file)).ToList();
+            files.Sort(StringComparer.OrdinalIgnoreCase);
             return files;
         }
         public static bool IsEqualsContent(string oldContent, string newContent)
