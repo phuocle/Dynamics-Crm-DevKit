@@ -16,7 +16,7 @@
     <SortOrder>140</SortOrder>
   </TemplateData>
   <TemplateContent>
-    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+    <Project File="ProjectTemplate.csproj.template" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.only.bat">deploy.debug.only.bat</ProjectItem>

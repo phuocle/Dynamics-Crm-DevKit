@@ -81,7 +81,7 @@
   <ItemGroup>
     <None Include="deploy.debug.only.bat" />
     <None Include="deploy.debug.bat" />
-    <None Include="ProjectTemplate.csproj" />
+    <None Include="ProjectTemplate.csproj.template" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
