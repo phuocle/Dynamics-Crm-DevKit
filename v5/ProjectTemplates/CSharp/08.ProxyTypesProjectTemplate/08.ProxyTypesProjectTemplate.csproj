@@ -63,8 +63,7 @@
   <ItemGroup>
     <None Include="AssemblyInfo.cs" />
     <None Include="ProxyTypesAssembly.cs" />
-    <None Include="ProjectTemplate.csproj" />
-    <None Include="_packages.config" />
+    <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpProxyTypesProjectTemplate.vstemplate">
