@@ -33,11 +33,6 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.Version$">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.Version$" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreTools" Version="$Microsoft.CrmSdk.CoreTools.Version$" />
 	</ItemGroup>

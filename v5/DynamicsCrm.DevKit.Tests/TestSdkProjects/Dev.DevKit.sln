@@ -30,6 +30,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ProxyTypes", "De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Test", "Dev.DevKit.Test\Dev.DevKit.Test.csproj", "{2A5DA73D-CE01-9791-4C99-160413F8D091}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{542AAEE6-1F87-4B3B-E91D-AC9770A3D0B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +72,14 @@ Global
 		{2A5DA73D-CE01-9791-4C99-160413F8D091}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A5DA73D-CE01-9791-4C99-160413F8D091}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A5DA73D-CE01-9791-4C99-160413F8D091}.Release|Any CPU.Build.0 = Release|Any CPU
+		{542AAEE6-1F87-4B3B-E91D-AC9770A3D0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{542AAEE6-1F87-4B3B-E91D-AC9770A3D0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{542AAEE6-1F87-4B3B-E91D-AC9770A3D0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{542AAEE6-1F87-4B3B-E91D-AC9770A3D0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
