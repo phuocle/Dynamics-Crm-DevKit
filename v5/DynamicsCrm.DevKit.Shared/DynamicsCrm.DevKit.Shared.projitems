@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\download.reports.bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\upload.reports.bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ReportProjectTemplate.rptproj" />

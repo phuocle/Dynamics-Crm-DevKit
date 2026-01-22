@@ -53,13 +53,14 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$Extract-Both.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.solutionpackager.extract.both.bat");
             replacements["$Pack-Both.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.solutionpackager.pack.both.bat");
             replacements["$download.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
+            replacements["$upload.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.upload.reports.bat");
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("TracingServiceFake.cs");
-            
+
             // Shared runtime assembly binding redirects
             replacements["$Runtime$"] = await VsixHelper.ReadEmbeddedResourceAsync("cs.console.runtime.xml");
-            
+
             // Connection-type-specific App.cs and App.config for Console projects
             if (!string.IsNullOrEmpty(connectionType))
             {
@@ -70,7 +71,7 @@ namespace DynamicsCrm.DevKit.Lib
                     appCsResource = ApplyReplacements(appCsResource, replacements);
                     replacements["$App.cs$"] = appCsResource;
                 }
-                
+
                 var appConfigResource = await VsixHelper.ReadEmbeddedResourceAsync($"cs.console.App.config.{connectionType}");
                 if (!string.IsNullOrEmpty(appConfigResource))
                 {
@@ -79,7 +80,7 @@ namespace DynamicsCrm.DevKit.Lib
                     replacements["$App.config$"] = appConfigResource;
                 }
             }
-            
+
             // Connection-type-specific App.cs and AppSettings.json for Console Core projects
             if (!string.IsNullOrEmpty(connectionType))
             {
@@ -89,7 +90,7 @@ namespace DynamicsCrm.DevKit.Lib
                     appCsCoreResource = ApplyReplacements(appCsCoreResource, replacements);
                     replacements["$AppCore.cs$"] = appCsCoreResource;
                 }
-                
+
                 var appSettingsResource = await VsixHelper.ReadEmbeddedResourceAsync($"cs.consolecore.AppSettings.{connectionType}.json");
                 if (!string.IsNullOrEmpty(appSettingsResource))
                 {
@@ -129,15 +130,15 @@ namespace DynamicsCrm.DevKit.Lib
         {
             replacements["$AuthTypeValue$"] = crmConnection.Type;
             replacements["$UrlValue$"] = crmConnection.Url;
-            
+
             // Generic placeholders (for backward compatibility)
             replacements["$UserNameValue$"] = crmConnection.UserName ?? string.Empty;
             replacements["$PasswordValue$"] = Helper.DecryptString(crmConnection.Password) ?? string.Empty;
-            
+
             // ClientSecret-specific placeholders
             replacements["$ClientIdValue$"] = crmConnection.ClientId ?? string.Empty;
             replacements["$ClientSecretValue$"] = Helper.DecryptString(crmConnection.ClientSecret) ?? string.Empty;
-            
+
             // FromPac-specific placeholders
             replacements["$PacProfileValue$"] = crmConnection.PacProfile ?? string.Empty;
         }
@@ -149,7 +150,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$SharedNameSpace$"] = $"{solutionName}.{ProjectType.Shared}";
             replacements["$SharedProject$"] = await VsixHelper.GetSharedProjectAsync();
             replacements["$SharedTestProject$"] = $"{solutionName}.{ProjectType.Shared}.{ProjectType.Test}";
-            replacements["$ProjectProxyTypes$"] = $"{solutionName}.{ProjectType.ProxyTypes}";            
+            replacements["$ProjectProxyTypes$"] = $"{solutionName}.{ProjectType.ProxyTypes}";
         }
     }
 }

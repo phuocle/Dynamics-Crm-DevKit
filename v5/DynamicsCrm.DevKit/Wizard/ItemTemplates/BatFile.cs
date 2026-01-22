@@ -53,6 +53,11 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                             content = content.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
                             replacementsDictionary.Add("$batfile.bat$", content);
                             break;
+                        case "upload.reports.bat":
+                            var contentUploadReports = await VsixHelper.ReadEmbeddedResourceAsync("bat.upload.reports.bat");
+                            contentUploadReports = contentUploadReports.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
+                            replacementsDictionary.Add("$batfile.bat$", contentUploadReports);
+                            break;
                         case "download.webresources.bat":
                             var content2 = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.webresources.bat");
                             content2 = content2.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));

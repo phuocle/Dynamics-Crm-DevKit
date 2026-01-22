@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;  
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
                 return selected.LogicalName ?? string.Empty;
             }
@@ -78,7 +78,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                return ThreadHelper.JoinableTaskFactory.Run(async () => await VsixHelper.PluginOrderAsync(Class));                
+                return ThreadHelper.JoinableTaskFactory.Run(async () => await VsixHelper.PluginOrderAsync(Class));
             }
         }
         public string PluginComment
@@ -140,7 +140,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
-                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;                    
+                    ComboBoxStage.Visibility = System.Windows.Visibility.Collapsed;
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                     LabelClass.Visibility = System.Windows.Visibility.Collapsed;
@@ -259,7 +259,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
                 return selected.Title ?? string.Empty;
             }
-        }        
+        }
 
         private async Task LoadCustomTemplatesAsync()
         {
@@ -313,7 +313,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (ItemType == ItemType.Plugin || ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi || ItemType == ItemType.Workflow || ItemType == ItemType.UiTest || ItemType == ItemType.Test)
                 {
-                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;                    
+                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                     var form = new FormCustom(CustomTemplates, CustomTemplate, ItemType, await T4Helper.BuildContextAsync(this));
                     Mouse.OverrideCursor = null;
                     form.ShowDialog();
@@ -324,7 +324,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _ = ButtonCustom_ClickAsync();            
+            _ = ButtonCustom_ClickAsync();
         }
 
         bool IsValid()
@@ -377,7 +377,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
                         var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
                         items = items.OrderBy(x => x.LogicalName).ToList();
-                        if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi) 
+                        if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
                         {
                             items.Insert(0, new XrmEntity { Name = "None", SchemaName = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
                         }
@@ -426,6 +426,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 var items = new List<XrmEntity>()
                 {
                     new XrmEntity { SchemaName = "download.reports.bat", LogicalName = "download.reports.bat" },
+                    new XrmEntity { SchemaName = "upload.reports.bat", LogicalName = "upload.reports.bat" },
                     new XrmEntity { SchemaName = "download.webresources.bat", LogicalName = "download.webresources.bat" },
                     new XrmEntity { SchemaName = "deploy.datasource.bat", LogicalName = "deploy.datasource.bat" },
                     new XrmEntity { SchemaName = "Plugin-Managed-Identity.ps1", LogicalName = "Plugin-Managed-Identity.ps1" }
@@ -488,7 +489,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomActionsAsync(ServiceClient);
                         else
                             ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomActionsAsync(ServiceClient, selectedEntity.LogicalName);
-                        ComboBoxMessage.DisplayMemberPath = "Name";                        
+                        ComboBoxMessage.DisplayMemberPath = "Name";
                         ComboBoxMessage.SelectedItem = null;
                         ComboBoxStage.SelectedItem = null;
                         ComboBoxExecution.SelectedItem = null;
@@ -517,12 +518,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         LockUi(false);
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
-            }            
+            }
         }
 
         private void UpdateClassName()
         {
-            if (ItemType == ItemType.CustomApi) 
+            if (ItemType == ItemType.CustomApi)
             {
                 TextboxClass.Text = $"{PluginMessage}Request";
             }

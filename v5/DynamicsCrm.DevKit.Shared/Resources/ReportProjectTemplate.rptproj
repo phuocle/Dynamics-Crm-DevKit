@@ -37,6 +37,9 @@
         <Report Include="download.reports.bat">
             <MimeType>application/octet-stream</MimeType>
         </Report>
+		<Report Include="upload.reports.bat">
+			<MimeType>application/octet-stream</MimeType>
+		</Report>
         <Report Include="README.md">
             <MimeType>
             </MimeType>

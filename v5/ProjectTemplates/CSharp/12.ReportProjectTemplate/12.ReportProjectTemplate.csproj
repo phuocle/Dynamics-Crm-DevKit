@@ -62,6 +62,7 @@
     <Content Include="icon.png" />
     <None Include="README.md" />
     <Content Include="ProjectTemplate.csproj" />
+    <None Include="upload.reports.bat" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpReportProjectTemplate.vstemplate">
