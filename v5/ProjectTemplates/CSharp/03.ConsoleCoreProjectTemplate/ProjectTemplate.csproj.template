@@ -36,10 +36,10 @@
 		<NoWarn>CS8032</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.14.0" />
+		<PackageReference Include="Azure.Identity" Version="1.17.1" />
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.Version$" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.2" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.Version$" />
 		<PackageReference Include="NSubstitute" Version="5.3.0" />
 	</ItemGroup>
