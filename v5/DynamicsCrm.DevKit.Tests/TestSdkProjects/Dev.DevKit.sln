@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}"
 EndProject
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Dev.DevKit.Report", "Dev.DevKit.Report\Dev.DevKit.Report.rptproj", "{44C72FF2-9813-24A6-661A-F3C0D238C0C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,12 @@ Global
 		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECF6C1D9-26BF-2341-8A5F-BD7B9DCA7F26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Debug|Any CPU.ActiveCfg = Debug
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Debug|Any CPU.Build.0 = Debug
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Debug|Any CPU.Deploy.0 = Debug
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.ActiveCfg = Release
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Build.0 = Release
+		{44C72FF2-9813-24A6-661A-F3C0D238C0C1}.Release|Any CPU.Deploy.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
