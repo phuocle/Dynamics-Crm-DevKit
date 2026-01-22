@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
-    <ProjectGuid>25936b61-5f39-47cf-b61f-881d48429fcf</ProjectGuid>
+    <ProjectGuid>8b175f53-23cc-48f7-8f01-2eadb5340052</ProjectGuid>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -10,4 +10,4 @@
   <Import Project="Dev.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>
-<!-- v.4.12.34.56 - Build: 22.01.2026 09:36:57 -->
+<!-- v.4.12.34.56 - Build: 22.01.2026 16:03:15 -->

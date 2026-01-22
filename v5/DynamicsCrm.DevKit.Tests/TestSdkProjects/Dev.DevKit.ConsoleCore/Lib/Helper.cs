@@ -13,10 +13,6 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-//using Microsoft.Xrm.Sdk.Workflow;
-//using System.Reflection;
-//using System.Activities;
-
 namespace Dev.DevKit.ConsoleCore.Lib
 {
     public static class Helper

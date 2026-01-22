@@ -25,7 +25,7 @@
 			<ProjectItem ReplaceParameters="true" TargetFileName="README.md">README.md</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="ReportTemplate.rdl">ReportTemplate.rdl</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="download.reports.bat">download.reports.bat</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="upload.reports.bat">download.reports.bat</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="upload.reports.bat">upload.reports.bat</ProjectItem>
 		</Project>
 	</TemplateContent>
 	<WizardExtension>

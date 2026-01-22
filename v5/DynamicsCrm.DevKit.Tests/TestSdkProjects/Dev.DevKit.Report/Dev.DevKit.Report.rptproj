@@ -37,6 +37,9 @@
         <Report Include="download.reports.bat">
             <MimeType>application/octet-stream</MimeType>
         </Report>
+		<Report Include="upload.reports.bat">
+			<MimeType>application/octet-stream</MimeType>
+		</Report>
         <Report Include="README.md">
             <MimeType>
             </MimeType>
@@ -45,4 +48,4 @@
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
-<!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->
+<!-- v.4.12.34.56 - Build: 22.01.2026 16:03:15 -->
