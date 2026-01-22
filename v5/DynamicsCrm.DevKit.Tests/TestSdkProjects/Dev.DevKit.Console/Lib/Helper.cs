@@ -1,9 +1,4 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Extensions;
-using Microsoft.Xrm.Sdk.PluginTelemetry;
-using NSubstitute;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -12,8 +7,13 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
+using Microsoft.Xrm.Sdk.PluginTelemetry;
+using NSubstitute;
 
-namespace $NameSpace$.Lib
+namespace Dev.DevKit.Console.Lib
 {
     public static class Helper
     {

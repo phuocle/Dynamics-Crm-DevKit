@@ -1,35 +1,30 @@
 ---
-description: Build VSIX DynamicsCrm.DevKit
+description: Build DynamicsCrm.DevKit VSIX project in Debug mode
 ---
 
-# Build VSIX Workflow
+// turbo-all
 
-Follow these steps strictly to examine, build, and verify the VSIX project.
+Build the VSIX project using MSBuild in Debug mode.
 
-## 1. Configuration Constants
-Use these exact paths and configurations. Do not deviate.
-- **Build Mode**: `DEBUG`
-- **MSBuild Path**: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
-- **Solution File**: `DynamicsCrm.DevKit.slnx` (Relative to workspace root `v5`)
+## Prerequisites
 
-## 2. Execution Process
-1.  **Pre-check**: Ensure you are in the workspace root (`v5`).
-2.  **Build Command**: Execute MSBuild with the following parameters:
-    - Target: `Rebuild`
-    - Configuration: `Debug`
-      ```
-3.  **Error Resolution Loop**:
-    - If the build **fails** (exit code != 0 or Errors > 0):
-      - Analyze the error output.
-      - Apply fixes to the code.
-      - **Re-run** the build command.
-      - Repeat until the build succeeds with 0 errors.
+- Visual Studio 2026 Professional must be installed
+- MSBuild path: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe`
 
-## 3. Strict Constraints
-- **NO TESTS**: You are strictly FORBIDDEN from running any VSIX tests. Your task ends at the build.
-- **DEBUG ONLY**: Do not use Release mode.
+## Build Command
 
-## 4. Completion Notification
-When the build is successful (0 errors), verify the `.vsix` file exists in `bin\Debug\`, then strictly notify the user with this exact message:
+```powershell
+cd "d:\github\Dynamics-Crm-DevKit\v5"
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+& $msbuild "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj" /t:Build /p:Configuration=Debug /v:m
+```
 
-> "Anh Phước, tôi đã build VSIX không có lỗi gì, anh hãy test lại giúp tôi"
+## Output Location
+
+- VSIX: `DynamicsCrm.DevKit\bin\Debug\DynamicsCrm.DevKit.vsix`
+
+## Notes
+
+- VSIX projects MUST use MSBuild, NOT `dotnet build`
+- Debug mode does NOT require PFX signing key password
+- For full solution build with packaging, use `/build-debug` workflow instead
