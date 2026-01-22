@@ -5,7 +5,6 @@
 		<RootNamespace>$NameSpace$</RootNamespace>
 		<AssemblyName>$ProjectName$</AssemblyName>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
 		<PlatformTarget>x64</PlatformTarget>
 
 		<!-- Assembly Info -->
@@ -20,6 +19,21 @@
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
 		<Nullable>disable</Nullable>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>..\Release\consolecore\$ProjectName$</OutputPath>
+		<NoWarn>CS8032</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.14.0" />

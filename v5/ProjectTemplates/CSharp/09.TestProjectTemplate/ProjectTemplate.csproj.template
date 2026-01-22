@@ -46,7 +46,7 @@
 		<PackageReference Include="FakeXrmEasy.Plugins.v9" Version="2.8.1" />
 		<PackageReference Include="FakeXrmEasy.CodeActivities.v9" Version="2.6.1" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.Version$" />
-		<PackageReference Include="Microsoft.CrmSdk.Deployment" Version="9.0.2.34" />
+		<PackageReference Include="Microsoft.CrmSdk.Deployment" Version="$Microsoft.CrmSdk.Deployment.Version$" />
 		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="$Microsoft.CrmSdk.Workflow.Version$" />
 		<PackageReference Include="MSTest.TestAdapter" Version="$MSTest.TestAdapter.Version$" />
 		<PackageReference Include="MSTest.TestFramework" Version="$MSTest.TestFramework.Version$" />
@@ -54,7 +54,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\$ProjectProxyTypes$\$ProjectProxyTypes$.csproj" />
-	</ItemGroup>
 	</ItemGroup>
 	<Import Project="..\$SharedTestProject$\$SharedTestProject$.projitems" Label="Shared" Condition="Exists('..\$SharedTestProject$\$SharedTestProject$.projitems')" />
 </Project>
