@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
 
 namespace Dev.DevKit.Shared
 {

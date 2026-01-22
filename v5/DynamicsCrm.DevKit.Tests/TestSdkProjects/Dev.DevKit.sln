@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.ConsoleCore", "Dev.DevKit.ConsoleCore\Dev.DevKit.ConsoleCore.csproj", "{22F2BF65-7019-A703-6BC9-60A280AAD8FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server", "Dev.DevKit.Server\Dev.DevKit.Server.csproj", "{DC1D6533-1713-7141-43F7-20566C8AE81A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{22F2BF65-7019-A703-6BC9-60A280AAD8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F2BF65-7019-A703-6BC9-60A280AAD8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22F2BF65-7019-A703-6BC9-60A280AAD8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC1D6533-1713-7141-43F7-20566C8AE81A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC1D6533-1713-7141-43F7-20566C8AE81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC1D6533-1713-7141-43F7-20566C8AE81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC1D6533-1713-7141-43F7-20566C8AE81A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +48,6 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{25936b61-5f39-47cf-b61f-881d48429fcf}*SharedItemsImports = 13
 		Dev.DevKit.Shared.Test\Dev.DevKit.Shared.Test.projitems*{6fc5125c-89e0-43b9-a02d-58fe60ab0964}*SharedItemsImports = 13
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{dc1d6533-1713-7141-43f7-20566c8ae81a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
