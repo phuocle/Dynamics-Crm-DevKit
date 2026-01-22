@@ -45,6 +45,7 @@
 		<None Update="AppSettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Include="README.md" />
 	</ItemGroup>
 </Project>
 <!-- $DevKitVersion$ -->

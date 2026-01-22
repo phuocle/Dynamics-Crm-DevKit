@@ -11,5 +11,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Executor\**\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" />
   </ItemGroup>
 </Project>

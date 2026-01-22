@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>
 <!-- $DevKitVersion$ -->

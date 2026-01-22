@@ -16,8 +16,7 @@
 		<SortOrder>200</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="false" TargetFileName="mapping.xml">mapping.xml</ProjectItem>
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">			<ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>			<ProjectItem ReplaceParameters="false" TargetFileName="mapping.xml">mapping.xml</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Extract-Both.bat">Extract-Both.bat</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Pack-Both.bat">Pack-Both.bat</ProjectItem>
 		</Project>

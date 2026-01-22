@@ -24,6 +24,7 @@
 			<Folder Name="html" />
 			<Folder Name="css" />
 			<Folder Name="js" />
+			<ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="jsconfig.json">jsconfig.json</ProjectItem>

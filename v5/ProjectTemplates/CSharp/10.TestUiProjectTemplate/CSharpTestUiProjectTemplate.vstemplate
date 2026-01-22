@@ -17,6 +17,7 @@
   </TemplateData>
   <TemplateContent>
 	  <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="TestSettings.cs">TestSettings.cs</ProjectItem>
 	  <ProjectItem ReplaceParameters="true" TargetFileName="$SafeProjectName$.runsettings">UiTest.runsettings</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.cs">App.cs</ProjectItem>

@@ -20,6 +20,7 @@
 			<Folder Name="Lib" TargetFolderName="Lib" />
 			<Folder Name="Entities" TargetFolderName="Entities" />
 			<ProjectItem TargetFileName="$NameSpace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
 			<ProjectItem ReplaceParameters="false" TargetFileName="Lib\Date.cs">Date.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginCore.cs">PluginCore.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>

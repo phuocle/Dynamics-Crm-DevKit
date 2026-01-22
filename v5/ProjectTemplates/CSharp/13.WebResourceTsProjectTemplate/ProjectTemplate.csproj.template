@@ -51,6 +51,7 @@
 		<None Include="deploy.debug.bat" />
 		<None Include="package.json" />
 		<None Include="tsconfig.json" />
+		<None Include="README.md" />
 		<Content Include="build.js" />
 		<TypeScriptCompile Include="lib\devkit.d.ts" />
 		<TypeScriptCompile Include="lib\devkit.ts" />

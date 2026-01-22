@@ -53,6 +53,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\$ProjectProxyTypes$\$ProjectProxyTypes$.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<None Include="README.md" />
+	</ItemGroup>
 	<Import Project="..\$SharedTestProject$\$SharedTestProject$.projitems" Label="Shared" Condition="Exists('..\$SharedTestProject$\$SharedTestProject$.projitems')" />
 </Project>
 <!-- $DevKitVersion$ -->

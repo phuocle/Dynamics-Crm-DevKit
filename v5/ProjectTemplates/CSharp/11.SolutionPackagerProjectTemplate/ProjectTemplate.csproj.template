@@ -37,6 +37,7 @@
 		<None Include="mapping.xml" />
 		<None Include="Extract-Both.bat" />
 		<None Include="Pack-Both.bat" />
+		<None Include="README.md" />
 	</ItemGroup>
 </Project>
 <!-- $DevKitVersion$ -->

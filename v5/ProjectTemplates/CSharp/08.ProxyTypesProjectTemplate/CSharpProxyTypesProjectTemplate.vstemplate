@@ -19,8 +19,7 @@
 		<SortOrder>170</SortOrder>
 	</TemplateData>
 	<TemplateContent>
-		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
-			<ProjectItem ReplaceParameters="true" TargetFileName="run.bat">run.bat</ProjectItem>
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">			<ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>			<ProjectItem ReplaceParameters="true" TargetFileName="run.bat">run.bat</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="GeneratedCode.cs">GeneratedCode.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="ProxyTypesAssembly.cs">ProxyTypesAssembly.cs</ProjectItem>
 		</Project>

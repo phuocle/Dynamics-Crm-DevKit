@@ -17,6 +17,7 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
       <ProjectItem ReplaceParameters="true">App.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true">AppSettings.json</ProjectItem>
       <ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>

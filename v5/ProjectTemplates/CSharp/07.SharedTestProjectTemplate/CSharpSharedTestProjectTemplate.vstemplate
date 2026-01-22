@@ -25,6 +25,7 @@
 			<Folder Name="Lib" TargetFolderName="Lib" />
 			<Folder Name="Executor" TargetFolderName="Executor" />
 			<ProjectItem TargetFileName="$NameSpace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Guids.cs">Guids.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\FakerHelper.cs">FakerHelper.cs</ProjectItem>
