@@ -3,7 +3,7 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>d6228379-0b82-4fce-b2e1-93ca437332b5</SharedGUID>
+    <SharedGUID>332454e4-78e4-4e16-a152-24c6db2bd392</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>

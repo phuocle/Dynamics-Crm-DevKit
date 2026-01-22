@@ -192,6 +192,26 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Build failed with exit code $LASTEXITCODE" }
     Write-Host "Build Success." -ForegroundColor Green
 
+    # 4b. Ensure VSIX is built (Workaround for SLNX not building VSIX container)
+    $vsixCheckPath = Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
+    if (-not (Test-Path $vsixCheckPath)) {
+        Write-Host "VSIX not found after solution build. Building VSIX project explicitly..." -ForegroundColor Yellow
+        $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
+        $vsixBuildArgs = @(
+            "$vsixProject",
+            "/t:Build",
+            "/p:Configuration=$Configuration",
+            "/p:Version=$Version",
+            "/p:AssemblyVersion=$Version",
+            "/p:FileVersion=$Version",
+            "/nologo",
+            "/v:m"
+        )
+        & $msbuild $vsixBuildArgs
+        if ($LASTEXITCODE -ne 0) { throw "VSIX Project Build failed with exit code $LASTEXITCODE" }
+        Write-Host "VSIX Project Build Success." -ForegroundColor Green
+    }
+
     # 5. Create NuGet Packages
     Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow
 
