@@ -1,5 +1,5 @@
-using System;
 using Bogus;
+using System;
 
 namespace Dev.DevKit.Shared.Test
 {

@@ -1,8 +1,8 @@
-﻿using System;
-using FakeXrmEasy.Abstractions;
+﻿using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Abstractions.FakeMessageExecutors;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using System;
 
 namespace Dev.DevKit.Shared.Test
 {

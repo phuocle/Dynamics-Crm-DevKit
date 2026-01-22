@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Dev.DevKit.ProxyTypes;
+﻿using Dev.DevKit.ProxyTypes;
 using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Abstractions.Enums;
 using FakeXrmEasy.Abstractions.Middleware;
@@ -9,6 +6,9 @@ using FakeXrmEasy.Middleware;
 using FakeXrmEasy.Middleware.Crud;
 using FakeXrmEasy.Middleware.Messages;
 using Microsoft.Xrm.Sdk;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Dev.DevKit.Shared.Test
 {

@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ProjectTemplate.csproj.template" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="CSharpTestProjectTemplate.vstemplate">

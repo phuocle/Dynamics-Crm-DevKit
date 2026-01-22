@@ -61,7 +61,6 @@
     <None Include="GeneratedCode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AssemblyInfo.cs" />
     <None Include="ProxyTypesAssembly.cs" />
     <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>

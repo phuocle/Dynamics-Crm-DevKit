@@ -16,7 +16,8 @@
     <SortOrder>180</SortOrder>
   </TemplateData>
   <TemplateContent>
-	  <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
+    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

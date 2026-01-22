@@ -14,6 +14,7 @@
       "DynamicsCrm.DevKit\\source.extension.cs",
       "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
       "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+      "ProjectTemplates\\CSharp\\09.TestProjectTemplate\\README.md",
       "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md"
     ],
     "dateReplacement": [
@@ -24,6 +25,7 @@
       "DynamicsCrm.DevKit\\VSPackage.resx",
       "DynamicsCrm.DevKit\\source.extension.cs",
       "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+      "ProjectTemplates\\CSharp\\09.TestProjectTemplate\\README.md",
       "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md"
     ],
     "allModified": [
@@ -34,6 +36,7 @@
       "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
       "DynamicsCrm.DevKit\\VSPackage.resx",
       "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+      "ProjectTemplates\\CSharp\\09.TestProjectTemplate\\README.md",
       "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md"
     ]
   },
