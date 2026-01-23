@@ -52,7 +52,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     Type = "proxytypes",
                     ServiceClient = settings.ServiceClient,
                     Version = settings.Version,
-                    AuthType = settings.AuthType
+                    AuthType = settings.AuthType,
+                    Url = settings.Url,
+                    ClientId = settings.ClientId,
+                    ClientSecret = settings.ClientSecret,
+                    Username = settings.Username,
+                    Password = settings.Password,
+                    Domain = settings.Domain,
+                    PacProfile = settings.PacProfile
                 };
                 var proxyType = new TaskProxyType(args, profile);
                 await proxyType.RunAsync();
