@@ -1,17 +1,41 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"name": ".agent",
+			"path": "../.agent"
 		},
 		{
+			"name": "DynamicsCrm.DevKit.Analyzers",
+			"path": "../DynamicsCrm.DevKit.Analyzers"
+		},
+		{
+			"name": "DynamicsCrm.DevKit.Analyzers.Test",
 			"path": "../DynamicsCrm.DevKit.Analyzers.Test"
 		},
 		{
-			"path": "../DynamicsCrm.DevKit.Tests/TestAnalyzers"
+			"name": "DynamicsCrm.DevKit.Docs",
+			"path": "../DynamicsCrm.DevKit.Docs"
 		},
 		{
-			"path": "../DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers"
+			"name": "DynamicsCrm.DevKit.Tests",
+			"path": "../DynamicsCrm.DevKit.Tests"
+		},
+		{
+			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.exclude": {
+			"**/.vs": true,
+			"**/Published": true,
+			"**/DynamicsCrm.DevKit.Wiki": true,
+			"**/bin": true,
+			"**/obj": true,
+			"**/*.user": true,
+			"**/*.suo": true,
+			"**/*.cache": true,
+			"**/*.vspscc": true,
+			"**/*.vshost.*": true
+		}
+	}
 }
