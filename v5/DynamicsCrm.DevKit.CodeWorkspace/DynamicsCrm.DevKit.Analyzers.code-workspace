@@ -13,6 +13,10 @@
 			"path": "../DynamicsCrm.DevKit.Analyzers.Test"
 		},
 		{
+			"name": "DynamicsCrm.DevKit.Scripts",
+			"path": "../DynamicsCrm.DevKit.Scripts"
+		},
+		{
 			"name": "DynamicsCrm.DevKit.Docs",
 			"path": "../DynamicsCrm.DevKit.Docs"
 		},
@@ -21,6 +25,7 @@
 			"path": "../DynamicsCrm.DevKit.Tests"
 		},
 		{
+			"name": "DynamicsCrm.DevKit.CodeWorkspace",
 			"path": "."
 		}
 	],
