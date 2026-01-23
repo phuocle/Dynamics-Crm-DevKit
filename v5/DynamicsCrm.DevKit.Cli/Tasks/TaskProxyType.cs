@@ -69,6 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         /// <summary>
         /// Auto-detect Microsoft.CrmSdk.CoreTools version by scanning packages folder.
+        /// Supports both old-style (Microsoft.CrmSdk.CoreTools.X.Y.Z) and SDK-style (microsoft.crmsdk.coretools\X.Y.Z) paths.
         /// Returns the latest version found or null if not found.
         /// </summary>
         private string AutoDetectCoreToolsVersion(string startDirectory)
@@ -79,11 +80,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var packagesFolder = Path.Combine(directory, "packages");
                 if (Directory.Exists(packagesFolder))
                 {
+                    // Try SDK-style path first: packages\microsoft.crmsdk.coretools\X.Y.Z
+                    var sdkStylePath = Path.Combine(packagesFolder, "microsoft.crmsdk.coretools");
+                    if (Directory.Exists(sdkStylePath))
+                    {
+                        var versions = Directory.GetDirectories(sdkStylePath)
+                            .Select(d => new DirectoryInfo(d).Name)
+                            .OrderByDescending(v => v)
+                            .ToList();
+
+                        if (versions.Count > 0)
+                        {
+                            return versions.First();
+                        }
+                    }
+
+                    // Fallback to old-style path: packages\Microsoft.CrmSdk.CoreTools.X.Y.Z
                     var coreToolsFolders = Directory.GetDirectories(packagesFolder, "Microsoft.CrmSdk.CoreTools.*")
                         .Select(d => new DirectoryInfo(d).Name)
                         .Where(n => n.StartsWith("Microsoft.CrmSdk.CoreTools."))
                         .Select(n => n.Substring("Microsoft.CrmSdk.CoreTools.".Length))
-                        .OrderByDescending(v => v) // Simple string sort, works for semver with same format
+                        .OrderByDescending(v => v)
                         .ToList();
 
                     if (coreToolsFolders.Count > 0)
@@ -100,18 +117,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private bool FindCrmSvcUtil(string currentDirectory)
         {
-            var temp = $@"packages\Microsoft.CrmSdk.CoreTools.{Version}\content\bin\coretools\CrmSvcUtil.exe";
-            CrmSvcUtil = $@"{currentDirectory}\{temp}";
+            // Try SDK-style path first: packages\microsoft.crmsdk.coretools\X.Y.Z\content\bin\coretools\CrmSvcUtil.exe
+            var sdkStylePath = $@"packages\microsoft.crmsdk.coretools\{Version}\content\bin\coretools\CrmSvcUtil.exe";
+            CrmSvcUtil = Path.Combine(currentDirectory, sdkStylePath);
             if (File.Exists(CrmSvcUtil))
             {
                 return true;
             }
-            else
+
+            // Fallback to old-style path: packages\Microsoft.CrmSdk.CoreTools.X.Y.Z\content\bin\coretools\CrmSvcUtil.exe
+            var oldStylePath = $@"packages\Microsoft.CrmSdk.CoreTools.{Version}\content\bin\coretools\CrmSvcUtil.exe";
+            CrmSvcUtil = Path.Combine(currentDirectory, oldStylePath);
+            if (File.Exists(CrmSvcUtil))
             {
-                var parentDirectory = new DirectoryInfo(currentDirectory)?.Parent?.FullName;
-                if (parentDirectory == null) return false;
-                return FindCrmSvcUtil(parentDirectory);
+                return true;
             }
+
+            // Search parent directories
+            var parentDirectory = new DirectoryInfo(currentDirectory)?.Parent?.FullName;
+            if (parentDirectory == null) return false;
+            return FindCrmSvcUtil(parentDirectory);
         }
 
         private async Task CopyExtensionDllAsync()

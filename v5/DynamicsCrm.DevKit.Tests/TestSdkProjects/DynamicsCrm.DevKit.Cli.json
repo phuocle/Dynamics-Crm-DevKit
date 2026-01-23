@@ -137,9 +137,9 @@
   "proxytypes": [
     {
       "profile": "ALL",
-      "namespace": "???",
+      "namespace": "Dev.DevKit.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "Account"
     }
   ],
   "uploadreports": [
