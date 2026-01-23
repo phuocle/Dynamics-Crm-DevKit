@@ -36,6 +36,15 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+		<Folder Include="html\" />
+		<Folder Include="css\" />
+		<Folder Include="entities\" />
+    <Folder Include="js\" />
+		<Folder Include="lib\" />
+		<Folder Include="images\" />
+		<Folder Include="resources\" />
+	</ItemGroup>
+  <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
 </Project>

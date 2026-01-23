@@ -90,36 +90,36 @@
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "???",
+      "rootnamespace": "Dev.DevKit.Shared.Entities",
       "namespace": "",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootfolder": "",
+      "entities": "*"
     },
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "entities": "*"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "entities": "*"
     },
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootfolder": "",
+      "entities": "*"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
+      "rootfolder": "",
+      "entities": "*"
     }
   ],
   "downloadwebresources": [

@@ -200,7 +200,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         public static void WriteProgress(int current, int total)
         {
-            AnsiConsole.Markup($"\r[white]{PREFIX}[/][green] {Escape(CliAction.PROCESSING)}[/][cyan on grey23]{current}[/][green]/[/][cyan on grey23]{total}[/]");
+            AnsiConsole.Markup($"\r[white]{PREFIX}[/][green]{Escape(CliAction.PROCESSING)}[/][cyan on grey23]{current}[/][green]/[/][cyan on grey23]{total}[/]");
         }
 
         public static void ClearProgress()

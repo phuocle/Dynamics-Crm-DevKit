@@ -35,6 +35,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+<ItemGroup>
+	<Folder Include="html\" />
+	<Folder Include="css\" />
+	<Folder Include="entities\" />
+	<Folder Include="lib\" />
+	<Folder Include="images\" />
+	<Folder Include="resources\" />
+	<Folder Include="js\" />
+</ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>

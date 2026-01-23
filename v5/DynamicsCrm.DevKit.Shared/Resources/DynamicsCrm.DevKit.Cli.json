@@ -103,6 +103,7 @@
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
+      "rootnamespace": "???",
       "rootfolder": "???",
       "entities": "folder"
     },
@@ -115,7 +116,6 @@
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootnamespace": "???",
       "rootfolder": "???",
       "entities": "folder"
     }
@@ -144,7 +144,9 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "languages": [ "???" ]
+      "languages": [
+        "???"
+      ]
     }
   ]
 }
