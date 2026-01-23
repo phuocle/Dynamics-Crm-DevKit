@@ -5,8 +5,49 @@ using System;
 namespace TestAnalyzers
 {
     /// <summary>
-    /// DEVKIT1001: Update message should have filtering attributes
-    /// This file contains code that should trigger DEVKIT1001 errors for Update plugins without filtering attributes.
+    /// DEVKIT1001: Create/Update message filtering attributes analyzer
+    /// 
+    /// Severity Rules:
+    /// - Create messages (Create, CreateMultiple, OnExternalCreated): WARNING - filtering attributes should be specified
+    /// - Update messages (Update, UpdateMultiple, OnExternalUpdated): ERROR - filtering attributes must be specified
+    /// </summary>
+
+    #region Create messages - WARNING (should have filtering attributes)
+
+    /// <summary>
+    /// DEVKIT1001: Create message with empty filtering attributes - should trigger WARNING
+    /// </summary>
+    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1001_CreateWithoutFilteringAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    public class DEVKIT1001_CreateWithoutFilteringAttributes : IPlugin
+    {
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            tracing.Trace("Create without filtering attributes - Warning expected");
+        }
+    }
+
+    /// <summary>
+    /// DEVKIT1001: Create message with * filtering attributes - should trigger WARNING
+    /// </summary>
+    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "*", "TestAnalyzers.DEVKIT1001_CreateWithAllAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    public class DEVKIT1001_CreateWithAllAttributes : IPlugin
+    {
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            tracing.Trace("Create with * filtering attributes - Warning expected");
+        }
+    }
+
+    #endregion
+
+    #region Update messages - ERROR (must have filtering attributes)
+
+    /// <summary>
+    /// DEVKIT1001: Update message with empty filtering attributes - should trigger ERROR
     /// </summary>
     [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1001_UpdateWithoutFilteringAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_UpdateWithoutFilteringAttributes : IPlugin
@@ -33,6 +74,9 @@ namespace TestAnalyzers
         }
     }
 
+    /// <summary>
+    /// DEVKIT1001: Update message with * filtering attributes - should trigger ERROR
+    /// </summary>
     [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "*", "TestAnalyzers.DEVKIT1001_UpdateWithAllAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_UpdateWithAllAttributes : IPlugin
     {
@@ -57,4 +101,7 @@ namespace TestAnalyzers
             var preEntity = (Entity)context?.PreEntityImages?["PreImage"];
         }
     }
+
+    #endregion
 }
+

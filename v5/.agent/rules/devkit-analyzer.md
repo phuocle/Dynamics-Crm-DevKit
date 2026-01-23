@@ -86,7 +86,7 @@ Trước khi hoàn thành bất kỳ thay đổi nào, kiểm tra:
 
 | ID | Analyzer | Severity |
 |----|----------|----------|
-| DEVKIT1001 | UpdateMessageShouldHaveFilteringAttributesAnalyzer | ❌ Error |
+| DEVKIT1001 | UpdateMessageShouldHaveFilteringAttributesAnalyzer | ⚠️ Warning (Create) / ❌ Error (Update) |
 | DEVKIT1002 | NotUseColumnSetTrueAnalyzer | ⚠️ Warning |
 | DEVKIT1003 | PluginImageAnalyzer | ❌ Error |
 | DEVKIT1004 | DeprecatedAnalyzer | ℹ️ Info |

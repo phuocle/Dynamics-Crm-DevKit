@@ -30,8 +30,8 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1001",
             "Create message should have filtering attributes",
             "Create message should have filtering attributes",
-            DiagnosticSeverity.Error,
-            "Create, CreateMultiple, and OnExternalCreated messages must have filtering attributes.");
+            DiagnosticSeverity.Warning,
+            "Create, CreateMultiple, and OnExternalCreated messages should have filtering attributes.");
 
         /// <summary>DEVKIT1001 - Update messages with missing filtering</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = CreateDescriptor(
@@ -46,8 +46,8 @@ namespace DynamicsCrm.DevKit.Analyzers
             "DEVKIT1001",
             "Create message should not use all attributes",
             "Create message should not use all attributes",
-            DiagnosticSeverity.Error,
-            "Create, CreateMultiple, and OnExternalCreated messages must have specific filtering attributes, not '*'.");
+            DiagnosticSeverity.Warning,
+            "Create, CreateMultiple, and OnExternalCreated messages should have specific filtering attributes, not '*'.");
 
         /// <summary>DEVKIT1001 - Update messages with * filtering</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldNotUseAllAttributes = CreateDescriptor(
