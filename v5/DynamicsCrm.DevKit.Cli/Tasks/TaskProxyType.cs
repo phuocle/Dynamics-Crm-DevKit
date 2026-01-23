@@ -158,14 +158,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgs()
         {
             var command = new StringBuilder();
-            // If AuthType is set (modern auth), use /interactivelogin since we already have a valid token
-            // CrmSvcUtil will prompt for credentials, but the user is already authenticated
-            if (!string.IsNullOrEmpty(Arg.AuthType))
+            // Only use /interactivelogin for Interactive or DeviceCode auth types
+            // For ClientSecret or connection string, use /connectionstring parameter
+            if (!string.IsNullOrEmpty(Arg.AuthType) && 
+                (Arg.AuthType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
+                 Arg.AuthType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase)))
             {
                 command.Append("/interactivelogin ");
             }
             else
             {
+                // Use connection string for ClientSecret or traditional connection string auth
                 var crmConn = Helper.ParseConnectionString(Connection);
                 var decryptedConnString = Helper.BuildConnectionString(crmConn);
                 command.Append($"/connectionstring:\"{decryptedConnString}\" ");
@@ -189,7 +192,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgsLog()
         {
             var command = new StringBuilder();
-            if (!string.IsNullOrEmpty(Arg.AuthType))
+            // Only use /interactivelogin for Interactive or DeviceCode auth types
+            if (!string.IsNullOrEmpty(Arg.AuthType) && 
+                (Arg.AuthType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
+                 Arg.AuthType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase)))
             {
                 command.Append("/interactivelogin ");
             }
