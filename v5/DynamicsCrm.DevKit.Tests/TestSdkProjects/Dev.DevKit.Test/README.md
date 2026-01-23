@@ -4,11 +4,11 @@
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
-        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 22.01.2026 16:03:15
+        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 23.01.2026 06:12:15
 
 ```
 
-# DynamicsCrm.DevKit Test Project Template
+# DynamicsCrm.DevKit Test Project
 
 Accelerates Dataverse development by providing a robust test project template, pre-configured with **FakeXrmEasy** for seamless unit testing and mocking of Dataverse plugins, workflows, and custom logic.
 

@@ -8,7 +8,7 @@
 
 ```
 
-# DynamicsCrm.DevKit Test Project Template
+# DynamicsCrm.DevKit Test Project
 
 Accelerates Dataverse development by providing a robust test project template, pre-configured with **FakeXrmEasy** for seamless unit testing and mocking of Dataverse plugins, workflows, and custom logic.
 

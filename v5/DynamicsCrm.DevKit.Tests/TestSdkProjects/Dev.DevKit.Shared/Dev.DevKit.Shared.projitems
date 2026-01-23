@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>8b175f53-23cc-48f7-8f01-2eadb5340052</SharedGUID>
+    <SharedGUID>600774b2-9dae-485f-9352-483569cfc335</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
@@ -13,5 +13,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" />
   </ItemGroup>
 </Project>

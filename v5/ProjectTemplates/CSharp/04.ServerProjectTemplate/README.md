@@ -8,7 +8,7 @@
 
 ```
 
-# DynamicsCrm.DevKit Server Project Template
+# DynamicsCrm.DevKit Server Project
 
 Accelerates Dataverse server-side development for plugins, workflows, custom actions, custom API, and data providers with pre-configured project structure, automated deployment scripts, and strong-name key signing.
 

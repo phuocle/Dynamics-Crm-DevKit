@@ -4,36 +4,34 @@
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
-        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss
+        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 23.01.2026 06:12:15
 
 ```
 
-# DynamicsCrm.DevKit Console Core Project
+# DynamicsCrm.DevKit Console Project
 
-Modern console application template targeting .NET 10.0 with Microsoft.PowerPlatform.Dataverse.Client for building cross-platform Dataverse automation tools, data migration utilities, and administrative scripts with the latest .NET features.
+Accelerates Dataverse console application development targeting .NET Framework 4.6.2 with Microsoft.PowerPlatform.Dataverse.Client for building automation tools, data migration utilities, and administrative scripts.
 
 ## Features
 
-* Pre-configured for .NET 10.0 (cross-platform)
+* Pre-configured for .NET Framework 4.6.2
 * Microsoft.PowerPlatform.Dataverse.Client integration
 * Helper class for common Dataverse operations
 * TracingServiceFake for debugging
 * App.cs structure for organized code
-* AppSettings.json for configuration management
-* Modern async/await patterns
+* Connection string configuration via App.config
 
 ## Requirements
 
 Before creating this project, ensure you have:
 
 1. **DynamicsCrm.DevKit Shared Project** - Required for shared code
-2. **.NET 10.0 SDK** - Required for building and running
 
 ## Package Dependencies
 
 * Microsoft.PowerPlatform.Dataverse.Client
-* Microsoft.Extensions.Configuration
-* Microsoft.Extensions.Configuration.Json
+* Microsoft.CrmSdk.CoreAssemblies
+* Microsoft.IdentityModel
 * DynamicsCrm.DevKit.Analyzers
 
 ## Key Components
@@ -42,9 +40,8 @@ Before creating this project, ensure you have:
 * **App.cs** - Main application logic
 * **Helper.cs** - Utility methods for Dataverse operations
 * **TracingServiceFake.cs** - Mock tracing service for debugging
-* **AppSettings.json** - Configuration file for connection strings
 
 ## References
 
-* [Console Core Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template)
+* [Console Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)
 * [Dataverse ServiceClient](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/xrm-tooling/use-connection-strings-xrm-tooling-connect)

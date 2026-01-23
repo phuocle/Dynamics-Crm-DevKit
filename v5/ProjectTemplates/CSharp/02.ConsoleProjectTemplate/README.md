@@ -8,7 +8,7 @@
 
 ```
 
-# DynamicsCrm.DevKit Console Project Template
+# DynamicsCrm.DevKit Console Project
 
 Accelerates Dataverse console application development targeting .NET Framework 4.6.2 with Microsoft.PowerPlatform.Dataverse.Client for building automation tools, data migration utilities, and administrative scripts.
 
@@ -26,7 +26,6 @@ Accelerates Dataverse console application development targeting .NET Framework 4
 Before creating this project, ensure you have:
 
 1. **DynamicsCrm.DevKit Shared Project** - Required for shared code
-2. **DynamicsCrm.DevKit ProxyTypes Project** - Required for early-bound entities
 
 ## Package Dependencies
 

@@ -12,8 +12,8 @@
     <Deploy />
   </Project>
   <Project Path="Dev.DevKit.Server/Dev.DevKit.Server.csproj" />
-  <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="23daf853-13d8-40ad-8590-39fc8e09758a" />
-  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="8b175f53-23cc-48f7-8f01-2eadb5340052" />
+  <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="c4c9603a-75f9-4e71-9a12-ef35472498a4" />
+  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="600774b2-9dae-485f-9352-483569cfc335" />
   <Project Path="Dev.DevKit.SolutionPackager/Dev.DevKit.SolutionPackager.csproj" />
   <Project Path="Dev.DevKit.Test/Dev.DevKit.Test.csproj" />
   <Project Path="Dev.DevKit.UiTest/Dev.DevKit.UiTest.csproj" />

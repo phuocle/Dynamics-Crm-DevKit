@@ -8,7 +8,7 @@
 
 ```
 
-# DynamicsCrm.DevKit Report Project Template
+# DynamicsCrm.DevKit Report Project
 
 Streamlines Dataverse report development using SQL Server Data Tools (SSDT) and Report Authoring Extension, enabling creation, modification, and deployment of SSRS reports for Dynamics 365 / Power Apps model-driven apps.
 

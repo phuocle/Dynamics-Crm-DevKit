@@ -8,7 +8,7 @@
 
 ```
 
-# DynamicsCrm.DevKit Package Project Template
+# DynamicsCrm.DevKit Package Project
 
 Enables Dataverse plugin development with dependent assemblies using NuGet packages, allowing you to leverage third-party libraries and manage dependencies efficiently for complex plugin scenarios.
 
