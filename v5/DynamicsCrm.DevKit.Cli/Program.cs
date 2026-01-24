@@ -65,6 +65,9 @@ namespace DynamicsCrm.DevKit.Cli
                     config.AddCommand<SolutionPackagerCommand>("solution")
                           .WithDescription("Extract or pack solutions using SolutionPackager");
 
+                    config.AddCommand<PacSolutionPackagerCommand>("pacsolution")
+                          .WithDescription("Extract or pack solutions using PAC CLI");
+
                     config.AddCommand<DownloadReportCommand>("downloadreport")
                           .WithDescription("Download reports from a solution");
 

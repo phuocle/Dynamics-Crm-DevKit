@@ -86,6 +86,26 @@
       "mapfile": ""
     }
   ],
+  "pacsolutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "solution": "DEVKITV4",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "devkitv4",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "solution": "DEVKITV4",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "devkitv4",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
   "generators": [
     {
       "profile": "LATEBOUND",

@@ -13,6 +13,7 @@
         modelbuilders,
         webresources,
         solutionpackagers,
+        pacsolutionpackagers,
         generators,
         downloadwebresources,
         downloadreports,
