@@ -66,6 +66,8 @@
 	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
 	  <!-- Dynamics 365 SDK - .NET 6+ compatible versions -->
 	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+	  <!-- ModelBuilder Library for early-bound entity generation -->
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.ModelBuilderLib" Version="2.0.16" />
 	  <!-- NuGet for package operations -->
 	  <PackageReference Include="NuGet.Packaging" Version="7.0.1" />
 	  <PackageReference Include="NuGet.Protocol" Version="7.0.1" />

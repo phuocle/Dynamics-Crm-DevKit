@@ -10,6 +10,7 @@
     public enum CliType
     {
         proxytypes,
+        modelbuilders,
         webresources,
         solutionpackagers,
         generators,

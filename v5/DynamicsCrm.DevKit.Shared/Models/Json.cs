@@ -12,6 +12,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public List<JsonSolutionPackager> solutionpackagers { get; set; }
         public List<JsonGenerator> generators { get; set; }
         public List<JsonProxyType> proxytypes { get; set; }
+        public List<JsonModelBuilder> modelbuilders { get; set; }
         public List<JsonDownloadWebResource> downloadwebresources { get; set; }
         public List<JsonDownloadReport> downloadreports { get; set; }
         public List<JsonServer> servers { get; set; }

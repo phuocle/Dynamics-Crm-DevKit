@@ -53,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonPlugin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonProxyType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonModelBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonSolutionPackager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonUploadReport.cs" />

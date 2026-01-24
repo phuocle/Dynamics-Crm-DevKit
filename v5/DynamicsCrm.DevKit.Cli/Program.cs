@@ -59,6 +59,9 @@ namespace DynamicsCrm.DevKit.Cli
                     config.AddCommand<ProxyTypeCommand>("proxytype")
                           .WithDescription("Generate proxy types using CrmSvcUtil");
 
+                    config.AddCommand<ModelBuilderCommand>("modelbuilder")
+                          .WithDescription("Generate early-bound entity classes using PAC ModelBuilder");
+
                     config.AddCommand<SolutionPackagerCommand>("solution")
                           .WithDescription("Extract or pack solutions using SolutionPackager");
 
