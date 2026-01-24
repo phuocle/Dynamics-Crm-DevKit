@@ -1,35 +1,18 @@
 {
 	"folders": [
 		{
-			"name": "DynamicsCrm.DevKit.Cli",
-			"path": "."
+			"name": ".agent",
+			"path": "../.agent"
 		},
 		{
 			"name": "DynamicsCrm.DevKit.Shared",
 			"path": "../DynamicsCrm.DevKit.Shared"
 		},
 		{
-			"name": "Dev.DevKit.WebResourceTs",
-			"path": "../DynamicsCrm.DevKit.Tests/TestProjectsItems/Dev.DevKit.WebResourceTs"
+			"path": "../DynamicsCrm.DevKit.Cli"
 		},
 		{
-			"name": "Dev.DevKit.WebResource",
-			"path": "../DynamicsCrm.DevKit.Tests/TestProjectsItems/Dev.DevKit.WebResource"
-		},
-		{
-			"name": ".agent",
-			"path": "../.agent"
-		},
-		{
-			"name": ".github",
-			"path": "../.github"
-		},
-		{
-			"name": ".gemini",
-			"path": "../.gemini"
-		},
-		{
-			"path": "../DynamicsCrm.DevKit.Tests/TestDevKitTs"
+			"path": "../DynamicsCrm.DevKit.Tests"
 		}
 	],
 	"settings": {}
