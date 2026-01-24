@@ -32,6 +32,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
         protected override async Task RunTaskAsync(SolutionPackagerCommandArgs settings)
         {
+            SpectreLog.ActionError("DEPRECATED: This command is deprecated and will be removed in future versions.");
+            SpectreLog.WriteLine("[yellow]Please use 'devkit pacsolution' instead.[/]");
+            SpectreLog.WriteLine();
+
             var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
 
             if (json.solutionpackagers == null)

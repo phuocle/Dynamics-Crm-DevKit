@@ -57,13 +57,13 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Deploy web resources");
 
                     config.AddCommand<ProxyTypeCommand>("proxytype")
-                          .WithDescription("Generate proxy types using CrmSvcUtil");
+                          .WithDescription("[red]DEPRECATED[/] Generate proxy types using CrmSvcUtil");
 
                     config.AddCommand<ModelBuilderCommand>("modelbuilder")
                           .WithDescription("Generate early-bound entity classes using PAC ModelBuilder");
 
                     config.AddCommand<SolutionPackagerCommand>("solution")
-                          .WithDescription("Extract or pack solutions using SolutionPackager");
+                          .WithDescription("[red]DEPRECATED[/] Extract or pack solutions using SolutionPackager");
 
                     config.AddCommand<PacSolutionPackagerCommand>("pacsolution")
                           .WithDescription("Extract or pack solutions using PAC CLI");

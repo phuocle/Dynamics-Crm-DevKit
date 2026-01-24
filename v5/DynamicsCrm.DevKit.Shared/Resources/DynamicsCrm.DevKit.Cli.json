@@ -64,26 +64,6 @@
       "name": "???"
     }
   ],
-  "solutionpackagers": [
-    {
-      "profile": "Extract-Both",
-      "solution": "???",
-      "rootfolder": "",
-      "solutiontype": "Both",
-      "folder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Both",
-      "solution": "???",
-      "rootfolder": "",
-      "solutiontype": "Both",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    }
-  ],
   "generators": [
     {
       "profile": "LATEBOUND",
@@ -132,10 +112,30 @@
       "solution": "???"
     }
   ],
-  "proxytypes": [
+  "pacsolutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "modelbuilders": [
     {
       "profile": "ALL",
-      "namespace": "???",
+      "namespace": "???.ProxyTypes",
       "output": "GeneratedCode.cs",
       "entities": "*"
     }

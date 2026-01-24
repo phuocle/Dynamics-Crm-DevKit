@@ -59,9 +59,11 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]plugin[/]                 Deploy plugins\n" +
                     "  [cyan]workflow[/]               Deploy workflows\n" +
                     "  [cyan]dataprovider[/]           Deploy data providers\n" +
-                    "  [cyan]proxytype[/]              Generate early-bound proxy classes\n" +
+                    "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Generate early-bound proxy classes\n" +
+                    "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +
-                    "  [cyan]solution[/]               Pack/unpack solutions\n" +
+                    "  [cyan]solution[/]               [red](DEPRECATED)[/] Pack/unpack solutions\n" +
+                    "  [cyan]pacsolution[/]            Extract or pack solutions using PAC CLI\n" +
                     "  [cyan]downloadreport[/]         Download reports from a solution\n" +
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +

@@ -14,7 +14,7 @@
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
 		<!-- Restore packages to solution-level packages folder (like old-style projects) -->
-		<RestorePackagesPath>$(SolutionDir)packages</RestorePackagesPath>
+
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
@@ -30,9 +30,7 @@
 		<NoWarn>CS8032</NoWarn>
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.CrmSdk.CoreTools" Version="$Microsoft.CrmSdk.CoreTools.Version$" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<None Include="mapping.xml" />
 		<None Include="Extract-Both.bat" />

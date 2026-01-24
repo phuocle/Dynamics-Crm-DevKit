@@ -19,4 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-devkit solution $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "Pack-Both"
+devkit pacsolution $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "Pack-Both"
