@@ -139,7 +139,7 @@
       "profile": "ALL",
       "namespace": "Dev.DevKit.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "Account"
+      "entities": "*"
     }
   ],
   "uploadreports": [
