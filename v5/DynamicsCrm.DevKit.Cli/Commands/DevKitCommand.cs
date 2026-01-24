@@ -72,7 +72,21 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             // Display arguments (common + command-specific)
             var argRows = new List<string[]>();
-            var connLog = Helper.BuildConnectionStringLog(settings.Connection);
+            var connLog = string.Empty;
+            if (!string.IsNullOrEmpty(settings.Connection))
+            {
+                var legacyBuilder = new LegacyConnectionBuilder();
+                var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
+                if (crmConn != null)
+                {
+                    try 
+                    {
+                        var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
+                        connLog = builder.BuildConnectionString(crmConn, true);
+                    }
+                    catch {}
+                }
+            }
             var label = "[green] Arguments:[/]";
             var indent = "           ";
             var argColumnWidth = 28; // Default for --auth and --sdk-login (increased for --pacprofile)
@@ -143,13 +157,16 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     {
                         throw new Exception("--conn or --auth: required");
                     }
-                    var crmConn = Helper.ParseConnectionString(settings.Connection);
-                    var decryptedConnString = Helper.BuildConnectionString(crmConn);
-                    var result = await Helper.IsConnectedAsync(decryptedConnString);
-                    serviceClient = result.serviceClient;
+                    var legacyBuilder = new LegacyConnectionBuilder();
+                    var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
+                    if (crmConn == null) throw new Exception("Invalid connection string");
+                    
+                    var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
+                    serviceClient = await builder.CreateServiceClientAsync(crmConn);
+                    
                     if (serviceClient == null)
                     {
-                        throw new Exception(result.error ?? "Unknown connection error");
+                        throw new Exception("Unknown connection error");
                     }
                 }
             });

@@ -96,7 +96,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             return authResult.AccessToken;
         }
 
-        public string BuildConnectionString(CrmConnection connection)
+        public string BuildConnectionString(CrmConnection connection, bool shouldMaskPassword = false)
         {
             // Interactive doesn't use traditional connection string
             // This is for diagnostic/display purposes only

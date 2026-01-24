@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         /// Some types (Interactive, DeviceCode) may return a diagnostic string
         /// since they use token providers instead of connection strings.
         /// </summary>
-        string BuildConnectionString(CrmConnection connection);
+        string BuildConnectionString(CrmConnection connection, bool shouldMaskPassword = false);
 
         /// <summary>
         /// Validate the connection configuration before attempting to connect.

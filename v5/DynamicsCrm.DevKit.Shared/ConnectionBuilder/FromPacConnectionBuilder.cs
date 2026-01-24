@@ -161,7 +161,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             return environmentUrl;
         }
 
-        public string BuildConnectionString(CrmConnection connection)
+        public string BuildConnectionString(CrmConnection connection, bool shouldMaskPassword = false)
         {
             // FromPac uses PAC CLI tokens, not traditional connection string
             // Profile name is required

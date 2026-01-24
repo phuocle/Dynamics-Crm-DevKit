@@ -40,10 +40,15 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             return serviceClient;
         }
 
-        public string BuildConnectionString(CrmConnection connection)
+        public string BuildConnectionString(CrmConnection connection, bool shouldMaskPassword = false)
         {
             // Decrypt Password if it's encrypted (auto-detect, same as legacy)
             var password = Helper.DecryptString(connection.Password);
+            
+            if (shouldMaskPassword)
+            {
+                password = "***";
+            }
 
             // Use custom ClientId if specified, otherwise use Microsoft default
             var appId = !string.IsNullOrEmpty(connection.ClientId)

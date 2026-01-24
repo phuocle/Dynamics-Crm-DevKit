@@ -159,9 +159,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgs()
         {
             var command = new StringBuilder();
-            
+
             // Build CrmSvcUtil connection based on AuthType
-            var connectionString = BuildCrmSvcUtilConnectionString();
+            var connectionString = BuildCrmSvcUtilConnectionString(false);
             if (connectionString == null)
             {
                 // Use /interactivelogin for Interactive or DeviceCode auth types
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 command.Append($"/connectionstring:\"{connectionString}\" ");
             }
-            
+
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
             command.Append($"/emitfieldsclasses ");
@@ -193,13 +193,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         /// Returns null if /interactivelogin should be used instead.
         /// CrmSvcUtil supports: AD, OAuth, ClientSecret, Certificate, Office365 (deprecated)
         /// </summary>
-        private string BuildCrmSvcUtilConnectionString()
+        private string BuildCrmSvcUtilConnectionString(bool shouldMaskPassword = false)
         {
             // If we have a legacy connection string, use it directly
             if (!string.IsNullOrEmpty(Connection))
             {
-                var crmConn = Helper.ParseConnectionString(Connection);
-                return Helper.BuildConnectionString(crmConn);
+                var legacyBuilder = new LegacyConnectionBuilder();
+                var crmConn = legacyBuilder.ParseConnectionString(Connection);
+                if (crmConn == null || string.IsNullOrEmpty(crmConn.Type)) return null;
+
+                try
+                {
+                    var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
+                    return builder.BuildConnectionString(crmConn, shouldMaskPassword);
+                }
+                catch (NotSupportedException)
+                {
+                    return null;
+                }
             }
 
             // Build connection string based on AuthType
@@ -209,7 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             var authType = Arg.AuthType.ToUpperInvariant();
-            
+
             // These types don't use connection string with CrmSvcUtil - use /interactivelogin
             if (authType == "INTERACTIVE" || authType == "DEVICECODE" || authType == "FROMPAC")
             {
@@ -221,7 +232,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var builder = ConnectionBuilderFactory.GetBuilder(Arg.AuthType);
                 var connection = CreateCrmConnectionFromArgs();
-                return builder.BuildConnectionString(connection);
+                return builder.BuildConnectionString(connection, shouldMaskPassword);
             }
             catch (NotSupportedException)
             {
@@ -233,9 +244,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgsLog()
         {
             var command = new StringBuilder();
-            
+
             // Build connection string for logging (with masked secrets)
-            var connectionString = BuildCrmSvcUtilConnectionStringForLog();
+            var connectionString = BuildCrmSvcUtilConnectionString(true);
             if (connectionString == null)
             {
                 command.Append("/interactivelogin ");
@@ -244,7 +255,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 command.Append($"/connectionstring:\"{connectionString}\" ");
             }
-            
+
             if (Json.entities != null && Json.entities.Length > 0)
             {
                 if (Json.entities != "*" && Json.entities.ToLower() != "all")
@@ -264,37 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         /// <summary>
         /// Build connection string for logging purposes (with masked secrets).
         /// </summary>
-        private string BuildCrmSvcUtilConnectionStringForLog()
-        {
-            // If we have a legacy connection string, use the log version
-            if (!string.IsNullOrEmpty(Connection))
-            {
-                return Helper.BuildConnectionStringLog(Connection);
-            }
 
-            // Build connection string based on AuthType
-            if (string.IsNullOrEmpty(Arg.AuthType))
-            {
-                return null;
-            }
-
-            var authType = Arg.AuthType.ToUpperInvariant();
-            
-            // These types use /interactivelogin - no connection string to log
-            if (authType == "INTERACTIVE" || authType == "DEVICECODE" || authType == "FROMPAC")
-            {
-                return null;
-            }
-
-            // Build masked connection string based on auth type
-            return authType switch
-            {
-                "CLIENTSECRET" => $"AuthType=ClientSecret;Url={Arg.Url};ClientId={Arg.ClientId};ClientSecret=***;",
-                "AD" => $"AuthType=AD;Url={Arg.Url};{(!string.IsNullOrEmpty(Arg.Domain) ? $"Domain={Arg.Domain};" : "")}Username={Arg.Username};Password=***;",
-                "OAUTH" => $"AuthType=OAuth;Url={Arg.Url};Username={Arg.Username};Password=***;{(!string.IsNullOrEmpty(Arg.ClientId) ? $"ClientId={Arg.ClientId};" : "")}RedirectUri=http://localhost;",
-                _ => null
-            };
-        }
 
         /// <summary>
         /// Create a CrmConnection object from command line arguments.

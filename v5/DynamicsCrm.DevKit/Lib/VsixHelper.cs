@@ -161,10 +161,11 @@ namespace DynamicsCrm.DevKit.Lib
         {
             try
             {
+                var type = crmConnection.Type ?? "OAuth";
                 // Use ConnectionBuilderFactory for supported connection types
-                if (ConnectionBuilderFactory.IsSupported(crmConnection.Type))
+                if (ConnectionBuilderFactory.IsSupported(type))
                 {
-                    var builder = ConnectionBuilderFactory.GetBuilder(crmConnection.Type);
+                    var builder = ConnectionBuilderFactory.GetBuilder(type);
                     
                     // Set DeviceCode callback if applicable
                     if (builder is DeviceCodeConnectionBuilder deviceCodeBuilder && deviceCodeCallback != null)
@@ -175,9 +176,7 @@ namespace DynamicsCrm.DevKit.Lib
                     return await builder.CreateServiceClientAsync(crmConnection);
                 }
                 
-                // Fallback to legacy connection string for unknown types
-                string connectionString = Helper.BuildConnectionString(crmConnection);
-                return new ServiceClient(connectionString);
+                throw new InvalidOperationException($"Connection type '{type}' is not supported.");
             }
             catch (Exception ex)
             {

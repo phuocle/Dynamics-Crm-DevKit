@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             return serviceClient;
         }
 
-        public string BuildConnectionString(CrmConnection connection)
+        public string BuildConnectionString(CrmConnection connection, bool shouldMaskPassword = false)
         {
             // Support both new format (ClientId/ClientSecret) and legacy format (UserName/Password)
             var clientId = !string.IsNullOrEmpty(connection.ClientId)
@@ -53,6 +53,11 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 
             // Decrypt ClientSecret if it's encrypted (auto-detect)
             var clientSecret = Helper.DecryptString(clientSecretEncrypted);
+            
+            if (shouldMaskPassword)
+            {
+                clientSecret = "***";
+            }
 
             // Build connection string
             var connStr = $"AuthType=ClientSecret;Url={connection.Url};ClientId={clientId};ClientSecret={clientSecret};";
