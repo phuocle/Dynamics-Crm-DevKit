@@ -50,5 +50,4 @@ Before creating this project, ensure you have:
 ## References
 
 * [UI Test Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/UI-Test-Project-Template)
-* [Test Automation for User Interface](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/devops-build-tools#test-automation-for-user-interface)
 * [EasyRepro](https://github.com/microsoft/EasyRepro)

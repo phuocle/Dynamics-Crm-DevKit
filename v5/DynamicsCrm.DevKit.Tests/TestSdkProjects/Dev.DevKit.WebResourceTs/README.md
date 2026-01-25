@@ -4,7 +4,7 @@
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
-        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 25.01.2026 16:22:10
+        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 25.01.2026 17:57:59
 
 ```
 
@@ -70,3 +70,5 @@ npm run watch
 ## References
 
 * [WebResource TypeScript Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template)
+* [TypeScript in Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/typescript)
+* [Client API Reference](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference)

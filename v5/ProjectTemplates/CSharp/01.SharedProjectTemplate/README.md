@@ -44,5 +44,5 @@ Add this shared project to your solution and reference it from:
 ## References
 
 * [Shared Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template)
-* [Shared Projects in Visual Studio](https://learn.microsoft.com/en-us/visualstudio/ide/how-to-create-and-use-shared-projects)
-* [Use the Organization Service](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/use-organization-service-read-write-data-metadata)
+* [Shared Projects in Visual Studio](https://learn.microsoft.com/en-us/visualstudio/ide/solutions-and-projects-in-visual-studio)
+* [Use the Organization Service](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/overview)

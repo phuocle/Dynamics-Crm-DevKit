@@ -45,5 +45,5 @@ Before creating this project, ensure you have:
 ## References
 
 * [Test Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template)
-* [Testing in Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/testing)
+* [Test automation](https://learn.microsoft.com/en-us/power-platform/alm/test-automation)
 * [Unit testing best practices](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices)

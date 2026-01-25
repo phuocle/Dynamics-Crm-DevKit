@@ -47,5 +47,5 @@ Before creating this project, ensure you have:
 ## References
 
 * [Console Core Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template)
-* [Use ServiceClient](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/use-serviceclient)
+* [Use the SDK for .NET](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/overview)
 * [ServiceClient Class](https://learn.microsoft.com/en-us/dotnet/api/microsoft.powerplatform.dataverse.client.serviceclient)

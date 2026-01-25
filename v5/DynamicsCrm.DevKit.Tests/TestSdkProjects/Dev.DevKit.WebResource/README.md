@@ -4,7 +4,7 @@
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
-        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 25.01.2026 16:22:10
+        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 25.01.2026 17:57:59
 
 ```
 
@@ -51,3 +51,5 @@ Before creating this project, ensure you have:
 ## References
 
 * [WebResource Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template)
+* [Web resources in model-driven apps](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/web-resources)
+* [Client API reference](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference)

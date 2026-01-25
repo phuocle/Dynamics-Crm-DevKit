@@ -55,5 +55,5 @@ deploy.debug.only.bat
 ## References
 
 * [Package Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template)
-* [Create packages for Package Deployer](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/package-deployer/create-packages-package-deployer)
+* [Create packages for Package Deployer](https://learn.microsoft.com/en-us/power-platform/alm/package-deployer-tool)
 * [Package Deployer tool](https://learn.microsoft.com/en-us/power-platform/alm/package-deployer-tool)
