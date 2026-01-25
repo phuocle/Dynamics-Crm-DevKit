@@ -2,8 +2,154 @@
 trigger: always_on
 ---
 
-# ÉP BUỘC #
-- Bắt đầu mỗi prompt luôn luôn là: "[các emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [các emoji]".
-- Kết thúc mỗi prompte luôn luôn là: "[các emoji] Tôi đã là xong rồi anh Phước, hãy kiểm tra lại những gì tôi làm nhé [các emoji]".
-- Không được tự ý commit git và push khi không có yêu cầu.
-- Khi cần lưu docs file .md thì phải lưu vào folder .\DynamicsCrm.DevKit.Docs tương ứng với ngữ cảnh mình đang làm. Ví dụ đang làm ở Cli thì phải lưu vào folder DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli, nếu làm ở VSIX thì phải lưu vào DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit. Và tự động hiểu là mình đã có skill của .\skills\markdown-management\SIKLL.md
+# DynamicsCrm.DevKit - AI Agent Core Rules
+
+> **Purpose**: Mandatory rules for AI agents working with this codebase.
+
+---
+
+## 📌 Communication Protocol
+
+### Required Greeting & Closing
+- **Start every response with**: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` (based on current time)
+- **End every response with**: `"[emoji] Tôi đã là xong rồi anh Phước, hãy kiểm tra lại những gì tôi làm nhé [emoji]"`
+
+---
+
+## 🚫 Critical Constraints
+
+| Rule | Description |
+|------|-------------|
+| **No Git Operations** | Never commit, push, or perform any git operations unless explicitly requested |
+| **DEBUG Mode Only** | Always use DEBUG configuration for builds. RELEASE mode requires PFX password (human only) |
+| **MSBuild for VSIX** | Use MSBuild (NOT `dotnet build`) for VSIX project |
+
+---
+
+## 📁 Project Structure
+
+| Component | Path | Description |
+|-----------|------|-------------|
+| **VSIX** | `DynamicsCrm.DevKit/` | VS2026 extension with project/item templates |
+| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 14 commands |
+| **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | 21 Roslyn analyzers (DEVKIT1001-1021) |
+| **Shared** | `DynamicsCrm.DevKit.Shared/` | Common logic, models, resources |
+| **Tool** | `DynamicsCrm.DevKit.Tool/` | Utility package |
+| **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration test project |
+| **Scripts** | `DynamicsCrm.DevKit.Scripts/` | Build and release PowerShell scripts |
+
+### CLI Commands (14 total)
+| Command | Status | Description |
+|---------|--------|-------------|
+| `generator` | Active | Generate form/webapi js/ts/csharp |
+| `server` | Active | Deploy plugins, workflows, custom actions |
+| `plugin` | Active | Deploy plugins only |
+| `workflow` | Active | Deploy workflows only |
+| `dataprovider` | Active | Deploy data providers |
+| `webresource` | Active | Deploy web resources |
+| **`modelbuilder`** | **New** | Generate early-bound using PAC ModelBuilder |
+| **`pacsolution`** | **New** | Pack/unpack solutions using PAC CLI |
+| `proxytype` | **DEPRECATED** | Use `modelbuilder` instead |
+| `solution` | **DEPRECATED** | Use `pacsolution` instead |
+| `downloadreport` | Active | Download reports |
+| `uploadreport` | Active | Upload reports |
+| `downloadwebresource` | Active | Download web resources |
+| `datasource` | Active | Create data source entities |
+
+### Project Templates (13 total)
+01-SharedProject, 02-Console, 03-ConsoleCore, 04-Server, 05-Package, 06-WebResource, 07-SharedTest, 08-ProxyTypes, 09-Test, 10-TestUi, 11-SolutionPackager, 12-Report, 13-WebResourceTs
+
+---
+
+## 🔧 Build Workflows
+
+Use these workflows for building:
+
+| Workflow | Command | Description |
+|----------|---------|-------------|
+| `/build-debug` | Full build | Build all projects + install CLI locally |
+| `/build-cli` | CLI only | Build and install CLI tool |
+| `/build-vsix` | VSIX only | Build Visual Studio extension |
+| `/build-analyzer` | Analyzers | Build + run analyzer unit tests |
+| `/build-tool` | Tool only | Build Tool package |
+| `/build-release` | Release | **Human only** - requires PFX |
+
+---
+
+## 📝 Documentation Rules
+
+When creating documentation files (`.md`):
+
+1. **Save to**: `DynamicsCrm.DevKit.Docs/` in the appropriate subfolder
+2. **Folder mapping**:
+   | Working On | Save To |
+   |------------|---------|
+   | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
+   | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
+   | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+   | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+
+---
+
+## 🔍 Key Files Reference
+
+| Purpose | File(s) |
+|---------|---------|
+| Version info | `Const.cs` in Shared |
+| Dataverse operations | `XrmHelper.cs` in Shared |
+| CLI entry point | `Program.cs` in CLI |
+| VSIX entry point | `DevKitPackage.cs` in VSIX |
+| CLI configuration | `DynamicsCrm.DevKit.Cli.json` in solution root |
+| JSON models | `DynamicsCrm.DevKit.Shared/Models/` |
+| Task implementations | `DynamicsCrm.DevKit.Cli/Tasks/` |
+| Analyzer implementations | `DynamicsCrm.DevKit.Analyzers/CrmAnalyzers/` |
+
+---
+
+## 📊 Analyzer Development
+
+Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development rules.
+
+**Quick reference**:
+- 21 analyzers: DEVKIT1001 → DEVKIT1021
+- Unit tests: `DynamicsCrm.DevKit.Analyzers.Test/Tests/`
+- Integration tests: `DynamicsCrm.DevKit.Tests/TestAnalyzers/`
+- Workflow: `/build-analyzer` for build + test
+- New analyzer: `/create-new-analyzer` workflow
+
+---
+
+## 🛠️ Naming Conventions
+
+| Type | Variable Name |
+|------|---------------|
+| `ServiceClient` | `serviceClient` |
+| `IOrganizationService` | `crmService` |
+
+---
+
+## ⚙️ Target Frameworks
+
+- .NET Framework 4.6.2, 4.8
+- .NET Standard 2.0
+- .NET 10.0 (CLI only)
+
+---
+
+## 🔐 Security
+
+> [!CAUTION]
+> Never commit connection strings, credentials, or PFX passwords.
+
+- Use environment variables or Azure Key Vault for secrets
+- PFX file (`DynamicsCrm.DevKit.pfx`) requires password for signing
+
+---
+
+## 📋 Checklist Before Completing Work
+
+- [ ] Ran appropriate build workflow (`/build-debug` or component-specific)
+- [ ] Verified build succeeded (`devkit --version` shows today's date)
+- [ ] All 4 packages exist in `Published/` folder (if full build)
+- [ ] Saved documentation to correct `DynamicsCrm.DevKit.Docs/` subfolder
+- [ ] Did NOT commit or push any git changes (unless requested)
