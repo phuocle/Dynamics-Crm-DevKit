@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (!string.IsNullOrEmpty(Json.entities) && Json.entities != "*" && Json.entities.ToLower() != "all")
             {
                 // ModelBuilder uses semicolon-separated entity names
-                var entityFilter = Json.entities.Replace(",", ";");
+                var entityFilter = Json.entities.ToLower().Replace(",", ";");
                 args.Add($"/entitynamesfilter:{entityFilter}");
             }
 
