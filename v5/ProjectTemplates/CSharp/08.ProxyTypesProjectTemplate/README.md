@@ -50,3 +50,5 @@ Before creating this project, ensure you have:
 ## References
 
 * [ProxyTypes Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template)
+* [Early-bound programming](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/early-bound-programming)
+* [Generate early-bound classes](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/generate-early-bound-classes)

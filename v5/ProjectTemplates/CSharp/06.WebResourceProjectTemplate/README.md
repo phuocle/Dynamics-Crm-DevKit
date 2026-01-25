@@ -51,3 +51,5 @@ Before creating this project, ensure you have:
 ## References
 
 * [WebResource Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template)
+* [Web resources in model-driven apps](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/web-resources)
+* [Client API reference](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference)

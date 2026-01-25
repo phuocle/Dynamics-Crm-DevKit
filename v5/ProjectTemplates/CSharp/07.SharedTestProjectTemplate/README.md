@@ -44,3 +44,5 @@ Add this shared test project to your solution and reference it from:
 ## References
 
 * [Shared Test Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template)
+* [Testing in Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/testing)
+* [Unit testing best practices](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices)

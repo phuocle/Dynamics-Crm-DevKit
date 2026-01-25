@@ -44,3 +44,5 @@ Before creating this project, ensure you have:
 ## References
 
 * [Console Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)
+* [Quickstart: Organization service console app](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/quick-start-org-service-console-app)
+* [Connection Strings](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/xrm-tooling/use-connection-strings-xrm-tooling-connect)

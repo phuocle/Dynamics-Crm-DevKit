@@ -54,3 +54,5 @@ deploy.debug.only.bat
 ## References
 
 * [Server Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template)
+* [Write a plug-in](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/plug-ins)
+* [Workflow extensions](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions)

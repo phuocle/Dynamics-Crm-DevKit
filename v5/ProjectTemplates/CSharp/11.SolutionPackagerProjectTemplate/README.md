@@ -51,3 +51,5 @@ After extraction, the following folders will be created:
 ## References
 
 * [Solution Packager Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template)
+* [SolutionPackager tool](https://learn.microsoft.com/en-us/power-platform/alm/solution-packager-tool)
+* [Use source control with solution files](https://learn.microsoft.com/en-us/power-platform/alm/use-source-control-solution-files)

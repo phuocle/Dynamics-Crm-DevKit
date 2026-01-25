@@ -70,3 +70,5 @@ npm run watch
 ## References
 
 * [WebResource TypeScript Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template)
+* [TypeScript in Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/typescript)
+* [Client API Reference](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference)

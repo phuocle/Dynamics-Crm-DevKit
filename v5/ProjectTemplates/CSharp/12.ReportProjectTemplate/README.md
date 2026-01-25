@@ -61,3 +61,5 @@ devkit downloadreport /report:"Report Name"
 ## References
 
 * [Report Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)
+* [Add reporting to your model-driven app](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/add-reporting-to-app)
+* [Dynamics 365 Report Authoring Extension](https://learn.microsoft.com/en-us/dynamics365/customerengagement/on-premises/analytics/download-report-authoring-extension)
