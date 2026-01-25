@@ -27,6 +27,7 @@
 			<ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
+			<ProjectItem ReplaceParameters="false" TargetFileName=".eslintrc.json">.eslintrc.json</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="tsconfig.json">tsconfig.json</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="build.js">build.js</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="lib\devkit.d.ts">devkitts.d.ts</ProjectItem>
