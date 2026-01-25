@@ -51,10 +51,18 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 await FileHelper.ForceWriteAllTextAsync(JavascriptFormProjectItemFullPath, _JavascriptForm_);
                 await FileHelper.ForceWriteAllTextAsync(JavascriptdtsProjectItemFullPath, _Javascriptdts_);
                 var JavascriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.js");
-                JavascriptFormProjectItem.Remove();
-                JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptFormProjectItemFullPath);
-                JavascriptdtsProjectItem.Remove();
-                JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
+                try
+                {
+                    JavascriptFormProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
+                    JavascriptdtsProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
+                }
+                catch
+                {
+                    JavascriptFormProjectItem.Remove();
+                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptFormProjectItemFullPath);
+                    JavascriptdtsProjectItem.Remove();
+                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
+                }
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.form.js up to date!!!");
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);

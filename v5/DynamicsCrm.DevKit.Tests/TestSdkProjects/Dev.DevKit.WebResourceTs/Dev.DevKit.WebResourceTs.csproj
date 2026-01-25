@@ -41,7 +41,6 @@
 		<Folder Include="html\" />
 		<Folder Include="css\" />
 		<Folder Include="build\" />
-		<Folder Include="entities\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
 		<Folder Include="resources\" />
@@ -56,6 +55,14 @@
 		<TypeScriptCompile Include="lib\devkit.ts" />
 		<None Include="entities\generator.form.bat" />
 		<None Include="entities\generator.webapi.bat" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="entities\Account.form.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
+	  <None Update="entities\Account.webapi.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
 	</ItemGroup>
 </Project>
 <!-- v.4.12.34.56 - Build: 25.01.2026 16:22:10 -->

@@ -43,8 +43,15 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var TypeScriptFormProjectItemFullPath = TypeScriptFormProjectItem.FileNames[0];
                 await FileHelper.ForceWriteAllTextAsync(TypeScriptFormProjectItemFullPath, _TypeScriptForm_);
                 var TypeScriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.ts");
-                TypeScriptFormProjectItem.Remove();
-                TypeScriptProjectItem.ProjectItems.AddFromFile(TypeScriptFormProjectItemFullPath);
+                try
+                {
+                    TypeScriptFormProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.ts";
+                }
+                catch
+                {
+                    TypeScriptFormProjectItem.Remove();
+                    TypeScriptProjectItem.ProjectItems.AddFromFile(TypeScriptFormProjectItemFullPath);
+                }
 
                 // Generate OptionSet.ts
                 var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();

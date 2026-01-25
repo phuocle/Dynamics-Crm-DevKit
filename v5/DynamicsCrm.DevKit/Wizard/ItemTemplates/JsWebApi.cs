@@ -50,10 +50,18 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 await FileHelper.ForceWriteAllTextAsync(JavascriptWebApiProjectItemFullPath, _JavascriptWebApi_);
                 await FileHelper.ForceWriteAllTextAsync(JavascriptdtsProjectItemFullPath, _Javascriptdts_);
                 var JavascriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.js");
-                JavascriptWebApiProjectItem.Remove();
-                JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptWebApiProjectItemFullPath);
-                JavascriptdtsProjectItem.Remove();
-                JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
+                try
+                {
+                    JavascriptWebApiProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
+                    JavascriptdtsProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
+                }
+                catch
+                {
+                    JavascriptWebApiProjectItem.Remove();
+                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptWebApiProjectItemFullPath);
+                    JavascriptdtsProjectItem.Remove();
+                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
+                }
                 await VsixHelper.ExecuteCommandAsync("File.SaveAll");
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.js up to date!!!");
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);

@@ -45,5 +45,16 @@
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <None Update="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+  </ItemGroup>
 </Project>
 <!-- v.4.12.34.56 - Build: 25.01.2026 16:22:10 -->
