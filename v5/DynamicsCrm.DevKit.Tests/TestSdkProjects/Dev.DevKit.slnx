@@ -18,4 +18,5 @@
   <Project Path="Dev.DevKit.Test/Dev.DevKit.Test.csproj" />
   <Project Path="Dev.DevKit.UiTest/Dev.DevKit.UiTest.csproj" />
   <Project Path="Dev.DevKit.WebResource/Dev.DevKit.WebResource.csproj" />
+  <Project Path="Dev.DevKit.WebResourceTs/Dev.DevKit.WebResourceTs.csproj" />
 </Solution>
