@@ -2,7 +2,7 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "DEVKITV4",
+      "solution": "???",
       "folder": "bin\\Debug",
       "includefiles": [
         "Dev.DevKit.Plugin.*.dll",
@@ -10,9 +10,7 @@
         "Dev.DevKit.CustomAction.*.dll",
         "Dev.DevKit.Workflow.*.dll",
         "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll",
-        "Dev.DevKit.Server.dll",
-        "Dev.DevKit.Server.*.dll"
+        "Dev.DevKit.DataProvider.*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
@@ -66,80 +64,40 @@
       "name": "???"
     }
   ],
-  "solutionpackagers": [
-    {
-      "profile": "Extract-Both",
-      "solution": "devkitv4",
-      "rootfolder": "",
-      "solutiontype": "Both",
-      "folder": "devkitv4",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Both",
-      "solution": "devkitv4",
-      "rootfolder": "",
-      "solutiontype": "Both",
-      "folder": "devkitv4",
-      "type": "Pack",
-      "mapfile": ""
-    }
-  ],
-  "pacsolutionpackagers": [
-    {
-      "profile": "Extract-Both",
-      "solution": "DEVKITV4",
-      "rootfolder": "",
-      "solutiontype": "Both",
-      "folder": "devkitv4",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Both",
-      "solution": "DEVKITV4",
-      "rootfolder": "",
-      "solutiontype": "Both",
-      "folder": "devkitv4",
-      "type": "Pack",
-      "mapfile": ""
-    }
-  ],
   "generators": [
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "Dev.DevKit.Shared.Entities",
+      "rootnamespace": "???",
       "namespace": "",
-      "rootfolder": "",
-      "entities": "*"
+      "rootfolder": "???",
+      "entities": "folder"
     },
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "DevKit",
-      "rootfolder": "",
-      "entities": "*"
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "DevKit",
-      "rootfolder": "",
-      "entities": "*"
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
     },
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootfolder": "",
-      "entities": "*"
+      "rootfolder": "???",
+      "entities": "folder"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootfolder": "",
-      "entities": "*"
+      "rootfolder": "???",
+      "entities": "folder"
     }
   ],
   "downloadwebresources": [
@@ -154,19 +112,31 @@
       "solution": "???"
     }
   ],
-  "proxytypes": [
+  "pacsolutionpackagers": [
     {
-      "profile": "ALL",
-      "namespace": "Dev.DevKit.ProxyTypes",
-      "output": "GeneratedCode.cs",
-      "entities": "*"
+      "profile": "Extract-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Pack",
+      "mapfile": ""
     }
   ],
   "modelbuilders": [
     {
-      "profile": "ACCOUNT",
-      "namespace": "Dev.DevKit.ProxyTypes",
-      "output": "ModelCode.cs",
+      "profile": "ALL",
+      "namespace": "???.ProxyTypes",
+      "output": "GeneratedCode.cs",
       "entities": "*"
     }
   ],
