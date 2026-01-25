@@ -7,6 +7,7 @@
   <Project Path="Dev.DevKit.Console/Dev.DevKit.Console.csproj" />
   <Project Path="Dev.DevKit.ConsoleCore/Dev.DevKit.ConsoleCore.csproj" />
   <Project Path="Dev.DevKit.Package/Dev.DevKit.Package.csproj" />
+  <Project Path="Dev.DevKit.ProxyTypes/Dev.DevKit.ProxyTypes.csproj" />
   <Project Path="Dev.DevKit.Server/Dev.DevKit.Server.csproj" />
   <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="768f0457-d603-481b-94cf-4cd1ec74d12d" />
   <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="8fe8fea2-de12-45b0-8917-4df5b2d347f6" />
