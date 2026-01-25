@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Server.2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=780fbfef8587c85f" PluginAssemblyId="324af1c0-a0f6-f011-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.4</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitServer2-324AF1C0-A0F6-F011-8407-000D3A316BDB/DevDevKitServer2.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server._2.Plugin.Account.PostAccountCreateAsynchronous, Dev.DevKit.Server.2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=780fbfef8587c85f" PluginTypeId="716a5bc8-a0f6-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server._2.Plugin.Account.PostAccountCreateAsynchronous">
+      <FriendlyName>Dev.DevKit.Server._2.Plugin.Account.PostAccountCreateAsynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

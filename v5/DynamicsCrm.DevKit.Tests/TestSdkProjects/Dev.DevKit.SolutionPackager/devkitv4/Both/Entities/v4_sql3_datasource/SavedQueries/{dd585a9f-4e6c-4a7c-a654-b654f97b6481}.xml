@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>1</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{dd585a9f-4e6c-4a7c-a654-b654f97b6481}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="v4_sql3_datasourcename" select="1" icon="1" preview="1">
+        <row name="result" id="v4_sql3_datasourceid">
+          <cell name="v4_sql3_datasourcename" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>4</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="v4_sql3_datasource">
+          <attribute name="v4_sql3_datasourceid" />
+          <attribute name="v4_sql3_datasourcename" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.4</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Quick Find Active Sql3 DataSources" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

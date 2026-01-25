@@ -115,19 +115,19 @@
   "pacsolutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "devkitv4",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "devkitv4",
       "type": "Pack",
       "mapfile": ""
     }
