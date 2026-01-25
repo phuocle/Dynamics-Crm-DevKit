@@ -16,50 +16,52 @@ A comprehensive development toolkit for **Microsoft Dynamics 365 / Power Platfor
 
 ### CLI Tool (`devkit`)
 
-A .NET global tool for CI/CD automation:
+A .NET global tool for CI/CD automation with **14 commands**:
 
-| Command | Description |
-|---------|-------------|
-| `devkit generator` | Generate TypeScript/JavaScript form and WebApi code |
-| `devkit server` | Deploy plugins, workflows, and custom actions |
-| `devkit plugin` | Deploy plugins only |
-| `devkit workflow` | Deploy workflows only |
-| `devkit dataprovider` | Deploy data providers |
-| `devkit webresource` | Deploy web resources (JS/TS/HTML/CSS/images) |
-| `devkit proxytype` | Generate early-bound proxy types using CrmSvcUtil |
-| `devkit solution` | Extract/pack solutions using SolutionPackager |
-| `devkit downloadreport` | Download reports from Dataverse |
-| `devkit uploadreport` | Upload reports to Dataverse |
-| `devkit downloadwebresource` | Download web resources from a solution |
-| `devkit datasource` | Create virtual table data sources |
+| Command | Status | Description |
+|---------|--------|-------------|
+| `devkit generator` | Active | Generate TypeScript/JavaScript form and WebApi code |
+| `devkit server` | Active | Deploy plugins, workflows, and custom actions |
+| `devkit plugin` | Active | Deploy plugins only |
+| `devkit workflow` | Active | Deploy workflows only |
+| `devkit dataprovider` | Active | Deploy data providers |
+| `devkit webresource` | Active | Deploy web resources (JS/TS/HTML/CSS/images) |
+| `devkit modelbuilder` | **New** | Generate early-bound entity classes using PAC ModelBuilder |
+| `devkit pacsolution` | **New** | Pack/unpack solutions using PAC CLI |
+| `devkit proxytype` | ⚠️ Deprecated | Use `modelbuilder` instead |
+| `devkit solution` | ⚠️ Deprecated | Use `pacsolution` instead |
+| `devkit downloadreport` | Active | Download reports from Dataverse |
+| `devkit uploadreport` | Active | Upload reports to Dataverse |
+| `devkit downloadwebresource` | Active | Download web resources from a solution |
+| `devkit datasource` | Active | Create virtual table data sources |
 
 ### Roslyn Analyzers (21 Rules)
 
 Static code analysis for Dataverse development best practices:
 
-| Rule ID | Description |
-|---------|-------------|
-| DEVKIT1001 | Plugin must be thread-safe (stateless) |
-| DEVKIT1002 | Avoid Console output in plugins |
-| DEVKIT1003 | Avoid File I/O operations in plugins |
-| DEVKIT1004 | Check IPluginExecutionContext.Depth |
-| DEVKIT1005 | Avoid blocking async calls (.GetAwaiter().GetResult()) |
-| DEVKIT1006 | Set HttpClient timeout |
-| DEVKIT1007 | Use InvalidPluginExecutionException for errors |
-| DEVKIT1008 | Check for null EntityReference before accessing |
-| DEVKIT1009 | Avoid ColumnSet(true) - specify columns explicitly |
-| DEVKIT1010 | RetrieveAsIfPublished parameter usage |
-| DEVKIT1011 | Update message should have filtering attributes |
-| DEVKIT1012 | RetrieveMultiple plugin performance |
-| DEVKIT1013 | Avoid AppDomain events in plugins |
-| DEVKIT1014 | Avoid deprecated APIs |
-| DEVKIT1015 | Use ITracingService in catch blocks |
-| DEVKIT1016 | Plugin image configuration |
-| DEVKIT1017 | Avoid KeepAlive=false in HTTP requests |
-| DEVKIT1018 | Avoid parallel execution in plugins |
-| DEVKIT1019 | Avoid batch requests in plugins |
-| DEVKIT1020 | Use ITracingService for logging |
-| DEVKIT1021 | DataProvider/DataSource validation |
+| Rule ID | Severity | Description |
+|---------|----------|-------------|
+| DEVKIT1001 | Error | Update message should have filtering attributes |
+| DEVKIT1002 | Warning | Don't use `ColumnSet(true)` |
+| DEVKIT1003 | Error | Plugin image validation |
+| DEVKIT1004 | Info | Use of deprecated SDK messages |
+| DEVKIT1005 | Warning | EntityReference maybe null |
+| DEVKIT1006 | Warning | Avoid batch requests in plugins |
+| DEVKIT1007 | Error | IPlugin implementations should be stateless |
+| DEVKIT1008 | Error | Avoid parallel execution in plugins |
+| DEVKIT1009 | Warning | Set KeepAlive to false for HTTP calls |
+| DEVKIT1010 | Warning | Set Timeout for HTTP calls |
+| DEVKIT1011 | Warning | Use InvalidPluginExecutionException |
+| DEVKIT1012 | Info | Use ITracingService in plugins |
+| DEVKIT1013 | Info | Avoid Retrieve/RetrieveMultiple plugins |
+| DEVKIT1014 | Error | Avoid AppDomain events in plugins |
+| DEVKIT1015 | Info | Avoid blocking async patterns |
+| DEVKIT1016 | Info | Avoid RetrieveAsIfPublished |
+| DEVKIT1017 | Info | Avoid Console output in plugins |
+| DEVKIT1018 | Error | Avoid File/IO operations in plugins |
+| DEVKIT1019 | Warning | Check context.Depth for infinite loops |
+| DEVKIT1020 | Error | DataProvider must have DataSource |
+| DEVKIT1021 | Warning | Use ITracingService in catch blocks |
 
 ### Client-Side Libraries
 
@@ -93,6 +95,23 @@ Create `DynamicsCrm.DevKit.Cli.json` in your project root:
       "type": "form"
     }
   ],
+  "modelbuilders": [
+    {
+      "profile": "ALL",
+      "namespace": "YourNamespace.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "*"
+    }
+  ],
+  "pacsolutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "solution": "YourSolution",
+      "solutiontype": "Both",
+      "folder": "Solutions",
+      "type": "Extract"
+    }
+  ],
   "webresources": [...],
   "servers": [...]
 }
@@ -104,20 +123,18 @@ Create `DynamicsCrm.DevKit.Cli.json` in your project root:
 
 - Visual Studio 2026 with VSIX workload
 - .NET Framework 4.6.2, 4.8, and .NET Standard 2.0 SDKs
+- .NET 10.0 SDK (for CLI)
 - MSBuild (via Visual Studio)
 
 ### Build Commands
 
 ```powershell
-# Build all (DEBUG - for development)
+# Full DEBUG build (recommended for development)
+.\DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1
+
+# Or manual build
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
 & $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
-
-# Build VSIX only
-& $msbuild "DynamicsCrm.DevKit.slnx" /t:Build /p:Configuration=Debug /v:m
-
-# Build CLI only
-& $msbuild "DynamicsCrm.DevKit.Cli.slnx" /t:Build /p:Configuration=Debug /v:m
 ```
 
 > **Note**: Release builds require PFX signing key password (human operators only).
@@ -129,7 +146,7 @@ v5/
 ├── DynamicsCrm.DevKit/              # VSIX Extension
 │   ├── Wizard/                      # Project/Item wizards
 │   └── Commands/                    # VS commands
-├── DynamicsCrm.DevKit.Cli/          # CLI Tool
+├── DynamicsCrm.DevKit.Cli/          # CLI Tool (.NET 10.0)
 │   ├── Commands/                    # Spectre.Console commands
 │   └── Tasks/                       # Task implementations
 ├── DynamicsCrm.DevKit.Analyzers/    # Roslyn Analyzers
@@ -137,8 +154,8 @@ v5/
 ├── DynamicsCrm.DevKit.Shared/       # Common Logic
 │   ├── Resources/                   # JS/TS templates
 │   └── XrmHelper.cs                 # Dataverse operations
-├── ProjectTemplates/                # VS project templates
-├── ItemTemplates/                   # VS item templates
+├── ProjectTemplates/                # 13 VS project templates
+├── ItemTemplates/                   # 16 VS item templates
 └── DynamicsCrm.DevKit.Tests/        # Test projects
 ```
 

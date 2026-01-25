@@ -1,16 +1,10 @@
 # DynamicsCrm.DevKit.Tool
 
-NuGet tools package for DynamicsCrm.DevKit CLI distribution.
+NuGet tools package for DynamicsCrm.DevKit utilities.
 
 ## Installation
 
-Install as a .NET tool:
-
-```powershell
-dotnet tool install DynamicsCrm.DevKit.Tool --global
-```
-
-Or add to your project:
+Install as a NuGet package:
 
 ```xml
 <PackageReference Include="DynamicsCrm.DevKit.Tool" Version="4.12.34.56">
@@ -22,14 +16,28 @@ Or add to your project:
 ## Contents
 
 This package includes:
-- `DynamicsCrm.DevKit.Cli.exe` - Command-line interface
-- `CrmSvcUtil.exe` - Proxy type generator
+- `DynamicsCrm.DevKit.Tool.exe` - Utility executable for CRM development
 - Supporting assemblies for CRM connectivity
 
 ## Usage
 
-After installation, run CLI commands:
+The tool is typically used alongside the CLI tool for advanced scenarios.
+
+For most use cases, use the CLI tool instead:
 
 ```powershell
-devkit /task:generator /config:DynamicsCrm.DevKit.Cli.json
+dotnet tool install -g DynamicsCrm.DevKit.Cli
+devkit --help
 ```
+
+## Related Packages
+
+| Package | Description |
+|---------|-------------|
+| [DynamicsCrm.DevKit.Cli](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli) | .NET global CLI tool (recommended) |
+| [DynamicsCrm.DevKit.Analyzers](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers) | Roslyn analyzers |
+
+## Support
+
+- GitHub: https://github.com/phuocle/Dynamics-Crm-DevKit
+- Issues: https://github.com/phuocle/Dynamics-Crm-DevKit/issues
