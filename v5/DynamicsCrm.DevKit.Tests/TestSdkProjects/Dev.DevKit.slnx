@@ -5,18 +5,5 @@
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
   <Project Path="Dev.DevKit.Console/Dev.DevKit.Console.csproj" />
-  <Project Path="Dev.DevKit.ConsoleCore/Dev.DevKit.ConsoleCore.csproj" />
-  <Project Path="Dev.DevKit.Package/Dev.DevKit.Package.csproj" />
-  <Project Path="Dev.DevKit.ProxyTypes/Dev.DevKit.ProxyTypes.csproj" />
-  <Project Path="Dev.DevKit.Report/Dev.DevKit.Report.rptproj">
-    <Deploy />
-  </Project>
-  <Project Path="Dev.DevKit.Server/Dev.DevKit.Server.csproj" />
-  <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="c4c9603a-75f9-4e71-9a12-ef35472498a4" />
-  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="600774b2-9dae-485f-9352-483569cfc335" />
-  <Project Path="Dev.DevKit.SolutionPackager/Dev.DevKit.SolutionPackager.csproj" />
-  <Project Path="Dev.DevKit.Test/Dev.DevKit.Test.csproj" />
-  <Project Path="Dev.DevKit.UiTest/Dev.DevKit.UiTest.csproj" />
-  <Project Path="Dev.DevKit.WebResource/Dev.DevKit.WebResource.csproj" />
-  <Project Path="Dev.DevKit.WebResourceTs/Dev.DevKit.WebResourceTs.csproj" />
+  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="2a27e755-d939-4991-946d-4a499e9ac46f" />
 </Solution>
