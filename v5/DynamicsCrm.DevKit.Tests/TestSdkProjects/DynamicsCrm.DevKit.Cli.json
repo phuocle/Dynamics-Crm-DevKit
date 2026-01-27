@@ -1,21 +1,21 @@
-{
+﻿{
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv4",
       "folder": "bin\\Debug",
       "includefiles": [
-        "???.Server.*.dll",
-        "???.Package.*.nupkg",
-        "???.Plugin.*.dll",
-        "???.Plugin.*.nupkg",
-        "???.CustomAction.*.dll",
-        "???.Workflow.*.dll",
-        "???.CustomApi.*.dll",
-        "???.DataProvider.*.dll"
+        "Dev.DevKit.Server.*.dll",
+        "Dev.DevKit.Package.*.nupkg",
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.Plugin.*.nupkg",
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.Workflow.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "Dev.DevKit.*.Test.dll"
       ]
     }
   ],
