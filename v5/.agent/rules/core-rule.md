@@ -48,9 +48,9 @@ trigger: always_on
 | `dataprovider` | **DEPRECATED** | Use `devkit server` |
 | `webresource` | Active | Deploy web resources |
 | **`modelbuilder`** | **New** | Generate early-bound using PAC ModelBuilder |
-| **`pacsolution`** | **New** | Pack/unpack solutions using PAC CLI |
-| `proxytype` | **DEPRECATED** | Use `modelbuilder` instead |
-| `solution` | **DEPRECATED** | Use `pacsolution` instead |
+| `proxytype` | **DEPRECATED** | Use `devkit modelbuilder` |
+| `solution` | Active | Pack/unpack solutions using PAC CLI |
+| `legacy-solution` | **DEPRECATED** | Use `devkit solution` |
 | `downloadreport` | Active | Download reports |
 | `uploadreport` | Active | Upload reports |
 | `downloadwebresource` | Active | Download web resources |

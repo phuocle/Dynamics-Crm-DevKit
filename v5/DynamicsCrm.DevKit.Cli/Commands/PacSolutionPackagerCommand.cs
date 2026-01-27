@@ -19,13 +19,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
 
-            if (json.pacsolutionpackagers == null)
+            if (json.solutionpackagers == null)
             {
-                SpectreLog.ActionError("'pacsolutionpackagers' section not found in json file");
+                SpectreLog.ActionError("'solutionpackagers' section not found in json file");
                 return;
             }
 
-            var profile = json.pacsolutionpackagers.FirstOrDefault(x => x.profile == settings.Profile);
+            var profile = json.solutionpackagers.FirstOrDefault(x => x.profile == settings.Profile);
             if (profile != null)
             {
                 var args = new CommandLineArgs
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     Connection = settings.Connection,
                     Json = settings.Json,
                     Profile = settings.Profile,
-                    Type = "pacsolutionpackagers",
+                    Type = "solutionpackagers",
                     ServiceClient = settings.ServiceClient,
                     AuthType = settings.AuthType
                 };
@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
             else
             {
-                SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'pacsolutionpackagers' section");
+                SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'solutionpackagers' section");
             }
         }
     }

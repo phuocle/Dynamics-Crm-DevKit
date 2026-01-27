@@ -20,8 +20,9 @@ namespace DynamicsCrm.DevKit.Cli
                 var originalArgs = args;
                 args = LegacyArgConverter.Convert(args);
 
-                // Show help if no args
-                if (args == null || args.Length == 0)
+                // Show help if no args or explicit help request
+                if (args == null || args.Length == 0 || 
+                    (args.Length == 1 && (args[0] == "--help" || args[0] == "-h")))
                 {
                     SpectreLog.WriteHeader();
                     SpectreLog.WriteHelp();
@@ -62,10 +63,10 @@ namespace DynamicsCrm.DevKit.Cli
                     config.AddCommand<ModelBuilderCommand>("modelbuilder")
                           .WithDescription("Generate early-bound entity classes using PAC ModelBuilder");
 
-                    config.AddCommand<SolutionPackagerCommand>("solution")
-                          .WithDescription("[red]DEPRECATED[/] Extract or pack solutions using SolutionPackager");
+                    config.AddCommand<SolutionPackagerCommand>("legacy-solution")
+                          .WithDescription("[red]DEPRECATED[/] Use: devkit solution");
 
-                    config.AddCommand<PacSolutionPackagerCommand>("pacsolution")
+                    config.AddCommand<PacSolutionPackagerCommand>("solution")
                           .WithDescription("Extract or pack solutions using PAC CLI");
 
                     config.AddCommand<DownloadReportCommand>("downloadreport")

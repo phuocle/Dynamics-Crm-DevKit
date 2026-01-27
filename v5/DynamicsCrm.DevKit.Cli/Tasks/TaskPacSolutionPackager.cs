@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    public class TaskPacSolutionPackager(CommandLineArgs arg, JsonPacSolutionPackager json) : ITask
+    public class TaskPacSolutionPackager(CommandLineArgs arg, JsonSolutionPackager json) : ITask
     {
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
         public CommandLineArgs Arg { get; set; } = arg;
-        private JsonPacSolutionPackager Json { get; set; } = json;
+        private JsonSolutionPackager Json { get; set; } = json;
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
-        public string TaskType => $"[{nameof(CliType.pacsolutionpackagers).ToUpper()}]";
+        public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
 

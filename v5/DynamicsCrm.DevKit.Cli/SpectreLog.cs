@@ -62,8 +62,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Generate early-bound proxy classes\n" +
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +
-                    "  [cyan]solution[/]               [red](DEPRECATED)[/] Pack/unpack solutions\n" +
-                    "  [cyan]pacsolution[/]            Extract or pack solutions using PAC CLI\n" +
+                    "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
+                    "  [cyan]legacy-solution[/]        [red](DEPRECATED)[/] Use: devkit solution\n" +
                     "  [cyan]downloadreport[/]         Download reports from a solution\n" +
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
@@ -74,16 +74,12 @@ namespace DynamicsCrm.DevKit.Cli
                     "  --url [yellow]URL[/]              Dynamics 365 environment URL\n" +
                     "  --clientid [yellow]GUID[/]        Azure AD application (client) ID\n" +
                     "  --secret [yellow]SECRET[/]        Client secret (plain or encrypted)\n" +
-                    "  --thumbprint [yellow]HEX[/]       Certificate thumbprint\n" +
-                    "  --pacprofile [yellow]NAME|INDEX[/] PAC CLI profile name or index (1-indexed)\n" +
+                    "  --pacprofile [yellow]NAME[/]      PAC CLI profile name\n" +
                     "  --sdk-login             Use SDK OOB login dialog\n\n" +
                     "[green]Auth Types (--auth):[/]\n" +
                     "  [cyan]Interactive[/]            Browser-based login (MFA supported)\n" +
                     "  [cyan]DeviceCode[/]             Device code flow for headless/SSH\n" +
                     "  [cyan]ClientSecret[/]           App registration with secret\n" +
-                    "  [cyan]ClientCertificate[/]      App registration with certificate\n" +
-                    "  [cyan]ManagedIdentity[/]        Azure VM/App Service identity\n" +
-                    "  [cyan]DefaultAzureCredential[/] Automatic Azure SDK chain\n" +
                     "  [cyan]FromPac[/]                Use PAC CLI cached tokens\n" +
                     "  [cyan]OAuth[/]                  Username/password (legacy)\n" +
                     "  [cyan]AD[/]                     On-premise Active Directory\n\n" +
