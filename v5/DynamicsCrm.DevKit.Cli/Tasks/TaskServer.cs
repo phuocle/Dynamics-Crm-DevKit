@@ -1977,13 +1977,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             catch (ReflectionTypeLoadException ex)
             {
-                SpectreLog.ActionError($"Failed to read types from assembly {file}: {ex.Message}");
-                if (ex.LoaderExceptions != null)
+                // Handle case where some types cannot be loaded (e.g., Workflow types with System.Activities dependency)
+                // Use ex.Types to get types that were successfully loaded
+                AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
+                var loadedTypes = ex.Types?.Where(t => t != null).OfType<TypeInfo>().ToList() ?? new List<TypeInfo>();
+                foreach (var type in loadedTypes)
                 {
-                    foreach (var loaderEx in ex.LoaderExceptions)
+                    try
                     {
-                        SpectreLog.ActionError($"  LoaderException: {loaderEx?.Message}");
+                        var attributes = type?.GetCustomAttributesData();
+                        if (attributes != null && attributes.Any(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
+                            types.Add(type);
                     }
+                    catch { }
                 }
             }
             catch (Exception ex)
@@ -2025,8 +2031,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
 
-                // Fall back to standard load by name
-                return Assembly.Load(args.Name);
+                // Cannot resolve - return null (do NOT call Assembly.Load(args.Name) as it triggers infinite recursion)
+                return null;
             }
             catch
             {
