@@ -461,21 +461,8 @@ namespace DynamicsCrm.DevKit.Cli
                     // Extract text from markup (remove [color] tags for padding calculation)
                     var labelText = StripMarkup(row[0]);
                     var valueText = StripMarkup(row[1]);
-
                     // Pad label to fixed width for alignment
-                    var paddedLabel = labelText.PadRight(labelWidth);
-
-                    // Calculate available width for value (console width - prefix - label - margin)
-                    var consoleWidth = Math.Max(80, Console.WindowWidth);
-                    var prefixLen = PREFIX.Length;
-                    var availableWidth = consoleWidth - prefixLen - labelWidth - 2; // 2 for safety margin
-
-                    // Truncate value if too long (add "..." at beginning for paths)
-                    if (valueText.Length > availableWidth && availableWidth > 10)
-                    {
-                        valueText = "..." + valueText.Substring(valueText.Length - availableWidth + 7);
-                    }
-
+                    var paddedLabel = labelText.PadRight(labelWidth - 2);
                     // Check if label contains a parameter (--xxx pattern)
                     var dashIndex = paddedLabel.IndexOf("--", StringComparison.Ordinal);
                     if (dashIndex >= 0)

@@ -1,4 +1,5 @@
 ﻿using DynamicsCrm.DevKit.Cli.Commands;
+using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
 using System.Threading.Tasks;
@@ -12,8 +13,11 @@ namespace DynamicsCrm.DevKit.Cli
         {
             try
             {
+
                 // Ensure flushed output for AI agents and correct encoding
                 Console.OutputEncoding = System.Text.Encoding.UTF8;
+                // Force console width to 8000 to prevent wrapping
+                AnsiConsole.Profile.Width = 8000;
 
 
                 // Convert legacy /arg:value format to --arg value if needed
@@ -21,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli
                 args = LegacyArgConverter.Convert(args);
 
                 // Show help if no args or explicit help request
-                if (args == null || args.Length == 0 || 
+                if (args == null || args.Length == 0 ||
                     (args.Length == 1 && (args[0] == "--help" || args[0] == "-h")))
                 {
                     SpectreLog.WriteHeader();
