@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  --clientid [yellow]GUID[/]        Azure AD application (client) ID\n" +
                     "  --secret [yellow]SECRET[/]        Client secret (plain or encrypted)\n" +
                     "  --pacprofile [yellow]NAME[/]      PAC CLI profile name\n" +
-                    "  --sdk-login             Use SDK OOB login dialog\n\n" +
+                    "  --sdk-login            Use SDK OOB login dialog\n\n" +
                     "[green]Auth Types (--auth):[/]\n" +
                     "  [cyan]Interactive[/]            Browser-based login (MFA supported)\n" +
                     "  [cyan]DeviceCode[/]             Device code flow for headless/SSH\n" +
@@ -88,9 +88,9 @@ namespace DynamicsCrm.DevKit.Cli
                     "  --profile [yellow]NAME[/]         Profile name from json file\n" +
                     "  --onlyupdateassembly   Fast deploy, only update the assembly\n\n" +
                     "[green]Examples:[/]\n" +
-                    "  devkit server --auth [cyan]Interactive[/] --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
-                    "  devkit server --auth [cyan]FromPac[/] --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
-                    "  devkit server --auth [cyan]ClientSecret[/] --url URL --clientid ID --secret SEC --json cli.json --profile CI\n"
+                    "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
+                    "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
+                    "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --secret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n"
                 ))
             {
                 Border = BoxBorder.Double,

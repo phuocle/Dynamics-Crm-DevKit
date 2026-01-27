@@ -4,66 +4,115 @@ description: Build DynamicsCrm.DevKit.Cli project in Debug mode
 
 // turbo-all
 
-Build the CLI project, pack it as a .NET tool, and install locally for testing.
+Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
 
-## Step 1: Kill Running CLI Process
+> [!CAUTION]
+> **PHẢI RESTORE `Const.cs` SAU KHI BUILD!**
+> 
+> Nếu không restore, file `Const.cs` sẽ chứa version/date thật thay vì placeholders.
+> Điều này sẽ gây lỗi cho các build khác và có thể bị commit nhầm vào git!
+> 
+> Step 5 (Restore) là **BẮT BUỘC** - KHÔNG ĐƯỢC BỎ QUA!
+
+## Step 1: Read Version from Config
 
 ```powershell
-Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
+$ProjectRoot = "d:\github\Dynamics-Crm-DevKit\v5"
+$ConfigFile = "$ProjectRoot\DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json"
+$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
+$Version = $Config.version
+$BuildDate = Get-Date -Format "dd.MM.yyyy HH:mm:ss"
+Write-Host "Version: $Version" -ForegroundColor Cyan
+Write-Host "Build Date: $BuildDate" -ForegroundColor Cyan
 ```
 
-## Step 2: Build CLI Project
+## Step 2: Update Const.cs with Real Values
 
 ```powershell
-Set-Location "d:\github\Dynamics-Crm-DevKit\v5"
-dotnet build "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" --configuration Debug
+$ConstFile = "$ProjectRoot\DynamicsCrm.DevKit.Shared\Const.cs"
+
+# Backup original content
+$OriginalContent = [System.IO.File]::ReadAllText($ConstFile, [System.Text.Encoding]::UTF8)
+
+# Replace placeholders
+$NewContent = $OriginalContent
+$NewContent = $NewContent -replace [regex]::Escape("x.xx.xx.xx"), $Version
+$NewContent = $NewContent -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
+
+# Write updated content
+[System.IO.File]::WriteAllText($ConstFile, $NewContent, [System.Text.Encoding]::UTF8)
+Write-Host "Updated Const.cs with version $Version and date $BuildDate" -ForegroundColor Green
 ```
 
-## Step 3: Pack CLI as .NET Tool
+## Step 3: Build & Pack CLI
 
 ```powershell
-$Version = "4.12.34.56"
-$publishDir = "d:\github\Dynamics-Crm-DevKit\v5\published\$Version"
+$publishDir = "$ProjectRoot\published\$Version"
 New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
-# Explicitly set AssemblyVersion and FileVersion to ensure 'devkit --version' reports correctly
-dotnet pack "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version -p:SignAssembly=false
+# Kill any running CLI process
+Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
+
+# Build CLI project only
+dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug
+
+# Pack as NuGet tool
+dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:SignAssembly=false --no-build
 ```
 
-## Step 4: Uninstall Existing CLI Tool
+## Step 4: Install CLI Tool
 
 ```powershell
 $ToolName = "DynamicsCrm.DevKit.Cli"
-dotnet tool uninstall -g $ToolName
-if ($LASTEXITCODE -ne 0) { Write-Host "Tool not installed or failed to uninstall" }
+
+# Uninstall existing
+dotnet tool uninstall -g $ToolName 2>$null
 
 # Clean tool store and cache
-$Version = "4.12.34.56"
 Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.cli" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\devkit.exe" -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$env:USERPROFILE\.nuget\packages\dynamicscrm.devkit.cli\$Version" -Recurse -Force -ErrorAction SilentlyContinue
+
+# Install new version
+dotnet tool install -g $ToolName --add-source $publishDir --version $Version
 ```
 
-## Step 5: Install New CLI Tool
+## Step 5: ⚠️ RESTORE Const.cs (QUAN TRỌNG!)
+
+> [!WARNING]
+> **KHÔNG ĐƯỢC BỎ QUA BƯỚC NÀY!**
+> Nếu không restore, git sẽ thấy file thay đổi và có thể bị commit nhầm.
 
 ```powershell
-$Version = "4.12.34.56"
-$publishDir = "d:\github\Dynamics-Crm-DevKit\v5\published\$Version"
-$ToolName = "DynamicsCrm.DevKit.Cli"
-
-dotnet tool install -g $ToolName --add-source $publishDir --version $Version
+# Restore original placeholder content
+[System.IO.File]::WriteAllText($ConstFile, $OriginalContent, [System.Text.Encoding]::UTF8)
+Write-Host "Restored Const.cs to original placeholders" -ForegroundColor Yellow
 ```
 
 ## Step 6: Verify Installation
 
 ```powershell
-# Use full path to avoid PATH update issues
-& "$env:USERPROFILE\.dotnet\tools\devkit.exe" --version
+devkit --version
 ```
 
-Expected output: `4.12.34.56 Build xxx.yy.zz...`
+Expected output: `4.12.34.56 Build: dd.MM.yyyy HH:mm:ss` (current date/time)
+
+## Step 7: Verify Const.cs is Restored
+
+```powershell
+# Verify placeholders are back
+$content = Get-Content $ConstFile -Raw
+if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
+    Write-Host "✓ Const.cs restored successfully" -ForegroundColor Green
+} else {
+    Write-Host "✗ ERROR: Const.cs NOT restored! Please restore manually!" -ForegroundColor Red
+    Write-Host "Run: git checkout $ConstFile" -ForegroundColor Yellow
+}
+```
 
 ## Notes
 
+- This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
+- Version is defined in `DevKit.ReleaseConfig.json`
 - Debug mode does NOT require PFX signing key
 - For full solution build, use `/build-debug` workflow instead
