@@ -5,14 +5,14 @@
       "solution": "???",
       "folder": "bin\\Debug",
       "includefiles": [
-        "???.Server.*.dll",
-        "???.Package.*.nupkg",
-        "???.Plugin.*.dll",
-        "???.Plugin.*.nupkg",
-        "???.CustomAction.*.dll",
-        "???.Workflow.*.dll",
-        "???.CustomApi.*.dll",
-        "???.DataProvider.*.dll"
+        "???.Server*.dll",
+        "???.Package*.nupkg",
+        "???.Plugin*.dll",
+        "???.Plugin*.nupkg",
+        "???.CustomAction*.dll",
+        "???.Workflow*.dll",
+        "???.CustomApi*.dll",
+        "???.DataProvider*.dll"
       ],
       "excludefiles": [
         "???.*.Test.dll"
