@@ -55,10 +55,10 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit [cyan]server[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n\n" +
                     "[green]Commands:[/]\n" +
                     "  [cyan]generator[/]              Generate form/webapi js/ts code, late-bound C# code\n" +
-                    "  [cyan]server[/]                 Deploy server objects (plugins, workflows, dataproviders)\n" +
-                    "  [cyan]plugin[/]                 [red](DEPRECATED)[/] Use: devkit server --type plugins\n" +
-                    "  [cyan]workflow[/]               [red](DEPRECATED)[/] Use: devkit server --type workflows\n" +
-                    "  [cyan]dataprovider[/]           [red](DEPRECATED)[/] Use: devkit server --type dataproviders\n" +
+                    "  [cyan]server[/]                 Deploy plugins, workflows, dataproviders (auto-detect)\n" +
+                    "  [cyan]plugin[/]                 [red](DEPRECATED)[/] Use: devkit server\n" +
+                    "  [cyan]workflow[/]               [red](DEPRECATED)[/] Use: devkit server\n" +
+                    "  [cyan]dataprovider[/]           [red](DEPRECATED)[/] Use: devkit server\n" +
                     "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Generate early-bound proxy classes\n" +
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +

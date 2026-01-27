@@ -42,10 +42,10 @@ trigger: always_on
 | Command | Status | Description |
 |---------|--------|-------------|
 | `generator` | Active | Generate form/webapi js/ts/csharp |
-| `server` | Active | Deploy plugins, workflows, dataproviders |
-| `plugin` | **DEPRECATED** | Use `devkit server --type plugins` |
-| `workflow` | **DEPRECATED** | Use `devkit server --type workflows` |
-| `dataprovider` | **DEPRECATED** | Use `devkit server --type dataproviders` |
+| `server` | Active | Deploy plugins, workflows, dataproviders (auto-detect) |
+| `plugin` | **DEPRECATED** | Use `devkit server` |
+| `workflow` | **DEPRECATED** | Use `devkit server` |
+| `dataprovider` | **DEPRECATED** | Use `devkit server` |
 | `webresource` | Active | Deploy web resources |
 | **`modelbuilder`** | **New** | Generate early-bound using PAC ModelBuilder |
 | **`pacsolution`** | **New** | Pack/unpack solutions using PAC CLI |

@@ -45,13 +45,13 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Deploy plugins, workflows, dataproviders");
 
                     config.AddCommand<PluginCommand>("plugin")
-                          .WithDescription("[red]DEPRECATED[/] Deploy plugins. Use: devkit server --type plugins");
+                          .WithDescription("[red]DEPRECATED[/] Use: devkit server");
 
                     config.AddCommand<WorkflowCommand>("workflow")
-                          .WithDescription("[red]DEPRECATED[/] Deploy workflows. Use: devkit server --type workflows");
+                          .WithDescription("[red]DEPRECATED[/] Use: devkit server");
 
                     config.AddCommand<DataProviderCommand>("dataprovider")
-                          .WithDescription("[red]DEPRECATED[/] Deploy data providers. Use: devkit server --type dataproviders");
+                          .WithDescription("[red]DEPRECATED[/] Use: devkit server");
 
                     config.AddCommand<WebResourceCommand>("webresource")
                           .WithDescription("Deploy web resources");
