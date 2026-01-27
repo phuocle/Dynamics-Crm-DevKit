@@ -53,11 +53,11 @@ New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 # Kill any running CLI process
 Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
 
-# Build CLI project only
-dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug
+# Build CLI project only (with version override)
+dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version
 
 # Pack as NuGet tool
-dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:SignAssembly=false --no-build
+dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version -p:SignAssembly=false --no-build
 ```
 
 ## Step 4: Install CLI Tool
