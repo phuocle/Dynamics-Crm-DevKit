@@ -55,10 +55,10 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit [cyan]server[/] --profile [yellow]NAME[/] --json [yellow]FILE[/] [dim][[options]][/]\n\n" +
                     "[green]Commands:[/]\n" +
                     "  [cyan]generator[/]              Generate form/webapi js/ts code, late-bound C# code\n" +
-                    "  [cyan]server[/]                 Deploy server objects (plugins, workflows...)\n" +
-                    "  [cyan]plugin[/]                 Deploy plugins\n" +
-                    "  [cyan]workflow[/]               Deploy workflows\n" +
-                    "  [cyan]dataprovider[/]           Deploy data providers\n" +
+                    "  [cyan]server[/]                 Deploy server objects (plugins, workflows, dataproviders)\n" +
+                    "  [cyan]plugin[/]                 [red](DEPRECATED)[/] Use: devkit server --type plugins\n" +
+                    "  [cyan]workflow[/]               [red](DEPRECATED)[/] Use: devkit server --type workflows\n" +
+                    "  [cyan]dataprovider[/]           [red](DEPRECATED)[/] Use: devkit server --type dataproviders\n" +
                     "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Generate early-bound proxy classes\n" +
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +
@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 Border = BoxBorder.Double,
                 BorderStyle = new Style(Color.Green),
-                Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Cli Help[/] ", Justify.Left),
+                Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Cli Help [/] ", Justify.Left),
                 Padding = new Padding(2, 1),
                 Width = 114
             };
