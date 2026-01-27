@@ -2031,6 +2031,29 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
 
+                // Try to load from .NET Framework 4.x directory for WF4 assemblies (e.g., System.Activities)
+                // This is required for loading Workflow types that extend CodeActivity
+                var netFxPaths = new[]
+                {
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"Microsoft.NET\Framework64\v4.0.30319"),
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"Microsoft.NET\Framework\v4.0.30319")
+                };
+
+                foreach (var netFxPath in netFxPaths)
+                {
+                    if (Directory.Exists(netFxPath))
+                    {
+                        var netFxAssemblyPath = Path.Combine(netFxPath, assemblyName + ".dll");
+                        if (File.Exists(netFxAssemblyPath))
+                        {
+                            var assemblyBytes = File.ReadAllBytes(netFxAssemblyPath);
+                            var loaded = Assembly.Load(assemblyBytes);
+                            _assemblyCache[assemblyName + ".dll"] = loaded;
+                            return loaded;
+                        }
+                    }
+                }
+
                 // Cannot resolve - return null (do NOT call Assembly.Load(args.Name) as it triggers infinite recursion)
                 return null;
             }

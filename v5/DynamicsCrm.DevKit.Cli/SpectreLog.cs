@@ -448,39 +448,78 @@ namespace DynamicsCrm.DevKit.Cli
 
         #region Table Methods
 
-        public static void WriteTable(List<string[]> rows, int columnWidth = 55)
+        /// <summary>
+        /// Writes rows with aligned columns using plain text (no Spectre.Table).
+        /// Uses green for text labels, white for parameter names (--xxx), cyan for values.
+        /// </summary>
+        public static void WriteTable(List<string[]> rows, int labelWidth = 30)
         {
-            var table = new Table().Border(TableBorder.None);
-            table.ShowHeaders = false;
-
-            if (rows.Count > 0)
-            {
-                var colCount = rows[0].Length;
-                for (var i = 0; i < colCount; i++)
-                {
-                    var column = new TableColumn("").NoWrap();
-                    if (i == 0)
-                        column.Width(columnWidth);
-                    table.AddColumn(column);
-                }
-            }
-
             foreach (var row in rows)
             {
-                var markupRows = row.Select(x => new Markup(x)).ToArray();
-                table.AddRow(markupRows);
+                if (row.Length >= 2)
+                {
+                    // Extract text from markup (remove [color] tags for padding calculation)
+                    var labelText = StripMarkup(row[0]);
+                    var valueText = StripMarkup(row[1]);
+
+                    // Pad label to fixed width for alignment
+                    var paddedLabel = labelText.PadRight(labelWidth);
+
+                    // Calculate available width for value (console width - prefix - label - margin)
+                    var consoleWidth = Math.Max(80, Console.WindowWidth);
+                    var prefixLen = PREFIX.Length;
+                    var availableWidth = consoleWidth - prefixLen - labelWidth - 2; // 2 for safety margin
+
+                    // Truncate value if too long (add "..." at beginning for paths)
+                    if (valueText.Length > availableWidth && availableWidth > 10)
+                    {
+                        valueText = "..." + valueText.Substring(valueText.Length - availableWidth + 7);
+                    }
+
+                    // Check if label contains a parameter (--xxx pattern)
+                    var dashIndex = paddedLabel.IndexOf("--", StringComparison.Ordinal);
+                    if (dashIndex >= 0)
+                    {
+                        // Split: prefix part (green) + parameter part (white)
+                        var prefix = paddedLabel.Substring(0, dashIndex);
+                        var param = paddedLabel.Substring(dashIndex);
+                        AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(prefix)}[/][white]{Escape(param)}[/][cyan]{Escape(valueText)}[/]");
+                    }
+                    else
+                    {
+                        // No parameter, all green label
+                        AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(paddedLabel)}[/][cyan]{Escape(valueText)}[/]");
+                    }
+                }
+                else if (row.Length == 1)
+                {
+                    var text = StripMarkup(row[0]);
+                    AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(text)}[/]");
+                }
             }
-            AnsiConsole.Write(table);
         }
 
+        /// <summary>
+        /// Writes dictionary items with aligned columns using plain text.
+        /// </summary>
         public static void WriteTable(Dictionary<string, string> items)
         {
             var rows = new List<string[]>();
             foreach (var item in items)
             {
-                 rows.Add(new[] { $"[green]{Escape(item.Key)}[/]", $"[white]{Escape(item.Value)}[/]" });
+                rows.Add(new[] { item.Key, item.Value });
             }
             WriteTable(rows);
+        }
+
+        /// <summary>
+        /// Strips Spectre.Console markup tags from text.
+        /// </summary>
+        private static string StripMarkup(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+            // Remove [color]...[/] patterns
+            return System.Text.RegularExpressions.Regex.Replace(text, @"\[/?[^\]]+\]", string.Empty);
         }
 
         #endregion

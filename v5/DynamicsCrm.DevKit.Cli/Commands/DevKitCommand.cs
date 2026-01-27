@@ -61,12 +61,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         /// </summary>
         protected virtual async Task<bool> IsValidAsync(T settings)
         {
-            // Display paths
+            // Display paths (plain text - WriteTable handles formatting)
             var pathRows = new List<string[]>
             {
-                new[] { $"[green] Current Directory[/]", $"[cyan]{Markup.Escape(settings.CurrentDirectory)}[/]" },
-                new[] { $"[green] DynamicsCrm.DevKit.Cli.exe[/]", $"[cyan]{Markup.Escape(Assembly.GetExecutingAssembly().Location)}[/]" },
-                new[] { $"[green] DynamicsCrm.DevKit.Cli.json[/]", $"[cyan]{Markup.Escape(settings.JsonFile ?? "Not found")}[/]" }
+                new[] { "Current Directory", settings.CurrentDirectory },
+                new[] { "DynamicsCrm.DevKit.Cli.exe", Assembly.GetExecutingAssembly().Location },
+                new[] { "DynamicsCrm.DevKit.Cli.json", settings.JsonFile ?? "Not found" }
             };
             SpectreLog.WriteTable(pathRows);
 
@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
                 if (crmConn != null)
                 {
-                    try 
+                    try
                     {
                         var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
                         connLog = builder.BuildConnectionString(crmConn, true);
@@ -87,45 +87,41 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     catch {}
                 }
             }
-            var label = "[green] Arguments:[/]";
-            var indent = "           ";
-            var argColumnWidth = 28; // Default for --auth and --sdk-login (increased for --pacprofile)
 
             // Phase 2: Display --auth args if using modern auth
             if (!string.IsNullOrEmpty(settings.AuthType))
             {
-                argRows.Add(new[] { $"{label}[white] --auth[/]", $"[cyan]{Markup.Escape(settings.AuthType)}[/]" });
-                argRows.Add(new[] { $"{indent}[white] --url[/]", $"[cyan]{Markup.Escape(settings.Url ?? "")}[/]" });
+                argRows.Add(new[] { "Arguments: --auth", settings.AuthType });
+                argRows.Add(new[] { "           --url", settings.Url ?? "" });
                 if (!string.IsNullOrEmpty(settings.ClientId))
                 {
-                    argRows.Add(new[] { $"{indent}[white] --clientid[/]", $"[cyan]{Markup.Escape(settings.ClientId)}[/]" });
+                    argRows.Add(new[] { "           --clientid", settings.ClientId });
                 }
                 // Show --pacprofile for FromPac auth (show "(active)" when no profile specified)
                 if (settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
                 {
                     var profileDisplay = string.IsNullOrEmpty(settings.PacProfile) ? "(active)" : settings.PacProfile;
-                    argRows.Add(new[] { $"{indent}[white] --pacprofile[/]", $"[cyan]{Markup.Escape(profileDisplay)}[/]" });
+                    argRows.Add(new[] { "           --pacprofile", profileDisplay });
                 }
                 else if (!string.IsNullOrEmpty(settings.PacProfile))
                 {
-                    argRows.Add(new[] { $"{indent}[white] --pacprofile[/]", $"[cyan]{Markup.Escape(settings.PacProfile)}[/]" });
+                    argRows.Add(new[] { "           --pacprofile", settings.PacProfile });
                 }
-                argRows.Add(new[] { $"{indent}[white] --json[/]", $"[cyan]{Markup.Escape(settings.Json)}[/]" });
-                argRows.Add(new[] { $"{indent}[white] --profile[/]", $"[cyan]{Markup.Escape(settings.Profile)}[/]" });
+                argRows.Add(new[] { "           --json", settings.Json });
+                argRows.Add(new[] { "           --profile", settings.Profile });
             }
             else
             {
-                // --conn mode needs wider column for long connection string
-                argColumnWidth = 55;
-                argRows.Add(new[] { $"{label}[white] --conn[/]", $"[cyan]{Markup.Escape(connLog)}[/]" });
-                argRows.Add(new[] { $"{indent}[white] --json[/]", $"[cyan]{Markup.Escape(settings.Json)}[/]" });
-                argRows.Add(new[] { $"{indent}[white] --profile[/]", $"[cyan]{Markup.Escape(settings.Profile)}[/]" });
+                // --conn mode
+                argRows.Add(new[] { "Arguments: --conn", connLog });
+                argRows.Add(new[] { "           --json", settings.Json });
+                argRows.Add(new[] { "           --profile", settings.Profile });
             }
 
             // Add command-specific args
             argRows.AddRange(BuildArgRows(settings));
 
-            SpectreLog.WriteTable(argRows, argColumnWidth);
+            SpectreLog.WriteTable(argRows);
 
             // Validate required args
             if (string.IsNullOrEmpty(settings.Profile))
@@ -160,10 +156,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     var legacyBuilder = new LegacyConnectionBuilder();
                     var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
                     if (crmConn == null) throw new Exception("Invalid connection string");
-                    
+
                     var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
                     serviceClient = await builder.CreateServiceClientAsync(crmConn);
-                    
+
                     if (serviceClient == null)
                     {
                         throw new Exception("Unknown connection error");
