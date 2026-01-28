@@ -408,6 +408,16 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
+        /// Level-based status with type (magenta) + name (white) + metadata list (cyan)
+        /// </summary>
+        public static void StatusWithLevel(LogLevel level, string type, string name, List<string> metadata)
+        {
+            var indent = GetIndent(level);
+            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
         /// Simple message with level indentation (no action tag)
         /// </summary>
         public static void WriteWithLevel(LogLevel level, string text)

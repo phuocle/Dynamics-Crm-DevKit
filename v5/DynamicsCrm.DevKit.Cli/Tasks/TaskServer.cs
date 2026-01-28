@@ -375,7 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginAssemblyId = rows.Entities[0].Id;
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Assembly {assemblyName}", new List<string> { name_IsolationMode, name_SourceType });
+                    SpectreLog.StatusWithLevel(LogLevel.Level1, "Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
                 }
                 else
                 {
