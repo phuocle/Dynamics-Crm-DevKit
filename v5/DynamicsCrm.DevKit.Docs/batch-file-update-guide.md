@@ -29,38 +29,38 @@ Based on connection type, `CliArgsBuilder.Build()` generates:
 
 ### Generator Files (5 files) ✅ Complete
 
-| File | Profile | Status |
-|------|---------|--------|
-| `generator.latebound.bat` | LATEBOUND | ✅ Done |
-| `generator.form.bat` | JS-FORM | ✅ Done |
-| `generator.form.ts_bat` | TS-FORM | ✅ Done |
-| `generator.webapi.bat` | JS-WEBAPI | ✅ Done |
-| `generator.webapi.ts_bat` | TS-WEBAPI | ✅ Done |
+| File | Profile | Command | Status |
+|------|---------|---------|--------|
+| `generator.latebound.bat` | LATEBOUND | `generator` | ✅ Done |
+| `generator.form.bat` | JS-FORM | `generator` | ✅ Done |
+| `generator.form.ts_bat` | TS-FORM | `generator` | ✅ Done |
+| `generator.webapi.bat` | JS-WEBAPI | `generator` | ✅ Done |
+| `generator.webapi.ts_bat` | TS-WEBAPI | `generator` | ✅ Done |
 
 ### Server/Plugin Files (4 files) ✅ Complete
 
-| File | Profile | Status |
-|------|---------|--------|
-| `plugin.deploy.debug.bat` | DEBUG | ✅ Done |
-| `plugin.deploy.debug.only.bat` | DEBUG | ✅ Done |
-| `webresource.deploy.debug.bat` | DEBUG | ✅ Done |
-| `webresource.deploy.debug.ts_bat` | DEBUG | ✅ Done |
+| File | Profile | Command | Status |
+|------|---------|---------|--------|
+| `plugin.deploy.debug.bat` | DEBUG | `server` | ✅ Done |
+| `plugin.deploy.debug.only.bat` | DEBUG | `server` | ✅ Done |
+| `webresource.deploy.debug.bat` | DEBUG | `webresource` | ✅ Done |
+| `webresource.deploy.debug.ts_bat` | DEBUG | `webresource` | ✅ Done |
 
-### Solution/ProxyTypes Files (3 files) ✅ Complete
+### Solution/ModelBuilder Files (3 files) ✅ Complete
 
-| File | Profile | Status |
-|------|---------|--------|
-| `proxytypes.run.bat` | ALL | ✅ Done |
-| `solutionpackager.extract.both.bat` | Extract-Both | ✅ Done |
-| `solutionpackager.pack.both.bat` | Pack-Both | ✅ Done |
+| File | Profile | Command | Status |
+|------|---------|---------|--------|
+| `modelbuilder.run.bat` | ALL | `modelbuilder` | ✅ Done |
+| `solution.extract.both.bat` | Extract-Both | `solutionpackager` | ✅ Done |
+| `solution.pack.both.bat` | Pack-Both | `solutionpackager` | ✅ Done |
 
 ### Download/Other Files (3 files) ✅ Complete
 
-| File | Profile | Status |
-|------|---------|--------|
-| `download.reports.bat` | DEBUG | ✅ Done |
-| `download.webresources.bat` | DEBUG | ✅ Done |
-| `deploy.datasource.bat` | DEBUG | ✅ Done |
+| File | Profile | Command | Status |
+|------|---------|---------|--------|
+| `download.reports.bat` | DEBUG | `downloadreport` | ✅ Done |
+| `download.webresources.bat` | DEBUG | `downloadwebresource` | ✅ Done |
+| `deploy.datasource.bat` | DEBUG | `datasource` | ✅ Done |
 
 ---
 

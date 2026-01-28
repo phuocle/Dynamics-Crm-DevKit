@@ -28,7 +28,7 @@ This comprehensive guide documents all changes required to migrate from **Dynami
 | **Installation** | Auto-restored via NuGet to `packages\` folder | Manual: `dotnet tool install -g DynamicsCrm.DevKit.Cli` |
 | **Execution** | `DynamicsCrm.DevKit.Cli.exe` | `devkit` |
 | **CLI Framework** | CmdLine library | Spectre.Console.Cli |
-| **Target Framework** | .NET Framework 4.8 | .NET 10 |
+| **Target Framework** | .NET Framework 4.8 | .NET 10.0 |
 | **Signing Key** | PFX certificate | SNK file |
 | **Logging** | Console colors (CliLog) | Spectre.Console rich formatting |
 
@@ -40,6 +40,7 @@ This comprehensive guide documents all changes required to migrate from **Dynami
 | `Spectre.Console.Cli` | Modern CLI framework with commands |
 | `Azure.Identity` | Azure authentication chain |
 | `System.Security.Cryptography.ProtectedData` | DPAPI encryption for secrets |
+| `Microsoft.PowerPlatform.Dataverse.ModelBuilderLib` | PAC ModelBuilder integration |
 
 ---
 
@@ -67,22 +68,30 @@ devkit --version
 
 ## 3. Command Mapping
 
-v5 uses a command-based architecture. The `/type:` argument is replaced by explicit commands:
+v5 uses a command-based architecture. The `/type:` argument is replaced by explicit commands.
+
+### Mapped Commands
 
 | v4 `/type` Argument | v5 Command | Description |
 | :--- | :--- | :--- |
 | `generators` | `generator` | Generate JS/TS/C# code from entity metadata |
 | `servers` | `server` | Deploy plugins, workflows, data providers |
 | `webresources` | `webresource` | Deploy web resources |
-| `plugins` | `plugin` | Deploy plugins only (NEW) |
-| `workflows` | `workflow` | Deploy workflows only (NEW) |
-| `dataproviders` | `dataprovider` | Deploy data providers only (NEW) |
-| `proxytypes` | `proxytype` | Generate C# proxy types using CrmSvcUtil |
-| `solutionpackagers` | `solution` | Extract or pack solutions |
+| `proxytypes` | `proxytype` | Generate C# proxy types (Legacy CrmSvcUtil) |
+| `solutionpackagers` | `solutionpackager` | Pack/Unpack solutions (Legacy SolutionPackager) |
 | `downloadreports` | `downloadreport` | Download RDL files from solution |
 | `uploadreports` | `uploadreport` | Upload RDL files to solution |
 | `downloadwebresources` | `downloadwebresource` | Download web resources from solution |
 | `datasources` | `datasource` | Create data source entities |
+
+### New Commands in v5
+
+| Command | Description |
+| :--- | :--- |
+| `modelbuilder` | Generate C# code using PAC ModelBuilder (Recommended) |
+| `pacsolutionpackager` | Pack/Unpack solutions using PAC CLI logic |
+
+> **Note**: The `plugins`, `workflows`, and `dataproviders` types from older versions are consolidated into the `server` command in v5.
 
 ### Examples
 
@@ -246,7 +255,7 @@ devkit server $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --prof
 | `/type:"generators" /profile:"JS-FORM"` | `generator ... --profile "JS-FORM"` |
 | `/type:"webresources" /profile:"DEBUG"` | `webresource ... --profile "DEBUG"` |
 | `/type:"proxytypes" /profile:"ALL"` | `proxytype ... --profile "ALL"` |
-| `/type:"solutionpackagers" /profile:"Extract"` | `solution ... --profile "Extract"` |
+| `/type:"solutionpackagers" /profile:"Extract"` | `solutionpackager ... --profile "Extract"` |
 | `/type:"downloadreports" /profile:"DEBUG"` | `downloadreport ... --profile "DEBUG"` |
 | `/type:"uploadreports" /profile:"DEBUG"` | `uploadreport ... --profile "DEBUG"` |
 | `/type:"datasources" /profile:"DEBUG"` | `datasource ... --profile "DEBUG"` |
@@ -409,7 +418,7 @@ REM v4: Extract solution
 "%packages%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:"..." /json:"..\cli.json" /type:"solutionpackagers" /profile:"Extract"
 
 REM v5: Same with new syntax
-devkit solution --auth ClientSecret --url "..." --clientid "..." --clientsecret "..." --json "..\cli.json" --profile "Extract"
+devkit solutionpackager --auth ClientSecret --url "..." --clientid "..." --clientsecret "..." --json "..\cli.json" --profile "Extract"
 ```
 
 ---
@@ -421,9 +430,9 @@ devkit solution --auth ClientSecret --url "..." --clientid "..." --clientsecret 
 | **Installation** | NuGet restore | `dotnet tool install -g` |
 | **Execution** | `DynamicsCrm.DevKit.Cli.exe` | `devkit` |
 | **Syntax** | `/arg:value` | `--arg value` |
-| **Type** | `/type:"..."` | Command name |
+| **Command** | `/type:"..."` | Command name (lowercase) |
 | **Auth Methods** | 2 (string + SDK login) | 6 (modern + legacy) |
-| **Framework** | .NET Framework 4.8 | .NET 10 |
+| **Framework** | .NET Framework 4.8 | .NET 10.0 |
 | **CLI Library** | CmdLine | Spectre.Console.Cli |
 | **JSON Config** | 100% compatible | 100% compatible |
 | **Legacy Support** | N/A | Full auto-conversion |

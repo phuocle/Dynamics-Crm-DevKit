@@ -1,6 +1,6 @@
 ================================================================================
-                      DynamicsCrm.DevKit v4 - PROJECT NOTES
-                    Last Updated: December 15, 2025 (v4.00.00.00)
+                      DynamicsCrm.DevKit v5 - PROJECT NOTES
+                    Last Updated: January 2026 (v5.00.00.00)
 ================================================================================
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
@@ -8,22 +8,21 @@
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 VERSION:
-  - Configured in DevKit.ReleaseConfig.json (single source of truth)
-  - Current version: 4.00.00.00
+  - Configured in DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json
+  - Current version: 5.00.00.00
   - Date: Auto-calculated (Dec 31 for annual, current for testing)
 
 CONFIGURATION FILE (SINGLE SOURCE OF TRUTH):
-  - DevKit.ReleaseConfig.json
+  - DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json
   - Contains: version, placeholders, file lists, build settings
   - All release scripts read from this file
-  - To change version: Edit "version" field in this JSON file
-  - To add/remove files: Edit "files" section in this JSON file
 
 KEY PASSWORDS:
   - PFX Signing Key (DynamicsCrm.DevKit.pfx): !Zz321^2
 
 MSBUILD PATH:
-  C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe
+  C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe
+  (Adjusted for VS 2026)
 
 ================================================================================
                               SOLUTION STRUCTURE
@@ -38,85 +37,32 @@ MSBUILD PATH:
 │ DynamicsCrm.DevKit.Analyzers.slnx   │ Roslyn analyzers only                 │
 └─────────────────────────────────────┴───────────────────────────────────────┘
 
-NUGET PACKAGES (Published\4.00.00.00\):
-  - DynamicsCrm.DevKit.4.00.00.00.vsix          (Visual Studio Extension)
-  - DynamicsCrm.DevKit.Analyzers.4.0.0.nupkg    (19 Roslyn analyzers)
-  - DynamicsCrm.DevKit.Cli.4.0.0.nupkg          (CLI deployment tool)
-  - DynamicsCrm.DevKit.Tool.4.0.0.nupkg         (Utility: minify, coverage)
+NUGET PACKAGES (Published\5.00.00.00\):
+  - DynamicsCrm.DevKit.5.00.00.00.vsix          (Visual Studio Extension)
+  - DynamicsCrm.DevKit.Analyzers.5.0.0.nupkg    (21 Roslyn analyzers)
+  - DynamicsCrm.DevKit.Cli.5.0.0.nupkg          (CLI deployment tool - .NET 10)
+  - DynamicsCrm.DevKit.Tool.5.0.0.nupkg         (Utility: minify, coverage)
 
 ================================================================================
-                              HOWTO: DEBUG VSIX
+                          TARGET FRAMEWORKS (IMPORTANT!)
 ================================================================================
 
-1. Run ImportKey.bat and provide password: !Zz321^2
-2. Open DynamicsCrm.DevKit.slnx in Visual Studio
-3. Set startup project to DynamicsCrm.DevKit
-4. Press F5 to launch Experimental Instance of VS
+  VSIX Extension:     .NET Framework 4.8
+  CLI Tool:           .NET 10.0
+  Tool:               .NET Framework 4.8
+  Analyzers:          .NET Standard 2.0 (for VS compatibility)
+  Shared Project:     Shared project (no specific framework)
 
 ================================================================================
-                           HOWTO: DEBUG ANALYZERS
+                          ANALYZERS (DEVKIT1001-DEVKIT1021)
 ================================================================================
 
-1. Open DynamicsCrm.DevKit.Analyzers.slnx in VS instance (A)
-2. Open DynamicsCrm.DevKit.slnx in another VS instance (B)
-3. In instance (A), uncomment the debugger attach code (if needed)
-4. Set breakpoints in analyzer code
-5. In instance (A), Debug > Attach to Process > select instance (B)
-6. In instance (B), write code that triggers the analyzer
-7. Breakpoints in (A) will hit
-
-================================================================================
-                              HOWTO: RELEASE
-================================================================================
-
-FINAL RELEASE (once per year - uses 31.12.{CurrentYear} 23:59:59):
-  .\Release-DynamicsCrm-DevKit.ps1
-
-  Version and settings are loaded from DevKit.ReleaseConfig.json
-  Date automatically uses Dec 31 of current year at 23:59:59
-
-TEST RELEASE (any time for testing):
-  .\Release-DynamicsCrm-DevKit-CurrentDate.ps1
-
-  Uses current date/time for build timestamp.
-  Used for development testing.
-
-WITH CUSTOM DATE:
-  .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "15.12.2025 10:00:00"
-
-TO CHANGE VERSION FOR NEW RELEASE:
-  Edit DevKit.ReleaseConfig.json:
-  {
-    "version": "4.50.00.00",  // Change this to new version
-    ...
-  }
-
-TO ADD/REMOVE FILES FROM RELEASE PROCESS:
-  Edit DevKit.ReleaseConfig.json, "files" section:
-  - "versionReplacement": Files where version placeholder gets replaced
-  - "dateReplacement": Files where date placeholder gets replaced
-  - "allModified": Combined list (used by RestoreReplacedFiles.ps1)
-
-RESTORE MODIFIED FILES (after build error):
-  .\RestoreReplacedFiles.ps1
-
-  If the release script fails mid-way, it may leave files in a modified state
-  with replaced placeholders (x.xx.xx.xx → 4.00.00.00, etc). This script
-  uses git restore to revert all modified files back to original state.
-
-  File list is automatically loaded from DevKit.ReleaseConfig.json.
-
-
-================================================================================
-                         ANALYZERS (DEVKIT1001-DEVKIT1019)
-================================================================================
-
-19 Roslyn analyzers in CrmAnalyzers folder:
+21 Roslyn analyzers in DynamicsCrm.DevKit.Analyzers\CrmAnalyzers:
 
 ┌────────────┬───────────┬───────────────────────────────────────────────────────┐
 │ Rule ID    │ Severity  │ Description                                           │
 ├────────────┼───────────┼───────────────────────────────────────────────────────┤
-│ DEVKIT1001 │ Error     │ Create/Update message needs filtering attributes      │
+│ DEVKIT1001 │ War/Err   │ Create (Warning) / Update (Error) filtering attributes│
 │ DEVKIT1002 │ Warning   │ Don't use ColumnSet(true)                             │
 │ DEVKIT1003 │ Error     │ Plugin image validation (Pre/Post availability)       │
 │ DEVKIT1004 │ Info      │ Use of deprecated SDK messages                        │
@@ -132,139 +78,105 @@ RESTORE MODIFIED FILES (after build error):
 │ DEVKIT1014 │ Error     │ Avoid AppDomain event registration in plugins         │
 │ DEVKIT1015 │ Info      │ Avoid blocking async patterns (.Result, .Wait())      │
 │ DEVKIT1016 │ Info      │ Avoid RetrieveAsIfPublished=true for metadata         │
-│ DEVKIT1017 │ Info      │ Avoid Console output in plugins (no effect in sandbox)│
+│ DEVKIT1017 │ Info      │ Avoid Console output in plugins                       │
 │ DEVKIT1018 │ Error     │ Avoid File/IO operations in plugins (blocked)         │
 │ DEVKIT1019 │ Warning   │ Check context.Depth to prevent infinite loops         │
+│ DEVKIT1020 │ Error     │ DataProvider must have DataSource                     │
+│ DEVKIT1021 │ Warning   │ Use ITracingService in catch blocks                   │
 └────────────┴───────────┴───────────────────────────────────────────────────────┘
 
 RUN ANALYZER TESTS:
   cd DynamicsCrm.DevKit.Analyzers
-  .\Run-Analyzer-Coverage.ps1
-
-RUN VS INTEGRATION TESTS:
-  1. Build analyzer in Debug:
-     dotnet build DynamicsCrm.DevKit.Analyzers.csproj --configuration Debug
-
-  2. Copy DLL to test packages:
-     Copy-Item "bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
-       "..\DynamicsCrm.DevKit.Tests\TestAnalyzers\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
-
-  3. Build test project:
-     msbuild "..\DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.csproj" /t:Rebuild /p:Configuration=Debug /v:n
-
-  4. Check build output for DEVKIT1001-DEVKIT1019 warnings
+  ..\DynamicsCrm.DevKit.Scripts\Run-Analyzer-Coverage.ps1
 
 ================================================================================
-                            IMPORTANT FILE LOCATIONS
+                               CLI COMMANDS
 ================================================================================
 
-RELEASE CONFIGURATION (SINGLE SOURCE OF TRUTH):
-  DevKit.ReleaseConfig.json                   → Version, file lists, build settings
-                                                All release scripts read from this file
+The CLI (DynamicsCrm.DevKit.Cli) supports the following commands:
 
-CONSTANTS & VERSION:
-  DynamicsCrm.DevKit.Shared\Const.cs          → Version, Build timestamp
-
-NUSPEC FILES (update before release):
-  DynamicsCrm.DevKit.Analyzers\Nuget\DynamicsCrm.DevKit.Analyzers.nuspec
-  DynamicsCrm.DevKit.Cli\Nuget\DynamicsCrm.DevKit.Cli.nuspec
-  DynamicsCrm.DevKit.Tool\Nuget\DynamicsCrm.DevKit.Tool.nuspec
-
-DOCUMENTATION:
-  DynamicsCrm.DevKit.Analyzers\docs\README.md  → Analyzer documentation (27KB)
-  DynamicsCrm.DevKit.Wiki\                     → Wiki pages for GitHub
-  AGENTS.md                                    → AI agent instructions
-
-AI INSTRUCTIONS:
-  .github\copilot-instructions.md              → GitHub Copilot/AI rules
-  AGENTS.md                                    → Detailed AI agent guide
-
-================================================================================
-                              CLI TASKS (DynamicsCrm.DevKit.Cli)
-================================================================================
-
-The CLI supports these deployment tasks:
-  - Plugin deployment
-  - Custom workflow activities deployment
-  - Web resources deployment
-  - Reports deployment
-  - Solution management
-  - Early-bound entity class generation (CrmSvcUtil)
+  1. datasource          (Create data source entities)
+  2. devkit              (Main entry/help)
+  3. downloadreport      (Download reports)
+  4. downloadwebresource (Download web resources)
+  5. generator           (Generate form/webapi js/ts/csharp)
+  6. modelbuilder        (Generate early-bound using PAC ModelBuilder)
+  7. pacsolutionpackager (Pack/unpack solutions using PAC CLI)
+  8. proxytype           (DEPRECATED - Use modelbuilder)
+  9. server              (Deploy plugins, workflows, dataproviders)
+  10. solutionpackager   (Legacy solution packager)
+  11. uploadreport       (Upload reports)
+  12. webresource        (Deploy web resources)
 
 Config file: DynamicsCrm.DevKit.Cli.json
 
 ================================================================================
-                              TOOL TASKS (DynamicsCrm.DevKit.Tool)
+                             PROJECT TEMPLATES
 ================================================================================
 
-  - JavaScript/CSS minification (NUglify.dll)
-  - Code coverage analysis (Microsoft.VisualStudio.Coverage.Analysis.dll)
+13 Templates available in ProjectTemplates\CSharp:
+
+  01. SharedProjectTemplate
+  02. ConsoleProjectTemplate
+  03. ConsoleCoreProjectTemplate
+  04. ServerProjectTemplate
+  05. PackageProjectTemplate
+  06. WebResourceProjectTemplate
+  07. SharedTestProjectTemplate
+  08. ProxyTypesProjectTemplate
+  09. TestProjectTemplate
+  10. TestUiProjectTemplate
+  11. SolutionPackagerProjectTemplate
+  12. ReportProjectTemplate
+  13. WebResourceTsProjectTemplate
 
 ================================================================================
-                         TARGET FRAMEWORKS (IMPORTANT!)
+                              ITEM TEMPLATES
 ================================================================================
 
-  VSIX Extension:     .NET Framework 4.8
-  CLI Tool:           .NET Framework 4.8
-  Tool:               .NET Framework 4.8
-  Analyzers:          .NET Standard 2.0 (for VS compatibility)
-  Plugins/Extensions: .NET Framework 4.6.2 or 4.8
-  Shared Project:     Shared project (no specific framework)
+15 Templates available in ItemTemplates\CSharp:
+
+  01. LateBoundItemTemplate
+  02. JsFormItemTemplate
+  03. JsWebApiItemTemplate
+  04. PluginItemTemplate
+  05. CustomActionItemTemplate
+  06. CustomApiItemTemplate
+  07. WorkflowItemTemplate
+  08. DataProviderItemTemplate
+  09. TestItemTemplate
+  10. UiTestItemTemplate
+  11. ResourceStringItemTemplate
+  12. JsDevkitItemTemplate
+  13. BatFileItemTemplate
+  14. JsFormTsItemTemplate (TypeScript)
+  15. TsWebApiItemTemplate (TypeScript)
 
 ================================================================================
-                           NUGET PACKAGE CHECKLIST
+                             IMPORTANT FILE LOCATIONS
 ================================================================================
 
-Before publishing to NuGet.org, each nuspec should have:
-  ✓ <readme>docs\README.md</readme>           → Display on NuGet.org
-  ✓ <repository>                              → Link to GitHub
-  ✓ <releaseNotes>                            → Version highlights
-  ✓ <tags> space-separated                    → For search discoverability
-  ✓ <description> detailed                    → Clear package purpose
-  ✓ <license type="file">                     → MIT License
+RELEASE CONFIGURATION:
+  DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json  → Version, settings
+
+CONSTANTS & VERSION:
+  DynamicsCrm.DevKit.Shared\Const.cs                    → Code constants
+
+SCRIPTS (in DynamicsCrm.DevKit.Scripts\):
+  Release-DynamicsCrm-DevKit.ps1                        → Main release script
+  Release-DynamicsCrm-DevKit-CurrentDate.ps1            → Test release script
+  RestroreReplacedFiles.ps1                             → Restore git changes
+  Import-StrongNameKey.ps1                              → Import PFX key
+
+DOCUMENTATION:
+  DynamicsCrm.DevKit.Docs\                              → Central docs location
 
 ================================================================================
-                              ANNUAL RELEASE CHECKLIST
+                               HOWTO: RELEASE
 ================================================================================
 
-1. Update version.txt to new version (e.g., 5.00.00.00)
-2. Update date.txt to Dec 31 of current year (e.g., 2026.12.31 23.59.59)
-3. Update Const.cs if needed
-4. Update all nuspec <releaseNotes> for new version
-5. Run: .\Release-DynamicsCrm-DevKit.ps1
-6. Verify outputs in Published\X.XX.XX.XX\ folder
-7. Upload to:
-   - Visual Studio Marketplace (VSIX)
-   - NuGet.org (3 nupkg packages)
-   - GitHub Releases
-
-================================================================================
-                              TROUBLESHOOTING
-================================================================================
-
-VSIX WON'T BUILD:
-  - Use MSBuild, NOT dotnet build
-  - Check PFX key is imported (run ImportKey.bat)
-
-ANALYZERS NOT WORKING IN VS:
-  - Close VS completely
-  - Delete bin/obj folders
-  - Rebuild analyzer project
-  - VS caches analyzers heavily
-
-NUGET PACK FAILS:
-  - Ensure all referenced DLLs exist in bin\Release\net48
-  - Check nuspec file paths are correct
-
-================================================================================
-                         NEXT VERSION REMINDERS (v5.x)
-================================================================================
-
-TODO for next version:
-  [ ] Consider .NET 8 for CLI tool
-  [ ] Add more analyzers for Power Platform specific patterns
-  [ ] Update VS extension for Visual Studio 20xx
-  [ ] Review deprecated CRM SDK messages list
-  [ ] Add code fixers (auto-fix) for analyzers
+1. Update version in DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json
+2. (Optional) Run .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit-CurrentDate.ps1 for testing
+3. Run .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1 for final release
 
 ================================================================================
