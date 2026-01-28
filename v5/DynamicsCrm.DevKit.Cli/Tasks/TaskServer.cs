@@ -225,7 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var oldContent = entity.GetAttributeValue<string>("content");
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Package {Path.GetFileName(file)}");
+                    SpectreLog.StatusWithLevel1("Package", Path.GetFileName(file));
                 }
                 else
                 {
@@ -266,7 +266,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Bind {Path.GetFileName(file)}", $"ApplicationId: {applicationId}");
+                    SpectreLog.StatusWithLevel1("Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
                 }
                 else
                 {
@@ -375,7 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginAssemblyId = rows.Entities[0].Id;
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, "Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
+                    SpectreLog.StatusWithLevel1("Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
                 }
                 else
                 {
@@ -416,7 +416,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Bind {assemblyName}", $"ApplicationId: {applicationId}");
+                    SpectreLog.StatusWithLevel1("Bind", assemblyName, $"ApplicationId: {applicationId}");
                 }
                 else
                 {
@@ -533,7 +533,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"Managed Identity App {AppId}");
+                    SpectreLog.StatusWithLevel1("Managed Identity App", AppId);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
                         _ManagedIdentityId = rows.Entities[0].Id;
@@ -976,7 +976,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                     if (error == null)
                     {
-                        SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {attributes[0].PluginType} {type.FullName}");
+                        SpectreLog.StatusWithLevel2(attributes[0].PluginType.ToString(), type.FullName);
                         continue;
                     }
                     else if (error == true)
@@ -1180,7 +1180,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {PluginType.DataSource} {logicalNameDataSource}", events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
+                    SpectreLog.StatusWithLevel2(PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                 }
             }
         }
@@ -1787,7 +1787,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (deployFileType == DeployFileType.Nuget)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {attribute.PluginType} {type.FullName}");
+                    SpectreLog.StatusWithLevel2(attribute.PluginType.ToString(), type.FullName);
                     return rows[0].Id;
                 }
             }
@@ -1836,7 +1836,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level2, $"Type {attribute.PluginType} {type.FullName}");
+                    SpectreLog.StatusWithLevel2(attribute.PluginType.ToString(), type.FullName);
                 }
             }
             return rows[0].Id;

@@ -408,16 +408,6 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
-        /// Level-based status with type (magenta) + name (white) + metadata list (cyan)
-        /// </summary>
-        public static void StatusWithLevel(LogLevel level, string type, string name, List<string> metadata)
-        {
-            var indent = GetIndent(level);
-            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
-        }
-
-        /// <summary>
         /// Simple message with level indentation (no action tag)
         /// </summary>
         public static void WriteWithLevel(LogLevel level, string text)
@@ -433,6 +423,34 @@ namespace DynamicsCrm.DevKit.Cli
         {
             var indent = GetIndent(level);
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(highlight)}[/]");
+        }
+
+        /// <summary>
+        /// Level 1 status with type (magenta) + name (white) + metadata list (cyan)
+        /// </summary>
+        public static void StatusWithLevel1(string type, string name, List<string> metadata)
+        {
+            var indent = GetIndent(LogLevel.Level1);
+            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 1 status with type (magenta) + name (white) (no metadata)
+        /// </summary>
+        public static void StatusWithLevel1(string type, string name)
+        {
+            var indent = GetIndent(LogLevel.Level1);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/]");
+        }
+
+        /// <summary>
+        /// Level 1 status with type (magenta) + name (white) + details (cyan)
+        /// </summary>
+        public static void StatusWithLevel1(string type, string name, string details)
+        {
+            var indent = GetIndent(LogLevel.Level1);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)} [/][cyan]{Escape(details)}[/]");
         }
 
         #endregion
@@ -452,6 +470,27 @@ namespace DynamicsCrm.DevKit.Cli
         public static void WriteHighLight(string v1, string v2, string v3, string v4, string v5)
         {
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(v1)}[/][cyan on grey23]{Escape(v2)}[/][white]{Escape(v3)}[/][cyan on grey23]{Escape(v4)}[/][white]{Escape(v5)}[/]");
+        }
+
+        /// <summary>
+        /// Level 2 status with pluginType (magenta) + fullName (white) (no metadata)
+        /// Format: [  ---  ] Plugin Dev.DevKit.Server...
+        /// </summary>
+        public static void StatusWithLevel2(string pluginType, string fullName)
+        {
+            var indent = GetIndent(LogLevel.Level2);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/]");
+        }
+
+        /// <summary>
+        /// Level 2 status with pluginType (magenta) + fullName (white) + metadata list (cyan)
+        /// Format: [  ---  ] Plugin Dev.DevKit.Server... [Create, Update]
+        /// </summary>
+        public static void StatusWithLevel2(string pluginType, string fullName, List<string> metadata)
+        {
+            var indent = GetIndent(LogLevel.Level2);
+            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/][cyan]{Escape(metaText)}[/]");
         }
 
         #endregion
