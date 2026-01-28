@@ -493,6 +493,28 @@ namespace DynamicsCrm.DevKit.Cli
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/][cyan]{Escape(metaText)}[/]");
         }
 
+        /// <summary>
+        /// Level 3 status with stepMessage (magenta) + name (white) + metadata list (cyan)
+        /// Format: [  ---  ]     Step Create Dev.DevKit.Server... [PostOperation, Asynchronous]
+        /// </summary>
+        public static void StatusWithLevel3(string stepMessage, string name, List<string> metadata)
+        {
+            var indent = GetIndent(LogLevel.Level3);
+            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 3 status with prefix + stepMessage (magenta) + name (white) + metadata list (cyan)
+        /// Format: [  ---  ]     DEACTIVATED Step Create Dev.DevKit.Server... [PostOperation, Asynchronous]
+        /// </summary>
+        public static void StatusWithLevel3(string prefix, string stepMessage, string name, List<string> metadata)
+        {
+            var indent = GetIndent(LogLevel.Level3);
+            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[yellow]{Escape(prefix)} [/][magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
         #endregion
 
         #region Table Methods

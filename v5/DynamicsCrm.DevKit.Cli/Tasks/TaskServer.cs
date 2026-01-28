@@ -1021,7 +1021,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 Message = attribute.Message,
                                 DataSource = attribute.DataSource
                             });
-                            SpectreLog.StatusWithLevel(LogLevel.Level3, $"Step {attribute.Message} {attribute.Name}", new List<string> { "MainOperation", "Synchronous" });
+                            SpectreLog.StatusWithLevel3($"Step {attribute.Message}", attribute.Name, new List<string> { "MainOperation", "Synchronous" });
                             break;
                         case PluginType.CustomApi:
                             await DeployCustomApiStepAsync(pluginTypeId.Value, type.FullName, attribute);
@@ -1196,7 +1196,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Activate)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level3, $"Step {attribute.Message} {pluginTypeName}", new List<string> { "MainOperation", "Synchronous" });
+                    SpectreLog.StatusWithLevel3($"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
@@ -1210,7 +1210,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Deactivate)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level3, $"{CliAction.DEACTIVATED.Trim()} Step {attribute.Message} {pluginTypeName}", new List<string> { "MainOperation", "Synchronous" });
+                    SpectreLog.StatusWithLevel3(CliAction.DEACTIVATED.Trim(), $"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
@@ -1528,11 +1528,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
-                        SpectreLog.StatusWithLevel(LogLevel.Level3, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.StatusWithLevel3($"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     else
                     {
-                        SpectreLog.StatusWithLevel(LogLevel.Level3, $"{CliAction.DEACTIVATED.Trim()} Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.StatusWithLevel3(CliAction.DEACTIVATED.Trim(), $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     CliLogSecureUnsecure();
                     CliLogUpdateFields();
