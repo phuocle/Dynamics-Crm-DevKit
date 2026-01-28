@@ -156,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
                 else
                 {
-                    SpectreLog.ActionError($"{webResourceName}", CliAction.NOT_FOUND);
+                    SpectreLog.ActionError($"Not found: {webResourceName}");
                     return;
                 }
                 if (!await IsTheSameDependencyXmlAsync(dependency.dependencies, existingDependencyXml))
@@ -175,7 +175,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level1, $"{webResourceName}", "dependencies");
+                    SpectreLog.ActionWithLevel1($"{webResourceName}", "dependencies");
                     foreach (var d in foundDependencies)
                         SpectreLog.WriteWithLevel(LogLevel.Level2, $"{d}");
                 }

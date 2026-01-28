@@ -267,137 +267,9 @@ namespace DynamicsCrm.DevKit.Cli
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.ERROR)}[/][red on grey23]{Escape(message)}[/]");
         }
 
-        public static void ActionError(string message, string details)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.ERROR)}[/][red on grey23]{Escape(message)}[/] [white on grey23]{Escape(details)}[/]");
-        }
-
         #endregion
 
-        #region Server Actions (Level-based indentation)
-
-        private static string GetIndent(LogLevel level)
-        {
-            // Actions already have trailing space, so Level1 needs no extra indent
-            return level switch
-            {
-                LogLevel.Level0 => string.Empty,
-                LogLevel.Level1 => string.Empty,     // 0 spaces (action trailing space is enough)
-                LogLevel.Level2 => "  ",             // 2 spaces
-                LogLevel.Level3 => "    ",           // 4 spaces
-                LogLevel.Level4 => "      ",         // 6 spaces
-                _ => new string(' ', ((int)level - 1) * 2)
-            };
-        }
-
-        /// <summary>
-        /// Level-based action with just action + text
-        /// </summary>
-        public static void ActionWithLevel(LogLevel level, string action, string text)
-        {
-            var indent = GetIndent(level);
-            if (action == CliAction.DO_NOTHING)
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)}[/]");
-            }
-        }
-
-        /// <summary>
-        /// Level-based action with text + details
-        /// </summary>
-        public static void ActionWithLevel(LogLevel level, string action, string text, string details)
-        {
-            var indent = GetIndent(level);
-            if (action == CliAction.DO_NOTHING)
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)} [/][cyan]{Escape(details)}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)} [/][cyan on grey23]{Escape(details)}[/]");
-            }
-        }
-
-        /// <summary>
-        /// Level-based action with text + details + details2
-        /// </summary>
-        public static void ActionWithLevel(LogLevel level, string action, string text, string details, string details2)
-        {
-            var indent = GetIndent(level);
-            if (action == CliAction.DO_NOTHING)
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)} [/][cyan]{Escape(details)}[/][white]{Escape(details2)}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)} [/][cyan on grey23]{Escape(details)}[/][white on grey23]{Escape(details2)}[/]");
-            }
-        }
-
-        /// <summary>
-        /// Level-based action with text + multiple highlights
-        /// </summary>
-        public static void ActionWithLevel(LogLevel level, string action, string text, List<string> metadata)
-        {
-            var indent = GetIndent(level);
-            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            if (action == CliAction.DO_NOTHING)
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(metaText)}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)}[/][cyan on grey23]{Escape(metaText)}[/]");
-            }
-        }
-
-        /// <summary>
-        /// Level-based action with 5 text parts (alternating colors)
-        /// </summary>
-        public static void ActionWithLevel(LogLevel level, string action, string v1, string v2, string v3, string v4, string v5)
-        {
-            var indent = GetIndent(level);
-            if (action == CliAction.DO_NOTHING)
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(v1)}[/][cyan]{Escape(v2)}[/][green]{Escape(v3)}[/][white]{Escape(v4)}[/][green]{Escape(v5)}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(v1)}[/][cyan on grey23]{Escape(v2)}[/][green on grey23]{Escape(v3)}[/][white on grey23]{Escape(v4)}[/][green on grey23]{Escape(v5)}[/]");
-            }
-        }
-
-        /// <summary>
-        /// Level-based status (DO_NOTHING) with text
-        /// </summary>
-        public static void StatusWithLevel(LogLevel level, string text)
-        {
-            var indent = GetIndent(level);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[white]{Escape(text)}[/]");
-        }
-
-        /// <summary>
-        /// Level-based status with text + details
-        /// </summary>
-        public static void StatusWithLevel(LogLevel level, string text, string details)
-        {
-            var indent = GetIndent(level);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[white]{Escape(text)} [/][cyan]{Escape(details)}[/]");
-        }
-
-        /// <summary>
-        /// Level-based status with text + metadata list
-        /// </summary>
-        public static void StatusWithLevel(LogLevel level, string text, List<string> metadata)
-        {
-            var indent = GetIndent(level);
-            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(metaText)}[/]");
-        }
+        #region WriteWithLevel
 
         /// <summary>
         /// Simple message with level indentation (no action tag)
@@ -769,6 +641,20 @@ namespace DynamicsCrm.DevKit.Cli
         {
             if (string.IsNullOrEmpty(text)) return string.Empty;
             return Markup.Escape(text);
+        }
+
+        private static string GetIndent(LogLevel level)
+        {
+            // Actions already have trailing space, so Level1 needs no extra indent
+            return level switch
+            {
+                LogLevel.Level0 => string.Empty,
+                LogLevel.Level1 => string.Empty,     // 0 spaces (action trailing space is enough)
+                LogLevel.Level2 => "  ",             // 2 spaces
+                LogLevel.Level3 => "    ",           // 4 spaces
+                LogLevel.Level4 => "      ",         // 6 spaces
+                _ => new string(' ', ((int)level - 1) * 2)
+            };
         }
 
         #endregion
