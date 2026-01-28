@@ -78,7 +78,7 @@ v5 uses a command-based architecture. The `/type:` argument is replaced by expli
 | `servers` | `server` | Deploy plugins, workflows, data providers |
 | `webresources` | `webresource` | Deploy web resources |
 | `proxytypes` | `proxytype` | Generate C# proxy types (Legacy CrmSvcUtil) |
-| `solutionpackagers` | `solutionpackager` | Pack/Unpack solutions (Legacy SolutionPackager) |
+| `solutionpackagers` | `legacy-solution` | Pack/Unpack solutions (Legacy SolutionPackager) |
 | `downloadreports` | `downloadreport` | Download RDL files from solution |
 | `uploadreports` | `uploadreport` | Upload RDL files to solution |
 | `downloadwebresources` | `downloadwebresource` | Download web resources from solution |
@@ -89,7 +89,7 @@ v5 uses a command-based architecture. The `/type:` argument is replaced by expli
 | Command | Description |
 | :--- | :--- |
 | `modelbuilder` | Generate C# code using PAC ModelBuilder (Recommended) |
-| `pacsolutionpackager` | Pack/Unpack solutions using PAC CLI logic |
+| `solution` | Pack/Unpack solutions using PAC CLI logic |
 
 > **Note**: The `plugins`, `workflows`, and `dataproviders` types from older versions are consolidated into the `server` command in v5.
 
@@ -255,10 +255,11 @@ devkit server $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --prof
 | `/type:"generators" /profile:"JS-FORM"` | `generator ... --profile "JS-FORM"` |
 | `/type:"webresources" /profile:"DEBUG"` | `webresource ... --profile "DEBUG"` |
 | `/type:"proxytypes" /profile:"ALL"` | `proxytype ... --profile "ALL"` |
-| `/type:"solutionpackagers" /profile:"Extract"` | `solutionpackager ... --profile "Extract"` |
+| `/type:"solutionpackagers" /profile:"Extract"` | `legacy-solution ... --profile "Extract"` |
 | `/type:"downloadreports" /profile:"DEBUG"` | `downloadreport ... --profile "DEBUG"` |
 | `/type:"uploadreports" /profile:"DEBUG"` | `uploadreport ... --profile "DEBUG"` |
 | `/type:"datasources" /profile:"DEBUG"` | `datasource ... --profile "DEBUG"` |
+
 
 ---
 

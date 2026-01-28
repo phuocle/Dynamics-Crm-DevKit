@@ -51,8 +51,8 @@ Based on connection type, `CliArgsBuilder.Build()` generates:
 | File | Profile | Command | Status |
 |------|---------|---------|--------|
 | `modelbuilder.run.bat` | ALL | `modelbuilder` | ✅ Done |
-| `solution.extract.both.bat` | Extract-Both | `solutionpackager` | ✅ Done |
-| `solution.pack.both.bat` | Pack-Both | `solutionpackager` | ✅ Done |
+| `solution.extract.both.bat` | Extract-Both | `solution` | ✅ Done |
+| `solution.pack.both.bat` | Pack-Both | `solution` | ✅ Done |
 
 ### Download/Other Files (3 files) ✅ Complete
 
