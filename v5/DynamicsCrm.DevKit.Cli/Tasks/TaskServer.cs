@@ -110,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (file.EndsWith(".dll"))
                 {
                     var fileDll = file;
-                    SpectreLog.ActionFile(Path.GetFileName(fileDll));
+                    SpectreLog.ActionWithLevel1(CliAction.FILE, Path.GetFileName(fileDll));
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
@@ -139,7 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else if (file.EndsWith(".nupkg"))
                 {
                     var fileNuget = file;
-                    SpectreLog.ActionFile(Path.GetFileName(fileNuget));
+                    SpectreLog.ActionWithLevel1(CliAction.FILE, Path.GetFileName(fileNuget));
                     var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
