@@ -549,6 +549,12 @@ namespace DynamicsCrm.DevKit.Cli
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(text1)} [/][white]{Escape(text2)}[/][cyan]{Escape(text3)}[/]");
         }
 
+        public static void ActionWithLevel2A(string action, string text1, string text2, string text3)
+        {
+            var indent = GetIndent(LogLevel.Level2);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[yellow]{Escape(text1)} [/][magenta]{Escape(text2)} [/][white]{Escape(text3)}[/]");
+        }
+
         /// <summary>
         /// Level 2 action with 4 text parameters
         /// Format: [ACTION]   text1 text2 text3 text4

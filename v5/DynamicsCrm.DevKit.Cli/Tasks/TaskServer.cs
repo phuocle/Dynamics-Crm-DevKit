@@ -976,12 +976,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                     if (error == null)
                     {
-                        SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, CliAction.UNREGISTERED.Trim(), attributes[0].PluginType.ToString(), type.FullName);
+                        SpectreLog.ActionWithLevel2A(CliAction.DO_NOTHING, CliAction.UNREGISTERED.Trim(), attributes[0].PluginType.ToString(), type.FullName);
                         continue;
                     }
                     else if (error == true)
                     {
-                        SpectreLog.ActionWithLevel2(CliAction.UPDATED, CliAction.UNREGISTERED.Trim(), attributes[0].PluginType.ToString(), type.FullName);
+                        SpectreLog.ActionWithLevel2A(CliAction.UPDATED, CliAction.UNREGISTERED.Trim(), attributes[0].PluginType.ToString(), type.FullName);
                         continue;
                     }
                     else
