@@ -166,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
                         {
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
@@ -179,13 +179,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
                 }
@@ -228,12 +228,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (File.Exists(fileEndsWith))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
                 }
@@ -285,7 +285,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (oldCode?.Length > 0 && newCode?.Length > 0 && !Helper.IsTheSame(oldDTS, newDTS))
                         {
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
@@ -298,13 +298,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
                             await FileHelper.ForceWriteAllTextAsync(dtsFile, newDTS);
-                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
                 }
@@ -365,12 +365,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (File.Exists(fileEndsWith))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, newCode);
-                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
                 }
@@ -396,9 +396,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     await FileHelper.ForceWriteAllTextAsync(optionSetFile, newOptionSetCode);
                     if (File.Exists(optionSetFile))
-                        SpectreLog.ActionUpdated("OptionSet.ts");
+                        SpectreLog.ActionWithLevel0(CliAction.UPDATED, "OptionSet.ts");
                     else
-                        SpectreLog.ActionCreated("OptionSet.ts");
+                        SpectreLog.ActionWithLevel0(CliAction.CREATED, "OptionSet.ts");
                 }
             }
         }
@@ -434,7 +434,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (File.Exists(fileEndsWith))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileEndsWith, _GeneratedClass_);
-                            SpectreLog.ActionUpdated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{schemaName}{endsWith}");
                         }
                         else
                         {
@@ -443,7 +443,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             {
                                 await FileHelper.ForceWriteAllTextAsync(file, Helper.GetDefaultFileWithCs(entityMetadata, Json.rootnamespace));
                             }
-                            SpectreLog.ActionCreated($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
                 }

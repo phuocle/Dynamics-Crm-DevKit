@@ -401,7 +401,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.ActionUpdated("Solution packed successfully");
+                    SpectreLog.ActionWithLevel0(CliAction.UPDATED, "Solution packed successfully");
                 }
             }
             else

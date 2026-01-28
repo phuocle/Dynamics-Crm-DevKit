@@ -222,16 +222,6 @@ namespace DynamicsCrm.DevKit.Cli
 
         #region Action Methods
 
-        public static void ActionCreated(string message)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.CREATED)}[/][white on grey23]{Escape(message)}[/]");
-        }
-
-        public static void ActionUpdated(string message)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.UPDATED)}[/][white on grey23]{Escape(message)}[/]");
-        }
-
         public static void ActionError(string message)
         {
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.ERROR)}[/][red on grey23]{Escape(message)}[/]");

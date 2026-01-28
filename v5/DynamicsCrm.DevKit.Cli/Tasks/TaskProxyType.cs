@@ -152,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (!File.Exists(fileToCopy))
             {
                 File.Copy(fileCrmSvcUtilExtension, fileToCopy);
-                SpectreLog.ActionCreated($"Copied DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll to CrmSvcUtil directory");
+                SpectreLog.ActionWithLevel0(CliAction.CREATED, $"Copied DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll to CrmSvcUtil directory");
             }
         }
 

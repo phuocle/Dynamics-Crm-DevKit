@@ -412,14 +412,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (webResourceId == Guid.Empty)
                 {
-                    SpectreLog.ActionCreated($"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
                     webResourceId = await ServiceClient.CreateAsync(webResource);
                     webResource["webresourceid"] = webResourceId;
                 }
                 else
                 {
                     webResource["webresourceid"] = webResourceId;
-                    SpectreLog.ActionUpdated($"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
                     await ServiceClient.UpdateAsync(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);

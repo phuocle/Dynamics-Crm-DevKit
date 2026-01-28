@@ -349,7 +349,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (process.ExitCode == 0)
             {
-                SpectreLog.ActionUpdated($"PAC solution {action} completed successfully");
+                SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"PAC solution {action} completed successfully");
             }
             else
             {
