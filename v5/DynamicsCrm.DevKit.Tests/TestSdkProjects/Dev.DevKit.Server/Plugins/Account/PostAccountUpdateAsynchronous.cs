@@ -5,8 +5,8 @@ using System;
 
 namespace Dev.DevKit.Server.Plugins.Account
 {
-    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*", UnSecureConfiguration = "UnSecureConfiguration", Action = PluginStepOperationEnum.Deactivate)]
-    public class PostAccountCreateAsynchronous : IPlugin
+    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "name", "Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name,accountcategorycode", SecureConfiguration = "SecureConfiguration")]
+    public class PostAccountUpdateAsynchronous : IPlugin
     {
         /*
         InputParameters:
@@ -15,14 +15,14 @@ namespace Dev.DevKit.Server.Plugins.Account
             CalculateMatchCodeSynchronously    System.Boolean
             SolutionUniqueName                 System.String
             MaintainLegacyAppServerBehavior    System.Boolean
+            ConcurrencyBehavior                Microsoft.Xrm.Sdk.ConcurrencyBehavior
             ReturnRowVersion                   System.Boolean
         OutputParameters:
-            id                                 System.Guid - require
         */
 
         //private readonly string unSecureConfiguration = null;
         //private readonly string secureConfiguration = null;
-        //public PostAccountCreateAsynchronous(string unSecureConfiguration, string secureConfiguration)
+        //public PostAccountUpdateAsynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
         //    this.unSecureConfiguration = unSecureConfiguration;
         //    this.secureConfiguration = secureConfiguration;
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Server.Plugins.Account
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (!int.Equals(context.Stage, (int)StageEnum.PostOperation)) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
-            if (!string.Equals(context.MessageName, "Create", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals Create");
+            if (!string.Equals(context.MessageName, "Update", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals Update");
             if (!string.Equals(context.PrimaryEntityName, "account", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
             if (!int.Equals(context.Mode, (int)ExecutionModeEnum.Asynchronous)) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
@@ -48,6 +48,7 @@ namespace Dev.DevKit.Server.Plugins.Account
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
         {
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
+            context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
 

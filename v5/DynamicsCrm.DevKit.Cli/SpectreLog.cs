@@ -426,31 +426,34 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
-        /// Level 1 status with type (magenta) + name (white) + metadata list (cyan)
+        /// Level 1 action with type (magenta) + name (white) + metadata list (cyan)
+        /// Format: [UPDATED] Assembly Dev.DevKit.Server [Sandbox, Database]
         /// </summary>
-        public static void StatusWithLevel1(string type, string name, List<string> metadata)
+        public static void ActionWithLevel1(string action, string type, string name, List<string> metadata)
         {
             var indent = GetIndent(LogLevel.Level1);
             var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
         }
 
         /// <summary>
-        /// Level 1 status with type (magenta) + name (white) (no metadata)
+        /// Level 1 action with type (magenta) + name (white) (no metadata)
+        /// Format: [REGISTERED] Assembly Dev.DevKit.Server
         /// </summary>
-        public static void StatusWithLevel1(string type, string name)
+        public static void ActionWithLevel1(string action, string type, string name)
         {
             var indent = GetIndent(LogLevel.Level1);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)}[/]");
         }
 
         /// <summary>
-        /// Level 1 status with type (magenta) + name (white) + details (cyan)
+        /// Level 1 action with type (magenta) + name (white) + details (cyan)
+        /// Format: [REGISTERED] Bind Dev.DevKit.Server ApplicationId: xxx
         /// </summary>
-        public static void StatusWithLevel1(string type, string name, string details)
+        public static void ActionWithLevel1(string action, string type, string name, string details)
         {
             var indent = GetIndent(LogLevel.Level1);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)} [/][cyan]{Escape(details)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)} [/][cyan]{Escape(details)}[/]");
         }
 
         #endregion
@@ -473,46 +476,78 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
-        /// Level 2 status with pluginType (magenta) + fullName (white) (no metadata)
-        /// Format: [  ---  ] Plugin Dev.DevKit.Server...
+        /// Level 2 action with pluginType (magenta) + fullName (white) (no metadata)
+        /// Format: [ACTION]   Plugin Dev.DevKit.Server...
         /// </summary>
-        public static void StatusWithLevel2(string pluginType, string fullName)
+        public static void ActionWithLevel2(string action, string pluginType, string fullName)
         {
             var indent = GetIndent(LogLevel.Level2);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/]");
         }
 
         /// <summary>
-        /// Level 2 status with pluginType (magenta) + fullName (white) + metadata list (cyan)
-        /// Format: [  ---  ] Plugin Dev.DevKit.Server... [Create, Update]
+        /// Level 2 action with pluginType (magenta) + fullName (white) + metadata list (cyan)
+        /// Format: [ACTION]   Plugin Dev.DevKit.Server... [Create, Update]
         /// </summary>
-        public static void StatusWithLevel2(string pluginType, string fullName, List<string> metadata)
+        public static void ActionWithLevel2(string action, string pluginType, string fullName, List<string> metadata)
         {
             var indent = GetIndent(LogLevel.Level2);
             var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/][cyan]{Escape(metaText)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/][cyan]{Escape(metaText)}[/]");
         }
 
         /// <summary>
-        /// Level 3 status with stepMessage (magenta) + name (white) + metadata list (cyan)
-        /// Format: [  ---  ]     Step Create Dev.DevKit.Server... [PostOperation, Asynchronous]
+        /// Level 3 action with stepMessage (magenta) + name (white) + metadata list (cyan)
+        /// Format: [ACTION]     Step Create Dev.DevKit.Server... [PostOperation, Asynchronous]
         /// </summary>
-        public static void StatusWithLevel3(string stepMessage, string name, List<string> metadata)
+        public static void ActionWithLevel3(string action, string stepMessage, string name, List<string> metadata)
         {
             var indent = GetIndent(LogLevel.Level3);
             var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
         }
 
         /// <summary>
-        /// Level 3 status with prefix + stepMessage (magenta) + name (white) + metadata list (cyan)
-        /// Format: [  ---  ]     DEACTIVATED Step Create Dev.DevKit.Server... [PostOperation, Asynchronous]
+        /// Level 3 action with prefix (yellow) + stepMessage (magenta) + name (white) + metadata list (cyan)
+        /// Format: [ACTION]     DEACTIVATED Step Create Dev.DevKit.Server... [PostOperation, Asynchronous]
         /// </summary>
-        public static void StatusWithLevel3(string prefix, string stepMessage, string name, List<string> metadata)
+        public static void ActionWithLevel3(string action, string prefix, string stepMessage, string name, List<string> metadata)
         {
             var indent = GetIndent(LogLevel.Level3);
             var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/]{indent}[yellow]{Escape(prefix)} [/][magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[yellow]{Escape(prefix)} [/][magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 4 action for Image with format: Image {imageType} Name = {name} Alias = {alias} [attributes]
+        /// Colors: imageType (magenta), Name =/Alias = (white), name/alias values (cyan), [attributes] (green)
+        /// </summary>
+        public static void ActionWithLevel4(string action, string imageType, string imageName, string imageAlias, List<string> attributes)
+        {
+            var indent = GetIndent(LogLevel.Level4);
+            var attrText = attributes?.Count > 0 ? $" [{string.Join(", ", attributes)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]Image {Escape(imageType)} [/][white]Name = [/][cyan]{Escape(imageName)} [/][white]Alias = [/][cyan]{Escape(imageAlias)}[/][green]{Escape(attrText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 4 action with text + metadata list (cyan)
+        /// Format: [ACTION]       Update Fields [field1, field2]
+        /// </summary>
+        public static void ActionWithLevel4(string action, string text, List<string> metadata)
+        {
+            var indent = GetIndent(LogLevel.Level4);
+            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 4 action with text only (no metadata)
+        /// Format: [ACTION]       Secure Configuration = xxx
+        /// </summary>
+        public static void ActionWithLevel4(string action, string text)
+        {
+            var indent = GetIndent(LogLevel.Level4);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/]");
         }
 
         #endregion

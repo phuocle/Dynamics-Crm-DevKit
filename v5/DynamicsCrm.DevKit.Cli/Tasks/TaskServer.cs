@@ -125,7 +125,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.SIGNED, $"Assembly {Path.GetFileName(file)}");
+                            SpectreLog.ActionWithLevel1(CliAction.SIGNED, "Assembly", Path.GetFileName(file));
                         }
                     }
                     else if (ERROR.Length > 0)
@@ -153,7 +153,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.SIGNED, $"Package {Path.GetFileName(file)}");
+                            SpectreLog.ActionWithLevel1(CliAction.SIGNED, "Package", Path.GetFileName(file));
                         }
                     }
                     else if (ERROR.Length > 0)
@@ -211,7 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Package {Path.GetFileName(file)}");
+                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Package", Path.GetFileName(file));
                     PluginPackageId = response.id;
                 }
                 catch (Exception fe)
@@ -225,7 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var oldContent = entity.GetAttributeValue<string>("content");
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    SpectreLog.StatusWithLevel1("Package", Path.GetFileName(file));
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Package", Path.GetFileName(file));
                 }
                 else
                 {
@@ -239,7 +239,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         request.Parameters.Add("SolutionUniqueName", Json.solution);
                         XrmHelper.COUNT_ExecuteAsync++;
                         await ServiceClient.ExecuteAsync(request);
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Package {Path.GetFileName(file)}");
+                        SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Package", Path.GetFileName(file));
                         PluginPackageId = entity.Id;
                     }
                     catch (Exception fe)
@@ -260,13 +260,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Bind {Path.GetFileName(file)}", $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    SpectreLog.StatusWithLevel1("Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
                 }
                 else
                 {
@@ -277,7 +277,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Bind {Path.GetFileName(file)}", $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -364,7 +364,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = plugin
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Assembly {assemblyName}", new List<string> { name_IsolationMode, name_SourceType });
+                SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
                 XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 pluginAssemblyId = response.id;
@@ -375,7 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginAssemblyId = rows.Entities[0].Id;
                 if (Helper.IsEqualsContent(oldContent, newContent))
                 {
-                    SpectreLog.StatusWithLevel1("Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
                 }
                 else
                 {
@@ -385,7 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = plugin
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Assembly {assemblyName}", new List<string> { name_IsolationMode, name_SourceType });
+                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Assembly", assemblyName, new List<string> { name_IsolationMode, name_SourceType });
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -410,13 +410,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Bind {assemblyName}", $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Bind", assemblyName, $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    SpectreLog.StatusWithLevel1("Bind", assemblyName, $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Bind", assemblyName, $"ApplicationId: {applicationId}");
                 }
                 else
                 {
@@ -427,7 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"Bind {assemblyName}", $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Bind", assemblyName, $"ApplicationId: {applicationId}");
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -521,7 +521,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var request = new CreateRequest { Target = managedIdentity };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.REGISTERED, $"Managed Identity App {AppId}");
+                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Managed Identity App", AppId);
                     XrmHelper.COUNT_ExecuteAsync++;
                     var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
@@ -533,7 +533,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel1("Managed Identity App", AppId);
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Managed Identity App", AppId);
                     if (isDevApplication && _ManagedIdentityId == null && _ApplicationId == null)
                     {
                         _ManagedIdentityId = rows.Entities[0].Id;
@@ -944,7 +944,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (pluginAssemblyId == null) return;
             if (Arg.OnlyUpdateAssembly)
             {
-                SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.FLAG, "OnlyUpdateAssembly", "true");
+                SpectreLog.ActionWithLevel1(CliAction.FLAG, "OnlyUpdateAssembly", "true");
                 return;
             }
             var sortedTypes = types.OrderBy(type =>
@@ -976,12 +976,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var error = await UnregisterPluginTypeAsync(pluginAssemblyId.Value, type, attributes[0], deployFileType);
                     if (error == null)
                     {
-                        SpectreLog.StatusWithLevel2(attributes[0].PluginType.ToString(), type.FullName);
+                        SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, attributes[0].PluginType.ToString(), type.FullName);
                         continue;
                     }
                     else if (error == true)
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.UNREGISTERED, $"Type {attributes[0].PluginType} {type.FullName}");
+                        SpectreLog.ActionWithLevel2(CliAction.UNREGISTERED, attributes[0].PluginType.ToString(), type.FullName);
                         continue;
                     }
                     else
@@ -1021,7 +1021,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 Message = attribute.Message,
                                 DataSource = attribute.DataSource
                             });
-                            SpectreLog.StatusWithLevel3($"Step {attribute.Message}", attribute.Name, new List<string> { "MainOperation", "Synchronous" });
+                            SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, $"Step {attribute.Message}", attribute.Name, new List<string> { "MainOperation", "Synchronous" });
                             break;
                         case PluginType.CustomApi:
                             await DeployCustomApiStepAsync(pluginTypeId.Value, type.FullName, attribute);
@@ -1150,7 +1150,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.REGISTERED, $"Type {PluginType.DataSource} {logicalNameDataSource}", events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
+                SpectreLog.ActionWithLevel2(CliAction.REGISTERED, PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                 XrmHelper.COUNT_ExecuteAsync++;
                 await ServiceClient.ExecuteAsync(request);
             }
@@ -1174,13 +1174,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = entity
                     };
-                    SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.UPDATED, $"Type {PluginType.DataSource} {logicalNameDataSource}", events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
+                    SpectreLog.ActionWithLevel2(CliAction.UPDATED, PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel2(PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
+                    SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, PluginType.DataSource.ToString(), logicalNameDataSource, events.Split(",".ToCharArray()).ToList().Select(x => x.Trim()).ToList());
                 }
             }
         }
@@ -1196,7 +1196,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Activate)
                 {
-                    SpectreLog.StatusWithLevel3($"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
+                    SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, $"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
@@ -1210,11 +1210,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Deactivate)
                 {
-                    SpectreLog.StatusWithLevel3(CliAction.DEACTIVATED.Trim(), $"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
+                    SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, CliAction.DEACTIVATED.Trim(), $"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
-                    SpectreLog.ActionWithLevel(LogLevel.Level3, CliAction.REGISTERED, $"Step {attribute.Message} {pluginTypeName}", new List<string> { "MainOperation", "Synchronous" });
+                    SpectreLog.ActionWithLevel3(CliAction.REGISTERED, $"Step {attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                     var update = new Entity("customapi", rows[0].Id);
                     update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
                     XrmHelper.COUNT_UpdateAsync++;
@@ -1271,7 +1271,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
+                    SpectreLog.ActionWithLevel4(CliAction.REGISTERED, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -1308,18 +1308,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level4, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
+                    SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
                 }
                 else
                 {
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows[0].Id;
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
+                        SpectreLog.ActionWithLevel4(CliAction.UPDATED, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
                     }
                     else if (imageAttributes.Length == 0)
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.DELETED, $"Image {imageType}, Name = {imageName}, Alias = {imageAliasName}", imageAttributes.Split(",".ToCharArray()).ToList());
+                        SpectreLog.ActionWithLevel4(CliAction.DELETED, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
                         XrmHelper.COUNT_DeleteAsync++;
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows[0].Id);
                         return Guid.NewGuid();
@@ -1439,7 +1439,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var actionText = attribute.Action == PluginStepOperationEnum.Deactivate
                     ? $"{CliAction.REGISTERED.Trim()} {CliAction.DEACTIVATED.Trim()}"
                     : CliAction.REGISTERED.Trim();
-                SpectreLog.ActionWithLevel(LogLevel.Level3, actionText, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                SpectreLog.ActionWithLevel3(actionText, $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
                 try
@@ -1528,11 +1528,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (attribute.Action == PluginStepOperationEnum.Activate)
                     {
-                        SpectreLog.StatusWithLevel3($"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     else
                     {
-                        SpectreLog.StatusWithLevel3(CliAction.DEACTIVATED.Trim(), $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, CliAction.DEACTIVATED.Trim(), $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     CliLogSecureUnsecure();
                     CliLogUpdateFields();
@@ -1550,7 +1550,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate &&
                             attribute.Action == PluginStepOperationEnum.Activate;
                         var actionText = needActivate ? $"{CliAction.UPDATED.Trim()} {CliAction.ACTIVATED.Trim()}" : CliAction.UPDATED.Trim();
-                        SpectreLog.ActionWithLevel(LogLevel.Level3, actionText, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.ActionWithLevel3(actionText, $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     else
                     {
@@ -1558,7 +1558,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
                             attribute.Action == PluginStepOperationEnum.Deactivate;
                         var actionText = needDeactivate ? $"{CliAction.UPDATED.Trim()} {CliAction.DEACTIVATED.Trim()}" : CliAction.UPDATED.Trim();
-                        SpectreLog.ActionWithLevel(LogLevel.Level3, actionText, $"Step {attribute.Message} {attribute.Name}", new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.ActionWithLevel3(actionText, $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     CliLogSecureUnsecure();
                     CliLogUpdateFields();
@@ -1615,17 +1615,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (rows.Count == 0)
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
+                        SpectreLog.ActionWithLevel4(CliAction.REGISTERED, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                     }
                     else
                     {
                         if (rows[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
                         {
-                            SpectreLog.StatusWithLevel(LogLevel.Level4, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
+                            SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                         }
                         else
                         {
-                            SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
+                            SpectreLog.ActionWithLevel4(CliAction.UPDATED, "Update Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                         }
                     }
                 }
@@ -1635,17 +1635,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (rows.Count == 0)
                         {
-                            SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
+                            SpectreLog.ActionWithLevel4(CliAction.REGISTERED, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                         }
                         else
                         {
                             if (rows[0].GetAttributeValue<string>("filteringattributes") == attribute.FilteringAttributes?.Replace(" ", ""))
                             {
-                                SpectreLog.StatusWithLevel(LogLevel.Level4, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
+                                SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                             }
                             else
                             {
-                                SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
+                                SpectreLog.ActionWithLevel4(CliAction.UPDATED, "Create Fields", attribute.FilteringAttributes.Split(",".ToCharArray()).ToList());
                             }
                         }
                     }
@@ -1655,40 +1655,40 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (SecureConfigurationAction == CliAction.DO_NOTHING)
                 {
-                    SpectreLog.StatusWithLevel(LogLevel.Level4, $"Secure Configuration = {attribute.SecureConfiguration}");
+                    SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, $"Secure Configuration = {attribute.SecureConfiguration}");
                 }
                 else if (!string.IsNullOrWhiteSpace(SecureConfigurationAction))
                 {
                     if (string.IsNullOrWhiteSpace(attribute.SecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UNREGISTERED, "Secure Configuration");
+                        SpectreLog.ActionWithLevel4(CliAction.UNREGISTERED, "Secure Configuration");
                     }
                     else
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, SecureConfigurationAction.Trim(), $"Secure Configuration = {attribute.SecureConfiguration}");
+                        SpectreLog.ActionWithLevel4(SecureConfigurationAction.Trim(), $"Secure Configuration = {attribute.SecureConfiguration}");
                     }
                 }
                 if (rows.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                 {
-                    SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
+                    SpectreLog.ActionWithLevel4(CliAction.REGISTERED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                 }
                 else
                 {
                     if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.REGISTERED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
+                        SpectreLog.ActionWithLevel4(CliAction.REGISTERED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
                     {
-                        SpectreLog.StatusWithLevel(LogLevel.Level4, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
+                        SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UNREGISTERED, "UnSecure Configuration");
+                        SpectreLog.ActionWithLevel4(CliAction.UNREGISTERED, "UnSecure Configuration");
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level4, CliAction.UPDATED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
+                        SpectreLog.ActionWithLevel4(CliAction.UPDATED, $"UnSecure Configuration = {attribute.UnSecureConfiguration}");
                     }
                 }
             }
@@ -1787,7 +1787,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (deployFileType == DeployFileType.Nuget)
                 {
-                    SpectreLog.StatusWithLevel2(attribute.PluginType.ToString(), type.FullName);
+                    SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, attribute.PluginType.ToString(), type.FullName);
                     return rows[0].Id;
                 }
             }
@@ -1806,7 +1806,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginType
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.REGISTERED, $"Type {attribute.PluginType} {type.FullName}");
+                SpectreLog.ActionWithLevel2(CliAction.REGISTERED, attribute.PluginType.ToString(), type.FullName);
                 XrmHelper.COUNT_ExecuteAsync++;
                 var response = (CreateResponse)await ServiceClient.ExecuteAsync(request);
                 return response.id;
@@ -1832,11 +1832,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request);
-                    SpectreLog.ActionWithLevel(LogLevel.Level2, CliAction.UPDATED, $"Type {attribute.PluginType} {type.FullName}");
+                    SpectreLog.ActionWithLevel2(CliAction.UPDATED, attribute.PluginType.ToString(), type.FullName);
                 }
                 else
                 {
-                    SpectreLog.StatusWithLevel2(attribute.PluginType.ToString(), type.FullName);
+                    SpectreLog.ActionWithLevel2(CliAction.DO_NOTHING, attribute.PluginType.ToString(), type.FullName);
                 }
             }
             return rows[0].Id;
