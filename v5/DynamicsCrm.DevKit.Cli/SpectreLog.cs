@@ -596,56 +596,79 @@ namespace DynamicsCrm.DevKit.Cli
             }
         }
 
+        #region ActionWithLevel4
+
         /// <summary>
-        /// Level 4 action for Image with format: {imageType} Name: {name} Alias: {alias} Fields: [attributes]
-        /// Colors: imageType (magenta), labels (white), name/alias/attributes values (green)
+        /// Level 4 action with 1 text parameter
+        /// Format: [ACTION]       text1
+        /// Colors: action (green), text1 (white)
         /// </summary>
-        public static void ActionWithLevel4(string action, string imageType, string imageName, string imageAlias, List<string> attributes)
+        public static void ActionWithLevel4(string action, string text1)
         {
             var indent = GetIndent(LogLevel.Level4);
-            var attrText = attributes?.Count > 0 ? $"[{string.Join(", ", attributes)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(imageType)} [/][white]Name: [/][green]{Escape(imageName)} [/][white]Alias: [/][green]{Escape(imageAlias)} [/][white]Fields: [/][green]{Escape(attrText)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text1)}[/]");
         }
 
         /// <summary>
-        /// Level 4 action with text + metadata list
-        /// Format: [ACTION]       Update Fields: [field1, field2]
-        /// Colors: action (green), text1 (magenta), text2 (white), fields (green)
+        /// Level 4 action with 2 text parameters
+        /// Format: [ACTION]       text1 text2
+        /// Colors: action (green), text1 (magenta), text2 (white)
         /// </summary>
-        public static void ActionWithLevel4(string action, string text1, string text2, List<string> metadata)
+        public static void ActionWithLevel4(string action, string text1, string text2)
         {
             var indent = GetIndent(LogLevel.Level4);
-            var metaText = metadata?.Count > 0 ? $"[{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(text1)} [/][white]{Escape(text2)}: [/][green]{Escape(metaText)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(text1)} [/][white]{Escape(text2)}[/]");
         }
 
         /// <summary>
-        /// Level 4 action for Configuration
-        /// Format: {configType} Configuration: {configValue}
-        /// Colors: action (green), configType (magenta), label (white), configValue (green)
+        /// Level 4 action with 3 text parameters
+        /// Format: [ACTION]       text1 text2: text3
+        /// Colors: action (green), text1 (magenta), text2 (white), text3 value (green)
+        /// Example: Update Fields: [field1, field2] OR Secure Configuration: value
         /// </summary>
-        public static void ActionWithLevel4(string action, string configType, string configValue)
+        public static void ActionWithLevel4(string action, string text1, string text2, string text3)
         {
             var indent = GetIndent(LogLevel.Level4);
-            if (string.IsNullOrEmpty(configValue))
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(configType)} [/][white]Configuration[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(configType)} [/][white]Configuration: [/][green]{Escape(configValue)}[/]");
-            }
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(text1)} [/][white]{Escape(text2)}: [/][green]{Escape(text3)}[/]");
         }
 
         /// <summary>
-        /// Level 4 action with text only (no metadata)
-        /// Format: [ACTION]       Secure Configuration = xxx
+        /// Level 4 action with 2 text parameters and list
+        /// Format: [ACTION]       text1 text2: [text3]
+        /// Colors: action (green), text1 (magenta), text2 (white), text3 values (green)
+        /// Example: Update Fields: [field1, field2] OR Secure Configuration: [value]
         /// </summary>
-        public static void ActionWithLevel4(string action, string text)
+        public static void ActionWithLevel4(string action, string text1, string text2, List<string> text3)
+        {
+            var text3Value = text3?.Count > 0 ? $"[{string.Join(", ", text3)}]" : string.Empty;
+            ActionWithLevel4(action, text1, text2, text3Value);
+        }
+
+        /// <summary>
+        /// Level 4 action with 4 text parameters
+        /// Format: [ACTION]       text1 Name: text2 Alias: text3 Fields: text4
+        /// Colors: action (green), text1 (magenta), labels (white), text2/text3/text4 values (green)
+        /// Example: PreImage Name: myImage Alias: image Fields: [field1, field2]
+        /// </summary>
+        public static void ActionWithLevel4(string action, string text1, string text2, string text3, string text4)
         {
             var indent = GetIndent(LogLevel.Level4);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(text1)} [/][white]Name: [/][green]{Escape(text2)} [/][white]Alias: [/][green]{Escape(text3)} [/][white]Fields: [/][green]{Escape(text4)}[/]");
         }
+
+        /// <summary>
+        /// Level 4 action with 4 text parameters and list
+        /// Format: [ACTION]       text1 Name: text2 Alias: text3 Fields: [text4]
+        /// Colors: action (green), text1 (magenta), labels (white), text2/text3/text4 values (green)
+        /// Example: PreImage Name: myImage Alias: image Fields: [field1, field2]
+        /// </summary>
+        public static void ActionWithLevel4(string action, string text1, string text2, string text3, List<string> text4)
+        {
+            var text4Value = text4?.Count > 0 ? $"[{string.Join(", ", text4)}]" : string.Empty;
+            ActionWithLevel4(action, text1, text2, text3, text4Value);
+        }
+
+        #endregion
 
         #endregion
 

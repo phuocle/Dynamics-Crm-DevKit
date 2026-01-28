@@ -1655,40 +1655,40 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (SecureConfigurationAction == CliAction.DO_NOTHING)
                 {
-                    SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, "Secure", attribute.SecureConfiguration);
+                    SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, "Secure", "Configuration", attribute.SecureConfiguration);
                 }
                 else if (!string.IsNullOrWhiteSpace(SecureConfigurationAction))
                 {
                     if (string.IsNullOrWhiteSpace(attribute.SecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel4(CliAction.UNREGISTERED, "Secure", (string)null);
+                        SpectreLog.ActionWithLevel4(CliAction.UNREGISTERED, "Secure", "Configuration", (string)null);
                     }
                     else
                     {
-                        SpectreLog.ActionWithLevel4(SecureConfigurationAction.Trim(), "Secure", attribute.SecureConfiguration);
+                        SpectreLog.ActionWithLevel4(SecureConfigurationAction.Trim(), "Secure", "Configuration", attribute.SecureConfiguration);
                     }
                 }
                 if (rows.Count == 0 && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                 {
-                    SpectreLog.ActionWithLevel4(CliAction.REGISTERED, "UnSecure", attribute.UnSecureConfiguration);
+                    SpectreLog.ActionWithLevel4(CliAction.REGISTERED, "UnSecure", "Configuration", attribute.UnSecureConfiguration);
                 }
                 else
                 {
                     if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == null && !string.IsNullOrWhiteSpace(attribute.UnSecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel4(CliAction.REGISTERED, "UnSecure", attribute.UnSecureConfiguration);
+                        SpectreLog.ActionWithLevel4(CliAction.REGISTERED, "UnSecure", "Configuration", attribute.UnSecureConfiguration);
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") == attribute.UnSecureConfiguration)
                     {
-                        SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, "UnSecure", attribute.UnSecureConfiguration);
+                        SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, "UnSecure", "Configuration", attribute.UnSecureConfiguration);
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel4(CliAction.UNREGISTERED, "UnSecure", (string)null);
+                        SpectreLog.ActionWithLevel4(CliAction.UNREGISTERED, "UnSecure", "Configuration", (string)null);
                     }
                     else if (rows.Count == 1 && rows[0].GetAttributeValue<string>("configuration") != null && !string.IsNullOrEmpty(attribute.UnSecureConfiguration))
                     {
-                        SpectreLog.ActionWithLevel4(CliAction.UPDATED, "UnSecure", attribute.UnSecureConfiguration);
+                        SpectreLog.ActionWithLevel4(CliAction.UPDATED, "UnSecure", "Configuration", attribute.UnSecureConfiguration);
                     }
                 }
             }
