@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ActionError($"{TaskType} Cannot auto-detect Microsoft.CrmSdk.CoreTools version. Please ensure the package is installed in the packages folder or specify --version parameter.");
                     return false;
                 }
-                SpectreLog.ActionWithLevel(LogLevel.Level0, "AUTO-DETECT: ", $"Microsoft.CrmSdk.CoreTools", Version);
+                SpectreLog.ActionWithLevel0("AUTO-DETECT: ", $"Microsoft.CrmSdk.CoreTools {Version}");
             }
 
             if (!IsExistSolutionPackager(CurrentDirectory))
@@ -194,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SolutionName = Json.solution
             };
 
-            SpectreLog.ActionWithLevel(LogLevel.Level0, CliAction.EXPORT, $"{solutionType} solution", Json.solution);
+            SpectreLog.ActionWithLevel0(CliAction.EXPORT, $"{solutionType} solution {Json.solution}");
 
             var crmVersion = await GetCrmVersionFromInstanceAsync();
             var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
@@ -313,24 +313,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (await IsValidAsync())
             {
                 // Log execution info
-                SpectreLog.ActionWithLevel(LogLevel.Level0, "EXECUTE: ", "SolutionPackager.exe", Version);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "ACTION: ", Json.type);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "SOLUTION: ", Json.solution);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "TYPE: ", Json.solutiontype);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "FOLDER: ", $"..\\{Json.folder}\\{Json.solutiontype}");
+                SpectreLog.ActionWithLevel0("EXECUTE: ", $"SolutionPackager.exe {Version}");
+                SpectreLog.ActionWithLevel1("ACTION: ", Json.type);
+                SpectreLog.ActionWithLevel1("SOLUTION: ", Json.solution);
+                SpectreLog.ActionWithLevel1("TYPE: ", Json.solutiontype);
+                SpectreLog.ActionWithLevel1("FOLDER: ", $"..\\{Json.folder}\\{Json.solutiontype}");
 
                 var solutionZipFile = await GetSolutionZipFileAsync();
                 if (Json.type.ToLower().Trim() == "Pack".ToLower())
                 {
                     if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                         var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
                     }
                     else
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                     }
                 }
 

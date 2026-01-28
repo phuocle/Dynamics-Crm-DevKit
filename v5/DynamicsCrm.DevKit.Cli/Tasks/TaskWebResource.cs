@@ -166,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         ["dependencyxml"] = dependencyXml
                     };
-                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.UPDATED, $"{webResourceName}", "dependencies");
+                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, webResourceName, "dependencies");
                     foreach (var d in foundDependencies)
                         SpectreLog.WriteWithLevel(LogLevel.Level2, $"{d}");
                     await ServiceClient.UpdateAsync(entity);
@@ -459,7 +459,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                 SolutionUniqueName = Json.solution
             };
-            SpectreLog.ActionWithLevel(LogLevel.Level3, CliAction.ADDED, $"{webResource["name"]}", $"to solution: ", $"{Json.solution}");
+            SpectreLog.ActionWithLevel3(CliAction.ADDED, $"{webResource["name"]}", "to solution: ", Json.solution);
             await ServiceClient.ExecuteAsync(request);
         }
 

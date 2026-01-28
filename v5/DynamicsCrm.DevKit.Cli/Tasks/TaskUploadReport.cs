@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 else
                                 {
                                     await XrmHelper.DeployReportAsync(ServiceClient, report.ObjectId, file);
-                                    SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.DEPLOYED, $"{language} report", " .." + file.Substring(CurrentDirectory.Length), " to ", fileName, " report file name");
+                                    SpectreLog.ActionWithLevel1(CliAction.DEPLOYED, $"{language} report", " .." + file.Substring(CurrentDirectory.Length), $" to {fileName} report file name");
                                 }
                             }
                         }

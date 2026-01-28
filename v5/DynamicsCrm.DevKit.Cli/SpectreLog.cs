@@ -426,6 +426,40 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
+        /// Level 0 action with action + text (no highlight)
+        /// Format: [ACTION] text
+        /// </summary>
+        public static void ActionWithLevel0(string action, string text)
+        {
+            var indent = GetIndent(LogLevel.Level0);
+            if (action == CliAction.DO_NOTHING)
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)}[/]");
+            }
+        }
+
+        /// <summary>
+        /// Level 0 action with action + text + details
+        /// Format: [ACTION] text details
+        /// </summary>
+        public static void ActionWithLevel0(string action, string text, string details)
+        {
+            var indent = GetIndent(LogLevel.Level0);
+            if (action == CliAction.DO_NOTHING)
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)} [/][cyan]{Escape(details)}[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)} [/][cyan on grey23]{Escape(details)}[/]");
+            }
+        }
+
+        /// <summary>
         /// Level 1 action with type (magenta) + name (white) + metadata list (cyan)
         /// Format: [UPDATED] Assembly Dev.DevKit.Server [Sandbox, Database]
         /// </summary>
@@ -454,6 +488,23 @@ namespace DynamicsCrm.DevKit.Cli
         {
             var indent = GetIndent(LogLevel.Level1);
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(type)} [/][white]{Escape(name)} [/][cyan]{Escape(details)}[/]");
+        }
+
+        /// <summary>
+        /// Level 1 action with just action + text (simple format)
+        /// Format: [ACTION] text
+        /// </summary>
+        public static void ActionWithLevel1(string action, string text)
+        {
+            var indent = GetIndent(LogLevel.Level1);
+            if (action == CliAction.DO_NOTHING)
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)}[/]");
+            }
         }
 
         #endregion
@@ -516,6 +567,23 @@ namespace DynamicsCrm.DevKit.Cli
             var indent = GetIndent(LogLevel.Level3);
             var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[yellow]{Escape(prefix)} [/][magenta]{Escape(stepMessage)} [/][white]{Escape(name)}[/][cyan]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 3 action with text + details1 + details2
+        /// Format: [ACTION]     text details1 details2
+        /// </summary>
+        public static void ActionWithLevel3(string action, string text, string details1, string details2)
+        {
+            var indent = GetIndent(LogLevel.Level3);
+            if (action == CliAction.DO_NOTHING)
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(details1)}[/][green]{Escape(details2)}[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(action)}[/][on grey23]{indent}[/][white on grey23]{Escape(text)}[/][cyan on grey23]{Escape(details1)}[/][green on grey23]{Escape(details2)}[/]");
+            }
         }
 
         /// <summary>

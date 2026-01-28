@@ -163,7 +163,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SolutionName = Json.solution
             };
 
-            SpectreLog.ActionWithLevel(LogLevel.Level0, CliAction.EXPORT, $"{solutionType} solution", Json.solution);
+            SpectreLog.ActionWithLevel0(CliAction.EXPORT, $"{solutionType} solution {Json.solution}");
 
             // Need to get CRM version for filename
             var crmVersion = await GetCrmVersionFromInstanceAsync();
@@ -240,11 +240,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (await IsValidAsync())
             {
                 var action = Json.type.ToLower();
-                SpectreLog.ActionWithLevel(LogLevel.Level0, "EXECUTE: ", "pac", $"solution {action}");
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "ACTION: ", Json.type);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "SOLUTION: ", Json.solution);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "TYPE: ", Json.solutiontype);
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "FOLDER: ", $"..\\{Json.folder}\\{Json.solutiontype}");
+                SpectreLog.ActionWithLevel0("EXECUTE: ", $"pac solution {action}");
+                SpectreLog.ActionWithLevel1("ACTION: ", Json.type);
+                SpectreLog.ActionWithLevel1("SOLUTION: ", Json.solution);
+                SpectreLog.ActionWithLevel1("TYPE: ", Json.solutiontype);
+                SpectreLog.ActionWithLevel1("FOLDER: ", $"..\\{Json.folder}\\{Json.solutiontype}");
 
                 var solutionZipFile = await GetSolutionZipFileAsync();
 
@@ -253,13 +253,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                         var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
                     }
                     else
                     {
-                        SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                     }
                 }
 

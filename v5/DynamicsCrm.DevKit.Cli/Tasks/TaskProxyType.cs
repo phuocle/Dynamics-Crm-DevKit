@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ActionError($"{TaskType} Cannot auto-detect Microsoft.CrmSdk.CoreTools version. Please ensure the package is installed in the packages folder or specify --version parameter.");
                     return false;
                 }
-                SpectreLog.ActionWithLevel(LogLevel.Level0, "AUTO-DETECT: ", $"Microsoft.CrmSdk.CoreTools", Version);
+                SpectreLog.ActionWithLevel0("AUTO-DETECT: ", $"Microsoft.CrmSdk.CoreTools {Version}");
             }
 
             if (!FindCrmSvcUtil(CurrentDirectory))
@@ -313,19 +313,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var path = "\"" + CrmSvcUtil + "\"";
 
             // Log execution info
-            SpectreLog.ActionWithLevel(LogLevel.Level0, "EXECUTE: ", "CrmSvcUtil.exe", $"{Version}");
+            SpectreLog.ActionWithLevel0("EXECUTE: ", $"CrmSvcUtil.exe {Version}");
 
             if (Json.entities == "*" || Json.entities.ToLower() == "all")
             {
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "FILTER: ", "All entities");
+                SpectreLog.ActionWithLevel1("FILTER: ", "All entities");
             }
             else
             {
-                SpectreLog.ActionWithLevel(LogLevel.Level1, "FILTER: ", "Entities:", Json.entities);
+                SpectreLog.ActionWithLevel1("FILTER: ", $"Entities: {Json.entities}");
             }
 
-            SpectreLog.ActionWithLevel(LogLevel.Level1, "OUTPUT: ", Json.output);
-            SpectreLog.ActionWithLevel(LogLevel.Level1, "NAMESPACE: ", Json.@namespace);
+            SpectreLog.ActionWithLevel1("OUTPUT: ", Json.output);
+            SpectreLog.ActionWithLevel1("NAMESPACE: ", Json.@namespace);
 
             SpectreLog.WriteWithLevel(LogLevel.Level0, path + " " + CreateCommandArgsLog());
             SpectreLog.WriteLine();

@@ -83,7 +83,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         {
                             var newFileName = FileHelper.GeNextFileName(fileName);
                             await FileHelper.ForceWriteAllTextAsync(newFileName, reportFile.Content);
-                            SpectreLog.ActionWithLevel(LogLevel.Level1, CliAction.DUPLICATED, $"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{newFileName}");
+                            SpectreLog.ActionWithLevel1(CliAction.DUPLICATED, $"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{newFileName}");
                         }
                         i++;
                     }
