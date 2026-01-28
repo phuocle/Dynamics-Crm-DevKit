@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKit.Server.Plugins.Account
 {
-    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "name", "Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name,accountcategorycode", SecureConfiguration = "SecureConfiguration")]
+    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "name", "Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name,accountcategorycode", SecureConfiguration = "SecureConfiguration", UnSecureConfiguration = "SecureConfiguration")]
     public class PostAccountUpdateAsynchronous : IPlugin
     {
         /*

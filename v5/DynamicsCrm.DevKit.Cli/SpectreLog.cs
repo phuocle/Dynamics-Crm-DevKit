@@ -537,6 +537,16 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
+        /// Level 2 action with status text, pluginType (magenta) and fullName (white)
+        /// Format: [ACTION]   STATUS PluginType FullName
+        /// </summary>
+        public static void ActionWithLevel2(string action, string status, string pluginType, string fullName)
+        {
+            var indent = GetIndent(LogLevel.Level2);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[yellow]{Escape(status)} [/][magenta]{Escape(pluginType)} [/][white]{Escape(fullName)}[/]");
+        }
+
+        /// <summary>
         /// Level 2 action with pluginType (magenta) + fullName (white) + metadata list (cyan)
         /// Format: [ACTION]   Plugin Dev.DevKit.Server... [Create, Update]
         /// </summary>
@@ -587,25 +597,44 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
-        /// Level 4 action for Image with format: Image {imageType} Name = {name} Alias = {alias} [attributes]
-        /// Colors: imageType (magenta), Name =/Alias = (white), name/alias values (cyan), [attributes] (green)
+        /// Level 4 action for Image with format: {imageType} Name: {name} Alias: {alias} Fields: [attributes]
+        /// Colors: imageType (magenta), labels (white), name/alias/attributes values (green)
         /// </summary>
         public static void ActionWithLevel4(string action, string imageType, string imageName, string imageAlias, List<string> attributes)
         {
             var indent = GetIndent(LogLevel.Level4);
-            var attrText = attributes?.Count > 0 ? $" [{string.Join(", ", attributes)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]Image {Escape(imageType)} [/][white]Name = [/][cyan]{Escape(imageName)} [/][white]Alias = [/][cyan]{Escape(imageAlias)}[/][green]{Escape(attrText)}[/]");
+            var attrText = attributes?.Count > 0 ? $"[{string.Join(", ", attributes)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(imageType)} [/][white]Name: [/][green]{Escape(imageName)} [/][white]Alias: [/][green]{Escape(imageAlias)} [/][white]Fields: [/][green]{Escape(attrText)}[/]");
         }
 
         /// <summary>
-        /// Level 4 action with text + metadata list (cyan)
-        /// Format: [ACTION]       Update Fields [field1, field2]
+        /// Level 4 action with text + metadata list
+        /// Format: [ACTION]       Update Fields: [field1, field2]
+        /// Colors: action (green), text1 (magenta), text2 (white), fields (green)
         /// </summary>
-        public static void ActionWithLevel4(string action, string text, List<string> metadata)
+        public static void ActionWithLevel4(string action, string text1, string text2, List<string> metadata)
         {
             var indent = GetIndent(LogLevel.Level4);
-            var metaText = metadata?.Count > 0 ? $" [{string.Join(", ", metadata)}]" : string.Empty;
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(metaText)}[/]");
+            var metaText = metadata?.Count > 0 ? $"[{string.Join(", ", metadata)}]" : string.Empty;
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(text1)} [/][white]{Escape(text2)}: [/][green]{Escape(metaText)}[/]");
+        }
+
+        /// <summary>
+        /// Level 4 action for Configuration
+        /// Format: {configType} Configuration: {configValue}
+        /// Colors: action (green), configType (magenta), label (white), configValue (green)
+        /// </summary>
+        public static void ActionWithLevel4(string action, string configType, string configValue)
+        {
+            var indent = GetIndent(LogLevel.Level4);
+            if (string.IsNullOrEmpty(configValue))
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(configType)} [/][white]Configuration[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[magenta]{Escape(configType)} [/][white]Configuration: [/][green]{Escape(configValue)}[/]");
+            }
         }
 
         /// <summary>
