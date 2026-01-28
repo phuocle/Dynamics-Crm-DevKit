@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!File.Exists(fileName))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileName, reportFile.Content);
-                            SpectreLog.ActionCreated($"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
                         }
                         else
                         {

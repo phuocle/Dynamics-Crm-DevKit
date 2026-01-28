@@ -97,7 +97,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     await RegisterDataSourceAsync();
                 });
-                SpectreLog.ActionCreated($"Data Source: ", DataSourceName);
+                SpectreLog.ActionWithLevel0(CliAction.CREATED, "Data Source: ", DataSourceName);
             }
             SpectreLog.WriteLine();
             SpectreLog.WriteLine("END");

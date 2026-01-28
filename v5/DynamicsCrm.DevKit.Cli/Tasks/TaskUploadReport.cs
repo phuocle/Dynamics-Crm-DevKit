@@ -90,7 +90,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 var report = reports.First();
                                 if (Helper.IsTheSame(report.Content, await FileHelper.ReadAllTextAsync(file)))
                                 {
-                                    SpectreLog.ActionDoNothing($"{language} report", " .." + file.Substring(CurrentDirectory.Length), " to ", fileName, " report file name");
+                                    SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{language} report", " .." + file.Substring(CurrentDirectory.Length), " to ", fileName, " report file name");
                                 }
                                 else
                                 {

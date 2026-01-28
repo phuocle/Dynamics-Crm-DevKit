@@ -333,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fileContent = Convert.ToBase64String(await FileHelper.ReadAllBytesAsync(webResourceFile.file));
             if (fileContent == content)
             {
-                SpectreLog.ActionDoNothing(webResourceFile.file.Substring(CurrentDirectory.Length + 1));
+                SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
                 await AddWebResourceToSolutionAsync(new Entity("webresource")
                 {
                     ["name"] = webResourceFile.uniquename,

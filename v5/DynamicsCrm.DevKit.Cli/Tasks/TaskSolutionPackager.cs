@@ -209,7 +209,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             File.Copy(tempFile, solutionFile, true);
 
             timer.Stop();
-            SpectreLog.ActionCreated($"..{solutionFile.Substring(CurrentDirectory.Length)}", $"({timer.Elapsed:c})");
+            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"..{solutionFile.Substring(CurrentDirectory.Length)}", $"({timer.Elapsed:c})");
             return solutionFile;
         }
 
@@ -397,7 +397,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (Json.type.ToLower() == "extract")
                 {
-                    SpectreLog.ActionUpdated("Solution extracted successfully to", $"..\\{Json.folder}\\{Json.solutiontype}");
+                    SpectreLog.ActionWithLevel0(CliAction.UPDATED, "Solution extracted successfully to", $"..\\{Json.folder}\\{Json.solutiontype}");
                 }
                 else
                 {

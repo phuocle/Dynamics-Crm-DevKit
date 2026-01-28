@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                 if (exitCode == 0)
                 {
-                    SpectreLog.ActionUpdated("Model classes generated successfully to", Json.output);
+                    SpectreLog.ActionWithLevel0(CliAction.UPDATED, "Model classes generated successfully to", Json.output);
                 }
                 else
                 {

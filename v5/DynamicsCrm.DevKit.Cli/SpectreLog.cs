@@ -222,44 +222,14 @@ namespace DynamicsCrm.DevKit.Cli
 
         #region Action Methods
 
-        public static void ActionDoNothing(string message)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/][white]{Escape(message)}[/]");
-        }
-
-        public static void ActionDoNothing(string message, string details)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/][white]{Escape(message)}[/] [grey]{Escape(details)}[/]");
-        }
-
-        public static void ActionDoNothing(string v1, string v2, string v3, string v4, string v5)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(CliAction.DO_NOTHING)}[/][white]{Escape(v1)}[/][cyan]{Escape(v2)}[/][green]{Escape(v3)}[/][white]{Escape(v4)}[/][green]{Escape(v5)}[/]");
-        }
-
         public static void ActionCreated(string message)
         {
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.CREATED)}[/][white on grey23]{Escape(message)}[/]");
         }
 
-        public static void ActionCreated(string message, string highlight)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.CREATED)}[/][white on grey23]{Escape(message)} [/][yellow on grey23]{Escape(highlight)}[/]");
-        }
-
-        public static void ActionCreated(string v1, string v2, string v3)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.CREATED)}[/][white on grey23]{Escape(v1)}[/][green on grey23]{Escape(v2)}[/][white on grey23]{Escape(v3)}[/]");
-        }
-
         public static void ActionUpdated(string message)
         {
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.UPDATED)}[/][white on grey23]{Escape(message)}[/]");
-        }
-
-        public static void ActionUpdated(string message, string highlight)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.UPDATED)}[/][white on grey23]{Escape(message)} [/][yellow on grey23]{Escape(highlight)}[/]");
         }
 
         public static void ActionError(string message)
@@ -327,6 +297,28 @@ namespace DynamicsCrm.DevKit.Cli
         {
             var indent = GetIndent(LogLevel.Level0);
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text1)} [/][cyan]{Escape(text2)}[/]");
+        }
+
+        /// <summary>
+        /// Level 0 action with 3 text parameters
+        /// Format: [ACTION] text1 text2 text3
+        /// Colors: action (green), text1 (white), text2 (green), text3 (white)
+        /// </summary>
+        public static void ActionWithLevel0(string action, string text1, string text2, string text3)
+        {
+            var indent = GetIndent(LogLevel.Level0);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text1)}[/][green]{Escape(text2)}[/][white]{Escape(text3)}[/]");
+        }
+
+        /// <summary>
+        /// Level 0 action with 5 text parameters
+        /// Format: [ACTION] text1 text2 text3 text4 text5
+        /// Colors: action (green), text1 (white), text2 (cyan), text3 (green), text4 (white), text5 (green)
+        /// </summary>
+        public static void ActionWithLevel0(string action, string text1, string text2, string text3, string text4, string text5)
+        {
+            var indent = GetIndent(LogLevel.Level0);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(action)}[/]{indent}[white]{Escape(text1)}[/][cyan]{Escape(text2)}[/][green]{Escape(text3)}[/][white]{Escape(text4)}[/][green]{Escape(text5)}[/]");
         }
 
         #endregion

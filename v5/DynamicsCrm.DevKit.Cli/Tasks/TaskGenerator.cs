@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Json.type.ToLower() != nameof(GeneratorType.tsform) &&
                 Json.type.ToLower() != nameof(GeneratorType.jswebapi) &&
                 Json.type.ToLower() != nameof(GeneratorType.tswebapi) &&
-                Json.type.ToLower() != nameof(GeneratorType.csharp) 
+                Json.type.ToLower() != nameof(GeneratorType.csharp)
                 )
             {
                 SpectreLog.ActionError($"'type' should be: 'JsForm' or 'TsForm' or 'JsWebApi' or 'CSharp' or 'EarlyBound'. Please check DynamicsCrm.DevKit.Cli.json file.");
@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             SpectreLog.WriteLine("START");
             SpectreLog.WriteLine();
-            
+
             if (await IsValidAsync())
             {
                 var schemaNames = await GetSchemaNamesAsync();
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
                         }
                     }
                     else
@@ -221,7 +221,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ClearProgress();
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
-                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
+                        SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
                     }
                     else
                     {
@@ -272,7 +272,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ClearProgress();
                     if (string.IsNullOrEmpty(newCode))
                     {
-                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}", "(no forms)");
+                        SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}", "(no forms)");
                         continue;
                     }
 
@@ -289,7 +289,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         else
                         {
-                            SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
+                            SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
                         }
                     }
                     else
@@ -342,7 +342,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ClearProgress();
                     if (string.IsNullOrEmpty(newCode))
                     {
-                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}", "(no forms)");
+                        SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}", "(no forms)");
                         continue;
                     }
 
@@ -358,7 +358,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
-                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
+                        SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
                     }
                     else
                     {
@@ -390,7 +390,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                 if (Helper.IsTheSame(existingContent, newOptionSetCode))
                 {
-                    SpectreLog.ActionDoNothing("OptionSet.ts");
+                    SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, "OptionSet.ts");
                 }
                 else
                 {
@@ -402,7 +402,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
         }
-       
+
         private async Task GeneratorLateBoundAsync(List<string> schemaNames)
         {
             const string endsWith = ".generated.cs";
@@ -427,7 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ClearProgress();
                     if (File.Exists(fileEndsWith) && Helper.IsTheSame(oldCode, newCode))
                     {
-                        SpectreLog.ActionDoNothing($"{schemaName}{endsWith}");
+                        SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, $"{schemaName}{endsWith}");
                     }
                     else
                     {

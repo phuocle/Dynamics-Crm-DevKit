@@ -384,7 +384,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (process.ExitCode == 0)
             {
-                SpectreLog.ActionUpdated("Proxy types generated successfully to", Json.output);
+                SpectreLog.ActionWithLevel0(CliAction.UPDATED, "Proxy types generated successfully to", Json.output);
             }
             else
             {

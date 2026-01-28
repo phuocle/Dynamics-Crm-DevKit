@@ -173,14 +173,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var solutionFile = Path.Combine(CurrentDirectory, Json.folder, "Solutions-Extract", fileName);
             if (solutionType.ToLower() == "Managed".ToLower())
                 solutionFile = $"{Path.GetDirectoryName(solutionFile)}\\{Path.GetFileNameWithoutExtension(solutionFile)}_managed.zip";
-            
+
             var tempFile = await FileHelper.WriteTempFileAsync(fileName, response.ExportSolutionFile);
             var dir = Path.GetDirectoryName(solutionFile);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             File.Copy(tempFile, solutionFile, true);
 
             timer.Stop();
-            SpectreLog.ActionCreated($"..{solutionFile.Substring(CurrentDirectory.Length)}", $"({timer.Elapsed:c})");
+            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"..{solutionFile.Substring(CurrentDirectory.Length)}", $"({timer.Elapsed:c})");
             return solutionFile;
         }
 
@@ -279,7 +279,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var args = $"solution {action}";
             args += $" --zipfile \"{solutionZipFile}\"";
             args += $" --folder \"{Path.Combine(CurrentDirectory, Json.folder, Json.solutiontype)}\"";
-            
+
             // Map package type
             var packageType = Json.solutiontype; // Managed, Unmanaged, Both
             args += $" --packageType {packageType}";
