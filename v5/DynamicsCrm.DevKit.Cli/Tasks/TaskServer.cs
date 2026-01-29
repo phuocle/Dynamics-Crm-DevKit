@@ -1271,7 +1271,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         Target = pluginImage
                     };
                     request.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel4(CliAction.REGISTERED, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
+                    SpectreLog.ActionWithLevel4(CliAction.REGISTERED, imageType.ToString(), "Fields", imageAttributes.Split(",".ToCharArray()).ToList());
                     try
                     {
                         XrmHelper.COUNT_ExecuteAsync++;
@@ -1308,18 +1308,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     attributes == (imageAttributes.Trim() == "*" ? null : imageAttributes) &&
                     imagetype == (int)imageType)
                 {
-                    SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
+                    SpectreLog.ActionWithLevel4(CliAction.DO_NOTHING, imageType.ToString(), "Fields", imageAttributes.Split(",".ToCharArray()).ToList());
                 }
                 else
                 {
                     if (attributes == null || (attributes != (imageAttributes.Trim() == "*" ? null : imageAttributes) && imageAttributes.Length != 0))
                     {
                         pluginImage["sdkmessageprocessingstepimageid"] = rows[0].Id;
-                        SpectreLog.ActionWithLevel4(CliAction.UPDATED, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
+                        SpectreLog.ActionWithLevel4(CliAction.UPDATED, imageType.ToString(), "Fields", imageAttributes.Split(",".ToCharArray()).ToList());
                     }
                     else if (imageAttributes.Length == 0)
                     {
-                        SpectreLog.ActionWithLevel4(CliAction.DELETED, imageType.ToString(), imageName, imageAliasName, imageAttributes.Split(",".ToCharArray()).ToList());
+                        SpectreLog.ActionWithLevel4(CliAction.DELETED, imageType.ToString(), "Fields", imageAttributes.Split(",".ToCharArray()).ToList());
                         XrmHelper.COUNT_DeleteAsync++;
                         await ServiceClient.DeleteAsync("sdkmessageprocessingstepimage", rows[0].Id);
                         return Guid.NewGuid();
