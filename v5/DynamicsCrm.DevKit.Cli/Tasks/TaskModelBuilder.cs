@@ -132,7 +132,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionWithLevel1("OUTPUT: ", Json.output);
                 SpectreLog.ActionWithLevel1("NAMESPACE: ", Json.@namespace);
 
-                SpectreLog.WriteWithLevel(LogLevel.Level0, $"ModelBuilder {string.Join(" ", args)}");
+                SpectreLog.ActionWithLevel0($"ModelBuilder {string.Join(" ", args)}");
                 SpectreLog.WriteLine();
 
                 // Verify arguments

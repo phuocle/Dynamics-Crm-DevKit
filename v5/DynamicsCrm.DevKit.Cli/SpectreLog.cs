@@ -229,28 +229,6 @@ namespace DynamicsCrm.DevKit.Cli
 
         #endregion
 
-        #region WriteWithLevel
-
-        /// <summary>
-        /// Simple message with level indentation (no action tag)
-        /// </summary>
-        public static void WriteWithLevel(LogLevel level, string text)
-        {
-            var indent = GetIndent(level);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text)}[/]");
-        }
-
-        /// <summary>
-        /// Message with level + cyan highlight
-        /// </summary>
-        public static void WriteWithLevel(LogLevel level, string text, string highlight)
-        {
-            var indent = GetIndent(level);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text)}[/][cyan]{Escape(highlight)}[/]");
-        }
-
-        #endregion
-
         #region Highlight
 
         public static void WriteHighLight(string v1, string v2, string v3)
@@ -266,6 +244,17 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel0
+
+        /// <summary>
+        /// Level 0 message with 1 text parameter (no action tag)
+        /// Format: text1
+        /// Colors: text1 (white)
+        /// </summary>
+        public static void ActionWithLevel0(string text1)
+        {
+            var indent = GetIndent(LogLevel.Level0);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text1)}[/]");
+        }
 
         /// <summary>
         /// Level 0 action with 1 text parameter
@@ -314,6 +303,17 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel1
+
+        /// <summary>
+        /// Level 1 message with 1 text parameter (no action tag)
+        /// Format: text1
+        /// Colors: text1 (white)
+        /// </summary>
+        public static void ActionWithLevel1(string text1)
+        {
+            var indent = GetIndent(LogLevel.Level1);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text1)}[/]");
+        }
 
         /// <summary>
         /// Level 1 action with 1 text parameter
@@ -366,6 +366,17 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel2
+
+        /// <summary>
+        /// Level 2 message with 1 text parameter (no action tag)
+        /// Format:   text1
+        /// Colors: text1 (white)
+        /// </summary>
+        public static void ActionWithLevel2(string text1)
+        {
+            var indent = GetIndent(LogLevel.Level2);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text1)}[/]");
+        }
 
         /// <summary>
         /// Level 2 action with 2 text parameters
@@ -426,6 +437,17 @@ namespace DynamicsCrm.DevKit.Cli
         #region ActionWithLevel3
 
         /// <summary>
+        /// Level 3 message with 1 text parameter (no action tag)
+        /// Format:     text1
+        /// Colors: text1 (white)
+        /// </summary>
+        public static void ActionWithLevel3(string text1)
+        {
+            var indent = GetIndent(LogLevel.Level3);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text1)}[/]");
+        }
+
+        /// <summary>
         /// Level 3 action with 2 text parameters and list
         /// Format: [ACTION]     text1 text2 [text3]
         /// Colors: action (green), text1 (magenta), text2 (white), text3 list (cyan)
@@ -476,6 +498,17 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel4
+
+        /// <summary>
+        /// Level 4 message with 1 text parameter (no action tag)
+        /// Format:       text1
+        /// Colors: text1 (white)
+        /// </summary>
+        public static void ActionWithLevel4(string text1)
+        {
+            var indent = GetIndent(LogLevel.Level4);
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text1)}[/]");
+        }
 
         /// <summary>
         /// Level 4 action with 1 text parameter

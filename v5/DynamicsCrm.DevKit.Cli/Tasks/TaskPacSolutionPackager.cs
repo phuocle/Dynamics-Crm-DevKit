@@ -89,9 +89,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.WriteLine("Please install Power Platform CLI by running the following command:");
                 SpectreLog.WriteLine();
                 var installCmd = "dotnet tool install --global Microsoft.PowerApps.CLI.Tool";
-                SpectreLog.WriteWithLevel(LogLevel.Level1, installCmd);
+                SpectreLog.ActionWithLevel1(installCmd);
                 SpectreLog.WriteLine();
-                SpectreLog.WriteWithLevel(LogLevel.Level1, "Ref: https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction");
+                SpectreLog.ActionWithLevel1("Ref: https://learn.microsoft.com/en-us/power-platform/developer/cli/introduction");
                 return false;
             }
 
@@ -297,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
 
-            SpectreLog.WriteWithLevel(LogLevel.Level0, $"pac {args}");
+            SpectreLog.ActionWithLevel0($"pac {args}");
             SpectreLog.WriteLine();
 
             var process = new Process

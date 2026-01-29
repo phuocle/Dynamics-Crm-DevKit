@@ -327,7 +327,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.ActionWithLevel1("OUTPUT: ", Json.output);
             SpectreLog.ActionWithLevel1("NAMESPACE: ", Json.@namespace);
 
-            SpectreLog.WriteWithLevel(LogLevel.Level0, path + " " + CreateCommandArgsLog());
+            SpectreLog.ActionWithLevel0(path + " " + CreateCommandArgsLog());
             SpectreLog.WriteLine();
 
             var process = new Process

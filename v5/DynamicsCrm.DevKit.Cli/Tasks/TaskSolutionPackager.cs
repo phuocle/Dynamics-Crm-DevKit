@@ -346,7 +346,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var command = CreateCommandArgs(solutionZipFile);
             var path = "\"" + SolutionPackagerExe + "\"";
 
-            SpectreLog.WriteWithLevel(LogLevel.Level0, path + " " + command);
+            SpectreLog.ActionWithLevel0(path + " " + command);
             SpectreLog.WriteLine();
 
             var process = new Process

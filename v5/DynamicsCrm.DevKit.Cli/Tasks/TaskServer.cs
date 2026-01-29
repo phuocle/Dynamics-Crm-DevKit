@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         SpectreLog.WriteHighLight($"Found: ",$"{files.Count}", " files to deploy.");
                         foreach (var file in files)
                         {
-                            SpectreLog.WriteWithLevel(LogLevel.Level1, $"- {Path.GetFileName(file)}");
+                            SpectreLog.ActionWithLevel1($"- {Path.GetFileName(file)}");
                         }
                         SpectreLog.WriteLine();
                     }
@@ -467,24 +467,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var tool = Helper.FindSignTool();
             if (tool != null) return tool;
             SpectreLog.WriteLine();
-            SpectreLog.WriteWithLevel(LogLevel.Level0, "To sign assemblies, you need to install Windows SDK:");
+            SpectreLog.ActionWithLevel0("To sign assemblies, you need to install Windows SDK:");
             SpectreLog.WriteLine();
-            SpectreLog.WriteWithLevel(LogLevel.Level0, "Option 1: Install Windows 10/11 SDK (Recommended)");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "Download: ", "https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "During installation, select: ", "'Windows SDK Signing Tools for Desktop Apps'");
+            SpectreLog.ActionWithLevel0("Option 1: Install Windows 10/11 SDK (Recommended)");
+            SpectreLog.ActionWithLevel1("Download: ", "https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
+            SpectreLog.ActionWithLevel1("During installation, select: ", "'Windows SDK Signing Tools for Desktop Apps'");
             SpectreLog.WriteLine();
-            SpectreLog.WriteWithLevel(LogLevel.Level0, "Option 2: Install via Visual Studio Installer");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "1. Open Visual Studio Installer");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "2. Click 'Modify' on your Visual Studio installation");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "3. Go to 'Individual Components' tab");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "4. Search for and select: ", "'Windows 10 SDK' or 'Windows 11 SDK'");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "5. Click 'Modify' to install");
+            SpectreLog.ActionWithLevel0("Option 2: Install via Visual Studio Installer");
+            SpectreLog.ActionWithLevel1("1. Open Visual Studio Installer");
+            SpectreLog.ActionWithLevel1("2. Click 'Modify' on your Visual Studio installation");
+            SpectreLog.ActionWithLevel1("3. Go to 'Individual Components' tab");
+            SpectreLog.ActionWithLevel1("4. Search for and select: ", "'Windows 10 SDK' or 'Windows 11 SDK'");
+            SpectreLog.ActionWithLevel1("5. Click 'Modify' to install");
             SpectreLog.WriteLine();
-            SpectreLog.WriteWithLevel(LogLevel.Level0, "Option 3: Install via Chocolatey (Package Manager)");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "Run: ", "choco install windows-sdk-10.0");
+            SpectreLog.ActionWithLevel0("Option 3: Install via Chocolatey (Package Manager)");
+            SpectreLog.ActionWithLevel1("Run: ", "choco install windows-sdk-10.0");
             SpectreLog.WriteLine();
-            SpectreLog.WriteWithLevel(LogLevel.Level0, "After installation, SignTool.exe will be located at:");
-            SpectreLog.WriteWithLevel(LogLevel.Level1, "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
+            SpectreLog.ActionWithLevel0("After installation, SignTool.exe will be located at:");
+            SpectreLog.ActionWithLevel1("C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
             return tool;
         }
         private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)

@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     foreach (var dependency in item.dependencies)
                     {
-                        SpectreLog.WriteWithLevel(LogLevel.Level3, $" {dependency}");
+                        SpectreLog.ActionWithLevel3($" {dependency}");
                     }
                 }
                 SpectreLog.WriteLine();
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     SpectreLog.ActionWithLevel1(CliAction.UPDATED, webResourceName, "dependencies");
                     foreach (var d in foundDependencies)
-                        SpectreLog.WriteWithLevel(LogLevel.Level2, $"{d}");
+                        SpectreLog.ActionWithLevel2($"{d}");
                     await ServiceClient.UpdateAsync(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
@@ -177,7 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     SpectreLog.ActionWithLevel1($"{webResourceName}", "dependencies");
                     foreach (var d in foundDependencies)
-                        SpectreLog.WriteWithLevel(LogLevel.Level2, $"{d}");
+                        SpectreLog.ActionWithLevel2($"{d}");
                 }
             }
         }
