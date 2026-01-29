@@ -1204,6 +1204,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     update["plugintypeid"] = null;
                     XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(update);
+                    SpectreLog.ActionWithLevel3(CliAction.DEACTIVATED, $"{attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                 }
             }
             else
