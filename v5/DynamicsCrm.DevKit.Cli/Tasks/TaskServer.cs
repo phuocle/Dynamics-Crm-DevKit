@@ -1210,7 +1210,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (attribute.Action == PluginStepOperationEnum.Deactivate)
                 {
-                    SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, CliAction.DEACTIVATED.Trim(), $"{attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
+                    SpectreLog.ActionWithLevel3(CliAction.DEACTIVATED, $"{attribute.Message}", pluginTypeName, new List<string> { "MainOperation", "Synchronous" });
                 }
                 else
                 {
@@ -1436,9 +1436,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     Target = pluginStep
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
-                var actionText = attribute.Action == PluginStepOperationEnum.Deactivate
-                    ? $"{CliAction.REGISTERED.Trim()} {CliAction.DEACTIVATED.Trim()}"
-                    : CliAction.REGISTERED.Trim();
+                var actionText = attribute.Action == PluginStepOperationEnum.Deactivate ? $"{CliAction.REGISTERED} {CliAction.DEACTIVATED}" : CliAction.REGISTERED;
                 SpectreLog.ActionWithLevel3(actionText, $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
@@ -1532,7 +1530,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     else
                     {
-                        SpectreLog.ActionWithLevel3(CliAction.DO_NOTHING, CliAction.DEACTIVATED.Trim(), $"{attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                        SpectreLog.ActionWithLevel3(CliAction.DEACTIVATED, $"{attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     CliLogSecureUnsecure();
                     CliLogUpdateFields();
@@ -1557,7 +1555,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var needDeactivate = rows.Count == 1 &&
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
                             attribute.Action == PluginStepOperationEnum.Deactivate;
-                        var actionText = needDeactivate ? $"{CliAction.UPDATED.Trim()} {CliAction.DEACTIVATED.Trim()}" : CliAction.UPDATED.Trim();
+                        var actionText = needDeactivate ? $"{CliAction.UPDATED} {CliAction.DEACTIVATED}" : CliAction.UPDATED;
                         SpectreLog.ActionWithLevel3(actionText, $"{attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     CliLogSecureUnsecure();
