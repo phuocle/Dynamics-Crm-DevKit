@@ -141,6 +141,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var fileNuget = file;
                     SpectreLog.ActionWithLevel1(CliAction.FILE, Path.GetFileName(fileNuget));
                     var fileNugetDll = GetDllFileFromNugetPackage(fileNuget);
+                    // Extract types first to check for workflow
+                    var types = GetTypes(fileNugetDll);
+                    // Check if package contains Workflow activities - NOT supported by Dataverse Plugin Packages
+                    // See: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/dependent-assembly-plugins
+                    var workflowTypes = _AttributesCache
+                        .Where(x => x.Value.Any(a => a.PluginType == PluginType.Workflow))
+                        .Select(x => x.Key)
+                        .ToList();
+                    if (workflowTypes.Count > 0)
+                    {
+                        SpectreLog.ActionError($"Package {Path.GetFileName(fileNuget)} contains Workflow activities:");
+                        foreach (var wfType in workflowTypes)
+                        {
+                            SpectreLog.ActionError($"  - {wfType}");
+                        }
+                        SpectreLog.ActionError("Workflow extensions (custom workflow activities) are NOT supported in Plugin Packages.");
+                        SpectreLog.ActionError("Please deploy Workflow assemblies separately using .dll files instead of .nupkg packages.");
+                        SpectreLog.ActionError("See: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/dependent-assembly-plugins");
+                        continue;
+                    }
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
@@ -166,10 +186,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (ERROR.Length > 0)
                     {
                         SpectreLog.ActionError(ERROR);
-                        SpectreLog.ActionError($"Package {Path.GetFileName(fileNuget)} not signed. Package deployment stopped.");
+                        SpectreLog.ActionError($"Package {Path.GetFileName(fileNuget)} deployment failed.");
                         continue;
                     }
-                    await DeployDllAsync(fileNugetDll, DeployFileType.Nuget);
+                    // DeployDllAsync uses types from _AttributesCache, which was already populated by GetTypes above
+                    await DeployFileAsync(fileNugetDll, types, DeployFileType.Nuget);
                 }
                 else
                     SpectreLog.ActionError($"Not support file extension: {new FileInfo(file).Extension}");
@@ -1954,9 +1975,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     _assemblyCache[fileName] = assembly;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                SpectreLog.ActionError($"Failed to load assembly {file}: {ex.Message}");
+                // Silently continue - this is expected for dependency DLLs that may not load
+                // (e.g., Microsoft.Xrm.Sdk.Workflow.dll in packages with Workflow activities)
             }
             return assembly;
         }
