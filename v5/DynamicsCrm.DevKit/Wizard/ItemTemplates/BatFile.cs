@@ -76,6 +76,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                             var content5 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity-Config.json");
                             content5 = content5.Replace("$config.json$", content5);
                             replacementsDictionary.Add("$config.json$", content5);
+                            var content6 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity.md");
+                            replacementsDictionary.Add("$mdfile$", content6);
                             break;
                     }
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
@@ -92,6 +94,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         public bool ShouldAddProjectItem(string filePath)
         {
             if (filePath == "Plugin-Managed-Identity-Config.json") return IsPluginManagedIdentity;
+            if (filePath == "Plugin-Managed-Identity.md") return IsPluginManagedIdentity;
             return true;
         }
     }
