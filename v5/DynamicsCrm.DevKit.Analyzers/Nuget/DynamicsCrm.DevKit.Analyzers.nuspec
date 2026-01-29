@@ -22,7 +22,7 @@
     <tags>Dynamics Dynamics365 DynamicsCrm Crm DevKit Analyzer Dataverse Roslyn Plugin CodeAnalysis BestPractices</tags>
   </metadata>
   <files>
-    <file src="..\bin\Release\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <file src="..\bin\$configuration$\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
     <file src="..\tools\*.ps1" target="tools\" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
 	<file src="..\docs\README.md" target="docs\README.md" />

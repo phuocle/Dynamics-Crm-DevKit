@@ -28,14 +28,24 @@
 	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.0.0" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.60" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
+		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.27" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="System.Workflow.Activities">
+	    <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Workflow.Activities.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="CustomApis\" />
 	</ItemGroup>
 	<Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />

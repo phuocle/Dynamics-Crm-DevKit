@@ -1547,7 +1547,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var needActivate = rows.Count == 1 &&
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Deactivate &&
                             attribute.Action == PluginStepOperationEnum.Activate;
-                        var actionText = needActivate ? $"{CliAction.UPDATED.Trim()} {CliAction.ACTIVATED.Trim()}" : CliAction.UPDATED.Trim();
+                        var actionText = needActivate ? $"{CliAction.ACTIVATED}" : CliAction.UPDATED;
                         SpectreLog.ActionWithLevel3(actionText, $"{attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     else
@@ -1555,7 +1555,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var needDeactivate = rows.Count == 1 &&
                             rows[0].GetAttributeValue<OptionSetValue>("statecode")?.Value == (int)PluginStepOperationEnum.Activate &&
                             attribute.Action == PluginStepOperationEnum.Deactivate;
-                        var actionText = needDeactivate ? $"{CliAction.UPDATED} {CliAction.DEACTIVATED}" : CliAction.UPDATED;
+                        var actionText = needDeactivate ? $"{CliAction.DEACTIVATED}" : CliAction.UPDATED;
                         SpectreLog.ActionWithLevel3(actionText, $"{attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                     }
                     CliLogSecureUnsecure();

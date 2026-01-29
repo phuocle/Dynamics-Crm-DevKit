@@ -266,7 +266,8 @@ try {
                 $nuspec,
                 "-Version", $Version,
                 "-OutputDirectory", $publishDir,
-                "-NoPackageAnalysis"
+                "-NoPackageAnalysis",
+                "-Properties", "Configuration=$Configuration"
             )
 
             & $nugetExe $packArgs
