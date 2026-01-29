@@ -181,7 +181,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         public static void ActionError(string message)
         {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.ERROR)}[/][red on grey23]{Escape(message)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green on grey23]{Escape(CliAction.ERROR)} [/][red on grey23]{Escape(message)}[/]");
         }
 
         #endregion
