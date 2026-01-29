@@ -64,6 +64,13 @@
       "displayname": "???",
       "pluralname": "???",
       "name": "???"
+    },
+    {
+      "profile": "Sqlite",
+      "solution": "devkitv4",
+      "displayname": "Sqlite",
+      "pluralname": "Sqlites",
+      "name": "Sqlite"
     }
   ],
   "generators": [

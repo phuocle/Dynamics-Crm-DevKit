@@ -44,9 +44,6 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="CustomApis\" />
-	</ItemGroup>
 	<Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />
 </Project>
