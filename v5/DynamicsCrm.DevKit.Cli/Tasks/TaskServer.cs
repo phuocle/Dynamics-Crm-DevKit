@@ -1743,6 +1743,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var pluginTypeId = rows[0].GetAttributeValue<Guid>("plugintypeid");
             try
             {
+                var customApisCacheRows = _CustomApisCache.Where(x => x.Key == attribute.Message).Select(x => x.Value).ToList();
+                if (customApisCacheRows.Count == 1)
+                {
+                    var update = new Entity("customapi", customApisCacheRows[0].Id);
+                    update["plugintypeid"] = null;
+                    XrmHelper.COUNT_UpdateAsync++;
+                    await ServiceClient.UpdateAsync(update);
+                }
                 await DeletePluginStepsAsync();
                 XrmHelper.COUNT_DeleteAsync++;
                 await ServiceClient.DeleteAsync("plugintype", pluginTypeId);

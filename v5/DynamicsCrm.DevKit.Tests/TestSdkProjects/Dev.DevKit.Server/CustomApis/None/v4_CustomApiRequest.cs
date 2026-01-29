@@ -4,7 +4,7 @@ using System;
 
 namespace Dev.DevKit.Server.CustomApis.None
 {
-    [CrmPluginRegistration("v4_CustomApiRequest", "v4_CustomApi", PluginType.CustomApi)]
+    [CrmPluginRegistration("v4_CustomApiRequest", "v4_CustomApi", PluginType.CustomApi, Unregister = true)]
     public class v4_CustomApiRequest : IPlugin
     {
         /*
