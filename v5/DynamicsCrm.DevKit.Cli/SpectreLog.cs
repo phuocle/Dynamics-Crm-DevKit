@@ -9,10 +9,6 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli
 {
-    /// <summary>
-    /// Enhanced CLI logging using Spectre.Console.
-    /// Provides table-based output, async progress, spinners, and rich formatting.
-    /// </summary>
     public static class SpectreLog
     {
         private const string PREFIX = "║";
@@ -33,10 +29,6 @@ namespace DynamicsCrm.DevKit.Cli
 
 
         #region Banner & Header
-
-        /// <summary>
-        /// Displays the CLI banner with version info - sexy gradient design.
-        /// </summary>
         public static void WriteHeader()
         {
             var width = 112;
@@ -57,10 +49,6 @@ namespace DynamicsCrm.DevKit.Cli
             AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorBox}]  ║[/]");
             AnsiConsole.MarkupLine($"[{colorBox}]╚{new string('═', width)}╝[/]");
         }
-
-        /// <summary>
-        /// Displays the help panel.
-        /// </summary>
         public static void WriteHelp()
         {
             var panel = new Panel(
@@ -117,18 +105,10 @@ namespace DynamicsCrm.DevKit.Cli
 
             AnsiConsole.Write(panel);
         }
-
-        /// <summary>
-        /// Writes an exception to the console.
-        /// </summary>
         public static void WriteException(Exception ex)
         {
             AnsiConsole.WriteException(ex, ExceptionFormats.ShortenEverything);
         }
-
-        /// <summary>
-        /// Waits for a key press.
-        /// </summary>
         public static void WaitForKeyPress()
         {
             if (System.Diagnostics.Debugger.IsAttached)
@@ -143,10 +123,6 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region Async Progress & Status
-
-        /// <summary>
-        /// Executes an async action with a status spinner (no return value).
-        /// </summary>
         public static async Task WithStatusAsync(string status, Func<StatusContext, Task> action)
         {
             await AnsiConsole.Status()
@@ -154,10 +130,6 @@ namespace DynamicsCrm.DevKit.Cli
                 .SpinnerStyle(Style.Parse("green"))
                 .StartAsync(status, action);
         }
-
-        /// <summary>
-        /// Shows animated waiting dots with cancellation support.
-        /// </summary>
         public static void WaitingWithCancellation(string message = "", CancellationToken cancellationToken = default)
         {
             AnsiConsole.Markup($"[white]{PREFIX}[/]{message}");
@@ -195,11 +167,6 @@ namespace DynamicsCrm.DevKit.Cli
         {
             AnsiConsole.Markup($"\r{new string(' ', 43)}\r");
         }
-
-        /// <summary>
-        /// Writes process output directly without the PREFIX (║).
-        /// Use this for external process stdout/stderr output.
-        /// </summary>
         public static void WriteProcessOutput(string line)
         {
             if (!string.IsNullOrWhiteSpace(line))
@@ -234,76 +201,41 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel0
-
-        /// <summary>
-        /// Level 0 message with 1 text parameter (no action tag)
-        /// Colors: text1 (white)
-        /// </summary>
         public static void ActionWithLevel0(string text1)
         {
             var indent = GetIndent(LogLevel.Level0);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}]{PREFIX}[/]{indent}[{ACTION_COLOR}]{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 0: [ACTION] text1
-        /// Colors: action (green), text1 (white)
-        /// </summary>
         public static void ActionWithLevel0(string action, string text1)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level0);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 0: [ACTION] text1 text2
-        /// Colors: action (green), text1 (white), text2 (cyan)
-        /// </summary>
         public static void ActionWithLevel0(string action, string text1, string text2)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level0);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)}[/]");
         }
-
-        /// <summary>
-        /// Level 0: [ACTION] text1 text2 text3
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta)
-        /// </summary>
         public static void ActionWithLevel0(string action, string text1, string text2, string text3)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level0);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)}[/]");
         }
-
-        /// <summary>
-        /// Level 0: [ACTION] text1 text2 text3 text4
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow)
-        /// </summary>
         public static void ActionWithLevel0(string action, string text1, string text2, string text3, string text4)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level0);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)}[/]");
         }
-
-        /// <summary>
-        /// Level 0: [ACTION] text1 text2 text3 text4 text5
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white)
-        /// </summary>
         public static void ActionWithLevel0(string action, string text1, string text2, string text3, string text4, string text5)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level0);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)}[/]");
         }
-
-        /// <summary>
-        /// Level 0: [ACTION] text1 text2 text3 text4 text5 text6
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white), text6 (cyan)
-        /// </summary>
         public static void ActionWithLevel0(string action, string text1, string text2, string text3, string text4, string text5, string text6)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level0);
@@ -314,87 +246,47 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel1
-
-        /// <summary>
-        /// Level 1 message with 1 text parameter (no action tag)
-        /// Colors: text1 (white)
-        /// </summary>
         public static void ActionWithLevel1(string text1)
         {
             var indent = GetIndent(LogLevel.Level1);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}]{PREFIX}[/]{indent}[{TEXT1_COLOR}]{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1
-        /// Colors: action (green), text1 (white)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level1);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1 text2
-        /// Colors: action (green), text1 (white), text2 (cyan)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1, string text2)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level1);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1 text2 text3
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1, string text2, string text3)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level1);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1 text2 text3 text4
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1, string text2, string text3, string text4)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level1);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1 text2 text3 text4 text5
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1, string text2, string text3, string text4, string text5)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level1);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1 text2 text3 text4 text5 text6
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white), text6 (cyan)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1, string text2, string text3, string text4, string text5, string text6)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level1);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)} [/][{TEXT6_COLOR}{bg}]{Escape(text6)}[/]");
         }
-
-        /// <summary>
-        /// Level 1: [ACTION] text1 text2 [text3 list]
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 list (magenta)
-        /// </summary>
         public static void ActionWithLevel1(string action, string text1, string text2, List<string> text3)
         {
             var text3Value = text3?.Count > 0 ? $"[{string.Join(", ", text3)}]" : string.Empty;
@@ -404,87 +296,47 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel2
-
-        /// <summary>
-        /// Level 2 message with 1 text parameter (no action tag)
-        /// Colors: text1 (white)
-        /// </summary>
         public static void ActionWithLevel2(string text1)
         {
             var indent = GetIndent(LogLevel.Level2);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}]{PREFIX}[/]{indent}[{TEXT1_COLOR}]{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1
-        /// Colors: action (green), text1 (white)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level2);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1 text2
-        /// Colors: action (green), text1 (white), text2 (cyan)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1, string text2)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level2);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1 text2 text3
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1, string text2, string text3)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level2);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1 text2 text3 text4
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1, string text2, string text3, string text4)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level2);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1 text2 text3 text4 text5
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1, string text2, string text3, string text4, string text5)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level2);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1 text2 text3 text4 text5 text6
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white), text6 (cyan)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1, string text2, string text3, string text4, string text5, string text6)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level2);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)} [/][{TEXT6_COLOR}{bg}]{Escape(text6)}[/]");
         }
-
-        /// <summary>
-        /// Level 2: [ACTION] text1 text2 [text3 list]
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 list (magenta)
-        /// </summary>
         public static void ActionWithLevel2(string action, string text1, string text2, List<string> text3)
         {
             var text3Value = text3?.Count > 0 ? $"[{string.Join(", ", text3)}]" : string.Empty;
@@ -494,97 +346,52 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel3
-
-        /// <summary>
-        /// Level 3 message with 1 text parameter (no action tag)
-        /// Colors: text1 (white)
-        /// </summary>
         public static void ActionWithLevel3(string text1)
         {
             var indent = GetIndent(LogLevel.Level3);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}]{PREFIX}[/]{indent}[{TEXT1_COLOR}]{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1
-        /// Colors: action (green), text1 (white)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level3);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2
-        /// Colors: action (green), text1 (white), text2 (cyan)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level3);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2 text3
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2, string text3)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level3);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2 text3 text4
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2, string text3, string text4)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level3);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2 text3 text4 text5
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2, string text3, string text4, string text5)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level3);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2 text3 text4 text5 text6
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white), text6 (cyan)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2, string text3, string text4, string text5, string text6)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level3);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)} [/][{TEXT6_COLOR}{bg}]{Escape(text6)}[/]");
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2 [text3 list]
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 list (magenta)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2, List<string> text3)
         {
             var text3Value = text3?.Count > 0 ? $"[{string.Join(", ", text3)}]" : string.Empty;
             ActionWithLevel3(action, text1, text2, text3Value);
         }
-
-        /// <summary>
-        /// Level 3: [ACTION] text1 text2 text3 [text4 list]
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 list (yellow)
-        /// </summary>
         public static void ActionWithLevel3(string action, string text1, string text2, string text3, List<string> text4)
         {
             var text4Value = text4?.Count > 0 ? $"[{string.Join(", ", text4)}]" : string.Empty;
@@ -594,97 +401,52 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region ActionWithLevel4
-
-        /// <summary>
-        /// Level 4 message with 1 text parameter (no action tag)
-        /// Colors: text1 (white)
-        /// </summary>
         public static void ActionWithLevel4(string text1)
         {
             var indent = GetIndent(LogLevel.Level4);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}]{PREFIX}[/]{indent}[{TEXT1_COLOR}]{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1
-        /// Colors: action (green), text1 (white)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level4);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2
-        /// Colors: action (green), text1 (white), text2 (cyan)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level4);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2 text3
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2, string text3)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level4);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2 text3 text4
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2, string text3, string text4)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level4);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2 text3 text4 text5
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2, string text3, string text4, string text5)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level4);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2 text3 text4 text5 text6
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 (yellow), text5 (white), text6 (cyan)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2, string text3, string text4, string text5, string text6)
         {
             var indent = IsNoIndent(action) ? "" : GetIndent(LogLevel.Level4);
             var bg = GetBg(action);
             AnsiConsole.MarkupLine($"[{TEXT1_COLOR}{bg}]{PREFIX}[/][{ACTION_COLOR}{bg}]{Escape(action)} [/][{TEXT1_COLOR}{bg}]{indent}{Escape(text1)} [/][{TEXT2_COLOR}{bg}]{Escape(text2)} [/][{TEXT3_COLOR}{bg}]{Escape(text3)} [/][{TEXT4_COLOR}{bg}]{Escape(text4)} [/][{TEXT5_COLOR}{bg}]{Escape(text5)} [/][{TEXT6_COLOR}{bg}]{Escape(text6)}[/]");
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2 [text3 list]
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 list (magenta)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2, List<string> text3)
         {
             var text3Value = text3?.Count > 0 ? $"[{string.Join(", ", text3)}]" : string.Empty;
             ActionWithLevel4(action, text1, text2, text3Value);
         }
-
-        /// <summary>
-        /// Level 4: [ACTION] text1 text2 text3 [text4 list]
-        /// Colors: action (green), text1 (white), text2 (cyan), text3 (magenta), text4 list (yellow)
-        /// </summary>
         public static void ActionWithLevel4(string action, string text1, string text2, string text3, List<string> text4)
         {
             var text4Value = text4?.Count > 0 ? $"[{string.Join(", ", text4)}]" : string.Empty;
@@ -694,11 +456,6 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region Table Methods
-
-        /// <summary>
-        /// Writes rows with aligned columns using plain text (no Spectre.Table).
-        /// Uses green for text labels, white for parameter names (--xxx), cyan for values.
-        /// </summary>
         public static void WriteTable(List<string[]> rows, int labelWidth = 30)
         {
             foreach (var row in rows)
@@ -732,10 +489,6 @@ namespace DynamicsCrm.DevKit.Cli
                 }
             }
         }
-
-        /// <summary>
-        /// Strips Spectre.Console markup tags from text.
-        /// </summary>
         private static string StripMarkup(string text)
         {
             if (string.IsNullOrEmpty(text)) return string.Empty;
@@ -746,10 +499,6 @@ namespace DynamicsCrm.DevKit.Cli
         #endregion
 
         #region Helpers
-
-        /// <summary>
-        /// Escapes Spectre.Console markup characters in text.
-        /// </summary>
         private static string Escape(string text)
         {
             if (string.IsNullOrEmpty(text)) return string.Empty;
