@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -295,7 +295,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
 
             if (await IsValidAsync())
@@ -305,7 +305,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
 
         private async Task RunProxyTypeAsync()

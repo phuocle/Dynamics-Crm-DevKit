@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployWebResourceFilesAsync()
         {
-            SpectreLog.WriteLine("DEPLOYING WEBRESOURCES WITH PATTERNS FILES");
+            SpectreLog.ActionWithLevel0("DEPLOYING WEBRESOURCES WITH PATTERNS FILES");
             foreach (var pattern in Json.includefiles)
             {
                 SpectreLog.WriteHighLight(" - ", $"{pattern}", "");
@@ -85,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (await IsSupportWebResourceDependencyAsync() && dependencies.Count > 0)
             {
                 SpectreLog.WriteLine();
-                SpectreLog.WriteLine("DEPLOYING WEBRESOURCES DEPENDENCIES WITH PATTERNS FILES");
+                SpectreLog.ActionWithLevel0("DEPLOYING WEBRESOURCES DEPENDENCIES WITH PATTERNS FILES");
                 foreach (var item in Json.dependencies)
                 {
                     foreach (var webresource in item.webresources)
@@ -124,10 +124,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     "</webresources></importexportxml>"
             };
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("PUBLISHING WEBRESOURCES");
+            SpectreLog.ActionWithLevel0("PUBLISHING WEBRESOURCES");
             await ServiceClient.ExecuteAsync(publish);
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("PUBLISHED WEBRESOURCES");
+            SpectreLog.ActionWithLevel0("PUBLISHED WEBRESOURCES");
         }
 
         private async Task UpdateDependencyAsync(Dependency dependency, int current)
@@ -636,7 +636,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
@@ -650,7 +650,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
     }
 }

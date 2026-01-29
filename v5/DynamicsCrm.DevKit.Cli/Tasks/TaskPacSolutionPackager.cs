@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 SpectreLog.ActionError($"{TaskType} 'pac' command not found.");
                 SpectreLog.WriteLine();
-                SpectreLog.WriteLine("Please install Power Platform CLI by running the following command:");
+                SpectreLog.ActionWithLevel0("Please install Power Platform CLI by running the following command:");
                 SpectreLog.WriteLine();
                 var installCmd = "dotnet tool install --global Microsoft.PowerApps.CLI.Tool";
                 SpectreLog.ActionWithLevel1(installCmd);
@@ -234,7 +234,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
 
             if (await IsValidAsync())
@@ -267,7 +267,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
 
         private async Task RunPacAsync(string solutionZipFile)

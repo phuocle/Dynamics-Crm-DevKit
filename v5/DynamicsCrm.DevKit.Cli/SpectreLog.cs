@@ -130,17 +130,6 @@ namespace DynamicsCrm.DevKit.Cli
         #region Async Progress & Status
 
         /// <summary>
-        /// Executes an async action with a status spinner.
-        /// </summary>
-        public static async Task<T> WithStatusAsync<T>(string status, Func<StatusContext, Task<T>> action)
-        {
-            return await AnsiConsole.Status()
-                .Spinner(Spinner.Known.Dots)
-                .SpinnerStyle(Style.Parse("green"))
-                .StartAsync(status, action);
-        }
-
-        /// <summary>
         /// Executes an async action with a status spinner (no return value).
         /// </summary>
         public static async Task WithStatusAsync(string status, Func<StatusContext, Task> action)
@@ -181,20 +170,6 @@ namespace DynamicsCrm.DevKit.Cli
             AnsiConsole.MarkupLine($"[white]{PREFIX}[/]");
         }
 
-        public static void WriteLine(string text)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(text)}[/]");
-        }
-
-        public static void WriteLine(string v1, string v2, string v3)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(v1)}[/][white]{Escape(v2)}[/][green]{Escape(v3)}[/]");
-        }
-
-        public static void WriteLine(string v1, string v2, string v3, string v4)
-        {
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(v1)}[/][white]{Escape(v2)}[/][green]{Escape(v3)}[/][white]{Escape(v4)}[/]");
-        }
 
         public static void WriteProgress(int current, int total)
         {
@@ -252,7 +227,7 @@ namespace DynamicsCrm.DevKit.Cli
         public static void ActionWithLevel0(string text1)
         {
             var indent = GetIndent(LogLevel.Level0);
-            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[white]{Escape(text1)}[/]");
+            AnsiConsole.MarkupLine($"[white]{PREFIX}[/]{indent}[green]{Escape(text1)}[/]");
         }
 
         /// <summary>
@@ -711,19 +686,6 @@ namespace DynamicsCrm.DevKit.Cli
                     AnsiConsole.MarkupLine($"[white]{PREFIX}[/][green]{Escape(text)}[/]");
                 }
             }
-        }
-
-        /// <summary>
-        /// Writes dictionary items with aligned columns using plain text.
-        /// </summary>
-        public static void WriteTable(Dictionary<string, string> items)
-        {
-            var rows = new List<string[]>();
-            foreach (var item in items)
-            {
-                rows.Add(new[] { item.Key, item.Value });
-            }
-            WriteTable(rows);
         }
 
         /// <summary>

@@ -189,8 +189,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             // const bool DEV_CONNECTION_TEST_ONLY = true;
             // if (DEV_CONNECTION_TEST_ONLY)
             // {
-            //     SpectreLog.WriteLine("[DEV] Connection test successful - exiting early for connection type development");
-            //     SpectreLog.WriteLine("END");
+            //     SpectreLog.ActionWithLevel0("[DEV] Connection test successful - exiting early for connection type development");
+            //     SpectreLog.ActionWithLevel0("END");
             //     SpectreLog.WriteLine();
             //     AnsiConsole.MarkupLine("[grey]Press any key to exit...[/]");
             //     Console.ReadKey(true);

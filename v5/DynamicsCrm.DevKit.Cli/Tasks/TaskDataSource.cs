@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Cli;
+using DynamicsCrm.DevKit.Cli;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
@@ -89,7 +89,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionWithLevel0(CliAction.CREATED, "Data Source: ", DataSourceName);
             }
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
 
         public async Task RegisterDataSourceAsync()

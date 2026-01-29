@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             if (await IsValidAsync())
             {
                 var files = Helper.GetFiles(CurrentFolder, Json.includefiles, Json.excludefiles);
@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_UpdateAsync: ", $"{XrmHelper.COUNT_UpdateAsync}");
             //#endif
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
         private async Task DeployFilesAsync(List<string> files)
         {

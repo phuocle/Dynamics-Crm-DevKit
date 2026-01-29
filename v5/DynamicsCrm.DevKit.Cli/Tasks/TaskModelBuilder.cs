@@ -85,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
 
             if (await IsValidAsync())
@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
 
         private async Task RunModelBuilderAsync()
@@ -197,7 +197,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.WriteProcessOutput(message);
                     break;
                 case ProgressType.Warning:
-                    SpectreLog.WriteLine($"[yellow]{message}[/]");
+                    SpectreLog.ActionWithLevel0($"[yellow]{message}[/]");
                     break;
                 case ProgressType.Error:
                     SpectreLog.ActionError(message);

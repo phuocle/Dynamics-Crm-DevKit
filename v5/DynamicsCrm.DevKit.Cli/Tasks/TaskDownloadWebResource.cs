@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
@@ -52,14 +52,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
                 var webResourcesFiles = await XrmHelper.GetWebResourcesBySolutionAsync(ServiceClient, Json.solution);
                 if (webResourcesFiles.Count == 0)
                 {
-                    SpectreLog.WriteLine("Not found any webresource to download");
+                    SpectreLog.ActionWithLevel0("Not found any webresource to download");
                     SpectreLog.WriteLine();
                 }
                 else
@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
     }
 }

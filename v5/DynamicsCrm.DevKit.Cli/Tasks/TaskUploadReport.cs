@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RunAsync()
         {
-            SpectreLog.WriteLine("START");
+            SpectreLog.ActionWithLevel0("START");
             SpectreLog.WriteLine();
 
             if (await IsValidAsync())
@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var files = Directory.GetFiles(folder, "*.rdl", SearchOption.AllDirectories);
                     if (files.Length == 0)
                     {
-                        SpectreLog.WriteLine("Not found any reports to deploy");
+                        SpectreLog.ActionWithLevel0("Not found any reports to deploy");
                         SpectreLog.WriteLine();
                     }
                     else
@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             SpectreLog.WriteLine();
-            SpectreLog.WriteLine("END");
+            SpectreLog.ActionWithLevel0("END");
         }
     }
 }
