@@ -9,8 +9,57 @@ This guide explains how to configure and deploy Dataverse Plugins using Azure Ma
 
 ## Prerequisites
 1. **Azure CLI**: Ensure `az` is installed and you are logged in (`az login`).
-2. **Permissions**: You need permissions to create Resource Groups, Key Vaults, and App Registrations in your Azure Subscription.
-3. **Power Platform**: Admin access to target Dataverse environment.
+2. **Power Platform**: Admin access to target Dataverse environment.
+
+## Permissions
+
+### Required Permissions
+
+To run the PowerShell script successfully, the user must have the following Azure permissions:
+
+| Resource | Required Role/Permission |
+|----------|--------------------------|
+| **Subscription** | Contributor (or higher) to create Resource Groups |
+| **Resource Group** | Owner or Contributor to manage resources within the group |
+| **Key Vault** | Key Vault Administrator or Key Vault Secrets Officer |
+| **Azure AD / Entra ID** | Application Administrator or Cloud Application Administrator (to create App Registrations) |
+| **Certificates** | Ability to create and manage certificates in Key Vault |
+
+> **Note**: If you have **Global Administrator** or **Owner** at the subscription level, you have all required permissions.
+
+### If You Do NOT Have Sufficient Permissions
+
+If you cannot obtain the required permissions (or your organization policy restricts these actions), follow this delegation workflow:
+
+#### Step A: Prepare Files for the Administrator
+
+Copy the following files and send them to a user who has sufficient Azure permissions (e.g., Azure Administrator):
+
+| File | Description |
+|------|-------------|
+| `Plugin-Managed-Identity.ps1` | The PowerShell automation script |
+| `Plugin-Managed-Identity-Config.json` | Configuration file (fill in your desired values first) |
+| `Plugin-Managed-Identity.md` | This documentation (for reference) |
+
+#### Step B: What the Administrator Needs to Do
+
+The administrator should:
+1. Review and verify the configuration in `Plugin-Managed-Identity-Config.json`
+2. Run the script: `.\Plugin-Managed-Identity.ps1`
+3. Wait for the script to complete successfully
+
+#### Step C: Files to Return
+
+After the script completes, the administrator should return the following files to you:
+
+| File | Description |
+|------|-------------|
+| `Plugin-Managed-Identity-Config.json` | Updated with auto-populated values (`TenantId`, `AppId`, `KeyVaultURL`, `CertificateThumbprint`, `CertificateSHA256Hash`) |
+| `<CertificateFileName>.pfx` | The generated certificate file (password is in the config) |
+| `<CertificateFileName>.cer` | The public certificate file |
+| `AssemblyInfo2.cs` | Generated C# file with the Managed Identity attribute |
+
+> **Important**: Handle `.pfx` files securely. Do NOT share via unencrypted email. Use secure file transfer methods.
 
 ## Step 1: Configuration
 Open `Plugin-Managed-Identity-Config.json` and fill in the required values:
