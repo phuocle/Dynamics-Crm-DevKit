@@ -1305,11 +1305,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
-                            SpectreLog.ActionError($"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"{pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         else if (fe.Message.Contains("does not support this image type") || fe.Message.Contains("does not support Post Image"))
                         {
-                            SpectreLog.ActionError($"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"{pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         else
                         {
@@ -1356,11 +1356,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("entity doesn't contain attribute with"))
                         {
-                            SpectreLog.ActionError($"Step {pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"{pluginStepName} have invalid {imageType} Attribute {imageAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         if (fe.Message.Contains("does not support this image type") || fe.Message.Contains("does not support Post Image"))
                         {
-                            SpectreLog.ActionError($"Step {pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"{pluginStepName} does not support this image type {imageType}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return Guid.Empty;
                     }
@@ -1460,7 +1460,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
                 var actionText = attribute.Action == PluginStepOperationEnum.Deactivate ? $"{CliAction.REGISTERED} {CliAction.DEACTIVATED}" : CliAction.REGISTERED;
-                SpectreLog.ActionWithLevel3(actionText, $"Step {attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
+                SpectreLog.ActionWithLevel3(actionText, $"{attribute.Message}", attribute.Name, new List<string> { $"{attribute.Stage}", $"{attribute.ExecutionMode}" });
                 CliLogSecureUnsecure();
                 CliLogUpdateFields();
                 try
@@ -1473,10 +1473,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (fe.Message.Contains("The dependent component Attribute "))
                     {
-                        SpectreLog.ActionError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                        SpectreLog.ActionError($"{attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         return null;
                     }
-                    SpectreLog.ActionError($"Step {attribute.Name} register failed: {fe.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
+                    SpectreLog.ActionError($"{attribute.Name} register failed: {fe.Message.TrimEnd(".".ToCharArray())}. Assemply deployed, but the deployment of this assembly stopped.");
                     return null;
                 }
             }
@@ -1592,7 +1592,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (fe.Message.Contains("The dependent component Attribute "))
                         {
-                            SpectreLog.ActionError($"Step {attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
+                            SpectreLog.ActionError($"{attribute.Name} have invalid Image Attribute {attribute.FilteringAttributes}. Assemply deployed, but the deployment of this assembly stopped.");
                         }
                         return null;
                     }

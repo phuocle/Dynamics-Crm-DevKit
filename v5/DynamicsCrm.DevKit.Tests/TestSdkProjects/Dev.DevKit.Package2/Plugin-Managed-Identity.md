@@ -1,4 +1,4 @@
-﻿# Plugin Managed Identity Setup
+# Plugin Managed Identity Setup
 
 This guide explains how to configure and deploy Dataverse Plugins using Azure Managed Identity.
 
@@ -122,3 +122,4 @@ After the script completes successfully:
 ## Security Note
 - **DO NOT commit** the `.pfx` file or `Plugin-Managed-Identity-Config.json` (if it contains real secrets) to source control.
 - Use `.gitignore` to exclude sensitive files.
+

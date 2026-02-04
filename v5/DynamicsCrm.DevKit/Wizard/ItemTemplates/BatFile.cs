@@ -70,13 +70,13 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                             break;
                         case "Plugin-Managed-Identity.ps1":
                             IsPluginManagedIdentity = true;
-                            var content4 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity.ps1");
+                            var content4 = await VsixHelper.ReadEmbeddedResourceAsync("ManagedIdentity.Plugin-Managed-Identity.ps1");
                             content4 = content4.Replace("$batfile.bat$", content4);
                             replacementsDictionary.Add("$batfile.bat$", content4);
-                            var content5 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity-Config.json");
+                            var content5 = await VsixHelper.ReadEmbeddedResourceAsync("ManagedIdentity.Plugin-Managed-Identity-Config.json");
                             content5 = content5.Replace("$config.json$", content5);
                             replacementsDictionary.Add("$config.json$", content5);
-                            var content6 = await VsixHelper.ReadEmbeddedResourceAsync("Plugin-Managed-Identity.md");
+                            var content6 = await VsixHelper.ReadEmbeddedResourceAsync("ManagedIdentity.Plugin-Managed-Identity.md");
                             replacementsDictionary.Add("$mdfile$", content6);
                             break;
                     }

@@ -171,12 +171,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\TracingServiceFake.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity-Config.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.ps1" />
-  </ItemGroup>
-  <ItemGroup>
+
+
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\build.js" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.ts" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ts\devkit.d.ts" />
@@ -211,7 +207,11 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\AppSettings.FromPac.json" />
   </ItemGroup>
+	<ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ManagedIdentity\Plugin-Managed-Identity.md" />
+  </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\Plugin-Managed-Identity.md" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ManagedIdentity\Plugin-Managed-Identity-Config.json" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ManagedIdentity\Plugin-Managed-Identity.ps1" />
   </ItemGroup>
 </Project>
