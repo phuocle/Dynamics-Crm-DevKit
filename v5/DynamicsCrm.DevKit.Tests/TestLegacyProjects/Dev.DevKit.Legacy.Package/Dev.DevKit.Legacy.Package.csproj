@@ -36,6 +36,14 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="CustomAcitons\" />
+	  <Folder Include="CustomApis\" />
+	  <Folder Include="DataProviders\" />
+	  <Folder Include="t4\" />
+	  <Folder Include="Plugins\" />
+	  <Folder Include="Workflows\" />
+	</ItemGroup>
 	<Import Project="..\Dev.DevKit.Legacy.Shared\Dev.DevKit.Legacy.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Legacy.Shared\Dev.DevKit.Legacy.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />
 </Project>

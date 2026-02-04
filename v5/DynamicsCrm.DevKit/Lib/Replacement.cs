@@ -120,6 +120,9 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.Workflow");
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.CrmSdk.CoreTools");
             await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.PowerPlatform.Dataverse.Client");
+            await NuGetHelper.SetReplacementAsync(replacements, "Azure.Identity");
+            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.Extensions.Configuration");
+            await NuGetHelper.SetReplacementAsync(replacements, "Microsoft.Extensions.Configuration.Json");
             await NuGetHelper.SetReplacementAsync(replacements, "NSubstitute");
             await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestAdapter");
             await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestFramework");
