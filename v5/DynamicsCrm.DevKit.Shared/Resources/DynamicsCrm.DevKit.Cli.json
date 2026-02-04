@@ -55,6 +55,19 @@
           ]
         }
       ]
+    },
+    {
+      "profile": "DEBUGTS",
+      "solution": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "html\\**.html",
+        "images\\**.png",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [],
+      "dependencies": []
     }
   ],
   "datasources": [
