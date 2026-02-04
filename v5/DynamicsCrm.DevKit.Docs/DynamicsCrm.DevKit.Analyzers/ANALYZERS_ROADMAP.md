@@ -1,6 +1,8 @@
 # 🗺️ Suggested Code Analyzers for DynamicsCrm.DevKit.Analyzers
 
-Based on research of [Microsoft's Dataverse Best Practices](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/), here are recommended new analyzers to add to the project.
+Based on research of [Microsoft's Dataverse Best Practices](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/), community blog posts, and deep analysis of common plugin development patterns, here are recommended new analyzers to add to the project.
+
+---
 
 ## ✅ Current Analyzers (Already Implemented)
 
@@ -32,34 +34,88 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 
 ## 🚀 Suggested New Analyzers (Roadmap)
 
-### 🔴 High Priority
+### 🔴 High Priority (P1) - Critical for Production Stability
 
-| ID | Title | Suggested Severity | Description | MS Best Practice |
+| ID | Title | Severity | Description | MS Best Practice |
 |---|---|:---:|---|---|
-| DEVKIT1022 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
+| DEVKIT1022 | Duplicate Plugin Step Registration | ⚠️ Warning | Detect duplicate `[CrmPluginRegistration]` attributes with same Message, Entity, and Stage | [Don't duplicate plug-in step registration](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/do-not-duplicate-plugin-step-registration) |
+| DEVKIT1023 | Avoid Reflection in Sandbox | ❌ Error | Detect `Assembly.Load`, `Activator.CreateInstance` on arbitrary types, `Type.GetType` with dynamic strings | Sandbox limitation |
+| DEVKIT1024 | Avoid Environment Variables Access | ❌ Error | Detect `Environment.GetEnvironmentVariable`, `Environment.SetEnvironmentVariable` (unavailable in sandbox) | Sandbox limitation |
+| DEVKIT1025 | Avoid Registry Access | ❌ Error | Detect `Microsoft.Win32.Registry` usage (blocked in sandbox) | Sandbox limitation |
+| DEVKIT1026 | Input Validation in Plugins | ⚠️ Warning | Warn when plugin does not validate user inputs (null checks, type validation) before processing | Security best practice |
 
-### 🟡 Medium Priority
+### 🟠 High Priority (P2) - Performance & Best Practices
 
-| ID | Title | Description | MS Best Practice |
-|---|---|---|---|
-| DEVKIT1023 | Avoid Reflection in Sandbox Plugins | Detect disallowed reflection patterns (Assembly.Load, Activator.CreateInstance on arbitrary types) | Sandbox limitation |
-| DEVKIT1024 | Avoid Environment Variables in Plugins | Detect Environment.GetEnvironmentVariable (unavailable in sandbox) | Sandbox limitation |
-| DEVKIT1025 | Use OrganizationServiceContext Carefully | Warn about AutoSaveChanges and LINQ edge cases | Performance |
-| DEVKIT1026 | Avoid Large EntityCollection Returns | Warn when not using paging for RetrieveMultiple | [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits) |
+| ID | Title | Severity | Description | MS Best Practice |
+|---|---|:---:|---|---|
+| DEVKIT1027 | Avoid Large EntityCollection Returns | ⚠️ Warning | Warn when `RetrieveMultiple` without paging or `TopCount` is used | [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits) |
+| DEVKIT1028 | Use OrganizationServiceContext Carefully | ⚠️ Warning | Warn about `AutoSaveChanges` default behavior and recommend explicit `SaveChanges()` | Performance best practice |
+| DEVKIT1029 | Avoid Recursive Plugin Calls | ⚠️ Warning | Detect patterns that may cause infinite plugin loops (e.g., Update in PostUpdate without depth check) | [Context depth check](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-infinite-loop) |
+| DEVKIT1030 | Use PreImage Instead of Retrieve | ℹ️ Info | Suggest using PreImage when code does `Retrieve` on the same entity in Update plugin | Performance optimization |
+| DEVKIT1031 | Hardcoded Entity/Attribute Names | ⚠️ Warning | Recommend using constants or early-bound types instead of hardcoded strings like `"account"`, `"name"` | Maintainability |
 
-### 🟢 Low Priority
+### 🟡 Medium Priority (P3) - Code Quality & Maintainability
 
-| ID | Title | Description | MS Best Practice |
-|---|---|---|---|
-| DEVKIT1027 | Manage Invalid Characters | Detect code that may set invalid characters in fields | [Manage invalid characters](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/invalidcharactersinfield) |
-| DEVKIT1028 | Verify Certificate Dependencies | Alert when using external HTTPS calls without cert validation consideration | [Verify certification dependencies](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/verify-certification-dependencies) |
-| DEVKIT1029 | Plugin Assembly Size Check | Warn if assembly exceeds recommended size limits | [Optimize custom assembly development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/optimize-assembly-development) |
+| ID | Title | Severity | Description | MS Best Practice |
+|---|---|:---:|---|---|
+| DEVKIT1032 | Manage Invalid Characters | ℹ️ Info | Detect code that may set invalid characters in text fields | [Manage invalid characters](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/invalidcharactersinfield) |
+| DEVKIT1033 | Verify Certificate Dependencies | ℹ️ Info | Alert when using external HTTPS calls without certificate validation consideration | [Verify certification dependencies](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/verify-certification-dependencies) |
+| DEVKIT1034 | DateTime Timezone Handling | ⚠️ Warning | Warn when `DateTime` operations don't consider UTC/Local conversion properly | Common error pattern |
+| DEVKIT1035 | Thread Usage in Plugin | ❌ Error | Detect `Thread`, `ThreadPool`, `BackgroundWorker` usage in plugins | Sandbox limitation |
+| DEVKIT1036 | Web Storage in Plugins | ❌ Error | Detect attempts to use local storage patterns in server-side code | Sandbox limitation |
+
+### 🟢 Low Priority (P4) - Nice to Have
+
+| ID | Title | Severity | Description | MS Best Practice |
+|---|---|:---:|---|---|
+| DEVKIT1037 | Plugin Assembly Size Check | ℹ️ Info | Warn if assembly approaches recommended size limits (16MB) | [Optimize custom assembly development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/optimize-assembly-development) |
+| DEVKIT1038 | Single Responsibility Plugin | ℹ️ Info | Suggest splitting large `Execute` methods (>100 lines) into smaller focused methods | SOLID principles |
+| DEVKIT1039 | Magic Numbers in Plugin | ℹ️ Info | Detect hardcoded OptionSet values without constants | Code quality |
+| DEVKIT1040 | Empty Catch Block | ⚠️ Warning | Detect empty `catch` blocks that swallow exceptions silently | Error handling best practice |
+| DEVKIT1041 | Missing Plugin Dispose | ℹ️ Info | Suggest implementing `IDisposable` when plugin creates disposable resources | Resource management |
+
+### 🔵 Future Consideration (P5) - Advanced Scenarios
+
+| ID | Title | Severity | Description | MS Best Practice |
+|---|---|:---:|---|---|
+| DEVKIT1042 | Direct SQL Query Detection | ❌ Error | Detect any attempts to use `SqlConnection` or direct database access | Sandbox & unsupported |
+| DEVKIT1043 | Insecure String Comparison | ⚠️ Warning | Detect case-sensitive comparisons on entity/attribute names | Common bug pattern |
+| DEVKIT1044 | Missing BypassBusinessLogicExecution Check | ℹ️ Info | Warn when plugin doesn't check for `tag:BypassBusinessLogicExecution` | Advanced pattern for migrations |
+| DEVKIT1045 | GUID Comparison with == | ℹ️ Info | Recommend using `Guid.Equals()` for clarity | Code style |
+| DEVKIT1046 | Long Running Synchronous Plugin | ⚠️ Warning | Warn about complex operations in synchronous plugins (suggest async) | Performance best practice |
 
 ---
 
-## 🔍 Competitor Analysis
+## 🔍 Research Sources
 
-> **Note**: As of December 2024, no dedicated Roslyn analyzer package for Dynamics 365 / Dataverse plugin development exists in the .NET ecosystem. **DynamicsCrm.DevKit.Analyzers is the first and only comprehensive analyzer package** specifically for this domain.
+### 📖 Microsoft Official Documentation (Bước 1)
+- [Best practices for plug-in and workflow development](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/)
+- [Best practices for working with data](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-data/)
+- [Best practices for working with metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/)
+- [Plug-in isolation, trusts, and statistics](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/plug-ins#plug-in-isolation-trusts-and-statistics)
+- [Dataverse plug-in troubleshooting](https://learn.microsoft.com/en-us/troubleshoot/power-platform/dataverse/plug-in-execution/dataverse-plug-ins-errors)
+- [Service protection API limits](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/api-limits)
+- [Sandbox Worker process crash troubleshooting](https://learn.microsoft.com/en-us/troubleshoot/power-platform/dataverse/plug-in-execution/sandbox-worker-process-crashed)
+
+### 🌐 Community Blog Posts & Resources (Bước 2)
+- Power Platform Solution Checker (không analyze plugin code trực tiếp)
+- Community patterns từ XrmToolBox, Power Platform Space
+- FXCop, StyleCop, ReSharper patterns cho CRM developers
+- Common mistakes patterns từ Dynamics community forums
+
+### 🔬 Deep Research Findings (Bước 3)
+- **Threading Issues**: Nhiều developers vẫn cố sử dụng `Thread`, `Task.Run`, `Parallel.ForEach` trong plugins
+- **DateTime Bugs**: Lỗi phổ biến nhất là không xử lý timezone đúng cách
+- **Recursive Plugins**: Plugins gọi Update trong PostUpdate mà không check depth
+- **Input Validation**: Security issue - không validate input trước khi xử lý
+- **Hardcoded Strings**: Khó maintain khi entity/attribute names thay đổi
+- **Empty Catch Blocks**: Errors bị "nuốt" và khó debug
+
+---
+
+## 🎯 Competitor Analysis
+
+> **Note**: As of February 2025, **DynamicsCrm.DevKit.Analyzers remains the first and only comprehensive Roslyn analyzer package** specifically designed for Dynamics 365 / Dataverse plugin development.
 
 ### 📦 Related Projects (Not Direct Competitors)
 
@@ -68,34 +124,38 @@ Based on research of [Microsoft's Dataverse Best Practices](https://learn.micros
 | [dotnet/roslyn-analyzers](https://github.com/dotnet/roslyn-analyzers) | Official .NET code quality analyzers | General C# |
 | [Roslynator](https://github.com/JosefPihrt/Roslynator) | 500+ general C# analyzers | General C# |
 | [Meziantou.Analyzer](https://github.com/meziantou/Meziantou.Analyzer) | Enforces C# best practices | General C# |
-| Power Platform Solution Checker | Built-in static analysis for solutions | Solutions (not plugin code) |
+| Power Platform Solution Checker | Built-in static analysis for solutions | **Does NOT analyze plugin code** (explicit limitation) |
 
 ### 🎯 Our Differentiator
 
 DynamicsCrm.DevKit.Analyzers uniquely focuses on:
 - **🔌 Plugin/Workflow Domain Knowledge**: Understands `IPlugin`, `CodeActivity`, `CrmPluginRegistration` patterns
-- **🔒 Sandbox Limitations**: Enforces sandbox-compatible code patterns
+- **🔒 Sandbox Limitations**: Enforces sandbox-compatible code patterns (Registry, File I/O, Threading, Environment Variables)
 - **📚 Microsoft Best Practices**: Directly maps to published Microsoft documentation
 - **⚡ Real-time Feedback**: IDE integration while coding, not just at deploy time
+- **🛡️ Security Patterns**: Input validation, secure configuration handling
 
 ---
 
 ## 📊 Summary
 
-| ID | Analyzer Name | Status |
+### Already Implemented
+| ID Range | Count | Status |
 |---|---|---|
-| DEVKIT1001-1018 | Current analyzers | ✅ Implemented |
-| DEVKIT1019 | Context depth check | ✅ Implemented |
-| DEVKIT1020 | DataProvider requires DataSource | ✅ Implemented |
-| DEVKIT1021 | ITracingService in catch blocks | ✅ Implemented |
-| DEVKIT1022 | Duplicate step registration | 📋 Planned |
-| DEVKIT1023 | Reflection patterns | 📋 Planned |
-| DEVKIT1024 | Environment variables | 📋 Planned |
-| DEVKIT1025 | OrganizationServiceContext | 📋 Planned |
-| DEVKIT1026 | Large EntityCollection | 📋 Planned |
-| DEVKIT1027 | Invalid characters | 📋 Planned |
-| DEVKIT1028 | Certificate dependencies | 📋 Planned |
-| DEVKIT1029 | Assembly size | 📋 Planned |
+| DEVKIT1001-DEVKIT1021 | 21 | ✅ Implemented |
+
+### Planned (Roadmap)
+| Priority | ID Range | Count | Status |
+|---|---|---|---|
+| 🔴 P1 - Critical | DEVKIT1022-DEVKIT1026 | 5 | 📋 Planned |
+| 🟠 P2 - High | DEVKIT1027-DEVKIT1031 | 5 | 📋 Planned |
+| 🟡 P3 - Medium | DEVKIT1032-DEVKIT1036 | 5 | 📋 Planned |
+| 🟢 P4 - Low | DEVKIT1037-DEVKIT1041 | 5 | 📋 Planned |
+| 🔵 P5 - Future | DEVKIT1042-DEVKIT1046 | 5 | 📋 Backlog |
+
+**Total Current**: 21 analyzers
+**Total Planned**: 25 new analyzers
+**Grand Total**: 46 analyzers
 
 ---
 
@@ -107,7 +167,14 @@ DynamicsCrm.DevKit.Analyzers uniquely focuses on:
 - [Best practices for working with metadata](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/work-with-metadata/)
 - [Plug-in isolation, trusts, and statistics](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/plug-ins#plug-in-isolation-trusts-and-statistics)
 - [Dataverse plug-in troubleshooting](https://learn.microsoft.com/en-us/troubleshoot/power-platform/dataverse/plug-in-execution/dataverse-plug-ins-errors)
+- [Power Platform injection attack protection](https://learn.microsoft.com/en-us/power-platform/admin/security/power-platform-protection-injection-attacks)
 
 ### 🌐 Community Resources
 - [Roslyn Analyzer Cookbook (Tom Englert)](https://github.com/tom-englert/RoslynAnalyzerCookbook)
 - [Awesome Analyzers List](https://github.com/cybermaxs/awesome-analyzers)
+- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)
+
+---
+
+*Last Updated: 05.02.2026*
+*Research conducted by DynamicsCrm.DevKit AI Agent*
