@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using System.Linq;
+
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
     /// <summary>
@@ -62,15 +64,72 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check for HttpClient instantiation
             if (typeName == "System.Net.Http.HttpClient")
             {
+                if (IsConnectionCloseSetToTrue(objectCreation)) return;
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.KeepAliveFalse,
                     objectCreation.GetLocation(), "HttpClient");
             }
             // Check for WebRequest.Create or HttpWebRequest instantiation
             else if (typeName == "System.Net.HttpWebRequest" || typeName == "System.Net.WebRequest")
             {
+                if (IsKeepAliveSetToFalse(objectCreation)) return;
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.KeepAliveFalse,
                     objectCreation.GetLocation(), "WebRequest");
             }
+        }
+
+        private bool IsConnectionCloseSetToTrue(ObjectCreationExpressionSyntax objectCreation)
+        {
+            var variableName = GetVariableName(objectCreation);
+            if (string.IsNullOrEmpty(variableName)) return false;
+
+            var block = objectCreation.FirstAncestorOrSelf<BlockSyntax>();
+            if (block == null) return false;
+
+            var targetLeft = $"{variableName}.DefaultRequestHeaders.ConnectionClose";
+
+            foreach (var assignment in block.DescendantNodes().OfType<AssignmentExpressionSyntax>())
+            {
+                if (assignment.Left.ToString() == targetLeft &&
+                    assignment.Right.Kind() == SyntaxKind.TrueLiteralExpression)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsKeepAliveSetToFalse(ObjectCreationExpressionSyntax objectCreation)
+        {
+            var variableName = GetVariableName(objectCreation);
+            if (string.IsNullOrEmpty(variableName)) return false;
+
+            var block = objectCreation.FirstAncestorOrSelf<BlockSyntax>();
+            if (block == null) return false;
+
+            var targetLeft = $"{variableName}.KeepAlive";
+            foreach (var assignment in block.DescendantNodes().OfType<AssignmentExpressionSyntax>())
+            {
+                if (assignment.Left.ToString() == targetLeft &&
+                    assignment.Right.Kind() == SyntaxKind.FalseLiteralExpression)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private string GetVariableName(SyntaxNode node)
+        {
+            if (node.Parent is EqualsValueClauseSyntax equalsValue &&
+                equalsValue.Parent is VariableDeclaratorSyntax variableDeclarator)
+            {
+                return variableDeclarator.Identifier.Text;
+            }
+            if (node.Parent is AssignmentExpressionSyntax assignment)
+            {
+                return assignment.Left.ToString();
+            }
+            return null;
         }
     }
 }

@@ -26,7 +26,12 @@ namespace System.Net.Http
 {
     public class HttpClient : System.IDisposable
     {
+        public HttpRequestHeaders DefaultRequestHeaders { get; set; }
         public void Dispose() { }
+    }
+    public class HttpRequestHeaders
+    {
+        public bool? ConnectionClose { get; set; }
     }
 }
 namespace System.Net
@@ -89,6 +94,19 @@ public class RegularClass
         public async Task NoDiagnostic_When_NonPlugin_Uses_HttpClient()
         {
             var src = WrapInRegularClass("using (var client = new System.Net.Http.HttpClient()) { }");
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Sets_ConnectionClose_True()
+        {
+            var src = WrapInPlugin(@"
+            using (var client = new System.Net.Http.HttpClient())
+            {
+                client.DefaultRequestHeaders.ConnectionClose = true;
+            }
+            ");
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 

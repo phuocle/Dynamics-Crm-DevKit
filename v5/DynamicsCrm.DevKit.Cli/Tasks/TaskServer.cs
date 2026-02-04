@@ -281,13 +281,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Bind", Path.GetFileName(file), "ApplicationId", applicationId.ToString());
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Bind", Path.GetFileName(file), "ApplicationId", applicationId.ToString());
                 }
                 else
                 {
@@ -298,7 +298,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginPackage };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Bind", Path.GetFileName(file), $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Bind", Path.GetFileName(file), "ApplicationId", applicationId.ToString());
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -431,13 +431,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Bind", assemblyName, $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.REGISTERED, "Bind", assemblyName, "ApplicationId", applicationId.ToString());
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
                 else if (rows.Entities[0].GetAttributeValue<EntityReference>("managedidentityid")?.Id == managedIdentityId)
                 {
-                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Bind", assemblyName, $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.DO_NOTHING, "Bind", assemblyName, "ApplicationId", applicationId.ToString());
                 }
                 else
                 {
@@ -448,7 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     };
                     var request2 = new UpdateRequest { Target = pluginAssembly };
                     request2.Parameters.Add("SolutionUniqueName", Json.solution);
-                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Bind", assemblyName, $"ApplicationId: {applicationId}");
+                    SpectreLog.ActionWithLevel1(CliAction.UPDATED, "Bind", assemblyName, "ApplicationId", applicationId.ToString());
                     XrmHelper.COUNT_ExecuteAsync++;
                     await ServiceClient.ExecuteAsync(request2);
                 }
@@ -536,7 +536,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ["credentialsource"] = new OptionSetValue(2),
                     ["subjectscope"] = new OptionSetValue(1),
                     ["managedidentityid"] = Guid.NewGuid(),
-                    ["name"] = $"{assemblyName}-{AppId.ToString().ToUpper()}"
+                    ["name"] = $"{assemblyName}-{AppId.ToString().ToUpper()}",
+                    ["version"] = 1 // v1 format: uses login.microsoftonline.com issuer
                 };
                 if (rows.Entities.Count == 0)
                 {

@@ -88,6 +88,19 @@ public class RegularClass
             await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Sets_Timeout()
+        {
+            var src = WrapInPlugin(@"
+            using (var client = new System.Net.Http.HttpClient())
+            {
+                client.Timeout = System.TimeSpan.FromSeconds(30);
+            }
+            ");
+            await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
         #endregion
     }
 }

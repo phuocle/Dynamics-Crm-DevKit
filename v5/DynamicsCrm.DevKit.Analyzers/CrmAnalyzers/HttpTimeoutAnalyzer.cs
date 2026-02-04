@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using System.Linq;
+
 namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 {
     /// <summary>
@@ -62,9 +64,44 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             // Check for HttpClient instantiation
             if (typeName == "System.Net.Http.HttpClient")
             {
+                if (IsTimeoutSet(objectCreation)) return;
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.HttpTimeout,
                     objectCreation.GetLocation(), "HttpClient");
             }
+        }
+
+        private bool IsTimeoutSet(ObjectCreationExpressionSyntax objectCreation)
+        {
+            var variableName = GetVariableName(objectCreation);
+            if (string.IsNullOrEmpty(variableName)) return false;
+
+            var block = objectCreation.FirstAncestorOrSelf<BlockSyntax>();
+            if (block == null) return false;
+
+            var targetLeft = $"{variableName}.Timeout";
+
+            foreach (var assignment in block.DescendantNodes().OfType<AssignmentExpressionSyntax>())
+            {
+                if (assignment.Left.ToString() == targetLeft)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private string GetVariableName(SyntaxNode node)
+        {
+            if (node.Parent is EqualsValueClauseSyntax equalsValue &&
+                equalsValue.Parent is VariableDeclaratorSyntax variableDeclarator)
+            {
+                return variableDeclarator.Identifier.Text;
+            }
+            if (node.Parent is AssignmentExpressionSyntax assignment)
+            {
+                return assignment.Left.ToString();
+            }
+            return null;
         }
     }
 }

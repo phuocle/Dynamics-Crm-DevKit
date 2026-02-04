@@ -122,3 +122,4 @@ After the script completes successfully:
 ## Security Note
 - **DO NOT commit** the `.pfx` file or `Plugin-Managed-Identity-Config.json` (if it contains real secrets) to source control.
 - Use `.gitignore` to exclude sensitive files.
+

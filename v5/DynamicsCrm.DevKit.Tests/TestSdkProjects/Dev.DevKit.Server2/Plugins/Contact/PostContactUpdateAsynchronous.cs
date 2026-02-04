@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace Dev.DevKit.Server2.Plugins.Contact
 {
@@ -45,18 +46,44 @@ namespace Dev.DevKit.Server2.Plugins.Contact
             var scopes = new List<string> { "https://vault.azure.net/.default" };
             var accessToken = identityService.AcquireToken(scopes);
 
-            tracing?.DebugContext(context);
+            //tracing?.DebugContext(context);
 
-            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing);
+            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, accessToken);
         }
 
-        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, string accessToken)
         {
             var targetEntity = context.InputParameterOrDefault<Entity>("Target");
             context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
             context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
             //YOUR PLUGIN-CODE GO HERE
-
+            var keyVaultUrl = "https://devdevkitserver2.vault.azure.net/";
+            var secretName = "DevDevKitServer2";
+            var secretUrl = $"{keyVaultUrl}secrets/{secretName}?api-version=7.4";
+            var secretValue = string.Empty;
+            using (var httpClient = new System.Net.Http.HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.ConnectionClose = true;
+                httpClient.Timeout = TimeSpan.FromMinutes(1);
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+                var response = httpClient.GetAsync(secretUrl).GetAwaiter().GetResult();
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    var start = result.IndexOf("\"value\":\"", StringComparison.OrdinalIgnoreCase) + 9;
+                    var end = result.IndexOf("\"", start, StringComparison.OrdinalIgnoreCase);
+                    if (start > 9 && end > start)
+                    {
+                        secretValue = result.Substring(start, end - start);
+                    }
+                }
+                else
+                {
+                    throw new InvalidPluginExecutionException($"Azure KeyVault error: {response.StatusCode} {response.ReasonPhrase}");
+                }
+            }
+            tracing.Trace($"Azure Access Token version: {accessToken}");
+            throw new InvalidPluginExecutionException($"secretValue = {secretValue}");
         }
     }
 }
