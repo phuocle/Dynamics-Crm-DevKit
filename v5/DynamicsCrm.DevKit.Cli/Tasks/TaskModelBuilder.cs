@@ -118,20 +118,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var args = BuildModelBuilderArgs();
                 modelBuilder.Parameters.LoadArguments(args);
 
-                SpectreLog.ActionWithLevel0("EXECUTE: ", "ModelBuilder 2.0.16");
+                SpectreLog.ActionWithLevel0("[EXECUTE]", "ModelBuilder 2.0.16");
 
                 if (Json.entities == "*" || Json.entities.ToLower() == "all")
                 {
-                    SpectreLog.ActionWithLevel1("FILTER: ", "All entities");
+                    SpectreLog.ActionWithLevel1("[FILTER]", "All entities");
                 }
                 else
                 {
-                    SpectreLog.ActionWithLevel1("FILTER: ", $"Entities: {Json.entities}");
+                    SpectreLog.ActionWithLevel1("[FILTER]", "Entities", Json.entities);
                 }
 
-                SpectreLog.ActionWithLevel1("OUTPUT: ", Json.output);
-                SpectreLog.ActionWithLevel1("NAMESPACE: ", Json.@namespace);
-
+                SpectreLog.ActionWithLevel1("[OUTPUT]", Json.output);
+                SpectreLog.ActionWithLevel1("[NAMESPACE]", Json.@namespace);
+                SpectreLog.WriteLine();
                 SpectreLog.ActionWithLevel0($"ModelBuilder {string.Join(" ", args)}");
                 SpectreLog.WriteLine();
 
