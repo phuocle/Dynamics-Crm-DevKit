@@ -240,11 +240,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (await IsValidAsync())
             {
                 var action = Json.type.ToLower();
-                SpectreLog.ActionWithLevel0("EXECUTE: ", $"pac solution {action}");
-                SpectreLog.ActionWithLevel1("ACTION: ", Json.type);
-                SpectreLog.ActionWithLevel1("SOLUTION: ", Json.solution);
-                SpectreLog.ActionWithLevel1("TYPE: ", Json.solutiontype);
-                SpectreLog.ActionWithLevel1("FOLDER: ", $"..\\{Json.folder}\\{Json.solutiontype}");
+                SpectreLog.ActionWithLevel0("[EXECUTE]", $"pac solution {action}");
+                SpectreLog.ActionWithLevel1("[ACTION]", Json.type);
+                SpectreLog.ActionWithLevel1("[SOLUTION]", Json.solution);
+                SpectreLog.ActionWithLevel1("[TYPE]", Json.solutiontype);
+                SpectreLog.ActionWithLevel1("[FOLDER]", $"..\\{Json.folder}\\{Json.solutiontype}");
 
                 var solutionZipFile = await GetSolutionZipFileAsync();
 
@@ -253,13 +253,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     if (Json.solutiontype.ToLower().Trim() == "Both".ToLower())
                     {
-                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("[OUTPUT] ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                         var solutionZipFileManaged = $"{Path.GetDirectoryName(solutionZipFile)}\\{Path.GetFileNameWithoutExtension(solutionZipFile)}_managed.zip";
-                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("[OUTPUT] ", ".." + solutionZipFileManaged.Substring(CurrentDirectory.Length));
                     }
                     else
                     {
-                        SpectreLog.ActionWithLevel1("OUTPUT: ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
+                        SpectreLog.ActionWithLevel1("[OUTPUT] ", ".." + solutionZipFile.Substring(CurrentDirectory.Length));
                     }
                 }
 
@@ -296,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     args += $" --map \"{map}\"";
                 }
             }
-
+            SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0($"pac {args}");
             SpectreLog.WriteLine();
 
@@ -349,11 +349,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (process.ExitCode == 0)
             {
-                SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"PAC solution {action} completed successfully");
+                SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"pac solution {action} completed successfully");
             }
             else
             {
-                SpectreLog.ActionError($"PAC exited with code {process.ExitCode}");
+                SpectreLog.ActionError($"pac solution {action} exited with code {process.ExitCode}");
             }
         }
     }

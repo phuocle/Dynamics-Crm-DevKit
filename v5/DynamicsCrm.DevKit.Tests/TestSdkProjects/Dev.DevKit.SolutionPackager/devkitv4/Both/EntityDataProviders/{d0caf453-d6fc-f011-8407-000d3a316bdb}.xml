@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDataProvider xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityDataProviderId>{d0caf453-d6fc-f011-8407-000d3a316bdb}</EntityDataProviderId>
+  <Name>v4_sqlite</Name>
+  <DataSourceLogicalName>v4_sqlite</DataSourceLogicalName>
+  <IsCustomizable>1</IsCustomizable>
+  <RetrievePluginTypeExportKey>8C6C52DD4D28A827A33E8B652F1F9B4C2C654AF4895EE17744BD26BB2D2FEC8E</RetrievePluginTypeExportKey>
+  <RetrieveMultiplePluginTypeExportKey>E6B3E1EE5CD89AE25BCDCD08481A34FB539A55B8D223941E0F484D6E9EBE25C5</RetrieveMultiplePluginTypeExportKey>
+  <CreatePluginTypeExportKey>D6ECB584EA98E11F691F390FC9D6AC2F074548B0F0FFE97308A0C064E4E380E5</CreatePluginTypeExportKey>
+  <UpdatePluginTypeExportKey>177537303C5FC6EC0B0F1D3708D9EC8FB20F674CD9824F7A36C05BC151DB50DE</UpdatePluginTypeExportKey>
+  <DeletePluginTypeExportKey>158DC6915879C19F04C49CCE5581C6B22A1C707A9B8DC9F01BC8EFFA6BE2D8B0</DeletePluginTypeExportKey>
+  <LookupExpansionEnabled>0</LookupExpansionEnabled>
+</EntityDataProvider>

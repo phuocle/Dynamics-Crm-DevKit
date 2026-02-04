@@ -13,6 +13,8 @@
   <Project Path="Dev.DevKit.Server2/Dev.DevKit.Server2.csproj" />
   <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="fd00dc29-d72e-4deb-89e4-aad3072960c3" />
   <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="a0bd4a94-1baa-4157-ae19-85b683272d84" />
+  <Project Path="Dev.DevKit.SolutionPackager/Dev.DevKit.SolutionPackager.csproj" />
   <Project Path="Dev.DevKit.Test/Dev.DevKit.Test.csproj" />
+  <Project Path="Dev.DevKit.UiTest/Dev.DevKit.UiTest.csproj" />
   <Project Path="Dev.DevKit.WebResource/Dev.DevKit.WebResource.csproj" />
 </Solution>
