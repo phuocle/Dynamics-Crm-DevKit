@@ -9,6 +9,9 @@
   <Project Path="Dev.DevKit.Package/Dev.DevKit.Package.csproj" />
   <Project Path="Dev.DevKit.Package2/Dev.DevKit.Package2.csproj" />
   <Project Path="Dev.DevKit.ProxyTypes/Dev.DevKit.ProxyTypes.csproj" />
+  <Project Path="Dev.DevKit.Report/Dev.DevKit.Report.rptproj">
+    <Deploy />
+  </Project>
   <Project Path="Dev.DevKit.Server/Dev.DevKit.Server.csproj" />
   <Project Path="Dev.DevKit.Server2/Dev.DevKit.Server2.csproj" />
   <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="fd00dc29-d72e-4deb-89e4-aad3072960c3" />
@@ -17,4 +20,5 @@
   <Project Path="Dev.DevKit.Test/Dev.DevKit.Test.csproj" />
   <Project Path="Dev.DevKit.UiTest/Dev.DevKit.UiTest.csproj" />
   <Project Path="Dev.DevKit.WebResource/Dev.DevKit.WebResource.csproj" />
+  <Project Path="Dev.DevKit.WebResourceTs/Dev.DevKit.WebResourceTs.csproj" />
 </Solution>

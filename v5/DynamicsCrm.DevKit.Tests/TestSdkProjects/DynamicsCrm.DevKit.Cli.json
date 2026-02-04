@@ -31,7 +31,8 @@
         "images\\**.png",
         "js\\**.js",
         "lib\\**.js",
-        "resources\\*.resx"
+        "resources\\*.resx",
+        "build\\*.js"
       ],
       "excludefiles": [
         "test\\**.js"
@@ -54,6 +55,23 @@
             "v4_/lib/devkit.js"
           ]
         }
+      ]
+    },
+    {
+      "profile": "DEBUGTS",
+      "solution": "devkitv4",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "html\\**.html",
+        "images\\**.png",
+        "resources\\*.resx",
+        "build\\*.js"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
       ]
     }
   ],
