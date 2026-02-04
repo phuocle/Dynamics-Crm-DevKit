@@ -39,9 +39,9 @@
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.Version$" />
 		<PackageReference Include="MSTest.TestAdapter" Version="$MSTest.TestAdapter.Version$" />
 		<PackageReference Include="MSTest.TestFramework" Version="$MSTest.TestFramework.Version$" />
-		<PackageReference Include="Selenium.WebDriver" Version="4.40.0" />
-		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="144.0.7559.9600" />
-		<PackageReference Include="Selenium.Support" Version="4.40.0" />
+		<PackageReference Include="Selenium.WebDriver" Version="$Selenium.WebDriver.Version$" />
+		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="$Selenium.WebDriver.ChromeDriver.Version$" />
+		<PackageReference Include="Selenium.Support" Version="$Selenium.Support.Version$" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="$ProjectName$.runsettings" />

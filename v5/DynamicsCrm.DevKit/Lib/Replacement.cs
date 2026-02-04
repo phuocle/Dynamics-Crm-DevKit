@@ -127,6 +127,10 @@ namespace DynamicsCrm.DevKit.Lib
             await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestAdapter");
             await NuGetHelper.SetReplacementAsync(replacements, "MSTest.TestFramework");
             await NuGetHelper.SetReplacementAsync(replacements, "Dynamics365.UIAutomation.Api");
+            await NuGetHelper.SetReplacementAsync(replacements, "Bogus");
+            await NuGetHelper.SetReplacementAsync(replacements, "Selenium.WebDriver");
+            await NuGetHelper.SetReplacementAsync(replacements, "Selenium.WebDriver.ChromeDriver");
+            await NuGetHelper.SetReplacementAsync(replacements, "Selenium.Support");
         }
 
         public static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)

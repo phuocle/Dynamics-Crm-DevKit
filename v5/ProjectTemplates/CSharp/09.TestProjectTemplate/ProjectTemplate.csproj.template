@@ -32,17 +32,17 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Bogus" Version="35.6.5" />
+		<PackageReference Include="Bogus" Version="$Bogus.Version$" />
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.Version$">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="FakeXrmEasy.v9" Version="2.8.0" />
-		<PackageReference Include="FakeXrmEasy.Abstractions.v9" Version="2.8.0" />
-		<PackageReference Include="FakeXrmEasy.Core.v9" Version="2.8.0" />
-		<PackageReference Include="FakeXrmEasy.Messages.v9" Version="2.8.0" />
-		<PackageReference Include="FakeXrmEasy.Plugins.v9" Version="2.8.1" />
-		<PackageReference Include="FakeXrmEasy.CodeActivities.v9" Version="2.6.1" />
+		<PackageReference Include="FakeXrmEasy.v9" Version="2.*" />
+		<PackageReference Include="FakeXrmEasy.Abstractions.v9" Version="2.*" />
+		<PackageReference Include="FakeXrmEasy.Core.v9" Version="2.*" />
+		<PackageReference Include="FakeXrmEasy.Messages.v9" Version="2.*" />
+		<PackageReference Include="FakeXrmEasy.Plugins.v9" Version="2.*" />
+		<PackageReference Include="FakeXrmEasy.CodeActivities.v9" Version="2.*" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="$Microsoft.CrmSdk.CoreAssemblies.Version$" />
 		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="$Microsoft.CrmSdk.Workflow.Version$" />
 		<PackageReference Include="MSTest.TestAdapter" Version="$MSTest.TestAdapter.Version$" />
