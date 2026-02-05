@@ -238,11 +238,13 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         exit 1
     }
 
+
     # Build v1 format federated credential
     $encodedTenantId = Convert-GuidToBase64Url -guid $TenantId
     $issuer = "https://login.microsoftonline.com/$TenantId/v2.0"
     $subject = "/eid1/c/pub/t/$encodedTenantId/a/qzXoWDkuqUa3l6zM5mM0Rw/n/plugin/e/$EnvironmentId/h/$sha256Hash"
-    $credName = "PowerPlatform-v1"
+    # Use CredentialName from config if specified, otherwise default to PowerPlatform-v1
+    $credName = if ($mi.CredentialName) { $mi.CredentialName } else { "PowerPlatform-v1" }
 
     Write-Host "  @ Checking federated credential: $credName" -ForegroundColor Yellow
     $existingCred = az ad app federated-credential list --id $AppId --query "[?name=='$credName']" | ConvertFrom-Json
@@ -284,8 +286,15 @@ Write-Host "`n[4] GENERATING ASSEMBLYINFO2.CS" -ForegroundColor Blue
 $assemblyFilePath = Join-Path -Path $ScriptDir -ChildPath "AssemblyInfo2.cs"
 
 $applicationIds = @()
+# Dedupe by AppName - same AppName means same app (only add AppId once per unique AppName)
+$seenAppNames = @{}
 foreach ($mi in $config.ManagedIdentities) {
-    if ($mi.AppId) { $applicationIds += $mi.AppId }
+    if ($mi.AppId -and $mi.AppName) {
+        if (-not $seenAppNames.ContainsKey($mi.AppName)) {
+            $seenAppNames[$mi.AppName] = $true
+            $applicationIds += $mi.AppId
+        }
+    }
 }
 $applicationIdsString = $applicationIds -join ','
 

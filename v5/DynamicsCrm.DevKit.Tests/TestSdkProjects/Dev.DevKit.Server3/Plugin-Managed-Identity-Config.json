@@ -6,8 +6,15 @@
     "ManagedIdentities":  [
                               {
                                   "AppName":  "Dev.DevKit.Server3",
-                                  "AppId":  "9ae26bec-fbb3-4f94-8143-7fc0c75bf9d9",
-                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                                  "AppId":  "0dce1abe-dafc-4171-98b7-ddcc40025d46",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17",
+                                  "CredentialName":  "PowerPlatform-DEV"
+                              },
+                              {
+                                  "AppName":  "Dev.DevKit.Server3",
+                                  "AppId":  "0dce1abe-dafc-4171-98b7-ddcc40025d46",
+                                  "EnvironmentId":  "2f985c04-9487-e70c-aa57-dcd6d08f0886",
+                                  "CredentialName":  "PowerPlatform-UAT"
                               }
                           ]
 }

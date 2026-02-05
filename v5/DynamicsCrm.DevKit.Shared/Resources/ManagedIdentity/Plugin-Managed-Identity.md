@@ -13,7 +13,7 @@ The script creates only the **minimum required** Azure resources for Managed Ide
 | **App Registration** | Azure AD application identity for your plugin |
 | **Service Principal** | Enterprise application for authentication |
 | **Code Signing Certificate** | Required to sign your plugin assembly (.pfx, .cer) |
-| **Federated Credential** | Links Power Platform to your Azure AD app |
+| **Federated Credential** | Links Power Platform environment to your Azure AD app |
 | **AssemblyInfo2.cs** | C# attribute file for your plugin project |
 
 > **Note**: This script does NOT create Resource Groups, Key Vaults, Storage Accounts, or other Azure resources. Those are **optional** and depend on what Azure services your plugin needs to access.
@@ -65,6 +65,8 @@ Add these exact versions to your `.csproj` file:
 
 Open `Plugin-Managed-Identity-Config.json` and fill in the required values:
 
+### Single Environment
+
 ```json
 {
   "CertificateFileName": "my-plugin-cert",
@@ -73,21 +75,100 @@ Open `Plugin-Managed-Identity-Config.json` and fill in the required values:
   "ManagedIdentities": [
     {
       "AppName": "My-Dataverse-Plugin-App",
-      "EnvironmentId": "00000000-0000-0000-0000-000000000000"
+      "EnvironmentId": "00000000-0000-0000-0000-000000000000",
+      "CredentialName": "PowerPlatform-DEV"
     }
   ]
 }
 ```
 
-| Field | Description |
-|-------|-------------|
-| `CertificateFileName` | Name for the certificate files (without extension) |
-| `CertificatePassword` | Password to protect the .pfx file |
-| `CertificateValidityYears` | How many years the certificate is valid |
-| `AppName` | Display name for the Azure AD App Registration |
-| `EnvironmentId` | Your Dataverse Environment ID (from Power Platform Admin Center) |
+### Multiple Environments (Recommended)
 
-> **Note**: `TenantId` and `AppId` will be auto-populated by the script.
+> [!TIP]
+> **Use the SAME `AppName` across multiple environments** to avoid unmanaged layer issues when deploying solutions!
+
+```json
+{
+  "CertificateFileName": "my-plugin-cert",
+  "CertificatePassword": "YourStrongPassword123!",
+  "CertificateValidityYears": 10,
+  "ManagedIdentities": [
+    {
+      "AppName": "My-Dataverse-Plugin-App",
+      "EnvironmentId": "11111111-0000-0000-0000-000000000000",
+      "CredentialName": "PowerPlatform-DEV"
+    },
+    {
+      "AppName": "My-Dataverse-Plugin-App",
+      "EnvironmentId": "22222222-0000-0000-0000-000000000000",
+      "CredentialName": "PowerPlatform-UAT"
+    },
+    {
+      "AppName": "My-Dataverse-Plugin-App",
+      "EnvironmentId": "33333333-0000-0000-0000-000000000000",
+      "CredentialName": "PowerPlatform-PROD"
+    }
+  ]
+}
+```
+
+### Configuration Fields
+
+| Field | Required | Description |
+|-------|:--------:|-------------|
+| `CertificateFileName` | ✅ | Name for the certificate files (without extension) |
+| `CertificatePassword` | ✅ | Password to protect the .pfx file |
+| `CertificateValidityYears` | ✅ | How many years the certificate is valid |
+| `AppName` | ✅ | Display name for the Azure AD App Registration |
+| `EnvironmentId` | ✅ | Your Dataverse Environment ID (from Power Platform Admin Center) |
+| `CredentialName` | ✅ | Unique name for the Federated Credential (e.g., `PowerPlatform-DEV`) |
+| `TenantId` | Auto | Auto-populated by the script |
+| `AppId` | Auto | Auto-populated by the script |
+
+---
+
+## Multi-Environment Deployment Strategy
+
+> [!IMPORTANT]
+> Understanding how `AppName` affects solution deployment is critical for avoiding unmanaged layers!
+
+### ✅ Recommended: Same AppName (Same App Registration)
+
+When entries have the **same `AppName`**, the script:
+1. Creates **ONE App Registration** shared across all environments
+2. Creates **multiple Federated Credentials** (one per environment with unique `CredentialName`)
+3. Generates **one `ApplicationId`** in `AssemblyInfo2.cs`
+
+**Benefits:**
+- ✅ Deploy solutions without unmanaged layer issues
+- ✅ Plugin Assembly uses same `ApplicationId` across all environments
+- ✅ No ALM complications
+
+### ⚠️ Alternative: Different AppNames (Different App Registrations)
+
+When entries have **different `AppName`**, the script:
+1. Creates **separate App Registrations** for each unique name
+2. Generates **multiple `ApplicationIds`** in `AssemblyInfo2.cs`
+
+**Considerations:**
+- ⚠️ Each environment uses a different `ApplicationId`
+- ⚠️ When deploying solution, plugin will have **unmanaged layer**
+- ⚠️ Must use **ALM Pipeline** to rebind `ApplicationId` to plugin assembly after deploy
+
+```mermaid
+graph TB
+    subgraph "Recommended: Same AppName"
+        A1[App: MyPlugin] --> FC1[Credential: DEV]
+        A1 --> FC2[Credential: UAT]
+        A1 --> FC3[Credential: PROD]
+    end
+    
+    subgraph "Alternative: Different AppNames"
+        B1[App: MyPlugin-DEV] --> FC4[Credential: DEV]
+        B2[App: MyPlugin-UAT] --> FC5[Credential: UAT]
+        B3[App: MyPlugin-PROD] --> FC6[Credential: PROD]
+    end
+```
 
 ---
 
@@ -102,7 +183,7 @@ Execute the PowerShell script:
 The script will:
 1. Create/verify **App Registration** and **Service Principal**
 2. Generate a **self-signed code signing certificate** (.pfx and .cer)
-3. Configure **Federated Credentials** for Power Platform
+3. Configure **Federated Credentials** for each environment
 4. Generate **AssemblyInfo2.cs** with the Managed Identity attribute
 5. Update the configuration file with generated IDs
 
@@ -154,7 +235,14 @@ ALTER ROLE db_datareader ADD MEMBER [your-app-name];
 
 ---
 
-## Step 5: Deploy Your Plugin
+## Step 5: Managed Identity Record in Dataverse
+
+> [!TIP]
+> **DevKit CLI handles this automatically!** When you deploy using `devkit server`, the CLI reads the `AssemblyInfo2.cs` attributes and automatically creates/updates the Managed Identity record in Dataverse for you. No manual steps required!
+
+---
+
+## Step 6: Deploy Your Plugin
 
 Use the DevKit CLI to deploy:
 
@@ -200,6 +288,7 @@ If you cannot obtain the required Azure AD permissions, follow this workflow:
 | Certificate errors | Re-run the script to regenerate certificate |
 | Plugin deployment fails | Verify EnvironmentId matches your Dataverse environment |
 | "System.ClientModel" error | Use Azure.Identity 1.9.0 and Azure.Security.KeyVault.Secrets 4.5.0 |
+| Unmanaged layer on deploy | Ensure all environments use same `AppName` in config |
 
 ---
 
