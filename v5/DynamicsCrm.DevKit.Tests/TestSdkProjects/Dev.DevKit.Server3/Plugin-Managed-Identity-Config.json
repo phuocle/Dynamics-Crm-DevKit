@@ -1,13 +1,13 @@
-{
-  "CertificateFileName": "",
-  "CertificatePassword": "",
-  "CertificateValidityYears": 10,
-  "TenantId": "",
-  "ManagedIdentities": [
-    {
-      "AppName": "",
-      "AppId": "",
-      "EnvironmentId": ""
-    }
-  ]
+﻿{
+    "CertificateFileName":  "Dev.DevKit.Server3",
+    "CertificatePassword":  "***Dev.DevKit.Server3@@@",
+    "CertificateValidityYears":  10,
+    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
+    "ManagedIdentities":  [
+                              {
+                                  "AppName":  "Dev.DevKit.Server3",
+                                  "AppId":  "9ae26bec-fbb3-4f94-8143-7fc0c75bf9d9",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                              }
+                          ]
 }
