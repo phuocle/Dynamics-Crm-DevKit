@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Server3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d6ec7a644d8ae65d" PluginAssemblyId="568c5be0-4a02-f111-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.4</IntroducedVersion>
+  <ManagedIdentityId>12ab4018-97ca-4ebb-b0a2-09cb4f44e437</ManagedIdentityId>
+  <FileName>/PluginAssemblies/DevDevKitServer3-568C5BE0-4A02-F111-8407-000D3A316BDB/DevDevKitServer3.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server3.Plugins.Contact.PostContactUpdateAsynchronous, Dev.DevKit.Server3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d6ec7a644d8ae65d" PluginTypeId="5b8c5be0-4a02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Server3.Plugins.Contact.PostContactUpdateAsynchronous">
+      <FriendlyName>Dev.DevKit.Server3.Plugins.Contact.PostContactUpdateAsynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

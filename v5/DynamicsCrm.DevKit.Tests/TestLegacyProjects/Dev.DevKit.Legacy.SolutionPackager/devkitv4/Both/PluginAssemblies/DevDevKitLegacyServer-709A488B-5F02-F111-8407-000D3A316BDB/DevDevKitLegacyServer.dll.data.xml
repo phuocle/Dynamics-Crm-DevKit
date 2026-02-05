@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginAssemblyId="709a488b-5f02-f111-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.4</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitLegacyServer-709A488B-5F02-F111-8407-000D3A316BDB/DevDevKitLegacyServer.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="789a488b-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous">
+      <FriendlyName>Dev.DevKit.Legacy.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.CustomActions.Account.PostAccountv4_AccountCustomActionSynchronous, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="7c9a488b-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.CustomActions.Account.PostAccountv4_AccountCustomActionSynchronous">
+      <FriendlyName>Dev.DevKit.Legacy.Server.CustomActions.Account.PostAccountv4_AccountCustomActionSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="809a488b-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous">
+      <FriendlyName>Dev.DevKit.Legacy.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.CustomActions.None.PostNonev4_CustomActionSynchronous, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="849a488b-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.CustomActions.None.PostNonev4_CustomActionSynchronous">
+      <FriendlyName>Dev.DevKit.Legacy.Server.CustomActions.None.PostNonev4_CustomActionSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.CustomApis.Account.v4_AccountCustomApiRequest, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="889a488b-5f02-f111-8407-000d3a316bdb" Name="v4_AccountCustomApiRequest">
+      <FriendlyName>Dev.DevKit.Legacy.Server.CustomApis.Account.v4_AccountCustomApiRequest</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.CustomApis.None.v4_CustomApiRequest, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8a9a488b-5f02-f111-8407-000d3a316bdb" Name="v4_CustomApiRequest">
+      <FriendlyName>Dev.DevKit.Legacy.Server.CustomApis.None.v4_CustomApiRequest</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.DataProviders.Sql.Create, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8b69e391-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.DataProviders.Sql.Create">
+      <FriendlyName>Dev.DevKit.Legacy.Server.DataProviders.Sql.Create</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.DataProviders.Sql.Delete, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8c69e391-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.DataProviders.Sql.Delete">
+      <FriendlyName>Dev.DevKit.Legacy.Server.DataProviders.Sql.Delete</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.DataProviders.Sql.Retrieve, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8d69e391-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.DataProviders.Sql.Retrieve">
+      <FriendlyName>Dev.DevKit.Legacy.Server.DataProviders.Sql.Retrieve</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.DataProviders.Sql.RetrieveMultiple, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8e69e391-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.DataProviders.Sql.RetrieveMultiple">
+      <FriendlyName>Dev.DevKit.Legacy.Server.DataProviders.Sql.RetrieveMultiple</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.DataProviders.Sql.Update, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8f69e391-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.DataProviders.Sql.Update">
+      <FriendlyName>Dev.DevKit.Legacy.Server.DataProviders.Sql.Update</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.Plugins.Account.PostAccountCreateAsynchronous, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="739a488b-5f02-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server.Plugins.Account.PostAccountCreateAsynchronous">
+      <FriendlyName>Dev.DevKit.Legacy.Server.Plugins.Account.PostAccountCreateAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server.Workflows.SendEmailByQueue2, Dev.DevKit.Legacy.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=942c28c45279f1e6" PluginTypeId="8a69e391-5f02-f111-8407-000d3a316bdb" Name="SendEmailByQueue2">
+      <FriendlyName>SendEmailByQueue2</FriendlyName>
+      <WorkflowActivityGroupName>Dev.DevKit.Legacy.Server.Workflows</WorkflowActivityGroupName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

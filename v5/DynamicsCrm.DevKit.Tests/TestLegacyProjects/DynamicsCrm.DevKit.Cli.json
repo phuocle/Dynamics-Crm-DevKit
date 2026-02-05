@@ -22,7 +22,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -39,19 +39,19 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "v4_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "v4_/entities/[entity].form.js",
+            "v4_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "v4_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "v4_/lib/devkit.js"
           ]
         }
       ]
@@ -69,19 +69,19 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "devkitv4",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "???",
+      "solution": "devkitv4",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "devkitv4",
       "type": "Pack",
       "mapfile": ""
     }
