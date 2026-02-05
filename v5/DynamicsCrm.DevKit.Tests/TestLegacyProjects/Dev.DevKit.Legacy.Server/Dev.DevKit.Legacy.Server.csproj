@@ -54,6 +54,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomActions\Account\PostAccountv4_AccountCustomActionAsynchronous.cs" />
+    <Compile Include="CustomActions\Account\PostAccountv4_AccountCustomActionSynchronous.cs" />
+    <Compile Include="CustomActions\None\PostNonev4_CustomActionAsynchronous.cs" />
+    <Compile Include="CustomActions\None\PostNonev4_CustomActionSynchronous.cs" />
+    <Compile Include="CustomApis\Account\v4_AccountCustomApiRequest.cs" />
+    <Compile Include="CustomApis\None\v4_CustomApiRequest.cs" />
+    <Compile Include="Plugins\Account\PostAccountCreateAsynchronous.cs" />
+    <Compile Include="Workflows\SendEmailByQueue2.cs" />
+    <None Include="DataProviders\Sql\deploy.datasource.bat" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Legacy.Server.snk" />
     <None Include="deploy.debug.bat" />
@@ -71,12 +80,6 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CustomAcitons\" />
-    <Folder Include="CustomApis\" />
-    <Folder Include="DataProviders\" />
-    <Folder Include="Plugins\" />
-    <Folder Include="Workflows\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
 <!-- v.4.00.00.01 - Build: 31.12.2025 23:59:59 -->

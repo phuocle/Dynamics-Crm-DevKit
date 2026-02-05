@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>bf6f3b42-fe16-48d0-bb8b-af8af105004b</ProjectGuid>
+    <ProjectGuid>{BF6F3B42-FE16-48D0-BB8B-AF8AF105004B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Legacy.Server2</RootNamespace>
@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -57,7 +58,10 @@
     <None Include="Dev.DevKit.Legacy.Server2.snk" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.debug.only.bat" />
+    <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Plugin-Managed-Identity-Config.json" />
+    <None Include="Plugin-Managed-Identity.ps1" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Legacy.Shared\Dev.DevKit.Legacy.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Legacy.Shared\Dev.DevKit.Legacy.Shared.projitems')" />
   <PropertyGroup>

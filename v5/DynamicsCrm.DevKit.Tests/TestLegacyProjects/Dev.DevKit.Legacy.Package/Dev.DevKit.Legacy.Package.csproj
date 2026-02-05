@@ -37,7 +37,7 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="CustomAcitons\" />
+	  <Folder Include="CustomActions\" />
 	  <Folder Include="CustomApis\" />
 	  <Folder Include="DataProviders\" />
 	  <Folder Include="t4\" />
