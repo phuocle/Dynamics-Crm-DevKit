@@ -148,14 +148,6 @@ if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
     Write-Host "  @ Found existing certificate files, re-using them." -ForegroundColor Yellow
     Write-Host "    - Private Key (.pfx): $pfxPath" -ForegroundColor Cyan
     Write-Host "    - Public Key (.cer): $cerPath" -ForegroundColor Cyan
-
-    # Load existing certificate to get thumbprint and hash
-    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
-    $config.CertificateThumbprint = $pfxCert.Thumbprint
-    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
-    $config.CertificateSHA256Hash = $sha256Hash
 } else {
     Write-Host "  @ Creating new self-signed code signing certificate..." -ForegroundColor Yellow
     try {
@@ -200,13 +192,6 @@ if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
         exit 1
     }
 
-    # Verify and save thumbprint/hash
-    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
-    $config.CertificateThumbprint = $pfxCert.Thumbprint
-    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
-    $config.CertificateSHA256Hash = $sha256Hash
 
     # Remove from Windows Certificate Store (we have the .pfx file)
     Write-Host "  @ Removing certificate from Windows Certificate Store..." -ForegroundColor Yellow
@@ -224,7 +209,6 @@ if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
 # ============================================================================
 Write-Host "`n[3] POWER PLATFORM FEDERATED CREDENTIALS" -ForegroundColor Blue
 
-$CertificateThumbprint = $config.CertificateThumbprint
 $CertificateFileName = $config.CertificateFileName
 $CertificatePassword = $config.CertificatePassword
 

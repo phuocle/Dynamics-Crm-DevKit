@@ -87,7 +87,7 @@ Open `Plugin-Managed-Identity-Config.json` and fill in the required values:
 | `AppName` | Display name for the Azure AD App Registration |
 | `EnvironmentId` | Your Dataverse Environment ID (from Power Platform Admin Center) |
 
-> **Note**: `TenantId`, `AppId`, `CertificateThumbprint`, and `CertificateSHA256Hash` will be auto-populated by the script.
+> **Note**: `TenantId` and `AppId` will be auto-populated by the script.
 
 ---
 
@@ -219,4 +219,3 @@ If you cannot obtain the required Azure AD permissions, follow this workflow:
 Plugin-Managed-Identity-Config.json
 AssemblyInfo2.cs
 ```
-
