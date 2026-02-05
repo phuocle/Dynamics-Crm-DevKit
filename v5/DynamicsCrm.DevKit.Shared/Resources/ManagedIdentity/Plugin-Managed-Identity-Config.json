@@ -1,14 +1,8 @@
 ﻿{
-  "ResourceGroup": "",
-  "Location": "",
-  "KeyVaultName": "",
-  "SecretName": "",
-  "SecretValue": "",
   "CertificateFileName": "",
   "CertificatePassword": "",
-  "CertificateValidityYears": null,
+  "CertificateValidityYears": 10,
   "TenantId": "",
-  "KeyVaultURL": "",
   "CertificateThumbprint": "",
   "CertificateSHA256Hash": "",
   "ManagedIdentities": [
