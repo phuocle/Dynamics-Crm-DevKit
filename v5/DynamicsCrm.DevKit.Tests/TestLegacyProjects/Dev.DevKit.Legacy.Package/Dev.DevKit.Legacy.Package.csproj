@@ -29,6 +29,7 @@
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
+		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.27" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="README.md">
@@ -37,12 +38,7 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="CustomActions\" />
-	  <Folder Include="CustomApis\" />
-	  <Folder Include="DataProviders\" />
 	  <Folder Include="t4\" />
-	  <Folder Include="Plugins\" />
-	  <Folder Include="Workflows\" />
 	</ItemGroup>
 	<Import Project="..\Dev.DevKit.Legacy.Shared\Dev.DevKit.Legacy.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Legacy.Shared\Dev.DevKit.Legacy.Shared.projitems')" />
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.targets')" />

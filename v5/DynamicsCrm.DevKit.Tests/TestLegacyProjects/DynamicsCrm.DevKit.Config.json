@@ -1,0 +1,13 @@
+﻿{
+    "WebResources": [
+        
+    ],
+    "CustomTemplates": [
+        {
+            "Type": "Plugin",
+            "Title": "Niam.XRM.Framework",
+            "Body": "rVXBTuMwEL1X6j9420uKuqnKcZdWYksXIlFaNSCxWu3BdYZikdiR7UArxL+vHdtpIC1wIJfEmec3854nk0JStkbxVirIfrZbRbmcUSK45HcqvBVZGCcPVeSK4iy8Xc7C3wJn8MTFQxgxBeIOE5DhIi3WlL0HfoM46Y4mXO/fKLc3vscCkivNHeeasjvWZO0W02tp1qixoQZtt57bLaSvvxOR2URLWFOpBFaUs6DT2DwDKfFaZ+n0UTN6ydeU4NRkKBGx0tgpK7KwQVSGuuM+mm6AFCbbjCcHsBXE4Dt7M9dE1XNNUixld3zSpXfBa9vmIgHxbTTsPZvwG0/LoHn/Uso4FO+jSPK0tKoqPsYsWfFNH1k7r7c5oFFt4U5tT0WVytGocyq3jNwLznghO6bEPjqDFBSUgXkO9oA0sxIFlHW+YoykTR8Xec6FgmQhIMr0YViu8nFoPNMMHR/TxtrAaUqx3BtxckqYeS7P1u+vtisl6KpQUHIc6TbRNn5QHpeqqu8DaFPJcaXE03gpxzspjdB+LR7mxByfNsUgSCWg8lDeGOk3+/TDw+mHn0o/3JPe9WXvn/1082KVUoKI6fT6x/4Frb/A5EH3DPrh+vcXlnAyZYqqrW7IyLaYrcLNETNLBkftVuOLmfAsA6a6Yws3uKPB7tmJqG37uvIDPc7MxC6Y1JNGQB+5F3bZ0/JWWlhQi5e43q48rW63eNk95oIrIPrzQvwRhKAJoEdOEzfToBqqgfPKjSDvISJ2kr/OZLzxlwOE1wITrSEG8UgJhGewKtaOLPAYexzVFHHhnv4deDZzZ/BU7xI3Jsg9ZNiO7Wq4eOJeaDkhqHM5F/TN8h9qw3cSaOOrZKa1LFGtk5pd8Q5bEGmTmMTE/Euc+IbR/qydZ/uN/8QBX+gpn0Lly87iWvXG7cHgz/xmiRaXN+fR1ffJ/GyKzufoYrqcet8Maufly38=",
+            "IsDefault": false
+        }
+    ]
+}

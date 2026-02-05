@@ -2,7 +2,7 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv4",
       "folder": "bin\\Debug",
       "includefiles": [
         "Dev.DevKit.Legacy.Plugin.*.dll",
@@ -10,7 +10,9 @@
         "Dev.DevKit.Legacy.CustomAction.*.dll",
         "Dev.DevKit.Legacy.Workflow.*.dll",
         "Dev.DevKit.Legacy.CustomApi.*.dll",
-        "Dev.DevKit.Legacy.DataProvider.*.dll"
+        "Dev.DevKit.Legacy.DataProvider.*.dll",
+        "Dev.DevKit.Legacy*.dll",
+        "Dev.DevKit.Legacy.Package*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKit.Legacy.*.Test.dll"
