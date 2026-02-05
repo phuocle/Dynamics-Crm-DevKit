@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>7e074655-d3f1-431d-8abd-72105b0f5212</ProjectGuid>
+    <ProjectGuid>{7E074655-D3F1-431D-8ABD-72105B0F5212}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Legacy.SolutionPackager</RootNamespace>
@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -35,10 +36,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Extract-Both.devkit.bat" />
+    <None Include="Extract-Both.legacy-to-devkit.bat" />
+    <None Include="Extract-Both.legacy.bat" />
+    <None Include="Pack-Both.devkit.bat" />
+    <None Include="Pack-Both.legacy-to-devkit.bat" />
+    <None Include="Pack-Both.legacy.bat" />
     <None Include="packages.config" />
     <None Include="mapping.xml" />
-    <None Include="Extract-Both.bat" />
-    <None Include="Pack-Both.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

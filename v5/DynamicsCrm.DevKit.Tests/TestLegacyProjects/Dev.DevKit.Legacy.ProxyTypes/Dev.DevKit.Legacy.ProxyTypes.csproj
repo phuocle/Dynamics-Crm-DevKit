@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -48,7 +49,9 @@
     <Compile Include="GeneratedCode.cs" />
     <Compile Include="ProxyTypesAssembly.cs" />
     <None Include="packages.config" />
-    <None Include="run.bat" />
+    <None Include="run.devkit.bat" />
+    <None Include="run.legacy-to-devkit.bat" />
+    <None Include="run.legacy.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

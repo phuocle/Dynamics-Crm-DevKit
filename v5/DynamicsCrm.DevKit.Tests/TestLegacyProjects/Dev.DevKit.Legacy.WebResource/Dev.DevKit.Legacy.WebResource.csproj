@@ -51,7 +51,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="deploy.debug.bat" />
+    <None Include="deploy.debug.devkit.bat" />
+    <None Include="deploy.debug.legacy-to-devkit.bat" />
+    <None Include="deploy.debug.legacy.bat" />
+    <None Include="entities\generator.form.devkit.bat" />
+    <None Include="entities\generator.form.legacy-to-devkit.bat" />
+    <None Include="entities\generator.form.legacy.bat" />
+    <None Include="entities\generator.webapi.devkit.bat" />
+    <None Include="entities\generator.webapi.legacy-to-devkit.bat" />
+    <None Include="entities\generator.webapi.legacy.bat" />
     <None Include="packages.config" />
     <None Include="package.json" />
     <Content Include="entities\Account.form.js">
@@ -64,8 +72,6 @@
     <Content Include="lib2\devkit.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
-    <None Include="entities\generator.form.bat" />
-    <None Include="entities\generator.webapi.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
