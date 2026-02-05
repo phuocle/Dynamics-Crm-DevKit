@@ -100,9 +100,9 @@ Write-Host "`n[1] AZURE AD APP REGISTRATION + SERVICE PRINCIPAL" -ForegroundColo
 for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $mi = $config.ManagedIdentities[$i]
     $appName = $mi.AppName
-    
+
     Write-Host "`n  Processing: $appName" -ForegroundColor Magenta
-    
+
     # Check/Create App Registration
     Write-Host "  @ Checking App Registration..." -ForegroundColor Yellow
     $existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
@@ -148,6 +148,14 @@ if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
     Write-Host "  @ Found existing certificate files, re-using them." -ForegroundColor Yellow
     Write-Host "    - Private Key (.pfx): $pfxPath" -ForegroundColor Cyan
     Write-Host "    - Public Key (.cer): $cerPath" -ForegroundColor Cyan
+
+    # Load existing certificate to get thumbprint and hash
+    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
+    $config.CertificateThumbprint = $pfxCert.Thumbprint
+    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
+    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+    $config.CertificateSHA256Hash = $sha256Hash
 } else {
     Write-Host "  @ Creating new self-signed code signing certificate..." -ForegroundColor Yellow
     try {
@@ -192,6 +200,13 @@ if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
         exit 1
     }
 
+    # Verify and save thumbprint/hash
+    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
+    $config.CertificateThumbprint = $pfxCert.Thumbprint
+    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
+    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+    $config.CertificateSHA256Hash = $sha256Hash
 
     # Remove from Windows Certificate Store (we have the .pfx file)
     Write-Host "  @ Removing certificate from Windows Certificate Store..." -ForegroundColor Yellow
@@ -209,6 +224,7 @@ if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
 # ============================================================================
 Write-Host "`n[3] POWER PLATFORM FEDERATED CREDENTIALS" -ForegroundColor Blue
 
+$CertificateThumbprint = $config.CertificateThumbprint
 $CertificateFileName = $config.CertificateFileName
 $CertificatePassword = $config.CertificatePassword
 
@@ -217,7 +233,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $AppName = $mi.AppName
     $AppId = $mi.AppId
     $EnvironmentId = $mi.EnvironmentId
-    
+
     Write-Host "`n  Processing: $AppName" -ForegroundColor Magenta
 
     # Load certificate for SHA256 hash
@@ -225,7 +241,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     if (-not (Test-Path $resolvedPfx)) {
         $resolvedPfx = "$CertificateFileName.pfx"
     }
-    
+
     try {
         $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($resolvedPfx, $CertificatePassword)
         $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
@@ -289,10 +305,10 @@ foreach ($mi in $config.ManagedIdentities) {
 }
 $applicationIdsString = $applicationIds -join ','
 
-$certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')) { 
-    $config.CertificateFileName 
-} else { 
-    "$($config.CertificateFileName).pfx" 
+$certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')) {
+    $config.CertificateFileName
+} else {
+    "$($config.CertificateFileName).pfx"
 }
 
 $assemblyContent = @"
