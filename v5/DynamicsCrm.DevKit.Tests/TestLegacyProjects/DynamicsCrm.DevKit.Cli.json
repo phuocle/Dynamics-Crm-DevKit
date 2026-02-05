@@ -59,11 +59,11 @@
   ],
   "datasources": [
     {
-      "profile": "DEBUG",
-      "solution": "???",
-      "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "profile": "SqlLegacy",
+      "solution": "devkitv4",
+      "displayname": "Sql Legacy",
+      "pluralname": "Sql Legacies",
+      "name": "SqlLegacy"
     }
   ],
   "solutionpackagers": [
@@ -125,9 +125,9 @@
   "proxytypes": [
     {
       "profile": "ALL",
-      "namespace": "???",
+      "namespace": "Dev.DevKit.Legacy.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "account,contact,systemuser,team"
     }
   ],
   "uploadreports": [
