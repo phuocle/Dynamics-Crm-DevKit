@@ -5,14 +5,9 @@
       "solution": "devkitv4",
       "folder": "bin\\Debug",
       "includefiles": [
-        "Dev.DevKit.Legacy.Plugin.*.dll",
-        "Dev.DevKit.Legacy.Plugin.*.nupkg",
-        "Dev.DevKit.Legacy.CustomAction.*.dll",
-        "Dev.DevKit.Legacy.Workflow.*.dll",
-        "Dev.DevKit.Legacy.CustomApi.*.dll",
-        "Dev.DevKit.Legacy.DataProvider.*.dll",
-        "Dev.DevKit.Legacy*.dll",
-        "Dev.DevKit.Legacy.Package*.nupkg"
+        "Dev.DevKit.Legacy.dll",
+        "Dev.DevKit.Legacy.Package.*.nupkg",
+        "Dev.DevKit.Legacy.Package2.*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKit.Legacy.*.Test.dll"
@@ -59,11 +54,46 @@
   ],
   "datasources": [
     {
-      "profile": "SqlLegacy",
+      "profile": "Sqlite-Package-Legacy",
       "solution": "devkitv4",
-      "displayname": "Sql Legacy",
-      "pluralname": "Sql Legacies",
-      "name": "SqlLegacy"
+      "displayname": "Sqlite-Package-Legacy",
+      "pluralname": "Sqlite-Package-Legacy",
+      "name": "SqlitePackageLegacy"
+    },
+    {
+      "profile": "Sqlite-Package-DevKit",
+      "solution": "devkitv4",
+      "displayname": "Sqlite-Package-DevKit",
+      "pluralname": "Sqlite-Package-DevKit",
+      "name": "SqlitePackageDevKit"
+    },
+    {
+      "profile": "Sqlite-Package-Legacy-To-DevKit",
+      "solution": "devkitv4",
+      "displayname": "Sqlite-Package-Legacy-To-DevKit",
+      "pluralname": "Sqlite-Package-Legacy-To-DevKit",
+      "name": "SqlitePackageLegacyToDevKit"
+    },
+    {
+      "profile": "Sql-Server-Legacy",
+      "solution": "devkitv4",
+      "displayname": "Sql-Server-Legacy",
+      "pluralname": "Sql-Server-Legacy",
+      "name": "SqlServerLegacy"
+    },
+    {
+      "profile": "Sql-Server-DevKit",
+      "solution": "devkitv4",
+      "displayname": "Sql-Servere-DevKit",
+      "pluralname": "Sql-Server-DevKit",
+      "name": "SqlServerDevKit"
+    },
+    {
+      "profile": "Sql-Server-Legacy-To-DevKit",
+      "solution": "devkitv4",
+      "displayname": "Sql-Server-Legacy-To-DevKit",
+      "pluralname": "Sql-Server-Legacy-To-DevKit",
+      "name": "SqlServerLegacyToDevKit"
     }
   ],
   "solutionpackagers": [
