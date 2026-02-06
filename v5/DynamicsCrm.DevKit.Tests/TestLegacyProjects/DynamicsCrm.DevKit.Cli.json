@@ -2,7 +2,7 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "folder": "bin\\Debug",
       "includefiles": [
         "Dev.DevKit.Legacy.dll",
@@ -17,7 +17,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -34,19 +34,19 @@
       "dependencies": [
         {
           "webresources": [
-            "v4_/entities/[entity].js"
+            "v4legacy_/entities/[entity].js"
           ],
           "dependencies": [
-            "v4_/entities/[entity].form.js",
-            "v4_/entities/[entity].webapi.js"
+            "v4legacy_/entities/[entity].form.js",
+            "v4legacy_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "v4_/entities/[entity].form.js"
+            "v4legacy_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "v4_/lib/devkit.js"
+            "v4legacy_/lib/devkit.js"
           ]
         }
       ]
@@ -55,42 +55,42 @@
   "datasources": [
     {
       "profile": "Sqlite-Package-Legacy",
-      "solution": "devkitv4",
-      "displayname": "Sqlite-Package-Legacy",
-      "pluralname": "Sqlite-Package-Legacy",
+      "solution": "devkitv4_legacy",
+      "displayname": "SqlitePackageLegacy",
+      "pluralname": "SqlitePackageLegacies",
       "name": "SqlitePackageLegacy"
     },
     {
       "profile": "Sqlite-Package-DevKit",
-      "solution": "devkitv4",
-      "displayname": "Sqlite-Package-DevKit",
-      "pluralname": "Sqlite-Package-DevKit",
+      "solution": "devkitv4_legacy",
+      "displayname": "SqlitePackageDevKit",
+      "pluralname": "SqlitePackageDevKits",
       "name": "SqlitePackageDevKit"
     },
     {
       "profile": "Sqlite-Package-Legacy-To-DevKit",
-      "solution": "devkitv4",
-      "displayname": "Sqlite-Package-Legacy-To-DevKit",
-      "pluralname": "Sqlite-Package-Legacy-To-DevKit",
+      "solution": "devkitv4_legacy",
+      "displayname": "SqlitePackageLegacyToDevKit",
+      "pluralname": "SqlitePackageLegacyToDevKits",
       "name": "SqlitePackageLegacyToDevKit"
     },
     {
       "profile": "Sql-Server-Legacy",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "displayname": "Sql-Server-Legacy",
       "pluralname": "Sql-Server-Legacy",
       "name": "SqlServerLegacy"
     },
     {
       "profile": "Sql-Server-DevKit",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "displayname": "Sql-Servere-DevKit",
       "pluralname": "Sql-Server-DevKit",
       "name": "SqlServerDevKit"
     },
     {
       "profile": "Sql-Server-Legacy-To-DevKit",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "displayname": "Sql-Server-Legacy-To-DevKit",
       "pluralname": "Sql-Server-Legacy-To-DevKit",
       "name": "SqlServerLegacyToDevKit"
@@ -99,7 +99,7 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "rootfolder": "",
       "solutiontype": "Both",
       "folder": "devkitv4",
@@ -108,7 +108,7 @@
     },
     {
       "profile": "Pack-Both",
-      "solution": "devkitv4",
+      "solution": "devkitv4_legacy",
       "rootfolder": "",
       "solutiontype": "Both",
       "folder": "devkitv4",
