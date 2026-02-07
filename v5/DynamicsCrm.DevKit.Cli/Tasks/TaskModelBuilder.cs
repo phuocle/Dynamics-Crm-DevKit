@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var args = BuildModelBuilderArgs();
                 modelBuilder.Parameters.LoadArguments(args);
 
-                SpectreLog.ActionWithLevel0("[EXECUTE]", "ModelBuilder 2.0.16");
+                SpectreLog.ActionWithLevel0("[EXECUTE]", "ModelBuilder", "2.0.16");
 
                 if (Json.entities == "*" || Json.entities.ToLower() == "all")
                 {
@@ -197,7 +197,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.WriteProcessOutput(message);
                     break;
                 case ProgressType.Warning:
-                    SpectreLog.ActionWithLevel0($"[yellow]{message}[/]");
+                    SpectreLog.ActionWithLevel0("[WARNING]", message);
                     break;
                 case ProgressType.Error:
                     SpectreLog.ActionError(message);

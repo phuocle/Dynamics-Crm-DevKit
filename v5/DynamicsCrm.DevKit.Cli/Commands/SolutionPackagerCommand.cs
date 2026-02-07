@@ -21,26 +21,26 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             var indent = "           ";
             if (!string.IsNullOrEmpty(settings.Version))
             {
-                rows.Add(new[] { $"{indent}[white] --version[/]", $"[cyan]{Markup.Escape(settings.Version)}[/]" });
+                rows.Add(new[] { $"{indent}[white]--version[/]", $"[cyan]{Markup.Escape(settings.Version)}[/]" });
             }
             else
             {
-                rows.Add(new[] { $"{indent}[white] --version[/]", "[grey](auto-detect)[/]" });
+                rows.Add(new[] { $"{indent}[white]--version[/]", "[grey](auto-detect)[/]" });
             }
             return rows;
         }
 
         protected override async Task RunTaskAsync(SolutionPackagerCommandArgs settings)
         {
-            SpectreLog.ActionError("DEPRECATED: This command is deprecated and will be removed in future versions.");
-            SpectreLog.ActionWithLevel0("[yellow]Please use 'devkit solution' instead.[/]");
+            SpectreLog.ActionWithLevel0("[DEPRECATED]", "This command is deprecated and will be removed in future versions.");
+            SpectreLog.ActionWithLevel0("[WARNING]", "Please use 'devkit solution' instead.");
             SpectreLog.WriteLine();
 
             var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
 
             if (json.solutionpackagers == null)
             {
-                SpectreLog.ActionError("'solutionpackagers' section not found in json file");
+                SpectreLog.ActionWithLevel0(CliAction.ERROR, "'solutionpackagers' section not found in json file");
                 return;
             }
 
@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
             else
             {
-                SpectreLog.ActionError($"Profile '{settings.Profile}' not found in 'solutionpackagers' section");
+                SpectreLog.ActionWithLevel0(CliAction.ERROR, $"Profile '{settings.Profile}' not found in 'solutionpackagers' section");
             }
         }
     }
