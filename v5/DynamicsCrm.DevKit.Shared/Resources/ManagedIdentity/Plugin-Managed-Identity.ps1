@@ -21,6 +21,13 @@ function Convert-GuidToBase64Url {
     return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
 }
 
+function Get-CredentialName {
+    param([string]$environmentId)
+    # Extract first part of GUID (before first hyphen)
+    $firstPart = $environmentId.Split('-')[0]
+    return "PowerPlatform-$firstPart"
+}
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "Plugin-Managed-Identity-Config.json"
 
@@ -45,25 +52,22 @@ try {
 }
 
 $errors = @()
-$requiredFields = @('CertificateFileName', 'CertificatePassword', 'CertificateValidityYears')
+$requiredFields = @('CertificateFileName', 'CertificatePassword', 'CertificateValidityYears', 'AppName')
 foreach ($field in $requiredFields) {
     if (-not $config.$field -or $config.$field -eq '' -or $null -eq $config.$field) {
         $errors += "[X] $field is empty"
     }
 }
 
-if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
-    $miFields = @('EnvironmentId', 'AppName', 'CredentialName')
-    for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
-        $mi = $config.ManagedIdentities[$i]
-        foreach ($field in $miFields) {
-            if (-not $mi.$field -or $mi.$field -eq '' -or $null -eq $mi.$field) {
-                $errors += "[X] ManagedIdentities[$i].$field is empty"
-            }
+if ($config.EnvironmentIds -and $config.EnvironmentIds.Count -gt 0) {
+    for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
+        $envId = $config.EnvironmentIds[$i]
+        if (-not $envId -or $envId -eq '' -or $null -eq $envId) {
+            $errors += "[X] EnvironmentIds[$i] is empty"
         }
     }
 } else {
-    $errors += "[X] ManagedIdentities array is empty"
+    $errors += "[X] EnvironmentIds array is empty"
 }
 
 if ($errors.Count -gt 0) {
@@ -97,40 +101,37 @@ Write-Host "  Tenant ID: $TenantId" -ForegroundColor Cyan
 # Step 1: App Registration + Service Principal
 # ============================================================================
 Write-Host "`n[1] AZURE AD APP REGISTRATION + SERVICE PRINCIPAL" -ForegroundColor Blue
-for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
-    $mi = $config.ManagedIdentities[$i]
-    $appName = $mi.AppName
+$appName = $config.AppName
     
-    Write-Host "`n  Processing: $appName" -ForegroundColor Magenta
+Write-Host "`n  Processing: $appName" -ForegroundColor Magenta
     
-    # Check/Create App Registration
-    Write-Host "  @ Checking App Registration..." -ForegroundColor Yellow
-    $existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
-    if ($null -ne $existingApp -and $existingApp.Count -gt 0) {
-        $appId = $existingApp[0].appId
-        Write-Host "  + SUCCESS: App Registration already exists." -ForegroundColor Green
-    } else {
-        $createdApp = az ad app create --display-name $appName --output json | ConvertFrom-Json
-        $appId = $createdApp.appId
-        Write-Host "  + SUCCESS: App Registration created." -ForegroundColor Green
-    }
-    Write-Host "    - App Name: $appName" -ForegroundColor Cyan
-    Write-Host "    - App (Client) ID: $appId" -ForegroundColor Cyan
-    $config.ManagedIdentities[$i].AppId = $appId
-
-    # Check/Create Service Principal
-    Write-Host "  @ Checking Service Principal..." -ForegroundColor Yellow
-    $existingSp = az ad sp show --id $appId --output json 2>$null | ConvertFrom-Json
-    if ($existingSp) {
-        Write-Host "  + SUCCESS: Service Principal already exists." -ForegroundColor Green
-        $spId = $existingSp.id
-    } else {
-        $createdSp = az ad sp create --id $appId --output json | ConvertFrom-Json
-        $spId = $createdSp.id
-        Write-Host "  + SUCCESS: Service Principal created." -ForegroundColor Green
-    }
-    Write-Host "    - Service Principal Object ID: $spId" -ForegroundColor Cyan
+# Check/Create App Registration
+Write-Host "  @ Checking App Registration..." -ForegroundColor Yellow
+$existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
+if ($null -ne $existingApp -and $existingApp.Count -gt 0) {
+    $appId = $existingApp[0].appId
+    Write-Host "  + SUCCESS: App Registration already exists." -ForegroundColor Green
+} else {
+    $createdApp = az ad app create --display-name $appName --output json | ConvertFrom-Json
+    $appId = $createdApp.appId
+    Write-Host "  + SUCCESS: App Registration created." -ForegroundColor Green
 }
+Write-Host "    - App Name: $appName" -ForegroundColor Cyan
+Write-Host "    - App (Client) ID: $appId" -ForegroundColor Cyan
+$config.AppId = $appId
+
+# Check/Create Service Principal
+Write-Host "  @ Checking Service Principal..." -ForegroundColor Yellow
+$existingSp = az ad sp show --id $appId --output json 2>$null | ConvertFrom-Json
+if ($existingSp) {
+    Write-Host "  + SUCCESS: Service Principal already exists." -ForegroundColor Green
+    $spId = $existingSp.id
+} else {
+    $createdSp = az ad sp create --id $appId --output json | ConvertFrom-Json
+    $spId = $createdSp.id
+    Write-Host "  + SUCCESS: Service Principal created." -ForegroundColor Green
+}
+Write-Host "    - Service Principal Object ID: $spId" -ForegroundColor Cyan
 
 # ============================================================================
 # Step 2: Code Signing Certificate
@@ -211,14 +212,15 @@ Write-Host "`n[3] POWER PLATFORM FEDERATED CREDENTIALS" -ForegroundColor Blue
 
 $CertificateFileName = $config.CertificateFileName
 $CertificatePassword = $config.CertificatePassword
+$AppName = $config.AppName
+$AppId = $config.AppId
 
-for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
-    $mi = $config.ManagedIdentities[$i]
-    $AppName = $mi.AppName
-    $AppId = $mi.AppId
-    $EnvironmentId = $mi.EnvironmentId
+for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
+    $EnvironmentId = $config.EnvironmentIds[$i]
+    $CredentialName = Get-CredentialName -environmentId $EnvironmentId
     
-    Write-Host "`n  Processing: $AppName" -ForegroundColor Magenta
+    Write-Host "`n  Processing Environment: $EnvironmentId" -ForegroundColor Magenta
+    Write-Host "    - Credential Name: $CredentialName" -ForegroundColor Cyan
 
     # Load certificate for SHA256 hash
     $resolvedPfx = Join-Path $ScriptDir "$CertificateFileName.pfx"
@@ -242,14 +244,12 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
     $encodedTenantId = Convert-GuidToBase64Url -guid $TenantId
     $issuer = "https://login.microsoftonline.com/$TenantId/v2.0"
     $subject = "/eid1/c/pub/t/$encodedTenantId/a/qzXoWDkuqUa3l6zM5mM0Rw/n/plugin/e/$EnvironmentId/h/$sha256Hash"
-    # Use CredentialName from config (required field)
-    $credName = $mi.CredentialName
 
-    Write-Host "  @ Checking federated credential: $credName" -ForegroundColor Yellow
-    $existingCred = az ad app federated-credential list --id $AppId --query "[?name=='$credName']" | ConvertFrom-Json
+    Write-Host "  @ Checking federated credential: $CredentialName" -ForegroundColor Yellow
+    $existingCred = az ad app federated-credential list --id $AppId --query "[?name=='$CredentialName']" | ConvertFrom-Json
 
     $newCred = @{
-        name = $credName
+        name = $CredentialName
         issuer = $issuer
         subject = $subject
         description = "Power Platform v1 - Environment $EnvironmentId"
@@ -262,16 +262,16 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
         } else {
             Write-Host "  @ Updating federated credential (values changed)..." -ForegroundColor Yellow
             az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred.id
-            $newCred | ConvertTo-Json | Out-File "$credName.json" -Encoding UTF8
-            az ad app federated-credential create --id $AppId --parameters "$credName.json" | Out-Null
-            Remove-Item "$credName.json" -Force -ErrorAction SilentlyContinue
+            $newCred | ConvertTo-Json | Out-File "$CredentialName.json" -Encoding UTF8
+            az ad app federated-credential create --id $AppId --parameters "$CredentialName.json" | Out-Null
+            Remove-Item "$CredentialName.json" -Force -ErrorAction SilentlyContinue
             Write-Host "  + SUCCESS: Federated credential updated." -ForegroundColor Green
         }
     } else {
         Write-Host "  @ Creating federated credential..." -ForegroundColor Yellow
-        $newCred | ConvertTo-Json | Out-File "$credName.json" -Encoding UTF8
-        az ad app federated-credential create --id $AppId --parameters "$credName.json" | Out-Null
-        Remove-Item "$credName.json" -Force -ErrorAction SilentlyContinue
+        $newCred | ConvertTo-Json | Out-File "$CredentialName.json" -Encoding UTF8
+        az ad app federated-credential create --id $AppId --parameters "$CredentialName.json" | Out-Null
+        Remove-Item "$CredentialName.json" -Force -ErrorAction SilentlyContinue
         Write-Host "  + SUCCESS: Federated credential created." -ForegroundColor Green
     }
     Write-Host "    - Issuer: $issuer" -ForegroundColor Gray
@@ -284,18 +284,7 @@ for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
 Write-Host "`n[4] GENERATING ASSEMBLYINFO2.CS" -ForegroundColor Blue
 $assemblyFilePath = Join-Path -Path $ScriptDir -ChildPath "AssemblyInfo2.cs"
 
-$applicationIds = @()
-# Dedupe by AppName - same AppName means same app (only add AppId once per unique AppName)
-$seenAppNames = @{}
-foreach ($mi in $config.ManagedIdentities) {
-    if ($mi.AppId -and $mi.AppName) {
-        if (-not $seenAppNames.ContainsKey($mi.AppName)) {
-            $seenAppNames[$mi.AppName] = $true
-            $applicationIds += $mi.AppId
-        }
-    }
-}
-$applicationIdsString = $applicationIds -join ','
+$applicationId = $config.AppId
 
 $certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')) { 
     $config.CertificateFileName 
@@ -306,7 +295,7 @@ $certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')
 $assemblyContent = @"
 [assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$TenantId",
-    ApplicationIds = "$applicationIdsString",
+    ApplicationIds = "$applicationId",
     CertificateFileName = "$certificateFileOut",
     CertificatePassword = "$($config.CertificatePassword)"
 )]

@@ -3,12 +3,9 @@
   "CertificatePassword": "",
   "CertificateValidityYears": 10,
   "TenantId": "",
-  "ManagedIdentities": [
-    {
-      "AppName": "",
-      "AppId": "",
-      "EnvironmentId": "",
-      "CredentialName": ""
-    }
+  "AppName": "",
+  "AppId": "",
+  "EnvironmentIds": [
+    ""
   ]
 }
