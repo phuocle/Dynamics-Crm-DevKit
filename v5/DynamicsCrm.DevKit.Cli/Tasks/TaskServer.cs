@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Cli.CodeSigning;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -21,6 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         const int PACK = 50;
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+        private readonly ICodeSigner _signer = new DotNetToolSigner();
         private string _currentAssemblyDirectory = null;
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
@@ -114,9 +116,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        var signToolPath = FindSignTool();
-                        if (signToolPath == null) continue;
-                        (OK, ERROR) = await Helper.SignAssemblyAsync(signToolPath, fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await _signer.SignDllAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             SpectreLog.ActionError(ERROR);
@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        (OK, ERROR) = await Helper.SignPackageAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await _signer.SignNugetAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             SpectreLog.ActionError(ERROR);
@@ -482,31 +482,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return (false, $"CertificateFile not exist: {certificateFile}");
             }
             return (true, string.Empty);
-        }
-        private string FindSignTool()
-        {
-            var tool = Helper.FindSignTool();
-            if (tool != null) return tool;
-            SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0("To sign assemblies, you need to install Windows SDK:");
-            SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0("Option 1: Install Windows 10/11 SDK (Recommended)");
-            SpectreLog.ActionWithLevel1("Download: ", "https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/");
-            SpectreLog.ActionWithLevel1("During installation, select: ", "'Windows SDK Signing Tools for Desktop Apps'");
-            SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0("Option 2: Install via Visual Studio Installer");
-            SpectreLog.ActionWithLevel1("1. Open Visual Studio Installer");
-            SpectreLog.ActionWithLevel1("2. Click 'Modify' on your Visual Studio installation");
-            SpectreLog.ActionWithLevel1("3. Go to 'Individual Components' tab");
-            SpectreLog.ActionWithLevel1("4. Search for and select: ", "'Windows 10 SDK' or 'Windows 11 SDK'");
-            SpectreLog.ActionWithLevel1("5. Click 'Modify' to install");
-            SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0("Option 3: Install via Chocolatey (Package Manager)");
-            SpectreLog.ActionWithLevel1("Run: ", "choco install windows-sdk-10.0");
-            SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0("After installation, SignTool.exe will be located at:");
-            SpectreLog.ActionWithLevel1("C:\\Program Files (x86)\\Windows Kits\\10\\bin\\{version}\\x64\\signtool.exe");
-            return tool;
         }
         private async Task<(Guid ManagedIdentityId, Guid ApplicationId)> DeployManagedIdentityAsync(string assemblyName, Guid TenantId, string ApplicationIds)
         {
