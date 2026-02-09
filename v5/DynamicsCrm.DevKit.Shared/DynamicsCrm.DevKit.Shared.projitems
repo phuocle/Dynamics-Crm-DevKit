@@ -71,6 +71,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\WebResourceFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\XrmEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGetVersionCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.FromPac.cs" />

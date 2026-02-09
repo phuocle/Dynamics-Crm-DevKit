@@ -57,11 +57,29 @@ namespace DynamicsCrm.DevKit.Shared
 
         internal static async Task SetReplacementAsync(Dictionary<string, string> replacements, string nuget)
         {
-            var latestVersion = await GetLatestVersionAsync(nuget);
-            var targetFramework = await GetTargetFrameworkAsync(nuget);
-            replacements[$"${nuget}.Version$"] = latestVersion?.OriginalVersion;
-            replacements[$"${nuget}.TargetFramework$"] = await NuGetHelper.GetTargetFrameworkAsync(nuget);
-            replacements[$"${nuget}.XmlPackage$"] = $"<package id=\"{nuget}\" version=\"{latestVersion.OriginalVersion}\" targetFramework=\"{targetFramework}\" />";
+            // Use cache for instant response if available (preloaded when form opened)
+            var cached = NuGetVersionCache.TryGetCached(nuget);
+            
+            string versionString, targetFramework, xmlPackage;
+            
+            if (cached.HasValue)
+            {
+                versionString = cached.Value.Version;
+                targetFramework = cached.Value.TargetFramework;
+                xmlPackage = cached.Value.XmlPackage;
+            }
+            else
+            {
+                // Fallback: fetch from NuGet (original behavior)
+                var data = await NuGetVersionCache.GetVersionAsync(nuget);
+                versionString = data.Version;
+                targetFramework = data.TargetFramework;
+                xmlPackage = data.XmlPackage;
+            }
+            
+            replacements[$"${nuget}.Version$"] = versionString;
+            replacements[$"${nuget}.TargetFramework$"] = targetFramework;
+            replacements[$"${nuget}.XmlPackage$"] = xmlPackage;
         }
     }
 }

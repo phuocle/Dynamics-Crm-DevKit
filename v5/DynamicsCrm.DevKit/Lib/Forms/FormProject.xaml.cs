@@ -213,7 +213,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public FormProject(ProjectType projectType)
         {
             InitializeComponent();
+            this.ContentRendered += FormProject_ContentRendered;
             ProjectType = projectType;
+        }
+
+        private void FormProject_ContentRendered(object sender, EventArgs e)
+        {
+            // Fire-and-forget: Start preloading NuGet versions in background
+            // This runs after the form is fully displayed, so user sees UI immediately
+            // By the time user fills in form and clicks OK, cache should be ready
+            NuGetVersionCache.StartPreload();
         }        
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)

@@ -2,9 +2,7 @@
   "CertificateFileName": "",
   "CertificatePassword": "",
   "CertificateValidityYears": 10,
-  "TenantId": "",
   "AppName": "",
-  "AppId": "",
   "EnvironmentIds": [
     ""
   ]

@@ -337,3 +337,4 @@ AssemblyInfo2.cs
 2. **Store certificates securely** (Azure Key Vault recommended for production)
 3. **Rotate certificates** before they expire
 4. **Limit access** to certificate files to only those who need them
+
