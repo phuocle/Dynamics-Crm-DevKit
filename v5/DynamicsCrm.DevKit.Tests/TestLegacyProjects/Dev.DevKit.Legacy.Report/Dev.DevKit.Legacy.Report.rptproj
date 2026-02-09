@@ -35,13 +35,13 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
+    <Report Include="BUG-download.reports.legacy.bat">
+      <MimeType>application/octet-stream</MimeType>
+    </Report>
     <Report Include="download.reports.devkit.bat">
       <MimeType>application/octet-stream</MimeType>
     </Report>
     <Report Include="download.reports.legacy-to-devkit.bat">
-      <MimeType>application/octet-stream</MimeType>
-    </Report>
-    <Report Include="download.reports.legacy.bat">
       <MimeType>application/octet-stream</MimeType>
     </Report>
     <Report Include="README.md">
