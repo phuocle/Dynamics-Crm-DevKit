@@ -197,7 +197,7 @@ After the script completes, add the generated files to your plugin project:
 Add the `AssemblyInfo2.cs` file to your plugin project. This file contains the Managed Identity attribute:
 
 ```csharp
-[assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
+[assembly: DynamicsCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "your-tenant-id",
     ApplicationIds = "your-app-id",
     CertificateFileName = "your-cert.pfx",

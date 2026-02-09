@@ -293,7 +293,7 @@ $certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')
 }
 
 $assemblyContent = @"
-[assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
+[assembly: DynamicsCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$TenantId",
     ApplicationIds = "$applicationId",
     CertificateFileName = "$certificateFileOut",
@@ -312,19 +312,13 @@ Write-Host "  + SUCCESS: Saved AssemblyInfo2.cs" -ForegroundColor Green
 Write-Host "    - Path: $assemblyFilePath" -ForegroundColor Cyan
 
 # ============================================================================
-# Step 5: Save Configuration
+# Step 5: Save Configuration (SKIPPED)
 # ============================================================================
+# Config file is NOT updated with AppId/TenantId to avoid changes.
+# These values are stored in AssemblyInfo2.cs
 Write-Host "`n[5] SAVING CONFIGURATION" -ForegroundColor Blue
-$config | Add-Member -NotePropertyName 'TenantId' -NotePropertyValue $TenantId -Force
-
-try {
-    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host "  + SUCCESS: Configuration saved." -ForegroundColor Green
-    Write-Host "    - Path: $ConfigPath" -ForegroundColor Cyan
-}
-catch {
-    Write-Host "  x ERROR: Failed to save config: $($_.Exception.Message)" -ForegroundColor Red
-}
+Write-Host "  @ Configuration file update specific skipped." -ForegroundColor Yellow
+Write-Host "    - AppId and TenantId are saved in AssemblyInfo2.cs" -ForegroundColor Gray
 
 # ============================================================================
 # Summary

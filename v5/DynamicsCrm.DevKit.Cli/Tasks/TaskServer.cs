@@ -1,4 +1,4 @@
-using DynamicsCrm.DevKit.Cli.CodeSigning;
+﻿using DynamicsCrm.DevKit.Cli.CodeSigning;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
         private string ERROR { get; set; } = string.Empty;
-        private DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
+        private DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute ManagedIdentityAttribute { get; set; }
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
@@ -457,23 +457,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private (bool needSign, string error) IsNeedSignAssembly(string file)
         {
             var assembly = LoadAssemblyIntoCache(file);
-            ManagedIdentityAttribute = GetDynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute(assembly);
+            ManagedIdentityAttribute = GetDynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute(assembly);
             if (ManagedIdentityAttribute == null) return (false, string.Empty);
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.TenantId))
             {
-                return (false, $"Not found TenantId value from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
+                return (false, $"Not found TenantId value from {nameof(DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.ApplicationIds))
             {
-                return (false, $"Not found ApplicationId value from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
+                return (false, $"Not found ApplicationId value from {nameof(DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             if (string.IsNullOrEmpty(ManagedIdentityAttribute.CertificateFileName))
             {
-                return (false, $"Not found CertificateFile value from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
+                return (false, $"Not found CertificateFile value from {nameof(DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             if (!ManagedIdentityAttribute.CertificateFileName.EndsWith(".pfx"))
             {
-                return (false, $"CertificateFile value should ends with '.pfx' from {nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
+                return (false, $"CertificateFile value should ends with '.pfx' from {nameof(DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute)}");
             }
             var certificateFile = Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName);
             if (!File.Exists(certificateFile))
@@ -540,14 +540,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return (_ManagedIdentityId.Value, _ApplicationId.Value);
         }
-        private DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute GetDynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute(Assembly assembly)
+        private DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute GetDynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute(Assembly assembly)
         {
+            // Support both old (typo) and new (correct) attribute names for backward compatibility
             var attributeData = CustomAttributeData.GetCustomAttributes(assembly)
-                .Where(data => data.AttributeType.FullName.Contains(nameof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute)))
+                .Where(data => data.AttributeType.FullName.Contains("PluginManagedIdentityAssemblyAttribute"))
                 .FirstOrDefault();
             if (attributeData == null) return null;
-            var attribute = new DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute();
-            var properties = typeof(DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute).GetProperties();
+            var attribute = new DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute();
+            var properties = typeof(DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute).GetProperties();
             foreach (var namedArgument in attributeData.NamedArguments)
             {
                 string propertyName = namedArgument.MemberName;

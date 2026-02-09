@@ -133,7 +133,7 @@ namespace $NameSpace$
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
+    public class DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
     {
         public string TenantId { get; set; }
         public string CertificateFileName { get; set; }
@@ -143,9 +143,11 @@ namespace $NameSpace$
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamcisCrmDevKitPluginAssemblyAttribute : Attribute
+    public class DynamicsCrmDevKitPluginAssemblyAttribute : Attribute
     {
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 }
+
+

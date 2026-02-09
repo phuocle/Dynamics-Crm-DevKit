@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # Plugin Managed Identity Setup Script
 # ============================================================================
 # This script creates the MINIMUM required Azure resources for Dataverse Plugin
@@ -305,7 +305,7 @@ $certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')
 }
 
 $assemblyContent = @"
-[assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
+[assembly: DynamicsCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$TenantId",
     ApplicationIds = "$applicationIdsString",
     CertificateFileName = "$certificateFileOut",

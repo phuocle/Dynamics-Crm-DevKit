@@ -1,4 +1,4 @@
-function Convert-GuidToBase64Url {
+﻿function Convert-GuidToBase64Url {
     param([string]$guid)
     $guidObj = [System.Guid]::Parse($guid)
     $bytes = $guidObj.ToByteArray()
@@ -436,7 +436,7 @@ if (Test-Path $assemblyFilePath) {
     Write-Host "  @ Creating file: AssemblyInfo2.cs" -ForegroundColor Yellow
 }
 $assemblyContent = @"
-[assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
+[assembly: DynamicsCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$TenantId",
     ApplicationIds = "$applicationIdsString",
     CertificateFileName = "$certificateFileOut",

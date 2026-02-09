@@ -1,12 +1,12 @@
 ﻿{
-    "CertificateFileName":  "DevDevKitServer4",
-    "CertificatePassword":  "DevDevKitServer4",
-    "CertificateValidityYears":  10,
-    "AppName":  "Dev.DevKit.Server4",
-    "EnvironmentIds":  [
-                           "cbba8ce9-ea7c-e440-b083-0b9517496e17",
-                           "2f985c04-9487-e70c-aa57-dcd6d08f0886"
-                       ],
-    "AppId":  "81f801ce-efbd-4e73-bc1a-9ad7fa157ee8",
-    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911"
+  "CertificateFileName": "DevDevKitServer4",
+  "CertificatePassword": "DevDevKitServer4",
+  "CertificateValidityYears": 10,
+  "AppName": "Dev.DevKit.Server4",
+  "EnvironmentIds": [
+    "cbba8ce9-ea7c-e440-b083-0b9517496e17",
+    "2f985c04-9487-e70c-aa57-dcd6d08f0886"
+  ],
+  "AppId": "81f801ce-efbd-4e73-bc1a-9ad7fa157ee8",
+  "TenantId": "49528483-b79b-4b88-b86e-7d882ba68911"
 }

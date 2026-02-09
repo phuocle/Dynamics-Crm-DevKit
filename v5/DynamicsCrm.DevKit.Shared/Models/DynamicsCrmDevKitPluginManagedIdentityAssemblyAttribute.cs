@@ -3,10 +3,9 @@ using System.Diagnostics;
 
 namespace DynamicsCrm.DevKit.Shared.Models
 {
-
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamcisCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
+    public class DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
     {
         public string TenantId { get; set; }
         public string CertificateFileName { get; set; }
@@ -14,3 +13,5 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string ApplicationIds { get; set; } = string.Empty;
     }
 }
+
+

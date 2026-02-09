@@ -1,4 +1,4 @@
-# Plugin Managed Identity Setup
+﻿# Plugin Managed Identity Setup
 
 This guide explains how to configure and deploy Dataverse Plugins using Azure Managed Identity.
 
@@ -107,7 +107,7 @@ After the script completes successfully:
    - `AssemblyInfo2.cs`
    - `<CertificateFileName>.pfx` (Set **Build Action**: `None`, **Copy to Output Directory**: `Do not copy`)
 
-2. **Verify Attribute**: Ensure `AssemblyInfo2.cs` contains the `DynamcisCrmDevKitPluginManagedIdentityAssembly` attribute with correct values.
+2. **Verify Attribute**: Ensure `AssemblyInfo2.cs` contains the `DynamicsCrmDevKitPluginManagedIdentityAssembly` attribute with correct values.
 
 ## Step 4: Build and Deploy
 1. **Build**: Build your project (Debug/Release).
