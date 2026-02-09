@@ -165,7 +165,7 @@ graph TB
 3. **Certificate**: Generates self-signed code signing certificate (.pfx and .cer)
 4. **Federated Credentials**: Configures one credential per environment
 5. **AssemblyInfo2.cs**: Generates C# attribute file with Managed Identity configuration
-6. **Config Update**: Saves `TenantId` and `AppId` back to config file
+6. **No Config Update**: The script does NOT modify your configuration file (`AppId` and `TenantId` are in `AssemblyInfo2.cs`)
 
 ### Output Files
 
@@ -176,7 +176,7 @@ After running the script, you will have these files:
 | `{CertificateFileName}.pfx` | Private key certificate | **Add to plugin project** |
 | `{CertificateFileName}.cer` | Public key certificate | Keep for reference |
 | `AssemblyInfo2.cs` | C# attribute file | **Add to plugin project** |
-| `Plugin-Managed-Identity-Config.json` | Updated with `TenantId` and `AppId` | Keep for reference |
+| `Plugin-Managed-Identity-Config.json` | Original configuration (unchanged) | Keep for reference |
 
 ### Azure AD Resources Created
 
@@ -293,10 +293,9 @@ If you cannot obtain the required Azure AD permissions, follow this workflow to 
 
 | File | Description |
 |------|-------------|
-| `Plugin-Managed-Identity-Config.json` | Updated with AppId, TenantId, etc. |
 | `*.pfx` | Certificate file (handle securely!) |
 | `*.cer` | Public certificate |
-| `AssemblyInfo2.cs` | C# attribute file |
+| `AssemblyInfo2.cs` | C# attribute file (contains `AppId` and `TenantId`) |
 
 ---
 
