@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ActionError($"{TaskType} Cannot auto-detect Microsoft.CrmSdk.CoreTools version. Please ensure the package is installed in the packages folder or specify --version parameter.");
                     return false;
                 }
-                SpectreLog.ActionWithLevel0("[AUTO-DETECT]", $"Microsoft.CrmSdk.CoreTools {Version}");
+                SpectreLog.ActionWithLevel0("[AUTO-DETECT]", "Microsoft.CrmSdk.CoreTools", Version);
             }
 
             if (!FindCrmSvcUtil(CurrentDirectory))
@@ -326,8 +326,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             SpectreLog.ActionWithLevel1("[OUTPUT]", Json.output);
             SpectreLog.ActionWithLevel1("[NAMESPACE]", Json.@namespace);
-
-            SpectreLog.ActionWithLevel0(path + " " + CreateCommandArgsLog());
+            SpectreLog.ActionWithLevel0("[CRMSVCUTIL]", path + " " + CreateCommandArgsLog());
             SpectreLog.WriteLine();
 
             var process = new Process
