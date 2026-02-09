@@ -37,6 +37,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+	<Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dev.DevKit.Server4.snk" />

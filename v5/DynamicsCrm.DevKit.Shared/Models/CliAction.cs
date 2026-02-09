@@ -21,5 +21,7 @@
         public const string PROCESSING = "[PROCESSING]";
         public const string FILE = "[FILE]";
         public const string EXPORT = "[EXPORT]";
+        public const string INSTALLING = "[INSTALLING]";
+        public const string INSTALLED = "[INSTALLED]";
     }
 }

@@ -22,7 +22,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         const int PACK = 50;
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
-        private readonly ICodeSigner _signer = new DotNetToolSigner();
         private string _currentAssemblyDirectory = null;
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
@@ -116,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        (OK, ERROR) = await _signer.SignDllAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await CodeSigner.SignDllAsync(fileDll, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             SpectreLog.ActionError(ERROR);
@@ -164,7 +163,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     (IS_MANAGED_IDENTITY, ERROR) = IsNeedSignAssembly(fileNugetDll);
                     if (IS_MANAGED_IDENTITY && ERROR.Length == 0)
                     {
-                        (OK, ERROR) = await _signer.SignNugetAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
+                        (OK, ERROR) = await CodeSigner.SignNugetAsync(fileNuget, Path.Combine(CurrentDirectory, ManagedIdentityAttribute.CertificateFileName), ManagedIdentityAttribute.CertificatePassword);
                         if (!OK)
                         {
                             SpectreLog.ActionError(ERROR);
