@@ -84,7 +84,7 @@ namespace Dev.DevKit.Server4.Plugins.Account
                 }
             }
 
-            throw new InvalidPluginExecutionException($"SUCCESS! secretValue = [{secretValue}]");
+            throw new InvalidPluginExecutionException($"SUCCESS SUCCESS SUCCESS secretValue = [{secretValue}]");
         }
     }
 }

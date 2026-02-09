@@ -2,7 +2,7 @@
 
 [assembly: DynamcisCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "49528483-b79b-4b88-b86e-7d882ba68911",
-    ApplicationIds = "dc0f747b-d63b-4e0e-a406-b3f3cf7f33f9",
+    ApplicationIds = "81f801ce-efbd-4e73-bc1a-9ad7fa157ee8",
     CertificateFileName = "DevDevKitServer4.pfx",
     CertificatePassword = "DevDevKitServer4"
 )]
