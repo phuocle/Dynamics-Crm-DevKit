@@ -77,13 +77,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!File.Exists(fileName))
                         {
                             await FileHelper.ForceWriteAllTextAsync(fileName, reportFile.Content);
-                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
+                            SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{reportFile.FileName} [{reportFile.Language}]", "to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
                         }
                         else
                         {
                             var newFileName = FileHelper.GeNextFileName(fileName);
                             await FileHelper.ForceWriteAllTextAsync(newFileName, reportFile.Content);
-                            SpectreLog.ActionWithLevel1(CliAction.DUPLICATED, $"{reportFile.FileName} [{reportFile.Language}]", " to:", $"..{newFileName}");
+                            SpectreLog.ActionWithLevel1(CliAction.DUPLICATED, $"{reportFile.FileName} [{reportFile.Language}]", "to:", $"..{newFileName}");
                         }
                         i++;
                     }
