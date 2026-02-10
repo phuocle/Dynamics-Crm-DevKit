@@ -1,0 +1,12 @@
+<pluginpackage uniquename="v4legacy_Dev.DevKit.Legacy.Package2">
+  <exportkeyversion>1</exportkeyversion>
+  <iscustomizable>1</iscustomizable>
+  <managedidentityid>
+    <managedidentityid>fbd74104-0be7-4dbe-8815-1fd7249c92c3</managedidentityid>
+  </managedidentityid>
+  <name>v4legacy_Dev.DevKit.Legacy.Package2</name>
+  <package mimetype="application/octet-stream">v4legacy_Dev.DevKit.Legacy.Package2.nupkg</package>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <version>1.0.0</version>
+</pluginpackage>

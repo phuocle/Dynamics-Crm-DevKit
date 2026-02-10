@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDataProvider xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityDataProviderId>{0240e701-9e05-f111-8407-000d3a316bdb}</EntityDataProviderId>
+  <Name>v4legacy_sqlserverlegacytodevkit</Name>
+  <DataSourceLogicalName>v4legacy_sqlserverlegacytodevkit</DataSourceLogicalName>
+  <IsCustomizable>1</IsCustomizable>
+  <RetrievePluginTypeId>109cdbfb-9d05-f111-8407-000d3a316bdb</RetrievePluginTypeId>
+  <RetrieveMultiplePluginTypeId>119cdbfb-9d05-f111-8407-000d3a316bdb</RetrieveMultiplePluginTypeId>
+  <CreatePluginTypeId>0d9cdbfb-9d05-f111-8407-000d3a316bdb</CreatePluginTypeId>
+  <UpdatePluginTypeId>129cdbfb-9d05-f111-8407-000d3a316bdb</UpdatePluginTypeId>
+  <DeletePluginTypeId>0f9cdbfb-9d05-f111-8407-000d3a316bdb</DeletePluginTypeId>
+  <LookupExpansionEnabled>0</LookupExpansionEnabled>
+</EntityDataProvider>

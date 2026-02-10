@@ -1,0 +1,972 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="Source LCID" xml:space="preserve">
+    <value>1033</value>
+  </metadata>
+  <metadata name="Source file" xml:space="preserve">
+    <value>devkitv4_legacy_1.0.0000.0_managed.zip</value>
+  </metadata>
+  <metadata name="Source package type" xml:space="preserve">
+    <value>Both</value>
+  </metadata>
+  <metadata name="SolutionPackager Version" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgJAAAAAAAAAAAAAAAAAAAACw==</value>
+  </metadata>
+  <metadata name="SolutionPackager Version String" xml:space="preserve">
+    <value>9.0.0.0</value>
+  </metadata>
+  <data name="15062:LocalizedName,devkitv4_legacy" xml:space="preserve">
+    <value>DEVKITV4_LEGACY</value>
+    <comment> 'devkitv4_legacy' : LocalizedName for Solution</comment>
+  </data>
+  <data name="15062:LocalizedName,devkitv4_legacyv4legacy11111" xml:space="preserve">
+    <value>DEVKITV4_LEGACY</value>
+    <comment> 'devkitv4_legacy' : LocalizedName for Solution Publisher</comment>
+  </data>
+  <data name="1:Description,SqlitePackageDevKit{1d92ccfc-3703-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>All active SqlitePackageDevKits</value>
+    <comment>'SqlitePackageDevKit' : Description for SavedQuery on Entity QueryId: '{1d92ccfc-3703-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageDevKit{c2df7aef-807c-402f-9008-1bf50b47baa8}" xml:space="preserve">
+    <value>A card form for this entity.</value>
+    <comment>'SqlitePackageDevKit' : Description for systemform in Entity FormXml ID: '{c2df7aef-807c-402f-9008-1bf50b47baa8}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageDevKit{d51d11c5-3a94-4e80-9a8e-a07265d52dfb}" xml:space="preserve">
+    <value>A form for this entity.</value>
+    <comment>'SqlitePackageDevKit' : Description for systemform in Entity FormXml ID: '{d51d11c5-3a94-4e80-9a8e-a07265d52dfb}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageLegacyToDevKit{2ada6780-652c-4f6a-b3d8-3f33182a0d45}" xml:space="preserve">
+    <value>A form for this entity.</value>
+    <comment>'SqlitePackageLegacyToDevKit' : Description for systemform in Entity FormXml ID: '{2ada6780-652c-4f6a-b3d8-3f33182a0d45}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageLegacyToDevKit{351d624f-74a8-46aa-8819-fff60747bba0}" xml:space="preserve">
+    <value>A card form for this entity.</value>
+    <comment>'SqlitePackageLegacyToDevKit' : Description for systemform in Entity FormXml ID: '{351d624f-74a8-46aa-8819-fff60747bba0}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageLegacyToDevKit{496bf81a-3303-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>All active SqlitePackageLegacyToDevKits</value>
+    <comment>'SqlitePackageLegacyToDevKit' : Description for SavedQuery on Entity QueryId: '{496bf81a-3303-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageLegacy{35c62751-664a-4f02-8542-3cdfb1bb6356}" xml:space="preserve">
+    <value>A form for this entity.</value>
+    <comment>'SqlitePackageLegacy' : Description for systemform in Entity FormXml ID: '{35c62751-664a-4f02-8542-3cdfb1bb6356}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageLegacy{690b6f8b-2f03-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>All active SqlitePackageLegacies</value>
+    <comment>'SqlitePackageLegacy' : Description for SavedQuery on Entity QueryId: '{690b6f8b-2f03-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:Description,SqlitePackageLegacy{f11877ae-0c27-4ace-a56e-9a3d4ba1be12}" xml:space="preserve">
+    <value>A card form for this entity.</value>
+    <comment>'SqlitePackageLegacy' : Description for systemform in Entity FormXml ID: '{f11877ae-0c27-4ace-a56e-9a3d4ba1be12}'</comment>
+  </data>
+  <data name="1:Description,SqlServereDevKit{202fdc85-9c51-40c0-ae82-c7e515deb622}" xml:space="preserve">
+    <value>A form for this entity.</value>
+    <comment>'SqlServereDevKit' : Description for systemform in Entity FormXml ID: '{202fdc85-9c51-40c0-ae82-c7e515deb622}'</comment>
+  </data>
+  <data name="1:Description,SqlServereDevKit{26231a46-9d05-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>All active SqlServerDevKits</value>
+    <comment>'SqlServereDevKit' : Description for SavedQuery on Entity QueryId: '{26231a46-9d05-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:Description,SqlServereDevKit{32a9fdbd-a327-4b91-8a95-4da147827d74}" xml:space="preserve">
+    <value>A card form for this entity.</value>
+    <comment>'SqlServereDevKit' : Description for systemform in Entity FormXml ID: '{32a9fdbd-a327-4b91-8a95-4da147827d74}'</comment>
+  </data>
+  <data name="1:Description,SqlServerLegacyToDevKit{4aaa448b-9d05-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>All active SqlServerLegacyToDevKits</value>
+    <comment>'SqlServerLegacyToDevKit' : Description for SavedQuery on Entity QueryId: '{4aaa448b-9d05-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:Description,SqlServerLegacyToDevKit{9d846f00-7bcc-43bb-a4a3-0abc762bbf72}" xml:space="preserve">
+    <value>A form for this entity.</value>
+    <comment>'SqlServerLegacyToDevKit' : Description for systemform in Entity FormXml ID: '{9d846f00-7bcc-43bb-a4a3-0abc762bbf72}'</comment>
+  </data>
+  <data name="1:Description,SqlServerLegacyToDevKit{c9804def-973f-496a-9d37-f1f4f5370762}" xml:space="preserve">
+    <value>A card form for this entity.</value>
+    <comment>'SqlServerLegacyToDevKit' : Description for systemform in Entity FormXml ID: '{c9804def-973f-496a-9d37-f1f4f5370762}'</comment>
+  </data>
+  <data name="1:Description,SqlServerLegacy{02f8366b-9d05-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>All active SqlServerLegacies</value>
+    <comment>'SqlServerLegacy' : Description for SavedQuery on Entity QueryId: '{02f8366b-9d05-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:Description,SqlServerLegacy{1a8a140e-7242-48d7-9279-b9568caa28b5}" xml:space="preserve">
+    <value>A form for this entity.</value>
+    <comment>'SqlServerLegacy' : Description for systemform in Entity FormXml ID: '{1a8a140e-7242-48d7-9279-b9568caa28b5}'</comment>
+  </data>
+  <data name="1:Description,SqlServerLegacy{96511ef5-6d32-48c5-9ad6-a86ce4723b74}" xml:space="preserve">
+    <value>A card form for this entity.</value>
+    <comment>'SqlServerLegacy' : Description for systemform in Entity FormXml ID: '{96511ef5-6d32-48c5-9ad6-a86ce4723b74}'</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlitePackageDevKitentityv4legacy_SqlitePackageDevKit" xml:space="preserve">
+    <value />
+    <comment> 'v4legacy_SqlitePackageDevKit' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlitePackageDevKitv4legacy_SqlitePackageDevKitId" xml:space="preserve">
+    <value>Unique identifier for entity instances</value>
+    <comment>'v4legacy_SqlitePackageDevKit' : Description for Attribute 'v4legacy_SqlitePackageDevKitId' on Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlitePackageLegacyentityv4legacy_SqlitePackageLegacy" xml:space="preserve">
+    <value />
+    <comment> 'v4legacy_SqlitePackageLegacy' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlitePackageLegacyToDevKitentityv4legacy_SqlitePackageLegacyToDevKit" xml:space="preserve">
+    <value />
+    <comment> 'v4legacy_SqlitePackageLegacyToDevKit' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlitePackageLegacyToDevKitv4legacy_SqlitePackageLegacyToDevKitId" xml:space="preserve">
+    <value>Unique identifier for entity instances</value>
+    <comment>'v4legacy_SqlitePackageLegacyToDevKit' : Description for Attribute 'v4legacy_SqlitePackageLegacyToDevKitId' on Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlitePackageLegacyv4legacy_SqlitePackageLegacyId" xml:space="preserve">
+    <value>Unique identifier for entity instances</value>
+    <comment>'v4legacy_SqlitePackageLegacy' : Description for Attribute 'v4legacy_SqlitePackageLegacyId' on Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlServerDevKitentityv4legacy_SqlServerDevKit" xml:space="preserve">
+    <value />
+    <comment> 'v4legacy_SqlServerDevKit' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlServerDevKitv4legacy_SqlServerDevKitId" xml:space="preserve">
+    <value>Unique identifier for entity instances</value>
+    <comment>'v4legacy_SqlServerDevKit' : Description for Attribute 'v4legacy_SqlServerDevKitId' on Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlServerLegacyentityv4legacy_SqlServerLegacy" xml:space="preserve">
+    <value />
+    <comment> 'v4legacy_SqlServerLegacy' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlServerLegacyToDevKitentityv4legacy_SqlServerLegacyToDevKit" xml:space="preserve">
+    <value />
+    <comment> 'v4legacy_SqlServerLegacyToDevKit' : Description for Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlServerLegacyToDevKitv4legacy_SqlServerLegacyToDevKitId" xml:space="preserve">
+    <value>Unique identifier for entity instances</value>
+    <comment>'v4legacy_SqlServerLegacyToDevKit' : Description for Attribute 'v4legacy_SqlServerLegacyToDevKitId' on Entity</comment>
+  </data>
+  <data name="1:Description,v4legacy_SqlServerLegacyv4legacy_SqlServerLegacyId" xml:space="preserve">
+    <value>Unique identifier for entity instances</value>
+    <comment>'v4legacy_SqlServerLegacy' : Description for Attribute 'v4legacy_SqlServerLegacyId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlitePackageDevKitv4legacy_SqlitePackageDevKitId" xml:space="preserve">
+    <value>SqlitePackageDevKit</value>
+    <comment>'v4legacy_SqlitePackageDevKit' : displayname for Attribute 'v4legacy_SqlitePackageDevKitId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlitePackageDevKitv4legacy_SqlitePackageDevKitName" xml:space="preserve">
+    <value>SqlitePackageDevKit</value>
+    <comment>'v4legacy_SqlitePackageDevKit' : displayname for Attribute 'v4legacy_SqlitePackageDevKitName' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlitePackageLegacyToDevKitv4legacy_SqlitePackageLegacyToDevKitId" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit</value>
+    <comment>'v4legacy_SqlitePackageLegacyToDevKit' : displayname for Attribute 'v4legacy_SqlitePackageLegacyToDevKitId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlitePackageLegacyToDevKitv4legacy_SqlitePackageLegacyToDevKitName" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit</value>
+    <comment>'v4legacy_SqlitePackageLegacyToDevKit' : displayname for Attribute 'v4legacy_SqlitePackageLegacyToDevKitName' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlitePackageLegacyv4legacy_SqlitePackageLegacyId" xml:space="preserve">
+    <value>SqlitePackageLegacy</value>
+    <comment>'v4legacy_SqlitePackageLegacy' : displayname for Attribute 'v4legacy_SqlitePackageLegacyId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlitePackageLegacyv4legacy_SqlitePackageLegacyName" xml:space="preserve">
+    <value>SqlitePackageLegacy</value>
+    <comment>'v4legacy_SqlitePackageLegacy' : displayname for Attribute 'v4legacy_SqlitePackageLegacyName' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlServerDevKitv4legacy_SqlServerDevKitId" xml:space="preserve">
+    <value>SqlServereDevKit</value>
+    <comment>'v4legacy_SqlServerDevKit' : displayname for Attribute 'v4legacy_SqlServerDevKitId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlServerDevKitv4legacy_SqlServerDevKitName" xml:space="preserve">
+    <value>SqlServereDevKit</value>
+    <comment>'v4legacy_SqlServerDevKit' : displayname for Attribute 'v4legacy_SqlServerDevKitName' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlServerLegacyToDevKitv4legacy_SqlServerLegacyToDevKitId" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit</value>
+    <comment>'v4legacy_SqlServerLegacyToDevKit' : displayname for Attribute 'v4legacy_SqlServerLegacyToDevKitId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlServerLegacyToDevKitv4legacy_SqlServerLegacyToDevKitName" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit</value>
+    <comment>'v4legacy_SqlServerLegacyToDevKit' : displayname for Attribute 'v4legacy_SqlServerLegacyToDevKitName' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlServerLegacyv4legacy_SqlServerLegacyId" xml:space="preserve">
+    <value>SqlServerLegacy</value>
+    <comment>'v4legacy_SqlServerLegacy' : displayname for Attribute 'v4legacy_SqlServerLegacyId' on Entity</comment>
+  </data>
+  <data name="1:displayname,v4legacy_SqlServerLegacyv4legacy_SqlServerLegacyName" xml:space="preserve">
+    <value>SqlServerLegacy</value>
+    <comment>'v4legacy_SqlServerLegacy' : displayname for Attribute 'v4legacy_SqlServerLegacyName' on Entity</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{0eede6a0-1154-4f81-b10c-cd59ea8db0f2}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{0eede6a0-1154-4f81-b10c-cd59ea8db0f2}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{250eaeb1-d70a-4360-8a10-9dde84159b99}" xml:space="preserve">
+    <value>Footer</value>
+    <comment>'SqlitePackageDevKit' : label for section in Entity FormXml ID: '{250eaeb1-d70a-4360-8a10-9dde84159b99}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{415740a9-7bfc-43eb-91ff-4b8e68b4d7d1}" xml:space="preserve">
+    <value>SqlitePackageDevKit</value>
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{415740a9-7bfc-43eb-91ff-4b8e68b4d7d1}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{415f097e-d78a-4644-8e62-a7497b5d3f23}" xml:space="preserve">
+    <value>Details</value>
+    <comment>'SqlitePackageDevKit' : label for section in Entity FormXml ID: '{415f097e-d78a-4644-8e62-a7497b5d3f23}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{48c2236a-fe52-4735-be14-7f9790e50398}" xml:space="preserve">
+    <value>SqlitePackageDevKit</value>
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{48c2236a-fe52-4735-be14-7f9790e50398}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{4b3cd93a-0194-426d-bcc0-4a977c402b33}" xml:space="preserve">
+    <value>Header</value>
+    <comment>'SqlitePackageDevKit' : label for section in Entity FormXml ID: '{4b3cd93a-0194-426d-bcc0-4a977c402b33}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{54747a2b-31cc-44fa-aa47-51b08414721d}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlitePackageDevKit' : label for tab in Entity FormXml ID: '{54747a2b-31cc-44fa-aa47-51b08414721d}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{560992e5-826b-4c52-b7fa-879849abc584}" xml:space="preserve">
+    <value>GENERAL</value>
+    <comment>'SqlitePackageDevKit' : label for section in Entity FormXml ID: '{560992e5-826b-4c52-b7fa-879849abc584}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{666814ae-f2ab-4ba2-969a-0bab4116daf5}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for tab in Entity FormXml ID: '{666814ae-f2ab-4ba2-969a-0bab4116daf5}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{72c955c0-b2c5-4ba1-961f-2b8c2308edbe}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{72c955c0-b2c5-4ba1-961f-2b8c2308edbe}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{7848d381-8c10-4811-a9da-78cfc7d3d190}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{7848d381-8c10-4811-a9da-78cfc7d3d190}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{82684663-2ba6-4e63-a72d-09aa36b84fd0}" xml:space="preserve">
+    <value>ColorStrip</value>
+    <comment>'SqlitePackageDevKit' : label for section in Entity FormXml ID: '{82684663-2ba6-4e63-a72d-09aa36b84fd0}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{8980ef99-e5f9-40a6-99a0-0be36f9eae87}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlitePackageDevKit' : label for section in Entity FormXml ID: '{8980ef99-e5f9-40a6-99a0-0be36f9eae87}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{a4f48289-e2d9-4e27-b170-171c789b37a5}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{a4f48289-e2d9-4e27-b170-171c789b37a5}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{aa87447e-1eab-4d6f-983b-ee6858928914}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for tab in Entity FormXml ID: '{aa87447e-1eab-4d6f-983b-ee6858928914}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{adaf29c7-281f-46ce-880b-18dfb200cd16}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{adaf29c7-281f-46ce-880b-18dfb200cd16}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{b26deef6-9a38-4409-90d9-44d741c37f79}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{b26deef6-9a38-4409-90d9-44d741c37f79}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageDevKit{e77bada2-ea01-4ef6-84b1-f24071b5ea6f}" xml:space="preserve">
+    <value>SqlitePackageDevKit</value>
+    <comment>'SqlitePackageDevKit' : label for cell in Entity FormXml ID: '{e77bada2-ea01-4ef6-84b1-f24071b5ea6f}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{0636fe13-8ff3-47d8-ba87-9d5dec1714ac}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{0636fe13-8ff3-47d8-ba87-9d5dec1714ac}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{0fd3e4f4-79bc-44de-a6b2-6616dc7483a2}" xml:space="preserve">
+    <value>Details</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for section in Entity FormXml ID: '{0fd3e4f4-79bc-44de-a6b2-6616dc7483a2}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{0fe1271c-d4a9-48c5-bb6d-73845e2cdd67}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{0fe1271c-d4a9-48c5-bb6d-73845e2cdd67}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{1c4ac1ca-09df-4a7d-9e6a-87507b78f138}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{1c4ac1ca-09df-4a7d-9e6a-87507b78f138}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{20ed0089-56f0-48e8-a651-4bab70d1c946}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for section in Entity FormXml ID: '{20ed0089-56f0-48e8-a651-4bab70d1c946}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{3f927f0b-cc35-4c54-a41d-6bdbb9c60fa4}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for tab in Entity FormXml ID: '{3f927f0b-cc35-4c54-a41d-6bdbb9c60fa4}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{5fc898c2-56df-45c4-8e5d-88d9b7c33a00}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{5fc898c2-56df-45c4-8e5d-88d9b7c33a00}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{7b78bc62-1118-40ef-ba98-062927dfff2b}" xml:space="preserve">
+    <value>Footer</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for section in Entity FormXml ID: '{7b78bc62-1118-40ef-ba98-062927dfff2b}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{918a0e90-b18a-4ffd-a34c-d587456906c4}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{918a0e90-b18a-4ffd-a34c-d587456906c4}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{986174ff-c0af-4837-8f97-39f1ba367962}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for tab in Entity FormXml ID: '{986174ff-c0af-4837-8f97-39f1ba367962}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{b3b841e6-3edd-449f-870b-258baba4b012}" xml:space="preserve">
+    <value>GENERAL</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for section in Entity FormXml ID: '{b3b841e6-3edd-449f-870b-258baba4b012}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{b98fac8c-fc9e-49d0-8ee7-80bcfba2d652}" xml:space="preserve">
+    <value>Header</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for section in Entity FormXml ID: '{b98fac8c-fc9e-49d0-8ee7-80bcfba2d652}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{bc4f56c4-bc76-41b7-b40c-77b1c9be1677}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{bc4f56c4-bc76-41b7-b40c-77b1c9be1677}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{cb9c75ce-b61a-4f34-a07c-9293bedc6d87}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{cb9c75ce-b61a-4f34-a07c-9293bedc6d87}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{d7f98afe-28a1-46ba-8dfd-84901a5ecd49}" xml:space="preserve">
+    <value>ColorStrip</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for section in Entity FormXml ID: '{d7f98afe-28a1-46ba-8dfd-84901a5ecd49}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{e47b9298-a429-4a99-86f1-5c7d90871fb7}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{e47b9298-a429-4a99-86f1-5c7d90871fb7}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{ed96c000-39c5-4269-8860-419bab5e39b0}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlitePackageLegacyToDevKit' : label for tab in Entity FormXml ID: '{ed96c000-39c5-4269-8860-419bab5e39b0}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacyToDevKit{f5d4796a-1481-4894-acb9-618993bfa5f4}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacyToDevKit' : label for cell in Entity FormXml ID: '{f5d4796a-1481-4894-acb9-618993bfa5f4}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{12223a5e-9839-47dc-a3a1-598d799c498f}" xml:space="preserve">
+    <value>GENERAL</value>
+    <comment>'SqlitePackageLegacy' : label for section in Entity FormXml ID: '{12223a5e-9839-47dc-a3a1-598d799c498f}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{1eb6fa44-ffa2-4cc2-a5b7-66ffd71d81f6}" xml:space="preserve">
+    <value>ColorStrip</value>
+    <comment>'SqlitePackageLegacy' : label for section in Entity FormXml ID: '{1eb6fa44-ffa2-4cc2-a5b7-66ffd71d81f6}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{1f04dafd-2ba7-4027-991f-a3d24bbb05d8}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for tab in Entity FormXml ID: '{1f04dafd-2ba7-4027-991f-a3d24bbb05d8}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{21e9536e-5700-404a-821b-991d85f91152}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlitePackageLegacy' : label for section in Entity FormXml ID: '{21e9536e-5700-404a-821b-991d85f91152}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{22f49a0c-d5cf-4c87-adb2-64a7a338d573}" xml:space="preserve">
+    <value>SqlitePackageLegacy</value>
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{22f49a0c-d5cf-4c87-adb2-64a7a338d573}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{37a84762-70eb-4dea-8d60-c577fb6fc7cd}" xml:space="preserve">
+    <value>Footer</value>
+    <comment>'SqlitePackageLegacy' : label for section in Entity FormXml ID: '{37a84762-70eb-4dea-8d60-c577fb6fc7cd}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{415114b8-ca38-4f98-bd13-77086cf952c5}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlitePackageLegacy' : label for tab in Entity FormXml ID: '{415114b8-ca38-4f98-bd13-77086cf952c5}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{5677b337-f313-4d0e-9731-c0fa62071f60}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{5677b337-f313-4d0e-9731-c0fa62071f60}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{5fcd26e4-2c3e-4c9c-a6af-f6f74793e0ac}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{5fcd26e4-2c3e-4c9c-a6af-f6f74793e0ac}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{681ddf95-ccfc-415c-b6a1-37e5dee7c574}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{681ddf95-ccfc-415c-b6a1-37e5dee7c574}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{869401e1-02a6-4901-8a5b-c15ff911a1ad}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{869401e1-02a6-4901-8a5b-c15ff911a1ad}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{8d86898b-6c0a-4936-8b6f-466e6c550251}" xml:space="preserve">
+    <value>Details</value>
+    <comment>'SqlitePackageLegacy' : label for section in Entity FormXml ID: '{8d86898b-6c0a-4936-8b6f-466e6c550251}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{9114059e-e225-4f9f-a50d-8613617149c0}" xml:space="preserve">
+    <value>SqlitePackageLegacy</value>
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{9114059e-e225-4f9f-a50d-8613617149c0}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{a04659e6-d5e1-4184-a3cf-aa2f18debc12}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for tab in Entity FormXml ID: '{a04659e6-d5e1-4184-a3cf-aa2f18debc12}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{b520b915-8ca8-4ea9-bb2f-29ee373b4b8f}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{b520b915-8ca8-4ea9-bb2f-29ee373b4b8f}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{b9a7f4d8-1c0d-412e-a188-bd6952e0f182}" xml:space="preserve">
+    <value>Header</value>
+    <comment>'SqlitePackageLegacy' : label for section in Entity FormXml ID: '{b9a7f4d8-1c0d-412e-a188-bd6952e0f182}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{cc9f475e-661a-4dd3-b0b5-b51e15d49ee6}" xml:space="preserve">
+    <value>SqlitePackageLegacy</value>
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{cc9f475e-661a-4dd3-b0b5-b51e15d49ee6}'</comment>
+  </data>
+  <data name="1:label,SqlitePackageLegacy{f590f0e5-6141-4b43-ae12-7db42e1b318d}" xml:space="preserve">
+    <value />
+    <comment>'SqlitePackageLegacy' : label for cell in Entity FormXml ID: '{f590f0e5-6141-4b43-ae12-7db42e1b318d}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{06f42cf9-3a1a-43bf-a91d-90d66370be99}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{06f42cf9-3a1a-43bf-a91d-90d66370be99}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{09bc9d0e-fce3-4bcb-bf21-385c836ab039}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{09bc9d0e-fce3-4bcb-bf21-385c836ab039}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{2464095c-484d-4d6d-83e7-4513630e4240}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{2464095c-484d-4d6d-83e7-4513630e4240}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{255240ba-886c-4f4f-9a33-6a067563c0b6}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{255240ba-886c-4f4f-9a33-6a067563c0b6}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{35912611-af76-4e58-90fb-6d1c837fa628}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for tab in Entity FormXml ID: '{35912611-af76-4e58-90fb-6d1c837fa628}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{47bfd12a-8f79-478a-bc13-4600719aea53}" xml:space="preserve">
+    <value>Details</value>
+    <comment>'SqlServereDevKit' : label for section in Entity FormXml ID: '{47bfd12a-8f79-478a-bc13-4600719aea53}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{4a94e4a1-b3b2-4a7a-847f-569b406c3c4e}" xml:space="preserve">
+    <value>SqlServereDevKit</value>
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{4a94e4a1-b3b2-4a7a-847f-569b406c3c4e}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{53823155-f551-4fc3-8c5c-e5d72c8ad199}" xml:space="preserve">
+    <value>Footer</value>
+    <comment>'SqlServereDevKit' : label for section in Entity FormXml ID: '{53823155-f551-4fc3-8c5c-e5d72c8ad199}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{66ed4483-49e9-4db5-b7f4-a6d23f4ec325}" xml:space="preserve">
+    <value>GENERAL</value>
+    <comment>'SqlServereDevKit' : label for section in Entity FormXml ID: '{66ed4483-49e9-4db5-b7f4-a6d23f4ec325}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{7ef8036e-a7ca-4139-b73d-3fe29ce1e493}" xml:space="preserve">
+    <value>Header</value>
+    <comment>'SqlServereDevKit' : label for section in Entity FormXml ID: '{7ef8036e-a7ca-4139-b73d-3fe29ce1e493}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{a8ce286f-a052-42dd-905e-c99d0c9fc456}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for tab in Entity FormXml ID: '{a8ce286f-a052-42dd-905e-c99d0c9fc456}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{add4119f-010a-40a9-a3a7-87c4efae7aad}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlServereDevKit' : label for section in Entity FormXml ID: '{add4119f-010a-40a9-a3a7-87c4efae7aad}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{aeafde49-9746-421a-b5be-c60a87efacc6}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlServereDevKit' : label for tab in Entity FormXml ID: '{aeafde49-9746-421a-b5be-c60a87efacc6}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{b59999ce-57ff-4fb5-9cac-f1899f92d59a}" xml:space="preserve">
+    <value>SqlServereDevKit</value>
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{b59999ce-57ff-4fb5-9cac-f1899f92d59a}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{bc08f308-a5ad-412e-b107-c584045ace0a}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{bc08f308-a5ad-412e-b107-c584045ace0a}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{cb6ec26c-d124-4cc6-b39f-ffcc261bc1af}" xml:space="preserve">
+    <value />
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{cb6ec26c-d124-4cc6-b39f-ffcc261bc1af}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{e92d1dff-975d-4d3d-bcf7-d838d1c3a9e2}" xml:space="preserve">
+    <value>SqlServereDevKit</value>
+    <comment>'SqlServereDevKit' : label for cell in Entity FormXml ID: '{e92d1dff-975d-4d3d-bcf7-d838d1c3a9e2}'</comment>
+  </data>
+  <data name="1:label,SqlServereDevKit{e97bc715-35b2-4244-9140-2634a1f506e4}" xml:space="preserve">
+    <value>ColorStrip</value>
+    <comment>'SqlServereDevKit' : label for section in Entity FormXml ID: '{e97bc715-35b2-4244-9140-2634a1f506e4}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{1472aa4f-2e0f-4314-8bff-741dc1c389de}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{1472aa4f-2e0f-4314-8bff-741dc1c389de}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{1cfb3661-85c5-45e0-8310-399de5eb5184}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for tab in Entity FormXml ID: '{1cfb3661-85c5-45e0-8310-399de5eb5184}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{2d1ba044-5c76-40ad-97be-f19f5cc382eb}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlServerLegacyToDevKit' : label for section in Entity FormXml ID: '{2d1ba044-5c76-40ad-97be-f19f5cc382eb}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{33c2928f-e2c5-4f7c-8099-4dc81252828e}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlServerLegacyToDevKit' : label for tab in Entity FormXml ID: '{33c2928f-e2c5-4f7c-8099-4dc81252828e}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{3aa3b5d8-4c13-4ebb-84ed-8dbd5d138211}" xml:space="preserve">
+    <value>GENERAL</value>
+    <comment>'SqlServerLegacyToDevKit' : label for section in Entity FormXml ID: '{3aa3b5d8-4c13-4ebb-84ed-8dbd5d138211}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{4b437d58-e42e-46b1-be43-c95512331355}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{4b437d58-e42e-46b1-be43-c95512331355}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{54d91943-2881-4b49-aeb5-2164c2ad20b3}" xml:space="preserve">
+    <value>ColorStrip</value>
+    <comment>'SqlServerLegacyToDevKit' : label for section in Entity FormXml ID: '{54d91943-2881-4b49-aeb5-2164c2ad20b3}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{57a6aa8f-4e3f-4676-8e23-ae2e59062355}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{57a6aa8f-4e3f-4676-8e23-ae2e59062355}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{621e8ad2-9990-47ed-9ddd-97b97530f044}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit</value>
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{621e8ad2-9990-47ed-9ddd-97b97530f044}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{87cfad0b-4c9c-476f-94ff-84f85b7715b1}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{87cfad0b-4c9c-476f-94ff-84f85b7715b1}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{8f69aa50-a7df-4f58-857c-5f38b9e09c28}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{8f69aa50-a7df-4f58-857c-5f38b9e09c28}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{98ae7788-2f00-4656-8726-8a4b00727169}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit</value>
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{98ae7788-2f00-4656-8726-8a4b00727169}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{b69523b1-98ff-4e03-aac1-f7efd0a14dff}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for tab in Entity FormXml ID: '{b69523b1-98ff-4e03-aac1-f7efd0a14dff}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{cff51598-3c21-444e-9b40-4d076039a9ba}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit</value>
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{cff51598-3c21-444e-9b40-4d076039a9ba}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{df0c0ac1-0a49-4184-acf3-1fe7807e6e40}" xml:space="preserve">
+    <value>Details</value>
+    <comment>'SqlServerLegacyToDevKit' : label for section in Entity FormXml ID: '{df0c0ac1-0a49-4184-acf3-1fe7807e6e40}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{e2c6a2a9-1403-4c19-b94d-ac9112f0a00c}" xml:space="preserve">
+    <value>Header</value>
+    <comment>'SqlServerLegacyToDevKit' : label for section in Entity FormXml ID: '{e2c6a2a9-1403-4c19-b94d-ac9112f0a00c}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{ea327ee8-291d-48e4-a989-7facfb925005}" xml:space="preserve">
+    <value>Footer</value>
+    <comment>'SqlServerLegacyToDevKit' : label for section in Entity FormXml ID: '{ea327ee8-291d-48e4-a989-7facfb925005}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacyToDevKit{f31c7cad-aeb1-4db5-803b-b4013b263f7c}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacyToDevKit' : label for cell in Entity FormXml ID: '{f31c7cad-aeb1-4db5-803b-b4013b263f7c}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{0682b45f-dc98-4e15-a75a-1f5aee9ab69e}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{0682b45f-dc98-4e15-a75a-1f5aee9ab69e}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{128d4379-5e24-4c1f-9d4d-a2b9480b4379}" xml:space="preserve">
+    <value>ColorStrip</value>
+    <comment>'SqlServerLegacy' : label for section in Entity FormXml ID: '{128d4379-5e24-4c1f-9d4d-a2b9480b4379}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{1b0c3355-538e-4101-81ad-ef22386e645b}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{1b0c3355-538e-4101-81ad-ef22386e645b}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{1e6dc735-6791-43cb-87e0-b4482ac22aaa}" xml:space="preserve">
+    <value>SqlServerLegacy</value>
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{1e6dc735-6791-43cb-87e0-b4482ac22aaa}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{37548c4e-f2ba-4c3c-89fd-73e57d2c409f}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{37548c4e-f2ba-4c3c-89fd-73e57d2c409f}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{5160e93f-5a9e-46ae-8ea3-a13155fb3745}" xml:space="preserve">
+    <value>Footer</value>
+    <comment>'SqlServerLegacy' : label for section in Entity FormXml ID: '{5160e93f-5a9e-46ae-8ea3-a13155fb3745}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{792ceb3d-24f5-43d7-9b7f-884186f0896a}" xml:space="preserve">
+    <value>Header</value>
+    <comment>'SqlServerLegacy' : label for section in Entity FormXml ID: '{792ceb3d-24f5-43d7-9b7f-884186f0896a}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{7add99c3-9f15-4ec7-8982-151ebf2b9d74}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{7add99c3-9f15-4ec7-8982-151ebf2b9d74}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{7b2828f5-e8e8-4680-a0b1-1498ace53f1d}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{7b2828f5-e8e8-4680-a0b1-1498ace53f1d}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{9843c830-2a2d-4af7-8b58-f3d1114dfba9}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for tab in Entity FormXml ID: '{9843c830-2a2d-4af7-8b58-f3d1114dfba9}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{b6348b03-5a0b-459f-8fb7-9ff645b5f4e3}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlServerLegacy' : label for section in Entity FormXml ID: '{b6348b03-5a0b-459f-8fb7-9ff645b5f4e3}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{c165fa83-844f-4767-91c1-703d90ff4ebe}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for tab in Entity FormXml ID: '{c165fa83-844f-4767-91c1-703d90ff4ebe}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{c3897783-4da0-4d67-be01-08e5dfe65b28}" xml:space="preserve">
+    <value />
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{c3897783-4da0-4d67-be01-08e5dfe65b28}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{d1e72a2f-a34a-47c6-a602-27a46176e3df}" xml:space="preserve">
+    <value>GENERAL</value>
+    <comment>'SqlServerLegacy' : label for section in Entity FormXml ID: '{d1e72a2f-a34a-47c6-a602-27a46176e3df}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{d309b899-d488-48e2-b2cb-9eb8fd3a229e}" xml:space="preserve">
+    <value>SqlServerLegacy</value>
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{d309b899-d488-48e2-b2cb-9eb8fd3a229e}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{dce6b5a9-127a-4f10-826a-0d55f6d75c05}" xml:space="preserve">
+    <value>Details</value>
+    <comment>'SqlServerLegacy' : label for section in Entity FormXml ID: '{dce6b5a9-127a-4f10-826a-0d55f6d75c05}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{e2261b04-9b6c-497c-8b6a-a77c450fd73e}" xml:space="preserve">
+    <value>SqlServerLegacy</value>
+    <comment>'SqlServerLegacy' : label for cell in Entity FormXml ID: '{e2261b04-9b6c-497c-8b6a-a77c450fd73e}'</comment>
+  </data>
+  <data name="1:label,SqlServerLegacy{f245beb1-99d2-40ae-b8a6-b664eedbe040}" xml:space="preserve">
+    <value>General</value>
+    <comment>'SqlServerLegacy' : label for tab in Entity FormXml ID: '{f245beb1-99d2-40ae-b8a6-b664eedbe040}'</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4legacy_SqlitePackageDevKitentityv4legacy_SqlitePackageDevKit" xml:space="preserve">
+    <value>SqlitePackageDevKits</value>
+    <comment> 'v4legacy_SqlitePackageDevKit' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4legacy_SqlitePackageLegacyentityv4legacy_SqlitePackageLegacy" xml:space="preserve">
+    <value>SqlitePackageLegacies</value>
+    <comment> 'v4legacy_SqlitePackageLegacy' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4legacy_SqlitePackageLegacyToDevKitentityv4legacy_SqlitePackageLegacyToDevKit" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKits</value>
+    <comment> 'v4legacy_SqlitePackageLegacyToDevKit' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4legacy_SqlServerDevKitentityv4legacy_SqlServerDevKit" xml:space="preserve">
+    <value>SqlServerDevKits</value>
+    <comment> 'v4legacy_SqlServerDevKit' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4legacy_SqlServerLegacyentityv4legacy_SqlServerLegacy" xml:space="preserve">
+    <value>SqlServerLegacies</value>
+    <comment> 'v4legacy_SqlServerLegacy' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,v4legacy_SqlServerLegacyToDevKitentityv4legacy_SqlServerLegacyToDevKit" xml:space="preserve">
+    <value>SqlServerLegacyToDevKits</value>
+    <comment> 'v4legacy_SqlServerLegacyToDevKit' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{0817096a-8e0f-4412-b219-ce1726f91252}" xml:space="preserve">
+    <value>Quick Find Active SqlitePackageDevKits</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{0817096a-8e0f-4412-b219-ce1726f91252}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{1d92ccfc-3703-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>SqlitePackageDevKits</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{1d92ccfc-3703-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{355d4fb2-a0ab-15b6-bee1-34628d07f223}" xml:space="preserve">
+    <value>SqlitePackageDevKits Copilot View</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{355d4fb2-a0ab-15b6-bee1-34628d07f223}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{3c91e4ea-f44d-4039-8994-da2a199d1282}" xml:space="preserve">
+    <value>SqlitePackageDevKit Associated View</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{3c91e4ea-f44d-4039-8994-da2a199d1282}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{651efb01-3045-4d68-b884-d4facaf7d43a}" xml:space="preserve">
+    <value>SqlitePackageDevKit Lookup View</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{651efb01-3045-4d68-b884-d4facaf7d43a}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{7fd56bbf-a8e3-468b-b4f2-32ebad4a85de}" xml:space="preserve">
+    <value>SqlitePackageDevKit Advanced Find View</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{7fd56bbf-a8e3-468b-b4f2-32ebad4a85de}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{c2df7aef-807c-402f-9008-1bf50b47baa8}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for systemform in Entity FormXml ID: '{c2df7aef-807c-402f-9008-1bf50b47baa8}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{d51d11c5-3a94-4e80-9a8e-a07265d52dfb}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for systemform in Entity FormXml ID: '{d51d11c5-3a94-4e80-9a8e-a07265d52dfb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{e13c5f65-af11-4f27-a798-9ee58d057478}" xml:space="preserve">
+    <value>All SqlitePackageDevKits</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{e13c5f65-af11-4f27-a798-9ee58d057478}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageDevKit{f5d0babc-be69-48a3-bde3-ba4652a2871e}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageDevKit' : LocalizedName for systemform in Entity FormXml ID: '{f5d0babc-be69-48a3-bde3-ba4652a2871e}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{0994e09d-8de0-490a-8d4f-066b7bce3222}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for systemform in Entity FormXml ID: '{0994e09d-8de0-490a-8d4f-066b7bce3222}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{2ada6780-652c-4f6a-b3d8-3f33182a0d45}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for systemform in Entity FormXml ID: '{2ada6780-652c-4f6a-b3d8-3f33182a0d45}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{351d624f-74a8-46aa-8819-fff60747bba0}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for systemform in Entity FormXml ID: '{351d624f-74a8-46aa-8819-fff60747bba0}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{496bf81a-3303-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKits</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{496bf81a-3303-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{51c42fba-4aab-4845-9a33-52c12cc58066}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit Lookup View</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{51c42fba-4aab-4845-9a33-52c12cc58066}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{6bbd6665-f304-41b6-b770-c3c0c8000c8c}" xml:space="preserve">
+    <value>All SqlitePackageLegacyToDevKits</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{6bbd6665-f304-41b6-b770-c3c0c8000c8c}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{955f04fa-1eaf-4d84-a159-816dfd61e19d}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit Associated View</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{955f04fa-1eaf-4d84-a159-816dfd61e19d}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{bb4f568d-284e-400d-9dce-23bd822c1798}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit Advanced Find View</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{bb4f568d-284e-400d-9dce-23bd822c1798}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{d29abf64-60ba-4189-a0d6-9ce5932c3d8f}" xml:space="preserve">
+    <value>Quick Find Active SqlitePackageLegacyToDevKits</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{d29abf64-60ba-4189-a0d6-9ce5932c3d8f}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacyToDevKit{d4a9d49e-c668-7d99-0e65-3355e99312e0}" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKits Copilot View</value>
+    <comment>'SqlitePackageLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{d4a9d49e-c668-7d99-0e65-3355e99312e0}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{1c9b31df-5024-4daa-bb6a-d96a5a63ebd2}" xml:space="preserve">
+    <value>SqlitePackageLegacy Lookup View</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{1c9b31df-5024-4daa-bb6a-d96a5a63ebd2}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{3586bd2b-5e82-4625-ba1b-112c2d496960}" xml:space="preserve">
+    <value>Quick Find Active SqlitePackageLegacies</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{3586bd2b-5e82-4625-ba1b-112c2d496960}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{35c62751-664a-4f02-8542-3cdfb1bb6356}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for systemform in Entity FormXml ID: '{35c62751-664a-4f02-8542-3cdfb1bb6356}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{5695eca7-5106-2e65-1fc9-22f9883512bf}" xml:space="preserve">
+    <value>SqlitePackageLegacies Copilot View</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{5695eca7-5106-2e65-1fc9-22f9883512bf}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{690b6f8b-2f03-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>SqlitePackageLegacies</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{690b6f8b-2f03-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{a283846b-5a59-44dd-ac95-6353d5b88724}" xml:space="preserve">
+    <value>SqlitePackageLegacy Associated View</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{a283846b-5a59-44dd-ac95-6353d5b88724}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{b36edabc-e9fd-4b6b-a4f8-0fba7fb71b4c}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for systemform in Entity FormXml ID: '{b36edabc-e9fd-4b6b-a4f8-0fba7fb71b4c}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{b5bebd54-9b35-48ec-9ef9-5af2d43a84b9}" xml:space="preserve">
+    <value>SqlitePackageLegacy Advanced Find View</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{b5bebd54-9b35-48ec-9ef9-5af2d43a84b9}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{d753f2ab-d156-4be0-88c8-564a328d51c4}" xml:space="preserve">
+    <value>All SqlitePackageLegacies</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{d753f2ab-d156-4be0-88c8-564a328d51c4}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlitePackageLegacy{f11877ae-0c27-4ace-a56e-9a3d4ba1be12}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlitePackageLegacy' : LocalizedName for systemform in Entity FormXml ID: '{f11877ae-0c27-4ace-a56e-9a3d4ba1be12}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{0f3931b8-0c3c-499c-be3e-7d25fa3cce83}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServereDevKit' : LocalizedName for systemform in Entity FormXml ID: '{0f3931b8-0c3c-499c-be3e-7d25fa3cce83}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{202fdc85-9c51-40c0-ae82-c7e515deb622}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServereDevKit' : LocalizedName for systemform in Entity FormXml ID: '{202fdc85-9c51-40c0-ae82-c7e515deb622}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{26231a46-9d05-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>SqlServerDevKits</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{26231a46-9d05-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{32a9fdbd-a327-4b91-8a95-4da147827d74}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServereDevKit' : LocalizedName for systemform in Entity FormXml ID: '{32a9fdbd-a327-4b91-8a95-4da147827d74}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{3f97e0b4-156f-405f-9ac3-7167c393444e}" xml:space="preserve">
+    <value>SqlServereDevKit Lookup View</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{3f97e0b4-156f-405f-9ac3-7167c393444e}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{5f288ea4-cd32-d9b7-fde5-c1c98c3a6d42}" xml:space="preserve">
+    <value>SqlServerDevKits Copilot View</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{5f288ea4-cd32-d9b7-fde5-c1c98c3a6d42}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{75dc5449-211c-46db-b910-404f3fd4dbce}" xml:space="preserve">
+    <value>SqlServereDevKit Associated View</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{75dc5449-211c-46db-b910-404f3fd4dbce}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{ac734d02-f3da-4b35-9d6e-422a9a23052f}" xml:space="preserve">
+    <value>SqlServereDevKit Advanced Find View</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{ac734d02-f3da-4b35-9d6e-422a9a23052f}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{b06189e1-285d-49c3-bb5a-95383f5c54c2}" xml:space="preserve">
+    <value>Quick Find Active SqlServerDevKits</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{b06189e1-285d-49c3-bb5a-95383f5c54c2}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServereDevKit{fb563818-d513-4381-ac41-5b353430a909}" xml:space="preserve">
+    <value>All SqlServerDevKits</value>
+    <comment>'SqlServereDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{fb563818-d513-4381-ac41-5b353430a909}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{10210e15-78ee-4f27-8b7e-356da8690c33}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for systemform in Entity FormXml ID: '{10210e15-78ee-4f27-8b7e-356da8690c33}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{35be9fe8-0291-4807-884d-61218cc6b11c}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit Advanced Find View</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{35be9fe8-0291-4807-884d-61218cc6b11c}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{3d3f0e3f-87f1-46ae-8f33-e4dbaf5d5100}" xml:space="preserve">
+    <value>All SqlServerLegacyToDevKits</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{3d3f0e3f-87f1-46ae-8f33-e4dbaf5d5100}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{4aaa448b-9d05-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKits</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{4aaa448b-9d05-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{4b1f53c3-cc8e-9f92-97ed-1be6139bec88}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKits Copilot View</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{4b1f53c3-cc8e-9f92-97ed-1be6139bec88}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{6ec73381-ed55-4539-b8b1-e2da80d5048e}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit Lookup View</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{6ec73381-ed55-4539-b8b1-e2da80d5048e}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{84547f8c-1dbf-4ef8-b09c-696be850c73e}" xml:space="preserve">
+    <value>Quick Find Active SqlServerLegacyToDevKits</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{84547f8c-1dbf-4ef8-b09c-696be850c73e}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{9d846f00-7bcc-43bb-a4a3-0abc762bbf72}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for systemform in Entity FormXml ID: '{9d846f00-7bcc-43bb-a4a3-0abc762bbf72}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{c9804def-973f-496a-9d37-f1f4f5370762}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for systemform in Entity FormXml ID: '{c9804def-973f-496a-9d37-f1f4f5370762}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacyToDevKit{db015450-36c2-44bb-906f-a4dfcf8fc4c6}" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit Associated View</value>
+    <comment>'SqlServerLegacyToDevKit' : LocalizedName for SavedQuery on Entity QueryId: '{db015450-36c2-44bb-906f-a4dfcf8fc4c6}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{02f8366b-9d05-f111-8407-000d3a316bdb}" xml:space="preserve">
+    <value>SqlServerLegacies</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{02f8366b-9d05-f111-8407-000d3a316bdb}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{1a8a140e-7242-48d7-9279-b9568caa28b5}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServerLegacy' : LocalizedName for systemform in Entity FormXml ID: '{1a8a140e-7242-48d7-9279-b9568caa28b5}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{4540f6c0-cc81-4b03-8fdd-c002bad2876a}" xml:space="preserve">
+    <value>All SqlServerLegacies</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{4540f6c0-cc81-4b03-8fdd-c002bad2876a}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{6d94daa9-755d-4593-b4ae-90121402ea0c}" xml:space="preserve">
+    <value>SqlServerLegacy Lookup View</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{6d94daa9-755d-4593-b4ae-90121402ea0c}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{96511ef5-6d32-48c5-9ad6-a86ce4723b74}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServerLegacy' : LocalizedName for systemform in Entity FormXml ID: '{96511ef5-6d32-48c5-9ad6-a86ce4723b74}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{a65c285d-09be-4a99-c56d-a1ccea3e4dc2}" xml:space="preserve">
+    <value>SqlServerLegacies Copilot View</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{a65c285d-09be-4a99-c56d-a1ccea3e4dc2}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{ad8ea309-fcb1-475c-9c8d-c52c12067542}" xml:space="preserve">
+    <value>Information</value>
+    <comment>'SqlServerLegacy' : LocalizedName for systemform in Entity FormXml ID: '{ad8ea309-fcb1-475c-9c8d-c52c12067542}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{b460a2d9-3a1e-4f6f-bcc9-3bd8bf5d1074}" xml:space="preserve">
+    <value>SqlServerLegacy Advanced Find View</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{b460a2d9-3a1e-4f6f-bcc9-3bd8bf5d1074}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{c516ce4a-42f9-438d-a6cd-8524b6df4e80}" xml:space="preserve">
+    <value>SqlServerLegacy Associated View</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{c516ce4a-42f9-438d-a6cd-8524b6df4e80}'</comment>
+  </data>
+  <data name="1:LocalizedName,SqlServerLegacy{fde46ab6-fbb3-4830-bcf9-3cc528096ee6}" xml:space="preserve">
+    <value>Quick Find Active SqlServerLegacies</value>
+    <comment>'SqlServerLegacy' : LocalizedName for SavedQuery on Entity QueryId: '{fde46ab6-fbb3-4830-bcf9-3cc528096ee6}'</comment>
+  </data>
+  <data name="1:LocalizedName,v4legacy_SqlitePackageDevKitentityv4legacy_SqlitePackageDevKit" xml:space="preserve">
+    <value>SqlitePackageDevKit</value>
+    <comment> 'v4legacy_SqlitePackageDevKit' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,v4legacy_SqlitePackageLegacyentityv4legacy_SqlitePackageLegacy" xml:space="preserve">
+    <value>SqlitePackageLegacy</value>
+    <comment> 'v4legacy_SqlitePackageLegacy' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,v4legacy_SqlitePackageLegacyToDevKitentityv4legacy_SqlitePackageLegacyToDevKit" xml:space="preserve">
+    <value>SqlitePackageLegacyToDevKit</value>
+    <comment> 'v4legacy_SqlitePackageLegacyToDevKit' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,v4legacy_SqlServerDevKitentityv4legacy_SqlServerDevKit" xml:space="preserve">
+    <value>SqlServereDevKit</value>
+    <comment> 'v4legacy_SqlServerDevKit' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,v4legacy_SqlServerLegacyentityv4legacy_SqlServerLegacy" xml:space="preserve">
+    <value>SqlServerLegacy</value>
+    <comment> 'v4legacy_SqlServerLegacy' : LocalizedName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,v4legacy_SqlServerLegacyToDevKitentityv4legacy_SqlServerLegacyToDevKit" xml:space="preserve">
+    <value>SqlServerLegacyToDevKit</value>
+    <comment> 'v4legacy_SqlServerLegacyToDevKit' : LocalizedName for Entity</comment>
+  </data>
+</root>

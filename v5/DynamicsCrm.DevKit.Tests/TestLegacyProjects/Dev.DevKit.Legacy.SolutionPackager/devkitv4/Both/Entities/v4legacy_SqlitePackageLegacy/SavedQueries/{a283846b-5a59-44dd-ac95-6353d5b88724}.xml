@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{a283846b-5a59-44dd-ac95-6353d5b88724}</savedqueryid>
+    <layoutxml>
+      <grid name="v4legacy_sqlitepackagelegacies" jump="v4legacy_sqlitepackagelegacyname" select="1" icon="1" preview="1">
+        <row name="v4legacy_sqlitepackagelegacy" id="v4legacy_sqlitepackagelegacyid">
+          <cell name="v4legacy_sqlitepackagelegacyname" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>2</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="v4legacy_sqlitepackagelegacy">
+          <attribute name="v4legacy_sqlitepackagelegacyid" />
+          <attribute name="v4legacy_sqlitepackagelegacyname" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="SqlitePackageLegacy Associated View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

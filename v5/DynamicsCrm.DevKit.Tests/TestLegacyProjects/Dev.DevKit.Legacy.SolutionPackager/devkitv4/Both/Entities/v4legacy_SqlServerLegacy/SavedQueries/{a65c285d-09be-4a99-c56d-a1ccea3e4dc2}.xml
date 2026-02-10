@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{a65c285d-09be-4a99-c56d-a1ccea3e4dc2}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="v4legacy_sqlserverlegacyname" select="1" icon="1" preview="1">
+        <row name="result" id="v4legacy_sqlserverlegacyid">
+          <cell name="v4legacy_sqlserverlegacyname" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>1048576</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="v4legacy_sqlserverlegacy">
+          <attribute name="v4legacy_sqlserverlegacyid" />
+          <attribute name="v4legacy_sqlserverlegacyname" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="SqlServerLegacies Copilot View" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

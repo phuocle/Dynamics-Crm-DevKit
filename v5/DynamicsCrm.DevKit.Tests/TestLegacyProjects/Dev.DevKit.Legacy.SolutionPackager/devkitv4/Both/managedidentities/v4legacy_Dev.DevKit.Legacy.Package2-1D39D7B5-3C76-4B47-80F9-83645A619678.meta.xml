@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<managedidentity managedidentityid="fbd74104-0be7-4dbe-8815-1fd7249c92c3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <applicationid>{1d39d7b5-3c76-4b47-80f9-83645a619678}</applicationid>
+  <credentialsource>2</credentialsource>
+  <identitytype>0</identitytype>
+  <iscustomizable>1</iscustomizable>
+  <name>v4legacy_Dev.DevKit.Legacy.Package2-1D39D7B5-3C76-4B47-80F9-83645A619678</name>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <subjectscope>1</subjectscope>
+  <tenantid>{49528483-b79b-4b88-b86e-7d882ba68911}</tenantid>
+  <version>1</version>
+</managedidentity>

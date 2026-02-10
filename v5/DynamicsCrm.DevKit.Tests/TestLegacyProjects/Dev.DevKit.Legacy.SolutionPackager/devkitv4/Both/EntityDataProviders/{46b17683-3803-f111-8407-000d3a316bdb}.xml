@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDataProvider xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityDataProviderId>{46b17683-3803-f111-8407-000d3a316bdb}</EntityDataProviderId>
+  <Name>v4legacy_sqlitepackagelegacy</Name>
+  <DataSourceLogicalName>v4legacy_sqlitepackagelegacy</DataSourceLogicalName>
+  <IsCustomizable>1</IsCustomizable>
+  <RetrievePluginTypeExportKey>83493DFC214349E37AE480AC26DB42E4D2856413AE0D645CDA17296A8369EF86</RetrievePluginTypeExportKey>
+  <RetrieveMultiplePluginTypeExportKey>48010C505F35B890A6A918075EAD78D8970D6C84A60886A0D7DE2C2E27DD14B6</RetrieveMultiplePluginTypeExportKey>
+  <CreatePluginTypeExportKey>8D6A5FFCF42FBA0C4E0EDE6FD3116B30A53B81BB27EF13B4EEDA99B98C50DBED</CreatePluginTypeExportKey>
+  <UpdatePluginTypeExportKey>966C835A225CBE4BEF6FC0B2943421665287544637DD681133F3DD575C48E8FF</UpdatePluginTypeExportKey>
+  <DeletePluginTypeExportKey>9DABD7B891E2C7525F3EB9D4E446336609B7525F2913A33D2F90F7C77F625F47</DeletePluginTypeExportKey>
+  <LookupExpansionEnabled>0</LookupExpansionEnabled>
+</EntityDataProvider>

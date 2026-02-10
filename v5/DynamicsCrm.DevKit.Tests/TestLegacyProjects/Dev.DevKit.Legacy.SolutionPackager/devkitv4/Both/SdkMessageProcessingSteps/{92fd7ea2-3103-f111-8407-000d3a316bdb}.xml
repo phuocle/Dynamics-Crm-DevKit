@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.Legacy.Package.CustomActions.None.PreValidationNonev4_CustomActionSynchronous" SdkMessageProcessingStepId="{92fd7ea2-3103-f111-8407-000d3a316bdb}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>6522dc63-3a94-f011-b4cc-000d3aa25840</SdkMessageId>
+  <PluginTypeExportKey>AF83FED2AE9C8C6D0B957AF1EDE27EA8CBA553532657EA9385A8FDE4687C0BF5</PluginTypeExportKey>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>10</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

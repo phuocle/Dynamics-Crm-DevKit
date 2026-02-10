@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>1</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{84547f8c-1dbf-4ef8-b09c-696be850c73e}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="v4legacy_sqlserverlegacytodevkitname" select="1" icon="1" preview="1">
+        <row name="result" id="v4legacy_sqlserverlegacytodevkitid">
+          <cell name="v4legacy_sqlserverlegacytodevkitname" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>4</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="v4legacy_sqlserverlegacytodevkit">
+          <attribute name="v4legacy_sqlserverlegacytodevkitid" />
+          <attribute name="v4legacy_sqlserverlegacytodevkitname" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Quick Find Active SqlServerLegacyToDevKits" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>
