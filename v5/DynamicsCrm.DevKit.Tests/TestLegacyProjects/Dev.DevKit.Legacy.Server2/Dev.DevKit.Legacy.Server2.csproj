@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BF6F3B42-FE16-48D0-BB8B-AF8AF105004B}</ProjectGuid>
+    <ProjectGuid>{ED8677B0-A509-44D3-8991-0E3478FE5289}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Legacy.Server2</RootNamespace>
@@ -60,11 +60,8 @@
     <None Include="deploy.debug.only.devkit.bat" />
     <None Include="deploy.debug.only.legacy-to-devkit.bat" />
     <None Include="deploy.debug.only.legacy.bat" />
-    <None Include="DevDevKitLegacyServer2.cer" />
-    <None Include="DevDevKitLegacyServer2.pfx" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Legacy.Server2.snk" />
-    <Compile Include="AssemblyInfo2.cs" />
     <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Plugin-Managed-Identity-Config.json" />
