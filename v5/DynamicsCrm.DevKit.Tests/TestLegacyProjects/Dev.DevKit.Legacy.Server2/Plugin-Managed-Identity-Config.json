@@ -1,21 +1,21 @@
-{
-  "ResourceGroup": "DevDevKitLegacyServer2",
-  "Location": "southeastasia",
-  "KeyVaultName": "DevDevKitLegacyServer2",
-  "SecretName": "DevDevKitLegacyServer2",
-  "SecretValue": "DevDevKitLegacyServer2",
-  "CertificateFileName": "DevDevKitLegacyServer2",
-  "CertificatePassword": "DevDevKitLegacyServer2",
-  "CertificateValidityYears": 10,
-  "TenantId": "",
-  "KeyVaultURL": "",
-  "CertificateThumbprint": "",
-  "CertificateSHA256Hash": "",
-  "ManagedIdentities": [
-    {
-      "AppName": "DevDevKitLegacyServer2",
-      "AppId": "",
-      "EnvironmentId": "cbba8ce9-ea7c-e440-b083-0b9517496e17"
-    }
-  ]
+﻿{
+    "ResourceGroup":  "DevDevKitLegacyServer2",
+    "Location":  "southeastasia",
+    "KeyVaultName":  "DevDevKitLegacyServer2",
+    "SecretName":  "DevDevKitLegacyServer2",
+    "SecretValue":  "DevDevKitLegacyServer2",
+    "CertificateFileName":  "DevDevKitLegacyServer2",
+    "CertificatePassword":  "DevDevKitLegacyServer2",
+    "CertificateValidityYears":  10,
+    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
+    "KeyVaultURL":  "https://devdevkitlegacyserver2.vault.azure.net/",
+    "CertificateThumbprint":  "A18B3EC3352759564EAEA3D38E26A22437D48CE7",
+    "CertificateSHA256Hash":  "N-Qv4LaoWqwDe8ZlM6f2JbZsLZ6JXm0LLzfNjx03qeE",
+    "ManagedIdentities":  [
+                              {
+                                  "AppName":  "DevDevKitLegacyServer2",
+                                  "AppId":  "f4a47232-5447-42ac-b35d-301d3ab93688",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                              }
+                          ]
 }

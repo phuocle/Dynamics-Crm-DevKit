@@ -56,12 +56,15 @@
   <ItemGroup>
     <None Include="deploy.debug.devkit.bat" />
     <None Include="deploy.debug.legacy-to-devkit.bat" />
-    <None Include="deploy.debug.legacy.bat" />
+    <None Include="BUG-deploy.debug.legacy.bat" />
     <None Include="deploy.debug.only.devkit.bat" />
     <None Include="deploy.debug.only.legacy-to-devkit.bat" />
-    <None Include="deploy.debug.only.legacy.bat" />
+    <None Include="BUG-deploy.debug.only.legacy.bat" />
+    <None Include="DevDevKitLegacyServer2.cer" />
+    <None Include="DevDevKitLegacyServer2.pfx" />
     <None Include="packages.config" />
     <None Include="Dev.DevKit.Legacy.Server2.snk" />
+    <Compile Include="AssemblyInfo2.cs" />
     <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Plugin-Managed-Identity-Config.json" />
