@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
-		<SignAssembly>True</SignAssembly>
+
 		<AssemblyVersion>4.12.34.56</AssemblyVersion>
 		<FileVersion>4.12.34.56</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -14,7 +14,7 @@
 		<AssemblyTitle>DynamicsCrm.DevKit.CrmSvcUtilExtensions</AssemblyTitle>
 		<AssemblyDescription>DynamicsCrm.DevKit.CrmSvcUtilExtensions</AssemblyDescription>
 		<BaseOutputPath>bin</BaseOutputPath>
-		<DelaySign>False</DelaySign>
+
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
@@ -24,7 +24,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DefineConstants>TRACE</DefineConstants>
 		<OutputPath>bin\Release\</OutputPath>
-		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="Release\**" />

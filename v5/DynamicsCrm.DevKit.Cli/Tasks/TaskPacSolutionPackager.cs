@@ -297,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0($"pac {args}");
+            SpectreLog.ActionWithLevel0("", $"pac {args}");
             SpectreLog.WriteLine();
 
             var process = new Process

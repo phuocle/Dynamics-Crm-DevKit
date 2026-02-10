@@ -4,7 +4,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<OutputType>Exe</OutputType>
 		<IsPublishable>True</IsPublishable>
-		<SignAssembly>True</SignAssembly>
+
 		<AssemblyVersion>4.12.34.56</AssemblyVersion>
 		<FileVersion>4.12.34.56</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -17,7 +17,7 @@
 		<AssemblyTitle>DynamicsCrm.DevKit.Tool</AssemblyTitle>
 		<AssemblyDescription>DynamicsCrm.DevKit.Tool</AssemblyDescription>
 		<BaseOutputPath>bin</BaseOutputPath>
-		<DelaySign>False</DelaySign>
+
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
@@ -28,7 +28,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<PlatformTarget>x86</PlatformTarget>
 		<DefineConstants>TRACE</DefineConstants>
-		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="Nuget\**" />
