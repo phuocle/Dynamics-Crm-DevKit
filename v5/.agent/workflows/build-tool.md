@@ -35,6 +35,6 @@ $nugetExe = "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\Nuget
 
 ## Notes
 
-- Debug mode does NOT require PFX signing key
+- Debug mode does NOT require any signing keys
 - Tool package uses legacy `.nuspec` for NuGet packaging
 - For full solution build with packaging, use `/build-debug` workflow instead

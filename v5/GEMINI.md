@@ -258,7 +258,7 @@ Planned: `DEVKIT1022` → `DEVKIT1046` (25 more in roadmap)
 
 ### 2. Configuration
 ```
-❌ Release mode (requires PFX password)
+❌ Release mode (human operators only)
 ✅ Debug mode (always use for development)
 ```
 

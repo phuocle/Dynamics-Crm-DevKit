@@ -18,7 +18,7 @@ CONFIGURATION FILE (SINGLE SOURCE OF TRUTH):
   - All release scripts read from this file
 
 KEY PASSWORDS:
-  - PFX Signing Key (DynamicsCrm.DevKit.pfx): !Zz321^2
+  (none)
 
 MSBUILD PATH:
   C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe
@@ -166,7 +166,7 @@ SCRIPTS (in DynamicsCrm.DevKit.Scripts\):
   Release-DynamicsCrm-DevKit.ps1                        → Main release script
   Release-DynamicsCrm-DevKit-CurrentDate.ps1            → Test release script
   RestroreReplacedFiles.ps1                             → Restore git changes
-  Import-StrongNameKey.ps1                              → Import PFX key
+
 
 DOCUMENTATION:
   DynamicsCrm.DevKit.Docs\                              → Central docs location

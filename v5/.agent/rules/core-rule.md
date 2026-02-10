@@ -21,7 +21,7 @@ trigger: always_on
 | Rule | Description |
 |------|-------------|
 | **No Git Operations** | Never commit, push, or perform any git operations unless explicitly requested |
-| **DEBUG Mode Only** | Always use DEBUG configuration for builds. RELEASE mode requires PFX password (human only) |
+| **DEBUG Mode Only** | Always use DEBUG configuration for builds. RELEASE mode is for human operators only |
 | **MSBuild for VSIX** | Use MSBuild (NOT `dotnet build`) for VSIX project |
 
 ---
@@ -72,7 +72,7 @@ Use these workflows for building:
 | `/build-vsix` | VSIX only | Build Visual Studio extension |
 | `/build-analyzer` | Analyzers | Build + run analyzer unit tests |
 | `/build-tool` | Tool only | Build Tool package |
-| `/build-release` | Release | **Human only** - requires PFX |
+| `/build-release` | Release | **Human only** |
 
 ---
 
@@ -139,10 +139,9 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 ## 🔐 Security
 
 > [!CAUTION]
-> Never commit connection strings, credentials, or PFX passwords.
+> Never commit connection strings or credentials.
 
 - Use environment variables or Azure Key Vault for secrets
-- PFX file (`DynamicsCrm.DevKit.pfx`) requires password for signing
 
 ---
 

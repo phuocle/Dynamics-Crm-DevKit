@@ -114,5 +114,5 @@ if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.s
 
 - This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
 - Version is defined in `DevKit.ReleaseConfig.json`
-- Debug mode does NOT require PFX signing key
+- Debug mode does NOT require any signing keys
 - For full solution build, use `/build-debug` workflow instead

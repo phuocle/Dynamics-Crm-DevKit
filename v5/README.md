@@ -185,8 +185,6 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 & $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
 ```
 
-> **⚠️ Note**: Release builds require PFX signing key password (human operators only).
-
 ---
 
 ## 📁 Project Structure

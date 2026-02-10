@@ -28,7 +28,7 @@
 ## Critical Constraints
 
 > [!IMPORTANT]
-> AI agents MUST use **DEBUG mode** for all builds. Release mode requires PFX signing key password (human only).
+> AI agents MUST use **DEBUG mode** for all builds. Release mode is for human operators only.
 
 ### Build Tool
 
@@ -64,7 +64,7 @@ Use these workflows for building:
 | `/build-vsix` | VSIX only | Build Visual Studio extension |
 | `/build-analyzer` | Analyzers | Build + run analyzer unit tests |
 | `/build-tool` | Tool only | Build Tool package |
-| `/build-release` | Release | **Human only** - requires PFX |
+| `/build-release` | Release | **Human only** |
 | `/clean-all` | Clean | Clean all build artifacts |
 | `/create-new-analyzer` | New Analyzer | Create a new Roslyn analyzer |
 
@@ -145,7 +145,6 @@ Test files are in `DynamicsCrm.DevKit.Tests/TestAnalyzers/DEVKIT*.cs`
 > [!CAUTION]
 > Never commit connection strings or credentials. Use environment variables or Azure Key Vault.
 
-- PFX key file (`DynamicsCrm.DevKit.pfx`) requires password for signing
 - Connection strings should use OAuth/MFA when possible
 
 ---

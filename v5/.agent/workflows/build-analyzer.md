@@ -44,6 +44,6 @@ $nugetExe = ".\nuget.exe"
 ## Notes
 
 - Analyzers target `netstandard2.0` for Roslyn compatibility
-- Debug mode does NOT require PFX signing key
+- Debug mode does NOT require any signing keys
 - **IMPORTANT**: Close and reopen VS after copying DLL - VS caches analyzers aggressively
 - For full solution build with packaging, use `/build-debug` workflow instead
