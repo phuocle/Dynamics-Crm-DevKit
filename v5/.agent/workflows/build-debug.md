@@ -11,7 +11,7 @@ description: Build Debug DynamicsCrm.DevKit for all projects
 5. Verify that all 4 files exist in the `published` folder:
    - `DynamicsCrm.DevKit.Analyzers.[version].nupkg`
    - `DynamicsCrm.DevKit.Cli.[version].nupkg`
-   - `DynamicsCrm.DevKit.Tools.[version].nupkg`
+   - `DynamicsCrm.DevKit.Tool.[version].nupkg`
    - `DynamicsCrm.DevKit.[version].vsix`   
    If any file is missing, investigate the build output and fix the issue.
 6. Report the total runtime and verified version
