@@ -1,7 +1,8 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Services;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -81,7 +82,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                     ItemName = form.ItemName;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _Javascript_ = await XrmHelper.GetDefaultFileWithFormAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"]);
+                    _Javascript_ = await new CodeGenService(form.ServiceClient).GetDefaultJsFormFileAsync(EntityMetadata, replacementsDictionary["$rootnamespace$"]);
                     replacementsDictionary["$Javascript$"] = _Javascript_;
                     (_JavascriptForm_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsForm.GetJsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
                     await Replacement.SetAsync(replacementsDictionary, form);

@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Cli;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -72,14 +73,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError("'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"solution '{Json.solution}' not exist");
                 return false;
             }
             DataSourceName = Json.name.ToLower().StartsWith(SolutionPrefix.ToLower()) ? Json.name : $"{SolutionPrefix}{Json.name}";
-            if (await XrmHelper.IsExistDataSourceAsync(ServiceClient, DataSourceName))
+            if (await new MetadataService(ServiceClient).IsExistDataSourceAsync(DataSourceName))
             {
                 SpectreLog.ActionError($"name '{DataSourceName}' exist");
                 return false;
@@ -105,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RegisterDataSourceAsync()
         {
-            var languageCode = await XrmHelper.GetLanguageCodeAsync(ServiceClient);
+            var languageCode = await new MetadataService(ServiceClient).GetLanguageCodeAsync();
             var propertyFalse = new BooleanManagedProperty(false);
             var propertyTrue = new BooleanManagedProperty(true);
 

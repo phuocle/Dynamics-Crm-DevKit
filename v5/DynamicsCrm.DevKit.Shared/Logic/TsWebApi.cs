@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -21,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = await new MetadataService(serviceClient).FetchEntityMetadataAsync(entityMetadata.LogicalName);
             return await GenerateTsContentAsync();
         }
 

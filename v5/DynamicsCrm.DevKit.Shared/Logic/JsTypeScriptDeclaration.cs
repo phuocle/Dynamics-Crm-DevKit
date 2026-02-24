@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -23,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = await new MetadataService(serviceClient).FetchEntityMetadataAsync(entityMetadata.LogicalName);
             RootNamespace = rootNamespace;
             FormNames = new List<string>();
             var @namespace = Helper.GetNameSpace(RootNamespace);
@@ -474,7 +475,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static async Task<string> GetForm_d_tsAsync(string @namespace)
         {
-            var forms = await XrmHelper.GetEntityFormsAsync(ServiceClient, EntityMetadata.LogicalName);
+            var forms = await new MetadataService(ServiceClient).GetEntityFormsAsync(EntityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var _d_ts = string.Empty;
             foreach (var form in forms.Where(x => x.FormType == FormType.Main).ToList())
@@ -820,7 +821,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
-            if (quickViewMetadata.Attributes == null) quickViewMetadata = await XrmHelper.FetchEntityMetadataAsync(ServiceClient, quickViewXml.entityLogicalName);
+            if (quickViewMetadata.Attributes == null) quickViewMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
             foreach (var field in fields)
             {
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();

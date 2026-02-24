@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -59,7 +60,7 @@ namespace DynamicsCrm.DevKit.Commands
             }
             else
             {
-                var webResources = await XrmHelper.GetWebResourcesAsync(serviceClient, fullFileNameForCrm);
+                var webResources = await new DeploymentService(serviceClient).GetWebResourcesAsync(fullFileNameForCrm);
                 var form = new FormWebResource(webResources, fullFileNameForCrm);
 
                 if (form.ShowModal() == true)
@@ -84,7 +85,7 @@ namespace DynamicsCrm.DevKit.Commands
             var url = serviceClient.ConnectedUrl();
 
             await TypeScriptBuildHelper.ShowStatusAsync(url, "Deploying (Release) ...");
-            var (ok, message) = await XrmHelper.DeployWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResourceId);
+            var (ok, message) = await new DeploymentService(serviceClient).DeployWebResourceAsync(fullFileName, deployWebResource.WebResourceId);
 
             if (ok)
             {
@@ -92,7 +93,7 @@ namespace DynamicsCrm.DevKit.Commands
                 await Helper.DelayAsync(wait);
                 await TypeScriptBuildHelper.ShowStatusAsync(url, "Publishing ...");
 
-                var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, deployWebResource.WebResourceId);
+                var (ok2, message2) = await new DeploymentService(serviceClient).PublishWebResourceAsync(deployWebResource.WebResourceId);
                 if (ok2)
                 {
                     await TypeScriptBuildHelper.ShowStatusAsync(url, $"[{fullFileName}] published (Release) to: [{deployWebResource.WebResource}]");

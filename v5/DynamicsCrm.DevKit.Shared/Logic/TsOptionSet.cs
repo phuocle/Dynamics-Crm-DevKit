@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -111,7 +112,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 var safeName = GetSafeEntityName(entity.SchemaName);
                 if (entity.Attributes == null)
                 {
-                    var metadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entity.LogicalName);
+                    var metadata = await new MetadataService(serviceClient).FetchEntityMetadataAsync(entity.LogicalName);
                     existingEntities[safeName] = GenerateEntityOptionSet(metadata);
                 }
                 else

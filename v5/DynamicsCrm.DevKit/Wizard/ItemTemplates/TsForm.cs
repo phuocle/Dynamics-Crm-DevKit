@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Logic;
+using DynamicsCrm.DevKit.Shared.Services;
 using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
@@ -87,7 +88,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     ItemName = form.ItemName;
                     ServiceClient = form.ServiceClient;
                     EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _TypeScript_ = await XrmHelper.GetDefaultTsFileWithFormAsync(form.ServiceClient, EntityMetadata);
+                    _TypeScript_ = await new CodeGenService(form.ServiceClient).GetDefaultTsFormFileAsync(EntityMetadata);
                     replacementsDictionary["$TypeScript$"] = _TypeScript_;
                     _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata);
                     await Replacement.SetAsync(replacementsDictionary, form);

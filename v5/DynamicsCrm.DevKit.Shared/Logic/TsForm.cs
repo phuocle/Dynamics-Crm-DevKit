@@ -1,4 +1,5 @@
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -135,8 +136,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             FormNames = new List<string>();
             ServiceClient = serviceClient;
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
-            var forms = await XrmHelper.GetEntityFormsAsync(serviceClient, entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = await new MetadataService(serviceClient).FetchEntityMetadataAsync(entityMetadata.LogicalName);
+            var forms = await new MetadataService(serviceClient).GetEntityFormsAsync(entityMetadata.LogicalName);
 
             // If no forms exist for this entity, return null to skip file generation
             if (forms == null || forms.Count == 0)
@@ -1574,7 +1575,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             if (quickViewMetadata == null) return fields;
             if (quickViewMetadata.Attributes == null)
-                quickViewMetadata = await XrmHelper.FetchEntityMetadataAsync(ServiceClient, quickViewXml.entityLogicalName);
+                quickViewMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
 
             foreach (var field in qvFields)
             {
@@ -1882,7 +1883,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             if (quickViewMetadata == null) return fields;
             if (quickViewMetadata.Attributes == null)
-                quickViewMetadata = await XrmHelper.FetchEntityMetadataAsync(ServiceClient, quickViewXml.entityLogicalName);
+                quickViewMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
 
             foreach (var field in qvFields)
             {

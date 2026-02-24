@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace DynamicsCrm.DevKit.Cli
 
             if (!string.IsNullOrEmpty(json.solution) && json.solution != "???")
             {
-                var result = await XrmHelper.IsExistSolutionAsync(_serviceClient, json.solution);
+                var result = await new DeploymentService(_serviceClient).IsExistSolutionAsync(json.solution);
                 if (!result.IsOk)
                     issues.Add($"Solution '{json.solution}' does not exist in the target environment");
             }
@@ -63,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli
 
             if (!string.IsNullOrEmpty(json.solution) && json.solution != "???")
             {
-                var result = await XrmHelper.IsExistSolutionAsync(_serviceClient, json.solution);
+                var result = await new DeploymentService(_serviceClient).IsExistSolutionAsync(json.solution);
                 if (!result.IsOk)
                     issues.Add($"Solution '{json.solution}' does not exist in the target environment");
             }

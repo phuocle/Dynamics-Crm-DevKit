@@ -1,5 +1,6 @@
-﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System.Linq;
@@ -157,8 +158,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
                     {
-                        await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
-                        var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        await new MetadataService(ServiceClient).ReadEntitiesMetadataAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
+                        var items = MetadataService.GetListXrmEntity(XrmHelper.EntitiesMetadata);
                         items = items.OrderBy(x => x.LogicalName).ToList();
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBox.DisplayMemberPath = Const.SchemaName;

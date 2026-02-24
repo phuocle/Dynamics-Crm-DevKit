@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -36,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -587,7 +588,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        var allEntities = await XrmHelper.GetAllEntitiesSchemaAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
+                        var allEntities = await new MetadataService(ServiceClient).GetAllEntitiesSchemaAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
                         foreach (var webResourceFile in webResourceFiles)
                         {
                             var fInfo = new FileInfo(webResourceFile.file);

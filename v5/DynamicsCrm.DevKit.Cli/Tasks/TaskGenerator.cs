@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Logic;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -81,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (schemaNames.Count > 500)
                     await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
                 else
-                    XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(ServiceClient, schemaNames);
+                    XrmHelper.EntitiesMetadata = await new MetadataService(ServiceClient).GetEntitiesMetadataAsync(schemaNames);
                 schemaNames = [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
                 if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     await GeneratorLateBoundAsync(schemaNames);
@@ -278,7 +279,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                     if (!File.Exists(file))
                     {
-                        await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
+                        await FileHelper.ForceWriteAllTextAsync(file, await new CodeGenService(ServiceClient).GetDefaultJsFormFileAsync(entityMetadata, Json.rootnamespace));
                     }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
@@ -349,7 +350,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
                     if (!File.Exists(file))
                     {
-                        var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata);
+                        var tsCode = await new CodeGenService(ServiceClient).GetDefaultTsFormFileAsync(entityMetadata);
                         if (!string.IsNullOrEmpty(tsCode))
                         {
                             await FileHelper.ForceWriteAllTextAsync(file, tsCode);
@@ -464,7 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        await XrmHelper.ReadEntitiesMetadataAsync(serviceClient, entityFilters);
+                        await new MetadataService(serviceClient).ReadEntitiesMetadataAsync(entityFilters);
                     }
                     finally
                     {
@@ -486,7 +487,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities FormXml ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                         try
                         {
-                            await XrmHelper.ReadEntitiesFormXmlAsync(serviceClient);
+                            await new MetadataService(serviceClient).ReadEntitiesFormXmlAsync();
                         }
                         finally
                         {

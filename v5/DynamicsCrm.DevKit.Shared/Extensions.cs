@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -102,7 +102,8 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
             {
-                XrmHelper.EntitiesMetadata.Add(await XrmHelper.FetchEntityMetadataAsync(crmServiceClient, entityLogicalName));
+                var metadataService = new Services.MetadataService(crmServiceClient);
+                XrmHelper.EntitiesMetadata.Add(await metadataService.FetchEntityMetadataAsync(entityLogicalName));
             }
         }
 
@@ -114,7 +115,8 @@ namespace DynamicsCrm.DevKit.Shared
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
                 if (entityMetadata != null)
                 {
-                    var forms = await XrmHelper.GetEntityFormXmlAsync(crmServiceClient, entityMetadata.ObjectTypeCode);
+                    var metadataService = new Services.MetadataService(crmServiceClient);
+                    var forms = await metadataService.GetEntityFormXmlAsync(entityMetadata.ObjectTypeCode);
                     if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
                 }
             }
@@ -126,7 +128,8 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(crmServiceClient, entityLogicalName);
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
-                var processes = await XrmHelper.GetEntityProcessFormAsync(crmServiceClient, entityMetadata.ObjectTypeCode, entityLogicalName);
+                var metadataService = new Services.MetadataService(crmServiceClient);
+                var processes = await metadataService.GetEntityProcessFormAsync(entityMetadata.ObjectTypeCode, entityLogicalName);
                 if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
             }
         }

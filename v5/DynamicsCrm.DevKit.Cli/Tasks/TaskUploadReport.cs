@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
@@ -30,7 +31,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            var solutionExists = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
             if (!solutionExists.IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -74,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var totalUploadFiles = files.Length;
                         SpectreLog.WriteHighLight("Found: ", $"{totalUploadFiles}", " ", language, " .rdl files");
                         SpectreLog.WriteLine();
-                        var reportFiles = await XrmHelper.GetReportsBySolutionAsync(ServiceClient, Json.solution);
+                        var reportFiles = await new DeploymentService(ServiceClient).GetReportsBySolutionAsync(Json.solution);
                         foreach (var file in files)
                         {
                             var fileName = Path.GetFileName(file);
@@ -94,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    await XrmHelper.DeployReportAsync(ServiceClient, report.ObjectId, file);
+                                    await new DeploymentService(ServiceClient).DeployReportAsync(report.ObjectId, file);
                                     SpectreLog.ActionWithLevel1(CliAction.DEPLOYED, $"{language} report", " .." + file.Substring(CurrentDirectory.Length), $" to {fileName} report file name");
                                 }
                             }

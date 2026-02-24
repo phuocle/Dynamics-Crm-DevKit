@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
@@ -104,7 +105,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (Json.type.ToLower() == "Extract".ToLower())
             {
-                (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+                (IsOk, SolutionId, SolutionPrefix) = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
                 if (!IsOk)
                 {
                     SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");

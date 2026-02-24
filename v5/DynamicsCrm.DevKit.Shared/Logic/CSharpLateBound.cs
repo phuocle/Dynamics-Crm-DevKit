@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -19,7 +20,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static string GetCsCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace, string shareProject = null)
         {
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = XrmHelper.FetchEntityMetadata(service, entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = new MetadataService(service).FetchEntityMetadata(entityMetadata.LogicalName);
             RootNamespace = rootNameSpace;
             var code = string.Empty;
             var @class = Helper.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);

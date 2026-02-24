@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
@@ -29,7 +30,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            var solutionExists = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
             if (!solutionExists.IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -57,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
-                var reportFiles = await XrmHelper.GetReportsBySolutionAsync(ServiceClient, Json.solution);
+                var reportFiles = await new DeploymentService(ServiceClient).GetReportsBySolutionAsync(Json.solution);
                 if (reportFiles.Count == 0)
                 {
                     SpectreLog.ActionWithLevel0("Not found any reports to download");
