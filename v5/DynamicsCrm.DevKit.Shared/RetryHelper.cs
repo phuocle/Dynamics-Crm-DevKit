@@ -80,9 +80,11 @@ namespace DynamicsCrm.DevKit.Shared
             return false;
         }
 
+        private static readonly Random _random = new Random();
+
         private static TimeSpan CalculateDelay(int attempt)
         {
-            var jitter = Random.Shared.Next(0, 1000);
+            var jitter = _random.Next(0, 1000);
             var delay = DefaultBaseDelay.TotalMilliseconds * Math.Pow(2, attempt) + jitter;
             return TimeSpan.FromMilliseconds(Math.Min(delay, 30000));
         }
