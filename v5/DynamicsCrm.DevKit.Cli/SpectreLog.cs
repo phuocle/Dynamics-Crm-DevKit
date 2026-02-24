@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli
 {
+    public enum Verbosity
+    {
+        Normal,
+        Verbose,
+        Quiet
+    }
+
     public static class SpectreLog
     {
         private const string PREFIX = "║";
@@ -23,6 +30,39 @@ namespace DynamicsCrm.DevKit.Cli
         private static List<string> ACTIONS_NO_INDENT = new List<string> { CliAction.DEACTIVATED, CliAction.UNREGISTERED, CliAction.ACTIVATED };
         private static List<string> ACTIONS_HIGHLIGHT = new List<string> { CliAction.CREATED, CliAction.UPDATED, CliAction.REGISTERED, CliAction.DELETED, CliAction.FLAG, CliAction.SIGNED };
 
+        public static Verbosity CurrentVerbosity { get; set; } = Verbosity.Normal;
+        public static bool IsJsonOutput { get; set; }
+        public static CliOutput JsonResult { get; set; }
+
+        public static void Configure(bool verbose, bool quiet, bool jsonOutput)
+        {
+            if (quiet) CurrentVerbosity = Verbosity.Quiet;
+            else if (verbose) CurrentVerbosity = Verbosity.Verbose;
+            else CurrentVerbosity = Verbosity.Normal;
+            IsJsonOutput = jsonOutput;
+            if (jsonOutput) JsonResult = new CliOutput();
+        }
+
+        public static void AddJsonItem(string action, string type, string name, string details = null)
+        {
+            if (JsonResult == null) return;
+            JsonResult.Items.Add(new CliOutputItem { Action = action, Type = type, Name = name, Details = details });
+            if (action == "created") JsonResult.Summary.Created++;
+            else if (action == "updated") JsonResult.Summary.Updated++;
+            else if (action == "skipped") JsonResult.Summary.Skipped++;
+            else if (action == "error") JsonResult.Summary.Errors++;
+            else if (action == "deleted") JsonResult.Summary.Deleted++;
+            JsonResult.Summary.Total++;
+        }
+
+        public static void AddJsonError(string message)
+        {
+            JsonResult?.Errors.Add(message);
+        }
+
+        private static bool ShouldSuppress => IsJsonOutput;
+        private static bool IsVerboseOnly => CurrentVerbosity != Verbosity.Verbose;
+
         private static bool IsNoIndent(string action) => ACTIONS_NO_INDENT.Any(a => action.Equals(a, StringComparison.OrdinalIgnoreCase));
         private static bool IsHighlight(string action) => IsNoIndent(action) || ACTIONS_HIGHLIGHT.Any(a => action.Equals(a, StringComparison.OrdinalIgnoreCase));
         private static string GetBg(string action) => IsHighlight(action) ? $" on {HIGHLIGHT_BG}" : string.Empty;
@@ -31,6 +71,7 @@ namespace DynamicsCrm.DevKit.Cli
         #region Banner & Header
         public static void WriteHeader()
         {
+            if (ShouldSuppress || CurrentVerbosity == Verbosity.Quiet) return;
             var width = 112;
             var colorBox = "green";
             var colorText = "white";
@@ -89,11 +130,17 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]Common Options:[/]\n" +
                     "  --json [yellow]FILE[/]            Path to DynamicsCrm.DevKit.Cli.json\n" +
                     "  --profile [yellow]NAME[/]         Profile name from json file\n" +
-                    "  --onlyupdateassembly   Fast deploy, only update the assembly\n\n" +
+                    "  --onlyupdateassembly   Fast deploy, only update the assembly\n" +
+                    "  --output [yellow]FORMAT[/]        Output format: text (default) or json\n" +
+                    "  --dry-run              Preview changes without deploying\n" +
+                    "  --verbose              Show detailed output\n" +
+                    "  --quiet                Suppress non-essential output\n\n" +
                     "[green]Examples:[/]\n" +
                     "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
-                    "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --secret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n"
+                    "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --secret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
+                    "  devkit server --auth [cyan]FromPac[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/] --dry-run\n" +
+                    "  devkit server --auth [cyan]FromPac[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/] --output [cyan]json[/]\n"
                 ))
             {
                 Border = BoxBorder.Double,

@@ -14,6 +14,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
     /// </summary>
     public class ServerCommand : DevKitCommand<ServerCommandArgs>
     {
+        protected override bool SupportsDryRun => true;
+
         protected override List<string[]> BuildArgRows(ServerCommandArgs settings)
         {
             var rows = new List<string[]>();

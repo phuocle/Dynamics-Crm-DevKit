@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.Threading.Tasks;
@@ -16,5 +16,6 @@ namespace DynamicsCrm.DevKit.Cli
         bool IsOk { get; set; }
         Guid SolutionId { get; set; }
         string SolutionPrefix { get; set; }
+        bool DryRun => Arg?.DryRun ?? false;
     }
 }
