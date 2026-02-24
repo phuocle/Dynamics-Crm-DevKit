@@ -1,5 +1,5 @@
 ---
-description: Analyzer development rules for DynamicsCrm.DevKit Roslyn analyzers
+description: Development rules for DynamicsCrm.DevKit Roslyn Analyzers (DEVKIT1001-1021)
 alwaysApply: true
 ---
 
@@ -28,45 +28,53 @@ alwaysApply: true
 | `AnalyzerHelper.cs` | Utilities: `IsPluginOrWorkflowClass`, `IsInsidePluginOrWorkflow`, deprecated/batch request lists |
 | `DiagnosticHelpers.cs` | `ReportDiagnostic()` overloads for reporting issues |
 
-## When Fixing or Changing Analyzers
+## Khi có yêu cầu thay đổi hoặc fix lỗi
 
-### Step 1: Read requirements and context
-1. Identify which analyzer is affected (DEVKIT1001-DEVKIT1021)
-2. Read the relevant core files in `DynamicsCrm.DevKit.Analyzers\`
+### Bước 1: Đọc kỹ yêu cầu và ngữ cảnh
+1. Đọc kỹ lại nội dung anh Phước yêu cầu
+2. Xác định analyzer nào liên quan (DEVKIT1001-DEVKIT1021)
+3. Đọc lại các files core trong `DynamicsCrm.DevKit.Analyzers\`:
+   - `DiagnosticIdentifiers.cs` - xem danh sách ID
+   - `DiagnosticDescriptors.cs` - xem descriptors
+   - Analyzer file tương ứng trong `CrmAnalyzers\`
 
-### Step 2: Check Unit Tests
-1. Run workflow `/build-analyzer` to build and run tests
-2. Unit tests at: `DynamicsCrm.DevKit.Analyzers.Test\Tests\{AnalyzerName}Tests.cs`
-3. Use pattern `[|code|]` to mark expected diagnostics:
+### Bước 2: Kiểm tra Unit Tests
+1. Chạy workflow `/build-analyzer` để build và run tests
+2. Unit tests nằm tại: `DynamicsCrm.DevKit.Analyzers.Test\Tests\{AnalyzerName}Tests.cs`
+3. Sử dụng pattern `[|code|]` để mark expected diagnostics:
    ```csharp
    var src = WrapInPlugin("[|new ColumnSet(true)|]");
    await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
    ```
 
-### Step 3: Check Integration Tests in Visual Studio
+### Bước 3: Kiểm tra Integration Tests trong Visual Studio
 1. Folder: `DynamicsCrm.DevKit.Tests\TestAnalyzers\`
-2. Must have 21 files: `DEVKIT1001.cs` through `DEVKIT1021.cs`
-3. AI cannot test in VS - must request anh Phước to test manually
+2. **Phải đảm bảo số lượng file `DEVKIT*.cs` bằng với số lượng analyzers đang support**
+   - Hiện tại có 21 analyzers: DEVKIT1001 → DEVKIT1021
+   - Phải có 21 files: `DEVKIT1001.cs` → `DEVKIT1021.cs`
+3. Code mẫu phải trigger đúng diagnostic
+4. **AI không thể test được trong VS - phải yêu cầu anh Phước test thủ công**
 
-### Step 4: Check and update Documentation
+### Bước 4: Kiểm tra và cập nhật Documentation
 1. Folder: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\`
-2. Each analyzer needs a `DEVKIT{XXXX}.md` file
-3. Update `ANALYZERS_ROADMAP.md` if status changes
+2. Mỗi analyzer phải có file `DEVKIT{XXXX}.md` tương ứng
+3. Sử dụng template: `DEVKIT.template.md`
+4. Cập nhật `ANALYZERS_ROADMAP.md` nếu thay đổi status
 
-## When Adding a New Analyzer
+## Khi có yêu cầu thêm mới analyzer
 
-Run the `/create-new-analyzer` workflow which guides through all steps from A-Z.
+**QUAN TRỌNG**: Phải chạy workflow `/create-new-analyzer` trước khi bắt đầu. Workflow này sẽ hướng dẫn chi tiết các bước từ A-Z.
 
-## Verification Checklist
+## Checklist Verification
 
-- [ ] `DiagnosticIdentifiers.cs` has new ID constant (if adding new)?
-- [ ] `DiagnosticDescriptors.cs` has new descriptor (if adding new)?
-- [ ] Analyzer file exists in `CrmAnalyzers\`?
-- [ ] Unit test file exists in `DynamicsCrm.DevKit.Analyzers.Test\Tests\`?
-- [ ] Unit tests pass? (run `/build-analyzer`)
-- [ ] Integration test file `DEVKIT{XXXX}.cs` exists in `TestAnalyzers\`?
-- [ ] Documentation file `DEVKIT{XXXX}.md` exists?
-- [ ] `ANALYZERS_ROADMAP.md` updated (if needed)?
+- [ ] `DiagnosticIdentifiers.cs` đã có ID mới (nếu thêm mới)?
+- [ ] `DiagnosticDescriptors.cs` đã có descriptor mới (nếu thêm mới)?
+- [ ] Analyzer file tồn tại trong `CrmAnalyzers\`?
+- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.Analyzers.Test\Tests\`?
+- [ ] Unit tests pass? (chạy `/build-analyzer`)
+- [ ] Integration test file `DEVKIT{XXXX}.cs` tồn tại trong `TestAnalyzers\`?
+- [ ] Documentation file `DEVKIT{XXXX}.md` tồn tại?
+- [ ] `ANALYZERS_ROADMAP.md` đã được cập nhật (nếu cần)?
 
 ## Current Analyzers (DEVKIT1001-DEVKIT1021)
 
