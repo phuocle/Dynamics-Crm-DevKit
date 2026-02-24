@@ -16,6 +16,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
         private static ServiceClient ServiceClient { get; set; }
+        private static MetadataService _metadataService;
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
         private static List<string> FormNames = new List<string>();
@@ -23,8 +25,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static async Task<string> GetCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata, string rootNamespace, bool isJsFormExist, bool isJsWebApiExist)
         {
             ServiceClient = serviceClient;
+            _metadataService = null;
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = await new MetadataService(serviceClient).FetchEntityMetadataAsync(entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
             RootNamespace = rootNamespace;
             FormNames = new List<string>();
             var @namespace = Helper.GetNameSpace(RootNamespace);
@@ -475,7 +478,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static async Task<string> GetForm_d_tsAsync(string @namespace)
         {
-            var forms = await new MetadataService(ServiceClient).GetEntityFormsAsync(EntityMetadata.LogicalName);
+            var forms = await Metadata.GetEntityFormsAsync(EntityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var _d_ts = string.Empty;
             foreach (var form in forms.Where(x => x.FormType == FormType.Main).ToList())
@@ -821,7 +824,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             await XrmHelper.EntitiesMetadata.AddIfNotExistAsync(ServiceClient, quickViewXml.entityLogicalName);
             var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
-            if (quickViewMetadata.Attributes == null) quickViewMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
+            if (quickViewMetadata.Attributes == null) quickViewMetadata = await Metadata.FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
             foreach (var field in fields)
             {
                 var fieldAttribute = quickViewMetadata.Attributes.Where(x => x.LogicalName == field.Id).FirstOrDefault();

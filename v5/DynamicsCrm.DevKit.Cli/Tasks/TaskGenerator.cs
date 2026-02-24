@@ -31,6 +31,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
+
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private CodeGenService _codeGenService;
+        private CodeGenService CodeGen => _codeGenService ??= new CodeGenService(ServiceClient);
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -82,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (schemaNames.Count > 500)
                     await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
                 else
-                    XrmHelper.EntitiesMetadata = await new MetadataService(ServiceClient).GetEntitiesMetadataAsync(schemaNames);
+                    XrmHelper.EntitiesMetadata = await Metadata.GetEntitiesMetadataAsync(schemaNames);
                 schemaNames = [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
                 if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     await GeneratorLateBoundAsync(schemaNames);
@@ -279,7 +284,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                     if (!File.Exists(file))
                     {
-                        await FileHelper.ForceWriteAllTextAsync(file, await new CodeGenService(ServiceClient).GetDefaultJsFormFileAsync(entityMetadata, Json.rootnamespace));
+                        await FileHelper.ForceWriteAllTextAsync(file, await CodeGen.GetDefaultJsFormFileAsync(entityMetadata, Json.rootnamespace));
                     }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
@@ -350,7 +355,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
                     if (!File.Exists(file))
                     {
-                        var tsCode = await new CodeGenService(ServiceClient).GetDefaultTsFormFileAsync(entityMetadata);
+                        var tsCode = await CodeGen.GetDefaultTsFormFileAsync(entityMetadata);
                         if (!string.IsNullOrEmpty(tsCode))
                         {
                             await FileHelper.ForceWriteAllTextAsync(file, tsCode);

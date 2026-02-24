@@ -56,7 +56,8 @@ namespace DynamicsCrm.DevKit.Commands
             }
             else
             {
-                var webResources = await new DeploymentService(serviceClient).GetWebResourcesAsync(fullFileNameForCrm);
+                var deployment = new DeploymentService(serviceClient);
+                var webResources = await deployment.GetWebResourcesAsync(fullFileNameForCrm);
                 var form = new FormWebResource(webResources, fullFileNameForCrm);
 
                 if (form.ShowModal() == true)
@@ -80,8 +81,10 @@ namespace DynamicsCrm.DevKit.Commands
             const int wait = 2;
             var url = serviceClient.ConnectedUrl();
 
+            var deployment = new DeploymentService(serviceClient);
+
             await TypeScriptBuildHelper.ShowStatusAsync(url, "Deploying ...");
-            var (ok, message) = await new DeploymentService(serviceClient).DeployWebResourceAsync(fullFileName, deployWebResource.WebResourceId);
+            var (ok, message) = await deployment.DeployWebResourceAsync(fullFileName, deployWebResource.WebResourceId);
 
             if (ok)
             {
@@ -89,7 +92,7 @@ namespace DynamicsCrm.DevKit.Commands
                 await Helper.DelayAsync(wait);
                 await TypeScriptBuildHelper.ShowStatusAsync(url, "Publishing ...");
 
-                var (ok2, message2) = await new DeploymentService(serviceClient).PublishWebResourceAsync(deployWebResource.WebResourceId);
+                var (ok2, message2) = await deployment.PublishWebResourceAsync(deployWebResource.WebResourceId);
                 if (ok2)
                 {
                     await TypeScriptBuildHelper.ShowStatusAsync(url, $"[{fullFileName}] published to: [{deployWebResource.WebResource}]");

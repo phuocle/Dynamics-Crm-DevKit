@@ -22,6 +22,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
 
         public async Task<bool> IsValidAsync()
@@ -98,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (Json.type.ToLower() == "Extract".ToLower())
             {
-                (IsOk, SolutionId, SolutionPrefix) = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
+                (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
                 if (!IsOk)
                 {
                     SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");

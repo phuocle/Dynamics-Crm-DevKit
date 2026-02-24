@@ -25,6 +25,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
         private List<Guid> WebResourcesToPublish { get; } = [];
+
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -37,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, SolutionPrefix) = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -588,7 +593,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        var allEntities = await new MetadataService(ServiceClient).GetAllEntitiesSchemaAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
+                        var allEntities = await Metadata.GetAllEntitiesSchemaAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
                         foreach (var webResourceFile in webResourceFiles)
                         {
                             var fInfo = new FileInfo(webResourceFile.file);

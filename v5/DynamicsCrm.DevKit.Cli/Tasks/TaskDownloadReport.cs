@@ -18,6 +18,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
+
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -30,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            var solutionExists = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
+            var solutionExists = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!solutionExists.IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -58,7 +61,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
-                var reportFiles = await new DeploymentService(ServiceClient).GetReportsBySolutionAsync(Json.solution);
+                var reportFiles = await Deployment.GetReportsBySolutionAsync(Json.solution);
                 if (reportFiles.Count == 0)
                 {
                     SpectreLog.ActionWithLevel0("Not found any reports to download");

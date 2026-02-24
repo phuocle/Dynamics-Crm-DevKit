@@ -14,6 +14,9 @@ namespace DynamicsCrm.DevKit.Cli
     {
         private readonly ServiceClient _serviceClient;
 
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(_serviceClient);
+
         public DeploymentValidator(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
@@ -31,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli
 
             if (!string.IsNullOrEmpty(json.solution) && json.solution != "???")
             {
-                var result = await new DeploymentService(_serviceClient).IsExistSolutionAsync(json.solution);
+                var result = await Deployment.IsExistSolutionAsync(json.solution);
                 if (!result.IsOk)
                     issues.Add($"Solution '{json.solution}' does not exist in the target environment");
             }
@@ -64,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli
 
             if (!string.IsNullOrEmpty(json.solution) && json.solution != "???")
             {
-                var result = await new DeploymentService(_serviceClient).IsExistSolutionAsync(json.solution);
+                var result = await Deployment.IsExistSolutionAsync(json.solution);
                 if (!result.IsOk)
                     issues.Add($"Solution '{json.solution}' does not exist in the target environment");
             }

@@ -19,6 +19,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -31,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            var solutionExists = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
+            var solutionExists = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!solutionExists.IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -75,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var totalUploadFiles = files.Length;
                         SpectreLog.WriteHighLight("Found: ", $"{totalUploadFiles}", " ", language, " .rdl files");
                         SpectreLog.WriteLine();
-                        var reportFiles = await new DeploymentService(ServiceClient).GetReportsBySolutionAsync(Json.solution);
+                        var reportFiles = await Deployment.GetReportsBySolutionAsync(Json.solution);
                         foreach (var file in files)
                         {
                             var fileName = Path.GetFileName(file);
@@ -95,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    await new DeploymentService(ServiceClient).DeployReportAsync(report.ObjectId, file);
+                                    await Deployment.DeployReportAsync(report.ObjectId, file);
                                     SpectreLog.ActionWithLevel1(CliAction.DEPLOYED, $"{language} report", " .." + file.Substring(CurrentDirectory.Length), $" to {fileName} report file name");
                                 }
                             }

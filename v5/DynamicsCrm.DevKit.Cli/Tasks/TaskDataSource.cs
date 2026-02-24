@@ -25,6 +25,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string SolutionPrefix { get; set; }
         private string DataSourceName { get; set; }
 
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -73,14 +78,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError("'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, SolutionPrefix) = await new DeploymentService(ServiceClient).IsExistSolutionAsync(Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"solution '{Json.solution}' not exist");
                 return false;
             }
             DataSourceName = Json.name.ToLower().StartsWith(SolutionPrefix.ToLower()) ? Json.name : $"{SolutionPrefix}{Json.name}";
-            if (await new MetadataService(ServiceClient).IsExistDataSourceAsync(DataSourceName))
+            if (await Metadata.IsExistDataSourceAsync(DataSourceName))
             {
                 SpectreLog.ActionError($"name '{DataSourceName}' exist");
                 return false;
@@ -106,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public async Task RegisterDataSourceAsync()
         {
-            var languageCode = await new MetadataService(ServiceClient).GetLanguageCodeAsync();
+            var languageCode = await Metadata.GetLanguageCodeAsync();
             var propertyFalse = new BooleanManagedProperty(false);
             var propertyTrue = new BooleanManagedProperty(true);
 

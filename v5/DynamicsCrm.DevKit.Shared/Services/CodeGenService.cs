@@ -11,6 +11,8 @@ namespace DynamicsCrm.DevKit.Shared.Services
     public class CodeGenService
     {
         private readonly ServiceClient _serviceClient;
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(_serviceClient);
 
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
@@ -72,7 +74,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                     return $"{formName}{count}";
                 }
             }
-            var forms = await new MetadataService(_serviceClient).GetEntityFormsAsync(entityMetadata.LogicalName);
+            var forms = await Metadata.GetEntityFormsAsync(entityMetadata.LogicalName);
             if (!forms.Any()) return Helper.GetDefaultFileWithWebApi(entityMetadata.SchemaName);
             var @namespace = Helper.GetNameSpace(rootNamespace);
             var code = string.Empty;
@@ -149,7 +151,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                     return $"{formName}{count}";
                 }
             }
-            var forms = await new MetadataService(_serviceClient).GetEntityFormsAsync(entityMetadata.LogicalName);
+            var forms = await Metadata.GetEntityFormsAsync(entityMetadata.LogicalName);
             if (!forms.Any()) return string.Empty;
             var code = string.Empty;
             var formNames = new List<string>();
@@ -307,7 +309,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
 
         public async Task<string> GetPluginCommentAsync(string entityLogicalName, string message)
         {
-            return await new MetadataService(_serviceClient).GetPluginCommentAsync(entityLogicalName, message);
+            return await Metadata.GetPluginCommentAsync(entityLogicalName, message);
         }
     }
 }

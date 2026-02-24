@@ -35,6 +35,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         }
 
         private static ServiceClient ServiceClient { get; set; }
+        private static MetadataService _metadataService;
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
         private static List<string> FormNames;
@@ -135,9 +137,10 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             FormNames = new List<string>();
             ServiceClient = serviceClient;
+            _metadataService = null;
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = await new MetadataService(serviceClient).FetchEntityMetadataAsync(entityMetadata.LogicalName);
-            var forms = await new MetadataService(serviceClient).GetEntityFormsAsync(entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
+            var forms = await Metadata.GetEntityFormsAsync(entityMetadata.LogicalName);
 
             // If no forms exist for this entity, return null to skip file generation
             if (forms == null || forms.Count == 0)
@@ -1575,7 +1578,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             if (quickViewMetadata == null) return fields;
             if (quickViewMetadata.Attributes == null)
-                quickViewMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
+                quickViewMetadata = await Metadata.FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
 
             foreach (var field in qvFields)
             {
@@ -1883,7 +1886,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             if (quickViewMetadata == null) return fields;
             if (quickViewMetadata.Attributes == null)
-                quickViewMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
+                quickViewMetadata = await Metadata.FetchEntityMetadataAsync(quickViewXml.entityLogicalName);
 
             foreach (var field in qvFields)
             {
