@@ -50,14 +50,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var className = $"{stagePrefix}{entity_schema_name}{message}{normalizedExecution}";
 
-                var pluginStageEnum = normalizedStage switch
-                {
-                    "PreValidation" => "PreValidation",
-                    "PreOperation" => "Pre",
-                    "PostOperation" => "Post",
-                    _ => normalizedStage
-                };
-
                 var comment = string.Empty;
                 try
                 {
@@ -75,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PluginMessage = message,
                     PluginLogicalName = entity_logical_name,
                     PluginSchemaName = entity_schema_name,
-                    PluginStage = pluginStageEnum,
+                    PluginStage = normalizedStage,
                     PluginExecution = normalizedExecution,
                     PluginOrder = plugin_order,
                     PluginComment = comment,

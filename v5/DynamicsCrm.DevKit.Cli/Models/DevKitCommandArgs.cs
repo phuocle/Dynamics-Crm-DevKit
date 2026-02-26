@@ -54,25 +54,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Domain for AD authentication (on-premises)")]
         public string Domain { get; set; } = string.Empty;
 
-        [CommandOption("--output")]
-        [Description("Output format: text (default) or json")]
-        [DefaultValue("text")]
-        public string Output { get; set; } = "text";
-
-        [CommandOption("--dry-run")]
-        [Description("Preview changes without deploying (deployment commands only)")]
-        public bool DryRun { get; set; }
-
-        [CommandOption("--verbose")]
-        [Description("Show detailed output")]
-        public bool Verbose { get; set; }
-
-        [CommandOption("--quiet")]
-        [Description("Suppress non-essential output")]
-        public bool Quiet { get; set; }
-
-        public bool IsJsonOutput => Output?.Equals("json", System.StringComparison.OrdinalIgnoreCase) == true;
-
         public string CurrentDirectory => Directory.GetCurrentDirectory();
 
         public string JsonFile

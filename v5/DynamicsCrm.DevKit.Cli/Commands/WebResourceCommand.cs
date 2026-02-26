@@ -12,8 +12,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
     /// </summary>
     public class WebResourceCommand : DevKitCommand<WebResourceCommandArgs>
     {
-        protected override bool SupportsDryRun => true;
-
         protected override async Task RunTaskAsync(WebResourceCommandArgs settings)
         {
             var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));

@@ -16,6 +16,5 @@ namespace DynamicsCrm.DevKit.Cli
         bool IsOk { get; set; }
         Guid SolutionId { get; set; }
         string SolutionPrefix { get; set; }
-        bool DryRun => Arg?.DryRun ?? false;
     }
 }

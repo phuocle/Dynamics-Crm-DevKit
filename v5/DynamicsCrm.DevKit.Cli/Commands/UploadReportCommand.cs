@@ -12,8 +12,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
     /// </summary>
     public class UploadReportCommand : DevKitCommand<UploadReportCommandArgs>
     {
-        protected override bool SupportsDryRun => true;
-
         protected override async Task RunTaskAsync(UploadReportCommandArgs settings)
         {
             var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));

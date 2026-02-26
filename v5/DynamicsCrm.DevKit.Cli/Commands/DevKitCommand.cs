@@ -24,50 +24,16 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         public override async Task<int> ExecuteAsync(CommandContext context, T settings, CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
-            SpectreLog.Configure(settings.Verbose, settings.Quiet, settings.IsJsonOutput);
 
             try
             {
                 SpectreLog.WriteHeader();
 
-                if (settings.DryRun && !SupportsDryRun)
-                {
-                    SpectreLog.ActionError("--dry-run is not supported for this command");
-                    return ExitCodes.ValidationError;
-                }
-
-                if (settings.DryRun)
-                {
-                    SpectreLog.ActionWithLevel0("[DRY-RUN]", "Preview mode - no changes will be made");
-                    SpectreLog.WriteLine();
-                }
-
                 if (await IsValidAsync(settings))
                 {
                     await RunTaskAsync(settings);
                     stopwatch.Stop();
-
-                    if (settings.IsJsonOutput)
-                    {
-                        SpectreLog.JsonResult.Success = true;
-                        SpectreLog.JsonResult.ExitCode = ExitCodes.Success;
-                        SpectreLog.JsonResult.Command = CommandName;
-                        SpectreLog.JsonResult.Profile = settings.Profile;
-                        SpectreLog.JsonResult.Environment = settings.ServiceClient?.ConnectedUrl();
-                        SpectreLog.JsonResult.Duration = $"{stopwatch.Elapsed.TotalSeconds:F1}s";
-                        SpectreLog.JsonResult.DryRun = settings.DryRun;
-                        Console.WriteLine(SpectreLog.JsonResult.ToJson());
-                    }
-
                     return ExitCodes.Success;
-                }
-
-                if (settings.IsJsonOutput)
-                {
-                    SpectreLog.JsonResult.Success = false;
-                    SpectreLog.JsonResult.ExitCode = ExitCodes.ValidationError;
-                    SpectreLog.JsonResult.Command = CommandName;
-                    Console.WriteLine(SpectreLog.JsonResult.ToJson());
                 }
 
                 return ExitCodes.ValidationError;
@@ -103,22 +69,10 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 SpectreLog.ActionError($"Inner: {ex.InnerException.Message}");
             }
 
-            if (settings.IsJsonOutput)
-            {
-                SpectreLog.JsonResult.Success = false;
-                SpectreLog.JsonResult.ExitCode = exitCode;
-                SpectreLog.JsonResult.Command = CommandName;
-                SpectreLog.JsonResult.Duration = $"{stopwatch.Elapsed.TotalSeconds:F1}s";
-                SpectreLog.AddJsonError(ex.Message);
-                Console.WriteLine(SpectreLog.JsonResult.ToJson());
-            }
-
             return exitCode;
         }
 
         protected abstract Task RunTaskAsync(T settings);
-
-        protected virtual bool SupportsDryRun => false;
 
         protected virtual List<string[]> BuildArgRows(T settings)
         {
@@ -178,13 +132,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 argRows.Add(new[] { "           --json", settings.Json });
                 argRows.Add(new[] { "           --profile", settings.Profile });
             }
-
-            if (settings.DryRun)
-                argRows.Add(new[] { "           --dry-run", "yes" });
-            if (settings.IsJsonOutput)
-                argRows.Add(new[] { "           --output", "json" });
-            if (settings.Verbose)
-                argRows.Add(new[] { "           --verbose", "yes" });
 
             argRows.AddRange(BuildArgRows(settings));
 
