@@ -78,6 +78,11 @@
 	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.6" />
 	  <!-- Phase 3: Azure production authentication -->
 	  <PackageReference Include="Azure.Identity" Version="1.13.2" />
+	  <!-- MCP Server Support -->
+	  <PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.1" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+	  <!-- T4 Template Processing (standalone, no VS dependency) -->
+	  <PackageReference Include="Mono.TextTemplating" Version="3.0.0" />
 	</ItemGroup>
 	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
 </Project>

@@ -111,7 +111,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]downloadreport[/]         Download reports from a solution\n" +
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +
-                    "  [cyan]datasource[/]             Create data source entities\n\n" +
+                    "  [cyan]datasource[/]             Create data source entities\n" +
+                    "  [cyan]mcp[/]                    Start MCP server for AI agent integration\n\n" +
                     "[green]Connection Options:[/]\n" +
                     "  --conn [yellow]STRING[/]          Dynamics 365 connection string (legacy)\n" +
                     "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +
@@ -140,7 +141,8 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --secret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
                     "  devkit server --auth [cyan]FromPac[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/] --dry-run\n" +
-                    "  devkit server --auth [cyan]FromPac[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/] --output [cyan]json[/]\n"
+                    "  devkit server --auth [cyan]FromPac[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/] --output [cyan]json[/]\n" +
+                    "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n"
                 ))
             {
                 Border = BoxBorder.Double,

@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Cli.Commands;
+using DynamicsCrm.DevKit.Cli.Commands;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
@@ -84,6 +84,9 @@ namespace DynamicsCrm.DevKit.Cli
 
                     config.AddCommand<DataSourceCommand>("datasource")
                           .WithDescription("Create data source entities");
+
+                    config.AddCommand<McpCommand>("mcp")
+                          .WithDescription("Start MCP server for AI agent integration");
                 });
 
                 var result = await app.RunAsync(args);
