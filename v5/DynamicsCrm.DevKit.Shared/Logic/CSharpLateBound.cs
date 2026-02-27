@@ -58,18 +58,27 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}public const string EntityPrimaryImageAttribute = \"{EntityMetadata.PrimaryImageAttribute}\";{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityPrimaryNameAttribute = \"{EntityMetadata.PrimaryNameAttribute}\";{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntitySchemaName = \"{EntityMetadata.SchemaName}\";{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with empty Guid.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"{@class}Id\"/>.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Guid {@class}Id){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, {@class}Id);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with alternate key (<paramref name=\"keyName\"/>, <paramref name=\"keyValue\"/>).{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(string keyName, object keyValue){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -128,6 +137,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with alternate <paramref name=\"keys\"/>.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(KeyAttributeCollection keys){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -717,15 +729,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         line4 = $"<strong>Default Value</strong> [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
                 }
             }
-            else if (attribute is DoubleAttributeMetadata)
-                line3 += "<strong>Decimal Number</strong>";
-            else if (attribute is DecimalAttributeMetadata)
+            else if (attribute is DoubleAttributeMetadata @double)
+            {
                 line3 += "<strong>Floating Point Number</strong>";
+                if (@double.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {@double.Precision.Value}";
+            }
+            else if (attribute is DecimalAttributeMetadata @decimal)
+            {
+                line3 += "<strong>Decimal Number</strong>";
+                if (@decimal.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {@decimal.Precision.Value}";
+            }
             else if (attribute is IntegerAttributeMetadata)
                 line3 += "<strong>Whole Number</strong>";
-            else if (attribute is MoneyAttributeMetadata)
+            else if (attribute is MoneyAttributeMetadata money)
             {
                 line3 += "<strong>Currency</strong>";
+                if (money.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {money.Precision.Value}";
             }
             else if (attribute is MemoAttributeMetadata)
             {
@@ -734,6 +753,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             else if (attribute is StringAttributeMetadata)
             {
                 line3 += "<strong>Single Line of Text</strong>";
+            }
+            else if (attribute is FileAttributeMetadata file)
+            {
+                line3 += "<strong>File</strong>";
+                if (file.MaxSizeInKB.HasValue) line3 += $" - <strong>MaxSize</strong>: {file.MaxSizeInKB.Value.ToString("#,#", CultureInfo.InvariantCulture)} KB";
             }
             else if (attribute is ImageAttributeMetadata)
             {
@@ -744,12 +768,15 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
             if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
             if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(attribute.AutoNumberFormat)) line3 += $" - <strong>AutoNumber</strong>: {attribute.AutoNumberFormat}";
+            if (attribute.IsAuditEnabled?.Value == true) line3 += " - <strong>Audit</strong>: Enabled";
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             line1 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
             if (line1 != null && line1.Length > 0)
             {
                 xml += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {line1}</para>{NEW_LINE}";
             }
+            xml += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {attribute.LogicalName}</para>{NEW_LINE}";
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
             {
