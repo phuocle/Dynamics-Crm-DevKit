@@ -819,12 +819,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else if (attribute is LookupAttributeMetadata lookup)
             {
-                line3 += $"<strong>Lookup</strong>: ";
-                foreach (var target in lookup.Targets)
+                if (attribute.AttributeType == AttributeTypeCode.Owner)
+                    line3 += $"<strong>Owner</strong>: ";
+                else if (attribute.AttributeType == AttributeTypeCode.Customer)
+                    line3 += $"<strong>Customer</strong>: ";
+                else if (lookup.Targets != null && lookup.Targets.Length > 1)
+                    line3 += $"<strong>Polymorphic Lookup</strong>: ";
+                else
+                    line3 += $"<strong>Lookup</strong>: ";
+                if (lookup.Targets != null)
                 {
-                    line3 += $"<see cref=\"{target}\"/>, ";
+                    foreach (var target in lookup.Targets)
+                    {
+                        line3 += $"<see cref=\"{target}\"/>, ";
+                    }
+                    line3 = line3.TrimEnd(", ".ToCharArray());
                 }
-                line3 = line3.TrimEnd(", ".ToCharArray());
             }
             else if (attribute is BooleanAttributeMetadata boolean)
             {
