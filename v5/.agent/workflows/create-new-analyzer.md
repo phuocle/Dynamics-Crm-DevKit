@@ -2,11 +2,11 @@
 description: Create a new Roslyn analyzer for DynamicsCrm.DevKit
 ---
 
-# 🆕 Create New Analyzer Workflow
+# Create New Analyzer Workflow
 
 This workflow guides you through creating a new Roslyn analyzer for DynamicsCrm.DevKit, following the established project patterns.
 
-## 📋 Pre-requisites
+## Pre-requisites
 
 Before starting, you need to know:
 1. **Analyzer ID**: Next available ID (check `DiagnosticIdentifiers.cs` - currently DEVKIT1022+)
@@ -309,7 +309,7 @@ Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsC
   -Destination "DynamicsCrm.DevKit.Tests\TestAnalyzers\Lib\" -Force
 ```
 
-**⚠️ IMPORTANT**: Request anh Phước to:
+**IMPORTANT**: Request anh Phước to:
 1. Close and reopen Visual Studio (VS caches analyzers)
 2. Open `DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.slnx`
 3. Verify the diagnostic appears in the integration test file
@@ -323,14 +323,14 @@ Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Docs\Dynam
 Use template from: `DEVKIT.template.md`
 
 **Required sections:**
-- 📖 Description
-- 🎯 Microsoft Best Practice (with link)
-- ⚠️ Why This Matters
-- 🔍 Detection
-- 💻 Code Examples (Bad and Good)
-- 🔧 How to Fix
-- 🔕 Suppression
-- 📊 Rule Properties
+- Description
+- Microsoft Best Practice (with link)
+- Why This Matters
+- Detection
+- Code Examples (Bad and Good)
+- How to Fix
+- Suppression
+- Rule Properties
 
 ---
 
@@ -339,11 +339,11 @@ Use template from: `DEVKIT.template.md`
 Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\ANALYZERS_ROADMAP.md`:
 
 1. Move entry from "Suggested New Analyzers" to "Current Analyzers" table
-2. Update status from 📋 Planned to ✅ Implemented
+2. Update status from Planned to Implemented
 
 ---
 
-## ✅ Final Verification Checklist
+## Final Verification Checklist
 
 - [ ] `DiagnosticIdentifiers.cs` has new ID constant
 - [ ] `DiagnosticDescriptors.cs` has new descriptor
@@ -356,7 +356,7 @@ Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKi
 
 ---
 
-## 📌 Tips and Common Patterns
+## Tips and Common Patterns
 
 ### Check if inside Plugin/Workflow
 ```csharp

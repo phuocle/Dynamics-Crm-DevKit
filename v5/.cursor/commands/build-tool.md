@@ -1,4 +1,4 @@
-# Build Tool - DynamicsCrm.DevKit.Tool
+﻿# Build Tool - DynamicsCrm.DevKit.Tool
 
 Build the Tool project using MSBuild in Debug mode.
 
@@ -33,4 +33,4 @@ $nugetExe = "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\Nuget
 
 - Debug mode does NOT require any signing keys
 - Tool package uses legacy `.nuspec` for NuGet packaging
-- For full solution build with packaging, use `/build-debug` command instead
+- For full solution build with packaging, use `/build-debug` workflow instead

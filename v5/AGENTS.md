@@ -113,9 +113,23 @@ The CLI (`devkit`) provides these commands:
 |------|---------|
 | `DynamicsCrm.DevKit.Cli.json` | CLI configuration in solution root |
 | `DynamicsCrm.DevKit.Config.json` | VSIX configuration |
-| `.agent/rules/core-rule.md` | Core rules for AI agents |
-| `.agent/rules/devkit-analyzer.md` | Analyzer development rules |
-| `.agent/workflows/*.md` | Workflow definitions |
+| `.agent/rules/core-rule.md` | Core rules for AI agents (source of truth) |
+| `.agent/rules/devkit-analyzer.md` | Analyzer development rules (source of truth) |
+| `.agent/workflows/*.md` | Workflow definitions (source of truth) |
+
+## IDE-Specific AI Configuration
+
+The `.agent/` folder is the **source of truth** for all AI agent configuration. Other IDE-specific folders are synced from `.agent/`.
+
+| IDE | Rules | Workflows/Commands | Entry File |
+|-----|-------|--------------------|------------|
+| **Antigravity** | `.agent/rules/*.md` | `.agent/workflows/*.md` | `GEMINI.md` |
+| **Cursor** | `.cursor/rules/*.mdc` | `.cursor/commands/*.md` | `AGENTS.md` |
+| **VS Code (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `AGENTS.md` |
+| **VS 2026 (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `AGENTS.md` |
+
+> [!NOTE]
+> When updating rules or workflows, edit `.agent/` files first, then run `DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1` to propagate changes to `.cursor/` and `.github/`.
 
 ---
 

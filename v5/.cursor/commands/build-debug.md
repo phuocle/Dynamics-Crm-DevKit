@@ -1,8 +1,4 @@
-# Build Debug - DynamicsCrm.DevKit
-
-Build Debug DynamicsCrm.DevKit for all projects.
-
-## Steps
+﻿# Build Debug - DynamicsCrm.DevKit
 
 1. Record the start time
 2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1`. If any errors occur, stop and fix them, then restart this workflow from the beginning.
@@ -12,6 +8,6 @@ Build Debug DynamicsCrm.DevKit for all projects.
    - `DynamicsCrm.DevKit.Analyzers.[version].nupkg`
    - `DynamicsCrm.DevKit.Cli.[version].nupkg`
    - `DynamicsCrm.DevKit.Tool.[version].nupkg`
-   - `DynamicsCrm.DevKit.[version].vsix`
+   - `DynamicsCrm.DevKit.[version].vsix`   
    If any file is missing, investigate the build output and fix the issue.
 6. Report the total runtime and verified version

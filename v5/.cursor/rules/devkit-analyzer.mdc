@@ -1,5 +1,5 @@
 ---
-description: Development rules for DynamicsCrm.DevKit Roslyn Analyzers (DEVKIT1001-1021)
+description: Development rules for DynamicsCrm.DevKit Roslyn analyzers (DEVKIT1001-DEVKIT1021)
 alwaysApply: true
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: true
 ## Project Structure
 
 | Folder | Purpose |
-|--------|---------|
+|-----|---|
 | `DynamicsCrm.DevKit.Analyzers\` | Main analyzer project (netstandard2.0) |
 | `DynamicsCrm.DevKit.Analyzers\CrmAnalyzers\` | Individual analyzer implementations |
 | `DynamicsCrm.DevKit.Analyzers.Test\` | Unit tests with xUnit + Roslyn Test Framework |
@@ -34,9 +34,9 @@ alwaysApply: true
 1. Đọc kỹ lại nội dung anh Phước yêu cầu
 2. Xác định analyzer nào liên quan (DEVKIT1001-DEVKIT1021)
 3. Đọc lại các files core trong `DynamicsCrm.DevKit.Analyzers\`:
-   - `DiagnosticIdentifiers.cs` - xem danh sách ID
-   - `DiagnosticDescriptors.cs` - xem descriptors
-   - Analyzer file tương ứng trong `CrmAnalyzers\`
+ - `DiagnosticIdentifiers.cs` - xem danh sách ID
+ - `DiagnosticDescriptors.cs` - xem descriptors
+ - Analyzer file tương ứng trong `CrmAnalyzers\`
 
 ### Bước 2: Kiểm tra Unit Tests
 1. Chạy workflow `/build-analyzer` để build và run tests
@@ -79,7 +79,7 @@ alwaysApply: true
 ## Current Analyzers (DEVKIT1001-DEVKIT1021)
 
 | ID | Analyzer | Severity |
-|----|----------|----------|
+|----|----|----|
 | DEVKIT1001 | UpdateMessageShouldHaveFilteringAttributesAnalyzer | Warning (Create) / Error (Update) |
 | DEVKIT1002 | NotUseColumnSetTrueAnalyzer | Warning |
 | DEVKIT1003 | PluginImageAnalyzer | Error |

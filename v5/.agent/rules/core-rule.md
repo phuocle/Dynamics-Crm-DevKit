@@ -8,15 +8,14 @@ trigger: always_on
 
 ---
 
-## 📌 Communication Protocol
+## Communication Protocol
 
-### Required Greeting & Closing
 - **Start every response with**: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` (based on current time)
 - **End every response with**: `"[emoji] Tôi đã là xong rồi anh Phước, hãy kiểm tra lại những gì tôi làm nhé [emoji]"`
 
 ---
 
-## 🚫 Critical Constraints
+## Critical Constraints
 
 | Rule | Description |
 |------|-------------|
@@ -26,7 +25,7 @@ trigger: always_on
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 | Component | Path | Description |
 |-----------|------|-------------|
@@ -39,6 +38,7 @@ trigger: always_on
 | **Scripts** | `DynamicsCrm.DevKit.Scripts/` | Build and release PowerShell scripts |
 
 ### CLI Commands (14 total)
+
 | Command | Status | Description |
 |---------|--------|-------------|
 | `generator` | Active | Generate form/webapi js/ts/csharp |
@@ -57,41 +57,38 @@ trigger: always_on
 | `datasource` | Active | Create data source entities |
 
 ### Project Templates (13 total)
+
 01-SharedProject, 02-Console, 03-ConsoleCore, 04-Server, 05-Package, 06-WebResource, 07-SharedTest, 08-ProxyTypes, 09-Test, 10-TestUi, 11-SolutionPackager, 12-Report, 13-WebResourceTs
 
 ---
 
-## 🔧 Build Workflows
+## Build Workflows
 
-Use these workflows for building:
-
-| Workflow | Command | Description |
-|----------|---------|-------------|
-| `/build-debug` | Full build | Build all projects + install CLI locally |
-| `/build-cli` | CLI only | Build and install CLI tool |
-| `/build-vsix` | VSIX only | Build Visual Studio extension |
-| `/build-analyzer` | Analyzers | Build + run analyzer unit tests |
-| `/build-tool` | Tool only | Build Tool package |
-| `/build-release` | Release | **Human only** |
-
----
-
-## 📝 Documentation Rules
-
-When creating documentation files (`.md`):
-
-1. **Save to**: `DynamicsCrm.DevKit.Docs/` in the appropriate subfolder
-2. **Folder mapping**:
-   | Working On | Save To |
-   |------------|---------|
-   | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
-   | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
-   | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
-   | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Workflow | Description |
+|----------|-------------|
+| `/build-debug` | Full build - Build all projects + install CLI locally |
+| `/build-cli` | CLI only - Build and install CLI tool |
+| `/build-vsix` | VSIX only - Build Visual Studio extension |
+| `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
+| `/build-tool` | Tool only - Build Tool package |
+| `/build-release` | Release - **Human only** |
+| `/clean-all` | Clean all build artifacts |
+| `/create-new-analyzer` | Create a new Roslyn analyzer |
 
 ---
 
-## 🔍 Key Files Reference
+## Documentation Rules
+
+| Working On | Save To |
+|------------|---------|
+| CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
+| VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
+| Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+| Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+
+---
+
+## Key Files Reference
 
 | Purpose | File(s) |
 |---------|---------|
@@ -106,7 +103,7 @@ When creating documentation files (`.md`):
 
 ---
 
-## 📊 Analyzer Development
+## Analyzer Development
 
 Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development rules.
 
@@ -119,7 +116,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## 🛠️ Naming Conventions
+## Naming Conventions
 
 | Type | Variable Name |
 |------|---------------|
@@ -128,7 +125,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## ⚙️ Target Frameworks
+## Target Frameworks
 
 - .NET Framework 4.6.2, 4.8
 - .NET Standard 2.0
@@ -136,7 +133,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## 🔐 Security
+## Security
 
 > [!CAUTION]
 > Never commit connection strings or credentials.
@@ -145,7 +142,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## 📋 Checklist Before Completing Work
+## Checklist Before Completing Work
 
 - [ ] Ran appropriate build workflow (`/build-debug` or component-specific)
 - [ ] Verified build succeeded (`devkit --version` shows today's date)
