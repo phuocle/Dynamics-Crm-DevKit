@@ -245,7 +245,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - Guid? - File Id. Check if file has been uploaded.</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
             if (maxSizeInKB.HasValue)
-                code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,#", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
+                code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public Guid? {schemaName}Id{NEW_LINE}";
@@ -858,12 +858,30 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 line3 += "<strong>Decimal Number</strong>";
                 if (@decimal.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {@decimal.Precision.Value}";
             }
-            else if (attribute is IntegerAttributeMetadata)
+            else if (attribute is IntegerAttributeMetadata integer)
+            {
                 line3 += "<strong>Whole Number</strong>";
+                if (integer.Format.HasValue && integer.Format.Value != IntegerFormat.None)
+                    line3 += $" - <strong>Format</strong>: {integer.Format.Value}";
+            }
             else if (attribute is MoneyAttributeMetadata money)
             {
                 line3 += "<strong>Currency</strong>";
-                if (money.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {money.Precision.Value}";
+                if (money.PrecisionSource.HasValue)
+                {
+                    if (money.PrecisionSource.Value == 0)
+                        line3 += $" - <strong>Precision</strong>: {(money.Precision.HasValue ? money.Precision.Value.ToString() : "2")}";
+                    else if (money.PrecisionSource.Value == 1)
+                        line3 += " - <strong>Precision</strong>: Organization.PricingDecimalPrecision";
+                    else if (money.PrecisionSource.Value == 2)
+                        line3 += " - <strong>Precision</strong>: TransactionCurrency.CurrencyPrecision";
+                }
+                else if (money.Precision.HasValue)
+                    line3 += $" - <strong>Precision</strong>: {money.Precision.Value}";
+            }
+            else if (attribute is BigIntAttributeMetadata)
+            {
+                line3 += "<strong>Big Integer</strong>";
             }
             else if (attribute is MemoAttributeMetadata)
             {
@@ -876,7 +894,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             else if (attribute is FileAttributeMetadata file)
             {
                 line3 += "<strong>File</strong>";
-                if (file.MaxSizeInKB.HasValue) line3 += $" - <strong>MaxSize</strong>: {file.MaxSizeInKB.Value.ToString("#,#", CultureInfo.InvariantCulture)} KB";
+                if (file.MaxSizeInKB.HasValue) line3 += $" - <strong>MaxSize</strong>: {file.MaxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB";
             }
             else if (attribute is ImageAttributeMetadata)
             {
@@ -884,9 +902,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else
                 line3 += "<strong>" + attribute.AttributeType.ToString() + "</strong>";
-            if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,##0", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,##0", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,##0", CultureInfo.InvariantCulture);
             if (!string.IsNullOrWhiteSpace(attribute.AutoNumberFormat)) line3 += $" - <strong>AutoNumber</strong>: {attribute.AutoNumberFormat}";
             if (attribute.IsAuditEnabled?.Value == true) line3 += " - <strong>Audit</strong>: Enabled";
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
