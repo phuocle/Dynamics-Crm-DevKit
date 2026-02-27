@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
@@ -46,9 +46,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
-	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
-	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
-	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
 	  <PackageReference Include="NUglify" Version="1.21.17" />
 	</ItemGroup>
 	<ItemGroup>

@@ -1,8 +1,8 @@
-﻿using CmdLine;
+using CmdLine;
 
 namespace DynamicsCrm.DevKit.Tool.Args
 {
-    public class CoverageToXmlArgs
+    internal class CoverageToXmlArgs
     {
         [CommandLineParameter(Command = "type", Name = "Type", Required = true, Description = "CoverageToXm type task")]
         public string Type { get; set; }

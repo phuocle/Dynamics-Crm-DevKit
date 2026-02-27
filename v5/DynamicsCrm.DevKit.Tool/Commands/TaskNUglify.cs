@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
+using System.Linq;
 using CmdLine;
 using DynamicsCrm.DevKit.Tool.Args;
 using NUglify;
 
 namespace DynamicsCrm.DevKit.Tool.Commands
 {
-    class TaskNUglify
+    internal class TaskNUglify
     {
-        private static List<string> SUPPORTED = new List<string>() { ".html", ".css", ".js" };
+        private static readonly string[] Supported = { ".html", ".css", ".js" };
 
         internal static void Run()
         {
@@ -17,28 +17,29 @@ namespace DynamicsCrm.DevKit.Tool.Commands
             var sourceFile = args.Source;
             var destinationFile = args.Destination;
             if (!File.Exists(sourceFile))
-                throw new Exception($"File not found: {sourceFile}");
-            var extension = Path.GetExtension(sourceFile);
-            if (!SUPPORTED.Contains(extension))
-                throw new Exception($"Not support extension: {extension}");
+                throw new FileNotFoundException($"Source file not found: {sourceFile}");
+            var extension = Path.GetExtension(sourceFile)?.ToLowerInvariant();
+            if (!Supported.Contains(extension))
+                throw new NotSupportedException($"Unsupported extension: {extension}. Supported: {string.Join(", ", Supported)}");
+            var content = File.ReadAllText(sourceFile);
+            UglifyResult result;
             switch (extension)
             {
                 case ".html":
-                    var html = File.ReadAllText(sourceFile);
-                    var resultHtml = Uglify.Html(html);
-                    Utility.ForceWriteAllText(destinationFile, resultHtml.Code);
+                    result = Uglify.Html(content);
                     break;
                 case ".css":
-                    var css = File.ReadAllText(sourceFile);
-                    var resultCss = Uglify.Css(css);
-                    Utility.ForceWriteAllText(destinationFile, resultCss.Code);
+                    result = Uglify.Css(content);
                     break;
                 case ".js":
-                    var js = File.ReadAllText(sourceFile);
-                    var resultJs = Uglify.Js(js);
-                    Utility.ForceWriteAllText(destinationFile, resultJs.Code);
+                    result = Uglify.Js(content);
                     break;
+                default:
+                    return;
             }
+            if (result.HasErrors)
+                throw new InvalidOperationException($"Minification failed for {sourceFile}: {string.Join("; ", result.Errors.Select(e => e.Message))}");
+            Utility.ForceWriteAllText(destinationFile, result.Code);
         }
     }
 }

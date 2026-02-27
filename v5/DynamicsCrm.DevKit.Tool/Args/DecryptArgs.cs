@@ -1,8 +1,8 @@
-﻿using CmdLine;
+using CmdLine;
 
 namespace DynamicsCrm.DevKit.Tool.Args
 {
-    public class DecryptArgs
+    internal class DecryptArgs
     {
         [CommandLineParameter(Command = "type", Name = "Type", Required = true, Description = "Decrypt Type task.")]
         public string Type { get; set; }

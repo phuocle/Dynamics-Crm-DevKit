@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using CmdLine;
 using DynamicsCrm.DevKit.Tool.Commands;
 
@@ -6,22 +7,33 @@ namespace DynamicsCrm.DevKit.Tool
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            var type = CommandLine.Tokenize().Where(x => x.Command == "type").FirstOrDefault();
-            if (type == null)
-                throw new System.Exception("Not found /type switch");
-            switch (type.Value.ToLower())
+            try
             {
-                case "coveragetoxml":
-                    TaskCoverageToXml.Run();
-                    break;
-                case "nuglify":
-                    TaskNUglify.Run();
-                    break;
-                case "decrypt":
-                    TaskDecrypt.Run();
-                    break;
+                var type = CommandLine.Tokenize().FirstOrDefault(x => x.Command == "type");
+                if (type == null)
+                    throw new InvalidOperationException("Missing required /type switch. Supported: coveragetoxml, nuglify, decrypt");
+                switch (type.Value.ToLower())
+                {
+                    case "coveragetoxml":
+                        TaskCoverageToXml.Run();
+                        break;
+                    case "nuglify":
+                        TaskNUglify.Run();
+                        break;
+                    case "decrypt":
+                        TaskDecrypt.Run();
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unknown command: '{type.Value}'. Supported: coveragetoxml, nuglify, decrypt");
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error: {ex.Message}");
+                return 1;
             }
         }
     }

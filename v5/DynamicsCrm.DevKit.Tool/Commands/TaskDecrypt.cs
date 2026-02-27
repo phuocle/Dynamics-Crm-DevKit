@@ -1,9 +1,9 @@
-﻿using CmdLine;
+using CmdLine;
 using DynamicsCrm.DevKit.Tool.Args;
 
 namespace DynamicsCrm.DevKit.Tool.Commands
 {
-    class TaskDecrypt
+    internal class TaskDecrypt
     {
         internal static void Run()
         {
