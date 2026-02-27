@@ -148,6 +148,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{GeneratorCode()}";
             code += $"{GeneratorImageCode()}";
+            code += $"{GeneratorFileCode()}";
             code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
@@ -159,8 +160,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>byte[]</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>Image</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Image</strong> - byte[] - Thumbnail image data</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
@@ -169,13 +170,50 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[\"{logicalName}\"] = value; }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>ReadOnly - String</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>Image</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - Relative URL for the image</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_url</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_url\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - long? - Timestamp of last image update</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_timestamp</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public long? {schemaName}Timestamp{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<long?>(\"{logicalName}_timestamp\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>Download full-size image. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Target = Entity.ToEntityReference(),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}FileAttributeName = \"{logicalName}\"{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var response = (Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadResponse)service.Execute(request);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var data = new byte[response.FileSizeInBytes];{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}long offset = 0;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}while (offset < response.FileSizeInBytes){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockRequest = new Microsoft.Crm.Sdk.Messages.DownloadBlockRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}FileContinuationToken = response.FileContinuationToken,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}BlockLength = (int)Math.Min(4 * 1024 * 1024, response.FileSizeInBytes - offset),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Offset = offset{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockResponse = (Microsoft.Crm.Sdk.Messages.DownloadBlockResponse)service.Execute(blockRequest);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Array.Copy(blockResponse.Data, 0, data, offset, blockResponse.Data.Length);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}offset += blockResponse.Data.Length;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return data;{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
 
             return code;
@@ -197,6 +235,74 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+            return code;
+        }
+
+        private static string GetGeneratorFileCode(string schemaName, string logicalName, int? maxSizeInKB)
+        {
+            var code = string.Empty;
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - Guid? - File Id. Check if file has been uploaded.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
+            if (maxSizeInKB.HasValue)
+                code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,#", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public Guid? {schemaName}Id{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<Guid?>(\"{logicalName}\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - File name of the uploaded file</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_name</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public string {schemaName}Name{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_name\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>Download file data. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Target = Entity.ToEntityReference(),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}FileAttributeName = \"{logicalName}\"{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var response = (Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadResponse)service.Execute(request);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var data = new byte[response.FileSizeInBytes];{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}long offset = 0;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}while (offset < response.FileSizeInBytes){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockRequest = new Microsoft.Crm.Sdk.Messages.DownloadBlockRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}FileContinuationToken = response.FileContinuationToken,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}BlockLength = (int)Math.Min(4 * 1024 * 1024, response.FileSizeInBytes - offset),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Offset = offset{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockResponse = (Microsoft.Crm.Sdk.Messages.DownloadBlockResponse)service.Execute(blockRequest);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Array.Copy(blockResponse.Data, 0, data, offset, blockResponse.Data.Length);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}offset += blockResponse.Data.Length;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return data;{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+
+            return code;
+        }
+
+        private static string GeneratorFileCode()
+        {
+            var code = string.Empty;
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (attribute is FileAttributeMetadata file)
+                {
+                    code += GetGeneratorFileCode(attribute.SchemaName, attribute.LogicalName, file.MaxSizeInKB);
+                }
+            }
             return code;
         }
 
@@ -267,6 +373,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static bool IsFieldOk(AttributeMetadata attribute)
         {
             if (attribute is ImageAttributeMetadata) return false;
+            if (attribute is FileAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
             if (attribute.AttributeType == AttributeTypeCode.EntityName) return true;
@@ -494,7 +601,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         return code;
                     }
                     else if (attribute is FileAttributeMetadata)
-                        return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}_name] = value; }}{NEW_LINE}";
+                        return string.Empty;
                     else
                         return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
