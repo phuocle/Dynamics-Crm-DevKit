@@ -101,9 +101,9 @@ namespace DynamicsCrm.DevKit.Tool.Extensions
             return false;
         }
 
-        public static DateTime UTC_To_VietNam(this DateTime date)
+        public static DateTime UtcToUserLocal(this DateTime date, TimeSpan utcOffset)
         {
-            return date.AddHours(7);
+            return date.Add(utcOffset);
         }
     }
 }

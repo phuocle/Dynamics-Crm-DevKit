@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
+    //[McpServerToolType] // Temporarily disabled - not exposed as MCP tool
     public static class CreatePluginTool
     {
         [McpServerTool(Name = "create_plugin", Idempotent = false, Destructive = false, ReadOnly = false),

@@ -13,7 +13,7 @@ using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
-    [McpServerToolType]
+    //[McpServerToolType] // Temporarily disabled - not exposed as MCP tool
     public class GetEntityMessagesTool
     {
         private readonly ServiceClient _serviceClient;
