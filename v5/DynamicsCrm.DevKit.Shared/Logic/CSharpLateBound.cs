@@ -883,13 +883,17 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 line3 += "<strong>Big Integer</strong>";
             }
-            else if (attribute is MemoAttributeMetadata)
+            else if (attribute is MemoAttributeMetadata memo)
             {
                 line3 += "<strong>Multiple Lines of Text</strong>";
+                if (memo.FormatName?.Value != null && memo.FormatName.Value != "TextArea")
+                    line3 += $" - <strong>Format</strong>: {memo.FormatName.Value}";
             }
-            else if (attribute is StringAttributeMetadata)
+            else if (attribute is StringAttributeMetadata str)
             {
                 line3 += "<strong>Single Line of Text</strong>";
+                if (str.FormatName?.Value != null && str.FormatName.Value != "Text")
+                    line3 += $" - <strong>Format</strong>: {str.FormatName.Value}";
             }
             else if (attribute is FileAttributeMetadata file)
             {
