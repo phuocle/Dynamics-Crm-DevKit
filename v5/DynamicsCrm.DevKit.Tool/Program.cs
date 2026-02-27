@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Tool
             {
                 var type = CommandLine.Tokenize().FirstOrDefault(x => x.Command == "type");
                 if (type == null)
-                    throw new InvalidOperationException("Missing required /type switch. Supported: coveragetoxml, nuglify, decrypt");
+                    throw new InvalidOperationException("Missing required /type switch. Supported: coveragetoxml, nuglify, decrypt, documentgenerator");
                 switch (type.Value.ToLower())
                 {
                     case "coveragetoxml":
@@ -25,8 +25,11 @@ namespace DynamicsCrm.DevKit.Tool
                     case "decrypt":
                         TaskDecrypt.Run();
                         break;
+                    case "documentgenerator":
+                        TaskDocumentGenerator.Run();
+                        break;
                     default:
-                        throw new InvalidOperationException($"Unknown command: '{type.Value}'. Supported: coveragetoxml, nuglify, decrypt");
+                        throw new InvalidOperationException($"Unknown command: '{type.Value}'. Supported: coveragetoxml, nuglify, decrypt, documentgenerator");
                 }
                 return 0;
             }

@@ -46,6 +46,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="*" />
+	  <PackageReference Include="Newtonsoft.Json" Version="*" />
 	  <PackageReference Include="NUglify" Version="1.21.17" />
 	</ItemGroup>
 	<ItemGroup>
