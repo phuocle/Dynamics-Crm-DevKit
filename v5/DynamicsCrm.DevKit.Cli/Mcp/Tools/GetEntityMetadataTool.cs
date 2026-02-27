@@ -19,7 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool, Description(
+        [McpServerTool(Name = "get_entity_metadata", Idempotent = true, Destructive = false, ReadOnly = true),
+        Description(
             "Retrieve ALL metadata for a Dataverse entity (table). Returns: " +
             "entity-level info (display name, schema name, ownership type, keys, etc.), " +
             "ALL attributes with full details (logical name, type, display name, required level, " +
@@ -99,6 +100,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static void AppendAttributes(StringBuilder sb, EntityMetadata metadata, string prefixFilter)
         {
             var attrs = metadata.Attributes
+                .Where(a =>
+                    a.AttributeType != AttributeTypeCode.Virtual &&
+                    a.AttributeType != AttributeTypeCode.CalendarRules &&
+                    a.AttributeOf == null)
                 .Where(a => string.IsNullOrEmpty(prefixFilter) || a.LogicalName.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(a => a.LogicalName)
                 .ToArray();

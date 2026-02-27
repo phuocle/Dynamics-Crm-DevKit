@@ -23,7 +23,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool, Description(
+        [McpServerTool(Name = "get_entity_messages", Idempotent = true, Destructive = false, ReadOnly = true),
+        Description(
             "Retrieves all available SDK messages (operations) for a Dataverse entity that support custom plugin registration. " +
             "Returns messages like Create, Update, Delete, Retrieve, RetrieveMultiple, etc. " +
             "Use 'none' as entity name to get global messages (not bound to any entity). " +

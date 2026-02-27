@@ -20,7 +20,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool, Description(
+        [McpServerTool(Name = "query_fetchxml", Idempotent = true, Destructive = false, ReadOnly = true),
+        Description(
             "Execute a FetchXML query against the connected Dataverse environment and return results as a markdown table. " +
             "Use this for any custom data query - retrieving records, aggregations, linked entities, etc. " +
             "The FetchXML must be valid XML. Results are formatted as a readable markdown table with all returned attributes.")]
