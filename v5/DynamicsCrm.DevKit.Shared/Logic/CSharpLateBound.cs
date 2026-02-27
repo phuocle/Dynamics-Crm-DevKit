@@ -647,6 +647,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
                         line3 += "<strong>DateTimeBehavior</strong>: TimeZoneIndependent - <strong>DateTimeFormat</strong>: DateAndTime";
                 }
+                else
+                    line3 += $"<strong>DateTimeBehavior</strong>: UserLocal - <strong>DateTimeFormat</strong>: DateAndTime";
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata multiple)
             {
