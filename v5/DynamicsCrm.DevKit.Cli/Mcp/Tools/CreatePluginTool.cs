@@ -15,8 +15,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         [McpServerTool, Description(
             "Creates a Dynamics 365 plugin C# file from a T4 template. " +
-            "Requires all 4 parameters: entity, message, stage, and execution mode. " +
-            "Use validate_entity, get_entity_messages, and validate_plugin_config tools first to gather and validate inputs. " +
+            "Requires: entity logical/schema name, message, stage, execution mode, namespace, and output path. " +
+            "Use get_entity_metadata to find entity schema name, and get_entity_messages to get available SDK messages. " +
+            "Business rules: PreValidation and PreOperation only support Synchronous. PostOperation supports both Synchronous and Asynchronous. " +
             "The generated file follows the DynamicsCrm.DevKit plugin pattern with CrmPluginRegistration attribute.")]
         public static async Task<string> create_plugin(
             MetadataService metadataService,
