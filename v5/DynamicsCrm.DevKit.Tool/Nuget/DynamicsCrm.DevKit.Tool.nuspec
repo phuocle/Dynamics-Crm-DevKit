@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>DynamicsCrm.DevKit.Tool</id>
@@ -23,7 +23,8 @@
     <file src="..\images\icon.png" target="images\icon.png" />
     <file src="..\bin\$configuration$\net48\DynamicsCrm.DevKit.Tool.exe" target="tools\DynamicsCrm.DevKit.Tool.exe" />
     <file src="..\bin\$configuration$\net48\DynamicsCrm.DevKit.Tool.exe.config" target="tools\DynamicsCrm.DevKit.Tool.exe.config" />
-    <file src="..\bin\$configuration$\net48\CmdLine.dll" target="tools\CmdLine.dll" />
+    <file src="..\bin\$configuration$\net48\Spectre.Console.dll" target="tools\Spectre.Console.dll" />
+    <file src="..\bin\$configuration$\net48\Spectre.Console.Cli.dll" target="tools\Spectre.Console.Cli.dll" />
     <file src="..\bin\$configuration$\net48\NUglify.dll" target="tools\NUglify.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
 	<file src="..\docs\README.md" target="docs\README.md" />

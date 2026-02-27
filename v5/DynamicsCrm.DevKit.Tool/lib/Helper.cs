@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DynamicsCrm.DevKit.Tool
+namespace DynamicsCrm.DevKit.Tool.Lib
 {
     internal class Helper
     {

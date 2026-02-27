@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace DynamicsCrm.DevKit.Tool
+namespace DynamicsCrm.DevKit.Tool.Lib
 {
     internal class Utility
     {

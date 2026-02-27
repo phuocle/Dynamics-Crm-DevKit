@@ -1,12 +1,10 @@
-using CmdLine;
-using DynamicsCrm.DevKit.Tool.Args;
 using DynamicsCrm.DevKit.Tool.Extensions;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using Newtonsoft.Json;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,14 +13,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace DynamicsCrm.DevKit.Tool.Commands
+namespace DynamicsCrm.DevKit.Tool.Tasks
 {
-    internal class InputCreateDocument
-    {
-        public string Folder { get; set; }
-        public string Solution { get; set; }
-    }
-
     internal class TaskDocumentGenerator
     {
         private const string NEW_LINE = "\r\n";
@@ -229,20 +221,40 @@ namespace DynamicsCrm.DevKit.Tool.Commands
         }
 
         /// <summary>
-        /// Reads the current user's timezone from usersettings, then maps timezonecode
-        /// to a .NET TimeZoneInfo via the Dataverse timezonedefinition table.
+        /// Resolves timezone offset. Priority:
+        /// 1. input.TimeZone override (e.g. "+7", "-6", "SE Asia Standard Time")
+        /// 2. WhoAmI user's timezone from Dataverse usersettings → timezonedefinition
         /// </summary>
+        private static TimeSpan ResolveTimeZoneOffset(string timeZoneInput, ServiceClient serviceClient)
+        {
+            if (!string.IsNullOrWhiteSpace(timeZoneInput))
+            {
+                var trimmed = timeZoneInput.Trim();
+                if (trimmed.StartsWith("+") || trimmed.StartsWith("-"))
+                {
+                    if (double.TryParse(trimmed, out var hours))
+                        return TimeSpan.FromHours(hours);
+                }
+                try
+                {
+                    var tzInfo = TimeZoneInfo.FindSystemTimeZoneById(trimmed);
+                    return tzInfo.BaseUtcOffset;
+                }
+                catch (TimeZoneNotFoundException) { }
+            }
+            return GetUserTimeZoneOffset(serviceClient);
+        }
+
         private static TimeSpan GetUserTimeZoneOffset(ServiceClient serviceClient)
         {
             try
             {
                 var whoAmI = (Microsoft.Crm.Sdk.Messages.WhoAmIResponse)serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.WhoAmIRequest());
-                var userId = whoAmI.UserId;
-                var userSettings = serviceClient.Retrieve("usersettings", userId, new ColumnSet("timezonecode"));
+                var userSettings = serviceClient.Retrieve("usersettings", whoAmI.UserId, new ColumnSet("timezonecode"));
                 var timeZoneCode = userSettings.GetAttributeValue<int?>("timezonecode");
                 if (timeZoneCode == null) return TimeSpan.Zero;
 
-                var fetchXml = $@"<fetch top=""1"">
+                var tzFetch = $@"<fetch top=""1"">
   <entity name=""timezonedefinition"">
     <attribute name=""standardname"" />
     <filter>
@@ -250,10 +262,10 @@ namespace DynamicsCrm.DevKit.Tool.Commands
     </filter>
   </entity>
 </fetch>";
-                var rows = serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (rows.Entities.Count > 0)
+                var tzRows = serviceClient.RetrieveMultiple(new FetchExpression(tzFetch));
+                if (tzRows.Entities.Count > 0)
                 {
-                    var standardName = rows.Entities[0].GetAttributeValue<string>("standardname");
+                    var standardName = tzRows.Entities[0].GetAttributeValue<string>("standardname");
                     if (!string.IsNullOrEmpty(standardName))
                     {
                         var tzInfo = TimeZoneInfo.FindSystemTimeZoneById(standardName);
@@ -268,59 +280,59 @@ namespace DynamicsCrm.DevKit.Tool.Commands
             }
         }
 
-        internal static void Run()
+        internal static void Run(string connectionString, string folder, string solution, string timeZone)
         {
-            var args = CommandLine.Parse<DocumentGeneratorArgs>();
-            var connectionString = args.ConnectionString;
-            var json = args.Input;
+            AnsiConsole.MarkupLine($"[cyan]Connecting to Dataverse...[/]");
 
             var serviceClient = new ServiceClient(connectionString);
             if (!serviceClient.IsReady)
                 throw new InvalidOperationException($"Cannot connect to Dataverse: {serviceClient.LastError}");
 
-            var input = JsonConvert.DeserializeObject<InputCreateDocument>(json.Replace("'", "\""));
-            if (string.IsNullOrWhiteSpace(input?.Folder))
-                throw new ArgumentException("Input JSON must contain 'Folder'");
-            if (string.IsNullOrWhiteSpace(input?.Solution))
-                throw new ArgumentException("Input JSON must contain 'Solution'");
-
-            if (!Path.IsPathRooted(input.Folder))
-                input.Folder = Path.GetFullPath(input.Folder);
-            Directory.CreateDirectory(input.Folder);
+            if (!Path.IsPathRooted(folder))
+                folder = Path.GetFullPath(folder);
+            Directory.CreateDirectory(folder);
 
             var instance = new TaskDocumentGenerator();
-            instance.Generate(serviceClient, input);
+            instance.Generate(serviceClient, folder, solution, timeZone);
         }
 
-        private void Generate(ServiceClient serviceClient, InputCreateDocument input)
+        private string outputFolder;
+        private string solutionName;
+
+        private void Generate(ServiceClient serviceClient, string folder, string solution, string timeZone)
         {
-            Console.WriteLine($"Connecting to Dataverse...");
-            userTimeZoneOffset = GetUserTimeZoneOffset(serviceClient);
-            Console.WriteLine($"User timezone offset: UTC{(userTimeZoneOffset >= TimeSpan.Zero ? "+" : "")}{userTimeZoneOffset.Hours:D2}:{userTimeZoneOffset.Minutes:D2}");
+            outputFolder = folder;
+            solutionName = solution;
+
+            userTimeZoneOffset = ResolveTimeZoneOffset(timeZone, serviceClient);
+            var tzSign = userTimeZoneOffset >= TimeSpan.Zero ? "+" : "";
+            var tzSource = string.IsNullOrWhiteSpace(timeZone) ? " (from WhoAmI user settings)" : $" (from input: {timeZone})";
+            AnsiConsole.MarkupLine($"[cyan]Timezone:[/] UTC{tzSign}{userTimeZoneOffset.Hours:D2}:{userTimeZoneOffset.Minutes:D2}{tzSource}");
+
             EntityMetadata[] entityMetadatas = ReadEntityMetadata(serviceClient);
             metadataDict = entityMetadatas.ToDictionary(x => x.LogicalName.ToLower(), x => x);
-            entities = GetEntityBySolution(input.Solution, serviceClient);
-            SolutionOptionSets = GetOptionSetsBySolution(input.Solution, serviceClient);
+            entities = GetEntityBySolution(solution, serviceClient);
+            SolutionOptionSets = GetOptionSetsBySolution(solution, serviceClient);
             businessRulesDict = GetBusinessRules(serviceClient);
             formsDict = GetForms(serviceClient);
             viewsDict = GetViews(serviceClient);
 
-            Console.WriteLine($"Found {entities.Count} entities in solution '{input.Solution}'");
+            AnsiConsole.MarkupLine($"[cyan]Solution:[/] {Markup.Escape(solution)} ({entities.Count} entities)");
 
             foreach (var entity in entities)
             {
                 EntityMetadata meta;
                 if (metadataDict.TryGetValue(entity.ToLower(), out meta) && (meta.IsIntersect ?? false))
                     continue;
-                var fileName = Path.Combine(input.Folder, $"{entity}.md");
-                CreateDocumentFile(entity, fileName, input, entityMetadatas);
-                Console.WriteLine($"  Generated: {entity}.md");
+                var fileName = Path.Combine(folder, $"{entity}.md");
+                CreateDocumentFile(entity, fileName, entityMetadatas);
+                AnsiConsole.MarkupLine($"  [dim]Generated:[/] {entity}.md");
             }
-            DocumentGlobalOptionSet(Path.Combine(input.Folder, "GlobalOptionSet.md"));
-            Console.WriteLine($"  Generated: GlobalOptionSet.md");
-            DocumentErd(Path.Combine(input.Folder, "Erd.md"), entityMetadatas);
-            Console.WriteLine($"  Generated: Erd.md");
-            Console.WriteLine($"Done! Output: {input.Folder}");
+            DocumentGlobalOptionSet(Path.Combine(folder, "GlobalOptionSet.md"));
+            AnsiConsole.MarkupLine($"  [dim]Generated:[/] GlobalOptionSet.md");
+            DocumentErd(Path.Combine(folder, "Erd.md"), entityMetadatas);
+            AnsiConsole.MarkupLine($"  [dim]Generated:[/] Erd.md");
+            AnsiConsole.MarkupLine($"[green]Done![/] Output: {Markup.Escape(folder)}");
         }
 
         private void DocumentErd(string file, EntityMetadata[] entityMetadatas)
@@ -419,7 +431,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
             File.WriteAllText(file, wiki, Encoding.UTF8);
         }
 
-        private void CreateDocumentFile(string entityName, string file, InputCreateDocument input, EntityMetadata[] entityMetadatas)
+        private void CreateDocumentFile(string entityName, string file, EntityMetadata[] entityMetadatas)
         {
             var sb = new StringBuilder();
             EntityMetadata entity;
@@ -482,7 +494,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
             foreach (var attribute in customColumns)
             {
                 AddGlobalOptionSets(attribute);
-                sb.Append(FormatColumnRow(attribute, i, input) + NEW_LINE);
+                sb.Append(FormatColumnRow(attribute, i) + NEW_LINE);
                 i++;
             }
             sb.Append($"{NEW_LINE}> **Total: {customColumns.Count} custom columns**{NEW_LINE}");
@@ -495,7 +507,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
             foreach (var attribute in systemColumns)
             {
                 AddGlobalOptionSets(attribute);
-                sb.Append(FormatColumnRow(attribute, i, input) + NEW_LINE);
+                sb.Append(FormatColumnRow(attribute, i) + NEW_LINE);
                 i++;
             }
             sb.Append($"{NEW_LINE}> **Total: {systemColumns.Count} system columns**{NEW_LINE}");
@@ -556,7 +568,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
                 sb.Append($"|:-:|:-|:-|:-{NEW_LINE}");
                 foreach (var relationship in oneToMany)
                 {
-                    var line = $"|{i}|{EntityWikiLink(relationship.ReferencedEntity, input)}.{relationship.ReferencedAttribute}|{EntityWikiLink(relationship.ReferencingEntity, input)}.{relationship.ReferencingAttribute}|{relationship.SchemaName}";
+                    var line = $"|{i}|{EntityWikiLink(relationship.ReferencedEntity)}.{relationship.ReferencedAttribute}|{EntityWikiLink(relationship.ReferencingEntity)}.{relationship.ReferencingAttribute}|{relationship.SchemaName}";
                     sb.Append(line + NEW_LINE);
                     i++;
                 }
@@ -576,7 +588,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
                 sb.Append($"|:-:|:-|:-|:-{NEW_LINE}");
                 foreach (var relationship in manyToOne)
                 {
-                    var line = $"|{i}|{EntityWikiLink(relationship.ReferencedEntity, input)}.{relationship.ReferencedAttribute}|{EntityWikiLink(relationship.ReferencingEntity, input)}.{relationship.ReferencingAttribute}|{relationship.SchemaName}";
+                    var line = $"|{i}|{EntityWikiLink(relationship.ReferencedEntity)}.{relationship.ReferencedAttribute}|{EntityWikiLink(relationship.ReferencingEntity)}.{relationship.ReferencingAttribute}|{relationship.SchemaName}";
                     sb.Append(line + NEW_LINE);
                     i++;
                 }
@@ -596,7 +608,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
                 sb.Append($"|:-:|:-|:-|:-{NEW_LINE}");
                 foreach (var relationship in manyToMany)
                 {
-                    var line = $"|{i}|{EntityWikiLink(relationship.Entity1LogicalName, input)}.{relationship.Entity1IntersectAttribute}|{EntityWikiLink(relationship.Entity2LogicalName, input)}.{relationship.Entity2IntersectAttribute}|{relationship.SchemaName}";
+                    var line = $"|{i}|{EntityWikiLink(relationship.Entity1LogicalName)}.{relationship.Entity1IntersectAttribute}|{EntityWikiLink(relationship.Entity2LogicalName)}.{relationship.Entity2IntersectAttribute}|{relationship.SchemaName}";
                     sb.Append(line + NEW_LINE);
                     i++;
                 }
@@ -670,7 +682,7 @@ namespace DynamicsCrm.DevKit.Tool.Commands
                 foreach (var attr in powerFxColumns)
                 {
                     var pfDisplayName = attr.DisplayName.ToWikiString();
-                    var attrType = GetAttributeType(attr, input);
+                    var attrType = GetAttributeType(attr);
                     var formula = string.Empty;
                     var propInfo = attr.GetType().GetProperty("FormulaDefinition");
                     if (propInfo != null)
@@ -790,9 +802,9 @@ namespace DynamicsCrm.DevKit.Tool.Commands
             File.WriteAllText(file, wiki, Encoding.UTF8);
         }
 
-        private string FormatColumnRow(AttributeMetadata attribute, int index, InputCreateDocument input)
+        private string FormatColumnRow(AttributeMetadata attribute, int index)
         {
-            var line = $"|{index}|{ConvertToFixed25(attribute.LogicalName)}{MoreLogicalName(attribute)}|{ConvertToFixed25(attribute.SchemaName)}|{attribute.DisplayName.ToWikiString()}|{GetAttributeType(attribute, input)}|{GetSourceType(attribute.SourceType)}|{attribute.RequiredLevel.ToWikiBooleanString()}|{attribute.IsSearchable.ToWikiBooleanString()}|{attribute.IsAuditEnabled.ToWikiBooleanString()}|{ConvertToFixed100(attribute.Description.ToWikiString())}|{attribute.CreatedOn?.ToString("yyyy-MM-dd")}";
+            var line = $"|{index}|{ConvertToFixed25(attribute.LogicalName)}{MoreLogicalName(attribute)}|{ConvertToFixed25(attribute.SchemaName)}|{attribute.DisplayName.ToWikiString()}|{GetAttributeType(attribute)}|{GetSourceType(attribute.SourceType)}|{attribute.RequiredLevel.ToWikiBooleanString()}|{attribute.IsSearchable.ToWikiBooleanString()}|{attribute.IsAuditEnabled.ToWikiBooleanString()}|{ConvertToFixed100(attribute.Description.ToWikiString())}|{attribute.CreatedOn?.ToString("yyyy-MM-dd")}";
             if ((attribute.IsPrimaryName ?? false) || (attribute.IsPrimaryId ?? false))
             {
                 line = line.Replace("|", "**|**");
@@ -862,24 +874,24 @@ namespace DynamicsCrm.DevKit.Tool.Commands
                 .Replace("\"", string.Empty);
         }
 
-        private string EntityWikiLink(string name, InputCreateDocument input)
+        private string EntityWikiLink(string name)
         {
             EntityMetadata entity;
             metadataDict.TryGetValue(name.ToLower(), out entity);
             name = entity?.SchemaName ?? name;
-            if (File.Exists(Path.Combine(input.Folder, $"{name}.md")))
+            if (File.Exists(Path.Combine(outputFolder, $"{name}.md")))
                 return $"[{name}]({name}.md)";
             return name;
         }
 
-        private string GetAttributeType(AttributeMetadata attribute, InputCreateDocument input)
+        private string GetAttributeType(AttributeMetadata attribute)
         {
             if (attribute is LookupAttributeMetadata lookup)
             {
                 var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
                 value += "<ul>";
                 foreach (var item in lookup.Targets.OrderBy(x => x))
-                    value += $"<li>{EntityWikiLink(item, input)}</li>";
+                    value += $"<li>{EntityWikiLink(item)}</li>";
                 value += "</ul>";
                 return value;
             }
