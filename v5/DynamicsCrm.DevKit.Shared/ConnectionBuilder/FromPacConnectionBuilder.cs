@@ -14,15 +14,15 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
     /// <summary>
     /// PAC CLI integration - leverages existing PAC CLI authentication profiles.
     /// This allows users to reuse their PAC CLI auth instead of managing credentials separately.
-    /// 
+    ///
     /// Usage:
     /// - With --pacprofile "Name": Uses profile by name (required)
-    /// 
+    ///
     /// Implementation approach (based on Rnwood.Dataverse.Data.PowerShell):
     /// 1. Read authprofiles_v2.json from %LOCALAPPDATA%\Microsoft\PowerAppsCLI
     /// 2. Extract environment URL from the selected profile
     /// 3. Use DefaultAzureCredential which shares tokens with Azure CLI/PAC CLI
-    /// 
+    ///
     /// Reference: https://github.com/rnwood/Rnwood.Dataverse.Data.PowerShell
     /// </summary>
     public class FromPacConnectionBuilder : IConnectionBuilder
@@ -195,7 +195,7 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         }
 
         #region PAC Profile JSON Models
-        
+
         /// <summary>
         /// Represents a single PAC CLI authentication profile.
         /// </summary>

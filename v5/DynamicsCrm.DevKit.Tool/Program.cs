@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Tool.Commands;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -48,21 +49,23 @@ namespace DynamicsCrm.DevKit.Tool
 
         internal static void WriteBanner()
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            var width = 90;
-            AnsiConsole.MarkupLine($"[green]╔{new string('═', width)}╗[/]");
-            AnsiConsole.MarkupLine($"[green]║ [/][white]  ____                              _           ____                  ____             _  ___ _   [/][green] ║[/]");
-            AnsiConsole.MarkupLine($"[green]║ [/][white] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_ [/][green] ║[/]");
-            AnsiConsole.MarkupLine($"[green]║ [/][white] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|[/][green] ║[/]");
-            AnsiConsole.MarkupLine($"[green]║ [/][white] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ [/][green] ║[/]");
-            AnsiConsole.MarkupLine($"[green]║ [/][white] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__|[/][green] ║[/]");
-            var part1 = "        |___/  ";
-            var part2 = "DynamicsCrm.DevKit.Tool";
-            var part3 = $"v{version}";
-            var padding = new string(' ', width - 1 - part1.Length - part2.Length - part3.Length);
-            AnsiConsole.MarkupLine($"[green]║ [/][white]{part1}[/][cyan]{part2}[/][white]{padding}{part3}[/][green] ║[/]");
-            AnsiConsole.MarkupLine($"[green]╚{new string('═', width)}╝[/]");
-            AnsiConsole.WriteLine();
+            var width = 112;
+            var colorBox = "green";
+            var colorText = "white";
+            AnsiConsole.MarkupLine($"[{colorBox}]╔{new string('═', width)}╗[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]  ____                              _           ____                  ____             _  ___ _     ____ _ _ [/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|[/][{colorBox}]  ║[/]");
+            var part1 = "        |___/            ";
+            var part2 = "https://github.com/phuocle/Dynamics-Crm-DevKit ";
+            var part3 = $"{Const.Version} [green]Build:[/] {Const.Build}";
+            var part3Len = $"{Const.Version} Build: {Const.Build}".Length;
+            var currentLen = part1.Length + part2.Length + part3Len;
+            var padding = new string(' ', 109 - currentLen);
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]╚{new string('═', width)}╝[/]");
         }
 
         private static void WriteHelp()
@@ -90,7 +93,7 @@ namespace DynamicsCrm.DevKit.Tool
                 BorderStyle = new Style(Color.Green),
                 Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Tool Help [/] ", Justify.Left),
                 Padding = new Padding(2, 1),
-                Width = 94
+                Width = 114
             };
             AnsiConsole.Write(panel);
         }

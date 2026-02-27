@@ -36,6 +36,10 @@
 	  <None Remove="Nuget\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs" Link="Lib\Const.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs" Link="Lib\Enum.cs" />
+	</ItemGroup>
+	<ItemGroup>
 	  <Content Include="images\icon.png" />
 	</ItemGroup>
 	<ItemGroup>
