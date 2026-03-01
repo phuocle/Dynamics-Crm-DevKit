@@ -46,5 +46,6 @@
 		</None>
 		<None Include="README.md" />
 	</ItemGroup>
+	<Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
 </Project>
 <!-- v.4.12.34.56 - Build: 27.01.2026 11:37:38 -->

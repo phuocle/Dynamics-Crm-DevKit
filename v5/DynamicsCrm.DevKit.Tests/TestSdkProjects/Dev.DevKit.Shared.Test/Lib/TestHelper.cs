@@ -1,12 +1,10 @@
-﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace Dev.DevKit.Shared.Test
@@ -15,14 +13,8 @@ namespace Dev.DevKit.Shared.Test
     {
         public static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
-            var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
-            var obj = Activator.CreateInstance<RemoteExecutionContext>();
-            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString)))
-            {
-                var serializer = new DataContractJsonSerializer(obj.GetType(), settings);
-                var deserialized = serializer.ReadObject(ms);
-                obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
-            }
+            // DevKitJson auto-detects both full and compact JSON formats
+            var obj = DevKitJson.Deserialize<RemoteExecutionContext>(jsonString);
             FixPluginExecutionContext(obj);
             return obj;
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.PluginTelemetry;
@@ -9,8 +9,6 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
 
 namespace Dev.DevKit.ConsoleCore.Lib
@@ -21,15 +19,8 @@ namespace Dev.DevKit.ConsoleCore.Lib
 
         private static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
-            var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
-            var obj = Activator.CreateInstance<RemoteExecutionContext>();
-            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonString)))
-            {
-                var serializer = new DataContractJsonSerializer(obj.GetType(), settings);
-                var deserialized = serializer.ReadObject(ms);
-                obj = deserialized != null ? (RemoteExecutionContext)deserialized : obj;
-            }
-            return obj;
+            // DevKitJson auto-detects both full and compact JSON formats
+            return DevKitJson.Deserialize<RemoteExecutionContext>(jsonString);
         }
         public static IServiceProvider GetServiceProvider(string json, ServiceClient service)
         {
