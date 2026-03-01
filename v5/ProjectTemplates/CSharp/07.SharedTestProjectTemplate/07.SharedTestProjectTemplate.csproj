@@ -81,6 +81,7 @@
     <Content Include="TestHelper.cs" />
     <Content Include="TestTracingService.cs" />
     <Content Include="PluginContextBuilder.cs" />
+    <Content Include="TestDataLoader.cs" />
     <Content Include="FakeXrmEasyTestBase.cs" />
     <Content Include="CalculateRollupFieldRequestExecutor.cs" />
     <None Include="FakerHelper.cs" />

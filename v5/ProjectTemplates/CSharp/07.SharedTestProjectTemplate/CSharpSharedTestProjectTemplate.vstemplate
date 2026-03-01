@@ -32,6 +32,7 @@
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TestHelper.cs">TestHelper.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TestTracingService.cs">TestTracingService.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginContextBuilder.cs">PluginContextBuilder.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\TestDataLoader.cs">TestDataLoader.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="FakeXrmEasyTestBase.cs">FakeXrmEasyTestBase.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Executor\CalculateRollupFieldRequestExecutor.cs">CalculateRollupFieldRequestExecutor.cs</ProjectItem>
 		</Project>

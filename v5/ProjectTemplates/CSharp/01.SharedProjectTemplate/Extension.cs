@@ -8,8 +8,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml;
 
@@ -505,14 +503,21 @@ namespace Microsoft.Xrm.Sdk
 #endif
         }
 
+        /// <summary>
+        /// Debug context using DevKitJson compact format.
+        /// Uses short keys to maximize data within the 10 KB Plugin Trace Log limit.
+        /// Output is a C# code snippet that can be copy-pasted into unit tests.
+        /// </summary>
         public static void DebugContext(this ITracingService tracingService, IExecutionContext context)
         {
 #if DEBUG
-            var json = context.ToRemoteExecutionContext().SerializeRemoteExecutionContext();
-            if (json.Length > 10000)
+            const int MAX_TRACE_BYTES = 10 * 1024;
+            var json = DevKitJson.SerializeContext(context);
+            if (Encoding.UTF8.GetByteCount(json) > MAX_TRACE_BYTES)
             {
-                json = $"var json = Helper.Decompress(\"{json.Compress()}\");";
-                if (json.Length > 10000) json = "json more than 10,000 chars";
+                json = $"var json = \"{json.Compress()}\".Decompress();";
+                if (Encoding.UTF8.GetByteCount(json) > MAX_TRACE_BYTES)
+                    json = "DebugContext: context exceeds 10 KB even after compact + compress";
             }
             else
             {
@@ -529,6 +534,7 @@ namespace Microsoft.Xrm.Sdk
             tracingService.LogMessage(json);
 #endif
         }
+
         public static void DebugMessage(this ITracingService tracingService, string message)
         {
 #if DEBUG
@@ -543,49 +549,6 @@ namespace Microsoft.Xrm.Sdk
             var debug = $"{method?.ReflectedType?.Namespace}.{method?.ReflectedType.Name}.{method?.Name}";
             tracingService?.DebugMessage(debug);
 #endif
-        }
-
-        public static RemoteExecutionContext ToRemoteExecutionContext(this IExecutionContext context)
-        {
-            var destination = new RemoteExecutionContext();
-            var destFields = destination.GetType()
-                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                .ToArray();
-            foreach (var sourceProperty in context.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                foreach (var destField in destFields)
-                {
-                    if (sourceProperty.Name == "PreEntityImages" && destField.Name == "_preImages")
-                    {
-                        destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
-                        break;
-                    }
-                    if (sourceProperty.Name == "PostEntityImages" && destField.Name == "_postImages")
-                    {
-                        destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
-                        break;
-                    }
-                    if (!destField.Name.ToLower().Contains(sourceProperty.Name.ToLower()) || !destField.FieldType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
-                    destField.SetValue(destination, sourceProperty.GetValue(context, new object[] { }));
-                    break;
-                }
-            }
-            return destination;
-        }
-
-        public static string SerializeRemoteExecutionContext(this RemoteExecutionContext context)
-        {
-            var settings = new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };
-            var serializer = new DataContractJsonSerializer(typeof(RemoteExecutionContext), settings);
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (StreamReader sr = new StreamReader(ms))
-                {
-                    serializer.WriteObject(ms, context);
-                    ms.Position = 0;
-                    return sr.ReadToEnd();
-                }
-            }
         }
 
         public static string Decompress(this string compressedString)

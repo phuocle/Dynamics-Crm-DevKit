@@ -9,7 +9,7 @@ using System.Text;
 namespace Microsoft.Xrm.Sdk
 {
     [DebuggerNonUserCode()]
-    public static class SimpleJson2
+    public static class DevKitJson
     {
         private const int BUILDER_CAPACITY = 2000;
         private static readonly char[] EscapeChars = { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
@@ -31,11 +31,32 @@ namespace Microsoft.Xrm.Sdk
 
         #region Public API
 
+        [ThreadStatic]
+        private static bool _compact;
+
+        /// <summary>
+        /// Serialize to full JSON format with readable keys (default for objects).
+        /// </summary>
         public static string Serialize(object value)
         {
             var sb = new StringBuilder(BUILDER_CAPACITY);
             WriteValue(value, sb);
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Serialize to compact JSON format with short keys.
+        /// </summary>
+        public static string SerializeCompact(object value)
+        {
+            _compact = true;
+            try
+            {
+                var sb = new StringBuilder(BUILDER_CAPACITY);
+                WriteValue(value, sb);
+                return sb.ToString();
+            }
+            finally { _compact = false; }
         }
 
         public static object Deserialize(string json)
@@ -63,16 +84,36 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Serialize any IExecutionContext (v1-v7+) directly via reflection,
-        /// capturing ALL properties including v2-v7 additions without SDK compile-time dependency.
+        /// Serialize any IExecutionContext to compact JSON format.
+        /// Uses short keys to maximize data within the 10 KB Plugin Trace Log limit.
         /// </summary>
         public static string SerializeContext(IExecutionContext context)
         {
             if (context == null) return "null";
-            if (context is RemoteExecutionContext rCtx)
-                return Serialize(rCtx);
+            _compact = true;
+            try
+            {
+                var sb = new StringBuilder(BUILDER_CAPACITY);
+                if (context is RemoteExecutionContext rCtx)
+                    WriteRemoteExecutionContext(rCtx, sb);
+                else
+                    WriteContextObject(context, sb);
+                return sb.ToString();
+            }
+            finally { _compact = false; }
+        }
+
+        /// <summary>
+        /// Serialize any IExecutionContext to full JSON format with readable keys.
+        /// </summary>
+        public static string SerializeContextFull(IExecutionContext context)
+        {
+            if (context == null) return "null";
             var sb = new StringBuilder(BUILDER_CAPACITY);
-            WriteContextObject(context, sb);
+            if (context is RemoteExecutionContext rCtx)
+                WriteRemoteExecutionContext(rCtx, sb);
+            else
+                WriteContextObject(context, sb);
             return sb.ToString();
         }
 
@@ -148,9 +189,23 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteTyped(string typeName, string value, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"");
-            sb.Append(typeName);
-            sb.Append("\",\"Value\":");
+            if (_compact)
+            {
+                string ct;
+                switch (typeName)
+                {
+                    case "DateTime": ct = "DT"; break;
+                    case "Guid": ct = "G"; break;
+                    case "File": ct = "F"; break;
+                    default: ct = typeName; break;
+                }
+                sb.Append("{\"_t\":\""); sb.Append(ct);
+            }
+            else
+            {
+                sb.Append("{\"__type\":\""); sb.Append(typeName);
+            }
+            sb.Append(_compact ? "\",\"v\":" : "\",\"Value\":");
             WriteString(value, sb);
             sb.Append('}');
         }
@@ -204,11 +259,11 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteEntity(Entity entity, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"Entity\",\"LogicalName\":");
+            sb.Append(_compact ? "{\"_t\":\"E\",\"ln\":" : "{\"__type\":\"Entity\",\"LogicalName\":");
             WriteString(entity.LogicalName ?? "", sb);
-            sb.Append(",\"Id\":");
+            sb.Append(_compact ? ",\"id\":" : ",\"Id\":");
             WriteString(entity.Id.ToString("D"), sb);
-            sb.Append(",\"Attributes\":{");
+            sb.Append(_compact ? ",\"a\":{" : ",\"Attributes\":{");
             var first = true;
             foreach (var attr in entity.Attributes)
             {
@@ -221,7 +276,7 @@ namespace Microsoft.Xrm.Sdk
             sb.Append('}');
             if (entity.FormattedValues != null && entity.FormattedValues.Count > 0)
             {
-                sb.Append(",\"FormattedValues\":{");
+                sb.Append(_compact ? ",\"fv\":{" : ",\"FormattedValues\":{");
                 first = true;
                 foreach (var fv in entity.FormattedValues)
                 {
@@ -238,13 +293,13 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteEntityReference(EntityReference er, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"EntityReference\",\"LogicalName\":");
+            sb.Append(_compact ? "{\"_t\":\"ER\",\"ln\":" : "{\"__type\":\"EntityReference\",\"LogicalName\":");
             WriteString(er.LogicalName ?? "", sb);
-            sb.Append(",\"Id\":");
+            sb.Append(_compact ? ",\"id\":" : ",\"Id\":");
             WriteString(er.Id.ToString("D"), sb);
             if (er.Name != null)
             {
-                sb.Append(",\"Name\":");
+                sb.Append(_compact ? ",\"n\":" : ",\"Name\":");
                 WriteString(er.Name, sb);
             }
             sb.Append('}');
@@ -252,21 +307,21 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteMoney(Money money, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"Money\",\"Value\":");
+            sb.Append(_compact ? "{\"_t\":\"M\",\"v\":" : "{\"__type\":\"Money\",\"Value\":");
             sb.Append(money.Value.ToString(CultureInfo.InvariantCulture));
             sb.Append('}');
         }
 
         private static void WriteOptionSetValue(OptionSetValue osv, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"OptionSetValue\",\"Value\":");
+            sb.Append(_compact ? "{\"_t\":\"O\",\"v\":" : "{\"__type\":\"OptionSetValue\",\"Value\":");
             sb.Append(osv.Value.ToString(CultureInfo.InvariantCulture));
             sb.Append('}');
         }
 
         private static void WriteOptionSetValueCollection(OptionSetValueCollection osvc, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"OptionSetValueCollection\",\"Values\":[");
+            sb.Append(_compact ? "{\"_t\":\"OC\",\"vs\":[" : "{\"__type\":\"OptionSetValueCollection\",\"Values\":[");
             var first = true;
             foreach (var osv in osvc)
             {
@@ -279,24 +334,24 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteAliasedValue(AliasedValue av, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"AliasedValue\",\"EntityLogicalName\":");
+            sb.Append(_compact ? "{\"_t\":\"AV\",\"eln\":" : "{\"__type\":\"AliasedValue\",\"EntityLogicalName\":");
             WriteString(av.EntityLogicalName ?? "", sb);
-            sb.Append(",\"AttributeLogicalName\":");
+            sb.Append(_compact ? ",\"aln\":" : ",\"AttributeLogicalName\":");
             WriteString(av.AttributeLogicalName ?? "", sb);
-            sb.Append(",\"Value\":");
+            sb.Append(_compact ? ",\"v\":" : ",\"Value\":");
             WriteValue(av.Value, sb);
             sb.Append('}');
         }
 
         private static void WriteBooleanManagedProperty(BooleanManagedProperty bmp, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"BooleanManagedProperty\",\"Value\":");
+            sb.Append(_compact ? "{\"_t\":\"BM\",\"v\":" : "{\"__type\":\"BooleanManagedProperty\",\"Value\":");
             sb.Append(bmp.Value ? "true" : "false");
-            sb.Append(",\"CanBeChanged\":");
+            sb.Append(_compact ? ",\"cc\":" : ",\"CanBeChanged\":");
             sb.Append(bmp.CanBeChanged ? "true" : "false");
             if (bmp.ManagedPropertyLogicalName != null)
             {
-                sb.Append(",\"ManagedPropertyLogicalName\":");
+                sb.Append(_compact ? ",\"ml\":" : ",\"ManagedPropertyLogicalName\":");
                 WriteString(bmp.ManagedPropertyLogicalName, sb);
             }
             sb.Append('}');
@@ -304,13 +359,13 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteEntityCollection(EntityCollection ec, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"EntityCollection\"");
+            sb.Append(_compact ? "{\"_t\":\"EC\"" : "{\"__type\":\"EntityCollection\"");
             if (ec.EntityName != null)
             {
-                sb.Append(",\"EntityName\":");
+                sb.Append(_compact ? ",\"en\":" : ",\"EntityName\":");
                 WriteString(ec.EntityName, sb);
             }
-            sb.Append(",\"Entities\":[");
+            sb.Append(_compact ? ",\"es\":[" : ",\"Entities\":[");
             var first = true;
             foreach (var entity in ec.Entities)
             {
@@ -323,7 +378,7 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteParameterCollection(ParameterCollection pc, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"ParameterCollection\",\"Values\":{");
+            sb.Append(_compact ? "{\"_t\":\"PC\",\"vs\":{" : "{\"__type\":\"ParameterCollection\",\"Values\":{");
             var first = true;
             foreach (var kvp in pc)
             {
@@ -338,7 +393,7 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteEntityImageCollection(EntityImageCollection eic, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"EntityImageCollection\",\"Values\":{");
+            sb.Append(_compact ? "{\"_t\":\"IC\",\"vs\":{" : "{\"__type\":\"EntityImageCollection\",\"Values\":{");
             var first = true;
             foreach (var kvp in eic)
             {
@@ -353,38 +408,38 @@ namespace Microsoft.Xrm.Sdk
 
         private static void WriteRemoteExecutionContext(RemoteExecutionContext ctx, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"RemoteExecutionContext\"");
-            sb.Append(",\"BusinessUnitId\":"); WriteString(ctx.BusinessUnitId.ToString("D"), sb);
-            sb.Append(",\"CorrelationId\":"); WriteString(ctx.CorrelationId.ToString("D"), sb);
-            sb.Append(",\"Depth\":"); sb.Append(ctx.Depth.ToString(CultureInfo.InvariantCulture));
-            sb.Append(",\"InitiatingUserId\":"); WriteString(ctx.InitiatingUserId.ToString("D"), sb);
-            sb.Append(",\"InputParameters\":"); WriteParameterCollection(ctx.InputParameters ?? new ParameterCollection(), sb);
-            sb.Append(",\"IsExecutingOffline\":"); sb.Append(ctx.IsExecutingOffline ? "true" : "false");
-            sb.Append(",\"IsInTransaction\":"); sb.Append(ctx.IsInTransaction ? "true" : "false");
-            sb.Append(",\"IsOfflinePlayback\":"); sb.Append(ctx.IsOfflinePlayback ? "true" : "false");
-            sb.Append(",\"IsolationMode\":"); sb.Append(ctx.IsolationMode.ToString(CultureInfo.InvariantCulture));
-            sb.Append(",\"MessageName\":"); WriteString(ctx.MessageName ?? "", sb);
-            sb.Append(",\"Mode\":"); sb.Append(ctx.Mode.ToString(CultureInfo.InvariantCulture));
-            sb.Append(",\"OperationCreatedOn\":"); WriteString(ctx.OperationCreatedOn.ToUniversalTime().ToString(DateTimeFormats[0], CultureInfo.InvariantCulture), sb);
-            sb.Append(",\"OperationId\":"); WriteString(ctx.OperationId.ToString("D"), sb);
-            sb.Append(",\"OrganizationId\":"); WriteString(ctx.OrganizationId.ToString("D"), sb);
-            sb.Append(",\"OrganizationName\":"); WriteString(ctx.OrganizationName ?? "", sb);
-            sb.Append(",\"OutputParameters\":"); WriteParameterCollection(ctx.OutputParameters ?? new ParameterCollection(), sb);
-            sb.Append(",\"OwningExtension\":");
+            sb.Append(_compact ? "{\"_t\":\"RC\"" : "{\"__type\":\"RemoteExecutionContext\"");
+            sb.Append(_compact ? ",\"bu\":" : ",\"BusinessUnitId\":"); WriteString(ctx.BusinessUnitId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"ci\":" : ",\"CorrelationId\":"); WriteString(ctx.CorrelationId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"dp\":" : ",\"Depth\":"); sb.Append(ctx.Depth.ToString(CultureInfo.InvariantCulture));
+            sb.Append(_compact ? ",\"iu\":" : ",\"InitiatingUserId\":"); WriteString(ctx.InitiatingUserId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"ip\":" : ",\"InputParameters\":"); WriteParameterCollection(ctx.InputParameters ?? new ParameterCollection(), sb);
+            sb.Append(_compact ? ",\"xo\":" : ",\"IsExecutingOffline\":"); sb.Append(ctx.IsExecutingOffline ? "true" : "false");
+            sb.Append(_compact ? ",\"xt\":" : ",\"IsInTransaction\":"); sb.Append(ctx.IsInTransaction ? "true" : "false");
+            sb.Append(_compact ? ",\"xp\":" : ",\"IsOfflinePlayback\":"); sb.Append(ctx.IsOfflinePlayback ? "true" : "false");
+            sb.Append(_compact ? ",\"im\":" : ",\"IsolationMode\":"); sb.Append(ctx.IsolationMode.ToString(CultureInfo.InvariantCulture));
+            sb.Append(_compact ? ",\"mn\":" : ",\"MessageName\":"); WriteString(ctx.MessageName ?? "", sb);
+            sb.Append(_compact ? ",\"md\":" : ",\"Mode\":"); sb.Append(ctx.Mode.ToString(CultureInfo.InvariantCulture));
+            sb.Append(_compact ? ",\"oc\":" : ",\"OperationCreatedOn\":"); WriteString(ctx.OperationCreatedOn.ToUniversalTime().ToString(DateTimeFormats[0], CultureInfo.InvariantCulture), sb);
+            sb.Append(_compact ? ",\"oi\":" : ",\"OperationId\":"); WriteString(ctx.OperationId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"og\":" : ",\"OrganizationId\":"); WriteString(ctx.OrganizationId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"on\":" : ",\"OrganizationName\":"); WriteString(ctx.OrganizationName ?? "", sb);
+            sb.Append(_compact ? ",\"ou\":" : ",\"OutputParameters\":"); WriteParameterCollection(ctx.OutputParameters ?? new ParameterCollection(), sb);
+            sb.Append(_compact ? ",\"oe\":" : ",\"OwningExtension\":");
             if (ctx.OwningExtension != null) WriteEntityReference(ctx.OwningExtension, sb); else sb.Append("null");
-            sb.Append(",\"PostEntityImages\":"); WriteEntityImageCollection(ctx.PostEntityImages ?? new EntityImageCollection(), sb);
-            sb.Append(",\"PreEntityImages\":"); WriteEntityImageCollection(ctx.PreEntityImages ?? new EntityImageCollection(), sb);
-            sb.Append(",\"PrimaryEntityId\":"); WriteString(ctx.PrimaryEntityId.ToString("D"), sb);
-            sb.Append(",\"PrimaryEntityName\":"); WriteString(ctx.PrimaryEntityName ?? "", sb);
-            sb.Append(",\"RequestId\":");
+            sb.Append(_compact ? ",\"po\":" : ",\"PostEntityImages\":"); WriteEntityImageCollection(ctx.PostEntityImages ?? new EntityImageCollection(), sb);
+            sb.Append(_compact ? ",\"pr\":" : ",\"PreEntityImages\":"); WriteEntityImageCollection(ctx.PreEntityImages ?? new EntityImageCollection(), sb);
+            sb.Append(_compact ? ",\"pi\":" : ",\"PrimaryEntityId\":"); WriteString(ctx.PrimaryEntityId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"pn\":" : ",\"PrimaryEntityName\":"); WriteString(ctx.PrimaryEntityName ?? "", sb);
+            sb.Append(_compact ? ",\"ri\":" : ",\"RequestId\":");
             if (ctx.RequestId.HasValue) WriteString(ctx.RequestId.Value.ToString("D"), sb); else sb.Append("null");
-            sb.Append(",\"SecondaryEntityName\":"); WriteString(ctx.SecondaryEntityName ?? "", sb);
-            sb.Append(",\"SharedVariables\":"); WriteParameterCollection(ctx.SharedVariables ?? new ParameterCollection(), sb);
-            sb.Append(",\"Stage\":"); sb.Append(ctx.Stage.ToString(CultureInfo.InvariantCulture));
-            sb.Append(",\"UserId\":"); WriteString(ctx.UserId.ToString("D"), sb);
+            sb.Append(_compact ? ",\"sn\":" : ",\"SecondaryEntityName\":"); WriteString(ctx.SecondaryEntityName ?? "", sb);
+            sb.Append(_compact ? ",\"sv\":" : ",\"SharedVariables\":"); WriteParameterCollection(ctx.SharedVariables ?? new ParameterCollection(), sb);
+            sb.Append(_compact ? ",\"st\":" : ",\"Stage\":"); sb.Append(ctx.Stage.ToString(CultureInfo.InvariantCulture));
+            sb.Append(_compact ? ",\"ui\":" : ",\"UserId\":"); WriteString(ctx.UserId.ToString("D"), sb);
             if (ctx.ParentContext != null)
             {
-                sb.Append(",\"ParentContext\":");
+                sb.Append(_compact ? ",\"pc\":" : ",\"ParentContext\":");
                 if (ctx.ParentContext is RemoteExecutionContext parentCtx)
                     WriteRemoteExecutionContext(parentCtx, sb);
                 else if (ctx.ParentContext is IExecutionContext parentExec)
@@ -394,6 +449,27 @@ namespace Microsoft.Xrm.Sdk
             }
             WriteExtraContextProperties(ctx, sb);
             sb.Append('}');
+        }
+
+        private static readonly Dictionary<string, string> FullToCompactContextKey = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            {"BusinessUnitId", "bu"}, {"CorrelationId", "ci"}, {"Depth", "dp"},
+            {"InitiatingUserId", "iu"}, {"InputParameters", "ip"},
+            {"IsExecutingOffline", "xo"}, {"IsInTransaction", "xt"},
+            {"IsOfflinePlayback", "xp"}, {"IsolationMode", "im"},
+            {"MessageName", "mn"}, {"Mode", "md"}, {"OperationCreatedOn", "oc"},
+            {"OperationId", "oi"}, {"OrganizationId", "og"}, {"OrganizationName", "on"},
+            {"OutputParameters", "ou"}, {"OwningExtension", "oe"},
+            {"PostEntityImages", "po"}, {"PreEntityImages", "pr"},
+            {"PrimaryEntityId", "pi"}, {"PrimaryEntityName", "pn"},
+            {"RequestId", "ri"}, {"SecondaryEntityName", "sn"},
+            {"SharedVariables", "sv"}, {"Stage", "st"}, {"UserId", "ui"},
+            {"ParentContext", "pc"}
+        };
+
+        private static string GetCompactContextKey(string propertyName)
+        {
+            return FullToCompactContextKey.TryGetValue(propertyName, out var compact) ? compact : propertyName;
         }
 
         /// <summary>
@@ -410,7 +486,7 @@ namespace Microsoft.Xrm.Sdk
                 {
                     var val = prop.GetValue(ctx);
                     sb.Append(",\"");
-                    sb.Append(prop.Name);
+                    sb.Append(_compact ? GetCompactContextKey(prop.Name) : prop.Name);
                     sb.Append("\":");
                     WriteValue(val, sb);
                 }
@@ -424,7 +500,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         private static void WriteContextObject(object context, StringBuilder sb)
         {
-            sb.Append("{\"__type\":\"RemoteExecutionContext\"");
+            sb.Append(_compact ? "{\"_t\":\"RC\"" : "{\"__type\":\"RemoteExecutionContext\"");
             object parentContextValue = null;
             foreach (var prop in context.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
@@ -438,7 +514,7 @@ namespace Microsoft.Xrm.Sdk
                 {
                     var val = prop.GetValue(context);
                     sb.Append(",\"");
-                    sb.Append(prop.Name);
+                    sb.Append(_compact ? GetCompactContextKey(prop.Name) : prop.Name);
                     sb.Append("\":");
                     WriteValue(val, sb);
                 }
@@ -446,7 +522,7 @@ namespace Microsoft.Xrm.Sdk
             }
             if (parentContextValue != null)
             {
-                sb.Append(",\"ParentContext\":");
+                sb.Append(_compact ? ",\"pc\":" : ",\"ParentContext\":");
                 if (parentContextValue is RemoteExecutionContext parentRemote)
                     WriteRemoteExecutionContext(parentRemote, sb);
                 else
@@ -524,6 +600,8 @@ namespace Microsoft.Xrm.Sdk
         private static object ParseObjectAndReconstruct(char[] json, ref int index)
         {
             var dict = ParseObject(json, ref index);
+            if (dict.ContainsKey("_t"))
+                dict = ExpandCompactDict(dict);
             if (dict.TryGetValue("__type", out var typeObj) && typeObj is string typeName)
                 return ReconstructTypedObject(typeName, dict);
             return dict;
@@ -750,6 +828,56 @@ namespace Microsoft.Xrm.Sdk
             }
 
             return ctx;
+        }
+
+        #endregion
+
+        #region Compact Format Expansion
+
+        private static readonly Dictionary<string, string> CompactToFullKey = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            {"_t", "__type"}, {"id", "Id"},
+            {"ln", "LogicalName"}, {"a", "Attributes"}, {"fv", "FormattedValues"}, {"n", "Name"},
+            {"v", "Value"}, {"vs", "Values"},
+            {"cc", "CanBeChanged"}, {"ml", "ManagedPropertyLogicalName"},
+            {"eln", "EntityLogicalName"}, {"aln", "AttributeLogicalName"},
+            {"en", "EntityName"}, {"es", "Entities"},
+            {"bu", "BusinessUnitId"}, {"ci", "CorrelationId"}, {"dp", "Depth"},
+            {"iu", "InitiatingUserId"}, {"ip", "InputParameters"},
+            {"xo", "IsExecutingOffline"}, {"xt", "IsInTransaction"},
+            {"xp", "IsOfflinePlayback"}, {"im", "IsolationMode"},
+            {"mn", "MessageName"}, {"md", "Mode"}, {"oc", "OperationCreatedOn"},
+            {"oi", "OperationId"}, {"og", "OrganizationId"}, {"on", "OrganizationName"},
+            {"ou", "OutputParameters"}, {"oe", "OwningExtension"},
+            {"po", "PostEntityImages"}, {"pr", "PreEntityImages"},
+            {"pi", "PrimaryEntityId"}, {"pn", "PrimaryEntityName"},
+            {"ri", "RequestId"}, {"sn", "SecondaryEntityName"},
+            {"sv", "SharedVariables"}, {"st", "Stage"}, {"ui", "UserId"},
+            {"pc", "ParentContext"}
+        };
+
+        private static readonly Dictionary<string, string> CompactToFullType = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            {"E", "Entity"}, {"ER", "EntityReference"}, {"M", "Money"},
+            {"O", "OptionSetValue"}, {"OC", "OptionSetValueCollection"},
+            {"AV", "AliasedValue"}, {"BM", "BooleanManagedProperty"},
+            {"EC", "EntityCollection"}, {"PC", "ParameterCollection"},
+            {"IC", "EntityImageCollection"}, {"RC", "RemoteExecutionContext"},
+            {"DT", "DateTime"}, {"G", "Guid"}, {"F", "File"}
+        };
+
+        private static Dictionary<string, object> ExpandCompactDict(Dictionary<string, object> dict)
+        {
+            var expanded = new Dictionary<string, object>(dict.Count);
+            foreach (var kvp in dict)
+            {
+                var key = CompactToFullKey.TryGetValue(kvp.Key, out var fullKey) ? fullKey : kvp.Key;
+                var value = kvp.Value;
+                if (key == "__type" && value is string tn && CompactToFullType.TryGetValue(tn, out var fullType))
+                    value = fullType;
+                expanded[key] = value;
+            }
+            return expanded;
         }
 
         #endregion

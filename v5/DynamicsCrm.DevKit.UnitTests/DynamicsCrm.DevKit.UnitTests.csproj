@@ -21,12 +21,15 @@
   <!-- Shared linked files (net48 only) -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Date.cs" Link="Lib\Date.cs" />
-    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\SimpleJson2.cs" Link="Lib\SimpleJson2.cs" />
+    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DevKitJson.cs" Link="Lib\DevKitJson.cs" />
   </ItemGroup>
 
   <!-- Content files per framework -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Content Include="Lib\AllDataverseTypes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lib\AllDataverseTypes.compact.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

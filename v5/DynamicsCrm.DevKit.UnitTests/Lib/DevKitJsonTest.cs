@@ -7,113 +7,113 @@ using Xunit;
 
 namespace DynamicsCrm.DevKit.UnitTests.Lib
 {
-    public class SimpleJson2Test
+    public class DevKitJsonTest
     {
         #region Primitives
 
         [Fact]
         public void Serialize_Null_ReturnsNullString()
         {
-            Assert.Equal("null", SimpleJson2.Serialize(null));
+            Assert.Equal("null", DevKitJson.Serialize(null));
         }
 
         [Fact]
         public void Serialize_String_QuotesAndEscapes()
         {
-            Assert.Equal("\"hello\"", SimpleJson2.Serialize("hello"));
-            Assert.Equal("\"hello\\nworld\"", SimpleJson2.Serialize("hello\nworld"));
-            Assert.Equal("\"he said \\\"hi\\\"\"", SimpleJson2.Serialize("he said \"hi\""));
-            Assert.Equal("\"tab\\there\"", SimpleJson2.Serialize("tab\there"));
-            Assert.Equal("\"back\\\\slash\"", SimpleJson2.Serialize("back\\slash"));
+            Assert.Equal("\"hello\"", DevKitJson.Serialize("hello"));
+            Assert.Equal("\"hello\\nworld\"", DevKitJson.Serialize("hello\nworld"));
+            Assert.Equal("\"he said \\\"hi\\\"\"", DevKitJson.Serialize("he said \"hi\""));
+            Assert.Equal("\"tab\\there\"", DevKitJson.Serialize("tab\there"));
+            Assert.Equal("\"back\\\\slash\"", DevKitJson.Serialize("back\\slash"));
         }
 
         [Fact]
         public void Serialize_Bool_LowercaseTrueFalse()
         {
-            Assert.Equal("true", SimpleJson2.Serialize(true));
-            Assert.Equal("false", SimpleJson2.Serialize(false));
+            Assert.Equal("true", DevKitJson.Serialize(true));
+            Assert.Equal("false", DevKitJson.Serialize(false));
         }
 
         [Fact]
         public void Serialize_Int_Roundtrip()
         {
-            Assert.Equal("42", SimpleJson2.Serialize(42));
-            Assert.Equal("-100", SimpleJson2.Serialize(-100));
-            Assert.Equal("0", SimpleJson2.Serialize(0));
+            Assert.Equal("42", DevKitJson.Serialize(42));
+            Assert.Equal("-100", DevKitJson.Serialize(-100));
+            Assert.Equal("0", DevKitJson.Serialize(0));
         }
 
         [Fact]
         public void Serialize_Long_Roundtrip()
         {
             var big = 9999999999L;
-            Assert.Equal("9999999999", SimpleJson2.Serialize(big));
+            Assert.Equal("9999999999", DevKitJson.Serialize(big));
         }
 
         [Fact]
         public void Serialize_Double_Roundtrip()
         {
-            var json = SimpleJson2.Serialize(3.14);
+            var json = DevKitJson.Serialize(3.14);
             Assert.Contains("3.14", json);
         }
 
         [Fact]
         public void Serialize_Decimal_Roundtrip()
         {
-            Assert.Equal("123.45", SimpleJson2.Serialize(123.45m));
+            Assert.Equal("123.45", DevKitJson.Serialize(123.45m));
         }
 
         [Fact]
         public void Serialize_Float_Roundtrip()
         {
-            var json = SimpleJson2.Serialize(2.5f);
+            var json = DevKitJson.Serialize(2.5f);
             Assert.Contains("2.5", json);
         }
 
         [Fact]
         public void Serialize_Byte_Roundtrip()
         {
-            Assert.Equal("255", SimpleJson2.Serialize((byte)255));
-            Assert.Equal("0", SimpleJson2.Serialize((byte)0));
+            Assert.Equal("255", DevKitJson.Serialize((byte)255));
+            Assert.Equal("0", DevKitJson.Serialize((byte)0));
         }
 
         [Fact]
         public void Serialize_Short_Roundtrip()
         {
-            Assert.Equal("32767", SimpleJson2.Serialize((short)32767));
-            Assert.Equal("-100", SimpleJson2.Serialize((short)-100));
+            Assert.Equal("32767", DevKitJson.Serialize((short)32767));
+            Assert.Equal("-100", DevKitJson.Serialize((short)-100));
         }
 
         [Fact]
         public void Deserialize_Null_ReturnsNull()
         {
-            Assert.Null(SimpleJson2.Deserialize("null"));
+            Assert.Null(DevKitJson.Deserialize("null"));
         }
 
         [Fact]
         public void Deserialize_String_RemovesQuotes()
         {
-            Assert.Equal("hello", SimpleJson2.Deserialize("\"hello\""));
+            Assert.Equal("hello", DevKitJson.Deserialize("\"hello\""));
         }
 
         [Fact]
         public void Deserialize_StringWithEscapes_Unescapes()
         {
-            Assert.Equal("hello\nworld", SimpleJson2.Deserialize("\"hello\\nworld\""));
-            Assert.Equal("he said \"hi\"", SimpleJson2.Deserialize("\"he said \\\"hi\\\"\""));
-            Assert.Equal("tab\there", SimpleJson2.Deserialize("\"tab\\there\""));
+            Assert.Equal("hello\nworld", DevKitJson.Deserialize("\"hello\\nworld\""));
+            Assert.Equal("he said \"hi\"", DevKitJson.Deserialize("\"he said \\\"hi\\\"\""));
+            Assert.Equal("tab\there", DevKitJson.Deserialize("\"tab\\there\""));
         }
 
         [Fact]
         public void Deserialize_Bool_ReturnsCorrectType()
         {
-            Assert.Equal(true, SimpleJson2.Deserialize("true"));
-            Assert.Equal(false, SimpleJson2.Deserialize("false"));
+            Assert.Equal(true, DevKitJson.Deserialize("true"));
+            Assert.Equal(false, DevKitJson.Deserialize("false"));
         }
 
         [Fact]
         public void Deserialize_Int_ReturnsInt()
         {
-            var result = SimpleJson2.Deserialize("42");
+            var result = DevKitJson.Deserialize("42");
             Assert.IsType<int>(result);
             Assert.Equal(42, result);
         }
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void Deserialize_LargeNumber_ReturnsLong()
         {
-            var result = SimpleJson2.Deserialize("9999999999");
+            var result = DevKitJson.Deserialize("9999999999");
             Assert.IsType<long>(result);
             Assert.Equal(9999999999L, result);
         }
@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void Deserialize_Double_ReturnsDouble()
         {
-            var result = SimpleJson2.Deserialize("3.14");
+            var result = DevKitJson.Deserialize("3.14");
             Assert.IsType<double>(result);
             Assert.Equal(3.14, (double)result, 10);
         }
@@ -137,18 +137,18 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void Deserialize_NegativeNumber()
         {
-            Assert.Equal(-42, SimpleJson2.Deserialize("-42"));
+            Assert.Equal(-42, DevKitJson.Deserialize("-42"));
         }
 
         [Fact]
         public void Deserialize_Generic_ConvertsTypes()
         {
-            Assert.Equal(42, SimpleJson2.Deserialize<int>("42"));
-            Assert.Equal(42L, SimpleJson2.Deserialize<long>("42"));
-            Assert.Equal(42.0, SimpleJson2.Deserialize<double>("42"));
-            Assert.Equal(42m, SimpleJson2.Deserialize<decimal>("42"));
-            Assert.Equal("hello", SimpleJson2.Deserialize<string>("\"hello\""));
-            Assert.True(SimpleJson2.Deserialize<bool>("true"));
+            Assert.Equal(42, DevKitJson.Deserialize<int>("42"));
+            Assert.Equal(42L, DevKitJson.Deserialize<long>("42"));
+            Assert.Equal(42.0, DevKitJson.Deserialize<double>("42"));
+            Assert.Equal(42m, DevKitJson.Deserialize<decimal>("42"));
+            Assert.Equal("hello", DevKitJson.Deserialize<string>("\"hello\""));
+            Assert.True(DevKitJson.Deserialize<bool>("true"));
         }
 
         #endregion
@@ -159,11 +159,11 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void DateTime_Roundtrip()
         {
             var dt = new DateTime(2025, 3, 15, 14, 30, 0, DateTimeKind.Utc);
-            var json = SimpleJson2.Serialize(dt);
+            var json = DevKitJson.Serialize(dt);
             Assert.Contains("\"__type\":\"DateTime\"", json);
             Assert.Contains("2025-03-15T14:30:00.000Z", json);
 
-            var result = SimpleJson2.Deserialize<DateTime>(json);
+            var result = DevKitJson.Deserialize<DateTime>(json);
             Assert.Equal(dt, result);
         }
 
@@ -171,10 +171,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void Guid_Roundtrip()
         {
             var guid = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
-            var json = SimpleJson2.Serialize(guid);
+            var json = DevKitJson.Serialize(guid);
             Assert.Contains("\"__type\":\"Guid\"", json);
 
-            var result = SimpleJson2.Deserialize<Guid>(json);
+            var result = DevKitJson.Deserialize<Guid>(json);
             Assert.Equal(guid, result);
         }
 
@@ -182,10 +182,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void ByteArray_Roundtrip_File()
         {
             var data = new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F };
-            var json = SimpleJson2.Serialize(data);
+            var json = DevKitJson.Serialize(data);
             Assert.Contains("\"__type\":\"File\"", json);
 
-            var result = (byte[])SimpleJson2.Deserialize(json);
+            var result = (byte[])DevKitJson.Deserialize(json);
             Assert.Equal(data, result);
         }
 
@@ -202,8 +202,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 { "count", 42 },
                 { "active", true }
             };
-            var json = SimpleJson2.Serialize(dict);
-            var result = SimpleJson2.Deserialize(json) as Dictionary<string, object>;
+            var json = DevKitJson.Serialize(dict);
+            var result = DevKitJson.Deserialize(json) as Dictionary<string, object>;
 
             Assert.NotNull(result);
             Assert.Equal("test", result["name"]);
@@ -215,8 +215,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void List_Roundtrip()
         {
             var list = new List<object> { 1, "two", true, null };
-            var json = SimpleJson2.Serialize(list);
-            var result = SimpleJson2.Deserialize(json) as List<object>;
+            var json = DevKitJson.Serialize(list);
+            var result = DevKitJson.Deserialize(json) as List<object>;
 
             Assert.NotNull(result);
             Assert.Equal(4, result.Count);
@@ -234,7 +234,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 { "first", "John" },
                 { "last", "Doe" }
             };
-            var json = SimpleJson2.Serialize(dict);
+            var json = DevKitJson.Serialize(dict);
             Assert.Contains("\"first\":\"John\"", json);
             Assert.Contains("\"last\":\"Doe\"", json);
         }
@@ -242,9 +242,9 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void EmptyObject_Roundtrip()
         {
-            var json = SimpleJson2.Serialize(new Dictionary<string, object>());
+            var json = DevKitJson.Serialize(new Dictionary<string, object>());
             Assert.Equal("{}", json);
-            var result = SimpleJson2.Deserialize(json) as Dictionary<string, object>;
+            var result = DevKitJson.Deserialize(json) as Dictionary<string, object>;
             Assert.NotNull(result);
             Assert.Empty(result);
         }
@@ -252,9 +252,9 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void EmptyArray_Roundtrip()
         {
-            var json = SimpleJson2.Serialize(new List<object>());
+            var json = DevKitJson.Serialize(new List<object>());
             Assert.Equal("[]", json);
-            var result = SimpleJson2.Deserialize(json) as List<object>;
+            var result = DevKitJson.Deserialize(json) as List<object>;
             Assert.NotNull(result);
             Assert.Empty(result);
         }
@@ -267,11 +267,11 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void Money_Roundtrip()
         {
             var money = new Money(1234.56m);
-            var json = SimpleJson2.Serialize(money);
+            var json = DevKitJson.Serialize(money);
             Assert.Contains("\"__type\":\"Money\"", json);
             Assert.Contains("\"Value\":1234.56", json);
 
-            var result = SimpleJson2.Deserialize<Money>(json);
+            var result = DevKitJson.Deserialize<Money>(json);
             Assert.Equal(1234.56m, result.Value);
         }
 
@@ -279,8 +279,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void Money_Zero()
         {
             var money = new Money(0m);
-            var json = SimpleJson2.Serialize(money);
-            var result = SimpleJson2.Deserialize<Money>(json);
+            var json = DevKitJson.Serialize(money);
+            var result = DevKitJson.Deserialize<Money>(json);
             Assert.Equal(0m, result.Value);
         }
 
@@ -288,8 +288,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void Money_Negative()
         {
             var money = new Money(-500.99m);
-            var json = SimpleJson2.Serialize(money);
-            var result = SimpleJson2.Deserialize<Money>(json);
+            var json = DevKitJson.Serialize(money);
+            var result = DevKitJson.Deserialize<Money>(json);
             Assert.Equal(-500.99m, result.Value);
         }
 
@@ -301,10 +301,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void OptionSetValue_Roundtrip()
         {
             var osv = new OptionSetValue(100000001);
-            var json = SimpleJson2.Serialize(osv);
+            var json = DevKitJson.Serialize(osv);
             Assert.Contains("\"__type\":\"OptionSetValue\"", json);
 
-            var result = SimpleJson2.Deserialize<OptionSetValue>(json);
+            var result = DevKitJson.Deserialize<OptionSetValue>(json);
             Assert.Equal(100000001, result.Value);
         }
 
@@ -317,10 +317,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 new OptionSetValue(2),
                 new OptionSetValue(3)
             };
-            var json = SimpleJson2.Serialize(osvc);
+            var json = DevKitJson.Serialize(osvc);
             Assert.Contains("\"__type\":\"OptionSetValueCollection\"", json);
 
-            var result = SimpleJson2.Deserialize<OptionSetValueCollection>(json);
+            var result = DevKitJson.Deserialize<OptionSetValueCollection>(json);
             Assert.Equal(3, result.Count);
             Assert.Equal(1, result[0].Value);
             Assert.Equal(2, result[1].Value);
@@ -336,12 +336,12 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var id = Guid.NewGuid();
             var er = new EntityReference("account", id) { Name = "Contoso" };
-            var json = SimpleJson2.Serialize(er);
+            var json = DevKitJson.Serialize(er);
             Assert.Contains("\"__type\":\"EntityReference\"", json);
             Assert.Contains("\"LogicalName\":\"account\"", json);
             Assert.Contains("\"Name\":\"Contoso\"", json);
 
-            var result = SimpleJson2.Deserialize<EntityReference>(json);
+            var result = DevKitJson.Deserialize<EntityReference>(json);
             Assert.Equal("account", result.LogicalName);
             Assert.Equal(id, result.Id);
             Assert.Equal("Contoso", result.Name);
@@ -352,10 +352,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var id = Guid.NewGuid();
             var er = new EntityReference("contact", id);
-            var json = SimpleJson2.Serialize(er);
+            var json = DevKitJson.Serialize(er);
             Assert.DoesNotContain("\"Name\"", json);
 
-            var result = SimpleJson2.Deserialize<EntityReference>(json);
+            var result = DevKitJson.Deserialize<EntityReference>(json);
             Assert.Equal("contact", result.LogicalName);
             Assert.Equal(id, result.Id);
             Assert.Null(result.Name);
@@ -369,10 +369,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithString()
         {
             var av = new AliasedValue("contact", "fullname", "John Doe");
-            var json = SimpleJson2.Serialize(av);
+            var json = DevKitJson.Serialize(av);
             Assert.Contains("\"__type\":\"AliasedValue\"", json);
 
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.Equal("contact", result.EntityLogicalName);
             Assert.Equal("fullname", result.AttributeLogicalName);
             Assert.Equal("John Doe", result.Value);
@@ -382,9 +382,9 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithMoney()
         {
             var av = new AliasedValue("account", "revenue", new Money(50000m));
-            var json = SimpleJson2.Serialize(av);
+            var json = DevKitJson.Serialize(av);
 
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.Equal("account", result.EntityLogicalName);
             Assert.Equal("revenue", result.AttributeLogicalName);
             Assert.IsType<Money>(result.Value);
@@ -396,9 +396,9 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var id = Guid.NewGuid();
             var av = new AliasedValue("account", "primarycontactid", new EntityReference("contact", id));
-            var json = SimpleJson2.Serialize(av);
+            var json = DevKitJson.Serialize(av);
 
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<EntityReference>(result.Value);
             var er = (EntityReference)result.Value;
             Assert.Equal("contact", er.LogicalName);
@@ -409,8 +409,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithOptionSetValue()
         {
             var av = new AliasedValue("account", "statuscode", new OptionSetValue(3));
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<OptionSetValue>(result.Value);
             Assert.Equal(3, ((OptionSetValue)result.Value).Value);
         }
@@ -419,8 +419,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithBool()
         {
             var av = new AliasedValue("contact", "donotphone", true);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.Equal(true, result.Value);
         }
 
@@ -428,8 +428,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithInt()
         {
             var av = new AliasedValue("account", "numberofemployees", 250);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.Equal(250, result.Value);
         }
 
@@ -438,8 +438,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var dt = new DateTime(2025, 12, 25, 0, 0, 0, DateTimeKind.Utc);
             var av = new AliasedValue("account", "createdon", dt);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<DateTime>(result.Value);
             Assert.Equal(dt, (DateTime)result.Value);
         }
@@ -449,8 +449,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var guid = Guid.NewGuid();
             var av = new AliasedValue("account", "accountid", guid);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<Guid>(result.Value);
             Assert.Equal(guid, (Guid)result.Value);
         }
@@ -459,8 +459,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithNull()
         {
             var av = new AliasedValue("account", "description", null);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.Equal("account", result.EntityLogicalName);
             Assert.Equal("description", result.AttributeLogicalName);
             Assert.Null(result.Value);
@@ -470,8 +470,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithDouble()
         {
             var av = new AliasedValue("account", "new_latitude", 47.6062);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<double>(result.Value);
             Assert.Equal(47.6062, (double)result.Value, 4);
         }
@@ -480,8 +480,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void AliasedValue_WithLong()
         {
             var av = new AliasedValue("account", "versionnumber", 9876543210L);
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<long>(result.Value);
             Assert.Equal(9876543210L, (long)result.Value);
         }
@@ -494,12 +494,12 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void BooleanManagedProperty_Roundtrip()
         {
             var bmp = new BooleanManagedProperty(true) { CanBeChanged = false };
-            var json = SimpleJson2.Serialize(bmp);
+            var json = DevKitJson.Serialize(bmp);
             Assert.Contains("\"__type\":\"BooleanManagedProperty\"", json);
             Assert.Contains("\"Value\":true", json);
             Assert.Contains("\"CanBeChanged\":false", json);
 
-            var result = SimpleJson2.Deserialize<BooleanManagedProperty>(json);
+            var result = DevKitJson.Deserialize<BooleanManagedProperty>(json);
             Assert.True(result.Value);
             Assert.False(result.CanBeChanged);
         }
@@ -518,11 +518,11 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             entity["revenue"] = new Money(1000000m);
             entity["primarycontactid"] = new EntityReference("contact", Guid.NewGuid()) { Name = "John" };
 
-            var json = SimpleJson2.Serialize(entity);
+            var json = DevKitJson.Serialize(entity);
             Assert.Contains("\"__type\":\"Entity\"", json);
             Assert.Contains("\"LogicalName\":\"account\"", json);
 
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("account", result.LogicalName);
             Assert.Equal(id, result.Id);
             Assert.Equal("Contoso", result["name"]);
@@ -540,11 +540,11 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             entity["statuscode"] = new OptionSetValue(1);
             entity.FormattedValues["statuscode"] = "Active";
 
-            var json = SimpleJson2.Serialize(entity);
+            var json = DevKitJson.Serialize(entity);
             Assert.Contains("\"FormattedValues\"", json);
             Assert.Contains("\"statuscode\":\"Active\"", json);
 
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("Active", result.FormattedValues["statuscode"]);
         }
 
@@ -555,8 +555,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             entity["name"] = null;
             entity["description"] = "test";
 
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Null(result["name"]);
             Assert.Equal("test", result["description"]);
         }
@@ -610,8 +610,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             // null value
             entity["description"] = null;
 
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
 
             // string
             Assert.Equal("Contoso Ltd", result["name"]);
@@ -685,8 +685,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void Entity_Empty()
         {
             var entity = new Entity("account");
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("account", result.LogicalName);
             Assert.Empty(result.Attributes);
         }
@@ -706,10 +706,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             ec.Entities.Add(e1);
             ec.Entities.Add(e2);
 
-            var json = SimpleJson2.Serialize(ec);
+            var json = DevKitJson.Serialize(ec);
             Assert.Contains("\"__type\":\"EntityCollection\"", json);
 
-            var result = SimpleJson2.Deserialize<EntityCollection>(json);
+            var result = DevKitJson.Deserialize<EntityCollection>(json);
             Assert.Equal("account", result.EntityName);
             Assert.Equal(2, result.Entities.Count);
             Assert.Equal("Contoso", result.Entities[0]["name"]);
@@ -720,8 +720,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void EntityCollection_Empty()
         {
             var ec = new EntityCollection();
-            var json = SimpleJson2.Serialize(ec);
-            var result = SimpleJson2.Deserialize<EntityCollection>(json);
+            var json = DevKitJson.Serialize(ec);
+            var result = DevKitJson.Deserialize<EntityCollection>(json);
             Assert.Empty(result.Entities);
         }
 
@@ -738,10 +738,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             pc["Target"] = target;
             pc["SuppressDuplicateDetection"] = true;
 
-            var json = SimpleJson2.Serialize(pc);
+            var json = DevKitJson.Serialize(pc);
             Assert.Contains("\"__type\":\"ParameterCollection\"", json);
 
-            var result = SimpleJson2.Deserialize<ParameterCollection>(json);
+            var result = DevKitJson.Deserialize<ParameterCollection>(json);
             Assert.IsType<Entity>(result["Target"]);
             Assert.Equal("Contoso", ((Entity)result["Target"])["name"]);
             Assert.Equal(true, result["SuppressDuplicateDetection"]);
@@ -754,8 +754,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             pc["Target"] = new EntityReference("account", Guid.NewGuid());
             pc["id"] = Guid.NewGuid();
 
-            var json = SimpleJson2.Serialize(pc);
-            var result = SimpleJson2.Deserialize<ParameterCollection>(json);
+            var json = DevKitJson.Serialize(pc);
+            var result = DevKitJson.Deserialize<ParameterCollection>(json);
             Assert.IsType<EntityReference>(result["Target"]);
             Assert.IsType<Guid>(result["id"]);
         }
@@ -772,10 +772,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             preImage["name"] = "Old Name";
             eic["PreImage"] = preImage;
 
-            var json = SimpleJson2.Serialize(eic);
+            var json = DevKitJson.Serialize(eic);
             Assert.Contains("\"__type\":\"EntityImageCollection\"", json);
 
-            var result = SimpleJson2.Deserialize<EntityImageCollection>(json);
+            var result = DevKitJson.Deserialize<EntityImageCollection>(json);
             Assert.True(result.ContainsKey("PreImage"));
             Assert.Equal("Old Name", result["PreImage"]["name"]);
         }
@@ -823,11 +823,11 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             preImage["name"] = "Old Contoso";
             ctx.PreEntityImages["PreImage"] = preImage;
 
-            var json = SimpleJson2.Serialize(ctx);
+            var json = DevKitJson.Serialize(ctx);
             Assert.Contains("\"__type\":\"RemoteExecutionContext\"", json);
             Assert.Contains("\"MessageName\":\"Create\"", json);
 
-            var result = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var result = DevKitJson.Deserialize<RemoteExecutionContext>(json);
             Assert.Equal(buId, result.BusinessUnitId);
             Assert.Equal(corrId, result.CorrelationId);
             Assert.Equal(1, result.Depth);
@@ -855,8 +855,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 if (f.Name == "_owningExtension")
                     f.SetValue(ctx, new EntityReference("sdkmessageprocessingstep", Guid.NewGuid()) { Name = "MyPlugin" });
 
-            var json = SimpleJson2.Serialize(ctx);
-            var result = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var json = DevKitJson.Serialize(ctx);
+            var result = DevKitJson.Deserialize<RemoteExecutionContext>(json);
             Assert.NotNull(result.OwningExtension);
             Assert.Equal("sdkmessageprocessingstep", result.OwningExtension.LogicalName);
             Assert.Equal("MyPlugin", result.OwningExtension.Name);
@@ -866,8 +866,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void RemoteExecutionContext_MinimalEmpty()
         {
             var ctx = new RemoteExecutionContext();
-            var json = SimpleJson2.Serialize(ctx);
-            var result = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var json = DevKitJson.Serialize(ctx);
+            var result = DevKitJson.Deserialize<RemoteExecutionContext>(json);
             Assert.NotNull(result);
             Assert.Equal(Guid.Empty, result.BusinessUnitId);
             Assert.Equal(0, result.Depth);
@@ -880,22 +880,22 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void Serialize_Enum_AsInt()
         {
-            var json = SimpleJson2.Serialize(DayOfWeek.Wednesday);
+            var json = DevKitJson.Serialize(DayOfWeek.Wednesday);
             Assert.Equal("3", json);
         }
 
         [Fact]
         public void Unicode_Roundtrip()
         {
-            var json = SimpleJson2.Serialize("Vi\u1EC7t Nam");
-            var result = SimpleJson2.Deserialize<string>(json);
+            var json = DevKitJson.Serialize("Vi\u1EC7t Nam");
+            var result = DevKitJson.Deserialize<string>(json);
             Assert.Equal("Vi\u1EC7t Nam", result);
         }
 
         [Fact]
         public void UnicodeEscape_InJson()
         {
-            var result = SimpleJson2.Deserialize<string>("\"\\u0041\\u0042\"");
+            var result = DevKitJson.Deserialize<string>("\"\\u0041\\u0042\"");
             Assert.Equal("AB", result);
         }
 
@@ -908,8 +908,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             ec.Entities.Add(innerEntity);
             var av = new AliasedValue("account", "contacts", ec);
 
-            var json = SimpleJson2.Serialize(av);
-            var result = SimpleJson2.Deserialize<AliasedValue>(json);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
             Assert.IsType<EntityCollection>(result.Value);
             var resEc = (EntityCollection)result.Value;
             Assert.Single(resEc.Entities);
@@ -920,7 +920,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void WhitespaceInJson_ParsedCorrectly()
         {
             var json = "  {  \"name\"  :  \"test\"  ,  \"value\"  :  42  }  ";
-            var result = SimpleJson2.Deserialize(json) as Dictionary<string, object>;
+            var result = DevKitJson.Deserialize(json) as Dictionary<string, object>;
             Assert.NotNull(result);
             Assert.Equal("test", result["name"]);
             Assert.Equal(42, result["value"]);
@@ -929,8 +929,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void EmptyString_Deserialize()
         {
-            Assert.Null(SimpleJson2.Deserialize(null));
-            Assert.Equal("", SimpleJson2.Deserialize<string>("\"\""));
+            Assert.Null(DevKitJson.Deserialize(null));
+            Assert.Equal("", DevKitJson.Deserialize<string>("\"\""));
         }
 
         [Fact]
@@ -948,8 +948,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             }
             entity["children"] = children;
 
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             var resChildren = (EntityCollection)result["children"];
             Assert.Equal(100, resChildren.Entities.Count);
             Assert.Equal("Contact 50", resChildren.Entities[50]["fullname"]);
@@ -1001,8 +1001,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
 
             ctx.SharedVariables["CustomKey"] = "CustomValue";
 
-            var json = SimpleJson2.Serialize(ctx);
-            var restored = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var json = DevKitJson.Serialize(ctx);
+            var restored = DevKitJson.Deserialize<RemoteExecutionContext>(json);
 
             Assert.Equal("Create", restored.MessageName);
             Assert.Equal("account", restored.PrimaryEntityName);
@@ -1054,8 +1054,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             preImage.FormattedValues["statuscode"] = "Active";
             ctx.PreEntityImages["PreImage"] = preImage;
 
-            var json = SimpleJson2.Serialize(ctx);
-            var restored = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var json = DevKitJson.Serialize(ctx);
+            var restored = DevKitJson.Deserialize<RemoteExecutionContext>(json);
 
             Assert.Equal("Update", restored.MessageName);
             Assert.Equal(20, restored.Stage);
@@ -1089,8 +1089,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
 
             ctx.InputParameters["Target"] = new EntityReference("account", accountId);
 
-            var json = SimpleJson2.Serialize(ctx);
-            var restored = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var json = DevKitJson.Serialize(ctx);
+            var restored = DevKitJson.Deserialize<RemoteExecutionContext>(json);
 
             Assert.Equal("Delete", restored.MessageName);
             Assert.IsType<EntityReference>(restored.InputParameters["Target"]);
@@ -1121,8 +1121,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 new Entity("activityparty") { ["partyid"] = new EntityReference("systemuser", Guid.NewGuid()) }
             });
 
-            var json = SimpleJson2.Serialize(email);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(email);
+            var result = DevKitJson.Deserialize<Entity>(json);
 
             Assert.Equal("Test Email", result["subject"]);
 
@@ -1145,8 +1145,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var entity = new Entity("account", Guid.NewGuid());
             entity["versionnumber"] = long.MaxValue;
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal(long.MaxValue, (long)result["versionnumber"]);
         }
 
@@ -1156,8 +1156,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             var entity = new Entity("account", Guid.NewGuid());
             entity["min_val"] = int.MinValue;
             entity["max_val"] = int.MaxValue;
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal(int.MinValue, result["min_val"]);
             Assert.Equal(int.MaxValue, result["max_val"]);
         }
@@ -1166,15 +1166,15 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void Money_LargeValue_Roundtrip()
         {
             var money = new Money(999999999999.9999m);
-            var json = SimpleJson2.Serialize(money);
-            var result = SimpleJson2.Deserialize<Money>(json);
+            var json = DevKitJson.Serialize(money);
+            var result = DevKitJson.Deserialize<Money>(json);
             Assert.Equal(999999999999.9999m, result.Value, 2);
         }
 
         [Fact]
         public void Double_ScientificNotation()
         {
-            var result = SimpleJson2.Deserialize("1.5e2");
+            var result = DevKitJson.Deserialize("1.5e2");
             Assert.IsType<double>(result);
             Assert.Equal(150.0, (double)result);
         }
@@ -1182,7 +1182,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void Double_NegativeExponent()
         {
-            var result = SimpleJson2.Deserialize("2.5e-3");
+            var result = DevKitJson.Deserialize("2.5e-3");
             Assert.IsType<double>(result);
             Assert.Equal(0.0025, (double)result, 10);
         }
@@ -1196,8 +1196,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var entity = new Entity("account", Guid.NewGuid());
             entity["name"] = "";
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("", result["name"]);
         }
 
@@ -1206,8 +1206,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var entity = new Entity("account", Guid.NewGuid());
             entity["description"] = "Line1\nLine2\tTabbed\r\nWindows\"Quoted\"Back\\slash";
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("Line1\nLine2\tTabbed\r\nWindows\"Quoted\"Back\\slash", result["description"]);
         }
 
@@ -1216,8 +1216,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var entity = new Entity("account", Guid.NewGuid());
             entity["name"] = "Công ty TNHH Động lực Việt Nam";
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("Công ty TNHH Động lực Việt Nam", result["name"]);
         }
 
@@ -1226,15 +1226,15 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         {
             var entity = new Entity("account", Guid.NewGuid());
             entity["name"] = "日本語テスト 한국어 中文测试";
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
             Assert.Equal("日本語テスト 한국어 中文测试", result["name"]);
         }
 
         [Fact]
         public void String_SurrogatePair_Emoji()
         {
-            var result = SimpleJson2.Deserialize<string>("\"\\uD83D\\uDE00\"");
+            var result = DevKitJson.Deserialize<string>("\"\\uD83D\\uDE00\"");
             Assert.Equal("\uD83D\uDE00", result);
         }
 
@@ -1258,8 +1258,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             entity.FormattedValues["revenue"] = "$5,000,000.00";
             entity.FormattedValues["createdon"] = "1/1/2025 12:00 AM";
 
-            var json = SimpleJson2.Serialize(entity);
-            var result = SimpleJson2.Deserialize<Entity>(json);
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
 
             Assert.Equal(5, result.FormattedValues.Count);
             Assert.Equal("Active", result.FormattedValues["statuscode"]);
@@ -1288,8 +1288,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             Set("_depth", 1);
             Set("_stage", 20);
 
-            var jsonSerialize = SimpleJson2.Serialize(ctx);
-            var jsonSerializeContext = SimpleJson2.SerializeContext(ctx);
+            var jsonSerialize = DevKitJson.Serialize(ctx);
+            var jsonSerializeContext = DevKitJson.SerializeContextFull(ctx);
 
             Assert.Equal(jsonSerialize, jsonSerializeContext);
         }
@@ -1297,7 +1297,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void SerializeContext_NullReturnsNull()
         {
-            Assert.Equal("null", SimpleJson2.SerializeContext(null));
+            Assert.Equal("null", DevKitJson.SerializeContextFull(null));
         }
 
         [Fact]
@@ -1338,7 +1338,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 IsApplicationUser = true
             };
 
-            var json = SimpleJson2.SerializeContext(mock);
+            var json = DevKitJson.SerializeContextFull(mock);
 
             Assert.Contains("\"__type\":\"RemoteExecutionContext\"", json);
             Assert.Contains("\"MessageName\":\"Update\"", json);
@@ -1391,8 +1391,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 IsApplicationUser = false
             };
 
-            var json = SimpleJson2.SerializeContext(mock);
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var json = DevKitJson.SerializeContextFull(mock);
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(json);
 
             Assert.Equal("Create", ctx.MessageName);
             Assert.Equal("account", ctx.PrimaryEntityName);
@@ -1475,7 +1475,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 IsApplicationUser = true
             };
 
-            var json = SimpleJson2.SerializeContext(child);
+            var json = DevKitJson.SerializeContextFull(child);
 
             Assert.Contains("\"ParentContext\":{", json);
             Assert.Contains("\"ParentOrg\"", json);
@@ -1523,7 +1523,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
                 IsApplicationUser = true
             };
 
-            var json = SimpleJson2.SerializeContext(mock);
+            var json = DevKitJson.SerializeContextFull(mock);
 
             Assert.Contains("\"IsPortalsClientCall\":true", json);
             Assert.Contains("\"InitiatingUserAgent\":\"TestAgent/1.0\"", json);
@@ -1531,7 +1531,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
             Assert.Contains(envId.ToString("D"), json);
             Assert.Contains(tenantId.ToString("D"), json);
 
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(json);
             Assert.Equal("Retrieve", ctx.MessageName);
             Assert.Equal("account", ctx.PrimaryEntityName);
         }
@@ -1551,7 +1551,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void JsonFile_DeserializesToRemoteExecutionContext()
         {
             var json = ReadJsonFile();
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(json);
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(json);
             Assert.NotNull(ctx);
             Assert.IsType<RemoteExecutionContext>(ctx);
         }
@@ -1559,7 +1559,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_ContextProperties()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
 
             Assert.Equal(Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890"), ctx.BusinessUnitId);
             Assert.Equal(Guid.Parse("b2c3d4e5-f6a7-8901-bcde-f12345678901"), ctx.CorrelationId);
@@ -1586,7 +1586,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_OwningExtension()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
 
             Assert.NotNull(ctx.OwningExtension);
             Assert.Equal("sdkmessageprocessingstep", ctx.OwningExtension.LogicalName);
@@ -1597,7 +1597,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_BasicAttributes()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             Assert.Equal("account", target.LogicalName);
@@ -1630,7 +1630,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_EscapedString()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var desc = (string)target["description"];
@@ -1643,7 +1643,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_Money()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var revenue = (Money)target["revenue"];
@@ -1656,7 +1656,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_OptionSetValue()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var status = (OptionSetValue)target["statuscode"];
@@ -1669,7 +1669,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_EntityReference()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var contact = (EntityReference)target["primarycontactid"];
@@ -1681,7 +1681,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_BooleanManagedProperty()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var bmp = (BooleanManagedProperty)target["ismanaged"];
@@ -1692,7 +1692,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_DateTime()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var created = (DateTime)target["createdon"];
@@ -1702,7 +1702,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_Guid()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var id = (Guid)target["accountid"];
@@ -1712,7 +1712,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_File()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var bytes = (byte[])target["entityimage"];
@@ -1722,7 +1722,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_OptionSetValueCollection()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var osvc = (OptionSetValueCollection)target["preferredcontactmethodcode"];
@@ -1735,7 +1735,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_AliasedValue_AllInnerTypes()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             // Key uses dot notation: "c.fullname" where "c" is the LinkEntity EntityAlias
@@ -1788,7 +1788,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_AliasedValue_GetAliasedValue_LateBoundPattern()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             // Simulate EntityBase.GetAliasedValue<T> pattern (used by late-bound generated classes)
@@ -1853,7 +1853,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_EntityCollection_ActivityParty()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             var emailTo = (EntityCollection)target["email_to"];
@@ -1871,7 +1871,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_TargetEntity_FormattedValues()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
             var target = (Entity)ctx.InputParameters["Target"];
 
             Assert.Equal(7, target.FormattedValues.Count);
@@ -1887,7 +1887,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_PreEntityImages()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
 
             Assert.Single(ctx.PreEntityImages);
             var preImage = ctx.PreEntityImages["PreImage"];
@@ -1899,7 +1899,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_PostEntityImages()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
 
             Assert.Single(ctx.PostEntityImages);
             var postImage = ctx.PostEntityImages["PostImage"];
@@ -1911,7 +1911,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_OutputParameters()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
 
             Assert.Single(ctx.OutputParameters);
             var id = (Guid)ctx.OutputParameters["id"];
@@ -1921,7 +1921,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         [Fact]
         public void JsonFile_SharedVariables()
         {
-            var ctx = SimpleJson2.Deserialize<RemoteExecutionContext>(ReadJsonFile());
+            var ctx = DevKitJson.Deserialize<RemoteExecutionContext>(ReadJsonFile());
 
             Assert.Equal(4, ctx.SharedVariables.Count);
             Assert.Equal(true, ctx.SharedVariables["IsAutoTransact"]);
@@ -1934,10 +1934,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void JsonFile_Roundtrip_SerializeAndDeserializeBack()
         {
             var json1 = ReadJsonFile();
-            var ctx1 = SimpleJson2.Deserialize<RemoteExecutionContext>(json1);
+            var ctx1 = DevKitJson.Deserialize<RemoteExecutionContext>(json1);
 
-            var json2 = SimpleJson2.Serialize(ctx1);
-            var ctx2 = SimpleJson2.Deserialize<RemoteExecutionContext>(json2);
+            var json2 = DevKitJson.Serialize(ctx1);
+            var ctx2 = DevKitJson.Deserialize<RemoteExecutionContext>(json2);
 
             Assert.Equal(ctx1.MessageName, ctx2.MessageName);
             Assert.Equal(ctx1.PrimaryEntityName, ctx2.PrimaryEntityName);
@@ -1958,10 +1958,10 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         public void JsonFile_Roundtrip_AliasedValue_DotKeys_Preserved()
         {
             var json1 = ReadJsonFile();
-            var ctx1 = SimpleJson2.Deserialize<RemoteExecutionContext>(json1);
+            var ctx1 = DevKitJson.Deserialize<RemoteExecutionContext>(json1);
 
-            var json2 = SimpleJson2.Serialize(ctx1);
-            var ctx2 = SimpleJson2.Deserialize<RemoteExecutionContext>(json2);
+            var json2 = DevKitJson.Serialize(ctx1);
+            var ctx2 = DevKitJson.Deserialize<RemoteExecutionContext>(json2);
 
             var target = (Entity)ctx2.InputParameters["Target"];
 

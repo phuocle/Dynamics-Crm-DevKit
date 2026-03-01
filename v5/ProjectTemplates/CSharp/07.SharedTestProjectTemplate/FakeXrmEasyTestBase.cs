@@ -1,4 +1,4 @@
-﻿using FakeXrmEasy.Abstractions;
+using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Abstractions.Enums;
 using FakeXrmEasy.Abstractions.Middleware;
 using FakeXrmEasy.Middleware;
@@ -73,6 +73,30 @@ namespace $NameSpace$
         {
             if (entities == null) return;
             _context.Initialize(entities);
+        }
+
+        /// <summary>
+        /// Load entities from one or more DevKitJson JSON strings and initialize FakeXrmEasy context.
+        /// </summary>
+        protected void InitializeFromJson(params string[] jsonStrings)
+        {
+            Initialize(TestDataLoader.FromJson(jsonStrings));
+        }
+
+        /// <summary>
+        /// Load entities from a DevKitJson JSON file and initialize FakeXrmEasy context.
+        /// </summary>
+        protected void InitializeFromJsonFile(string filePath)
+        {
+            Initialize(TestDataLoader.FromJsonFile(filePath));
+        }
+
+        /// <summary>
+        /// Load entities from multiple DevKitJson JSON files and initialize FakeXrmEasy context.
+        /// </summary>
+        protected void InitializeFromJsonFiles(params string[] filePaths)
+        {
+            Initialize(TestDataLoader.FromJsonFiles(filePaths));
         }
     }
 }

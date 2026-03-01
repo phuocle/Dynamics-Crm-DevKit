@@ -299,7 +299,7 @@ Project: `DynamicsCrm.DevKit.UnitTests/` (multi-target: net48 + net10.0).
 | **Analyzer verifier** | — | net48 | `Analyzers/Verifier/CSharpAnalyzerVerifier.cs` |
 | **CLI tests** | MSTest + FakeXrmEasy | net10.0 | `Cli/*.cs` |
 | **CLI Generator tests** | MSTest | net10.0 | `Cli/Generator/*.cs` |
-| **Lib tests** | xUnit | net48 | `Lib/*.cs` (SimpleJson2Test, DateTest) |
+| **Lib tests** | xUnit | net48 | `Lib/*.cs` (DevKitJsonTest, DateTest) |
 
 Run all tests:
 

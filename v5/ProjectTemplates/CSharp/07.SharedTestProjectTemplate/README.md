@@ -20,6 +20,7 @@ A shared project template for collaborative unit testing in Dataverse developmen
 * FakerHelper for generating test data with Bogus
 * TestHelper for common test operations (deserialization, decompression, plugin registration)
 * TestTracingService for capturing trace output in unit tests
+* TestDataLoader for loading test data from DevKitJson JSON strings or files into FakeXrmEasy
 * Extension methods for testing (ExecutePluginFromJson, ExecutePluginFromCompressedJson)
 * Guids utility class for consistent test GUIDs
 * CalculateRollupFieldRequestExecutor for rollup field testing
@@ -36,6 +37,7 @@ This is a foundational shared test project that other test templates depend on.
 * **FakerHelper.cs** - Utilities for generating fake test data using Bogus
 * **TestHelper.cs** - Common test helper methods (deserialization, decompression, plugin registration)
 * **TestTracingService.cs** - ITracingService mock with log capture for assertions
+* **TestDataLoader.cs** - Load test data from DevKitJson JSON (strings or files) into FakeXrmEasy
 * **Extension.cs** - Extension methods (SetXrmFakedContextPlugin, ExecutePluginFromJson, ExecutePluginFromCompressedJson)
 * **Guids.cs** - Centralized GUID management for tests
 * **CalculateRollupFieldRequestExecutor.cs** - Custom executor for rollup field calculations

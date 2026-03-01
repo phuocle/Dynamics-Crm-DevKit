@@ -37,6 +37,9 @@
 	  <None Remove="Nuget\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DevKitJson.cs" Link="Mcp\DevKitJson.cs" />
+	</ItemGroup>
+	<ItemGroup>
 	  <None Remove="DynamicsCrm.DevKit.Cli.code-workspace" />
 	  <None Remove="DynamicsCrm.DevKit.Cli.TsForm.code-workspace" />
 	  <None Include="README.md" Pack="true" PackagePath="\" />
