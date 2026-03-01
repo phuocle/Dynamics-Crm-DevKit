@@ -10,9 +10,17 @@
 
   <ItemGroup>
     <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Date.cs" Link="Lib\Date.cs" />
+    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\SimpleJson2.cs" Link="Lib\SimpleJson2.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Lib\AllDataverseTypes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <PrivateAssets>all</PrivateAssets>

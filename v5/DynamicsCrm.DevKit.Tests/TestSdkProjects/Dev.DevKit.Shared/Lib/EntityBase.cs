@@ -1,6 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -78,18 +77,18 @@ namespace Dev.DevKit.Shared
             {
                 return new EntityCollection(entityCollectionValue.Entities.Select(CloneThisEntity).ToList());
             }
-            var valueTypes = new List<Type>
+            var byteArrayValue = value as byte[];
+            if (byteArrayValue != null)
             {
-                typeof(long), typeof(bool), typeof(DateTime),
-                typeof(decimal), typeof(double), typeof(int),
-                typeof(Guid), typeof(float), typeof(byte), typeof(Enum)
-            };
-            var type = value.GetType();
-            if (valueTypes.Contains(type))
+                var clone = new byte[byteArrayValue.Length];
+                Array.Copy(byteArrayValue, clone, byteArrayValue.Length);
+                return clone;
+            }
+            if (value.GetType().IsValueType || value.GetType().IsEnum)
             {
                 return value;
             }
-            throw new InvalidDataException("Attribute of type '" + type.Name + "' is not supported yet. Please file an issue on GitHub: https://github.com/DigitalFlow/Xrm-Update-Context");
+            throw new InvalidDataException("Attribute of type '" + value.GetType().Name + "' is not supported yet. Please file an issue on GitHub: https://github.com/phuocle/Dynamics-Crm-DevKit");
         }
 
         protected Entity CloneThisEntity(Entity entity)
@@ -111,14 +110,9 @@ namespace Dev.DevKit.Shared
             return this.Entity;
         }
 
-        public Entity GetUpdateEntity()
+        public Entity GetUpdateEntity([System.Runtime.CompilerServices.CallerMemberName] string caller = "")
         {
-            string MethodUpdate()
-            {
-                var stackTrace = new System.Diagnostics.StackTrace();
-                System.Reflection.MethodBase method = stackTrace.GetFrame(2).GetMethod();
-                return $"{method?.ReflectedType?.Namespace}.{method?.ReflectedType?.Name}.{method?.Name}";
-            }
+            if (Entity.Id == Guid.Empty) throw new InvalidPluginExecutionException($"Update {Entity.LogicalName} without Guid. Caller: {caller}");
             var update = new Entity(Entity.LogicalName);
             update.Id = Entity.Id;
             foreach (var property in Entity.Attributes)
@@ -129,14 +123,32 @@ namespace Dev.DevKit.Shared
                 {
                     update[key] = value;
                 }
-                else if (!object.Equals(PreEntity[key], Entity[key]))
+                else if (!AttributeEquals(PreEntity[key], Entity[key]))
                 {
                     update[key] = value;
                 }
             }
-            if (update.Attributes.Count == 0) throw new InvalidPluginExecutionException($"Update {Entity.LogicalName} without attributes on method: {MethodUpdate()}");
-            if (Entity.Id == Guid.Empty) throw new InvalidPluginExecutionException($"Update {Entity.LogicalName} without Guid on method: {MethodUpdate()}");
+            if (update.Attributes.Count == 0) throw new InvalidPluginExecutionException($"Update {Entity.LogicalName} without attributes. Caller: {caller}");
             return update;
+        }
+
+        protected bool AttributeEquals(object a, object b)
+        {
+            if (a == null && b == null) return true;
+            if (a == null || b == null) return false;
+            if (a is OptionSetValue osv1 && b is OptionSetValue osv2)
+                return osv1.Value == osv2.Value;
+            if (a is Money m1 && b is Money m2)
+                return m1.Value == m2.Value;
+            if (a is EntityReference er1 && b is EntityReference er2)
+                return er1.Id == er2.Id && er1.LogicalName == er2.LogicalName;
+            if (a is BooleanManagedProperty bmp1 && b is BooleanManagedProperty bmp2)
+                return bmp1.Value == bmp2.Value;
+            if (a is OptionSetValueCollection osvc1 && b is OptionSetValueCollection osvc2)
+                return osvc1.Count == osvc2.Count && osvc1.All(x => osvc2.Any(y => y.Value == x.Value));
+            if (a is byte[] ba1 && b is byte[] ba2)
+                return ba1.Length == ba2.Length && ba1.SequenceEqual(ba2);
+            return object.Equals(a, b);
         }
 
         public EntityReference ToEntityReference()
