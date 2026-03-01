@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -496,6 +497,33 @@ namespace DynamicsCrm.DevKit.Cli
             if (string.IsNullOrEmpty(text)) return string.Empty;
             // Remove [color]...[/] patterns
             return System.Text.RegularExpressions.Regex.Replace(text, @"\[/?[^\]]+\]", string.Empty);
+        }
+
+        #endregion
+
+        #region Request Counts
+
+        [Conditional("DEBUG")]
+        public static void WriteRequestCounts()
+        {
+            var total = XrmHelper.GetTotalCount();
+            if (total == 0) return;
+            WriteLine();
+            ActionWithLevel0("DATAVERSE API REQUESTS SUMMARY");
+            if (XrmHelper.COUNT_ExecuteAsync > 0)
+                ActionWithLevel1("ExecuteAsync:", $"{XrmHelper.COUNT_ExecuteAsync}");
+            if (XrmHelper.COUNT_RetrieveMultipleAsync > 0)
+                ActionWithLevel1("RetrieveMultipleAsync:", $"{XrmHelper.COUNT_RetrieveMultipleAsync}");
+            if (XrmHelper.COUNT_CreateAsync > 0)
+                ActionWithLevel1("CreateAsync:", $"{XrmHelper.COUNT_CreateAsync}");
+            if (XrmHelper.COUNT_UpdateAsync > 0)
+                ActionWithLevel1("UpdateAsync:", $"{XrmHelper.COUNT_UpdateAsync}");
+            if (XrmHelper.COUNT_DeleteAsync > 0)
+                ActionWithLevel1("DeleteAsync:", $"{XrmHelper.COUNT_DeleteAsync}");
+            if (XrmHelper.COUNT_RetrieveAsync > 0)
+                ActionWithLevel1("RetrieveAsync:", $"{XrmHelper.COUNT_RetrieveAsync}");
+            WriteLine();
+            ActionWithLevel0("TOTAL REQUESTS:", $"{total}");
         }
 
         #endregion

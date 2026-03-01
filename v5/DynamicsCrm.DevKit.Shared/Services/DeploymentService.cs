@@ -123,6 +123,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
 
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
@@ -142,6 +143,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
         {
             var update = new Entity("report", reportId);
             update["bodytext"] = await FileHelper.ReadAllTextAsync(fullFileName);
+            XrmHelper.COUNT_UpdateAsync++;
             await _serviceClient.UpdateAsync(update);
         }
 
@@ -172,6 +174,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var webResources = new List<DeployWebResource>();
             foreach (var entity in rows.Entities)
@@ -193,6 +196,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 var webResource = new Entity("webresource") { Id = webResourceId };
                 webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
                 var request = new UpdateRequest { Target = webResource };
+                XrmHelper.COUNT_ExecuteAsync++;
                 var response = await _serviceClient.ExecuteAsync(request);
                 return (true, string.Empty);
             }
@@ -265,6 +269,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                     if (int.TryParse(arr[arr.Length - 1], out var languagecode))
                     {
                         var req = new RetrieveProvisionedLanguagesRequest();
+                        XrmHelper.COUNT_ExecuteAsync++;
                         var res = (RetrieveProvisionedLanguagesResponse)await _serviceClient.ExecuteAsync(req);
                         if (res.RetrieveProvisionedLanguages.Contains(languagecode))
                         {
@@ -276,6 +281,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                         }
                     }
                 }
+                XrmHelper.COUNT_CreateAsync++;
                 var webResourceId = await _serviceClient.CreateAsync(webResource);
                 return (webResourceId, string.Empty);
             }
@@ -291,6 +297,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
             {
                 var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
                 var request = new PublishXmlRequest { ParameterXml = publishXml };
+                XrmHelper.COUNT_ExecuteAsync++;
                 var response = await _serviceClient.ExecuteAsync(request);
                 return (true, string.Empty);
             }
@@ -329,6 +336,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<NameValueGuidExtend>();
             foreach (var entity in rows.Entities)
@@ -366,6 +374,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
@@ -396,6 +405,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 ComponentId = webResourceId,
                 SolutionUniqueName = solutionUniqueName
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             await _serviceClient.ExecuteAsync(request);
         }
 

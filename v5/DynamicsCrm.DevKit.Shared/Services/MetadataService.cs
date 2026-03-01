@@ -69,6 +69,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = logicalName
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveEntityResponse)await _serviceClient.ExecuteAsync(request);
             return response.EntityMetadata.SchemaName;
         }
@@ -80,6 +81,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 EntityFilters = entityFilters,
                 RetrieveAsIfPublished = true
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveAllEntitiesResponse)await _serviceClient.ExecuteAsync(request);
             return [.. response.EntityMetadata];
         }
@@ -91,6 +93,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 EntityFilters = entityFilters,
                 RetrieveAsIfPublished = true
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveAllEntitiesResponse)await _serviceClient.ExecuteAsync(request);
             return [.. response.EntityMetadata.ToList().Select(x => x.SchemaName)];
         }
@@ -124,6 +127,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
             };
             foreach (var schemaName in requests)
                 request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
+            XrmHelper.COUNT_ExecuteAsync++;
             ExecuteMultipleResponse response = (ExecuteMultipleResponse)await _serviceClient.ExecuteAsync(request);
             foreach (var result in response.Responses)
             {
@@ -149,6 +153,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 LogicalName = entityLogicalName,
                 EntityFilters = EntityFilters.All
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
             return response.EntityMetadata;
         }
@@ -160,6 +165,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 LogicalName = entityLogicalName,
                 EntityFilters = EntityFilters.All
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveEntityResponse)await _serviceClient.ExecuteAsync(request);
             return response.EntityMetadata;
         }
@@ -217,6 +223,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return [];
             var forms = rows.Entities.Select(x => new SystemForm
@@ -261,6 +268,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var forms = rows.Entities.Select(x => new SystemForm
             {
@@ -313,6 +321,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return [.. rows.Entities.Select(x => new ProcessForm
             {
@@ -370,6 +379,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = logicalName
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveEntityResponse)await _serviceClient.ExecuteAsync(request);
             var fetchData = new
             {
@@ -399,6 +409,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
   </entity>
 </fetch>";
 
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var messages = (from entity in rows.Entities
                             select entity["name"].ToString()
@@ -443,6 +454,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var messages = (from entity in rows.Entities
                             select entity["name"].ToString()
@@ -483,6 +495,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list = new List<PluginInputOutputParameter>();
             var sdkMessageRequestId = Guid.Empty;
@@ -520,6 +533,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows2 = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml2));
             foreach (var row in rows2.Entities)
             {
@@ -596,6 +610,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var list2 = new List<Entity>();
             foreach (var entity in rows.Entities)
@@ -627,6 +642,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = logicalName
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveEntityResponse)await _serviceClient.ExecuteAsync(request);
             var fetchData = new
             {
@@ -651,6 +667,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var messages = (from entity in rows.Entities
                             select entity["name"].ToString()
@@ -687,6 +704,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return [.. rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).Select(y => new NameValue { Name = y }).OrderBy(z => z.Name)];
         }
@@ -716,6 +734,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
             {
                 Query = entityQueryExpression
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveMetadataChangesResponse)await _serviceClient.ExecuteAsync(request);
             foreach (EntityMetadata entityMetadata in response.EntityMetadata)
                 list.Add(entityMetadata.LogicalName);
@@ -725,6 +744,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
         public async Task<List<XrmEntity>> GetProvisionedLanguagesAsync()
         {
             var request = new RetrieveProvisionedLanguagesRequest();
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveProvisionedLanguagesResponse)await _serviceClient.ExecuteAsync(request);
             var list = response.RetrieveProvisionedLanguages.ToList();
 
@@ -906,6 +926,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     <attribute name='languagecode' />
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return 1033;
             var entity = rows.Entities[0];

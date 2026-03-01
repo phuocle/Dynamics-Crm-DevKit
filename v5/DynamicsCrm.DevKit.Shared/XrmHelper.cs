@@ -15,6 +15,22 @@ namespace DynamicsCrm.DevKit.Shared
         public static int COUNT_UpdateAsync = 0;
         public static int COUNT_DeleteAsync = 0;
         public static int COUNT_CreateAsync = 0;
+
+        public static void ResetCounts()
+        {
+            COUNT_RetrieveMultipleAsync = 0;
+            COUNT_RetrieveAsync = 0;
+            COUNT_ExecuteAsync = 0;
+            COUNT_UpdateAsync = 0;
+            COUNT_DeleteAsync = 0;
+            COUNT_CreateAsync = 0;
+        }
+
+        public static int GetTotalCount()
+        {
+            return COUNT_RetrieveMultipleAsync + COUNT_RetrieveAsync + COUNT_ExecuteAsync
+                 + COUNT_UpdateAsync + COUNT_DeleteAsync + COUNT_CreateAsync;
+        }
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = [];
         public static List<SystemForm> EntitiesFormXml { get; set; } = [];
         public static List<ProcessForm> EntitiesProcessForm { get; set; } = [];
