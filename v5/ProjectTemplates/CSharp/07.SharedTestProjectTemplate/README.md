@@ -1,4 +1,4 @@
-﻿```text
+```text
   ____                              _           ____                  ____             _  ___ _     ____ _ _
  |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_  / ___| (_)
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
@@ -16,9 +16,11 @@ A shared project template for collaborative unit testing in Dataverse developmen
 
 * Shared project structure for test code reusability
 * FakeXrmEasyTestBase for test base class
+* PluginContextBuilder for fluent plugin context creation (auto-detect from CrmPluginRegistrationAttribute or hydrate from Plugin Trace Log JSON)
 * FakerHelper for generating test data with Bogus
-* TestHelper for common test operations
-* Extension methods for testing
+* TestHelper for common test operations (deserialization, decompression, plugin registration)
+* TestTracingService for capturing trace output in unit tests
+* Extension methods for testing (ExecutePluginFromJson, ExecutePluginFromCompressedJson)
 * Guids utility class for consistent test GUIDs
 * CalculateRollupFieldRequestExecutor for rollup field testing
 * Pre-configured folder structure (Lib, Executor)
@@ -30,9 +32,11 @@ This is a foundational shared test project that other test templates depend on.
 ## Key Components
 
 * **FakeXrmEasyTestBase.cs** - Base class for FakeXrmEasy tests
+* **PluginContextBuilder.cs** - Fluent builder for XrmFakedPluginExecutionContext with auto-detection and Plugin Trace Log support
 * **FakerHelper.cs** - Utilities for generating fake test data using Bogus
-* **TestHelper.cs** - Common test helper methods
-* **Extension.cs** - Extension methods for testing
+* **TestHelper.cs** - Common test helper methods (deserialization, decompression, plugin registration)
+* **TestTracingService.cs** - ITracingService mock with log capture for assertions
+* **Extension.cs** - Extension methods (SetXrmFakedContextPlugin, ExecutePluginFromJson, ExecutePluginFromCompressedJson)
 * **Guids.cs** - Centralized GUID management for tests
 * **CalculateRollupFieldRequestExecutor.cs** - Custom executor for rollup field calculations
 

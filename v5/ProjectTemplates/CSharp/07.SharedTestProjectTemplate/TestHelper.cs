@@ -1,4 +1,4 @@
-﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,6 +13,26 @@ namespace $NameSpace$
 {
     public static class TestHelper
     {
+        internal static List<CrmPluginRegistrationAttribute> GetRegisteredPlugins(object obj)
+        {
+            var registeredPlugins = new List<CrmPluginRegistrationAttribute>();
+            foreach (var attribute in System.Attribute.GetCustomAttributes(obj.GetType()))
+            {
+                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
+                {
+                    var registeredPlugin = attribute as CrmPluginRegistrationAttribute;
+                    registeredPlugins.Add(registeredPlugin);
+                }
+            }
+            return registeredPlugins;
+        }
+
+        public static string GetRandomString(int minLen, int maxLen)
+        {
+            var length = new Random().Next(minLen, maxLen);
+            return FakerHelper.GenerateTemplateCode().Substring(0, Math.Min(length, 15));
+        }
+
         public static RemoteExecutionContext DeserializeRemoteExecutionContext(string jsonString)
         {
             var settings = new DataContractJsonSerializerSettings { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'") };

@@ -9,9 +9,26 @@ namespace $NameSpace$
 
         public static Guid GenerateGuid() => _faker.Random.Guid();
 
+        public static string GeneratePhoneNumber()
+        {
+            return _faker.Random.Replace("+84#########");
+        }
+
+        public static string GenerateTemplateCode()
+        {
+            return _faker.Random.AlphaNumeric(15).ToUpper();
+        }
+
         public static string GenerateFirstName() => _faker.Name.FirstName();
 
         public static string GenerateLastName() => _faker.Name.LastName();
+
+        public static string GenerateText()
+        {
+            return _faker.Lorem.Sentence(10, 5);
+        }
+
+        public static string GenerateSubject() => _faker.Lorem.Sentence(5, 3);
 
         public static string GenerateEmail() => _faker.Internet.Email();
 
