@@ -101,6 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await GeneratorTsWebApiAsync(schemaNames);
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

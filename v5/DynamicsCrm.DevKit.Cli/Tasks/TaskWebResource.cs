@@ -131,6 +131,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("PUBLISHING WEBRESOURCES");
+            XrmHelper.COUNT_ExecuteAsync++;
             await ServiceClient.ExecuteAsync(publish);
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("PUBLISHED WEBRESOURCES");
@@ -156,6 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
+                XrmHelper.COUNT_RetrieveMultipleAsync++;
                 var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 string existingDependencyXml;
                 if (rows.Entities.Count > 0)
@@ -175,6 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ActionWithLevel1(CliAction.UPDATED, webResourceName, "dependencies");
                     foreach (var d in foundDependencies)
                         SpectreLog.ActionWithLevel2($"{d}");
+                    XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
@@ -225,6 +228,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             return rows.Entities.Count > 0;
         }
@@ -253,6 +257,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
+                XrmHelper.COUNT_RetrieveMultipleAsync++;
                 var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
                 if (rows.Entities.Count > 0)
                 {
@@ -294,6 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             var content = string.Empty;
             var webResourceId = Guid.Empty;
@@ -407,6 +413,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (int.TryParse(arr[arr.Length - 1], out var languagecode))
                     {
                         var req = new RetrieveProvisionedLanguagesRequest();
+                        XrmHelper.COUNT_ExecuteAsync++;
                         var res = (RetrieveProvisionedLanguagesResponse)await ServiceClient.ExecuteAsync(req);
                         if (res.RetrieveProvisionedLanguages.Contains(languagecode))
                             webResource["languagecode"] = languagecode;
@@ -419,6 +426,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (webResourceId == Guid.Empty)
                 {
                     SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    XrmHelper.COUNT_CreateAsync++;
                     webResourceId = await ServiceClient.CreateAsync(webResource);
                     webResource["webresourceid"] = webResourceId;
                 }
@@ -426,6 +434,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     webResource["webresourceid"] = webResourceId;
                     SpectreLog.ActionWithLevel0(CliAction.UPDATED, $"{webResourceFile.uniquename} = {webResourceFile.file.Substring(CurrentDirectory.Length + 1)}");
+                    XrmHelper.COUNT_UpdateAsync++;
                     await ServiceClient.UpdateAsync(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);
@@ -456,6 +465,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 0) return;
             var request = new AddSolutionComponentRequest
@@ -466,6 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SolutionUniqueName = Json.solution
             };
             SpectreLog.ActionWithLevel3(CliAction.ADDED, $"{webResource["name"]}", "to solution: ", Json.solution);
+            XrmHelper.COUNT_ExecuteAsync++;
             await ServiceClient.ExecuteAsync(request);
         }
 
@@ -474,6 +485,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (_isSupportWebResourceDependency != null) return _isSupportWebResourceDependency.Value;
             var request = new RetrieveVersionRequest();
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (RetrieveVersionResponse)await ServiceClient.ExecuteAsync(request);
             var version = new Version(response.Version);
             _isSupportWebResourceDependency = version >= new Version("9.0");
@@ -655,6 +667,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await DeployWebResourceFilesAsync();
                 }
             }
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

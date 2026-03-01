@@ -107,6 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

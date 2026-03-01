@@ -99,15 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await DeployFilesAsync(files);
                 }
             }
-            //#if DEBUG
-            //            SpectreLog.WriteLine();
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_ExecuteAsync: ", $"{XrmHelper.COUNT_ExecuteAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_RetrieveMultipleAsync: ", $"{XrmHelper.COUNT_RetrieveMultipleAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_CreateAsync: ", $"{XrmHelper.COUNT_CreateAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_DeleteAsync: ", $"{XrmHelper.COUNT_DeleteAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_RetrieveAsync: ", $"{XrmHelper.COUNT_RetrieveAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_UpdateAsync: ", $"{XrmHelper.COUNT_UpdateAsync}");
-            //#endif
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

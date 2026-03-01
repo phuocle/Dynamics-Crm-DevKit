@@ -304,6 +304,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await RunProxyTypeAsync();
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

@@ -201,6 +201,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.ActionWithLevel0(CliAction.EXPORT, $"{solutionType} solution {Json.solution}");
 
             var crmVersion = await GetCrmVersionFromInstanceAsync();
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
 
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
@@ -232,6 +233,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return "1.0.0.0";
             var solution = rows.Entities[0];
@@ -341,6 +343,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await RunSolutionPackagerAsync(solutionZipFile);
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }
