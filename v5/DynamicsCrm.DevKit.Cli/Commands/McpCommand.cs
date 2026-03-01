@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 if (serviceClient == null) return 2;
 
                 LogInfo("Starting MCP server with stdio transport...");
-                LogInfo("Tools: query_fetchxml, get_entity_metadata");
+                LogInfo("Tools: query_fetchxml, get_entity_metadata, migrate_bat_files");
                 LogInfo("Waiting for client connection on stdin/stdout...");
 
                 var host = new Mcp.McpServerHost(serviceClient);
