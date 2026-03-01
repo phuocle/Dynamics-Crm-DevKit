@@ -61,7 +61,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with empty Guid.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
@@ -70,7 +69,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"{@class}Id\"/>.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Guid {@class}Id){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, {@class}Id);{NEW_LINE}";
@@ -79,7 +77,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with alternate key (<paramref name=\"keyName\"/>, <paramref name=\"keyValue\"/>).{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(string keyName, object keyValue){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, keyName, keyValue);{NEW_LINE}";
@@ -88,7 +85,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"targetEntity\"/>.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = targetEntity ?? new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
@@ -98,7 +94,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity) with targetEntity = null\");{NEW_LINE}";
@@ -116,7 +111,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. After that copy all attributes from <paramref name=\"postEntity\"/> to the last result. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity, Entity postEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity, postEntity) with targetEntity = null\");{NEW_LINE}";
@@ -140,7 +134,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with alternate <paramref name=\"keys\"/>.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(KeyAttributeCollection keys){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, keys);{NEW_LINE}";
@@ -163,7 +156,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <para><strong>Image</strong> - byte[] - Thumbnail image data</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<byte[]>(\"{logicalName}\"); }}{NEW_LINE}";
@@ -173,7 +165,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - Relative URL for the image</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_url</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_url\"); }}{NEW_LINE}";
@@ -182,7 +173,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - long? - Timestamp of last image update</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_timestamp</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public long? {schemaName}Timestamp{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<long?>(\"{logicalName}_timestamp\"); }}{NEW_LINE}";
@@ -190,7 +180,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>Download full-size image. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
@@ -247,7 +236,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (maxSizeInKB.HasValue)
                 code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public Guid? {schemaName}Id{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<Guid?>(\"{logicalName}\"); }}{NEW_LINE}";
@@ -256,7 +244,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - File name of the uploaded file</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_name</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Name{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_name\"); }}{NEW_LINE}";
@@ -264,7 +251,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>Download file data. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
@@ -940,7 +926,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
             }
             xml += $"{TAB}{TAB}/// </summary>\r\n";
-            xml += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             return xml;
         }
     }
