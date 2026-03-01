@@ -144,7 +144,7 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 ### Unit Tests
 
 ```powershell
-cd DynamicsCrm.DevKit.Analyzers.Test
+cd DynamicsCrm.DevKit.UnitTests
 dotnet test
 ```
 

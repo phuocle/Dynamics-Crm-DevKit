@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
-using DynamicsCrm.DevKit.Analyzers.Test.Verifier;
+using DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier;
 using Xunit;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Tests
+namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
 {
     public class InvalidPluginExecutionExceptionAnalyzerTests
     {

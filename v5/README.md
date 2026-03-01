@@ -1,4 +1,4 @@
-﻿# DynamicsCrm.DevKit
+# DynamicsCrm.DevKit
 
 ```text
   ____                              _           ____                  ____             _  ___ _     ____ _ _
@@ -208,7 +208,7 @@ v5/
 ├── ProjectTemplates/                # 13 VS project templates
 ├── ItemTemplates/                   # 15 VS item templates
 ├── DynamicsCrm.DevKit.Tests/        # Integration tests
-├── DynamicsCrm.DevKit.Analyzers.Test/ # Analyzer unit tests
+├── DynamicsCrm.DevKit.UnitTests/         # Unit tests (analyzers, shared lib)
 ├── DynamicsCrm.DevKit.Docs/         # Documentation
 └── DynamicsCrm.DevKit.Scripts/      # Build & release scripts
 ```
@@ -220,7 +220,7 @@ v5/
 ### Analyzer Unit Tests
 
 ```powershell
-cd DynamicsCrm.DevKit.Analyzers.Test
+cd DynamicsCrm.DevKit.UnitTests
 dotnet test
 ```
 

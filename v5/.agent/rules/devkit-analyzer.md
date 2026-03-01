@@ -10,9 +10,9 @@ trigger: always_on
 |-----|---|
 | `DynamicsCrm.DevKit.Analyzers\` | Main analyzer project (netstandard2.0) |
 | `DynamicsCrm.DevKit.Analyzers\CrmAnalyzers\` | Individual analyzer implementations |
-| `DynamicsCrm.DevKit.Analyzers.Test\` | Unit tests with xUnit + Roslyn Test Framework |
-| `DynamicsCrm.DevKit.Analyzers.Test\Tests\` | Test classes for each analyzer |
-| `DynamicsCrm.DevKit.Analyzers.Test\Verifier\` | `CSharpAnalyzerVerifier<T>` utility |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\` | Analyzer unit tests with xUnit + Roslyn Test Framework |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\` | Test classes for each analyzer |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\Verifier\` | `CSharpAnalyzerVerifier<T>` utility |
 | `DynamicsCrm.DevKit.Tests\TestAnalyzers\` | Visual Studio integration tests |
 | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` | Documentation for each analyzer |
 
@@ -39,7 +39,7 @@ trigger: always_on
 
 ### Bước 2: Kiểm tra Unit Tests
 1. Chạy workflow `/build-analyzer` để build và run tests
-2. Unit tests nằm tại: `DynamicsCrm.DevKit.Analyzers.Test\Tests\{AnalyzerName}Tests.cs`
+2. Unit tests nằm tại: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
 3. Sử dụng pattern `[|code|]` để mark expected diagnostics:
    ```csharp
    var src = WrapInPlugin("[|new ColumnSet(true)|]");
@@ -69,7 +69,7 @@ trigger: always_on
 - [ ] `DiagnosticIdentifiers.cs` đã có ID mới (nếu thêm mới)?
 - [ ] `DiagnosticDescriptors.cs` đã có descriptor mới (nếu thêm mới)?
 - [ ] Analyzer file tồn tại trong `CrmAnalyzers\`?
-- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.Analyzers.Test\Tests\`?
+- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
 - [ ] Unit tests pass? (chạy `/build-analyzer`)
 - [ ] Integration test file `DEVKIT{XXXX}.cs` tồn tại trong `TestAnalyzers\`?
 - [ ] Documentation file `DEVKIT{XXXX}.md` tồn tại?

@@ -145,16 +145,16 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
 ## Step 5: Create Unit Tests
 
-Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers.Test\Tests\{AnalyzerName}AnalyzerTests.cs`
+Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}AnalyzerTests.cs`
 
 **Template:**
 ```csharp
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
-using DynamicsCrm.DevKit.Analyzers.Test.Verifier;
+using DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier;
 using Xunit;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Tests
+namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
 {
     public class {AnalyzerName}AnalyzerTests
     {

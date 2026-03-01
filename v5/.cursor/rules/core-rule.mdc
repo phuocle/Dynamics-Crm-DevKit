@@ -1,4 +1,4 @@
-﻿---
+---
 description: Mandatory core rules for AI agents working with DynamicsCrm.DevKit codebase
 alwaysApply: true
 ---
@@ -110,7 +110,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 **Quick reference**:
 - 21 analyzers: DEVKIT1001 → DEVKIT1021
-- Unit tests: `DynamicsCrm.DevKit.Analyzers.Test/Tests/`
+- Unit tests: `DynamicsCrm.DevKit.UnitTests/Analyzers/Tests/`
 - Integration tests: `DynamicsCrm.DevKit.Tests/TestAnalyzers/`
 - Workflow: `/build-analyzer` for build + test
 - New analyzer: `/create-new-analyzer` workflow

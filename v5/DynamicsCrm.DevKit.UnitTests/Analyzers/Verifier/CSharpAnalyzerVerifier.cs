@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Verifier
+namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier
 {
     public static class CSharpAnalyzerVerifier<TAnalyzer>
         where TAnalyzer : DiagnosticAnalyzer, new()

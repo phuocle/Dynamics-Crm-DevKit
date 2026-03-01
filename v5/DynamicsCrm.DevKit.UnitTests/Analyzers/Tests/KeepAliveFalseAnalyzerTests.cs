@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
-using DynamicsCrm.DevKit.Analyzers.Test.Verifier;
+using DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier;
 using Xunit;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Tests
+namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
 {
-    public class HttpTimeoutAnalyzerTests
+    public class KeepAliveFalseAnalyzerTests
     {
         private const string Stubs = @"
 namespace Microsoft.Xrm.Sdk
@@ -26,9 +26,18 @@ namespace System.Net.Http
 {
     public class HttpClient : System.IDisposable
     {
-        public System.TimeSpan Timeout { get; set; }
+        public HttpRequestHeaders DefaultRequestHeaders { get; set; }
         public void Dispose() { }
     }
+    public class HttpRequestHeaders
+    {
+        public bool? ConnectionClose { get; set; }
+    }
+}
+namespace System.Net
+{
+    public class HttpWebRequest { }
+    public class WebRequest { }
 }
 ";
 
@@ -71,34 +80,34 @@ public class RegularClass
         public async Task Diagnostic_When_Plugin_Uses_HttpClient()
         {
             var src = WrapInPlugin("using (var client = [|new System.Net.Http.HttpClient()|]) { }");
-            await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task Diagnostic_When_Workflow_Uses_HttpClient()
         {
             var src = WrapInWorkflow("using (var client = [|new System.Net.Http.HttpClient()|]) { }");
-            await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         [Fact]
         public async Task NoDiagnostic_When_NonPlugin_Uses_HttpClient()
         {
             var src = WrapInRegularClass("using (var client = new System.Net.Http.HttpClient()) { }");
-            await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
 
         [Fact]
-        public async Task NoDiagnostic_When_Plugin_Sets_Timeout()
+        public async Task NoDiagnostic_When_Plugin_Sets_ConnectionClose_True()
         {
             var src = WrapInPlugin(@"
             using (var client = new System.Net.Http.HttpClient())
             {
-                client.Timeout = System.TimeSpan.FromSeconds(30);
+                client.DefaultRequestHeaders.ConnectionClose = true;
             }
             ");
-            await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
         #endregion
