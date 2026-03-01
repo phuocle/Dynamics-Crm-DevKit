@@ -1,4 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
@@ -60,6 +60,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         var LateBoundGeneratedProjectItemFullPath = LateBoundGeneratedProjectItem.FileNames[0];
                         LateBoundGeneratedProjectItem.Remove();
                         LateBoundProjectItem.ProjectItems.AddFromFile(LateBoundGeneratedProjectItemFullPath);
+                    }
+                }
+                var customFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(FullFilePath), $"{ItemName}.cs");
+                if (System.IO.File.Exists(customFile))
+                {
+                    var customContent = System.IO.File.ReadAllText(customFile);
+                    var oldDeclaration = $"public partial class {ItemName}";
+                    if (customContent.Contains(oldDeclaration))
+                    {
+                        var newContent = customContent.Replace(oldDeclaration, $"internal partial class {ItemName}");
+                        System.IO.File.WriteAllText(customFile, newContent);
                     }
                 }
                 await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");

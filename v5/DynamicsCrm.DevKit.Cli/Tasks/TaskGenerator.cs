@@ -453,6 +453,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
+                    await MigratePublicToInternalAsync(file, entityMetadata.SchemaName);
                 }
                 else
                 {
@@ -460,6 +461,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
+        }
+
+        private static async Task MigratePublicToInternalAsync(string customFile, string className)
+        {
+            if (!File.Exists(customFile)) return;
+            var content = await File.ReadAllTextAsync(customFile);
+            var oldDeclaration = $"public partial class {className}";
+            if (!content.Contains(oldDeclaration)) return;
+            var newContent = content.Replace(oldDeclaration, $"internal partial class {className}");
+            await FileHelper.ForceWriteAllTextAsync(customFile, newContent);
+            SpectreLog.ActionWithLevel0(CliAction.UPDATED, Path.GetFileName(customFile));
         }
 
         private async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient, EntityFilters entityFilters)
