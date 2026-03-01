@@ -1,13 +1,8 @@
 using DynamicsCrm.DevKit.Cli;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DynamicsCrm.DevKit.Cli.Test;
+namespace DynamicsCrm.DevKit.UnitTests.Cli;
 
-/// <summary>
-/// Tests for SpectreLog utility class
-/// Note: These tests verify that SpectreLog methods don't throw exceptions.
-/// Actual console output cannot be easily verified in unit tests.
-/// </summary>
 [TestClass]
 public class SpectreLogTests
 {
@@ -16,15 +11,7 @@ public class SpectreLogTests
     [TestMethod]
     public void WriteLine_NoArgs_DoesNotThrow()
     {
-        // Act & Assert - should not throw
         SpectreLog.WriteLine();
-    }
-
-    [TestMethod]
-    public void WriteLine_WithText_DoesNotThrow()
-    {
-        // Act & Assert - should not throw
-        SpectreLog.WriteLine("Test message");
     }
 
     #endregion
@@ -34,46 +21,40 @@ public class SpectreLogTests
     [TestMethod]
     public void WriteHighLight_FiveArgs_DoesNotThrow()
     {
-        // Act & Assert
         SpectreLog.WriteHighLight("First", "Second", "Third", "Fourth", "Fifth");
     }
 
     [TestMethod]
-    public void WriteHighLight_EscapedCharacters_DoesNotThrow()
+    public void WriteHighLight_ThreeArgs_DoesNotThrow()
     {
-        // Act & Assert - should handle markup escape
-        SpectreLog.WriteHighLight("URL: ", "https://test.crm.dynamics.com", " with ", "300", " seconds");
+        SpectreLog.WriteHighLight("URL: ", "https://test.crm.dynamics.com", " done");
     }
 
     #endregion
 
-    #region Action Methods Tests
+    #region ActionWithLevel Tests
 
     [TestMethod]
-    public void ActionDoNothing_DoesNotThrow()
+    public void ActionWithLevel0_OneArg_DoesNotThrow()
     {
-        // Act & Assert
-        SpectreLog.ActionDoNothing("account", "Account.js");
+        SpectreLog.ActionWithLevel0("test text");
     }
 
     [TestMethod]
-    public void ActionCreated_DoesNotThrow()
+    public void ActionWithLevel0_TwoArgs_DoesNotThrow()
     {
-        // Act & Assert
-        SpectreLog.ActionCreated("Account.js");
+        SpectreLog.ActionWithLevel0("CREATED", "Account.js");
     }
 
     [TestMethod]
-    public void ActionUpdated_DoesNotThrow()
+    public void ActionWithLevel1_TwoArgs_DoesNotThrow()
     {
-        // Act & Assert
-        SpectreLog.ActionUpdated("Account.js");
+        SpectreLog.ActionWithLevel1("UPDATED", "Account.js");
     }
 
     [TestMethod]
     public void ActionError_DoesNotThrow()
     {
-        // Act & Assert
         SpectreLog.ActionError("Test error message");
     }
 
@@ -84,24 +65,18 @@ public class SpectreLogTests
     [TestMethod]
     public void WriteTable_EmptyRows_DoesNotThrow()
     {
-        // Arrange
         var rows = new List<string[]>();
-
-        // Act & Assert
         SpectreLog.WriteTable(rows);
     }
 
     [TestMethod]
     public void WriteTable_WithRows_DoesNotThrow()
     {
-        // Arrange
         var rows = new List<string[]>
         {
             new[] { "[green]Label[/]", "[cyan]Value[/]" },
             new[] { "[green]Label2[/]", "[cyan]Value2[/]" }
         };
-
-        // Act & Assert
         SpectreLog.WriteTable(rows);
     }
 

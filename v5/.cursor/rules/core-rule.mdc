@@ -85,7 +85,11 @@ alwaysApply: true
 | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+| Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
+| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
+| Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |
 
 ---
 
@@ -110,7 +114,8 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 **Quick reference**:
 - 21 analyzers: DEVKIT1001 → DEVKIT1021
-- Unit tests: `DynamicsCrm.DevKit.UnitTests/Analyzers/Tests/`
+- Analyzer unit tests: `DynamicsCrm.DevKit.UnitTests/Analyzers/Tests/` (net48, xUnit)
+- CLI unit tests: `DynamicsCrm.DevKit.UnitTests/Cli/` (net10.0, MSTest)
 - Integration tests: `DynamicsCrm.DevKit.Tests/TestAnalyzers/`
 - Workflow: `/build-analyzer` for build + test
 - New analyzer: `/create-new-analyzer` workflow

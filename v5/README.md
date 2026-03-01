@@ -208,7 +208,10 @@ v5/
 ├── ProjectTemplates/                # 13 VS project templates
 ├── ItemTemplates/                   # 15 VS item templates
 ├── DynamicsCrm.DevKit.Tests/        # Integration tests
-├── DynamicsCrm.DevKit.UnitTests/         # Unit tests (analyzers, shared lib)
+├── DynamicsCrm.DevKit.UnitTests/    # Unit tests (analyzers, CLI, shared lib)
+│   ├── Analyzers/                   # Analyzer unit tests (net48, xUnit)
+│   ├── Cli/                         # CLI unit tests (net10.0, MSTest)
+│   └── Lib/                         # Shared lib tests
 ├── DynamicsCrm.DevKit.Docs/         # Documentation
 └── DynamicsCrm.DevKit.Scripts/      # Build & release scripts
 ```
@@ -217,14 +220,14 @@ v5/
 
 ## 🧪 Testing
 
-### Analyzer Unit Tests
+### Unit Tests (Analyzers + CLI)
 
 ```powershell
 cd DynamicsCrm.DevKit.UnitTests
 dotnet test
 ```
 
-### CLI Integration Tests
+### Integration Tests
 
 ```powershell
 cd DynamicsCrm.DevKit.Tests

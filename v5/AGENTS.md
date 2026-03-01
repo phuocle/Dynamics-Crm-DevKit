@@ -141,12 +141,15 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 |---|---|---|
 | DEVKIT1001-1021 | 21 | Plugin/Workflow best practices |
 
-### Unit Tests
+### Unit Tests (Analyzers + CLI)
 
 ```powershell
 cd DynamicsCrm.DevKit.UnitTests
 dotnet test
 ```
+
+- **Analyzer tests** (net48, xUnit): `DynamicsCrm.DevKit.UnitTests/Analyzers/`
+- **CLI tests** (net10.0, MSTest): `DynamicsCrm.DevKit.UnitTests/Cli/`
 
 ### Integration Tests
 
@@ -172,7 +175,11 @@ When creating documentation files (`.md`):
 | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+| Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
+| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
+| Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |
 
 ---
 

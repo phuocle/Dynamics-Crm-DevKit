@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
-namespace DynamicsCrm.DevKit.Cli.Test;
+namespace DynamicsCrm.DevKit.UnitTests.Cli;
 
 [TestClass]
 public class HelperTests

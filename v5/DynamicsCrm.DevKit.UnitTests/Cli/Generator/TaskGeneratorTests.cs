@@ -12,7 +12,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DynamicsCrm.DevKit.Cli.Test.Generator;
+namespace DynamicsCrm.DevKit.UnitTests.Cli.Generator;
 
 [TestClass]
 public class TaskGeneratorTests
@@ -671,7 +671,6 @@ public class TaskGeneratorTests
             LogicalName = "account",
             SchemaName = "Account"
         };
-        // Set read-only properties via reflection
         typeof(EntityMetadata).GetProperty(nameof(EntityMetadata.ObjectTypeCode))!.SetValue(accountMetadata, 1);
         
         var attributes = new AttributeMetadata[] 
@@ -695,7 +694,6 @@ public class TaskGeneratorTests
         };
         XrmHelper.EntitiesFormXml.Add(systemForm);
         
-        // Setup BPF Mock to avoid null reference in JsForm generator
         XrmHelper.EntitiesProcessForm.Add(new ProcessForm 
         { 
             EntityLogicalName = "account", 
@@ -705,21 +703,19 @@ public class TaskGeneratorTests
 
         // 3. Configure Task
         var arg = CreateCommandLineArgs();
-        // arg.CurrentDirectory = _testOutputDirectory; // SKIP: Read-only property
         
         var json = new JsonGenerator
         {
             profile = "test",
-            rootfolder = "entities", // Output to temp/entities
+            rootfolder = "entities",
             type = "jsform",
             rootnamespace = "Dev.DevKit",
-            entities = "account" // Explicitly target 'account'
+            entities = "account"
         };
         var task = new TaskGenerator(arg, json);
         task.CurrentDirectory = _testOutputDirectory;
 
         // Act
-        // This should skip ServiceClient calls because cache is populated
         await task.RunAsync();
 
         // Assert
@@ -914,7 +910,7 @@ public class TaskGeneratorTests
             Json = "DynamicsCrm.DevKit.Cli.json",
             Type = "generators",
             Profile = "test",
-            ServiceClient = null // We'll use FakeXrmEasy for actual service calls
+            ServiceClient = null
         };
     }
 
@@ -928,7 +924,4 @@ public class TaskGeneratorTests
             rootnamespace = "Dev.DevKit"
         };
     }
-
-
 }
-
