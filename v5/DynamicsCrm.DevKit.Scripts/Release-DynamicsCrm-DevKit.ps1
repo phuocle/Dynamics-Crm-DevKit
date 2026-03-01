@@ -129,10 +129,6 @@ try {
     Write-Host "Date:          $BuildDate" -ForegroundColor Cyan
     Write-Host "Configuration: $Configuration" -ForegroundColor Cyan
 
-    if ($Configuration -eq "Debug") {
-        Write-Host "Mode:          DEBUG (no PFX required)" -ForegroundColor Yellow
-    }
-
     # 2. Update Placeholders
     Write-Host "`nUpdating placeholders..." -ForegroundColor Yellow
     $backups = @()
@@ -227,8 +223,7 @@ try {
         "/p:Version=$Version",
         "/p:AssemblyVersion=$Version",
         "/p:FileVersion=$Version",
-        "/p:NoWarn=NU5100%3BNU1702%3BCVSTBLD002",
-        "/p:SignAssembly=false"
+        "/p:NoWarn=NU5100%3BNU1702%3BCVSTBLD002"
     )
     
     & dotnet $dotnetPackArgs

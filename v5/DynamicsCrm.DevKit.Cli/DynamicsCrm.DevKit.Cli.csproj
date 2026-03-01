@@ -3,7 +3,6 @@
 		<LangVersion>latest</LangVersion>
 		<TargetFramework>net10.0</TargetFramework>
 		<IsPublishable>True</IsPublishable>
-		<SignAssembly>True</SignAssembly>
 		<AssemblyVersion>5.0.0.0</AssemblyVersion>
 		<FileVersion>5.0.0.0</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -16,7 +15,6 @@
 		<OutputType>Exe</OutputType>
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
 		<BaseOutputPath>bin</BaseOutputPath>
-		<DelaySign>False</DelaySign>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<!-- .NET Global Tool Configuration -->
 		<PackAsTool>true</PackAsTool>
@@ -33,7 +31,6 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<PlatformTarget>x64</PlatformTarget>
-		<AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.snk</AssemblyOriginatorKeyFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	<ItemGroup>
