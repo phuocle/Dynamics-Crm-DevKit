@@ -7,7 +7,7 @@ using System.Linq;
 namespace Dev.DevKit.Shared
 {
     [DebuggerNonUserCode()]
-    public abstract class EntityBase
+    internal abstract class EntityBase
     {
         protected T GetAliasedValue<T>(string name)
         {

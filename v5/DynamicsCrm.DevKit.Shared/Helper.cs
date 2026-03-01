@@ -506,7 +506,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += NEW_LINE;
             code += $"namespace {@namespace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
-            code += $"{TAB}public partial class {@class}{NEW_LINE}";
+            code += $"{TAB}internal partial class {@class}{NEW_LINE}";
             code += $"{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}#region --- PROPERTIES ---{NEW_LINE}";
             code += NEW_LINE;

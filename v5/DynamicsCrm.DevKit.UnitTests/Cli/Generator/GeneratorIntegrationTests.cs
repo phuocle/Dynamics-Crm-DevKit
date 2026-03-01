@@ -506,7 +506,7 @@ public class GeneratorIntegrationTests
         Assert.IsTrue(File.Exists(csFilePath), "Account.generated.cs should exist");
 
         Assert.IsTrue(csCode.Contains("namespace Dev.DevKit.Entities"), "CS should contain namespace");
-        Assert.IsTrue(csCode.Contains("public partial class Account"), "CS should contain Account class");
+        Assert.IsTrue(csCode.Contains("internal partial class Account"), "CS should contain Account class");
         Assert.IsTrue(csCode.Contains("public string Name"), "CS should contain Name property");
     }
 

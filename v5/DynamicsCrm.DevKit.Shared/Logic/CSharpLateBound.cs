@@ -40,9 +40,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{{{NEW_LINE}";
             code += $"{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             if (shareProject != null) shareProject += ".";
-            code += $"{TAB}public partial class {@class} : {shareProject}EntityBase{NEW_LINE}";
+            code += $"{TAB}internal partial class {@class} : {shareProject}EntityBase{NEW_LINE}";
             code += $"{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}public struct Fields{NEW_LINE}";
+            code += $"{TAB}{TAB}internal struct Fields{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{GeneratorClassFields()}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
@@ -295,7 +295,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static string GeneratorEnum()
         {
             var @enum = string.Empty;
-            @enum += $"{TAB}public enum [[Enum]]{NEW_LINE}";
+            @enum += $"{TAB}internal enum [[Enum]]{NEW_LINE}";
             @enum += $"{TAB}{{{NEW_LINE}";
             @enum += $"[[Declare]]";
             @enum += $"{TAB}}}{NEW_LINE}";

@@ -856,7 +856,7 @@ public class TaskGeneratorTests
         Assert.IsTrue(File.Exists(csharpFile), "Account.generated.cs should exist");
         
         var content = File.ReadAllText(csharpFile);
-        Assert.IsTrue(content.Contains("public partial class Account"), "Generated C# should contain class definition");
+        Assert.IsTrue(content.Contains("internal partial class Account"), "Generated C# should contain class definition");
     }
 
     private EntityMetadata CreateMockAccountMetadata()

@@ -9,7 +9,7 @@ using System.Text;
 namespace Microsoft.Xrm.Sdk
 {
     [DebuggerNonUserCode()]
-    public static class DevKitJson
+    internal static class DevKitJson
     {
         private const int BUILDER_CAPACITY = 2000;
         private static readonly char[] EscapeChars = { '"', '\\', '\b', '\f', '\n', '\r', '\t' };
@@ -713,8 +713,6 @@ namespace Microsoft.Xrm.Sdk
             };
             if (dict.TryGetValue("Name", out var name) && name is string n) 
                 er.Name = n;
-            else
-                er.Name = "(No Name)"; // Default name when not present in JSON
             return er;
         }
 

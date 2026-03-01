@@ -7,7 +7,7 @@ using System.Linq;
 namespace $NameSpace$
 {
     [DebuggerNonUserCode()]
-    public abstract class EntityBase
+    internal abstract class EntityBase
     {
         protected T GetAliasedValue<T>(string name)
         {

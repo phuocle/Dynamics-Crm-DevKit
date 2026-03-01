@@ -14,7 +14,7 @@ using System.Xml;
 namespace Microsoft.Xrm.Sdk
 {
     [DebuggerNonUserCode()]
-    public static class Extension
+    internal static class Extension
     {
 
         public static OrganizationRequest ToUpdateRequest(this Entity entity)

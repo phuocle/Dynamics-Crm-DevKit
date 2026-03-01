@@ -1,9 +1,9 @@
-﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
 using System;
 
 namespace Dev.DevKit.Shared.Entities
 {
-    public partial class Account
+    internal partial class Account
     {
         #region --- PROPERTIES ---
 

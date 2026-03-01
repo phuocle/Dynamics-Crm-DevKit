@@ -9,7 +9,7 @@ namespace System
     /// providing a date-only type for .NET Framework where <c>System.DateOnly</c> is not available.
     /// </summary>
     [DebuggerNonUserCode()]
-    public readonly struct Date : IComparable, IFormattable, IComparable<Date>, IEquatable<Date>
+    internal readonly struct Date : IComparable, IFormattable, IComparable<Date>, IEquatable<Date>
     {
         private readonly DateTime _dt;
 
@@ -261,7 +261,7 @@ namespace System
     /// Extension methods for converting between <see cref="DateTime"/> and <see cref="Date"/>.
     /// </summary>
     [DebuggerNonUserCode()]
-    public static class DateTimeExtensions
+    internal static class DateTimeExtensions
     {
         /// <summary>Converts a <see cref="DateTime"/> to a <see cref="Date"/>, stripping the time component.</summary>
         public static Date ToDate(this DateTime dt) => new Date(dt);
