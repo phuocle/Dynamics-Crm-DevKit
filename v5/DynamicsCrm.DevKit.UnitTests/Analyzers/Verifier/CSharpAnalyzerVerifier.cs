@@ -4,8 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
-
 namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier
 {
     public static class CSharpAnalyzerVerifier<TAnalyzer>
@@ -20,9 +18,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier
         public static async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
         {
             var test = new Test { TestCode = source };
-            // Use modern .NET reference assemblies to enable analyzer config support
             test.ReferenceAssemblies = ReferenceAssemblies.Net.Net60;
-            // Disambiguate diagnostics when analyzers expose multiple descriptors with same ID
             test.MarkupOptions = MarkupOptions.UseFirstDescriptor;
             test.SolutionTransforms.Add((solution, projectId) =>
             {
@@ -36,7 +32,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier
             await test.RunAsync(CancellationToken.None);
         }
 
-        private class Test : CSharpAnalyzerTest<TAnalyzer, XUnitVerifier>
+        private class Test : CSharpAnalyzerTest<TAnalyzer, DefaultVerifier>
         {
         }
     }

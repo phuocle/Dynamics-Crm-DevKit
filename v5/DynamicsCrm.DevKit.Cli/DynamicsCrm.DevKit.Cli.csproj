@@ -66,18 +66,18 @@
 	  <!-- ModelBuilder Library for early-bound entity generation -->
 	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.ModelBuilderLib" Version="2.0.16" />
 	  <!-- NuGet for package operations -->
-	  <PackageReference Include="NuGet.Packaging" Version="7.0.1" />
-	  <PackageReference Include="NuGet.Protocol" Version="7.0.1" />
+	  <PackageReference Include="NuGet.Packaging" Version="7.3.0" />
+	  <PackageReference Include="NuGet.Protocol" Version="7.3.0" />
 	  <!-- CodeDom for .NET 10 compatibility -->
-	  <PackageReference Include="System.CodeDom" Version="10.0.1" />
+	  <PackageReference Include="System.CodeDom" Version="10.0.3" />
 	  <!-- Phase 2: Modern Interactive Authentication -->
 	  <!-- Note: Microsoft.Identity.Client is already included via Microsoft.PowerPlatform.Dataverse.Client -->
-	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.6" />
+	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.3" />
 	  <!-- Phase 3: Azure production authentication -->
-	  <PackageReference Include="Azure.Identity" Version="1.13.2" />
+	  <PackageReference Include="Azure.Identity" Version="1.18.0" />
 	  <!-- MCP Server Support -->
-	  <PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.1" />
-	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+	  <PackageReference Include="ModelContextProtocol" Version="1.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
 	  <!-- T4 Template Processing (standalone, no VS dependency) -->
 	  <PackageReference Include="Mono.TextTemplating" Version="3.0.0" />
 	</ItemGroup>
