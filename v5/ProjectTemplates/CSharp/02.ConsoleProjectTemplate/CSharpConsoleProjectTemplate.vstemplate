@@ -20,7 +20,7 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.cs">App.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config.template</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Helper.cs">Helper.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Lib\TracingServiceFake.cs">TracingServiceFake.cs</ProjectItem>
     </Project>

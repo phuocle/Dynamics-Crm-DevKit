@@ -20,7 +20,7 @@ public class ExtensionsTests
     [TestMethod]
     public void TrimNewLine_Null_ReturnsNull()
     {
-        string input = null;
+        string? input = null;
         var result = input.TrimNewLine();
         Assert.IsNull(result);
     }

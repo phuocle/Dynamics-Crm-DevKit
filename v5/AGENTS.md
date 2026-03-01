@@ -82,6 +82,7 @@
 | `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
 | `/build-tool` | Tool only - Build Tool package |
 | `/build-release` | Release - **Human only** |
+| `/unit-test` | Run all unit tests + code coverage report |
 | `/clean-all` | Clean all build artifacts |
 | `/create-new-analyzer` | Create a new Roslyn analyzer |
 
@@ -425,6 +426,7 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 | `.agent/workflows/build-analyzer.md` | `/build-analyzer` |
 | `.agent/workflows/build-tool.md` | `/build-tool` |
 | `.agent/workflows/build-release.md` | `/build-release` |
+| `.agent/workflows/unit-test.md` | `/unit-test` |
 | `.agent/workflows/clean-all.md` | `/clean-all` |
 | `.agent/workflows/create-new-analyzer.md` | `/create-new-analyzer` |
 

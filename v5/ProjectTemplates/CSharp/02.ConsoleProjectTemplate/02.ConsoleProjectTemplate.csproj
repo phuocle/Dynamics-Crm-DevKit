@@ -82,7 +82,7 @@
     <None Include="Helper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config.template" />
     <None Include="ProjectTemplate.csproj.template" />
   </ItemGroup>
   <ItemGroup>

@@ -72,6 +72,7 @@ trigger: always_on
 | `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
 | `/build-tool` | Tool only - Build Tool package |
 | `/build-release` | Release - **Human only** |
+| `/unit-test` | Run all unit tests + code coverage report |
 | `/clean-all` | Clean all build artifacts |
 | `/create-new-analyzer` | Create a new Roslyn analyzer |
 
