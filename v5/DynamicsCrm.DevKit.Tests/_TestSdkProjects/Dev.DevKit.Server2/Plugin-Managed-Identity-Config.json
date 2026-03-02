@@ -1,0 +1,21 @@
+﻿{
+    "ResourceGroup":  "DevDevKitServer2",
+    "Location":  "southeastasia",
+    "KeyVaultName":  "DevDevKitServer2",
+    "SecretName":  "DevDevKitServer2",
+    "SecretValue":  "PASSWORD-DevDevKitServer2",
+    "CertificateFileName":  "DevDevKitServer2",
+    "CertificatePassword":  "!DevDevKitServer2*",
+    "CertificateValidityYears":  10,
+    "TenantId":  "49528483-b79b-4b88-b86e-7d882ba68911",
+    "KeyVaultURL":  "https://devdevkitserver2.vault.azure.net/",
+    "CertificateThumbprint":  "9BC4268D35977F011484DC9023ED7C1DDD1B4C1A",
+    "CertificateSHA256Hash":  "iVMP6boVu19KXjNwPlqQniI3qAPUYxn94a8qiIgTr9A",
+    "ManagedIdentities":  [
+                              {
+                                  "AppName":  "DevDevKitServer2",
+                                  "AppId":  "4ed67ce4-590f-4937-83df-5d8af9a38d23",
+                                  "EnvironmentId":  "cbba8ce9-ea7c-e440-b083-0b9517496e17"
+                              }
+                          ]
+}

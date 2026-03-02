@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous" SdkMessageProcessingStepId="{30d0cd33-5afb-f011-8407-000d3a316bdb}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>a5fd954b-3194-f011-b4cc-000d3aa25840</SdkMessageId>
+  <PluginTypeName>Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316</PluginTypeName>
+  <PluginTypeId>77a02c46-50fb-f011-8407-000d3a316bdb</PluginTypeId>
+  <PrimaryEntity>account</PrimaryEntity>
+  <AsyncAutoDelete>1</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.4</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

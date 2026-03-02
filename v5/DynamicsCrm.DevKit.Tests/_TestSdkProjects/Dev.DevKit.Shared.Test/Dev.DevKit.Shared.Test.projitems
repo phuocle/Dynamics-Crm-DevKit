@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>fd00dc29-d72e-4deb-89e4-aad3072960c3</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Dev.DevKit.Shared.Test</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Executor\**\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+  <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
+</Project>

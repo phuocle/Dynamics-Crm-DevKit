@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.Package.Plugins.Contact.PostContactUpdateAsynchronous" SdkMessageProcessingStepId="{f0c4aa4d-d6fc-f011-8407-000d3a316bdb}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>20bebb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
+  <PluginTypeExportKey>4DC7862A63F7923740DF23058A991F3C2B5B470B11F61CFBD62D15088B4D2F1B</PluginTypeExportKey>
+  <PrimaryEntity>contact</PrimaryEntity>
+  <AsyncAutoDelete>1</AsyncAutoDelete>
+  <FilteringAttributes>firstname</FilteringAttributes>
+  <InvocationSource>1</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.4</IntroducedVersion>
+  <SdkMessageProcessingStepImages>
+    <SdkMessageProcessingStepImage Name="PostImage">
+      <SdkMessageProcessingStepImageId>{f4c4aa4d-d6fc-f011-8407-000d3a316bdb}</SdkMessageProcessingStepImageId>
+      <Attributes>firstname,lastname</Attributes>
+      <EntityAlias>PostImage</EntityAlias>
+      <ImageType>1</ImageType>
+      <MessagePropertyName>Target</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+    <SdkMessageProcessingStepImage Name="PreImage">
+      <SdkMessageProcessingStepImageId>{f3c4aa4d-d6fc-f011-8407-000d3a316bdb}</SdkMessageProcessingStepImageId>
+      <Attributes>firstname</Attributes>
+      <EntityAlias>PreImage</EntityAlias>
+      <ImageType>0</ImageType>
+      <MessagePropertyName>Target</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+  </SdkMessageProcessingStepImages>
+</SdkMessageProcessingStep>
