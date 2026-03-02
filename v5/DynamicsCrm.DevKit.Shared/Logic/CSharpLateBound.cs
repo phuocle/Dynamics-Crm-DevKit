@@ -398,8 +398,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
-                if (attribute is FileAttributeMetadata)
-                    code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName}_name = \"{attribute.LogicalName}_name\";{NEW_LINE}";
             }
             return code;
         }
@@ -454,9 +452,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             return $"Date?";
                         else if (datetime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                             return $"DateTime?";
-                        else if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal)
+                        else
                             return $"DateTime?";
-                        return $"DateTime?";
                     }
                 case AttributeTypeCode.Decimal:
                     return $"decimal?";
@@ -482,10 +479,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         return $"string";
                 case AttributeTypeCode.PartyList:
                     return $"System.Collections.Generic.List<ActivityParty>";
-                case AttributeTypeCode.ManagedProperty:
-                    return $"?";
                 default:
-                    return $"?";
+                    throw new InvalidOperationException($"Unsupported AttributeType '{attribute.AttributeType}' for attribute '{attribute.LogicalName}'. IsFieldOk should have filtered this.");
             }
         }
 
@@ -586,8 +581,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
-                    else if (attribute is FileAttributeMetadata)
-                        return string.Empty;
                     else
                         return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -599,10 +592,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = data;{NEW_LINE}";
                     code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
-                case AttributeTypeCode.ManagedProperty:
-                    return "set;";
                 default:
-                    return "set;";
+                    throw new InvalidOperationException($"Unsupported AttributeType '{attribute.AttributeType}' for attribute '{attribute.LogicalName}'. IsFieldOk should have filtered this.");
             }
         }
 
@@ -687,8 +678,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
-                    else if (attribute is FileAttributeMetadata)
-                        return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}_name); }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}); }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -701,7 +690,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
                 default:
-                    return $"?{attribute.AttributeType}";
+                    throw new InvalidOperationException($"Unsupported AttributeType '{attribute.AttributeType}' for attribute '{attribute.LogicalName}'. IsFieldOk should have filtered this.");
             }
         }
 
@@ -880,15 +869,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 line3 += "<strong>Single Line of Text</strong>";
                 if (str.FormatName?.Value != null && str.FormatName.Value != "Text")
                     line3 += $" - <strong>Format</strong>: {str.FormatName.Value}";
-            }
-            else if (attribute is FileAttributeMetadata file)
-            {
-                line3 += "<strong>File</strong>";
-                if (file.MaxSizeInKB.HasValue) line3 += $" - <strong>MaxSize</strong>: {file.MaxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB";
-            }
-            else if (attribute is ImageAttributeMetadata)
-            {
-                line3 += "<strong>Image</strong>";
             }
             else
                 line3 += "<strong>" + attribute.AttributeType.ToString() + "</strong>";

@@ -44,11 +44,23 @@
   <!-- Exclude CLI tests from net48, Analyzer tests from net10.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Compile Remove="Cli\**\*.cs" />
+    <Compile Remove="Lib\CSharpLateBoundTest.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
     <Compile Remove="Analyzers\**\*.cs" />
     <Compile Remove="Lib\**\*.cs" />
+    <Compile Include="Lib\CSharpLateBoundTest.cs" />
+  </ItemGroup>
+
+  <!-- Generated output files - Content only, not compiled -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Compile Remove="Lib\UnitTestEntity.generated.cs" />
+    <Compile Remove="Lib\UnitTestEntity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lib\UnitTestEntity.generated.cs" />
+    <None Include="Lib\UnitTestEntity.cs" />
   </ItemGroup>
 
   <!-- Analyzer project reference (net48 only) -->
