@@ -192,8 +192,8 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NuGet.Protocol" Version="7.3.0" />
-    <PackageReference Include="Azure.Identity" Version="1.18.0" />
-    <PackageReference Include="System.Text.Json" Version="10.0.3" />
+    <PackageReference Include="Azure.Identity" Version="1.17.1" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="System.Runtime.CompilerServices.Unsafe.dll">
