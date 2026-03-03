@@ -1,5 +1,5 @@
----
-description: Rules for working with TestClientCode projects (JS/TS client-side code)
+﻿---
+description: client-code rules
 alwaysApply: true
 ---
 

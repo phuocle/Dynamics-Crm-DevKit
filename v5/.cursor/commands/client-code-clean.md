@@ -1,6 +1,4 @@
----
-description: Clean all generated files in TestClientCode folders to restore fresh checkout state
----
+﻿# client-code-clean
 
 # Clean TestClientCode Workflow
 

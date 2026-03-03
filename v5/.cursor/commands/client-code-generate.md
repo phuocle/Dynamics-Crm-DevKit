@@ -1,6 +1,4 @@
----
-description: Generate entity form and webapi files using CLI
----
+﻿# client-code-generate
 
 # Generate Entity Files Workflow
 

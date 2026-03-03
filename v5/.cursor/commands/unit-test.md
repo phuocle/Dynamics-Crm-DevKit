@@ -1,4 +1,4 @@
-# Unit Test - Run All Tests with Code Coverage
+﻿# unit-test
 
 Run **all** unit tests in `DynamicsCrm.DevKit.UnitTests` (both net48 Analyzer tests and net10.0 CLI tests) and generate a unified code coverage report.
 

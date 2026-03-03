@@ -1,5 +1,5 @@
----
-description: CLI profiles and run instructions for integration test scenarios
+﻿---
+description: test-cli-profiles rules
 alwaysApply: true
 ---
 

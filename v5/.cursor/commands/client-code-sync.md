@@ -1,6 +1,4 @@
----
-description: Sync all 5 core source-of-truth files and generator files to TestClientCode folders
----
+﻿# client-code-sync
 
 # Sync Source of Truth Workflow
 

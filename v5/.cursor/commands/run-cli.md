@@ -1,6 +1,4 @@
----
-description: Run a specific CLI profile for TestClientCode (JS-FORM, JS-WEBAPI, TS-FORM, TS-WEBAPI)
----
+﻿# run-cli
 
 # Run CLI Workflow
 
