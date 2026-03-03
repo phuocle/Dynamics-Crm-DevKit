@@ -2,4 +2,5 @@
   <Folder Name="/Solution Items/">
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
+  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="111fcf03-72e9-4a06-8997-4588919002b9" />
 </Solution>

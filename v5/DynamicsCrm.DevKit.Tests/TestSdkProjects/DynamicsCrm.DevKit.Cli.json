@@ -1,0 +1,167 @@
+﻿{
+  "servers": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "folder": "bin\\Debug",
+      "includefiles": [
+        "???.Server*.dll",
+        "???.Package*.nupkg",
+        "???.Plugin*.dll",
+        "???.Plugin*.nupkg",
+        "???.CustomAction*.dll",
+        "???.Workflow*.dll",
+        "???.CustomApi*.dll",
+        "???.DataProvider*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "???_/lib/devkit.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "DEBUGTS",
+      "solution": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "html\\**.html",
+        "images\\**.png",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [],
+      "dependencies": []
+    }
+  ],
+  "datasources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "displayname": "???",
+      "pluralname": "???",
+      "name": "???"
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "type": "CSharp",
+      "rootnamespace": "???",
+      "namespace": "",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "JS-FORM",
+      "type": "JsForm",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "type": "JsWebApi",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-FORM",
+      "type": "TsForm",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-WEBAPI",
+      "type": "TsWebApi",
+      "rootfolder": "???",
+      "entities": "folder"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "solution": "???",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "modelbuilders": [
+    {
+      "profile": "ALL",
+      "namespace": "???.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "*"
+    }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "languages": [
+        "???"
+      ]
+    }
+  ]
+}
