@@ -85,6 +85,23 @@
 | `/unit-test` | Run all unit tests + code coverage report |
 | `/clean-all` | Clean all build artifacts |
 | `/create-new-analyzer` | Create a new Roslyn analyzer |
+| `/client-code-clean` | Clean all 6 TestClientCode folders |
+| `/client-code-install` | Install NPM packages for all TestClientCode folders |
+| `/client-code-generate` | Generate entity files via CLI |
+| `/client-code-sync` | Sync source-of-truth files to TestClientCode folders |
+| `/client-code-test` | Run checks, builds, and tests for TestClientCode |
+| `/run-cli` | Run a specific CLI profile (JS-FORM, JS-WEBAPI, TS-FORM, TS-WEBAPI) |
+
+---
+
+## CLI Run Profile
+
+When running a CLI profile:
+
+1. Read profile from `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json`
+2. Extract `workingDirectory` and `commandLineArgs`
+3. `cd` to `workingDirectory`
+4. Run CLI exe with `commandLineArgs`
 
 ---
 
@@ -375,6 +392,28 @@ Test files are in `DynamicsCrm.DevKit.Tests/` with 15+ test scenarios:
 
 ---
 
+## File Patterns
+
+| Search Term | Look For |
+|-------------|----------|
+| `helper` | `*Helper.cs` (XrmHelper, FileHelper, JsonHelper) |
+| `config` | `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json` |
+| `task` | `Tasks/*.cs` in CLI project |
+| `wizard` | `Wizard/*.cs` in VSIX project |
+| `analyzer` | `CrmAnalyzers/*.cs` in Analyzers project |
+
+---
+
+## Release Scripts
+
+| Script | Mode | PFX Required | Use Case |
+|--------|------|--------------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official release |
+
+---
+
 ## Key Files Quick Reference
 
 | What You Need | Where To Find It |
@@ -415,6 +454,8 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 |---|---|
 | `.agent/rules/core-rule.md` | Core rules for AI agents |
 | `.agent/rules/devkit-analyzer.md` | Analyzer development rules |
+| `.agent/rules/client-code.md` | TestClientCode source-of-truth, sync rules, CLI profiles |
+| `.agent/rules/test-cli-profiles.md` | CLI profiles for integration test scenarios (server, webresource, proxy types, solution packager, reports) |
 
 ### Workflows
 
@@ -429,6 +470,12 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 | `.agent/workflows/unit-test.md` | `/unit-test` |
 | `.agent/workflows/clean-all.md` | `/clean-all` |
 | `.agent/workflows/create-new-analyzer.md` | `/create-new-analyzer` |
+| `.agent/workflows/client-code-clean.md` | `/client-code-clean` |
+| `.agent/workflows/client-code-install.md` | `/client-code-install` |
+| `.agent/workflows/client-code-generate.md` | `/client-code-generate` |
+| `.agent/workflows/client-code-sync.md` | `/client-code-sync` |
+| `.agent/workflows/client-code-test.md` | `/client-code-test` |
+| `.agent/workflows/run-cli.md` | `/run-cli` |
 
 ### Skills
 
@@ -441,8 +488,8 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 
 | IDE | Rules | Workflows/Commands | Entry File |
 |---|---|---|---|
-| **Antigravity** | `.agent/rules/*.md` | `.agent/workflows/*.md` | `GEMINI.md` |
-| **Cursor** | `.cursor/rules/*.mdc` | `.cursor/commands/*.md` | `AGENTS.md` |
+| **Antigravity** | `.agent/rules/*.md` (4 files) | `.agent/workflows/*.md` (15 files) | `GEMINI.md` |
+| **Cursor** | `.cursor/rules/*.mdc` (4 files) | `.cursor/commands/*.md` (15 files) | `AGENTS.md` |
 | **VS Code (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `AGENTS.md` |
 | **VS 2026 (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `AGENTS.md` |
 

@@ -40,8 +40,24 @@ Build workflows are defined in `.agent/workflows/*.md`. Read and follow the step
 | `.agent/workflows/build-analyzer.md` | Analyzers - Build + run analyzer unit tests |
 | `.agent/workflows/build-tool.md` | Tool only - Build Tool package |
 | `.agent/workflows/build-release.md` | Release - **Human only** |
+| `.agent/workflows/unit-test.md` | Run all unit tests + code coverage report |
 | `.agent/workflows/clean-all.md` | Clean all build artifacts |
 | `.agent/workflows/create-new-analyzer.md` | Create a new Roslyn analyzer |
+| `.agent/workflows/client-code-clean.md` | Clean all 6 TestClientCode folders |
+| `.agent/workflows/client-code-install.md` | Install NPM packages for TestClientCode |
+| `.agent/workflows/client-code-generate.md` | Generate entity files via CLI |
+| `.agent/workflows/client-code-sync.md` | Sync source-of-truth files to TestClientCode |
+| `.agent/workflows/client-code-test.md` | Run checks, builds, tests for TestClientCode |
+| `.agent/workflows/run-cli.md` | Run a specific CLI profile |
+
+## CLI Run Profile
+
+When running a CLI profile:
+
+1. Read profile from `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json`
+2. Extract `workingDirectory` and `commandLineArgs`
+3. `cd` to `workingDirectory`
+4. Run CLI exe with `commandLineArgs`
 
 ## Naming Conventions
 
@@ -74,6 +90,24 @@ Build workflows are defined in `.agent/workflows/*.md`. Read and follow the step
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+
+## File Patterns
+
+| Search Term | Look For |
+|-------------|----------|
+| `helper` | `*Helper.cs` (XrmHelper, FileHelper, JsonHelper) |
+| `config` | `DynamicsCrm.DevKit.json`, `DynamicsCrm.DevKit.Cli.json` |
+| `task` | `Tasks/*.cs` in CLI project |
+| `wizard` | `Wizard/*.cs` in VSIX project |
+| `analyzer` | `CrmAnalyzers/*.cs` in Analyzers project |
+
+## Release Scripts
+
+| Script | Mode | PFX Required | Use Case |
+|--------|------|--------------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official release |
 
 ## Security
 

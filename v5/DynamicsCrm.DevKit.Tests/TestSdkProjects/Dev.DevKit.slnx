@@ -1,1 +1,5 @@
-<Solution />
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="DynamicsCrm.DevKit.json" />
+  </Folder>
+</Solution>

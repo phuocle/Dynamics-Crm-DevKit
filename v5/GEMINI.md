@@ -24,6 +24,12 @@ Antigravity supports **slash commands** via `.agent/workflows/*.md`:
 | `/build-release` | Release build (human only) | no |
 | `/clean-all` | Clean all artifacts | turbo-all |
 | `/create-new-analyzer` | Create new analyzer | no |
+| `/client-code-clean` | Clean all 6 TestClientCode folders | turbo |
+| `/client-code-install` | Install NPM packages for TestClientCode | turbo |
+| `/client-code-generate` | Generate entity files via CLI | turbo |
+| `/client-code-sync` | Sync source-of-truth files to TestClientCode | turbo |
+| `/client-code-test` | Run checks, builds, tests for TestClientCode | turbo |
+| `/run-cli` | Run a specific CLI profile | no |
 
 ### How to Create New Workflows
 
@@ -54,6 +60,8 @@ Rules in `.agent/rules/` are loaded automatically:
 |------|---------|
 | `core-rule.md` | Primary rules (always loaded) |
 | `devkit-analyzer.md` | Loaded when working on analyzers |
+| `client-code.md` | TestClientCode source-of-truth and sync rules |
+| `test-cli-profiles.md` | CLI profiles for integration tests |
 
 ### Rule File Format
 
