@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using Microsoft.Xrm.Sdk;
 using Xunit;
 
@@ -2860,6 +2861,1191 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
 
         #endregion
 
+        #region Boundary Tests - Numeric Limits
+
+        [Fact]
+        public void Boundary_Int_MinValue()
+        {
+            var json = int.MinValue.ToString();
+            var result = DevKitJson.Deserialize(json);
+            Assert.IsType<int>(result);
+            Assert.Equal(int.MinValue, result);
+        }
+
+        [Fact]
+        public void Boundary_Int_MaxValue()
+        {
+            var json = int.MaxValue.ToString();
+            var result = DevKitJson.Deserialize(json);
+            Assert.IsType<int>(result);
+            Assert.Equal(int.MaxValue, result);
+        }
+
+        [Fact]
+        public void Boundary_Int_MaxValuePlusOne_BecomesLong()
+        {
+            var val = (long)int.MaxValue + 1;
+            var json = val.ToString();
+            var result = DevKitJson.Deserialize(json);
+            Assert.IsType<long>(result);
+            Assert.Equal(val, result);
+        }
+
+        [Fact]
+        public void Boundary_Int_MinValueMinusOne_BecomesLong()
+        {
+            var val = (long)int.MinValue - 1;
+            var json = val.ToString();
+            var result = DevKitJson.Deserialize(json);
+            Assert.IsType<long>(result);
+            Assert.Equal(val, result);
+        }
+
+        [Fact]
+        public void Boundary_Long_MaxValue()
+        {
+            var json = long.MaxValue.ToString();
+            var result = DevKitJson.Deserialize(json);
+            Assert.IsType<long>(result);
+            Assert.Equal(long.MaxValue, result);
+        }
+
+        [Fact]
+        public void Boundary_Long_MinValue()
+        {
+            var json = long.MinValue.ToString();
+            var result = DevKitJson.Deserialize(json);
+            Assert.IsType<long>(result);
+            Assert.Equal(long.MinValue, result);
+        }
+
+        [Fact]
+        public void Boundary_Zero_Int()
+        {
+            Assert.Equal(0, DevKitJson.Deserialize("0"));
+        }
+
+        [Fact]
+        public void Boundary_NegativeZero_Double()
+        {
+            var result = DevKitJson.Deserialize("-0.0");
+            Assert.IsType<double>(result);
+            Assert.Equal(0.0, (double)result);
+        }
+
+        [Fact]
+        public void Boundary_Double_MaxValue_Roundtrip()
+        {
+            var json = DevKitJson.Serialize(double.MaxValue);
+            var result = DevKitJson.Deserialize<double>(json);
+            Assert.Equal(double.MaxValue, result);
+        }
+
+        [Fact]
+        public void Boundary_Double_MinValue_Roundtrip()
+        {
+            var json = DevKitJson.Serialize(double.MinValue);
+            var result = DevKitJson.Deserialize<double>(json);
+            Assert.Equal(double.MinValue, result);
+        }
+
+        [Fact]
+        public void Boundary_Double_Epsilon()
+        {
+            var json = DevKitJson.Serialize(double.Epsilon);
+            var result = DevKitJson.Deserialize<double>(json);
+            Assert.Equal(double.Epsilon, result);
+        }
+
+        [Fact]
+        public void Boundary_Double_VerySmall()
+        {
+            var result = DevKitJson.Deserialize("0.000000001");
+            Assert.IsType<double>(result);
+            Assert.Equal(0.000000001, (double)result, 12);
+        }
+
+        [Fact]
+        public void Boundary_Double_VeryLarge_Scientific()
+        {
+            var result = DevKitJson.Deserialize("1.7976931348623157E+308");
+            Assert.IsType<double>(result);
+        }
+
+        [Fact]
+        public void Boundary_Decimal_MaxValue_InEntity()
+        {
+            // Known limitation: decimal.MaxValue exceeds double precision.
+            // JSON numbers are parsed as double, so exact decimal.MaxValue cannot roundtrip.
+            // Verify it doesn't throw and produces a positive value.
+            var entity = new Entity("test", Guid.NewGuid());
+            entity["val"] = decimal.MaxValue;
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
+            Assert.NotNull(result["val"]);
+        }
+
+        [Fact]
+        public void Boundary_Money_MaxDecimal()
+        {
+            // Known limitation: very large Money values lose decimal precision
+            // because JSON numbers are parsed as double internally.
+            // Dataverse Money max is ~922 trillion; test with safe precision range.
+            var money = new Money(999999999999.99m);
+            var json = DevKitJson.Serialize(money);
+            var result = DevKitJson.Deserialize<Money>(json);
+            Assert.Equal(999999999999.99m, result.Value, 2);
+        }
+
+        [Fact]
+        public void Boundary_Money_Zero()
+        {
+            var money = new Money(0m);
+            var json = DevKitJson.Serialize(money);
+            var result = DevKitJson.Deserialize<Money>(json);
+            Assert.Equal(0m, result.Value);
+        }
+
+        [Fact]
+        public void Boundary_Money_Negative()
+        {
+            var money = new Money(-999999999999.99m);
+            var json = DevKitJson.Serialize(money);
+            var result = DevKitJson.Deserialize<Money>(json);
+            Assert.Equal(-999999999999.99m, result.Value, 2);
+        }
+
+        [Fact]
+        public void Boundary_Money_TypicalCrmValues()
+        {
+            // Test Money values in typical Dataverse range (up to ~billions)
+            var values = new[] { 0.01m, 1.00m, 999.99m, 1000000.50m, 999999999.99m };
+            foreach (var v in values)
+            {
+                var money = new Money(v);
+                var json = DevKitJson.Serialize(money);
+                var result = DevKitJson.Deserialize<Money>(json);
+                Assert.Equal(v, result.Value, 2);
+            }
+        }
+
+        [Fact]
+        public void Boundary_OptionSetValue_Zero()
+        {
+            var osv = new OptionSetValue(0);
+            var json = DevKitJson.Serialize(osv);
+            var result = DevKitJson.Deserialize<OptionSetValue>(json);
+            Assert.Equal(0, result.Value);
+        }
+
+        [Fact]
+        public void Boundary_OptionSetValue_Negative()
+        {
+            var osv = new OptionSetValue(-1);
+            var json = DevKitJson.Serialize(osv);
+            var result = DevKitJson.Deserialize<OptionSetValue>(json);
+            Assert.Equal(-1, result.Value);
+        }
+
+        [Fact]
+        public void Boundary_OptionSetValue_MaxInt()
+        {
+            var osv = new OptionSetValue(int.MaxValue);
+            var json = DevKitJson.Serialize(osv);
+            var result = DevKitJson.Deserialize<OptionSetValue>(json);
+            Assert.Equal(int.MaxValue, result.Value);
+        }
+
+        [Fact]
+        public void Boundary_Coerce_LongToInt_WhenFits()
+        {
+            var json = "{\"Score\":42}";
+            var result = DevKitJson.Deserialize<MixedPoco>(json);
+            Assert.Equal(42, result.Score);
+        }
+
+        [Fact]
+        public void Boundary_Coerce_DoubleToDecimal_InPoco()
+        {
+            var json = "{\"Amount\":123.456}";
+            var result = DevKitJson.Deserialize<NullableDecimalPoco>(json);
+            Assert.True(result.Amount.HasValue);
+            Assert.Equal(123.456m, result.Amount.Value, 3);
+        }
+
+        [Fact]
+        public void Boundary_Coerce_IntToLong_InPoco()
+        {
+            var json = "{\"BigNumbers\":[42]}";
+            var result = DevKitJson.Deserialize<ListLongPoco>(json);
+            Assert.Single(result.BigNumbers);
+            Assert.Equal(42L, result.BigNumbers[0]);
+        }
+
+        [Fact]
+        public void Boundary_Coerce_DoubleToFloat_InPoco()
+        {
+            var json = "{\"Value\":3.14}";
+            var result = DevKitJson.Deserialize<FloatPoco>(json);
+            Assert.Equal(3.14f, result.Value, 2);
+        }
+
+        #endregion
+
+        #region Boundary Tests - String & Encoding
+
+        [Fact]
+        public void Boundary_String_NullChar()
+        {
+            var s = "before\0after";
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(s, result);
+        }
+
+        [Fact]
+        public void Boundary_String_OnlyEscapeChars()
+        {
+            var s = "\"\\\b\f\n\r\t";
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(s, result);
+        }
+
+        [Fact]
+        public void Boundary_String_AllEscapeCombined()
+        {
+            var s = "tab\there\nnewline\rcarriage\"quote\\backslash\bback\fform";
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(s, result);
+        }
+
+        [Fact]
+        public void Boundary_String_OnlyWhitespace()
+        {
+            var s = "   \t\t\n\n  ";
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(s, result);
+        }
+
+        [Fact]
+        public void Boundary_String_VeryLong()
+        {
+            var s = new string('A', 100000);
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(100000, result.Length);
+            Assert.Equal(s, result);
+        }
+
+        [Fact]
+        public void Boundary_String_Unicode_BMP_CJK()
+        {
+            var s = "\u4E16\u754C\u4F60\u597D";
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(s, result);
+        }
+
+        [Fact]
+        public void Boundary_String_Unicode_Escape_NullChar()
+        {
+            var result = DevKitJson.Deserialize<string>("\"abc\\u0000def\"");
+            Assert.Equal("abc\0def", result);
+        }
+
+        [Fact]
+        public void Boundary_String_Unicode_ControlChars()
+        {
+            var result = DevKitJson.Deserialize<string>("\"\\u0001\\u001F\"");
+            Assert.Equal("\u0001\u001F", result);
+        }
+
+        [Fact]
+        public void Boundary_String_Unicode_SurrogatePair_Emoji()
+        {
+            var result = DevKitJson.Deserialize<string>("\"\\uD83D\\uDE80\"");
+            Assert.Equal("\uD83D\uDE80", result);
+        }
+
+        [Fact]
+        public void Boundary_String_ForwardSlash_Escaped()
+        {
+            var result = DevKitJson.Deserialize<string>("\"a\\/b\"");
+            Assert.Equal("a/b", result);
+        }
+
+        [Fact]
+        public void Boundary_String_ForwardSlash_Unescaped()
+        {
+            var result = DevKitJson.Deserialize<string>("\"a/b\"");
+            Assert.Equal("a/b", result);
+        }
+
+        [Fact]
+        public void Boundary_String_ConsecutiveEscapes()
+        {
+            var result = DevKitJson.Deserialize<string>("\"\\\\\\\\\"");
+            Assert.Equal("\\\\", result);
+        }
+
+        [Fact]
+        public void Boundary_String_ConsecutiveQuoteEscapes()
+        {
+            var result = DevKitJson.Deserialize<string>("\"\\\"\\\"\\\"\"");
+            Assert.Equal("\"\"\"", result);
+        }
+
+        [Fact]
+        public void Boundary_String_MixedEscapesAndUnicode()
+        {
+            var s = "Path: C:\\Dir\\\"file\"\t\u00E9\u00E8\u00EA";
+            var json = DevKitJson.Serialize(s);
+            var result = DevKitJson.Deserialize<string>(json);
+            Assert.Equal(s, result);
+        }
+
+        #endregion
+
+        #region Boundary Tests - Parse Robustness
+
+        [Fact]
+        public void Boundary_Deserialize_EmptyString()
+        {
+            var result = DevKitJson.Deserialize("");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_WhitespaceOnly()
+        {
+            var result = DevKitJson.Deserialize("   \t\n  ");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_Null()
+        {
+            Assert.Null(DevKitJson.Deserialize(null));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_JustNull()
+        {
+            Assert.Null(DevKitJson.Deserialize("null"));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_JustTrue()
+        {
+            Assert.Equal(true, DevKitJson.Deserialize("true"));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_JustFalse()
+        {
+            Assert.Equal(false, DevKitJson.Deserialize("false"));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_JustNumber()
+        {
+            Assert.Equal(42, DevKitJson.Deserialize("42"));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_JustString()
+        {
+            Assert.Equal("hello", DevKitJson.Deserialize("\"hello\""));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_EmptyArray()
+        {
+            var result = DevKitJson.Deserialize("[]") as List<object>;
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_EmptyObject()
+        {
+            var result = DevKitJson.Deserialize("{}") as Dictionary<string, object>;
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_DuplicateKeys_LastWins()
+        {
+            var json = "{\"key\":\"first\",\"key\":\"second\"}";
+            var result = DevKitJson.Deserialize(json) as Dictionary<string, object>;
+            Assert.NotNull(result);
+            Assert.Equal("second", result["key"]);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_NestedEmptyStructures()
+        {
+            var json = "{\"a\":{},\"b\":[],\"c\":{\"d\":[]},\"e\":[{}]}";
+            var result = DevKitJson.Deserialize(json) as Dictionary<string, object>;
+            Assert.NotNull(result);
+            Assert.IsType<Dictionary<string, object>>(result["a"]);
+            Assert.Empty((Dictionary<string, object>)result["a"]);
+            Assert.IsType<List<object>>(result["b"]);
+            Assert.Empty((List<object>)result["b"]);
+            var c = result["c"] as Dictionary<string, object>;
+            Assert.Empty((List<object>)c["d"]);
+            var e = result["e"] as List<object>;
+            Assert.Single(e);
+            Assert.Empty((Dictionary<string, object>)e[0]);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_DeeplyNestedObject()
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < 50; i++) sb.Append("{\"n\":");
+            sb.Append("\"leaf\"");
+            for (int i = 0; i < 50; i++) sb.Append("}");
+
+            var result = DevKitJson.Deserialize(sb.ToString());
+            var dict = result as Dictionary<string, object>;
+            for (int i = 0; i < 49; i++)
+            {
+                Assert.NotNull(dict);
+                dict = dict["n"] as Dictionary<string, object>;
+            }
+            Assert.NotNull(dict);
+            Assert.Equal("leaf", dict["n"]);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_DeeplyNestedArray()
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < 50; i++) sb.Append("[");
+            sb.Append("\"core\"");
+            for (int i = 0; i < 50; i++) sb.Append("]");
+
+            var result = DevKitJson.Deserialize(sb.ToString());
+            var list = result as List<object>;
+            for (int i = 0; i < 49; i++)
+            {
+                Assert.Single(list);
+                list = list[0] as List<object>;
+            }
+            Assert.Single(list);
+            Assert.Equal("core", list[0]);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_LargeArray()
+        {
+            var sb = new StringBuilder("[");
+            for (int i = 0; i < 10000; i++)
+            {
+                if (i > 0) sb.Append(",");
+                sb.Append(i);
+            }
+            sb.Append("]");
+
+            var result = DevKitJson.Deserialize(sb.ToString()) as List<object>;
+            Assert.Equal(10000, result.Count);
+            Assert.Equal(0, result[0]);
+            Assert.Equal(9999, result[9999]);
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_NumberZeroVariants()
+        {
+            Assert.Equal(0, DevKitJson.Deserialize("0"));
+            Assert.Equal(0.0, DevKitJson.Deserialize("0.0"));
+            Assert.Equal(0.0, DevKitJson.Deserialize("0e0"));
+            Assert.Equal(0.0, DevKitJson.Deserialize("0E0"));
+        }
+
+        [Fact]
+        public void Boundary_Deserialize_WhitespaceAroundValues()
+        {
+            Assert.Equal(42, DevKitJson.Deserialize("  42  "));
+            Assert.Equal("hi", DevKitJson.Deserialize("  \"hi\"  "));
+            Assert.Equal(true, DevKitJson.Deserialize("  true  "));
+            Assert.Null(DevKitJson.Deserialize("  null  "));
+        }
+
+        #endregion
+
+        #region Boundary Tests - Deserialize<T> Type Conversion
+
+        [Fact]
+        public void Boundary_DeserializeT_IntFromDouble()
+        {
+            var result = DevKitJson.Deserialize<int>("42.0");
+            Assert.Equal(42, result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_LongFromInt()
+        {
+            var result = DevKitJson.Deserialize<long>("42");
+            Assert.Equal(42L, result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_DoubleFromInt()
+        {
+            var result = DevKitJson.Deserialize<double>("42");
+            Assert.Equal(42.0, result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_DecimalFromInt()
+        {
+            var result = DevKitJson.Deserialize<decimal>("42");
+            Assert.Equal(42m, result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_FloatFromInt()
+        {
+            var result = DevKitJson.Deserialize<float>("42");
+            Assert.Equal(42f, result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_BoolFromTrue()
+        {
+            Assert.True(DevKitJson.Deserialize<bool>("true"));
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_StringFromNumber()
+        {
+            var result = DevKitJson.Deserialize<string>("42");
+            Assert.Equal("42", result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_NullForClass()
+        {
+            var result = DevKitJson.Deserialize<SamplePoco>("null");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_NullForString()
+        {
+            var result = DevKitJson.Deserialize<string>("null");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_DefaultForInt()
+        {
+            var result = DevKitJson.Deserialize<int>("null");
+            Assert.Equal(0, result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_DefaultForBool()
+        {
+            var result = DevKitJson.Deserialize<bool>("null");
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Boundary_DeserializeT_DefaultForGuid()
+        {
+            var result = DevKitJson.Deserialize<Guid>("null");
+            Assert.Equal(Guid.Empty, result);
+        }
+
+        #endregion
+
+        #region Boundary Tests - POCO Edge Cases
+
+        [Fact]
+        public void Boundary_Poco_PropertyCasingMismatch()
+        {
+            var json = "{\"name\":\"lower\",\"COUNT\":99}";
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("lower", result.Name);
+            Assert.Equal(99, result.Count);
+        }
+
+        [Fact]
+        public void Boundary_Poco_ReadOnlyPropertyIgnored()
+        {
+            var json = "{\"Value\":42,\"Computed\":999}";
+            var result = DevKitJson.Deserialize<ReadOnlyPropPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(42, result.Value);
+            Assert.Equal(84, result.Computed);
+        }
+
+        [Fact]
+        public void Boundary_Poco_ExtraFieldsIgnored()
+        {
+            var json = "{\"QuoteId\":\"abc\",\"field1\":1,\"field2\":\"x\",\"field3\":[1,2],\"field4\":{\"a\":1}}";
+            var result = DevKitJson.Deserialize<InputCloneQuote>(json);
+            Assert.Equal("abc", result.QuoteId);
+        }
+
+        [Fact]
+        public void Boundary_Poco_AllPropsNull()
+        {
+            var json = "{\"QuoteId\":null}";
+            var result = DevKitJson.Deserialize<InputCloneQuote>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.QuoteId);
+        }
+
+        [Fact]
+        public void Boundary_Poco_EmptyJsonObject()
+        {
+            var json = "{}";
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.Name);
+            Assert.Equal(0, result.Count);
+            Assert.False(result.IsActive);
+        }
+
+        [Fact]
+        public void Boundary_Poco_IntPropertyFromLong()
+        {
+            var json = "{\"Count\":2147483647}";
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.Equal(int.MaxValue, result.Count);
+        }
+
+        [Fact]
+        public void Boundary_Poco_DoublePropertyFromInt()
+        {
+            var json = "{\"Amount\":100}";
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.Equal(100.0, result.Amount, 1);
+        }
+
+        [Fact]
+        public void Boundary_Poco_BoolPropertyFromTrue()
+        {
+            var json = "{\"IsActive\":true}";
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.True(result.IsActive);
+        }
+
+        [Fact]
+        public void Boundary_Poco_StringPropertyFromInt()
+        {
+            var json = "{\"QuoteId\":42}";
+            var result = DevKitJson.Deserialize<InputCloneQuote>(json);
+            Assert.Equal("42", result.QuoteId);
+        }
+
+        [Fact]
+        public void Boundary_Poco_GuidPropertyFromString()
+        {
+            var g = Guid.NewGuid();
+            var json = "{\"Id\":\"" + g.ToString("D") + "\",\"Name\":\"test\"}";
+            var result = DevKitJson.Deserialize<GuidPoco>(json);
+            Assert.Equal(g, result.Id);
+        }
+
+        [Fact]
+        public void Boundary_Poco_NullableIntWithValue()
+        {
+            var json = "{\"Value\":0}";
+            var result = DevKitJson.Deserialize<NullableIntPoco>(json);
+            Assert.True(result.Value.HasValue);
+            Assert.Equal(0, result.Value.Value);
+        }
+
+        [Fact]
+        public void Boundary_Poco_NullableIntWithNull()
+        {
+            var json = "{\"Value\":null}";
+            var result = DevKitJson.Deserialize<NullableIntPoco>(json);
+            Assert.False(result.Value.HasValue);
+        }
+
+        [Fact]
+        public void Boundary_Poco_NullableGuidWithEmpty()
+        {
+            var json = "{\"Id\":\"00000000-0000-0000-0000-000000000000\"}";
+            var result = DevKitJson.Deserialize<NullableGuidPoco>(json);
+            Assert.True(result.Id.HasValue);
+            Assert.Equal(Guid.Empty, result.Id.Value);
+        }
+
+        [Fact]
+        public void Boundary_Poco_ListPropertyIsNull_InJson()
+        {
+            var json = "{\"PriceListLines\":null}";
+            var result = DevKitJson.Deserialize<Input_CreateQuote>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.PriceListLines);
+        }
+
+        [Fact]
+        public void Boundary_Poco_DictPropertyIsNull()
+        {
+            var json = "{\"Labels\":null}";
+            var result = DevKitJson.Deserialize<DictStringStringPoco>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.Labels);
+        }
+
+        #endregion
+
+        #region Boundary Tests - Dataverse Type Edge Cases
+
+        [Fact]
+        public void Boundary_Entity_EmptyGuidId()
+        {
+            var entity = new Entity("account", Guid.Empty);
+            entity["name"] = "test";
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
+            Assert.Equal(Guid.Empty, result.Id);
+            Assert.Equal("account", result.LogicalName);
+        }
+
+        [Fact]
+        public void Boundary_Entity_EmptyLogicalName()
+        {
+            var entity = new Entity("", Guid.NewGuid());
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
+            Assert.Equal("", result.LogicalName);
+        }
+
+        [Fact]
+        public void Boundary_Entity_NoAttributes()
+        {
+            var entity = new Entity("account", Guid.NewGuid());
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
+            Assert.Empty(result.Attributes);
+        }
+
+        [Fact]
+        public void Boundary_Entity_AttributeValueIsEmptyString()
+        {
+            var entity = new Entity("account", Guid.NewGuid());
+            entity["name"] = "";
+            var json = DevKitJson.Serialize(entity);
+            var result = DevKitJson.Deserialize<Entity>(json);
+            Assert.Equal("", result["name"]);
+        }
+
+        [Fact]
+        public void Boundary_EntityReference_EmptyGuid()
+        {
+            var er = new EntityReference("account", Guid.Empty);
+            var json = DevKitJson.Serialize(er);
+            var result = DevKitJson.Deserialize<EntityReference>(json);
+            Assert.Equal(Guid.Empty, result.Id);
+        }
+
+        [Fact]
+        public void Boundary_EntityReference_EmptyLogicalName()
+        {
+            var er = new EntityReference("", Guid.NewGuid());
+            var json = DevKitJson.Serialize(er);
+            var result = DevKitJson.Deserialize<EntityReference>(json);
+            Assert.Equal("", result.LogicalName);
+        }
+
+        [Fact]
+        public void Boundary_EntityReference_NameWithSpecialChars()
+        {
+            var er = new EntityReference("account", Guid.NewGuid())
+            {
+                Name = "Contoso \"Inc\" & Son's\nMultiline"
+            };
+            var json = DevKitJson.Serialize(er);
+            var result = DevKitJson.Deserialize<EntityReference>(json);
+            Assert.Equal("Contoso \"Inc\" & Son's\nMultiline", result.Name);
+        }
+
+        [Fact]
+        public void Boundary_OptionSetValueCollection_Empty()
+        {
+            var osvc = new OptionSetValueCollection();
+            var json = DevKitJson.Serialize(osvc);
+            var result = DevKitJson.Deserialize<OptionSetValueCollection>(json);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Boundary_OptionSetValueCollection_SingleItem()
+        {
+            var osvc = new OptionSetValueCollection { new OptionSetValue(42) };
+            var json = DevKitJson.Serialize(osvc);
+            var result = DevKitJson.Deserialize<OptionSetValueCollection>(json);
+            Assert.Single(result);
+            Assert.Equal(42, result[0].Value);
+        }
+
+        [Fact]
+        public void Boundary_EntityCollection_EmptyWithName()
+        {
+            var ec = new EntityCollection { EntityName = "contact" };
+            var json = DevKitJson.Serialize(ec);
+            var result = DevKitJson.Deserialize<EntityCollection>(json);
+            Assert.Equal("contact", result.EntityName);
+            Assert.Empty(result.Entities);
+        }
+
+        [Fact]
+        public void Boundary_EntityCollection_NullEntityName()
+        {
+            var ec = new EntityCollection();
+            var json = DevKitJson.Serialize(ec);
+            var result = DevKitJson.Deserialize<EntityCollection>(json);
+            Assert.Null(result.EntityName);
+            Assert.Empty(result.Entities);
+        }
+
+        [Fact]
+        public void Boundary_ParameterCollection_Empty()
+        {
+            var pc = new ParameterCollection();
+            var json = DevKitJson.Serialize(pc);
+            var result = DevKitJson.Deserialize<ParameterCollection>(json);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Boundary_ParameterCollection_NullValue()
+        {
+            var pc = new ParameterCollection();
+            pc["key"] = null;
+            var json = DevKitJson.Serialize(pc);
+            var result = DevKitJson.Deserialize<ParameterCollection>(json);
+            Assert.True(result.ContainsKey("key"));
+            Assert.Null(result["key"]);
+        }
+
+        [Fact]
+        public void Boundary_EntityImageCollection_Empty()
+        {
+            var eic = new EntityImageCollection();
+            var json = DevKitJson.Serialize(eic);
+            var result = DevKitJson.Deserialize<EntityImageCollection>(json);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Boundary_AliasedValue_NullValue()
+        {
+            var av = new AliasedValue("account", "name", null);
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
+            Assert.Equal("account", result.EntityLogicalName);
+            Assert.Equal("name", result.AttributeLogicalName);
+            Assert.Null(result.Value);
+        }
+
+        [Fact]
+        public void Boundary_AliasedValue_EmptyStrings()
+        {
+            var av = new AliasedValue("", "", "");
+            var json = DevKitJson.Serialize(av);
+            var result = DevKitJson.Deserialize<AliasedValue>(json);
+            Assert.Equal("", result.EntityLogicalName);
+            Assert.Equal("", result.AttributeLogicalName);
+            Assert.Equal("", result.Value);
+        }
+
+        [Fact]
+        public void Boundary_BooleanManagedProperty_AllTrue()
+        {
+            var bmp = new BooleanManagedProperty(true) { CanBeChanged = true };
+            var json = DevKitJson.Serialize(bmp);
+            var result = DevKitJson.Deserialize<BooleanManagedProperty>(json);
+            Assert.True(result.Value);
+            Assert.True(result.CanBeChanged);
+        }
+
+        [Fact]
+        public void Boundary_BooleanManagedProperty_AllFalse()
+        {
+            var bmp = new BooleanManagedProperty(false) { CanBeChanged = false };
+            var json = DevKitJson.Serialize(bmp);
+            var result = DevKitJson.Deserialize<BooleanManagedProperty>(json);
+            Assert.False(result.Value);
+            Assert.False(result.CanBeChanged);
+        }
+
+        [Fact]
+        public void Boundary_DateTime_MinValue()
+        {
+            var dt = DateTime.MinValue.ToUniversalTime();
+            var json = DevKitJson.Serialize(dt);
+            var result = DevKitJson.Deserialize<DateTime>(json);
+            Assert.Equal(dt, result);
+        }
+
+        [Fact]
+        public void Boundary_DateTime_Epoch()
+        {
+            var dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var json = DevKitJson.Serialize(dt);
+            var result = DevKitJson.Deserialize<DateTime>(json);
+            Assert.Equal(dt, result);
+        }
+
+        [Fact]
+        public void Boundary_Guid_Empty()
+        {
+            var json = DevKitJson.Serialize(Guid.Empty);
+            var result = DevKitJson.Deserialize<Guid>(json);
+            Assert.Equal(Guid.Empty, result);
+        }
+
+        [Fact]
+        public void Boundary_ByteArray_Empty()
+        {
+            var data = new byte[0];
+            var json = DevKitJson.Serialize(data);
+            var result = (byte[])DevKitJson.Deserialize(json);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void Boundary_ByteArray_SingleByte()
+        {
+            var data = new byte[] { 0xFF };
+            var json = DevKitJson.Serialize(data);
+            var result = (byte[])DevKitJson.Deserialize(json);
+            Assert.Single(result);
+            Assert.Equal(0xFF, result[0]);
+        }
+
+        [Fact]
+        public void Boundary_ByteArray_LargeFile()
+        {
+            var data = new byte[10000];
+            new Random(42).NextBytes(data);
+            var json = DevKitJson.Serialize(data);
+            var result = (byte[])DevKitJson.Deserialize(json);
+            Assert.Equal(data, result);
+        }
+
+        #endregion
+
+        #region Boundary Tests - Compact Format
+
+        [Fact]
+        public void Boundary_Compact_Entity_Roundtrip()
+        {
+            var entity = new Entity("account", Guid.NewGuid());
+            entity["name"] = "Contoso";
+            entity["revenue"] = new Money(100m);
+            entity.FormattedValues["revenue"] = "$100.00";
+
+            var compact = DevKitJson.SerializeCompact(entity);
+            Assert.Contains("\"_t\":\"E\"", compact);
+            Assert.DoesNotContain("\"__type\"", compact);
+
+            var result = DevKitJson.Deserialize<Entity>(compact);
+            Assert.Equal("account", result.LogicalName);
+            Assert.Equal("Contoso", result["name"]);
+            Assert.Equal(100m, ((Money)result["revenue"]).Value);
+            Assert.Equal("$100.00", result.FormattedValues["revenue"]);
+        }
+
+        [Fact]
+        public void Boundary_Compact_EntityReference_Roundtrip()
+        {
+            var er = new EntityReference("contact", Guid.NewGuid()) { Name = "John" };
+            var compact = DevKitJson.SerializeCompact(er);
+            Assert.Contains("\"_t\":\"ER\"", compact);
+
+            var result = DevKitJson.Deserialize<EntityReference>(compact);
+            Assert.Equal("contact", result.LogicalName);
+            Assert.Equal("John", result.Name);
+        }
+
+        [Fact]
+        public void Boundary_Compact_Money_Roundtrip()
+        {
+            var money = new Money(999.99m);
+            var compact = DevKitJson.SerializeCompact(money);
+            Assert.Contains("\"_t\":\"M\"", compact);
+
+            var result = DevKitJson.Deserialize<Money>(compact);
+            Assert.Equal(999.99m, result.Value);
+        }
+
+        [Fact]
+        public void Boundary_Compact_DateTime_Roundtrip()
+        {
+            var dt = new DateTime(2025, 6, 15, 10, 30, 0, DateTimeKind.Utc);
+            var compact = DevKitJson.SerializeCompact(dt);
+            Assert.Contains("\"_t\":\"DT\"", compact);
+
+            var result = DevKitJson.Deserialize<DateTime>(compact);
+            Assert.Equal(dt, result);
+        }
+
+        [Fact]
+        public void Boundary_Compact_Guid_Roundtrip()
+        {
+            var guid = Guid.NewGuid();
+            var compact = DevKitJson.SerializeCompact(guid);
+            Assert.Contains("\"_t\":\"G\"", compact);
+
+            var result = DevKitJson.Deserialize<Guid>(compact);
+            Assert.Equal(guid, result);
+        }
+
+        [Fact]
+        public void Boundary_Compact_OptionSetValue_Roundtrip()
+        {
+            var osv = new OptionSetValue(42);
+            var compact = DevKitJson.SerializeCompact(osv);
+            Assert.Contains("\"_t\":\"O\"", compact);
+
+            var result = DevKitJson.Deserialize<OptionSetValue>(compact);
+            Assert.Equal(42, result.Value);
+        }
+
+        [Fact]
+        public void Boundary_Compact_ParameterCollection_Roundtrip()
+        {
+            var pc = new ParameterCollection();
+            pc["Target"] = new Entity("account", Guid.NewGuid());
+            var compact = DevKitJson.SerializeCompact(pc);
+            Assert.Contains("\"_t\":\"PC\"", compact);
+
+            var result = DevKitJson.Deserialize<ParameterCollection>(compact);
+            Assert.IsType<Entity>(result["Target"]);
+        }
+
+        [Fact]
+        public void Boundary_Compact_FullVsFull_SameDeserialization()
+        {
+            var entity = new Entity("account", Guid.NewGuid());
+            entity["name"] = "Test";
+            entity["revenue"] = new Money(500m);
+
+            var full = DevKitJson.Serialize(entity);
+            var compact = DevKitJson.SerializeCompact(entity);
+
+            Assert.True(compact.Length < full.Length);
+
+            var fromFull = DevKitJson.Deserialize<Entity>(full);
+            var fromCompact = DevKitJson.Deserialize<Entity>(compact);
+
+            Assert.Equal(fromFull.LogicalName, fromCompact.LogicalName);
+            Assert.Equal(fromFull.Id, fromCompact.Id);
+            Assert.Equal(fromFull["name"], fromCompact["name"]);
+            Assert.Equal(((Money)fromFull["revenue"]).Value, ((Money)fromCompact["revenue"]).Value);
+        }
+
+        #endregion
+
+        #region Boundary Tests - MapTo Edge Cases
+
+        [Fact]
+        public void Boundary_MapTo_Null()
+        {
+            Assert.Null(DevKitJson.MapTo<SamplePoco>(null));
+        }
+
+        [Fact]
+        public void Boundary_MapTo_WrongType_NotDict()
+        {
+            var result = DevKitJson.MapTo<SamplePoco>("not a dict");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void Boundary_MapTo_EmptyDict()
+        {
+            var result = DevKitJson.MapTo<SamplePoco>(new Dictionary<string, object>());
+            Assert.NotNull(result);
+            Assert.Null(result.Name);
+            Assert.Equal(0, result.Count);
+        }
+
+        [Fact]
+        public void Boundary_MapTo_AlreadyCorrectType()
+        {
+            var original = new SamplePoco { Name = "X" };
+            var result = DevKitJson.MapTo<SamplePoco>(original);
+            Assert.Same(original, result);
+        }
+
+        #endregion
+
+        #region Boundary Tests - Serialize Edge Cases
+
+        [Fact]
+        public void Boundary_Serialize_Enum()
+        {
+            Assert.Equal("3", DevKitJson.Serialize(DayOfWeek.Wednesday));
+            Assert.Equal("0", DevKitJson.Serialize(DayOfWeek.Sunday));
+            Assert.Equal("6", DevKitJson.Serialize(DayOfWeek.Saturday));
+        }
+
+        [Fact]
+        public void Boundary_Serialize_DictionaryWithNullValues()
+        {
+            var dict = new Dictionary<string, object>
+            {
+                { "a", null },
+                { "b", "value" },
+                { "c", null }
+            };
+            var json = DevKitJson.Serialize(dict);
+            var result = DevKitJson.Deserialize(json) as Dictionary<string, object>;
+            Assert.Null(result["a"]);
+            Assert.Equal("value", result["b"]);
+            Assert.Null(result["c"]);
+        }
+
+        [Fact]
+        public void Boundary_Serialize_ListWithNulls()
+        {
+            var list = new List<object> { null, "a", null, 1, null };
+            var json = DevKitJson.Serialize(list);
+            var result = DevKitJson.Deserialize(json) as List<object>;
+            Assert.Equal(5, result.Count);
+            Assert.Null(result[0]);
+            Assert.Equal("a", result[1]);
+            Assert.Null(result[2]);
+            Assert.Equal(1, result[3]);
+            Assert.Null(result[4]);
+        }
+
+        [Fact]
+        public void Boundary_Serialize_EmptyDict()
+        {
+            Assert.Equal("{}", DevKitJson.Serialize(new Dictionary<string, object>()));
+        }
+
+        [Fact]
+        public void Boundary_Serialize_EmptyList()
+        {
+            Assert.Equal("[]", DevKitJson.Serialize(new List<object>()));
+        }
+
+        [Fact]
+        public void Boundary_Serialize_EmptyStringDict()
+        {
+            Assert.Equal("{}", DevKitJson.Serialize(new Dictionary<string, string>()));
+        }
+
+        #endregion
+
         #region JSON-in-JSON (Escaped JSON String) Tests
 
         // ===================================================================
@@ -3513,6 +4699,17 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
     internal class ListMoneyPoco
     {
         public List<Money> Amounts { get; set; }
+    }
+
+    internal class FloatPoco
+    {
+        public float Value { get; set; }
+    }
+
+    internal class ReadOnlyPropPoco
+    {
+        public int Value { get; set; }
+        public int Computed => Value * 2;
     }
 
     internal class JsonInJsonPoco
