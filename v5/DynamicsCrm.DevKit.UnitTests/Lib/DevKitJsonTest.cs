@@ -1991,6 +1991,298 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         }
 
         #endregion
+
+        #region POCO Serialization/Deserialization
+
+        [Fact]
+        public void Deserialize_SimplePoco_MapsFromDictionary()
+        {
+            var json = "{\"QuoteId\":\"abc-123\"}";
+            var result = DevKitJson.Deserialize<InputCloneQuote>(json);
+            Assert.NotNull(result);
+            Assert.Equal("abc-123", result.QuoteId);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithMultipleTypes()
+        {
+            var json = "{\"Name\":\"Test\",\"Count\":42,\"IsActive\":true,\"Amount\":99.5}";
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("Test", result.Name);
+            Assert.Equal(42, result.Count);
+            Assert.True(result.IsActive);
+            Assert.Equal(99.5, result.Amount, 1);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullProperty()
+        {
+            var json = "{\"QuoteId\":null}";
+            var result = DevKitJson.Deserialize<InputCloneQuote>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.QuoteId);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNestedObject()
+        {
+            var json = "{\"OrderId\":\"order-1\",\"Customer\":{\"Name\":\"John\",\"Count\":5,\"IsActive\":true,\"Amount\":100.0}}";
+            var result = DevKitJson.Deserialize<OrderPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("order-1", result.OrderId);
+            Assert.NotNull(result.Customer);
+            Assert.Equal("John", result.Customer.Name);
+            Assert.Equal(5, result.Customer.Count);
+        }
+
+        [Fact]
+        public void Serialize_SimplePoco_WritesProperties()
+        {
+            var input = new InputCloneQuote { QuoteId = "abc-123" };
+            var json = DevKitJson.Serialize(input);
+            Assert.Contains("\"QuoteId\":\"abc-123\"", json);
+        }
+
+        [Fact]
+        public void Serialize_Poco_Roundtrip()
+        {
+            var original = new SamplePoco { Name = "Test", Count = 42, IsActive = true, Amount = 99.5 };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<SamplePoco>(json);
+            Assert.Equal(original.Name, result.Name);
+            Assert.Equal(original.Count, result.Count);
+            Assert.Equal(original.IsActive, result.IsActive);
+            Assert.Equal(original.Amount, result.Amount, 1);
+        }
+
+        [Fact]
+        public void Serialize_NestedPoco_Roundtrip()
+        {
+            var original = new OrderPoco
+            {
+                OrderId = "order-1",
+                Customer = new SamplePoco { Name = "John", Count = 5, IsActive = true, Amount = 100.0 }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<OrderPoco>(json);
+            Assert.Equal("order-1", result.OrderId);
+            Assert.NotNull(result.Customer);
+            Assert.Equal("John", result.Customer.Name);
+            Assert.Equal(5, result.Customer.Count);
+        }
+
+        [Fact]
+        public void MapTo_FromDictionary_MapsCorrectly()
+        {
+            var dict = new Dictionary<string, object>
+            {
+                { "QuoteId", "abc-123" }
+            };
+            var result = DevKitJson.MapTo<InputCloneQuote>(dict);
+            Assert.NotNull(result);
+            Assert.Equal("abc-123", result.QuoteId);
+        }
+
+        [Fact]
+        public void MapTo_CaseInsensitive()
+        {
+            var dict = new Dictionary<string, object>
+            {
+                { "quoteid", "abc-123" }
+            };
+            var result = DevKitJson.MapTo<InputCloneQuote>(dict);
+            Assert.Equal("abc-123", result.QuoteId);
+        }
+
+        [Fact]
+        public void MapTo_Null_ReturnsDefault()
+        {
+            var result = DevKitJson.MapTo<InputCloneQuote>(null);
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void MapTo_AlreadyCorrectType_ReturnsSame()
+        {
+            var original = new InputCloneQuote { QuoteId = "abc" };
+            var result = DevKitJson.MapTo<InputCloneQuote>(original);
+            Assert.Same(original, result);
+        }
+
+        [Fact]
+        public void Poco_InParameterCollection_Roundtrip()
+        {
+            var pc = new ParameterCollection();
+            pc["Input"] = new InputCloneQuote { QuoteId = "quote-guid-123" };
+
+            var json = DevKitJson.Serialize(pc);
+            var restored = DevKitJson.Deserialize<ParameterCollection>(json);
+
+            var input = DevKitJson.MapTo<InputCloneQuote>(restored["Input"]);
+            Assert.Equal("quote-guid-123", input.QuoteId);
+        }
+
+        [Fact]
+        public void Poco_WithGuidProperty_Roundtrip()
+        {
+            var id = Guid.NewGuid();
+            var json = "{\"Id\":\"" + id.ToString("D") + "\",\"Name\":\"Test\"}";
+            var result = DevKitJson.Deserialize<GuidPoco>(json);
+            Assert.Equal(id, result.Id);
+            Assert.Equal("Test", result.Name);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListString()
+        {
+            var json = "{\"PriceListLines\":[\"f3905a0e-5e18-f111-8342-70a8a502738b\",\"f8905a0e-5e18-f111-8342-70a8a502738b\"]}";
+            var result = DevKitJson.Deserialize<Input_CreateQuote>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.PriceListLines);
+            Assert.Equal(2, result.PriceListLines.Count);
+            Assert.Equal("f3905a0e-5e18-f111-8342-70a8a502738b", result.PriceListLines[0]);
+            Assert.Equal("f8905a0e-5e18-f111-8342-70a8a502738b", result.PriceListLines[1]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListInt()
+        {
+            var json = "{\"Values\":[1,2,3,4,5]}";
+            var result = DevKitJson.Deserialize<ListIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(5, result.Values.Count);
+            Assert.Equal(1, result.Values[0]);
+            Assert.Equal(5, result.Values[4]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListGuid()
+        {
+            var g1 = Guid.NewGuid();
+            var g2 = Guid.NewGuid();
+            var json = "{\"Ids\":[\"" + g1.ToString("D") + "\",\"" + g2.ToString("D") + "\"]}";
+            var result = DevKitJson.Deserialize<ListGuidPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Ids.Count);
+            Assert.Equal(g1, result.Ids[0]);
+            Assert.Equal(g2, result.Ids[1]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithArrayString()
+        {
+            var json = "{\"Tags\":[\"tag1\",\"tag2\",\"tag3\"]}";
+            var result = DevKitJson.Deserialize<ArrayStringPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Tags.Length);
+            Assert.Equal("tag1", result.Tags[0]);
+            Assert.Equal("tag3", result.Tags[2]);
+        }
+
+        [Fact]
+        public void Serialize_PocoWithListString_Roundtrip()
+        {
+            var original = new Input_CreateQuote
+            {
+                PriceListLines = new List<string> { "aaa-bbb", "ccc-ddd" }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<Input_CreateQuote>(json);
+            Assert.NotNull(result.PriceListLines);
+            Assert.Equal(2, result.PriceListLines.Count);
+            Assert.Equal("aaa-bbb", result.PriceListLines[0]);
+            Assert.Equal("ccc-ddd", result.PriceListLines[1]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithEmptyList()
+        {
+            var json = "{\"PriceListLines\":[]}";
+            var result = DevKitJson.Deserialize<Input_CreateQuote>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.PriceListLines);
+            Assert.Empty(result.PriceListLines);
+        }
+
+        [Fact]
+        public void MapTo_PocoWithListString()
+        {
+            var dict = new Dictionary<string, object>
+            {
+                { "PriceListLines", new List<object> { "guid-1", "guid-2" } }
+            };
+            var result = DevKitJson.MapTo<Input_CreateQuote>(dict);
+            Assert.NotNull(result);
+            Assert.NotNull(result.PriceListLines);
+            Assert.Equal(2, result.PriceListLines.Count);
+            Assert.Equal("guid-1", result.PriceListLines[0]);
+        }
+
+        [Fact]
+        public void Poco_WithListString_InParameterCollection_Roundtrip()
+        {
+            var pc = new ParameterCollection();
+            pc["Input"] = new Input_CreateQuote
+            {
+                PriceListLines = new List<string> { "f3905a0e-5e18-f111-8342-70a8a502738b", "f8905a0e-5e18-f111-8342-70a8a502738b" }
+            };
+
+            var json = DevKitJson.Serialize(pc);
+            var restored = DevKitJson.Deserialize<ParameterCollection>(json);
+
+            var input = DevKitJson.MapTo<Input_CreateQuote>(restored["Input"]);
+            Assert.NotNull(input.PriceListLines);
+            Assert.Equal(2, input.PriceListLines.Count);
+            Assert.Equal("f3905a0e-5e18-f111-8342-70a8a502738b", input.PriceListLines[0]);
+        }
+
+        #endregion
+    }
+
+    internal class InputCloneQuote
+    {
+        public string QuoteId { get; set; }
+    }
+
+    internal class SamplePoco
+    {
+        public string Name { get; set; }
+        public int Count { get; set; }
+        public bool IsActive { get; set; }
+        public double Amount { get; set; }
+    }
+
+    internal class OrderPoco
+    {
+        public string OrderId { get; set; }
+        public SamplePoco Customer { get; set; }
+    }
+
+    internal class GuidPoco
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    internal class Input_CreateQuote
+    {
+        public List<string> PriceListLines { get; set; }
+    }
+
+    internal class ListIntPoco
+    {
+        public List<int> Values { get; set; }
+    }
+
+    internal class ListGuidPoco
+    {
+        public List<Guid> Ids { get; set; }
+    }
+
+    internal class ArrayStringPoco
+    {
+        public string[] Tags { get; set; }
     }
 
     /// <summary>

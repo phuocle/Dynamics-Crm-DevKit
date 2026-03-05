@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli
         private const string TEXT5_COLOR = "white";
         private const string TEXT6_COLOR = "cyan";
         private static List<string> ACTIONS_NO_INDENT = new List<string> { CliAction.DEACTIVATED, CliAction.UNREGISTERED, CliAction.ACTIVATED };
-        private static List<string> ACTIONS_HIGHLIGHT = new List<string> { CliAction.CREATED, CliAction.UPDATED, CliAction.REGISTERED, CliAction.DELETED, CliAction.FLAG, CliAction.SIGNED };
+        private static List<string> ACTIONS_HIGHLIGHT = new List<string> { CliAction.CREATED, CliAction.UPDATED, CliAction.REGISTERED, CliAction.DELETED, CliAction.FLAG, CliAction.SIGNED, CliAction.ADDED };
 
         private static bool IsNoIndent(string action) => ACTIONS_NO_INDENT.Any(a => action.Equals(a, StringComparison.OrdinalIgnoreCase));
         private static bool IsHighlight(string action) => IsNoIndent(action) || ACTIONS_HIGHLIGHT.Any(a => action.Equals(a, StringComparison.OrdinalIgnoreCase));

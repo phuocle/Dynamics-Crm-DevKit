@@ -80,7 +80,25 @@ namespace Microsoft.Xrm.Sdk
             if (t == typeof(float)) return (T)(object)Convert.ToSingle(result, CultureInfo.InvariantCulture);
             if (t == typeof(bool)) return (T)(object)Convert.ToBoolean(result, CultureInfo.InvariantCulture);
             if (t == typeof(string)) return (T)(object)result.ToString();
+            if (result is Dictionary<string, object> dict && t.IsClass && !typeof(IEnumerable).IsAssignableFrom(t))
+            {
+                try { return (T)MapDictionaryToObject(dict, t); }
+                catch { }
+            }
             return (T)result;
+        }
+
+        /// <summary>
+        /// Map a deserialized object (typically Dictionary&lt;string, object&gt;) to a strongly-typed POCO.
+        /// Use this when retrieving custom types from InputParameters/OutputParameters after deserialization.
+        /// Example: var input = DevKitJson.MapTo&lt;Input_CloneQuote&gt;(context.InputParameters["Input"]);
+        /// </summary>
+        public static T MapTo<T>(object value) where T : new()
+        {
+            if (value == null) return default(T);
+            if (value is T typed) return typed;
+            if (value is Dictionary<string, object> dict) return (T)MapDictionaryToObject(dict, typeof(T));
+            return default(T);
         }
 
         /// <summary>
@@ -157,6 +175,12 @@ namespace Microsoft.Xrm.Sdk
             if (value is IDictionary<string, string> sdict) { WriteStringDictionary(sdict, sb); return; }
             if (value is IEnumerable enumerable) { WriteArray(enumerable, sb); return; }
 
+            var valueType = value.GetType();
+            if (valueType.IsClass && valueType.GetProperties(BindingFlags.Public | BindingFlags.Instance).Length > 0)
+            {
+                WriteReflectedObject(value, sb);
+                return;
+            }
             WriteString(value.ToString(), sb);
         }
 
@@ -251,6 +275,27 @@ namespace Microsoft.Xrm.Sdk
                 first = false;
             }
             sb.Append(']');
+        }
+
+        private static void WriteReflectedObject(object value, StringBuilder sb)
+        {
+            sb.Append('{');
+            var first = true;
+            foreach (var prop in value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (prop.GetIndexParameters().Length > 0) continue;
+                if (!prop.CanRead) continue;
+                try
+                {
+                    if (!first) sb.Append(',');
+                    WriteString(prop.Name, sb);
+                    sb.Append(':');
+                    WriteValue(prop.GetValue(value), sb);
+                    first = false;
+                }
+                catch { }
+            }
+            sb.Append('}');
         }
 
         #endregion
@@ -934,6 +979,86 @@ namespace Microsoft.Xrm.Sdk
                 catch { }
                 break;
             }
+        }
+
+        private static object MapDictionaryToObject(Dictionary<string, object> dict, Type targetType)
+        {
+            var instance = Activator.CreateInstance(targetType);
+            foreach (var prop in targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!prop.CanWrite) continue;
+                object value;
+                if (!TryGetDictValue(dict, prop.Name, out value)) continue;
+                if (value == null)
+                {
+                    if (!prop.PropertyType.IsValueType || Nullable.GetUnderlyingType(prop.PropertyType) != null)
+                        prop.SetValue(instance, null);
+                    continue;
+                }
+                try { prop.SetValue(instance, CoerceValue(value, prop.PropertyType)); }
+                catch { }
+            }
+            return instance;
+        }
+
+        private static bool TryGetDictValue(Dictionary<string, object> dict, string name, out object value)
+        {
+            if (dict.TryGetValue(name, out value)) return true;
+            foreach (var kvp in dict)
+            {
+                if (string.Equals(kvp.Key, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    value = kvp.Value;
+                    return true;
+                }
+            }
+            value = null;
+            return false;
+        }
+
+        private static object CoerceValue(object value, Type targetType)
+        {
+            if (value == null) return null;
+            var underlying = Nullable.GetUnderlyingType(targetType);
+            if (underlying != null) targetType = underlying;
+            if (targetType.IsAssignableFrom(value.GetType())) return value;
+            if (targetType == typeof(string)) return value.ToString();
+            if (targetType == typeof(Guid) && value is string gs) return Guid.Parse(gs);
+            if (targetType == typeof(int)) return Convert.ToInt32(value, CultureInfo.InvariantCulture);
+            if (targetType == typeof(long)) return Convert.ToInt64(value, CultureInfo.InvariantCulture);
+            if (targetType == typeof(double)) return Convert.ToDouble(value, CultureInfo.InvariantCulture);
+            if (targetType == typeof(decimal)) return Convert.ToDecimal(value, CultureInfo.InvariantCulture);
+            if (targetType == typeof(float)) return Convert.ToSingle(value, CultureInfo.InvariantCulture);
+            if (targetType == typeof(bool)) return Convert.ToBoolean(value, CultureInfo.InvariantCulture);
+            if (value is List<object> sourceList && targetType.IsGenericType)
+            {
+                var genDef = targetType.GetGenericTypeDefinition();
+                if (genDef == typeof(List<>) || genDef == typeof(IList<>) || genDef == typeof(IEnumerable<>) || genDef == typeof(ICollection<>) || genDef == typeof(IReadOnlyList<>) || genDef == typeof(IReadOnlyCollection<>))
+                {
+                    var elementType = targetType.GetGenericArguments()[0];
+                    var listType = typeof(List<>).MakeGenericType(elementType);
+                    var typedList = (IList)Activator.CreateInstance(listType);
+                    foreach (var item in sourceList)
+                        typedList.Add(CoerceValue(item, elementType));
+                    return typedList;
+                }
+            }
+            if (value is Dictionary<string, object> nestedDict)
+            {
+                if (nestedDict.TryGetValue("__type", out var typeObj) && typeObj is string typeName)
+                    return ReconstructTypedObject(typeName, nestedDict);
+                if (targetType.IsClass && targetType != typeof(string))
+                    return MapDictionaryToObject(nestedDict, targetType);
+            }
+            if (value is List<object> arrayForArray && targetType.IsArray)
+            {
+                var elementType = targetType.GetElementType();
+                var array = Array.CreateInstance(elementType, arrayForArray.Count);
+                for (var i = 0; i < arrayForArray.Count; i++)
+                    array.SetValue(CoerceValue(arrayForArray[i], elementType), i);
+                return array;
+            }
+            return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
         }
 
         #endregion
