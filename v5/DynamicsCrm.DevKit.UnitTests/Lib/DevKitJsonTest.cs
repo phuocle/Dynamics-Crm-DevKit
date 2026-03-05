@@ -2238,6 +2238,1101 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
         }
 
         #endregion
+
+        #region Advanced Collection & POCO Stress Tests
+
+        [Fact]
+        public void Deserialize_PocoWithListListString()
+        {
+            var json = "{\"Matrix\":[[\"a\",\"b\"],[\"c\",\"d\",\"e\"],[\"f\"]]}";
+            var result = DevKitJson.Deserialize<ListListStringPoco>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.Matrix);
+            Assert.Equal(3, result.Matrix.Count);
+            Assert.Equal(2, result.Matrix[0].Count);
+            Assert.Equal("a", result.Matrix[0][0]);
+            Assert.Equal("b", result.Matrix[0][1]);
+            Assert.Equal(3, result.Matrix[1].Count);
+            Assert.Equal("c", result.Matrix[1][0]);
+            Assert.Equal("e", result.Matrix[1][2]);
+            Assert.Single(result.Matrix[2]);
+            Assert.Equal("f", result.Matrix[2][0]);
+        }
+
+        [Fact]
+        public void Serialize_PocoWithListListString_Roundtrip()
+        {
+            var original = new ListListStringPoco
+            {
+                Matrix = new List<List<string>>
+                {
+                    new List<string> { "x", "y" },
+                    new List<string> { "z" }
+                }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<ListListStringPoco>(json);
+            Assert.Equal(2, result.Matrix.Count);
+            Assert.Equal("x", result.Matrix[0][0]);
+            Assert.Equal("y", result.Matrix[0][1]);
+            Assert.Equal("z", result.Matrix[1][0]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListListInt()
+        {
+            var json = "{\"Grid\":[[1,2,3],[4,5],[6]]}";
+            var result = DevKitJson.Deserialize<ListListIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Grid.Count);
+            Assert.Equal(3, result.Grid[0].Count);
+            Assert.Equal(1, result.Grid[0][0]);
+            Assert.Equal(3, result.Grid[0][2]);
+            Assert.Equal(2, result.Grid[1].Count);
+            Assert.Single(result.Grid[2]);
+            Assert.Equal(6, result.Grid[2][0]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListPoco()
+        {
+            var json = "{\"Items\":[{\"Name\":\"A\",\"Count\":1,\"IsActive\":true,\"Amount\":10.5},{\"Name\":\"B\",\"Count\":2,\"IsActive\":false,\"Amount\":20.0}]}";
+            var result = DevKitJson.Deserialize<ListPocoPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Items.Count);
+            Assert.Equal("A", result.Items[0].Name);
+            Assert.Equal(1, result.Items[0].Count);
+            Assert.True(result.Items[0].IsActive);
+            Assert.Equal(10.5, result.Items[0].Amount, 1);
+            Assert.Equal("B", result.Items[1].Name);
+            Assert.False(result.Items[1].IsActive);
+        }
+
+        [Fact]
+        public void Serialize_PocoWithListPoco_Roundtrip()
+        {
+            var original = new ListPocoPoco
+            {
+                Items = new List<SamplePoco>
+                {
+                    new SamplePoco { Name = "X", Count = 99, IsActive = true, Amount = 3.14 },
+                    new SamplePoco { Name = "Y", Count = 0, IsActive = false, Amount = 0 }
+                }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<ListPocoPoco>(json);
+            Assert.Equal(2, result.Items.Count);
+            Assert.Equal("X", result.Items[0].Name);
+            Assert.Equal(99, result.Items[0].Count);
+            Assert.Equal("Y", result.Items[1].Name);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithDictionaryStringString()
+        {
+            var json = "{\"Labels\":{\"en\":\"Hello\",\"vi\":\"Xin chào\",\"ja\":\"こんにちは\"}}";
+            var result = DevKitJson.Deserialize<DictStringStringPoco>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.Labels);
+            Assert.Equal(3, result.Labels.Count);
+            Assert.Equal("Hello", result.Labels["en"]);
+            Assert.Equal("Xin chào", result.Labels["vi"]);
+            Assert.Equal("こんにちは", result.Labels["ja"]);
+        }
+
+        [Fact]
+        public void Serialize_PocoWithDictionaryStringString_Roundtrip()
+        {
+            var original = new DictStringStringPoco
+            {
+                Labels = new Dictionary<string, string>
+                {
+                    { "key1", "value1" },
+                    { "key2", "value2" }
+                }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<DictStringStringPoco>(json);
+            Assert.NotNull(result.Labels);
+            Assert.Equal(2, result.Labels.Count);
+            Assert.Equal("value1", result.Labels["key1"]);
+            Assert.Equal("value2", result.Labels["key2"]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithDictionaryStringInt()
+        {
+            var json = "{\"Scores\":{\"math\":95,\"physics\":88,\"chemistry\":72}}";
+            var result = DevKitJson.Deserialize<DictStringIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.Scores);
+            Assert.Equal(3, result.Scores.Count);
+            Assert.Equal(95, result.Scores["math"]);
+            Assert.Equal(88, result.Scores["physics"]);
+            Assert.Equal(72, result.Scores["chemistry"]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithDictionaryStringObject()
+        {
+            var json = "{\"Meta\":{\"name\":\"test\",\"count\":42,\"active\":true}}";
+            var result = DevKitJson.Deserialize<DictStringObjectPoco>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.Meta);
+            Assert.Equal("test", result.Meta["name"]);
+            Assert.Equal(42, result.Meta["count"]);
+            Assert.Equal(true, result.Meta["active"]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableInt()
+        {
+            var json = "{\"Value\":42}";
+            var result = DevKitJson.Deserialize<NullableIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.True(result.Value.HasValue);
+            Assert.Equal(42, result.Value.Value);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableInt_Null()
+        {
+            var json = "{\"Value\":null}";
+            var result = DevKitJson.Deserialize<NullableIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.False(result.Value.HasValue);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableGuid()
+        {
+            var g = Guid.NewGuid();
+            var json = "{\"Id\":\"" + g.ToString("D") + "\"}";
+            var result = DevKitJson.Deserialize<NullableGuidPoco>(json);
+            Assert.NotNull(result);
+            Assert.True(result.Id.HasValue);
+            Assert.Equal(g, result.Id.Value);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableGuid_Null()
+        {
+            var json = "{\"Id\":null}";
+            var result = DevKitJson.Deserialize<NullableGuidPoco>(json);
+            Assert.NotNull(result);
+            Assert.False(result.Id.HasValue);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableBool()
+        {
+            var json = "{\"Flag\":true}";
+            var result = DevKitJson.Deserialize<NullableBoolPoco>(json);
+            Assert.NotNull(result);
+            Assert.True(result.Flag.HasValue);
+            Assert.True(result.Flag.Value);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableBool_Null()
+        {
+            var json = "{\"Flag\":null}";
+            var result = DevKitJson.Deserialize<NullableBoolPoco>(json);
+            Assert.NotNull(result);
+            Assert.False(result.Flag.HasValue);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableDecimal()
+        {
+            var json = "{\"Amount\":123.45}";
+            var result = DevKitJson.Deserialize<NullableDecimalPoco>(json);
+            Assert.NotNull(result);
+            Assert.True(result.Amount.HasValue);
+            Assert.Equal(123.45m, result.Amount.Value, 2);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableDateTime()
+        {
+            var json = "{\"Date\":{\"__type\":\"DateTime\",\"Value\":\"2025-06-15T10:30:00.000Z\"}}";
+            var result = DevKitJson.Deserialize<NullableDateTimePoco>(json);
+            Assert.NotNull(result);
+            Assert.True(result.Date.HasValue);
+            Assert.Equal(new DateTime(2025, 6, 15, 10, 30, 0, DateTimeKind.Utc), result.Date.Value);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNullableDateTime_Null()
+        {
+            var json = "{\"Date\":null}";
+            var result = DevKitJson.Deserialize<NullableDateTimePoco>(json);
+            Assert.NotNull(result);
+            Assert.False(result.Date.HasValue);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithArrayInt()
+        {
+            var json = "{\"Numbers\":[10,20,30,40]}";
+            var result = DevKitJson.Deserialize<ArrayIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(4, result.Numbers.Length);
+            Assert.Equal(10, result.Numbers[0]);
+            Assert.Equal(40, result.Numbers[3]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithArrayGuid()
+        {
+            var g1 = Guid.NewGuid();
+            var g2 = Guid.NewGuid();
+            var json = "{\"Ids\":[\"" + g1.ToString("D") + "\",\"" + g2.ToString("D") + "\"]}";
+            var result = DevKitJson.Deserialize<ArrayGuidPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Ids.Length);
+            Assert.Equal(g1, result.Ids[0]);
+            Assert.Equal(g2, result.Ids[1]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListDouble()
+        {
+            var json = "{\"Values\":[1.1,2.2,3.3]}";
+            var result = DevKitJson.Deserialize<ListDoublePoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Values.Count);
+            Assert.Equal(1.1, result.Values[0], 1);
+            Assert.Equal(2.2, result.Values[1], 1);
+            Assert.Equal(3.3, result.Values[2], 1);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListBool()
+        {
+            var json = "{\"Flags\":[true,false,true,false]}";
+            var result = DevKitJson.Deserialize<ListBoolPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(4, result.Flags.Count);
+            Assert.True(result.Flags[0]);
+            Assert.False(result.Flags[1]);
+            Assert.True(result.Flags[2]);
+            Assert.False(result.Flags[3]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListDecimal()
+        {
+            var json = "{\"Amounts\":[100.50,200.75,300.00]}";
+            var result = DevKitJson.Deserialize<ListDecimalPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.Amounts.Count);
+            Assert.Equal(100.50m, result.Amounts[0], 2);
+            Assert.Equal(200.75m, result.Amounts[1], 2);
+            Assert.Equal(300.00m, result.Amounts[2], 2);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithMixedProperties()
+        {
+            var g = Guid.NewGuid();
+            var json = "{\"Name\":\"Test\",\"Tags\":[\"a\",\"b\"],\"Ids\":[\"" + g.ToString("D") + "\"],\"Score\":99,\"Active\":true,\"Rate\":4.5}";
+            var result = DevKitJson.Deserialize<MixedPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("Test", result.Name);
+            Assert.Equal(2, result.Tags.Count);
+            Assert.Equal("a", result.Tags[0]);
+            Assert.Single(result.Ids);
+            Assert.Equal(g, result.Ids[0]);
+            Assert.Equal(99, result.Score);
+            Assert.True(result.Active);
+            Assert.Equal(4.5, result.Rate, 1);
+        }
+
+        [Fact]
+        public void Serialize_MixedPoco_Roundtrip()
+        {
+            var g = Guid.NewGuid();
+            var original = new MixedPoco
+            {
+                Name = "Roundtrip",
+                Tags = new List<string> { "x", "y", "z" },
+                Ids = new List<Guid> { g },
+                Score = 42,
+                Active = false,
+                Rate = 9.99
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<MixedPoco>(json);
+            Assert.Equal("Roundtrip", result.Name);
+            Assert.Equal(3, result.Tags.Count);
+            Assert.Equal(g, result.Ids[0]);
+            Assert.Equal(42, result.Score);
+            Assert.False(result.Active);
+            Assert.Equal(9.99, result.Rate, 2);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithNestedPocoAndLists()
+        {
+            var json = "{\"Order\":\"ORD-001\",\"Lines\":[{\"Product\":\"Widget\",\"Qty\":10,\"Prices\":[100.0,95.0]},{\"Product\":\"Gadget\",\"Qty\":5,\"Prices\":[200.0]}]}";
+            var result = DevKitJson.Deserialize<OrderWithLinesPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("ORD-001", result.Order);
+            Assert.Equal(2, result.Lines.Count);
+            Assert.Equal("Widget", result.Lines[0].Product);
+            Assert.Equal(10, result.Lines[0].Qty);
+            Assert.Equal(2, result.Lines[0].Prices.Count);
+            Assert.Equal(100.0, result.Lines[0].Prices[0], 1);
+            Assert.Equal(95.0, result.Lines[0].Prices[1], 1);
+            Assert.Equal("Gadget", result.Lines[1].Product);
+            Assert.Single(result.Lines[1].Prices);
+        }
+
+        [Fact]
+        public void Serialize_NestedPocoWithLists_Roundtrip()
+        {
+            var original = new OrderWithLinesPoco
+            {
+                Order = "ORD-002",
+                Lines = new List<OrderLinePoco>
+                {
+                    new OrderLinePoco { Product = "A", Qty = 1, Prices = new List<double> { 50.0 } },
+                    new OrderLinePoco { Product = "B", Qty = 2, Prices = new List<double> { 30.0, 25.0 } }
+                }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<OrderWithLinesPoco>(json);
+            Assert.Equal("ORD-002", result.Order);
+            Assert.Equal(2, result.Lines.Count);
+            Assert.Equal("A", result.Lines[0].Product);
+            Assert.Single(result.Lines[0].Prices);
+            Assert.Equal(2, result.Lines[1].Prices.Count);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListNullableInt()
+        {
+            var json = "{\"Values\":[1,null,3,null,5]}";
+            var result = DevKitJson.Deserialize<ListNullableIntPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(5, result.Values.Count);
+            Assert.Equal(1, result.Values[0]);
+            Assert.Null(result.Values[1]);
+            Assert.Equal(3, result.Values[2]);
+            Assert.Null(result.Values[3]);
+            Assert.Equal(5, result.Values[4]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithEmptyNestedLists()
+        {
+            var json = "{\"Matrix\":[]}";
+            var result = DevKitJson.Deserialize<ListListStringPoco>(json);
+            Assert.NotNull(result);
+            Assert.NotNull(result.Matrix);
+            Assert.Empty(result.Matrix);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListContainingEmptyList()
+        {
+            var json = "{\"Matrix\":[[],[\"a\"],[],[\"\"]]}";
+            var result = DevKitJson.Deserialize<ListListStringPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(4, result.Matrix.Count);
+            Assert.Empty(result.Matrix[0]);
+            Assert.Single(result.Matrix[1]);
+            Assert.Equal("a", result.Matrix[1][0]);
+            Assert.Empty(result.Matrix[2]);
+            Assert.Single(result.Matrix[3]);
+            Assert.Equal("", result.Matrix[3][0]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithAllNullProperties()
+        {
+            var json = "{\"Name\":null,\"Tags\":null,\"Ids\":null,\"Score\":0,\"Active\":false,\"Rate\":0}";
+            var result = DevKitJson.Deserialize<MixedPoco>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.Name);
+            Assert.Null(result.Tags);
+            Assert.Null(result.Ids);
+            Assert.Equal(0, result.Score);
+            Assert.False(result.Active);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithExtraJsonProperties_IgnoresThem()
+        {
+            var json = "{\"QuoteId\":\"abc\",\"ExtraField\":\"ignored\",\"AnotherExtra\":123}";
+            var result = DevKitJson.Deserialize<InputCloneQuote>(json);
+            Assert.NotNull(result);
+            Assert.Equal("abc", result.QuoteId);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithMissingJsonProperties_DefaultValues()
+        {
+            var json = "{\"Name\":\"OnlyName\"}";
+            var result = DevKitJson.Deserialize<MixedPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("OnlyName", result.Name);
+            Assert.Null(result.Tags);
+            Assert.Null(result.Ids);
+            Assert.Equal(0, result.Score);
+            Assert.False(result.Active);
+            Assert.Equal(0, result.Rate, 1);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListMixedNullAndValues()
+        {
+            var json = "{\"PriceListLines\":[\"guid-1\",null,\"guid-3\"]}";
+            var result = DevKitJson.Deserialize<Input_CreateQuote>(json);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.PriceListLines.Count);
+            Assert.Equal("guid-1", result.PriceListLines[0]);
+            Assert.Null(result.PriceListLines[1]);
+            Assert.Equal("guid-3", result.PriceListLines[2]);
+        }
+
+        [Fact]
+        public void Deserialize_DeeplyNestedPoco()
+        {
+            var json = "{\"Level\":1,\"Child\":{\"Level\":2,\"Child\":{\"Level\":3,\"Child\":null}}}";
+            var result = DevKitJson.Deserialize<RecursivePoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Level);
+            Assert.NotNull(result.Child);
+            Assert.Equal(2, result.Child.Level);
+            Assert.NotNull(result.Child.Child);
+            Assert.Equal(3, result.Child.Child.Level);
+            Assert.Null(result.Child.Child.Child);
+        }
+
+        [Fact]
+        public void Serialize_DeeplyNestedPoco_Roundtrip()
+        {
+            var original = new RecursivePoco
+            {
+                Level = 1,
+                Child = new RecursivePoco
+                {
+                    Level = 2,
+                    Child = new RecursivePoco { Level = 3 }
+                }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<RecursivePoco>(json);
+            Assert.Equal(1, result.Level);
+            Assert.Equal(2, result.Child.Level);
+            Assert.Equal(3, result.Child.Child.Level);
+            Assert.Null(result.Child.Child.Child);
+        }
+
+        [Fact]
+        public void MapTo_ComplexPoco_WithLists()
+        {
+            var json = "{\"Order\":\"ORD-X\",\"Lines\":[{\"Product\":\"P1\",\"Qty\":3,\"Prices\":[10.0,20.0]}]}";
+            var raw = DevKitJson.Deserialize(json);
+            var result = DevKitJson.MapTo<OrderWithLinesPoco>((Dictionary<string, object>)raw);
+            Assert.Equal("ORD-X", result.Order);
+            Assert.Single(result.Lines);
+            Assert.Equal("P1", result.Lines[0].Product);
+            Assert.Equal(2, result.Lines[0].Prices.Count);
+        }
+
+        [Fact]
+        public void Poco_InParameterCollection_ComplexRoundtrip()
+        {
+            var pc = new ParameterCollection();
+            pc["Input"] = new OrderWithLinesPoco
+            {
+                Order = "ORD-100",
+                Lines = new List<OrderLinePoco>
+                {
+                    new OrderLinePoco { Product = "Widget", Qty = 5, Prices = new List<double> { 99.99, 89.99 } }
+                }
+            };
+
+            var json = DevKitJson.Serialize(pc);
+            var restored = DevKitJson.Deserialize<ParameterCollection>(json);
+
+            var input = DevKitJson.MapTo<OrderWithLinesPoco>(restored["Input"]);
+            Assert.Equal("ORD-100", input.Order);
+            Assert.Single(input.Lines);
+            Assert.Equal("Widget", input.Lines[0].Product);
+            Assert.Equal(5, input.Lines[0].Qty);
+            Assert.Equal(2, input.Lines[0].Prices.Count);
+            Assert.Equal(99.99, input.Lines[0].Prices[0], 2);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListLong()
+        {
+            var json = "{\"BigNumbers\":[9999999999,8888888888,7777777777]}";
+            var result = DevKitJson.Deserialize<ListLongPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.BigNumbers.Count);
+            Assert.Equal(9999999999L, result.BigNumbers[0]);
+            Assert.Equal(8888888888L, result.BigNumbers[1]);
+            Assert.Equal(7777777777L, result.BigNumbers[2]);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithDateTimeProperty_String()
+        {
+            var json = "{\"Name\":\"Meeting\",\"When\":{\"__type\":\"DateTime\",\"Value\":\"2025-12-25T10:00:00.000Z\"}}";
+            var result = DevKitJson.Deserialize<DateTimePoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("Meeting", result.Name);
+            Assert.Equal(new DateTime(2025, 12, 25, 10, 0, 0, DateTimeKind.Utc), result.When);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListEntityReference()
+        {
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var json = "{\"Refs\":[" +
+                "{\"__type\":\"EntityReference\",\"LogicalName\":\"contact\",\"Id\":\"" + id1.ToString("D") + "\",\"Name\":\"John\"}," +
+                "{\"__type\":\"EntityReference\",\"LogicalName\":\"account\",\"Id\":\"" + id2.ToString("D") + "\",\"Name\":\"Contoso\"}" +
+                "]}";
+            var result = DevKitJson.Deserialize<ListEntityRefPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Refs.Count);
+            Assert.Equal("contact", result.Refs[0].LogicalName);
+            Assert.Equal(id1, result.Refs[0].Id);
+            Assert.Equal("John", result.Refs[0].Name);
+            Assert.Equal("account", result.Refs[1].LogicalName);
+        }
+
+        [Fact]
+        public void Serialize_PocoWithListEntityReference_Roundtrip()
+        {
+            var id1 = Guid.NewGuid();
+            var original = new ListEntityRefPoco
+            {
+                Refs = new List<EntityReference>
+                {
+                    new EntityReference("contact", id1) { Name = "Jane" }
+                }
+            };
+            var json = DevKitJson.Serialize(original);
+            var result = DevKitJson.Deserialize<ListEntityRefPoco>(json);
+            Assert.Single(result.Refs);
+            Assert.Equal("contact", result.Refs[0].LogicalName);
+            Assert.Equal(id1, result.Refs[0].Id);
+            Assert.Equal("Jane", result.Refs[0].Name);
+        }
+
+        [Fact]
+        public void Deserialize_PocoWithListMoney()
+        {
+            var json = "{\"Amounts\":[{\"__type\":\"Money\",\"Value\":100.50},{\"__type\":\"Money\",\"Value\":200.75}]}";
+            var result = DevKitJson.Deserialize<ListMoneyPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Amounts.Count);
+            Assert.Equal(100.50m, result.Amounts[0].Value);
+            Assert.Equal(200.75m, result.Amounts[1].Value);
+        }
+
+        [Fact]
+        public void Deserialize_EmptyJson_ReturnsDefaultPoco()
+        {
+            var json = "{}";
+            var result = DevKitJson.Deserialize<MixedPoco>(json);
+            Assert.NotNull(result);
+            Assert.Null(result.Name);
+            Assert.Null(result.Tags);
+            Assert.Equal(0, result.Score);
+        }
+
+        [Fact]
+        public void Deserialize_SingleItemList()
+        {
+            var json = "{\"PriceListLines\":[\"only-one\"]}";
+            var result = DevKitJson.Deserialize<Input_CreateQuote>(json);
+            Assert.Single(result.PriceListLines);
+            Assert.Equal("only-one", result.PriceListLines[0]);
+        }
+
+        #endregion
+
+        #region JSON-in-JSON (Escaped JSON String) Tests
+
+        // ===================================================================
+        // Scenario: A property value is itself a JSON string.
+        // In real Dataverse plugins, InputParameters["Input"] is often a
+        // serialized JSON string that needs a second Deserialize call.
+        //
+        // JSON escaping rules:
+        //   Level 0 (raw):    {"Name":"John","Age":30}
+        //   Level 1 (in string): "{\"Name\":\"John\",\"Age\":30}"
+        //   Level 2 (nested):    "{\"Json\":\"{\\\"Name\\\":\\\"John\\\"}\"}"
+        // ===================================================================
+
+        [Fact]
+        public void JsonInJson_Level1_SimpleObjectAsString()
+        {
+            // Outer JSON: { "PropertyA": "OK", "Json": "{\"Name\":\"John\",\"Count\":30}" }
+            var json = "{\"PropertyA\":\"OK\",\"Json\":\"{\\\"Name\\\":\\\"John\\\",\\\"Count\\\":30}\"}";
+
+            var result = DevKitJson.Deserialize<JsonInJsonPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("OK", result.PropertyA);
+
+            // Json property is a string containing escaped JSON
+            Assert.Equal("{\"Name\":\"John\",\"Count\":30}", result.Json);
+
+            // Second pass: deserialize the inner JSON string
+            var inner = DevKitJson.Deserialize<SamplePoco>(result.Json);
+            Assert.Equal("John", inner.Name);
+            Assert.Equal(30, inner.Count);
+        }
+
+        [Fact]
+        public void JsonInJson_Level1_ObjectWithQuotesInValue()
+        {
+            // Inner object: {"Description":"He said \"hello\" to her"}
+            // Escaped once: "{\"Description\":\"He said \\\"hello\\\" to her\"}"
+            var json = "{\"PropertyA\":\"test\",\"Json\":\"{\\\"Description\\\":\\\"He said \\\\\\\"hello\\\\\\\" to her\\\"}\"}";
+
+            var result = DevKitJson.Deserialize<JsonInJsonPoco>(json);
+            Assert.NotNull(result);
+            Assert.Equal("{\"Description\":\"He said \\\"hello\\\" to her\"}", result.Json);
+
+            var inner = DevKitJson.Deserialize(result.Json) as Dictionary<string, object>;
+            Assert.NotNull(inner);
+            Assert.Equal("He said \"hello\" to her", inner["Description"]);
+        }
+
+        [Fact]
+        public void JsonInJson_Level1_WithList()
+        {
+            // Inner: {"Items":["a","b","c"]}
+            // Escaped: "{\"Items\":[\"a\",\"b\",\"c\"]}"
+            var json = "{\"PropertyA\":\"list-test\",\"Json\":\"{\\\"Items\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"]}\"}";
+
+            var result = DevKitJson.Deserialize<JsonInJsonPoco>(json);
+            Assert.Equal("{\"Items\":[\"a\",\"b\",\"c\"]}", result.Json);
+
+            var inner = DevKitJson.Deserialize<ListStringJsonPoco>(result.Json);
+            Assert.Equal(3, inner.Items.Count);
+            Assert.Equal("a", inner.Items[0]);
+            Assert.Equal("c", inner.Items[2]);
+        }
+
+        [Fact]
+        public void JsonInJson_Level2_NestedJsonInJsonInJson()
+        {
+            // Level 0 (raw inner-inner): {"Value":"deep"}
+            // Level 1 (inner JSON string): {"Nested":"{\"Value\":\"deep\"}"}
+            // Level 2 (outer JSON string): escaped again in outer
+            //
+            // Build from inside out using Serialize to ensure correct escaping
+            var innerInner = DevKitJson.Serialize(new Dictionary<string, object> { { "Value", "deep" } });
+            // innerInner = {"Value":"deep"}
+
+            var inner = DevKitJson.Serialize(new Dictionary<string, object> { { "Nested", innerInner } });
+            // inner = {"Nested":"{\"Value\":\"deep\"}"}
+
+            var outer = DevKitJson.Serialize(new Dictionary<string, object> { { "PropertyA", "L2" }, { "Json", inner } });
+            // outer = {"PropertyA":"L2","Json":"{\"Nested\":\"{\\\"Value\\\":\\\"deep\\\"}\"}"}
+
+            // Parse level 0
+            var result0 = DevKitJson.Deserialize<JsonInJsonPoco>(outer);
+            Assert.Equal("L2", result0.PropertyA);
+
+            // Parse level 1
+            var result1 = DevKitJson.Deserialize<JsonInJsonPoco>(result0.Json);
+            Assert.NotNull(result1);
+
+            // result1.Json should be the level-2 string: {"Value":"deep"}
+            // But result1 is mapped from dict, PropertyA and Json are property names
+            // Let's use raw dict instead
+            var dict1 = DevKitJson.Deserialize(result0.Json) as Dictionary<string, object>;
+            Assert.NotNull(dict1);
+            var nestedStr = (string)dict1["Nested"];
+            Assert.Equal("{\"Value\":\"deep\"}", nestedStr);
+
+            // Parse level 2
+            var dict2 = DevKitJson.Deserialize(nestedStr) as Dictionary<string, object>;
+            Assert.NotNull(dict2);
+            Assert.Equal("deep", dict2["Value"]);
+        }
+
+        [Fact]
+        public void JsonInJson_Serialize_ThenDeserialize_Roundtrip()
+        {
+            // Simulate: user creates an object, serializes it to a string,
+            // then puts that string as a property of another object
+            var innerObj = new SamplePoco { Name = "Test", Count = 42, IsActive = true, Amount = 99.5 };
+            var innerJson = DevKitJson.Serialize(innerObj);
+
+            var outerObj = new JsonInJsonPoco { PropertyA = "wrapper", Json = innerJson };
+            var outerJson = DevKitJson.Serialize(outerObj);
+
+            // Deserialize outer
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            Assert.Equal("wrapper", restored.PropertyA);
+            Assert.Equal(innerJson, restored.Json);
+
+            // Deserialize inner
+            var restoredInner = DevKitJson.Deserialize<SamplePoco>(restored.Json);
+            Assert.Equal("Test", restoredInner.Name);
+            Assert.Equal(42, restoredInner.Count);
+            Assert.True(restoredInner.IsActive);
+            Assert.Equal(99.5, restoredInner.Amount, 1);
+        }
+
+        [Fact]
+        public void JsonInJson_Level2_Serialize_Roundtrip()
+        {
+            // 3 levels of nesting via Serialize
+            var level2 = DevKitJson.Serialize(new Dictionary<string, object> { { "Secret", "password123" } });
+            var level1 = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "mid", Json = level2 });
+            var level0 = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "top", Json = level1 });
+
+            // Unwrap level 0
+            var r0 = DevKitJson.Deserialize<JsonInJsonPoco>(level0);
+            Assert.Equal("top", r0.PropertyA);
+
+            // Unwrap level 1
+            var r1 = DevKitJson.Deserialize<JsonInJsonPoco>(r0.Json);
+            Assert.Equal("mid", r1.PropertyA);
+
+            // Unwrap level 2
+            var r2 = DevKitJson.Deserialize(r1.Json) as Dictionary<string, object>;
+            Assert.NotNull(r2);
+            Assert.Equal("password123", r2["Secret"]);
+        }
+
+        [Fact]
+        public void JsonInJson_WithSingleQuotesInValue()
+        {
+            // Single quotes don't need escaping in JSON, but let's verify
+            // Inner: {"Msg":"It's a test with 'quotes'"}
+            var json = "{\"PropertyA\":\"sq\",\"Json\":\"{\\\"Msg\\\":\\\"It's a test with 'quotes'\\\"}\"}";
+
+            var result = DevKitJson.Deserialize<JsonInJsonPoco>(json);
+            var inner = DevKitJson.Deserialize(result.Json) as Dictionary<string, object>;
+            Assert.NotNull(inner);
+            Assert.Equal("It's a test with 'quotes'", inner["Msg"]);
+        }
+
+        [Fact]
+        public void JsonInJson_WithMixedQuotes()
+        {
+            // Inner: {"Msg":"He said 'hi' and she said \"bye\""}
+            // Single quotes: no escape needed
+            // Double quotes: escaped as \"
+            var innerObj = new Dictionary<string, object>
+            {
+                { "Msg", "He said 'hi' and she said \"bye\"" }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+            Assert.Equal("{\"Msg\":\"He said 'hi' and she said \\\"bye\\\"\"}", innerJson);
+
+            var outerObj = new JsonInJsonPoco { PropertyA = "mixed", Json = innerJson };
+            var outerJson = DevKitJson.Serialize(outerObj);
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            Assert.Equal(innerJson, restored.Json);
+
+            var restoredInner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.Equal("He said 'hi' and she said \"bye\"", restoredInner["Msg"]);
+        }
+
+        [Fact]
+        public void JsonInJson_WithBackslashesAndQuotes()
+        {
+            // Inner value: C:\Users\"Admin"\file.txt
+            var innerObj = new Dictionary<string, object>
+            {
+                { "Path", "C:\\Users\\\"Admin\"\\file.txt" }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+
+            var outerObj = new JsonInJsonPoco { PropertyA = "path", Json = innerJson };
+            var outerJson = DevKitJson.Serialize(outerObj);
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            var restoredInner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.Equal("C:\\Users\\\"Admin\"\\file.txt", restoredInner["Path"]);
+        }
+
+        [Fact]
+        public void JsonInJson_WithNewlinesAndTabs()
+        {
+            // Inner: {"Text":"Line1\nLine2\tTabbed"}
+            var innerObj = new Dictionary<string, object>
+            {
+                { "Text", "Line1\nLine2\tTabbed" }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+
+            var outerObj = new JsonInJsonPoco { PropertyA = "special", Json = innerJson };
+            var outerJson = DevKitJson.Serialize(outerObj);
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            var restoredInner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.Equal("Line1\nLine2\tTabbed", restoredInner["Text"]);
+        }
+
+        [Fact]
+        public void JsonInJson_WithVietnameseAndSpecialChars()
+        {
+            var innerObj = new Dictionary<string, object>
+            {
+                { "Name", "Nguyễn Văn A" },
+                { "Note", "Tổng tiền: 1.000.000đ - \"đã thanh toán\"" }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+            var outerObj = new JsonInJsonPoco { PropertyA = "vn", Json = innerJson };
+            var outerJson = DevKitJson.Serialize(outerObj);
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            var restoredInner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.Equal("Nguyễn Văn A", restoredInner["Name"]);
+            Assert.Equal("Tổng tiền: 1.000.000đ - \"đã thanh toán\"", restoredInner["Note"]);
+        }
+
+        [Fact]
+        public void JsonInJson_ComplexInnerObject()
+        {
+            // Inner is a complex POCO with list, nested object, etc.
+            var innerObj = new OrderWithLinesPoco
+            {
+                Order = "ORD-001",
+                Lines = new List<OrderLinePoco>
+                {
+                    new OrderLinePoco { Product = "Widget \"Pro\"", Qty = 10, Prices = new List<double> { 99.99, 89.99 } },
+                    new OrderLinePoco { Product = "Gadget's Best", Qty = 5, Prices = new List<double> { 199.99 } }
+                }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+            var outerObj = new JsonInJsonPoco { PropertyA = "complex", Json = innerJson };
+            var outerJson = DevKitJson.Serialize(outerObj);
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            var restoredInner = DevKitJson.Deserialize<OrderWithLinesPoco>(restored.Json);
+            Assert.Equal("ORD-001", restoredInner.Order);
+            Assert.Equal(2, restoredInner.Lines.Count);
+            Assert.Equal("Widget \"Pro\"", restoredInner.Lines[0].Product);
+            Assert.Equal("Gadget's Best", restoredInner.Lines[1].Product);
+            Assert.Equal(2, restoredInner.Lines[0].Prices.Count);
+        }
+
+        [Fact]
+        public void JsonInJson_InParameterCollection_PluginPattern()
+        {
+            // Real-world Dataverse plugin pattern:
+            // InputParameters["Input"] = "{\"QuoteId\":\"abc-123\",\"Lines\":[\"line1\",\"line2\"]}"
+            var innerObj = new Input_CreateQuote
+            {
+                PriceListLines = new List<string> { "f3905a0e-5e18-f111-8342-70a8a502738b", "f8905a0e-5e18-f111-8342-70a8a502738b" }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+
+            var pc = new ParameterCollection();
+            pc["Input"] = innerJson;
+            pc["Target"] = new EntityReference("quote", Guid.NewGuid());
+
+            var json = DevKitJson.Serialize(pc);
+            var restored = DevKitJson.Deserialize<ParameterCollection>(json);
+
+            // Input is a string (the JSON), not an object
+            var inputStr = (string)restored["Input"];
+            Assert.Equal(innerJson, inputStr);
+
+            // Deserialize the string to get the actual object
+            var input = DevKitJson.Deserialize<Input_CreateQuote>(inputStr);
+            Assert.NotNull(input.PriceListLines);
+            Assert.Equal(2, input.PriceListLines.Count);
+        }
+
+        [Fact]
+        public void JsonInJson_Level3_TripleNesting()
+        {
+            // 4 levels of nesting to push escape limits
+            var l3 = DevKitJson.Serialize(new Dictionary<string, object> { { "Deep", "value with \"quotes\" and 'apostrophe'" } });
+            var l2 = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "L2", Json = l3 });
+            var l1 = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "L1", Json = l2 });
+            var l0 = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "L0", Json = l1 });
+
+            // Unwrap all levels
+            var r0 = DevKitJson.Deserialize<JsonInJsonPoco>(l0);
+            Assert.Equal("L0", r0.PropertyA);
+
+            var r1 = DevKitJson.Deserialize<JsonInJsonPoco>(r0.Json);
+            Assert.Equal("L1", r1.PropertyA);
+
+            var r2 = DevKitJson.Deserialize<JsonInJsonPoco>(r1.Json);
+            Assert.Equal("L2", r2.PropertyA);
+
+            var r3 = DevKitJson.Deserialize(r2.Json) as Dictionary<string, object>;
+            Assert.NotNull(r3);
+            Assert.Equal("value with \"quotes\" and 'apostrophe'", r3["Deep"]);
+        }
+
+        [Fact]
+        public void JsonInJson_HandCrafted_VerifyEscapeLevels()
+        {
+            // Level 0 raw: {"Val":"hello"}
+            // Level 1 escaped once:   {\"Val\":\"hello\"}
+            //   as JSON string value: "{\"Val\":\"hello\"}"
+            // Level 2 escaped twice:  {\\\"Val\\\":\\\"hello\\\"}
+            //   as JSON string value: "{\\\"Val\\\":\\\"hello\\\"}"
+
+            // Hand-craft level 1
+            var l1Json = "{\"Outer\":\"data\",\"Inner\":\"{\\\"Val\\\":\\\"hello\\\"}\"}";
+            var l1 = DevKitJson.Deserialize(l1Json) as Dictionary<string, object>;
+            Assert.Equal("data", l1["Outer"]);
+            Assert.Equal("{\"Val\":\"hello\"}", l1["Inner"]);
+
+            var l0 = DevKitJson.Deserialize((string)l1["Inner"]) as Dictionary<string, object>;
+            Assert.Equal("hello", l0["Val"]);
+        }
+
+        [Fact]
+        public void JsonInJson_HandCrafted_Level2()
+        {
+            // Build by hand to verify escape at each level
+            // Level 0: {"X":"Y"}
+            // Level 1: {"A":"{\"X\":\"Y\"}"}
+            //   → in C# string: "{\"A\":\"{\\\"X\\\":\\\"Y\\\"}\"}"
+            // Level 2: {"B":"{\"A\":\"{\\\"X\\\":\\\"Y\\\"}\"}"}
+            //   → in C# string: the escaping doubles again
+
+            // Let's use Serialize to build correctly, then verify hand-parse
+            var raw = "{\"X\":\"Y\"}";
+            var l1Dict = new Dictionary<string, object> { { "A", raw } };
+            var l1Str = DevKitJson.Serialize(l1Dict);
+            // l1Str should be: {"A":"{\"X\":\"Y\"}"}
+
+            var l2Dict = new Dictionary<string, object> { { "B", l1Str } };
+            var l2Str = DevKitJson.Serialize(l2Dict);
+
+            // Now unwrap
+            var p2 = DevKitJson.Deserialize(l2Str) as Dictionary<string, object>;
+            Assert.NotNull(p2);
+            var bVal = (string)p2["B"];
+
+            var p1 = DevKitJson.Deserialize(bVal) as Dictionary<string, object>;
+            Assert.NotNull(p1);
+            var aVal = (string)p1["A"];
+
+            var p0 = DevKitJson.Deserialize(aVal) as Dictionary<string, object>;
+            Assert.NotNull(p0);
+            Assert.Equal("Y", p0["X"]);
+        }
+
+        [Fact]
+        public void JsonInJson_ValueContainsOnlySingleQuotes()
+        {
+            // Single quotes are NOT special in JSON - they need no escaping
+            var innerObj = new Dictionary<string, object>
+            {
+                { "SQL", "SELECT * FROM account WHERE name = 'Contoso'" },
+                { "Note", "It's John's account" }
+            };
+            var innerJson = DevKitJson.Serialize(innerObj);
+            var outerJson = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "sql", Json = innerJson });
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            var restoredInner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.Equal("SELECT * FROM account WHERE name = 'Contoso'", restoredInner["SQL"]);
+            Assert.Equal("It's John's account", restoredInner["Note"]);
+        }
+
+        [Fact]
+        public void JsonInJson_ValueContainsMixedQuotesAndBackslashes()
+        {
+            // Extreme case: value has both " and ' and \ and \n
+            var nastyValue = "Path: C:\\Users\\\"Admin\"\\It's a 'test'\nLine2";
+            var innerObj = new Dictionary<string, object> { { "Data", nastyValue } };
+            var innerJson = DevKitJson.Serialize(innerObj);
+            var outerJson = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "nasty", Json = innerJson });
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            var restoredInner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.Equal(nastyValue, restoredInner["Data"]);
+        }
+
+        [Fact]
+        public void JsonInJson_EmptyInnerJson()
+        {
+            var outerJson = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "empty", Json = "{}" });
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            Assert.Equal("{}", restored.Json);
+
+            var inner = DevKitJson.Deserialize(restored.Json) as Dictionary<string, object>;
+            Assert.NotNull(inner);
+            Assert.Empty(inner);
+        }
+
+        [Fact]
+        public void JsonInJson_InnerIsArray()
+        {
+            var innerJson = DevKitJson.Serialize(new List<string> { "a", "b", "c" });
+            var outerJson = DevKitJson.Serialize(new JsonInJsonPoco { PropertyA = "arr", Json = innerJson });
+
+            var restored = DevKitJson.Deserialize<JsonInJsonPoco>(outerJson);
+            Assert.Equal("[\"a\",\"b\",\"c\"]", restored.Json);
+
+            var inner = DevKitJson.Deserialize(restored.Json) as List<object>;
+            Assert.Equal(3, inner.Count);
+            Assert.Equal("a", inner[0]);
+        }
+
+        [Fact]
+        public void JsonInJson_RealWorldDataverse_CustomApiInput()
+        {
+            // Simulating a real Dataverse Custom API where:
+            // - Plugin receives InputParameters["Input"] as a serialized JSON string
+            // - That JSON contains a POCO with List<string> and nested objects
+            // - Values contain Vietnamese text with quotes
+            var customInput = new Dictionary<string, object>
+            {
+                { "QuoteId", "abc-123" },
+                { "CustomerName", "Công ty TNHH \"Phước\" & Son's" },
+                { "LineIds", new List<string> { "line-1", "line-2" } },
+                { "Config", new Dictionary<string, object>
+                    {
+                        { "AutoApprove", true },
+                        { "Template", "Quote_'Standard'_v2" }
+                    }
+                }
+            };
+            var inputJson = DevKitJson.Serialize(customInput);
+
+            // Simulate ParameterCollection round-trip (Dataverse stores it as string)
+            var pc = new ParameterCollection();
+            pc["Input"] = inputJson;
+            var pcJson = DevKitJson.Serialize(pc);
+            var restoredPc = DevKitJson.Deserialize<ParameterCollection>(pcJson);
+
+            // Get the input string back
+            var inputStr = (string)restoredPc["Input"];
+            Assert.Equal(inputJson, inputStr);
+
+            // Parse the inner JSON
+            var parsed = DevKitJson.Deserialize(inputStr) as Dictionary<string, object>;
+            Assert.Equal("abc-123", parsed["QuoteId"]);
+            Assert.Equal("Công ty TNHH \"Phước\" & Son's", parsed["CustomerName"]);
+
+            var lineIds = parsed["LineIds"] as List<object>;
+            Assert.Equal(2, lineIds.Count);
+            Assert.Equal("line-1", lineIds[0]);
+
+            var config = parsed["Config"] as Dictionary<string, object>;
+            Assert.Equal(true, config["AutoApprove"]);
+            Assert.Equal("Quote_'Standard'_v2", config["Template"]);
+        }
+
+        #endregion
     }
 
     internal class InputCloneQuote
@@ -2283,6 +3378,152 @@ namespace DynamicsCrm.DevKit.UnitTests.Lib
     internal class ArrayStringPoco
     {
         public string[] Tags { get; set; }
+    }
+
+    internal class ListListStringPoco
+    {
+        public List<List<string>> Matrix { get; set; }
+    }
+
+    internal class ListListIntPoco
+    {
+        public List<List<int>> Grid { get; set; }
+    }
+
+    internal class ListPocoPoco
+    {
+        public List<SamplePoco> Items { get; set; }
+    }
+
+    internal class DictStringStringPoco
+    {
+        public Dictionary<string, string> Labels { get; set; }
+    }
+
+    internal class DictStringIntPoco
+    {
+        public Dictionary<string, int> Scores { get; set; }
+    }
+
+    internal class DictStringObjectPoco
+    {
+        public Dictionary<string, object> Meta { get; set; }
+    }
+
+    internal class NullableIntPoco
+    {
+        public int? Value { get; set; }
+    }
+
+    internal class NullableGuidPoco
+    {
+        public Guid? Id { get; set; }
+    }
+
+    internal class NullableBoolPoco
+    {
+        public bool? Flag { get; set; }
+    }
+
+    internal class NullableDecimalPoco
+    {
+        public decimal? Amount { get; set; }
+    }
+
+    internal class NullableDateTimePoco
+    {
+        public DateTime? Date { get; set; }
+    }
+
+    internal class ArrayIntPoco
+    {
+        public int[] Numbers { get; set; }
+    }
+
+    internal class ArrayGuidPoco
+    {
+        public Guid[] Ids { get; set; }
+    }
+
+    internal class ListDoublePoco
+    {
+        public List<double> Values { get; set; }
+    }
+
+    internal class ListBoolPoco
+    {
+        public List<bool> Flags { get; set; }
+    }
+
+    internal class ListDecimalPoco
+    {
+        public List<decimal> Amounts { get; set; }
+    }
+
+    internal class ListLongPoco
+    {
+        public List<long> BigNumbers { get; set; }
+    }
+
+    internal class ListNullableIntPoco
+    {
+        public List<int?> Values { get; set; }
+    }
+
+    internal class MixedPoco
+    {
+        public string Name { get; set; }
+        public List<string> Tags { get; set; }
+        public List<Guid> Ids { get; set; }
+        public int Score { get; set; }
+        public bool Active { get; set; }
+        public double Rate { get; set; }
+    }
+
+    internal class OrderLinePoco
+    {
+        public string Product { get; set; }
+        public int Qty { get; set; }
+        public List<double> Prices { get; set; }
+    }
+
+    internal class OrderWithLinesPoco
+    {
+        public string Order { get; set; }
+        public List<OrderLinePoco> Lines { get; set; }
+    }
+
+    internal class RecursivePoco
+    {
+        public int Level { get; set; }
+        public RecursivePoco Child { get; set; }
+    }
+
+    internal class DateTimePoco
+    {
+        public string Name { get; set; }
+        public DateTime When { get; set; }
+    }
+
+    internal class ListEntityRefPoco
+    {
+        public List<EntityReference> Refs { get; set; }
+    }
+
+    internal class ListMoneyPoco
+    {
+        public List<Money> Amounts { get; set; }
+    }
+
+    internal class JsonInJsonPoco
+    {
+        public string PropertyA { get; set; }
+        public string Json { get; set; }
+    }
+
+    internal class ListStringJsonPoco
+    {
+        public List<string> Items { get; set; }
     }
 
     /// <summary>

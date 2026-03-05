@@ -1047,6 +1047,23 @@ namespace Microsoft.Xrm.Sdk
             {
                 if (nestedDict.TryGetValue("__type", out var typeObj) && typeObj is string typeName)
                     return ReconstructTypedObject(typeName, nestedDict);
+                if (targetType.IsGenericType)
+                {
+                    var genDef = targetType.GetGenericTypeDefinition();
+                    if (genDef == typeof(Dictionary<,>) || genDef == typeof(IDictionary<,>) || genDef == typeof(IReadOnlyDictionary<,>))
+                    {
+                        var keyType = targetType.GetGenericArguments()[0];
+                        var valType = targetType.GetGenericArguments()[1];
+                        if (keyType == typeof(string))
+                        {
+                            var dictType = typeof(Dictionary<,>).MakeGenericType(keyType, valType);
+                            var typedDict = (IDictionary)Activator.CreateInstance(dictType);
+                            foreach (var kvp in nestedDict)
+                                typedDict.Add(kvp.Key, CoerceValue(kvp.Value, valType));
+                            return typedDict;
+                        }
+                    }
+                }
                 if (targetType.IsClass && targetType != typeof(string))
                     return MapDictionaryToObject(nestedDict, targetType);
             }
