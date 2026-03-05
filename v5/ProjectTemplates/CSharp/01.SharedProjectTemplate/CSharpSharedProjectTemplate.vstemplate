@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
 		<Name>01. Shared Project</Name>
-		<Description>Shared Project Template for DynamicsCrm.DevKit. Provides a foundational structure for Dataverse development, including core utility classes, extension methods, and a simple json handler.</Description>
+		<Description>Shared Project Template for DynamicsCrm.DevKit. Provides a foundational structure for Dataverse development, including core utility classes, extension methods, and a DevKitJson handler.</Description>
 		<DefaultName>SharedProject</DefaultName>
 		<TemplateID>DynamicsCrm.DevKit.CSharpSharedProject</TemplateID>
 		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
@@ -25,7 +25,6 @@
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginCore.cs">PluginCore.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\EntityBase.cs">EntityBase.cs</ProjectItem>
-			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\SimpleJson.cs">SimpleJson.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Lib\DevKitJson.cs">DevKitJson.cs</ProjectItem>
 			<ProjectItem ReplaceParameters="true" TargetFileName="Entities\generator.bat">generator.bat</ProjectItem>
 		</Project>

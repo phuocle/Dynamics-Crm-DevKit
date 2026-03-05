@@ -11,9 +11,8 @@
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" Exclude="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />
-    <None Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
   </ItemGroup>
 </Project>

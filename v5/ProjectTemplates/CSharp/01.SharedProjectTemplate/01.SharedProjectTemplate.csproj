@@ -78,7 +78,6 @@
   <ItemGroup>
     <None Include="generator.bat" />
     <None Include="Shared.projitems" />
-    <None Include="SimpleJson.cs" />
     <None Include="Date.cs" />
     <None Include="PluginCore.cs" />
     <None Include="Extension.cs" />

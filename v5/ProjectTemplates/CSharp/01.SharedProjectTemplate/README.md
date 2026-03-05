@@ -1,4 +1,4 @@
-﻿```text
+```text
   ____                              _           ____                  ____             _  ___ _     ____ _ _
  |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_  / ___| (_)
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
@@ -17,7 +17,7 @@ Provides a foundational structure for Dataverse development with core utility cl
 * Shared project structure for code reusability
 * Core utility classes (Date, Extension, EntityBase)
 * PluginCore base class for plugin development
-* SimpleJson handler for lightweight JSON operations
+* DevKitJson handler for lightweight JSON operations
 * Generator batch file for entity code generation
 * Pre-configured folder structure (Lib, Entities)
 
@@ -30,7 +30,7 @@ This is a foundational shared project that other templates depend on.
 * **PluginCore.cs** - Base class for plugin development with common functionality
 * **Extension.cs** - Extension methods for common Dataverse operations
 * **EntityBase.cs** - Base class for entity operations
-* **SimpleJson.cs** - Lightweight JSON serialization/deserialization
+* **DevKitJson.cs** - Lightweight JSON serialization/deserialization
 * **Date.cs** - Date utility functions
 * **generator.bat** - Code generation script for entities
 
