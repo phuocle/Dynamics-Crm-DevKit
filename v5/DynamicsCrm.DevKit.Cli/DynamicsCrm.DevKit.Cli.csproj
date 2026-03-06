@@ -16,6 +16,7 @@
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
 		<BaseOutputPath>bin</BaseOutputPath>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<PackageIcon>icon.png</PackageIcon>
 		<!-- .NET Global Tool Configuration -->
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>devkit</ToolCommandName>
@@ -43,6 +44,7 @@
 	  <None Remove="DynamicsCrm.DevKit.Cli.code-workspace" />
 	  <None Remove="DynamicsCrm.DevKit.Cli.TsForm.code-workspace" />
 	  <None Include="README.md" Pack="true" PackagePath="\" />
+	  <None Include="images\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="icon.ico" />

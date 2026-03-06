@@ -20,6 +20,10 @@ lcov.info
 **/build/
 **/bin/
 **/obj/
+**/nupkg/
+
+# Tool test data
+DynamicsCrm.DevKit.Tool/Test/
 
 # IDE
 **/.vscode/

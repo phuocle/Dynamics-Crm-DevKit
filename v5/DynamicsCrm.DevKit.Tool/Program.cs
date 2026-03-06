@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Tool
             var app = new CommandApp();
             app.Configure(config =>
             {
-                config.SetApplicationName("DynamicsCrm.DevKit.Tool");
+                config.SetApplicationName("devkit-tool");
 
                 config.AddCommand<DocumentGeneratorCommand>("documentgenerator")
                       .WithDescription("Generate Dataverse entity documentation (markdown)");
@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Tool
             var panel = new Panel(
                 new Markup(
                     "[green]Usage:[/]\n" +
-                    "  DynamicsCrm.DevKit.Tool [cyan]<command>[/] [dim][[options]][/]\n\n" +
+                    "  devkit-tool [cyan]<command>[/] [dim][[options]][/]\n\n" +
                     "[green]Commands:[/]\n" +
                     "  [cyan]documentgenerator[/]      Generate Dataverse entity documentation (markdown)\n" +
                     "  [cyan]documentcodegenerator[/]  Generate server-side code documentation from assemblies\n" +
@@ -81,17 +81,17 @@ namespace DynamicsCrm.DevKit.Tool
                     "  [cyan]nuglify[/]                Minify HTML, CSS, or JS files\n" +
                     "  [cyan]decrypt[/]                Decrypt an encrypted password string\n\n" +
                     "[green]Examples:[/]\n" +
-                    "  DynamicsCrm.DevKit.Tool [cyan]documentgenerator[/] --conn [yellow]\"...\"[/] --solution [yellow]HsapCustomize[/] --folder [yellow]./docs[/]\n" +
-                    "  DynamicsCrm.DevKit.Tool [cyan]documentcodegenerator[/] --folder [yellow]./bin/Debug[/] --output [yellow]./docs[/] --devops [yellow]AzureDevOps[/]\n" +
-                    "  DynamicsCrm.DevKit.Tool [cyan]coveragetoxml[/] --coverage [yellow]file.coverage[/] --xml [yellow]output.xml[/] --dlls [yellow]\"a.dll;b.dll\"[/]\n" +
-                    "  DynamicsCrm.DevKit.Tool [cyan]nuglify[/] --source [yellow]input.js[/] --destination [yellow]output.min.js[/]\n" +
-                    "  DynamicsCrm.DevKit.Tool [cyan]decrypt[/] --password [yellow]\"encrypted_string\"[/]\n\n" +
+                    "  devkit-tool [cyan]documentgenerator[/] --conn [yellow]\"...\"[/] --solution [yellow]HsapCustomize[/] --folder [yellow]./docs[/]\n" +
+                    "  devkit-tool [cyan]documentcodegenerator[/] --folder [yellow]./bin/Debug[/] --output [yellow]./docs[/] --devops [yellow]AzureDevOps[/]\n" +
+                    "  devkit-tool [cyan]coveragetoxml[/] --coverage [yellow]file.coverage[/] --xml [yellow]output.xml[/] --dlls [yellow]\"a.dll;b.dll\"[/]\n" +
+                    "  devkit-tool [cyan]nuglify[/] --source [yellow]input.js[/] --destination [yellow]output.min.js[/]\n" +
+                    "  devkit-tool [cyan]decrypt[/] --password [yellow]\"encrypted_string\"[/]\n\n" +
                     "[dim]Use[/] [cyan]<command> --help[/] [dim]for more details on each command.[/]"
                 ))
             {
                 Border = BoxBorder.Double,
                 BorderStyle = new Style(Color.Green),
-                Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Tool Help [/] ", Justify.Left),
+                Header = new PanelHeader(" [bold] devkit-tool Help [/] ", Justify.Left),
                 Padding = new Padding(2, 1),
                 Width = 114
             };
