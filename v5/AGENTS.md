@@ -481,6 +481,7 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 
 | File | Purpose |
 |---|---|
+| `.agent/skills/devkit-analyzer/SKILL.md` | Analyzer development guidance |
 | `.agent/skills/markdown-management/SKILL.md` | Markdown management |
 | `.agent/skills/powershell-windows/SKILL.md` | PowerShell operations |
 

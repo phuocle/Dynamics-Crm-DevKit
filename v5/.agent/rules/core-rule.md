@@ -39,14 +39,14 @@ trigger: always_on
 | Component | Path | Description |
 |-----------|------|-------------|
 | **VSIX** | `DynamicsCrm.DevKit/` | VS2026 extension with project/item templates |
-| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 14 commands |
+| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 15 commands |
 | **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | 21 Roslyn analyzers (DEVKIT1001-1021) |
 | **Shared** | `DynamicsCrm.DevKit.Shared/` | Common logic, models, resources |
 | **Tool** | `DynamicsCrm.DevKit.Tool/` | Utility package |
 | **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration test project |
 | **Scripts** | `DynamicsCrm.DevKit.Scripts/` | Build and release PowerShell scripts |
 
-### CLI Commands (14 total)
+### CLI Commands (15 total)
 
 | Command | Status | Description |
 |---------|--------|-------------|
@@ -64,6 +64,7 @@ trigger: always_on
 | `uploadreport` | Active | Upload reports |
 | `downloadwebresource` | Active | Download web resources |
 | `datasource` | Active | Create data source entities |
+| `mcp` | Active | MCP server for Dataverse operations |
 
 ### Project Templates (13 total)
 

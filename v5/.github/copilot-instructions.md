@@ -21,7 +21,7 @@
 | Component | Path | Description |
 |-----------|------|-------------|
 | **VSIX** | `DynamicsCrm.DevKit/` | VS2026 extension with project/item templates |
-| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 14 commands |
+| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 15 commands |
 | **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | 21 Roslyn analyzers (DEVKIT1001-1021) |
 | **Shared** | `DynamicsCrm.DevKit.Shared/` | Common logic, models, resources |
 | **Tool** | `DynamicsCrm.DevKit.Tool/` | Utility package |
@@ -89,7 +89,11 @@ When running a CLI profile:
 | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+| Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
+| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
+| Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |
 
 ## File Patterns
 

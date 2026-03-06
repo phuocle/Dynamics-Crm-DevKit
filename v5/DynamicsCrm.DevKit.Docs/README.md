@@ -11,7 +11,7 @@ DynamicsCrm.DevKit.Docs/
 ├── README.md                              ← This file
 ├── DynamicsCrm.DevKit/                    ← VSIX Extension docs
 ├── DynamicsCrm.DevKit.Analyzers/          ← Roslyn Analyzers docs (DEVKIT1001-1021)
-├── DynamicsCrm.DevKit.Cli/               ← CLI Tool docs (14 commands)
+├── DynamicsCrm.DevKit.Cli/               ← CLI Tool docs (15 commands)
 ├── DynamicsCrm.DevKit.CrmSvcUtilExtensions/ ← CrmSvcUtil extension docs
 ├── DynamicsCrm.DevKit.Scripts/            ← Build/Release scripts docs
 ├── DynamicsCrm.DevKit.Tool/              ← Utility Tool docs (5 commands)

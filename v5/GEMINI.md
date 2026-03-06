@@ -29,6 +29,7 @@ Antigravity supports **slash commands** via `.agent/workflows/*.md`:
 | `/client-code-generate` | Generate entity files via CLI | turbo |
 | `/client-code-sync` | Sync source-of-truth files to TestClientCode | turbo |
 | `/client-code-test` | Run checks, builds, tests for TestClientCode | turbo |
+| `/unit-test` | Run all unit tests + code coverage report | turbo-all |
 | `/run-cli` | Run a specific CLI profile | no |
 
 ### How to Create New Workflows
@@ -84,6 +85,7 @@ Reusable skill modules in `.agent/skills/`:
 
 | Skill | Purpose |
 |-------|---------|
+| `devkit-analyzer/SKILL.md` | Analyzer development guidance |
 | `markdown-management/SKILL.md` | Markdown formatting best practices |
 | `powershell-windows/SKILL.md` | PowerShell Windows patterns and pitfalls |
 
