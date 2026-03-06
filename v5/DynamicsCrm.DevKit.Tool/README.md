@@ -21,6 +21,7 @@ After installation, the `devkit-tool` command is available globally.
 | `coveragetoxml` | Convert Visual Studio coverage file to XML |
 | `nuglify` | Minify HTML, CSS, or JS files |
 | `decrypt` | Decrypt an encrypted password string |
+| `createentity` | Create a Dataverse entity with standard forms and attributes |
 
 ## Usage
 
@@ -95,6 +96,31 @@ devkit-tool decrypt --password "encrypted_string"
 | Option | Required | Description |
 |---|---|---|
 | `--password` | Yes | The encrypted password string to decrypt |
+
+### createentity
+
+Create a Dataverse entity with standard forms (main, quick view, card) and a debug_context attribute.
+
+```
+devkit-tool createentity --conn "AuthType=..." --solution MySolution --entity "My Entity" --type UserOwned
+```
+
+| Option | Required | Description |
+|---|---|---|
+| `--conn` | Yes | Dataverse connection string |
+| `--solution` | Yes | Dataverse solution unique name |
+| `--entity` | Yes | Entity display name (e.g. `My Entity`) |
+| `--type` | Yes | Entity type: `UserOwned`, `OrganizationOwned`, `Activity`, `Elastic_UserOwned`, `Elastic_OrganizationOwned` |
+
+**Entity types:**
+
+| Type | Description |
+|---|---|
+| `UserOwned` | Standard user-owned entity |
+| `OrganizationOwned` | Organization-owned entity |
+| `Activity` | Activity entity (user-owned, with notes and feedback) |
+| `Elastic_UserOwned` | Elastic (Cosmos DB) user-owned entity |
+| `Elastic_OrganizationOwned` | Elastic (Cosmos DB) organization-owned entity |
 
 ## Related Packages
 

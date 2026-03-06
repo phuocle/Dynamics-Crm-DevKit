@@ -42,6 +42,9 @@ namespace DynamicsCrm.DevKit.Tool
 
                 config.AddCommand<DecryptCommand>("decrypt")
                       .WithDescription("Decrypt an encrypted password string");
+
+                config.AddCommand<CreateEntityCommand>("createentity")
+                      .WithDescription("Create a Dataverse entity with standard forms and attributes");
             });
 
             return app.Run(args);
@@ -79,13 +82,15 @@ namespace DynamicsCrm.DevKit.Tool
                     "  [cyan]documentcodegenerator[/]  Generate server-side code documentation from assemblies\n" +
                     "  [cyan]coveragetoxml[/]          Convert Visual Studio coverage file to XML\n" +
                     "  [cyan]nuglify[/]                Minify HTML, CSS, or JS files\n" +
-                    "  [cyan]decrypt[/]                Decrypt an encrypted password string\n\n" +
+                    "  [cyan]decrypt[/]                Decrypt an encrypted password string\n" +
+                    "  [cyan]createentity[/]           Create a Dataverse entity with standard forms\n\n" +
                     "[green]Examples:[/]\n" +
                     "  devkit-tool [cyan]documentgenerator[/] --conn [yellow]\"...\"[/] --solution [yellow]HsapCustomize[/] --folder [yellow]./docs[/]\n" +
                     "  devkit-tool [cyan]documentcodegenerator[/] --folder [yellow]./bin/Debug[/] --output [yellow]./docs[/] --devops [yellow]AzureDevOps[/]\n" +
                     "  devkit-tool [cyan]coveragetoxml[/] --coverage [yellow]file.coverage[/] --xml [yellow]output.xml[/] --dlls [yellow]\"a.dll;b.dll\"[/]\n" +
                     "  devkit-tool [cyan]nuglify[/] --source [yellow]input.js[/] --destination [yellow]output.min.js[/]\n" +
-                    "  devkit-tool [cyan]decrypt[/] --password [yellow]\"encrypted_string\"[/]\n\n" +
+                    "  devkit-tool [cyan]decrypt[/] --password [yellow]\"encrypted_string\"[/]\n" +
+                    "  devkit-tool [cyan]createentity[/] --conn [yellow]\"...\"[/] --solution [yellow]MySolution[/] --entity [yellow]\"My Entity\"[/] --type [yellow]UserOwned[/]\n\n" +
                     "[dim]Use[/] [cyan]<command> --help[/] [dim]for more details on each command.[/]"
                 ))
             {

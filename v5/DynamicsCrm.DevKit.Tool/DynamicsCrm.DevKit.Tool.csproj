@@ -50,6 +50,9 @@
 	  <None Include="images\icon.png" Pack="true" PackagePath="\" />
 	  <None Include="license\LICENSE.txt" />
 	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\CreateEntity\*.xml" />
+	</ItemGroup>
 	<PropertyGroup>
 		<NoWarn>SYSLIB0041;NU5100</NoWarn>
 	</PropertyGroup>
