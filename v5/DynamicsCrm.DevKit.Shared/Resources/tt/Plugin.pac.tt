@@ -1,0 +1,198 @@
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
+using Microsoft.Xrm.Sdk.PluginTelemetry;
+using System;
+using System.Runtime.CompilerServices;
+using System.ServiceModel;
+using <#=Context.PluginSharedNameSpace#>;
+
+namespace <#=Context.PluginNameSpace#>
+{
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.EntityLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.RegistrationName#>", <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin<#if(Context.IsAsynchronous){#>, DeleteAsyncOperation = true<#}#><#if(Context.HasPreImage){#>, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#><#if(Context.HasPostImage){#><#if(Context.HasPreImage){#>, Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*"<#} else {#>, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*"<#}#><#}#>)]
+    public class <#=Context.ClassWithOrder#> : PluginBase
+    {
+        /*
+<#=Context.PluginComment#>
+        */
+
+        public <#=Context.ClassWithOrder#>(string unsecureConfiguration, string secureConfiguration)
+            : base(typeof(<#=Context.ClassWithOrder#>))
+        {
+        }
+
+        protected override void ExecuteDataversePlugin(ILocalPluginContext localPluginContext)
+        {
+            if (localPluginContext == null)
+            {
+                throw new ArgumentNullException(nameof(localPluginContext));
+            }
+
+            var context = localPluginContext.PluginExecutionContext;
+            var tracing = localPluginContext.TracingService;
+            var serviceFactory = localPluginContext.OrgSvcFactory;
+            var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+            var service = serviceFactory.CreateOrganizationService(context.UserId);
+
+            tracing?.DebugContext(context);
+
+            ExecutePlugin(context, serviceFactory, serviceAdmin, service, tracing, localPluginContext.Logger);
+        }
+
+        private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing, ILogger logger)
+        {
+<#if(Context.IsCreateMessage || Context.IsUpdateMessage){#>
+            var targetEntity = context.InputParameterOrDefault<Entity>("Target");
+<#}else if(Context.IsCreateMultipleMessage || Context.IsUpdateMultipleMessage){#>
+            var targetEntities = context.InputParameterOrDefault<EntityCollection>("Targets");
+<#}else if(Context.IsDeleteMessage){#>
+            var targetEntityReference = context.InputParameterOrDefault<EntityReference>("Target");
+<#}else{#>
+            //var ??? = context.InputParameterOrDefault<???>("???");
+<#}#>
+<#if(Context.HasPreImage){#>
+            context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
+<#}#>
+<#if(Context.HasPostImage){#>
+            context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
+<#}#>
+            //YOUR PLUGIN-CODE GO HERE
+
+        }
+    }
+
+    public abstract class PluginBase : IPlugin
+    {
+        protected string PluginClassName { get; }
+
+        internal PluginBase(Type pluginClassName)
+        {
+            PluginClassName = pluginClassName.ToString();
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "Execute")]
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            if (serviceProvider == null)
+            {
+                throw new InvalidPluginExecutionException(nameof(serviceProvider));
+            }
+
+            var localPluginContext = new LocalPluginContext(serviceProvider);
+
+            localPluginContext.Trace($"Entered {PluginClassName}.Execute() " +
+                $"Correlation Id: {localPluginContext.PluginExecutionContext.CorrelationId}, " +
+                $"Initiating User: {localPluginContext.PluginExecutionContext.InitiatingUserId}");
+
+            try
+            {
+                ExecuteDataversePlugin(localPluginContext);
+                return;
+            }
+            catch (FaultException<OrganizationServiceFault> orgServiceFault)
+            {
+                localPluginContext.Trace($"Exception: {orgServiceFault.ToString()}");
+                throw new InvalidPluginExecutionException($"OrganizationServiceFault: {orgServiceFault.Message}", orgServiceFault);
+            }
+            finally
+            {
+                localPluginContext.Trace($"Exiting {PluginClassName}.Execute()");
+            }
+        }
+
+        protected virtual void ExecuteDataversePlugin(ILocalPluginContext localPluginContext)
+        {
+        }
+    }
+
+    public interface ILocalPluginContext
+    {
+        IOrganizationService InitiatingUserService { get; }
+        IOrganizationService PluginUserService { get; }
+        IPluginExecutionContext PluginExecutionContext { get; }
+        IServiceEndpointNotificationService NotificationService { get; }
+        ITracingService TracingService { get; }
+        IServiceProvider ServiceProvider { get; }
+        IOrganizationServiceFactory OrgSvcFactory { get; }
+        ILogger Logger { get; }
+        void Trace(string message, [CallerMemberName] string method = null);
+    }
+
+    public class LocalPluginContext : ILocalPluginContext
+    {
+        public IOrganizationService InitiatingUserService { get; }
+        public IOrganizationService PluginUserService { get; }
+        public IPluginExecutionContext PluginExecutionContext { get; }
+        public IServiceEndpointNotificationService NotificationService { get; }
+        public ITracingService TracingService { get; }
+        public IServiceProvider ServiceProvider { get; }
+        public IOrganizationServiceFactory OrgSvcFactory { get; }
+        public ILogger Logger { get; }
+
+        public LocalPluginContext(IServiceProvider serviceProvider)
+        {
+            if (serviceProvider == null)
+            {
+                throw new InvalidPluginExecutionException(nameof(serviceProvider));
+            }
+
+            ServiceProvider = serviceProvider;
+            Logger = serviceProvider.Get<ILogger>();
+            PluginExecutionContext = serviceProvider.Get<IPluginExecutionContext>();
+            TracingService = new LocalTracingService(serviceProvider);
+            NotificationService = serviceProvider.Get<IServiceEndpointNotificationService>();
+            OrgSvcFactory = serviceProvider.Get<IOrganizationServiceFactory>();
+            PluginUserService = serviceProvider.GetOrganizationService(PluginExecutionContext.UserId);
+            InitiatingUserService = serviceProvider.GetOrganizationService(PluginExecutionContext.InitiatingUserId);
+        }
+
+        public void Trace(string message, [CallerMemberName] string method = null)
+        {
+            if (string.IsNullOrWhiteSpace(message) || TracingService == null)
+            {
+                return;
+            }
+
+            if (method != null)
+                TracingService.Trace($"[{method}] - {message}");
+            else
+                TracingService.Trace($"{message}");
+        }
+    }
+
+    public class LocalTracingService : ITracingService
+    {
+        private readonly ITracingService _tracingService;
+        private DateTime _previousTraceTime;
+
+        public LocalTracingService(IServiceProvider serviceProvider)
+        {
+            DateTime utcNow = DateTime.UtcNow;
+            var context = (IExecutionContext)serviceProvider.GetService(typeof(IExecutionContext));
+            DateTime initialTimestamp = context.OperationCreatedOn;
+            if (initialTimestamp > utcNow)
+            {
+                initialTimestamp = utcNow;
+            }
+            _tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            _previousTraceTime = initialTimestamp;
+        }
+
+        public void Trace(string message, params object[] args)
+        {
+            var utcNow = DateTime.UtcNow;
+            var deltaMilliseconds = utcNow.Subtract(_previousTraceTime).TotalMilliseconds;
+            try
+            {
+                if (args == null || args.Length == 0)
+                    _tracingService.Trace($"[+{deltaMilliseconds:N0}ms] - {message}");
+                else
+                    _tracingService.Trace($"[+{deltaMilliseconds:N0}ms] - {string.Format(message, args)}");
+            }
+            catch (FormatException ex)
+            {
+                throw new InvalidPluginExecutionException($"Failed to write trace message due to error {ex.Message}", ex);
+            }
+            _previousTraceTime = utcNow;
+        }
+    }
+}

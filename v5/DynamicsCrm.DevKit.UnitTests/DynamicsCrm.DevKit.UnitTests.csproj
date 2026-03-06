@@ -41,9 +41,10 @@
     </Content>
   </ItemGroup>
 
-  <!-- Exclude CLI tests from net48, Analyzer tests from net10.0 -->
+  <!-- Exclude CLI/T4 tests from net48, Analyzer tests from net10.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Compile Remove="Cli\**\*.cs" />
+    <Compile Remove="T4\**\*.cs" />
     <Compile Remove="Lib\CSharpLateBoundTest.cs" />
   </ItemGroup>
 
