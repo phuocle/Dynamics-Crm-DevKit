@@ -150,6 +150,29 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
+## Git Operations (PowerShell)
+
+> [!IMPORTANT]
+> This project runs on **Windows with PowerShell**. When performing git operations, you **MUST** use PowerShell-compatible syntax. Bash syntax will fail.
+
+**Rules**:
+- Do NOT use `&&` to chain commands — use `;` or run commands separately
+- Do NOT use heredoc `<<'EOF'` — it is bash-only syntax
+- For multi-line commit messages, use multiple `-m` flags: `git commit -m "title" -m "body"`
+- Always run `git add` and `git commit` as **separate commands**, not chained
+
+**Example**:
+
+```powershell
+# Step 1: Stage files
+git add "file1.md" "file2.ps1"
+
+# Step 2: Commit (separate command)
+git commit -m "Short summary of changes" -m "Longer description of what was changed and why."
+```
+
+---
+
 ## Security
 
 > [!CAUTION]
