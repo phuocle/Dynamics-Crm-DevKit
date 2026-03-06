@@ -2,17 +2,10 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv4",
       "folder": "bin\\Debug",
       "includefiles": [
-        "???.Server*.dll",
-        "???.Package*.nupkg",
-        "???.Plugin*.dll",
-        "???.Plugin*.nupkg",
-        "???.CustomAction*.dll",
-        "???.Workflow*.dll",
-        "???.CustomApi*.dll",
-        "???.DataProvider*.dll"
+        "Dev.DevKit.Package*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"

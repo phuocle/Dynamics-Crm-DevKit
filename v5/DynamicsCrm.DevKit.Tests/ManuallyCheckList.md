@@ -162,13 +162,13 @@
 
 - ⬜ Deploy Server (Plugin) - Profile `07-DEVKITV4.Server`
 - ⬜ Deploy Server OnlyUpdateAssembly - Profile `08-DEVKITV4.Server.OnlyUpdateAssembly`
-- ⬜ Deploy Package - Profile `09-DEVKITV4.Server.Package`
-- ⬜ Deploy Package OnlyUpdateAssembly - Profile `10-DEVKITV4.Server.Package.OnlyUpdateAssembly`
+- ✅ Deploy Package
+- ✅ Deploy Package OnlyUpdateAssembly
 - ⬜ Deploy Server ManagedIdentity - Profile `11-DEVKITV4.Server.ManagedIdentity`
 - ⬜ Deploy Server MI OnlyUpdateAssembly - Profile `12-DEVKITV4.Server.ManagedIdentity.OnlyUpdateAssembly`
 - ⬜ Deploy Package ManagedIdentity - Profile `13-DEVKITV4.Package.ManagedIdentity`
 - ⬜ Deploy Package MI OnlyUpdateAssembly - Profile `14-DEVKITV4.Package.ManagedIdentity.OnlyUpdateAssembly`
-- ✅ Deploy DataSource - Profile `23-DEVKITV4.DataSource`
+- ✅ Deploy DataSource
 
 ### 2.3 Generator Command
 
