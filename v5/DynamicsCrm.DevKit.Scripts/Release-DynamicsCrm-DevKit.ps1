@@ -116,6 +116,15 @@ function Restore-Files {
 # --- Main Logic ---
 
 try {
+    # 0. Kill CLI process (may be running as MCP server, causing file locks)
+    $cliProcess = Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue
+    if ($cliProcess) {
+        Write-Host "Killing running CLI process (MCP server)..." -ForegroundColor Yellow
+        $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue
+        Start-Sleep -Milliseconds 500
+        Write-Host "CLI process killed." -ForegroundColor Green
+    }
+
     # 1. Determine Build Date
     # If no BuildDate provided, use Dec 31 of current year (annual release)
     if ([string]::IsNullOrWhiteSpace($BuildDate)) {
@@ -128,10 +137,6 @@ try {
     Write-Host "Version:       $Version" -ForegroundColor Cyan
     Write-Host "Date:          $BuildDate" -ForegroundColor Cyan
     Write-Host "Configuration: $Configuration" -ForegroundColor Cyan
-
-    if ($Configuration -eq "Debug") {
-        Write-Host "Mode:          DEBUG (no PFX required)" -ForegroundColor Yellow
-    }
 
     # 2. Update Placeholders
     Write-Host "`nUpdating placeholders..." -ForegroundColor Yellow
@@ -215,7 +220,7 @@ try {
     # 5. Create NuGet Packages
     Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow
 
-    # --- CLI: Use dotnet pack (upgraded to .NET tool) ---
+    # --- CLI: Use dotnet pack (.NET global tool) ---
     Write-Host "`nPacking CLI with dotnet pack (.NET tool)..." -ForegroundColor Cyan
     $cliProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
     
@@ -227,15 +232,33 @@ try {
         "/p:Version=$Version",
         "/p:AssemblyVersion=$Version",
         "/p:FileVersion=$Version",
-        "/p:NoWarn=NU5100%3BNU1702%3BCVSTBLD002",
-        "/p:SignAssembly=false"
+        "/p:NoWarn=NU5100%3BNU1702%3BCVSTBLD002"
     )
     
     & dotnet $dotnetPackArgs
     if ($LASTEXITCODE -ne 0) { throw "dotnet pack failed for CLI" }
     Write-Host "CLI package created successfully!" -ForegroundColor Green
 
-    # --- Analyzers & Tool: Use nuget pack (legacy .nuspec) ---
+    # --- Tool: Use dotnet pack (.NET global tool) ---
+    Write-Host "`nPacking Tool with dotnet pack (.NET tool)..." -ForegroundColor Cyan
+    $toolProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj"
+    
+    $dotnetPackToolArgs = @(
+        "pack",
+        $toolProject,
+        "-c", $Configuration,
+        "-o", $publishDir,
+        "/p:Version=$Version",
+        "/p:AssemblyVersion=$Version",
+        "/p:FileVersion=$Version",
+        "/p:NoWarn=NU5100%3BSYSLIB0041"
+    )
+    
+    & dotnet $dotnetPackToolArgs
+    if ($LASTEXITCODE -ne 0) { throw "dotnet pack failed for Tool" }
+    Write-Host "Tool package created successfully!" -ForegroundColor Green
+
+    # --- Analyzers: Use nuget pack (legacy .nuspec) ---
     $nugetExe = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Analyzers\Nuget\nuget.exe"
     if (-not (Test-Path $nugetExe)) {
         Write-Host "NuGet.exe not found. Downloading..." -ForegroundColor Yellow
@@ -246,8 +269,7 @@ try {
     }
 
     $nugetPackages = @(
-        @{ Dir = "DynamicsCrm.DevKit.Analyzers\Nuget"; Nuspec = "DynamicsCrm.DevKit.Analyzers.nuspec" },
-        @{ Dir = "DynamicsCrm.DevKit.Tool\Nuget"; Nuspec = "DynamicsCrm.DevKit.Tool.nuspec" }
+        @{ Dir = "DynamicsCrm.DevKit.Analyzers\Nuget"; Nuspec = "DynamicsCrm.DevKit.Analyzers.nuspec" }
     )
 
     foreach ($pkg in $nugetPackages) {
@@ -297,16 +319,15 @@ try {
     
     # 7. Install CLI (Always)
     Write-Host "`nInstalling CLI Locally..." -ForegroundColor Yellow
-    $ToolName = "DynamicsCrm.DevKit.Cli"
+    $CliToolName = "DynamicsCrm.DevKit.Cli"
         
-        # Determine nupkg path (it is in publishDir)
         $NupkgPath = $publishDir
         
         # Uninstall existing
-        $existingTool = dotnet tool list -g | Select-String -Pattern $ToolName
+        $existingTool = dotnet tool list -g | Select-String -Pattern $CliToolName
         if ($existingTool) {
-            Write-Host "Uninstalling existing tool..." -ForegroundColor DarkGray
-             dotnet tool uninstall -g $ToolName
+            Write-Host "Uninstalling existing CLI tool..." -ForegroundColor DarkGray
+             dotnet tool uninstall -g $CliToolName
         }
 
         # Force clean the tool store to prevent corruption
@@ -332,20 +353,19 @@ try {
         }
 
         # Install new
-        Write-Host "Installing new version..." -ForegroundColor DarkGray
+        Write-Host "Installing new CLI version..." -ForegroundColor DarkGray
         $installArgs = @(
             "tool", "install",
-            "-g", $ToolName,
+            "-g", $CliToolName,
             "--add-source", $NupkgPath,
             "--version", $Version
         )
         & dotnet $installArgs
         if ($LASTEXITCODE -ne 0) { 
-            # Try update if install fails
             Write-Host "Install failed (exit code $LASTEXITCODE), trying update..." -ForegroundColor Yellow
             $updateArgs = @(
                 "tool", "update",
-                "-g", $ToolName,
+                "-g", $CliToolName,
                 "--add-source", $NupkgPath,
                 "--version", $Version
             )
@@ -354,17 +374,80 @@ try {
                Write-Warning "Failed to install/update CLI tool. Exit code: $LASTEXITCODE" 
             } else {
                Write-Host "CLI updated successfully!" -ForegroundColor Green
-               Write-Host "Run 'devkit --version' to verify." -ForegroundColor Cyan
             }
         } else {
             Write-Host "CLI installed successfully!" -ForegroundColor Green
-            Write-Host "Run 'devkit --version' to verify." -ForegroundColor Cyan
+        }
+
+    # 8. Install Tool (Always)
+    Write-Host "`nInstalling Tool Locally..." -ForegroundColor Yellow
+    $ToolToolName = "DynamicsCrm.DevKit.Tool"
+
+        # Uninstall existing
+        $existingDevkitTool = dotnet tool list -g | Select-String -Pattern $ToolToolName
+        if ($existingDevkitTool) {
+            Write-Host "Uninstalling existing Tool..." -ForegroundColor DarkGray
+             dotnet tool uninstall -g $ToolToolName
+        }
+
+        # Force clean the tool store to prevent corruption
+        $toolToolStorePath = Join-Path $env:USERPROFILE ".dotnet\tools\.store\dynamicscrm.devkit.tool"
+        if (Test-Path $toolToolStorePath) {
+            Write-Host "Force cleaning tool store at $toolToolStorePath..." -ForegroundColor DarkGray
+            Remove-Item $toolToolStorePath -Recurse -Force -ErrorAction SilentlyContinue
+            Start-Sleep -Seconds 1
+        }
+
+        # Force clean the shim to prevent 'command conflicts'
+        $toolShimPath = Join-Path $env:USERPROFILE ".dotnet\tools\devkit-tool.exe"
+        if (Test-Path $toolShimPath) {
+             Write-Host "Force cleaning shim at $toolShimPath..." -ForegroundColor DarkGray
+             Remove-Item $toolShimPath -Force -ErrorAction SilentlyContinue
+        }
+
+        # Clear NuGet cache for this version to ensure we get the latest build
+        $toolCachedPackage = Join-Path $env:USERPROFILE ".nuget\packages\dynamicscrm.devkit.tool\$Version"
+        if (Test-Path $toolCachedPackage) {
+             Write-Host "Removing cached package at $toolCachedPackage..." -ForegroundColor DarkGray
+             Remove-Item $toolCachedPackage -Recurse -Force -ErrorAction SilentlyContinue
+        }
+
+        # Install new
+        Write-Host "Installing new Tool version..." -ForegroundColor DarkGray
+        $toolInstallArgs = @(
+            "tool", "install",
+            "-g", $ToolToolName,
+            "--add-source", $NupkgPath,
+            "--version", $Version
+        )
+        & dotnet $toolInstallArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Install failed (exit code $LASTEXITCODE), trying update..." -ForegroundColor Yellow
+            $toolUpdateArgs = @(
+                "tool", "update",
+                "-g", $ToolToolName,
+                "--add-source", $NupkgPath,
+                "--version", $Version
+            )
+            & dotnet $toolUpdateArgs
+            if ($LASTEXITCODE -ne 0) {
+               Write-Warning "Failed to install/update Tool. Exit code: $LASTEXITCODE"
+            } else {
+               Write-Host "Tool updated successfully!" -ForegroundColor Green
+            }
+        } else {
+            Write-Host "Tool installed successfully!" -ForegroundColor Green
         }
 
     Write-Host "`nRelease completed successfully!" -ForegroundColor Green
 
     # Verify installation
-    Write-Host "Verifying installation:" -ForegroundColor DarkGray
+    Write-Host "`nVerifying installation:" -ForegroundColor DarkGray
+    Write-Host "--- devkit (CLI) ---" -ForegroundColor Cyan
+    devkit --version
+    Write-Host "--- devkit-tool (Tool) ---" -ForegroundColor Cyan
+    devkit-tool --help
+    Write-Host "`n--- Global Tools List ---" -ForegroundColor Cyan
     dotnet tool list -g
 }
 catch {

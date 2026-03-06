@@ -2,17 +2,17 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "devkitv4",
+      "solution": "???",
       "folder": "bin\\Debug",
       "includefiles": [
-        "Dev.DevKit.Server*.dll",
-        "Dev.DevKit.Package*.nupkg",
-        "Dev.DevKit.Plugin*.dll",
-        "Dev.DevKit.Plugin*.nupkg",
-        "Dev.DevKit.CustomAction*.dll",
-        "Dev.DevKit.Workflow*.dll",
-        "Dev.DevKit.CustomApi*.dll",
-        "Dev.DevKit.DataProvider*.dll"
+        "???.Server*.dll",
+        "???.Package*.nupkg",
+        "???.Plugin*.dll",
+        "???.Plugin*.nupkg",
+        "???.CustomAction*.dll",
+        "???.Workflow*.dll",
+        "???.CustomApi*.dll",
+        "???.DataProvider*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
@@ -22,7 +22,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "devkitv4",
+      "solution": "???",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -31,8 +31,7 @@
         "images\\**.png",
         "js\\**.js",
         "lib\\**.js",
-        "resources\\*.resx",
-        "build\\*.js"
+        "resources\\*.resx"
       ],
       "excludefiles": [
         "test\\**.js"
@@ -40,39 +39,35 @@
       "dependencies": [
         {
           "webresources": [
-            "v4_/entities/[entity].js"
+            "???_/entities/[entity].js"
           ],
           "dependencies": [
-            "v4_/entities/[entity].form.js",
-            "v4_/entities/[entity].webapi.js"
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "v4_/entities/[entity].form.js"
+            "???_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "v4_/lib/devkit.js"
+            "???_/lib/devkit.js"
           ]
         }
       ]
     },
     {
       "profile": "DEBUGTS",
-      "solution": "devkitv4",
+      "solution": "???",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
         "html\\**.html",
         "images\\**.png",
-        "resources\\*.resx",
-        "build\\*.js"
+        "resources\\*.resx"
       ],
-      "excludefiles": [
-        "test\\**.js"
-      ],
-      "dependencies": [
-      ]
+      "excludefiles": [],
+      "dependencies": []
     }
   ],
   "datasources": [
@@ -82,22 +77,15 @@
       "displayname": "???",
       "pluralname": "???",
       "name": "???"
-    },
-    {
-      "profile": "Sqlite",
-      "solution": "devkitv4",
-      "displayname": "Sqlite",
-      "pluralname": "Sqlites",
-      "name": "Sqlite"
     }
   ],
   "generators": [
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "Dev.DevKit.Shared.Entities",
+      "rootnamespace": "???",
       "namespace": "",
-      "rootfolder": "",
+      "rootfolder": "???",
       "entities": "folder"
     },
     {
@@ -142,19 +130,19 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "devkitv4",
+      "solution": "???",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "devkitv4",
+      "folder": "???",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "devkitv4",
+      "solution": "???",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "devkitv4",
+      "folder": "???",
       "type": "Pack",
       "mapfile": ""
     }
@@ -162,9 +150,9 @@
   "modelbuilders": [
     {
       "profile": "ALL",
-      "namespace": "Dev.DevKit.ProxyTypes",
+      "namespace": "???.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "account,contact,systemuser,team"
+      "entities": "*"
     }
   ],
   "uploadreports": [

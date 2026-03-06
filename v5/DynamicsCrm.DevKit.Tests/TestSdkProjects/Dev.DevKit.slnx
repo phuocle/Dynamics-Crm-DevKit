@@ -1,26 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
-    <File Path=".editorconfig" />
-    <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
-  <Project Path="Dev.DevKit.Console/Dev.DevKit.Console.csproj" />
-  <Project Path="Dev.DevKit.ConsoleCore/Dev.DevKit.ConsoleCore.csproj" />
-  <Project Path="Dev.DevKit.Package/Dev.DevKit.Package.csproj" />
-  <Project Path="Dev.DevKit.Package2/Dev.DevKit.Package2.csproj" />
-  <Project Path="Dev.DevKit.ProxyTypes/Dev.DevKit.ProxyTypes.csproj" />
-  <Project Path="Dev.DevKit.Report/Dev.DevKit.Report.rptproj">
-    <Deploy />
-  </Project>
-  <Project Path="Dev.DevKit.Server/Dev.DevKit.Server.csproj" />
-  <Project Path="Dev.DevKit.Server2/Dev.DevKit.Server2.csproj" />
-  <Project Path="Dev.DevKit.Server3/Dev.DevKit.Server3.csproj" />
-  <Project Path="Dev.DevKit.Server4/Dev.DevKit.Server4.csproj" />
-  <Project Path="Dev.DevKit.Shared.Test/Dev.DevKit.Shared.Test.shproj" Id="fd00dc29-d72e-4deb-89e4-aad3072960c3" />
-  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="a0bd4a94-1baa-4157-ae19-85b683272d84" />
-  <Project Path="Dev.DevKit.SolutionPackager/Dev.DevKit.SolutionPackager.csproj" />
-  <Project Path="Dev.DevKit.Test/Dev.DevKit.Test.csproj" />
-  <Project Path="Dev.DevKit.UiTest/Dev.DevKit.UiTest.csproj" />
-  <Project Path="Dev.DevKit.WebResource/Dev.DevKit.WebResource.csproj" />
-  <Project Path="Dev.DevKit.WebResourceTs/Dev.DevKit.WebResourceTs.csproj" />
+  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="111fcf03-72e9-4a06-8997-4588919002b9" />
 </Solution>

@@ -135,9 +135,12 @@ namespace DynamicsCrm.DevKit.Shared
 
             try
             {
+                var preload = _preloadTask;
                 var delayTask = Task.Delay(timeoutMs);
-                var completedTask = await Task.WhenAny(_preloadTask, delayTask).ConfigureAwait(false);
-                return completedTask == _preloadTask && _preloadTask.Status == TaskStatus.RanToCompletion;
+#pragma warning disable VSTHRD003 // Intentionally awaiting background preload task with timeout
+                var completedTask = await Task.WhenAny(preload, delayTask).ConfigureAwait(false);
+#pragma warning restore VSTHRD003
+                return completedTask == preload && preload.Status == TaskStatus.RanToCompletion;
             }
             catch
             {

@@ -26,7 +26,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Dynamics 365 URL")]
         public string Url { get; set; } = string.Empty;
 
-        // Phase 2: Modern Interactive Authentication arguments
         [CommandOption("--auth")]
         [Description("Authentication type (Interactive, DeviceCode)")]
         public string AuthType { get; set; } = string.Empty;
@@ -39,12 +38,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Azure AD Client Secret (for ClientSecret auth type)")]
         public string ClientSecret { get; set; } = string.Empty;
 
-        // Phase 4: FromPac arguments
         [CommandOption("--pacprofile")]
         [Description("PAC CLI auth profile name or index")]
         public string PacProfile { get; set; } = string.Empty;
 
-        // OAuth Username/Password arguments
         [CommandOption("--username")]
         [Description("Username for OAuth authentication")]
         public string Username { get; set; } = string.Empty;
@@ -53,7 +50,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Password for OAuth authentication (can be encrypted)")]
         public string Password { get; set; } = string.Empty;
 
-        // AD (On-premises) arguments
         [CommandOption("--domain")]
         [Description("Domain for AD authentication (on-premises)")]
         public string Domain { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Cli.Commands;
+using DynamicsCrm.DevKit.Cli.Commands;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
@@ -24,12 +24,20 @@ namespace DynamicsCrm.DevKit.Cli
                 var originalArgs = args;
                 args = LegacyArgConverter.Convert(args);
 
+                var updateTask = UpdateChecker.CheckAsync();
+
                 // Show help if no args or explicit help request
                 if (args == null || args.Length == 0 ||
                     (args.Length == 1 && (args[0] == "--help" || args[0] == "-h")))
                 {
                     SpectreLog.WriteHeader();
                     SpectreLog.WriteHelp();
+                    try
+                    {
+                        var updateResult = await updateTask;
+                        UpdateChecker.ShowNotification(updateResult);
+                    }
+                    catch { }
                     SpectreLog.WaitForKeyPress();
                     return 0;
                 }
@@ -84,9 +92,21 @@ namespace DynamicsCrm.DevKit.Cli
 
                     config.AddCommand<DataSourceCommand>("datasource")
                           .WithDescription("Create data source entities");
+
+                    config.AddCommand<McpCommand>("mcp")
+                          .WithDescription("Start MCP server for AI agent integration");
                 });
 
                 var result = await app.RunAsync(args);
+
+                try
+                {
+                    var updateResult = await updateTask;
+                    UpdateChecker.ShowNotification(updateResult);
+                }
+                catch
+                {
+                }
 
                 SpectreLog.WaitForKeyPress();
                 return result;

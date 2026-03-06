@@ -1,7 +1,8 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Services;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.PowerPlatform.Dataverse.Client;
@@ -278,7 +279,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var friendlyname = row.GetAttributeValue<string>("friendlyname");
                 var description = row.GetAttributeValue<string>("description");
                 var workflowactivitygroupname = row.GetAttributeValue<string>("workflowactivitygroupname");
-                var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
+                var isolationMode = DeploymentService.GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
 
                 var attribute = $"\"{name}\", \"{friendlyname}\", \"{description}\", \"{workflowactivitygroupname}\", {isolationModeName}, PluginType = PluginType.Workflow, Id = \"{pluginTypeId}\"";
@@ -364,8 +365,8 @@ namespace DynamicsCrm.DevKit.Commands
             foreach (var row in rows.Entities)
             {
                 var stepId = row.Id;
-                var message = XrmHelper.GetAliasedValue<string>(row, "m.name");
-                var entity = XrmHelper.GetAliasedValue<string>(row, "f.primaryobjecttypecode");
+                var message = DeploymentService.GetAliasedValue<string>(row, "m.name");
+                var entity = DeploymentService.GetAliasedValue<string>(row, "f.primaryobjecttypecode");
                 var stage = row.GetAttributeValue<OptionSetValue>("stage").Value;
                 var stageName = stage == 10 ? "StageEnum.PreValidation" : (stage == 20 ? "StageEnum.PreOperation" : "StageEnum.PostOperation");
                 var mode = row.GetAttributeValue<OptionSetValue>("mode").Value;
@@ -373,7 +374,7 @@ namespace DynamicsCrm.DevKit.Commands
                 var filteringAttributes = row.GetAttributeValue<string>("filteringattributes");
                 var name = row.GetAttributeValue<string>("name");
                 var rank = row.GetAttributeValue<int>("rank");
-                var isolationMode = XrmHelper.GetAliasedValue<OptionSetValue>(row, "p.isolationmode").Value;
+                var isolationMode = DeploymentService.GetAliasedValue<OptionSetValue>(row, "p.isolationmode").Value;
                 var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
 
                 var sb = new StringBuilder();
@@ -399,7 +400,7 @@ namespace DynamicsCrm.DevKit.Commands
                 if (configuration != null)
                     sb.Append($", UnSecureConfiguration = \"{configuration}\"");
 
-                var secureconfig = XrmHelper.GetAliasedValue<string>(row, "s.secureconfig");
+                var secureconfig = DeploymentService.GetAliasedValue<string>(row, "s.secureconfig");
                 if (secureconfig != null)
                     sb.Append($", SecureConfiguration = \"{secureconfig}\"");
 

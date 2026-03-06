@@ -1,5 +1,5 @@
 ---
-description: Development rules for DynamicsCrm.DevKit Roslyn Analyzers (DEVKIT1001-1021)
+description: Development rules for DynamicsCrm.DevKit Roslyn analyzers (DEVKIT1001-DEVKIT1021)
 alwaysApply: true
 ---
 
@@ -8,12 +8,12 @@ alwaysApply: true
 ## Project Structure
 
 | Folder | Purpose |
-|--------|---------|
+|-----|---|
 | `DynamicsCrm.DevKit.Analyzers\` | Main analyzer project (netstandard2.0) |
 | `DynamicsCrm.DevKit.Analyzers\CrmAnalyzers\` | Individual analyzer implementations |
-| `DynamicsCrm.DevKit.Analyzers.Test\` | Unit tests with xUnit + Roslyn Test Framework |
-| `DynamicsCrm.DevKit.Analyzers.Test\Tests\` | Test classes for each analyzer |
-| `DynamicsCrm.DevKit.Analyzers.Test\Verifier\` | `CSharpAnalyzerVerifier<T>` utility |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\` | Analyzer unit tests with xUnit + Roslyn Test Framework |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\` | Test classes for each analyzer |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\Verifier\` | `CSharpAnalyzerVerifier<T>` utility |
 | `DynamicsCrm.DevKit.Tests\TestAnalyzers\` | Visual Studio integration tests |
 | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` | Documentation for each analyzer |
 
@@ -34,13 +34,13 @@ alwaysApply: true
 1. Đọc kỹ lại nội dung anh Phước yêu cầu
 2. Xác định analyzer nào liên quan (DEVKIT1001-DEVKIT1021)
 3. Đọc lại các files core trong `DynamicsCrm.DevKit.Analyzers\`:
-   - `DiagnosticIdentifiers.cs` - xem danh sách ID
-   - `DiagnosticDescriptors.cs` - xem descriptors
-   - Analyzer file tương ứng trong `CrmAnalyzers\`
+ - `DiagnosticIdentifiers.cs` - xem danh sách ID
+ - `DiagnosticDescriptors.cs` - xem descriptors
+ - Analyzer file tương ứng trong `CrmAnalyzers\`
 
 ### Bước 2: Kiểm tra Unit Tests
 1. Chạy workflow `/build-analyzer` để build và run tests
-2. Unit tests nằm tại: `DynamicsCrm.DevKit.Analyzers.Test\Tests\{AnalyzerName}Tests.cs`
+2. Unit tests nằm tại: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
 3. Sử dụng pattern `[|code|]` để mark expected diagnostics:
    ```csharp
    var src = WrapInPlugin("[|new ColumnSet(true)|]");
@@ -70,7 +70,7 @@ alwaysApply: true
 - [ ] `DiagnosticIdentifiers.cs` đã có ID mới (nếu thêm mới)?
 - [ ] `DiagnosticDescriptors.cs` đã có descriptor mới (nếu thêm mới)?
 - [ ] Analyzer file tồn tại trong `CrmAnalyzers\`?
-- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.Analyzers.Test\Tests\`?
+- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
 - [ ] Unit tests pass? (chạy `/build-analyzer`)
 - [ ] Integration test file `DEVKIT{XXXX}.cs` tồn tại trong `TestAnalyzers\`?
 - [ ] Documentation file `DEVKIT{XXXX}.md` tồn tại?
@@ -79,7 +79,7 @@ alwaysApply: true
 ## Current Analyzers (DEVKIT1001-DEVKIT1021)
 
 | ID | Analyzer | Severity |
-|----|----------|----------|
+|----|----|----|
 | DEVKIT1001 | UpdateMessageShouldHaveFilteringAttributesAnalyzer | Warning (Create) / Error (Update) |
 | DEVKIT1002 | NotUseColumnSetTrueAnalyzer | Warning |
 | DEVKIT1003 | PluginImageAnalyzer | Error |

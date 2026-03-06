@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Cli;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -23,6 +24,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
         private string DataSourceName { get; set; }
+
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
 
         public async Task<bool> IsValidAsync()
         {
@@ -72,14 +78,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError("'name' can cannot contain space character.");
                 return false;
             }
-            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"solution '{Json.solution}' not exist");
                 return false;
             }
             DataSourceName = Json.name.ToLower().StartsWith(SolutionPrefix.ToLower()) ? Json.name : $"{SolutionPrefix}{Json.name}";
-            if (await XrmHelper.IsExistDataSourceAsync(ServiceClient, DataSourceName))
+            if (await Metadata.IsExistDataSourceAsync(DataSourceName))
             {
                 SpectreLog.ActionError($"name '{DataSourceName}' exist");
                 return false;
@@ -99,13 +105,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 });
                 SpectreLog.ActionWithLevel0(CliAction.CREATED, "Data Source", DataSourceName);
             }
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }
 
         public async Task RegisterDataSourceAsync()
         {
-            var languageCode = await XrmHelper.GetLanguageCodeAsync(ServiceClient);
+            var languageCode = await Metadata.GetLanguageCodeAsync();
             var propertyFalse = new BooleanManagedProperty(false);
             var propertyTrue = new BooleanManagedProperty(true);
 
@@ -166,6 +173,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Parameters["SolutionUniqueName"] = Json.solution;
             else
                 request.Parameters.Add("SolutionUniqueName", Json.solution);
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (CreateEntityResponse)await ServiceClient.ExecuteAsync(request);
             var entityId = response.EntityId;
             var retrieveEntityRequest = new RetrieveEntityRequest()
@@ -173,6 +181,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityFilters = EntityFilters.All,
                 MetadataId = entityId
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             EntityMetadata entityMetadata = ((RetrieveEntityResponse)await ServiceClient.ExecuteAsync(retrieveEntityRequest)).EntityMetadata;
 
             var requestId = new RetrieveAttributeRequest()
@@ -180,6 +189,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}id", entityMetadata.LogicalName)
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var attributeMetadataId = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestId)).AttributeMetadata;
             attributeMetadataId.ExternalName = $"{DataSourceName}Id";
             var updateRequestId = new UpdateAttributeRequest()
@@ -188,12 +198,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             await ServiceClient.ExecuteAsync(updateRequestId);
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
                 LogicalName = string.Format("{0}name", DataSourceName.ToLower())
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             var attributeMetadataName = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestName)).AttributeMetadata;
             attributeMetadataName.ExternalName = $"{DataSourceName}Name";
             var updateRequestName = new UpdateAttributeRequest()
@@ -202,11 +214,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
+            XrmHelper.COUNT_ExecuteAsync++;
             await ServiceClient.ExecuteAsync(updateRequestName);
 
             try
             {
                 PublishAllXmlRequest publishAllXmlRequest = new();
+                XrmHelper.COUNT_ExecuteAsync++;
                 PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse)await ServiceClient.ExecuteAsync(publishAllXmlRequest);
             }
             catch

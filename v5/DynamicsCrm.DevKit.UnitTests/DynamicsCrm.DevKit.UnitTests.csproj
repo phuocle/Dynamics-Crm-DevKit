@@ -1,0 +1,110 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net48;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Nullable>disable</Nullable>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <!-- Shared linked files (net48 only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\Date.cs" Link="Lib\Date.cs" />
+    <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DevKitJson.cs" Link="Lib\DevKitJson.cs" />
+  </ItemGroup>
+
+  <!-- Content files per framework -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Content Include="Lib\AllDataverseTypes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lib\AllDataverseTypes.compact.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Content Include="Cli\Account.FormXrml.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Account.FormXrml.xml</Link>
+    </Content>
+  </ItemGroup>
+
+  <!-- Exclude CLI/T4 tests from net48, Analyzer tests from net10.0 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Compile Remove="Cli\**\*.cs" />
+    <Compile Remove="T4\**\*.cs" />
+    <Compile Remove="Lib\CSharpLateBoundTest.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Remove="Analyzers\**\*.cs" />
+    <Compile Remove="Lib\**\*.cs" />
+    <Compile Include="Lib\CSharpLateBoundTest.cs" />
+  </ItemGroup>
+
+  <!-- Generated output files - Content only, not compiled -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Compile Remove="Lib\UnitTestEntity.generated.cs" />
+    <Compile Remove="Lib\UnitTestEntity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lib\UnitTestEntity.generated.cs" />
+    <None Include="Lib\UnitTestEntity.cs" />
+  </ItemGroup>
+
+  <!-- Analyzer project reference (net48 only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" />
+  </ItemGroup>
+
+  <!-- CLI project reference (net10.0 only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" />
+  </ItemGroup>
+
+  <!-- Analyzer test packages (net48 only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="1.1.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzer.Testing" Version="1.1.3" />
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- CLI test packages (net10.0 only) -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.1.0" />
+    <PackageReference Include="FakeXrmEasy.v9" Version="3.8.0" />
+  </ItemGroup>
+
+  <!-- Shared test infrastructure -->
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <None Include="coverlet.runsettings" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+</Project>

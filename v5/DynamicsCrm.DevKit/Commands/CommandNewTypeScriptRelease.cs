@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System;
@@ -36,7 +37,8 @@ namespace DynamicsCrm.DevKit.Commands
             var url = serviceClient.ConnectedUrl();
             await TypeScriptBuildHelper.ShowStatusAsync(url, "Connected");
 
-            var solutions = await XrmHelper.GetSolutionsAsync(serviceClient);
+            var deployment = new DeploymentService(serviceClient);
+            var solutions = await deployment.GetSolutionsAsync();
             var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
 
             // Build TypeScript in Release mode (minified)
@@ -75,8 +77,10 @@ namespace DynamicsCrm.DevKit.Commands
             const int wait = 2;
             var url = serviceClient.ConnectedUrl();
 
+            var deployment = new DeploymentService(serviceClient);
+
             await TypeScriptBuildHelper.ShowStatusAsync(url, "Deploying (Release) ...");
-            var (webResouceId, message) = await XrmHelper.DeployNewWebResourceAsync(serviceClient, fullFileName, deployWebResource.WebResource);
+            var (webResouceId, message) = await deployment.DeployNewWebResourceAsync(fullFileName, deployWebResource.WebResource);
 
             if (webResouceId != Guid.Empty)
             {
@@ -84,13 +88,13 @@ namespace DynamicsCrm.DevKit.Commands
                 await Helper.DelayAsync(wait);
                 await TypeScriptBuildHelper.ShowStatusAsync(url, "Adding to solution ...");
                 await Helper.DelayAsync(wait);
-                await XrmHelper.AddWebResourceToSolutionAsync(serviceClient, webResouceId, deployWebResource.SolutionUniqueName);
+                await deployment.AddWebResourceToSolutionAsync(webResouceId, deployWebResource.SolutionUniqueName);
                 await Helper.DelayAsync(wait);
                 await TypeScriptBuildHelper.ShowStatusAsync(url, "Added to solution");
                 await Helper.DelayAsync(wait);
                 await TypeScriptBuildHelper.ShowStatusAsync(url, "Publishing ...");
 
-                var (ok2, message2) = await XrmHelper.PublishWebResourceAsync(serviceClient, webResouceId);
+                var (ok2, message2) = await deployment.PublishWebResourceAsync(webResouceId);
                 if (ok2)
                 {
                     await TypeScriptBuildHelper.ShowStatusAsync(url, $"[{fullFileName}] published (Release) to: [{deployWebResource.WebResource}]");

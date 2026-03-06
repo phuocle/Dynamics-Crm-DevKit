@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -14,14 +15,17 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private const string TAB = "\t";
 
         private static ServiceClient ServiceClient { get; set; }
+        private static MetadataService _metadataService;
+        private static MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
 
         public static async Task<string> GetTsWebApiCodeAsync(ServiceClient serviceClient, EntityMetadata entityMetadata)
         {
             ServiceClient = serviceClient;
+            _metadataService = null;
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = await XrmHelper.FetchEntityMetadataAsync(serviceClient, entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
             return await GenerateTsContentAsync();
         }
 

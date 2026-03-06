@@ -20,9 +20,17 @@ lcov.info
 **/build/
 **/bin/
 **/obj/
+**/nupkg/
+
+# Tool test data
+DynamicsCrm.DevKit.Tool/Test/
+
+# Environment secrets
+.env
 
 # IDE
-**/.vscode/
+**/.vscode/*
+!.vscode/mcp.json
 **/.idea/
 
 # OS files

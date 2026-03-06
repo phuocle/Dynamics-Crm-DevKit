@@ -1,6 +1,8 @@
 # Create New Analyzer
 
-Create a new Roslyn analyzer for DynamicsCrm.DevKit, following established project patterns.
+# Create New Analyzer Workflow
+
+This workflow guides you through creating a new Roslyn analyzer for DynamicsCrm.DevKit, following the established project patterns.
 
 ## Pre-requisites
 
@@ -10,19 +12,26 @@ Before starting, you need to know:
 3. **Severity level**: Error, Warning, or Info?
 4. **Microsoft Best Practice URL**: Official documentation link (if applicable)
 
+---
+
 ## Step 1: Determine Next Available ID
 
+
 ```powershell
+# Check current highest ID in DiagnosticIdentifiers.cs
 Get-Content "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\DiagnosticIdentifiers.cs" | Select-String "DEVKIT\d+"
 ```
 
 Expected: Next ID after the highest existing one (e.g., if DEVKIT1021 exists, next is DEVKIT1022)
 
+---
+
 ## Step 2: Add Diagnostic Identifier
 
-Edit `DynamicsCrm.DevKit.Analyzers\DiagnosticIdentifiers.cs`:
+Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\DiagnosticIdentifiers.cs`:
 
 ```csharp
+// Add new constant at the end of the class
 public const string YourAnalyzerName = "DEVKIT{XXXX}";
 ```
 
@@ -31,9 +40,11 @@ public const string YourAnalyzerName = "DEVKIT{XXXX}";
 public const string DuplicatePluginStepRegistration = "DEVKIT1022";
 ```
 
+---
+
 ## Step 3: Add Diagnostic Descriptor
 
-Edit `DynamicsCrm.DevKit.Analyzers\DiagnosticDescriptors.cs`:
+Edit `d:\github\Dynamics-Crm.DevKit.Analyzers\DiagnosticDescriptors.cs`:
 
 ```csharp
 /// <summary>DEVKIT{XXXX}</summary>
@@ -41,7 +52,7 @@ public static readonly DiagnosticDescriptor YourDescriptorName = CreateDescripto
     "DEVKIT{XXXX}",
     "Title of the diagnostic",
     "Message format with {0} placeholders",
-    DiagnosticSeverity.Warning,
+    DiagnosticSeverity.Warning,  // or Error/Info
     "Detailed description of what this rule checks.");
 ```
 
@@ -56,9 +67,11 @@ public static readonly DiagnosticDescriptor DuplicatePluginStepRegistration = Cr
     "Don't duplicate plug-in step registration as it can cause unintended behavior.");
 ```
 
+---
+
 ## Step 4: Create Analyzer Implementation
 
-Create new file: `DynamicsCrm.DevKit.Analyzers\CrmAnalyzers\{AnalyzerName}Analyzer.cs`
+Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\CrmAnalyzers\{AnalyzerName}Analyzer.cs`
 
 **Template:**
 ```csharp
@@ -102,6 +115,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             base.Initialize(context);
             
+            // Register for appropriate syntax nodes
             context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ObjectCreationExpression);
         }
 
@@ -110,6 +124,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var semanticModel = context.SemanticModel;
             if (semanticModel == null) return;
 
+            // Check if inside plugin/workflow (if applicable)
             if (!AnalyzerHelper.IsInsidePluginOrWorkflow(context.Node, semanticModel, context.CancellationToken))
                 return;
 
@@ -123,18 +138,20 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 }
 ```
 
+---
+
 ## Step 5: Create Unit Tests
 
-Create new file: `DynamicsCrm.DevKit.Analyzers.Test\Tests\{AnalyzerName}AnalyzerTests.cs`
+Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}AnalyzerTests.cs`
 
 **Template:**
 ```csharp
 using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
-using DynamicsCrm.DevKit.Analyzers.Test.Verifier;
+using DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier;
 using Xunit;
 
-namespace DynamicsCrm.DevKit.Analyzers.Test.Tests
+namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
 {
     public class {AnalyzerName}AnalyzerTests
     {
@@ -230,7 +247,10 @@ public class RegularClass
 }
 ```
 
+---
+
 ## Step 6: Run Unit Tests
+
 
 ```powershell
 cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers"
@@ -239,15 +259,18 @@ cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers"
 
 **Expected:** All tests pass with good coverage
 
+---
+
 ## Step 7: Create Integration Test File
 
-Create new file: `DynamicsCrm.DevKit.Tests\TestAnalyzers\DEVKIT{XXXX}.cs`
+Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestAnalyzers\DEVKIT{XXXX}.cs`
 
 **Template:**
 ```csharp
 using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
 using System;
+// Add other using statements as needed
 
 namespace TestAnalyzers
 {
@@ -264,12 +287,16 @@ namespace TestAnalyzers
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
             // DEVKIT{XXXX}: Code that should trigger the diagnostic
+            // {Example problematic code}
         }
     }
 }
 ```
 
+---
+
 ## Step 8: Copy DLL to Test Project for VS Integration Testing
+
 
 ```powershell
 cd "d:\github\Dynamics-Crm-DevKit\v5"
@@ -282,9 +309,11 @@ Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsC
 2. Open `DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.slnx`
 3. Verify the diagnostic appears in the integration test file
 
+---
+
 ## Step 9: Create Documentation
 
-Create new file: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\DEVKIT{XXXX}.md`
+Create new file: `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\DEVKIT{XXXX}.md`
 
 Use template from: `DEVKIT.template.md`
 
@@ -298,12 +327,16 @@ Use template from: `DEVKIT.template.md`
 - Suppression
 - Rule Properties
 
+---
+
 ## Step 10: Update Roadmap
 
-Edit `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\ANALYZERS_ROADMAP.md`:
+Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\ANALYZERS_ROADMAP.md`:
 
 1. Move entry from "Suggested New Analyzers" to "Current Analyzers" table
 2. Update status from Planned to Implemented
+
+---
 
 ## Final Verification Checklist
 
@@ -315,6 +348,8 @@ Edit `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\ANALYZERS_ROADMAP.md`
 - [ ] Documentation `DEVKIT{XXXX}.md` created
 - [ ] `ANALYZERS_ROADMAP.md` updated
 - [ ] Request anh Phước to test in Visual Studio
+
+---
 
 ## Tips and Common Patterns
 
@@ -336,7 +371,7 @@ context.RegisterSyntaxNodeAction(AnalyzeNode,
 DiagnosticHelpers.ReportDiagnostic(context, 
     DiagnosticDescriptors.YourDescriptor,
     node.GetLocation(), 
-    "HttpClient");
+    "HttpClient");  // {0} placeholder value
 ```
 
 ### Get type info from expression

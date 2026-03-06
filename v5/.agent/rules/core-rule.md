@@ -8,15 +8,23 @@ trigger: always_on
 
 ---
 
-## 📌 Communication Protocol
+## Communication Protocol
 
-### Required Greeting & Closing
-- **Start every response with**: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` (based on current time)
+- **Start every response with**: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` (based on user's local time)
 - **End every response with**: `"[emoji] Tôi đã là xong rồi anh Phước, hãy kiểm tra lại những gì tôi làm nhé [emoji]"`
 
 ---
 
-## 🚫 Critical Constraints
+## User Timezone (for greeting)
+
+- **Timezone**: Vietnam (Asia/Ho_Chi_Minh, UTC+7)
+- **Greeting mapping**: sáng (5h–11h), trưa (11h–13h), chiều (13h–17h), tối (17h–21h), đêm (21h–5h)
+- **If context shows UTC or server time**: Add 7 hours to get Vietnam time before choosing greeting (e.g. 11:05 UTC → 18:05 Vietnam → chiều)
+- **Build start/end times**: Use the actual timestamp when the command was executed (from terminal output or system), not assumed time. If unknown, omit or use "N/A".
+
+---
+
+## Critical Constraints
 
 | Rule | Description |
 |------|-------------|
@@ -26,19 +34,20 @@ trigger: always_on
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 | Component | Path | Description |
 |-----------|------|-------------|
 | **VSIX** | `DynamicsCrm.DevKit/` | VS2026 extension with project/item templates |
-| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 14 commands |
+| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET global tool with 15 commands |
 | **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | 21 Roslyn analyzers (DEVKIT1001-1021) |
 | **Shared** | `DynamicsCrm.DevKit.Shared/` | Common logic, models, resources |
 | **Tool** | `DynamicsCrm.DevKit.Tool/` | Utility package |
 | **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration test project |
 | **Scripts** | `DynamicsCrm.DevKit.Scripts/` | Build and release PowerShell scripts |
 
-### CLI Commands (14 total)
+### CLI Commands (15 total)
+
 | Command | Status | Description |
 |---------|--------|-------------|
 | `generator` | Active | Generate form/webapi js/ts/csharp |
@@ -55,43 +64,46 @@ trigger: always_on
 | `uploadreport` | Active | Upload reports |
 | `downloadwebresource` | Active | Download web resources |
 | `datasource` | Active | Create data source entities |
+| `mcp` | Active | MCP server for Dataverse operations |
 
 ### Project Templates (13 total)
+
 01-SharedProject, 02-Console, 03-ConsoleCore, 04-Server, 05-Package, 06-WebResource, 07-SharedTest, 08-ProxyTypes, 09-Test, 10-TestUi, 11-SolutionPackager, 12-Report, 13-WebResourceTs
 
 ---
 
-## 🔧 Build Workflows
+## Build Workflows
 
-Use these workflows for building:
-
-| Workflow | Command | Description |
-|----------|---------|-------------|
-| `/build-debug` | Full build | Build all projects + install CLI locally |
-| `/build-cli` | CLI only | Build and install CLI tool |
-| `/build-vsix` | VSIX only | Build Visual Studio extension |
-| `/build-analyzer` | Analyzers | Build + run analyzer unit tests |
-| `/build-tool` | Tool only | Build Tool package |
-| `/build-release` | Release | **Human only** |
-
----
-
-## 📝 Documentation Rules
-
-When creating documentation files (`.md`):
-
-1. **Save to**: `DynamicsCrm.DevKit.Docs/` in the appropriate subfolder
-2. **Folder mapping**:
-   | Working On | Save To |
-   |------------|---------|
-   | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
-   | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
-   | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
-   | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Workflow | Description |
+|----------|-------------|
+| `/build-debug` | Full build - Build all projects + install CLI locally |
+| `/build-cli` | CLI only - Build and install CLI tool |
+| `/build-vsix` | VSIX only - Build Visual Studio extension |
+| `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
+| `/build-tool` | Tool only - Build Tool package |
+| `/build-release` | Release - **Human only** |
+| `/unit-test` | Run all unit tests + code coverage report |
+| `/clean-all` | Clean all build artifacts |
+| `/create-new-analyzer` | Create a new Roslyn analyzer |
 
 ---
 
-## 🔍 Key Files Reference
+## Documentation Rules
+
+| Working On | Save To |
+|------------|---------|
+| CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
+| VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
+| Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+| Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
+| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
+| Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
+| Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |
+
+---
+
+## Key Files Reference
 
 | Purpose | File(s) |
 |---------|---------|
@@ -106,20 +118,21 @@ When creating documentation files (`.md`):
 
 ---
 
-## 📊 Analyzer Development
+## Analyzer Development
 
 Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development rules.
 
 **Quick reference**:
 - 21 analyzers: DEVKIT1001 → DEVKIT1021
-- Unit tests: `DynamicsCrm.DevKit.Analyzers.Test/Tests/`
+- Analyzer unit tests: `DynamicsCrm.DevKit.UnitTests/Analyzers/Tests/` (net48, xUnit)
+- CLI unit tests: `DynamicsCrm.DevKit.UnitTests/Cli/` (net10.0, MSTest)
 - Integration tests: `DynamicsCrm.DevKit.Tests/TestAnalyzers/`
 - Workflow: `/build-analyzer` for build + test
 - New analyzer: `/create-new-analyzer` workflow
 
 ---
 
-## 🛠️ Naming Conventions
+## Naming Conventions
 
 | Type | Variable Name |
 |------|---------------|
@@ -128,7 +141,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## ⚙️ Target Frameworks
+## Target Frameworks
 
 - .NET Framework 4.6.2, 4.8
 - .NET Standard 2.0
@@ -136,7 +149,30 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## 🔐 Security
+## Git Operations (PowerShell)
+
+> [!IMPORTANT]
+> This project runs on **Windows with PowerShell**. When performing git operations, you **MUST** use PowerShell-compatible syntax. Bash syntax will fail.
+
+**Rules**:
+- Do NOT use `&&` to chain commands — use `;` or run commands separately
+- Do NOT use heredoc `<<'EOF'` — it is bash-only syntax
+- For multi-line commit messages, use multiple `-m` flags: `git commit -m "title" -m "body"`
+- Always run `git add` and `git commit` as **separate commands**, not chained
+
+**Example**:
+
+```powershell
+# Step 1: Stage files
+git add "file1.md" "file2.ps1"
+
+# Step 2: Commit (separate command)
+git commit -m "Short summary of changes" -m "Longer description of what was changed and why."
+```
+
+---
+
+## Security
 
 > [!CAUTION]
 > Never commit connection strings or credentials.
@@ -145,7 +181,7 @@ Refer to: `.agent/rules/devkit-analyzer.md` for detailed analyzer development ru
 
 ---
 
-## 📋 Checklist Before Completing Work
+## Checklist Before Completing Work
 
 - [ ] Ran appropriate build workflow (`/build-debug` or component-specific)
 - [ ] Verified build succeeded (`devkit --version` shows today's date)

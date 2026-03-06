@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<OutputType>Exe</OutputType>
 		<IsPublishable>True</IsPublishable>
 
@@ -20,41 +20,48 @@
 
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<LangVersion>latest</LangVersion>
+
+		<!-- .NET Global Tool Configuration -->
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>devkit-tool</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<PackageId>DynamicsCrm.DevKit.Tool</PackageId>
+		<PackageDescription>Utility tools for DynamicsCrm.DevKit development. Includes documentation generation, JavaScript/CSS minification, coverage conversion, and encryption tools for Dynamics 365/Dataverse projects.</PackageDescription>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>PhuocLe</Authors>
+		<PackageTags>dynamics365;crm;devkit;tool;documentation;minify;coverage</PackageTags>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<PlatformTarget>x86</PlatformTarget>
+		<PlatformTarget>x64</PlatformTarget>
 		<DefineConstants>DEBUG;TRACE</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<PlatformTarget>x86</PlatformTarget>
+		<PlatformTarget>x64</PlatformTarget>
 		<DefineConstants>TRACE</DefineConstants>
-
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Nuget\**" />
-	  <EmbeddedResource Remove="Nuget\**" />
-	  <None Remove="Nuget\**" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs" Link="Lib\Const.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs" Link="Lib\Enum.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Include="images\icon.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Include="docs\README.md" />
-	  <None Include="Nuget\DynamicsCrm.DevKit.Tool.nuspec" />
-	  <None Include="Nuget\pack.bat" />
+	  <None Include="README.md" Pack="true" PackagePath="\" />
+	  <None Include="images\icon.png" Pack="true" PackagePath="\" />
 	  <None Include="license\LICENSE.txt" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="CmdLine" Version="1.0.7.509" />
-	  <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
-	  <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
-	  <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
-	  <PackageReference Include="NUglify" Version="1.21.17" />
+	  <EmbeddedResource Include="Resources\CreateEntity\*.xml" />
 	</ItemGroup>
+	<PropertyGroup>
+		<NoWarn>SYSLIB0041;NU5100</NoWarn>
+	</PropertyGroup>
 	<ItemGroup>
-	  <Reference Include="Microsoft.VisualStudio.Coverage.Analysis">
-	    <HintPath>lib\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
-	    <SpecificVersion>False</SpecificVersion>
-	  </Reference>
+	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
+	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="*" />
+	  <PackageReference Include="Mono.Cecil" Version="*" />
+	  <PackageReference Include="Newtonsoft.Json" Version="*" />
+	  <PackageReference Include="NUglify" Version="1.21.17" />
 	</ItemGroup>
 </Project>

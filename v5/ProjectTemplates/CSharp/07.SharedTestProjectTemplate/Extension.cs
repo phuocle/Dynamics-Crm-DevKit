@@ -1,4 +1,4 @@
-﻿using FakeXrmEasy.CodeActivities;
+using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Plugins;
 using Microsoft.Xrm.Sdk;
 
@@ -37,33 +37,31 @@ namespace $NameSpace$
             plugin.Stage = remote.Stage;
         }
 
-        public static void SetXrmFakedContextWorkflow(this XrmFakedWorkflowContext workflow, RemoteExecutionContext remote)
+        /// <summary>
+        /// Deserialize a RemoteExecutionContext JSON string (from Plugin Trace Log)
+        /// and execute the plugin in one call.
+        /// <example>
+        /// <code>
+        /// var json = @"{...}"; // paste from Plugin Trace Log
+        /// _context.ExecutePluginFromJson&lt;PreCreateSynchronous&gt;(json);
+        /// </code>
+        /// </example>
+        /// </summary>
+        public static void ExecutePluginFromJson<TPlugin>(this IXrmFakedContext context, string json)
+            where TPlugin : IPlugin, new()
         {
-            workflow.UserId = remote.UserId;
-            workflow.SharedVariables = remote.SharedVariables;
-            workflow.SecondaryEntityName = remote.SecondaryEntityName;
-            workflow.RequestId = remote.RequestId;
-            workflow.PrimaryEntityName = remote.PrimaryEntityName;
-            workflow.PrimaryEntityId = remote.PrimaryEntityId;
-            workflow.PreEntityImages = remote.PreEntityImages;
-            workflow.PostEntityImages = remote.PostEntityImages;
-            workflow.OwningExtension = remote.OwningExtension;
-            workflow.OutputParameters = remote.OutputParameters;
-            workflow.OrganizationName = remote.OrganizationName;
-            workflow.OrganizationId = remote.OrganizationId;
-            workflow.OperationId = remote.OperationId;
-            workflow.OperationCreatedOn = remote.OperationCreatedOn;
-            workflow.Mode = remote.Mode;
-            workflow.MessageName = remote.MessageName;
-            workflow.IsolationMode = remote.IsolationMode;
-            workflow.IsOfflinePlayback = remote.IsOfflinePlayback;
-            workflow.IsInTransaction = remote.IsInTransaction;
-            workflow.IsExecutingOffline = remote.IsExecutingOffline;
-            workflow.InputParameters = remote.InputParameters;
-            workflow.InitiatingUserId = remote.InitiatingUserId;
-            workflow.Depth = remote.Depth;
-            workflow.CorrelationId = remote.CorrelationId;
-            workflow.BusinessUnitId = remote.BusinessUnitId;
+            var ctx = PluginContextBuilder.FromJson(context, json).Build();
+            context.ExecutePluginWith<TPlugin>(ctx);
+        }
+
+        /// <summary>
+        /// Deserialize a compressed RemoteExecutionContext string and execute the plugin.
+        /// </summary>
+        public static void ExecutePluginFromCompressedJson<TPlugin>(this IXrmFakedContext context, string compressedBase64)
+            where TPlugin : IPlugin, new()
+        {
+            var ctx = PluginContextBuilder.FromCompressedJson(context, compressedBase64).Build();
+            context.ExecutePluginWith<TPlugin>(ctx);
         }
     }
 }

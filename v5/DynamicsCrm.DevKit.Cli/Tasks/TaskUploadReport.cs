@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
 using System.IO;
@@ -18,6 +19,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
         public string TaskType => $"[{nameof(CliType.uploadreports).ToUpper()}]";
 
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -30,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            var solutionExists = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            var solutionExists = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!solutionExists.IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -74,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var totalUploadFiles = files.Length;
                         SpectreLog.WriteHighLight("Found: ", $"{totalUploadFiles}", " ", language, " .rdl files");
                         SpectreLog.WriteLine();
-                        var reportFiles = await XrmHelper.GetReportsBySolutionAsync(ServiceClient, Json.solution);
+                        var reportFiles = await Deployment.GetReportsBySolutionAsync(Json.solution);
                         foreach (var file in files)
                         {
                             var fileName = Path.GetFileName(file);
@@ -94,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 }
                                 else
                                 {
-                                    await XrmHelper.DeployReportAsync(ServiceClient, report.ObjectId, file);
+                                    await Deployment.DeployReportAsync(report.ObjectId, file);
                                     SpectreLog.ActionWithLevel1(CliAction.DEPLOYED, $"{language} report", " .." + file.Substring(CurrentDirectory.Length), $" to {fileName} report file name");
                                 }
                             }
@@ -103,6 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

@@ -1,4 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.CSharp;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -29,15 +29,14 @@ namespace DynamicsCrm.DevKit.Shared
             string passPhrase = "PL.DynamicsCrm.DevKit";
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-#pragma warning disable SYSLIB0022, SYSLIB0041 // Obsolete: RijndaelManaged and PasswordDeriveBytes
+#pragma warning disable SYSLIB0041
             PasswordDeriveBytes password = new(passPhrase, null);
             byte[] keyBytes = password.GetBytes(keysize / 8);
-            RijndaelManaged symmetricKey = new()
-            {
-                Mode = CipherMode.CBC
-            };
-            ICryptoTransform encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
-#pragma warning restore SYSLIB0022, SYSLIB0041
+#pragma warning restore SYSLIB0041
+            using var aes = Aes.Create();
+            aes.Mode = CipherMode.CBC;
+            aes.KeySize = keysize;
+            using var encryptor = aes.CreateEncryptor(keyBytes, initVectorBytes);
             using MemoryStream memoryStream = new();
             using CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write);
             cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
@@ -54,19 +53,16 @@ namespace DynamicsCrm.DevKit.Shared
                 string passPhrase = "PL.DynamicsCrm.DevKit";
                 byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
                 byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
-#pragma warning disable SYSLIB0022, SYSLIB0041 // Obsolete: RijndaelManaged and PasswordDeriveBytes
+#pragma warning disable SYSLIB0041
                 PasswordDeriveBytes password = new(passPhrase, null);
                 byte[] keyBytes = password.GetBytes(keysize / 8);
-                RijndaelManaged symmetricKey = new()
-                {
-                    Mode = CipherMode.CBC
-                };
-                ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
-#pragma warning restore SYSLIB0022, SYSLIB0041
+#pragma warning restore SYSLIB0041
+                using var aes = Aes.Create();
+                aes.Mode = CipherMode.CBC;
+                aes.KeySize = keysize;
+                using var decryptor = aes.CreateDecryptor(keyBytes, initVectorBytes);
                 using MemoryStream memoryStream = new(cipherTextBytes);
                 using CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);
-                // .NET 6+ breaking change: Read() may not fill entire buffer
-                // Use StreamReader to ensure we read all decrypted text
                 using StreamReader reader = new(cryptoStream, Encoding.UTF8);
                 return reader.ReadToEnd();
             }
@@ -510,7 +506,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += NEW_LINE;
             code += $"namespace {@namespace}{NEW_LINE}";
             code += $"{{{NEW_LINE}";
-            code += $"{TAB}public partial class {@class}{NEW_LINE}";
+            code += $"{TAB}internal partial class {@class}{NEW_LINE}";
             code += $"{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}#region --- PROPERTIES ---{NEW_LINE}";
             code += NEW_LINE;

@@ -1,12 +1,12 @@
-﻿using System.Activities;
+using System.Activities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using <#=Context.PluginSharedNameSpace#>;
 
 namespace <#=Context.PluginNameSpace#>
 {
-    [CrmPluginRegistration("<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>", "", "<#=Context.PluginNameSpace#>", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
-    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : CodeActivity
+    [CrmPluginRegistration("<#=Context.ClassWithOrder#>", "<#=Context.ClassWithOrder#>", "", "<#=Context.PluginNameSpace#>", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    public class <#=Context.ClassWithOrder#> : CodeActivity
     {
         // https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions#add-parameters
         // Supported Input/Output types: bool, DateTime, Decimal, Double, EntityReference, int, Money, OptionSetValue, string

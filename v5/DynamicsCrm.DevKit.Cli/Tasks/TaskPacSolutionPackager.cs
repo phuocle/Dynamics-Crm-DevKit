@@ -1,5 +1,6 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
@@ -21,6 +22,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string CurrentDirectory { get; set; } = arg.CurrentDirectory;
         public string TaskType => $"[{nameof(CliType.solutionpackagers).ToUpper()}]";
         public ServiceClient ServiceClient { get; set; } = arg.ServiceClient;
+
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
         private string SolutionXmlFile => $"{CurrentDirectory}\\{Json.folder}\\{Json.solutiontype}\\Other\\Solution.xml";
 
         public async Task<bool> IsValidAsync()
@@ -97,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (Json.type.ToLower() == "Extract".ToLower())
             {
-                (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+                (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
                 if (!IsOk)
                 {
                     SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -167,6 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             // Need to get CRM version for filename
             var crmVersion = await GetCrmVersionFromInstanceAsync();
+            XrmHelper.COUNT_ExecuteAsync++;
             var response = (ExportSolutionResponse)await ServiceClient.ExecuteAsync(request);
 
             var fileName = FormatSolutionVersionString(Json.solution, System.Version.Parse(crmVersion), Json.solutiontype);
@@ -199,6 +204,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </filter>
   </entity>
 </fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return "1.0.0.0";
             var solution = rows.Entities[0];
@@ -266,6 +272,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await RunPacAsync(solutionZipFile);
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

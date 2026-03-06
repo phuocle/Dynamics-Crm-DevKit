@@ -1,6 +1,7 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string TAB = "\t";
         private const string NEW_LINE = "\r\n";
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
         public string Class =>  TextboxClass.Text.EndsWith("Test") ? TextboxClass.Text.Substring(0, TextboxClass.Text.Length - 4) : TextboxClass.Text ?? string.Empty;
@@ -71,6 +74,47 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
+        public string EntityDisplayName
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.DisplayName ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public string EntitySetName
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.EntitySetName ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public int EntityTypeCode
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return -1;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.EntityTypeCode;
+                return -1;
+            }
+        }
+        public bool IsCustomEntity
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return false;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.IsCustomEntity;
+                return false;
+            }
+        }
+
         public string LanguageCode => PluginLogicalName;
         public string BatFileName => PluginLogicalName;
 
@@ -85,7 +129,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                return ThreadHelper.JoinableTaskFactory.Run(async () => await XrmHelper.GetPluginCommentAsync(ServiceClient, PluginLogicalName, PluginMessage));
+                return ThreadHelper.JoinableTaskFactory.Run(async () => await Metadata.GetPluginCommentAsync(PluginLogicalName, PluginMessage));
             }
         }
 
@@ -374,8 +418,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
                     {
-                        await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
-                        var items = XrmHelper.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        await Metadata.ReadEntitiesMetadataAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
+                        var items = MetadataService.GetListXrmEntity(XrmHelper.EntitiesMetadata);
                         items = items.OrderBy(x => x.LogicalName).ToList();
                         if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
                         {
@@ -396,7 +440,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
                     {
-                        var items = await XrmHelper.GetAllDataSourceAsync(ServiceClient);
+                        var items = await Metadata.GetAllDataSourceAsync();
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.LogicalName;
                         ComboBoxEntity.ItemsSource = items;
@@ -412,7 +456,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
                     {
-                        var items = await XrmHelper.GetProvisionedLanguagesAsync(ServiceClient);
+                        var items = await Metadata.GetProvisionedLanguagesAsync();
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                         ComboBoxEntity.ItemsSource = items;
@@ -464,7 +508,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     {
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
-                        var items = await XrmHelper.GetSdkMessagesAsync(ServiceClient, selectedEntity.LogicalName);
+                        var items = await Metadata.GetSdkMessagesAsync(selectedEntity.LogicalName);
                         ComboBoxMessage.DisplayMemberPath = "Name";
                         ComboBoxMessage.ItemsSource = items;
                         ComboBoxMessage.SelectedItem = null;
@@ -486,9 +530,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
                         if (selectedEntity.LogicalName == "none")
-                            ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomActionsAsync(ServiceClient);
+                            ComboBoxMessage.ItemsSource = await Metadata.GetCustomActionsAsync();
                         else
-                            ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomActionsAsync(ServiceClient, selectedEntity.LogicalName);
+                            ComboBoxMessage.ItemsSource = await Metadata.GetCustomActionsAsync(selectedEntity.LogicalName);
                         ComboBoxMessage.DisplayMemberPath = "Name";
                         ComboBoxMessage.SelectedItem = null;
                         ComboBoxStage.SelectedItem = null;
@@ -508,7 +552,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     {
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         var selectedEntity = (XrmEntity)ComboBoxEntity.SelectedItem;
-                        ComboBoxMessage.ItemsSource = await XrmHelper.GetCustomApisAsync(ServiceClient, selectedEntity.LogicalName);
+                        ComboBoxMessage.ItemsSource = await Metadata.GetCustomApisAsync(selectedEntity.LogicalName);
                         ComboBoxMessage.DisplayMemberPath = "Name";
                         ComboBoxMessage.SelectedItem = null;
                         ComboBoxStage.SelectedItem = null;

@@ -1,0 +1,226 @@
+{
+  "__type": "RemoteExecutionContext",
+  "BusinessUnitId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "CorrelationId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+  "Depth": 1,
+  "InitiatingUserId": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+  "InputParameters": {
+    "__type": "ParameterCollection",
+    "Values": {
+      "Target": {
+        "__type": "Entity",
+        "LogicalName": "account",
+        "Id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+        "Attributes": {
+          "name": "Contoso Ltd",
+          "revenue": { "__type": "Money", "Value": 1500000.50 },
+          "creditlimit": { "__type": "Money", "Value": 250000.75 },
+          "statuscode": { "__type": "OptionSetValue", "Value": 1 },
+          "industrycode": { "__type": "OptionSetValue", "Value": 100000001 },
+          "primarycontactid": {
+            "__type": "EntityReference",
+            "LogicalName": "contact",
+            "Id": "e5f6a7b8-c9d0-1234-efab-345678901234",
+            "Name": "John Smith"
+          },
+          "ismanaged": {
+            "__type": "BooleanManagedProperty",
+            "Value": true,
+            "CanBeChanged": false,
+            "ManagedPropertyLogicalName": "ismanaged"
+          },
+          "numberofemployees": 500,
+          "versionnumber": 3000000000,
+          "exchangerate": 1.234567,
+          "address1_longitude": 106.6297,
+          "address1_latitude": 10.8231,
+          "donotphone": true,
+          "donotemail": false,
+          "createdon": { "__type": "DateTime", "Value": "2025-01-15T10:30:00.000Z" },
+          "accountid": { "__type": "Guid", "Value": "d4e5f6a7-b8c9-0123-defa-234567890123" },
+          "entityimage": { "__type": "File", "Value": "SGVsbG8gV29ybGQ=" },
+          "preferredcontactmethodcode": {
+            "__type": "OptionSetValueCollection",
+            "Values": [1, 2, 3]
+          },
+
+          "c.fullname": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "fullname",
+            "Value": "Jane Doe"
+          },
+          "c.age": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "age",
+            "Value": 35
+          },
+          "c.annualincome": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "annualincome",
+            "Value": { "__type": "Money", "Value": 75000.00 }
+          },
+          "c.statuscode": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "statuscode",
+            "Value": { "__type": "OptionSetValue", "Value": 2 }
+          },
+          "c.createdon": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "createdon",
+            "Value": { "__type": "DateTime", "Value": "2024-06-15T08:00:00.000Z" }
+          },
+          "c.contactid": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "contactid",
+            "Value": { "__type": "Guid", "Value": "e5f6a7b8-c9d0-1234-efab-345678901234" }
+          },
+          "c.isactive": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "isactive",
+            "Value": true
+          },
+          "c.address1_longitude": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "address1_longitude",
+            "Value": 106.6297
+          },
+          "c.parentcustomerid": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "parentcustomerid",
+            "Value": {
+              "__type": "EntityReference",
+              "LogicalName": "account",
+              "Id": "d4e5f6a7-b8c9-0123-4567-890123456789",
+              "Name": "Contoso Ltd"
+            }
+          },
+          "c.middlename": {
+            "__type": "AliasedValue",
+            "EntityLogicalName": "contact",
+            "AttributeLogicalName": "middlename",
+            "Value": null
+          },
+
+          "email_to": {
+            "__type": "EntityCollection",
+            "EntityName": "activityparty",
+            "Entities": [
+              {
+                "__type": "Entity",
+                "LogicalName": "activityparty",
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "Attributes": {
+                  "partyid": {
+                    "__type": "EntityReference",
+                    "LogicalName": "contact",
+                    "Id": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+                    "Name": "Alice"
+                  }
+                }
+              },
+              {
+                "__type": "Entity",
+                "LogicalName": "activityparty",
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "Attributes": {
+                  "partyid": {
+                    "__type": "EntityReference",
+                    "LogicalName": "contact",
+                    "Id": "a7b8c9d0-e1f2-3456-abcd-567890123456",
+                    "Name": "Bob"
+                  }
+                }
+              }
+            ]
+          },
+
+          "nullfield": null,
+          "description": "Line 1\nLine 2\tTabbed\nSpecial \"quotes\" and \\backslash"
+        },
+        "FormattedValues": {
+          "statuscode": "Active",
+          "industrycode": "Technology",
+          "revenue": "$1,500,000.50",
+          "creditlimit": "$250,000.75",
+          "createdon": "1/15/2025 10:30 AM",
+          "donotphone": "Do Not Allow",
+          "donotemail": "Allow"
+        }
+      }
+    }
+  },
+  "IsExecutingOffline": false,
+  "IsInTransaction": true,
+  "IsOfflinePlayback": false,
+  "IsolationMode": 2,
+  "MessageName": "Update",
+  "Mode": 0,
+  "OperationCreatedOn": "2025-06-15T14:30:00.000Z",
+  "OperationId": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+  "OrganizationId": "11111111-2222-3333-4444-555555555555",
+  "OrganizationName": "ContosoOrg",
+  "OutputParameters": {
+    "__type": "ParameterCollection",
+    "Values": {
+      "id": { "__type": "Guid", "Value": "d4e5f6a7-b8c9-0123-defa-234567890123" }
+    }
+  },
+  "OwningExtension": {
+    "__type": "EntityReference",
+    "LogicalName": "sdkmessageprocessingstep",
+    "Id": "22222222-3333-4444-5555-666666666666",
+    "Name": "AccountPlugin: Update of account"
+  },
+  "PostEntityImages": {
+    "__type": "EntityImageCollection",
+    "Values": {
+      "PostImage": {
+        "__type": "Entity",
+        "LogicalName": "account",
+        "Id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+        "Attributes": {
+          "name": "Contoso Ltd (Updated)",
+          "revenue": { "__type": "Money", "Value": 2000000.00 }
+        }
+      }
+    }
+  },
+  "PreEntityImages": {
+    "__type": "EntityImageCollection",
+    "Values": {
+      "PreImage": {
+        "__type": "Entity",
+        "LogicalName": "account",
+        "Id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+        "Attributes": {
+          "name": "Contoso Ltd",
+          "revenue": { "__type": "Money", "Value": 1500000.50 }
+        }
+      }
+    }
+  },
+  "PrimaryEntityId": "d4e5f6a7-b8c9-0123-defa-234567890123",
+  "PrimaryEntityName": "account",
+  "RequestId": "33333333-4444-5555-6666-777777777777",
+  "SecondaryEntityName": "none",
+  "SharedVariables": {
+    "__type": "ParameterCollection",
+    "Values": {
+      "IsAutoTransact": true,
+      "PluginStep": "PostUpdate",
+      "RetryCount": 3,
+      "Timestamp": { "__type": "DateTime", "Value": "2025-06-15T14:30:00.000Z" }
+    }
+  },
+  "Stage": 40,
+  "UserId": "44444444-5555-6666-7777-888888888888"
+}

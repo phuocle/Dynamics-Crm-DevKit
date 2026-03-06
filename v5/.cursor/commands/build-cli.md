@@ -2,11 +2,12 @@
 
 Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
 
-> **CAUTION**: PHẢI RESTORE `Const.cs` SAU KHI BUILD!
->
+> [!CAUTION]
+> **PHẢI RESTORE `Const.cs` SAU KHI BUILD!**
+> 
 > Nếu không restore, file `Const.cs` sẽ chứa version/date thật thay vì placeholders.
 > Điều này sẽ gây lỗi cho các build khác và có thể bị commit nhầm vào git!
->
+> 
 > Step 5 (Restore) là **BẮT BUỘC** - KHÔNG ĐƯỢC BỎ QUA!
 
 ## Step 1: Read Version from Config
@@ -52,7 +53,7 @@ Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
 dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version
 
 # Pack as NuGet tool
-dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version -p:SignAssembly=false --no-build
+dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version --no-build
 ```
 
 ## Step 4: Install CLI Tool
@@ -72,9 +73,10 @@ Remove-Item -Path "$env:USERPROFILE\.nuget\packages\dynamicscrm.devkit.cli\$Vers
 dotnet tool install -g $ToolName --add-source $publishDir --version $Version
 ```
 
-## Step 5: RESTORE Const.cs (BẮT BUỘC!)
+## Step 5: ⚠️ RESTORE Const.cs (QUAN TRỌNG!)
 
-> **WARNING**: KHÔNG ĐƯỢC BỎ QUA BƯỚC NÀY!
+> [!WARNING]
+> **KHÔNG ĐƯỢC BỎ QUA BƯỚC NÀY!**
 > Nếu không restore, git sẽ thấy file thay đổi và có thể bị commit nhầm.
 
 ```powershell
@@ -97,16 +99,16 @@ Expected output: `4.12.34.56 Build: dd.MM.yyyy HH:mm:ss` (current date/time)
 # Verify placeholders are back
 $content = Get-Content $ConstFile -Raw
 if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
-    Write-Host "Const.cs restored successfully" -ForegroundColor Green
+    Write-Host "✓ Const.cs restored successfully" -ForegroundColor Green
 } else {
-    Write-Host "ERROR: Const.cs NOT restored! Please restore manually!" -ForegroundColor Red
+    Write-Host "✗ ERROR: Const.cs NOT restored! Please restore manually!" -ForegroundColor Red
     Write-Host "Run: git checkout $ConstFile" -ForegroundColor Yellow
 }
 ```
 
 ## Notes
 
-- This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) - much faster
+- This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
 - Version is defined in `DevKit.ReleaseConfig.json`
 - Debug mode does NOT require any signing keys
-- For full solution build, use `/build-debug` command instead
+- For full solution build, use `/build-debug` workflow instead

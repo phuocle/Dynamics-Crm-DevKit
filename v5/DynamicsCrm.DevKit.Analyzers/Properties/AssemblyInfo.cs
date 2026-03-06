@@ -18,4 +18,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("87e4fbf2-6f3e-4f95-b5eb-a91b66f77279")]
 [assembly: AssemblyVersion("4.12.34.56")]
 [assembly: AssemblyFileVersion("4.12.34.56")]
-[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.Analyzers.Test")]
+[assembly: InternalsVisibleTo("DynamicsCrm.DevKit.UnitTests")]

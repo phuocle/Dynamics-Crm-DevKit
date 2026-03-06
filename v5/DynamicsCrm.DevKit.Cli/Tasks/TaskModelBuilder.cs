@@ -93,6 +93,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 await RunModelBuilderAsync();
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }

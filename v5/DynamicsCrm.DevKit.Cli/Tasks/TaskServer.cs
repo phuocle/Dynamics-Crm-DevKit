@@ -1,6 +1,7 @@
-﻿using DynamicsCrm.DevKit.Cli.CodeSigning;
+using DynamicsCrm.DevKit.Cli.CodeSigning;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -23,6 +24,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private const string SPACE = "  ";
         private readonly Dictionary<string, Assembly> _assemblyCache = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
         private string _currentAssemblyDirectory = null;
+
+        private DeploymentService _deploymentService;
+        private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+
         private bool OK { get; set; } = false;
         private bool IS_MANAGED_IDENTITY { get; set; } = false;
         private string ERROR { get; set; } = string.Empty;
@@ -92,15 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await DeployFilesAsync(files);
                 }
             }
-            //#if DEBUG
-            //            SpectreLog.WriteLine();
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_ExecuteAsync: ", $"{XrmHelper.COUNT_ExecuteAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_RetrieveMultipleAsync: ", $"{XrmHelper.COUNT_RetrieveMultipleAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_CreateAsync: ", $"{XrmHelper.COUNT_CreateAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_DeleteAsync: ", $"{XrmHelper.COUNT_DeleteAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_RetrieveAsync: ", $"{XrmHelper.COUNT_RetrieveAsync}");
-            //            SpectreLog.WriteWithLevel(LogLevel.Level0, "Total Dataverse Requests COUNT_UpdateAsync: ", $"{XrmHelper.COUNT_UpdateAsync}");
-            //#endif
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }
@@ -592,7 +591,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            (IsOk, SolutionId, SolutionPrefix) = await XrmHelper.IsExistSolutionAsync(ServiceClient, Json.solution);
+            (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"{TaskType} solution '{Json.solution}' not exist");
@@ -675,7 +674,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
 
-                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                 foreach (var entity in rows)
                 {
                     var typename = entity.GetAttributeValue<string>("typename");
@@ -700,7 +699,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         <filter type='or'>{condition}</filter>
     </entity>
 </fetch>";
-                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                 foreach (var entity in rows)
                 {
                     var plugintypeid = entity.GetAttributeValue<EntityReference>("plugintypeid").Id;
@@ -732,7 +731,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         <filter type='or'>{condition}</filter>
     </entity>
 </fetch>";
-                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                 foreach (var entity in rows)
                 {
                     var sdkmessageprocessingstepid = entity.GetAttributeValue<EntityReference>("sdkmessageprocessingstepid").Id;
@@ -765,7 +764,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                 foreach (var entity in rows)
                 {
                     var sdkmessageprocessingstepid = entity.GetAttributeValue<Guid>("sdkmessageprocessingstepid");
@@ -776,7 +775,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         private async Task LoadAllObjectTypeCodeAsync()
         {
-            await XrmHelper.ReadEntitiesMetadataAsync(ServiceClient, Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
+            await Metadata.ReadEntitiesMetadataAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
             _ObjectTypeCodesCache.Clear();
             foreach(var item in XrmHelper.EntitiesMetadata)
             {
@@ -831,7 +830,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <filter type='or'>{conditionNone}</filter>
   </entity>
 </fetch>";
-                    var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                    var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                     foreach (var entity in rows)
                     {
                         var key = $"none-{entity.GetAttributeValue<string>("name")}";
@@ -854,7 +853,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-                    var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                    var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                     foreach (var entity in rows)
                     {
                         var Aliased = entity.GetAttributeValue<AliasedValue>("s.primaryobjecttypecode");
@@ -875,7 +874,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-                    var rows2 = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml2);
+                    var rows2 = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml2);
                     foreach (var entity in rows2)
                     {
                         var Aliased = entity.GetAttributeValue<AliasedValue>("s.name");
@@ -917,7 +916,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </entity>
 </fetch>
 ";
-                var rows = await XrmHelper.RetrieveAllRecordsByFetchXmlAsync(ServiceClient, fetchXml);
+                var rows = await Deployment.RetrieveAllRecordsByFetchXmlAsync(fetchXml);
                 foreach (var entity in rows)
                 {
                     var key = $"{entity.GetAttributeValue<string>("uniquename")}";
@@ -1046,7 +1045,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private async Task<bool> IsValidDataProviderAsync(List<DataProviderEvent> dataProviderEvents, string dataSource)
         {
             var checkDataSource = dataSource.ToLower().StartsWith(SolutionPrefix.ToLower()) ? dataSource : $"{SolutionPrefix?.ToLower()}{dataSource}";
-            if (!await XrmHelper.IsExistDataSourceAsync(ServiceClient, $"{checkDataSource}"))
+            if (!await Metadata.IsExistDataSourceAsync($"{checkDataSource}"))
             {
                 SpectreLog.ActionError($"DataSource {dataSource} with prefix {SolutionPrefix.ToLower()} not exist ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
@@ -1063,7 +1062,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError($"Multiple message RetrieveMultiple found with data source {dataSource} ({checkDataSource}). Assemply deployed, but the deployment of this assembly stopped.");
                 return false;
             }
-            if (await XrmHelper.IsVirtualTableSupportCRUDAsync(ServiceClient))
+            if (await Deployment.IsVirtualTableSupportCRUDAsync())
             {
                 var countCreate = dataProviderEvents.Count(x => x.Message == "Create" && x.DataSource == dataSource);
                 if (countCreate != 0 && countCreate != 1)
@@ -1110,7 +1109,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 entity.Attributes.Add("retrievemultipleplugin", retrievemultiple.PluginTypeId);
                 events += "RetrieveMultiple, ";
             }
-            if (await XrmHelper.IsVirtualTableSupportCRUDAsync(ServiceClient))
+            if (await Deployment.IsVirtualTableSupportCRUDAsync())
             {
                 var create = dataProviderEvents.Where(x => x.Message == "Create" && x.DataSource == dataSource).FirstOrDefault();
                 if (create == null)
@@ -1139,7 +1138,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             events = events.TrimEnd(", ".ToCharArray());
             events = string.Join(", ", events.Split(",".ToCharArray()).Select(x => x.Trim()).OrderBy(x => x)).Trim();
-            var entityDataProvider = await XrmHelper.GetEntityDataProviderIdAsync(ServiceClient, logicalNameDataSource);
+            var entityDataProvider = await Deployment.GetEntityDataProviderIdAsync(logicalNameDataSource);
             if (entityDataProvider == null)
             {
                 var request = new CreateRequest();
@@ -1392,7 +1391,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
             var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
-            var impersonatingUserId = await XrmHelper.GetImpersonatingUserIdAsync(ServiceClient, attribute.RunAs);
+            var impersonatingUserId = await Metadata.GetImpersonatingUserIdAsync(attribute.RunAs);
 
             if (attribute.ExecutionMode == 0) attribute.DeleteAsyncOperation = false;
             var pluginStep = new Entity("sdkmessageprocessingstep")

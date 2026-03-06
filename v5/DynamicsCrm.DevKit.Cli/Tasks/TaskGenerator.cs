@@ -1,6 +1,7 @@
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Logic;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -30,6 +31,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
+
+        private MetadataService _metadataService;
+        private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private CodeGenService _codeGenService;
+        private CodeGenService CodeGen => _codeGenService ??= new CodeGenService(ServiceClient);
         public async Task<bool> IsValidAsync()
         {
             if (Json == null)
@@ -81,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (schemaNames.Count > 500)
                     await ReadEntitiesMetadataAsync(ServiceClient, EntityFilters.Attributes);
                 else
-                    XrmHelper.EntitiesMetadata = await XrmHelper.GetEntitiesMetadataAsync(ServiceClient, schemaNames);
+                    XrmHelper.EntitiesMetadata = await Metadata.GetEntitiesMetadataAsync(schemaNames);
                 schemaNames = [.. XrmHelper.EntitiesMetadata.Select(x => x.SchemaName)];
                 if (Json.type.ToLower() == nameof(GeneratorType.csharp))
                     await GeneratorLateBoundAsync(schemaNames);
@@ -95,6 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await GeneratorTsWebApiAsync(schemaNames);
             }
 
+            SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
             SpectreLog.ActionWithLevel0("END");
         }
@@ -278,7 +285,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
                     if (!File.Exists(file))
                     {
-                        await FileHelper.ForceWriteAllTextAsync(file, await XrmHelper.GetDefaultFileWithFormAsync(ServiceClient, entityMetadata, Json.rootnamespace));
+                        await FileHelper.ForceWriteAllTextAsync(file, await CodeGen.GetDefaultJsFormFileAsync(entityMetadata, Json.rootnamespace));
                     }
                     if (Helper.IsTheSame(oldCode, newCode))
                     {
@@ -349,7 +356,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.ts");
                     if (!File.Exists(file))
                     {
-                        var tsCode = await XrmHelper.GetDefaultTsFileWithFormAsync(ServiceClient, entityMetadata);
+                        var tsCode = await CodeGen.GetDefaultTsFormFileAsync(entityMetadata);
                         if (!string.IsNullOrEmpty(tsCode))
                         {
                             await FileHelper.ForceWriteAllTextAsync(file, tsCode);
@@ -446,6 +453,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             SpectreLog.ActionWithLevel0(CliAction.CREATED, $"{schemaName}{endsWith}");
                         }
                     }
+                    await MigratePublicToInternalAsync(file, entityMetadata.SchemaName);
                 }
                 else
                 {
@@ -453,6 +461,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     SpectreLog.ActionError($"entity schema name: {schemaName} not found in the current instance !!!");
                 }
             }
+        }
+
+        private static async Task MigratePublicToInternalAsync(string customFile, string className)
+        {
+            if (!File.Exists(customFile)) return;
+            var content = await File.ReadAllTextAsync(customFile);
+            var oldDeclaration = $"public partial class {className}";
+            if (!content.Contains(oldDeclaration)) return;
+            var newContent = content.Replace(oldDeclaration, $"internal partial class {className}");
+            await FileHelper.ForceWriteAllTextAsync(customFile, newContent);
+            SpectreLog.ActionWithLevel0(CliAction.UPDATED, Path.GetFileName(customFile));
         }
 
         private async Task ReadEntitiesMetadataAsync(ServiceClient serviceClient, EntityFilters entityFilters)
@@ -464,7 +483,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities Metadata ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                     try
                     {
-                        await XrmHelper.ReadEntitiesMetadataAsync(serviceClient, entityFilters);
+                        await new MetadataService(serviceClient).ReadEntitiesMetadataAsync(entityFilters);
                     }
                     finally
                     {
@@ -486,7 +505,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         var waitingTask = Task.Run(() => SpectreLog.WaitingWithCancellation("Reading entities FormXml ", cancellationTokenSource.Token), cancellationTokenSource.Token);
                         try
                         {
-                            await XrmHelper.ReadEntitiesFormXmlAsync(serviceClient);
+                            await new MetadataService(serviceClient).ReadEntitiesFormXmlAsync();
                         }
                         finally
                         {

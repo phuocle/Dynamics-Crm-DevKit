@@ -6,6 +6,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,16 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
     /// Base class for all DevKit CLI commands.
-    /// Handles common logic: header, connection, validation.
+    /// Handles common logic: header, connection, validation, output formatting.
     /// </summary>
     public abstract class DevKitCommand<T> : AsyncCommand<T> where T : DevKitCommandArgs
     {
+        protected virtual string CommandName => GetType().Name.Replace("Command", "").ToLower();
+
         public override async Task<int> ExecuteAsync(CommandContext context, T settings, CancellationToken cancellationToken)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             try
             {
                 SpectreLog.WriteHeader();
@@ -27,41 +32,55 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 if (await IsValidAsync(settings))
                 {
                     await RunTaskAsync(settings);
-                    return 0;
+                    stopwatch.Stop();
+                    return ExitCodes.Success;
                 }
 
-                return 1;
+                return ExitCodes.ValidationError;
+            }
+            catch (DevKitValidationException ex)
+            {
+                return HandleException(settings, ex, ExitCodes.ValidationError, stopwatch);
+            }
+            catch (DevKitConnectionException ex)
+            {
+                return HandleException(settings, ex, ExitCodes.ConnectionError, stopwatch);
+            }
+            catch (DevKitConfigurationException ex)
+            {
+                return HandleException(settings, ex, ExitCodes.ConfigurationError, stopwatch);
+            }
+            catch (DevKitDeploymentException ex)
+            {
+                return HandleException(settings, ex, ExitCodes.RuntimeError, stopwatch);
             }
             catch (Exception ex)
             {
-                SpectreLog.ActionError($"Error: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    SpectreLog.ActionError($"Inner: {ex.InnerException.Message}");
-                }
-                return 1;
+                return HandleException(settings, ex, ExitCodes.RuntimeError, stopwatch);
             }
         }
 
-        /// <summary>
-        /// Override this method to run the specific task logic.
-        /// </summary>
+        private int HandleException(T settings, Exception ex, int exitCode, Stopwatch stopwatch)
+        {
+            stopwatch.Stop();
+            SpectreLog.ActionError($"Error: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                SpectreLog.ActionError($"Inner: {ex.InnerException.Message}");
+            }
+
+            return exitCode;
+        }
+
         protected abstract Task RunTaskAsync(T settings);
 
-        /// <summary>
-        /// Override this method to add command-specific argument rows to the display table.
-        /// </summary>
         protected virtual List<string[]> BuildArgRows(T settings)
         {
             return new List<string[]>();
         }
 
-        /// <summary>
-        /// Validates common settings and connects to Dynamics 365.
-        /// </summary>
         protected virtual async Task<bool> IsValidAsync(T settings)
         {
-            // Display paths (plain text - WriteTable handles formatting)
             var pathRows = new List<string[]>
             {
                 new[] { "Current Directory", settings.CurrentDirectory },
@@ -70,7 +89,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             };
             SpectreLog.WriteTable(pathRows);
 
-            // Display arguments (common + command-specific)
             var argRows = new List<string[]>();
             var connLog = string.Empty;
             if (!string.IsNullOrEmpty(settings.Connection))
@@ -88,7 +106,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 }
             }
 
-            // Phase 2: Display --auth args if using modern auth
             if (!string.IsNullOrEmpty(settings.AuthType))
             {
                 argRows.Add(new[] { "Arguments: --auth", settings.AuthType });
@@ -97,7 +114,6 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 {
                     argRows.Add(new[] { "           --clientid", settings.ClientId });
                 }
-                // Show --pacprofile for FromPac auth (show "(active)" when no profile specified)
                 if (settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
                 {
                     var profileDisplay = string.IsNullOrEmpty(settings.PacProfile) ? "(active)" : settings.PacProfile;
@@ -112,18 +128,15 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
             else
             {
-                // --conn mode
                 argRows.Add(new[] { "Arguments: --conn", connLog });
                 argRows.Add(new[] { "           --json", settings.Json });
                 argRows.Add(new[] { "           --profile", settings.Profile });
             }
 
-            // Add command-specific args
             argRows.AddRange(BuildArgRows(settings));
 
             SpectreLog.WriteTable(argRows);
 
-            // Validate required args
             if (string.IsNullOrEmpty(settings.Profile))
             {
                 SpectreLog.ActionError("--profile: required");
@@ -136,33 +149,30 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 return false;
             }
 
-            // Connect to Dynamics 365
             ServiceClient serviceClient = null;
 
             await SpectreLog.WithStatusAsync("Connecting to Dynamics 365...", async ctx =>
             {
-                // Modern Interactive Auth via --auth argument
                 if (!string.IsNullOrEmpty(settings.AuthType))
                 {
                     serviceClient = await ConnectWithModernAuthAsync(settings);
                 }
-                // Legacy: Connection string
                 else
                 {
                     if (string.IsNullOrEmpty(settings.Connection))
                     {
-                        throw new Exception("--conn or --auth: required");
+                        throw new DevKitConnectionException("--conn or --auth: required");
                     }
                     var legacyBuilder = new LegacyConnectionBuilder();
                     var crmConn = legacyBuilder.ParseConnectionString(settings.Connection);
-                    if (crmConn == null) throw new Exception("Invalid connection string");
+                    if (crmConn == null) throw new DevKitConnectionException("Invalid connection string");
 
                     var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
                     serviceClient = await builder.CreateServiceClientAsync(crmConn);
 
                     if (serviceClient == null)
                     {
-                        throw new Exception("Unknown connection error");
+                        throw new DevKitConnectionException("Unknown connection error");
                     }
                 }
             });
@@ -181,37 +191,14 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             SpectreLog.WriteHighLight("Connected: ", serviceClient.ConnectedUrl(), " with connection timeout: ", $"{timeout:#,###}", " (seconds)");
             SpectreLog.WriteLine();
 
-            // ═══════════════════════════════════════════════════════════════════
-            // DEV-ONLY: Early exit after connection check for connection type development
-            // Set to true when testing connection types, false for normal operation
-            // TODO: Remove this block before release
-            // ═══════════════════════════════════════════════════════════════════
-            // const bool DEV_CONNECTION_TEST_ONLY = true;
-            // if (DEV_CONNECTION_TEST_ONLY)
-            // {
-            //     SpectreLog.ActionWithLevel0("[DEV] Connection test successful - exiting early for connection type development");
-            //     SpectreLog.ActionWithLevel0("END");
-            //     SpectreLog.WriteLine();
-            //     AnsiConsole.MarkupLine("[grey]Press any key to exit...[/]");
-            //     Console.ReadKey(true);
-            //     Environment.Exit(0);
-            // }
-            // ═══════════════════════════════════════════════════════════════════
-
             return true;
         }
 
-
-        /// <summary>
-        /// Connect using modern authentication (Interactive, DeviceCode).
-        /// Phase 2: Uses ConnectionBuilderFactory to get the appropriate builder.
-        /// </summary>
         protected async Task<ServiceClient> ConnectWithModernAuthAsync(T settings)
         {
-            // FromPac gets URL from PAC profile, other auth types require --url
             if (string.IsNullOrEmpty(settings.Url) && !settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
             {
-                throw new Exception("--url: required for modern authentication (except FromPac)");
+                throw new DevKitConnectionException("--url: required for modern authentication (except FromPac)");
             }
 
             if (!ConnectionBuilderFactory.IsSupported(settings.AuthType))
@@ -219,47 +206,40 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 var (planned, phase) = ConnectionBuilderFactory.GetFuturePlanning(settings.AuthType);
                 if (planned)
                 {
-                    throw new NotImplementedException($"Authentication type '{settings.AuthType}' will be implemented in {phase}");
+                    throw new DevKitConnectionException($"Authentication type '{settings.AuthType}' will be implemented in {phase}");
                 }
-                throw new NotSupportedException($"Authentication type '{settings.AuthType}' is not supported. Use: Interactive, DeviceCode");
+                throw new DevKitConnectionException($"Authentication type '{settings.AuthType}' is not supported. Use: Interactive, DeviceCode");
             }
 
             var builder = ConnectionBuilderFactory.GetBuilder(settings.AuthType);
 
-            // Handle ClientSecret - auto-detect encrypted vs plain text (legacy behavior)
-            // If DecryptString returns different value, it was encrypted; otherwise it's plain text
             var clientSecret = settings.ClientSecret;
             if (!string.IsNullOrEmpty(clientSecret))
             {
                 var decrypted = Helper.DecryptString(clientSecret);
-                clientSecret = decrypted; // DecryptString returns plain if already plain, or decrypted if was encrypted
+                clientSecret = decrypted;
             }
 
-            // Build CrmConnection from settings
             var connection = new CrmConnection
             {
-                Name = settings.Profile, // Use profile as connection name for token cache
+                Name = settings.Profile,
                 Url = settings.Url,
                 ClientId = settings.ClientId,
                 ClientSecret = clientSecret,
                 Type = settings.AuthType,
-                // Phase 4: FromPac
                 PacProfile = settings.PacProfile
             };
 
-            // Validate connection before attempting to connect
             var (isValid, error) = await builder.ValidateAsync(connection);
             if (!isValid)
             {
-                throw new Exception(error);
+                throw new DevKitConnectionException(error);
             }
 
-            // For DeviceCode, set up the callback to use AnsiConsole
             if (builder is DeviceCodeConnectionBuilder deviceCodeBuilder)
             {
                 deviceCodeBuilder.DeviceCodeCallback = message =>
                 {
-                    // Use AnsiConsole directly for proper color rendering
                     AnsiConsole.WriteLine();
                     AnsiConsole.MarkupLine("[yellow]═══════════════════════════════════════════════════════════════[/]");
                     AnsiConsole.MarkupLine("[yellow] Device Code Authentication[/]");
@@ -271,12 +251,11 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 };
             }
 
-            // Create ServiceClient
             var serviceClient = await builder.CreateServiceClientAsync(connection);
 
             if (serviceClient?.IsReady != true)
             {
-                throw new Exception($"Modern authentication failed: {serviceClient?.LastError}");
+                throw new DevKitConnectionException($"Modern authentication failed: {serviceClient?.LastError}");
             }
 
             return serviceClient;

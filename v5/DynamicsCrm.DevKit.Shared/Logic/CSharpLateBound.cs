@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -19,7 +20,11 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static string GetCsCode(ServiceClient service, EntityMetadata entityMetadata, string rootNameSpace, string shareProject = null)
         {
             EntityMetadata = entityMetadata;
-            if (EntityMetadata.Attributes == null) EntityMetadata = XrmHelper.FetchEntityMetadata(service, entityMetadata.LogicalName);
+            if (EntityMetadata.Attributes == null)
+            {
+                var metadataService = new MetadataService(service);
+                EntityMetadata = metadataService.FetchEntityMetadata(entityMetadata.LogicalName);
+            }
             RootNamespace = rootNameSpace;
             var code = string.Empty;
             var @class = Helper.SafeDeclareName(entityMetadata.SchemaName, GeneratorType.csharp);
@@ -35,9 +40,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{{{NEW_LINE}";
             code += $"{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             if (shareProject != null) shareProject += ".";
-            code += $"{TAB}public partial class {@class} : {shareProject}EntityBase{NEW_LINE}";
+            code += $"{TAB}internal partial class {@class} : {shareProject}EntityBase{NEW_LINE}";
             code += $"{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}public struct Fields{NEW_LINE}";
+            code += $"{TAB}{TAB}internal struct Fields{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{GeneratorClassFields()}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
@@ -53,19 +58,25 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}public const string EntityPrimaryImageAttribute = \"{EntityMetadata.PrimaryImageAttribute}\";{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityPrimaryNameAttribute = \"{EntityMetadata.PrimaryNameAttribute}\";{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntitySchemaName = \"{EntityMetadata.SchemaName}\";{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with empty Guid.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"{@class}Id\"/>.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Guid {@class}Id){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, {@class}Id);{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with alternate key (<paramref name=\"keyName\"/>, <paramref name=\"keyValue\"/>).{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(string keyName, object keyValue){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, keyName, keyValue);{NEW_LINE}";
@@ -74,7 +85,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"targetEntity\"/>.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = targetEntity ?? new Entity(EntityLogicalName, Guid.Empty);{NEW_LINE}";
@@ -84,7 +94,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity) with targetEntity = null\");{NEW_LINE}";
@@ -102,7 +111,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with <paramref name=\"preEntity\"/>. Then copy all attributes from <paramref name=\"targetEntity\"/> to <paramref name=\"preEntity\"/>. After that copy all attributes from <paramref name=\"postEntity\"/> to the last result. Existing attribute will be overwritten.{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <exception cref=\"InvalidPluginExecutionException\">when <paramref name=\"targetEntity\"/> is null.</exception>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(Entity preEntity, Entity targetEntity, Entity postEntity){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (targetEntity == null) throw new InvalidPluginExecutionException($\"new {@class}(preEntity, targetEntity, postEntity) with targetEntity = null\");{NEW_LINE}";
@@ -123,7 +131,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// Instance new late bound class <see cref=\"{@class}\"/> with alternate <paramref name=\"keys\"/>.{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public {@class}(KeyAttributeCollection keys){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}Entity = new Entity(EntityLogicalName, keys);{NEW_LINE}";
@@ -131,6 +141,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{GeneratorCode()}";
             code += $"{GeneratorImageCode()}";
+            code += $"{GeneratorFileCode()}";
             code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
@@ -142,23 +153,56 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>byte[]</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>Image</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Image</strong> - byte[] - Thumbnail image data</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<byte[]>(\"{logicalName}\"); }}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[\"{logicalName}\"] = value; }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>ReadOnly - String</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para>Image</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - Relative URL for the image</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_url</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_url\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - long? - Timestamp of last image update</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_timestamp</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}public long? {schemaName}Timestamp{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<long?>(\"{logicalName}_timestamp\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>Download full-size image. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Target = Entity.ToEntityReference(),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}FileAttributeName = \"{logicalName}\"{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var response = (Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadResponse)service.Execute(request);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var data = new byte[response.FileSizeInBytes];{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}long offset = 0;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}while (offset < response.FileSizeInBytes){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockRequest = new Microsoft.Crm.Sdk.Messages.DownloadBlockRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}FileContinuationToken = response.FileContinuationToken,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}BlockLength = (int)Math.Min(4 * 1024 * 1024, response.FileSizeInBytes - offset),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Offset = offset{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockResponse = (Microsoft.Crm.Sdk.Messages.DownloadBlockResponse)service.Execute(blockRequest);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Array.Copy(blockResponse.Data, 0, data, offset, blockResponse.Data.Length);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}offset += blockResponse.Data.Length;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return data;{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
 
             return code;
@@ -183,10 +227,75 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
+        private static string GetGeneratorFileCode(string schemaName, string logicalName, int? maxSizeInKB)
+        {
+            var code = string.Empty;
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - Guid? - File Id. Check if file has been uploaded.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
+            if (maxSizeInKB.HasValue)
+                code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}public Guid? {schemaName}Id{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<Guid?>(\"{logicalName}\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - File name of the uploaded file</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_name</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}public string {schemaName}Name{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_name\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>Download file data. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Target = Entity.ToEntityReference(),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}FileAttributeName = \"{logicalName}\"{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var response = (Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadResponse)service.Execute(request);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}var data = new byte[response.FileSizeInBytes];{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}long offset = 0;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}while (offset < response.FileSizeInBytes){NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockRequest = new Microsoft.Crm.Sdk.Messages.DownloadBlockRequest{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}FileContinuationToken = response.FileContinuationToken,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}BlockLength = (int)Math.Min(4 * 1024 * 1024, response.FileSizeInBytes - offset),{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Offset = offset{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}}};{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}var blockResponse = (Microsoft.Crm.Sdk.Messages.DownloadBlockResponse)service.Execute(blockRequest);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}Array.Copy(blockResponse.Data, 0, data, offset, blockResponse.Data.Length);{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}offset += blockResponse.Data.Length;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return data;{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+
+            return code;
+        }
+
+        private static string GeneratorFileCode()
+        {
+            var code = string.Empty;
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (attribute is FileAttributeMetadata file)
+                {
+                    code += GetGeneratorFileCode(attribute.SchemaName, attribute.LogicalName, file.MaxSizeInKB);
+                }
+            }
+            return code;
+        }
+
         private static string GeneratorEnum()
         {
             var @enum = string.Empty;
-            @enum += $"{TAB}public enum [[Enum]]{NEW_LINE}";
+            @enum += $"{TAB}internal enum [[Enum]]{NEW_LINE}";
             @enum += $"{TAB}{{{NEW_LINE}";
             @enum += $"[[Declare]]";
             @enum += $"{TAB}}}{NEW_LINE}";
@@ -250,6 +359,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         private static bool IsFieldOk(AttributeMetadata attribute)
         {
             if (attribute is ImageAttributeMetadata) return false;
+            if (attribute is FileAttributeMetadata) return false;
             if (attribute.AttributeOf != null) return false;
             if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
             if (attribute.AttributeType == AttributeTypeCode.EntityName) return true;
@@ -288,8 +398,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
                 code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
-                if (attribute is FileAttributeMetadata)
-                    code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName}_name = \"{attribute.LogicalName}_name\";{NEW_LINE}";
             }
             return code;
         }
@@ -344,9 +452,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                             return $"Date?";
                         else if (datetime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                             return $"DateTime?";
-                        else if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal)
+                        else
                             return $"DateTime?";
-                        return $"DateTime?";
                     }
                 case AttributeTypeCode.Decimal:
                     return $"decimal?";
@@ -372,10 +479,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         return $"string";
                 case AttributeTypeCode.PartyList:
                     return $"System.Collections.Generic.List<ActivityParty>";
-                case AttributeTypeCode.ManagedProperty:
-                    return $"?";
                 default:
-                    return $"?";
+                    throw new InvalidOperationException($"Unsupported AttributeType '{attribute.AttributeType}' for attribute '{attribute.LogicalName}'. IsFieldOk should have filtered this.");
             }
         }
 
@@ -476,8 +581,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
-                    else if (attribute is FileAttributeMetadata)
-                        return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}_name] = value; }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -489,10 +592,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = data;{NEW_LINE}";
                     code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
-                case AttributeTypeCode.ManagedProperty:
-                    return "set;";
                 default:
-                    return "set;";
+                    throw new InvalidOperationException($"Unsupported AttributeType '{attribute.AttributeType}' for attribute '{attribute.LogicalName}'. IsFieldOk should have filtered this.");
             }
         }
 
@@ -577,8 +678,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
-                    else if (attribute is FileAttributeMetadata)
-                        return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}_name); }}{NEW_LINE}";
                     else
                         return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(Fields.{attribute.SchemaName}); }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
@@ -591,7 +690,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
                 default:
-                    return $"?{attribute.AttributeType}";
+                    throw new InvalidOperationException($"Unsupported AttributeType '{attribute.AttributeType}' for attribute '{attribute.LogicalName}'. IsFieldOk should have filtered this.");
             }
         }
 
@@ -630,6 +729,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     else if (datetime.Format == DateTimeFormat.DateAndTime)
                         line3 += "<strong>DateTimeBehavior</strong>: TimeZoneIndependent - <strong>DateTimeFormat</strong>: DateAndTime";
                 }
+                else
+                    line3 += $"<strong>DateTimeBehavior</strong>: UserLocal - <strong>DateTimeFormat</strong>: DateAndTime";
             }
             else if (attribute is MultiSelectPicklistAttributeMetadata multiple)
             {
@@ -693,12 +794,22 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else if (attribute is LookupAttributeMetadata lookup)
             {
-                line3 += $"<strong>Lookup</strong>: ";
-                foreach (var target in lookup.Targets)
+                if (attribute.AttributeType == AttributeTypeCode.Owner)
+                    line3 += $"<strong>Owner</strong>: ";
+                else if (attribute.AttributeType == AttributeTypeCode.Customer)
+                    line3 += $"<strong>Customer</strong>: ";
+                else if (lookup.Targets != null && lookup.Targets.Length > 1)
+                    line3 += $"<strong>Polymorphic Lookup</strong>: ";
+                else
+                    line3 += $"<strong>Lookup</strong>: ";
+                if (lookup.Targets != null)
                 {
-                    line3 += $"<see cref=\"{target}\"/>, ";
+                    foreach (var target in lookup.Targets)
+                    {
+                        line3 += $"<see cref=\"{target}\"/>, ";
+                    }
+                    line3 = line3.TrimEnd(", ".ToCharArray());
                 }
-                line3 = line3.TrimEnd(", ".ToCharArray());
             }
             else if (attribute is BooleanAttributeMetadata boolean)
             {
@@ -712,39 +823,67 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         line4 = $"<strong>Default Value</strong> [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
                 }
             }
-            else if (attribute is DoubleAttributeMetadata)
-                line3 += "<strong>Decimal Number</strong>";
-            else if (attribute is DecimalAttributeMetadata)
+            else if (attribute is DoubleAttributeMetadata @double)
+            {
                 line3 += "<strong>Floating Point Number</strong>";
-            else if (attribute is IntegerAttributeMetadata)
+                if (@double.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {@double.Precision.Value}";
+            }
+            else if (attribute is DecimalAttributeMetadata @decimal)
+            {
+                line3 += "<strong>Decimal Number</strong>";
+                if (@decimal.Precision.HasValue) line3 += $" - <strong>Precision</strong>: {@decimal.Precision.Value}";
+            }
+            else if (attribute is IntegerAttributeMetadata integer)
+            {
                 line3 += "<strong>Whole Number</strong>";
-            else if (attribute is MoneyAttributeMetadata)
+                if (integer.Format.HasValue && integer.Format.Value != IntegerFormat.None)
+                    line3 += $" - <strong>Format</strong>: {integer.Format.Value}";
+            }
+            else if (attribute is MoneyAttributeMetadata money)
             {
                 line3 += "<strong>Currency</strong>";
+                if (money.PrecisionSource.HasValue)
+                {
+                    if (money.PrecisionSource.Value == 0)
+                        line3 += $" - <strong>Precision</strong>: {(money.Precision.HasValue ? money.Precision.Value.ToString() : "2")}";
+                    else if (money.PrecisionSource.Value == 1)
+                        line3 += " - <strong>Precision</strong>: Organization.PricingDecimalPrecision";
+                    else if (money.PrecisionSource.Value == 2)
+                        line3 += " - <strong>Precision</strong>: TransactionCurrency.CurrencyPrecision";
+                }
+                else if (money.Precision.HasValue)
+                    line3 += $" - <strong>Precision</strong>: {money.Precision.Value}";
             }
-            else if (attribute is MemoAttributeMetadata)
+            else if (attribute is BigIntAttributeMetadata)
+            {
+                line3 += "<strong>Big Integer</strong>";
+            }
+            else if (attribute is MemoAttributeMetadata memo)
             {
                 line3 += "<strong>Multiple Lines of Text</strong>";
+                if (memo.FormatName?.Value != null && memo.FormatName.Value != "TextArea")
+                    line3 += $" - <strong>Format</strong>: {memo.FormatName.Value}";
             }
-            else if (attribute is StringAttributeMetadata)
+            else if (attribute is StringAttributeMetadata str)
             {
                 line3 += "<strong>Single Line of Text</strong>";
-            }
-            else if (attribute is ImageAttributeMetadata)
-            {
-                line3 += "<strong>Image</strong>";
+                if (str.FormatName?.Value != null && str.FormatName.Value != "Text")
+                    line3 += $" - <strong>Format</strong>: {str.FormatName.Value}";
             }
             else
                 line3 += "<strong>" + attribute.AttributeType.ToString() + "</strong>";
-            if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
-            if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,#", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,##0", CultureInfo.InvariantCulture);
+            if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,##0", CultureInfo.InvariantCulture);
+            if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,##0", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(attribute.AutoNumberFormat)) line3 += $" - <strong>AutoNumber</strong>: {attribute.AutoNumberFormat}";
+            if (attribute.IsAuditEnabled?.Value == true) line3 += " - <strong>Audit</strong>: Enabled";
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             line1 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
             if (line1 != null && line1.Length > 0)
             {
                 xml += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {line1}</para>{NEW_LINE}";
             }
+            xml += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {attribute.LogicalName}</para>{NEW_LINE}";
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
             {
@@ -767,7 +906,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
             }
             xml += $"{TAB}{TAB}/// </summary>\r\n";
-            xml += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             return xml;
         }
     }

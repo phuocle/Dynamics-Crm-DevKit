@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "dynamicscrm-devkit": {
+      "command": "cmd",
+      "args": ["/c", "devkit-mcp.cmd"],
+      "autoApprove": [
+        "get_entities_metadata",
+        "get_entity_metadata",
+        "get_global_optionsets",
+        "get_sdk_messages",
+        "get_entity_messages",
+        "get_none_messages",
+        "execute_fetchxml"
+      ]
+    }
+  }
+}

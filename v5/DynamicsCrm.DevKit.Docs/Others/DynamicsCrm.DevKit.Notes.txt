@@ -1,0 +1,182 @@
+================================================================================
+                      DynamicsCrm.DevKit v5 - PROJECT NOTES
+                    Last Updated: January 2026 (v5.00.00.00)
+================================================================================
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                              QUICK REFERENCE                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+VERSION:
+  - Configured in DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json
+  - Current version: 5.00.00.00
+  - Date: Auto-calculated (Dec 31 for annual, current for testing)
+
+CONFIGURATION FILE (SINGLE SOURCE OF TRUTH):
+  - DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json
+  - Contains: version, placeholders, file lists, build settings
+  - All release scripts read from this file
+
+KEY PASSWORDS:
+  (none)
+
+MSBUILD PATH:
+  C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe
+  (Adjusted for VS 2026)
+
+================================================================================
+                              SOLUTION STRUCTURE
+================================================================================
+
+┌─────────────────────────────────────┬───────────────────────────────────────┐
+│ Solution                            │ Purpose                               │
+├─────────────────────────────────────┼───────────────────────────────────────┤
+│ DynamicsCrm.DevKit.AllInOne.slnx    │ ALL projects (build all at once)      │
+│ DynamicsCrm.DevKit.slnx             │ VSIX extension only                   │
+│ DynamicsCrm.DevKit.Cli.slnx         │ CLI tool only                         │
+│ DynamicsCrm.DevKit.Analyzers.slnx   │ Roslyn analyzers only                 │
+└─────────────────────────────────────┴───────────────────────────────────────┘
+
+NUGET PACKAGES (Published\5.00.00.00\):
+  - DynamicsCrm.DevKit.5.00.00.00.vsix          (Visual Studio Extension)
+  - DynamicsCrm.DevKit.Analyzers.5.0.0.nupkg    (21 Roslyn analyzers)
+  - DynamicsCrm.DevKit.Cli.5.0.0.nupkg          (CLI deployment tool - .NET 10)
+  - DynamicsCrm.DevKit.Tool.5.0.0.nupkg         (Utility: minify, coverage)
+
+================================================================================
+                          TARGET FRAMEWORKS (IMPORTANT!)
+================================================================================
+
+  VSIX Extension:     .NET Framework 4.8
+  CLI Tool:           .NET 10.0
+  Tool:               .NET Framework 4.8
+  Analyzers:          .NET Standard 2.0 (for VS compatibility)
+  Shared Project:     Shared project (no specific framework)
+
+================================================================================
+                          ANALYZERS (DEVKIT1001-DEVKIT1021)
+================================================================================
+
+21 Roslyn analyzers in DynamicsCrm.DevKit.Analyzers\CrmAnalyzers:
+
+┌────────────┬───────────┬───────────────────────────────────────────────────────┐
+│ Rule ID    │ Severity  │ Description                                           │
+├────────────┼───────────┼───────────────────────────────────────────────────────┤
+│ DEVKIT1001 │ War/Err   │ Create (Warning) / Update (Error) filtering attributes│
+│ DEVKIT1002 │ Warning   │ Don't use ColumnSet(true)                             │
+│ DEVKIT1003 │ Error     │ Plugin image validation (Pre/Post availability)       │
+│ DEVKIT1004 │ Info      │ Use of deprecated SDK messages                        │
+│ DEVKIT1005 │ Warning   │ EntityReference maybe null                            │
+│ DEVKIT1006 │ Warning   │ Don't use batch requests in plugins                   │
+│ DEVKIT1007 │ Error     │ IPlugin implementations should be stateless           │
+│ DEVKIT1008 │ Error     │ Don't use parallel execution in plugins               │
+│ DEVKIT1009 │ Warning   │ Set KeepAlive=false for external HTTP calls           │
+│ DEVKIT1010 │ Warning   │ Set Timeout for external HTTP calls                   │
+│ DEVKIT1011 │ Warning   │ Use InvalidPluginExecutionException for errors        │
+│ DEVKIT1012 │ Info      │ Consider using ITracingService in plugins             │
+│ DEVKIT1013 │ Info      │ Avoid plugins on Retrieve/RetrieveMultiple            │
+│ DEVKIT1014 │ Error     │ Avoid AppDomain event registration in plugins         │
+│ DEVKIT1015 │ Info      │ Avoid blocking async patterns (.Result, .Wait())      │
+│ DEVKIT1016 │ Info      │ Avoid RetrieveAsIfPublished=true for metadata         │
+│ DEVKIT1017 │ Info      │ Avoid Console output in plugins                       │
+│ DEVKIT1018 │ Error     │ Avoid File/IO operations in plugins (blocked)         │
+│ DEVKIT1019 │ Warning   │ Check context.Depth to prevent infinite loops         │
+│ DEVKIT1020 │ Error     │ DataProvider must have DataSource                     │
+│ DEVKIT1021 │ Warning   │ Use ITracingService in catch blocks                   │
+└────────────┴───────────┴───────────────────────────────────────────────────────┘
+
+RUN ANALYZER TESTS:
+  cd DynamicsCrm.DevKit.Analyzers
+  ..\DynamicsCrm.DevKit.Scripts\Run-Analyzer-Coverage.ps1
+
+================================================================================
+                               CLI COMMANDS
+================================================================================
+
+The CLI (DynamicsCrm.DevKit.Cli) supports the following commands:
+
+  1. datasource          (Create data source entities)
+  2. devkit              (Main entry/help)
+  3. downloadreport      (Download reports)
+  4. downloadwebresource (Download web resources)
+  5. generator           (Generate form/webapi js/ts/csharp)
+  6. modelbuilder        (Generate early-bound using PAC ModelBuilder)
+  7. pacsolutionpackager (Pack/unpack solutions using PAC CLI)
+  8. proxytype           (DEPRECATED - Use modelbuilder)
+  9. server              (Deploy plugins, workflows, dataproviders)
+  10. solutionpackager   (Legacy solution packager)
+  11. uploadreport       (Upload reports)
+  12. webresource        (Deploy web resources)
+
+Config file: DynamicsCrm.DevKit.Cli.json
+
+================================================================================
+                             PROJECT TEMPLATES
+================================================================================
+
+13 Templates available in ProjectTemplates\CSharp:
+
+  01. SharedProjectTemplate
+  02. ConsoleProjectTemplate
+  03. ConsoleCoreProjectTemplate
+  04. ServerProjectTemplate
+  05. PackageProjectTemplate
+  06. WebResourceProjectTemplate
+  07. SharedTestProjectTemplate
+  08. ProxyTypesProjectTemplate
+  09. TestProjectTemplate
+  10. TestUiProjectTemplate
+  11. SolutionPackagerProjectTemplate
+  12. ReportProjectTemplate
+  13. WebResourceTsProjectTemplate
+
+================================================================================
+                              ITEM TEMPLATES
+================================================================================
+
+15 Templates available in ItemTemplates\CSharp:
+
+  01. LateBoundItemTemplate
+  02. JsFormItemTemplate
+  03. JsWebApiItemTemplate
+  04. PluginItemTemplate
+  05. CustomActionItemTemplate
+  06. CustomApiItemTemplate
+  07. WorkflowItemTemplate
+  08. DataProviderItemTemplate
+  09. TestItemTemplate
+  10. UiTestItemTemplate
+  11. ResourceStringItemTemplate
+  12. JsDevkitItemTemplate
+  13. BatFileItemTemplate
+  14. JsFormTsItemTemplate (TypeScript)
+  15. TsWebApiItemTemplate (TypeScript)
+
+================================================================================
+                             IMPORTANT FILE LOCATIONS
+================================================================================
+
+RELEASE CONFIGURATION:
+  DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json  → Version, settings
+
+CONSTANTS & VERSION:
+  DynamicsCrm.DevKit.Shared\Const.cs                    → Code constants
+
+SCRIPTS (in DynamicsCrm.DevKit.Scripts\):
+  Release-DynamicsCrm-DevKit.ps1                        → Main release script
+  Release-DynamicsCrm-DevKit-CurrentDate.ps1            → Test release script
+  RestroreReplacedFiles.ps1                             → Restore git changes
+
+
+DOCUMENTATION:
+  DynamicsCrm.DevKit.Docs\                              → Central docs location
+
+================================================================================
+                               HOWTO: RELEASE
+================================================================================
+
+1. Update version in DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json
+2. (Optional) Run .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit-CurrentDate.ps1 for testing
+3. Run .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1 for final release
+
+================================================================================

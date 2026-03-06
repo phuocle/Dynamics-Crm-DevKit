@@ -1,0 +1,411 @@
+﻿<RibbonDiffXml>
+	<CustomActions>
+		<CustomAction Id="$entity_logicial_name$.FlyoutButton.Hidden.CustomAction.SubGrid" Location="Mscrm.SubGrid.$entity_logicial_name$.MainTab.Management.Controls._children" Sequence="5">
+			<CommandUIDefinition>
+				<FlyoutAnchor Alt="$LocLabels:$entity_logicial_name$.Label.Hidden" Command="Mscrm.Disabled" Id="$entity_logicial_name$.FlyoutButton.Hidden.SubGrid" Image16by16="" Image32by32="" LabelText="$LocLabels:$entity_logicial_name$.Label.Hidden" PopulateOnlyOnce="true" Sequence="5" TemplateAlias="isv" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Hidden" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Hidden" ModernImage="$webresource:hs_/images/logo.svg">
+					<Menu Id="$entity_logicial_name$.FlyoutButton.Hidden.Menu.SubGrid">
+						<MenuSection Id="$entity_logicial_name$.MenuSection.Section.SubGrid" Title="$LocLabels:$entity_logicial_name$.Label.Hidden" Sequence="5" DisplayMode="Menu16">
+							<Controls Id="$entity_logicial_name$.MenuSection.Section.Controls.SubGrid">
+								<Button Alt="$LocLabels:$entity_logicial_name$.Label.Hidden" Command="$entity_logicial_name$.Command.CommandItem.SubGrid" Id="$entity_logicial_name$.Button.Hidden.SubGrid" LabelText="$LocLabels:$entity_logicial_name$.Label.Hidden" Sequence="5" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Hidden" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Hidden"/>
+							</Controls>
+						</MenuSection>
+					</Menu>
+				</FlyoutAnchor>
+			</CommandUIDefinition>
+		</CustomAction>
+		<CustomAction Id="$entity_logicial_name$.FlyoutButton.CustomAction.SubGrid" Location="Mscrm.SubGrid.$entity_logicial_name$.MainTab.Management.Controls._children" Sequence="10">
+			<CommandUIDefinition>
+				<FlyoutAnchor Alt="$LocLabels:$entity_logicial_name$.Label.Action" Command="$entity_logicial_name$.Command.CommandFlyout.SubGrid" Id="$entity_logicial_name$.FlyoutButton.SubGrid" Image16by16="" Image32by32="" LabelText="$LocLabels:$entity_logicial_name$.Label.Action" PopulateDynamically="true" PopulateQueryCommand="$entity_logicial_name$.Command.CommandItems.SubGrid" PopulateOnlyOnce="true" Sequence="10" TemplateAlias="isv" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Action" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Action" ModernImage="$webresource:hs_/images/logo.svg"/>
+			</CommandUIDefinition>
+		</CustomAction>
+		<CustomAction Id="$entity_logicial_name$.FlyoutButton.Hidden.CustomAction.Form" Location="Mscrm.Form.$entity_logicial_name$.MainTab.Save.Controls._children" Sequence="5">
+			<CommandUIDefinition>
+				<FlyoutAnchor Alt="$LocLabels:$entity_logicial_name$.Label.Hidden" Command="Mscrm.Disabled" Id="$entity_logicial_name$.FlyoutButton.Hidden.Form" Image16by16="" Image32by32="" LabelText="$LocLabels:$entity_logicial_name$.Label.Hidden" PopulateOnlyOnce="true" Sequence="5" TemplateAlias="isv" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Hidden" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Hidden" ModernImage="$webresource:hs_/images/logo.svg">
+					<Menu Id="$entity_logicial_name$.FlyoutButton.Hidden.Menu.Form">
+						<MenuSection Id="$entity_logicial_name$.MenuSection.Section.Form" Title="$LocLabels:$entity_logicial_name$.Label.Hidden" Sequence="5" DisplayMode="Menu16">
+							<Controls Id="$entity_logicial_name$.MenuSection.Section.Controls.Form">
+								<Button Alt="$LocLabels:$entity_logicial_name$.Label.Hidden" Command="$entity_logicial_name$.Command.CommandItem.Form" Id="$entity_logicial_name$.Button.Hidden.Form" LabelText="$LocLabels:$entity_logicial_name$.Label.Hidden" Sequence="5" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Hidden" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Hidden"/>
+							</Controls>
+						</MenuSection>
+					</Menu>
+				</FlyoutAnchor>
+			</CommandUIDefinition>
+		</CustomAction>
+		<CustomAction Id="$entity_logicial_name$.FlyoutButton.CustomAction.Form" Location="Mscrm.Form.$entity_logicial_name$.MainTab.Save.Controls._children" Sequence="10">
+			<CommandUIDefinition>
+				<FlyoutAnchor Alt="$LocLabels:$entity_logicial_name$.Label.Action" Command="$entity_logicial_name$.Command.CommandFlyout.Form" Id="$entity_logicial_name$.FlyoutButton.Form" Image16by16="" Image32by32="" LabelText="$LocLabels:$entity_logicial_name$.Label.Action" PopulateDynamically="true" PopulateQueryCommand="$entity_logicial_name$.Command.CommandItems.Form" PopulateOnlyOnce="true" Sequence="10" TemplateAlias="isv" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Action" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Action" ModernImage="$webresource:hs_/images/logo.svg"/>
+			</CommandUIDefinition>
+		</CustomAction>
+		<CustomAction Id="$entity_logicial_name$.FlyoutButton.Hidden.CustomAction.HomepageGrid" Location="Mscrm.HomepageGrid.$entity_logicial_name$.MainTab.Management.Controls._children" Sequence="5">
+			<CommandUIDefinition>
+				<FlyoutAnchor Alt="$LocLabels:$entity_logicial_name$.Label.Hidden" Command="Mscrm.Disabled" Id="$entity_logicial_name$.FlyoutButton.Hidden.HomepageGrid" Image16by16="" Image32by32="" LabelText="$LocLabels:$entity_logicial_name$.Label.Hidden" PopulateOnlyOnce="true" Sequence="5" TemplateAlias="isv" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Hidden" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Hidden" ModernImage="$webresource:hs_/images/logo.svg">
+					<Menu Id="$entity_logicial_name$.FlyoutButton.Hidden.Menu.HomepageGrid">
+						<MenuSection Id="$entity_logicial_name$.MenuSection.Section.HomepageGrid" Title="$LocLabels:$entity_logicial_name$.Label.Hidden" Sequence="5" DisplayMode="Menu16">
+							<Controls Id="$entity_logicial_name$.MenuSection.Section.Controls.HomepageGrid">
+								<Button Alt="$LocLabels:$entity_logicial_name$.Label.Hidden" Command="$entity_logicial_name$.Command.CommandItem.HomepageGrid" Id="$entity_logicial_name$.Button.Hidden.HomepageGrid" LabelText="$LocLabels:$entity_logicial_name$.Label.Hidden" Sequence="5" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Hidden" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Hidden"/>
+							</Controls>
+						</MenuSection>
+					</Menu>
+				</FlyoutAnchor>
+			</CommandUIDefinition>
+		</CustomAction>
+		<CustomAction Id="$entity_logicial_name$.FlyoutButton.CustomAction.HomepageGrid" Location="Mscrm.HomepageGrid.$entity_logicial_name$.MainTab.Management.Controls._children" Sequence="10">
+			<CommandUIDefinition>
+				<FlyoutAnchor Alt="$LocLabels:$entity_logicial_name$.Label.Action" Command="$entity_logicial_name$.Command.CommandFlyout.HomepageGrid" Id="$entity_logicial_name$.FlyoutButton.HomepageGrid" Image16by16="" Image32by32="" LabelText="$LocLabels:$entity_logicial_name$.Label.Action" PopulateDynamically="true" PopulateQueryCommand="$entity_logicial_name$.Command.CommandItems.HomepageGrid" PopulateOnlyOnce="true" Sequence="10" TemplateAlias="isv" ToolTipTitle="$LocLabels:$entity_logicial_name$.Label.Action" ToolTipDescription="$LocLabels:$entity_logicial_name$.Label.Action" ModernImage="$webresource:hs_/images/logo.svg"/>
+			</CommandUIDefinition>
+		</CustomAction>
+	</CustomActions>
+	<Templates>
+		<RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates>
+	</Templates>
+	<CommandDefinitions>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandFlyout.SubGrid">
+			<EnableRules>
+				<EnableRule Id="$entity_logicial_name$.EnableRule.FormFlyoutEnabled.SubGrid"/>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions/>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandItem.SubGrid">
+			<EnableRules>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<JavaScriptFunction FunctionName="ribbon_$entity_logicial_name$_subgrid.CommandItemClick" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+				</JavaScriptFunction>
+			</Actions>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandItems.SubGrid">
+			<EnableRules>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<JavaScriptFunction FunctionName="ribbon_$entity_logicial_name$_subgrid.CommandItemLoad" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+					<StringParameter Value="SubGrid"/>
+				</JavaScriptFunction>
+			</Actions>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandFlyout.Form">
+			<EnableRules>
+				<EnableRule Id="$entity_logicial_name$.EnableRule.FormFlyoutEnabled.Form"/>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules>
+				<DisplayRule Id="$entity_logicial_name$.DisplayRule.FormNotCreate"/>
+			</DisplayRules>
+			<Actions/>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandItem.Form">
+			<EnableRules>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<JavaScriptFunction FunctionName="ribbon_$entity_logicial_name$_form.CommandItemClick" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+				</JavaScriptFunction>
+			</Actions>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandItems.Form">
+			<EnableRules>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<JavaScriptFunction FunctionName="ribbon_$entity_logicial_name$_form.CommandItemLoad" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+					<StringParameter Value="Form"/>
+				</JavaScriptFunction>
+			</Actions>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandFlyout.HomepageGrid">
+			<EnableRules>
+				<EnableRule Id="$entity_logicial_name$.EnableRule.FormFlyoutEnabled.HomepageGrid"/>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions/>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandItem.HomepageGrid">
+			<EnableRules>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<JavaScriptFunction FunctionName="ribbon_$entity_logicial_name$_homepagegrid.CommandItemClick" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+				</JavaScriptFunction>
+			</Actions>
+		</CommandDefinition>
+		<CommandDefinition Id="$entity_logicial_name$.Command.CommandItems.HomepageGrid">
+			<EnableRules>
+				<EnableRule Id="Mscrm.AnySelection"/>
+			</EnableRules>
+			<DisplayRules/>
+			<Actions>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<JavaScriptFunction FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<JavaScriptFunction FunctionName="ribbon_$entity_logicial_name$_homepagegrid.CommandItemLoad" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+					<StringParameter Value="HomepageGrid"/>
+				</JavaScriptFunction>
+			</Actions>
+		</CommandDefinition>
+	</CommandDefinitions>
+	<RuleDefinitions>
+		<TabDisplayRules/>
+		<DisplayRules>
+			<DisplayRule Id="$entity_logicial_name$.DisplayRule.FormNotCreate">
+				<FormStateRule State="Create" InvertResult="true"/>
+			</DisplayRule>
+		</DisplayRules>
+		<EnableRules>
+			<EnableRule Id="$entity_logicial_name$.EnableRule.FormFlyoutEnabled.SubGrid">
+				<CustomRule FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<CustomRule FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<CustomRule FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<CustomRule FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<CustomRule FunctionName="ribbon_$entity_logicial_name$_subgrid.CommandItemEnable" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+				</CustomRule>
+			</EnableRule>
+			<EnableRule Id="$entity_logicial_name$.EnableRule.FormFlyoutEnabled.Form">
+				<CustomRule FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<CustomRule FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<CustomRule FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<CustomRule FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<CustomRule FunctionName="ribbon_$entity_logicial_name$_form.CommandItemEnable" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+				</CustomRule>
+			</EnableRule>
+			<EnableRule Id="$entity_logicial_name$.EnableRule.FormFlyoutEnabled.HomepageGrid">
+				<CustomRule FunctionName="isNaN" Library="$webresource:hs_/lib/devkit.js"/>
+				<CustomRule FunctionName="isNaN" Library="$webresource:hs_/lib/shared.js"/>
+				<!--<CustomRule FunctionName="isNaN" Library="$webresource:hs_/entities/entities.form.min.js"/>-->
+				<!--<CustomRule FunctionName="isNaN" Library="$webresource:hs_/entities/entities.webapi.min.js"/>-->
+				<CustomRule FunctionName="ribbon_$entity_logicial_name$_homepagegrid.CommandItemEnable" Library="$webresource:hs_/entities/$entity_logicial_name$.ribbon.js">
+					<CrmParameter Value="CommandProperties"/>
+					<CrmParameter Value="PrimaryEntityTypeName"/>
+					<CrmParameter Value="PrimaryItemIds"/>
+					<CrmParameter Value="FirstPrimaryItemId"/>
+					<CrmParameter Value="PrimaryControl"/>
+					<CrmParameter Value="PrimaryControlId"/>
+					<CrmParameter Value="SelectedEntityTypeName"/>
+					<CrmParameter Value="FirstSelectedItemId"/>
+					<CrmParameter Value="SelectedControl"/>
+					<CrmParameter Value="SelectedControlSelectedItemCount"/>
+					<CrmParameter Value="SelectedControlSelectedItemIds"/>
+					<CrmParameter Value="SelectedControlSelectedItemReferences"/>
+					<CrmParameter Value="SelectedControlAllItemCount"/>
+					<CrmParameter Value="SelectedControlAllItemIds"/>
+					<CrmParameter Value="SelectedControlAllItemReferences"/>
+					<CrmParameter Value="SelectedControlUnselectedItemCount"/>
+					<CrmParameter Value="SelectedControlUnselectedItemIds"/>
+					<CrmParameter Value="SelectedControlUnselectedItemReferences"/>
+					<CrmParameter Value="OrgName"/>
+					<CrmParameter Value="OrgLcid"/>
+					<CrmParameter Value="UserLcid"/>
+				</CustomRule>
+			</EnableRule>
+		</EnableRules>
+	</RuleDefinitions>
+	<LocLabels>
+		<LocLabel Id="$entity_logicial_name$.Label.Hidden">
+			<Titles>
+				<Title description="Hidden" languagecode="1033"/>
+			</Titles>
+		</LocLabel>
+		<LocLabel Id="$entity_logicial_name$.Label.Action">
+			<Titles>
+				<Title description="Action" languagecode="1033"/>
+			</Titles>
+		</LocLabel>
+	</LocLabels>
+</RibbonDiffXml>
