@@ -8,32 +8,28 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetEntityMessagesTool
+    public class GetNoneMessagesTool
     {
         private readonly MetadataService _metadataService;
 
-        public GetEntityMessagesTool(MetadataService metadataService)
+        public GetNoneMessagesTool(MetadataService metadataService)
         {
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_entity_messages", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_none_messages", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Get messages for an entity, with optional Custom Action and Custom API messages. " +
-            "Use entity_logical_name='none' for global (none-bound) messages.")]
-        public async Task<string> get_entity_messages(
-            [Description("Entity logical name. Use 'none' for global messages.")] string entity_logical_name,
+            "Get global none-bound messages. " +
+            "Equivalent to get_entity_messages(entity_logical_name='none').")]
+        public async Task<string> get_none_messages(
             [Description("true: include Custom Action messages.")] bool include_custom_actions = true,
             [Description("true: include Custom API messages.")] bool include_custom_apis = true)
         {
-            if (string.IsNullOrWhiteSpace(entity_logical_name))
-                return ToolResponseFormatter.Error("entity_logical_name is required. Use 'none' for global messages.");
-
             try
             {
                 var payload = await MessageDiscoveryHelper.GetMessagePayloadAsync(
                     _metadataService,
-                    entity_logical_name,
+                    "none",
                     include_custom_actions,
                     include_custom_apis);
 
@@ -41,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ToolResponseFormatter.Error($"Failed to load messages for '{entity_logical_name}'", ex);
+                return ToolResponseFormatter.Error("Failed to load none-bound messages", ex);
             }
         }
     }

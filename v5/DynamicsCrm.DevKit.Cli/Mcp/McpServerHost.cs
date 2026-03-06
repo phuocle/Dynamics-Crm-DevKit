@@ -1,4 +1,3 @@
-using DynamicsCrm.DevKit.Cli.Mcp.Services;
 using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +28,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             builder.Services.AddSingleton(_serviceClient);
             builder.Services.AddSingleton(new MetadataService(_serviceClient));
-            builder.Services.AddSingleton<T4TemplateProcessor>();
 
             builder.Services
                 .AddMcpServer(options =>
