@@ -21,8 +21,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_global_optionsets", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Get Dataverse global option sets (choices). " +
-            "If optionset_name is empty, return all. " +
-            "If optionset_name is provided, return details for that option set.")]
+            "If optionset_name is empty, return a summary table of all. " +
+            "If optionset_name is provided, return detailed options for that option set.")]
         public string get_global_optionsets(
             [Description("Optional global option set name. Empty means list all.")] string optionset_name = "")
         {
@@ -35,23 +35,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ToolResponseFormatter.Error("Failed to load global option sets", ex);
+                return $"Error: Failed to load global option sets: {ex.Message}";
             }
         }
 
         private string ListAllOptionSets()
         {
             var response = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
-            var optionsets = response.OptionSetMetadata
-                .OrderBy(x => x.Name)
-                .Select(MetadataFormatter.ToOptionSetDetail)
-                .ToList();
-
-            return ToolResponseFormatter.Success(new
-            {
-                count = optionsets.Count,
-                optionsets
-            });
+            var sorted = response.OptionSetMetadata.OrderBy(x => x.Name);
+            return MarkdownFormatter.FormatOptionSetList(sorted);
         }
 
         private string GetSingleOptionSet(string name)
@@ -60,8 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Name = name
             });
-
-            return ToolResponseFormatter.Success(MetadataFormatter.ToOptionSetDetail(response.OptionSetMetadata));
+            return MarkdownFormatter.FormatOptionSetDetail(response.OptionSetMetadata);
         }
     }
 }

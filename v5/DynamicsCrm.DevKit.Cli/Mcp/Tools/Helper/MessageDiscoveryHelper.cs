@@ -7,7 +7,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class MessageDiscoveryHelper
     {
-        public static async Task<object> GetMessagePayloadAsync(
+        public static async Task<string> GetMessageMarkdownAsync(
             MetadataService metadataService,
             string scope,
             bool includeCustomActions,
@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 ? await metadataService.GetCustomApisAsync(normalizedScope)
                 : [];
 
-            return MetadataFormatter.ToMessagesPayload(
+            return MarkdownFormatter.FormatMessages(
                 normalizedScope,
                 sdkMessages.Select(x => x.Name),
                 customActions.Select(x => x.Name),

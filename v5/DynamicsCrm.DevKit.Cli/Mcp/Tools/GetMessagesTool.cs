@@ -8,37 +8,35 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetSdkMessagesTool
+    public class GetMessagesTool
     {
         private readonly MetadataService _metadataService;
 
-        public GetSdkMessagesTool(MetadataService metadataService)
+        public GetMessagesTool(MetadataService metadataService)
         {
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_sdk_messages", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_messages", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Get SDK messages with optional Custom Action and Custom API messages. " +
-            "Use entity_logical_name='none' (or empty) for global scope.")]
-        public async Task<string> get_sdk_messages(
-            [Description("Entity logical name. Use 'none' or empty for global scope.")] string entity_logical_name = "none",
+            "Get SDK messages, Custom Actions, and Custom APIs for an entity. " +
+            "Use entity_name='none' or leave empty for global (none-bound) messages.")]
+        public async Task<string> get_messages(
+            [Description("Entity logical name. Use 'none' or leave empty for global messages.")] string entity_name = "none",
             [Description("true: include Custom Action messages.")] bool include_custom_actions = true,
             [Description("true: include Custom API messages.")] bool include_custom_apis = true)
         {
             try
             {
-                var payload = await MessageDiscoveryHelper.GetMessagePayloadAsync(
+                return await MessageDiscoveryHelper.GetMessageMarkdownAsync(
                     _metadataService,
-                    entity_logical_name,
+                    entity_name,
                     include_custom_actions,
                     include_custom_apis);
-
-                return ToolResponseFormatter.Success(payload);
             }
             catch (Exception ex)
             {
-                return ToolResponseFormatter.Error("Failed to load SDK messages", ex);
+                return $"Error: Failed to load messages for '{entity_name}': {ex.Message}";
             }
         }
     }

@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         [McpServerTool(Name = "get_entities_metadata", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Get entity list metadata in compact JSON format. " +
+            "List Dataverse entities in a markdown table. " +
             "Supports text filter, custom-only mode, and intersect include/exclude.")]
         public async Task<string> get_entities_metadata(
             [Description("Optional keyword to match logical name or display name.")] string filter = "",
@@ -48,20 +48,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                          x.DisplayName.UserLocalizedLabel.Label.ToLowerInvariant().Contains(keyword)));
                 }
 
-                var payload = query
-                    .OrderBy(x => x.LogicalName)
-                    .Select(MetadataFormatter.ToEntitySummary)
-                    .ToList();
-
-                return ToolResponseFormatter.Success(new
-                {
-                    count = payload.Count,
-                    entities = payload
-                });
+                var sorted = query.OrderBy(x => x.LogicalName);
+                return MarkdownFormatter.FormatEntitySummaryTable(sorted);
             }
             catch (Exception ex)
             {
-                return ToolResponseFormatter.Error("Failed to load entities metadata", ex);
+                return $"Error: Failed to load entities metadata: {ex.Message}";
             }
         }
     }

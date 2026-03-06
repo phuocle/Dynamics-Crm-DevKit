@@ -6,67 +6,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class DataverseValueFormatter
     {
-        public static object FormatValue(Entity entity, string attributeName)
+        public static string FormatValue(Entity entity, string attributeName)
         {
             if (!entity.Attributes.TryGetValue(attributeName, out var raw) || raw == null)
-                return null;
+                return "";
 
-            var formatted = entity.FormattedValues.TryGetValue(attributeName, out var fv) ? fv : null;
+            if (entity.FormattedValues.TryGetValue(attributeName, out var formatted) && !string.IsNullOrEmpty(formatted))
+                return formatted;
 
             return raw switch
             {
-                EntityReference er => new
-                {
-                    logical_name = er.LogicalName,
-                    id = er.Id,
-                    name = string.IsNullOrWhiteSpace(er.Name) ? null : er.Name,
-                    formatted
-                },
-                OptionSetValue osv => new
-                {
-                    value = osv.Value,
-                    formatted
-                },
-                Money money => new
-                {
-                    value = money.Value,
-                    formatted = formatted ?? money.Value.ToString("N2", CultureInfo.InvariantCulture)
-                },
-                DateTime dt => new
-                {
-                    value = dt,
-                    formatted = formatted ?? dt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
-                },
-                bool b => new
-                {
-                    value = b,
-                    formatted = formatted ?? (b ? "Yes" : "No")
-                },
+                EntityReference er => string.IsNullOrWhiteSpace(er.Name)
+                    ? $"{er.LogicalName}:{er.Id}"
+                    : $"{er.Name} ({er.LogicalName}:{er.Id})",
+                OptionSetValue osv => osv.Value.ToString(),
+                Money money => money.Value.ToString("N2", CultureInfo.InvariantCulture),
+                DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                bool b => b ? "Yes" : "No",
                 AliasedValue av => FormatAliased(av),
-                byte[] bytes => new
-                {
-                    bytes = bytes.Length
-                },
-                _ => new
-                {
-                    value = raw.ToString(),
-                    formatted
-                }
+                Guid g => g.ToString(),
+                byte[] bytes => $"[{bytes.Length} bytes]",
+                _ => raw.ToString()
             };
         }
 
-        private static object FormatAliased(AliasedValue av)
+        private static string FormatAliased(AliasedValue av)
         {
             if (av?.Value == null)
-                return null;
+                return "";
 
             return av.Value switch
             {
-                EntityReference er => new { logical_name = er.LogicalName, id = er.Id, name = er.Name },
-                OptionSetValue osv => new { value = osv.Value },
-                Money money => new { value = money.Value },
-                DateTime dt => new { value = dt },
-                _ => new { value = av.Value.ToString() }
+                EntityReference er => string.IsNullOrWhiteSpace(er.Name)
+                    ? $"{er.LogicalName}:{er.Id}"
+                    : $"{er.Name} ({er.LogicalName}:{er.Id})",
+                OptionSetValue osv => osv.Value.ToString(),
+                Money money => money.Value.ToString("N2", CultureInfo.InvariantCulture),
+                DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                Guid g => g.ToString(),
+                _ => av.Value.ToString()
             };
         }
     }
