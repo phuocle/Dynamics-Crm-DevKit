@@ -1,4 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Lib
         {
             var t4Context = new T4Context
             {
-                PluginComment =  form.PluginComment,
+                PluginComment = form.PluginComment,
                 PluginNameSpace = form.PluginNameSpace,
                 PluginExecution = form.PluginExecution,
                 PluginMessage = form.PluginMessage,
@@ -47,6 +47,10 @@ namespace DynamicsCrm.DevKit.Lib
                 PluginLogicalName = form.PluginLogicalName,
                 PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
                 DataSource = form.DataSource,
+                EntityDisplayName = form.EntityDisplayName,
+                EntitySetName = form.EntitySetName,
+                EntityTypeCode = form.EntityTypeCode,
+                IsCustomEntity = form.IsCustomEntity,
             };
             return t4Context;
         }

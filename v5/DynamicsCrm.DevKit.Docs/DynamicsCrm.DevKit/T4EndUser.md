@@ -130,6 +130,9 @@ When creating templates, you have access to these properties through the `Contex
 | `Context.PluginNameSpace` | Your plugin namespace | `"MyCompany.Plugins"` |
 | `Context.Class` | Class name | `"PreAccountCreate"` |
 | `Context.PluginSharedNameSpace` | Shared project namespace | `"MyCompany.Shared"` |
+| `Context.ClassWithOrder` | Class name with order suffix (auto-appended when order != 1) | `"PreAccountCreate"` or `"PreAccountCreate2"` |
+| `Context.GeneratedDate` | Date/time when template is processed | `"2026-03-06 23:45:00"` |
+| `Context.DevKitVersion` | DynamicsCrm.DevKit version | `"4.12.34.56"` |
 
 ### Plugin-Specific Properties
 
@@ -143,18 +146,129 @@ When creating templates, you have access to these properties through the `Contex
 | `Context.PluginOrder` | Execution order | `1`, `2`, `3` |
 | `Context.PluginComment` | Auto-generated comment from CRM | See example below |
 
-### Computed Properties
+### Entity Properties
 
-| Property | Description | Returns |
-|----------|-------------|---------|
-| `Context.IsPluginSupportedPreImage` | Can this message have PreImage? | `true` or `false` |
-| `Context.IsPluginSupportedPostImage` | Can this message have PostImage? | `true` or `false` |
+Friendly aliases and CRM metadata properties:
+
+| Property | Description | Example Value |
+|----------|-------------|---------------|
+| `Context.EntityLogicalName` | Same as `Context.PluginLogicalName` | `"account"` |
+| `Context.EntitySchemaName` | Same as `Context.PluginSchemaName` | `"Account"` |
+| `Context.EntityDisplayName` | Display name from CRM metadata | `"Account"`, `"Khách hàng"` |
+| `Context.EntitySetName` | WebAPI collection name | `"accounts"` |
+| `Context.EntityTypeCode` | Object type code | `1` |
+| `Context.IsCustomEntity` | Whether entity is custom | `true` or `false` |
+
+### Naming Helpers
+
+| Property | Description | Example Value |
+|----------|-------------|---------------|
+| `Context.FullClassName` | Namespace + class name with order | `"MyCompany.Plugins.PreAccountCreate"` |
+| `Context.RegistrationName` | Same as `FullClassName`, for registration attributes | `"MyCompany.Plugins.PreAccountCreate"` |
+
+### Boolean Helpers
+
+Instead of writing string comparisons in your templates, use these convenient boolean properties:
+
+#### Stage Helpers
+
+| Property | `true` when... |
+|----------|----------------|
+| `Context.IsPreValidation` | Stage is PreValidation |
+| `Context.IsPreOperation` | Stage is PreOperation |
+| `Context.IsPostOperation` | Stage is PostOperation |
+| `Context.StageNumber` | Returns `10` (PreValidation), `20` (PreOperation), `40` (PostOperation) |
+
+#### Execution Mode Helpers
+
+| Property | `true` when... |
+|----------|----------------|
+| `Context.IsAsynchronous` | Execution mode is Asynchronous |
+| `Context.IsSynchronous` | Execution mode is Synchronous |
+
+#### Message Helpers
+
+| Property | `true` when... |
+|----------|----------------|
+| `Context.IsCreateMessage` | Message is Create |
+| `Context.IsUpdateMessage` | Message is Update |
+| `Context.IsDeleteMessage` | Message is Delete |
+| `Context.IsCreateMultipleMessage` | Message is CreateMultiple |
+| `Context.IsUpdateMultipleMessage` | Message is UpdateMultiple |
+
+#### Image Helpers
+
+| Property | Same As | Description |
+|----------|---------|-------------|
+| `Context.HasPreImage` | `Context.IsPluginSupportedPreImage` | Can this message have PreImage? |
+| `Context.HasPostImage` | `Context.IsPluginSupportedPostImage` | Can this message have PostImage? |
+
+> **Note:** `IsPluginSupportedPreImage` and `IsPluginSupportedPostImage` still work. `HasPreImage` and `HasPostImage` are shorter aliases.
 
 ### Data Provider Properties
 
 | Property | Description | Example Value |
 |----------|-------------|---------------|
 | `Context.DataSource` | Data source name | `"my_datasource"` |
+
+### Before vs After: Using Helper Properties
+
+These helpers make your templates shorter and easier to read:
+
+```csharp
+// BEFORE (verbose):
+public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : IPlugin
+
+// AFTER (clean):
+public class <#=Context.ClassWithOrder#> : IPlugin
+```
+
+```csharp
+// BEFORE (verbose registration name):
+"<#=Context.PluginNameSpace#>.<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>"
+
+// AFTER:
+"<#=Context.RegistrationName#>"
+```
+
+```csharp
+// BEFORE:
+<#if(Context.PluginExecution=="Asynchronous"){#>, DeleteAsyncOperation = true<#}#>
+
+// AFTER:
+<#if(Context.IsAsynchronous){#>, DeleteAsyncOperation = true<#}#>
+```
+
+```csharp
+// BEFORE:
+<#if(Context.PluginMessage=="Create" || Context.PluginMessage=="Update"){#>
+    var target = context.InputParameterOrDefault<Entity>("Target");
+<#}#>
+
+// AFTER:
+<#if(Context.IsCreateMessage || Context.IsUpdateMessage){#>
+    var target = context.InputParameterOrDefault<Entity>("Target");
+<#}#>
+```
+
+```csharp
+// BEFORE:
+<#if(Context.IsPluginSupportedPreImage){#>
+    context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
+<#}#>
+
+// AFTER:
+<#if(Context.HasPreImage){#>
+    context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
+<#}#>
+```
+
+```csharp
+// Entity metadata from CRM:
+/// Entity: <#=Context.EntityDisplayName#> (<#=Context.EntityLogicalName#>)
+/// WebAPI: api/data/v9.2/<#=Context.EntitySetName#>
+<#if(Context.IsCustomEntity){#>/// Custom entity (OTC: <#=Context.EntityTypeCode#>)<#}#>
+```
 
 ---
 
@@ -763,7 +877,7 @@ Or use source control to revert the config file.
 
 ## Example: Complete Custom Plugin Template
 
-Here's a complete example showing many customizations:
+Here's a complete example showing many customizations, using the new helper properties:
 
 ```csharp
 using System;
@@ -774,19 +888,20 @@ using <#=Context.PluginSharedNameSpace#>;
 namespace <#=Context.PluginNameSpace#>
 {
     /// <summary>
-    /// Plugin: <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>
-    /// Entity: <#=Context.PluginSchemaName#> (<#=Context.PluginLogicalName#>)
+    /// Plugin: <#=Context.ClassWithOrder#>
+    /// Entity: <#=Context.EntitySchemaName#> (<#=Context.EntityLogicalName#>)
     /// Message: <#=Context.PluginMessage#>
     /// Stage: <#=Context.PluginStage#>
+    /// Generated by DevKit v<#=Context.DevKitVersion#> on <#=Context.GeneratedDate#>
     /// </summary>
-    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.PluginLogicalName#>",
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.EntityLogicalName#>",
         StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>,
-        "", "<#=Context.PluginNameSpace#>.<#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>",
+        "", "<#=Context.PluginNameSpace#>.<#=Context.ClassWithOrder#>",
         <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin
-<#if(Context.PluginExecution=="Asynchronous"){#>, DeleteAsyncOperation = true<#}#>
-<#if(Context.IsPluginSupportedPreImage){#>, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#>
-<#if(Context.IsPluginSupportedPostImage){#><#if(Context.IsPluginSupportedPreImage){#>, Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*"<#} else {#>, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*"<#}#><#}#>)]
-    public class <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#> : IPlugin
+<#if(Context.IsAsynchronous){#>, DeleteAsyncOperation = true<#}#>
+<#if(Context.HasPreImage){#>, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#>
+<#if(Context.HasPostImage){#><#if(Context.HasPreImage){#>, Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*"<#} else {#>, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*"<#}#><#}#>)]
+    public class <#=Context.ClassWithOrder#> : IPlugin
     {
         #region Fields
 
@@ -797,7 +912,7 @@ namespace <#=Context.PluginNameSpace#>
 
         #region Constructor
 
-        public <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>(string unsecureConfiguration, string secureConfiguration)
+        public <#=Context.ClassWithOrder#>(string unsecureConfiguration, string secureConfiguration)
         {
             _unsecureConfig = unsecureConfiguration;
             _secureConfig = secureConfiguration;
@@ -812,15 +927,14 @@ namespace <#=Context.PluginNameSpace#>
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-            tracing?.Trace($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Plugin Started: <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>");
+            tracing?.Trace($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}] Plugin Started: <#=Context.ClassWithOrder#>");
 
-            // Validate execution context
             if (!int.Equals(context.Stage, (int)StageEnum.<#=Context.PluginStage#>))
                 throw new InvalidPluginExecutionException("Stage does not equals <#=Context.PluginStage#>");
             if (!string.Equals(context.MessageName, "<#=Context.PluginMessage#>", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidPluginExecutionException("MessageName does not equals <#=Context.PluginMessage#>");
-            if (!string.Equals(context.PrimaryEntityName, "<#=Context.PluginLogicalName#>", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.PluginLogicalName#>");
+            if (!string.Equals(context.PrimaryEntityName, "<#=Context.EntityLogicalName#>", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.EntityLogicalName#>");
             if (!int.Equals(context.Mode, (int)ExecutionModeEnum.<#=Context.PluginExecution#>))
                 throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
 
@@ -843,24 +957,24 @@ namespace <#=Context.PluginNameSpace#>
         {
             try
             {
-<#if(Context.PluginMessage=="Create" || Context.PluginMessage=="Update"){#>
+<#if(Context.IsCreateMessage || Context.IsUpdateMessage){#>
                 var targetEntity = context.InputParameterOrDefault<Entity>("Target");
                 tracing?.Trace($"Target Entity ID: {targetEntity.Id}");
-<#}else if(Context.PluginMessage=="CreateMultiple" || Context.PluginMessage=="UpdateMultiple"){#>
+<#}else if(Context.IsCreateMultipleMessage || Context.IsUpdateMultipleMessage){#>
                 var targetEntities = context.InputParameterOrDefault<EntityCollection>("Targets");
                 tracing?.Trace($"Target Entities Count: {targetEntities.Entities.Count}");
-<#}else if(Context.PluginMessage=="Delete"){#>
+<#}else if(Context.IsDeleteMessage){#>
                 var targetEntityReference = context.InputParameterOrDefault<EntityReference>("Target");
                 tracing?.Trace($"Target Entity ID: {targetEntityReference.Id}");
 <#}else{#>
                 //var ??? = context.InputParameterOrDefault<???>("???");
 <#}#>
-<#if(Context.IsPluginSupportedPreImage){#>
+<#if(Context.HasPreImage){#>
                 context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);
                 if (preEntity != null)
                     tracing?.Trace("PreImage retrieved successfully");
 <#}#>
-<#if(Context.IsPluginSupportedPostImage){#>
+<#if(Context.HasPostImage){#>
                 context.PostEntityImages.TryGetValue("PostImage", out Entity postEntity);
                 if (postEntity != null)
                     tracing?.Trace("PostImage retrieved successfully");
@@ -871,24 +985,14 @@ namespace <#=Context.PluginNameSpace#>
             }
             catch (InvalidPluginExecutionException)
             {
-                throw; // Re-throw CRM exceptions
+                throw;
             }
             catch (Exception ex)
             {
                 tracing?.Trace($"ERROR: {ex.Message}");
                 tracing?.Trace($"Stack Trace: {ex.StackTrace}");
-                throw new InvalidPluginExecutionException($"An error occurred in <#=Context.Class#><#if(Context.PluginOrder!=1){#><#=Context.PluginOrder#><#}#>: {ex.Message}", ex);
+                throw new InvalidPluginExecutionException($"An error occurred in <#=Context.ClassWithOrder#>: {ex.Message}", ex);
             }
-        }
-
-        private bool HasAttribute(Entity entity, string attributeName)
-        {
-            return entity != null && entity.Contains(attributeName) && entity[attributeName] != null;
-        }
-
-        private T GetAttributeValue<T>(Entity entity, string attributeName, T defaultValue = default(T))
-        {
-            return HasAttribute(entity, attributeName) ? entity.GetAttributeValue<T>(attributeName) : defaultValue;
         }
 
         #endregion
@@ -896,15 +1000,14 @@ namespace <#=Context.PluginNameSpace#>
 }
 ```
 
-This template includes:
-- XML documentation comments
-- Constructor for configuration
-- Enhanced logging with timestamps
-- Try-catch error handling
-- Helper methods
-- Organized with regions
-- PreImage/PostImage with null checks
-- Message-specific parameter handling
+This template demonstrates:
+- `ClassWithOrder` instead of the verbose `Class + PluginOrder` pattern
+- `EntityLogicalName` / `EntitySchemaName` instead of `PluginLogicalName` / `PluginSchemaName`
+- `IsAsynchronous` instead of string comparison `PluginExecution=="Asynchronous"`
+- `IsCreateMessage`, `IsUpdateMessage`, `IsDeleteMessage` instead of string comparisons
+- `IsCreateMultipleMessage`, `IsUpdateMultipleMessage` for bulk operations
+- `HasPreImage` / `HasPostImage` instead of `IsPluginSupportedPreImage` / `IsPluginSupportedPostImage`
+- `DevKitVersion` and `GeneratedDate` for metadata in XML comments
 
 ---
 

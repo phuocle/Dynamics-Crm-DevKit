@@ -74,6 +74,47 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
+        public string EntityDisplayName
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.DisplayName ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public string EntitySetName
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.EntitySetName ?? string.Empty;
+                return string.Empty;
+            }
+        }
+        public int EntityTypeCode
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return -1;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.EntityTypeCode;
+                return -1;
+            }
+        }
+        public bool IsCustomEntity
+        {
+            get
+            {
+                if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return false;
+                if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
+                    return entity.IsCustomEntity;
+                return false;
+            }
+        }
+
         public string LanguageCode => PluginLogicalName;
         public string BatFileName => PluginLogicalName;
 

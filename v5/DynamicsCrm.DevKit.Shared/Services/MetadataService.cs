@@ -977,7 +977,9 @@ namespace DynamicsCrm.DevKit.Shared.Services
                     SchemaName = entity.SchemaName,
                     HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
                     EntityTypeCode = entity.ObjectTypeCode ?? -1,
-                    IsCustomEntity = entity.IsCustomEntity ?? false
+                    IsCustomEntity = entity.IsCustomEntity ?? false,
+                    DisplayName = entity.DisplayName?.UserLocalizedLabel?.Label ?? entity.SchemaName,
+                    EntitySetName = entity.EntitySetName ?? string.Empty
                 });
             }
             entities = [.. entities.OrderBy(entity => entity.Name)];
