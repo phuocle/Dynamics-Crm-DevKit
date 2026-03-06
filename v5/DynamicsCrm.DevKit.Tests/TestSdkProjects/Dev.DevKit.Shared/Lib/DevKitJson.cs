@@ -756,7 +756,7 @@ namespace Microsoft.Xrm.Sdk
                 LogicalName = GetString(dict, "LogicalName", ""),
                 Id = dict.TryGetValue("Id", out var id) ? Guid.Parse((string)id) : Guid.Empty
             };
-            if (dict.TryGetValue("Name", out var name) && name is string n) 
+            if (dict.TryGetValue("Name", out var name) && name is string n)
                 er.Name = n;
             return er;
         }

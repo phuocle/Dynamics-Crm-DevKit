@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
-  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="111fcf03-72e9-4a06-8997-4588919002b9" />
+  <Project Path="Dev.DevKit.Shared/Dev.DevKit.Shared.shproj" Id="c977ff20-d2f1-4f35-9f0f-f4238633a026" />
 </Solution>

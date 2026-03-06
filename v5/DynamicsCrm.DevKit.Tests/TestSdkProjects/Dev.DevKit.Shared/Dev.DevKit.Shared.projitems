@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>111fcf03-72e9-4a06-8997-4588919002b9</SharedGUID>
+    <SharedGUID>c977ff20-d2f1-4f35-9f0f-f4238633a026</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
@@ -11,9 +11,8 @@
     <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" Exclude="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />
-    <None Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
   </ItemGroup>
 </Project>

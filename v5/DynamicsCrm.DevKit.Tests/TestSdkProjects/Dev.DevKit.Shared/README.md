@@ -4,7 +4,7 @@
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
-        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss
+        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 06.03.2026 16:38:48
 
 ```
 
@@ -17,7 +17,7 @@ Provides a foundational structure for Dataverse development with core utility cl
 * Shared project structure for code reusability
 * Core utility classes (Date, Extension, EntityBase)
 * PluginCore base class for plugin development
-* SimpleJson handler for lightweight JSON operations
+* DevKitJson handler for lightweight JSON operations
 * Generator batch file for entity code generation
 * Pre-configured folder structure (Lib, Entities)
 
@@ -30,7 +30,7 @@ This is a foundational shared project that other templates depend on.
 * **PluginCore.cs** - Base class for plugin development with common functionality
 * **Extension.cs** - Extension methods for common Dataverse operations
 * **EntityBase.cs** - Base class for entity operations
-* **SimpleJson.cs** - Lightweight JSON serialization/deserialization
+* **DevKitJson.cs** - Lightweight JSON serialization/deserialization
 * **Date.cs** - Date utility functions
 * **generator.bat** - Code generation script for entities
 
