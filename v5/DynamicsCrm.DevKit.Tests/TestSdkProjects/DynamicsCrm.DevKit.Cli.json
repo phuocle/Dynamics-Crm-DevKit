@@ -72,11 +72,11 @@
   ],
   "datasources": [
     {
-      "profile": "DEBUG",
-      "solution": "???",
-      "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "profile": "Package-Sqlite",
+      "solution": "devkitv4",
+      "displayname": "Package Sqlite",
+      "pluralname": "Packages Sqlites",
+      "name": "PackageSqlite"
     }
   ],
   "generators": [
