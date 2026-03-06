@@ -116,6 +116,15 @@ function Restore-Files {
 # --- Main Logic ---
 
 try {
+    # 0. Kill CLI process (may be running as MCP server, causing file locks)
+    $cliProcess = Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue
+    if ($cliProcess) {
+        Write-Host "Killing running CLI process (MCP server)..." -ForegroundColor Yellow
+        $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue
+        Start-Sleep -Milliseconds 500
+        Write-Host "CLI process killed." -ForegroundColor Green
+    }
+
     # 1. Determine Build Date
     # If no BuildDate provided, use Dec 31 of current year (annual release)
     if ([string]::IsNullOrWhiteSpace($BuildDate)) {

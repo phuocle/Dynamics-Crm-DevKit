@@ -18,6 +18,14 @@ Write-Host "============================================================" -Foreg
 Write-Host "  Debug Build & Deploy (Debug-DynamicsCrm-DevKit)" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 
+$cliProcess = Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue
+if ($cliProcess) {
+    Write-Host "Killing running CLI process (MCP server)..." -ForegroundColor Yellow
+    $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Milliseconds 500
+    Write-Host "CLI process killed." -ForegroundColor Green
+}
+
 & "$PSScriptRoot\Release-DynamicsCrm-DevKit-CurrentDate.ps1" -Configuration Debug
 
 if ($LASTEXITCODE -ne 0) {
