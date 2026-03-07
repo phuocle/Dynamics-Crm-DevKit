@@ -793,12 +793,21 @@ public class CSharpLateBoundTest
         var libDir = Path.Combine(testProjectDir, "Lib");
 
         var generatedPath = Path.Combine(libDir, "UnitTestEntity.generated.cs");
-        File.WriteAllText(generatedPath, code);
+        // Only write if body content changed (skip the 7-line header that contains DateTime.Now timestamp)
+        // This prevents dirty git state when only the timestamp comment changes.
+        if (!File.Exists(generatedPath) ||
+            Helper.GetContentFromLine6(File.ReadAllText(generatedPath)) != Helper.GetContentFromLine6(code))
+        {
+            File.WriteAllText(generatedPath, code);
+        }
         Assert.IsTrue(File.Exists(generatedPath));
 
         var partialCode = GeneratePartialClassShell(RootNamespace, EntitySchemaName);
         var partialPath = Path.Combine(libDir, "UnitTestEntity.cs");
-        File.WriteAllText(partialPath, partialCode);
+        if (!File.Exists(partialPath) || File.ReadAllText(partialPath) != partialCode)
+        {
+            File.WriteAllText(partialPath, partialCode);
+        }
         Assert.IsTrue(File.Exists(partialPath));
     }
 
