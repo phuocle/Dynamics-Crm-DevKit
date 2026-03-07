@@ -90,7 +90,6 @@ When running a CLI profile:
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
 | Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
-| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
 | Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
 | Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |

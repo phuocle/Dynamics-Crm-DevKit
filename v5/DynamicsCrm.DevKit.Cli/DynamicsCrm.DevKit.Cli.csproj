@@ -48,21 +48,12 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="icon.ico" />
-	  <!-- CrmSvcUtil extension DLL for ProxyType generation -->
-	  <Content Include="..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\bin\$(Configuration)\net48\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    <Link>DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll</Link>
-	  </Content>
 	</ItemGroup>
 	<PropertyGroup>
 		<NoWarn>CVSTBLD002;NU1702;NU5100;CA1416;SYSLIB0057</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj">
-	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-		<NoWarn>NU1702</NoWarn>
-	  </ProjectReference>
 	  <!-- CLI Framework - Spectre.Console -->
 	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
 	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />

@@ -57,7 +57,7 @@ trigger: always_on
 | `dataprovider` | **DEPRECATED** | Use `devkit server` |
 | `webresource` | Active | Deploy web resources |
 | **`modelbuilder`** | **New** | Generate early-bound using PAC ModelBuilder |
-| `proxytype` | **DEPRECATED** | Use `devkit modelbuilder` |
+| `proxytype` | **DEPRECATED** | Auto-redirects to `devkit modelbuilder` |
 | `solution` | Active | Pack/unpack solutions using PAC CLI |
 | `legacy-solution` | **DEPRECATED** | Use `devkit solution` |
 | `downloadreport` | Active | Download reports |
@@ -96,7 +96,6 @@ trigger: always_on
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
 | Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
-| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
 | Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
 | Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |

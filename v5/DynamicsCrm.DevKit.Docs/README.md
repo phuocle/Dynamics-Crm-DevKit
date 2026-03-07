@@ -12,7 +12,6 @@ DynamicsCrm.DevKit.Docs/
 ├── DynamicsCrm.DevKit/                    ← VSIX Extension docs
 ├── DynamicsCrm.DevKit.Analyzers/          ← Roslyn Analyzers docs (DEVKIT1001-1021)
 ├── DynamicsCrm.DevKit.Cli/               ← CLI Tool docs (15 commands)
-├── DynamicsCrm.DevKit.CrmSvcUtilExtensions/ ← CrmSvcUtil extension docs
 ├── DynamicsCrm.DevKit.Scripts/            ← Build/Release scripts docs
 ├── DynamicsCrm.DevKit.Tool/              ← Utility Tool docs (5 commands)
 └── Others/                                ← Miscellaneous notes & guides
@@ -49,10 +48,6 @@ DynamicsCrm.DevKit.Docs/
 - [TaskUploadReport.md](./DynamicsCrm.DevKit.Cli/TaskUploadReport.md) - Upload reports
 - [TaskDownloadWebResource.md](./DynamicsCrm.DevKit.Cli/TaskDownloadWebResource.md) - Download web resources
 - [managed-identity/](./DynamicsCrm.DevKit.Cli/managed-identity/) - Managed Identity research & notes
-
-### CrmSvcUtil Extensions (`DynamicsCrm.DevKit.CrmSvcUtilExtensions/`)
-
-- [README.md](./DynamicsCrm.DevKit.CrmSvcUtilExtensions/README.md) - CrmSvcUtil entity filter extension (legacy, used by `proxytype` command)
 
 ### Utility Tool (`DynamicsCrm.DevKit.Tool/`)
 

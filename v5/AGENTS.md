@@ -17,7 +17,7 @@
 
 | Solution File | Purpose | Contains |
 |---|---|---|
-| `DynamicsCrm.DevKit.AllInOne.slnx` | **Main development** | VSIX + CLI + Tool + Shared + CrmSvcUtilExtensions + Analyzers + UnitTests + all Templates |
+| `DynamicsCrm.DevKit.AllInOne.slnx` | **Main development** | VSIX + CLI + Tool + Shared + Analyzers + UnitTests + all Templates |
 | `DynamicsCrm.DevKit.slnx` | VSIX only | VSIX + Shared + Project/Item Templates |
 | `DynamicsCrm.DevKit.Cli.slnx` | CLI only | CLI + Shared |
 | `DynamicsCrm.DevKit.Analyzers.slnx` | Analyzers only | Analyzers + Analyzers.Test (legacy) |
@@ -31,7 +31,6 @@
 | **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 | 21 Roslyn analyzers (DEVKIT1001-1021) |
 | **Shared** | `DynamicsCrm.DevKit.Shared/` | Shared Project | Common logic, models, resources, connection builders (referenced by VSIX, CLI, Tool) |
 | **Tool** | `DynamicsCrm.DevKit.Tool/` | .NET Framework 4.8 | Utility package (NUglify, DocumentGenerator, Decrypt, Coverage) |
-| **CrmSvcUtilExtensions** | `DynamicsCrm.DevKit.CrmSvcUtilExtensions/` | .NET Framework 4.8 | CrmSvcUtil code writer filter for proxy type generation |
 | **UnitTests** | `DynamicsCrm.DevKit.UnitTests/` | net48 + net10.0 | Unit tests (Analyzer tests via xUnit, CLI tests via MSTest) |
 | **Tests** | `DynamicsCrm.DevKit.Tests/` | Various | Integration test projects (15+ test scenarios) |
 | **Docs** | `DynamicsCrm.DevKit.Docs/` | — | Documentation files for all components |
@@ -59,7 +58,7 @@
 | Framework | Used By |
 |---|---|
 | .NET Framework 4.6.2 | Project Templates, Item Templates |
-| .NET Framework 4.8 | VSIX, Tool, CrmSvcUtilExtensions, UnitTests (Analyzer) |
+| .NET Framework 4.8 | VSIX, Tool, UnitTests (Analyzer) |
 | .NET Standard 2.0 | Analyzers |
 | .NET 10.0 | CLI, UnitTests (CLI) |
 
@@ -120,7 +119,7 @@ The CLI (`devkit`) is a .NET 10 global tool. Entry point: `DynamicsCrm.DevKit.Cl
 | `dataprovider` | ⚠️ Deprecated | `DataProviderCommand` | `TaskServer.cs` | `dataproviders` |
 | `webresource` | ✅ Active | `WebResourceCommand` | `TaskWebResource.cs` | `webresources` |
 | `modelbuilder` | ✅ Active | `ModelBuilderCommand` | `TaskModelBuilder.cs` | `modelbuilders` |
-| `proxytype` | ⚠️ Deprecated | `ProxyTypeCommand` | `TaskProxyType.cs` | `proxytypes` |
+| `proxytype` | ⚠️ Deprecated (auto-redirects to `modelbuilder`) | `ProxyTypeCommand` | — | `proxytypes` |
 | `solution` | ✅ Active | `PacSolutionPackagerCommand` | `TaskPacSolutionPackager.cs` | `solutionpackagers` |
 | `legacy-solution` | ⚠️ Deprecated | `SolutionPackagerCommand` | `TaskSolutionPackager.cs` | `solutionpackagers` |
 | `downloadreport` | ✅ Active | `DownloadReportCommand` | `TaskDownloadReport.cs` | `downloadreports` |
@@ -509,7 +508,6 @@ When creating documentation files (`.md`):
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
 | Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
-| CrmSvcUtilExtensions | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.CrmSvcUtilExtensions/` |
 | Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
 | Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |

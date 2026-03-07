@@ -124,7 +124,6 @@
   </Folder>
   <Project Path="DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj" />
   <Project Path="DynamicsCrm.DevKit.Cli/DynamicsCrm.DevKit.Cli.csproj" />
-  <Project Path="DynamicsCrm.DevKit.CrmSvcUtilExtensions/DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj" />
   <Project Path="DynamicsCrm.DevKit.Shared/DynamicsCrm.DevKit.Shared.shproj" />
   <Project Path="DynamicsCrm.DevKit.Tool/DynamicsCrm.DevKit.Tool.csproj" />
   <Project Path="DynamicsCrm.DevKit/DynamicsCrm.DevKit.csproj" Id="a886e86e-65bc-40c1-8494-fe7e80b7e1a3">

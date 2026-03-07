@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Deploy web resources");
 
                     config.AddCommand<ProxyTypeCommand>("proxytype")
-                          .WithDescription("[red]DEPRECATED[/] Generate proxy types using CrmSvcUtil");
+                          .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit modelbuilder");
 
                     config.AddCommand<ModelBuilderCommand>("modelbuilder")
                           .WithDescription("Generate early-bound entity classes using PAC ModelBuilder");

@@ -20,7 +20,7 @@ dotnet tool install --global DynamicsCrm.DevKit.Cli
 | `webresource` | Active | Deploy web resources |
 | `modelbuilder` | Active | Generate early-bound using PAC ModelBuilder |
 | `solution` | Active | Extract/Pack solutions using PAC CLI |
-| `proxytype` | Deprecated | Use `devkit modelbuilder` |
+| `proxytype` | Deprecated | Auto-redirects to `devkit modelbuilder` |
 | `legacy-solution` | Deprecated | Use `devkit solution` |
 | `downloadreport` | Active | Download reports from a solution |
 | `uploadreport` | Active | Upload reports to a solution |

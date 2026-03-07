@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]plugin[/]                 [red](DEPRECATED)[/] Use: devkit server\n" +
                     "  [cyan]workflow[/]               [red](DEPRECATED)[/] Use: devkit server\n" +
                     "  [cyan]dataprovider[/]           [red](DEPRECATED)[/] Use: devkit server\n" +
-                    "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Generate early-bound proxy classes\n" +
+                    "  [cyan]proxytype[/]              [red](DEPRECATED)[/] Auto-redirects to modelbuilder\n" +
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
