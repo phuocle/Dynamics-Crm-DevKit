@@ -16,13 +16,13 @@ Both versions share the same architecture: a Visual Studio extension (VSIX) with
 
 ## Critical Constraints
 
-> **All AI builds MUST use DEBUG mode.** Release mode requires a PFX password and is reserved for human operators.
+> Use DEBUG configuration by default. Use RELEASE when explicitly requested (e.g. `/build-release`).
 
 | Constraint | Value |
 |------------|-------|
 | **Build tool** | MSBuild.exe (NOT `dotnet build` for VSIX projects) |
 | **MSBuild path** | `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe` |
-| **Build config** | `/p:Configuration=Debug` |
+| **Default build config** | `/p:Configuration=Debug` (use Release when requested) |
 | **Target frameworks** | .NET Framework 4.6.2, 4.8; .NET Standard 2.0; .NET 10.0 (v5 CLI only) |
 
 ### Naming Conventions
@@ -99,11 +99,11 @@ Each version has four solution files (`.slnx` format):
 1. **Determine which version you are working on** — check whether the files are under `v4/` or `v5/`, then read the corresponding `AGENTS.md` for version-specific instructions.
 2. **Use the correct solution file** — open the appropriate `.slnx` for the component you are modifying.
 3. **Never use `dotnet build`** for VSIX projects — use MSBuild directly.
-4. **Always build in DEBUG mode** — never attempt Release builds.
+4. **Default to DEBUG mode** — use RELEASE when explicitly requested.
 
 ## Security
 
-- Never commit connection strings, credentials, or PFX passwords.
+- Never commit connection strings or credentials.
 - Use environment variables or Azure Key Vault for secrets.
 - Connection strings should use OAuth/MFA when possible.
 

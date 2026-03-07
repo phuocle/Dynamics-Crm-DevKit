@@ -112,5 +112,5 @@ if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.s
 - This workflow builds **only Tool** (not CLI, Analyzer, or VSIX) → much faster
 - Tool is a .NET 10 global tool with command name `devkit-tool`
 - Version is defined in `DevKit.ReleaseConfig.json`
-- Debug mode does NOT require any signing keys
+- No signing keys required for any build configuration
 - For full solution build, use `/build-debug` workflow instead

@@ -44,12 +44,12 @@
 ## Critical Constraints
 
 > [!IMPORTANT]
-> AI agents MUST use **DEBUG mode** for all builds. Release mode is for human operators only.
+> Use DEBUG configuration by default. Use RELEASE when explicitly requested (e.g. `/build-release`).
 
 | Rule | Detail |
 |---|---|
 | **No Git Operations** | Never commit, push, or perform any git operations unless explicitly requested |
-| **DEBUG Mode Only** | Always use DEBUG configuration for builds |
+| **Default DEBUG Mode** | Use DEBUG configuration by default. Use RELEASE when explicitly requested |
 | **MSBuild for VSIX** | Use MSBuild (NOT `dotnet build`) for VSIX project |
 | **MSBuild Path** | `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe` |
 
@@ -80,7 +80,7 @@
 | `/build-vsix` | VSIX only - Build Visual Studio extension |
 | `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
 | `/build-tool` | Tool only - Build Tool package |
-| `/build-release` | Release - **Human only** |
+| `/build-release` | Release - Full release build for all projects |
 | `/unit-test` | Run all unit tests + code coverage report |
 | `/clean-all` | Clean all build artifacts |
 | `/create-new-analyzer` | Create a new Roslyn analyzer |
@@ -405,11 +405,11 @@ Test files are in `DynamicsCrm.DevKit.Tests/` with 15+ test scenarios:
 
 ## Release Scripts
 
-| Script | Mode | PFX Required | Use Case |
-|--------|------|--------------|----------|
-| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
-| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
-| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official release |
+| Script | Mode | Use Case |
+|--------|------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | Quick debug build |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Release with current date |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Official release |
 
 ---
 

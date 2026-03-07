@@ -30,7 +30,7 @@ alwaysApply: true
 | Rule | Description |
 |------|-------------|
 | **No Git Operations** | Never commit, push, or perform any git operations unless explicitly requested |
-| **DEBUG Mode Only** | Always use DEBUG configuration for builds. RELEASE mode is for human operators only |
+| **Default DEBUG Mode** | Use DEBUG configuration by default. Use RELEASE when explicitly requested (e.g. `/build-release`) |
 | **MSBuild for VSIX** | Use MSBuild (NOT `dotnet build`) for VSIX project |
 
 ---
@@ -82,7 +82,7 @@ alwaysApply: true
 | `/build-vsix` | VSIX only - Build Visual Studio extension |
 | `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
 | `/build-tool` | Tool only - Build Tool package |
-| `/build-release` | Release - **Human only** |
+| `/build-release` | Release - Full release build for all projects |
 | `/unit-test` | Run all unit tests + code coverage report |
 | `/clean-all` | Clean all build artifacts |
 | `/create-new-analyzer` | Create a new Roslyn analyzer |

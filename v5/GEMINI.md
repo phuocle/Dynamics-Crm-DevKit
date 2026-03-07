@@ -21,7 +21,7 @@ Antigravity supports **slash commands** via `.agent/workflows/*.md`:
 | `/build-vsix` | Build VSIX only | turbo-all |
 | `/build-analyzer` | Build + test analyzers | turbo-all |
 | `/build-tool` | Build Tool package | turbo-all |
-| `/build-release` | Release build (human only) | no |
+| `/build-release` | Full release build for all projects | no |
 | `/clean-all` | Clean all artifacts | turbo-all |
 | `/create-new-analyzer` | Create new analyzer | no |
 | `/client-code-clean` | Clean all 6 TestClientCode folders | turbo |

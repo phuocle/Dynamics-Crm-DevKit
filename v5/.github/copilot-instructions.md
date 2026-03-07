@@ -13,7 +13,7 @@
 | Rule | Description |
 |------|-------------|
 | **No Git Operations** | Never commit, push, or perform any git operations unless explicitly requested |
-| **DEBUG Mode Only** | Always use DEBUG configuration for builds. RELEASE mode is for human operators only |
+| **Default DEBUG Mode** | Use DEBUG configuration by default. Use RELEASE when explicitly requested (e.g. `/build-release`) |
 | **MSBuild for VSIX** | Use MSBuild (NOT `dotnet build`) for VSIX project. Path: `C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe` |
 
 ## Project Structure
@@ -39,7 +39,7 @@ Build workflows are defined in `.agent/workflows/*.md`. Read and follow the step
 | `.agent/workflows/build-vsix.md` | VSIX only - Build Visual Studio extension |
 | `.agent/workflows/build-analyzer.md` | Analyzers - Build + run analyzer unit tests |
 | `.agent/workflows/build-tool.md` | Tool only - Build Tool package |
-| `.agent/workflows/build-release.md` | Release - **Human only** |
+| `.agent/workflows/build-release.md` | Release - Full release build for all projects |
 | `.agent/workflows/unit-test.md` | Run all unit tests + code coverage report |
 | `.agent/workflows/clean-all.md` | Clean all build artifacts |
 | `.agent/workflows/create-new-analyzer.md` | Create a new Roslyn analyzer |
@@ -106,11 +106,11 @@ When running a CLI profile:
 
 ## Release Scripts
 
-| Script | Mode | PFX Required | Use Case |
-|--------|------|--------------|----------|
-| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | No | AI Agent sessions |
-| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Yes | Human testing |
-| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Yes | Official release |
+| Script | Mode | Use Case |
+|--------|------|----------|
+| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | Quick debug build |
+| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Release with current date |
+| `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Official release |
 
 ## Security
 
