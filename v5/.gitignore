@@ -36,3 +36,6 @@ DynamicsCrm.DevKit.Tool/Test/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Build output / release packages
+Published/
