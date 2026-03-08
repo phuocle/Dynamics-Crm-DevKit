@@ -140,13 +140,29 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}{TAB}PreEntity = CloneThisEntity(Entity);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{GeneratorCode()}";
-            code += $"{GeneratorImageCode()}";
-            code += $"{GeneratorFileCode()}";
+            var existingNames = GetExistingPropertyNames();
+            code += $"{GeneratorImageCode(existingNames)}";
+            code += $"{GeneratorFileCode(existingNames)}";
             code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
             code += $"{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"}}";
             return $"{Helper.GetDefaultHeaderForGeneratedCs()}{code}";
+        }
+
+        private static HashSet<string> GetExistingPropertyNames()
+        {
+            var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (!IsFieldOk(attribute)) continue;
+                var utc = string.Empty;
+                if (attribute is DateTimeAttributeMetadata datetime)
+                    if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal) utc = "Utc";
+                var propName = Helper.SafeDeclareName(attribute.SchemaName, GeneratorType.csharp, EntityMetadata.SchemaName, attribute) + utc;
+                names.Add(propName);
+            }
+            return names;
         }
 
         private static string GetGeneratorImageCode(string schemaName, string logicalName)
@@ -207,7 +223,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             return code;
         }
-        private static string GeneratorImageCode()
+        private static string GeneratorImageCode(HashSet<string> existingNames)
         {
             var code = string.Empty;
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
@@ -215,11 +231,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 if (attribute is ImageAttributeMetadata image)
                 {
                     if (image.IsPrimaryImage ?? false)
+                    {
                         code += GetGeneratorImageCode("EntityImage", image.LogicalName);
+                        existingNames.Add("EntityImage");
+                        existingNames.Add("EntityImageUrl");
+                        existingNames.Add("EntityImageTimestamp");
+                        existingNames.Add("EntityImage_Download");
+                    }
                     else
                     {
                         if (image.LogicalName == "entityimage") continue;
-                        code += GetGeneratorImageCode(attribute.SchemaName, attribute.LogicalName);
+                        var safeName = attribute.SchemaName;
+                        if (existingNames.Contains(safeName) || existingNames.Contains(safeName + "Url") || existingNames.Contains(safeName + "Timestamp"))
+                            safeName = safeName + "_Image";
+                        code += GetGeneratorImageCode(safeName, attribute.LogicalName);
+                        existingNames.Add(safeName);
+                        existingNames.Add(safeName + "Url");
+                        existingNames.Add(safeName + "Timestamp");
+                        existingNames.Add(safeName + "_Download");
                     }
                 }
             }
@@ -227,7 +256,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
-        private static string GetGeneratorFileCode(string schemaName, string logicalName, int? maxSizeInKB)
+        private static string GetGeneratorFileCode(string safeName, string logicalName, int? maxSizeInKB)
         {
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
@@ -236,7 +265,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (maxSizeInKB.HasValue)
                 code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}public Guid? {schemaName}Id{NEW_LINE}";
+            code += $"{TAB}{TAB}public Guid? {safeName}Id{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<Guid?>(\"{logicalName}\"); }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
@@ -244,14 +273,14 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - File name of the uploaded file</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_name</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}public string {schemaName}Name{NEW_LINE}";
+            code += $"{TAB}{TAB}public string {safeName}Name{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_name\"); }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>Download file data. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-            code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
+            code += $"{TAB}{TAB}public byte[] {safeName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}var request = new Microsoft.Crm.Sdk.Messages.InitializeFileBlocksDownloadRequest{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
@@ -279,14 +308,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
-        private static string GeneratorFileCode()
+        private static string GeneratorFileCode(HashSet<string> existingNames)
         {
             var code = string.Empty;
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
                 if (attribute is FileAttributeMetadata file)
                 {
-                    code += GetGeneratorFileCode(attribute.SchemaName, attribute.LogicalName, file.MaxSizeInKB);
+                    var safeName = attribute.SchemaName;
+                    if (existingNames.Contains(safeName + "Id") || existingNames.Contains(safeName + "Name"))
+                        safeName = safeName + "_File";
+                    code += GetGeneratorFileCode(safeName, attribute.LogicalName, file.MaxSizeInKB);
+                    existingNames.Add(safeName + "Id");
+                    existingNames.Add(safeName + "Name");
+                    existingNames.Add(safeName + "_Download");
                 }
             }
             return code;
