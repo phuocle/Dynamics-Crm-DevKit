@@ -636,6 +636,83 @@ public class CSharpLateBoundTest
         Assert.IsTrue(_generatedCode.Contains("<strong>MaxSize</strong>: 32,768 KB"));
     }
 
+    [TestMethod]
+    public void GetCsCode_FileAttribute_SameNameAsEntity_UsesSuffixToAvoidConflict()
+    {
+        // Entity is "hs_document" with primary key "hs_documentid"
+        // File column is also named "hs_document" → would generate hs_documentId which conflicts
+        var metadata = new EntityMetadata
+        {
+            LogicalName = "hs_document",
+            SchemaName = "hs_document",
+            DisplayName = CreateLabel("HS Document")
+        };
+        SetProperty(metadata, nameof(EntityMetadata.MetadataId), Guid.NewGuid());
+        SetProperty(metadata, nameof(EntityMetadata.ObjectTypeCode), 10999);
+        SetProperty(metadata, nameof(EntityMetadata.PrimaryIdAttribute), "hs_documentid");
+        SetProperty(metadata, nameof(EntityMetadata.PrimaryNameAttribute), "hs_name");
+
+        var pkAttr = CreateUniqueIdentifierAttribute("hs_documentid", "HS Document Id", isPrimaryId: true);
+        pkAttr.SchemaName = "hs_documentId";
+        var nameAttr = CreateStringAttribute("hs_name", "Name", isPrimaryName: true);
+        nameAttr.SchemaName = "hs_name";
+        var fileAttr = CreateFileAttribute("hs_document", "HS Document File", maxSizeInKB: 32768);
+        fileAttr.SchemaName = "hs_document";
+
+        var attributes = new AttributeMetadata[] { pkAttr, nameAttr, fileAttr };
+        SetProperty(metadata, nameof(EntityMetadata.Attributes), attributes);
+
+        XrmHelper.EntitiesMetadata = [metadata];
+        var code = CSharpLateBound.GetCsCode(null, metadata, RootNamespace, null);
+
+        // Primary key: hs_documentId → SafeDeclareName checks match with entitySchemaName+"id" → returns as-is
+        Assert.IsTrue(code.Contains("public Guid hs_documentId"), "Primary key should exist as hs_documentId");
+        // File attribute should use _File suffix to avoid conflict with primary key's hs_documentId
+        Assert.IsTrue(code.Contains("public Guid? hs_document_FileId"), "File attribute Id should use _File suffix");
+        Assert.IsTrue(code.Contains("public string hs_document_FileName"), "File attribute Name should use _File suffix");
+        Assert.IsTrue(code.Contains("hs_document_File_Download"), "File attribute Download should use _File suffix");
+    }
+
+    [TestMethod]
+    public void GetCsCode_ImageAttribute_SameNameAsExistingAttribute_UsesSuffixToAvoidConflict()
+    {
+        // Entity has a regular string attribute "hs_photo" AND an Image column also named "hs_photo"
+        // This creates a conflict: the regular attribute generates property "hs_photo",
+        // and the Image attribute also wants to generate property "hs_photo"
+        var metadata = new EntityMetadata
+        {
+            LogicalName = "hs_entity",
+            SchemaName = "hs_entity",
+            DisplayName = CreateLabel("HS Entity")
+        };
+        SetProperty(metadata, nameof(EntityMetadata.MetadataId), Guid.NewGuid());
+        SetProperty(metadata, nameof(EntityMetadata.ObjectTypeCode), 10998);
+        SetProperty(metadata, nameof(EntityMetadata.PrimaryIdAttribute), "hs_entityid");
+        SetProperty(metadata, nameof(EntityMetadata.PrimaryNameAttribute), "hs_name");
+
+        var pkAttr = CreateUniqueIdentifierAttribute("hs_entityid", "HS Entity Id", isPrimaryId: true);
+        pkAttr.SchemaName = "hs_entityId";
+        var nameAttr = CreateStringAttribute("hs_name", "Name", isPrimaryName: true);
+        nameAttr.SchemaName = "hs_name";
+        var strAttr = CreateStringAttribute("hs_photo", "HS Photo Description");
+        strAttr.SchemaName = "hs_photo";
+        var imgAttr = CreateImageAttribute("hs_photo_img", "HS Photo Image", isPrimary: false);
+        imgAttr.SchemaName = "hs_photo";
+
+        var attributes = new AttributeMetadata[] { pkAttr, nameAttr, strAttr, imgAttr };
+        SetProperty(metadata, nameof(EntityMetadata.Attributes), attributes);
+
+        XrmHelper.EntitiesMetadata = [metadata];
+        var code = CSharpLateBound.GetCsCode(null, metadata, RootNamespace, null);
+
+        // Regular string property should be normal
+        Assert.IsTrue(code.Contains("public string hs_photo"), "Regular string attribute should exist as hs_photo");
+        // Image attribute should use _Image suffix to avoid conflict
+        Assert.IsTrue(code.Contains("public byte[] hs_photo_Image"), "Image attribute should use _Image suffix");
+        Assert.IsTrue(code.Contains("public string hs_photo_ImageUrl"), "Image URL should use _Image suffix");
+        Assert.IsTrue(code.Contains("public long? hs_photo_ImageTimestamp"), "Image Timestamp should use _Image suffix");
+    }
+
     #endregion
 
     #region Group 8: Getter/Setter code paths
