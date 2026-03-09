@@ -1,7 +1,6 @@
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Spectre.Console;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,31 +8,21 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Commands
 {
     /// <summary>
-    /// Command for 'devkit solution' - manages solution packager operations (Extract/Pack).
-    /// Syntax: devkit solution --conn "..." --json "..." --profile "..."
-    /// Optional: --version to specify CrmSdk CoreTools version (auto-detected if not provided)
+    /// Command for 'devkit legacy-solution' - DEPRECATED, auto-redirects to TaskPacSolutionPackager.
+    /// Reads 'solutionpackagers' section from JSON config and runs TaskPacSolutionPackager instead of the removed TaskSolutionPackager.
     /// </summary>
-    public class SolutionPackagerCommand : DevKitCommand<SolutionPackagerCommandArgs>
+    public class SolutionPackagerCommand : DevKitCommand<PacSolutionPackagerCommandArgs>
     {
-        protected override List<string[]> BuildArgRows(SolutionPackagerCommandArgs settings)
+        protected override List<string[]> BuildArgRows(PacSolutionPackagerCommandArgs settings)
         {
-            var rows = new List<string[]>();
-            var indent = "           ";
-            if (!string.IsNullOrEmpty(settings.Version))
-            {
-                rows.Add(new[] { $"{indent}[white]--version[/]", $"[cyan]{Markup.Escape(settings.Version)}[/]" });
-            }
-            else
-            {
-                rows.Add(new[] { $"{indent}[white]--version[/]", "[grey](auto-detect)[/]" });
-            }
-            return rows;
+            return new List<string[]>();
         }
 
-        protected override async Task RunTaskAsync(SolutionPackagerCommandArgs settings)
+        protected override async Task RunTaskAsync(PacSolutionPackagerCommandArgs settings)
         {
-            SpectreLog.ActionWithLevel0("[DEPRECATED]", "This command is deprecated and will be removed in future versions.");
-            SpectreLog.ActionWithLevel0("[WARNING]", "Please use 'devkit solution' instead.");
+            SpectreLog.ActionWithLevel0("[DEPRECATED]", "'devkit legacy-solution' is deprecated and now auto-redirects to 'devkit solution'.");
+            SpectreLog.ActionWithLevel0("[INFO]", "Please update your scripts/CI to use 'devkit solution' directly.");
+            SpectreLog.ActionWithLevel0("[INFO]", "The '--version' parameter is no longer needed. PAC CLI is used instead of SolutionPackager.exe.");
             SpectreLog.WriteLine();
 
             var json = JsonHelper.Deserialize<Json>(await FileHelper.ReadAllTextAsync(settings.JsonFile));
@@ -45,26 +34,34 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
 
             var profile = json.solutionpackagers.FirstOrDefault(x => x.profile == settings.Profile);
-            if (profile != null)
-            {
-                // Create CommandLineArgs for TaskSolutionPackager compatibility
-                var args = new CommandLineArgs
-                {
-                    Connection = settings.Connection,
-                    Json = settings.Json,
-                    Profile = settings.Profile,
-                    Type = "solutionpackagers",
-                    ServiceClient = settings.ServiceClient,
-                    Version = settings.Version,
-                    AuthType = settings.AuthType
-                };
-                var solutionPackager = new TaskSolutionPackager(args, profile);
-                await solutionPackager.RunAsync();
-            }
-            else
+            if (profile == null)
             {
                 SpectreLog.ActionWithLevel0(CliAction.ERROR, $"Profile '{settings.Profile}' not found in 'solutionpackagers' section");
+                return;
             }
+
+            var args = new CommandLineArgs
+            {
+                Connection = settings.Connection,
+                Json = settings.Json,
+                Profile = settings.Profile,
+                Type = "solutionpackagers",
+                ServiceClient = settings.ServiceClient,
+                AuthType = settings.AuthType,
+                Url = settings.Url,
+                ClientId = settings.ClientId,
+                ClientSecret = settings.ClientSecret,
+                Username = settings.Username,
+                Password = settings.Password,
+                Domain = settings.Domain,
+                PacProfile = settings.PacProfile
+            };
+
+            SpectreLog.ActionWithLevel0("[REDIRECT]", "Running PAC SolutionPackager with solutionpackagers profile...");
+            SpectreLog.WriteLine();
+
+            var task = new TaskPacSolutionPackager(args, profile);
+            await task.RunAsync();
         }
     }
 }

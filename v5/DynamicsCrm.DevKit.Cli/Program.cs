@@ -76,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Generate early-bound entity classes using PAC ModelBuilder");
 
                     config.AddCommand<SolutionPackagerCommand>("legacy-solution")
-                          .WithDescription("[red]DEPRECATED[/] Use: devkit solution");
+                          .WithDescription("[red]DEPRECATED[/] Auto-redirects to: devkit solution");
 
                     config.AddCommand<PacSolutionPackagerCommand>("solution")
                           .WithDescription("Extract or pack solutions using PAC CLI");

@@ -60,7 +60,7 @@ alwaysApply: true
 | **`modelbuilder`** | **New** | Generate early-bound using PAC ModelBuilder |
 | `proxytype` | **DEPRECATED** | Auto-redirects to `devkit modelbuilder` |
 | `solution` | Active | Pack/unpack solutions using PAC CLI |
-| `legacy-solution` | **DEPRECATED** | Use `devkit solution` |
+| `legacy-solution` | **DEPRECATED** | Auto-redirects to `devkit solution` |
 | `downloadreport` | Active | Download reports |
 | `uploadreport` | Active | Upload reports |
 | `downloadwebresource` | Active | Download web resources |

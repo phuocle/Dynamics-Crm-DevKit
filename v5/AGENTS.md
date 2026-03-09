@@ -121,7 +121,7 @@ The CLI (`devkit`) is a .NET 10 global tool. Entry point: `DynamicsCrm.DevKit.Cl
 | `modelbuilder` | ✅ Active | `ModelBuilderCommand` | `TaskModelBuilder.cs` | `modelbuilders` |
 | `proxytype` | ⚠️ Deprecated (auto-redirects to `modelbuilder`) | `ProxyTypeCommand` | — | `proxytypes` |
 | `solution` | ✅ Active | `PacSolutionPackagerCommand` | `TaskPacSolutionPackager.cs` | `solutionpackagers` |
-| `legacy-solution` | ⚠️ Deprecated | `SolutionPackagerCommand` | `TaskSolutionPackager.cs` | `solutionpackagers` |
+| `legacy-solution` | ⚠️ Deprecated (auto-redirects to `solution`) | `SolutionPackagerCommand` | — | `solutionpackagers` |
 | `downloadreport` | ✅ Active | `DownloadReportCommand` | `TaskDownloadReport.cs` | `downloadreports` |
 | `uploadreport` | ✅ Active | `UploadReportCommand` | `TaskUploadReport.cs` | `uploadreports` |
 | `downloadwebresource` | ✅ Active | `DownloadWebResourceCommand` | `TaskDownloadWebResource.cs` | `downloadwebresources` |

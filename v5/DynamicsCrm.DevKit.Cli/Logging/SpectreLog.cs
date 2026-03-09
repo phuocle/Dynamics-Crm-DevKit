@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]modelbuilder[/]           Generate early-bound entity classes using PAC ModelBuilder\n" +
                     "  [cyan]webresource[/]            Deploy web resources\n" +
                     "  [cyan]solution[/]               Extract or pack solutions using PAC CLI\n" +
-                    "  [cyan]legacy-solution[/]        [red](DEPRECATED)[/] Use: devkit solution\n" +
+                    "  [cyan]legacy-solution[/]        [red](DEPRECATED)[/] Auto-redirects to solution\n" +
                     "  [cyan]downloadreport[/]         Download reports from a solution\n" +
                     "  [cyan]uploadreport[/]           Upload reports to a solution\n" +
                     "  [cyan]downloadwebresource[/]    Download web resources from a solution\n" +

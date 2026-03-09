@@ -41,7 +41,7 @@ A .NET global tool for CI/CD automation with **12 commands**:
 | `devkit modelbuilder` | ✅ Active | Generate early-bound entity classes using PAC ModelBuilder |
 | `devkit proxytype` | ⚠️ Deprecated | Use `devkit modelbuilder` instead |
 | `devkit solution` | ✅ Active | Extract or pack solutions using PAC CLI |
-| `devkit legacy-solution` | ⚠️ Deprecated | Use `devkit solution` instead |
+| `devkit legacy-solution` | ⚠️ Deprecated | Auto-redirects to `devkit solution` |
 | `devkit downloadreport` | ✅ Active | Download reports from Dataverse |
 | `devkit uploadreport` | ✅ Active | Upload reports to Dataverse |
 | `devkit downloadwebresource` | ✅ Active | Download web resources from a solution |
