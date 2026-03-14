@@ -930,7 +930,7 @@ function loadFormDialog(formContext: any, fields: string[]): any {
     const fieldsLength = fields.length;
     for (let i = 0; i < fieldsLength; i++) {
         const fieldName = fields[i];
-        const attribute = formContext?.data?.entity?.attributes?.get(fieldName);
+        const attribute = formContext?.data?.attributes?.get(fieldName);
         const control = formContext?.getControl(fieldName);
         form[fieldName] = {};
         loadField(formContext, form[fieldName], attribute, control);
