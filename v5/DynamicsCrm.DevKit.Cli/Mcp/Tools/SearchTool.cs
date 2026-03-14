@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -23,11 +24,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "search", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Perform a Dataverse Relevance Search (full-text search) across one or more entities. " +
-            "Returns matching records ranked by relevance.\n\n" +
+            "Returns matching records ranked by relevance score.\n\n" +
 
             "RETURNS:\n" +
             "- Total count of matching records\n" +
-            "- Markdown table with entity type, record ID, primary name, and relevance score\n" +
+            "- Markdown table with entity type, record ID, score, and attribute values\n" +
+            "- Highlights showing which parts of the text matched the search term\n" +
             "- Results are ranked by relevance (best matches first)\n\n" +
 
             "WHEN TO USE:\n" +
@@ -36,19 +38,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- When you don't know the exact field to filter on — Relevance Search searches across all indexed fields\n" +
             "- As a quick alternative to FetchXML when you just need to find records by text\n\n" +
 
-            "IMPORTANT:\n" +
-            "- Relevance Search must be enabled in the Dataverse environment (most environments have it enabled by default)\n" +
-            "- Only entities and columns that are configured for Relevance Search will be searched\n" +
-            "- For precise filtering (e.g. by date range, status, or numeric values), use execute_fetchxml instead\n\n" +
+            "SEARCH SYNTAX:\n" +
+            "- Boolean operators: + (AND), | (OR), - (NOT)\n" +
+            "- Wildcards: trailing wildcard supported (e.g. 'Alp*' matches 'alpine')\n" +
+            "- Exact matches: enclose in quotes (e.g. '\"Contoso Ltd\"')\n" +
+            "- Precedence: use parentheses (e.g. 'hotel+(wifi|luxury)')\n\n" +
 
-            "EXAMPLES:\n" +
-            "- Search 'Contoso' across all entities\n" +
-            "- Search 'john@email.com' in contacts only\n" +
-            "- Search 'Widget' in products")]
+            "IMPORTANT:\n" +
+            "- Relevance Search must be enabled in the Dataverse environment\n" +
+            "- Only entities and columns configured for Relevance Search will be searched\n" +
+            "- Max 100 results per call. For larger datasets, use execute_fetchxml instead\n" +
+            "- For precise filtering (by date range, status, numeric values), use execute_fetchxml instead")]
         public string search(
             [Description(
-                "The text to search for. Supports keywords, phrases, and partial matches. " +
-                "Examples: 'Contoso', 'john smith', 'john@email.com', 'Widget Pro'."
+                "The text to search for (1-100 characters). " +
+                "Supports simple search syntax: + (AND), | (OR), - (NOT), trailing wildcards (*), " +
+                "exact phrases (\"quoted text\"), and precedence grouping with parentheses. " +
+                "Examples: 'Contoso', 'john smith', '\"Contoso Ltd\"', 'hotel+(wifi|luxury)', 'Alp*'."
             )] string search_term,
             [Description(
                 "Comma-separated entity logical names to limit the search scope. " +
@@ -56,155 +62,211 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Leave empty to search across all searchable entities."
             )] string entities = "",
             [Description(
-                "Maximum number of results to return. Default: 20. Max: 100. " +
-                "Use a smaller value for quick lookups."
-            )] int max_results = 20)
+                "Maximum number of results to return. Default: 50. Max: 100. " +
+                "Use a smaller value (e.g. 10) for quick lookups."
+            )] int top = 50,
+            [Description(
+                "OData-style filter to narrow results. Applied across all searched entities. " +
+                "Operators: eq, ne, gt, ge, lt, le, and, or, not. " +
+                "Example: 'statecode eq 0' (active records only), 'createdon gt 2024-01-01'. " +
+                "Leave empty for no filter."
+            )] string filter = "")
         {
             if (string.IsNullOrWhiteSpace(search_term))
                 return "Error: search_term is required.";
 
-            if (max_results <= 0) max_results = 20;
-            if (max_results > 100) max_results = 100;
+            if (search_term.Trim().Length > 100)
+                return "Error: search_term must be 100 characters or less.";
+
+            if (top <= 0) top = 50;
+            if (top > 100) top = 100;
 
             try
             {
-                var entityFilter = ParseEntityFilter(entities);
-                var request = BuildSearchRequest(search_term.Trim(), entityFilter, max_results);
+                var request = BuildSearchRequest(search_term.Trim(), entities, top, filter);
                 var response = (OrganizationResponse)_serviceClient.Execute(request);
 
-                return FormatSearchResponse(response, search_term.Trim());
+                if (!response.Results.TryGetValue("response", out var responseBody) || responseBody is not string jsonResponse)
+                    return "Error: Unexpected response format from search API.";
+
+                return FormatSearchResults(jsonResponse, search_term.Trim());
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("search is not enabled", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase))
+                if (ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase))
                 {
                     return "Error: Relevance Search is not enabled in this Dataverse environment. " +
-                           "Use execute_fetchxml with a filter condition instead.";
+                           "Ask your admin to enable it, or use execute_fetchxml with a 'like' filter instead.";
                 }
 
                 return $"Error: Search failed: {ex.Message}";
             }
         }
 
-        private static List<string> ParseEntityFilter(string entities)
-        {
-            if (string.IsNullOrWhiteSpace(entities))
-                return [];
-
-            return entities
-                .Split(',')
-                .Select(e => e.Trim().ToLowerInvariant())
-                .Where(e => !string.IsNullOrEmpty(e))
-                .ToList();
-        }
-
-        private static OrganizationRequest BuildSearchRequest(string searchTerm, List<string> entityFilter, int maxResults)
+        private static OrganizationRequest BuildSearchRequest(string searchTerm, string entities, int top, string filter)
         {
             var request = new OrganizationRequest("searchquery")
             {
                 ["search"] = searchTerm,
                 ["count"] = true,
-                ["top"] = maxResults
+                ["top"] = top
             };
 
-            if (entityFilter.Count > 0)
+            if (!string.IsNullOrWhiteSpace(entities))
             {
-                request["entities"] = string.Join(",", entityFilter);
+                var entityList = entities
+                    .Split(',')
+                    .Select(e => e.Trim().ToLowerInvariant())
+                    .Where(e => !string.IsNullOrEmpty(e))
+                    .Select(e => new SearchEntity { Name = e })
+                    .ToList();
+
+                if (entityList.Count > 0)
+                    request["entities"] = JsonSerializer.Serialize(entityList, _jsonOptions);
             }
+
+            if (!string.IsNullOrWhiteSpace(filter))
+                request["filter"] = filter.Trim();
 
             return request;
         }
 
-        private static string FormatSearchResponse(OrganizationResponse response, string searchTerm)
+        private static string FormatSearchResults(string jsonResponse, string searchTerm)
         {
-            var sb = new StringBuilder(2048);
+            var sb = new StringBuilder(4096);
 
-            if (response.Results.TryGetValue("response", out var responseBody) && responseBody is string jsonResponse)
+            SearchQueryResults results;
+            try
             {
-                return FormatJsonSearchResponse(jsonResponse, searchTerm);
+                results = JsonSerializer.Deserialize<SearchQueryResults>(jsonResponse, _jsonOptions);
+            }
+            catch
+            {
+                sb.AppendLine($"# Search Results for \"{searchTerm}\"");
+                sb.AppendLine();
+                sb.AppendLine(jsonResponse);
+                return sb.ToString();
             }
 
-            if (response.Results.TryGetValue("value", out var value) && value is EntityCollection collection)
+            if (results?.Error != null)
             {
-                return FormatEntityCollectionResponse(collection, searchTerm);
+                sb.AppendLine($"# Search Error");
+                sb.AppendLine();
+                sb.AppendLine($"**Code**: {results.Error.Code}");
+                sb.AppendLine($"**Message**: {results.Error.Message}");
+                return sb.ToString();
             }
 
-            sb.AppendLine($"# Search Results for \"{searchTerm}\"");
-            sb.AppendLine();
-            sb.AppendLine("No results found or unexpected response format.");
-            sb.AppendLine();
-            sb.AppendLine("TIP: Try execute_fetchxml with a like filter instead:");
-            sb.AppendLine($"```xml");
-            sb.AppendLine($"<fetch top='10'>");
-            sb.AppendLine($"  <entity name='account'>");
-            sb.AppendLine($"    <attribute name='name'/>");
-            sb.AppendLine($"    <filter>");
-            sb.AppendLine($"      <condition attribute='name' operator='like' value='%{searchTerm}%'/>");
-            sb.AppendLine($"    </filter>");
-            sb.AppendLine($"  </entity>");
-            sb.AppendLine($"</fetch>");
-            sb.AppendLine($"```");
-
-            return sb.ToString();
-        }
-
-        private static string FormatJsonSearchResponse(string jsonResponse, string searchTerm)
-        {
-            var sb = new StringBuilder(2048);
-            sb.AppendLine($"# Search Results for \"{searchTerm}\"");
-            sb.AppendLine();
-            sb.AppendLine(jsonResponse);
-            return sb.ToString();
-        }
-
-        private static string FormatEntityCollectionResponse(EntityCollection collection, string searchTerm)
-        {
-            var sb = new StringBuilder(collection.Entities.Count * 120 + 512);
+            var records = results?.Value ?? [];
+            var totalCount = results?.Count ?? records.Count;
 
             sb.AppendLine($"# Search Results for \"{searchTerm}\"");
             sb.AppendLine();
-            sb.AppendLine($"Returned **{collection.Entities.Count}** records");
+            sb.AppendLine($"Returned **{records.Count}** records (total matches: {totalCount})");
             sb.AppendLine();
 
-            if (collection.Entities.Count == 0)
+            if (records.Count == 0)
             {
                 sb.AppendLine("No matching records found.");
                 return sb.ToString();
             }
 
-            var allKeys = collection.Entities
-                .SelectMany(e => e.Attributes.Keys)
-                .Distinct()
-                .OrderBy(k => k)
-                .ToList();
+            sb.AppendLine("| Entity | Id | Score | Attributes | Highlights |");
+            sb.AppendLine("| --- | --- | --- | --- | --- |");
 
-            sb.Append("| _entity | _id");
-            foreach (var key in allKeys)
-                sb.Append($" | {key}");
-            sb.AppendLine(" |");
-
-            sb.Append("| --- | ---");
-            foreach (var _ in allKeys)
-                sb.Append(" | ---");
-            sb.AppendLine(" |");
-
-            foreach (var entity in collection.Entities)
+            foreach (var record in records)
             {
-                sb.Append($"| {entity.LogicalName} | {entity.Id}");
-                foreach (var key in allKeys)
-                {
-                    var value = DataverseValueFormatter.FormatValue(entity, key);
-                    sb.Append($" | {EscapePipe(value)}");
-                }
-                sb.AppendLine(" |");
+                var attrs = FormatAttributes(record.Attributes);
+                var highlights = FormatHighlights(record.Highlights);
+                sb.AppendLine($"| {record.EntityName} | {record.Id} | {record.Score:F2} | {EscapePipe(attrs)} | {EscapePipe(highlights)} |");
             }
 
             return sb.ToString();
         }
 
+        private static string FormatAttributes(Dictionary<string, object> attributes)
+        {
+            if (attributes == null || attributes.Count == 0)
+                return "";
+
+            var relevant = attributes
+                .Where(kv => !kv.Key.StartsWith("@search.", StringComparison.OrdinalIgnoreCase))
+                .Where(kv => !kv.Key.Contains("@OData", StringComparison.OrdinalIgnoreCase))
+                .Where(kv => kv.Value != null)
+                .OrderBy(kv => kv.Key);
+
+            return string.Join("; ", relevant.Select(kv =>
+            {
+                var value = kv.Value is JsonElement je ? je.ToString() : kv.Value?.ToString() ?? "";
+                return $"{kv.Key}={value}";
+            }));
+        }
+
+        private static string FormatHighlights(Dictionary<string, string[]> highlights)
+        {
+            if (highlights == null || highlights.Count == 0)
+                return "";
+
+            return string.Join("; ", highlights.Select(kv =>
+            {
+                var values = string.Join(", ", kv.Value.Select(v =>
+                    v.Replace("{crmhit}", "**").Replace("{/crmhit}", "**")));
+                return $"{kv.Key}: {values}";
+            }));
+        }
+
         private static string EscapePipe(string value) =>
             value.Replace("|", "\\|").Replace("\n", " ").Replace("\r", "");
+
+        private static readonly JsonSerializerOptions _jsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        #region Search API Models (per Microsoft docs)
+
+        private sealed class SearchEntity
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; set; } = "";
+
+            [JsonPropertyName("selectColumns")]
+            public List<string> SelectColumns { get; set; }
+
+            [JsonPropertyName("searchColumns")]
+            public List<string> SearchColumns { get; set; }
+
+            [JsonPropertyName("filter")]
+            public string Filter { get; set; }
+        }
+
+        private sealed class SearchQueryResults
+        {
+            public SearchErrorDetail Error { get; set; }
+            public List<QueryResult> Value { get; set; }
+            public long Count { get; set; }
+        }
+
+        private sealed class SearchErrorDetail
+        {
+            public string Code { get; set; }
+            public string Message { get; set; }
+        }
+
+        private sealed class QueryResult
+        {
+            public string Id { get; set; } = "";
+            public string EntityName { get; set; } = "";
+            public int ObjectTypeCode { get; set; }
+            public Dictionary<string, object> Attributes { get; set; } = [];
+            public Dictionary<string, string[]> Highlights { get; set; } = [];
+            public double Score { get; set; }
+        }
+
+        #endregion
     }
 }
