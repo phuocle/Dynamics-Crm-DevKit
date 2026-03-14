@@ -21,12 +21,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         [McpServerTool(Name = "get_entities_metadata", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "List Dataverse entities in a markdown table. " +
-            "Supports text filter, custom-only mode, and intersect include/exclude.")]
+            "List ALL entities (tables) in this Dataverse environment. " +
+            "Returns a markdown table with each entity's logicalName, displayName, schemaName, ownershipType, isCustom, and isActivity flag.\n\n" +
+
+            "WHEN TO USE:\n" +
+            "- When you don't know the logical name of an entity the user mentions " +
+            "(e.g., user says 'Cases' but the logical name is 'incident')\n" +
+            "- When you need to find custom entities (they have prefixes like 'new_', 'cr_', 'msdyn_')\n" +
+            "- When a FetchXML query fails with 'entity not found' error\n" +
+            "- To explore what tables are available in the Dataverse environment\n\n" +
+
+            "COMMON NAME MAPPINGS (displayName -> logicalName):\n" +
+            "Account -> account, Contact -> contact, Lead -> lead, " +
+            "Opportunity -> opportunity, Case -> incident, Activity -> activitypointer, " +
+            "User -> systemuser, Team -> team, Business Unit -> businessunit, " +
+            "Note -> annotation, Email -> email, Task -> task, Phone Call -> phonecall, " +
+            "Product -> product, Quote -> quote, Order -> salesorder, Invoice -> invoice\n\n" +
+
+            "TIP: After finding the correct logicalName, use get_entity_metadata to get column details before querying.")]
         public async Task<string> get_entities_metadata(
-            [Description("Optional keyword to match logical name or display name.")] string filter = "",
-            [Description("true: return only custom entities.")] bool custom_only = false,
-            [Description("true: include intersect entities. false: exclude intersect entities.")] bool include_intersect = false)
+            [Description(
+                "Optional keyword to filter entities by logical name or display name. " +
+                "Examples: 'account', 'contact', 'msdyn_', 'invoice'. " +
+                "Leave empty to return all entities."
+            )] string filter = "",
+            [Description("true: return only custom entities (non-system). false: return all entities.")] bool custom_only = false,
+            [Description("true: include intersect (N:N relationship) entities. false: exclude them (default).")] bool include_intersect = false)
         {
             try
             {

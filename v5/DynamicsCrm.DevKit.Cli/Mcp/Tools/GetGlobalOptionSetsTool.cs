@@ -20,11 +20,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         [McpServerTool(Name = "get_global_optionsets", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Get Dataverse global option sets (choices). " +
-            "If optionset_name is empty, return a summary table of all. " +
-            "If optionset_name is provided, return detailed options for that option set.")]
+            "Retrieve global option sets (choices/picklists) from Dataverse metadata.\n\n" +
+
+            "TWO MODES:\n" +
+            "- If optionset_name is EMPTY: returns a summary markdown table of ALL global option sets " +
+            "(name, displayName, type, isGlobal). Use this to discover available option sets.\n" +
+            "- If optionset_name is PROVIDED: returns detailed options for that specific option set " +
+            "(value, label, description for each option).\n\n" +
+
+            "RETURNS:\n" +
+            "- Summary mode: markdown table with name, displayName, type (Picklist/State/Status/Boolean), isGlobal\n" +
+            "- Detail mode: option set properties + options table with value (integer stored in Dataverse), " +
+            "label (display text), description\n\n" +
+
+            "WHEN TO USE:\n" +
+            "- When you need to know the valid values for a global choice/picklist column\n" +
+            "- When building FetchXML filters on option set fields and need the integer values\n" +
+            "- When you see an integer value in query results and need to map it to a label\n" +
+            "- When get_entity_metadata shows a column is PicklistType but the options are empty " +
+            "(this means it references a global option set — use this tool to get the values)\n\n" +
+
+            "NOTE: This retrieves GLOBAL option sets only. For entity-specific (local) picklists, " +
+            "use get_entity_metadata which includes options in the attribute definition.")]
         public string get_global_optionsets(
-            [Description("Optional global option set name. Empty means list all.")] string optionset_name = "")
+            [Description(
+                "The logical name of the global option set (always lowercase). " +
+                "Examples: 'msdyn_committype', 'budgetstatus', 'msdyn_bookingstatus'. " +
+                "Leave EMPTY to list all global option sets. " +
+                "If unsure of the name, use get_entity_metadata on the entity that uses the column — " +
+                "if the options are empty, the column references a global option set."
+            )] string optionset_name = "")
         {
             try
             {
