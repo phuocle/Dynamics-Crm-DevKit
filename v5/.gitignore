@@ -33,6 +33,10 @@ DynamicsCrm.DevKit.Tool/Test/
 !.vscode/mcp.json
 **/.idea/
 
+# MCP config with credentials (each dev has their own)
+.cursor/mcp.json
+.gemini/settings.json
+
 # OS files
 .DS_Store
 Thumbs.db
