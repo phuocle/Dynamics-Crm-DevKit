@@ -37,6 +37,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         Name = "DynamicsCrm.DevKit",
                         Version = DynamicsCrm.DevKit.Shared.Const.Version
                     };
+                    options.ServerInstructions =
+                        $"Connected to Dataverse environment: {_serviceClient.ConnectedOrgUriActual} | " +
+                        $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
+                        $"Version: {_serviceClient.ConnectedOrgVersion}";
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly();

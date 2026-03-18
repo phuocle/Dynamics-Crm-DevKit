@@ -19,12 +19,13 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             try
             {
                 settings.ResolveEnvironmentDefaults();
+                LogConnectionInfo(settings);
                 var serviceClient = await ConnectAsync(settings);
                 if (serviceClient == null) return 2;
 
-                LogInfo("Starting MCP server with stdio transport...");
-                LogInfo("Tools: execute_fetchxml, get_entities_metadata, get_entity_metadata, get_global_optionsets, get_sdk_messages, get_entity_messages, get_none_messages");
-                LogInfo("Waiting for client connection on stdin/stdout...");
+                LogInfo($"Org: {serviceClient.ConnectedOrgFriendlyName} ({serviceClient.ConnectedOrgUniqueName})");
+                LogInfo($"Version: {serviceClient.ConnectedOrgVersion}");
+                LogInfo($"Starting MCP server v{Shared.Const.Version}...");
 
                 var host = new Mcp.McpServerHost(serviceClient);
                 await host.RunAsync();
@@ -119,6 +120,15 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
 
             return await builder.CreateServiceClientAsync(connection);
+        }
+
+        private static void LogConnectionInfo(McpCommandArgs settings)
+        {
+            LogInfo($"Auth: {(string.IsNullOrEmpty(settings.AuthType) ? "(legacy --conn)" : settings.AuthType)}");
+            if (!string.IsNullOrEmpty(settings.Url))
+                LogInfo($"URL: {settings.Url}");
+            if (!string.IsNullOrEmpty(settings.PacProfile))
+                LogInfo($"PAC Profile: {settings.PacProfile}");
         }
 
         private static void LogInfo(string message)
