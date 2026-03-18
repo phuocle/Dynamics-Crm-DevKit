@@ -75,6 +75,57 @@ devkit mcp --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "
 | `OAuth` | Legacy username/password | Legacy |
 | `AD` | On-premise Active Directory | On-prem |
 
+## Environment Variables
+
+All connection arguments support **environment variable fallback**. If a CLI argument is not provided, the CLI automatically reads from `DEVKIT_*` environment variables.
+
+**Priority**: CLI args > Environment variables > empty (validation error)
+
+| CLI Argument | Environment Variable | Used By |
+|---|---|---|
+| `--conn` | `DEVKIT_CONNECTION` | Legacy connection string |
+| `--auth` | `DEVKIT_AUTH_TYPE` | All auth types |
+| `--url` | `DEVKIT_URL` | All (except FromPac) |
+| `--clientid` | `DEVKIT_CLIENT_ID` | ClientSecret, Interactive, DeviceCode |
+| `--clientsecret` | `DEVKIT_CLIENT_SECRET` | ClientSecret |
+| `--pacprofile` | `DEVKIT_PAC_PROFILE` | FromPac |
+| `--username` | `DEVKIT_USERNAME` | OAuth, AD |
+| `--password` | `DEVKIT_PASSWORD` | OAuth, AD |
+| `--domain` | `DEVKIT_DOMAIN` | AD |
+
+### Setting Environment Variables (Windows)
+
+```powershell
+# Set persistent user-level environment variables (one-time setup)
+[Environment]::SetEnvironmentVariable("DEVKIT_AUTH_TYPE", "ClientSecret", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_URL", "https://org.crm.dynamics.com", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_CLIENT_ID", "your-app-id", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_CLIENT_SECRET", "your-secret", "User")
+
+# Or for FromPac (simplest - no secrets needed)
+[Environment]::SetEnvironmentVariable("DEVKIT_AUTH_TYPE", "FromPac", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_PAC_PROFILE", "dev", "User")
+```
+
+### Before vs After
+
+```powershell
+# Before: verbose command with all connection args
+devkit server --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "app-id" --clientsecret "secret" --json "cli.json" --profile "DEBUG"
+
+# After: set env vars once, then just specify project args
+devkit server --json "cli.json" --profile "DEBUG"
+```
+
+### Override
+
+CLI args always take precedence. To temporarily connect to a different environment:
+
+```powershell
+# Env vars point to DEV, but this command connects to UAT
+devkit server --url "https://uat.crm.dynamics.com" --json "cli.json" --profile "DEBUG"
+```
+
 ## MCP Server (Model Context Protocol)
 
 The `mcp` command starts a stdio-based MCP server that exposes Dataverse tools to AI agents (Cursor, VS Code Copilot, Claude Desktop, etc.).
@@ -94,6 +145,8 @@ devkit mcp --auth Interactive --url "https://org.crm.dynamics.com"
 
 ### IDE Configuration
 
+If you have `DEVKIT_*` environment variables set (see [Environment Variables](#environment-variables)), the MCP config is minimal — just `devkit mcp` with no args.
+
 #### Cursor
 
 Add to `.cursor/mcp.json`:
@@ -103,7 +156,7 @@ Add to `.cursor/mcp.json`:
   "mcpServers": {
     "devkit": {
       "command": "devkit",
-      "args": ["mcp", "--auth", "FromPac", "--pacprofile", "DEV"]
+      "args": ["mcp"]
     }
   }
 }
@@ -119,7 +172,7 @@ Add to `.vscode/mcp.json`:
     "devkit": {
       "type": "stdio",
       "command": "devkit",
-      "args": ["mcp", "--auth", "FromPac", "--pacprofile", "DEV"]
+      "args": ["mcp"]
     }
   }
 }
@@ -134,7 +187,41 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "devkit": {
       "command": "devkit",
-      "args": ["mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "app-id", "--clientsecret", "secret"]
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+#### Alternative: Pass credentials via `env` property
+
+If you prefer not to set system-wide environment variables, use the `env` property in the MCP config:
+
+```json
+{
+  "mcpServers": {
+    "devkit": {
+      "command": "devkit",
+      "args": ["mcp"],
+      "env": {
+        "DEVKIT_AUTH_TYPE": "ClientSecret",
+        "DEVKIT_URL": "https://org.crm.dynamics.com",
+        "DEVKIT_CLIENT_ID": "your-app-id",
+        "DEVKIT_CLIENT_SECRET": "your-secret"
+      }
+    }
+  }
+}
+```
+
+#### Alternative: Pass credentials via CLI args
+
+```json
+{
+  "mcpServers": {
+    "devkit": {
+      "command": "devkit",
+      "args": ["mcp", "--auth", "FromPac", "--pacprofile", "DEV"]
     }
   }
 }

@@ -5,7 +5,7 @@ description: Build Debug DynamicsCrm.DevKit for all projects
 // turbo-all
 
 1. Record the start time
-2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1`. If any errors occur, stop and fix them, then restart this workflow from the beginning.
+2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1`. The script automatically kills any running `DynamicsCrm.DevKit.Cli.exe` process (e.g. MCP server) before building. If any errors occur, stop and fix them, then restart this workflow from the beginning.
 3. Record the end time
 4. Verify the build:
    - Run `devkit --version`. Expected version format is `4.12.34.56` with Build timestamp in `dd.MM.yyyy HH:mm:ss` format (current date/time when built). Confirm the date/month/year matches today.

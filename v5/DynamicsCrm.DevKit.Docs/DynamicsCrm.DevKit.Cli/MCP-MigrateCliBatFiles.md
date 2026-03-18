@@ -133,6 +133,24 @@ devkit server --auth "ClientSecret" --url "https://org.crm.dynamics.com" --clien
 3. Test each migrated .bat file
 4. Update `$CliConnectionArgs$` placeholders if present
 5. Remove NuGet package `DynamicsCrm.DevKit.Cli` from packages.config or .csproj
+6. **Optional**: Set `DEVKIT_*` environment variables and remove connection args from batch files (see below)
+
+## Environment Variable Fallback (Optional Simplification)
+
+After migration, you can further simplify batch files by using environment variables instead of hardcoded connection args. Set env vars once:
+
+```powershell
+[Environment]::SetEnvironmentVariable("DEVKIT_AUTH_TYPE", "ClientSecret", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_URL", "https://org.crm.dynamics.com", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_CLIENT_ID", "your-app-id", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_CLIENT_SECRET", "your-secret", "User")
+```
+
+Then batch files become:
+
+```batch
+devkit server --json "..\DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
+```
 
 ## Source
 

@@ -1,5 +1,6 @@
 using Spectre.Console.Cli;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using System;
 using System.IO;
 using System.ComponentModel;
 
@@ -27,7 +28,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Url { get; set; } = string.Empty;
 
         [CommandOption("--auth")]
-        [Description("Authentication type (Interactive, DeviceCode)")]
+        [Description("Authentication type (Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD)")]
         public string AuthType { get; set; } = string.Empty;
 
         [CommandOption("--clientid")]
@@ -68,5 +69,39 @@ namespace DynamicsCrm.DevKit.Shared.Models
         }
 
         public ServiceClient ServiceClient { get; set; }
+
+        /// <summary>
+        /// Fill empty connection properties from DEVKIT_* environment variables.
+        /// Priority: CLI args > Environment variables > empty string.
+        /// </summary>
+        public void ResolveEnvironmentDefaults()
+        {
+            if (string.IsNullOrEmpty(Connection))
+                Connection = Environment.GetEnvironmentVariable("DEVKIT_CONNECTION") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(AuthType))
+                AuthType = Environment.GetEnvironmentVariable("DEVKIT_AUTH_TYPE") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(Url))
+                Url = Environment.GetEnvironmentVariable("DEVKIT_URL") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(ClientId))
+                ClientId = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_ID") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(ClientSecret))
+                ClientSecret = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_SECRET") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(PacProfile))
+                PacProfile = Environment.GetEnvironmentVariable("DEVKIT_PAC_PROFILE") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(Username))
+                Username = Environment.GetEnvironmentVariable("DEVKIT_USERNAME") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(Password))
+                Password = Environment.GetEnvironmentVariable("DEVKIT_PASSWORD") ?? string.Empty;
+
+            if (string.IsNullOrEmpty(Domain))
+                Domain = Environment.GetEnvironmentVariable("DEVKIT_DOMAIN") ?? string.Empty;
+        }
     }
 }

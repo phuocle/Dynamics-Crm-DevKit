@@ -140,6 +140,35 @@ devkit server --conn "..." --json "..\..\cli.json" --profile "DEBUG"
 | `--password` | Password for OAuth/AD authentication |
 | `--domain` | Domain for AD authentication (on-premises) |
 
+### Environment Variable Fallback (New in v5)
+
+All connection arguments now support automatic fallback to `DEVKIT_*` environment variables. If a CLI argument is not provided, the CLI reads from the corresponding environment variable.
+
+| v5 Argument | Environment Variable |
+| :--- | :--- |
+| `--conn` | `DEVKIT_CONNECTION` |
+| `--auth` | `DEVKIT_AUTH_TYPE` |
+| `--url` | `DEVKIT_URL` |
+| `--clientid` | `DEVKIT_CLIENT_ID` |
+| `--clientsecret` | `DEVKIT_CLIENT_SECRET` |
+| `--pacprofile` | `DEVKIT_PAC_PROFILE` |
+| `--username` | `DEVKIT_USERNAME` |
+| `--password` | `DEVKIT_PASSWORD` |
+| `--domain` | `DEVKIT_DOMAIN` |
+
+Set env vars once, then all commands use them automatically:
+
+```powershell
+# One-time setup
+[Environment]::SetEnvironmentVariable("DEVKIT_AUTH_TYPE", "ClientSecret", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_URL", "https://org.crm.dynamics.com", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_CLIENT_ID", "your-app-id", "User")
+[Environment]::SetEnvironmentVariable("DEVKIT_CLIENT_SECRET", "your-secret", "User")
+
+# Then just run commands without connection args
+devkit server --json "cli.json" --profile "DEBUG"
+```
+
 ---
 
 ## 5. Authentication Methods

@@ -18,6 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         {
             try
             {
+                settings.ResolveEnvironmentDefaults();
                 var serviceClient = await ConnectAsync(settings);
                 if (serviceClient == null) return 2;
 

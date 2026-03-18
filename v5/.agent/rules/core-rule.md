@@ -66,6 +66,22 @@ trigger: always_on
 | `datasource` | Active | Create data source entities |
 | `mcp` | Active | MCP server for Dataverse operations |
 
+### Environment Variable Fallback
+
+All connection CLI arguments support automatic fallback to `DEVKIT_*` environment variables. Priority: **CLI args > Env vars > empty**.
+
+| CLI Argument | Environment Variable |
+|---|---|
+| `--conn` | `DEVKIT_CONNECTION` |
+| `--auth` | `DEVKIT_AUTH_TYPE` |
+| `--url` | `DEVKIT_URL` |
+| `--clientid` | `DEVKIT_CLIENT_ID` |
+| `--clientsecret` | `DEVKIT_CLIENT_SECRET` |
+| `--pacprofile` | `DEVKIT_PAC_PROFILE` |
+| `--username` | `DEVKIT_USERNAME` |
+| `--password` | `DEVKIT_PASSWORD` |
+| `--domain` | `DEVKIT_DOMAIN` |
+
 ### Project Templates (13 total)
 
 01-SharedProject, 02-Console, 03-ConsoleCore, 04-Server, 05-Package, 06-WebResource, 07-SharedTest, 08-ProxyTypes, 09-Test, 10-TestUi, 11-SolutionPackager, 12-Report, 13-WebResourceTs
@@ -176,7 +192,9 @@ git commit -m "Short summary of changes" -m "Longer description of what was chan
 > [!CAUTION]
 > Never commit connection strings or credentials.
 
-- Use environment variables or Azure Key Vault for secrets
+- Use `DEVKIT_*` environment variables for connection credentials (see Environment Variable Fallback section)
+- Use Azure Key Vault for production secrets
+- Never commit `.env` files containing credentials
 
 ---
 

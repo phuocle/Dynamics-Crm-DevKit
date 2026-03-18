@@ -27,6 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             try
             {
+                settings.ResolveEnvironmentDefaults();
                 SpectreLog.WriteHeader();
 
                 if (await IsValidAsync(settings))

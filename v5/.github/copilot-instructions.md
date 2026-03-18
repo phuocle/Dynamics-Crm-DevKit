@@ -112,6 +112,22 @@ When running a CLI profile:
 | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Release with current date |
 | `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Official release |
 
+## Environment Variable Fallback
+
+All CLI connection arguments support automatic fallback to `DEVKIT_*` environment variables. Priority: CLI args > Env vars > empty.
+
+| CLI Argument | Environment Variable |
+|---|---|
+| `--conn` | `DEVKIT_CONNECTION` |
+| `--auth` | `DEVKIT_AUTH_TYPE` |
+| `--url` | `DEVKIT_URL` |
+| `--clientid` | `DEVKIT_CLIENT_ID` |
+| `--clientsecret` | `DEVKIT_CLIENT_SECRET` |
+| `--pacprofile` | `DEVKIT_PAC_PROFILE` |
+| `--username` | `DEVKIT_USERNAME` |
+| `--password` | `DEVKIT_PASSWORD` |
+| `--domain` | `DEVKIT_DOMAIN` |
+
 ## Security
 
-Never commit connection strings or credentials. Use environment variables or Azure Key Vault for secrets.
+Never commit connection strings or credentials. Use `DEVKIT_*` environment variables for connection credentials. Use Azure Key Vault for production secrets. Never commit `.env` files containing credentials.

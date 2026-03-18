@@ -169,6 +169,24 @@ Program.cs → Spectre.Console.Cli
 | `OAuth` | `ConnectionType.OAuth` | Username/Password (legacy) |
 | `AD` | `ConnectionType.AD` | Active Directory (on-premises) |
 
+### Environment Variable Fallback
+
+All connection CLI arguments support automatic fallback to `DEVKIT_*` environment variables. Priority: **CLI args > Env vars > empty**.
+
+| CLI Argument | Environment Variable | Used By |
+|---|---|---|
+| `--conn` | `DEVKIT_CONNECTION` | Legacy connection string |
+| `--auth` | `DEVKIT_AUTH_TYPE` | All auth types |
+| `--url` | `DEVKIT_URL` | All (except FromPac) |
+| `--clientid` | `DEVKIT_CLIENT_ID` | ClientSecret, Interactive, DeviceCode |
+| `--clientsecret` | `DEVKIT_CLIENT_SECRET` | ClientSecret |
+| `--pacprofile` | `DEVKIT_PAC_PROFILE` | FromPac |
+| `--username` | `DEVKIT_USERNAME` | OAuth, AD |
+| `--password` | `DEVKIT_PASSWORD` | OAuth, AD |
+| `--domain` | `DEVKIT_DOMAIN` | AD |
+
+This applies to **all 15 CLI commands** and the MCP server. Implementation: `DevKitCommandArgs.ResolveEnvironmentDefaults()` called at the start of every command execution.
+
 ---
 
 ## VSIX Extension

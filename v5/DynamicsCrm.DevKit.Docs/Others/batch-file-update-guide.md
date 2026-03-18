@@ -114,6 +114,7 @@ For each batch file, test with:
 - The `$CliConnectionArgs$` placeholder is replaced by `Replacement.cs` using `CliArgsBuilder.Build()`
 - All connection types use new CLI format (no legacy `--conn`)
 - Secrets are encrypted using `Helper.EncryptString()` before embedding in batch files
+- **Environment variable fallback**: All connection args (`--auth`, `--url`, `--clientid`, `--clientsecret`, `--pacprofile`, etc.) now fall back to `DEVKIT_*` environment variables if not provided via CLI args. Users can set env vars once and omit connection args from batch files
 
 ## Status: ✅ COMPLETE
 
