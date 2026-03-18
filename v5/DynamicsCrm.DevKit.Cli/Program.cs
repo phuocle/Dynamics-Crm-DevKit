@@ -94,7 +94,11 @@ namespace DynamicsCrm.DevKit.Cli
                           .WithDescription("Create data source entities");
 
                     config.AddCommand<McpCommand>("mcp")
-                          .WithDescription("Start MCP server for AI agent integration");
+                          .WithDescription("Start MCP server for AI agent integration")
+                          .WithExample(new[] { "mcp", "--setup-guide" })
+                          .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "APP_ID", "--clientsecret", "SECRET" })
+                          .WithExample(new[] { "mcp", "--auth", "FromPac", "--pacprofile", "default" })
+                          .WithExample(new[] { "mcp", "--auth", "Interactive", "--url", "https://org.crm.dynamics.com" });
                 });
 
                 var result = await app.RunAsync(args);

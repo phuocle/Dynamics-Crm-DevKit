@@ -9,5 +9,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("MCP transport type: stdio (default)")]
         [DefaultValue("stdio")]
         public string Transport { get; set; } = "stdio";
+
+        [CommandOption("--setup-guide")]
+        [Description("Show comprehensive setup guide for configuring MCP in your IDE")]
+        [DefaultValue(false)]
+        public bool SetupGuide { get; set; }
     }
 }
