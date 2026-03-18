@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier
         public static async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expected)
         {
             var test = new Test { TestCode = source };
-            test.ReferenceAssemblies = ReferenceAssemblies.Net.Net60;
+            test.ReferenceAssemblies = ReferenceAssemblies.NetFramework.Net48.Default;
             test.MarkupOptions = MarkupOptions.UseFirstDescriptor;
             test.SolutionTransforms.Add((solution, projectId) =>
             {
