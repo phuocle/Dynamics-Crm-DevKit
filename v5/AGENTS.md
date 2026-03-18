@@ -137,7 +137,7 @@ Program.cs → Spectre.Console.Cli
   ├── Tasks/     → ITask interface → TaskXxx implementations
   ├── Services/  → LegacyArgConverter, UpdateChecker, DeploymentValidator
   ├── Logging/   → SpectreLog (ASCII art logo + colored output)
-  ├── Mcp/       → MCP server (11 tools for Dataverse operations)
+  ├── Mcp/       → MCP server (12 tools for Dataverse operations)
   └── Exceptions/→ DevKitExceptions
 ```
 
@@ -145,17 +145,18 @@ Program.cs → Spectre.Console.Cli
 
 | Tool | Description |
 |---|---|
-| `ListTablesTool` | List Dataverse tables |
-| `GetEntityMetadataTool` | Get entity metadata |
-| `GetEntityMessagesTool` | Get SDK messages for entity |
-| `GetGlobalOptionSetTool` | Get global option sets |
-| `CreatePluginTool` | Create plugin registration |
-| `GetEnvironmentInfoTool` | Get environment info |
-| `GetRecordTool` | Get a record |
-| `CreateRecordTool` | Create a record |
-| `UpdateRecordTool` | Update a record |
-| `DeleteRecordTool` | Delete a record |
-| `QueryFetchXmlTool` | Query with FetchXML |
+| `get_entities_metadata` | List all entities/tables in the environment |
+| `get_entity_metadata` | Get full metadata for a single entity |
+| `get_messages` | Discover SDK messages, Custom Actions, Custom APIs |
+| `get_global_optionsets` | Get global option set definitions |
+| `get_environment_info` | Get environment/organization info |
+| `whoami` | Get current user identity and roles |
+| `get_record` | Retrieve a single record by ID |
+| `execute_fetchxml` | Execute FetchXML query with auto-paging |
+| `search` | Dataverse Relevance Search across entities |
+| `create_record` | Create a new record |
+| `update_record` | Update an existing record (partial update) |
+| `delete_record` | Delete a record by ID |
 
 ### Authentication Types
 
