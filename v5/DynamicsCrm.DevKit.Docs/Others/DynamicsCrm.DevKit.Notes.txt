@@ -162,15 +162,20 @@ CLI command: devkit mcp
 ┌─────────────────┬─────────────────────────────────────────────────────────────┐
 │ IDE             │ MCP Config File Location                                    │
 ├─────────────────┼─────────────────────────────────────────────────────────────┤
-│ Cursor          │ .cursor\mcp.json                                            │
-│ Antigravity     │ C:\Users\p\.gemini\antigravity\mcp_config.json              │
-│ VS Code         │ .vscode\mcp.json                                            │
+│ Cursor          │ .cursor\mcp.json (project-level)                            │
+│ Antigravity     │ mcp_config.json (managed via IDE UI)                        │
+│ VS Code         │ .vscode\mcp.json (project-level)                            │
 └─────────────────┴─────────────────────────────────────────────────────────────┘
 
-IMPORTANT: Khi update MCP config ở 1 IDE, phải đồng bộ qua các IDE còn lại!
-  - Source of truth: .cursor\mcp.json (hoặc IDE nào vừa update)
-  - Sync script: DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1
-  - Xem thêm rule: .agent\rules\core-rule.md → section "MCP Configuration"
+NOTES:
+  - Cursor/VS Code dùng file trong project. Các file này có thể chứa credentials qua field `env`,
+    vì vậy **không nên commit** (đã được gitignore trong v5).
+  - Antigravity không dùng file `.gemini/settings.json` trong project cho MCP.
+    Antigravity quản lý MCP servers qua UI: MCP Servers → Manage MCP Servers → View raw config
+    (file tên là `mcp_config.json` theo docs).
+    Official doc: https://docs.cloud.google.com/mcp/manage-mcp-servers
+  - Nếu cần đồng bộ “template config”, chỉ đồng bộ phần cấu trúc (command/args/tools allow-list),
+    còn credentials phải để user tự set (DEVKIT_* env vars hoặc env trong IDE config).
 
 ================================================================================
                              IMPORTANT FILE LOCATIONS
