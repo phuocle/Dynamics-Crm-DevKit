@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "dynamicscrm-devkit": {
-      "command": "devkit",
-      "args": ["mcp"]
-    }
-  }
-}

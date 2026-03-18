@@ -153,6 +153,26 @@ Config file: DynamicsCrm.DevKit.Cli.json
   15. TsWebApiItemTemplate (TypeScript)
 
 ================================================================================
+                          MCP CONFIGURATION (PER IDE)
+================================================================================
+
+MCP (Model Context Protocol) server cho Dataverse operations.
+CLI command: devkit mcp
+
+┌─────────────────┬─────────────────────────────────────────────────────────────┐
+│ IDE             │ MCP Config File Location                                    │
+├─────────────────┼─────────────────────────────────────────────────────────────┤
+│ Cursor          │ .cursor\mcp.json                                            │
+│ Antigravity     │ C:\Users\p\.gemini\antigravity\mcp_config.json              │
+│ VS Code         │ .vscode\mcp.json                                            │
+└─────────────────┴─────────────────────────────────────────────────────────────┘
+
+IMPORTANT: Khi update MCP config ở 1 IDE, phải đồng bộ qua các IDE còn lại!
+  - Source of truth: .cursor\mcp.json (hoặc IDE nào vừa update)
+  - Sync script: DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1
+  - Xem thêm rule: .agent\rules\core-rule.md → section "MCP Configuration"
+
+================================================================================
                              IMPORTANT FILE LOCATIONS
 ================================================================================
 

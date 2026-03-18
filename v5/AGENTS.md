@@ -503,17 +503,30 @@ The `.agent/` folder is the **source of truth** for all AI agent configuration. 
 | `.agent/skills/markdown-management/SKILL.md` | Markdown management |
 | `.agent/skills/powershell-windows/SKILL.md` | PowerShell operations |
 
+### MCP Configuration (Per IDE)
+
+The DevKit CLI includes an MCP server (`devkit mcp`). Each IDE stores MCP config in a different location:
+
+| IDE | MCP Config File |
+|---|---|
+| **Cursor** | `.cursor/mcp.json` |
+| **Antigravity** | `C:\Users\p\.gemini\antigravity\mcp_config.json` |
+| **VS Code** | `.vscode/mcp.json` |
+
+> [!IMPORTANT]
+> When updating MCP config in one IDE, you **MUST** sync the changes to all other IDEs. MCP config must be synced manually due to different JSON formats per IDE.
+
 ### IDE Sync
 
-| IDE | Rules | Workflows/Commands | Entry File |
-|---|---|---|---|
-| **Antigravity** | `.agent/rules/*.md` (4 files) | `.agent/workflows/*.md` (15 files) | `GEMINI.md` |
-| **Cursor** | `.cursor/rules/*.mdc` (4 files) | `.cursor/commands/*.md` (15 files) | `AGENTS.md` |
-| **VS Code (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `AGENTS.md` |
-| **VS 2026 (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `AGENTS.md` |
+| IDE | Rules | Workflows/Commands | MCP Config | Entry File |
+|---|---|---|---|---|
+| **Antigravity** | `.agent/rules/*.md` (4 files) | `.agent/workflows/*.md` (15 files) | `C:\Users\p\.gemini\antigravity\mcp_config.json` | `GEMINI.md` |
+| **Cursor** | `.cursor/rules/*.mdc` (4 files) | `.cursor/commands/*.md` (15 files) | `.cursor/mcp.json` | `AGENTS.md` |
+| **VS Code (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `.vscode/mcp.json` | `AGENTS.md` |
+| **VS 2026 (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | — | `AGENTS.md` |
 
 > [!NOTE]
-> When updating rules or workflows, edit `.agent/` files first, then run `DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1` to propagate changes to `.cursor/` and `.github/`.
+> When updating rules or workflows, edit `.agent/` files first, then run `DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1` to propagate changes to `.cursor/` and `.github/`. MCP config must be synced manually across IDEs.
 
 ---
 

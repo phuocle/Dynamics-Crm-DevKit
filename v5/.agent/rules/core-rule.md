@@ -187,6 +187,28 @@ git commit -m "Short summary of changes" -m "Longer description of what was chan
 
 ---
 
+## MCP Configuration (Per IDE)
+
+The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations. Each IDE stores MCP config in a different location:
+
+| IDE | MCP Config File |
+|---|---|
+| **Cursor** | `.cursor/mcp.json` |
+| **Antigravity** | `C:\Users\p\.gemini\antigravity\mcp_config.json` |
+| **VS Code** | `.vscode/mcp.json` |
+
+> [!IMPORTANT]
+> When updating MCP config in one IDE, you **MUST** sync the changes to all other IDEs. The MCP server name and args should be identical across all IDEs (only the JSON format may differ per IDE).
+
+### MCP Sync Rules
+
+1. After updating MCP config in any IDE, copy the equivalent config to the other IDE locations
+2. Cursor and VS Code configs are in the workspace (`.cursor/mcp.json`, `.vscode/mcp.json`)
+3. Antigravity config is at a global user-level path: `C:\Users\p\.gemini\antigravity\mcp_config.json`
+4. The `Sync-AI-Config.ps1` script handles rules/workflows sync but **MCP config must be synced manually** due to different JSON formats per IDE
+
+---
+
 ## Security
 
 > [!CAUTION]
