@@ -424,7 +424,7 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 | `/json` | Yes | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
 | `/type` | Yes | Task type to execute | `/type:servers` |
 | `/profile` | Yes | Configuration profile name | `/profile:DEBUG` |
-| `/conn` | Yes* | Connection string | `/conn:"..."` |
+| `/conn` | Yes* | Connection string (OAuth, ClientSecret, or AD) | `/conn:"AuthType=OAuth;..."` |
 | `/sdklogin` | Yes* | Use SDK login dialog | `/sdklogin:yes` |
 | `/url` | Conditional | URL for SDK login | `/url:"https://org.crm.dynamics.com"` |
 | `/version` | No | Tool version | `/version:9.1.0.82` |
@@ -432,6 +432,14 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 | `/command` | No | Additional commands | `/command:"extra"` |
 
 \* Either `/conn` or `/sdklogin` is required
+
+### Supported Connection String Authentication Types
+
+| AuthType | Use Case | Example |
+|----------|----------|---------|
+| `OAuth` | Username/Password | `AuthType=OAuth;Url=...;Username=user@domain.com;Password=****` |
+| `ClientSecret` | Service Principal / CI-CD | `AuthType=ClientSecret;Url=...;ClientId=<AppId>;ClientSecret=<Secret>` |
+| `AD` | On-Premises Active Directory | `AuthType=AD;Url=...;Domain=yourdomain;Username=user;Password=****` |
 
 ### Typical Development Workflow
 

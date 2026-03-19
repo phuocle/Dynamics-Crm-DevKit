@@ -8,11 +8,11 @@ The Download Web Resources task retrieves web resource files from Dynamics 365/D
 
 ## Task Type
 
-**CLI Type:** `downloadwebresources`
+**CLI Command:** `downloadwebresource`
 
 **Used in command line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:DEBUG
+devkit downloadwebresource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ---
@@ -23,20 +23,41 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `/json` | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Task type to execute | `/type:downloadwebresources` |
-| `/profile` | Configuration profile name | `/profile:DEBUG` |
+| `--json` | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Configuration profile name | `--profile DEBUG` |
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;******;Url=https://org.crm.dynamics.com"
+--auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: DeviceCode (Headless/Remote)
 ```powershell
-/sdklogin:yes /url:"https://org.crm.dynamics.com"
+--auth DeviceCode --url "https://org.crm.dynamics.com"
+```
+
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
+
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
 ```
 
 ---
@@ -123,7 +144,7 @@ Web resources are downloaded preserving the folder structure from their names:
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:DEBUG
+devkit downloadwebresource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 **Result:**
@@ -149,7 +170,7 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"$(ProdConnection)" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:PROD-BACKUP
+devkit downloadwebresource --profile PROD-BACKUP --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "$(Url)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
 ```
 
 ### Example 3: Download for Version Control
@@ -170,7 +191,7 @@ DynamicsCrm.DevKit.Cli /conn:"$(ProdConnection)" /json:"DynamicsCrm.DevKit.Cli.j
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://company.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:SOURCE-CONTROL
+devkit downloadwebresource --profile SOURCE-CONTROL --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://company.crm.dynamics.com"
 ```
 
 ---
@@ -229,7 +250,7 @@ The task validates the following before execution:
 ```powershell
 # Delete existing folder and download fresh
 Remove-Item -Recurse -Force WebResourcesSolution
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:DEBUG
+devkit downloadwebresource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ### Issue 2: Binary Files Corrupted
@@ -268,8 +289,8 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 ```powershell
 # Download web resources and commit to source control
 
-$connectionString = "AuthType=OAuth;Username=admin@company.com;******;Url=https://company.crm.dynamics.com"
-$cliPath = ".\packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
+# Use devkit environment variables or pass auth args directly
+# devkit is a .NET global tool, no path needed
 $jsonFile = "DynamicsCrm.DevKit.Cli.json"
 $solution = "MyWebApp"
 
@@ -280,7 +301,7 @@ if (Test-Path $solution) {
 
 # Download web resources
 Write-Host "Downloading web resources..." -ForegroundColor Green
-& $cliPath /conn:"$connectionString" /json:"$jsonFile" /type:downloadwebresources /profile:DEBUG
+devkit downloadwebresource --profile DEBUG --json $jsonFile --auth Interactive --url "https://company.crm.dynamics.com"
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Download successful!" -ForegroundColor Green
@@ -299,17 +320,17 @@ if ($LASTEXITCODE -eq 0) {
 ```powershell
 # Download from DEV, upload to UAT
 
-$devConnection = "AuthType=OAuth;Username=dev@company.com;******;Url=https://dev.crm.dynamics.com"
-$uatConnection = "AuthType=OAuth;Username=uat@company.com;******;Url=https://uat.crm.dynamics.com"
-$cliPath = ".\packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
+$devUrl = "https://dev.crm.dynamics.com"
+$uatUrl = "https://uat.crm.dynamics.com"
+# devkit is a .NET global tool, no path needed
 
 # Download from DEV
 Write-Host "Downloading from DEV..." -ForegroundColor Yellow
-& $cliPath /conn:"$devConnection" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:DEV
+devkit downloadwebresource --profile DEV --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url $devUrl
 
 # Upload to UAT
 Write-Host "Uploading to UAT..." -ForegroundColor Yellow
-& $cliPath /conn:"$uatConnection" /json:"DynamicsCrm.DevKit.Cli.json" /type:webresources /profile:UAT
+devkit webresource --profile UAT --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url $uatUrl
 
 Write-Host "Migration complete!" -ForegroundColor Green
 ```

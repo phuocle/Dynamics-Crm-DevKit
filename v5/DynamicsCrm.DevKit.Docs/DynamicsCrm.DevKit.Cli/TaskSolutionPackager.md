@@ -8,11 +8,13 @@ The Solution Packager task automates the extraction and packing of Dynamics 365/
 
 ## Task Type
 
-**CLI Type:** `solutionpackagers`
+**CLI Command:** `legacy-solution` *(deprecated — use `devkit solution` instead)*
 
 **Used in command line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Extract-Both
+devkit legacy-solution --profile Extract-Both --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
+# Recommended: use the PAC-based solution command instead
+devkit solution --profile Extract-Both --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ---
@@ -23,28 +25,42 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `/json` | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Task type to execute | `/type:solutionpackagers` |
-| `/profile` | Configuration profile name | `/profile:Extract-Both` |
+| `--json` | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Configuration profile name | `--profile Extract-Both` |
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;Password=****;Url=https://org.crm.dynamics.com"
+--auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: DeviceCode (Headless/Remote)
 ```powershell
-/sdklogin:yes /url:"https://org.crm.dynamics.com"
+--auth DeviceCode --url "https://org.crm.dynamics.com"
 ```
 
-### Optional Parameters
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
 
-| Parameter | Description | Default | Example |
-|-----------|-------------|---------|---------|
-| `/version` | Version number for CrmSdk.CoreTools | `1.0.0.0` | `/version:9.1.0.82` |
-| `/command` | Additional commands | `""` | `/command:"extra"` |
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
+```
 
 ---
 
@@ -164,7 +180,7 @@ Path to a SolutionPackager mapping file (XML) that controls how files are organi
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;Password=****;Url=https://org.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Extract-Both
+devkit solution --profile Extract-Both --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **Result:**
@@ -209,7 +225,7 @@ DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;P
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://dev.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Extract-Unmanaged
+devkit solution --profile Extract-Unmanaged --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://dev.crm.dynamics.com"
 ```
 
 ### Example 3: Pack Solution from Source Files
@@ -235,7 +251,7 @@ DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://dev.crm.dynamics.com" /json:"
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Pack-Both
+devkit solution --profile Pack-Both --json "DynamicsCrm.DevKit.Cli.json"
 ```
 
 **Result:**
@@ -266,7 +282,7 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Extract-Mapped
+devkit solution --profile Extract-Mapped --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 ---
@@ -424,8 +440,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $cliPath = "$(Build.SourcesDirectory)\packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
-      & $cliPath /conn:"$(DevConnectionString)" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Extract-Both
+      # devkit is a .NET global tool, no path needed
+      devkit solution --profile Extract-Both --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "$(Url)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
 
 - task: PowerShell@2
   displayName: 'Commit Extracted Files'
@@ -465,7 +481,7 @@ jobs:
     - name: Pack Solution
       run: |
         $cliPath = "packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
-        & $cliPath /conn:"${{ secrets.PROD_CONNECTION }}" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Pack-Both
+        devkit solution --profile Pack-Both --json "DynamicsCrm.DevKit.Cli.json"
       shell: pwsh
       
     - name: Upload Artifacts
@@ -480,13 +496,13 @@ jobs:
 
 ```powershell
 # Configuration
-$connectionString = "AuthType=OAuth;Username=admin@company.onmicrosoft.com;Password=****;Url=https://company.crm.dynamics.com"
+# Use devkit environment variables or pass auth args directly
 $jsonFile = "DynamicsCrm.DevKit.Cli.json"
-$cliPath = ".\packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
+# devkit is a .NET global tool, no path needed
 
 # Step 1: Extract solution from DEV environment
 Write-Host "Extracting solution from DEV..." -ForegroundColor Green
-& $cliPath /conn:"$connectionString" /json:"$jsonFile" /type:solutionpackagers /profile:Extract-Both
+devkit solution --profile Extract-Both --json $jsonFile --auth Interactive --url "https://company.crm.dynamics.com"
 
 # Step 2: Make automated changes (example: update version)
 Write-Host "Updating solution version..." -ForegroundColor Green
@@ -497,7 +513,7 @@ $xml.Save($solutionXml)
 
 # Step 3: Pack modified solution
 Write-Host "Packing solution..." -ForegroundColor Green
-& $cliPath /json:"$jsonFile" /type:solutionpackagers /profile:Pack-Both
+devkit solution --profile Pack-Both --json $jsonFile
 
 # Step 4: Deploy to TEST (using separate import script)
 Write-Host "Solution packed successfully!" -ForegroundColor Green
@@ -521,7 +537,7 @@ set BACKUP_DATE=%DATE:~-4%%DATE:~-10,2%%DATE:~-7,2%
 set BACKUP_FOLDER=backups\solution_%BACKUP_DATE%
 
 REM Run extraction
-%CLI_PATH% /conn:"%PROD_CONNECTION%" /json:"%JSON_FILE%" /type:solutionpackagers /profile:%PROFILE%
+devkit solution --profile %PROFILE% --json %JSON_FILE% --auth ClientSecret --url %URL% --clientid %CLIENT_ID% --clientsecret %CLIENT_SECRET%
 
 REM Copy extracted files to backup
 xcopy MySolution %BACKUP_FOLDER%\MySolution\ /E /I /Y

@@ -32,12 +32,34 @@ devkit solution --profile [profile_name] --json "DynamicsCrm.DevKit.Cli.json" [c
 
 *Authentication is primarily used for the `Extract` (Unpack) action to check if the solution exists or to download it if executing a hybrid fetch-and-unpack operation.*
 
-#### Option 1: Interactive
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
 --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: FromPac (Ideal for this task!)
+#### Option 2: DeviceCode (Headless/Remote)
+```powershell
+--auth DeviceCode --url "https://org.crm.dynamics.com"
+```
+
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
+
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *ideal for this task*
 ```powershell
 # Reuses the authentication profile from the 'pac' tool itself
 --auth FromPac --pacprofile "MyDevProfile"

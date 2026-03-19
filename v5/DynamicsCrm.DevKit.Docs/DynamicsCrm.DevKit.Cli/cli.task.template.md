@@ -8,11 +8,11 @@
 
 ## Task Type
 
-**CLI Type:** `[tasktype]`
+**CLI Command:** `[command]`
 
 **Used in command line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:[tasktype] /profile:[profile]
+devkit [command] --profile [profile] --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ---
@@ -23,28 +23,42 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `/json` | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Task type to execute | `/type:[tasktype]` |
-| `/profile` | Configuration profile name | `/profile:DEBUG` |
+| `--json` | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Configuration profile name | `--profile DEBUG` |
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;Password=****;Url=https://org.crm.dynamics.com"
+--auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: DeviceCode (Headless/Remote)
 ```powershell
-/sdklogin:yes /url:"https://org.crm.dynamics.com"
+--auth DeviceCode --url "https://org.crm.dynamics.com"
 ```
 
-### Optional Parameters
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
 
-| Parameter | Description | Default | Example |
-|-----------|-------------|---------|---------|
-| `/version` | Version number for tools | `1.0.0.0` | `/version:1.0.0.0` |
-| `/command` | Additional commands | `""` | `/command:"extra"` |
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
+```
 
 ---
 
@@ -109,7 +123,7 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:[tasktype] /profile:DEBUG
+devkit [command] --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 ### Example 2: [Another Scenario]
@@ -131,7 +145,7 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://org.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:[tasktype] /profile:RELEASE
+devkit [command] --profile RELEASE --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
 ```
 
 ---
@@ -213,7 +227,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      DynamicsCrm.DevKit.Cli /conn:"$(ConnectionString)" /json:"DynamicsCrm.DevKit.Cli.json" /type:[tasktype] /profile:$(Environment)
+      devkit [command] --profile $(Environment) --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "$(Url)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
 ```
 
 ### CI/CD Pipeline (GitHub Actions)
@@ -221,7 +235,7 @@ steps:
 ```yaml
 - name: [Task Description]
   run: |
-    DynamicsCrm.DevKit.Cli /conn:"${{ secrets.CONNECTION_STRING }}" /json:"DynamicsCrm.DevKit.Cli.json" /type:[tasktype] /profile:${{ env.PROFILE }}
+    devkit [command] --profile ${{ env.PROFILE }} --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "${{ secrets.URL }}" --clientid "${{ secrets.CLIENT_ID }}" --clientsecret "${{ secrets.CLIENT_SECRET }}"
   shell: pwsh
 ```
 
@@ -229,13 +243,14 @@ steps:
 
 ```powershell
 # Set variables
-$connectionString = "AuthType=OAuth;Username=user@org.onmicrosoft.com;Password=****;Url=https://org.crm.dynamics.com"
 $jsonFile = "DynamicsCrm.DevKit.Cli.json"
-$taskType = "[tasktype]"
 $profile = "DEBUG"
 
-# Execute CLI
-& DynamicsCrm.DevKit.Cli /conn:"$connectionString" /json:"$jsonFile" /type:$taskType /profile:$profile
+# Execute CLI (Interactive auth for development)
+devkit [command] --profile $profile --json $jsonFile --auth Interactive --url "https://org.crm.dynamics.com"
+
+# Or with ClientSecret (for CI/CD)
+devkit [command] --profile $profile --json $jsonFile --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
 ```
 
 ---

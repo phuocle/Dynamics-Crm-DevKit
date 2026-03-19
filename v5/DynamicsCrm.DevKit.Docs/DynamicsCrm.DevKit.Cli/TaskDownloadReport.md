@@ -8,11 +8,11 @@ The Download Reports task retrieves SSRS report (RDL) files from Dynamics 365/Da
 
 ## Task Type
 
-**CLI Type:** `downloadreports`
+**CLI Command:** `downloadreport`
 
 **Used in command line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadreports /profile:DEBUG
+devkit downloadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ---
@@ -23,20 +23,41 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `/json` | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Task type to execute | `/type:downloadreports` |
-| `/profile` | Configuration profile name | `/profile:DEBUG` |
+| `--json` | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Configuration profile name | `--profile DEBUG` |
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;******;Url=https://org.crm.dynamics.com"
+--auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: DeviceCode (Headless/Remote)
 ```powershell
-/sdklogin:yes /url:"https://org.crm.dynamics.com"
+--auth DeviceCode --url "https://org.crm.dynamics.com"
+```
+
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
+
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
 ```
 
 ---
@@ -115,7 +136,7 @@ Downloaded reports are organized by solution name and language code:
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadreports /profile:DEBUG
+devkit downloadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 **Result:**
@@ -141,7 +162,7 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://prod.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadreports /profile:BACKUP
+devkit downloadreport --profile BACKUP --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://prod.crm.dynamics.com"
 ```
 
 ---
@@ -199,7 +220,7 @@ The task validates the following before execution:
 ```powershell
 # Delete existing folder and download fresh
 Remove-Item -Recurse -Force ReportingSolution
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadreports /profile:DEBUG
+devkit downloadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ### Issue 2: Duplicate File Names
