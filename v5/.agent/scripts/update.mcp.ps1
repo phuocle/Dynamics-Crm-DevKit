@@ -1,0 +1,24 @@
+# Script: update.mcp.ps1
+# Cập nhật mcp_config.json cho dynamicscrm-devkit trỏ đến DevKit v4
+# Sau khi chạy, cần restart Antigravity để MCP reconnect.
+
+$mcpConfig = Join-Path $env:USERPROFILE ".gemini\antigravity\mcp_config.json"
+$json = Get-Content $mcpConfig -Raw -Encoding UTF8 | ConvertFrom-Json
+
+$devkit = $json.mcpServers."dynamicscrm-devkit"
+$devkit.env.DEVKIT_URL = "https://dynamics-crm-devkit-v4.crm.dynamics.com"
+$devkit.env.DEVKIT_CLIENT_ID = "1a60a5c2-d04c-4b26-8f86-9d6ce0616799"
+$devkit.env.DEVKIT_CLIENT_SECRET = "~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL"
+$devkit.disabled = $false
+
+$appMaker = $json.mcpServers."AppMaker"
+$appMaker.args[1] = "https://dynamics-crm-devkit-v4.crm.dynamics.com"
+$appMaker.disabled = $false
+
+$jsonString = $json | ConvertTo-Json -Depth 10
+[System.IO.File]::WriteAllText($mcpConfig, $jsonString)
+
+# Format lại JSON bằng prettier để tránh Powershell làm hỏng format
+npx prettier --write $mcpConfig
+
+Write-Host "Done! MCP -> DevKit v4. Format fixed. Restart Antigravity." -ForegroundColor Green
