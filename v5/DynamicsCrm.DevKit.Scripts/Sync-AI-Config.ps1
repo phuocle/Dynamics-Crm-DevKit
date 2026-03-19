@@ -142,7 +142,8 @@ function Compare-And-Write($TargetPath, $NewContent) {
         if (-not (Test-Path $dir)) {
             New-Item -Path $dir -ItemType Directory -Force | Out-Null
         }
-        [System.IO.File]::WriteAllText($TargetPath, $NewContent, [System.Text.Encoding]::UTF8)
+        $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
+        [System.IO.File]::WriteAllText($TargetPath, $NewContent, $utf8NoBOM)
         Write-Status "Updated: $TargetPath" "SYNC"
     }
     $script:FilesUpdated++

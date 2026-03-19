@@ -99,7 +99,8 @@ function Update-FileContent {
 
     if ($content -ne $originalContent) {
         Write-Host "Updating $fullPath..." -ForegroundColor DarkGray
-        [System.IO.File]::WriteAllText($fullPath, $content, [System.Text.Encoding]::UTF8)
+        $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
+        [System.IO.File]::WriteAllText($fullPath, $content, $utf8NoBOM)
         return @{ Path = $fullPath; Content = $originalContent }
     }
     return $null
@@ -107,9 +108,10 @@ function Update-FileContent {
 
 function Restore-Files {
     param ($Backups)
+    $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
     foreach ($backup in $Backups) {
         Write-Host "Restoring $($backup.Path)..." -ForegroundColor DarkGray
-        [System.IO.File]::WriteAllText($backup.Path, $backup.Content, [System.Text.Encoding]::UTF8)
+        [System.IO.File]::WriteAllText($backup.Path, $backup.Content, $utf8NoBOM)
     }
 }
 
