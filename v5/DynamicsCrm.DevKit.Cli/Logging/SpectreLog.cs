@@ -96,7 +96,18 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --secret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
-                    "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n"
+                    "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
+                    "[green]Environment Variables (DEVKIT_*):[/]\n" +
+                    "  All connection args support env var fallback. Priority: CLI args > env vars > empty.\n" +
+                    "  [cyan]DEVKIT_AUTH_TYPE[/]     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
+                    "  [cyan]DEVKIT_URL[/]           Environment URL\n" +
+                    "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +
+                    "  [cyan]DEVKIT_CLIENT_SECRET[/] Client secret\n" +
+                    "  [cyan]DEVKIT_PAC_PROFILE[/]   PAC CLI profile name\n\n" +
+                    "[green]MCP Server (AI Agent Integration):[/]\n" +
+                    "  devkit [cyan]mcp[/]                    12 tools: metadata, CRUD, FetchXML, search\n" +
+                    "  devkit [cyan]mcp[/] --setup-guide      Setup instructions for all IDEs\n"
+
                 ))
             {
                 Border = BoxBorder.Double,

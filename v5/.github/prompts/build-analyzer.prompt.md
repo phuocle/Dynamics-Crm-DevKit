@@ -1,4 +1,7 @@
-﻿# Build Analyzer - DynamicsCrm.DevKit.Analyzers
+﻿---
+description: "Build DynamicsCrm.DevKit.Analyzers project in Debug mode"
+mode: agent
+---
 
 Build the Analyzers project using `dotnet build` in Debug mode.
 

@@ -1,4 +1,4 @@
-﻿# DynamicsCrm.DevKit
+# DynamicsCrm.DevKit
 
 ```text
   ____                              _           ____                  ____             _  ___ _     ____ _ _
@@ -28,7 +28,7 @@ A comprehensive development toolkit for **Microsoft Dynamics 365 / Power Platfor
 
 ### CLI Tool (`devkit`)
 
-A .NET global tool for CI/CD automation with **12 commands**:
+A .NET global tool for CI/CD automation with **15 commands**:
 
 | Command | Status | Description |
 |---------|--------|-------------|
@@ -46,6 +46,7 @@ A .NET global tool for CI/CD automation with **12 commands**:
 | `devkit uploadreport` | ✅ Active | Upload reports to Dataverse |
 | `devkit downloadwebresource` | ✅ Active | Download web resources from a solution |
 | `devkit datasource` | ✅ Active | Create virtual table data sources |
+| `devkit mcp` | ✅ Active | Start MCP server for AI agent integration |
 
 ### Authentication Methods
 
@@ -87,6 +88,27 @@ Static code analysis for Dataverse development best practices:
 | DEVKIT1021 | ⚠️ Warning | Use ITracingService in catch blocks |
 
 📚 [Full Analyzer Documentation](DynamicsCrm.DevKit.Analyzers/README.md)
+
+### MCP Server (AI Agent Integration)
+
+The `devkit mcp` command starts a Model Context Protocol server, enabling AI agents (GitHub Copilot, Cursor, Claude, etc.) to interact with Dataverse directly:
+
+| Tool | Description |
+|------|-------------|
+| `get_entities_metadata` | List all entities/tables in the environment |
+| `get_entity_metadata` | Get full metadata for a single entity |
+| `get_messages` | Discover SDK messages, Custom Actions, Custom APIs |
+| `get_global_optionsets` | Get global option set definitions |
+| `get_environment_info` | Get environment/organization info |
+| `whoami` | Get current user identity and roles |
+| `get_record` | Retrieve a single record by ID |
+| `execute_fetchxml` | Execute FetchXML query with auto-paging |
+| `search` | Dataverse Relevance Search across entities |
+| `create_record` | Create a new record |
+| `update_record` | Update an existing record (partial update) |
+| `delete_record` | Delete a record by ID |
+
+📚 [MCP Server Documentation](DynamicsCrm.DevKit.Cli/README.md#mcp-server-model-context-protocol)
 
 ### Client-Side Libraries
 

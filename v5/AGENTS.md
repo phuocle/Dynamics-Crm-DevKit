@@ -520,13 +520,67 @@ The DevKit CLI includes an MCP server (`devkit mcp`). Each IDE stores MCP config
 
 | IDE | Rules | Workflows/Commands | MCP Config | Entry File |
 |---|---|---|---|---|
-| **Antigravity** | `.agent/rules/*.md` (4 files) | `.agent/workflows/*.md` (15 files) | `C:\Users\p\.gemini\antigravity\mcp_config.json` | `GEMINI.md` |
-| **Cursor** | `.cursor/rules/*.mdc` (4 files) | `.cursor/commands/*.md` (15 files) | `.cursor/mcp.json` | `AGENTS.md` |
+| **Antigravity** | `.agent/rules/*.md` (5 files) | `.agent/workflows/*.md` (15 files) | `.agent/mcp.json` (backup) | `AGENTS.md` |
+| **Cursor** | `.cursor/rules/*.mdc` (5 files) | `.cursor/commands/*.md` (15 files) | `.cursor/mcp.json` | `AGENTS.md` |
 | **VS Code (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | `.vscode/mcp.json` | `AGENTS.md` |
 | **VS 2026 (Copilot)** | `.github/copilot-instructions.md` | Read `.agent/workflows/*.md` | — | `AGENTS.md` |
 
 > [!NOTE]
 > When updating rules or workflows, edit `.agent/` files first, then run `DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1` to propagate changes to `.cursor/` and `.github/`. MCP config must be synced manually across IDEs.
+
+---
+
+## Tool Usage Patterns
+
+### File Operations
+
+```
+view_file     - Read file content (max 800 lines at a time)
+write_to_file - Create new files
+replace_file_content - Edit single block
+multi_replace_file_content - Edit multiple blocks
+```
+
+### Terminal Operations
+
+```
+run_command   - Execute shell commands
+command_status - Check async command status
+send_command_input - Interact with running processes
+```
+
+### Search Operations
+
+```
+grep_search   - Search file contents
+find_by_name  - Search file names
+view_code_item - View specific functions/classes
+```
+
+### Browser Operations
+
+```
+browser_subagent - Automate browser tasks
+read_url_content - Fetch web content
+```
+
+---
+
+## Configuration Tips
+
+### Enable Auto-Run for Safe Commands
+
+In workflow files (`.agent/workflows/*.md`), use:
+- `// turbo` - Auto-run next step only
+- `// turbo-all` - Auto-run all steps
+
+### Trust Safe Commands
+
+For read-only commands, set `SafeToAutoRun: true`:
+```powershell
+# Safe: reading files, listing directories, running tests
+# NOT Safe: deleting files, pushing git, modifying production
+```
 
 ---
 

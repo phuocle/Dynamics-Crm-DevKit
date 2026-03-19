@@ -1,6 +1,9 @@
-﻿# Build CLI - DynamicsCrm.DevKit.Cli
+﻿---
+description: "Build DynamicsCrm.DevKit.Tool project in Debug mode"
+mode: agent
+---
 
-Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
+Build **only** the Tool project (faster than `/build-debug`), pack it as a .NET global tool, and install locally for testing.
 
 > [!CAUTION]
 > **PHẢI RESTORE `Const.cs` SAU KHI BUILD!**
@@ -40,34 +43,31 @@ $NewContent = $NewContent -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $Buil
 Write-Host "Updated Const.cs with version $Version and date $BuildDate" -ForegroundColor Green
 ```
 
-## Step 3: Build & Pack CLI
+## Step 3: Build & Pack Tool
 
 ```powershell
 $publishDir = "$ProjectRoot\published\$Version"
 New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
-# Kill any running CLI process
-Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
-
-# Build CLI project only (with version override)
-dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version
+# Build Tool project only (with version override)
+dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj" -c Debug -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version
 
 # Pack as NuGet tool
-dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version --no-build
+dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version --no-build
 ```
 
-## Step 4: Install CLI Tool
+## Step 4: Install Tool
 
 ```powershell
-$ToolName = "DynamicsCrm.DevKit.Cli"
+$ToolName = "DynamicsCrm.DevKit.Tool"
 
 # Uninstall existing
 dotnet tool uninstall -g $ToolName 2>$null
 
 # Clean tool store and cache
-Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.cli" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\devkit.exe" -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "$env:USERPROFILE\.nuget\packages\dynamicscrm.devkit.cli\$Version" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.tool" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\devkit-tool.exe" -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$env:USERPROFILE\.nuget\packages\dynamicscrm.devkit.tool\$Version" -Recurse -Force -ErrorAction SilentlyContinue
 
 # Install new version
 dotnet tool install -g $ToolName --add-source $publishDir --version $Version
@@ -88,10 +88,10 @@ Write-Host "Restored Const.cs to original placeholders" -ForegroundColor Yellow
 ## Step 6: Verify Installation
 
 ```powershell
-devkit --version
+devkit-tool --help
 ```
 
-Expected output: `4.12.34.56 Build: dd.MM.yyyy HH:mm:ss` (current date/time)
+Expected output: `devkit-tool` banner with version `4.12.34.56` and list of available commands.
 
 ## Step 7: Verify Const.cs is Restored
 
@@ -108,7 +108,8 @@ if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.s
 
 ## Notes
 
-- This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
+- This workflow builds **only Tool** (not CLI, Analyzer, or VSIX) → much faster
+- Tool is a .NET 10 global tool with command name `devkit-tool`
 - Version is defined in `DevKit.ReleaseConfig.json`
 - No signing keys required for any build configuration
 - For full solution build, use `/build-debug` workflow instead

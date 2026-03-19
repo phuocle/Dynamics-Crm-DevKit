@@ -23,11 +23,11 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 : GetDefaultServerType();
             if (serverType != "servers")
             {
-                rows.Add(new[] { $"{indent}[white] --type[/]", $"[cyan]{Markup.Escape(serverType)}[/]" });
+                rows.Add(new[] { $"{indent} --type", serverType });
             }
             if (settings.OnlyUpdateAssembly)
             {
-                rows.Add(new[] { $"{indent}[white] --only-assembly[/]", "[cyan]yes[/]" });
+                rows.Add(new[] { $"{indent} --only-assembly", "yes" });
             }
             return rows;
         }

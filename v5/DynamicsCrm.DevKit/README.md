@@ -1,5 +1,7 @@
 # DynamicsCrm.DevKit
 
+[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/phuocle.DynamicsCrmDevKit?label=VS%20Marketplace&logo=visualstudio)](https://marketplace.visualstudio.com/items?itemName=phuocle.DynamicsCrmDevKit)
+
 Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dataverse development.
 
 ## Features
@@ -27,12 +29,25 @@ Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dat
 | 12 | Report | SSRS Reports |
 | 13 | WebResourceTs | TypeScript web resources |
 
-## Item Templates (16 Total)
+## Item Templates (15 Total)
 
-- Plugin, Workflow, CustomAction, CustomApi, DataProvider
-- JsForm, JsWebApi, TsForm, TsWebApi
-- LateBound, Test, UiTest, ResourceString, JsDevkit
-- And more...
+| # | Template | Description |
+|---|----------|-------------|
+| 01 | LateBound | Late-bound entity class |
+| 02 | JsForm | JavaScript form script |
+| 03 | JsWebApi | JavaScript WebAPI script |
+| 04 | Plugin | Plugin class |
+| 05 | CustomAction | Custom action class |
+| 06 | CustomApi | Custom API class |
+| 07 | Workflow | Workflow activity class |
+| 08 | DataProvider | Data provider class |
+| 09 | Test | Unit test class |
+| 10 | UiTest | UI test class |
+| 11 | ResourceString | Resource string file |
+| 12 | JsDevkit | DevKit JavaScript helper |
+| 13 | BatFile | Batch file for CLI commands |
+| 14 | TsForm | TypeScript form script |
+| 15 | TsWebApi | TypeScript WebAPI script |
 
 ## Requirements
 
@@ -47,12 +62,13 @@ Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dat
 3. Configure your connection in `DynamicsCrm.DevKit.json`
 4. Start developing!
 
-## Related Tools
+## Related Packages
 
-| Tool | Description |
-|------|-------------|
-| [CLI Tool](../DynamicsCrm.DevKit.Cli/README.md) | Command-line automation |
-| [Analyzers](../DynamicsCrm.DevKit.Analyzers/README.md) | Roslyn code analysis |
+| Package | Deploy To | Description |
+|---------|-----------|-------------|
+| [CLI Tool](../DynamicsCrm.DevKit.Cli/README.md) | NuGet | Command-line automation (15 commands + MCP server) |
+| [Analyzers](../DynamicsCrm.DevKit.Analyzers/README.md) | NuGet | Roslyn code analysis (21 rules) |
+| [Tool](../DynamicsCrm.DevKit.Tool/README.md) | NuGet | Utility tools (minify, docs, decrypt) |
 
 ## Support
 

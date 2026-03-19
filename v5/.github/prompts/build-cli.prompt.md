@@ -1,4 +1,7 @@
-﻿# Build CLI - DynamicsCrm.DevKit.Cli
+﻿---
+description: "Build DynamicsCrm.DevKit.Cli project in Debug mode"
+mode: agent
+---
 
 Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
 

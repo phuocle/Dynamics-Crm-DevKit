@@ -1,4 +1,4 @@
-# Build Tool - DynamicsCrm.DevKit.Tool
+﻿# Build Tool - DynamicsCrm.DevKit.Tool
 
 Build **only** the Tool project (faster than `/build-debug`), pack it as a .NET global tool, and install locally for testing.
 

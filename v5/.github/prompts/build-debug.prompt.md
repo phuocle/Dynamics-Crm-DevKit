@@ -1,4 +1,7 @@
-﻿# Build Debug - DynamicsCrm.DevKit
+﻿---
+description: "Build Debug DynamicsCrm.DevKit for all projects"
+mode: agent
+---
 
 1. Record the start time
 2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1`. The script automatically kills any running `DynamicsCrm.DevKit.Cli.exe` process (e.g. MCP server) before building. If any errors occur, stop and fix them, then restart this workflow from the beginning.

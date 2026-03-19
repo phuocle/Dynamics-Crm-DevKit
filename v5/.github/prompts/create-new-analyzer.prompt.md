@@ -1,4 +1,7 @@
-﻿# Create New Analyzer
+﻿---
+description: "Create a new Roslyn analyzer for DynamicsCrm.DevKit"
+mode: agent
+---
 
 # Create New Analyzer Workflow
 

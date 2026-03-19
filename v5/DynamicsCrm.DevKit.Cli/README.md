@@ -224,32 +224,32 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 }
 ```
 
-### Available MCP Tools
+### Available MCP Tools (12)
 
 | Tool | Description |
 |------|-------------|
-| `query_fetchxml` | Execute FetchXML queries against Dataverse, return results as markdown |
-| `get_entity_metadata` | Retrieve full metadata for an entity (attributes, relationships, keys) |
-| `get_environment_info` | Get connected environment info (org, version, user, installed solutions) |
-| `list_tables` | List all tables/entities with optional filter by prefix or keyword |
-| `get_entity_messages` | Get available SDK messages for plugin registration on an entity |
-| `get_global_optionset` | Retrieve global option set definitions or list all option sets |
+| `get_entities_metadata` | List all entities/tables in the environment |
+| `get_entity_metadata` | Get full metadata for a single entity (attributes, relationships, keys) |
+| `get_messages` | Discover SDK messages, Custom Actions, Custom APIs |
+| `get_global_optionsets` | Get global option set definitions |
+| `get_environment_info` | Get environment/organization info |
+| `whoami` | Get current user identity and roles |
 | `get_record` | Retrieve a single record by entity name and GUID |
+| `execute_fetchxml` | Execute FetchXML query with auto-paging |
+| `search` | Dataverse Relevance Search across entities |
 | `create_record` | Create a new record with JSON attributes |
-| `update_record` | Update an existing record with JSON attributes |
+| `update_record` | Update an existing record (partial update) |
 | `delete_record` | Delete a record by entity name and GUID |
-| `create_plugin` | Generate a plugin C# file from a T4 template |
 
 ### MCP Tool Examples
 
 Once connected, AI agents can use these tools naturally:
 
-- *"Show me all custom tables in this environment"* - uses `list_tables`
-- *"What fields does the account entity have?"* - uses `get_entity_metadata`
-- *"Query all active contacts created this month"* - uses `query_fetchxml`
-- *"Create a new account named Contoso"* - uses `create_record`
-- *"What SDK messages are available for the contact entity?"* - uses `get_entity_messages`
-- *"Generate a plugin for account Create in PostOperation"* - uses `create_plugin`
+- *"Show me all custom tables in this environment"* — uses `get_entities_metadata`
+- *"What fields does the account entity have?"* — uses `get_entity_metadata`
+- *"Query all active contacts created this month"* — uses `execute_fetchxml`
+- *"Create a new account named Contoso"* — uses `create_record`
+- *"What SDK messages are available for the contact entity?"* — uses `get_messages`
 
 ## Configuration File
 

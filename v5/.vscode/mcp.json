@@ -1,9 +1,0 @@
-{
-  "servers": {
-    "dynamicscrm-devkit": {
-      "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "${workspaceFolder}/devkit-mcp.cmd"]
-    }
-  }
-}
