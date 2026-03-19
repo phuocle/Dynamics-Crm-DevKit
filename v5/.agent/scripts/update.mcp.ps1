@@ -8,7 +8,7 @@ $json = Get-Content $mcpConfig -Raw -Encoding UTF8 | ConvertFrom-Json
 $devkit = $json.mcpServers."dynamicscrm-devkit"
 $devkit.env.DEVKIT_URL = "https://dynamics-crm-devkit-v4.crm.dynamics.com"
 $devkit.env.DEVKIT_CLIENT_ID = "1a60a5c2-d04c-4b26-8f86-9d6ce0616799"
-$devkit.env.DEVKIT_CLIENT_SECRET = "~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL"
+$devkit.env.DEVKIT_CLIENT_SECRET = "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ"
 $devkit.disabled = $false
 
 $appMaker = $json.mcpServers."AppMaker"
