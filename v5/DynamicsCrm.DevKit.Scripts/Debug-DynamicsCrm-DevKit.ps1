@@ -18,12 +18,15 @@ Write-Host "============================================================" -Foreg
 Write-Host "  Debug Build & Deploy (Debug-DynamicsCrm-DevKit)" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 
+# Kill both assembly name and tool shim name (MCP server runs as "devkit.exe")
 $cliProcess = Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue
-if ($cliProcess) {
-    Write-Host "Killing running CLI process (MCP server)..." -ForegroundColor Yellow
-    $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue
-    Start-Sleep -Milliseconds 500
-    Write-Host "CLI process killed." -ForegroundColor Green
+$devkitProcess = Get-Process -Name "devkit" -ErrorAction SilentlyContinue
+if ($cliProcess -or $devkitProcess) {
+    Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
+    if ($cliProcess) { $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue }
+    if ($devkitProcess) { $devkitProcess | Stop-Process -Force -ErrorAction SilentlyContinue }
+    Start-Sleep -Seconds 1
+    Write-Host "CLI/devkit processes killed." -ForegroundColor Green
 }
 
 & "$PSScriptRoot\Release-DynamicsCrm-DevKit-CurrentDate.ps1" -Configuration Debug

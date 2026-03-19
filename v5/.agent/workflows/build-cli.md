@@ -50,8 +50,11 @@ Write-Host "Updated Const.cs with version $Version and date $BuildDate" -Foregro
 $publishDir = "$ProjectRoot\published\$Version"
 New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
-# Kill any running CLI process
+# Kill any running CLI process (both assembly name and tool shim name)
+# The MCP server runs as "devkit.exe" which locks DLLs in the tool store
 Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
+Stop-Process -Name "devkit" -Force -ErrorAction SilentlyContinue
+Start-Sleep -Seconds 1
 
 # Build CLI project only (with version override)
 dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" -c Debug -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version
@@ -65,6 +68,11 @@ dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj" 
 ```powershell
 $ToolName = "DynamicsCrm.DevKit.Cli"
 
+# Kill again before uninstall (in case MCP server restarted during build)
+Stop-Process -Name "DynamicsCrm.DevKit.Cli" -Force -ErrorAction SilentlyContinue
+Stop-Process -Name "devkit" -Force -ErrorAction SilentlyContinue
+Start-Sleep -Seconds 1
+
 # Uninstall existing
 dotnet tool uninstall -g $ToolName 2>$null
 
@@ -72,6 +80,13 @@ dotnet tool uninstall -g $ToolName 2>$null
 Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.cli" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\devkit.exe" -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$env:USERPROFILE\.nuget\packages\dynamicscrm.devkit.cli\$Version" -Recurse -Force -ErrorAction SilentlyContinue
+
+# Verify tool store is fully removed (retry if files were locked)
+if (Test-Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.cli") {
+    Write-Host "Tool store still exists, retrying cleanup..." -ForegroundColor Yellow
+    Start-Sleep -Seconds 2
+    Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.cli" -Recurse -Force -ErrorAction Stop
+}
 
 # Install new version
 dotnet tool install -g $ToolName --add-source $publishDir --version $Version

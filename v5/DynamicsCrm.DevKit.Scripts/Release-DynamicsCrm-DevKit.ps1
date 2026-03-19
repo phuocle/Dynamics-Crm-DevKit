@@ -117,12 +117,15 @@ function Restore-Files {
 
 try {
     # 0. Kill CLI process (may be running as MCP server, causing file locks)
+    # Must kill both assembly name and tool shim name to release all file locks
     $cliProcess = Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue
-    if ($cliProcess) {
-        Write-Host "Killing running CLI process (MCP server)..." -ForegroundColor Yellow
-        $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue
-        Start-Sleep -Milliseconds 500
-        Write-Host "CLI process killed." -ForegroundColor Green
+    $devkitProcess = Get-Process -Name "devkit" -ErrorAction SilentlyContinue
+    if ($cliProcess -or $devkitProcess) {
+        Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
+        if ($cliProcess) { $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue }
+        if ($devkitProcess) { $devkitProcess | Stop-Process -Force -ErrorAction SilentlyContinue }
+        Start-Sleep -Seconds 1
+        Write-Host "CLI/devkit processes killed." -ForegroundColor Green
     }
 
     # 1. Determine Build Date
@@ -171,6 +174,7 @@ try {
 
     # 4. Build Solution
     Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+    Get-Process -Name "devkit" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
     $LASTEXITCODE = 0
     Write-Host "`nBuilding Solution ($Configuration)..." -ForegroundColor Yellow
 
