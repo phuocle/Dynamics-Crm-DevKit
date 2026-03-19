@@ -28,19 +28,39 @@ devkit generator --profile [profile_name] --json "DynamicsCrm.DevKit.Cli.json" [
 
 ### Authentication Parameters
 
-Use **one** of the following methods:
+Use **one** of the following authentication options:
 
-#### Option 1: Client Secret
-```powershell
---auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "00000000-0000-0000-0000-000000000000" --clientsecret "secret"
-```
-
-#### Option 2: Interactive
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
 --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 3: Connection String (Legacy)
+#### Option 2: DeviceCode (Headless/Remote)
+```powershell
+--auth DeviceCode --url "https://org.crm.dynamics.com"
+```
+
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
+
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
+```
+
+#### Option 7: Connection String (Legacy)
 ```powershell
 --conn "AuthType=OAuth;Username=...;Password=...;Url=..."
 ```

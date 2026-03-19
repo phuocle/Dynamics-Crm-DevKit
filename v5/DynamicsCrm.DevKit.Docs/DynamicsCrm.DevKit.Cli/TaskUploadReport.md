@@ -8,11 +8,11 @@ The Upload Reports task deploys SSRS report (RDL) files to Dynamics 365/Datavers
 
 ## Task Type
 
-**CLI Type:** `uploadreports`
+**CLI Command:** `uploadreport`
 
 **Used in command line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:uploadreports /profile:DEBUG
+devkit uploadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ---
@@ -23,20 +23,41 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `/json` | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Task type to execute | `/type:uploadreports` |
-| `/profile` | Configuration profile name | `/profile:DEBUG` |
+| `--json` | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Configuration profile name | `--profile DEBUG` |
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;******;Url=https://org.crm.dynamics.com"
+--auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: DeviceCode (Headless/Remote)
 ```powershell
-/sdklogin:yes /url:"https://org.crm.dynamics.com"
+--auth DeviceCode --url "https://org.crm.dynamics.com"
+```
+
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
+
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
 ```
 
 ---
@@ -146,7 +167,7 @@ ReportingSolution/
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:uploadreports /profile:DEBUG
+devkit uploadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ### Example 2: Multi-Language Reports
@@ -181,7 +202,7 @@ GlobalReports/
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://company.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:uploadreports /profile:MULTILANG
+devkit uploadreport --profile MULTILANG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://company.crm.dynamics.com"
 ```
 
 ---

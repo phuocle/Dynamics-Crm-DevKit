@@ -34,13 +34,13 @@ Deploy server-side assemblies including plugins, workflows, custom APIs, and dat
 - ✅ 4 Images support (unique feature)
 - ✅ Managed Identity with automatic signing
 - ✅ Batch processing (50 operations per batch)
-- ✅ Fast deployment mode (`/onlyupdateassembly`)
+- ✅ Fast deployment mode (`--onlyupdateassembly`)
 - ✅ NuGet package deployment support
 - ✅ Step ID tracking for idempotent deployments
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:servers /profile:DEBUG
+devkit server --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **JSON Configuration:**
@@ -86,7 +86,7 @@ Deploy web resources (HTML, CSS, JavaScript, images, etc.) to Dynamics 365.
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:webresources /profile:DEBUG
+devkit webresource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **JSON Configuration:**
@@ -121,7 +121,7 @@ Download web resources from Dynamics 365 to local file system.
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadwebresources /profile:DEBUG
+devkit downloadwebresource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 [📖 Full Documentation](TaskDownloadWebResource.md)
@@ -157,10 +157,10 @@ Generate type-safe code for Dynamics 365 development.
 **Quick Example:**
 ```powershell
 # JavaScript Form Helpers
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:generators /profile:JS-FORM
+devkit generator --profile JS-FORM --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 
 # C# Late-Bound Classes
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:generators /profile:LATEBOUND
+devkit generator --profile LATEBOUND --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **JSON Configuration:**
@@ -189,11 +189,11 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 [📖 Full Documentation](TaskGenerator.md)
 
-### [Proxy Types (Early-Bound Classes)](TaskProxyType.md)
+### [Model Builder (Early-Bound Classes)](TaskModelBuilder.md)
 
-Generate early-bound entity classes using CrmSvcUtil.
+Generate early-bound entity classes using PAC ModelBuilder.
 
-**Task Type:** `proxytypes`
+**CLI Command:** `modelbuilder`
 
 **Use Cases:**
 - Generate strongly-typed entity classes
@@ -210,34 +210,34 @@ Generate early-bound entity classes using CrmSvcUtil.
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:proxytypes /profile:ALL
+devkit modelbuilder --profile ALL --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **JSON Configuration:**
 ```json
 {
-  "proxytypes": [
+  "modelbuilders": [
     {
       "profile": "ALL",
       "namespace": "MyCompany.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "account,contact,lead"
+      "entities": "*"
     }
   ]
 }
 ```
 
-[📖 Full Documentation](TaskProxyType.md)
+[📖 Full Documentation](TaskModelBuilder.md)
 
 ---
 
 ## Solution Tasks
 
-### [Solution Packager](TaskSolutionPackager.md)
+### [Solution Packager](TaskPacSolutionPackager.md)
 
-Extract and pack Dynamics 365 solutions.
+Extract and pack Dynamics 365 solutions using PAC CLI.
 
-**Task Type:** `solutionpackagers`
+**CLI Command:** `solution`
 
 **Operation Types:**
 - **Extract** - Export from D365 and extract to files
@@ -250,7 +250,7 @@ Extract and pack Dynamics 365 solutions.
 - Automated builds
 
 **Key Features:**
-- ✅ Direct export from Dynamics 365
+- ✅ Uses PAC CLI for modern solution management
 - ✅ Extract managed and unmanaged
 - ✅ Mapping file support
 - ✅ Automatic version formatting
@@ -258,30 +258,28 @@ Extract and pack Dynamics 365 solutions.
 **Quick Example:**
 ```powershell
 # Extract Solution
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Extract-Both
+devkit solution --profile Extract-Both --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 
-# Pack Solution
-DynamicsCrm.DevKit.Cli /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:Pack-Both
+# Pack Solution (no connection needed)
+devkit solution --profile Pack-Both --json "DynamicsCrm.DevKit.Cli.json"
 ```
 
 **JSON Configuration:**
 ```json
 {
-  "solutionpackagers": [
+  "pacsolutionpackagers": [
     {
       "profile": "Extract-Both",
       "solution": "MyCompanySolution",
-      "rootfolder": "",
       "solutiontype": "Both",
       "folder": "MyCompanySolution",
-      "type": "Extract",
-      "mapfile": ""
+      "type": "Extract"
     }
   ]
 }
 ```
 
-[📖 Full Documentation](TaskSolutionPackager.md)
+[📖 Full Documentation](TaskPacSolutionPackager.md)
 
 ---
 
@@ -307,7 +305,7 @@ Deploy SSRS reports (RDL files) to Dynamics 365.
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:uploadreports /profile:DEBUG
+devkit uploadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **JSON Configuration:**
@@ -348,7 +346,7 @@ Download SSRS reports from Dynamics 365.
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:downloadreports /profile:DEBUG
+devkit downloadreport --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 [📖 Full Documentation](TaskDownloadReport.md)
@@ -376,7 +374,7 @@ Create virtual entity data sources in Dynamics 365.
 
 **Quick Example:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:datasources /profile:DEBUG
+devkit datasource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 **JSON Configuration:**
@@ -400,79 +398,92 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 ## Quick Reference
 
-### Task Types Summary
+### Commands Summary
 
-| Task Type | Purpose | Documentation |
-|-----------|---------|---------------|
-| `servers` | Deploy all server components | [TaskServer.md](TaskServer.md) |
-| `plugins` | Deploy plugins only | [TaskServer.md](TaskServer.md) |
-| `workflows` | Deploy workflows only | [TaskServer.md](TaskServer.md) |
-| `dataproviders` | Deploy data providers only | [TaskServer.md](TaskServer.md) |
-| `webresources` | Deploy web resources | [TaskWebResource.md](TaskWebResource.md) |
-| `downloadwebresources` | Download web resources | [TaskDownloadWebResource.md](TaskDownloadWebResource.md) |
-| `generators` | Generate code (JS/C#) | [TaskGenerator.md](TaskGenerator.md) |
-| `proxytypes` | Generate early-bound classes | [TaskProxyType.md](TaskProxyType.md) |
-| `solutionpackagers` | Extract/Pack solutions | [TaskSolutionPackager.md](TaskSolutionPackager.md) |
-| `uploadreports` | Deploy reports | [TaskUploadReport.md](TaskUploadReport.md) |
-| `downloadreports` | Download reports | [TaskDownloadReport.md](TaskDownloadReport.md) |
-| `datasources` | Create virtual entity data sources | [TaskDataSource.md](TaskDataSource.md) |
+| Command | Purpose | Documentation |
+|---------|---------|---------------|
+| `devkit server` | Deploy plugins, workflows, custom APIs, data providers | [TaskServer.md](TaskServer.md) |
+| `devkit webresource` | Deploy web resources | [TaskWebResource.md](TaskWebResource.md) |
+| `devkit downloadwebresource` | Download web resources | [TaskDownloadWebResource.md](TaskDownloadWebResource.md) |
+| `devkit generator` | Generate code (JS/TS/C#) | [TaskGenerator.md](TaskGenerator.md) |
+| `devkit modelbuilder` | Generate early-bound classes (PAC ModelBuilder) | [TaskModelBuilder.md](TaskModelBuilder.md) |
+| `devkit solution` | Extract/Pack solutions using PAC CLI | [TaskPacSolutionPackager.md](TaskPacSolutionPackager.md) |
+| `devkit uploadreport` | Deploy reports | [TaskUploadReport.md](TaskUploadReport.md) |
+| `devkit downloadreport` | Download reports | [TaskDownloadReport.md](TaskDownloadReport.md) |
+| `devkit datasource` | Create virtual entity data sources | [TaskDataSource.md](TaskDataSource.md) |
+| `devkit mcp` | Start MCP server for AI agent integration | — |
+| `devkit proxytype` | *(Deprecated)* Use `devkit modelbuilder` | [TaskProxyType.md](TaskProxyType.md) |
+| `devkit legacy-solution` | *(Deprecated)* Use `devkit solution` | [TaskSolutionPackager.md](TaskSolutionPackager.md) |
 
 ### Common Command Line Parameters
 
 | Parameter | Required | Description | Example |
 |-----------|----------|-------------|---------|
-| `/json` | Yes | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Yes | Task type to execute | `/type:servers` |
-| `/profile` | Yes | Configuration profile name | `/profile:DEBUG` |
-| `/conn` | Yes* | Connection string | `/conn:"..."` |
-| `/sdklogin` | Yes* | Use SDK login dialog | `/sdklogin:yes` |
-| `/url` | Conditional | URL for SDK login | `/url:"https://org.crm.dynamics.com"` |
-| `/version` | No | Tool version | `/version:9.1.0.82` |
-| `/onlyupdateassembly` | No | Fast deploy (servers only) | `/onlyupdateassembly:yes` |
-| `/command` | No | Additional commands | `/command:"extra"` |
+| `--json` | Yes | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Yes | Configuration profile name | `--profile DEBUG` |
+| `--auth` | Yes* | Authentication type | `--auth Interactive` |
+| `--url` | Conditional | Dynamics 365 URL | `--url "https://org.crm.dynamics.com"` |
+| `--clientid` | Conditional | Azure AD Client ID | `--clientid "<AppId>"` |
+| `--clientsecret` | Conditional | Azure AD Client Secret | `--clientsecret "<Secret>"` |
+| `--username` | Conditional | Username (OAuth/AD) | `--username "user@domain.com"` |
+| `--password` | Conditional | Password (OAuth/AD) | `--password "****"` |
+| `--pacprofile` | Conditional | PAC CLI profile (FromPac) | `--pacprofile "MyProfile"` |
+| `--onlyupdateassembly` | No | Fast deploy (server only) | `--onlyupdateassembly` |
+| `--conn` | No | Legacy connection string | `--conn "AuthType=OAuth;..."` |
 
-\* Either `/conn` or `/sdklogin` is required
+\* Or set `DEVKIT_AUTH_TYPE` environment variable
+
+### Supported Authentication Types
+
+| Auth Type | Best For | Required Args |
+|-----------|----------|---------------|
+| `Interactive` | Developers (MFA support) | `--url` |
+| `DeviceCode` | Headless/Remote/SSH | `--url` |
+| `ClientSecret` | CI/CD pipelines | `--url`, `--clientid`, `--clientsecret` |
+| `OAuth` | Username/Password (legacy) | `--url`, `--username`, `--password` |
+| `AD` | On-Premises Active Directory | `--url`, `--username`, `--password` |
+| `FromPac` | Reuse PAC CLI tokens | `--pacprofile` (optional) |
 
 ### Typical Development Workflow
 
 1. **Setup**
    ```powershell
-   # Install CLI via NuGet
-   Install-Package DynamicsCrm.DevKit.Cli
+   # Install CLI as .NET global tool
+   dotnet tool install --global DynamicsCrm.DevKit.Cli
    ```
 
 2. **Generate Code**
    ```powershell
    # Generate early-bound classes
-   DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:proxytypes /profile:ALL
+   devkit modelbuilder --profile ALL --json "..." --auth Interactive --url "..."
    
    # Generate JavaScript helpers
-   DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:generators /profile:JS-FORM
+   devkit generator --profile JS-FORM --json "..." --auth Interactive --url "..."
    ```
 
 3. **Development**
    ```powershell
    # Deploy plugins (fast mode during development)
-   DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:servers /profile:DEBUG /onlyupdateassembly:yes
+   devkit server --profile DEBUG --json "..." --auth Interactive --url "..." --onlyupdateassembly
    
    # Deploy web resources
-   DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:webresources /profile:DEBUG
+   devkit webresource --profile DEBUG --json "..." --auth Interactive --url "..."
    ```
 
 4. **Source Control**
    ```powershell
    # Extract solution for version control
-   DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:solutionpackagers /profile:Extract-Both
+   devkit solution --profile Extract-Both --json "..." --auth Interactive --url "..."
    
    # Download web resources for backup
-   DynamicsCrm.DevKit.Cli /conn:"..." /json:"..." /type:downloadwebresources /profile:DEBUG
+   devkit downloadwebresource --profile DEBUG --json "..." --auth Interactive --url "..."
    ```
 
 5. **Deployment**
    ```powershell
-   # Deploy to production
-   DynamicsCrm.DevKit.Cli /conn:"$(ProdConnection)" /json:"..." /type:servers /profile:RELEASE
-   DynamicsCrm.DevKit.Cli /conn:"$(ProdConnection)" /json:"..." /type:webresources /profile:RELEASE
+   # Deploy to production using ClientSecret
+   devkit server --profile RELEASE --json "..." --auth ClientSecret --url "$(ProdUrl)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
+   devkit webresource --profile RELEASE --json "..." --auth ClientSecret --url "$(ProdUrl)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
    ```
 
 ### CI/CD Integration
@@ -485,16 +496,14 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $cli = "packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
-      & $cli /conn:"$(ConnectionString)" /json:"DynamicsCrm.DevKit.Cli.json" /type:servers /profile:$(Environment)
+      devkit server --profile $(Environment) --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "$(Url)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
 ```
 
 **GitHub Actions Example:**
 ```yaml
 - name: Deploy Web Resources
   run: |
-    $cli = "packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
-    & $cli /conn:"${{ secrets.CONNECTION }}" /json:"DynamicsCrm.DevKit.Cli.json" /type:webresources /profile:RELEASE
+    devkit webresource --profile RELEASE --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "${{ secrets.URL }}" --clientid "${{ secrets.CLIENT_ID }}" --clientsecret "${{ secrets.CLIENT_SECRET }}"
   shell: pwsh
 ```
 
@@ -511,9 +520,8 @@ steps:
 
 ## Notes
 
-- **Not a dotnet global tool:** Install via NuGet package manager, not `dotnet tool install`
-- **Requires .NET Framework 4.8:** Ensure .NET Framework 4.8 is installed
-- **CrmSdk.CoreTools dependency:** Some tasks require Microsoft.CrmSdk.CoreTools NuGet package
+- **Dotnet global tool:** Install with `dotnet tool install --global DynamicsCrm.DevKit.Cli`
+- **Requires .NET 10.0:** Ensure .NET 10 SDK is installed
 - **Configuration file:** All tasks use `DynamicsCrm.DevKit.Cli.json` for configuration
 - **Profiles:** Use different profiles for different environments (DEBUG, RELEASE, UAT, PROD)
 - **Batch operations:** Many tasks automatically batch operations for performance

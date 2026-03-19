@@ -61,7 +61,7 @@ devkit mcp --auth FromPac --pacprofile "DEV"
 devkit mcp --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "app-id" --clientsecret "secret"
 ```
 
-## Authentication Methods (9 Types)
+## Authentication Methods (6 Types)
 
 | Auth Type | Best For | Recommended |
 |-----------|----------|-------------|
@@ -69,9 +69,6 @@ devkit mcp --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "
 | `Interactive` | Developers with MFA | Yes |
 | `DeviceCode` | Headless, SSH, CI containers | OK |
 | `ClientSecret` | CI/CD pipelines, automation | Yes |
-| `ClientCertificate` | High-security production | OK |
-| `ManagedIdentity` | Azure VMs, App Services, Functions | Yes |
-| `DefaultAzureCredential` | Flexible Azure SDK chain | OK |
 | `OAuth` | Legacy username/password | Legacy |
 | `AD` | On-premise Active Directory | On-prem |
 

@@ -7,7 +7,7 @@ Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dat
 - **13 Project Templates**: Create plugin, workflow, custom action, custom API, data provider, console, web resource, proxy types, test, and solution packager projects
 - **16 Item Templates**: Generate forms, web resources, tests, and proxy types
 - **Integrated Wizards**: Step-by-step guidance for creating CRM components
-- **Connection Management**: Support for OAuth, Client Secret, Certificate, Managed Identity, FromPac, and more
+- **Connection Management**: Support for OAuth, ClientSecret, AD, Interactive, DeviceCode, and FromPac (PAC CLI Profile)
 
 ## Project Templates
 

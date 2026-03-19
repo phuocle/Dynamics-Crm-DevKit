@@ -8,11 +8,11 @@ The Data Source task creates virtual entity data sources in Dynamics 365/Dataver
 
 ## Task Type
 
-**CLI Type:** `datasources`
+**CLI Command:** `datasource`
 
 **Used in command line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:datasources /profile:DEBUG
+devkit datasource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" [connection_args]
 ```
 
 ---
@@ -23,28 +23,42 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `/json` | Path to CLI configuration file | `/json:"DynamicsCrm.DevKit.Cli.json"` |
-| `/type` | Task type to execute | `/type:datasources` |
-| `/profile` | Configuration profile name | `/profile:DEBUG` |
+| `--json` | Path to CLI configuration file | `--json "DynamicsCrm.DevKit.Cli.json"` |
+| `--profile` | Configuration profile name | `--profile DEBUG` |
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: Interactive (Browser Sign-in) — *recommended for development*
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;******;Url=https://org.crm.dynamics.com"
+--auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: DeviceCode (Headless/Remote)
 ```powershell
-/sdklogin:yes /url:"https://org.crm.dynamics.com"
+--auth DeviceCode --url "https://org.crm.dynamics.com"
 ```
 
-### Optional Parameters
+#### Option 3: ClientSecret (Service Principal) — *recommended for CI/CD*
+```powershell
+--auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
+```
 
-| Parameter | Description | Default | Example |
-|-----------|-------------|---------|---------|
-| `/version` | Version number | `1.0.0.0` | `/version:1.0.0.0` |
-| `/command` | Additional commands | `""` | `/command:"extra"` |
+#### Option 4: OAuth (Username/Password)
+```powershell
+--auth OAuth --url "https://org.crm.dynamics.com" --username "user@domain.com" --password "****"
+```
+
+#### Option 5: AD (Active Directory - On-Premises)
+```powershell
+--auth AD --url "https://yourorg.crm.contoso.com" --username "domain\\user" --password "****"
+```
+
+#### Option 6: FromPac (PAC CLI Profile) — *zero login for developers*
+```powershell
+--auth FromPac --pacprofile "MyProfile"
+```
 
 ---
 
@@ -143,7 +157,7 @@ Logical name for the data source (schema name).
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;Username=admin@company.com;******;Url=https://company.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:datasources /profile:SQL-DATASOURCE
+devkit datasource --profile SQL-DATASOURCE --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://company.crm.dynamics.com"
 ```
 
 **Result:** Creates data source entity with logical name `prefix_SQLServer_DataSource`
@@ -169,7 +183,7 @@ DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;Username=admin@company.com;******;U
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://dev.crm.dynamics.com" /json:"DynamicsCrm.DevKit.Cli.json" /type:datasources /profile:ODATA-SOURCE
+devkit datasource --profile ODATA-SOURCE --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://dev.crm.dynamics.com"
 ```
 
 ### Example 3: Custom API Data Source
@@ -193,7 +207,7 @@ DynamicsCrm.DevKit.Cli /sdklogin:yes /url:"https://dev.crm.dynamics.com" /json:"
 
 **Command Line:**
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.json" /type:datasources /profile:DEBUG
+devkit datasource --profile DEBUG --json "DynamicsCrm.DevKit.Cli.json" --auth Interactive --url "https://org.crm.dynamics.com"
 ```
 
 ---
@@ -330,8 +344,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $cliPath = "$(Build.SourcesDirectory)\packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
-      & $cliPath /conn:"$(ConnectionString)" /json:"DynamicsCrm.DevKit.Cli.json" /type:datasources /profile:$(Environment)
+      devkit datasource --profile $(Environment) --json "DynamicsCrm.DevKit.Cli.json" --auth ClientSecret --url "$(Url)" --clientid "$(ClientId)" --clientsecret "$(ClientSecret)"
 ```
 
 ### PowerShell Script
@@ -339,18 +352,16 @@ steps:
 ```powershell
 # Create data source and deploy data providers
 
-$connectionString = "AuthType=OAuth;Username=admin@company.com;******;Url=https://company.crm.dynamics.com"
-$cliPath = ".\packages\DynamicsCrm.DevKit.Cli\tools\DynamicsCrm.DevKit.Cli.exe"
 $jsonFile = "DynamicsCrm.DevKit.Cli.json"
 
 Write-Host "Creating data source..." -ForegroundColor Green
-& $cliPath /conn:"$connectionString" /json:"$jsonFile" /type:datasources /profile:DEBUG
+devkit datasource --profile DEBUG --json $jsonFile --auth ClientSecret --url "https://company.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Data source created successfully!" -ForegroundColor Green
     Write-Host "Deploying data provider plugins..." -ForegroundColor Yellow
     
-    & $cliPath /conn:"$connectionString" /json:"$jsonFile" /type:dataproviders /profile:DEBUG
+    devkit server --profile DEBUG --json $jsonFile --auth ClientSecret --url "https://company.crm.dynamics.com" --clientid "<AppId>" --clientsecret "<Secret>"
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Data providers deployed!" -ForegroundColor Green

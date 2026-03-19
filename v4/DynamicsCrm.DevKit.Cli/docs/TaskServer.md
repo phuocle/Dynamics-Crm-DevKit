@@ -39,12 +39,24 @@ DynamicsCrm.DevKit.Cli /conn:"ConnectionString" /json:"DynamicsCrm.DevKit.Cli.js
 
 ### Authentication Parameters
 
-#### Option 1: Connection String
+Use **one** of the following authentication options:
+
+#### Option 1: OAuth (Username/Password)
 ```powershell
-/conn:"AuthType=OAuth;Username=user@org.onmicrosoft.com;******;Url=https://org.crm.dynamics.com"
+/conn:"AuthType=OAuth;Url=https://org.crm.dynamics.com;Username=user@domain.com;Password=****"
 ```
 
-#### Option 2: SDK Login (OAuth Browser)
+#### Option 2: ClientSecret (Service Principal)
+```powershell
+/conn:"AuthType=ClientSecret;Url=https://org.crm.dynamics.com;ClientId=<AppId>;ClientSecret=<Secret>"
+```
+
+#### Option 3: AD (Active Directory - On-Premises)
+```powershell
+/conn:"AuthType=AD;Url=https://yourorg.crm.contoso.com;Domain=yourdomain;Username=user;Password=****"
+```
+
+#### Option 4: SDK Login (OAuth Browser)
 ```powershell
 /sdklogin:yes /url:"https://org.crm.dynamics.com"
 ```
