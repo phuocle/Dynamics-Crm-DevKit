@@ -75,7 +75,7 @@
 
 | Workflow | Description |
 |---|---|
-| `/build-debug` | Full build - Build all projects + install CLI locally |
+| `/build-debug` | Release build evaluating with current date - Build all projects + install CLI locally |
 | `/build-cli` | CLI only - Build and install CLI tool |
 | `/build-vsix` | VSIX only - Build Visual Studio extension |
 | `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
@@ -387,7 +387,6 @@ Test files are in `DynamicsCrm.DevKit.Tests/` with 15+ test scenarios:
 
 | Script | Purpose |
 |---|---|
-| `Debug-DynamicsCrm-DevKit.ps1` | Debug build automation |
 | `Release-DynamicsCrm-DevKit.ps1` | Release build automation |
 | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | Release with current date |
 | `Sync-AI-Config.ps1` | Sync `.agent/` → `.cursor/`, `.github/` |
@@ -426,7 +425,6 @@ Test files are in `DynamicsCrm.DevKit.Tests/` with 15+ test scenarios:
 
 | Script | Mode | Use Case |
 |--------|------|----------|
-| `Release-DynamicsCrm-DevKit-Debug.ps1` | DEBUG | Quick debug build |
 | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | RELEASE | Release with current date |
 | `Release-DynamicsCrm-DevKit.ps1` | RELEASE | Official release |
 
@@ -625,7 +623,7 @@ When creating documentation files (`.md`):
 
 ## Checklist Before Completing Work
 
-- [ ] Ran appropriate build workflow (`/build-debug` or component-specific)
+- [ ] Ran appropriate build workflow (`/build-debug`, `/build-release`, or component-specific)
 - [ ] Verified build succeeded (`devkit --version` shows today's date)
 - [ ] All 4 packages exist in `Published/` folder (if full build)
 - [ ] Saved documentation to correct `DynamicsCrm.DevKit.Docs/` subfolder

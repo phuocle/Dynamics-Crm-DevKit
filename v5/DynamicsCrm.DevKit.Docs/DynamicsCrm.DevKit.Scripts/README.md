@@ -10,7 +10,6 @@ PowerShell scripts for building, releasing, and maintaining the DynamicsCrm.DevK
 |---|---|
 | **Release-DynamicsCrm-DevKit.ps1** | Main release script: updates version/date placeholders across all projects, builds solution via MSBuild, creates NuGet packages, publishes VSIX. Uses Dec 31 of current year for annual releases. Parameters: `-BuildDate`, `-Configuration` |
 | **Release-DynamicsCrm-DevKit-CurrentDate.ps1** | Wrapper that runs the main release script with the current date/time. For testing releases during development |
-| **Debug-DynamicsCrm-DevKit.ps1** | Debug build wrapper: runs the current-date release script with `-Configuration Debug`. Builds in Debug, packs CLI, installs/updates locally |
 | **Clean-Repository.ps1** | Cleans build artifacts (`bin`, `obj`, `node_modules`, VS cache, temp files) to reset the repo. Supports `-DryRun` and `-IncludePublished` to also remove `.nupkg`/`.vsix` in `Published/` |
 | **RestoreReplacedFiles.ps1** | Restores files changed by the release script using `git restore`. Reads file list from `DevKit.ReleaseConfig.json`. Use when a release fails and leaves placeholders replaced |
 | **Sync-AI-Config.ps1** | Syncs AI agent configuration from `.agent/` (source of truth) to `.cursor/` and `.github/`. Converts `.md` to `.mdc` with frontmatter. Supports `-DryRun` and `-Verbose` |
@@ -29,14 +28,15 @@ PowerShell scripts for building, releasing, and maintaining the DynamicsCrm.DevK
 
 ## Common Usage
 
-### Debug Build (AI agents / development)
+### Release build dynamically injected with the current timestamp
 ```powershell
-.\DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1
+.\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit-CurrentDate.ps1
 ```
 
-### Release Build (human operators only)
+# Or manual build with MSBuild
 ```powershell
-.\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1
+$msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Release /v:m
 ```
 
 ### Clean All Build Artifacts

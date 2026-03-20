@@ -199,12 +199,12 @@ Create `DynamicsCrm.DevKit.Cli.json` in your project root:
 ### Build Commands
 
 ```powershell
-# Full DEBUG build (recommended for development)
-.\DynamicsCrm.DevKit.Scripts\Debug-DynamicsCrm-DevKit.ps1
+# Release build dynamically injected with the current timestamp
+.\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit-CurrentDate.ps1
 
 # Or manual build with MSBuild
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Debug /v:m
+& $msbuild "DynamicsCrm.DevKit.AllInOne.slnx" /t:Build /p:Configuration=Release /v:m
 ```
 
 ---

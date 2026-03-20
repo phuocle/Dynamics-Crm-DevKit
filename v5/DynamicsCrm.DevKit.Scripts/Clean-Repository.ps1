@@ -103,7 +103,8 @@ Write-Host ""
 do {
     $deletedThisPass = 0
     foreach ($folder in $foldersToDelete) {
-        $found = Get-ChildItem -Path $ProjectRoot -Directory -Recurse -Filter $folder -ErrorAction SilentlyContinue
+        # Use -Force to find hidden folders like .vs and .nuget
+        $found = Get-ChildItem -Path $ProjectRoot -Directory -Recurse -Filter $folder -Force -ErrorAction SilentlyContinue
         foreach ($item in $found) {
             $sizeMB = Get-FolderSize -Path $item.FullName
             $totalSizeFreed += $sizeMB

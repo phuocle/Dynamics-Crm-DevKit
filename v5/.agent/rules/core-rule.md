@@ -92,7 +92,7 @@ All connection CLI arguments support automatic fallback to `DEVKIT_*` environmen
 
 | Workflow | Description |
 |----------|-------------|
-| `/build-debug` | Full build - Build all projects + install CLI locally |
+| `/build-debug` | Release build evaluating with current date - Build all projects + install CLI locally |
 | `/build-cli` | CLI only - Build and install CLI tool |
 | `/build-vsix` | VSIX only - Build Visual Studio extension |
 | `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
@@ -222,7 +222,7 @@ The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations. E
 
 ## Checklist Before Completing Work
 
-- [ ] Ran appropriate build workflow (`/build-debug` or component-specific)
+- [ ] Ran appropriate build workflow (`/build-debug`, `/build-release`, or component-specific)
 - [ ] Verified build succeeded (`devkit --version` shows today's date)
 - [ ] All 4 packages exist in `Published/` folder (if full build)
 - [ ] Saved documentation to correct `DynamicsCrm.DevKit.Docs/` subfolder
