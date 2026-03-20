@@ -47,7 +47,7 @@ Before creating this project, ensure you have:
 # Build and deploy
 deploy.debug.bat
 
-# Deploy only (skip build)
+# Deploy only
 deploy.debug.only.bat
 ```
 

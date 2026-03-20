@@ -10,7 +10,7 @@
     "versionReplacement": [
       "DynamicsCrm.DevKit.Shared\\Const.cs",
       "DynamicsCrm.DevKit.Cli\\README.md",
-      "DynamicsCrm.DevKit.Analyzers\\docs\\README.md",
+      "DynamicsCrm.DevKit.Analyzers\\README.md",
       "DynamicsCrm.DevKit\\source.extension.cs",
       "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
       "README.md",
@@ -30,7 +30,7 @@
     ],
     "dateReplacement": [
       "DynamicsCrm.DevKit.Cli\\README.md",
-      "DynamicsCrm.DevKit.Analyzers\\docs\\README.md",
+      "DynamicsCrm.DevKit.Analyzers\\README.md",
       "DynamicsCrm.DevKit.Shared\\Const.cs",
       "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
       "DynamicsCrm.DevKit\\VSPackage.resx",
@@ -53,7 +53,7 @@
     "allModified": [
       "DynamicsCrm.DevKit.Shared\\Const.cs",
       "DynamicsCrm.DevKit.Cli\\README.md",
-      "DynamicsCrm.DevKit.Analyzers\\docs\\README.md",
+      "DynamicsCrm.DevKit.Analyzers\\README.md",
       "DynamicsCrm.DevKit\\source.extension.cs",
       "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
       "DynamicsCrm.DevKit\\VSPackage.resx",

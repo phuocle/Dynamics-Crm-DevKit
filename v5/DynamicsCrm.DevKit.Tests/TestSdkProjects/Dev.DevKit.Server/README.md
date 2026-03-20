@@ -4,20 +4,21 @@
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|| |   | | |
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
-        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss
+        |___/            https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: 31.03.2026 23:59:59
 
 ```
 
-# DynamicsCrm.DevKit Package Project
+# DynamicsCrm.DevKit Server Project
 
-Enables Dataverse plugin development with dependent assemblies using NuGet packages, allowing you to leverage third-party libraries and manage dependencies efficiently for complex plugin scenarios.
+Accelerates Dataverse server-side development for plugins, workflows, custom actions, custom API, and data providers with pre-configured project structure, automated deployment scripts, and strong-name key signing.
 
 ## Features
 
-* NuGet package support for dependent assemblies
 * Pre-configured for .NET Framework 4.6.2
+* Strong-name key (SNK) file for assembly signing
 * Automated deployment scripts (deploy.debug.bat, deploy.debug.only.bat)
-* Support for plugins with external dependencies
+* Support for plugins, workflows, custom actions
+* Support for custom API and data providers
 * Reference to Shared Project for common code
 * DynamicsCrm.DevKit.Analyzers for code quality
 
@@ -36,16 +37,14 @@ Before creating this project, ensure you have:
 
 ## Key Components
 
-* **deploy.debug.bat** - Build, merge, and deploy package plugin
+* **key.snk** - Strong-name key for assembly signing
+* **deploy.debug.bat** - Deploy and register server-side components
 * **deploy.debug.only.bat** - Deploy only (without building)
-* **README.md** - This file (included in NuGet package metadata)
 
-## Usage
-
-Add your NuGet package dependencies in the .csproj file. The deployment script will automatically merge them with your plugin assembly.
+## Deployment
 
 ```bash
-# Build, merge dependencies, and deploy
+# Build and deploy
 deploy.debug.bat
 
 # Deploy only
@@ -54,6 +53,6 @@ deploy.debug.only.bat
 
 ## References
 
-* [Package Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template)
-* [Create packages for Package Deployer](https://learn.microsoft.com/en-us/power-platform/alm/package-deployer-tool)
-* [Package Deployer tool](https://learn.microsoft.com/en-us/power-platform/alm/package-deployer-tool)
+* [Server Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template)
+* [Write a plug-in](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/plug-ins)
+* [Workflow extensions](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/workflow/workflow-extensions)

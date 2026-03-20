@@ -48,7 +48,7 @@ Add your NuGet package dependencies in the .csproj file. The deployment script w
 # Build, merge dependencies, and deploy
 deploy.debug.bat
 
-# Deploy only (skip build)
+# Deploy only
 deploy.debug.only.bat
 ```
 
