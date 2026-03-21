@@ -47,7 +47,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="README.md" Pack="true" PackagePath="\" />
-	  <None Include="images\icon.png" Pack="true" PackagePath="\" />
+	  <None Include="..\images\icon.png" Pack="true" PackagePath="icon.png" />
 	  <None Include="license\LICENSE.txt" />
 	</ItemGroup>
 	<ItemGroup>
@@ -64,8 +64,4 @@
 	  <PackageReference Include="Newtonsoft.Json" Version="*" />
 	  <PackageReference Include="NUglify" Version="1.21.17" />
 	</ItemGroup>
-	<Target Name="CopySharedIcon" BeforeTargets="BeforeBuild">
-		<MakeDir Directories="$(MSBuildProjectDirectory)\images" Condition="!Exists('$(MSBuildProjectDirectory)\images')" />
-		<Copy SourceFiles="..\images\icon.png" DestinationFolder="$(MSBuildProjectDirectory)\images\" />
-	</Target>
 </Project>
