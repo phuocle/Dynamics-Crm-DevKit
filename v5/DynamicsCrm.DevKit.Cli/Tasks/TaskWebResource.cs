@@ -32,6 +32,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         public async Task<bool> IsValidAsync()
         {
+            if (!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource))
+            {
+                return true; // Bypass profile validation for explicit single file update
+            }
+
             if (Json == null)
             {
                 SpectreLog.ActionError($"{TaskType} 'profile' not found: '{Arg.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
@@ -72,12 +77,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private async Task DeployWebResourceFilesAsync()
         {
-            SpectreLog.ActionWithLevel0("DEPLOYING WEBRESOURCES WITH PATTERNS FILES");
-            foreach (var pattern in Json.includefiles)
+            if (string.IsNullOrEmpty(Arg.File))
             {
-                SpectreLog.WriteHighLight(" - ", $"{pattern}", "");
+                SpectreLog.ActionWithLevel0("DEPLOYING WEBRESOURCES WITH PATTERNS FILES");
+                foreach (var pattern in Json.includefiles)
+                {
+                    SpectreLog.WriteHighLight(" - ", $"{pattern}", "");
+                }
+                SpectreLog.WriteLine();
             }
-            SpectreLog.WriteLine();
             SpectreLog.WriteHighLight("Found: ", $"{WebResourceFiles.Count}", " webresources");
             SpectreLog.WriteLine();
             var i = 1;
@@ -295,7 +303,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <attribute name='ismanaged' />
     <filter type='or'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name2}'/>";
+            if (!string.IsNullOrEmpty(Arg.WebResource))
+            {
+                fetchXml += $@"
+      <condition attribute='name' operator='like' value='%{fetchData.name}'/>";
+            }
+            fetchXml += $@"
     </filter>
   </entity>
 </fetch>";
@@ -305,7 +319,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var webResourceId = Guid.Empty;
             if (rows.Entities.Count > 0)
             {
-                if (rows.Entities.Count == 1)
+                if (!string.IsNullOrEmpty(Arg.WebResource) && rows.Entities.Count > 1)
+                {
+                    var names = rows.Entities.Select(x => x.GetAttributeValue<string>("name")).ToList();
+                    SpectreLog.ActionError($"Found multiple web resources matching '{Arg.WebResource}': {string.Join(", ", names)}. Please specify the exact name using --webresource");
+                    return;
+                }
+
+                if (rows.Entities.Count == 1 || !string.IsNullOrEmpty(Arg.WebResource))
                 {
                     var entity = rows.Entities[0];
                     var ismanaged = entity.GetAttributeValue<bool?>("ismanaged");
@@ -320,6 +341,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     webResourceId = entity.Id;
                     content = entity?["content"]?.ToString();
+                    webResourceFile.uniquename = entity.GetAttributeValue<string>("name"); // ensure exact name from server
                 }
                 else
                 {
@@ -342,15 +364,23 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
+            else if (!string.IsNullOrEmpty(Arg.WebResource))
+            {
+                SpectreLog.ActionError($"Web resource '{Arg.WebResource}' not found.");
+                return;
+            }
             var fileContent = Convert.ToBase64String(await FileHelper.ReadAllBytesAsync(webResourceFile.file));
             if (fileContent == content)
             {
                 SpectreLog.ActionWithLevel0(CliAction.DO_NOTHING, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
-                await AddWebResourceToSolutionAsync(new Entity("webresource")
+                if (!(!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource)))
                 {
-                    ["name"] = webResourceFile.uniquename,
-                    ["webresourceid"] = webResourceId
-                });
+                    await AddWebResourceToSolutionAsync(new Entity("webresource")
+                    {
+                        ["name"] = webResourceFile.uniquename,
+                        ["webresourceid"] = webResourceId
+                    });
+                }
             }
             else
             {
@@ -438,7 +468,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     await ServiceClient.UpdateAsync(webResource);
                 }
                 WebResourcesToPublish.Add(webResourceId);
-                await AddWebResourceToSolutionAsync(webResource);
+                if (!(!string.IsNullOrEmpty(Arg.File) && !string.IsNullOrEmpty(Arg.WebResource)))
+                {
+                    await AddWebResourceToSolutionAsync(webResource);
+                }
             }
         }
 
@@ -495,6 +528,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private List<Dependency> _dependencies = null;
         private async Task<List<Dependency>> GetDependenciesAsync()
         {
+            if (!string.IsNullOrEmpty(Arg.File)) return []; // Bypass for single file deploy
+
             if (_dependencies != null) return _dependencies;
             _dependencies = [];
             var dependencies = await TransformPatternAsync(Json.dependencies, WebResourceFiles);
@@ -529,6 +564,97 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 if (_webResourceFiles != null) return _webResourceFiles;
                 _webResourceFiles = [];
+
+                if (!string.IsNullOrEmpty(Arg.File))
+                {
+                    var file = Path.GetFullPath(Arg.File);
+                    if (file.EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
+                    {
+                        SpectreLog.ActionWithLevel0("Auto-redirecting input from .ts to compiled .js file...");
+                        
+                        var projectRoot = Path.GetDirectoryName(file);
+                        while (!string.IsNullOrEmpty(projectRoot))
+                        {
+                            if (System.IO.File.Exists(Path.Combine(projectRoot, "package.json"))) break;
+                            projectRoot = Path.GetDirectoryName(projectRoot);
+                        }
+
+                        if (!string.IsNullOrEmpty(projectRoot))
+                        {
+                            var process = new System.Diagnostics.Process
+                            {
+                                StartInfo = new System.Diagnostics.ProcessStartInfo
+                                {
+                                    FileName = "cmd.exe",
+                                    Arguments = $"/c chcp 65001 >nul && npm run debug {Path.GetFileNameWithoutExtension(file)}",
+                                    WorkingDirectory = projectRoot,
+                                    UseShellExecute = false,
+                                    RedirectStandardOutput = true,
+                                    RedirectStandardError = true,
+                                    CreateNoWindow = true,
+                                    StandardOutputEncoding = System.Text.Encoding.UTF8,
+                                    StandardErrorEncoding = System.Text.Encoding.UTF8
+                                }
+                            };
+                            process.OutputDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3(ev.Data); };
+                            process.ErrorDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3($"[STDERR] {ev.Data}"); };
+                            
+                            process.Start();
+                            process.BeginOutputReadLine();
+                            process.BeginErrorReadLine();
+                            process.WaitForExit();
+
+                            if (process.ExitCode != 0)
+                            {
+                                SpectreLog.ActionError($"TypeScript build failed. Please check your TypeScript code.");
+                                return _webResourceFiles; // return empty
+                            }
+                            
+                            file = Path.Combine(projectRoot, "build", Path.GetFileNameWithoutExtension(file) + ".js");
+                        }
+                        else 
+                        {
+                            file = file.Substring(0, file.Length - 3) + ".js"; // Legacy fallback
+                        }
+
+                        if (!System.IO.File.Exists(file))
+                        {
+                            SpectreLog.ActionError($"Compiled JS file not found: {file}. Please ensure your TypeScript compiles successfully before deploying.");
+                            return _webResourceFiles; // return empty
+                        }
+                    }
+
+                    var uniquename = Arg.WebResource;
+                    if (string.IsNullOrEmpty(uniquename))
+                    {
+                        var rootPath = $"{CurrentDirectory}\\{Json.rootfolder}\\".Replace(@"\\", @"\");
+                        if (file.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var name = file.Substring(rootPath.Length).Replace("\\", "/");
+                            if (!name.StartsWith(SolutionPrefix))
+                                name = SolutionPrefix + "/" + name;
+                            uniquename = name;
+                        }
+                        else
+                        {
+                            SpectreLog.ActionError($"File '{file}' is not under rootfolder. Please provide --webresource explicitly.");
+                            return _webResourceFiles;
+                        }
+                    }
+                    var webResourceFile = new WebResourceFile
+                    {
+                        file = file,
+                        version = Arg.Version,
+                        uniquename = uniquename,
+                        displayname = uniquename
+                    };
+                    if (IsSupportedExtensions(file))
+                    {
+                        _webResourceFiles.Add(webResourceFile);
+                    }
+                    return _webResourceFiles;
+                }
+
                 var includeFiles = new List<string>();
                 foreach (var pattern in Json.includefiles)
                 {

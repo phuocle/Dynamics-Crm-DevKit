@@ -1,4 +1,4 @@
-﻿using Spectre.Console.Cli;
+using Spectre.Console.Cli;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System.IO;
 using System.ComponentModel;
@@ -29,5 +29,13 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [CommandOption("--only-assembly")] // Keeping this for backward compatibility if used anywhere else
         [Description("Fast deploy, only update the assembly")]
         public bool OnlyUpdateAssembly { get; set; }
+
+        [CommandOption("--file|-f")]
+        [Description("Single web resource file to deploy")]
+        public string File { get; set; }
+
+        [CommandOption("--webresource|-w")]
+        [Description("Unique name of the web resource in Dataverse")]
+        public string WebResource { get; set; }
     }
 }

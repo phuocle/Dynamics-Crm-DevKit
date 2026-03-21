@@ -1,3 +1,4 @@
+using Spectre.Console.Cli;
 using System.ComponentModel;
 
 namespace DynamicsCrm.DevKit.Shared.Models
@@ -7,6 +8,12 @@ namespace DynamicsCrm.DevKit.Shared.Models
     /// </summary>
     public class WebResourceCommandArgs : DevKitCommandArgs
     {
-        // No additional args needed for webresource command
+        [CommandOption("--file|-f")]
+        [Description("Single web resource file to deploy")]
+        public string File { get; set; }
+
+        [CommandOption("--webresource|-w")]
+        [Description("Unique name of the web resource in Dataverse")]
+        public string WebResource { get; set; }
     }
 }

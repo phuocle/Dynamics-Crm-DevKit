@@ -20,6 +20,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
     public abstract class DevKitCommand<T> : AsyncCommand<T> where T : DevKitCommandArgs
     {
         protected virtual string CommandName => GetType().Name.Replace("Command", "").ToLower();
+        protected virtual bool IsProfileRequired(T settings) => true;
+        protected virtual bool IsJsonRequired(T settings) => true;
 
         public override async Task<int> ExecuteAsync(CommandContext context, T settings, CancellationToken cancellationToken)
         {
@@ -124,27 +126,39 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 {
                     argRows.Add(new[] { "           --pacprofile", settings.PacProfile });
                 }
-                argRows.Add(new[] { "           --json", settings.Json });
-                argRows.Add(new[] { "           --profile", settings.Profile });
+                if (!string.IsNullOrEmpty(settings.Json))
+                {
+                    argRows.Add(new[] { "           --json", settings.Json });
+                }
+                if (!string.IsNullOrEmpty(settings.Profile))
+                {
+                    argRows.Add(new[] { "           --profile", settings.Profile });
+                }
             }
             else
             {
                 argRows.Add(new[] { "Arguments: --conn", connLog });
-                argRows.Add(new[] { "           --json", settings.Json });
-                argRows.Add(new[] { "           --profile", settings.Profile });
+                if (!string.IsNullOrEmpty(settings.Json))
+                {
+                    argRows.Add(new[] { "           --json", settings.Json });
+                }
+                if (!string.IsNullOrEmpty(settings.Profile))
+                {
+                    argRows.Add(new[] { "           --profile", settings.Profile });
+                }
             }
 
             argRows.AddRange(BuildArgRows(settings));
 
             SpectreLog.WriteTable(argRows);
 
-            if (string.IsNullOrEmpty(settings.Profile))
+            if (IsProfileRequired(settings) && string.IsNullOrEmpty(settings.Profile))
             {
                 SpectreLog.ActionError("--profile: required");
                 return false;
             }
 
-            if (string.IsNullOrEmpty(settings.JsonFile))
+            if (IsJsonRequired(settings) && string.IsNullOrEmpty(settings.JsonFile))
             {
                 SpectreLog.ActionError("--json: required or file not found");
                 return false;
