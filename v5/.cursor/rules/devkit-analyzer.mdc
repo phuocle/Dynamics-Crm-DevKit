@@ -1,4 +1,4 @@
-﻿---
+---
 description: Development rules for DynamicsCrm.DevKit Roslyn analyzers (DEVKIT1001-DEVKIT1021)
 alwaysApply: true
 ---
@@ -21,8 +21,8 @@ alwaysApply: true
 
 | File | Purpose |
 |------|---------|
-| `DiagnosticIdentifiers.cs` | All 21 analyzer IDs (DEVKIT1001-DEVKIT1021) |
-| `DiagnosticDescriptors.cs` | Descriptors with ID, title, message, severity, description |
+| `DiagnosticIdentifiers.cs` | `Core\` (All 21 analyzer IDs DEVKIT1001-DEVKIT1021) |
+| `DiagnosticDescriptors.cs` | `Core\` (Descriptors with ID, title, message, severity) |
 | `DiagnosticCategories.cs` | Category constants (DynamicsCrm.DevKit) |
 | `BaseDiagnosticAnalyzer.cs` | Base class all analyzers inherit from |
 | `AnalyzerHelper.cs` | Utilities: `IsPluginOrWorkflowClass`, `IsInsidePluginOrWorkflow`, deprecated/batch request lists |
@@ -34,8 +34,8 @@ alwaysApply: true
 1. Đọc kỹ lại nội dung anh Phước yêu cầu
 2. Xác định analyzer nào liên quan (DEVKIT1001-DEVKIT1021)
 3. Đọc lại các files core trong `DynamicsCrm.DevKit.Analyzers\`:
- - `DiagnosticIdentifiers.cs` - xem danh sách ID
- - `DiagnosticDescriptors.cs` - xem descriptors
+ - `DiagnosticIdentifiers.cs` trong `Core\` - xem danh sách ID
+ - `DiagnosticDescriptors.cs` trong `Core\` - xem descriptors
  - Analyzer file tương ứng trong `CrmAnalyzers\`
 
 ### Bước 2: Kiểm tra Unit Tests

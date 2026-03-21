@@ -1,4 +1,4 @@
-﻿# Create New Analyzer
+# Create New Analyzer
 
 # Create New Analyzer Workflow
 
@@ -19,7 +19,7 @@ Before starting, you need to know:
 
 ```powershell
 # Check current highest ID in DiagnosticIdentifiers.cs
-Get-Content "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\DiagnosticIdentifiers.cs" | Select-String "DEVKIT\d+"
+Get-Content "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\Core\DiagnosticIdentifiers.cs" | Select-String "DEVKIT\d+"
 ```
 
 Expected: Next ID after the highest existing one (e.g., if DEVKIT1021 exists, next is DEVKIT1022)
@@ -28,7 +28,7 @@ Expected: Next ID after the highest existing one (e.g., if DEVKIT1021 exists, ne
 
 ## Step 2: Add Diagnostic Identifier
 
-Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\DiagnosticIdentifiers.cs`:
+Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\Core\DiagnosticIdentifiers.cs`:
 
 ```csharp
 // Add new constant at the end of the class
@@ -44,7 +44,7 @@ public const string DuplicatePluginStepRegistration = "DEVKIT1022";
 
 ## Step 3: Add Diagnostic Descriptor
 
-Edit `d:\github\Dynamics-Crm.DevKit.Analyzers\DiagnosticDescriptors.cs`:
+Edit `d:\github\Dynamics-Crm.DevKit.Analyzers\Core\DiagnosticDescriptors.cs`:
 
 ```csharp
 /// <summary>DEVKIT{XXXX}</summary>
@@ -253,7 +253,7 @@ public class RegularClass
 
 
 ```powershell
-cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers"
+cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Scripts"
 .\Run-Analyzer-Coverage.ps1
 ```
 

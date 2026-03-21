@@ -1,4 +1,4 @@
-﻿# Build Analyzer - DynamicsCrm.DevKit.Analyzers
+# Build Analyzer - DynamicsCrm.DevKit.Analyzers
 
 Build the Analyzers project using `dotnet build` in Debug mode.
 
@@ -16,7 +16,7 @@ dotnet build "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" 
 ## Run Unit Tests
 
 ```powershell
-cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers"
+cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Scripts"
 .\Run-Analyzer-Coverage.ps1
 ```
 

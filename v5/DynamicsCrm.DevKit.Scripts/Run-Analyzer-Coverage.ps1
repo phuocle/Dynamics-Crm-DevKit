@@ -528,7 +528,7 @@ $testProjects = @(
         Name = "DynamicsCrm.DevKit.UnitTests"
         ProjectPath = $testProjectPath
         RunSettingsPath = $runSettingsPath
-        ReportFolder = "CoverageReport"
+        ReportFolder = "..\DynamicsCrm.DevKit.Analyzers\CoverageReport"
         TargetDll = "DynamicsCrm.DevKit.Analyzers.dll"
         AssemblyFilter = "+DynamicsCrm.DevKit.Analyzers"
     }

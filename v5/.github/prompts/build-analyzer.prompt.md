@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Build DynamicsCrm.DevKit.Analyzers project in Debug mode"
 mode: agent
 ---
@@ -19,7 +19,7 @@ dotnet build "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" 
 ## Run Unit Tests
 
 ```powershell
-cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers"
+cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Scripts"
 .\Run-Analyzer-Coverage.ps1
 ```
 
