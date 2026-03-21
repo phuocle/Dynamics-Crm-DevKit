@@ -16,4 +16,8 @@
     <PackageReference Include="System.Text.Json" Version="10.0.3" />
   </ItemGroup>
 
+	<Target Name="CopySharedIcon" BeforeTargets="BeforeBuild">
+		<MakeDir Directories="$(MSBuildProjectDirectory)\images" Condition="!Exists('$(MSBuildProjectDirectory)\images')" />
+		<Copy SourceFiles="..\images\icon.png" DestinationFolder="$(MSBuildProjectDirectory)\images\" />
+	</Target>
 </Project>

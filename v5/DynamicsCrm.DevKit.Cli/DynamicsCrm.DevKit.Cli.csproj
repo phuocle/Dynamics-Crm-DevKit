@@ -78,4 +78,8 @@
 	  <PackageReference Include="Mono.TextTemplating" Version="3.0.0" />
 	</ItemGroup>
 	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
+	<Target Name="CopySharedIcon" BeforeTargets="BeforeBuild">
+		<MakeDir Directories="$(MSBuildProjectDirectory)\images" Condition="!Exists('$(MSBuildProjectDirectory)\images')" />
+		<Copy SourceFiles="..\images\icon.png" DestinationFolder="$(MSBuildProjectDirectory)\images\" />
+	</Target>
 </Project>

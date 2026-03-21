@@ -238,11 +238,25 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                         "OneToManyRelationships", "ManyToOneRelationships", "ManyToManyRelationships"),
                     AttributeQuery = new AttributeQueryExpression
                     {
-                        Properties = new MetadataPropertiesExpression("MetadataId")
+                        Properties = new MetadataPropertiesExpression("MetadataId"),
+                        Criteria = new MetadataFilterExpression
+                        {
+                            Conditions =
+                            {
+                                new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, true)
+                            }
+                        }
                     },
                     RelationshipQuery = new RelationshipQueryExpression
                     {
-                        Properties = new MetadataPropertiesExpression("MetadataId")
+                        Properties = new MetadataPropertiesExpression("MetadataId"),
+                        Criteria = new MetadataFilterExpression
+                        {
+                            Conditions =
+                            {
+                                new MetadataConditionExpression("IsManaged", MetadataConditionOperator.Equals, true)
+                            }
+                        }
                     }
                 };
                 var entityMetadatas = ((RetrieveMetadataChangesResponse)serviceClient.Execute(
