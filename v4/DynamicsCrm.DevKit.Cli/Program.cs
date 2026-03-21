@@ -200,19 +200,31 @@ namespace DynamicsCrm.DevKit.Cli
             ServiceClient = null;
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
-            if (!File.Exists(arguments.JsonFile))
+            if (!arguments.IsSingleFileMode)
             {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"/json:{arguments.Json} [{arguments.JsonFile}] not found !!!");
-                return false;
+                if (!File.Exists(arguments.JsonFile))
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"/json:{arguments.Json} [{arguments.JsonFile}] not found !!!");
+                    return false;
+                }
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.json ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.JsonFile);
             }
-            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.json ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.JsonFile);
             if (arguments.IsSdkLogin)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/sdklogin:", ConsoleColor.White, "\"yes\"");
                 CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/url:", ConsoleColor.White, "\"" + arguments.Url + "\"");
-                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
-                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
-                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
+                if (arguments.IsSingleFileMode)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/f:", ConsoleColor.White, "\"" + arguments.File + "\"");
+                    if (!string.IsNullOrEmpty(arguments.WebResourceName))
+                        CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/w:", ConsoleColor.White, "\"" + arguments.WebResourceName + "\"");
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
+                }
             }
             else
             {
@@ -222,16 +234,25 @@ namespace DynamicsCrm.DevKit.Cli
                     return false;
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ", ConsoleColor.Blue, "/conn:", ConsoleColor.White, "\"" + Helper.BuildConnectionStringLog(arguments.Connection) + "\"");
-                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
-                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
-                CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
+                if (arguments.IsSingleFileMode)
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/f:", ConsoleColor.White, "\"" + arguments.File + "\"");
+                    if (!string.IsNullOrEmpty(arguments.WebResourceName))
+                        CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/w:", ConsoleColor.White, "\"" + arguments.WebResourceName + "\"");
+                }
+                else
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json + "\"");
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type + "\"");
+                    CliLog.WriteLine(ConsoleColor.White, "|           ", ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\"");
+                }
             }
-            if (arguments.Type.Length == 0)
+            if (!arguments.IsSingleFileMode && arguments.Type.Length == 0)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/type: required !!!");
                 return false;
             }
-            if (arguments.Profile.Length == 0)
+            if (!arguments.IsSingleFileMode && arguments.Profile.Length == 0)
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"/profile: required !!!");
                 return false;

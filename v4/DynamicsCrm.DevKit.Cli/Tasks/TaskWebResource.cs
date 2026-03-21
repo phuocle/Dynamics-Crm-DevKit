@@ -279,7 +279,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fetchData = new
             {
                 name = webResourceFile.uniquename,
-                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
+                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.')),
+                name3 = webResourceFile.uniquename.Contains("/")
+                    ? webResourceFile.uniquename.Substring(webResourceFile.uniquename.LastIndexOf('/') + 1)
+                    : webResourceFile.uniquename
             };
             var fetchXml = $@"
 <fetch>
@@ -292,6 +295,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <filter type='or'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
       <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
+      <condition attribute='name' operator='like' value='%/{fetchData.name3}'/>
     </filter>
   </entity>
 </fetch>";

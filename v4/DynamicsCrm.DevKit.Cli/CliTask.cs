@@ -12,6 +12,12 @@ namespace DynamicsCrm.DevKit.Cli
     {
         internal static async Task RunAsync(CommandLineArgs arg)
         {
+            if (arg.IsSingleFileMode)
+            {
+                var cmd = new WebResourceCommand(arg);
+                await cmd.RunAsync();
+                return;
+            }
             var json = SimpleJson.DeserializeObject<Json>(await FileHelper.ReadAllTextAsync(arg.JsonFile));
             switch (arg.Type)
             {
