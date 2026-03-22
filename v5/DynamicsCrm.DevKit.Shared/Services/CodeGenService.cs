@@ -315,20 +315,19 @@ namespace DynamicsCrm.DevKit.Shared.Services
         public async Task<string> GetDefaultTsDialogFileAsync(SystemForm dialogForm, string dialogNamespace)
         {
             await Helper.DelayAsync(1);
-            var varName = dialogForm.Name.Replace(" ", "_").ToLower() + "_dialog";
-            if (varName.EndsWith("_dialog_dialog")) varName = varName.Substring(0, varName.Length - 7);
+            var varName = dialogNamespace;
             
-            var dialogClassName = dialogNamespace + "Dialog";
+            var dialogClassName = "Dialog";
             var code = string.Empty;
-            code += $"import {{ {dialogNamespace} }} from './{dialogNamespace}.dialog';{NEW_LINE}";
+            code += $"import {{ {dialogNamespace} as _{dialogNamespace} }} from './{dialogNamespace}.dialog';{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"const {varName} = (function () {{{NEW_LINE}";
             code += $"{TAB}\"use strict\";{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"{TAB}let dialog: {dialogNamespace}.{dialogClassName};{NEW_LINE}";
+            code += $"{TAB}let dialog: _{dialogNamespace}.{dialogClassName};{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OnLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}dialog = new {dialogNamespace}.{dialogClassName}(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}dialog = new _{dialogNamespace}.{dialogClassName}(executionContext);{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OkClick(executionContext: any): Promise<void> {{{NEW_LINE}";

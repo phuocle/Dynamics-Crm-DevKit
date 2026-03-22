@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             await Helper.DelayAsync(1);
             var dialogNamespace = GetDialogClassName(dialogForm.Name);
-            var dialogClassName = dialogNamespace + "Dialog";
+            var dialogClassName = "Dialog";
             var allControls = GetAllDialogControls(dialogForm.FormXml);
 
             var code = string.Empty;
@@ -101,13 +101,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}}}\r\n";
             code += $"\r\n";
             code += $"{TAB}/**\r\n";
-            code += $"{TAB} * {dialogClassName} Dialog class\r\n";
+            code += $"{TAB} * {dialogClassName} class\r\n";
             code += $"{TAB} * Provides typed access to all dialog controls\r\n";
             code += $"{TAB} * Usage: new {dialogNamespace}.{dialogClassName}(executionContext)\r\n";
             code += $"{TAB} */\r\n";
             code += $"{TAB}export class {dialogClassName} extends FormBase<{dialogClassName}.IBody, {dialogClassName}.IHeader, {dialogClassName}.IGrid, {dialogClassName}.INavigation, {dialogClassName}.IQuickForm, {dialogClassName}.IProcess, {dialogClassName}.IDialog> {{\r\n";
             code += $"{TAB2}/**\r\n";
-            code += $"{TAB2} * Creates a {dialogClassName} Dialog instance\r\n";
+            code += $"{TAB2} * Creates a {dialogClassName} instance\r\n";
             code += $"{TAB2} * @param executionContext The execution context from dialog event\r\n";
             code += $"{TAB2} * @param defaultWebResourceName Optional default web resource name\r\n";
             code += $"{TAB2} */\r\n";
@@ -136,10 +136,6 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             if (string.IsNullOrEmpty(dialogName)) return dialogName;
             var name = dialogName;
-            if (name.EndsWith(" Dialog", System.StringComparison.OrdinalIgnoreCase))
-                name = name.Substring(0, name.Length - 7).Trim();
-            else if (name.EndsWith("Dialog", System.StringComparison.OrdinalIgnoreCase))
-                name = name.Substring(0, name.Length - 6).Trim();
             
             return string.Join("", name.Split(new[] { '_', ' ' })
                 .Where(s => s.Length > 0)
