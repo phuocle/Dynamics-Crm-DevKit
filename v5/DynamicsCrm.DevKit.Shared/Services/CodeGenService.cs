@@ -312,37 +312,40 @@ namespace DynamicsCrm.DevKit.Shared.Services
             return await Metadata.GetPluginCommentAsync(entityLogicalName, message);
         }
 
-        public async Task<string> GetDefaultTsDialogFileAsync(SystemForm dialogForm, string dialogClassName)
+        public async Task<string> GetDefaultTsDialogFileAsync(SystemForm dialogForm, string dialogNamespace)
         {
             await Helper.DelayAsync(1);
-            var logicalName = dialogForm.Name;
+            var varName = dialogForm.Name.Replace(" ", "_").ToLower() + "_dialog";
+            if (varName.EndsWith("_dialog_dialog")) varName = varName.Substring(0, varName.Length - 7);
+            
+            var dialogClassName = dialogNamespace + "Dialog";
             var code = string.Empty;
-            code += $"import {{ {dialogClassName} }} from './{dialogClassName}.dialog';{NEW_LINE}";
+            code += $"import {{ {dialogNamespace} }} from './{dialogNamespace}.dialog';{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"const {logicalName}_dialog = (function () {{{NEW_LINE}";
+            code += $"const {varName} = (function () {{{NEW_LINE}";
             code += $"{TAB}\"use strict\";{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"{TAB}let dialog: {dialogClassName}.IDialog;{NEW_LINE}";
+            code += $"{TAB}let dialog: {dialogNamespace}.{dialogClassName};{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OnLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}dialog = new {dialogClassName}.Dialog(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}dialog = new {dialogNamespace}.{dialogClassName}(executionContext);{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OkClick(executionContext: any): Promise<void> {{{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function CancelClick(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}dialog.Close();{NEW_LINE}";
+            code += $"{TAB}{TAB}dialog.dialog.ab_button_cancel; // example{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}return {{{NEW_LINE}";
             code += $"{TAB}{TAB}OnLoad: OnLoad,{NEW_LINE}";
             code += $"{TAB}{TAB}OkClick: OkClick,{NEW_LINE}";
-            code += $"{TAB}{TAB}CancelClick: CancelClick,{NEW_LINE}";
+            code += $"{TAB}{TAB}CancelClick: CancelClick{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})();{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"export {{ {logicalName}_dialog }};";
+            code += $"export {{ {varName} }};";
             return code;
         }
     }

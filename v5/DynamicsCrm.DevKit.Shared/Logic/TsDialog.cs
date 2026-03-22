@@ -22,29 +22,109 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static async Task<string> GetTsDialogCodeAsync(ServiceClient serviceClient, SystemForm dialogForm)
         {
             await Helper.DelayAsync(1);
-            var dialogName = GetDialogClassName(dialogForm.Name);
-            var logicalName = dialogForm.Name;
-
+            var dialogNamespace = GetDialogClassName(dialogForm.Name);
+            var dialogClassName = dialogNamespace + "Dialog";
             var allControls = GetAllDialogControls(dialogForm.FormXml);
 
             var code = string.Empty;
-            code += $"export namespace {dialogName} {{\r\n";
+            code += $"/**\r\n";
+            code += $" * {dialogNamespace}.dialog.ts - {dialogNamespace} Dialog for early-bound style dialog coding\r\n";
+            code += $" * Generated file - DO NOT MODIFY MANUALLY\r\n";
+            code += $" *\r\n";
+            code += $" * Structure:\r\n";
+            code += $" * 1. Imports\r\n";
+            code += $" * 2. Namespace {dialogNamespace} containing dialog class: {dialogNamespace}.{dialogClassName}\r\n";
+            code += $" */\r\n";
             code += $"\r\n";
-            code += $"{TAB}export interface IDialog extends DevKit.IDialog {{\r\n";
+            code += $"/// <reference path=\"../lib/devkit.d.ts\" />\r\n";
+            code += $"import {{ FormBase }} from '../lib/devkit';\r\n";
+            code += $"\r\n";
+            code += $"export namespace {dialogNamespace} {{\r\n";
+            code += $"\r\n";
+            code += $"{TAB}// ========================================================================\r\n";
+            code += $"{TAB}// Dialog: {dialogClassName}\r\n";
+            code += $"{TAB}// ========================================================================\r\n";
+            code += $"\r\n";
+            code += $"{TAB}export namespace {dialogClassName} {{\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Body controls interface\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface IBody {{\r\n";
+            code += $"{TAB2}}}\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Header controls interface\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface IHeader extends DevKit.Controls.IHeader {{\r\n";
+            code += $"{TAB2}}}\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Grid controls interface\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface IGrid {{\r\n";
+            code += $"{TAB2}}}\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Navigation interface\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface INavigation {{\r\n";
+            code += $"{TAB2}}}\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * QuickForm interface\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface IQuickForm {{\r\n";
+            code += $"{TAB2}}}\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Process interface\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface IProcess extends DevKit.Controls.IProcess {{\r\n";
+            code += $"{TAB2}}}\r\n";
+            code += $"\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Dialog controls interface\r\n";
+            code += $"{TAB2} * Contains all controls on the dialog form\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}export interface IDialog extends DevKit.IDialog {{\r\n";
 
             foreach (var field in allControls)
             {
                 var dialogType = GetDialogControlType(field.ClassId);
                 var comment = !string.IsNullOrEmpty(field.Label) ? field.Label : field.Id;
-                code += $"{TAB2}/** {comment} */\r\n";
-                code += $"{TAB2}{field.Id}: DevKit.Dialog.{dialogType};\r\n";
+                code += $"{TAB2}{TAB}/** {comment} */\r\n";
+                code += $"{TAB2}{TAB}{field.Id}: DevKit.Controls.Dialog.{dialogType};\r\n";
             }
 
+            code += $"{TAB2}}}\r\n";
             code += $"{TAB}}}\r\n";
             code += $"\r\n";
-            code += $"{TAB}export class Dialog extends DevKit.FormBase<IDialog> {{\r\n";
-            code += $"{TAB2}constructor(executionContext: any) {{\r\n";
-            code += $"{TAB2}{TAB}super(executionContext, \"{logicalName}\");\r\n";
+            code += $"{TAB}/**\r\n";
+            code += $"{TAB} * {dialogClassName} Dialog class\r\n";
+            code += $"{TAB} * Provides typed access to all dialog controls\r\n";
+            code += $"{TAB} * Usage: new {dialogNamespace}.{dialogClassName}(executionContext)\r\n";
+            code += $"{TAB} */\r\n";
+            code += $"{TAB}export class {dialogClassName} extends FormBase<{dialogClassName}.IBody, {dialogClassName}.IHeader, {dialogClassName}.IGrid, {dialogClassName}.INavigation, {dialogClassName}.IQuickForm, {dialogClassName}.IProcess, {dialogClassName}.IDialog> {{\r\n";
+            code += $"{TAB2}/**\r\n";
+            code += $"{TAB2} * Creates a {dialogClassName} Dialog instance\r\n";
+            code += $"{TAB2} * @param executionContext The execution context from dialog event\r\n";
+            code += $"{TAB2} * @param defaultWebResourceName Optional default web resource name\r\n";
+            code += $"{TAB2} */\r\n";
+            code += $"{TAB2}constructor(executionContext: any, defaultWebResourceName?: string) {{\r\n";
+            code += $"{TAB2}{TAB}super(executionContext, defaultWebResourceName, {{\r\n";
+            code += $"{TAB2}{TAB}{TAB}body: [],\r\n";
+            code += $"{TAB2}{TAB}{TAB}header: [],\r\n";
+            code += $"{TAB2}{TAB}{TAB}tab: [],\r\n";
+            code += $"{TAB2}{TAB}{TAB}grid: [],\r\n";
+            code += $"{TAB2}{TAB}{TAB}navigation: [],\r\n";
+            code += $"{TAB2}{TAB}{TAB}quick: [],\r\n";
+            code += $"{TAB2}{TAB}{TAB}bpf: [],\r\n";
+            
+            var fields = string.Join(", ", allControls.Select(f => $"'{f.Id}'"));
+            code += $"{TAB2}{TAB}{TAB}dialog: [{fields}]\r\n";
+
+            code += $"{TAB2}{TAB}}});\r\n";
             code += $"{TAB2}}}\r\n";
             code += $"{TAB}}}\r\n";
             code += $"}}\r\n";
@@ -55,7 +135,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static string GetDialogClassName(string dialogName)
         {
             if (string.IsNullOrEmpty(dialogName)) return dialogName;
-            return string.Join("", dialogName.Split('_')
+            var name = dialogName;
+            if (name.EndsWith(" Dialog", System.StringComparison.OrdinalIgnoreCase))
+                name = name.Substring(0, name.Length - 7).Trim();
+            else if (name.EndsWith("Dialog", System.StringComparison.OrdinalIgnoreCase))
+                name = name.Substring(0, name.Length - 6).Trim();
+            
+            return string.Join("", name.Split(new[] { '_', ' ' })
                 .Where(s => s.Length > 0)
                 .Select(s => char.ToUpper(s[0]) + s.Substring(1)));
         }
