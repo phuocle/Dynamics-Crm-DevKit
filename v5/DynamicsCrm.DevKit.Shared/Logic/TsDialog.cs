@@ -19,11 +19,12 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public string Label { get; set; }
         }
 
+        private const string DIALOG_NAMESPACE = "DevKitDialog";
+
         public static async Task<string> GetTsDialogCodeAsync(ServiceClient serviceClient, SystemForm dialogForm)
         {
             await Helper.DelayAsync(1);
             var dialogUniqueName = dialogForm.UniqueName;
-            var dialogClassName = "Dialog";
             var allControls = GetAllDialogControls(dialogForm.FormXml);
 
             var code = string.Empty;
@@ -33,19 +34,19 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $" *\r\n";
             code += $" * Structure:\r\n";
             code += $" * 1. Imports\r\n";
-            code += $" * 2. Namespace {dialogUniqueName} containing dialog class: {dialogUniqueName}.{dialogClassName}\r\n";
+            code += $" * 2. Namespace {DIALOG_NAMESPACE} containing dialog class: {DIALOG_NAMESPACE}.{dialogUniqueName}\r\n";
             code += $" */\r\n";
             code += $"\r\n";
             code += $"/// <reference path=\"../lib/devkit.d.ts\" />\r\n";
             code += $"import {{ FormBase }} from '../lib/devkit';\r\n";
             code += $"\r\n";
-            code += $"export namespace {dialogUniqueName} {{\r\n";
+            code += $"export namespace {DIALOG_NAMESPACE} {{\r\n";
             code += $"\r\n";
             code += $"{TAB}// ========================================================================\r\n";
-            code += $"{TAB}// Dialog: {dialogClassName}\r\n";
+            code += $"{TAB}// Dialog: {dialogUniqueName}\r\n";
             code += $"{TAB}// ========================================================================\r\n";
             code += $"\r\n";
-            code += $"{TAB}export namespace {dialogClassName} {{\r\n";
+            code += $"{TAB}export namespace {dialogUniqueName} {{\r\n";
             code += $"\r\n";
             code += $"{TAB2}/**\r\n";
             code += $"{TAB2} * Body controls interface\r\n";
@@ -101,13 +102,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}}}\r\n";
             code += $"\r\n";
             code += $"{TAB}/**\r\n";
-            code += $"{TAB} * {dialogClassName} class\r\n";
+            code += $"{TAB} * {dialogUniqueName} class\r\n";
             code += $"{TAB} * Provides typed access to all dialog controls\r\n";
-            code += $"{TAB} * Usage: new {dialogUniqueName}.{dialogClassName}(executionContext)\r\n";
+            code += $"{TAB} * Usage: new {DIALOG_NAMESPACE}.{dialogUniqueName}(executionContext)\r\n";
             code += $"{TAB} */\r\n";
-            code += $"{TAB}export class {dialogClassName} extends FormBase<{dialogClassName}.IBody, {dialogClassName}.IHeader, {dialogClassName}.IGrid, {dialogClassName}.INavigation, {dialogClassName}.IQuickForm, {dialogClassName}.IProcess, {dialogClassName}.IDialog> {{\r\n";
+            code += $"{TAB}export class {dialogUniqueName} extends FormBase<{dialogUniqueName}.IBody, {dialogUniqueName}.IHeader, {dialogUniqueName}.IGrid, {dialogUniqueName}.INavigation, {dialogUniqueName}.IQuickForm, {dialogUniqueName}.IProcess, {dialogUniqueName}.IDialog> {{\r\n";
             code += $"{TAB2}/**\r\n";
-            code += $"{TAB2} * Creates a {dialogClassName} instance\r\n";
+            code += $"{TAB2} * Creates a {dialogUniqueName} instance\r\n";
             code += $"{TAB2} * @param executionContext The execution context from dialog event\r\n";
             code += $"{TAB2} * @param defaultWebResourceName Optional default web resource name\r\n";
             code += $"{TAB2} */\r\n";

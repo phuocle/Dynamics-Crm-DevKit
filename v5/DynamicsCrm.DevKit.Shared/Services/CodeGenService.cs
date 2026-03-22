@@ -312,29 +312,28 @@ namespace DynamicsCrm.DevKit.Shared.Services
             return await Metadata.GetPluginCommentAsync(entityLogicalName, message);
         }
 
-        public async Task<string> GetDefaultTsDialogFileAsync(SystemForm dialogForm, string dialogNamespace)
+        public async Task<string> GetDefaultTsDialogFileAsync(SystemForm dialogForm, string dialogUniqueName)
         {
             await Helper.DelayAsync(1);
-            var varName = dialogNamespace;
+            var varName = dialogUniqueName;
+            var dialogNamespace = "DevKitDialog";
             
-            var dialogClassName = "Dialog";
             var code = string.Empty;
-            code += $"import {{ {dialogNamespace} as _{dialogNamespace} }} from './{dialogNamespace}.dialog';{NEW_LINE}";
+            code += $"import {{ {dialogNamespace} as _{dialogNamespace} }} from './{dialogUniqueName}.dialog';{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"const {varName} = (function () {{{NEW_LINE}";
             code += $"{TAB}\"use strict\";{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"{TAB}let dialog: _{dialogNamespace}.{dialogClassName};{NEW_LINE}";
+            code += $"{TAB}let dialog: _{dialogNamespace}.{dialogUniqueName};{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OnLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}dialog = new _{dialogNamespace}.{dialogClassName}(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}dialog = new _{dialogNamespace}.{dialogUniqueName}(executionContext);{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OkClick(executionContext: any): Promise<void> {{{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function CancelClick(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}dialog.dialog.ab_button_cancel; // example{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}return {{{NEW_LINE}";

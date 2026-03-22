@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 {
                     // APPEND mode: Dialog.ts already exists
                     var existingContent = await FileHelper.ReadAllTextAsync(dialogTsPath);
-                    var importStatement = $"import {{ {DialogClassName} as _{DialogClassName} }} from './{DialogClassName}.dialog';";
+                    var importStatement = $"import {{ DevKitDialog as _DevKitDialog }} from './{DialogClassName}.dialog';";
                     var updatedContent = AppendDialogToExistingFile(existingContent, importStatement, _TypeScript_, DialogClassName);
                     await FileHelper.ForceWriteAllTextAsync(dialogTsPath, updatedContent);
                 }
