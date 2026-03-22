@@ -22,24 +22,24 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         public static async Task<string> GetTsDialogCodeAsync(ServiceClient serviceClient, SystemForm dialogForm)
         {
             await Helper.DelayAsync(1);
-            var dialogNamespace = GetDialogClassName(dialogForm.Name);
+            var dialogUniqueName = dialogForm.UniqueName;
             var dialogClassName = "Dialog";
             var allControls = GetAllDialogControls(dialogForm.FormXml);
 
             var code = string.Empty;
             code += $"/**\r\n";
-            code += $" * {dialogNamespace}.dialog.ts - {dialogNamespace} Dialog for early-bound style dialog coding\r\n";
+            code += $" * {dialogUniqueName}.dialog.ts - {dialogForm.Name} Dialog for early-bound style dialog coding\r\n";
             code += $" * Generated file - DO NOT MODIFY MANUALLY\r\n";
             code += $" *\r\n";
             code += $" * Structure:\r\n";
             code += $" * 1. Imports\r\n";
-            code += $" * 2. Namespace {dialogNamespace} containing dialog class: {dialogNamespace}.{dialogClassName}\r\n";
+            code += $" * 2. Namespace {dialogUniqueName} containing dialog class: {dialogUniqueName}.{dialogClassName}\r\n";
             code += $" */\r\n";
             code += $"\r\n";
             code += $"/// <reference path=\"../lib/devkit.d.ts\" />\r\n";
             code += $"import {{ FormBase }} from '../lib/devkit';\r\n";
             code += $"\r\n";
-            code += $"export namespace {dialogNamespace} {{\r\n";
+            code += $"export namespace {dialogUniqueName} {{\r\n";
             code += $"\r\n";
             code += $"{TAB}// ========================================================================\r\n";
             code += $"{TAB}// Dialog: {dialogClassName}\r\n";
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}/**\r\n";
             code += $"{TAB} * {dialogClassName} class\r\n";
             code += $"{TAB} * Provides typed access to all dialog controls\r\n";
-            code += $"{TAB} * Usage: new {dialogNamespace}.{dialogClassName}(executionContext)\r\n";
+            code += $"{TAB} * Usage: new {dialogUniqueName}.{dialogClassName}(executionContext)\r\n";
             code += $"{TAB} */\r\n";
             code += $"{TAB}export class {dialogClassName} extends FormBase<{dialogClassName}.IBody, {dialogClassName}.IHeader, {dialogClassName}.IGrid, {dialogClassName}.INavigation, {dialogClassName}.IQuickForm, {dialogClassName}.IProcess, {dialogClassName}.IDialog> {{\r\n";
             code += $"{TAB2}/**\r\n";

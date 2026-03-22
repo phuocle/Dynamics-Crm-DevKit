@@ -1003,6 +1003,7 @@ namespace DynamicsCrm.DevKit.Shared.Services
     <attribute name='type' />
     <attribute name='objecttypecode' />
     <attribute name='formid' />
+    <attribute name='uniquename' />
     <order attribute='name' descending='false'/>
     <filter type='and'>
       <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
@@ -1022,7 +1023,8 @@ namespace DynamicsCrm.DevKit.Shared.Services
                 IsQuickCreate = false,
                 EntityLogicalName = x.GetAttributeValue<string>("objecttypecode"),
                 FormType = FormType.Dialog,
-                FormId = x.GetAttributeValue<Guid?>("formid")
+                FormId = x.GetAttributeValue<Guid?>("formid"),
+                UniqueName = x.GetAttributeValue<string>("uniquename")
             });
             return [.. forms.OrderBy(x => x.Name)];
         }

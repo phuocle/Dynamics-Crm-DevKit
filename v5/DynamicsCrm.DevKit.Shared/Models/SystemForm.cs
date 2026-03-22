@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using static DynamicsCrm.DevKit.Shared.XrmHelper;
 
 namespace DynamicsCrm.DevKit.Shared.Models
@@ -12,5 +12,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string EntityLogicalName { get; set; }
         public FormType? FormType { get; set; }
         public Guid? FormId { get; set; }
+        public string UniqueName { get; set; }
     }
 }

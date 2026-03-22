@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     ServiceClient = form.ServiceClient;
                     SelectedDialogForm = form.SelectedDialogForm;
                     DialogLogicalName = SelectedDialogForm.Name;
-                    DialogClassName = Shared.Logic.TsDialog.GetDialogClassName(DialogLogicalName);
+                    DialogClassName = SelectedDialogForm.UniqueName;
 
                     // Generate the .dialog.ts content
                     _TypeScriptDialog_ = await Shared.Logic.TsDialog.GetTsDialogCodeAsync(form.ServiceClient, SelectedDialogForm);
