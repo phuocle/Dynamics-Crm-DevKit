@@ -1,4 +1,4 @@
-﻿namespace DynamicsCrm.DevKit.Shared.Models
+namespace DynamicsCrm.DevKit.Shared.Models
 {
     public class ControlClassId
     {

@@ -228,78 +228,36 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static string GetDialogControlType(string classId)
         {
-            if (string.IsNullOrEmpty(classId)) return "String";
+            if (string.IsNullOrEmpty(classId)) return "Unknown";
 
-            // Single-line text variants
-            if (classId == ControlClassId.SINGLE_LINE_OF_TEXT ||
-                classId == ControlClassId.SINGLE_LINE_OF_TEXT_EMAIL ||
-                classId == ControlClassId.SINGLE_LINE_OF_TEXT_TICKER_SYMBOL ||
-                classId == ControlClassId.SINGLE_LINE_OF_TEXT_URL ||
-                classId == ControlClassId.SINGLE_LINE_OF_TEXT_PHONE)
-                return "String";
+            var id = classId.ToUpper();
 
-            // Multi-line text variants
-            if (classId == ControlClassId.MULTI_LINES_OF_TEXT ||
-                classId == ControlClassId.MULTI_LINES_OF_TEXT_MAX ||
-                classId == ControlClassId.MULTI_LINES_OF_TEXT_MEMO ||
-                classId == ControlClassId.MULTI_LINES_OF_TEXT_MEMO_2 ||
-                classId == ControlClassId.MULTI_LINES_OF_TEXT_DESCRIPTION)
-                return "Memo";
-
-            // Whole number variants
-            if (classId == ControlClassId.WHOLE_NUMBER ||
-                classId == ControlClassId.WHOLE_NUMBER_DURATION ||
-                classId == ControlClassId.WHOLE_NUMBER_LANGUAGE ||
-                classId == ControlClassId.WHOLE_NUMBER_LANGUAGE_2 ||
-                classId == ControlClassId.WHOLE_NUMBER_TIMEZONE)
-                return "Integer";
-
-            if (classId == ControlClassId.DECIMAL_NUMBER)
-                return "Decimal";
-            if (classId == ControlClassId.FLOATING_POINT_NUMBER)
-                return "Double";
-            if (classId == ControlClassId.CURRENCY)
-                return "Money";
-
-            // Boolean
-            if (classId == ControlClassId.TWO_OPTIONS ||
-                classId == ControlClassId.TWO_OPTIONS_2)
-                return "Boolean";
-
-            // OptionSet
-            if (classId == ControlClassId.STATUS_CODE ||
-                classId == ControlClassId.STATE_CODE)
-                return "OptionSet";
-
-            if (classId == ControlClassId.MULTI_OPTIONSET)
-                return "MultiOptionSet";
-
-            // Lookup variants
-            if (classId == ControlClassId.LOOKUP ||
-                classId == ControlClassId.LOOKUP_2 ||
-                classId == ControlClassId.LOOKUP_3 ||
-                classId == ControlClassId.LOOKUP_4)
-                return "Lookup";
-
-            if (classId == ControlClassId.DATE_TIME)
-                return "DateTime";
-            if (classId == ControlClassId.FILE)
-                return "File";
-            if (classId == ControlClassId.IMAGE)
-                return "Image";
-            if (classId == ControlClassId.WEB_RESOURCE)
-                return "WebResource";
-            if (classId == ControlClassId.IFRAME)
-                return "IFrame";
-
-            // Dialog-specific controls from Dataverse-Dialog-Builder guid.js
-            if (classId == "00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20")
-                return "Button";
-            if (classId == "39354E4A-5015-4D74-8031-EA9EB73A1322")
-                return "Label";
-
-            // Fallback
-            return "String";
+            if (id == ControlDialogClassId.LABEL) return "Label";
+            if (id == ControlDialogClassId.BUTTON) return "Button";
+            if (id == ControlDialogClassId.SLT_TEXT) return "String";
+            if (id == ControlDialogClassId.SLT_EMAIL) return "String";
+            if (id == ControlDialogClassId.SLT_TICKER_SYMBOL) return "String";
+            if (id == ControlDialogClassId.SLT_URL) return "String";
+            if (id == ControlDialogClassId.SLT_TEXT_AREA) return "Memo";
+            if (id == ControlDialogClassId.DATETIME) return "DateTime";
+            if (id == ControlDialogClassId.NUMBER_WHOLE_NUMBER) return "Integer";
+            if (id == ControlDialogClassId.NUMBER_DECIMAL_NUMBER) return "Decimal";
+            if (id == ControlDialogClassId.NUMBER_FLOATING_POINT_NUMBER) return "Double";
+            if (id == ControlDialogClassId.NUMBER_CURRENCY) return "Money";
+            if (id == ControlDialogClassId.LOOKUP) return "Lookup";
+            if (id == ControlDialogClassId.IFRAME) return "IFrame";
+            if (id == ControlDialogClassId.DROPDOWN_LANGUAGE) return "Integer";
+            if (id == ControlDialogClassId.DROPDOWN_TIMEZONE) return "Integer";
+            if (id == ControlDialogClassId.DROPDOWN_DURATION) return "Integer";
+            if (id == ControlDialogClassId.OPTIONSET_OPTIONSET) return "OptionSet";
+            if (id == ControlDialogClassId.OPTIONSET_MULTISELECT_OPTIONSET) return "MultiOptionSet";
+            if (id == ControlDialogClassId.SUBGRID_CHART) return "Grid";
+            if (id == ControlDialogClassId.TWOOPTIONS_DROPDOWN) return "Boolean";
+            if (id == ControlDialogClassId.TWOOPTIONS_CHECKBOX) return "Boolean";
+            if (id == ControlDialogClassId.REGARDING) return "Lookup";
+            
+            // Fallback for everything else
+            return "Unknown";
         }
     }
 }
