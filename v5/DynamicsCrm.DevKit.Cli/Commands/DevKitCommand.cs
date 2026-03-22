@@ -166,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             ServiceClient serviceClient = null;
 
-            await SpectreLog.WithStatusAsync("Connecting to Dynamics 365...", async ctx =>
+            await SpectreLog.WithStatusAsync("Connecting ...", async ctx =>
             {
                 if (!string.IsNullOrEmpty(settings.AuthType))
                 {

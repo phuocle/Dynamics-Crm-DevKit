@@ -139,9 +139,13 @@ namespace DynamicsCrm.DevKit.Cli
         #region Async Progress & Status
         public static async Task WithStatusAsync(string status, Func<StatusContext, Task> action)
         {
-            WriteLine();
-            AnsiConsole.MarkupLine($"[{TEXT1_COLOR}]{PREFIX}[/]{Escape(status)}");
-            await action(null);
+            await AnsiConsole.Status()
+                .Spinner(Spinner.Known.Dots)
+                .SpinnerStyle(Style.Parse("green"))
+                .StartAsync($"[{TEXT1_COLOR}]{Escape(status)}[/]", async ctx =>
+                {
+                    await action(ctx);
+                });
         }
         public static void WaitingWithCancellation(string message = "", CancellationToken cancellationToken = default)
         {

@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
             if (settings.OnlyUpdateAssembly)
             {
-                rows.Add(new[] { $"{indent} --only-assembly", "yes" });
+                rows.Add(new[] { $"{indent}--only-assembly", "yes" });
             }
             return rows;
         }
