@@ -7,104 +7,13 @@ description: Build DynamicsCrm.DevKit.Tool project in Debug mode
 Build **only** the Tool project (faster than `/build-debug`), pack it as a .NET global tool, and install locally for testing.
 
 > [!CAUTION]
-> **PHẢI RESTORE `Const.cs` SAU KHI BUILD!**
-> 
-> Nếu không restore, file `Const.cs` sẽ chứa version/date thật thay vì placeholders.
-> Điều này sẽ gây lỗi cho các build khác và có thể bị commit nhầm vào git!
-> 
-> Step 5 (Restore) là **BẮT BUỘC** - KHÔNG ĐƯỢC BỎ QUA!
+> Quy trình build sử dụng script `Release.DynamicsCrm.DevKit.Tool.ps1`.
+> Kịch bản này đã được cấu trúc với `try...finally` để đảm bảo tệp `Const.cs` sẽ luôn được phục hồi an toàn trong mọi tình huống (kể cả khi lỗi hoặc nhấn huỷ giữa chừng).
 
-## Step 1: Read Version from Config
+## Build Script
 
 ```powershell
-$ProjectRoot = "d:\github\Dynamics-Crm-DevKit\v5"
-$ConfigFile = "$ProjectRoot\DynamicsCrm.DevKit.Scripts\DevKit.ReleaseConfig.json"
-$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-$Version = $Config.version
-$BuildDate = Get-Date -Format "dd.MM.yyyy HH:mm:ss"
-Write-Host "Version: $Version" -ForegroundColor Cyan
-Write-Host "Build Date: $BuildDate" -ForegroundColor Cyan
-```
-
-## Step 2: Update Const.cs with Real Values
-
-```powershell
-$ConstFile = "$ProjectRoot\DynamicsCrm.DevKit.Shared\Const.cs"
-
-# Backup original content
-$OriginalContent = [System.IO.File]::ReadAllText($ConstFile, [System.Text.Encoding]::UTF8)
-
-# Replace placeholders
-$NewContent = $OriginalContent
-$NewContent = $NewContent -replace [regex]::Escape("x.xx.xx.xx"), $Version
-$NewContent = $NewContent -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
-
-# Write updated content
-[System.IO.File]::WriteAllText($ConstFile, $NewContent, [System.Text.Encoding]::UTF8)
-Write-Host "Updated Const.cs with version $Version and date $BuildDate" -ForegroundColor Green
-```
-
-## Step 3: Build & Pack Tool
-
-```powershell
-$publishDir = "$ProjectRoot\published\$Version"
-New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
-
-# Build Tool project only (with version override)
-dotnet build "$ProjectRoot\DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj" -c Debug -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version
-
-# Pack as NuGet tool
-dotnet pack "$ProjectRoot\DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj" -c Debug -o $publishDir -p:Version=$Version -p:AssemblyVersion=$Version -p:FileVersion=$Version --no-build
-```
-
-## Step 4: Install Tool
-
-```powershell
-$ToolName = "DynamicsCrm.DevKit.Tool"
-
-# Uninstall existing
-dotnet tool uninstall -g $ToolName 2>$null
-
-# Clean tool store and cache
-Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\.store\dynamicscrm.devkit.tool" -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "$env:USERPROFILE\.dotnet\tools\devkit-tool.exe" -Force -ErrorAction SilentlyContinue
-Remove-Item -Path "$env:USERPROFILE\.nuget\packages\dynamicscrm.devkit.tool\$Version" -Recurse -Force -ErrorAction SilentlyContinue
-
-# Install new version
-dotnet tool install -g $ToolName --add-source $publishDir --version $Version
-```
-
-## Step 5: ⚠️ RESTORE Const.cs (QUAN TRỌNG!)
-
-> [!WARNING]
-> **KHÔNG ĐƯỢC BỎ QUA BƯỚC NÀY!**
-> Nếu không restore, git sẽ thấy file thay đổi và có thể bị commit nhầm.
-
-```powershell
-# Restore original placeholder content
-[System.IO.File]::WriteAllText($ConstFile, $OriginalContent, [System.Text.Encoding]::UTF8)
-Write-Host "Restored Const.cs to original placeholders" -ForegroundColor Yellow
-```
-
-## Step 6: Verify Installation
-
-```powershell
-devkit-tool --help
-```
-
-Expected output: `devkit-tool` banner with version `4.12.34.56` and list of available commands.
-
-## Step 7: Verify Const.cs is Restored
-
-```powershell
-# Verify placeholders are back
-$content = Get-Content $ConstFile -Raw
-if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
-    Write-Host "✓ Const.cs restored successfully" -ForegroundColor Green
-} else {
-    Write-Host "✗ ERROR: Const.cs NOT restored! Please restore manually!" -ForegroundColor Red
-    Write-Host "Run: git checkout $ConstFile" -ForegroundColor Yellow
-}
+.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Tool.ps1
 ```
 
 ## Notes
