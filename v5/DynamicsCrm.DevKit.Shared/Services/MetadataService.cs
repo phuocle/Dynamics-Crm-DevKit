@@ -985,5 +985,46 @@ namespace DynamicsCrm.DevKit.Shared.Services
             entities = [.. entities.OrderBy(entity => entity.Name)];
             return entities;
         }
+
+        public async Task<List<SystemForm>> GetEntityDialogFormsAsync()
+        {
+            var fetchData = new
+            {
+                formactivationstate = "1",
+                type = (int)FormType.Dialog,
+                ismanaged = "0"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemform'>
+    <attribute name='description' />
+    <attribute name='name' />
+    <attribute name='formxml' />
+    <attribute name='type' />
+    <attribute name='objecttypecode' />
+    <attribute name='formid' />
+    <order attribute='name' descending='false'/>
+    <filter type='and'>
+      <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
+      <condition attribute='type' operator='eq' value='{fetchData.type}'/>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
+    </filter>
+  </entity>
+</fetch>";
+            XrmHelper.COUNT_RetrieveMultipleAsync++;
+            var rows = await _serviceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return [];
+            var forms = rows.Entities.Select(x => new SystemForm
+            {
+                Name = x.GetAttributeValue<string>("name"),
+                Description = x.GetAttributeValue<string>("description"),
+                FormXml = x.GetAttributeValue<string>("formxml"),
+                IsQuickCreate = false,
+                EntityLogicalName = x.GetAttributeValue<string>("objecttypecode"),
+                FormType = FormType.Dialog,
+                FormId = x.GetAttributeValue<Guid?>("formid")
+            });
+            return [.. forms.OrderBy(x => x.Name)];
+        }
     }
 }

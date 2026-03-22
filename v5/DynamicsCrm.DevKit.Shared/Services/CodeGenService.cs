@@ -311,5 +311,39 @@ namespace DynamicsCrm.DevKit.Shared.Services
         {
             return await Metadata.GetPluginCommentAsync(entityLogicalName, message);
         }
+
+        public async Task<string> GetDefaultTsDialogFileAsync(SystemForm dialogForm, string dialogClassName)
+        {
+            await Helper.DelayAsync(1);
+            var logicalName = dialogForm.Name;
+            var code = string.Empty;
+            code += $"import {{ {dialogClassName} }} from './{dialogClassName}.dialog';{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"const {logicalName}_dialog = (function () {{{NEW_LINE}";
+            code += $"{TAB}\"use strict\";{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}let dialog: {dialogClassName}.IDialog;{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function OnLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}{TAB}dialog = new {dialogClassName}.Dialog(executionContext);{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function OkClick(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}async function CancelClick(executionContext: any): Promise<void> {{{NEW_LINE}";
+            code += $"{TAB}{TAB}dialog.Close();{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}return {{{NEW_LINE}";
+            code += $"{TAB}{TAB}OnLoad: OnLoad,{NEW_LINE}";
+            code += $"{TAB}{TAB}OkClick: OkClick,{NEW_LINE}";
+            code += $"{TAB}{TAB}CancelClick: CancelClick,{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})();{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"export {{ {logicalName}_dialog }};";
+            return code;
+        }
     }
 }

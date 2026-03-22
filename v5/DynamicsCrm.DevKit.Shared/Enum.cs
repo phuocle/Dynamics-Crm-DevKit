@@ -1,10 +1,11 @@
-﻿namespace DynamicsCrm.DevKit.Shared
+namespace DynamicsCrm.DevKit.Shared
 {
     public enum FormType
     {
         Main = 2,
         QuickCreate = 7,
-        QuickView = 6
+        QuickView = 6,
+        Dialog = 8
     }
 
     public enum CliType
@@ -98,7 +99,8 @@
         DataProvider,
         ResourceString,
         DownloadReports,
-        BatFile
+        BatFile,
+        TsDialog
     }
 
     public enum DeployFileType

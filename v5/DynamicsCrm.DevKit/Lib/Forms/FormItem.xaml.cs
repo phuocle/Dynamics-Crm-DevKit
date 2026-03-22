@@ -3,6 +3,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,10 +15,22 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
+        public SystemForm SelectedDialogForm { get; set; }
+        public List<SystemForm> DialogForms { get; set; }
         public string ItemName
         {
             get
             {
+                if (ItemType == ItemType.TsDialog)
+                {
+                    var index = ComboBox.SelectedIndex;
+                    if (index >= 0 && DialogForms != null && index < DialogForms.Count)
+                    {
+                        SelectedDialogForm = DialogForms[index];
+                        return SelectedDialogForm.Name;
+                    }
+                    return LabelItemNameLatest.Content?.ToString();
+                }
                 return ((XrmEntity)ComboBox.SelectedItem)?.SchemaName ?? LabelItemNameLatest.Content?.ToString();
             }
         }
@@ -83,6 +96,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
                     LabelItemName.Content = "Entity";
                 }
+                void TsDialogItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript Dialog Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Dialog";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -100,6 +124,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.TsWebApi:
                         TsWebApiItem();
+                        break;
+                    case ItemType.TsDialog:
+                        TsDialogItem();
                         break;
                 }
             }
@@ -166,6 +193,28 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         ComboBox.DisplayMemberPath = Const.SchemaName;
                         ComboBox.ItemsSource = items;
                         buttonOK.IsEnabled = items.Count > 0;
+                        StackPanelMain.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        CONNECTION.SetIsEnabledButtonConnection(true);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else if (ItemType == ItemType.TsDialog)
+            {
+                StackPanelMain.IsEnabled = false;
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                CONNECTION.SetIsEnabledButtonConnection(false);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        var metadata = new MetadataService(ServiceClient);
+                        DialogForms = await metadata.GetEntityDialogFormsAsync();
+                        var displayNames = DialogForms.Select(x => x.Name).ToList();
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBox.DisplayMemberPath = null;
+                        ComboBox.ItemsSource = displayNames;
+                        buttonOK.IsEnabled = displayNames.Count > 0;
                         StackPanelMain.IsEnabled = true;
                         progressBar.Visibility = System.Windows.Visibility.Hidden;
                         CONNECTION.SetIsEnabledButtonConnection(true);

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>16. TypeScript Dialog</Name>
+		<Description>Generates a Dataverse TypeScript dialog scaffold with typed interfaces for dialog controls.</Description>
+		<DefaultName>TypeScript.dialog.ts</DefaultName>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000016</TemplateID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<SortOrder>260</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$DialogName$.dialog.ts">TypeScript.dialog.ts</ProjectItem>
+		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Dialog.ts">TypeScript.ts</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.TsDialog</FullClassName>
+	</WizardExtension>
+</VSTemplate>

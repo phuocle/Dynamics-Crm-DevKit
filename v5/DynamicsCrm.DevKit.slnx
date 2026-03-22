@@ -66,6 +66,10 @@
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
+    <Project Path="ItemTemplates/CSharp/16.TsDialogItemTemplate/16.TsDialogItemTemplate.csproj" Id="b4432efe-5fe3-46f4-9335-703e658c0230">
+      <Platform Solution="*|arm64" Project="arm64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
   </Folder>
   <Folder Name="/ProjectTemplates/" />
   <Folder Name="/ProjectTemplates/CSharp/">

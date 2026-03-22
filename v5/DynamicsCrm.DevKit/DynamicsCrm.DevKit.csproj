@@ -120,6 +120,7 @@
     <Compile Include="Wizard\ItemTemplates\ResourceString.cs" />
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
     <Compile Include="Wizard\ItemTemplates\TsForm.cs" />
+    <Compile Include="Wizard\ItemTemplates\TsDialog.cs" />
     <Compile Include="Wizard\ItemTemplates\UiTest.cs" />
     <Compile Include="Wizard\ItemTemplates\JsDevkit.cs" />
     <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
@@ -368,6 +369,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\15.TsWebApiItemTemplate\15.TsWebApiItemTemplate.csproj">
       <Project>{1B81A02C-92EC-4963-B6FF-AAD8202044A9}</Project>
       <Name>15.TsWebApiItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\16.TsDialogItemTemplate\16.TsDialogItemTemplate.csproj">
+      <Project>{B4432EFE-5FE3-46F4-9335-703E658C0230}</Project>
+      <Name>16.TsDialogItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

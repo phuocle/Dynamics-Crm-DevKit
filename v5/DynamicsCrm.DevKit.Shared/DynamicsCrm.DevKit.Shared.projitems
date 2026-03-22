@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\TsForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\TsDialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\TsOptionSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsWebApi.cs" />
