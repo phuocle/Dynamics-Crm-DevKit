@@ -58,8 +58,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 {
                     // APPEND mode: Dialog.ts already exists
                     var existingContent = await FileHelper.ReadAllTextAsync(dialogTsPath);
-                    var importStatement = $"import {{ DevKitDialog as _DevKitDialog }} from './{DialogClassName}.dialog';";
-                    var updatedContent = AppendDialogToExistingFile(existingContent, importStatement, _TypeScript_, DialogClassName);
+                var importStatement = $"import {{ DevKitDialog as Dialog }} from './{DialogClassName}.dialog';";
+                var updatedContent = AppendDialogToExistingFile(existingContent, importStatement, _TypeScript_, DialogClassName);
                     await FileHelper.ForceWriteAllTextAsync(dialogTsPath, updatedContent);
                 }
                 else
@@ -155,11 +155,14 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             var lines = existingContent.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).ToList();
 
             // 1. Find the last import line and insert new import AFTER it
-            var lastImportIndex = lines.FindLastIndex(l => l.TrimStart().StartsWith("import "));
-            if (lastImportIndex >= 0)
-                lines.Insert(lastImportIndex + 1, importStatement);
-            else
-                lines.Insert(0, importStatement);
+            if (!lines.Any(l => l.Contains("import { DevKitDialog as Dialog }")))
+            {
+                var lastImportIndex = lines.FindLastIndex(l => l.TrimStart().StartsWith("import "));
+                if (lastImportIndex >= 0)
+                    lines.Insert(lastImportIndex + 1, importStatement);
+                else
+                    lines.Insert(0, importStatement);
+            }
 
             // 2. Find the `export { ... }` line
             var exportIndex = lines.FindLastIndex(l => l.TrimStart().StartsWith("export {"));

@@ -319,15 +319,15 @@ namespace DynamicsCrm.DevKit.Shared.Services
             var dialogNamespace = "DevKitDialog";
             
             var code = string.Empty;
-            code += $"import {{ {dialogNamespace} as _{dialogNamespace} }} from './{dialogUniqueName}.dialog';{NEW_LINE}";
+            code += $"import {{ {dialogNamespace} as Dialog }} from './{dialogUniqueName}.dialog';{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"const {varName} = (function () {{{NEW_LINE}";
             code += $"{TAB}\"use strict\";{NEW_LINE}";
             code += $"{NEW_LINE}";
-            code += $"{TAB}let dialog: _{dialogNamespace}.{dialogUniqueName};{NEW_LINE}";
+            code += $"{TAB}let form: Dialog.{dialogUniqueName};{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OnLoad(executionContext: any): Promise<void> {{{NEW_LINE}";
-            code += $"{TAB}{TAB}dialog = new _{dialogNamespace}.{dialogUniqueName}(executionContext);{NEW_LINE}";
+            code += $"{TAB}{TAB}form = new Dialog.{dialogUniqueName}(executionContext);{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}async function OkClick(executionContext: any): Promise<void> {{{NEW_LINE}";
