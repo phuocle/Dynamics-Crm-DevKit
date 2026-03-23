@@ -981,6 +981,15 @@ const devKit = (function () {
         obj.Close = () => formContext?.ui?.close();
         return obj;
     }
+    function loadDialogFormBase(executionContext, dialog, defaultWebResourceName) {
+        const obj = {};
+        const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+        const contextUi = formContext?.ui;
+        obj.Close = () => contextUi?.close();
+        obj.Dialog = dialog?.length > 0 ? loadFormDialog(formContext, dialog) : {};
+        obj.Utility = loadUtility(defaultWebResourceName);
+        return obj;
+    }
     function loadFormV2(executionContext, defaultWebResourceName, formConfig) {
         const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
         const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
@@ -1012,7 +1021,7 @@ const devKit = (function () {
         LoadWebApi: loadWebApi,
         LoadCopilot: loadCopilot,
         LoadExecutionContext: loadExecutionContext,
-        LoadFormDialog: loadFormDialog,
+        LoadFormDialog: loadDialogFormBase,
         LoadSidePanes: loadSidePanes,
         LoadFormV2: loadFormV2
     }

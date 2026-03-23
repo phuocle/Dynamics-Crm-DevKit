@@ -4895,4 +4895,21 @@ declare namespace OptionSet {
         /** 7 - Last Name First Name (no space, e.g., "SmithJohn") */
         LastNameFirstName
     }
+    /**
+     * Interface for Dialog forms with a Utility property
+     */
+    interface IDialogFormBase<TDialog> {
+        Dialog: TDialog;
+        Utility: Utility;
+        Close(): void;
+    }
+    /**
+     * Class for devKit.LoadFormDialog constructor
+     */
+    class LoadFormDialog<TDialog> implements IDialogFormBase<TDialog> {
+        constructor(executionContext: any, fields: Array<string>, defaultWebResourceName?: string);
+        Dialog: TDialog;
+        Utility: Utility;
+        Close(): void;
+    }
 }
