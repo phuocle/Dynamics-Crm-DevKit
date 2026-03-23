@@ -2,6 +2,11 @@
 description: Build Release DynamicsCrm.DevKit for all projects
 ---
 
+> [!IMPORTANT]  
+> **AI AGENT INSTRUCTIONS (CRITICAL):**
+> GỬI TỚI AI AGENT: Bạn KHÔNG ĐƯỢC chỉ in ra văn bản các bước. Bạn PHẢI SỬ DỤNG TOOL để thực thi TỪNG LỆNH một thay cho người dùng.
+> **RẤT QUAN TRỌNG:** Lệnh `/unit-test` và tập lệnh build (.ps1) cần rất nhiều thời gian để hoàn thành. Bạn PHẢI DÙNG TOOL để kiểm tra lệnh đang chạy và CHỜ ĐỢI cho đến khi lệnh chạy xong 100% (status DONE) TRƯỚC KHI gọi tool làm bước tiếp theo (nhất là các bước Verify). Nếu bạn chạy một lèo không chờ, kết quả Verify sẽ fail hoàn toàn. Phải đợi dứt điểm lệnh này mới chạy lệnh kia!
+
 // turbo-all
 
 1. Record the start time

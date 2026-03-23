@@ -2,6 +2,11 @@
 description: Build Release DynamicsCrm.DevKit for all projects with current timestamp
 ---
 
+> [!IMPORTANT]  
+> **AI AGENT INSTRUCTIONS (CRITICAL):**
+> GỬI TỚI AI AGENT: Bạn KHÔNG ĐƯỢC chỉ in ra văn bản các bước. Bạn PHẢI SỬ DỤNG TOOL để thực thi TỪNG LỆNH một thay cho người dùng.
+> **RẤT QUAN TRỌNG:** Tập lệnh build (.ps1) cần rất nhiều thời gian để hoàn thành. Bạn PHẢI DÙNG TOOL để kiểm tra tiến trình (process status) và CHỜ ĐỢI cho đến khi tập lệnh chạy xong 100% TRƯỚC KHI chuyển sang các bước Verify. Nếu bạn không chờ, các bước Verify sẽ báo lỗi hoặc báo thiếu file `nupkg`/`vsix` (vì nó chưa build xong), dẫn tới output sai hoàn toàn. Hãy làm tuần tự, chậm mà chắc.
+
 // turbo-all
 
 1. Record the start time

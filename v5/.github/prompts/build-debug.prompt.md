@@ -3,6 +3,12 @@ description: "Build Release DynamicsCrm.DevKit for all projects with current tim
 mode: agent
 ---
 
+> [!IMPORTANT]  
+> **AI AGENT INSTRUCTIONS (CRITICAL):**
+> GỬI TỚI AI AGENT: Bạn KHÔNG ĐƯỢC chỉ in ra văn bản các bước. Bạn PHẢI SỬ DỤNG TOOL để thực thi TỪNG LỆNH một thay cho người dùng.
+> **RẤT QUAN TRỌNG:** Tập lệnh build (.ps1) cần rất nhiều thời gian để hoàn thành. Bạn PHẢI DÙNG TOOL để kiểm tra tiến trình (process status) và CHỜ ĐỢI cho đến khi tập lệnh chạy xong 100% TRƯỚC KHI chuyển sang các bước Verify. Nếu bạn không chờ, các bước Verify sẽ báo lỗi hoặc báo thiếu file `nupkg`/`vsix` (vì nó chưa build xong), dẫn tới output sai hoàn toàn. Hãy làm tuần tự, chậm mà chắc.
+
+
 1. Record the start time
 2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit-CurrentDate.ps1`. The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes (such as the running MCP server) before building to avoid file lock access-denied errors. It builds all projects in Release mode without running unit tests. The version comes from `DevKit.ReleaseConfig.json`, but the date/time is dynamically overridden with the current date/time. If any errors occur, stop and fix them, then restart this workflow from the beginning.
 3. Record the end time

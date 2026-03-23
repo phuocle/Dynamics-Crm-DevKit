@@ -17,6 +17,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             public string Id { get; set; }
             public string ClassId { get; set; }
             public string Label { get; set; }
+            public string ParameterType { get; set; }
         }
 
         private const string DIALOG_NAMESPACE = "DevKitDialog";
@@ -57,7 +58,9 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
             foreach (var field in allControls)
             {
-                var dialogType = GetDialogControlType(field.ClassId);
+                var dialogType = field.ClassId == null && field.ParameterType != null
+                    ? GetParameterControlType(field.ParameterType)
+                    : GetDialogControlType(field.ClassId);
                 var comment = !string.IsNullOrEmpty(field.Label) ? field.Label : field.Id;
                 code += $"{TAB2}{TAB}/** {comment} */\r\n";
                 code += $"{TAB2}{TAB}{field.Id}: DevKit.Controls.Dialog.{dialogType};\r\n";
@@ -91,7 +94,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
         {
             if (string.IsNullOrEmpty(dialogName)) return dialogName;
             var name = dialogName;
-            
+
             return string.Join("", name.Split(new[] { '_', ' ' })
                 .Where(s => s.Length > 0)
                 .Select(s => char.ToUpper(s[0]) + s.Substring(1)));
@@ -178,7 +181,39 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 });
             }
 
+            // Parse form parameters (dialog input/output querystring parameters)
+            var formParameters = xdoc.Descendants("formparameters")
+                .Descendants("querystringparameter");
+
+            foreach (var param in formParameters)
+            {
+                var name = param.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(name)) continue;
+                var type = param.Attribute("type")?.Value;
+                results.Add(new DialogFieldInfo
+                {
+                    Id = name,
+                    ClassId = null,
+                    Label = null,
+                    ParameterType = type
+                });
+            }
+
             return results;
+        }
+
+        private static string GetParameterControlType(string paramType)
+        {
+            if (string.IsNullOrEmpty(paramType)) return "String";
+            if (paramType == "SafeString") return "String";
+            if (paramType == "Boolean") return "Boolean";
+            if (paramType == "Integer") return "Integer";
+            if (paramType == "PositiveInteger") return "Integer";
+            if (paramType == "DateTime") return "DateTime";
+            if (paramType == "UniqueId") return "String";
+            if (paramType == "Object") return "String";
+            if (paramType == "EntityType") return "String";
+            return "String";
         }
 
         private static string GetDialogControlType(string classId)
@@ -210,7 +245,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (id == ControlDialogClassId.TWOOPTIONS_DROPDOWN) return "Boolean";
             if (id == ControlDialogClassId.TWOOPTIONS_CHECKBOX) return "Boolean";
             if (id == ControlDialogClassId.REGARDING) return "Lookup";
-            
+
             // Fallback for everything else
             return "Unknown";
         }
