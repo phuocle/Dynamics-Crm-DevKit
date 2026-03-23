@@ -50,8 +50,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var dialogProjectItemFullPath = dialogProjectItem.FileNames[0];
                 await FileHelper.ForceWriteAllTextAsync(dialogProjectItemFullPath, _TypeScriptDialog_);
 
-                // 2. Handle Dialog.ts (user code)
-                var dialogTsProjectItem = await VsixHelper.GetProjectItemAsync("Dialog.ts");
+                // 2. Handle {DialogClassName}.ts (user code)
+                var dialogTsProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.ts");
                 var dialogTsPath = dialogTsProjectItem.FileNames[0];
 
                 if (IsDialogTsExisting)
@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 // 3. Nest .dialog.ts under Dialog.ts
                 try
                 {
-                    dialogProjectItem.Properties.Item("DependentUpon").Value = "Dialog.ts";
+                    dialogProjectItem.Properties.Item("DependentUpon").Value = $"{DialogClassName}.ts";
                 }
                 catch
                 {
@@ -127,7 +127,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 switch (filePath)
                 {
                     case "TypeScript.ts":
-                        FilePath = "Dialog.ts";
+                        FilePath = $"{DialogClassName}.ts";
                         break;
                     default:
                         FilePath = $"{DialogClassName}.dialog.ts";
@@ -139,8 +139,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 if (filePath == "TypeScript.ts")
                 {
                     IsDialogTsExisting = IsFilePathExist;
-                    // If Dialog.ts exists, don't add it (we'll append in RunFinished)
-                    // If Dialog.ts doesn't exist, add it so template creates it
+                    // If {DialogClassName}.ts exists, don't add it (we'll append in RunFinished)
+                    // If {DialogClassName}.ts doesn't exist, add it so template creates it
                     return !IsFilePathExist;
                 }
                 // Always add the .dialog.ts file

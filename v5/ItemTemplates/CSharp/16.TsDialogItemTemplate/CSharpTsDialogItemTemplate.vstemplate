@@ -15,7 +15,7 @@
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$DialogName$.dialog.ts">TypeScript.dialog.ts</ProjectItem>
-		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="Dialog.ts">TypeScript.ts</ProjectItem>
+		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$DialogName$.ts">TypeScript.ts</ProjectItem>
 	</TemplateContent>
 	<WizardExtension>
 		<Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
