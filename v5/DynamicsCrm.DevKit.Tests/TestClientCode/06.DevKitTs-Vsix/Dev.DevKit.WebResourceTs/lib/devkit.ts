@@ -130,20 +130,22 @@ function findControlFromAttribute(attribute: any, controlName: string): any {
 }
 function loadFields(formContext: any, fields: string[], type?: string): any {
     const body: any = {};
+    const hasGetControl = typeof formContext?.getControl === 'function';
+    const hasGetAttribute = typeof formContext?.getAttribute === 'function';
     fields.forEach(field => {
         body[field] = {};
         const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-        let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+        let control = hasGetControl ? (formContext.getControl(logicalName) ?? formContext.getControl(field)) : null;
         let attribute: any = null;
         if (type === "header_" && control) {
             attribute = control.getAttribute();
         } else {
-            attribute = formContext?.getAttribute(logicalName);
+            attribute = hasGetAttribute ? formContext.getAttribute(logicalName) : null;
             if (!attribute) {
                 const baseFieldName = field.replace(/\d+$/, '');
                 if (baseFieldName !== field) {
                     const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
-                    attribute = formContext?.getAttribute(baseLogicalName);
+                    attribute = hasGetAttribute ? formContext.getAttribute(baseLogicalName) : null;
                 }
             }
             if (!attribute && control) {
@@ -313,7 +315,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
         return obj;
     };
     const loadGrid = (formContext: any, obj: any, grid: string) => {
-        const gridControl = formContext?.getControl(grid);
+        const gridControl = typeof formContext?.getControl === 'function' ? formContext.getControl(grid) : null;
         const createCollectionObject = (getItemsFn: any, processItemFn: any) => {
             const obj: any = {};
             obj.getLength = () => getItemsFn()?.getLength();
@@ -332,14 +334,14 @@ function loadGrids(formContext: any, gridItems: string[]): any {
         getter(obj[grid], 'GridType', () => gridControl?.getGridType());
         getter(obj[grid], 'Relationship', () => gridControl?.getRelationship());
         getter(obj[grid], 'Rows', () => {
-            const gridInstance = formContext?.getControl(grid)?.getGrid();
+            const gridInstance = typeof formContext?.getControl === 'function' ? formContext.getControl(grid)?.getGrid() : null;
             return createCollectionObject(
                 () => gridInstance?.getRows(),
                 (row: any) => loadGridRow(row)
             );
         });
         getter(obj[grid], 'SelectedRows', () => {
-            const gridInstance = formContext?.getControl(grid)?.getGrid();
+            const gridInstance = typeof formContext?.getControl === 'function' ? formContext.getControl(grid)?.getGrid() : null;
             return createCollectionObject(
                 () => gridInstance?.getSelectedRows(),
                 (row: any) => loadGridRow(row?.getData())
@@ -927,11 +929,15 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
 }
 function loadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
+    const hasGetControl = typeof formContext?.getControl === 'function';
     const fieldsLength = fields.length;
     for (let i = 0; i < fieldsLength; i++) {
         const fieldName = fields[i];
-        const attribute = formContext?.data?.entity?.attributes?.get(fieldName);
-        const control = formContext?.getControl(fieldName);
+        let attribute = formContext?.data?.attributes?.get(fieldName);
+        const control = hasGetControl ? formContext.getControl(fieldName) : null;
+        if (!attribute && control) {
+            attribute = control.getAttribute?.();
+        }
         form[fieldName] = {};
         loadField(formContext, form[fieldName], attribute, control);
     }
@@ -981,7 +987,6 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public Navigation!: TNavigation;
     public QuickForm!: TQuickForm;
     public Process!: TProcess;
-    public Dialog!: TDialog;
     public ExecutionContext!: DevKit.IExecutionContext;
     public Utility!: DevKit.IUtility;
     public SidePanes!: DevKit.ISidePanes;
@@ -1005,7 +1010,6 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public readonly ViewPortWidth!: number;
     public Save!: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
     public Refresh!: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
-    public Close!: () => void;
     public SetFormNotification!: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
     public ClearFormNotification!: (uniqueId: string) => boolean;
     public RefreshRibbon!: (refreshAll?: boolean) => void;
@@ -1066,7 +1070,6 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         this.AddOnPostSave = (callback: any) => contextDataEntity?.addOnPostSave(callback);
         this.AddOnSave = (callback: any) => contextDataEntity?.addOnSave(callback);
         this.ClearFormNotification = (uniqueId: string) => contextUi?.clearFormNotification(uniqueId);
-        this.Close = () => contextUi?.close();
         this.DataAddOnLoad = (callback: any) => contextData?.addOnLoad(callback);
         this.DataRemoveOnLoad = (callback: any) => contextData?.removeOnLoad(callback);
         this.FormIsVisible = (formId: string) => { return findFormItem((item: any) => item.getId(), formId)?.getVisible(); };
@@ -1093,7 +1096,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         this.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
         this.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
         // Load form sections
-        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
+        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [] } = formConfig;
         const bodyObj: any = body.length > 0 ? loadFields(formContext, body) : {};
         bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
         this.Body = bodyObj as TBody;
@@ -1102,12 +1105,28 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         this.QuickForm = (quick.length > 0 ? loadQuickForms(formContext, quick) : {}) as TQuickForm;
         this.Grid = (grid.length > 0 ? loadGrids(formContext, grid) : {}) as TGrid;
         this.Navigation = (navigation.length > 0 ? loadNavigations(formContext, navigation) : {}) as TNavigation;
-        this.Dialog = (dialog.length > 0 ? loadFormDialog(formContext, dialog) : {}) as TDialog;
         this.Utility = loadUtility(defaultWebResourceName);
         this.ExecutionContext = loadExecutionContext(executionContext);
         this.SidePanes = loadSidePanes();
         this.WebApi = loadWebApi();
         this.Copilot = loadCopilot();
+    }
+}
+export class DialogFormBase<TDialog = any> implements DevKit.IDialogFormBase<TDialog> {
+    public Dialog!: TDialog;
+    public Utility!: DevKit.IUtility;
+    public Close!: () => void;
+
+    constructor(
+        executionContext: any,
+        dialog: string[],
+        defaultWebResourceName?: string
+    ) {
+        const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+        const contextUi = formContext?.ui;
+        this.Close = () => contextUi?.close();
+        this.Dialog = (dialog.length > 0 ? loadFormDialog(formContext, dialog) : {}) as TDialog;
+        this.Utility = loadUtility(defaultWebResourceName);
     }
 }
 export function defineWebApiField(obj: any, fieldName: string, entity: Record<string, any>, config: DevKit.IWebApiFieldConfig, upsertEntity: Record<string, any>): void {

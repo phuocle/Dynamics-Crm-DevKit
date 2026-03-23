@@ -2119,6 +2119,31 @@ declare namespace DevKit {
     }
 
     /**
+     * Base interface for Dialog form class
+     * Used by generated dialog forms to provide typed access to dialog controls only
+     * When typing form. on a dialog form, only Dialog and Close() are available
+     */
+    interface IDialogFormBase<TDialog = any> {
+        /**
+         * The Dialog section containing all dialog controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+         */
+        Dialog: TDialog;
+
+        /**
+         * The Utility section providing access to global context and helper methods (e.g. Resource strings)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+         */
+        Utility: IUtility;
+
+        /**
+         * Closes the dialog form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/close
+         */
+        Close(): void;
+    }
+
+    /**
      * Base interface for Form class
      * Used by generated entity forms to provide typed access to form controls
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
@@ -2159,12 +2184,6 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
          */
         Process: TProcess;
-
-        /**
-         * The Dialog section for quick create dialogs or other dialog forms
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
-         */
-        Dialog: TDialog;
 
         /**
          * The Execution Context passed to the form event handler
@@ -2309,12 +2328,6 @@ declare namespace DevKit {
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
          */
         Refresh(save?: boolean, successCallback?: any, errorCallback?: any): Promise<void> | void;
-
-        /**
-         * Closes the form
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/close
-         */
-        Close(): void;
 
         /**
          * Use this method to display form level notifications
@@ -4602,3 +4615,4 @@ declare namespace OptionSet {
      */
     type FullNameConventionCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 }
+

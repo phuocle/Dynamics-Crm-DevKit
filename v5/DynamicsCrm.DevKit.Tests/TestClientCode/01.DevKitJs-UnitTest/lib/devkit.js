@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
 // --------------------------- SOURCE OF TRUTH ---------------------------------------
 // -----------------------------------------------------------------------------------
 // This file is a Source of Truth for the DynamicsCrm.DevKit project.
@@ -966,11 +966,15 @@ const devKit = (function () {
     }
     function loadFormDialog(formContext, fields) {
         const obj = {};
+        const hasGetControl = typeof formContext?.getControl === 'function';
         const fieldsLength = fields?.length || 0;
         for (let i = 0; i < fieldsLength; i++) {
             const field = fields[i];
-            const attribute = formContext?.data?.entity?.attributes?.get(field);
-            const control = formContext?.getControl(field);
+            let attribute = formContext?.data?.attributes?.get(field);
+            const control = hasGetControl ? formContext.getControl(field) : null;
+            if (!attribute && control) {
+                attribute = control.getAttribute?.();
+            }
             obj[field] = {};
             loadField(formContext, obj[field], attribute, control);
         }

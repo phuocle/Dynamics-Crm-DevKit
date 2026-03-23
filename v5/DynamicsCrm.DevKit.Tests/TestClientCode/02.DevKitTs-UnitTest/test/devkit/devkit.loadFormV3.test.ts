@@ -402,11 +402,7 @@ describe('loadFormV3 Tests', () => {
             expect(result).toBeUndefined();
         });
 
-        test('Close should be callable', () => {
-            const formContext = createFormContext();
-            const form = getForm({ formContext });
-            expect(() => form.Close()).not.toThrow();
-        });
+
 
         test('RefreshRibbon should be callable', () => {
             const formContext = createFormContext();

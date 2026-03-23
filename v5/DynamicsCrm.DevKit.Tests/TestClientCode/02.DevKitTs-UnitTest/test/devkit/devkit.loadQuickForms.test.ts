@@ -294,11 +294,7 @@ describe('loadQuickForms Tests', () => {
             expect(form.QuickForm.ContactQuickForm.Body).toBeDefined();
         });
 
-        test('Body should have Close method', () => {
-            const form = getQuickFormForm();
-            expect(form.QuickForm.ContactQuickForm.Body.Close).toBeDefined();
-            expect(() => form.QuickForm.ContactQuickForm.Body.Close()).not.toThrow();
-        });
+
 
         test('Body field EmailAddress1 should exist', () => {
             const form = getQuickFormForm();
@@ -316,7 +312,26 @@ describe('loadQuickForms Tests', () => {
         function getQuickFormWithBodyField(): any {
             let emailValue = 'contact@example.com';
 
-            // QuickForm control mock with proper data/entity/attributes for Body fields
+            const mockAttributes = {
+                get: (fieldName: string) => fieldName === 'emailaddress1' ? ({
+                    getValue: () => emailValue,
+                    setValue: (value: any) => { emailValue = value; },
+                    getName: () => 'emailaddress1',
+                    getFormat: () => 'email',
+                    getAttributeType: () => 'string',
+                    getRequiredLevel: () => 'none',
+                    setRequiredLevel: () => { },
+                    getSubmitMode: () => 'dirty',
+                    setSubmitMode: () => { },
+                    getIsDirty: () => false,
+                    getMaxLength: () => 100,
+                    controls: { get: () => null },
+                    addOnChange: () => { },
+                    removeOnChange: () => { },
+                    fireOnChange: () => { }
+                }) : null
+            };
+
             const quickFormControl = {
                 getName: () => 'contactquickform',
                 getParent: () => ({ getName: () => 'tab_general' }),
@@ -337,33 +352,15 @@ describe('loadQuickForms Tests', () => {
                     getDisabled: () => false,
                     setDisabled: () => { },
                     setFocus: () => { },
-                    getParent: () => null
+                    getParent: () => null,
+                    getAttribute: () => mockAttributes.get(fieldName)
                 }) : undefined,
                 setFocus: () => { },
                 isLoaded: () => true,
                 refresh: () => { },
-                // For loadFormDialog - Body field loading
                 data: {
                     entity: {
-                        attributes: {
-                            get: (fieldName: string) => fieldName === 'emailaddress1' ? ({
-                                getValue: () => emailValue,
-                                setValue: (value: any) => { emailValue = value; },
-                                getName: () => 'emailaddress1',
-                                getFormat: () => 'email',
-                                getAttributeType: () => 'string',
-                                getRequiredLevel: () => 'none',
-                                setRequiredLevel: () => { },
-                                getSubmitMode: () => 'dirty',
-                                setSubmitMode: () => { },
-                                getIsDirty: () => false,
-                                getMaxLength: () => 100,
-                                controls: { get: () => null },
-                                addOnChange: () => { },
-                                removeOnChange: () => { },
-                                fireOnChange: () => { }
-                            }) : null
-                        }
+                        attributes: mockAttributes
                     }
                 },
                 ui: {
