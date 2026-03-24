@@ -1479,8 +1479,68 @@ describe('devKit', () => {
         XrmMockGenerator.formContext = new FormContextMock(data, ui);
         var executionContext = XrmMockGenerator.formContext;
         var form = devKit.LoadFormDialog(executionContext, ["name"]);
-        expect(form.name.Value).toBe("LE VAN PHUOC");
+        expect(form.Dialog.name.Value).toBe("LE VAN PHUOC");
         expect(() => { form.Close(); }).toThrow(new Error("close not implemented"));
+    });
+    test('loadFormQuickView - no getControl on formContext (hasGetControl=false branch)', () => {
+        // formContext where getControl is NOT a function → hasGetControl = false → control = null
+        var formCtxNoGetControl = {
+            data: { attributes: { get: function (name) { return { getName: function () { return name; }, getValue: function () { return 'val'; }, setValue: function () {}, getAttributeType: function () { return 'string'; }, getRequiredLevel: function () { return 'none'; }, getSubmitMode: function () { return 'dirty'; }, isDirty: function () { return false; }, controls: { forEach: function () {} } }; } } },
+            ui: {},
+            getControl: null
+        };
+        var form = devKit.LoadFormDialog(formCtxNoGetControl, ["name"]);
+        expect(form.Dialog.name).toBeDefined();
+        expect(form.Dialog.name.Value).toBe('val');
+    });
+    test('loadFormQuickView - attribute from control.getAttribute (attribute null, control exists)', () => {
+        // attribute NOT in data → !attribute=true; control returned by getControl has getAttribute → attribute=from control
+        var formCtxNoAttr = {
+            data: { attributes: { get: function () { return null; } } },
+            ui: {},
+            getControl: function (name) {
+                return {
+                    getName: function () { return name; },
+                    getControlType: function () { return 'standard'; },
+                    getAttribute: function () {
+                        return { getName: function () { return name; }, getValue: function () { return 'ctrl_val'; }, setValue: function () {}, getAttributeType: function () { return 'string'; }, getRequiredLevel: function () { return 'none'; }, getSubmitMode: function () { return 'dirty'; }, isDirty: function () { return false; }, controls: { forEach: function () {} } };
+                    }
+                };
+            }
+        };
+        var form = devKit.LoadFormDialog(formCtxNoAttr, ["name"]);
+        expect(form.Dialog.name).toBeDefined();
+        expect(form.Dialog.name.Value).toBe('ctrl_val');
+    });
+    test('loadFormQuickView - control.getAttribute is undefined (getAttribute?.() returns undefined)', () => {
+        // attribute NOT in data, control exists but getAttribute is undefined → attribute stays null
+        var formCtxNoGetAttr = {
+            data: { attributes: { get: function () { return null; } } },
+            ui: {},
+            getControl: function (name) {
+                return { getName: function () { return name; }, getAttribute: undefined };
+            }
+        };
+        var form = devKit.LoadFormDialog(formCtxNoGetAttr, ["name"]);
+        expect(form.Dialog.name).toBeDefined();
+    });
+    test('loadDialogFormBase - empty dialog array (dialog?.length > 0 false branch)', () => {
+        // dialog is empty → obj.Dialog = {} (false branch of ternary at line 989)
+        var formCtx = {
+            data: { attributes: { get: function (name) { return null; } } },
+            ui: {},
+            getControl: null
+        };
+        var form = devKit.LoadFormDialog(formCtx, []);
+        expect(form.Dialog).toEqual({});
+        expect(form.Utility).toBeDefined();
+    });
+    test('loadDialogFormBase - null executionContext (?? null branch at line 986)', () => {
+        // executionContext is null → formContext = null (covers ?? null branch)
+        var form = devKit.LoadFormDialog(null, ["name"]);
+        expect(form).toBeDefined();
+        expect(form.Dialog).toBeDefined();
+        expect(form.Utility).toBeDefined();
     });
     test('devKit.LoadWebApi - CRUD operations', () => {
         // Setup mock WebApi using simple mocks
@@ -2586,7 +2646,7 @@ describe('devKit', () => {
             controls: {
                 forEach: function (cb) {
                     cb(ctrl1);  // First iteration: if condition is FALSE
-                    cb(ctrl2);  // Second iteration: if condition is FALSE  
+                    cb(ctrl2);  // Second iteration: if condition is FALSE
                     cb(ctrl3);  // Third iteration: if condition is TRUE
                 }
             },

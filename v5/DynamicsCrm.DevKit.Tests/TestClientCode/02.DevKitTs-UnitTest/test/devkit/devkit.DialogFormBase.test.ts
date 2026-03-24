@@ -91,7 +91,7 @@ describe('DialogFormBase Tests', () => {
     test('Dialog properties should be accessible', () => {
         const { executionContext } = createDialogContext(['name']);
         const dialog = new DialogFormBase(executionContext, ['name']);
-        
+
         expect(dialog.Dialog.name.AttributeName).toBe('name');
         expect(dialog.Dialog.name.Value).toBe('test_value');
     });
@@ -99,7 +99,7 @@ describe('DialogFormBase Tests', () => {
     test('Close() method should call formContext.ui.close()', () => {
         const { executionContext, isClosed } = createDialogContext();
         const dialog = new DialogFormBase(executionContext, []);
-        
+
         expect(isClosed()).toBe(false);
         dialog.Close();
         expect(isClosed()).toBe(true);
@@ -108,9 +108,30 @@ describe('DialogFormBase Tests', () => {
     test('should gracefully handle getControl missing', () => {
         const { executionContext } = createDialogContext(['name']);
         // Simulate missing getControl entirely
-        delete executionContext.getFormContext().getControl; 
-        
+        delete executionContext.getFormContext().getControl;
+
         const dialog = new DialogFormBase(executionContext, ['name']);
         expect(dialog.Dialog.name.Value).toBe('test_value'); // Can still get from attribute
+    });
+
+    test('should handle null executionContext (line 1125 ?? null branch)', () => {
+        // executionContext = null → getFormContext?.() = undefined → formContext = null
+        const dialog = new DialogFormBase(null, []);
+        expect(dialog).toBeDefined();
+        expect(dialog.Dialog).toEqual({});
+        expect(() => dialog.Close()).not.toThrow();
+    });
+
+    test('should use executionContext directly when getFormContext returns null (line 1125 ?? executionContext branch)', () => {
+        // getFormContext() returns null → executionContext itself is used as formContext fallback
+        const closeFn = jest.fn();
+        const executionContext: any = {
+            getFormContext: () => null,
+            ui: { close: closeFn }
+        };
+        const dialog = new DialogFormBase(executionContext, []);
+        expect(dialog).toBeDefined();
+        dialog.Close();
+        expect(closeFn).toHaveBeenCalled();
     });
 });

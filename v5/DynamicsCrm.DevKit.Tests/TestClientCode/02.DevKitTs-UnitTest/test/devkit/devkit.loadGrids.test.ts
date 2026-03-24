@@ -1,7 +1,7 @@
 /**
  * Unit Tests for devkit.ts - loadGrids function
  * Using xrm-mock framework for Dynamics 365/Xrm API simulation
- * 
+ *
  * This test file covers Grid functionality including:
  * - Grid parsing from config (Contacts from Account.form.ts)
  * - Grid getters: EntityName, FetchXml, GridType, Relationship, TotalRecordCount
@@ -12,7 +12,7 @@
  * - Visible property (getter/setter)
  * - Methods: AddOnLoad, OpenRelatedGrid, Refresh, RefreshRibbon, RemoveOnLoad, Url
  * - Edge cases
- * 
+ *
  * Reference: Account.form.ts grid = ['Contacts']
  */
 import { XrmMockGenerator } from 'xrm-mock';
@@ -657,6 +657,67 @@ describe('loadGrids Tests', () => {
             let count = 0;
             form.Grid.EmptyGrid.SelectedRows.forEach((row: any) => { count++; });
             expect(count).toBe(0);
+        });
+    });
+
+    // ========================================================================
+    // TEST: Edge Cases - No getControl function (lines 318, 337, 344 false branches)
+    // ========================================================================
+
+    describe('Edge Cases - No getControl function', () => {
+        function getFormWithNoGetControl(): any {
+            // formContext has NO getControl property at all
+            // This makes typeof formContext?.getControl === 'function' → false
+            const formContext: any = {
+                data: {
+                    getIsDirty: () => false, isValid: () => true,
+                    refresh: () => Promise.resolve(), save: () => Promise.resolve(),
+                    addOnLoad: () => { }, removeOnLoad: () => { },
+                    entity: {
+                        attributes: { get: () => null }, getId: () => 'id', getEntityName: () => 'account',
+                        getIsDirty: () => false, isValid: () => true, getDataXml: () => '',
+                        getEntityReference: () => ({}), getPrimaryAttributeValue: () => '',
+                        addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { }
+                    }
+                },
+                ui: {
+                    getFormType: () => 2, controls: { get: () => null }, tabs: { get: () => null },
+                    formSelector: { getCurrentItem: () => ({ getId: () => 'f', getLabel: () => 'l' }), items: { getLength: () => 0, get: () => null } },
+                    getViewPortHeight: () => 800, getViewPortWidth: () => 1200,
+                    clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
+                    addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { }, setFormEntityName: () => { }
+                },
+                // NO getControl property - typeof formContext?.getControl !== 'function'
+                getAttribute: () => null,
+                getFormContext: function () { return this; }
+            };
+
+            return new FormBase({ getFormContext: () => formContext }, 'test', {
+                body: [], header: [], tab: [], navigation: [], quick: [], bpf: [],
+                grid: ['NoControlGrid']
+            });
+        }
+
+        test('EntityName should return undefined when no getControl function (line 318 false branch)', () => {
+            const form = getFormWithNoGetControl();
+            // line 318: typeof formContext?.getControl === 'function' → false → gridControl = null
+            expect(form.Grid.NoControlGrid.EntityName).toBeUndefined();
+        });
+
+        test('Rows should use null gridInstance when no getControl function (line 337 false branch)', () => {
+            const form = getFormWithNoGetControl();
+            // line 337: typeof formContext?.getControl === 'function' → false → gridInstance = null
+            const rows = form.Grid.NoControlGrid.Rows;
+            expect(rows).toBeDefined();
+            expect(rows.getLength()).toBeUndefined();
+        });
+
+        test('SelectedRows should use null gridInstance when no getControl function (line 344 false branch)', () => {
+            const form = getFormWithNoGetControl();
+            // line 344: typeof formContext?.getControl === 'function' → false → gridInstance = null
+            const selectedRows = form.Grid.NoControlGrid.SelectedRows;
+            expect(selectedRows).toBeDefined();
+            expect(selectedRows.getLength()).toBeUndefined();
         });
     });
 });

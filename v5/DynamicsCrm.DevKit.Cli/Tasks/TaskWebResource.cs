@@ -508,7 +508,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                 SolutionUniqueName = Json.solution
             };
-            SpectreLog.ActionWithLevel3(CliAction.ADDED, $"{webResource["name"]}", "to solution: ", Json.solution);
+            SpectreLog.ActionWithLevel3(CliAction.ADDED, $"{webResource["name"]}", "to solution:", Json.solution);
             XrmHelper.COUNT_ExecuteAsync++;
             await ServiceClient.ExecuteAsync(request);
         }
@@ -571,7 +571,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (file.EndsWith(".ts", StringComparison.OrdinalIgnoreCase))
                     {
                         SpectreLog.ActionWithLevel0("Auto-redirecting input from .ts to compiled .js file...");
-                        
+
                         var projectRoot = Path.GetDirectoryName(file);
                         while (!string.IsNullOrEmpty(projectRoot))
                         {
@@ -598,7 +598,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             };
                             process.OutputDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3(ev.Data); };
                             process.ErrorDataReceived += (s, ev) => { if (!string.IsNullOrEmpty(ev.Data)) SpectreLog.ActionWithLevel3($"[STDERR] {ev.Data}"); };
-                            
+
                             process.Start();
                             process.BeginOutputReadLine();
                             process.BeginErrorReadLine();
@@ -609,10 +609,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 SpectreLog.ActionError($"TypeScript build failed. Please check your TypeScript code.");
                                 return _webResourceFiles; // return empty
                             }
-                            
+
                             file = Path.Combine(projectRoot, "build", Path.GetFileNameWithoutExtension(file) + ".js");
                         }
-                        else 
+                        else
                         {
                             file = file.Substring(0, file.Length - 3) + ".js"; // Legacy fallback
                         }

@@ -3009,5 +3009,104 @@ describe('loadFormV3 Tests', () => {
             expect(() => form.Save({}, callback)).not.toThrow();
         });
     });
+
+    // =========================================================================
+    // loadFields - hasGetControl=false and hasGetAttribute=false branch coverage
+    // Lines 138 (false), 143 (false), 148 (false) in devkit.ts
+    // =========================================================================
+    describe('loadFields - false branch coverage (lines 138, 143, 148)', () => {
+        function makeMinimalUi() {
+            return {
+                getFormType: () => 2, controls: { get: () => null, getLength: () => 0, forEach: () => { } },
+                tabs: { get: () => null, getLength: () => 0, forEach: () => { } },
+                formSelector: { getCurrentItem: () => ({ getId: () => '', getLabel: () => '' }), items: { getLength: () => 0, get: () => null, forEach: () => { } } },
+                getViewPortHeight: () => 800, getViewPortWidth: () => 1200,
+                clearFormNotification: () => true, setFormNotification: () => true, close: () => { }, refreshRibbon: () => { },
+                addLoaded: () => { }, removeLoaded: () => { }, addOnLoad: () => { }, removeOnLoad: () => { },
+                setFormEntityName: () => { }, process: null, quickForms: { get: () => null, getLength: () => 0 }
+            };
+        }
+
+        function makeMinimalData() {
+            return {
+                getIsDirty: () => false, isValid: () => true, refresh: () => Promise.resolve(), save: () => Promise.resolve(),
+                addOnLoad: () => { }, removeOnLoad: () => { },
+                entity: {
+                    attributes: { get: () => null, getLength: () => 0, forEach: () => { } }, getId: () => '', getEntityName: () => '',
+                    getIsDirty: () => false, isValid: () => true, getDataXml: () => '', getEntityReference: () => ({}),
+                    getPrimaryAttributeValue: () => '', addOnSave: () => { }, removeOnSave: () => { }, addOnPostSave: () => { }, removeOnPostSave: () => { }
+                }, process: null
+            };
+        }
+
+        function makeAttribute(name: string, value: any = null) {
+            return {
+                getName: () => name, getValue: () => value, setValue: () => { },
+                getAttributeType: () => 'string', controls: [], getParent: () => null,
+                getFormat: () => 'text', getInitialValue: () => '', getIsDirty: () => false,
+                getIsPartyList: () => false, isValid: () => true, getMax: () => 100, getMaxLength: () => 100,
+                getMin: () => 0, getOptions: () => [], getSelectedOption: () => null, getText: () => '',
+                getUserPrivilege: () => ({ canRead: true, canUpdate: true, canCreate: true }),
+                getPrecision: () => 0, setPrecision: () => { }, getRequiredLevel: () => 'none',
+                setRequiredLevel: () => { }, getSubmitMode: () => 'dirty', setSubmitMode: () => { },
+                addOnChange: () => { }, removeOnChange: () => { }, fireOnChange: () => { }, setIsValid: () => { }, getOption: () => null
+            };
+        }
+
+        test('line 138 false branch: no getControl property → hasGetControl=false → control=null', () => {
+            const attr = makeAttribute('name', 'John');
+            // formContext WITHOUT getControl → typeof formContext?.getControl === 'function' is false
+            const formContext: any = {
+                data: makeMinimalData(),
+                ui: makeMinimalUi(),
+                // NO getControl property - this triggers line 138 false branch
+                getAttribute: (n: string) => n === 'name' ? attr : null,
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', { body: ['name'] });
+            // Should still get value via getAttribute
+            expect(form.Body.name).toBeDefined();
+            expect(form.Body.name.Value).toBe('John');
+            expect(form.Body.name.ControlName).toBeUndefined(); // no control → undefined
+        });
+
+        test('line 143 false branch: no getAttribute property → hasGetAttribute=false → attribute=null', () => {
+            const attr = makeAttribute('name', 'Test');
+            const control = {
+                getName: () => 'name', getLabel: () => 'Name', setLabel: () => { }, getVisible: () => true, setVisible: () => { },
+                getDisabled: () => false, setDisabled: () => { }, setFocus: () => { }, getControlType: () => 'standard',
+                getParent: () => ({}), getAttribute: () => attr, clearNotification: () => true, setNotification: () => true, addNotification: () => { }
+            };
+            // formContext WITH getControl but WITHOUT getAttribute → line 143 returns null
+            // attribute is then obtained via control.getAttribute?.()
+            const formContext: any = {
+                data: makeMinimalData(),
+                ui: makeMinimalUi(),
+                getControl: (n: string) => n === 'name' ? control : null,
+                // NO getAttribute property - hasGetAttribute = false → line 143: null
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', { body: ['name'] });
+            // attribute fallback from control.getAttribute()
+            expect(form.Body.name).toBeDefined();
+            expect(form.Body.name.Value).toBe('Test');
+        });
+
+        test('line 148 false branch: no getAttribute + digit-suffix field → baseFieldName !== field, hasGetAttribute=false → null', () => {
+            // Field = 'name1' → baseFieldName = 'name' ≠ 'name1' → enters line 148 block
+            // hasGetAttribute = false → null (line 148 false branch)
+            const formContext: any = {
+                data: makeMinimalData(),
+                ui: makeMinimalUi(),
+                getControl: () => null,
+                // NO getAttribute → hasGetAttribute=false, triggers line 148 false branch
+                getFormContext: function () { return this; }
+            };
+            const form = new FormBase({ getFormContext: () => formContext }, 'test', { body: ['name1'] });
+            // No attribute found → field defined but values undefined
+            expect(form.Body.name1).toBeDefined();
+            expect(form.Body.name1.Value).toBeUndefined();
+        });
+    });
 });
 

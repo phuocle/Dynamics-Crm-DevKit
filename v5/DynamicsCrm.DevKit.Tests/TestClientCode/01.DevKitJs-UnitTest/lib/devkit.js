@@ -1055,5 +1055,3 @@ var OptionSet;
     OptionSet.TabDisplayState = Object.freeze({ Expanded: 'expanded', Collapsed: 'collapsed' });
     OptionSet.TimerState = Object.freeze({ NotSet: 1, InProgress: 2, Warning: 3, Violated: 4, Success: 5, Expired: 6, Canceled: 7, Paused: 8 });
 })(OptionSet || (OptionSet = /** @type {any} */ ({})));
-
-export { devKit, OptionSet };
