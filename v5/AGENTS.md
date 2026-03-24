@@ -137,7 +137,7 @@ Program.cs → Spectre.Console.Cli
   ├── Tasks/     → ITask interface → TaskXxx implementations
   ├── Services/  → LegacyArgConverter, UpdateChecker, DeploymentValidator
   ├── Logging/   → SpectreLog (ASCII art logo + colored output)
-  ├── Mcp/       → MCP server (12 tools for Dataverse operations)
+  ├── Mcp/       → MCP server (13 tools for Dataverse operations)
   └── Exceptions/→ DevKitExceptions
 ```
 
@@ -152,6 +152,7 @@ Program.cs → Spectre.Console.Cli
 | `get_environment_info` | Get environment/organization info |
 | `whoami` | Get current user identity and roles |
 | `get_record` | Retrieve a single record by ID |
+| `get_solution_components` | List all components inside a solution (fuzzy match on name) |
 | `execute_fetchxml` | Execute FetchXML query with auto-paging |
 | `search` | Dataverse Relevance Search across entities |
 | `create_record` | Create a new record |
