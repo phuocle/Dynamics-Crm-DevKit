@@ -85,8 +85,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RETURNS:\n" +
             "- Solution info: uniqueName, displayName, version, publisher, isManaged\n" +
             "- Component summary table: count per component type\n" +
-            "- Full component detail table: componentType, typeId, objectId " +
-            "(objectId can be passed to get_record or other tools for further inspection)\n\n" +
+            "- Full component detail table: componentType, typeId, objectId, name " +
+            "(name = logical/schema/display name; objectId can be passed to get_record or other tools)\n\n" +
 
             "FUZZY MATCH BEHAVIOR:\n" +
             "- Matches against both uniqueName and displayName using a 'contains' search\n" +
@@ -133,8 +133,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return FormatMultipleSolutions(solution_name, solutions);
 
                 var solution = solutions[0];
-                var components = LoadComponents(solution.Id);
-                return FormatResult(solution, components);
+                var (components, expandedMetadata) = LoadComponents(solution.Id);
+                return FormatResult(solution, components, expandedMetadata);
             }
             catch (Exception ex)
             {
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return _serviceClient.RetrieveMultiple(query).Entities.ToList();
         }
 
-        private List<Entity> LoadComponents(Guid solutionId)
+        private (List<Entity> Components, List<EntityMetadata> ExpandedMetadata) LoadComponents(Guid solutionId)
         {
             // 1) Fetch all direct solutioncomponent rows for this solution
             var allComponents = _serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
@@ -197,7 +197,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToArray();
 
             if (fullEntityIds.Length == 0)
-                return components;
+                return (components, new List<EntityMetadata>());
 
             // 3) Load metadata for full-entity expansions (one batch call)
             var entityQuery = new EntityQueryExpression
@@ -210,6 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 },
                 Properties = new MetadataPropertiesExpression(
+                    "MetadataId",
                     "LogicalName",
                     "Attributes",
                     "OneToManyRelationships",
@@ -217,11 +218,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "ManyToManyRelationships"),
                 AttributeQuery = new AttributeQueryExpression
                 {
-                    Properties = new MetadataPropertiesExpression("MetadataId")
+                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
                 },
                 RelationshipQuery = new RelationshipQueryExpression
                 {
-                    Properties = new MetadataPropertiesExpression("MetadataId")
+                    Properties = new MetadataPropertiesExpression("MetadataId", "SchemaName")
                 }
             };
 
@@ -232,7 +233,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Attributes (type 2)
             components.AddRange(entityMetadatas
-                .SelectMany(e => e.Attributes)
+                .SelectMany(e => e.Attributes ?? Array.Empty<AttributeMetadata>())
                 .Where(a => a.MetadataId.HasValue)
                 .Select(a => new Entity("solutioncomponent")
                 {
@@ -242,9 +243,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Relationships (type 3) — 1:N, N:1, N:N
             components.AddRange(entityMetadatas
-                .SelectMany(e => e.OneToManyRelationships.Cast<RelationshipMetadataBase>()
-                    .Concat(e.ManyToOneRelationships)
-                    .Concat(e.ManyToManyRelationships))
+                .SelectMany(e => (e.OneToManyRelationships?.Cast<RelationshipMetadataBase>() ?? Array.Empty<RelationshipMetadataBase>())
+                    .Concat(e.ManyToOneRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
+                    .Concat(e.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>()))
                 .Where(r => r.MetadataId.HasValue)
                 .Select(r => new Entity("solutioncomponent")
                 {
@@ -300,7 +301,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["componenttype"] = new OptionSetValue(59)
             }));
 
-            return components;
+            return (components, entityMetadatas);
         }
 
         // ── Output formatters ────────────────────────────────────────────────────
@@ -326,7 +327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private string FormatResult(Entity solution, List<Entity> components)
+        private string FormatResult(Entity solution, List<Entity> components, List<EntityMetadata> expandedMetadata)
         {
             var uniqueName   = solution.GetAttributeValue<string>("uniquename")   ?? "";
             var displayName  = solution.GetAttributeValue<string>("friendlyname") ?? "";
@@ -366,23 +367,245 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             sb.AppendLine();
 
+            var nameMap = BuildNameMap(components, expandedMetadata);
+
             // ── Full component list (objectIds usable by other tools) ──
             sb.AppendLine($"## Components — {components.Count}");
             sb.AppendLine();
-            sb.AppendLine("| ComponentType | TypeId | ObjectId |");
-            sb.AppendLine("| --- | --- | --- |");
+            sb.AppendLine("| ComponentType | TypeId | ObjectId | Name |");
+            sb.AppendLine("| --- | --- | --- | --- |");
             foreach (var grp in grouped)
             {
                 var typeName = GetTypeName(grp.Key);
                 foreach (var c in grp)
                 {
                     var objectId = c.GetAttributeValue<Guid>("objectid");
-                    sb.AppendLine($"| {typeName} | {grp.Key} | {objectId} |");
+                    nameMap.TryGetValue(objectId, out var name);
+                    sb.AppendLine($"| {typeName} | {grp.Key} | {objectId} | {name ?? ""} |");
                 }
             }
 
             return sb.ToString();
         }
+
+        // ── Name resolution ──────────────────────────────────────────────────────
+
+        private Dictionary<Guid, string> BuildNameMap(List<Entity> components, List<EntityMetadata> expandedMetadata)
+        {
+            var nameMap = new Dictionary<Guid, string>();
+            var byType = components
+                .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
+                .ToDictionary(g => g.Key, g => g.Select(c => c.GetAttributeValue<Guid>("objectid")).Distinct().ToList());
+
+            // Step 1: Populate from entity metadata already loaded during full-entity expansion
+            PopulateFromEntityMetadata(expandedMetadata, nameMap);
+
+            // Step 2: Resolve entity names (type 1) not already in cache
+            if (byType.TryGetValue(1, out var entityIds))
+            {
+                var missing = entityIds.Where(id => !nameMap.ContainsKey(id)).ToList();
+                if (missing.Count > 0)
+                    ResolveEntityMetadataNames(missing, nameMap);
+            }
+
+            // Step 3: Resolve attribute names (type 2) not already in cache
+            if (byType.TryGetValue(2, out var attrIds))
+            {
+                var missing = attrIds.Where(id => !nameMap.ContainsKey(id)).ToList();
+                if (missing.Count > 0 && missing.Count <= 250)
+                    ResolveAttributeMetadataNames(missing, nameMap);
+            }
+
+            // Step 4: Resolve relationship names (type 3) not already in cache
+            if (byType.TryGetValue(3, out var relIds))
+            {
+                var missing = relIds.Where(id => !nameMap.ContainsKey(id)).ToList();
+                if (missing.Count > 0 && missing.Count <= 250)
+                    ResolveRelationshipMetadataNames(missing, nameMap);
+            }
+
+            // Step 5: Batch-resolve entity-backed component types
+            BatchResolve(byType, nameMap, 20,  "role",                          "roleid",                          new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 24,  "systemform",                    "formid",                          new ColumnSet("name", "objecttypecode"),              e => $"{S(e, "objecttypecode")} / {S(e, "name")}");
+            BatchResolve(byType, nameMap, 26,  "savedquery",                    "savedqueryid",                    new ColumnSet("name", "returnedtypecode"),            e => $"{S(e, "returnedtypecode")} / {S(e, "name")}");
+            BatchResolve(byType, nameMap, 29,  "workflow",                      "workflowid",                      new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 31,  "report",                        "reportid",                        new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 36,  "template",                      "templateid",                      new ColumnSet("title"),                               e => S(e, "title"));
+            BatchResolve(byType, nameMap, 44,  "duplicaterule",                 "duplicateruleid",                 new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 59,  "savedqueryvisualization",       "savedqueryvisualizationid",       new ColumnSet("name", "primaryentitytypecode"),       e => $"{S(e, "primaryentitytypecode")} / {S(e, "name")}");
+            BatchResolve(byType, nameMap, 60,  "systemform",                    "formid",                          new ColumnSet("name", "objecttypecode"),              e => $"{S(e, "objecttypecode")} / {S(e, "name")}");
+            BatchResolve(byType, nameMap, 61,  "webresource",                   "webresourceid",                   new ColumnSet("name", "displayname"),                e => S(e, "name") is { Length: > 0 } n ? n : S(e, "displayname"));
+            BatchResolve(byType, nameMap, 62,  "sitemap",                       "sitemapid",                       new ColumnSet("sitemapname"),                         e => S(e, "sitemapname"));
+            BatchResolve(byType, nameMap, 63,  "connectionrole",                "connectionroleid",                new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 66,  "customcontrol",                 "customcontrolid",                 new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 70,  "fieldsecurityprofile",          "fieldsecurityprofileid",          new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 71,  "fieldpermission",               "fieldpermissionid",               new ColumnSet("entityname", "attributelogicalname"), e => $"{S(e, "entityname")}.{S(e, "attributelogicalname")}");
+            BatchResolve(byType, nameMap, 80,  "appmodule",                     "appmoduleid",                     new ColumnSet("name", "uniquename"),                 e => $"{S(e, "name")} ({S(e, "uniquename")})");
+            BatchResolve(byType, nameMap, 90,  "plugintype",                    "plugintypeid",                    new ColumnSet("typename"),                            e => S(e, "typename"));
+            BatchResolve(byType, nameMap, 91,  "pluginassembly",                "pluginassemblyid",                new ColumnSet("name", "version"),                    e => $"{S(e, "name")} v{S(e, "version")}");
+            BatchResolve(byType, nameMap, 92,  "sdkmessageprocessingstep",      "sdkmessageprocessingstepid",      new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 93,  "sdkmessageprocessingstepimage", "sdkmessageprocessingstepimageid", new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 95,  "serviceendpoint",               "serviceendpointid",               new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 150, "routingrule",                   "routingruleid",                   new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 152, "sla",                           "slaid",                           new ColumnSet("name"),                                e => S(e, "name"));
+            BatchResolve(byType, nameMap, 380, "environmentvariabledefinition", "environmentvariabledefinitionid", new ColumnSet("schemaname", "displayname"),          e => $"{S(e, "schemaname")} ({S(e, "displayname")})");
+
+            return nameMap;
+        }
+
+        private static void PopulateFromEntityMetadata(List<EntityMetadata> metadataList, Dictionary<Guid, string> nameMap)
+        {
+            foreach (var em in metadataList)
+            {
+                if (em.MetadataId.HasValue)
+                    nameMap.TryAdd(em.MetadataId.Value, em.LogicalName);
+
+                foreach (var attr in em.Attributes ?? Array.Empty<AttributeMetadata>())
+                    if (attr.MetadataId.HasValue && attr.LogicalName != null)
+                        nameMap.TryAdd(attr.MetadataId.Value, $"{em.LogicalName}.{attr.LogicalName}");
+
+                foreach (var rel in em.OneToManyRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
+                    if (rel.MetadataId.HasValue && rel.SchemaName != null)
+                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
+
+                foreach (var rel in em.ManyToOneRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
+                    if (rel.MetadataId.HasValue && rel.SchemaName != null)
+                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
+
+                foreach (var rel in em.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>())
+                    if (rel.MetadataId.HasValue && rel.SchemaName != null)
+                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
+            }
+        }
+
+        private void ResolveEntityMetadataNames(List<Guid> entityIds, Dictionary<Guid, string> nameMap)
+        {
+            try
+            {
+                var query = new EntityQueryExpression
+                {
+                    Criteria = new MetadataFilterExpression(LogicalOperator.Or),
+                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
+                };
+                foreach (var id in entityIds)
+                    query.Criteria.Conditions.Add(
+                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
+
+                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                    new RetrieveMetadataChangesRequest { Query = query });
+
+                foreach (var em in response.EntityMetadata)
+                    if (em.MetadataId.HasValue)
+                        nameMap.TryAdd(em.MetadataId.Value, em.LogicalName);
+            }
+            catch { /* skip on metadata query failure */ }
+        }
+
+        private void ResolveAttributeMetadataNames(List<Guid> attrIds, Dictionary<Guid, string> nameMap)
+        {
+            try
+            {
+                var attrSet = new HashSet<Guid>(attrIds);
+                var query = new EntityQueryExpression
+                {
+                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName"),
+                    AttributeQuery = new AttributeQueryExpression
+                    {
+                        Criteria = new MetadataFilterExpression(LogicalOperator.Or),
+                        Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
+                    }
+                };
+                foreach (var id in attrIds)
+                    query.AttributeQuery.Criteria.Conditions.Add(
+                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
+
+                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                    new RetrieveMetadataChangesRequest { Query = query });
+
+                foreach (var em in response.EntityMetadata)
+                    foreach (var attr in em.Attributes ?? Array.Empty<AttributeMetadata>())
+                        if (attr.MetadataId.HasValue && attr.LogicalName != null && attrSet.Contains(attr.MetadataId.Value))
+                            nameMap.TryAdd(attr.MetadataId.Value, $"{em.LogicalName}.{attr.LogicalName}");
+            }
+            catch { /* skip on metadata query failure */ }
+        }
+
+        private void ResolveRelationshipMetadataNames(List<Guid> relIds, Dictionary<Guid, string> nameMap)
+        {
+            try
+            {
+                var relSet = new HashSet<Guid>(relIds);
+                var query = new EntityQueryExpression
+                {
+                    Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName",
+                        "OneToManyRelationships", "ManyToManyRelationships"),
+                    RelationshipQuery = new RelationshipQueryExpression
+                    {
+                        Criteria = new MetadataFilterExpression(LogicalOperator.Or),
+                        Properties = new MetadataPropertiesExpression("MetadataId", "SchemaName")
+                    }
+                };
+                foreach (var id in relIds)
+                    query.RelationshipQuery.Criteria.Conditions.Add(
+                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.Equals, id));
+
+                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                    new RetrieveMetadataChangesRequest { Query = query });
+
+                foreach (var em in response.EntityMetadata)
+                {
+                    foreach (var rel in em.OneToManyRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
+                        if (rel.MetadataId.HasValue && rel.SchemaName != null && relSet.Contains(rel.MetadataId.Value))
+                            nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
+
+                    foreach (var rel in em.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>())
+                        if (rel.MetadataId.HasValue && rel.SchemaName != null && relSet.Contains(rel.MetadataId.Value))
+                            nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
+                }
+            }
+            catch { /* skip on metadata query failure */ }
+        }
+
+        private void BatchResolve(
+            Dictionary<int, List<Guid>> byType,
+            Dictionary<Guid, string> nameMap,
+            int typeId,
+            string entityName,
+            string pkAttribute,
+            ColumnSet columnSet,
+            Func<Entity, string> nameSelector)
+        {
+            if (!byType.TryGetValue(typeId, out var ids) || ids.Count == 0)
+                return;
+
+            try
+            {
+                const int chunkSize = 500;
+                for (var i = 0; i < ids.Count; i += chunkSize)
+                {
+                    var chunk = ids.Skip(i).Take(chunkSize).Cast<object>().ToArray();
+                    var query = new QueryExpression(entityName)
+                    {
+                        NoLock = true,
+                        ColumnSet = columnSet,
+                        Criteria = new FilterExpression
+                        {
+                            Conditions = { new ConditionExpression(pkAttribute, ConditionOperator.In, chunk) }
+                        }
+                    };
+                    foreach (var e in _serviceClient.RetrieveMultiple(query).Entities)
+                    {
+                        try { nameMap.TryAdd(e.Id, nameSelector(e) ?? ""); }
+                        catch { /* ignore individual name resolution failures */ }
+                    }
+                }
+            }
+            catch { /* skip unsupported or unavailable entity types */ }
+        }
+
+        // Safe string getter for Entity attributes
+        private static string S(Entity e, string attr) =>
+            e.Contains(attr) ? e[attr]?.ToString() ?? "" : "";
 
         private static string GetTypeName(int typeId) =>
             ComponentTypeNames.TryGetValue(typeId, out var name) ? name : $"Type_{typeId}";
