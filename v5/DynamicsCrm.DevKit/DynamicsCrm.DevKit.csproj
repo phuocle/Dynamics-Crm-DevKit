@@ -121,6 +121,7 @@
     <Compile Include="Wizard\ItemTemplates\Test.cs" />
     <Compile Include="Wizard\ItemTemplates\TsForm.cs" />
     <Compile Include="Wizard\ItemTemplates\TsDialog.cs" />
+    <Compile Include="Wizard\ItemTemplates\JsDialog.cs" />
     <Compile Include="Wizard\ItemTemplates\UiTest.cs" />
     <Compile Include="Wizard\ItemTemplates\JsDevkit.cs" />
     <Compile Include="Wizard\ItemTemplates\Workflow.cs" />
@@ -376,6 +377,13 @@
     <ProjectReference Include="..\ItemTemplates\CSharp\16.TsDialogItemTemplate\16.TsDialogItemTemplate.csproj">
       <Project>{B4432EFE-5FE3-46F4-9335-703E658C0230}</Project>
       <Name>16.TsDialogItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\17.JsDialogItemTemplate\17.JsDialogItemTemplate.csproj">
+      <Project>{B4432EFE-5FE3-46F4-9335-703E658C0231}</Project>
+      <Name>17.JsDialogItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>

@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
-                if (ItemType == ItemType.TsDialog)
+                if (ItemType == ItemType.TsDialog || ItemType == ItemType.JsDialog)
                 {
                     var index = ComboBox.SelectedIndex;
                     if (index >= 0 && DialogForms != null && index < DialogForms.Count)
@@ -107,6 +107,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
                     LabelItemName.Content = "Dialog";
                 }
+                void JsDialogItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript Dialog Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Dialog";
+                }
                 _ItemType = value;
                 switch (_ItemType)
                 {
@@ -127,6 +138,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                     case ItemType.TsDialog:
                         TsDialogItem();
+                        break;
+                    case ItemType.JsDialog:
+                        JsDialogItem();
                         break;
                 }
             }
@@ -199,7 +213,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     });
                 }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
             }
-            else if (ItemType == ItemType.TsDialog)
+            else if (ItemType == ItemType.TsDialog || ItemType == ItemType.JsDialog)
             {
                 StackPanelMain.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;

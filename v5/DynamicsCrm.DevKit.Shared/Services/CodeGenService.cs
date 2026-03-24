@@ -346,5 +346,38 @@ namespace DynamicsCrm.DevKit.Shared.Services
             code += $"export {{ {varName} }};";
             return code;
         }
+
+        public async Task<string> GetDefaultJsDialogFileAsync(SystemForm dialogForm, string dialogUniqueName)
+        {
+            await Helper.DelayAsync(1);
+            var varName = dialogUniqueName;
+            var dialogNamespace = "DevKitDialog";
+            
+            var code = string.Empty;
+            code += $"//@ts-check{NEW_LINE}";
+            code += $"///<reference path=\"{dialogUniqueName}.dialog.d.ts\" />{NEW_LINE}";
+            code += $"\"use strict\";{NEW_LINE}";
+            code += $"var {varName} = (function () {{{NEW_LINE}";
+            code += $"{TAB}\"use strict\";{NEW_LINE}";
+            code += $"{TAB}/** @type {{{dialogNamespace}.{dialogUniqueName}}} */{NEW_LINE}";
+            code += $"{TAB}let form;{NEW_LINE}";
+            code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
+            code += $"{TAB}async function OnLoad(executionContext) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}form = new {dialogNamespace}.{dialogUniqueName}(executionContext);{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
+            code += $"{TAB}async function OkClick(executionContext) {{{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{TAB}/** @param {{any}} executionContext */{NEW_LINE}";
+            code += $"{TAB}async function CancelClick(executionContext) {{{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"{TAB}return {{{NEW_LINE}";
+            code += $"{TAB}{TAB}OnLoad: OnLoad,{NEW_LINE}";
+            code += $"{TAB}{TAB}OkClick: OkClick,{NEW_LINE}";
+            code += $"{TAB}{TAB}CancelClick: CancelClick{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})();{NEW_LINE}";
+            return code;
+        }
     }
 }

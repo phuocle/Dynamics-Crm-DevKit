@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logic\CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logic\JsDialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\TsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logic\TsDialog.cs" />

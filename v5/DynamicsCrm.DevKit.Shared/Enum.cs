@@ -100,7 +100,8 @@ namespace DynamicsCrm.DevKit.Shared
         ResourceString,
         DownloadReports,
         BatFile,
-        TsDialog
+        TsDialog,
+        JsDialog
     }
 
     public enum DeployFileType
