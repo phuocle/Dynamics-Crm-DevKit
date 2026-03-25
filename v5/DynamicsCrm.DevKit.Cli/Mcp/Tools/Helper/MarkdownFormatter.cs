@@ -14,15 +14,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             var sb = new StringBuilder(list.Count * 120 + 256);
             sb.AppendLine($"# Entities — {list.Count}");
             sb.AppendLine();
-            sb.AppendLine("| LogicalName | DisplayName | SchemaName | OwnershipType | IsCustom | IsActivity |");
-            sb.AppendLine("| --- | --- | --- | --- | --- | --- |");
+            sb.AppendLine("| LogicalName | DisplayName | SchemaName | OwnershipType | IsCustom | IsActivity | IsAuditEnabled |");
+            sb.AppendLine("| --- | --- | --- | --- | --- | --- | --- |");
             foreach (var e in list)
             {
                 var display = e.DisplayName?.UserLocalizedLabel?.Label ?? "";
                 var ownership = e.OwnershipType?.ToString() ?? "";
                 var isCustom = e.IsCustomEntity == true ? "Yes" : "";
                 var isActivity = e.IsActivity == true ? "Yes" : "";
-                sb.AppendLine($"| {e.LogicalName} | {display} | {e.SchemaName} | {ownership} | {isCustom} | {isActivity} |");
+                var isAudit = e.IsAuditEnabled?.Value == true ? "Yes" : "";
+                sb.AppendLine($"| {e.LogicalName} | {display} | {e.SchemaName} | {ownership} | {isCustom} | {isActivity} | {isAudit} |");
             }
             return sb.ToString();
         }
@@ -215,6 +216,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             sb.AppendLine($"| OwnershipType | {meta.OwnershipType} |");
             sb.AppendLine($"| IsActivity | {meta.IsActivity} |");
             sb.AppendLine($"| IsCustomEntity | {meta.IsCustomEntity} |");
+            sb.AppendLine($"| IsAuditEnabled | {meta.IsAuditEnabled?.Value} |");
             sb.AppendLine($"| ChangeTrackingEnabled | {meta.ChangeTrackingEnabled} |");
             sb.AppendLine($"| ObjectTypeCode | {meta.ObjectTypeCode} |");
             sb.AppendLine($"| TotalAttributes | {meta.Attributes.Length} |");

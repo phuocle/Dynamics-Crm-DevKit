@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_entities_metadata", Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List ALL entities (tables) in this Dataverse environment. " +
-            "Returns a markdown table with each entity's logicalName, displayName, schemaName, ownershipType, isCustom, and isActivity flag.\n\n" +
+            "Returns a markdown table with each entity's logicalName, displayName, schemaName, ownershipType, isCustom, isActivity, and isAuditEnabled flag.\n\n" +
 
             "WHEN TO USE:\n" +
             "- When you don't know the logical name of an entity the user mentions " +
