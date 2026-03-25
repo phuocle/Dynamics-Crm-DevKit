@@ -21,12 +21,21 @@ namespace DynamicsCrm.DevKit.Tool
                 return 0;
             }
 
+            if (args.Length == 1 && (args[0] == "--version" || args[0] == "-v"))
+            {
+                var ver = Assembly.GetExecutingAssembly().GetName().Version;
+                AnsiConsole.MarkupLine($"devkit-tool [green]{ver}[/] Build: [green]{Const.Build}[/]");
+                return 0;
+            }
+
             WriteBanner();
 
             var app = new CommandApp();
             app.Configure(config =>
             {
                 config.SetApplicationName("devkit-tool");
+                var version = Assembly.GetExecutingAssembly().GetName().Version;
+                config.SetApplicationVersion($"{version} Build: {Const.Build}");
 
                 config.AddCommand<DocumentGeneratorCommand>("documentgenerator")
                       .WithDescription("Generate Dataverse entity documentation (markdown)");
