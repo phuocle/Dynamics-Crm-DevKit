@@ -26,7 +26,7 @@
 | **Tool** | `DynamicsCrm.DevKit.Tool/` | .NET Framework 4.8 |
 | **UnitTests** | `DynamicsCrm.DevKit.UnitTests/` | net48 (xUnit) + net10.0 (MSTest) |
 | **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration tests (15+ scenarios, live Dataverse) |
-| **Templates** | `ProjectTemplates/` + `ItemTemplates/` | .NET Framework 4.6.2 (13 project + 15 item templates) |
+| **Templates** | `ProjectTemplates/` + `ItemTemplates/` | .NET Framework 4.6.2 (13 project + 17 item templates) |
 
 ---
 
@@ -78,6 +78,7 @@ Mcp/      → MCP server (13 Dataverse tools)
 
 | CLI Arg | Env Var |
 |---|---|
+| `--conn` | `DEVKIT_CONNECTION` |
 | `--auth` | `DEVKIT_AUTH_TYPE` |
 | `--url` | `DEVKIT_URL` |
 | `--clientid` / `--clientsecret` | `DEVKIT_CLIENT_ID` / `DEVKIT_CLIENT_SECRET` |
@@ -98,7 +99,7 @@ Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workin
 
 ## VSIX
 
-Entry: `DynamicsCrm.DevKit/DevKitPackage.cs` (inherits `ToolkitPackage`). Contains `Commands/`, `Lib/`, `Wizard/ProjectTemplates/` (13), `Wizard/ItemTemplates/` (15).
+Entry: `DynamicsCrm.DevKit/DevKitPackage.cs` (inherits `ToolkitPackage`). Contains `Commands/`, `Lib/`, `Wizard/ProjectTemplates/` (13), `Wizard/ItemTemplates/` (17).
 
 ---
 
@@ -110,8 +111,8 @@ Entry: `DynamicsCrm.DevKit/DevKitPackage.cs` (inherits `ToolkitPackage`). Contai
 | `Helper.cs` | Code generation (~926 lines) |
 | `XrmHelper.cs` | Dataverse operations (metadata, forms, plugins) |
 | `ConnectionBuilder/` | 7 builders: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD, Legacy + Factory |
-| `Logic/` | `CSharpLateBound`, `JsForm`, `TsForm`, `TsOptionSet`, `JsWebApi`, `TsWebApi` |
-| `Models/` | 41 model classes (JSON configs, CRM entities, plugin attributes) |
+| `Logic/` | `CSharpLateBound`, `CSharpEarlyBound`, `JsForm`, `JsWebApi`, `JsDialog`, `JsTypeScriptDeclaration`, `TsForm`, `TsWebApi`, `TsDialog`, `TsOptionSet` |
+| `Models/` | 42 model classes (JSON configs, CRM entities, plugin attributes) |
 
 ---
 
@@ -130,6 +131,36 @@ Target: .NET Standard 2.0. All inherit `BaseDiagnosticAnalyzer`. Core files in `
 | All | — | — | `dotnet test DynamicsCrm.DevKit.UnitTests\DynamicsCrm.DevKit.UnitTests.csproj` |
 
 Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClientCode, TestWebResource, TestSolutionPackager, TestReports, TestProxyTypes, etc.)
+
+---
+
+## Build Workflows
+
+| Workflow | Description |
+|----------|-------------|
+| `/build-debug` | Release build evaluating with current date - Build all projects + install CLI locally |
+| `/build-cli` | CLI only - Build and install CLI tool |
+| `/build-vsix` | VSIX only - Build Visual Studio extension |
+| `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
+| `/build-tool` | Tool only - Build Tool package |
+| `/build-release` | Release - Full release build for all projects |
+| `/unit-test` | Run all unit tests + code coverage report |
+| `/clean-all` | Clean all build artifacts |
+| `/create-new-analyzer` | Create a new Roslyn analyzer |
+
+---
+
+## Documentation Rules
+
+| Working On | Save To |
+|------------|---------|
+| CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
+| VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
+| Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
+| Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
+| Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
+| Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
+| Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |
 
 ---
 
