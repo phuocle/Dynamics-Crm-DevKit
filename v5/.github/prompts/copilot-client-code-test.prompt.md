@@ -1,4 +1,7 @@
-﻿# client-code-test
+---
+description: "Run checks, release builds, and tests for all TestClientCode projects"
+mode: agent
+---
 
 # Check, Build, and Test Workflow
 

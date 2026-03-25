@@ -1,7 +1,3 @@
----
-trigger: always_on
----
-
 # AI Config Sync Rules
 
 > **Purpose**: Ensure all 4 IDEs (Claude Code, Copilot, Antigravity, Cursor) stay in sync.

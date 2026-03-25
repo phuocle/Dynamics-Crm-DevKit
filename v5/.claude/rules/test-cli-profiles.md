@@ -1,0 +1,92 @@
+# Test CLI Profiles
+
+> **Purpose**: CLI profiles and run instructions for integration test scenarios.
+
+---
+
+## CLI Legacy Exe
+
+For profiles marked **LEGACY**, use this exe instead of building the CLI:
+
+```
+DynamicsCrm.DevKit.Docs\CliBackup\DynamicsCrm.DevKit.Cli.exe
+```
+
+---
+
+## Run Logic
+
+| Instruction | Action |
+|-------------|--------|
+| Says **LEGACY** | Use CLI Legacy exe path above, read profile to get args |
+| Says nothing / default | Build CLI (`dotnet build`), then run profile |
+
+---
+
+## Build CLI Before Running
+
+```powershell
+taskkill /F /IM "DynamicsCrm.DevKit.Cli.exe" 2>$null
+dotnet build --configuration Release "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
+```
+
+---
+
+## Server Code Profiles
+
+| Profile | Description |
+|---------|-------------|
+| `07-DEVKITV4.Server` | Server deployment |
+| `08-DEVKITV4.Server.OnlyUpdateAssembly` | Server assembly update only |
+| `09-DEVKITV4.Server.Package` | Server package deployment |
+| `10-DEVKITV4.Server.Package.OnlyUpdateAssembly` | Server package assembly update only |
+| `11-DEVKITV4.Server.ManagedIdentity` | Server with Managed Identity |
+| `12-DEVKITV4.Server.ManagedIdentity.OnlyUpdateAssembly` | Server MI assembly update only |
+| `13-DEVKITV4.Package.ManagedIdentity` | Package with Managed Identity |
+| `14-DEVKITV4.Package.ManagedIdentity.OnlyUpdateAssembly` | Package MI assembly update only |
+| `23-DEVKITV4.DataSource` | DataSource deployment |
+
+---
+
+## Web Resource Profiles
+
+| Profile | Description |
+|---------|-------------|
+| `15.TestWebResource-JS` | JavaScript web resource deployment |
+| `16.TestWebResource-TS` | TypeScript web resource deployment |
+| `22.DownloadWebResource` | Download web resources from CRM |
+
+---
+
+## Proxy Types Profile
+
+| Profile | Description |
+|---------|-------------|
+| `17.TestProxyTypes` | Generate proxy types via CrmSvcUtil |
+
+---
+
+## Solution Packager Profiles
+
+| Profile | Description |
+|---------|-------------|
+| `18.TestSolutionPackager-Extract` | Extract solution to files |
+| `19.TestSolutionPackager-Pack` | Pack files to solution |
+
+---
+
+## Reports Profiles
+
+| Profile | Description |
+|---------|-------------|
+| `20.TestReports-Download` | Download reports from CRM |
+| `21.TestReports-Upload` | Upload reports to CRM |
+
+---
+
+## How to Run a Profile
+
+1. Read profile from `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json`
+2. Extract `workingDirectory` and `commandLineArgs`
+3. `cd` to `workingDirectory`
+4. Run CLI exe with `commandLineArgs`

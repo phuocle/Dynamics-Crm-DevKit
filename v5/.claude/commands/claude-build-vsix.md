@@ -1,4 +1,6 @@
-﻿# Build VSIX - DynamicsCrm.DevKit
+---
+description: "Build DynamicsCrm.DevKit VSIX project in Debug mode"
+---
 
 Build the VSIX project using MSBuild in Debug mode.
 

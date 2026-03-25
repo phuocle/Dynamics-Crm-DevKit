@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Run all unit tests with code coverage report"
 mode: agent
 ---

@@ -1,4 +1,4 @@
-﻿# Clean Repository
+# Clean Repository
 
 # Clean Repository Workflow
 

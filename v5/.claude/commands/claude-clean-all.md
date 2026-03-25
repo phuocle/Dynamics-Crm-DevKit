@@ -1,6 +1,5 @@
-﻿---
+---
 description: "Clean all build artifacts, node_modules, and cache to reset repo to fresh state"
-mode: agent
 ---
 
 # Clean Repository Workflow

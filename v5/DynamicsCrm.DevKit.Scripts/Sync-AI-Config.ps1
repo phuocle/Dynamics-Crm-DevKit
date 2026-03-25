@@ -12,12 +12,15 @@ $AgentWorkflowsDir = Join-Path $ProjectRoot ".agent\workflows"
 $AgentSkillsDir = Join-Path $ProjectRoot ".agent\skills"
 $CursorRulesDir = Join-Path $ProjectRoot ".cursor\rules"
 $CursorCommandsDir = Join-Path $ProjectRoot ".cursor\commands"
+$ClaudeRulesDir = Join-Path $ProjectRoot ".claude\rules"
+$ClaudeCommandsDir = Join-Path $ProjectRoot ".claude\commands"
 $GithubDir = Join-Path $ProjectRoot ".github"
 $GithubPromptsDir = Join-Path $ProjectRoot ".github\prompts"
 $VsCodeDir = Join-Path $ProjectRoot ".vscode"
 
 $ChangesDetected = 0
 $FilesUpdated = 0
+$FilesRemoved = 0
 
 function Write-Status($Message, $Type) {
     switch ($Type) {
@@ -27,6 +30,7 @@ function Write-Status($Message, $Type) {
         "WARN" { Write-Host "[WARN] $Message" -ForegroundColor Yellow }
         "ERR"  { Write-Host "[ERR] $Message" -ForegroundColor Red }
         "INFO" { Write-Host "[INFO] $Message" -ForegroundColor Gray }
+        "DEL"  { Write-Host "[DEL] $Message" -ForegroundColor Magenta }
         default { Write-Host $Message }
     }
 }
@@ -149,6 +153,34 @@ function Compare-And-Write($TargetPath, $NewContent) {
     $script:FilesUpdated++
 }
 
+# Cleanup old files that don't match the new prefix naming convention
+function Remove-OldFiles($Dir, $Prefix, $Extension, $SourceNames) {
+    if (-not (Test-Path $Dir)) { return }
+    $existingFiles = Get-ChildItem -Path $Dir -Filter "*$Extension" -ErrorAction SilentlyContinue
+    foreach ($file in $existingFiles) {
+        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
+        # Skip files that already have the correct prefix
+        if ($baseName.StartsWith($Prefix)) { continue }
+        # Check if this old file corresponds to a source workflow
+        $nameWithoutOldPrefix = $baseName
+        # Remove old prefixes if present (devkit-, or no prefix)
+        if ($nameWithoutOldPrefix.StartsWith("devkit-")) {
+            $nameWithoutOldPrefix = $nameWithoutOldPrefix.Substring(7)
+        }
+        # Also handle .prompt suffix for copilot files
+        $nameWithoutOldPrefix = $nameWithoutOldPrefix -replace "\.prompt$", ""
+        if ($SourceNames -contains $nameWithoutOldPrefix) {
+            if ($DryRun) {
+                Write-Status "Would remove old file: $($file.FullName)" "DEL"
+            } else {
+                Remove-Item $file.FullName -Force
+                Write-Status "Removed old file: $($file.FullName)" "DEL"
+            }
+            $script:FilesRemoved++
+        }
+    }
+}
+
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Sync AI Config (.agent/ -> IDEs)" -ForegroundColor Cyan
@@ -160,6 +192,25 @@ if ($DryRun) {
     Write-Host ""
 }
 
+# Collect source workflow names for cleanup
+$sourceWorkflowNames = @()
+$wfSourceFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
+if ($wfSourceFiles) {
+    $sourceWorkflowNames = $wfSourceFiles | ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }
+}
+
+# ── Cleanup old files (before sync) ──────────────────────────────────────────
+
+Write-Host "--- Cleaning up old files (no prefix / wrong prefix) ---" -ForegroundColor White
+Write-Host ""
+
+Remove-OldFiles $CursorCommandsDir "cursor-" ".md" $sourceWorkflowNames
+Remove-OldFiles $GithubPromptsDir "copilot-" ".md" $sourceWorkflowNames
+Remove-OldFiles $ClaudeCommandsDir "claude-" ".md" $sourceWorkflowNames
+
+# ── Sync Rules → Cursor ──────────────────────────────────────────────────────
+
+Write-Host ""
 Write-Host "--- Syncing Rules (.agent/rules/ -> .cursor/rules/) ---" -ForegroundColor White
 Write-Host ""
 
@@ -179,15 +230,36 @@ if ($ruleFiles) {
     Write-Status "No rule files found in $AgentRulesDir" "WARN"
 }
 
+# ── Sync Rules → Claude ──────────────────────────────────────────────────────
+
 Write-Host ""
-Write-Host "--- Syncing Workflows (.agent/workflows/ -> .cursor/commands/) ---" -ForegroundColor White
+Write-Host "--- Syncing Rules (.agent/rules/ -> .claude/rules/) ---" -ForegroundColor White
+Write-Host ""
+
+$ruleFiles = Get-ChildItem -Path $AgentRulesDir -Filter "*.md" -ErrorAction SilentlyContinue
+if ($ruleFiles) {
+    foreach ($ruleFile in $ruleFiles) {
+        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($ruleFile.Name)
+        $targetPath = Join-Path $ClaudeRulesDir "$baseName.md"
+
+        $body = Get-AgentRuleBody $ruleFile.FullName
+        Compare-And-Write $targetPath $body
+    }
+} else {
+    Write-Status "No rule files found in $AgentRulesDir" "WARN"
+}
+
+# ── Sync Workflows → Cursor (prefix: cursor-) ────────────────────────────────
+
+Write-Host ""
+Write-Host "--- Syncing Workflows (.agent/workflows/ -> .cursor/commands/cursor-*) ---" -ForegroundColor White
 Write-Host ""
 
 $workflowFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
 if ($workflowFiles) {
     foreach ($wfFile in $workflowFiles) {
         $baseName = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
-        $targetPath = Join-Path $CursorCommandsDir "$baseName.md"
+        $targetPath = Join-Path $CursorCommandsDir "cursor-$baseName.md"
 
         $title = Get-CursorCommandTitle $wfFile.Name
         $body = Get-WorkflowBody $wfFile.FullName
@@ -198,6 +270,35 @@ if ($workflowFiles) {
 } else {
     Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
 }
+
+# ── Sync Workflows → Claude (prefix: claude-) ────────────────────────────────
+
+Write-Host ""
+Write-Host "--- Syncing Workflows (.agent/workflows/ -> .claude/commands/claude-*) ---" -ForegroundColor White
+Write-Host ""
+
+$workflowFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
+if ($workflowFiles) {
+    foreach ($wfFile in $workflowFiles) {
+        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
+        $targetPath = Join-Path $ClaudeCommandsDir "claude-$baseName.md"
+
+        $description = Get-WorkflowDescription $wfFile.FullName
+        $body = Get-WorkflowBody $wfFile.FullName
+        $claudeContent = @"
+---
+description: "$description"
+---
+
+$body
+"@
+        Compare-And-Write $targetPath $claudeContent
+    }
+} else {
+    Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
+}
+
+# ── Sync Rules → Copilot (merged into copilot-instructions.md) ───────────────
 
 Write-Host ""
 Write-Host "--- Syncing Rules (.agent/rules/ -> .github/copilot-instructions.md) ---" -ForegroundColor White
@@ -235,15 +336,17 @@ if ($ruleFiles) {
     Write-Status "No rule files found in $AgentRulesDir" "WARN"
 }
 
+# ── Sync Workflows → Copilot (prefix: copilot-) ──────────────────────────────
+
 Write-Host ""
-Write-Host "--- Syncing Workflows (.agent/workflows/ -> .github/prompts/) ---" -ForegroundColor White
+Write-Host "--- Syncing Workflows (.agent/workflows/ -> .github/prompts/copilot-*) ---" -ForegroundColor White
 Write-Host ""
 
 $workflowFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
 if ($workflowFiles) {
     foreach ($wfFile in $workflowFiles) {
         $baseName = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
-        $targetPath = Join-Path $GithubPromptsDir "$baseName.prompt.md"
+        $targetPath = Join-Path $GithubPromptsDir "copilot-$baseName.prompt.md"
 
         $description = Get-WorkflowDescription $wfFile.FullName
         $body = Get-WorkflowBody $wfFile.FullName
@@ -261,6 +364,8 @@ $body
     Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
 }
 
+# ── Summary ───────────────────────────────────────────────────────────────────
+
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Summary" -ForegroundColor Cyan
@@ -268,13 +373,14 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Status "Files checked: $ChangesDetected" "INFO"
 Write-Status "Files updated: $FilesUpdated" "INFO"
+Write-Status "Files removed: $FilesRemoved" "INFO"
 
-if ($FilesUpdated -eq 0) {
+if ($FilesUpdated -eq 0 -and $FilesRemoved -eq 0) {
     Write-Host ""
     Write-Status "All files are in sync!" "OK"
 } elseif ($DryRun) {
     Write-Host ""
-    Write-Status "$FilesUpdated file(s) would be updated. Run without -DryRun to apply." "WARN"
+    Write-Status "$FilesUpdated file(s) would be updated, $FilesRemoved file(s) would be removed. Run without -DryRun to apply." "WARN"
 }
 
 Write-Host ""

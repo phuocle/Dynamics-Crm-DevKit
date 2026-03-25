@@ -1,7 +1,4 @@
-﻿---
-description: "Generate entity form and webapi files using CLI"
-mode: agent
----
+# client-code-generate
 
 # Generate Entity Files Workflow
 

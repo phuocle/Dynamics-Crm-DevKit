@@ -1,4 +1,6 @@
-﻿# client-code-install
+---
+description: "Install all NPM packages in TestClientCode folders for development"
+---
 
 # Install TestClientCode Workflow
 
