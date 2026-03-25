@@ -95,11 +95,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "the user to re-call with the exact uniqueName to disambiguate\n" +
             "- If no solution matches → returns an error message\n\n" +
 
-            "FULL ENTITY EXPANSION:\n" +
+            "FULL ENTITY (Include All Components) BEHAVIOR:\n" +
             "When a solution contains an entity added with 'Include All Components' " +
-            "(rootComponentBehavior = 0), this tool automatically expands that entity into its " +
-            "complete set of sub-components: all attributes, all relationships " +
-            "(1:N, N:1, N:N), system forms, saved queries (views), and charts.\n\n" +
+            "(rootComponentBehavior = 0), this tool does NOT expand it into sub-components. " +
+            "Instead, it lists the entity with a note indicating it was added as full, and " +
+            "instructs the AI to use the `get_entity_metadata` tool to fetch the complete " +
+            "metadata (attributes, relationships, forms, views, etc.) for that entity. " +
+            "This keeps the response lightweight and fast.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Before packaging or deploying a solution, to audit its contents\n" +
@@ -133,8 +135,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return FormatMultipleSolutions(solution_name, solutions);
 
                 var solution = solutions[0];
-                var (components, expandedMetadata) = LoadComponents(solution.Id);
-                return FormatResult(solution, components, expandedMetadata);
+                var (components, fullEntityNames) = LoadComponents(solution.Id);
+                return FormatResult(solution, components, fullEntityNames);
             }
             catch (Exception ex)
             {
@@ -171,7 +173,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return _serviceClient.RetrieveMultiple(query).Entities.ToList();
         }
 
-        private (List<Entity> Components, List<EntityMetadata> ExpandedMetadata) LoadComponents(Guid solutionId)
+        /// <summary>
+        /// Loads solution components. For entities added with "Include All Components" (rootComponentBehavior = 0),
+        /// only resolves their logical names via a lightweight metadata query — does NOT expand into sub-components.
+        /// Returns the component list and a dictionary of full-entity MetadataId → LogicalName.
+        /// </summary>
+        private (List<Entity> Components, Dictionary<Guid, string> FullEntityNames) LoadComponents(Guid solutionId)
         {
             // 1) Fetch all direct solutioncomponent rows for this solution
             var allComponents = _serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
@@ -187,8 +194,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var components = new List<Entity>(allComponents);
 
             // 2) Find Entity components added with "Include All Components" (rootcomponentbehavior = 0)
-            //    These must be expanded — the solutioncomponent row alone only has one record (the entity),
-            //    but logically it includes every attribute, relationship, form, view, and chart.
+            //    Instead of expanding into sub-components (which is very heavy), we only resolve
+            //    the entity logical name so we can instruct the AI to use get_entity_metadata.
             var fullEntityIds = allComponents
                 .Where(c =>
                     c.GetAttributeValue<OptionSetValue>("componenttype")?.Value == 1 &&
@@ -196,112 +203,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .Select(c => c.GetAttributeValue<Guid>("objectid"))
                 .ToArray();
 
+            var fullEntityNames = new Dictionary<Guid, string>();
+
             if (fullEntityIds.Length == 0)
-                return (components, new List<EntityMetadata>());
+                return (components, fullEntityNames);
 
-            // 3) Load metadata for full-entity expansions (one batch call)
-            var entityQuery = new EntityQueryExpression
+            // 3) Lightweight metadata query — only fetch MetadataId + LogicalName (no attributes, no relationships)
+            try
             {
-                Criteria = new MetadataFilterExpression(LogicalOperator.And)
+                var entityQuery = new EntityQueryExpression
                 {
-                    Conditions =
+                    Criteria = new MetadataFilterExpression(LogicalOperator.And)
                     {
-                        new MetadataConditionExpression("MetadataId", MetadataConditionOperator.In, fullEntityIds)
-                    }
-                },
-                Properties = new MetadataPropertiesExpression(
-                    "MetadataId",
-                    "LogicalName",
-                    "Attributes",
-                    "OneToManyRelationships",
-                    "ManyToOneRelationships",
-                    "ManyToManyRelationships"),
-                AttributeQuery = new AttributeQueryExpression
-                {
+                        Conditions =
+                        {
+                            new MetadataConditionExpression("MetadataId", MetadataConditionOperator.In, fullEntityIds)
+                        }
+                    },
                     Properties = new MetadataPropertiesExpression("MetadataId", "LogicalName")
-                },
-                RelationshipQuery = new RelationshipQueryExpression
+                };
+
+                var response = (RetrieveMetadataChangesResponse)_serviceClient.Execute(
+                    new RetrieveMetadataChangesRequest { Query = entityQuery });
+
+                foreach (var em in response.EntityMetadata)
                 {
-                    Properties = new MetadataPropertiesExpression("MetadataId", "SchemaName")
+                    if (em.MetadataId.HasValue && em.LogicalName != null)
+                        fullEntityNames[em.MetadataId.Value] = em.LogicalName;
                 }
-            };
+            }
+            catch { /* skip on metadata query failure */ }
 
-            var entityMetadatas = ((RetrieveMetadataChangesResponse)_serviceClient.Execute(
-                new RetrieveMetadataChangesRequest { Query = entityQuery })).EntityMetadata.ToList();
-
-            var logicalNames = entityMetadatas.Select(e => e.LogicalName).ToArray();
-
-            // Attributes (type 2)
-            components.AddRange(entityMetadatas
-                .SelectMany(e => e.Attributes ?? Array.Empty<AttributeMetadata>())
-                .Where(a => a.MetadataId.HasValue)
-                .Select(a => new Entity("solutioncomponent")
-                {
-                    ["objectid"] = a.MetadataId.Value,
-                    ["componenttype"] = new OptionSetValue(2)
-                }));
-
-            // Relationships (type 3) — 1:N, N:1, N:N
-            components.AddRange(entityMetadatas
-                .SelectMany(e => (e.OneToManyRelationships?.Cast<RelationshipMetadataBase>() ?? Array.Empty<RelationshipMetadataBase>())
-                    .Concat(e.ManyToOneRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
-                    .Concat(e.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>()))
-                .Where(r => r.MetadataId.HasValue)
-                .Select(r => new Entity("solutioncomponent")
-                {
-                    ["objectid"] = r.MetadataId.Value,
-                    ["componenttype"] = new OptionSetValue(3)
-                }));
-
-            // System Forms (type 60)
-            var forms = _serviceClient.RetrieveMultiple(new QueryExpression("systemform")
-            {
-                NoLock = true,
-                ColumnSet = new ColumnSet("formid"),
-                Criteria = new FilterExpression
-                {
-                    Conditions = { new ConditionExpression("objecttypecode", ConditionOperator.In, logicalNames) }
-                }
-            });
-            components.AddRange(forms.Entities.Select(f => new Entity("solutioncomponent")
-            {
-                ["objectid"] = f.Id,
-                ["componenttype"] = new OptionSetValue(60)
-            }));
-
-            // Saved Queries / Views (type 26)
-            var views = _serviceClient.RetrieveMultiple(new QueryExpression("savedquery")
-            {
-                NoLock = true,
-                ColumnSet = new ColumnSet("savedqueryid"),
-                Criteria = new FilterExpression
-                {
-                    Conditions = { new ConditionExpression("returnedtypecode", ConditionOperator.In, logicalNames) }
-                }
-            });
-            components.AddRange(views.Entities.Select(v => new Entity("solutioncomponent")
-            {
-                ["objectid"] = v.Id,
-                ["componenttype"] = new OptionSetValue(26)
-            }));
-
-            // Charts / Visualizations (type 59)
-            var charts = _serviceClient.RetrieveMultiple(new QueryExpression("savedqueryvisualization")
-            {
-                NoLock = true,
-                ColumnSet = new ColumnSet("savedqueryvisualizationid"),
-                Criteria = new FilterExpression
-                {
-                    Conditions = { new ConditionExpression("primaryentitytypecode", ConditionOperator.In, logicalNames) }
-                }
-            });
-            components.AddRange(charts.Entities.Select(c => new Entity("solutioncomponent")
-            {
-                ["objectid"] = c.Id,
-                ["componenttype"] = new OptionSetValue(59)
-            }));
-
-            return (components, entityMetadatas);
+            return (components, fullEntityNames);
         }
 
         // ── Output formatters ────────────────────────────────────────────────────
@@ -327,7 +260,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private string FormatResult(Entity solution, List<Entity> components, List<EntityMetadata> expandedMetadata)
+        private string FormatResult(Entity solution, List<Entity> components, Dictionary<Guid, string> fullEntityNames)
         {
             var uniqueName   = solution.GetAttributeValue<string>("uniquename")   ?? "";
             var displayName  = solution.GetAttributeValue<string>("friendlyname") ?? "";
@@ -350,6 +283,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"| Total Components | {components.Count} |");
             sb.AppendLine();
 
+            // ── Full Entities guidance (if any) ──
+            if (fullEntityNames.Count > 0)
+            {
+                sb.AppendLine($"## ⚡ Entities with \"Include All Components\" — {fullEntityNames.Count} entities");
+                sb.AppendLine();
+                sb.AppendLine("The following entities were added to this solution with **\"Include All Components\"** (rootComponentBehavior = 0). " +
+                              "Their sub-components (attributes, relationships, forms, views, charts) are **not listed here** to keep this response lightweight.");
+                sb.AppendLine();
+                sb.AppendLine("> **To get full metadata for any of these entities, use the `get_entity_metadata` tool with the entity logical name.**");
+                sb.AppendLine();
+                sb.AppendLine("| Entity LogicalName | MetadataId | Action |");
+                sb.AppendLine("| --- | --- | --- |");
+                foreach (var kvp in fullEntityNames.OrderBy(k => k.Value))
+                {
+                    sb.AppendLine($"| `{kvp.Value}` | {kvp.Key} | → Use `get_entity_metadata(\"{kvp.Value}\")` |");
+                }
+                sb.AppendLine();
+            }
+
             var grouped = components
                 .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
                 .OrderBy(g => g.Key)
@@ -367,7 +319,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             sb.AppendLine();
 
-            var nameMap = BuildNameMap(components, expandedMetadata);
+            var nameMap = BuildNameMap(components, fullEntityNames);
 
             // ── Full component list (objectIds usable by other tools) ──
             sb.AppendLine($"## Components — {components.Count}");
@@ -381,6 +333,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var objectId = c.GetAttributeValue<Guid>("objectid");
                     nameMap.TryGetValue(objectId, out var name);
+
+                    // Mark full entities with ⚡ indicator
+                    if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
+                        name = $"{name} ⚡ (full — use get_entity_metadata)";
+
                     sb.AppendLine($"| {typeName} | {grp.Key} | {objectId} | {name ?? ""} |");
                 }
             }
@@ -390,15 +347,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Name resolution ──────────────────────────────────────────────────────
 
-        private Dictionary<Guid, string> BuildNameMap(List<Entity> components, List<EntityMetadata> expandedMetadata)
+        private Dictionary<Guid, string> BuildNameMap(List<Entity> components, Dictionary<Guid, string> fullEntityNames)
         {
             var nameMap = new Dictionary<Guid, string>();
             var byType = components
                 .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
                 .ToDictionary(g => g.Key, g => g.Select(c => c.GetAttributeValue<Guid>("objectid")).Distinct().ToList());
 
-            // Step 1: Populate from entity metadata already loaded during full-entity expansion
-            PopulateFromEntityMetadata(expandedMetadata, nameMap);
+            // Step 1: Populate entity names from full-entity resolution (already resolved in LoadComponents)
+            foreach (var kvp in fullEntityNames)
+                nameMap.TryAdd(kvp.Key, kvp.Value);
 
             // Step 2: Resolve entity names (type 1) not already in cache
             if (byType.TryGetValue(1, out var entityIds))
@@ -451,31 +409,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             BatchResolve(byType, nameMap, 380, "environmentvariabledefinition", "environmentvariabledefinitionid", new ColumnSet("schemaname", "displayname"),          e => $"{S(e, "schemaname")} ({S(e, "displayname")})");
 
             return nameMap;
-        }
-
-        private static void PopulateFromEntityMetadata(List<EntityMetadata> metadataList, Dictionary<Guid, string> nameMap)
-        {
-            foreach (var em in metadataList)
-            {
-                if (em.MetadataId.HasValue)
-                    nameMap.TryAdd(em.MetadataId.Value, em.LogicalName);
-
-                foreach (var attr in em.Attributes ?? Array.Empty<AttributeMetadata>())
-                    if (attr.MetadataId.HasValue && attr.LogicalName != null)
-                        nameMap.TryAdd(attr.MetadataId.Value, $"{em.LogicalName}.{attr.LogicalName}");
-
-                foreach (var rel in em.OneToManyRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
-                    if (rel.MetadataId.HasValue && rel.SchemaName != null)
-                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
-
-                foreach (var rel in em.ManyToOneRelationships ?? Array.Empty<OneToManyRelationshipMetadata>())
-                    if (rel.MetadataId.HasValue && rel.SchemaName != null)
-                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
-
-                foreach (var rel in em.ManyToManyRelationships ?? Array.Empty<ManyToManyRelationshipMetadata>())
-                    if (rel.MetadataId.HasValue && rel.SchemaName != null)
-                        nameMap.TryAdd(rel.MetadataId.Value, rel.SchemaName);
-            }
         }
 
         private void ResolveEntityMetadataNames(List<Guid> entityIds, Dictionary<Guid, string> nameMap)
