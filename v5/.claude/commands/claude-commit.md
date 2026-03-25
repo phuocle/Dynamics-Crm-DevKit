@@ -2,47 +2,47 @@
 description: "Prepare and commit code for DynamicsCrm.DevKit"
 ---
 
-Quy trình chuẩn bị và commit code an toàn cho dự án DynamicsCrm.DevKit.
+Safe code preparation and commit workflow for the DynamicsCrm.DevKit project.
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > **AI AGENT INSTRUCTIONS (CRITICAL):**
-> GỬI TỚI AI AGENT: Người dùng KHÔNG muốn bạn chỉ hướng dẫn hoặc liệt kê ra các bước. Bạn là một Agent, bạn PHẢI SỬ DỤNG TOOL để thực thi các lệnh `git` thay mặt người dùng. 
-> Khi được yêu cầu chạy lệnh cắt nghĩa workflow này, bạn PHẢI NGAY LẬP TỨC dùng tool chạy `git status`, sau đó tự động phân tích, kiểm tra `Const.cs`, chọn file để add, tạo nội dung commit phù hợp và cuối cùng: ĐỀ XUẤT CÁC LỆNH ĐÓ CHO NGƯỜI DÙNG DUYỆT ĐỂ CHẠY. Đừng bắt người dùng phải chat lại thêm lần nào nếu không thực sự cần thiết.
+> TO AI AGENT: The user does NOT want you to just guide or list out steps. You are an Agent — you MUST USE TOOLS to execute `git` commands on behalf of the user.
+> When asked to run this workflow, you MUST IMMEDIATELY use a tool to run `git status`, then automatically analyze, check `Const.cs`, select files to add, craft an appropriate commit message, and finally: PROPOSE THE COMMANDS FOR THE USER TO APPROVE AND RUN. Do not make the user chat back again unless truly necessary.
 
-> Dự án này sử dụng PowerShell trên Windows. Không dùng script Bash (`&&` hoặc `<<EOF`).
+> This project uses PowerShell on Windows. Do not use Bash scripts (`&&` or `<<EOF`).
 
 ## Workflow Steps
 
-**Bước 1: Kiểm tra trạng thái các biến động (TỰ ĐỘNG CHẠY)**
+**Step 1: Check the status of changed files (AUTO-RUN)**
 
-AI Agent sử dụng tool để chạy tự động lệnh này ngay từ đầu để xem file thay đổi:
+AI Agent uses a tool to automatically run this command from the start to see changed files:
 ```powershell
 git status
 ```
 
-**Bước 2: Cảnh báo sống còn (Critical Check)**
+**Step 2: Critical Check**
 
 > [!CAUTION]
-> **⚠ Cảnh báo về tệp `Const.cs`**  
-> AI phải kiểm tra nếu `DynamicsCrm.DevKit.Shared\Const.cs` nằm trong danh sách thay đổi.
-> Nếu có thay đổi, hãy dùng lệnh đọc file xem nó có đang chứa Placeholder gốc không:
+> **Warning about `Const.cs`**
+> AI must check if `DynamicsCrm.DevKit.Shared\Const.cs` is in the list of changed files.
+> If it has changes, read the file to check whether it still contains the original placeholders:
 > - Version: `x.xx.xx.xx`
 > - Date: `xxxx.yy.zz HH.mm.ss`
-> 
-> Nếu trong file hiển thị số version thật (ví dụ: `4.12.34.56`), tuyệt đối **KHÔNG** được commit file này. AI phải tự động chạy lệnh `git restore "DynamicsCrm.DevKit.Shared\Const.cs"` hoặc dùng tool revert lại file trước khi chia stage file nào.
+>
+> If the file shows a real version number (e.g., `4.12.34.56`), you absolutely **MUST NOT** commit this file. AI must automatically run `git restore "DynamicsCrm.DevKit.Shared\Const.cs"` or use a tool to revert the file before staging anything.
 
-**Bước 3: Chỉ thị cẩn thận đối với file thay đổi**
+**Step 3: Carefully select files to stage**
 
-AI đọc list file đã thay đổi, đề xuất lệnh `git add` CHỈ với các file thực sự cần.
-(Tuyệt đối tránh dùng `git add .` hoặc `git add -A` để ngăn rò rỉ file config nhạy cảm)
+AI reads the list of changed files and proposes a `git add` command with ONLY the files that actually need to be committed.
+(Never use `git add .` or `git add -A` to prevent leaking sensitive config files)
 ```powershell
-git add "duong/dan/den/file1.cs" "duong/dan/den/file2.cs"
+git add "path/to/file1.cs" "path/to/file2.cs"
 ```
 
-**Bước 4: Đóng gói commit bằng PowerShell**
+**Step 4: Create the commit using PowerShell**
 
-AI dựa vào hiểu biết từ file được add để tự hiểu ý định và làm gọn thành message hợp lý (bạn cũng có thể hỏi người dùng hoặc tự suy diễn nếu rõ ràng). Sau đó đề xuất chạy lệnh:
-(Sử dụng 2 cờ -m để tách biệt Tiêu đề và Nội dung)
+AI uses its understanding of the added files to infer the intent and craft a concise, appropriate message (you may also ask the user or infer if the intent is clear). Then propose running:
+(Use two `-m` flags to separate the title and body)
 ```powershell
-git commit -m "Tiêu đề ngắn gọn gọn (khoảng 50 ký tự)" -m "Mô tả chi tiết những gì đã thay đổi và lý do đưa ra thiết kế này."
+git commit -m "Short concise title (about 50 characters)" -m "Detailed description of what changed and the reasoning behind the design."
 ```

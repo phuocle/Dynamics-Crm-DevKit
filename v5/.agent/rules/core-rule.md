@@ -10,16 +10,16 @@ trigger: always_on
 
 ## Communication Protocol
 
-- **Start every response with**: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` (based on user's local time)
-- **End every response with**: `"[emoji] Tôi đã là xong rồi anh Phước, hãy kiểm tra lại những gì tôi làm nhé [emoji]"`
+- **Start every response with**: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` (based on user's local time)
+- **End every response with**: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
 
 ---
 
 ## User Timezone (for greeting)
 
 - **Timezone**: Vietnam (Asia/Ho_Chi_Minh, UTC+7)
-- **Greeting mapping**: sáng (5h–11h), trưa (11h–13h), chiều (13h–17h), tối (17h–21h), đêm (21h–5h)
-- **If context shows UTC or server time**: Add 7 hours to get Vietnam time before choosing greeting (e.g. 11:05 UTC → 18:05 Vietnam → chiều)
+- **Greeting mapping**: morning (5h–11h), noon (11h–13h), afternoon (13h–17h), evening (17h–21h), night (21h–5h)
+- **If context shows UTC or server time**: Add 7 hours to get Vietnam time before choosing greeting (e.g. 11:05 UTC → 18:05 Vietnam → afternoon)
 - **Build start/end times**: Use the actual timestamp when the command was executed (from terminal output or system), not assumed time. If unknown, omit or use "N/A".
 
 ---

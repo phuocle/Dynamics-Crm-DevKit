@@ -2,10 +2,10 @@
 description: Build Release DynamicsCrm.DevKit for all projects with current timestamp
 ---
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > **AI AGENT INSTRUCTIONS (CRITICAL):**
-> GỬI TỚI AI AGENT: Bạn KHÔNG ĐƯỢC chỉ in ra văn bản các bước. Bạn PHẢI SỬ DỤNG TOOL để thực thi TỪNG LỆNH một thay cho người dùng.
-> **RẤT QUAN TRỌNG:** Tập lệnh build (.ps1) cần rất nhiều thời gian để hoàn thành. Bạn PHẢI DÙNG TOOL để kiểm tra tiến trình (process status) và CHỜ ĐỢI cho đến khi tập lệnh chạy xong 100% TRƯỚC KHI chuyển sang các bước Verify. Nếu bạn không chờ, các bước Verify sẽ báo lỗi hoặc báo thiếu file `nupkg`/`vsix` (vì nó chưa build xong), dẫn tới output sai hoàn toàn. Hãy làm tuần tự, chậm mà chắc.
+> TO AI AGENT: You MUST NOT just print out the steps as text. You MUST USE TOOLS to execute EACH COMMAND one by one on behalf of the user.
+> **VERY IMPORTANT:** The build script (.ps1) takes a long time to complete. You MUST USE TOOLS to check the process status and WAIT until the script finishes 100% BEFORE moving on to the Verify steps. If you don't wait, the Verify steps will report errors or missing `nupkg`/`vsix` files (because the build hasn't finished), leading to completely wrong output. Execute sequentially — slow and steady.
 
 // turbo-all
 

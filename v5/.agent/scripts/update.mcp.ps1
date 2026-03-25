@@ -1,6 +1,6 @@
 # Script: update.mcp.ps1
-# Cập nhật mcp_config.json cho dynamicscrm-devkit trỏ đến DevKit v4
-# Sau khi chạy, cần restart Antigravity để MCP reconnect.
+# Update mcp_config.json for dynamicscrm-devkit to point to DevKit v4
+# After running, restart Antigravity for MCP to reconnect.
 
 $mcpConfig = Join-Path $env:USERPROFILE ".gemini\antigravity\mcp_config.json"
 $json = Get-Content $mcpConfig -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -18,7 +18,7 @@ $appMaker.disabled = $false
 $jsonString = $json | ConvertTo-Json -Depth 10
 [System.IO.File]::WriteAllText($mcpConfig, $jsonString)
 
-# Format lại JSON bằng prettier để tránh Powershell làm hỏng format
+# Reformat JSON with prettier to prevent PowerShell from corrupting format
 npx prettier --write $mcpConfig
 
 Write-Host "Done! MCP -> DevKit v4. Format fixed. Restart Antigravity." -ForegroundColor Green

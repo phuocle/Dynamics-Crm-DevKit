@@ -309,7 +309,7 @@ Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsC
   -Destination "DynamicsCrm.DevKit.Tests\TestAnalyzers\Lib\" -Force
 ```
 
-**IMPORTANT**: Request anh Phước to:
+**IMPORTANT**: Request the user to:
 1. Close and reopen Visual Studio (VS caches analyzers)
 2. Open `DynamicsCrm.DevKit.Tests\TestAnalyzers\TestAnalyzers.slnx`
 3. Verify the diagnostic appears in the integration test file
@@ -352,7 +352,7 @@ Edit `d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKi
 - [ ] Integration test file `DEVKIT{XXXX}.cs` created in `TestAnalyzers\`
 - [ ] Documentation `DEVKIT{XXXX}.md` created
 - [ ] `ANALYZERS_ROADMAP.md` updated
-- [ ] Request anh Phước to test in Visual Studio
+- [ ] Request the user to test in Visual Studio
 
 ---
 

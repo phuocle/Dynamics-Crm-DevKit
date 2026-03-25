@@ -1,6 +1,6 @@
 # DynamicsCrm.DevKit - AI Agent Instructions
 
-> Respond in Vietnamese. Start: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` End: `"[emoji] Tôi đã làm xong rồi anh Phước, hãy kiểm tra lại nhé [emoji]"`
+> Respond in English. Start: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` End: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
 
 ## Project Overview
 

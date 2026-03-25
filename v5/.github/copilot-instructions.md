@@ -252,16 +252,16 @@ TestClientCode\06.DevKitTs-Vsix\...\entities\OptionSet.ts
 
 ## Communication Protocol
 
-- **Start every response with**: `"[emoji] Xin chào buổi [sáng/trưa/chiều/tối] anh Phước [emoji]"` (based on user's local time)
-- **End every response with**: `"[emoji] Tôi đã là xong rồi anh Phước, hãy kiểm tra lại những gì tôi làm nhé [emoji]"`
+- **Start every response with**: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` (based on user's local time)
+- **End every response with**: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
 
 ---
 
 ## User Timezone (for greeting)
 
 - **Timezone**: Vietnam (Asia/Ho_Chi_Minh, UTC+7)
-- **Greeting mapping**: sáng (5h–11h), trưa (11h–13h), chiều (13h–17h), tối (17h–21h), đêm (21h–5h)
-- **If context shows UTC or server time**: Add 7 hours to get Vietnam time before choosing greeting (e.g. 11:05 UTC → 18:05 Vietnam → chiều)
+- **Greeting mapping**: morning (5h–11h), noon (11h–13h), afternoon (13h–17h), evening (17h–21h), night (21h–5h)
+- **If context shows UTC or server time**: Add 7 hours to get Vietnam time before choosing greeting (e.g. 11:05 UTC → 18:05 Vietnam → afternoon)
 - **Build start/end times**: Use the actual timestamp when the command was executed (from terminal output or system), not assumed time. If unknown, omit or use "N/A".
 
 ---
@@ -522,53 +522,53 @@ The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations. E
 | `AnalyzerHelper.cs` | Utilities: `IsPluginOrWorkflowClass`, `IsInsidePluginOrWorkflow`, deprecated/batch request lists |
 | `DiagnosticHelpers.cs` | `ReportDiagnostic()` overloads for reporting issues |
 
-## Khi có yêu cầu thay đổi hoặc fix lỗi
+## When Changing or Fixing an Analyzer
 
-### Bước 1: Đọc kỹ yêu cầu và ngữ cảnh
-1. Đọc kỹ lại nội dung anh Phước yêu cầu
-2. Xác định analyzer nào liên quan (DEVKIT1001-DEVKIT1021)
-3. Đọc lại các files core trong `DynamicsCrm.DevKit.Analyzers\`:
- - `DiagnosticIdentifiers.cs` trong `Core\` - xem danh sách ID
- - `DiagnosticDescriptors.cs` trong `Core\` - xem descriptors
- - Analyzer file tương ứng trong `CrmAnalyzers\`
+### Step 1: Read the Requirements and Context
+1. Carefully read the user's request
+2. Identify which analyzer is involved (DEVKIT1001-DEVKIT1021)
+3. Read the core files in `DynamicsCrm.DevKit.Analyzers\`:
+ - `DiagnosticIdentifiers.cs` in `Core\` — review the ID list
+ - `DiagnosticDescriptors.cs` in `Core\` — review descriptors
+ - The corresponding analyzer file in `CrmAnalyzers\`
 
-### Bước 2: Kiểm tra Unit Tests
-1. Chạy workflow `/build-analyzer` để build và run tests
-2. Unit tests nằm tại: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
-3. Sử dụng pattern `[|code|]` để mark expected diagnostics:
+### Step 2: Verify Unit Tests
+1. Run workflow `/build-analyzer` to build and run tests
+2. Unit tests are located at: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
+3. Use the `[|code|]` pattern to mark expected diagnostics:
    ```csharp
    var src = WrapInPlugin("[|new ColumnSet(true)|]");
    await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
    ```
 
-### Bước 3: Kiểm tra Integration Tests trong Visual Studio
+### Step 3: Verify Integration Tests in Visual Studio
 1. Folder: `DynamicsCrm.DevKit.Tests\TestAnalyzers\`
-2. **Phải đảm bảo số lượng file `DEVKIT*.cs` bằng với số lượng analyzers đang support**
-   - Hiện tại có 21 analyzers: DEVKIT1001 → DEVKIT1021
-   - Phải có 21 files: `DEVKIT1001.cs` → `DEVKIT1021.cs`
-3. Code mẫu phải trigger đúng diagnostic
-4. **AI không thể test được trong VS - phải yêu cầu anh Phước test thủ công**
+2. **Ensure the number of `DEVKIT*.cs` files matches the number of supported analyzers**
+   - Currently 21 analyzers: DEVKIT1001 → DEVKIT1021
+   - Must have 21 files: `DEVKIT1001.cs` → `DEVKIT1021.cs`
+3. Sample code must trigger the correct diagnostic
+4. **AI cannot test in VS — request the user to test manually**
 
-### Bước 4: Kiểm tra và cập nhật Documentation
+### Step 4: Verify and Update Documentation
 1. Folder: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\`
-2. Mỗi analyzer phải có file `DEVKIT{XXXX}.md` tương ứng
-3. Sử dụng template: `DEVKIT.template.md`
-4. Cập nhật `ANALYZERS_ROADMAP.md` nếu thay đổi status
+2. Each analyzer must have a corresponding `DEVKIT{XXXX}.md` file
+3. Use template: `DEVKIT.template.md`
+4. Update `ANALYZERS_ROADMAP.md` if the status changes
 
-## Khi có yêu cầu thêm mới analyzer
+## When Adding a New Analyzer
 
-**QUAN TRỌNG**: Phải chạy workflow `/create-new-analyzer` trước khi bắt đầu. Workflow này sẽ hướng dẫn chi tiết các bước từ A-Z.
+**IMPORTANT**: You must run the `/create-new-analyzer` workflow before starting. This workflow provides step-by-step guidance from A to Z.
 
 ## Checklist Verification
 
-- [ ] `DiagnosticIdentifiers.cs` đã có ID mới (nếu thêm mới)?
-- [ ] `DiagnosticDescriptors.cs` đã có descriptor mới (nếu thêm mới)?
-- [ ] Analyzer file tồn tại trong `CrmAnalyzers\`?
-- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
-- [ ] Unit tests pass? (chạy `/build-analyzer`)
-- [ ] Integration test file `DEVKIT{XXXX}.cs` tồn tại trong `TestAnalyzers\`?
-- [ ] Documentation file `DEVKIT{XXXX}.md` tồn tại?
-- [ ] `ANALYZERS_ROADMAP.md` đã được cập nhật (nếu cần)?
+- [ ] `DiagnosticIdentifiers.cs` has the new ID (if adding)?
+- [ ] `DiagnosticDescriptors.cs` has the new descriptor (if adding)?
+- [ ] Analyzer file exists in `CrmAnalyzers\`?
+- [ ] Unit test file exists in `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
+- [ ] Unit tests pass? (run `/build-analyzer`)
+- [ ] Integration test file `DEVKIT{XXXX}.cs` exists in `TestAnalyzers\`?
+- [ ] Documentation file `DEVKIT{XXXX}.md` exists?
+- [ ] `ANALYZERS_ROADMAP.md` updated (if needed)?
 
 ## Current Analyzers (DEVKIT1001-DEVKIT1021)
 
@@ -697,99 +697,91 @@ dotnet build --configuration Release "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.
 
 ---
 
-<!-- Skill: devkit-analyzer -->
-
-
-
----
-
----
-
 <!-- Skill: markdown-management -->
 
 
 # SKILL: Markdown Gold Standard for AI Training
 
-## 1. TỔNG QUAN (OVERVIEW)
+## 1. OVERVIEW
 
-Định dạng Markdown không chỉ dành cho con người đọc mà là "ngôn ngữ chung" (lingua franca) tối ưu nhất cho AI. Việc tuân thủ chuẩn Markdown giúp AI:
+Markdown is not just for human readability — it is the optimal "lingua franca" for AI. Following Markdown standards helps AI:
 
-- **Tăng độ hiểu ngữ cảnh:** Cải thiện 40-60% khả năng nắm bắt cấu trúc và ý nghĩa.
-- **Tiết kiệm tài nguyên:** Giảm ~25% số lượng token so với HTML/XML hoặc văn bản thô.
-- **Tăng tốc độ xử lý:** Xử lý nhanh hơn ~38% nhờ cấu trúc rõ ràng.
+- **Improve context comprehension:** 40-60% better at understanding structure and meaning.
+- **Save resources:** ~25% fewer tokens compared to HTML/XML or raw text.
+- **Increase processing speed:** ~38% faster processing thanks to clear structure.
 
-## 2. QUY TẮC CẤU TRÚC (STRUCTURAL RULES)
+## 2. STRUCTURAL RULES
 
-### Hệ thống phân cấp tiêu đề (Hierarchy)
+### Heading Hierarchy
 
-AI dựa vào tiêu đề để hiểu mối quan hệ cha-con và ngữ cảnh của nội dung.
+AI relies on headings to understand parent-child relationships and content context.
 
-- **BẮT BUỘC:** Sử dụng thứ tự logic nghiêm ngặt: `H1` -> `H2` -> `H3`.
-- **CẤM:** Nhảy cóc cấp độ (ví dụ: từ `H1` nhảy xuống `H4` chỉ vì muốn chữ nhỏ hơn).
-- **MỤC ĐÍCH:** Giúp AI xây dựng cây kiến thức (knowledge tree) chính xác.
+- **REQUIRED:** Use strict logical order: `H1` -> `H2` -> `H3`.
+- **FORBIDDEN:** Skip heading levels (e.g., jumping from `H1` to `H4` just for smaller text).
+- **PURPOSE:** Help AI build an accurate knowledge tree.
 
-### Bảng dữ liệu (Tables)
+### Data Tables
 
-Bảng biểu là cách tốt nhất để AI so sánh và trích xuất dữ liệu đa chiều.
+Tables are the best way for AI to compare and extract multi-dimensional data.
 
-- **Yêu cầu:** - Luôn có dòng tiêu đề (Header row) rõ ràng.
-  - Căn chỉnh cột (Alignment) bằng cú pháp `|---|`.
-  - Không để ô trống vô nghĩa, nên dùng "N/A" hoặc "-" nếu thiếu dữ liệu.
-- **Tác dụng:** Giúp AI thực hiện các phép tính, so sánh cột/dòng chính xác hơn 52%.
+- **Requirements:** - Always include a clear header row.
+  - Align columns using `|---|` syntax.
+  - Do not leave cells meaninglessly blank — use "N/A" or "-" if data is missing.
+- **Effect:** Helps AI perform calculations and column/row comparisons 52% more accurately.
 
-## 3. TỐI ƯU NGỮ CẢNH (CONTEXT OPTIMIZATION)
+## 3. CONTEXT OPTIMIZATION
 
-### Metadata (Siêu dữ liệu)
+### Metadata
 
-Luôn bắt đầu tài liệu bằng block thông tin ngữ cảnh để "kích hoạt" vùng kiến thức phù hợp cho AI.
+Always start documents with a context information block to "activate" the appropriate knowledge domain for AI.
 
-**Ví dụ Metadata:**
+**Metadata Example:**
 **Document Type:** Technical Specification
 **Project:** Project Name
 **Last Updated:** 2025-01-22
 **Status:** Draft
 
-### Liên kết nội bộ (Cross-Referencing)
+### Cross-Referencing
 
-Sử dụng liên kết để tạo mạng lưới thông tin, giúp AI kết nối các khái niệm rời rạc.
+Use links to create an information network, helping AI connect discrete concepts.
 
-- **Cú pháp:** `[Xem phần Bảo mật](#security-section)`
-- **Tác dụng:** Giúp AI hiểu sự phụ thuộc và quan hệ giữa các phần nội dung.
+- **Syntax:** `[See Security section](#security-section)`
+- **Effect:** Helps AI understand dependencies and relationships between content sections.
 
-## 4. CHECKLIST "DO & DON'T"
+## 4. DO & DON'T CHECKLIST
 
-| DO (NÊN LÀM)                                                        | DON'T (KHÔNG NÊN)                                                      |
+| DO                                                                    | DON'T                                                                    |
 | :-------------------------------------------------------------------- | :----------------------------------------------------------------------- |
-| ✅ Sử dụng tiêu đề mô tả rõ nội dung (Descriptive Headers).  | ❌ Dùng định dạng (in đậm, nghiêng) thay cho Tiêu đề (Header). |
-| ✅ Dùng danh sách (Lists) cho các bước hoặc liệt kê.          | ❌ Viết các bước quy trình thành một đoạn văn dài.            |
-| ✅ Bao quanh code bằng code block kèm ngôn ngữ (ví dụ: python). | ❌ Dùng HTML/XML phức tạp khi không cần thiết.                     |
-| ✅ Thêm ngữ cảnh/metadata vào đầu file.                         | ❌ Để AI phải tự đoán loại tài liệu hoặc đối tượng đọc.  |
+| Use descriptive headers that clearly describe content.                | Use formatting (bold, italic) instead of headers.                        |
+| Use lists for steps or enumerations.                                  | Write process steps as long paragraphs.                                  |
+| Wrap code in code blocks with language identifier (e.g., python).     | Use complex HTML/XML when unnecessary.                                   |
+| Add context/metadata at the top of the file.                          | Let AI guess the document type or target audience.                       |
 
-## 5. VÍ DỤ CHUẨN (GOLD STANDARD EXAMPLE)
+## 5. GOLD STANDARD EXAMPLE
 
-Dưới đây là ví dụ về cách một tài liệu nên được trình bày để AI hiểu tốt nhất:
+Below is an example of how a document should be formatted for optimal AI comprehension:
 
 ---
 
-# Hướng dẫn quy trình Nhân sự (H1)
+# HR Process Guide (H1)
 
-**Phòng ban:** HR
-**Ngày hiệu lực:** 01/2025
+**Department:** HR
+**Effective Date:** 01/2025
 
-## 1. Chính sách nghỉ phép (H2)
+## 1. Leave Policy (H2)
 
-Nhân viên được hưởng các quyền lợi sau dựa trên thâm niên:
+Employees are entitled to the following benefits based on seniority:
 
-| Thâm niên | Số ngày phép | Ghi chú              |
-| :---------- | :-------------: | :-------------------- |
-| < 1 năm    |       12       | Có thể ứng trước |
-| > 1 năm    |       15       | Không cộng dồn     |
+| Seniority   | Leave Days   | Notes                |
+| :---------- | :----------: | :------------------- |
+| < 1 year    |      12      | Can be advanced      |
+| > 1 year    |      15      | Non-cumulative       |
 
-### Quy trình xin nghỉ (H3)
+### Leave Request Process (H3)
 
-1. Truy cập portal nhân sự.
-2. Điền form [Mẫu đơn xin nghỉ](#mau-don).
-3. Chờ duyệt từ quản lý trực tiếp.
+1. Access the HR portal.
+2. Fill out the [Leave Request Form](#leave-form).
+3. Wait for approval from your direct manager.
 
 ---
 

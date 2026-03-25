@@ -5,8 +5,8 @@ description: "Build DynamicsCrm.DevKit.Tool project in Debug mode"
 Build **only** the Tool project (faster than `/build-debug`), pack it as a .NET global tool, and install locally for testing.
 
 > [!CAUTION]
-> Quy trình build sử dụng script `Release.DynamicsCrm.DevKit.Tool.ps1`.
-> Kịch bản này đã được cấu trúc với `try...finally` để đảm bảo tệp `Const.cs` sẽ luôn được phục hồi an toàn trong mọi tình huống (kể cả khi lỗi hoặc nhấn huỷ giữa chừng).
+> The build process uses the `Release.DynamicsCrm.DevKit.Tool.ps1` script.
+> This script is structured with `try...finally` to ensure `Const.cs` is always safely restored in all scenarios (including errors or mid-process cancellation).
 
 ## Build Script
 

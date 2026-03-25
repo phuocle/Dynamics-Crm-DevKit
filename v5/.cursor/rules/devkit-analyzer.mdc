@@ -28,53 +28,53 @@ alwaysApply: true
 | `AnalyzerHelper.cs` | Utilities: `IsPluginOrWorkflowClass`, `IsInsidePluginOrWorkflow`, deprecated/batch request lists |
 | `DiagnosticHelpers.cs` | `ReportDiagnostic()` overloads for reporting issues |
 
-## Khi có yêu cầu thay đổi hoặc fix lỗi
+## When Changing or Fixing an Analyzer
 
-### Bước 1: Đọc kỹ yêu cầu và ngữ cảnh
-1. Đọc kỹ lại nội dung anh Phước yêu cầu
-2. Xác định analyzer nào liên quan (DEVKIT1001-DEVKIT1021)
-3. Đọc lại các files core trong `DynamicsCrm.DevKit.Analyzers\`:
- - `DiagnosticIdentifiers.cs` trong `Core\` - xem danh sách ID
- - `DiagnosticDescriptors.cs` trong `Core\` - xem descriptors
- - Analyzer file tương ứng trong `CrmAnalyzers\`
+### Step 1: Read the Requirements and Context
+1. Carefully read the user's request
+2. Identify which analyzer is involved (DEVKIT1001-DEVKIT1021)
+3. Read the core files in `DynamicsCrm.DevKit.Analyzers\`:
+ - `DiagnosticIdentifiers.cs` in `Core\` — review the ID list
+ - `DiagnosticDescriptors.cs` in `Core\` — review descriptors
+ - The corresponding analyzer file in `CrmAnalyzers\`
 
-### Bước 2: Kiểm tra Unit Tests
-1. Chạy workflow `/build-analyzer` để build và run tests
-2. Unit tests nằm tại: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
-3. Sử dụng pattern `[|code|]` để mark expected diagnostics:
+### Step 2: Verify Unit Tests
+1. Run workflow `/build-analyzer` to build and run tests
+2. Unit tests are located at: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
+3. Use the `[|code|]` pattern to mark expected diagnostics:
    ```csharp
    var src = WrapInPlugin("[|new ColumnSet(true)|]");
    await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
    ```
 
-### Bước 3: Kiểm tra Integration Tests trong Visual Studio
+### Step 3: Verify Integration Tests in Visual Studio
 1. Folder: `DynamicsCrm.DevKit.Tests\TestAnalyzers\`
-2. **Phải đảm bảo số lượng file `DEVKIT*.cs` bằng với số lượng analyzers đang support**
-   - Hiện tại có 21 analyzers: DEVKIT1001 → DEVKIT1021
-   - Phải có 21 files: `DEVKIT1001.cs` → `DEVKIT1021.cs`
-3. Code mẫu phải trigger đúng diagnostic
-4. **AI không thể test được trong VS - phải yêu cầu anh Phước test thủ công**
+2. **Ensure the number of `DEVKIT*.cs` files matches the number of supported analyzers**
+   - Currently 21 analyzers: DEVKIT1001 → DEVKIT1021
+   - Must have 21 files: `DEVKIT1001.cs` → `DEVKIT1021.cs`
+3. Sample code must trigger the correct diagnostic
+4. **AI cannot test in VS — request the user to test manually**
 
-### Bước 4: Kiểm tra và cập nhật Documentation
+### Step 4: Verify and Update Documentation
 1. Folder: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\`
-2. Mỗi analyzer phải có file `DEVKIT{XXXX}.md` tương ứng
-3. Sử dụng template: `DEVKIT.template.md`
-4. Cập nhật `ANALYZERS_ROADMAP.md` nếu thay đổi status
+2. Each analyzer must have a corresponding `DEVKIT{XXXX}.md` file
+3. Use template: `DEVKIT.template.md`
+4. Update `ANALYZERS_ROADMAP.md` if the status changes
 
-## Khi có yêu cầu thêm mới analyzer
+## When Adding a New Analyzer
 
-**QUAN TRỌNG**: Phải chạy workflow `/create-new-analyzer` trước khi bắt đầu. Workflow này sẽ hướng dẫn chi tiết các bước từ A-Z.
+**IMPORTANT**: You must run the `/create-new-analyzer` workflow before starting. This workflow provides step-by-step guidance from A to Z.
 
 ## Checklist Verification
 
-- [ ] `DiagnosticIdentifiers.cs` đã có ID mới (nếu thêm mới)?
-- [ ] `DiagnosticDescriptors.cs` đã có descriptor mới (nếu thêm mới)?
-- [ ] Analyzer file tồn tại trong `CrmAnalyzers\`?
-- [ ] Unit test file tồn tại trong `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
-- [ ] Unit tests pass? (chạy `/build-analyzer`)
-- [ ] Integration test file `DEVKIT{XXXX}.cs` tồn tại trong `TestAnalyzers\`?
-- [ ] Documentation file `DEVKIT{XXXX}.md` tồn tại?
-- [ ] `ANALYZERS_ROADMAP.md` đã được cập nhật (nếu cần)?
+- [ ] `DiagnosticIdentifiers.cs` has the new ID (if adding)?
+- [ ] `DiagnosticDescriptors.cs` has the new descriptor (if adding)?
+- [ ] Analyzer file exists in `CrmAnalyzers\`?
+- [ ] Unit test file exists in `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
+- [ ] Unit tests pass? (run `/build-analyzer`)
+- [ ] Integration test file `DEVKIT{XXXX}.cs` exists in `TestAnalyzers\`?
+- [ ] Documentation file `DEVKIT{XXXX}.md` exists?
+- [ ] `ANALYZERS_ROADMAP.md` updated (if needed)?
 
 ## Current Analyzers (DEVKIT1001-DEVKIT1021)
 

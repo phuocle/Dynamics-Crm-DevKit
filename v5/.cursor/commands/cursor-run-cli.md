@@ -13,7 +13,7 @@ This workflow runs one of 4 TestClientCode CLI profiles.
 | `TestClientCode-TS-FORM` | Generate TS form files |
 | `TestClientCode-TS-WEBAPI` | Generate TS WebAPI files |
 
-> If no profile is specified, ask: "Anh Phước muốn run CLI nào?" and wait for a response.
+> If no profile is specified, ask: "Which CLI profile would you like to run?" and wait for a response.
 
 ## Steps
 

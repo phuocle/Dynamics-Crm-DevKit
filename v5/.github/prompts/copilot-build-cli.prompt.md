@@ -6,8 +6,8 @@ mode: agent
 Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
 
 > [!CAUTION]
-> Quy trình build sử dụng script `Release.DynamicsCrm.DevKit.Cli.ps1`.
-> Kịch bản này đã được cấu trúc với `try...finally` để đảm bảo tệp `Const.cs` sẽ luôn được phục hồi an toàn trong mọi tình huống (kể cả khi lỗi hoặc nhấn huỷ giữa chừng).
+> The build process uses the `Release.DynamicsCrm.DevKit.Cli.ps1` script.
+> This script is structured with `try...finally` to ensure `Const.cs` is always safely restored in all scenarios (including errors or mid-process cancellation).
 
 ## Build Script
 
