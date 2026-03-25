@@ -47,4 +47,6 @@ Published/
 # MCP config (contains credentials)
 .vscode/mcp.json
 .agent/mcp.json
+.cursor/mcp.json
 .mcp.json
+.claude/settings.local.json
