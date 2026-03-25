@@ -64,14 +64,16 @@ Regardless of which IDE you are working in:
 
 ## MCP Configuration
 
-MCP config is **manually maintained** per IDE (contains credentials):
+**Source of truth**: `.vscode/mcp.json` (VS Code format, `"servers"` key).
 
-| IDE | MCP Config Location |
-|-----|---------------------|
-| **Antigravity** | `.agent/mcp.json` (backup) |
-| **Claude Code** | `.vscode/mcp.json` (shared with Copilot) |
-| **Cursor** | `.cursor/mcp.json` (workspace) |
-| **VS Code Copilot** | `.vscode/mcp.json` (shared with Claude Code) |
+Auto-synced by `Sync-AI-Config.ps1`:
+
+| Source | Target | Format | Sync |
+|--------|--------|--------|------|
+| `.vscode/mcp.json` | `.vscode/mcp.json` | `"servers": { ... }` | Source (Claude Code + Copilot) |
+| `.vscode/mcp.json` | `.cursor/mcp.json` | `"mcpServers": { ... }` | Auto-sync |
+| — | Antigravity (user-level) | Per Antigravity format | Manual |
 
 > [!IMPORTANT]
-> When updating MCP config in one IDE, manually copy the equivalent config to the other IDE locations.
+> **Antigravity** uses user-level config at `C:\Users\p\.gemini\antigravity\mcp_config.json`.
+> This file is NOT auto-synced. After updating `.vscode/mcp.json`, manually update the Antigravity config.

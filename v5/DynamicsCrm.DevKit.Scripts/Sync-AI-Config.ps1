@@ -57,6 +57,12 @@ description: Development rules for DynamicsCrm.DevKit Roslyn analyzers (DEVKIT10
 alwaysApply: true
 ---
 "@
+        "skill-powershell-windows" = @"
+---
+description: PowerShell Windows patterns - critical pitfalls, operator syntax, error handling
+alwaysApply: true
+---
+"@
     }
 
     $baseName = [System.IO.Path]::GetFileNameWithoutExtension($RuleFileName)
@@ -249,6 +255,49 @@ if ($ruleFiles) {
     Write-Status "No rule files found in $AgentRulesDir" "WARN"
 }
 
+# ── Sync Skills → Cursor (as rule files: skill-{name}.mdc) ───────────────────
+
+Write-Host ""
+Write-Host "--- Syncing Skills (.agent/skills/ -> .cursor/rules/skill-*) ---" -ForegroundColor White
+Write-Host ""
+
+$skillDirs = Get-ChildItem -Path $AgentSkillsDir -Directory -ErrorAction SilentlyContinue
+if ($skillDirs) {
+    foreach ($skillDir in ($skillDirs | Sort-Object Name)) {
+        $skillFile = Join-Path $skillDir.FullName "SKILL.md"
+        if (Test-Path $skillFile) {
+            $skillBody = Get-AgentRuleBody $skillFile
+            if ($skillBody -and $skillBody.Trim().Length -gt 0) {
+                $targetName = "skill-$($skillDir.Name)"
+                $targetPath = Join-Path $CursorRulesDir "$targetName.mdc"
+                $frontmatter = Get-CursorFrontmatter "$targetName.mdc"
+                $cursorContent = "$frontmatter`n`n$skillBody"
+                Compare-And-Write $targetPath $cursorContent
+            }
+        }
+    }
+}
+
+# ── Sync Skills → Claude (as rule files: skill-{name}.md) ────────────────────
+
+Write-Host ""
+Write-Host "--- Syncing Skills (.agent/skills/ -> .claude/rules/skill-*) ---" -ForegroundColor White
+Write-Host ""
+
+$skillDirs = Get-ChildItem -Path $AgentSkillsDir -Directory -ErrorAction SilentlyContinue
+if ($skillDirs) {
+    foreach ($skillDir in ($skillDirs | Sort-Object Name)) {
+        $skillFile = Join-Path $skillDir.FullName "SKILL.md"
+        if (Test-Path $skillFile) {
+            $skillBody = Get-AgentRuleBody $skillFile
+            if ($skillBody -and $skillBody.Trim().Length -gt 0) {
+                $targetPath = Join-Path $ClaudeRulesDir "skill-$($skillDir.Name).md"
+                Compare-And-Write $targetPath $skillBody
+            }
+        }
+    }
+}
+
 # ── Sync Workflows → Cursor (prefix: cursor-) ────────────────────────────────
 
 Write-Host ""
@@ -362,6 +411,27 @@ $body
     }
 } else {
     Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
+}
+
+# ── Sync MCP Config (.vscode/mcp.json -> .cursor/mcp.json) ────────────────────
+
+Write-Host ""
+Write-Host "--- Syncing MCP Config (.vscode/mcp.json -> .cursor/mcp.json) ---" -ForegroundColor White
+Write-Host ""
+
+$vscodeMcpPath = Join-Path $VsCodeDir "mcp.json"
+$cursorMcpPath = Join-Path $ProjectRoot ".cursor\mcp.json"
+
+if (Test-Path $vscodeMcpPath) {
+    # Read source JSON and convert "servers" key to "mcpServers" for Cursor format
+    $sourceContent = [System.IO.File]::ReadAllText($vscodeMcpPath, [System.Text.Encoding]::UTF8)
+    $cursorMcpContent = $sourceContent -replace '"servers"', '"mcpServers"'
+    Compare-And-Write $cursorMcpPath $cursorMcpContent
+
+    Write-Host ""
+    Write-Status "Antigravity MCP: user-level config at C:\Users\p\.gemini\antigravity\mcp_config.json (manual sync required)" "INFO"
+} else {
+    Write-Status "Source MCP config not found: $vscodeMcpPath" "WARN"
 }
 
 # ── Summary ───────────────────────────────────────────────────────────────────
