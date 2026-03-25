@@ -47,3 +47,4 @@ Published/
 # MCP config (contains credentials)
 .vscode/mcp.json
 .agent/mcp.json
+.mcp.json
