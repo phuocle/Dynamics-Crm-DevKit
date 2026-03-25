@@ -1,23 +1,6 @@
 ---
-description: "Build DynamicsCrm.DevKit.Cli project in Debug mode"
+description: "build-cli"
 mode: agent
 ---
 
-Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
-
-> [!CAUTION]
-> The build process uses the `Release.DynamicsCrm.DevKit.Cli.ps1` script.
-> This script is structured with `try...finally` to ensure `Const.cs` is always safely restored in all scenarios (including errors or mid-process cancellation).
-
-## Build Script
-
-```powershell
-.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1
-```
-
-## Notes
-
-- This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
-- Version is defined in `DevKit.ReleaseConfig.json`
-- No signing keys required for any build configuration
-- For full solution build, use `/build-debug` workflow instead
+---ndescription: Build DynamicsCrm.DevKit.Cli project in Debug moden---nn// turbo-allnnBuild **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.nn> [!CAUTION]n> The build process uses the `Release.DynamicsCrm.DevKit.Cli.ps1` script.n> This script is structured with `try...finally` to ensure `Const.cs` is always safely restored in all scenarios (including errors or mid-process cancellation).nn## Build Scriptnn```powershelln.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Cli.ps1n```nn## Notesnn- This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much fastern- Version is defined in `DevKit.ReleaseConfig.json`n- No signing keys required for any build configurationn- For full solution build, use `/build-debug` workflow insteadn

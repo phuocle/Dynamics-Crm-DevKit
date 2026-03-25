@@ -1,21 +1,3 @@
 # Build Tool - DynamicsCrm.DevKit.Tool
 
-Build **only** the Tool project (faster than `/build-debug`), pack it as a .NET global tool, and install locally for testing.
-
-> [!CAUTION]
-> The build process uses the `Release.DynamicsCrm.DevKit.Tool.ps1` script.
-> This script is structured with `try...finally` to ensure `Const.cs` is always safely restored in all scenarios (including errors or mid-process cancellation).
-
-## Build Script
-
-```powershell
-.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Tool.ps1
-```
-
-## Notes
-
-- This workflow builds **only Tool** (not CLI, Analyzer, or VSIX) → much faster
-- Tool is a .NET 10 global tool with command name `devkit-tool`
-- Version is defined in `DevKit.ReleaseConfig.json`
-- No signing keys required for any build configuration
-- For full solution build, use `/build-debug` workflow instead
+---ndescription: Build DynamicsCrm.DevKit.Tool project in Debug moden---nn// turbo-allnnBuild **only** the Tool project (faster than `/build-debug`), pack it as a .NET global tool, and install locally for testing.nn> [!CAUTION]n> The build process uses the `Release.DynamicsCrm.DevKit.Tool.ps1` script.n> This script is structured with `try...finally` to ensure `Const.cs` is always safely restored in all scenarios (including errors or mid-process cancellation).nn## Build Scriptnn```powershelln.\DynamicsCrm.DevKit.Scripts\Release.DynamicsCrm.DevKit.Tool.ps1n```nn## Notesnn- This workflow builds **only Tool** (not CLI, Analyzer, or VSIX) → much fastern- Tool is a .NET 10 global tool with command name `devkit-tool`n- Version is defined in `DevKit.ReleaseConfig.json`n- No signing keys required for any build configurationn- For full solution build, use `/build-debug` workflow insteadn
