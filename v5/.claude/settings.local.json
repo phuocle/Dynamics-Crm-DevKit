@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs head:*)",
+      "Bash(TZ='Asia/Ho_Chi_Minh' date '+%Y-%m-%d %H:%M:%S')",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"DynamicsCrm.DevKit.Scripts/Release-DynamicsCrm-DevKit-CurrentDate.ps1\")",
+      "Bash(devkit --version)",
+      "Bash(devkit-tool --help)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(gh search:*)",
+      "Bash(gh api:*)",
+      "Bash(devkit mcp:*)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "mcp__devkit__get_solution_components",
+      "mcp__devkit__get_entities_metadata",
+      "mcp__devkit__execute_fetchxml",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
