@@ -30,6 +30,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Authors>PhuocLe</Authors>
 		<PackageTags>dynamics365;crm;devkit;tool;documentation;minify;coverage</PackageTags>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
@@ -44,6 +45,9 @@
 	<ItemGroup>
 	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs" Link="Lib\Const.cs" />
 	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs" Link="Lib\Enum.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="icon.ico" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="README.md" Pack="true" PackagePath="\" />

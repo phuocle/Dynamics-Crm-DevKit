@@ -23,7 +23,7 @@ A comprehensive development toolkit for **Microsoft Dynamics 365 / Power Platfor
 ### Visual Studio Extension (VSIX)
 
 - **13 Project Templates**: Shared, Console, ConsoleCore, Server (Plugin/Workflow/CustomAction/DataProvider), Package, WebResource (JS), SharedTest, ProxyTypes, Test, TestUi, SolutionPackager, Report, WebResource (TS)
-- **15 Item Templates**: LateBound, JsForm, JsWebApi, Plugin, CustomAction, CustomApi, Workflow, DataProvider, Test, UiTest, ResourceString, JsDevkit, BatFile, TsForm, TsWebApi
+- **17 Item Templates**: LateBound, JsForm, JsWebApi, Plugin, CustomAction, CustomApi, Workflow, DataProvider, Test, UiTest, ResourceString, JsDevkit, BatFile, TsForm, TsWebApi, TsDialog, JsDialog
 - **Integrated Wizards**: Step-by-step project and item creation with Dataverse connection
 
 ### CLI Tool (`devkit`)
@@ -228,7 +228,7 @@ v5/
 │   └── XrmHelper.cs                 # Dataverse operations
 ├── DynamicsCrm.DevKit.Tool/         # Utility package
 ├── ProjectTemplates/                # 13 VS project templates
-├── ItemTemplates/                   # 15 VS item templates
+├── ItemTemplates/                   # 17 VS item templates
 ├── DynamicsCrm.DevKit.Tests/        # Integration tests
 ├── DynamicsCrm.DevKit.UnitTests/    # Unit tests (analyzers, CLI, shared lib)
 │   ├── Analyzers/                   # Analyzer unit tests (net48, xUnit)
