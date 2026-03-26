@@ -2,6 +2,7 @@ using DynamicsCrm.DevKit.Cli.Commands;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli
@@ -18,6 +19,18 @@ namespace DynamicsCrm.DevKit.Cli
                 Console.OutputEncoding = System.Text.Encoding.UTF8;
                 // Force console width to 8000 to prevent wrapping
                 AnsiConsole.Profile.Width = 8000;
+
+                // Detect plain mode: --plain flag > NO_COLOR env var > default (rich)
+                if (args != null && args.Any(a => a.Equals("--plain", StringComparison.OrdinalIgnoreCase)))
+                {
+                    SpectreLog.IsPlain = true;
+                    // Remove --plain from args so Spectre.Console.Cli doesn't reject it
+                    args = args.Where(a => !a.Equals("--plain", StringComparison.OrdinalIgnoreCase)).ToArray();
+                }
+                else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NO_COLOR")))
+                {
+                    SpectreLog.IsPlain = true;
+                }
 
 
                 // Convert legacy /arg:value format to --arg value if needed

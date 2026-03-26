@@ -51,6 +51,16 @@ namespace DynamicsCrm.DevKit.Cli
         {
             if (!result.HasUpdate) return;
 
+            if (SpectreLog.IsPlain)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"[UPDATE] A new version of DynamicsCrm.DevKit.Cli is available!");
+                Console.WriteLine($"  Current: {result.CurrentVersion}  ->  Latest: {result.LatestVersion}");
+                Console.WriteLine($"  Run: dotnet tool update -g DynamicsCrm.DevKit.Cli");
+                Console.WriteLine();
+                return;
+            }
+
             AnsiConsole.WriteLine();
             var panel = new Panel(
                 new Markup(

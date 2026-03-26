@@ -84,8 +84,20 @@ Mcp/      → MCP server (13 Dataverse tools)
 | `--clientid` / `--clientsecret` | `DEVKIT_CLIENT_ID` / `DEVKIT_CLIENT_SECRET` |
 | `--pacprofile` | `DEVKIT_PAC_PROFILE` |
 | `--username` / `--password` / `--domain` | `DEVKIT_USERNAME` / `DEVKIT_PASSWORD` / `DEVKIT_DOMAIN` |
+| `--plain` | `NO_COLOR` |
 
 Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
+
+### Plain Mode (AI/CI Output)
+
+When AI agents call `devkit` CLI commands directly (not via MCP), add `--plain` for clean text output without ANSI escape codes, colors, box-drawing characters, or spinners.
+
+Detection priority: `--plain` CLI flag > `NO_COLOR` env var > default (rich output)
+
+| Method | Detail |
+|---|---|
+| `--plain` flag | `devkit server --plain --json cli.json --profile CI` |
+| `NO_COLOR` env var | `NO_COLOR=1` (standard convention, https://no-color.org) |
 
 ### CLI Run Profile
 
