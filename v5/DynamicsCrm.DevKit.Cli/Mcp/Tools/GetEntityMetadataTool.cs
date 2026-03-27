@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Call this AFTER a failed execute_fetchxml to find the correct column names.\n\n" +
 
             "RETURNS:\n" +
-            "1. Entity info: logicalName, displayName, entitySetName (for Web API), primaryIdAttribute, primaryNameAttribute, " +
+            "1. Entity info: logicalName, displayName, displayCollectionName (plural display name), entitySetName (for Web API), primaryIdAttribute, primaryNameAttribute, " +
             "schemaName, ownershipType, isActivity, isCustomEntity, isAuditEnabled, changeTrackingEnabled, objectTypeCode, totalAttributes\n" +
             "2. Attributes table (all columns): logicalName (use this in FetchXML), type " +
             "(Lookup -> targets, Picklist with options, Status, State, MultiSelect, String, Money, DateTime, Boolean, Integer, Decimal, Memo, etc.), " +

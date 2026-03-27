@@ -213,6 +213,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             sb.AppendLine($"| PrimaryNameAttribute | {meta.PrimaryNameAttribute ?? "(none)"} |");
             sb.AppendLine($"| EntitySetName | {meta.EntitySetName} |");
             sb.AppendLine($"| LogicalCollectionName | {meta.LogicalCollectionName} |");
+            var displayCollectionName = meta.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "";
+            sb.AppendLine($"| DisplayCollectionName | {displayCollectionName} |");
+            var externalName = meta.ExternalName ?? "";
+            if (!string.IsNullOrEmpty(externalName))
+                sb.AppendLine($"| ExternalName | {externalName} |");
             sb.AppendLine($"| OwnershipType | {meta.OwnershipType} |");
             sb.AppendLine($"| IsActivity | {meta.IsActivity} |");
             sb.AppendLine($"| IsCustomEntity | {meta.IsCustomEntity} |");
