@@ -114,7 +114,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  DEVKIT_PAC_PROFILE   PAC CLI profile name\n" +
                 "  NO_COLOR             Set to any value to enable plain text output\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
-                "  devkit mcp                    13 tools: metadata, CRUD, FetchXML, search\n" +
+                "  devkit mcp                    12 tools: metadata, CRUD, FetchXML, search\n" +
                 "  devkit mcp --setup-guide      Setup instructions for all IDEs\n";
 
             if (IsPlain)
@@ -180,7 +180,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]DEVKIT_PAC_PROFILE[/]   PAC CLI profile name\n" +
                     "  [cyan]NO_COLOR[/]             Set to any value to enable plain text output\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
-                    "  devkit [cyan]mcp[/]                    13 tools: metadata, CRUD, FetchXML, search\n" +
+                    "  devkit [cyan]mcp[/]                    12 tools: metadata, CRUD, FetchXML, search\n" +
                     "  devkit [cyan]mcp[/] --setup-guide      Setup instructions for all IDEs\n"
 
                 ))

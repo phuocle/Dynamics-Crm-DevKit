@@ -27,10 +27,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Supports auto-paging to retrieve large datasets. Max 5000 records per call.\n\n" +
 
             "FETCHXML STRUCTURE:\n" +
-            "- Root: <fetch [top='N'] [distinct='true'] [aggregate='true'] [count='N'] [page='N']>\n" +
+            "- Root: <fetch [distinct='true'] [aggregate='true']>\n" +
             "- Entity: <entity name='logical_name'> (exactly one, use logical name like 'account', not 'Account')\n" +
             "- Columns: <attribute name='col'/> for each column. Omit all <attribute> to get all columns.\n" +
-            "- Order: <order attribute='col' [descending='true']/>\n\n" +
+            "- Order: <order attribute='col' [descending='true']/>\n" +
+            "- DO NOT use top/count/page attributes in <fetch> — use the max_records parameter instead\n\n" +
 
             "FILTERING:\n" +
             "- <filter [type='and|or']> wraps <condition> elements\n" +
@@ -53,6 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Distinct count: <attribute name='col' alias='alias_name' aggregate='countcolumn' distinct='true'/>\n\n" +
 
             "IMPORTANT RULES:\n" +
+            "- DO NOT use top='N' in FetchXML — it will be stripped. Use the max_records parameter to limit results\n" +
             "- Always use entity logical names (lowercase): 'account' not 'Account', 'contact' not 'Contact'\n" +
             "- Always use attribute logical names (lowercase): 'accountid' not 'AccountId'\n" +
             "- If unsure of entity/attribute names, call get_entity_metadata first\n" +
@@ -60,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "EXAMPLES:\n" +
             "Count accounts: <fetch aggregate='true'><entity name='account'><attribute name='accountid' alias='count' aggregate='count'/></entity></fetch>\n" +
-            "Top 5 contacts: <fetch top='5'><entity name='contact'><attribute name='fullname'/><order attribute='fullname'/></entity></fetch>\n" +
+            "Top 5 contacts (use max_records=5): <fetch><entity name='contact'><attribute name='fullname'/><order attribute='fullname'/></entity></fetch>\n" +
             "Active accounts: <fetch><entity name='account'><attribute name='name'/><filter><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>")]
         public string execute_fetchxml(
             [Description(
@@ -105,7 +107,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(effectiveFetchXml));
             var records = ConvertEntities(result.Entities.Take(maxRecords));
 
-            return MarkdownFormatter.FormatFetchXmlResults(records, records.Count, result.MoreRecords);
+            return CompactFormatter.FormatFetchXmlResults(records, records.Count, result.MoreRecords);
         }
 
         private string ExecuteAllPages(string fetchxml, int maxRecords)
@@ -133,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var finalHasMore = hasMore && allRecords.Count < maxRecords;
-            return MarkdownFormatter.FormatFetchXmlResults(allRecords, allRecords.Count, finalHasMore);
+            return CompactFormatter.FormatFetchXmlResults(allRecords, allRecords.Count, finalHasMore);
         }
 
         private static List<Dictionary<string, string>> ConvertEntities(IEnumerable<Entity> entities)

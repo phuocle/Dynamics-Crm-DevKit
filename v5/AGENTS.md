@@ -51,7 +51,7 @@ Entry point: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
 Commands/ → DevKitCommand<T> base (connection, validation)
 Models/   → DevKitCommandArgs → specific args
 Tasks/    → ITask → TaskXxx implementations
-Mcp/      → MCP server (13 Dataverse tools)
+Mcp/      → MCP server (12 Dataverse tools)
 ```
 
 ### Commands

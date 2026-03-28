@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 ? await metadataService.GetCustomApisAsync(normalizedScope)
                 : [];
 
-            return MarkdownFormatter.FormatMessages(
+            return CompactFormatter.FormatMessages(
                 normalizedScope,
                 sdkMessages.Select(x => x.Name),
                 customActions.Select(x => x.Name),

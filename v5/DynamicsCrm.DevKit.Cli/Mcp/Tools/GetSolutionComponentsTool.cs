@@ -242,20 +242,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string FormatMultipleSolutions(string keyword, List<Entity> solutions)
         {
             var sb = new StringBuilder(512);
-            sb.AppendLine($"# Multiple Solutions Found for \"{keyword}\"");
+            sb.AppendLine($"[Multiple Solutions] {solutions.Count} matches for \"{keyword}\"");
+            sb.AppendLine("Re-call with exact UniqueName:");
             sb.AppendLine();
-            sb.AppendLine($"Found **{solutions.Count}** solutions matching your keyword. " +
-                          "Please call `get_solution_components` again using the exact **UniqueName** from the table below:");
-            sb.AppendLine();
-            sb.AppendLine("| UniqueName | DisplayName | Version | IsManaged |");
-            sb.AppendLine("| --- | --- | --- | --- |");
+            sb.AppendLine("UniqueName\tDisplayName\tVersion\tIsManaged");
             foreach (var s in solutions.OrderBy(s => s.GetAttributeValue<string>("uniquename")))
             {
                 var uniqueName  = s.GetAttributeValue<string>("uniquename")   ?? "";
                 var displayName = s.GetAttributeValue<string>("friendlyname") ?? "";
                 var version     = s.GetAttributeValue<string>("version")      ?? "";
                 var isManaged   = s.GetAttributeValue<bool>("ismanaged") ? "Yes" : "No";
-                sb.AppendLine($"| {uniqueName} | {displayName} | {version} | {isManaged} |");
+                sb.AppendLine($"{uniqueName}\t{displayName}\t{version}\t{isManaged}");
             }
             return sb.ToString();
         }
@@ -268,37 +265,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var isManaged    = solution.GetAttributeValue<bool>("ismanaged") ? "Yes" : "No";
             var publisherName = solution.GetAttributeValue<AliasedValue>("pub.friendlyname")?.Value as string ?? "";
 
-            var sb = new StringBuilder(components.Count * 80 + 1024);
+            var sb = new StringBuilder(components.Count * 60 + 1024);
 
             // ── Solution info ──
-            sb.AppendLine($"# Solution: {displayName} (`{uniqueName}`)");
-            sb.AppendLine();
-            sb.AppendLine("| Property | Value |");
-            sb.AppendLine("| --- | --- |");
-            sb.AppendLine($"| Unique Name | {uniqueName} |");
-            sb.AppendLine($"| Display Name | {displayName} |");
-            sb.AppendLine($"| Version | {version} |");
-            sb.AppendLine($"| Publisher | {publisherName} |");
-            sb.AppendLine($"| Is Managed | {isManaged} |");
-            sb.AppendLine($"| Total Components | {components.Count} |");
+            sb.AppendLine($"[Solution] {displayName} ({uniqueName})");
+            sb.AppendLine($"Version: {version}");
+            sb.AppendLine($"Publisher: {publisherName}");
+            sb.AppendLine($"IsManaged: {isManaged}");
+            sb.AppendLine($"Components: {components.Count}");
             sb.AppendLine();
 
             // ── Full Entities guidance (if any) ──
             if (fullEntityNames.Count > 0)
             {
-                sb.AppendLine($"## ⚡ Entities with \"Include All Components\" — {fullEntityNames.Count} entities");
-                sb.AppendLine();
-                sb.AppendLine("The following entities were added to this solution with **\"Include All Components\"** (rootComponentBehavior = 0). " +
-                              "Their sub-components (attributes, relationships, forms, views, charts) are **not listed here** to keep this response lightweight.");
-                sb.AppendLine();
-                sb.AppendLine("> **To get full metadata for any of these entities, use the `get_entity_metadata` tool with the entity logical name.**");
-                sb.AppendLine();
-                sb.AppendLine("| Entity LogicalName | MetadataId | Action |");
-                sb.AppendLine("| --- | --- | --- |");
+                sb.AppendLine($"[Full Entities] {fullEntityNames.Count} entities");
+                sb.AppendLine("Use get_entity_metadata for details:");
                 foreach (var kvp in fullEntityNames.OrderBy(k => k.Value))
-                {
-                    sb.AppendLine($"| `{kvp.Value}` | {kvp.Key} | → Use `get_entity_metadata(\"{kvp.Value}\")` |");
-                }
+                    sb.AppendLine($"- {kvp.Value}");
                 sb.AppendLine();
             }
 
@@ -308,24 +291,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToList();
 
             // ── Summary ──
-            sb.AppendLine($"## Component Summary — {components.Count} total");
-            sb.AppendLine();
-            sb.AppendLine("| ComponentType | TypeId | Count |");
-            sb.AppendLine("| --- | --- | --- |");
+            sb.AppendLine("[Component Summary]");
+            sb.AppendLine("Type\tTypeId\tCount");
             foreach (var grp in grouped)
             {
                 var typeName = GetTypeName(grp.Key);
-                sb.AppendLine($"| {typeName} | {grp.Key} | {grp.Count()} |");
+                sb.AppendLine($"{typeName}\t{grp.Key}\t{grp.Count()}");
             }
             sb.AppendLine();
 
             var nameMap = BuildNameMap(components, fullEntityNames);
 
-            // ── Full component list (objectIds usable by other tools) ──
-            sb.AppendLine($"## Components — {components.Count}");
+            // ── Full component list ──
+            sb.AppendLine($"[Components] {components.Count} total");
             sb.AppendLine();
-            sb.AppendLine("| ComponentType | TypeId | ObjectId | Name |");
-            sb.AppendLine("| --- | --- | --- | --- |");
+            sb.AppendLine("Type\tTypeId\tObjectId\tName");
             foreach (var grp in grouped)
             {
                 var typeName = GetTypeName(grp.Key);
@@ -334,11 +314,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var objectId = c.GetAttributeValue<Guid>("objectid");
                     nameMap.TryGetValue(objectId, out var name);
 
-                    // Mark full entities with ⚡ indicator
+                    // Mark full entities
                     if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
-                        name = $"{name} ⚡ (full — use get_entity_metadata)";
+                        name = $"{name} (full — use get_entity_metadata)";
 
-                    sb.AppendLine($"| {typeName} | {grp.Key} | {objectId} | {name ?? ""} |");
+                    sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? ""}");
                 }
             }
 

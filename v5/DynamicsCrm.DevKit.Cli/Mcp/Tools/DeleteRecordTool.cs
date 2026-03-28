@@ -1,8 +1,10 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
-using System.Text;
+using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -16,7 +18,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "delete_record", Destructive = true, ReadOnly = false),
+        [McpServerTool(Name = "delete_record", Destructive = true, ReadOnly = false,
+            UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Delete a record from a Dataverse table by its GUID.\n\n" +
 
@@ -35,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use execute_fetchxml or get_record to verify the record exists and confirm it is the right one before deleting\n" +
             "- Some records may fail to delete due to dependencies (child records, required lookups, etc.)\n" +
             "- Deleting a parent record may cascade-delete child records depending on relationship configuration")]
-        public string delete_record(
+        public CallToolResult delete_record(
             [Description(
                 "Logical name of the entity/table (lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity'. " +
@@ -48,44 +51,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string record_id)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return "Error: entity_name is required.";
+                return ErrorResult("Error: entity_name is required.");
 
             if (string.IsNullOrWhiteSpace(record_id))
-                return "Error: record_id is required.";
+                return ErrorResult("Error: record_id is required.");
 
             var entityName = entity_name.Trim().ToLowerInvariant();
 
             if (!Guid.TryParse(record_id.Trim(), out var id))
-                return $"Error: '{record_id}' is not a valid GUID.";
+                return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
 
             try
             {
                 _serviceClient.Delete(entityName, id);
 
-                var sb = new StringBuilder(256);
-                sb.AppendLine($"# Record Deleted");
-                sb.AppendLine();
-                sb.AppendLine("| Property | Value |");
-                sb.AppendLine("| --- | --- |");
-                sb.AppendLine($"| Entity | {entityName} |");
-                sb.AppendLine($"| Id | `{id}` |");
-                sb.AppendLine($"| Status | Deleted successfully |");
-                return sb.ToString();
+                var structured = new CrudResult { Entity = entityName, Id = id.ToString(), Status = "deleted" };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = $"Deleted {entityName} {id}" }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
             }
             catch (Exception ex)
             {
-                var sb = new StringBuilder(512);
-                sb.AppendLine("# Error: Delete Failed");
-                sb.AppendLine();
-                sb.AppendLine($"**Entity**: {entityName}");
-                sb.AppendLine($"**Record ID**: `{record_id}`");
-                sb.AppendLine();
-                sb.AppendLine($"**Error**: {ex.Message}");
-                sb.AppendLine();
-                sb.AppendLine("**Hint**: Verify the record_id is correct using execute_fetchxml or get_record. " +
-                    "The record may have child records or dependencies preventing deletion.");
-                return sb.ToString();
+                return ErrorResult($"Error: Delete failed for {entityName} {record_id}\nMessage: {ex.Message}\nHint: Verify the record_id using execute_fetchxml or get_record.");
             }
         }
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }

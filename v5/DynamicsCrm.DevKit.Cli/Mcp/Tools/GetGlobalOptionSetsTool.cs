@@ -68,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var response = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
             var sorted = response.OptionSetMetadata.OrderBy(x => x.Name);
-            return MarkdownFormatter.FormatOptionSetList(sorted);
+            return CompactFormatter.FormatOptionSetList(sorted);
         }
 
         private string GetSingleOptionSet(string name)
@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 Name = name
             });
-            return MarkdownFormatter.FormatOptionSetDetail(response.OptionSetMetadata);
+            return CompactFormatter.FormatOptionSetDetail(response.OptionSetMetadata);
         }
     }
 }

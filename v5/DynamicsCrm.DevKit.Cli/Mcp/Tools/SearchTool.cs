@@ -96,10 +96,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase))
+                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("Expected non-empty Guid", StringComparison.OrdinalIgnoreCase))
                 {
                     return "Error: Relevance Search is not enabled in this Dataverse environment. " +
-                           "Ask your admin to enable it, or use execute_fetchxml with a 'like' filter instead.";
+                           "Ask your admin to enable it in Power Platform admin center, " +
+                           "or use execute_fetchxml with a 'like' filter instead.";
                 }
 
                 return $"Error: Search failed: {ex.Message}";
@@ -145,27 +147,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch
             {
-                sb.AppendLine($"# Search Results for \"{searchTerm}\"");
-                sb.AppendLine();
+                sb.AppendLine($"[Search: \"{searchTerm}\"]");
                 sb.AppendLine(jsonResponse);
                 return sb.ToString();
             }
 
             if (results?.Error != null)
             {
-                sb.AppendLine($"# Search Error");
-                sb.AppendLine();
-                sb.AppendLine($"**Code**: {results.Error.Code}");
-                sb.AppendLine($"**Message**: {results.Error.Message}");
+                sb.AppendLine($"Error: {results.Error.Code}");
+                sb.AppendLine($"Message: {results.Error.Message}");
                 return sb.ToString();
             }
 
             var records = results?.Value ?? [];
             var totalCount = results?.Count ?? records.Count;
 
-            sb.AppendLine($"# Search Results for \"{searchTerm}\"");
-            sb.AppendLine();
-            sb.AppendLine($"Returned **{records.Count}** records (total matches: {totalCount})");
+            sb.AppendLine($"[Search: \"{searchTerm}\"] {records.Count} results (total: {totalCount})");
             sb.AppendLine();
 
             if (records.Count == 0)
@@ -174,14 +171,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return sb.ToString();
             }
 
-            sb.AppendLine("| Entity | Id | Score | Attributes | Highlights |");
-            sb.AppendLine("| --- | --- | --- | --- | --- |");
+            sb.AppendLine("Entity\tId\tScore\tAttributes\tHighlights");
 
             foreach (var record in records)
             {
                 var attrs = FormatAttributes(record.Attributes);
                 var highlights = FormatHighlights(record.Highlights);
-                sb.AppendLine($"| {record.EntityName} | {record.Id} | {record.Score:F2} | {EscapePipe(attrs)} | {EscapePipe(highlights)} |");
+                sb.AppendLine($"{record.EntityName}\t{record.Id}\t{record.Score:F2}\t{EscapeTab(attrs)}\t{EscapeTab(highlights)}");
             }
 
             return sb.ToString();
@@ -218,8 +214,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }));
         }
 
-        private static string EscapePipe(string value) =>
-            value.Replace("|", "\\|").Replace("\n", " ").Replace("\r", "");
+        private static string EscapeTab(string value) =>
+            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
 
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {

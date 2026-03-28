@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 var sorted = query.OrderBy(x => x.LogicalName);
-                return MarkdownFormatter.FormatEntitySummaryTable(sorted);
+                return CompactFormatter.FormatEntitySummaryTable(sorted);
             }
             catch (Exception ex)
             {

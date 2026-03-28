@@ -1,9 +1,11 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
-using System.Text;
+using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -17,7 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "create_record", Destructive = false, ReadOnly = false),
+        [McpServerTool(Name = "create_record", Destructive = false, ReadOnly = false,
+            UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Create a new record in a Dataverse table. Returns the new record's GUID on success.\n\n" +
 
@@ -46,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Lookup fields need the GUID of the target record — use execute_fetchxml to find it\n" +
             "- Picklist fields need the integer option value — use get_entity_metadata to see available options\n" +
             "- For polymorphic lookups (customerid, ownerid), use the 'field@entity' key syntax")]
-        public string create_record(
+        public CallToolResult create_record(
             [Description(
                 "Logical name of the entity/table (lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
@@ -59,10 +62,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string fields_json)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return "Error: entity_name is required.";
+                return ErrorResult("Error: entity_name is required.");
 
             if (string.IsNullOrWhiteSpace(fields_json))
-                return "Error: fields_json is required.";
+                return ErrorResult("Error: fields_json is required.");
 
             var entityName = entity_name.Trim().ToLowerInvariant();
 
@@ -71,29 +74,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fields_json);
                 var newId = _serviceClient.Create(entity);
 
-                var sb = new StringBuilder(256);
-                sb.AppendLine($"# Record Created");
-                sb.AppendLine();
-                sb.AppendLine("| Property | Value |");
-                sb.AppendLine("| --- | --- |");
-                sb.AppendLine($"| Entity | {entityName} |");
-                sb.AppendLine($"| Id | `{newId}` |");
-                sb.AppendLine($"| Status | Created successfully |");
-                return sb.ToString();
+                var structured = new CrudResult { Entity = entityName, Id = newId.ToString(), Status = "created" };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = $"Created {entityName} {newId}" }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
             }
             catch (Exception ex)
             {
-                var sb = new StringBuilder(512);
-                sb.AppendLine("# Error: Create Failed");
-                sb.AppendLine();
-                sb.AppendLine($"**Entity**: {entityName}");
-                sb.AppendLine();
-                sb.AppendLine($"**Error**: {ex.Message}");
-                sb.AppendLine();
-                sb.AppendLine("**Hint**: Use get_entity_metadata to verify entity/field names and types. " +
-                    "Lookup fields require a valid GUID string. Picklist fields require an integer option value.");
-                return sb.ToString();
+                return ErrorResult($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_entity_metadata to verify field names and types.");
             }
         }
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }

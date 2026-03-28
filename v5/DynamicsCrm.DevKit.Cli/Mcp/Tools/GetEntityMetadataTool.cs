@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var metadata = await _metadataService.FetchEntityMetadataAsync(entity_name.Trim().ToLowerInvariant());
-                return MarkdownFormatter.FormatEntityDetail(metadata, attribute_prefix);
+                return CompactFormatter.FormatEntityDetail(metadata, attribute_prefix);
             }
             catch (Exception ex)
             {

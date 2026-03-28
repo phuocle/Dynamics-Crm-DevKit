@@ -94,23 +94,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string FormatRecord(Entity entity)
         {
-            var sb = new StringBuilder(entity.Attributes.Count * 80 + 256);
+            var sb = new StringBuilder(entity.Attributes.Count * 60 + 128);
 
-            sb.AppendLine($"# {entity.LogicalName} — `{entity.Id}`");
+            sb.AppendLine($"[{entity.LogicalName}] {entity.Id}");
             sb.AppendLine();
-            sb.AppendLine("| Field | Value |");
-            sb.AppendLine("| --- | --- |");
 
             foreach (var attr in entity.Attributes.OrderBy(a => a.Key))
             {
                 var value = DataverseValueFormatter.FormatValue(entity, attr.Key);
-                sb.AppendLine($"| {attr.Key} | {EscapePipe(value)} |");
+                sb.AppendLine($"{attr.Key}: {value}");
             }
 
             return sb.ToString();
         }
-
-        private static string EscapePipe(string value) =>
-            value.Replace("|", "\\|").Replace("\n", " ").Replace("\r", "");
     }
 }

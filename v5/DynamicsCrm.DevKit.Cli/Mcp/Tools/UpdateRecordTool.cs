@@ -1,9 +1,11 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
-using System.Text;
+using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -17,7 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_record", Destructive = false, ReadOnly = false),
+        [McpServerTool(Name = "update_record", Destructive = false, ReadOnly = false,
+            UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Update an existing record in a Dataverse table. Only the fields included in fields_json will be updated; " +
             "other fields remain unchanged (partial update).\n\n" +
@@ -48,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Set a field to null to clear its value\n" +
             "- Use execute_fetchxml or get_record to find the record_id first\n" +
             "- Use get_entity_metadata to verify field names and types")]
-        public string update_record(
+        public CallToolResult update_record(
             [Description(
                 "Logical name of the entity/table (lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity'. " +
@@ -66,48 +69,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string fields_json)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return "Error: entity_name is required.";
+                return ErrorResult("Error: entity_name is required.");
 
             if (string.IsNullOrWhiteSpace(record_id))
-                return "Error: record_id is required.";
+                return ErrorResult("Error: record_id is required.");
 
             if (string.IsNullOrWhiteSpace(fields_json))
-                return "Error: fields_json is required.";
+                return ErrorResult("Error: fields_json is required.");
 
             var entityName = entity_name.Trim().ToLowerInvariant();
 
             if (!Guid.TryParse(record_id.Trim(), out var id))
-                return $"Error: '{record_id}' is not a valid GUID.";
+                return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
 
             try
             {
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fields_json, id);
                 _serviceClient.Update(entity);
 
-                var sb = new StringBuilder(256);
-                sb.AppendLine($"# Record Updated");
-                sb.AppendLine();
-                sb.AppendLine("| Property | Value |");
-                sb.AppendLine("| --- | --- |");
-                sb.AppendLine($"| Entity | {entityName} |");
-                sb.AppendLine($"| Id | `{id}` |");
-                sb.AppendLine($"| Fields Updated | {CountFields(fields_json)} |");
-                sb.AppendLine($"| Status | Updated successfully |");
-                return sb.ToString();
+                var fieldCount = CountFields(fields_json);
+                var structured = new CrudResult
+                {
+                    Entity = entityName,
+                    Id = id.ToString(),
+                    Status = "updated",
+                    FieldsUpdated = fieldCount
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = $"Updated {entityName} {id} ({fieldCount} fields)" }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
             }
             catch (Exception ex)
             {
-                var sb = new StringBuilder(512);
-                sb.AppendLine("# Error: Update Failed");
-                sb.AppendLine();
-                sb.AppendLine($"**Entity**: {entityName}");
-                sb.AppendLine($"**Record ID**: `{record_id}`");
-                sb.AppendLine();
-                sb.AppendLine($"**Error**: {ex.Message}");
-                sb.AppendLine();
-                sb.AppendLine("**Hint**: Use get_entity_metadata to verify field names and types. " +
-                    "Use execute_fetchxml or get_record to verify the record exists.");
-                return sb.ToString();
+                return ErrorResult($"Error: Update failed for {entityName} {record_id}\nMessage: {ex.Message}\nHint: Use execute_fetchxml or get_record to verify the record exists.");
             }
         }
 
@@ -126,5 +122,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return 0;
             }
         }
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }
