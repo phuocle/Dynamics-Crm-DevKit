@@ -170,10 +170,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   DEVKIT_PASSWORD      : Password");
             Console.WriteLine("   DEVKIT_DOMAIN        : Domain");
             Console.WriteLine();
-            Console.WriteLine("3. AVAILABLE TOOLS (13 Tools)");
+            Console.WriteLine("3. AVAILABLE TOOLS (12 Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   - whoami                     : Get current user identity & roles");
-            Console.WriteLine("   - get_environment_info       : Get environment version & details");
+            Console.WriteLine("   - whoami                     : Get current user identity, roles & environment info");
             Console.WriteLine("   - get_entities_metadata      : List all tables in environment");
             Console.WriteLine("   - get_entity_metadata        : Get detailed metadata for one table");
             Console.WriteLine("   - get_global_optionsets      : Get global choices/optionsets");

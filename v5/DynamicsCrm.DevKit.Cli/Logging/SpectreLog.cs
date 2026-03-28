@@ -36,8 +36,8 @@ namespace DynamicsCrm.DevKit.Cli
         {
             if (IsPlain)
             {
-                Console.WriteLine($"DynamicsCrm.DevKit.Cli {Const.Version} Build: {Const.Build}");
-                Console.WriteLine("https://github.com/phuocle/Dynamics-Crm-DevKit");
+                Console.WriteLine($"{PLAIN_PREFIX} DynamicsCrm.DevKit.Cli {Const.Version} Build: {Const.Build}");
+                Console.WriteLine($"{PLAIN_PREFIX} https://github.com/phuocle/Dynamics-Crm-DevKit");
                 return;
             }
             var width = 112;

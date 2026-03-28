@@ -228,12 +228,11 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 
 | Tool | Description |
 |------|-------------|
+| `whoami` | Get current user identity, roles, environment info & access token |
 | `get_entities_metadata` | List all entities/tables in the environment |
 | `get_entity_metadata` | Get full metadata for a single entity (attributes, relationships, keys) |
 | `get_messages` | Discover SDK messages, Custom Actions, Custom APIs |
 | `get_global_optionsets` | Get global option set definitions |
-| `get_environment_info` | Get environment/organization info |
-| `whoami` | Get current user identity and roles |
 | `get_record` | Retrieve a single record by entity name and GUID |
 | `execute_fetchxml` | Execute FetchXML query with auto-paging |
 | `search` | Dataverse Relevance Search across entities |

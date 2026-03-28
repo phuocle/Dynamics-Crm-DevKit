@@ -103,9 +103,9 @@ Detection priority: `--plain` CLI flag > `NO_COLOR` env var > default (rich outp
 
 Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run CLI with `commandLineArgs`.
 
-### MCP Tools (13)
+### MCP Tools (12)
 
-`get_entities_metadata`, `get_entity_metadata`, `get_messages`, `get_global_optionsets`, `get_environment_info`, `whoami`, `get_record`, `get_solution_components`, `execute_fetchxml`, `search`, `create_record`, `update_record`, `delete_record`
+`whoami`, `get_entities_metadata`, `get_entity_metadata`, `get_messages`, `get_global_optionsets`, `get_record`, `get_solution_components`, `execute_fetchxml`, `search`, `create_record`, `update_record`, `delete_record`
 
 ---
 
