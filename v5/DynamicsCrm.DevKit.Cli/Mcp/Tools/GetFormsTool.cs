@@ -36,6 +36,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Call get_entities_metadata first if unsure of the logical name.\n" +
             "- form_id: GUID of a specific form to get full details including FormXML. " +
             "Leave empty to list all forms for the entity.\n" +
+            "- form_name: Filter forms by name (contains match). If exactly 1 form matches, " +
+            "returns its full detail automatically. If multiple forms match, returns the list " +
+            "for disambiguation. Ignored if form_id is provided.\n" +
             "- form_type: Filter by type: 2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. " +
             "Leave empty for all form types.\n" +
             "- include_formxml: In list mode, also include FormXML (default: false to save tokens). " +
@@ -48,6 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- To understand the UI layout of an entity before making customizations\n" +
             "- To find the form ID needed for form updates\n" +
+            "- To look up a form by name (e.g., form_name='Information')\n" +
             "- To check which fields are on a form and how they are arranged\n" +
             "- To identify the default main form for an entity\n" +
             "- Before adding/removing fields from a form\n\n" +
@@ -72,6 +76,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use list mode first to discover form IDs."
             )] string form_id = "",
             [Description(
+                "Filter forms by name (contains match). " +
+                "If exactly 1 form matches, returns its full detail automatically. " +
+                "If multiple forms match, returns the list for disambiguation. " +
+                "Ignored if form_id is provided. " +
+                "Examples: 'Information', 'Quick Create', 'Card'."
+            )] string form_name = "",
+            [Description(
                 "Filter by form type: 2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. " +
                 "Leave empty for all form types. " +
                 "Common types: 2 (Main), 7 (QuickCreate), 6 (QuickView)."
@@ -86,6 +97,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
+                // Priority: form_id > form_name > list mode
                 if (!string.IsNullOrWhiteSpace(form_id))
                 {
                     if (!Guid.TryParse(form_id.Trim(), out var id))
@@ -93,6 +105,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     return GetFormDetail(id);
                 }
+
+                if (!string.IsNullOrWhiteSpace(form_name))
+                    return FindFormsByName(entity_name.Trim().ToLowerInvariant(), form_name.Trim(), form_type);
 
                 return ListForms(entity_name.Trim().ToLowerInvariant(), form_type, include_formxml);
             }
@@ -114,8 +129,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return $"[Forms] {entityName} — 0 forms found{typeHint}";
             }
 
-            var sb = new StringBuilder(forms.Count * 120 + 128);
-            sb.AppendLine($"[Forms] {entityName} ({forms.Count} forms)");
+            return FormatFormList(entityName, forms, includeFormXml);
+        }
+
+        private string FindFormsByName(string entityName, string formName, int formType)
+        {
+            var query = BuildListQuery(entityName, formType, includeFormXml: false);
+            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{formName}%");
+
+            var result = _serviceClient.RetrieveMultiple(query);
+            var forms = result.Entities;
+
+            if (forms.Count == 0)
+            {
+                var typeHint = formType > 0 ? $" (type={MapFormType(formType)})" : "";
+                return $"Error: No form found matching '{formName}' for entity '{entityName}'{typeHint}. " +
+                       $"Use get_forms with entity_name='{entityName}' to list all available forms.";
+            }
+
+            if (forms.Count == 1)
+                return GetFormDetail(forms[0].GetAttributeValue<Guid>("formid"));
+
+            // Multiple matches — return list for disambiguation
+            var sb = new StringBuilder(forms.Count * 120 + 256);
+            sb.AppendLine($"[Forms] {entityName} — {forms.Count} forms match '{formName}'. Specify the exact form_id to proceed.");
             sb.AppendLine();
             sb.AppendLine("formid\tname\ttype\tdefault\tactive\tmanaged\tversion");
 
@@ -130,18 +167,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var version = form.GetAttributeValue<int>("version");
 
                 sb.AppendLine($"{formId}\t{EscapeTab(name)}\t{MapFormType(type)}\t{(isDefault ? "yes" : "no")}\t{(activationState == 1 ? "Active" : "Inactive")}\t{(isManaged ? "yes" : "no")}\t{version}");
-
-                if (includeFormXml)
-                {
-                    var formXml = form.GetAttributeValue<string>("formxml");
-                    if (!string.IsNullOrEmpty(formXml))
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"[FormXML: {name}]");
-                        sb.AppendLine(PrettyPrintXml(formXml));
-                        sb.AppendLine();
-                    }
-                }
             }
 
             return sb.ToString();
@@ -222,6 +247,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.AddOrder("name", OrderType.Ascending);
 
             return query;
+        }
+
+        private static string FormatFormList(string entityName, DataCollection<Entity> forms, bool includeFormXml, string header = null)
+        {
+            var sb = new StringBuilder(forms.Count * 120 + 256);
+            sb.AppendLine(header ?? $"[Forms] {entityName} ({forms.Count} forms)");
+            sb.AppendLine();
+            sb.AppendLine("formid\tname\ttype\tdefault\tactive\tmanaged\tversion");
+
+            foreach (var form in forms)
+            {
+                var formId = form.GetAttributeValue<Guid>("formid");
+                var name = form.GetAttributeValue<string>("name") ?? "";
+                var type = form.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
+                var isDefault = form.GetAttributeValue<bool>("isdefault");
+                var activationState = form.GetAttributeValue<OptionSetValue>("formactivationstate")?.Value ?? 0;
+                var isManaged = form.GetAttributeValue<bool>("ismanaged");
+                var version = form.GetAttributeValue<int>("version");
+
+                sb.AppendLine($"{formId}\t{EscapeTab(name)}\t{MapFormType(type)}\t{(isDefault ? "yes" : "no")}\t{(activationState == 1 ? "Active" : "Inactive")}\t{(isManaged ? "yes" : "no")}\t{version}");
+
+                if (includeFormXml)
+                {
+                    var formXml = form.GetAttributeValue<string>("formxml");
+                    if (!string.IsNullOrEmpty(formXml))
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"[FormXML: {name}]");
+                        sb.AppendLine(PrettyPrintXml(formXml));
+                        sb.AppendLine();
+                    }
+                }
+            }
+
+            return sb.ToString();
         }
 
         private static string MapFormType(int type) => type switch

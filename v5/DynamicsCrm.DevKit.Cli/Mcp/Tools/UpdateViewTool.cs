@@ -33,56 +33,65 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_view", Title = "Update a view's LayoutXML/FetchXML with backup, sync validation & publish",
+        [McpServerTool(Name = "update_view", Title = "Update, create, or rename a view with backup, sync validation & publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpdateViewResult)),
         Description(
-            "Update a Dataverse view's LayoutXML and/or FetchXML with automatic backup, sync validation, " +
-            "and publishing. This is the safe write companion to get_views (read).\n\n" +
+            "Update, create, or rename a Dataverse view (saved query) with automatic backup, " +
+            "sync validation, and publishing.\n\n" +
+
+            "THREE ACTIONS (controlled by 'action' parameter):\n" +
+            "- 'update' (default): Modify LayoutXML/FetchXML of an existing view. " +
+            "Requires view_id + layoutxml.\n" +
+            "- 'create': Create a new Public view. " +
+            "Requires view_name + entity_name + layoutxml. view_id is ignored.\n" +
+            "- 'rename': Change a view's display name. " +
+            "Requires view_id + view_name + entity_name. layoutxml is ignored.\n\n" +
 
             "PARAMETERS:\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account'). Needed for backup and publishing.\n" +
-            "- view_id (required): GUID of the view. Use get_views to find view IDs first.\n" +
-            "- layoutxml (required): The new LayoutXML content defining column order and widths.\n" +
-            "- fetchxml: The new FetchXML content. Leave empty to keep existing FetchXML unchanged.\n" +
-            "- validate: Validate XMLs and check FetchXML<>LayoutXML sync (default: true).\n" +
-            "- backup: Save current XMLs to local backup before overwriting (default: true).\n" +
-            "- auto_publish: Publish the entity after update (default: true).\n\n" +
+            "- action: 'update' (default), 'create', or 'rename'.\n" +
+            "- entity_name (required): Entity logical name (e.g., 'account').\n" +
+            "- view_id: GUID of the view. Required for 'update' and 'rename'. Ignored for 'create'.\n" +
+            "- view_name: Name for the view. Required for 'create' (new name) and 'rename' (new name). " +
+            "Ignored for 'update'.\n" +
+            "- layoutxml: LayoutXML content. Required for 'update' and 'create'. Ignored for 'rename'.\n" +
+            "- fetchxml: FetchXML content. Optional for 'update' (empty = keep existing) and 'create' " +
+            "(empty = auto-generate default). Ignored for 'rename'.\n" +
+            "- validate: Validate XMLs and check FetchXML<>LayoutXML sync (default: true). " +
+            "Applies to 'update' and 'create'.\n" +
+            "- backup: Save current XMLs to local backup before overwriting (default: true). " +
+            "Applies to 'update' and 'rename'.\n" +
+            "- auto_publish: Publish the entity after changes (default: true).\n\n" +
 
-            "RETURNS:\n" +
-            "- Update status (success/blocked/error)\n" +
-            "- Sync validation results\n" +
-            "- Backup file paths (for rollback)\n" +
-            "- Publish status\n\n" +
-
-            "WORKFLOW (MUST follow this order):\n" +
+            "WORKFLOW FOR 'update' (MUST follow this order):\n" +
             "1. Call get_views with view_id to READ the current FetchXML + LayoutXML\n" +
             "2. Modify the XMLs as needed (follow docs://instructions_for_views rules)\n" +
             "3. Call update_view with the modified XMLs\n" +
             "4. Tool auto-handles: backup > validate > sync-check > update > publish\n" +
             "5. If something breaks: use the backup file paths from the response to rollback\n\n" +
 
-            "CRITICAL SYNC RULE:\n" +
+            "WORKFLOW FOR 'create':\n" +
+            "1. Call get_entity_metadata to discover available columns\n" +
+            "2. Build LayoutXML with desired columns and FetchXML with desired filters\n" +
+            "3. Call update_view with action='create', view_name, layoutxml, and optionally fetchxml\n" +
+            "4. Tool auto-handles: duplicate check > validate > sync-check > create > publish\n\n" +
+
+            "WORKFLOW FOR 'rename':\n" +
+            "1. Call get_views to find the view_id\n" +
+            "2. Call update_view with action='rename', view_id, and view_name\n" +
+            "3. Tool auto-handles: duplicate check > backup > rename > publish\n\n" +
+
+            "CRITICAL SYNC RULE (applies to 'update' and 'create'):\n" +
             "A view has TWO XML parts that MUST stay in sync:\n" +
             "- Every <attribute name=\"X\"> in FetchXML MUST have a <cell name=\"X\"> in LayoutXML\n" +
             "- Every <cell name=\"X\"> in LayoutXML MUST have an <attribute name=\"X\"> in FetchXML\n" +
-            "- The tool validates this automatically and BLOCKS the update if out of sync\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- After reading a view with get_views and making modifications\n" +
-            "- To add/remove/reorder columns in a view\n" +
-            "- To change view filters or sorting\n" +
-            "- To adjust column widths\n\n" +
-
-            "WHEN NOT TO USE:\n" +
-            "- To read views (use get_views instead)\n" +
-            "- To create a NEW view (future create_view tool)\n" +
-            "- To rename a view (use execute_webapi: PATCH /savedqueries({id}) with {\"name\": \"New Name\"})\n\n" +
+            "- The tool validates this automatically and BLOCKS the operation if out of sync\n\n" +
 
             "SAFETY:\n" +
-            "- Auto-backup saves current FetchXML + LayoutXML before ANY modification\n" +
+            "- Auto-backup saves current FetchXML + LayoutXML before ANY modification (update/rename)\n" +
             "- Sync validation blocks mismatched FetchXML/LayoutXML from being written\n" +
             "- XSD validation blocks structurally invalid XML\n" +
+            "- Duplicate name check for 'create' and 'rename' actions\n" +
             "- Rollback instructions included in every success response\n" +
             "- If backup=true and backup fails, the update is BLOCKED (fail-safe)\n\n" +
 
@@ -100,238 +109,477 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
         public CallToolResult update_view(
             [Description(
+                "Action to perform: 'update' (default), 'create' (new view), or 'rename' (change name). " +
+                "For 'update': modifies LayoutXML/FetchXML of existing view (requires view_id + layoutxml). " +
+                "For 'create': creates a new Public view (requires view_name + layoutxml; view_id is ignored). " +
+                "For 'rename': changes the view name (requires view_id + view_name; layoutxml is ignored)."
+            )] string action = "update",
+            [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
                 "If unsure, call get_entities_metadata first."
-            )] string entity_name,
+            )] string entity_name = "",
             [Description(
-                "GUID of the view to update. " +
+                "GUID of the view to update or rename. " +
+                "Required for 'update' and 'rename' actions. Ignored for 'create'. " +
                 "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
                 "Use get_views to find valid view IDs."
-            )] string view_id,
+            )] string view_id = "",
+            [Description(
+                "Name for the view. Required for 'create' (new view name) and 'rename' (new name). " +
+                "Ignored for 'update' action."
+            )] string view_name = "",
             [Description(
                 "The new LayoutXML content defining column order and widths in the grid. " +
+                "Required for 'update' and 'create' actions. Ignored for 'rename'. " +
                 "Must be valid XML. The tool will strip any XML declaration before writing."
-            )] string layoutxml,
+            )] string layoutxml = "",
             [Description(
-                "The new FetchXML content. Leave empty to keep existing FetchXML unchanged. " +
+                "The new FetchXML content. " +
+                "For 'update': leave empty to keep existing FetchXML unchanged. " +
+                "For 'create': leave empty to auto-generate a default FetchXML for the entity. " +
+                "Ignored for 'rename'. " +
                 "If provided, must be valid XML. The tool will strip any XML declaration before writing."
             )] string fetchxml = "",
             [Description(
                 "Validate LayoutXML/FetchXML and check sync between them (default: true). " +
-                "Blocks update if invalid. Set false only if you've already validated."
+                "Applies to 'update' and 'create' actions. " +
+                "Blocks operation if invalid. Set false only if you've already validated."
             )] bool validate = true,
             [Description(
-                "Save current FetchXML + LayoutXML to local backup before overwriting (default: true). " +
-                "Strongly recommended to keep true. If backup fails, update is BLOCKED (fail-safe)."
+                "Save current XMLs to local backup before overwriting (default: true). " +
+                "Applies to 'update' and 'rename' actions. " +
+                "Strongly recommended to keep true. If backup fails, operation is BLOCKED (fail-safe)."
             )] bool backup = true,
             [Description(
-                "Publish the entity after update (default: true). " +
+                "Publish the entity after changes (default: true). " +
                 "Set false if batching multiple changes, then call publish_customizations once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
 
-            if (string.IsNullOrWhiteSpace(view_id))
-                return ErrorResult("Error: view_id is required.");
-
-            if (!Guid.TryParse(view_id.Trim(), out var viewId))
-                return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
-
-            if (string.IsNullOrWhiteSpace(layoutxml))
-                return ErrorResult("Error: layoutxml is required.");
-
             var entityName = entity_name.Trim().ToLowerInvariant();
-            var newLayoutXml = StripXmlDeclaration(layoutxml.Trim());
-            var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : StripXmlDeclaration(fetchxml.Trim());
+            var actionName = (action ?? "update").Trim().ToLowerInvariant();
 
             try
             {
-                // Step 1: Retrieve current view
-                var currentView = RetrieveView(viewId);
-                if (currentView == null)
-                    return ErrorResult(
-                        $"[Error] View not found\n" +
-                        $"ViewId: {viewId}\n" +
-                        $"Tip: Use get_views with entity_name='{entityName}' to find valid view IDs");
-
-                var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
-                var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
-                var viewName = currentView.GetAttributeValue<string>("name") ?? "";
-                var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
-
-                // Determine the effective FetchXML for sync validation
-                var effectiveFetchXml = newFetchXml ?? currentFetchXml;
-
-                // Step 2: Backup current XMLs
-                string fetchBackupPath = null;
-                string layoutBackupPath = null;
-                if (backup)
+                switch (actionName)
                 {
-                    try
-                    {
-                        (fetchBackupPath, layoutBackupPath) = SaveBackup(entityName, viewId, viewName, currentFetchXml, currentLayoutXml);
-                    }
-                    catch (Exception ex)
-                    {
-                        return ErrorResult(
-                            $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
-                            $"ViewId: {viewId}\n" +
-                            $"Message: {ex.Message}\n" +
-                            $"Tip: Fix the backup directory permissions or set backup=false (not recommended)");
-                    }
-                }
+                    case "create":
+                        return CreateView(entityName, view_name, layoutxml, fetchxml, validate, auto_publish);
 
-                // Step 3: Validate
-                if (validate)
-                {
-                    var allErrors = new List<string>();
-                    var allWarnings = new List<string>();
+                    case "rename":
+                        if (string.IsNullOrWhiteSpace(view_id))
+                            return ErrorResult("Error: view_id is required for 'rename' action.");
+                        if (!Guid.TryParse(view_id.Trim(), out var renameId))
+                            return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
+                        return RenameView(entityName, renameId, view_name, backup, auto_publish);
 
-                    // 3a. Validate LayoutXML against XSD
-                    var (layoutErrors, layoutWarnings) = ValidateLayoutXml(newLayoutXml);
-                    allErrors.AddRange(layoutErrors);
-                    allWarnings.AddRange(layoutWarnings);
-
-                    // 3b. Validate FetchXML against XSD (if provided)
-                    if (newFetchXml != null)
-                    {
-                        var (fetchErrors, fetchWarnings) = ValidateFetchXml(newFetchXml);
-                        allErrors.AddRange(fetchErrors);
-                        allWarnings.AddRange(fetchWarnings);
-                    }
-
-                    // 3c. Sync check: FetchXML attributes <-> LayoutXML cells
-                    var syncErrors = ValidateSync(effectiveFetchXml, newLayoutXml);
-                    allErrors.AddRange(syncErrors);
-
-                    if (allErrors.Count > 0)
-                    {
-                        var sb = new StringBuilder(512);
-                        sb.AppendLine($"[ViewUpdate] BLOCKED — Validation failed");
-                        sb.AppendLine($"ViewId: {viewId}");
-                        sb.AppendLine($"Errors: {allErrors.Count}");
-                        foreach (var error in allErrors)
-                            sb.AppendLine($"- {error}");
-                        if (allWarnings.Count > 0)
-                        {
-                            sb.AppendLine($"Warnings: {allWarnings.Count}");
-                            foreach (var warning in allWarnings)
-                                sb.AppendLine($"- {warning}");
-                        }
-                        if (fetchBackupPath != null)
-                            sb.AppendLine($"Backup: saved (no changes made)");
-                        else
-                            sb.AppendLine($"Backup: not needed (no changes made)");
-                        sb.AppendLine($"Tip: Fix the errors above and retry. Refer to docs://instructions_for_views for rules.");
-
-                        var allIssues = new List<string>(allErrors);
-                        if (allWarnings.Count > 0) allIssues.AddRange(allWarnings);
-
-                        var blockedResult = new UpdateViewResult
-                        {
-                            Entity = entityName,
-                            ViewId = viewId.ToString(),
-                            ViewName = viewName,
-                            Status = "blocked_validation",
-                            Validated = true,
-                            ValidationErrors = allIssues,
-                            FetchXmlBackupPath = fetchBackupPath,
-                            LayoutXmlBackupPath = layoutBackupPath,
-                            Published = false
-                        };
-                        return new CallToolResult
-                        {
-                            Content = [new TextContentBlock { Text = sb.ToString() }],
-                            StructuredContent = JsonSerializer.SerializeToElement(blockedResult)
-                        };
-                    }
-                }
-
-                // Step 4: Update view record in Dataverse
-                var update = new Entity("savedquery", viewId);
-                update["layoutxml"] = newLayoutXml;
-                if (newFetchXml != null)
-                    update["fetchxml"] = newFetchXml;
-                _serviceClient.Update(update);
-
-                // Step 5: Publish entity
-                var published = false;
-                if (auto_publish)
-                {
-                    try
-                    {
-                        var publishRequest = new PublishXmlRequest
-                        {
-                            ParameterXml = $"<importexportxml><entities><entity>{returnedTypeCode}</entity></entities></importexportxml>"
-                        };
-                        _serviceClient.Execute(publishRequest);
-                        published = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        var sb = BuildSuccessText(entityName, viewId, viewName, fetchBackupPath, layoutBackupPath,
-                            validate, newFetchXml != null, false);
-                        sb.AppendLine($"PublishError: {ex.Message}");
-                        sb.AppendLine($"Tip: Call publish_customizations with entities='{returnedTypeCode}' to retry");
-                        sb.AppendLine();
-                        AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, viewId);
-
-                        var partialResult = new UpdateViewResult
-                        {
-                            Entity = entityName,
-                            ViewId = viewId.ToString(),
-                            ViewName = viewName,
-                            Status = "updated_publish_failed",
-                            Validated = validate,
-                            UpdatedParts = newFetchXml != null ? "LayoutXML + FetchXML" : "LayoutXML only",
-                            FetchXmlBackupPath = fetchBackupPath,
-                            LayoutXmlBackupPath = layoutBackupPath,
-                            Published = false
-                        };
-                        return new CallToolResult
-                        {
-                            Content = [new TextContentBlock { Text = sb.ToString() }],
-                            StructuredContent = JsonSerializer.SerializeToElement(partialResult)
-                        };
-                    }
-                }
-
-                // Step 6: Return success
-                {
-                    var sb = BuildSuccessText(entityName, viewId, viewName, fetchBackupPath, layoutBackupPath,
-                        validate, newFetchXml != null, published);
-                    sb.AppendLine();
-                    AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, viewId);
-
-                    var structured = new UpdateViewResult
-                    {
-                        Entity = entityName,
-                        ViewId = viewId.ToString(),
-                        ViewName = viewName,
-                        Status = "updated",
-                        Validated = validate,
-                        UpdatedParts = newFetchXml != null ? "LayoutXML + FetchXML" : "LayoutXML only",
-                        FetchXmlBackupPath = fetchBackupPath,
-                        LayoutXmlBackupPath = layoutBackupPath,
-                        Published = published
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(structured)
-                    };
+                    default: // "update"
+                        if (string.IsNullOrWhiteSpace(view_id))
+                            return ErrorResult("Error: view_id is required for 'update' action.");
+                        if (!Guid.TryParse(view_id.Trim(), out var updateId))
+                            return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
+                        if (string.IsNullOrWhiteSpace(layoutxml))
+                            return ErrorResult("Error: layoutxml is required for 'update' action.");
+                        return UpdateViewXml(entityName, updateId, layoutxml, fetchxml, validate, backup, auto_publish);
                 }
             }
             catch (Exception ex)
             {
                 return ErrorResult(
-                    $"[Error] View update failed\n" +
-                    $"ViewId: {viewId}\n" +
-                    $"Message: {ex.Message}\n" +
-                    $"Tip: Use get_views with entity_name='{entityName}' to verify the view exists");
+                    $"[Error] View {actionName} failed\n" +
+                    $"Entity: {entityName}\n" +
+                    $"Message: {ex.Message}");
             }
+        }
+
+        // ── Action: update ─────────────────────────────────────────────────
+
+        private CallToolResult UpdateViewXml(string entityName, Guid viewId,
+            string layoutxml, string fetchxml, bool validate, bool backup, bool auto_publish)
+        {
+            var newLayoutXml = StripXmlDeclaration(layoutxml.Trim());
+            var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : StripXmlDeclaration(fetchxml.Trim());
+
+            // Step 1: Retrieve current view
+            var currentView = RetrieveView(viewId);
+            if (currentView == null)
+                return ErrorResult(
+                    $"[Error] View not found\n" +
+                    $"ViewId: {viewId}\n" +
+                    $"Tip: Use get_views with entity_name='{entityName}' to find valid view IDs");
+
+            var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+            var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
+            var viewName = currentView.GetAttributeValue<string>("name") ?? "";
+            var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
+
+            // Determine the effective FetchXML for sync validation
+            var effectiveFetchXml = newFetchXml ?? currentFetchXml;
+
+            // Step 2: Backup current XMLs
+            string fetchBackupPath = null;
+            string layoutBackupPath = null;
+            if (backup)
+            {
+                try
+                {
+                    (fetchBackupPath, layoutBackupPath) = SaveBackup(entityName, viewId, viewName, currentFetchXml, currentLayoutXml);
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult(
+                        $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
+                        $"ViewId: {viewId}\n" +
+                        $"Message: {ex.Message}\n" +
+                        $"Tip: Fix the backup directory permissions or set backup=false (not recommended)");
+                }
+            }
+
+            // Step 3: Validate
+            if (validate)
+            {
+                var allErrors = new List<string>();
+                var allWarnings = new List<string>();
+
+                var (layoutErrors, layoutWarnings) = ValidateLayoutXml(newLayoutXml);
+                allErrors.AddRange(layoutErrors);
+                allWarnings.AddRange(layoutWarnings);
+
+                if (newFetchXml != null)
+                {
+                    var (fetchErrors, fetchWarnings) = ValidateFetchXml(newFetchXml);
+                    allErrors.AddRange(fetchErrors);
+                    allWarnings.AddRange(fetchWarnings);
+                }
+
+                var syncErrors = ValidateSync(effectiveFetchXml, newLayoutXml);
+                allErrors.AddRange(syncErrors);
+
+                if (allErrors.Count > 0)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[ViewUpdate] BLOCKED — Validation failed");
+                    sb.AppendLine($"ViewId: {viewId}");
+                    sb.AppendLine($"Errors: {allErrors.Count}");
+                    foreach (var error in allErrors)
+                        sb.AppendLine($"- {error}");
+                    if (allWarnings.Count > 0)
+                    {
+                        sb.AppendLine($"Warnings: {allWarnings.Count}");
+                        foreach (var warning in allWarnings)
+                            sb.AppendLine($"- {warning}");
+                    }
+                    sb.AppendLine(fetchBackupPath != null ? $"Backup: saved (no changes made)" : $"Backup: not needed (no changes made)");
+                    sb.AppendLine($"Tip: Fix the errors above and retry. Refer to docs://instructions_for_views for rules.");
+
+                    var allIssues = new List<string>(allErrors);
+                    if (allWarnings.Count > 0) allIssues.AddRange(allWarnings);
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        {
+                            Action = "updated",
+                            Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues,
+                            FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
+                        })
+                    };
+                }
+            }
+
+            // Step 4: Update view record
+            var update = new Entity("savedquery", viewId);
+            update["layoutxml"] = newLayoutXml;
+            if (newFetchXml != null)
+                update["fetchxml"] = newFetchXml;
+            _serviceClient.Update(update);
+
+            // Step 5: Publish
+            var published = TryPublish(returnedTypeCode, auto_publish);
+
+            if (auto_publish && !published)
+            {
+                var sb = BuildSuccessText(entityName, viewId, viewName, fetchBackupPath, layoutBackupPath,
+                    validate, newFetchXml != null, false);
+                sb.AppendLine($"Tip: Call publish_customizations with entities='{returnedTypeCode}' to retry");
+                sb.AppendLine();
+                AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, viewId);
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    {
+                        Action = "updated", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                        Status = "updated_publish_failed", Validated = validate,
+                        UpdatedParts = newFetchXml != null ? "LayoutXML + FetchXML" : "LayoutXML only",
+                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
+                    })
+                };
+            }
+
+            // Step 6: Return success
+            {
+                var sb = BuildSuccessText(entityName, viewId, viewName, fetchBackupPath, layoutBackupPath,
+                    validate, newFetchXml != null, published);
+                sb.AppendLine();
+                AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, viewId);
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    {
+                        Action = "updated", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                        Status = "updated", Validated = validate,
+                        UpdatedParts = newFetchXml != null ? "LayoutXML + FetchXML" : "LayoutXML only",
+                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published
+                    })
+                };
+            }
+        }
+
+        // ── Action: create ─────────────────────────────────────────────────
+
+        private CallToolResult CreateView(string entityName, string viewName,
+            string layoutxml, string fetchxml, bool validate, bool auto_publish)
+        {
+            if (string.IsNullOrWhiteSpace(viewName))
+                return ErrorResult("Error: view_name is required for 'create' action.");
+
+            if (string.IsNullOrWhiteSpace(layoutxml))
+                return ErrorResult("Error: layoutxml is required for 'create' action.");
+
+            viewName = viewName.Trim();
+            var newLayoutXml = StripXmlDeclaration(layoutxml.Trim());
+            var newFetchXml = string.IsNullOrWhiteSpace(fetchxml)
+                ? $"<fetch><entity name='{entityName}'><attribute name='{entityName}id'/></entity></fetch>"
+                : StripXmlDeclaration(fetchxml.Trim());
+
+            // Step 1: Check for duplicate name
+            var duplicate = FindViewByName(entityName, viewName);
+            if (duplicate != null)
+            {
+                var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
+                return ErrorResult(
+                    $"[Error] A view with this name already exists\n" +
+                    $"Entity: {entityName}\n" +
+                    $"Name: {viewName}\n" +
+                    $"ExistingViewId: {dupId}\n" +
+                    $"Tip: Choose a different name or use action='update' with the existing view_id");
+            }
+
+            // Step 2: Validate
+            if (validate)
+            {
+                var allErrors = new List<string>();
+                var allWarnings = new List<string>();
+
+                var (layoutErrors, layoutWarnings) = ValidateLayoutXml(newLayoutXml);
+                allErrors.AddRange(layoutErrors);
+                allWarnings.AddRange(layoutWarnings);
+
+                var (fetchErrors, fetchWarnings) = ValidateFetchXml(newFetchXml);
+                allErrors.AddRange(fetchErrors);
+                allWarnings.AddRange(fetchWarnings);
+
+                var syncErrors = ValidateSync(newFetchXml, newLayoutXml);
+                allErrors.AddRange(syncErrors);
+
+                if (allErrors.Count > 0)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[ViewCreate] BLOCKED — Validation failed");
+                    sb.AppendLine($"Entity: {entityName}");
+                    sb.AppendLine($"ViewName: {viewName}");
+                    sb.AppendLine($"Errors: {allErrors.Count}");
+                    foreach (var error in allErrors)
+                        sb.AppendLine($"- {error}");
+                    sb.AppendLine($"Tip: Fix the errors above and retry. Refer to docs://instructions_for_views for rules.");
+
+                    var allIssues = new List<string>(allErrors);
+                    if (allWarnings.Count > 0) allIssues.AddRange(allWarnings);
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        {
+                            Action = "created", Entity = entityName, ViewName = viewName,
+                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues, Published = false
+                        })
+                    };
+                }
+            }
+
+            // Step 3: Create savedquery record
+            var newView = new Entity("savedquery")
+            {
+                ["name"] = viewName,
+                ["returnedtypecode"] = entityName,
+                ["querytype"] = 0, // Public (MainApplicationView)
+                ["fetchxml"] = newFetchXml,
+                ["layoutxml"] = newLayoutXml
+            };
+            var newViewId = _serviceClient.Create(newView);
+
+            // Step 4: Publish
+            var published = TryPublish(entityName, auto_publish);
+
+            // Step 5: Return success
+            var resultSb = new StringBuilder(256);
+            resultSb.AppendLine($"[ViewCreate] {entityName} — {viewName}");
+            resultSb.AppendLine($"ViewId: {newViewId}");
+            resultSb.AppendLine($"Status: Created successfully");
+            resultSb.AppendLine($"Validated: {(validate ? "yes (sync OK)" : "skipped")}");
+            resultSb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            var status = published || !auto_publish ? "created" : "created_publish_failed";
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = resultSb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                {
+                    Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
+                    Status = status, Validated = validate, Published = published
+                })
+            };
+        }
+
+        // ── Action: rename ─────────────────────────────────────────────────
+
+        private CallToolResult RenameView(string entityName, Guid viewId, string viewName,
+            bool backup, bool auto_publish)
+        {
+            if (string.IsNullOrWhiteSpace(viewName))
+                return ErrorResult("Error: view_name is required for 'rename' action.");
+
+            viewName = viewName.Trim();
+
+            // Step 1: Retrieve current view
+            var currentView = RetrieveView(viewId);
+            if (currentView == null)
+                return ErrorResult(
+                    $"[Error] View not found\n" +
+                    $"ViewId: {viewId}\n" +
+                    $"Tip: Use get_views with entity_name='{entityName}' to find valid view IDs");
+
+            var oldName = currentView.GetAttributeValue<string>("name") ?? "";
+            var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
+
+            // Step 2: Check for duplicate name (excluding current view)
+            var duplicate = FindViewByName(returnedTypeCode, viewName, excludeViewId: viewId);
+            if (duplicate != null)
+            {
+                var dupId = duplicate.GetAttributeValue<Guid>("savedqueryid");
+                return ErrorResult(
+                    $"[Error] A view with this name already exists\n" +
+                    $"Entity: {entityName}\n" +
+                    $"Name: {viewName}\n" +
+                    $"ExistingViewId: {dupId}\n" +
+                    $"Tip: Choose a different name");
+            }
+
+            // Step 3: Backup
+            string fetchBackupPath = null;
+            string layoutBackupPath = null;
+            if (backup)
+            {
+                try
+                {
+                    var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
+                    var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
+                    (fetchBackupPath, layoutBackupPath) = SaveBackup(entityName, viewId, oldName, currentFetchXml, currentLayoutXml);
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult(
+                        $"[Error] Backup failed — rename BLOCKED (fail-safe)\n" +
+                        $"ViewId: {viewId}\n" +
+                        $"Message: {ex.Message}");
+                }
+            }
+
+            // Step 4: Rename
+            var update = new Entity("savedquery", viewId)
+            {
+                ["name"] = viewName
+            };
+            _serviceClient.Update(update);
+
+            // Step 5: Publish
+            var published = TryPublish(returnedTypeCode, auto_publish);
+
+            // Step 6: Return success
+            var sb = new StringBuilder(256);
+            sb.AppendLine($"[ViewRename] {entityName}");
+            sb.AppendLine($"ViewId: {viewId}");
+            sb.AppendLine($"OldName: {oldName}");
+            sb.AppendLine($"NewName: {viewName}");
+            sb.AppendLine($"Status: Renamed successfully");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (fetchBackupPath != null)
+            {
+                sb.AppendLine($"Backup:");
+                sb.AppendLine($"  {fetchBackupPath}");
+                sb.AppendLine($"  {layoutBackupPath}");
+            }
+
+            var status = published || !auto_publish ? "renamed" : "renamed_publish_failed";
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                {
+                    Action = "renamed", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                    Status = status, Validated = false,
+                    FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published
+                })
+            };
+        }
+
+        // ── Helpers ────────────────────────────────────────────────────────
+
+        private bool TryPublish(string entityName, bool autoPublish)
+        {
+            if (!autoPublish) return false;
+            try
+            {
+                _serviceClient.Execute(new PublishXmlRequest
+                {
+                    ParameterXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>"
+                });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private Entity FindViewByName(string entityName, string viewName, Guid? excludeViewId = null)
+        {
+            var query = new QueryExpression("savedquery")
+            {
+                ColumnSet = new ColumnSet("savedqueryid", "name"),
+                TopCount = 1
+            };
+            query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
+            query.Criteria.AddCondition("name", ConditionOperator.Equal, viewName);
+            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+
+            if (excludeViewId.HasValue)
+                query.Criteria.AddCondition("savedqueryid", ConditionOperator.NotEqual, excludeViewId.Value);
+
+            var result = _serviceClient.RetrieveMultiple(query);
+            return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
         private Entity RetrieveView(Guid viewId)
