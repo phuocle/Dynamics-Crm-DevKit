@@ -15,13 +15,14 @@
 | Phase 1: Pure Static Helpers | 8 | 124 | ✅ All Pass |
 | Phase 2: Tool Validation & Static Methods | 5 | 90 | ✅ All Pass |
 | Phase 3: Complex Tools & Edge Cases | 3 | 49 | ✅ All Pass |
-| **Total** | **16** | **263** | **✅ All Pass** |
+| Phase 4: Deep Static Methods & Metadata | 6 | 93 | ✅ All Pass |
+| **Total** | **22** | **356** | **✅ All Pass** |
 
 ```
 Test Run Successful.
-Total tests: 263
-     Passed: 263
- Total time: ~3.2 Seconds
+Total tests: 356
+     Passed: 356
+ Total time: ~4.2 Seconds
 ```
 
 ---
@@ -63,18 +64,31 @@ Total tests: 263
 
 ---
 
+## Phase 4: Deep Static Methods & Metadata Formatters
+
+| # | Test File | Tests | Key Methods Tested |
+|---|-----------|-------|--------------------|
+| 17 | `SearchToolTests.cs` | 25 | `FormatSearchResults()` (5), `FormatAttributes()` (5 w/ annotation filtering), `FormatHighlights()` (5 w/ crmhit), `BuildSearchRequest()` (5), `EscapeTab()` (4) |
+| 18 | `FetchXmlAndRecordToolTests.cs` | 23 | `ConvertEntities()` (9 — all Dataverse types), `BuildColumnSet()` (7 — parsing/filtering), `FormatRecord()` (7 — header, sort, types) |
+| 19 | `SchemaResourcesTests.cs` | 11 | `ReadEmbeddedResourceAsync()` (6 — all 5 XSDs + non-existent), public schema methods (4 — FormXml, LayoutXml, FetchXml, SiteMap) |
+| 20 | `CompactFormatterMetadataTests.cs` | 14 | `FormatEntitySummaryTable()` (5), `FormatOptionSetList()` (2), `FormatOptionSetDetail()` (4 — with options, boolean, empty, ordering) |
+| 21 | `GetViewsToolTests.cs` | 16 | Input validation (3), `MapQueryType()` (7 known + unknown), `PrettyPrintXml()` (3), `EscapeTab()` (3) |
+| 22 | `MarkdownFormatterMetadataTests.cs` | 10 | `FormatEntitySummaryTable()` (4), `FormatOptionSetList()` (2), `FormatOptionSetDetail()` (3) — markdown table format verification |
+
+---
+
 ## Not Tested — Reason
 
 | Class | Reason |
 |-------|--------|
 | `McpServerHost` | DI/hosting wiring — no business logic to test |
-| `SchemaResources` | Reads embedded XSD resources — returns null in test assembly context |
 | `GetSolutionComponentsTool` | ~530 lines, complex multi-query Dataverse with metadata resolution |
-| `GetEntitiesMetadataTool` | All logic delegated to `MetadataService` async + `CompactFormatter` (already tested) |
-| `GetGlobalOptionSetsTool` | All logic delegated to `ServiceClient.Execute()` + `CompactFormatter` (already tested) |
+| `GetEntitiesMetadataTool` | All logic delegated to `MetadataService` async + formatters (already tested) |
+| `GetGlobalOptionSetsTool` | All logic delegated to `ServiceClient.Execute()` + formatters (already tested) |
 | `GetMessagesTool` | All logic delegated to `MessageDiscoveryHelper` (already tested) |
-| `SearchTool` (format methods) | `FormatSearchResults()` depends on Dataverse response objects not constructible without mock |
-| `ExecuteFetchXmlTool` (ConvertEntities) | Private method tightly coupled to `EntityCollection` from Dataverse |
+| `GetFormsTool` | No static methods, all logic delegated to ServiceClient + formatters |
+| `CompactFormatter.FormatEntityDetail` | Requires fully-constructed `EntityMetadata` with Attributes/Relationships arrays (internal setters nested deeply) |
+| `MarkdownFormatter.FormatEntityDetail` | Same as above |
 
 ---
 
@@ -100,7 +114,6 @@ private static readonly MethodInfo Method = typeof(ToolClass)
 ### Null ServiceClient Pattern (for input validation)
 
 ```csharp
-// Tools are public — pass null ServiceClient, test only error paths
 private readonly DeleteRecordTool _tool = new(null!);
 
 [TestMethod]
@@ -108,6 +121,18 @@ public void DeleteRecord_EmptyEntityName_ReturnsError()
 {
     var result = _tool.delete_record("", "guid");
     Assert.IsTrue(result.IsError);
+}
+```
+
+### EntityMetadata Construction (for metadata tests)
+
+```csharp
+private static EntityMetadata CreateEntityMetadata(string logicalName)
+{
+    var meta = new EntityMetadata();
+    typeof(EntityMetadata).GetProperty("LogicalName")!.SetValue(meta, logicalName);
+    typeof(EntityMetadata).GetProperty("IsCustomEntity")!.SetValue(meta, (bool?)false);
+    return meta;
 }
 ```
 
@@ -119,20 +144,26 @@ public void DeleteRecord_EmptyEntityName_ReturnsError()
 DynamicsCrm.DevKit.UnitTests/
 └── Cli/
     └── Mcp/
-        ├── FetchXmlPagingHelperTests.cs       (13 tests)
-        ├── DataverseValueFormatterTests.cs     (27 tests)
-        ├── CompactFormatterTests.cs            (17 tests)
-        ├── MarkdownFormatterTests.cs           (15 tests)
-        ├── WebApiResponseFormatterTests.cs     (17 tests)
-        ├── MessageDiscoveryHelperTests.cs      (12 tests)
-        ├── StructuredResultsTests.cs           (10 tests)
-        ├── InstructionResourcesTests.cs        (13 tests)
-        ├── ParseRecordUrlToolTests.cs          (21 tests)
-        ├── WhoAmIToolTests.cs                  (18 tests)
-        ├── PublishCustomizationsToolTests.cs   ( 8 tests)
-        ├── CrudToolValidationTests.cs          (27 tests)
-        ├── EntityParserHelperTests.cs          (16 tests)
-        ├── ExecuteWebApiToolTests.cs           (26 tests)
-        ├── GetPluginTraceLogsToolTests.cs      (20 tests)
-        └── MetadataToolValidationTests.cs      ( 3 tests)
+        ├── FetchXmlPagingHelperTests.cs          (13 tests)
+        ├── DataverseValueFormatterTests.cs        (27 tests)
+        ├── CompactFormatterTests.cs               (17 tests)
+        ├── CompactFormatterMetadataTests.cs        (14 tests)
+        ├── MarkdownFormatterTests.cs              (15 tests)
+        ├── MarkdownFormatterMetadataTests.cs       (10 tests)
+        ├── WebApiResponseFormatterTests.cs        (17 tests)
+        ├── MessageDiscoveryHelperTests.cs         (12 tests)
+        ├── StructuredResultsTests.cs              (10 tests)
+        ├── InstructionResourcesTests.cs           (13 tests)
+        ├── ParseRecordUrlToolTests.cs             (21 tests)
+        ├── WhoAmIToolTests.cs                     (18 tests)
+        ├── PublishCustomizationsToolTests.cs       ( 8 tests)
+        ├── CrudToolValidationTests.cs             (27 tests)
+        ├── EntityParserHelperTests.cs             (16 tests)
+        ├── ExecuteWebApiToolTests.cs              (26 tests)
+        ├── GetPluginTraceLogsToolTests.cs         (20 tests)
+        ├── MetadataToolValidationTests.cs          ( 3 tests)
+        ├── SearchToolTests.cs                     (25 tests)
+        ├── FetchXmlAndRecordToolTests.cs          (23 tests)
+        ├── SchemaResourcesTests.cs                (11 tests)
+        └── GetViewsToolTests.cs                   (16 tests)
 ```
