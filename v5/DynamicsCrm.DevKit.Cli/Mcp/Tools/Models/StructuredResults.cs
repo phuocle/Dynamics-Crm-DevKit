@@ -79,6 +79,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int? FieldsUpdated { get; set; }
     }
 
+    internal sealed class PublishResult
+    {
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("entities")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Entities { get; set; }
+
+        [JsonPropertyName("entityCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? EntityCount { get; set; }
+
+        [JsonPropertyName("includeGlobalOptionSets")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IncludeGlobalOptionSets { get; set; }
+
+        [JsonPropertyName("includeSiteMap")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool IncludeSiteMap { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("durationSeconds")]
+        public double DurationSeconds { get; set; }
+    }
+
     internal sealed class WebApiResult
     {
         [JsonPropertyName("method")]
