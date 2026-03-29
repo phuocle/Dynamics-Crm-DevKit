@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "{snake_case_name}", ...),
+        [McpServerTool(Name = "{snake_case_name}", Title = "Short human-readable description", ...),
         Description("...")]
         public ... {snake_case_name}(...)
         {
@@ -86,6 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
 | Property | When to use |
 |----------|-------------|
+| `Title = "..."` | **REQUIRED** — short human-readable description shown by `devkit mcp --tools` |
 | `Idempotent = true` | Read-only tools that return the same result for same input |
 | `Destructive = true` | Tools that delete data (e.g. delete_record) |
 | `ReadOnly = true` | Tools that only read data |
@@ -191,14 +192,18 @@ private static CallToolResult ErrorResult(string message) => new()
 
 ## Step 5: Update Help Text and Tool Count
 
-### 5a. Update tool count in `SpectreLog.cs`
+### 5a. Verify tool appears in `devkit mcp --tools`
+
+After building (Step 7), run `devkit mcp --tools` to verify the new tool appears in the list with the correct `Title`. The `--tools` command uses reflection to auto-discover all tools — if the tool has `[McpServerToolType]` and `[McpServerTool(Title = "...")]`, it will appear automatically.
+
+### 5b. Update tool count in `SpectreLog.cs`
 
 File: `DynamicsCrm.DevKit.Cli\Logging\SpectreLog.cs`
 
-Search for the current tool count (e.g. `12 tools`) and increment it. There are **2 occurrences** (plain text and Spectre markup):
-- Line with `"12 tools: metadata, CRUD, FetchXML, search"` — update count and categories if needed
+Search for the current tool count (e.g. `15 tools`) and increment it. There are **2 occurrences** (plain text and Spectre markup):
+- Line with `"15 tools: metadata, CRUD, FetchXML, search, ..."` — update count and add category keyword if the tool introduces a new category
 
-### 5b. Update `AGENTS.md`
+### 5c. Update `AGENTS.md`
 
 File: `AGENTS.md`
 
@@ -236,18 +241,23 @@ Run `/claude-build-cli` and verify:
 
 ### How to test
 
-Use the **installed `devkit` CLI** (global tool) to run the MCP server and invoke the new tool via MCP stdio protocol:
+The MCP server running in the current IDE session uses the **previous** build. After `/claude-build-cli` installs the new global tool, the MCP server must be **restarted** to pick up the new tool.
 
-```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"{snake_case_name}","arguments":{...}}}
-```
+1. **Ask the user to restart the MCP server** using `AskUserQuestion`:
+   - "Please restart the devkit MCP server so I can test the new tool. Let me know when it's reconnected."
+   - Wait for confirmation before proceeding.
+2. **Test via the connected MCP tools** (`mcp__devkit__{snake_case_name}`) — call the tool directly with multiple test inputs:
+   - Happy path: valid input that exercises the main logic
+   - Edge cases: boundary values, optional parameters
+   - Error case: invalid/empty input to verify error handling
+3. Do **NOT** try to test via stdio protocol (piping JSON-RPC to `devkit mcp`) — this is unreliable in CI/terminal environments and wastes tokens.
 
 ### What to verify
 
-- Tool executes without errors on the **installed global `devkit mcp`** runtime
+- Tool executes without errors via `mcp__devkit__{snake_case_name}` calls
 - Output uses compact format (Key-Value or TSV, NOT Markdown)
 - Structured content is present (if applicable)
-- Error handling works (test with invalid parameters)
+- Error handling works (test with invalid/empty parameters)
 
 ### Why this matters
 
@@ -267,15 +277,16 @@ This ensures the tool's design spec is preserved with the project documentation.
 
 - [ ] Tool class created in `Mcp\Tools\{ToolName}Tool.cs`
 - [ ] `[McpServerToolType]` class attribute present
-- [ ] `[McpServerTool(Name = "...")]` with correct properties
+- [ ] `[McpServerTool(Name = "...", Title = "...")]` with correct properties
 - [ ] `[Description]` has PARAMETERS, RETURNS, WHEN TO USE, EXAMPLES, TIPS sections
 - [ ] All parameters have `[Description]` attributes
 - [ ] Constructor injects `ServiceClient` (variable name: `_serviceClient`)
 - [ ] Output uses **Compact format** (Key-Value/TSV), NOT Markdown
 - [ ] Structured output model added to `StructuredResults.cs` (if using `CallToolResult`)
-- [ ] Tool count updated in `SpectreLog.cs` (2 places)
+- [ ] Tool count updated in `SpectreLog.cs` (2 places: plain text + Spectre markup)
 - [ ] Tool count and name updated in `AGENTS.md` (2 places)
 - [ ] `/claude-build-cli` succeeded with 0 errors
-- [ ] **Production runtime test**: tool tested via **installed `devkit mcp`** (global tool) and output verified
+- [ ] `devkit mcp --tools` shows the new tool with correct Title and category
+- [ ] **Production runtime test**: user restarted MCP server, tool tested via `mcp__devkit__` calls and output verified
 - [ ] Spec file saved to `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp\`
 - [ ] `Const.cs` is clean (still has `x.xx.xx.xx` placeholder)

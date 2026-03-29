@@ -1,4 +1,16 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Edit(*)",
+      "Write(*)",
+      "NotebookEdit(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Skill(*)",
+      "mcp__devkit__*"
+    ]
+  },
   "enabledPlugins": {
     "claude-md-management@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true
