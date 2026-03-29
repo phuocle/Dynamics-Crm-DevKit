@@ -113,6 +113,22 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\WebApi.js" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Dataverse XSD Schemas (from Microsoft Schemas.zip) -->
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\CustomizationsSolution.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\Fetch.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\FormXml.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\isv.config.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\ParameterXml.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\reports.config.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\RibbonCore.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\RibbonTypes.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\RibbonWSS.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\SiteMap.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\SiteMapType.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\VisualizationDataDescription.xsd" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\LayoutXml.xsd" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\plugin.deploy.debug.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\plugin.deploy.debug.only.bat" />
   </ItemGroup>

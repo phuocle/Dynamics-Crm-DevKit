@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema id="layoutxml" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation>
+			Schema name: layoutxml-schema
+			Extracted from Fetch.xsd (savedquery/layoutxml element) for standalone use.
+			Defines the column layout of Dataverse views (SavedQuery/UserQuery).
+			Structure: grid > row > cell (with name, width, and display attributes).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="BoolOrEmpty">
+		<xs:union memberTypes="xs:boolean">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="" />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:element name="grid">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="row" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="cell" minOccurs="1" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence></xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="required" />
+									<xs:attribute name="width" type="xs:integer" use="optional" />
+									<xs:attribute name="LabelId" type="xs:string" use="optional" />
+									<xs:attribute name="label" type="xs:string" use="optional" />
+									<xs:attribute name="desc" type="xs:string" use="optional" />
+									<xs:attribute name="ishidden" type="xs:integer" use="optional" />
+									<xs:attribute name="disableSorting" type="xs:integer" use="optional" />
+									<xs:attribute name="disableMetaDataBinding" type="xs:integer" use="optional" />
+									<xs:attribute name="cellType" type="xs:string" />
+									<xs:attribute name="imageproviderwebresource" type="xs:string" />
+									<xs:attribute name="imageproviderfunctionname" type="xs:string" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required" />
+						<xs:attribute name="id" type="xs:string" use="required" />
+						<xs:attribute name="multiobjectidfield" type="xs:string" />
+						<xs:attribute name="layoutstyle" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="select" type="xs:boolean" use="required" />
+			<xs:attribute name="preview" type="BoolOrEmpty" use="required" />
+			<xs:attribute name="icon" type="BoolOrEmpty" use="required" />
+			<xs:attribute name="jump" type="xs:string" use="optional" />
+			<xs:attribute name="object" type="xs:integer" use="required" />
+			<xs:attribute name="disableInlineEditing" type="xs:integer" use="optional" />
+			<xs:attribute name="iconrenderer" type="xs:string" />
+			<xs:attribute name="multilinerows" type="BoolOrEmpty" use="optional" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

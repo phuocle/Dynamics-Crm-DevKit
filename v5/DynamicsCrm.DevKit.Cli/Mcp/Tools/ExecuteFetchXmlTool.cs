@@ -64,7 +64,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "EXAMPLES:\n" +
             "Count accounts: <fetch aggregate='true'><entity name='account'><attribute name='accountid' alias='count' aggregate='count'/></entity></fetch>\n" +
             "Top 5 contacts (use max_records=5): <fetch><entity name='contact'><attribute name='fullname'/><order attribute='fullname'/></entity></fetch>\n" +
-            "Active accounts: <fetch><entity name='account'><attribute name='name'/><filter><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>")]
+            "Active accounts: <fetch><entity name='account'><attribute name='name'/><filter><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>\n\n" +
+
+            "TIPS:\n" +
+            "- For advanced FetchXML syntax or edge cases, read the resource schema://fetchxml for the full XSD schema")]
         public string execute_fetchxml(
             [Description(
                 "The FetchXML query string. Must be valid XML starting with <fetch> root element. " +

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="viewers" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="viewers">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="viewer">
+          <xs:complexType>
+            <xs:attribute name="extension" type="xs:string" use="required"/>
+            <xs:attribute name="handler" type="xs:string" use="optional"/>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

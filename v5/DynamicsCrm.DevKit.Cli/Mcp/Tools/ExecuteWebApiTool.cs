@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "execute_webapi", Title = "Execute any Dataverse Web API request",
-            Destructive = false, ReadOnly = false,
+            ReadOnly = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
             "Execute any Dataverse Web API request. Use this as a fallback when specialized " +
@@ -36,6 +36,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Call custom Actions or Functions\n" +
             "- Read $metadata CSDL schema\n" +
             "- Any Dataverse Web API operation not covered by other tools\n\n" +
+
+            "BLOCKED OPERATIONS (execute_webapi will REJECT these with an error):\n" +
+            "You MUST NOT use execute_webapi to write to these endpoints. " +
+            "The tool will hard-block and return an error if you try.\n" +
+            "- PATCH/PUT/DELETE systemforms(...) → Use update_form tool instead\n" +
+            "- PATCH/PUT/DELETE savedqueries(...) → Use update_view tool instead\n" +
+            "- PATCH/PUT/DELETE userqueries(...) → Use update_view tool instead\n" +
+            "- PATCH/PUT/DELETE sitemaps(...) → Use update_sitemap tool instead (coming soon)\n" +
+            "GET on these endpoints is allowed (reading is safe). " +
+            "POST to create new records is allowed.\n" +
+            "WHY BLOCKED: A malformed FormXML/LayoutXML/SiteMap breaks the UI for ALL users " +
+            "with no undo. Dedicated tools auto-backup, validate XSD, and provide rollback.\n\n" +
 
             "URL PARAMETER:\n" +
             "- Pass relative URL only — SDK handles base URL automatically\n" +
@@ -99,6 +111,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (max_response_lines <= 0)
                 max_response_lines = 200;
+
+            var blockedReason = GetBlockedReason(httpMethod, url.Trim());
+            if (blockedReason != null)
+                return ErrorResult(blockedReason);
 
             try
             {
@@ -166,6 +182,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return ErrorResult($"Error: Web API request failed\nMethod: {method}\nUrl: {url}\nMessage: {ex.Message}");
             }
+        }
+
+        private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
+        [
+            ("systemforms(", "update_form",
+                "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
+            ("savedqueries(", "update_view",
+                "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
+            ("userqueries(", "update_view",
+                "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
+            ("sitemaps(", "update_sitemap (coming soon)",
+                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app.")
+        ];
+
+        private static string GetBlockedReason(HttpMethod method, string url)
+        {
+            if (method == HttpMethod.Get || method == HttpMethod.Post)
+                return null;
+
+            var urlLower = url.ToLowerInvariant();
+            foreach (var (pattern, tool, reason) in BlockedEndpoints)
+            {
+                if (urlLower.Contains(pattern))
+                {
+                    return $"BLOCKED: Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi.\n\n" +
+                           $"REASON: {reason}\n\n" +
+                           $"USE INSTEAD: {tool} — it auto-handles: backup → validate XSD → update → publish → rollback path.\n\n" +
+                           $"If {tool} is not yet available, you MUST manually:\n" +
+                           $"1. GET the current XML first (backup)\n" +
+                           $"2. Validate your changes against the schema resource\n" +
+                           $"3. Save backup to a local file\n" +
+                           $"4. Only then consider using execute_webapi";
+                }
+            }
+
+            return null;
         }
 
         private static HttpMethod ParseHttpMethod(string method)

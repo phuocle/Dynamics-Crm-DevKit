@@ -43,7 +43,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Version: {_serviceClient.ConnectedOrgVersion}";
                 })
                 .WithStdioServerTransport()
-                .WithToolsFromAssembly();
+                .WithToolsFromAssembly()
+                .WithResourcesFromAssembly();
 
             await builder.Build().RunAsync();
         }

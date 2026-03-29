@@ -107,6 +107,17 @@ Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workin
 
 `whoami`, `get_entities_metadata`, `get_entity_metadata`, `get_messages`, `get_global_optionsets`, `get_record`, `get_solution_components`, `execute_fetchxml`, `search`, `create_record`, `update_record`, `delete_record`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `parse_record_url`
 
+### MCP Resources (6)
+
+| URI | Type | Description |
+|-----|------|-------------|
+| `schema://formxml` | XSD | FormXml.xsd — form structure schema |
+| `schema://layoutxml` | XSD | LayoutXml.xsd — view column layout schema |
+| `schema://fetchxml` | XSD | Fetch.xsd — query schema |
+| `schema://sitemapxml` | Markdown + XSD | SiteMap.xsd + SiteMapType.xsd + rules |
+| `docs://instructions_for_formxml` | Markdown | FormXML manipulation rules |
+| `docs://instructions_for_views` | Markdown | View/LayoutXML manipulation rules |
+
 ---
 
 ## VSIX
