@@ -19,16 +19,14 @@ DynamicsCrm.DevKit.Docs\CliBackup\DynamicsCrm.DevKit.Cli.exe
 | Instruction | Action |
 |-------------|--------|
 | Says **LEGACY** | Use CLI Legacy exe path above, read profile to get args |
-| Says nothing / default | Build CLI (`dotnet build`), then run profile |
+| Says nothing / default | Build CLI using `/build-cli` workflow, then run profile |
 
 ---
 
 ## Build CLI Before Running
 
-```powershell
-taskkill /F /IM "DynamicsCrm.DevKit.Cli.exe" 2>$null
-dotnet build --configuration Release "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
-```
+> [!CAUTION]
+> **Do NOT use `dotnet build` directly!** Use the `/build-cli` workflow instead.
 
 ---
 

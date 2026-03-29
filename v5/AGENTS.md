@@ -32,8 +32,28 @@
 
 ## Critical Constraints
 
+> [!CAUTION]
+> **NEVER USE `dotnet build` OR `dotnet test` DIRECTLY!**
+>
+> This project has **dedicated build workflows** that handle configuration, paths, MSBuild selection, and post-build steps correctly. Running `dotnet build` or `dotnet test` manually WILL produce incorrect results, miss steps, or break the build.
+>
+> **ALWAYS use the appropriate workflow command instead:**
+>
+> | Want to build... | Use this workflow | NEVER use |
+> |---|---|---|
+> | CLI (`DynamicsCrm.DevKit.Cli`) | `/build-cli` | ~~`dotnet build DynamicsCrm.DevKit.Cli`~~ |
+> | VSIX (`DynamicsCrm.DevKit`) | `/build-vsix` | ~~`MSBuild DynamicsCrm.DevKit`~~ |
+> | Analyzers (`DynamicsCrm.DevKit.Analyzers`) | `/build-analyzer` | ~~`dotnet build DynamicsCrm.DevKit.Analyzers`~~ |
+> | Tool (`DynamicsCrm.DevKit.Tool`) | `/build-tool` | ~~`dotnet build DynamicsCrm.DevKit.Tool`~~ |
+> | Everything (DEBUG) | `/build-debug` | ~~`dotnet build DynamicsCrm.DevKit.AllInOne.slnx`~~ |
+> | Everything (RELEASE) | `/build-release` | ~~`dotnet build --configuration Release`~~ |
+> | Unit tests | `/unit-test` | ~~`dotnet test`~~ |
+>
+> **If you use `dotnet build` or `dotnet test` directly, you are doing it WRONG. Stop and use the workflow.**
+
 | Rule | Detail |
 |---|---|
+| **NO `dotnet build`** | **NEVER run `dotnet build` or `dotnet test` directly — ALWAYS use `/build-*` or `/unit-test` workflows** |
 | **No Git** | Never commit/push unless explicitly requested |
 | **Default DEBUG** | Use RELEASE only when explicitly requested |
 | **MSBuild for VSIX** | `"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"` |
@@ -147,11 +167,14 @@ Target: .NET Standard 2.0. All inherit `BaseDiagnosticAnalyzer`. Core files in `
 
 ## Tests
 
+> [!CAUTION]
+> **Do NOT run `dotnet test` directly!** Use `/unit-test` workflow instead.
+
 | Type | Framework | Target | Run |
 |---|---|---|---|
-| Analyzer | xUnit | net48 | `dotnet test --framework net48` |
-| CLI | MSTest | net10.0 | `dotnet test --framework net10.0` |
-| All | — | — | `dotnet test DynamicsCrm.DevKit.UnitTests\DynamicsCrm.DevKit.UnitTests.csproj` |
+| Analyzer | xUnit | net48 | `/unit-test` workflow |
+| CLI | MSTest | net10.0 | `/unit-test` workflow |
+| All | — | — | `/unit-test` workflow |
 
 Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClientCode, TestWebResource, TestSolutionPackager, TestReports, TestProxyTypes, etc.)
 
@@ -159,17 +182,20 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 
 ## Build Workflows
 
-| Workflow | Description |
-|----------|-------------|
-| `/build-debug` | Release build evaluating with current date - Build all projects + install CLI locally |
-| `/build-cli` | CLI only - Build and install CLI tool |
-| `/build-vsix` | VSIX only - Build Visual Studio extension |
-| `/build-analyzer` | Analyzers - Build + run analyzer unit tests |
-| `/build-tool` | Tool only - Build Tool package |
-| `/build-release` | Release - Full release build for all projects |
-| `/unit-test` | Run all unit tests + code coverage report |
-| `/clean-all` | Clean all build artifacts |
-| `/create-new-analyzer` | Create a new Roslyn analyzer |
+> [!CAUTION]
+> **STOP! Do NOT use `dotnet build` or `dotnet test`!** Use the workflows below. See [Critical Constraints](#critical-constraints).
+
+| Workflow | Description | Replaces |
+|----------|-------------|----------|
+| `/build-debug` | Build all projects (DEBUG) + install CLI locally | ~~`dotnet build`~~ |
+| `/build-cli` | CLI only - Build and install CLI tool | ~~`dotnet build DynamicsCrm.DevKit.Cli`~~ |
+| `/build-vsix` | VSIX only - Build Visual Studio extension | ~~`MSBuild` direct call~~ |
+| `/build-analyzer` | Analyzers - Build + run analyzer unit tests | ~~`dotnet build DynamicsCrm.DevKit.Analyzers`~~ |
+| `/build-tool` | Tool only - Build Tool package | ~~`dotnet build DynamicsCrm.DevKit.Tool`~~ |
+| `/build-release` | Release - Full release build for all projects | ~~`dotnet build --configuration Release`~~ |
+| `/unit-test` | Run all unit tests + code coverage report | ~~`dotnet test`~~ |
+| `/clean-all` | Clean all build artifacts | - |
+| `/create-new-analyzer` | Create a new Roslyn analyzer | - |
 
 ---
 
