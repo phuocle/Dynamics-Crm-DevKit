@@ -299,7 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var position = GetStringProp(op, "position") ?? "last";
 
             // Parse sections
-            var sections = new List<(string name, string label, int sectionColumns, int tabColumn, List<JsonElement> fields)>();
+            var sections = new List<(string name, string label, int sectionColumns, int tabColumn, bool showLabel, List<JsonElement> fields)>();
             if (op.TryGetProperty("sections", out var secArray) && secArray.ValueKind == JsonValueKind.Array)
             {
                 foreach (var sec in secArray.EnumerateArray())
@@ -307,14 +307,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var secLabel = GetStringProp(sec, "label") ?? "Section";
                     var secName = GetStringProp(sec, "name") ?? AutoSectionName(tabName, secLabel);
                     var secColumns = GetIntProp(sec, "section_columns", 1);
-                    var secTabColumn = GetIntProp(sec, "tab_column", 1);
+                    var secTabColumn = GetIntProp(sec, "tab_column", 0); // 0 = auto-distribute
+                    var secShowLabel = GetBoolProp(sec, "show_label", true);
                     var fields = new List<JsonElement>();
                     if (sec.TryGetProperty("fields", out var fieldsArray) && fieldsArray.ValueKind == JsonValueKind.Array)
                     {
                         foreach (var f in fieldsArray.EnumerateArray())
                             fields.Add(f);
                     }
-                    sections.Add((secName, secLabel, secColumns, secTabColumn, fields));
+                    sections.Add((secName, secLabel, secColumns, secTabColumn, secShowLabel, fields));
                 }
             }
 
@@ -345,14 +346,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 columnElements.Add(col);
             }
 
+            // Collect existing control IDs from the form to avoid duplicates
+            var existingControlIds = CollectExistingControlIds(formDoc);
+
             // Distribute sections to columns
-            foreach (var (secName, secLabel, secColumns, tabColumn, fields) in sections)
+            for (var secIdx = 0; secIdx < sections.Count; secIdx++)
             {
-                var targetColIdx = Math.Min(tabColumn - 1, tabColumns - 1);
+                var (secName, secLabel, secColumns, tabColumn, showLabel, fields) = sections[secIdx];
+                // If tab_column was explicitly set, use it; otherwise auto-distribute round-robin
+                var targetColIdx = tabColumn > 0
+                    ? Math.Min(tabColumn - 1, tabColumns - 1)
+                    : secIdx % tabColumns;
                 targetColIdx = Math.Max(0, targetColIdx);
                 var targetSections = columnElements[targetColIdx].Element("sections");
 
-                var sectionElement = BuildSectionElement(secName, secLabel, secColumns, fields, attrMap, classIdMap);
+                var sectionElement = BuildSectionElement(secName, secLabel, secColumns, fields, attrMap, classIdMap, showLabel, existingControlIds);
                 targetSections.Add(sectionElement);
             }
 
@@ -361,7 +369,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var defaultSection = BuildSectionElement(
                     AutoSectionName(tabName, "default"), label, 1,
-                    new List<JsonElement>(), attrMap, classIdMap);
+                    new List<JsonElement>(), attrMap, classIdMap, true, existingControlIds);
                 columnElements[0].Element("sections").Add(defaultSection);
             }
 
@@ -391,6 +399,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var secName = GetStringProp(op, "name") ?? AutoSectionName(tabName, label);
             var secColumns = GetIntProp(op, "section_columns", 1);
             var tabColumn = GetIntProp(op, "tab_column", 1);
+            var showLabel = GetBoolProp(op, "show_label", true);
             var position = GetStringProp(op, "position") ?? "last";
 
             var fields = new List<JsonElement>();
@@ -420,7 +429,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 columns[targetColIdx].Add(sectionsElement);
             }
 
-            var sectionElement = BuildSectionElement(secName, label, secColumns, fields, attrMap, classIdMap);
+            var sectionElement = BuildSectionElement(secName, label, secColumns, fields, attrMap, classIdMap, showLabel, CollectExistingControlIds(formDoc));
             InsertElement(sectionsElement, sectionElement, position, "section", "name");
 
             return $"add_section: \"{label}\" in tab \"{tabName}\" ({secColumns} column(s), {fields.Count} field(s))";
@@ -467,6 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Build cells for each field
+            var existingControlIds = CollectExistingControlIds(formDoc);
             var cells = new List<XElement>();
             foreach (var fieldEl in fields)
             {
@@ -479,7 +489,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ?? attr.DisplayName?.UserLocalizedLabel?.Label
                     ?? fieldName;
 
-                var cell = BuildCellElement(fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel);
+                var controlId = DeduplicateControlId(fieldName, existingControlIds);
+                var cell = BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel);
                 cells.Add(cell);
             }
 
@@ -513,11 +524,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private XElement BuildSectionElement(string name, string label, int sectionColumns,
             List<JsonElement> fields, Dictionary<string, AttributeMetadata> attrMap,
-            Dictionary<string, string> classIdMap)
+            Dictionary<string, string> classIdMap, bool showLabel, HashSet<string> existingControlIds)
         {
             var section = new XElement("section",
                 new XAttribute("name", name),
-                new XAttribute("showlabel", "true"),
+                new XAttribute("showlabel", showLabel ? "true" : "false"),
                 new XAttribute("id", NewGuid()),
                 new XAttribute("columns", sectionColumns.ToString()),
                 new XAttribute("celllabelposition", "Left"),
@@ -543,7 +554,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         ?? attr.DisplayName?.UserLocalizedLabel?.Label
                         ?? fieldName;
 
-                    cells.Add(BuildCellElement(fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel));
+                    var controlId = DeduplicateControlId(fieldName, existingControlIds);
+                    cells.Add(BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel));
                 }
 
                 var rows = BuildRows(cells, sectionColumns);
@@ -555,7 +567,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return section;
         }
 
-        private static XElement BuildCellElement(string fieldName, string label, string classid,
+        private static XElement BuildCellElement(string controlId, string fieldName, string label, string classid,
             bool disabled, bool visible, int colspan, int rowspan, bool showlabel)
         {
             var cell = new XElement("cell",
@@ -576,7 +588,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     new XAttribute("languagecode", "1033"))));
 
             var control = new XElement("control",
-                new XAttribute("id", fieldName),
+                new XAttribute("id", controlId),
                 new XAttribute("classid", $"{{{classid}}}"),
                 new XAttribute("datafieldname", fieldName));
 
@@ -591,6 +603,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             return new XElement("cell",
                 new XAttribute("id", NewGuid()));
+        }
+
+        /// <summary>
+        /// Collects all existing control IDs from the form to detect duplicates.
+        /// </summary>
+        private static HashSet<string> CollectExistingControlIds(XDocument formDoc)
+        {
+            var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var control in formDoc.Descendants("control"))
+            {
+                var id = control.Attribute("id")?.Value;
+                if (!string.IsNullOrEmpty(id))
+                    ids.Add(id);
+            }
+            return ids;
+        }
+
+        /// <summary>
+        /// Returns a unique control ID. If the fieldName already exists, appends 1, 2, 3... until unique.
+        /// Also adds the returned ID to the set so subsequent calls in the same batch detect it.
+        /// </summary>
+        private static string DeduplicateControlId(string fieldName, HashSet<string> existingIds)
+        {
+            if (!existingIds.Contains(fieldName))
+            {
+                existingIds.Add(fieldName);
+                return fieldName;
+            }
+
+            var suffix = 1;
+            while (existingIds.Contains($"{fieldName}{suffix}"))
+                suffix++;
+
+            var uniqueId = $"{fieldName}{suffix}";
+            existingIds.Add(uniqueId);
+            return uniqueId;
         }
 
         private static List<XElement> BuildRows(List<XElement> cells, int sectionColumns)
@@ -635,7 +683,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 BooleanAttributeMetadata => ControlClassId.TWO_OPTIONS_2,
                 PicklistAttributeMetadata => ControlClassId.STATE_CODE,
                 StateAttributeMetadata => ControlClassId.STATE_CODE,
-                StatusAttributeMetadata => ControlClassId.STATUS_CODE,
+                StatusAttributeMetadata => ControlClassId.STATE_CODE,
                 DoubleAttributeMetadata => ControlClassId.FLOATING_POINT_NUMBER,
                 DecimalAttributeMetadata => ControlClassId.DECIMAL_NUMBER,
                 MoneyAttributeMetadata => ControlClassId.CURRENCY,
