@@ -159,6 +159,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public bool Published { get; set; }
     }
 
+    internal sealed class BuildFormXmlResult
+    {
+        [JsonPropertyName("entity")]
+        public string Entity { get; set; }
+
+        [JsonPropertyName("formId")]
+        public string FormId { get; set; }
+
+        [JsonPropertyName("formName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormName { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("operationsCount")]
+        public int OperationsCount { get; set; }
+
+        [JsonPropertyName("fieldsResolved")]
+        public int FieldsResolved { get; set; }
+
+        [JsonPropertyName("formXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormXml { get; set; }
+    }
+
     internal sealed class UpdateViewResult
     {
         [JsonPropertyName("action")]
