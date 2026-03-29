@@ -21,7 +21,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "search", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "search", Title = "Dataverse Relevance Search",
+            Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Perform a Dataverse Relevance Search (full-text search) across one or more entities. " +
             "Returns matching records ranked by relevance score.\n\n" +

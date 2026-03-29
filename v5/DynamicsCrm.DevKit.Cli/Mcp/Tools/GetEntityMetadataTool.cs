@@ -17,7 +17,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_entity_metadata", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_entity_metadata", Title = "Get detailed metadata for one table",
+            Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve full metadata for a single Dataverse entity/table. " +
             "Call this BEFORE writing FetchXML to discover correct attribute names and relationships. " +

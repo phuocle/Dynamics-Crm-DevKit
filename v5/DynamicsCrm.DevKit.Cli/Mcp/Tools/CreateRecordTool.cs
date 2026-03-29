@@ -19,7 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "create_record", Destructive = false, ReadOnly = false,
+        [McpServerTool(Name = "create_record", Title = "Create a new record",
+            Destructive = false, ReadOnly = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Create a new record in a Dataverse table. Returns the new record's GUID on success.\n\n" +

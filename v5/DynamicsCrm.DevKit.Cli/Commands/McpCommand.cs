@@ -2,9 +2,13 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.ConnectionBuilder;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using ModelContextProtocol.Server;
 using Spectre.Console.Cli;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +25,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 if (settings.SetupGuide)
                 {
                     PrintSetupGuide();
+                    return 0;
+                }
+
+                if (settings.ListTools)
+                {
+                    PrintTools();
                     return 0;
                 }
 
@@ -151,6 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
         private void PrintSetupGuide()
         {
+            var tools = GetMcpToolInfos();
             Console.WriteLine("=========================================================================");
             Console.WriteLine(" DevKit MCP Setup Guide");
             Console.WriteLine("=========================================================================");
@@ -170,20 +181,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   DEVKIT_PASSWORD      : Password");
             Console.WriteLine("   DEVKIT_DOMAIN        : Domain");
             Console.WriteLine();
-            Console.WriteLine("3. AVAILABLE TOOLS (12 Tools)");
+            Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   - whoami                     : Get current user identity, roles & environment info");
-            Console.WriteLine("   - get_entities_metadata      : List all tables in environment");
-            Console.WriteLine("   - get_entity_metadata        : Get detailed metadata for one table");
-            Console.WriteLine("   - get_global_optionsets      : Get global choices/optionsets");
-            Console.WriteLine("   - get_messages               : Discover Dataverse SDK messages/APIs");
-            Console.WriteLine("   - get_solution_components    : List all components inside a solution");
-            Console.WriteLine("   - execute_fetchxml           : Query data using FetchXML");
-            Console.WriteLine("   - search                     : Dataverse Relevance Search");
-            Console.WriteLine("   - get_record                 : Retrieve a single record by ID");
-            Console.WriteLine("   - create_record              : Create a new record");
-            Console.WriteLine("   - update_record              : Update an existing record");
-            Console.WriteLine("   - delete_record              : Delete a record");
+            foreach (var tool in tools)
+            {
+                Console.WriteLine($"   - {tool.Name,-30}: {tool.Title}");
+            }
             Console.WriteLine();
             Console.WriteLine("4. MCP.JSON CONFIGURATION EXAMPLES");
             Console.WriteLine("-------------------------------------------------------------------------");
@@ -207,5 +210,97 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("   Same as above, placed in: C:\\Users\\[User]\\.gemini\\antigravity\\mcp_config.json");
             Console.WriteLine("=========================================================================");
         }
+
+        private static void PrintTools()
+        {
+            var tools = GetMcpToolInfos();
+            var categories = new[]
+            {
+                "Metadata Discovery",
+                "Query & Read",
+                "Data Operations",
+                "Advanced"
+            };
+
+            Console.WriteLine();
+            Console.WriteLine($"DevKit MCP Tools ({tools.Count})");
+            Console.WriteLine("=========================================================================");
+
+            var index = 1;
+            foreach (var category in categories)
+            {
+                var categoryTools = tools.Where(t => t.Category == category).ToList();
+                if (categoryTools.Count == 0) continue;
+
+                Console.WriteLine();
+                Console.WriteLine($"  {category}");
+                Console.WriteLine("  -------------------------------------------------------------------------");
+                foreach (var tool in categoryTools)
+                {
+                    Console.WriteLine($"  {index,3}. {tool.Name,-25} - {tool.Title}");
+                    index++;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("=========================================================================");
+            Console.WriteLine("Run 'devkit mcp --setup-guide' for full configuration guide.");
+        }
+
+        private static List<McpToolInfo> GetMcpToolInfos()
+        {
+            var results = new List<McpToolInfo>();
+            var assembly = Assembly.GetExecutingAssembly();
+            var toolTypes = assembly.GetTypes()
+                .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null);
+
+            foreach (var type in toolTypes)
+            {
+                foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
+                {
+                    var toolAttr = method.GetCustomAttribute<McpServerToolAttribute>();
+                    if (toolAttr == null) continue;
+
+                    var name = toolAttr.Name ?? method.Name;
+                    var title = toolAttr.Title ?? name;
+                    var readOnly = toolAttr.ReadOnly;
+                    var destructive = toolAttr.Destructive;
+
+                    var category = GetCategory(name, readOnly, destructive);
+                    results.Add(new McpToolInfo(name, title, category));
+                }
+            }
+
+            var categoryOrder = new Dictionary<string, int>
+            {
+                ["Metadata Discovery"] = 0,
+                ["Query & Read"] = 1,
+                ["Data Operations"] = 2,
+                ["Advanced"] = 3
+            };
+
+            return results
+                .OrderBy(t => categoryOrder.TryGetValue(t.Category, out var order) ? order : 99)
+                .ThenBy(t => t.Name)
+                .ToList();
+        }
+
+        private static string GetCategory(string name, bool readOnly, bool destructive)
+        {
+            if (readOnly)
+            {
+                var metadataNames = new HashSet<string>
+                {
+                    "whoami", "get_entities_metadata", "get_entity_metadata",
+                    "get_global_optionsets", "get_messages", "get_solution_components"
+                };
+                return metadataNames.Contains(name) ? "Metadata Discovery" : "Query & Read";
+            }
+            if (name == "execute_webapi" || name == "publish_customizations")
+                return "Advanced";
+            return "Data Operations";
+        }
+
+        private record McpToolInfo(string Name, string Title, string Category);
     }
 }

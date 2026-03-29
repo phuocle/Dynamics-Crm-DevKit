@@ -18,7 +18,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_global_optionsets", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_global_optionsets", Title = "Get global choices/optionsets",
+            Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve global option sets (choices/picklists) from Dataverse metadata.\n\n" +
 

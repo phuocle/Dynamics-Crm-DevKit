@@ -108,6 +108,7 @@ namespace DynamicsCrm.DevKit.Cli
 
                     config.AddCommand<McpCommand>("mcp")
                           .WithDescription("Start MCP server for AI agent integration")
+                          .WithExample(new[] { "mcp", "--tools" })
                           .WithExample(new[] { "mcp", "--setup-guide" })
                           .WithExample(new[] { "mcp", "--auth", "ClientSecret", "--url", "https://org.crm.dynamics.com", "--clientid", "APP_ID", "--clientsecret", "SECRET" })
                           .WithExample(new[] { "mcp", "--auth", "FromPac", "--pacprofile", "default" })

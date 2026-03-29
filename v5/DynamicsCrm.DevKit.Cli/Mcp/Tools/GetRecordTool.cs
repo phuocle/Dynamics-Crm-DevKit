@@ -21,7 +21,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_record", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_record", Title = "Retrieve a single record by ID",
+            Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve a single Dataverse record by entity name and record ID. " +
             "Returns the record's fields as a markdown table.\n\n" +

@@ -76,7 +76,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_solution_components", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_solution_components", Title = "List all components inside a solution",
+            Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List all components inside a Dataverse solution. " +
             "Accepts either the solution unique name (logical name) or display name — " +

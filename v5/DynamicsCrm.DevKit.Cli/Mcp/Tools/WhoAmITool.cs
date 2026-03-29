@@ -23,7 +23,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "whoami", Idempotent = true, Destructive = false, ReadOnly = true,
+        [McpServerTool(Name = "whoami", Title = "Get current user identity & environment info",
+            Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(WhoAmIResult)),
         Description(
             "Get the identity of the currently authenticated user, environment info, and access token.\n\n" +

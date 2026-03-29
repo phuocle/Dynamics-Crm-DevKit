@@ -17,7 +17,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_messages", Idempotent = true, Destructive = false, ReadOnly = true),
+        [McpServerTool(Name = "get_messages", Title = "Discover Dataverse SDK messages & APIs",
+            Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Discover SDK messages, Custom Actions, and Custom APIs available for a Dataverse entity. " +
             "Returns a markdown report with counts and categorized message lists.\n\n" +

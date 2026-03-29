@@ -19,7 +19,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_record", Destructive = false, ReadOnly = false,
+        [McpServerTool(Name = "update_record", Title = "Update an existing record",
+            Destructive = false, ReadOnly = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Update an existing record in a Dataverse table. Only the fields included in fields_json will be updated; " +

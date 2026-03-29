@@ -18,7 +18,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "delete_record", Destructive = true, ReadOnly = false,
+        [McpServerTool(Name = "delete_record", Title = "Delete a record",
+            Destructive = true, ReadOnly = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Delete a record from a Dataverse table by its GUID.\n\n" +
