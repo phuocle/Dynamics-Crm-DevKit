@@ -214,7 +214,7 @@ Only update if the new tool requires new environment variables or connection par
 
 ---
 
-## Step 7: Build and Verify
+## Step 7: Build and Install CLI as Global Tool
 
 > [!CAUTION]
 > **NEVER** run `dotnet build` or `dotnet pack` directly.
@@ -227,19 +227,31 @@ Run `/claude-build-cli` and verify:
 
 ---
 
-## Step 8: Test the Tool
+## Step 8: Production Runtime Test (MANDATORY)
 
-Test the new tool using the MCP stdio protocol. Create a test call:
+> [!CAUTION]
+> **This step is MANDATORY — do NOT skip it.**
+> The purpose is to verify the tool works in the **real installed `devkit` CLI** (the global tool installed by `/claude-build-cli` in Step 7), NOT just that the code compiles.
+> This catches issues that a `dotnet build` alone cannot: DI registration, serialization, ServiceClient wiring, MCP protocol compliance, etc.
+
+### How to test
+
+Use the **installed `devkit` CLI** (global tool) to run the MCP server and invoke the new tool via MCP stdio protocol:
 
 ```json
 {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"{snake_case_name}","arguments":{...}}}
 ```
 
-Verify:
-- Tool executes without errors
+### What to verify
+
+- Tool executes without errors on the **installed global `devkit mcp`** runtime
 - Output uses compact format (Key-Value or TSV, NOT Markdown)
 - Structured content is present (if applicable)
 - Error handling works (test with invalid parameters)
+
+### Why this matters
+
+`/claude-build-cli` builds, packs, and installs the CLI as a .NET global tool. This step ensures the new MCP tool works end-to-end in that installed runtime — the same runtime users and AI agents will use in production. A passing `dotnet build` only proves compilation; this step proves the tool actually works.
 
 ---
 
@@ -264,6 +276,6 @@ This ensures the tool's design spec is preserved with the project documentation.
 - [ ] Tool count updated in `SpectreLog.cs` (2 places)
 - [ ] Tool count and name updated in `AGENTS.md` (2 places)
 - [ ] `/claude-build-cli` succeeded with 0 errors
-- [ ] Tool tested via MCP stdio and output verified
+- [ ] **Production runtime test**: tool tested via **installed `devkit mcp`** (global tool) and output verified
 - [ ] Spec file saved to `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp\`
 - [ ] `Const.cs` is clean (still has `x.xx.xx.xx` placeholder)
