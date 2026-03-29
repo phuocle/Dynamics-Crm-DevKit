@@ -364,11 +364,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
-            else if (!string.IsNullOrEmpty(Arg.WebResource))
-            {
-                SpectreLog.ActionError($"Web resource '{Arg.WebResource}' not found.");
-                return;
-            }
             var fileContent = Convert.ToBase64String(await FileHelper.ReadAllBytesAsync(webResourceFile.file));
             if (fileContent == content)
             {
