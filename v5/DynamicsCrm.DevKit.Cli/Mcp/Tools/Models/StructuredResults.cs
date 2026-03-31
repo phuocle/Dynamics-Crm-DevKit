@@ -127,6 +127,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
     internal sealed class UpdateFormResult
     {
+        [JsonPropertyName("action")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Action { get; set; }
+
         [JsonPropertyName("entity")]
         public string Entity { get; set; }
 

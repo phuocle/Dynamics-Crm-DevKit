@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
             "Execute any Dataverse Web API request. Use this as a fallback when specialized " +
-            "tools (execute_fetchxml, get_entity_metadata, create_record, update_record) " +
+            "tools (execute_fetchxml, get_entity_metadata, upsert_record) " +
             "don't cover your use case.\n\n" +
 
             "WHEN TO USE:\n" +
