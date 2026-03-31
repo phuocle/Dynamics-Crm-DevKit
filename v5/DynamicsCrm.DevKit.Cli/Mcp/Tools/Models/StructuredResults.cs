@@ -161,6 +161,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
+
+        [JsonPropertyName("restoredFromBackup")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RestoredFromBackup { get; set; }
     }
 
     internal sealed class BuildFormXmlResult
