@@ -193,6 +193,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string FormXml { get; set; }
     }
 
+    internal sealed class CreateEntityResult
+    {
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("displayCollectionName")]
+        public string DisplayCollectionName { get; set; }
+
+        [JsonPropertyName("schemaName")]
+        public string SchemaName { get; set; }
+
+        [JsonPropertyName("ownershipType")]
+        public string OwnershipType { get; set; }
+
+        [JsonPropertyName("primaryAttributeName")]
+        public string PrimaryAttributeName { get; set; }
+
+        [JsonPropertyName("primaryAttributeDisplayName")]
+        public string PrimaryAttributeDisplayName { get; set; }
+
+        [JsonPropertyName("primaryAttributeMaxLength")]
+        public int PrimaryAttributeMaxLength { get; set; }
+
+        [JsonPropertyName("metadataId")]
+        public string MetadataId { get; set; }
+
+        [JsonPropertyName("entitySetName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntitySetName { get; set; }
+
+        [JsonPropertyName("solutionName")]
+        public string SolutionName { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+    }
+
     internal sealed class UpdateViewResult
     {
         [JsonPropertyName("action")]
