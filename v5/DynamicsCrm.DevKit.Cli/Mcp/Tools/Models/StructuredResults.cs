@@ -236,6 +236,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Status { get; set; }
     }
 
+    internal sealed class UpdateSiteMapResult
+    {
+        [JsonPropertyName("action")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Action { get; set; }
+
+        [JsonPropertyName("appModuleId")]
+        public string AppModuleId { get; set; }
+
+        [JsonPropertyName("appName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AppName { get; set; }
+
+        [JsonPropertyName("siteMapId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SiteMapId { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("validated")]
+        public bool Validated { get; set; }
+
+        [JsonPropertyName("validationErrors")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> ValidationErrors { get; set; }
+
+        [JsonPropertyName("validationWarnings")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> ValidationWarnings { get; set; }
+
+        [JsonPropertyName("backupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string BackupPath { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("restoredFromBackup")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RestoredFromBackup { get; set; }
+    }
+
     internal sealed class UpdateViewResult
     {
         [JsonPropertyName("action")]
