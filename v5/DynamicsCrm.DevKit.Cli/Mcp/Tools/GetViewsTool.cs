@@ -220,6 +220,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             sb.AppendLine();
 
+            // Quick Find: extract Find Columns (search columns) before showing raw XML
+            if (qt == 4 && !string.IsNullOrEmpty(fetchXml))
+            {
+                try
+                {
+                    var fetchDoc = XDocument.Parse(fetchXml);
+                    var qfFilter = fetchDoc.Descendants("filter")
+                        .FirstOrDefault(f => f.Attribute("isquickfindfields")?.Value == "1");
+
+                    if (qfFilter != null)
+                    {
+                        var findColumns = qfFilter.Elements("condition")
+                            .Select(c => c.Attribute("attribute")?.Value)
+                            .Where(a => a != null)
+                            .ToList();
+
+                        if (findColumns.Count > 0)
+                        {
+                            sb.AppendLine($"[FindColumns] {findColumns.Count} fields (searched when user types in search bar)");
+                            foreach (var col in findColumns)
+                                sb.AppendLine($"  {col}");
+                            sb.AppendLine();
+                        }
+                    }
+                }
+                catch
+                {
+                    // Silently skip if FetchXML can't be parsed
+                }
+            }
+
             if (!string.IsNullOrEmpty(fetchXml))
             {
                 sb.AppendLine("[FetchXML]");

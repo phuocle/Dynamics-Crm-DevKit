@@ -31,6 +31,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 3. Call publish_customizations for the entity
 4. Verify form loads correctly in the browser
 
+## CRITICAL: Verify Field Names Before Modifying Forms
+- Before adding ANY field to a form, you MUST call `get_entity_metadata` first to verify the field's logical name exists on the entity.
+- Do NOT guess or assume field names. User-provided names may not match the actual logical name (e.g., ""fpt site"" could be ""ftpsiteurl"", ""websiteurl"", or a custom field with a publisher prefix).
+- After calling `get_entity_metadata`, search the attributes list for the field by display name or logical name to find the exact match.
+- If the field does not exist, inform the user and list similar fields as suggestions.
+
 ## Before Making Changes
 - Always read the current FormXML using get_forms with the specific form_id
 - Understand the existing structure before modifying
@@ -112,10 +118,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
   Without backup, you may need to restore the entire environment.
 
 ## Rollback Procedure (If View Breaks)
-1. Read the backup file contents
-2. PATCH /savedqueries({viewid}) with body: {""fetchxml"": ""<original>"", ""layoutxml"": ""<original>""}
-3. Call publish_customizations for the entity
-4. Verify view loads correctly in the browser
+1. Call update_view with action='undo', view_id, layoutxml=<layout backup file path>, fetchxml=<fetch backup file path>
+2. Tool auto-handles: read backups > validate > restore > publish (no new backup created)
+3. The backup file paths are returned in every update/rename response
+4. Backup files are at: {working_directory}/.devkit/backups/views/
+
+## CRITICAL: Verify Field Names Before Modifying Views
+- Before adding ANY field to a view (FetchXML, LayoutXML, or Quick Find columns), you MUST call `get_entity_metadata` first to verify the field's logical name exists on the entity.
+- Do NOT guess or assume field names. User-provided names like ""fpt site"" may not match the actual logical name (e.g., it could be ""ftpsiteurl"", ""websiteurl"", or a custom field with a publisher prefix).
+- After calling `get_entity_metadata`, search the attributes list for the field by display name or logical name to find the exact match.
+- If the field does not exist, inform the user and list similar fields as suggestions.
+- This prevents failed updates due to invalid field names and avoids wasting backup/restore cycles.
 
 ## Structure
 A view has TWO XML parts that must be kept in sync:
@@ -157,9 +170,65 @@ A view has TWO XML parts that must be kept in sync:
 - Column widths are in pixels
 - Standard column widths: 100 (narrow), 150 (medium), 200 (wide), 300 (extra wide)
 
+## Quick Find Views (querytype=4) -- Find Columns
+
+Quick Find views have THREE types of columns:
+1. **View columns** -- `<attribute>` elements in FetchXML -> shown in grid results
+2. **Find columns** -- `<filter isquickfindfields=""1"">` -> searched when user types in search bar
+3. **Filter columns** -- `<filter type=""and"">` -> pre-filter records (e.g., statecode=Active)
+
+Find columns and View columns are INDEPENDENT. A field can be a Find column without being a View column.
+
+### Find Column Structure (isquickfindfields)
+```xml
+<filter type=""or"" isquickfindfields=""1"">
+  <condition attribute=""name"" operator=""like"" value=""{0}"" />
+  <condition attribute=""emailaddress1"" operator=""like"" value=""{0}"" />
+  <condition attribute=""telephone1"" operator=""like"" value=""{0}"" />
+</filter>
+```
+
+### Supported Find Column Types
+Any field type can be added as a Quick Find Find Column. Dataverse does NOT restrict column types
+for the isquickfindfields filter. All column types (String, Memo, Lookup, Picklist, Integer, Money,
+DateTime, Boolean, etc.) can be used as Find Columns.
+
+### Quick Find Rules
+- Find columns use `operator=""like""` with `value=""{0}""` (placeholder for user input)
+- The filter MUST have `type=""or""` and `isquickfindfields=""1""`
+- NEVER remove the `isquickfindfields` filter -- it disables search entirely
+- To add a Find column: add a `<condition>` inside the `isquickfindfields` filter
+- To remove a Find column: remove the `<condition>` (keep at least one)
+- Keep only essential fields as Find columns for better search performance
+
+### Quick Find FetchXML Example
+```xml
+<fetch version=""1.0"" output-format=""xml-platform"" mapping=""logical"">
+  <entity name=""account"">
+    <attribute name=""name"" />
+    <attribute name=""accountnumber"" />
+    <attribute name=""telephone1"" />
+    <attribute name=""accountid"" />
+    <order attribute=""name"" descending=""false"" />
+    <filter type=""and"">
+      <condition attribute=""statecode"" operator=""eq"" value=""0"" />
+    </filter>
+    <filter type=""or"" isquickfindfields=""1"">
+      <condition attribute=""name"" operator=""like"" value=""{0}"" />
+      <condition attribute=""accountnumber"" operator=""like"" value=""{0}"" />
+      <condition attribute=""emailaddress1"" operator=""like"" value=""{0}"" />
+      <condition attribute=""telephone1"" operator=""like"" value=""{0}"" />
+    </filter>
+  </entity>
+</fetch>
+```
+
+Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/quick-find
+
 ## After Making Changes
 - Use the dedicated update_view tool (NOT execute_webapi) to apply changes
 - update_view auto-handles: backup > validate > sync-check > update > publish
+- If something breaks: use action='undo' with the backup file paths from the response
 - Verify the view loads correctly in the browser
 ";
     }

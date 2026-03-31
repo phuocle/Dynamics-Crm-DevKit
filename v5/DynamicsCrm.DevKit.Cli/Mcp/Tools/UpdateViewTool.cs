@@ -33,20 +33,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_view", Title = "Update, create, or rename a view with backup, sync validation & publish",
+        [McpServerTool(Name = "update_view", Title = "Update, create, rename, or undo a view with backup, sync validation & publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpdateViewResult)),
         Description(
-            "Update, create, or rename a Dataverse view (saved query) with automatic backup, " +
+            "Update, create, rename, or undo a Dataverse view (saved query) with automatic backup, " +
             "sync validation, and publishing.\n\n" +
 
-            "THREE ACTIONS (controlled by 'action' parameter):\n" +
+            "FOUR ACTIONS (controlled by 'action' parameter):\n" +
             "- 'update' (default): Modify LayoutXML/FetchXML of an existing view. " +
             "Requires view_id + layoutxml.\n" +
             "- 'create': Create a new Public view. " +
             "Requires view_name + entity_name + layoutxml. view_id is ignored.\n" +
             "- 'rename': Change a view's display name. " +
-            "Requires view_id + view_name + entity_name. layoutxml is ignored.\n\n" +
+            "Requires view_id + view_name + entity_name. layoutxml is ignored.\n" +
+            "- 'undo': Restore a view from backup files. " +
+            "Requires view_id + layoutxml (= path to layout .bak file). " +
+            "fetchxml = path to fetch .bak file (optional, omit to restore layout only). " +
+            "Skips backup (no need). Still validates XSD.\n\n" +
 
             "PARAMETERS:\n" +
             "- action: 'update' (default), 'create', or 'rename'.\n" +
@@ -81,6 +85,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "2. Call update_view with action='rename', view_id, and view_name\n" +
             "3. Tool auto-handles: duplicate check > backup > rename > publish\n\n" +
 
+            "WORKFLOW FOR 'undo':\n" +
+            "1. Call update_view with action='undo', view_id, layoutxml=<layout backup file path>, " +
+            "fetchxml=<fetch backup file path>\n" +
+            "2. Tool auto-handles: read backups > validate > restore > publish (no new backup)\n" +
+            "3. The backup file paths are returned in every update/rename response\n\n" +
+
             "CRITICAL SYNC RULE (applies to 'update' and 'create'):\n" +
             "A view has TWO XML parts that MUST stay in sync:\n" +
             "- Every <attribute name=\"X\"> in FetchXML MUST have a <cell name=\"X\"> in LayoutXML\n" +
@@ -109,10 +119,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
         public CallToolResult update_view(
             [Description(
-                "Action to perform: 'update' (default), 'create' (new view), or 'rename' (change name). " +
+                "Action to perform: 'update' (default), 'create' (new view), 'rename' (change name), " +
+                "or 'undo' (restore from backup). " +
                 "For 'update': modifies LayoutXML/FetchXML of existing view (requires view_id + layoutxml). " +
                 "For 'create': creates a new Public view (requires view_name + layoutxml; view_id is ignored). " +
-                "For 'rename': changes the view name (requires view_id + view_name; layoutxml is ignored)."
+                "For 'rename': changes the view name (requires view_id + view_name; layoutxml is ignored). " +
+                "For 'undo': restores view from backup files (requires view_id + layoutxml as layout backup path; " +
+                "fetchxml as fetch backup path is optional)."
             )] string action = "update",
             [Description(
                 "Entity logical name (always lowercase). " +
@@ -132,6 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "The new LayoutXML content defining column order and widths in the grid. " +
                 "Required for 'update' and 'create' actions. Ignored for 'rename'. " +
+                "For 'undo': the file path to the layout backup .bak file. " +
                 "Must be valid XML. The tool will strip any XML declaration before writing."
             )] string layoutxml = "",
             [Description(
@@ -139,6 +153,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "For 'update': leave empty to keep existing FetchXML unchanged. " +
                 "For 'create': leave empty to auto-generate a default FetchXML for the entity. " +
                 "Ignored for 'rename'. " +
+                "For 'undo': the file path to the fetch backup .bak file (optional, omit to restore layout only). " +
                 "If provided, must be valid XML. The tool will strip any XML declaration before writing."
             )] string fetchxml = "",
             [Description(
@@ -148,7 +163,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool validate = true,
             [Description(
                 "Save current XMLs to local backup before overwriting (default: true). " +
-                "Applies to 'update' and 'rename' actions. " +
+                "Applies to 'update' and 'rename' actions. Ignored for 'undo' (always skipped). " +
                 "Strongly recommended to keep true. If backup fails, operation is BLOCKED (fail-safe)."
             )] bool backup = true,
             [Description(
@@ -176,6 +191,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
                         return RenameView(entityName, renameId, view_name, backup, auto_publish);
 
+                    case "undo":
+                        if (string.IsNullOrWhiteSpace(view_id))
+                            return ErrorResult("Error: view_id is required for 'undo' action.");
+                        if (!Guid.TryParse(view_id.Trim(), out var undoId))
+                            return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
+                        if (string.IsNullOrWhiteSpace(layoutxml))
+                            return ErrorResult("Error: layoutxml (layout backup file path) is required for 'undo' action.");
+                        return UndoView(entityName, undoId, layoutxml.Trim(), string.IsNullOrWhiteSpace(fetchxml) ? null : fetchxml.Trim(), validate, auto_publish);
+
                     default: // "update"
                         if (string.IsNullOrWhiteSpace(view_id))
                             return ErrorResult("Error: view_id is required for 'update' action.");
@@ -186,12 +210,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return UpdateViewXml(entityName, updateId, layoutxml, fetchxml, validate, backup, auto_publish);
                 }
             }
-            catch (Exception ex)
+            catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
             {
+                var fault = fex.Detail;
+                var errorDetail = fault != null
+                    ? $"{fault.Message} (ErrorCode: 0x{fault.ErrorCode:X8})"
+                    : fex.Message;
+                if (fault?.InnerFault != null)
+                    errorDetail += $" → InnerFault: {fault.InnerFault.Message}";
+
                 return ErrorResult(
                     $"[Error] View {actionName} failed\n" +
                     $"Entity: {entityName}\n" +
-                    $"Message: {ex.Message}");
+                    $"Message: {errorDetail}");
+            }
+            catch (Exception ex)
+            {
+                var errorDetail = ex.InnerException != null
+                    ? $"{ex.Message} → {ex.InnerException.Message}"
+                    : ex.Message;
+
+                return ErrorResult(
+                    $"[Error] View {actionName} failed\n" +
+                    $"Entity: {entityName}\n" +
+                    $"Message: {errorDetail}");
             }
         }
 
@@ -258,6 +300,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var syncErrors = ValidateSync(effectiveFetchXml, newLayoutXml);
                 allErrors.AddRange(syncErrors);
 
+                // Quick Find validation: check isquickfindfields preservation and field types
+                var queryType = currentView.GetAttributeValue<int>("querytype");
+                if (queryType == 4 && newFetchXml != null)
+                {
+                    var qfErrors = ValidateQuickFindPreservation(currentFetchXml, newFetchXml);
+                    allErrors.AddRange(qfErrors);
+                }
+
                 if (allErrors.Count > 0)
                 {
                     var sb = new StringBuilder(512);
@@ -292,14 +342,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Step 4: Update view record
-            var update = new Entity("savedquery", viewId);
+            // Step 4: Validate FetchXML via Dataverse (server-side validation)
+            if (validate && newFetchXml != null)
+            {
+                var fetchValidationError = ValidateFetchXmlExpression(newFetchXml);
+                if (fetchValidationError != null)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[ViewUpdate] BLOCKED — FetchXML validation failed (server-side)");
+                    sb.AppendLine($"ViewId: {viewId}");
+                    sb.AppendLine($"Error: {fetchValidationError}");
+                    sb.AppendLine($"Tip: Fix the FetchXML and retry.");
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        {
+                            Action = "updated", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                            Status = "blocked_validation", Validated = true,
+                            ValidationErrors = [fetchValidationError],
+                            FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
+                        })
+                    };
+                }
+            }
+
+            // Step 5: Update view record
+            var isPersonalView = currentView.LogicalName == "userquery";
+            var update = new Entity(currentView.LogicalName, viewId);
             update["layoutxml"] = newLayoutXml;
             if (newFetchXml != null)
                 update["fetchxml"] = newFetchXml;
+            if (!isPersonalView)
+                update["returnedtypecode"] = returnedTypeCode;
             _serviceClient.Update(update);
 
-            // Step 5: Publish
+            // Step 6: Publish
             var published = TryPublish(returnedTypeCode, auto_publish);
 
             if (auto_publish && !published)
@@ -323,7 +402,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
             }
 
-            // Step 6: Return success
+            // Step 7: Return success
             {
                 var sb = BuildSuccessText(entityName, viewId, viewName, fetchBackupPath, layoutBackupPath,
                     validate, newFetchXml != null, published);
@@ -507,7 +586,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Step 4: Rename
-            var update = new Entity("savedquery", viewId)
+            var update = new Entity(currentView.LogicalName, viewId)
             {
                 ["name"] = viewName
             };
@@ -545,7 +624,277 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
+        // ── Action: undo ───────────────────────────────────────────────────
+
+        private CallToolResult UndoView(string entityName, Guid viewId,
+            string layoutBackupPath, string fetchBackupPath, bool validate, bool auto_publish)
+        {
+            // Step 1: Read layout backup file (required)
+            if (!File.Exists(layoutBackupPath))
+                return ErrorResult(
+                    $"[Error] Layout backup file not found\n" +
+                    $"Path: {layoutBackupPath}\n" +
+                    $"Tip: Check the file path. Backup files are at: .devkit/backups/views/");
+
+            string restoredLayoutXml;
+            try
+            {
+                var layoutContent = File.ReadAllText(layoutBackupPath, Encoding.UTF8);
+                var strippedLayout = StripXmlComments(layoutContent);
+                if (string.IsNullOrWhiteSpace(strippedLayout))
+                    return ErrorResult(
+                        $"[Error] Layout backup file is empty (no LayoutXML content)\n" +
+                        $"Path: {layoutBackupPath}\n" +
+                        $"Tip: This backup has no LayoutXML to restore. Try an earlier backup.");
+                var layoutDoc = XDocument.Parse(strippedLayout);
+                restoredLayoutXml = StripXmlDeclaration(layoutDoc.ToString());
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult(
+                    $"[Error] Failed to parse layout backup file\n" +
+                    $"Path: {layoutBackupPath}\n" +
+                    $"Message: {ex.Message}\n" +
+                    $"Tip: The backup file must contain valid LayoutXML");
+            }
+
+            // Step 2: Read fetch backup file (optional)
+            string restoredFetchXml = null;
+            if (fetchBackupPath != null)
+            {
+                if (!File.Exists(fetchBackupPath))
+                    return ErrorResult(
+                        $"[Error] Fetch backup file not found\n" +
+                        $"Path: {fetchBackupPath}\n" +
+                        $"Tip: Check the file path. Backup files are at: .devkit/backups/views/");
+
+                try
+                {
+                    var fetchContent = File.ReadAllText(fetchBackupPath, Encoding.UTF8);
+                    var strippedFetch = StripXmlComments(fetchContent);
+                    if (string.IsNullOrWhiteSpace(strippedFetch))
+                    {
+                        // Backup was empty (view had no FetchXML) — skip fetch restore
+                        restoredFetchXml = null;
+                    }
+                    else
+                    {
+                        var fetchDoc = XDocument.Parse(strippedFetch);
+                        restoredFetchXml = StripXmlDeclaration(fetchDoc.ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult(
+                        $"[Error] Failed to parse fetch backup file\n" +
+                        $"Path: {fetchBackupPath}\n" +
+                        $"Message: {ex.Message}\n" +
+                        $"Tip: The backup file must contain valid FetchXML");
+                }
+            }
+
+            // Step 3: Verify view exists
+            var currentView = RetrieveView(viewId);
+            if (currentView == null)
+                return ErrorResult(
+                    $"[Error] View not found\n" +
+                    $"ViewId: {viewId}\n" +
+                    $"Tip: Use get_views with entity_name='{entityName}' to find valid view IDs");
+
+            var viewName = currentView.GetAttributeValue<string>("name") ?? "";
+            var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
+
+            // Step 4: Validate restored XMLs
+            List<string> validationWarnings = null;
+            if (validate)
+            {
+                var allErrors = new List<string>();
+                var allWarnings = new List<string>();
+
+                var (layoutErrors, layoutWarnings) = ValidateLayoutXml(restoredLayoutXml);
+                allErrors.AddRange(layoutErrors);
+                allWarnings.AddRange(layoutWarnings);
+
+                if (restoredFetchXml != null)
+                {
+                    var (fetchErrors, fetchWarnings) = ValidateFetchXml(restoredFetchXml);
+                    allErrors.AddRange(fetchErrors);
+                    allWarnings.AddRange(fetchWarnings);
+
+                    var syncErrors = ValidateSync(restoredFetchXml, restoredLayoutXml);
+                    allErrors.AddRange(syncErrors);
+                }
+
+                validationWarnings = allWarnings.Count > 0 ? allWarnings : null;
+
+                if (allErrors.Count > 0)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[ViewUndo] BLOCKED — Backup file(s) failed validation");
+                    sb.AppendLine($"ViewId: {viewId}");
+                    sb.AppendLine($"LayoutBackup: {layoutBackupPath}");
+                    if (fetchBackupPath != null)
+                        sb.AppendLine($"FetchBackup: {fetchBackupPath}");
+                    sb.AppendLine($"Errors: {allErrors.Count}");
+                    foreach (var error in allErrors)
+                        sb.AppendLine($"- {error}");
+                    if (allWarnings.Count > 0)
+                    {
+                        sb.AppendLine($"Warnings: {allWarnings.Count}");
+                        foreach (var warning in allWarnings)
+                            sb.AppendLine($"- {warning}");
+                    }
+                    sb.AppendLine($"Tip: The backup file(s) may be corrupted. Set validate=false to force restore (not recommended).");
+
+                    var allIssues = new List<string>(allErrors);
+                    if (allWarnings.Count > 0) allIssues.AddRange(allWarnings);
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        {
+                            Action = "undo",
+                            Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues,
+                            RestoredFromLayoutXmlBackup = layoutBackupPath,
+                            RestoredFromFetchXmlBackup = fetchBackupPath,
+                            Published = false
+                        })
+                    };
+                }
+            }
+
+            // Step 5: Validate FetchXML server-side (if provided)
+            if (validate && restoredFetchXml != null)
+            {
+                var fetchValidationError = ValidateFetchXmlExpression(restoredFetchXml);
+                if (fetchValidationError != null)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[ViewUndo] BLOCKED — FetchXML validation failed (server-side)");
+                    sb.AppendLine($"ViewId: {viewId}");
+                    sb.AppendLine($"Error: {fetchValidationError}");
+                    sb.AppendLine($"Tip: The backup FetchXML may reference entities/fields that no longer exist. Set validate=false to force restore.");
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        {
+                            Action = "undo", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                            Status = "blocked_validation", Validated = true,
+                            ValidationErrors = [fetchValidationError],
+                            RestoredFromLayoutXmlBackup = layoutBackupPath,
+                            RestoredFromFetchXmlBackup = fetchBackupPath,
+                            Published = false
+                        })
+                    };
+                }
+            }
+
+            // Step 6: Update view record (NO backup — we're restoring!)
+            var isPersonalView = currentView.LogicalName == "userquery";
+            var update = new Entity(currentView.LogicalName, viewId);
+            update["layoutxml"] = restoredLayoutXml;
+            if (restoredFetchXml != null)
+                update["fetchxml"] = restoredFetchXml;
+            if (!isPersonalView)
+                update["returnedtypecode"] = returnedTypeCode;
+            _serviceClient.Update(update);
+
+            // Step 7: Publish
+            var published = TryPublish(returnedTypeCode, auto_publish);
+
+            if (auto_publish && !published)
+            {
+                var sb = new StringBuilder(256);
+                sb.AppendLine($"[ViewUndo] Restored but publish failed");
+                sb.AppendLine($"ViewId: {viewId}");
+                sb.AppendLine($"RestoredFrom: {layoutBackupPath}");
+                if (fetchBackupPath != null)
+                    sb.AppendLine($"FetchRestoredFrom: {fetchBackupPath}");
+                sb.AppendLine($"PublishError: Publish failed after successful restore");
+                sb.AppendLine($"Tip: Call publish_customizations with entities='{entityName}' to retry");
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    {
+                        Action = "undo",
+                        Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                        Status = "restored_publish_failed", Validated = validate,
+                        RestoredFromLayoutXmlBackup = layoutBackupPath,
+                        RestoredFromFetchXmlBackup = fetchBackupPath,
+                        Published = false
+                    })
+                };
+            }
+
+            // Step 8: Return success
+            {
+                var sb = new StringBuilder(256);
+                sb.AppendLine($"[ViewUndo] {entityName} — {viewName}");
+                sb.AppendLine($"ViewId: {viewId}");
+                sb.AppendLine($"Status: Restored successfully");
+                sb.AppendLine($"RestoredFrom: {layoutBackupPath}");
+                if (fetchBackupPath != null)
+                    sb.AppendLine($"FetchRestoredFrom: {fetchBackupPath}");
+                sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
+                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+                if (validationWarnings?.Count > 0)
+                {
+                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
+                    foreach (var w in validationWarnings)
+                        sb.AppendLine($"  - {w}");
+                }
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    {
+                        Action = "undo",
+                        Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
+                        Status = "restored", Validated = validate,
+                        ValidationWarnings = validationWarnings,
+                        RestoredFromLayoutXmlBackup = layoutBackupPath,
+                        RestoredFromFetchXmlBackup = fetchBackupPath,
+                        Published = published
+                    })
+                };
+            }
+        }
+
         // ── Helpers ────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Calls Dataverse ValidateFetchXmlExpression to validate FetchXML server-side.
+        /// Returns null if valid, or an error message string if invalid.
+        /// </summary>
+        private string ValidateFetchXmlExpression(string fetchXml)
+        {
+            try
+            {
+                var request = new OrganizationRequest("ValidateFetchXmlExpression");
+                request["FetchXml"] = fetchXml;
+                _serviceClient.Execute(request);
+                return null; // Valid
+            }
+            catch (Exception ex)
+            {
+                // SDK deserialization error for ValidateFetchXmlExpressionResult
+                // means the server accepted the FetchXML but the SDK can't deserialize the response.
+                // Treat as valid — the FetchXML was processed successfully server-side.
+                if (ex.Message.Contains("ValidateFetchXmlExpressionResult") ||
+                    ex.InnerException?.Message?.Contains("ValidateFetchXmlExpressionResult") == true)
+                {
+                    return null;
+                }
+                return ex.Message;
+            }
+        }
 
         private bool TryPublish(string entityName, bool autoPublish)
         {
@@ -584,15 +933,59 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private Entity RetrieveView(Guid viewId)
         {
+            // Try system view (savedquery) first
             try
             {
                 return _serviceClient.Retrieve("savedquery", viewId,
                     new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype"));
             }
+            catch { }
+
+            // Fallback to personal view (userquery)
+            try
+            {
+                var query = new QueryExpression("userquery")
+                {
+                    ColumnSet = new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype")
+                };
+                query.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
+                var result = _serviceClient.RetrieveMultiple(query);
+                return result.Entities.Count > 0 ? result.Entities[0] : null;
+            }
             catch
             {
                 return null;
             }
+        }
+
+        // ── Quick Find validation ──────────────────────────────────────────
+
+        /// <summary>
+        /// Checks that the isquickfindfields filter is not accidentally removed from a Quick Find view.
+        /// Returns errors (blocking) if the filter was present in current but missing in new.
+        /// </summary>
+        private static List<string> ValidateQuickFindPreservation(string currentFetchXml, string newFetchXml)
+        {
+            var errors = new List<string>();
+            try
+            {
+                var currentHasQF = currentFetchXml.Contains("isquickfindfields");
+                var newHasQF = newFetchXml.Contains("isquickfindfields");
+
+                if (currentHasQF && !newHasQF)
+                {
+                    errors.Add(
+                        "QuickFind: The isquickfindfields filter was REMOVED from FetchXML. " +
+                        "This will BREAK the search bar for all users. Quick Find views MUST have a " +
+                        "<filter type=\"or\" isquickfindfields=\"1\"> block. " +
+                        "Restore the filter and retry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"QuickFind: Failed to check isquickfindfields preservation — {ex.Message}");
+            }
+            return errors;
         }
 
         private static (string FetchBackupPath, string LayoutBackupPath) SaveBackup(
@@ -615,7 +1008,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sbFetch.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
             sbFetch.AppendLine($"<!-- To restore: call update_view with this file's content (excluding comments) -->");
             sbFetch.AppendLine();
-            sbFetch.Append(PrettyPrintXml(currentFetchXml));
+            if (!string.IsNullOrWhiteSpace(currentFetchXml))
+                sbFetch.Append(PrettyPrintXml(currentFetchXml));
+            else
+                sbFetch.Append("<!-- (empty — no FetchXML on this view) -->");
             File.WriteAllText(fetchBackupPath, sbFetch.ToString(), Encoding.UTF8);
 
             // Write LayoutXML backup
@@ -625,7 +1021,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sbLayout.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
             sbLayout.AppendLine($"<!-- To restore: call update_view with this file's content (excluding comments) -->");
             sbLayout.AppendLine();
-            sbLayout.Append(PrettyPrintXml(currentLayoutXml));
+            if (!string.IsNullOrWhiteSpace(currentLayoutXml))
+                sbLayout.Append(PrettyPrintXml(currentLayoutXml));
+            else
+                sbLayout.Append("<!-- (empty — no LayoutXML on this view) -->");
             File.WriteAllText(layoutBackupPath, sbLayout.ToString(), Encoding.UTF8);
 
             return (fetchBackupPath, layoutBackupPath);
@@ -870,6 +1269,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"1. Retrieve the previous XMLs (no backup was created)");
                 sb.AppendLine($"2. Call update_view with view_id='{viewId}' and the original layoutxml + fetchxml");
             }
+        }
+
+        /// <summary>
+        /// Strips XML comment lines (<!-- ... -->) from backup file content,
+        /// returning only the actual XML content (or empty if none).
+        /// </summary>
+        private static string StripXmlComments(string content)
+        {
+            var sb = new StringBuilder(content.Length);
+            foreach (var line in content.Split('\n'))
+            {
+                var trimmed = line.Trim();
+                if (trimmed.StartsWith("<!--") && trimmed.EndsWith("-->"))
+                    continue;
+                if (!string.IsNullOrWhiteSpace(trimmed))
+                    sb.AppendLine(line.TrimEnd('\r'));
+            }
+            return sb.ToString().Trim();
         }
 
         private static string StripXmlDeclaration(string xml)
