@@ -279,6 +279,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RestoredFromBackup { get; set; }
     }
 
+    internal sealed class CreateAttributeResult
+    {
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("attributeName")]
+        public string AttributeName { get; set; }
+
+        [JsonPropertyName("attributeType")]
+        public string AttributeType { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("requiredLevel")]
+        public string RequiredLevel { get; set; }
+
+        [JsonPropertyName("metadataId")]
+        public string MetadataId { get; set; }
+
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("extra")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, string> Extra { get; set; }
+    }
+
     internal sealed class UpdateViewResult
     {
         [JsonPropertyName("action")]
