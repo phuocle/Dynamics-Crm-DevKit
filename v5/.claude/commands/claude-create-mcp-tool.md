@@ -265,11 +265,26 @@ The MCP server running in the current IDE session uses the **previous** build. A
 
 ---
 
-## Step 9: Save Spec File to Docs
+## Step 9: Move Spec File to `mcp-done/` with Correct Numbering
 
-Copy or move the spec file to: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp\`
+After the tool is fully implemented and tested:
 
-This ensures the tool's design spec is preserved with the project documentation.
+1. Run `devkit mcp --tools --plain` to get the current numbered tool list
+2. Find your new tool's **number** in the output (e.g., if the tool appears as `28. your_tool_name`, use `28`)
+3. Move (or rename) the spec file to: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp-done\{NN}.{snake_case_name}.md`
+
+**Naming convention:** `{two-digit number}.{tool_name}.md` — must match `devkit mcp --tools` numbering exactly.
+
+**Examples:**
+```
+28.manage_relationship.md
+29.get_business_rules.md
+```
+
+> [!IMPORTANT]
+> The `mcp-done/` folder must always have **exactly N files = N tools** from `devkit mcp --tools`.
+> Each file is numbered to match the tool's position in the `devkit mcp --tools` output.
+> If adding a new tool changes the numbering of existing tools, you must also rename the affected files.
 
 ---
 
@@ -288,5 +303,5 @@ This ensures the tool's design spec is preserved with the project documentation.
 - [ ] `/claude-build-cli` succeeded with 0 errors
 - [ ] `devkit mcp --tools` shows the new tool with correct Title and category
 - [ ] **Production runtime test**: user restarted MCP server, tool tested via `mcp__devkit__` calls and output verified
-- [ ] Spec file saved to `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp\`
+- [ ] Spec file moved to `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp-done\{NN}.{tool_name}.md` (numbered to match `devkit mcp --tools`)
 - [ ] `Const.cs` is clean (still has `x.xx.xx.xx` placeholder)
