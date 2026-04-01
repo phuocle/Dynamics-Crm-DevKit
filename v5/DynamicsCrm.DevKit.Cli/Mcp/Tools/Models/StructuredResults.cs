@@ -368,6 +368,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public bool Published { get; set; }
     }
 
+    internal sealed class UpdateAttributeChange
+    {
+        [JsonPropertyName("oldValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string OldValue { get; set; }
+
+        [JsonPropertyName("newValue")]
+        public string NewValue { get; set; }
+    }
+
+    internal sealed class UpdateAttributeResult
+    {
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("attributeName")]
+        public string AttributeName { get; set; }
+
+        [JsonPropertyName("attributeType")]
+        public string AttributeType { get; set; }
+
+        [JsonPropertyName("changes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, UpdateAttributeChange> Changes { get; set; }
+
+        [JsonPropertyName("optionsAdded")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsAdded { get; set; }
+
+        [JsonPropertyName("optionsRenamed")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsRenamed { get; set; }
+
+        [JsonPropertyName("optionsDeleted")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsDeleted { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+    }
+
     internal sealed class EnvironmentVariableItem
     {
         [JsonPropertyName("name")]
