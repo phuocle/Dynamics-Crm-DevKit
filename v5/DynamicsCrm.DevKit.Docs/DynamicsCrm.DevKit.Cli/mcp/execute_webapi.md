@@ -96,6 +96,20 @@ url: "$metadata"
 max_response_lines: 50
 ```
 
+### Example Prompts
+
+> Natural-language prompts that would trigger this tool.
+
+| # | Prompt |
+|---|--------|
+| 1 | "Get the relationship metadata for the account entity" |
+| 2 | "Call the WinOpportunity action for opportunity abc-123" |
+| 3 | "Query the $metadata schema to see entity definitions" |
+| 4 | "Execute a custom action 'new_ApproveRequest' with parameter RequestId" |
+| 5 | "Get the entity display names for account and contact" |
+| 6 | "Check the OneToMany relationships on the opportunity entity" |
+| 7 | "Execute a PUT request to update relationship metadata" |
+
 ### Implementation Notes
 
 - Use `ServiceClient.ExecuteWebRequest()` — the SDK method that handles authentication, token refresh, and connection reuse automatically
