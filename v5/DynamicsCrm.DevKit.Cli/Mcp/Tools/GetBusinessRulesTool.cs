@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "RETURNS:\n" +
             "- List mode: Table of rules with name, scope, status, modifiedOn\n" +
-            "- Detail mode: Full rule info with conditions and actions parsed from clientdata\n\n" +
+            "- Detail mode: Full rule info with conditions and actions parsed from XAML\n\n" +
 
             "WHEN TO USE:\n" +
             "- Debugging form behavior (fields hiding/showing unexpectedly)\n" +
@@ -74,6 +74,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entity_name = entity_name.Trim().ToLowerInvariant();
 
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                var s = status.Trim().ToLowerInvariant();
+                if (s != "active" && s != "draft")
+                    return $"Error: Invalid status value '{status.Trim()}'. Use 'active' or 'draft'.";
+            }
+
             if (max_records <= 0) max_records = 50;
             if (max_records > 200) max_records = 200;
 
@@ -105,7 +112,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return $"0 business rules found for '{entityName}'.";
 
                 var sb = new StringBuilder(result.Entities.Count * 120 + 128);
-                sb.AppendLine($"[BusinessRules] {entityName} ({result.Entities.Count} rules)");
+                var countLabel = result.Entities.Count == 1 ? "rule" : "rules";
+                sb.AppendLine($"[BusinessRules] {entityName} ({result.Entities.Count} {countLabel})");
                 sb.AppendLine();
                 sb.AppendLine("ruleId\tname\tscope\tstatus\tmodifiedOn");
 
