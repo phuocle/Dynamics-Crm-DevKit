@@ -14,7 +14,7 @@ using System.Text;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetSolutionComponentsTool
+    public class GetComponentsTool
     {
         private readonly ServiceClient _serviceClient;
 
@@ -71,12 +71,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 418, "Dataflow" },
         };
 
-        public GetSolutionComponentsTool(ServiceClient serviceClient)
+        public GetComponentsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_solution_components", Title = "List all components inside a solution",
+        [McpServerTool(Name = "get_components", Title = "List all components inside a solution",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List all components inside a Dataverse solution. " +
@@ -113,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIP: The objectId column in the output is the primary key for the component — " +
             "pass it to get_record (with the appropriate entity name) to retrieve full details. " +
             "For example, Plugin Assembly objectId → get_record('pluginassembly', objectId).")]
-        public string get_solution_components(
+        public string get_components(
             [Description(
                 "The solution unique name (e.g. 'DevKit_Core', 'mySolution') or display name " +
                 "(e.g. 'DevKit Core', 'My Solution'). " +

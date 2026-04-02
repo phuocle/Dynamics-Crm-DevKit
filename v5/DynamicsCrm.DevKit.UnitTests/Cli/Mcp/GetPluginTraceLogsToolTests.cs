@@ -7,24 +7,24 @@ using System.Text;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for GetPluginTraceLogsTool private static methods:
+/// Tests for GetLogsTool private static methods:
 /// BuildListFetchXml, FormatNoResults, FormatDetailRecord, FormatListMode, EscapeTab, EscapeXml.
 /// </summary>
 [TestClass]
 public class GetPluginTraceLogsToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginTraceLogsTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetLogsTool);
 
     // ──────────────────────────────────────────────
     // Input validation via public method
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginTraceLogsTool _tool = new(null!);
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetLogsTool _tool = new(null!);
 
     [TestMethod]
     public void GetPluginTraceLogs_InvalidRecordId_ReturnsError()
     {
-        var result = _tool.get_plugin_trace_logs(record_id: "not-a-guid");
+        var result = _tool.get_logs(record_id: "not-a-guid");
         Assert.IsTrue(result.Contains("not a valid GUID"));
     }
 

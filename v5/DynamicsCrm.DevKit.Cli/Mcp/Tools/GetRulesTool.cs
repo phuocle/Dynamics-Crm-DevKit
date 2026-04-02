@@ -15,16 +15,16 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetBusinessRulesTool
+    public class GetRulesTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetBusinessRulesTool(ServiceClient serviceClient)
+        public GetRulesTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_business_rules", Title = "List business rules for a Dataverse entity",
+        [McpServerTool(Name = "get_rules", Title = "List business rules for a Dataverse entity",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List business rules (client-side logic) for a Dataverse entity.\n\n" +
@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- They execute BEFORE JavaScript form events\n" +
             "- Scope 'Entity' means the rule runs on ALL forms\n" +
             "- Business rules are stored as workflow records with category=2")]
-        public string get_business_rules(
+        public string get_rules(
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +

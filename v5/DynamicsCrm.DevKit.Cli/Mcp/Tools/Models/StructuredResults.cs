@@ -473,25 +473,4 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Description { get; set; }
     }
 
-    internal sealed class EnvironmentVariableSetResult
-    {
-        [JsonPropertyName("action")]
-        public string Action { get; set; }
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
-
-        [JsonPropertyName("oldValue")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string OldValue { get; set; }
-
-        [JsonPropertyName("newValue")]
-        public string NewValue { get; set; }
-
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
-    }
 }

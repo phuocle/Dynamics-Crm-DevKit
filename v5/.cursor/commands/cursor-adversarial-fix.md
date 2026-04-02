@@ -109,7 +109,7 @@ Replace the `Category` column with `Status` column, marking each as FIXED:
 1. Re-read the modified .cs file to confirm changes are syntactically correct
 2. Re-read the modified .md file to confirm all findings are marked FIXED
 3. Run `/build-cli` to build the CLI and confirm the fixes compile successfully
-4. **Rename the doc file**: rename from `{name}.md` to `{name}-fixed.md` (e.g., `11.get_plugin_trace_logs.md` → `11.get_plugin_trace_logs-fixed.md`)
+4. **Rename the doc file**: rename from `{name}.md` to `{name}-fixed.md` (e.g., `10.get_logs.md` → `10.get_logs-fixed.md`)
 
 ---
 

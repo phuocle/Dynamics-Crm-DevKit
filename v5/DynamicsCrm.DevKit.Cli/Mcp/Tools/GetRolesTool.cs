@@ -11,16 +11,16 @@ using System.Text;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetSecurityRolesTool
+    public class GetRolesTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetSecurityRolesTool(ServiceClient serviceClient)
+        public GetRolesTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_security_roles", Title = "List security roles and their privileges",
+        [McpServerTool(Name = "get_roles", Title = "List security roles and their privileges",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List security roles and their privileges for Dataverse entities. " +
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use entity_name filter in detail mode to focus on one entity's privileges\n" +
             "- System Administrator has all privileges at Organization depth\n" +
             "- Use whoami to find the current user's security roles first")]
-        public string get_security_roles(
+        public string get_roles(
             [Description(
                 "Email address or GUID of a user to check their assigned security roles. " +
                 "Examples: 'john@contoso.com', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'. " +

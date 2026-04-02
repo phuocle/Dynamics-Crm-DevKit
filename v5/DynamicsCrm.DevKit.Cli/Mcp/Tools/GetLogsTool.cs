@@ -11,16 +11,16 @@ using System.Text;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetPluginTraceLogsTool
+    public class GetLogsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetPluginTraceLogsTool(ServiceClient serviceClient)
+        public GetLogsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_plugin_trace_logs", Title = "Query plugin execution trace logs",
+        [McpServerTool(Name = "get_logs", Title = "Query plugin execution trace logs",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Query plugin execution trace logs from Dataverse for debugging. " +
@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Logs are retained for 24 hours by default\n" +
             "- If no logs found, suggest enabling plugin trace logging\n" +
             "- Browse first (no record_id) to find the log, then get full detail (with record_id)")]
-        public string get_plugin_trace_logs(
+        public string get_logs(
             [Description(
                 "Specific plugin trace log GUID to retrieve in full detail. " +
                 "When provided, ALL other filters are ignored and the tool returns the FULL trace output + exception. " +

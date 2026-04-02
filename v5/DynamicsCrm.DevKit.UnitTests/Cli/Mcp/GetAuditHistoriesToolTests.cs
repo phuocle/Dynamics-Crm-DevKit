@@ -6,46 +6,46 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for GetAuditHistoriesTool private static methods:
+/// Tests for GetHistoriesTool private static methods:
 /// BuildBrowseFetchXml, ParseActionName, FormatAction, FormatOperation,
 /// FormatTimeWindow, FormatBrowseNoResults, EscapeTab, EscapeXml.
 /// </summary>
 [TestClass]
 public class GetAuditHistoriesToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetAuditHistoriesTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetHistoriesTool);
 
     // ──────────────────────────────────────────────
     // Input validation via public method
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetAuditHistoriesTool _tool = new(null!);
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetHistoriesTool _tool = new(null!);
 
     [TestMethod]
     public void GetAuditHistories_RecordIdWithoutEntityName_ReturnsError()
     {
-        var result = _tool.get_audit_histories(record_id: "11111111-1111-1111-1111-111111111111");
+        var result = _tool.get_histories(record_id: "11111111-1111-1111-1111-111111111111");
         Assert.IsTrue(result.Contains("entity_name is required when record_id is provided"));
     }
 
     [TestMethod]
     public void GetAuditHistories_InvalidRecordId_ReturnsError()
     {
-        var result = _tool.get_audit_histories(entity_name: "account", record_id: "not-a-guid");
+        var result = _tool.get_histories(entity_name: "account", record_id: "not-a-guid");
         Assert.IsTrue(result.Contains("not a valid GUID"));
     }
 
     [TestMethod]
     public void GetAuditHistories_InvalidFromDate_ReturnsError()
     {
-        var result = _tool.get_audit_histories(from_date: "not-a-date");
+        var result = _tool.get_histories(from_date: "not-a-date");
         Assert.IsTrue(result.Contains("not a valid ISO 8601 date"));
     }
 
     [TestMethod]
     public void GetAuditHistories_InvalidToDate_ReturnsError()
     {
-        var result = _tool.get_audit_histories(to_date: "not-a-date");
+        var result = _tool.get_histories(to_date: "not-a-date");
         Assert.IsTrue(result.Contains("not a valid ISO 8601 date"));
     }
 

@@ -6,8 +6,8 @@ Act as a **devil's advocate** to stress-test a DevKit MCP tool against the live 
 
 > [!CAUTION]
 > **REQUIRED ARGUMENTS (2):**
-> 1. **Doc file** — path to a `.md` file in `mcp-done/` (e.g. `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/mcp-done/28.get_business_rules.md`)
-> 2. **Tool file** — path to the `.cs` implementation (e.g. `DynamicsCrm.DevKit.Cli/Mcp/Tools/GetBusinessRulesTool.cs`)
+> 1. **Doc file** — path to a `.md` file in `mcp-done/` (e.g. `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/mcp-done/27.get_rules.md`)
+> 2. **Tool file** — path to the `.cs` implementation (e.g. `DynamicsCrm.DevKit.Cli/Mcp/Tools/GetRulesTool.cs`)
 >
 > If EITHER argument is missing, **STOP IMMEDIATELY** and show this error:
 > ```
