@@ -42,7 +42,7 @@ index.js (main)
 | `action-tools` | `We()` | `execute_action`, `execute_function`, `execute_bound_action`, `execute_bound_function`, `list_dependencies`, `retrieve_dependencies_for_delete` |
 | `batch-tools` | `Fe()` | `batch_execute` |
 | `change-tracking` | `Ge()` | `change_detection` |
-| `solution-tools` | `Ve()` | `publish_customizations` |
+| `solution-tools` | `Ve()` | `publish` |
 | `impersonate-tool` | `Ke()` | `impersonate` |
 | `customization-tools` | `Qe()` | `list_custom_actions`, `list_plugin_steps`, `set_workflow_state`, `list_connection_references` |
 | `environment-tools` | `Je()` | `get/set/create_environment_variable`, `environment_capabilities` |

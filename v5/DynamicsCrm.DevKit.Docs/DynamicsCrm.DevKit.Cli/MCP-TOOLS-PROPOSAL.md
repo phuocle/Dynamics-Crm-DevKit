@@ -30,7 +30,7 @@
 | **Query** | `read_query`, `search`, `fetch` | `query`, `execute_fetchxml`, `retrieve_multiple_with_paging` | - | `execute_fetch_xml` | `execute_fetchxml` |
 | **CRUD** | `create_record`, `update_record`, `delete_record` | 6 tools | - | - | **MISSING** |
 | **Search** | `search` | `search` (Relevance Search) | - | - | **MISSING** |
-| **Solutions** | - | `publish_customizations` | solution tools | - | **MISSING** |
+| **Solutions** | - | `publish` | solution tools | - | **MISSING** |
 | **Environment** | - | `get_environment_variable`, `environment_capabilities` | - | - | **MISSING** |
 
 ---

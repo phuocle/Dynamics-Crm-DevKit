@@ -32,7 +32,7 @@
 |---|------------|------------------|--------|
 | 1 | `get_forms` | No form inspection | HIGH — forms are critical for UI customization |
 | 2 | `update_form` | No form editing | HIGH — auto-backup, XSD validation, undo |
-| 3 | `build_form_xml` | No form builder | HIGH — auto-resolves classid, generates FormXML |
+| 3 | `build_formxml` | No form builder | HIGH — auto-resolves classid, generates FormXML |
 | 4 | `get_views` (with FetchXML/LayoutXML) | `list_views` only returns names | MEDIUM — no view content inspection |
 | 5 | `update_view` | No view editing | HIGH — auto-backup, sync validation |
 | 6 | `update_sitemap` | `create_sitemap` only (no update/undo) | MEDIUM — no edit or rollback |
@@ -114,7 +114,7 @@
 | Create/Update Record | `dataverse_create` + `dataverse_update` | `upsert_record` |
 | Delete Record | `dataverse_delete` | `delete_record` |
 | Web API | (via `execute_action`/`execute_function`) | `execute_webapi` |
-| Publish | `dataverse_publish_customizations` | `publish_customizations` |
+| Publish | `dataverse_publish` | `publish` |
 | Plugin Trace Logs | `dataverse_get_plugin_trace_logs` | `get_plugin_trace_logs` |
 | Audit | `dataverse_get_audit_log` | `get_audit_history` |
 | Security Roles | `dataverse_list_roles` + `get_role_privileges` | `get_security_roles` |
@@ -252,7 +252,7 @@ codeurali has **ZERO** equivalent for these DevKit capabilities:
 
 | Capability | DevKit Tools | Why It Matters |
 |-----------|-------------|---------------|
-| **Form Lifecycle** | `get_forms` → `build_form_xml` → `update_form` (with backup/validate/undo) | The #1 customization task in Dynamics 365 |
+| **Form Lifecycle** | `get_forms` → `build_formxml` → `update_form` (with backup/validate/undo) | The #1 customization task in Dynamics 365 |
 | **View Lifecycle** | `get_views` → `update_view` (with backup/sync-check/undo) | Critical for data presentation |
 | **SiteMap Lifecycle** | `update_sitemap` (with backup/validate/undo) | App navigation management |
 | **XSD Schema Resources** | `schema://formxml`, `schema://layoutxml`, `schema://fetchxml`, `schema://sitemapxml` | AI can validate XML before writing |

@@ -278,7 +278,7 @@ These are operations AI agents need **almost every session** when working with D
 | 1 | **`get_forms`** | List forms for an entity; return name, type, FormXML | Medium | AI MUST understand UI to help with customization. No competitor has this -- differentiator. |
 | 2 | **`get_views`** | List system/personal views for an entity; return FetchXML, LayoutXML | Medium | Views are the #2 UI artifact. Essential for understanding data presentation. |
 | 3 | **`get_plugin_trace_logs`** | Query plugin trace logs by plugin name, time range, or correlation ID | Easy | #1 developer troubleshooting need. 2 of 6 competitors have this. |
-| 4 | **`publish_customizations`** | Publish specific entities or all customizations | Easy | Required after ANY metadata change. Without this, AI cannot complete schema modification workflows. |
+| 4 | **`publish`** | Publish specific entities or all customizations | Easy | Required after ANY metadata change. Without this, AI cannot complete schema modification workflows. |
 | 5 | **`get_plugin_registrations`** | Query plugin assemblies, types, steps, images for an entity | Medium | Essential for plugin development workflow. AI needs to understand event pipeline. |
 
 ### TIER 2: Should Have (High Impact, Medium Frequency)
@@ -334,7 +334,7 @@ These improve capabilities but `execute_webapi` can serve as fallback:
 
 | Sprint | Tools | Total Effort |
 |--------|-------|--------------|
-| **Sprint 1** | `get_plugin_trace_logs`, `publish_customizations`, `upsert_record` | ~4 hours |
+| **Sprint 1** | `get_plugin_trace_logs`, `publish`, `upsert_record` | ~4 hours |
 | **Sprint 2** | `get_forms`, `get_views` | ~6 hours |
 | **Sprint 3** | `get_plugin_registrations`, `get_workflows` | ~5 hours |
 | **Sprint 4** | `manage_solution_components`, `get_security_roles` | ~6 hours |
@@ -354,7 +354,7 @@ These improve capabilities but `execute_webapi` can serve as fallback:
 
 5. **Schema creation tools have diminishing returns** -- The `execute_webapi` tool can handle `POST /EntityDefinitions` etc. Dedicated tools add discoverability but not new capability.
 
-6. **Publish is a blocker** -- Without `publish_customizations`, AI cannot complete any metadata modification workflow end-to-end. This should be the easiest quick win.
+6. **Publish is a blocker** -- Without `publish`, AI cannot complete any metadata modification workflow end-to-end. This should be the easiest quick win.
 
 7. **The AI should NEVER need to extract access tokens** -- Every operation should be handled through a tool, not by getting a token and making raw HTTP calls outside the MCP server.
 

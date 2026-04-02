@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 ## Rollback Procedure (If Form Breaks)
 1. Read the backup file content
 2. PATCH /systemforms({formid}) with body: {""formxml"": ""<original XML from backup>""}
-3. Call publish_customizations for the entity
+3. Call publish for the entity
 4. Verify form loads correctly in the browser
 
 ## CRITICAL: Verify Field Names Before Modifying Forms

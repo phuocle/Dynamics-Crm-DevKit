@@ -48,7 +48,7 @@ Total tests: 356
 |---|-----------|-------|--------------------|
 | 9 | `ParseRecordUrlToolTests.cs` | 21 | All URL formats: main.aspx, Web API, maker portal (flow/run/solution), legacy URLs, raw GUID, edge cases |
 | 10 | `WhoAmIToolTests.cs` | 18 | `GetLanguageName()` (13 LCIDs) + `BuildCompactText()` (5 scenarios) via reflection |
-| 11 | `PublishCustomizationsToolTests.cs` | 8 | `BuildParameterXml()` — entities, optionsets, sitemaps XML generation |
+| 11 | `PublishToolTests.cs` | 8 | `BuildParameterXml()` — entities, optionsets, sitemaps XML generation |
 | 12 | `CrudToolValidationTests.cs` | 27 | Delete (5), Create (4), Update (4), `CountFields()` (5), GetRecord (3), FetchXml (2), Search (3) |
 | 13 | `EntityParserHelperTests.cs` | 16 | `ParseFieldKey()` (6), `ParseFieldName()` (3), `FallbackConvert()` (5), `ClearCache()` (1) |
 
@@ -156,7 +156,7 @@ DynamicsCrm.DevKit.UnitTests/
         ├── InstructionResourcesTests.cs           (13 tests)
         ├── ParseRecordUrlToolTests.cs             (21 tests)
         ├── WhoAmIToolTests.cs                     (18 tests)
-        ├── PublishCustomizationsToolTests.cs       ( 8 tests)
+        ├── PublishToolTests.cs       ( 8 tests)
         ├── CrudToolValidationTests.cs             (27 tests)
         ├── EntityParserHelperTests.cs             (16 tests)
         ├── ExecuteWebApiToolTests.cs              (26 tests)

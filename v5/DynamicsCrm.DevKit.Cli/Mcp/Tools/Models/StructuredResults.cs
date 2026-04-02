@@ -167,7 +167,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RestoredFromBackup { get; set; }
     }
 
-    internal sealed class BuildFormXmlResult
+    internal sealed class BuildFormxmlResult
     {
         [JsonPropertyName("entity")]
         public string Entity { get; set; }

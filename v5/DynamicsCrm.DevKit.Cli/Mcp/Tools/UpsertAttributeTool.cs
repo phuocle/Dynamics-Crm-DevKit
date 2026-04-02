@@ -80,7 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use get_metadata_entities to check if attribute already exists\n" +
             "- Cannot change attribute type after creation — Dataverse limitation\n" +
             "- For picklist with existing choices: use global_optionset_name instead of options\n" +
-            "- After creation, use build_form_xml to add the new field to a form")]
+            "- After creation, use build_formxml to add the new field to a form")]
         public CallToolResult upsert_attribute(
             [Description(
                 "Entity logical name (always lowercase). " +

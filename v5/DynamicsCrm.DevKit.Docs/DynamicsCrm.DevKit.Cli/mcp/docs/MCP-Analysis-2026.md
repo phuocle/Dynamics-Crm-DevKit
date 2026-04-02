@@ -61,14 +61,14 @@ DevKit excels at the **"inner loop" of Dynamics 365 development** — what a dev
 | 10 | `search` | Data | Read | ⭐⭐⭐⭐ |
 | 11 | `execute_webapi` | Fallback | Read/Write | ⭐⭐⭐⭐⭐ |
 | 12 | `get_forms` | UI/Forms | Read | ⭐⭐⭐⭐⭐ |
-| 13 | `build_form_xml` | UI/Forms | Read (builder) | ⭐⭐⭐⭐⭐ |
+| 13 | `build_formxml` | UI/Forms | Read (builder) | ⭐⭐⭐⭐⭐ |
 | 14 | `update_form` | UI/Forms | Write | ⭐⭐⭐⭐⭐ |
 | 15 | `get_views` | UI/Views | Read | ⭐⭐⭐⭐⭐ |
 | 16 | `update_view` | UI/Views | Write | ⭐⭐⭐⭐⭐ |
 | 17 | `get_security_roles` | Security | Read | ⭐⭐⭐⭐⭐ |
 | 18 | `get_solution_components` | ALM | Read | ⭐⭐⭐⭐ |
 | 19 | `get_plugin_trace_logs` | Debugging | Read | ⭐⭐⭐⭐⭐ |
-| 20 | `publish_customizations` | Operations | Write | ⭐⭐⭐⭐⭐ |
+| 20 | `publish` | Operations | Write | ⭐⭐⭐⭐⭐ |
 | 21 | `parse_record_url` | Utility | Read | ⭐⭐⭐⭐ |
 
 ### 2.2 Resources (6)
@@ -173,7 +173,7 @@ Wraps existing PAC CLI commands (solution management, auth management, plugin re
 
 ### Strengths 💪
 
-1. **Unmatched Form/View Customization** — The `build_form_xml` → `update_form` → `undo` workflow is unique in the entire ecosystem. No other MCP server provides:
+1. **Unmatched Form/View Customization** — The `build_formxml` → `update_form` → `undo` workflow is unique in the entire ecosystem. No other MCP server provides:
    - Automatic classID resolution from metadata
    - XSD validation before write
    - Auto-backup with rollback path
@@ -293,7 +293,7 @@ These are **high-impact, high-demand** tools that a 20-year D365 architect would
 | `create_global_optionset` | Create a new global choice/picklist | Low |
 | `update_global_optionset` | Add/remove/reorder options in an existing global optionset | Low |
 
-**Why DevKit Should Own This**: The `build_form_xml` tool already demonstrates DevKit's ability to resolve metadata (classIDs, attribute types) and generate correct XML structures. The same pattern applies to schema management — resolve metadata → validate → create → publish. DevKit could add the same level of safety (validation, solution-aware) that makes form/view tools exceptional.
+**Why DevKit Should Own This**: The `build_formxml` tool already demonstrates DevKit's ability to resolve metadata (classIDs, attribute types) and generate correct XML structures. The same pattern applies to schema management — resolve metadata → validate → create → publish. DevKit could add the same level of safety (validation, solution-aware) that makes form/view tools exceptional.
 
 **Competitor Analysis**: mwhesse has full schema CRUD. Microsoft Official has `create_table`/`delete_table`. DevKit has none.
 
@@ -317,7 +317,7 @@ But the actual tool doesn't exist yet.
 **Pattern**: Follow the exact same pattern as `update_form` and `update_view`:
 1. Read current SiteMap → backup → validate XSD → update → publish
 2. Support `undo` action via backup file
-3. Support `add_entity`, `add_page`, `add_url` builder operations (like `build_form_xml`)
+3. Support `add_entity`, `add_page`, `add_url` builder operations (like `build_formxml`)
 
 ---
 
@@ -331,7 +331,7 @@ But the actual tool doesn't exist yet.
 |------|-------------|
 | `manage_relationship` | Create/inspect 1:N and N:N relationships with guided parameters |
 
-**Input**: Simplified parameters like `parent_entity`, `child_entity`, `lookup_name`, `relationship_type` — the tool resolves the full JSON payload internally (similar to how `build_form_xml` resolves classIDs).
+**Input**: Simplified parameters like `parent_entity`, `child_entity`, `lookup_name`, `relationship_type` — the tool resolves the full JSON payload internally (similar to how `build_formxml` resolves classIDs).
 
 ---
 
@@ -469,7 +469,7 @@ Based on what makes the existing DevKit MCP tools exceptional, new tools should 
 1. **Safety First** — Auto-backup before any destructive operation. Fail-safe: block if backup fails.
 2. **Validation Before Write** — Validate against known schemas/constraints before sending to Dataverse.
 3. **Solution-Aware** — Schema changes should specify target solution for proper ALM.
-4. **Guided Parameters** — Resolve complexity internally (like `build_form_xml` resolves classIDs). Don't force users to know internal GUIDs or JSON schemas.
+4. **Guided Parameters** — Resolve complexity internally (like `build_formxml` resolves classIDs). Don't force users to know internal GUIDs or JSON schemas.
 5. **Structured + Text Output** — Maintain dual output (markdown text + structured JSON) for all tools.
 6. **Idempotent Where Possible** — Tools should be safe to call multiple times.
 7. **Publish Integration** — Schema/metadata tools should offer `auto_publish` option (like forms/views).
@@ -513,7 +513,7 @@ Based on what makes the existing DevKit MCP tools exceptional, new tools should 
 |-----------|-----------|------------|-----------|---------|
 | List forms | ✅ `get_forms` | ❌ | ❌ | ❌ |
 | Read FormXML | ✅ `get_forms` (detail) | ❌ | ❌ | ❌ |
-| Build FormXML | ✅ `build_form_xml` | ❌ | ❌ | ❌ |
+| Build FormXML | ✅ `build_formxml` | ❌ | ❌ | ❌ |
 | Update FormXML | ✅ `update_form` | ❌ | ❌ | ❌ |
 | Rename form | ✅ `update_form` (rename) | ❌ | ❌ | ❌ |
 | Undo form | ✅ `update_form` (undo) | ❌ | ❌ | ❌ |

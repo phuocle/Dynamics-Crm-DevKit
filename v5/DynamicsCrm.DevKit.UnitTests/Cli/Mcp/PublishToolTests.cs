@@ -6,13 +6,13 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for PublishCustomizationsTool.BuildParameterXml() — generates XML parameter for PublishXml request.
+/// Tests for PublishTool.BuildParameterXml() — generates XML parameter for PublishXml request.
 /// This method is private static, accessed via reflection.
 /// </summary>
 [TestClass]
-public class PublishCustomizationsToolTests
+public class PublishToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.PublishCustomizationsTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.PublishTool);
 
     private static readonly MethodInfo BuildParameterXmlMethod = ToolType
         .GetMethod("BuildParameterXml", BindingFlags.NonPublic | BindingFlags.Static)!;

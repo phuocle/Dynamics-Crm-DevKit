@@ -115,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "where alias matches the 'alias' attribute on <link-entity> in FetchXML\n" +
             "- If FetchXML has <order attribute=\"X\">, that column MUST also be in LayoutXML cells\n" +
             "- For related entity columns, use <link-entity link-type='outer'> with a unique alias\n" +
-            "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
+            "- Set auto_publish=false when making multiple changes, then call publish once\n" +
             "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
         public CallToolResult upsert_view(
             [Description(
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool backup = true,
             [Description(
                 "Publish the entity after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish_customizations once."
+                "Set false if batching multiple changes, then call publish once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -385,7 +385,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var sb = BuildSuccessText(entityName, viewId, viewName, fetchBackupPath, layoutBackupPath,
                     validate, newFetchXml != null, false);
-                sb.AppendLine($"Tip: Call publish_customizations with entities='{returnedTypeCode}' to retry");
+                sb.AppendLine($"Tip: Call publish with entities='{returnedTypeCode}' to retry");
                 sb.AppendLine();
                 AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, viewId);
 
@@ -815,7 +815,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (fetchBackupPath != null)
                     sb.AppendLine($"FetchRestoredFrom: {fetchBackupPath}");
                 sb.AppendLine($"PublishError: Publish failed after successful restore");
-                sb.AppendLine($"Tip: Call publish_customizations with entities='{entityName}' to retry");
+                sb.AppendLine($"Tip: Call publish with entities='{entityName}' to retry");
 
                 return new CallToolResult
                 {

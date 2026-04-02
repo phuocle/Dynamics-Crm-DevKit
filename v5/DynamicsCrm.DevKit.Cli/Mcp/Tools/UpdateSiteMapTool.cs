@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool backup = true,
             [Description(
                 "Publish the app module after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish_customizations once."
+                "Set false if batching multiple changes, then call publish once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(app_module_id))
@@ -392,7 +392,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"AppModuleId: {appModuleId}");
                 sb.AppendLine($"SiteMapId: {siteMapId}");
                 sb.AppendLine($"RestoredFrom: {backupFilePath}");
-                sb.AppendLine($"Tip: Call publish_customizations with include_sitemap=true to retry");
+                sb.AppendLine($"Tip: Call publish with include_sitemap=true to retry");
 
                 return new CallToolResult
                 {

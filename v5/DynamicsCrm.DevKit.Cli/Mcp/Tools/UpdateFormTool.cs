@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Always read the current form first with get_forms to understand the structure\n" +
             "- Read schema://formxml for the XSD schema reference\n" +
             "- Read docs://instructions_for_formxml for naming conventions and best practices\n" +
-            "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
+            "- Set auto_publish=false when making multiple changes, then call publish once\n" +
             "- Backup files are at: .devkit/backups/forms/{entity}_{formid}_{timestamp}.formxml.json")]
         public CallToolResult upsert_form(
             [Description(
@@ -142,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool backup = true,
             [Description(
                 "Publish the entity after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish_customizations once."
+                "Set false if batching multiple changes, then call publish once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -295,7 +295,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     // Update succeeded but publish failed — don't error, report it
                     var sb = BuildSuccessText(entityName, formId, formName, backupPath, validate, false);
                     sb.AppendLine($"PublishError: {ex.Message}");
-                    sb.AppendLine($"Tip: Call publish_customizations with entities='{objectTypeCode}' to retry");
+                    sb.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
                     sb.AppendLine();
                     AppendRollbackInfo(sb, backupPath, formId);
 
@@ -575,7 +575,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine($"FormId: {formId}");
                     sb.AppendLine($"RestoredFrom: {backupFilePath}");
                     sb.AppendLine($"PublishError: {ex.Message}");
-                    sb.AppendLine($"Tip: Call publish_customizations with entities='{entityName}' to retry");
+                    sb.AppendLine($"Tip: Call publish with entities='{entityName}' to retry");
 
                     return new CallToolResult
                     {

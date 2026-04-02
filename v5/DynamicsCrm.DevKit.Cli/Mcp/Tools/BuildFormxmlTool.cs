@@ -19,19 +19,19 @@ using System.Xml.Linq;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class BuildFormXmlTool
+    public class BuildFormxmlTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public BuildFormXmlTool(ServiceClient serviceClient)
+        public BuildFormxmlTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "build_form_xml",
+        [McpServerTool(Name = "build_formxml",
             Title = "Build modified FormXML with fields, sections, or tabs -- returns XML for upsert_form",
             ReadOnly = true, Destructive = false, Idempotent = true,
-            UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXmlResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(BuildFormxmlResult)),
         Description(
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
             "This is a READ-ONLY builder -- it returns the modified FormXML string. Use upsert_form to write it.\n\n" +
@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WORKFLOW:\n" +
             "1. (Optional) Call get_metadata_entities to understand available fields\n" +
             "2. (Optional) Call get_forms to see current form structure\n" +
-            "3. Call build_form_xml with desired operations\n" +
+            "3. Call build_formxml with desired operations\n" +
             "4. Pass the returned FormXML to upsert_form to write it to Dataverse\n\n" +
 
             "WHY USE THIS INSTEAD OF EDITING FORMXML MANUALLY:\n" +
@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- This tool does NOT modify Dataverse -- it only returns XML. Use upsert_form to apply changes.\n" +
             "- Combine multiple operations in one call (add tab + sections + fields + events in a single request)\n" +
             "- Duplicate libraries and handlers are automatically detected and skipped")]
-        public CallToolResult build_form_xml(
+        public CallToolResult build_formxml(
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
@@ -190,7 +190,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (missingFields.Count > 0)
                 {
                     var sb = new StringBuilder();
-                    sb.AppendLine($"[BuildFormXml] ERROR -- Field(s) not found in entity '{entityName}' metadata.");
+                    sb.AppendLine($"[BuildFormxml] ERROR -- Field(s) not found in entity '{entityName}' metadata.");
                     foreach (var f in missingFields)
                     {
                         sb.AppendLine($"- '{f}' not found");
@@ -258,7 +258,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // 9. Build response
                 var resultSb = new StringBuilder(2048);
-                resultSb.AppendLine($"[BuildFormXml] {entityName} -- {formName}");
+                resultSb.AppendLine($"[BuildFormxml] {entityName} -- {formName}");
                 resultSb.AppendLine();
                 resultSb.AppendLine("Operations performed:");
                 for (var i = 0; i < opSummaries.Count; i++)
@@ -282,7 +282,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resultSb.AppendLine();
                 resultSb.AppendLine($"Next step: Pass this FormXML to upsert_form(entity_name='{entityName}', form_id='{formId}', formxml=<above>)");
 
-                var structured = new BuildFormXmlResult
+                var structured = new BuildFormxmlResult
                 {
                     Entity = entityName,
                     FormId = formId.ToString(),
@@ -302,7 +302,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 return ErrorResult(
-                    $"[Error] build_form_xml failed\n" +
+                    $"[Error] build_formxml failed\n" +
                     $"Entity: {entityName}\nFormId: {formId}\n" +
                     $"Message: {ex.Message}");
             }

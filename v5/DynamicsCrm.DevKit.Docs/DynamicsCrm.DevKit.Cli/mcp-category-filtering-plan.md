@@ -14,7 +14,7 @@ The current categorization uses a hardcoded name-based approach with only **4 ca
 | **Metadata Discovery** | `ReadOnly=true` + name in hardcoded set | 6 tools |
 | **Query & Read** | `ReadOnly=true` + NOT in metadata set | ~10 tools |
 | **Data Operations** | `ReadOnly=false` + NOT advanced names | ~10 tools |
-| **Advanced** | `execute_webapi` or `publish_customizations` | 2 tools |
+| **Advanced** | `execute_webapi` or `publish` | 2 tools |
 
 ### Current Registration
 ```csharp
@@ -82,7 +82,7 @@ devkit mcp --category read,advance  # Read + Advance tools (excludes normal writ
 | 14 | `get_logs` | ✅ true | ❌ false | List / Detail | Query plugin trace logs (compact list or full detail) |
 | 15 | `get_histories` | ✅ true | ❌ false | Browse / Detail | Browse audit entries or detail for one record |
 | 16 | `get_rules` | ✅ true | ❌ false | List / Detail | List business rules or get one rule's XAML |
-| 17 | `build_form_xml` | ✅ true | ❌ false | Single | Build modified FormXML (read-only builder, returns XML) |
+| 17 | `build_formxml` | ✅ true | ❌ false | Single | Build modified FormXML (read-only builder, returns XML) |
 
 #### `write` — 7 tools (`ReadOnly=false`, safe/targeted operations)
 
@@ -101,7 +101,7 @@ devkit mcp --category read,advance  # Read + Advance tools (excludes normal writ
 | # | Tool Name | ReadOnly | Destructive | Why `advance`? |
 |---|---|---|---|---|
 | 1 | `execute_webapi` | ❌ false | ❌ false | Generic Web API — can do ANY HTTP method (GET/POST/PUT/PATCH/DELETE). Hard-blocks systemforms/savedqueries/sitemaps writes but allows everything else. Most powerful and dangerous. |
-| 2 | `publish_customizations` | ❌ false | ❌ false | Not a data mutation but a **system-wide side-effect**. Publishing affects ALL users immediately. Misuse can break production UI. |
+| 2 | `publish` | ❌ false | ❌ false | Not a data mutation but a **system-wide side-effect**. Publishing affects ALL users immediately. Misuse can break production UI. |
 | 3 | `get_variables` | ❌ false | ❌ false | **Mixed R/W** — `action=list|get` is read-only, `action=set` is write. Config changes affect all users and integrations. |
 
 ---
@@ -145,7 +145,7 @@ These tools implement a **List/Detail pattern** where the same tool handles both
 | 7 | `execute_fetchxml` | Query results (variable) | ✅ Verb pattern — not a get tool |
 | 8 | `search` | Search results (variable) | ✅ Verb pattern — not a get tool |
 | 9 | `parse_record_url` | Always parses one URL | ✅ Singular — always one URL |
-| 10 | `build_form_xml` | Always returns modified XML | ✅ Verb pattern — builder tool |
+| 10 | `build_formxml` | Always returns modified XML | ✅ Verb pattern — builder tool |
 
 ### Mixed-Mode Tools (Read + Write in same tool)
 
@@ -211,7 +211,7 @@ private static readonly Dictionary<Type, string> ToolCategories = new()
     { typeof(GetLogsTool), "read" },
     { typeof(GetHistoriesTool), "read" },
     { typeof(GetRulesTool), "read" },
-    { typeof(BuildFormXmlTool), "read" },
+    { typeof(BuildFormxmlTool), "read" },
 
     // write (8)
     { typeof(UpsertRecordTool), "write" },
@@ -224,7 +224,7 @@ private static readonly Dictionary<Type, string> ToolCategories = new()
 
     // advance (3)
     { typeof(ExecuteWebApiTool), "advance" },
-    { typeof(PublishCustomizationsTool), "advance" },
+    { typeof(PublishTool), "advance" },
     { typeof(GetVariablesTool), "advance" },
 };
 ```

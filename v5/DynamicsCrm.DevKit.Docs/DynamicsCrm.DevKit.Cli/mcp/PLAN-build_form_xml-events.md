@@ -1,12 +1,12 @@
-# Plan: Add `add_event` and `add_library` Operations to `build_form_xml`
+# Plan: Add `add_event` and `add_library` Operations to `build_formxml`
 
 ## Goal
 
-Enhance the `build_form_xml` MCP tool to support adding form event handlers (onload, onsave, onchange) and library references to FormXML. This eliminates the need for AI agents to manually edit raw FormXML for event operations.
+Enhance the `build_formxml` MCP tool to support adding form event handlers (onload, onsave, onchange) and library references to FormXML. This eliminates the need for AI agents to manually edit raw FormXML for event operations.
 
 ## Target File
 
-- `DynamicsCrm.DevKit.Cli/Mcp/Tools/BuildFormXmlTool.cs`
+- `DynamicsCrm.DevKit.Cli/Mcp/Tools/BuildFormxmlTool.cs`
 
 ## XSD Reference (FormXml.xsd)
 
@@ -188,7 +188,7 @@ Add an event handler (onload, onsave, onchange, etc.) to the form.
 
 ### Step 1: Update Description and Switch Statement
 
-In `BuildFormXmlTool.cs`:
+In `BuildFormxmlTool.cs`:
 
 1. Update the `Description` string to document `add_library` and `add_event` operations
 2. Add two new cases in the switch statement (line 215-231):
@@ -245,7 +245,7 @@ Update the McpServerTool Description to include:
 
 ### Step 7: Update Documentation
 
-Update `mcp-done/07.build_form_xml.md` to document the new operations.
+Update `mcp-done/07.build_formxml.md` to document the new operations.
 
 ---
 
@@ -259,7 +259,7 @@ Step 2: AI calls manage_web_resources(action="list", name_filter="account", type
         -> Returns: name="new_/js/account.js"
 Step 3: AI calls get_forms(entity="account", form_type=2)
         -> Returns: form_id="xxx-yyy"
-Step 4: AI calls build_form_xml(entity="account", form_id="xxx-yyy", operations=[
+Step 4: AI calls build_formxml(entity="account", form_id="xxx-yyy", operations=[
           {"action": "add_library", "library_name": "new_/js/account.js"},
           {"action": "add_event", "event_name": "onload",
            "function_name": "accOnload", "library_name": "new_/js/account.js"}

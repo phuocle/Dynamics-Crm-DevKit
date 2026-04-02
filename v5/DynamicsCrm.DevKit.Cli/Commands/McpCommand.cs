@@ -296,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 };
                 return metadataNames.Contains(name) ? "Metadata Discovery" : "Query & Read";
             }
-            if (name == "execute_webapi" || name == "publish_customizations")
+            if (name == "execute_webapi" || name == "publish")
                 return "Advanced";
             return "Data Operations";
         }
