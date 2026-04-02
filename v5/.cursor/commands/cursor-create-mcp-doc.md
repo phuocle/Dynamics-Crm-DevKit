@@ -1,6 +1,4 @@
----
-description: ""Rewrite an MCP tool doc to match the spec template format""
----
+# create-mcp-doc
 
 # Create MCP Doc
 

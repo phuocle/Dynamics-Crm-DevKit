@@ -1,5 +1,6 @@
 ---
 description: ""Rewrite an MCP tool doc to match the spec template format""
+mode: agent
 ---
 
 # Create MCP Doc
