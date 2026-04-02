@@ -89,7 +89,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return "Error: fetchxml is required.";
 
             if (max_records <= 0)
-                max_records = DataversePageLimit;
+                return "Error: max_records must be a positive integer (1-5000).";
             if (max_records > DataversePageLimit)
                 max_records = DataversePageLimit;
 
@@ -138,8 +138,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 page++;
             }
 
-            var finalHasMore = hasMore && allRecords.Count < maxRecords;
-            return CompactFormatter.FormatFetchXmlResults(allRecords, allRecords.Count, finalHasMore);
+            return CompactFormatter.FormatFetchXmlResults(allRecords, allRecords.Count, hasMore);
         }
 
         private static List<Dictionary<string, string>> ConvertEntities(IEnumerable<Entity> entities)

@@ -187,10 +187,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 }
             }
 
+            var recordWord = totalReturned == 1 ? "record" : "records";
             if (singleEntity != null)
-                sb.AppendLine($"{totalReturned} {singleEntity} records (more: {(hasMore ? "yes" : "no")})");
+                sb.AppendLine($"{totalReturned} {singleEntity} {recordWord} (more: {(hasMore ? "yes" : "no")})");
             else
-                sb.AppendLine($"{totalReturned} records (more: {(hasMore ? "yes" : "no")})");
+                sb.AppendLine($"{totalReturned} {recordWord} (more: {(hasMore ? "yes" : "no")})");
 
             sb.AppendLine();
             sb.AppendLine(string.Join("\t", allKeys));
