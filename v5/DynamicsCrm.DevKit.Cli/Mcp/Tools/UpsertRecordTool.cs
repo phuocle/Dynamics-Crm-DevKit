@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "upsert_record", Title = "Create, update, or upsert a record",
-            Destructive = false, ReadOnly = false,
+            Destructive = true, ReadOnly = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
             "Create, update, or upsert a record in a Dataverse table using a single tool.\n\n" +

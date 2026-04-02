@@ -172,7 +172,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "systemforms(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("update_form"));
+        Assert.IsTrue(result.Contains("upsert_form"));
     }
 
     [TestMethod]
@@ -181,7 +181,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Put, "savedqueries(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("update_view"));
+        Assert.IsTrue(result.Contains("upsert_view"));
     }
 
     [TestMethod]
@@ -190,7 +190,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Delete, "userqueries(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("update_view"));
+        Assert.IsTrue(result.Contains("upsert_view"));
     }
 
     [TestMethod]

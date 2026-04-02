@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- To understand how data is displayed in an entity's grid/list\n" +
             "- To find which columns are shown in the default view\n" +
             "- To get the FetchXML query behind a view for analysis or modification\n" +
-            "- Before modifying a view via update_view\n" +
+            "- Before modifying a view via upsert_view\n" +
             "- To help users create or customize views\n\n" +
 
             "TIPS:\n" +
@@ -58,8 +58,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- querytype=4 (QuickFind) defines what columns are searched\n" +
             "- The default Public view (isdefault=true, querytype=0) is shown by default\n" +
             "- LayoutXML defines column order and widths in the grid\n" +
-            "- To UPDATE a view: use update_view tool (auto-backup + sync validation + publish)\n" +
-            "- DO NOT use execute_webapi for view updates -- use update_view for safety")]
+            "- To UPDATE a view: use upsert_view tool (auto-backup + sync validation + publish)\n" +
+            "- DO NOT use execute_webapi for view updates -- use upsert_view for safety")]
         public string get_views(
             [Description(
                 "The entity logical name (always lowercase). " +

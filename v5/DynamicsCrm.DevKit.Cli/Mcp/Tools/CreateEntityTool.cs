@@ -23,8 +23,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "create_entity", Title = "Create a new custom Dataverse table (entity)",
-            Destructive = false, ReadOnly = false,
+        [McpServerTool(Name = "upsert_entity", Title = "Create a new custom Dataverse table (entity)",
+            Destructive = true, ReadOnly = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CreateEntityResult)),
         Description(
             "Create a new custom Dataverse entity (table) with guided parameters. " +
@@ -63,12 +63,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Entity name MUST include a publisher prefix (e.g., 'new_', 'cr_')\n" +
             "- After creation, use create_attribute to add columns\n" +
-            "- Then use build_form_xml + update_form to customize the default form\n" +
+            "- Then use build_form_xml + upsert_form to customize the default form\n" +
             "- Activity entities inherit from activitypointer and have special behavior\n" +
             "- UserOwned entities support sharing, assigning, and team ownership\n" +
             "- OrgOwned entities are visible to all users (no row-level security)\n" +
             "- Use get_components to find the solution unique name")]
-        public CallToolResult create_entity(
+        public CallToolResult upsert_entity(
             [Description(
                 "Logical name with publisher prefix (always lowercase). " +
                 "Must contain an underscore separating the prefix from the name. " +

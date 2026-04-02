@@ -61,8 +61,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- The default main form (isdefault=true, type=2) is what most users see\n" +
             "- FormXML defines: tabs > columns > sections > rows > cells > controls\n" +
             "- Use include_formxml=false (default) for quick discovery, true for detailed analysis\n" +
-            "- To UPDATE a form: use update_form tool (auto-backup + validate + publish)\n" +
-            "- DO NOT use execute_webapi for form updates -- use update_form for safety")]
+            "- To UPDATE a form: use upsert_form tool (auto-backup + validate + publish)\n" +
+            "- DO NOT use execute_webapi for form updates -- use upsert_form for safety")]
         public string get_forms(
             [Description(
                 "The entity logical name (always lowercase). " +

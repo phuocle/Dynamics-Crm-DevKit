@@ -29,12 +29,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "build_form_xml",
-            Title = "Build modified FormXML with fields, sections, or tabs -- returns XML for update_form",
+            Title = "Build modified FormXML with fields, sections, or tabs -- returns XML for upsert_form",
             ReadOnly = true, Destructive = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXmlResult)),
         Description(
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
-            "This is a READ-ONLY builder -- it returns the modified FormXML string. Use update_form to write it.\n\n" +
+            "This is a READ-ONLY builder -- it returns the modified FormXML string. Use upsert_form to write it.\n\n" +
 
             "FIVE OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "1. (Optional) Call get_metadata_entities to understand available fields\n" +
             "2. (Optional) Call get_forms to see current form structure\n" +
             "3. Call build_form_xml with desired operations\n" +
-            "4. Pass the returned FormXML to update_form to write it to Dataverse\n\n" +
+            "4. Pass the returned FormXML to upsert_form to write it to Dataverse\n\n" +
 
             "WHY USE THIS INSTEAD OF EDITING FORMXML MANUALLY:\n" +
             "- Automatically resolves classid GUIDs (most common source of errors)\n" +
@@ -91,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Fields can be simple strings (\"createdon\") or objects with overrides (label, disabled, colspan)\n" +
             "- Positions: \"last\" (default), \"first\", \"after:element_name\"\n" +
-            "- This tool does NOT modify Dataverse -- it only returns XML. Use update_form to apply changes.\n" +
+            "- This tool does NOT modify Dataverse -- it only returns XML. Use upsert_form to apply changes.\n" +
             "- Combine multiple operations in one call (add tab + sections + fields + events in a single request)\n" +
             "- Duplicate libraries and handlers are automatically detected and skipped")]
         public CallToolResult build_form_xml(
@@ -280,7 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resultSb.AppendLine("Modified FormXML:");
                 resultSb.AppendLine(modifiedFormXml);
                 resultSb.AppendLine();
-                resultSb.AppendLine($"Next step: Pass this FormXML to update_form(entity_name='{entityName}', form_id='{formId}', formxml=<above>)");
+                resultSb.AppendLine($"Next step: Pass this FormXML to upsert_form(entity_name='{entityName}', form_id='{formId}', formxml=<above>)");
 
                 var structured = new BuildFormXmlResult
                 {

@@ -40,9 +40,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "BLOCKED OPERATIONS (execute_webapi will REJECT these with an error):\n" +
             "You MUST NOT use execute_webapi to write to these endpoints. " +
             "The tool will hard-block and return an error if you try.\n" +
-            "- PATCH/PUT/DELETE systemforms(...) → Use update_form tool instead\n" +
-            "- PATCH/PUT/DELETE savedqueries(...) → Use update_view tool instead\n" +
-            "- PATCH/PUT/DELETE userqueries(...) → Use update_view tool instead\n" +
+            "- PATCH/PUT/DELETE systemforms(...) → Use upsert_form tool instead\n" +
+            "- PATCH/PUT/DELETE savedqueries(...) → Use upsert_view tool instead\n" +
+            "- PATCH/PUT/DELETE userqueries(...) → Use upsert_view tool instead\n" +
             "- PATCH/PUT/DELETE sitemaps(...) → Use update_sitemap tool instead\n" +
             "GET on these endpoints is allowed (reading is safe). " +
             "POST to create new records is allowed.\n" +
@@ -186,11 +186,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
         [
-            ("systemforms(", "update_form",
+            ("systemforms(", "upsert_form",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
-            ("savedqueries(", "update_view",
+            ("savedqueries(", "upsert_view",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
-            ("userqueries(", "update_view",
+            ("userqueries(", "upsert_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
             ("sitemaps(", "update_sitemap",
                 "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app.")

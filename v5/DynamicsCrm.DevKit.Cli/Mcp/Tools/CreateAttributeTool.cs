@@ -64,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "WHEN TO USE:\n" +
             "- To add a new field to an entity\n" +
-            "- After creating a new entity with create_entity\n" +
+            "- After creating a new entity with upsert_entity\n" +
             "- When extending an existing entity's data model\n\n" +
 
             "TIPS:\n" +

@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_view", Title = "Update, create, rename, or undo a view with backup, sync validation & publish",
+        [McpServerTool(Name = "upsert_view", Title = "Update, create, rename, or undo a view with backup, sync validation & publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpdateViewResult)),
         Description(
@@ -70,23 +70,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WORKFLOW FOR 'update' (MUST follow this order):\n" +
             "1. Call get_views with view_id to READ the current FetchXML + LayoutXML\n" +
             "2. Modify the XMLs as needed (follow docs://instructions_for_views rules)\n" +
-            "3. Call update_view with the modified XMLs\n" +
+            "3. Call upsert_view with the modified XMLs\n" +
             "4. Tool auto-handles: backup > validate > sync-check > update > publish\n" +
             "5. If something breaks: use the backup file paths from the response to rollback\n\n" +
 
             "WORKFLOW FOR 'create':\n" +
             "1. Call get_metadata_entities to discover available columns\n" +
             "2. Build LayoutXML with desired columns and FetchXML with desired filters\n" +
-            "3. Call update_view with action='create', view_name, layoutxml, and optionally fetchxml\n" +
+            "3. Call upsert_view with action='create', view_name, layoutxml, and optionally fetchxml\n" +
             "4. Tool auto-handles: duplicate check > validate > sync-check > create > publish\n\n" +
 
             "WORKFLOW FOR 'rename':\n" +
             "1. Call get_views to find the view_id\n" +
-            "2. Call update_view with action='rename', view_id, and view_name\n" +
+            "2. Call upsert_view with action='rename', view_id, and view_name\n" +
             "3. Tool auto-handles: duplicate check > backup > rename > publish\n\n" +
 
             "WORKFLOW FOR 'undo':\n" +
-            "1. Call update_view with action='undo', view_id, layoutxml=<layout backup file path>, " +
+            "1. Call upsert_view with action='undo', view_id, layoutxml=<layout backup file path>, " +
             "fetchxml=<fetch backup file path>\n" +
             "2. Tool auto-handles: read backups > validate > restore > publish (no new backup)\n" +
             "3. The backup file paths are returned in every update/rename response\n\n" +
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- For related entity columns, use <link-entity link-type='outer'> with a unique alias\n" +
             "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
             "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
-        public CallToolResult update_view(
+        public CallToolResult upsert_view(
             [Description(
                 "Action to perform: 'update' (default), 'create' (new view), 'rename' (change name), " +
                 "or 'undo' (restore from backup). " +
@@ -1006,7 +1006,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sbFetch.AppendLine($"<!-- Backup: {viewName} ({entityName}) -->");
             sbFetch.AppendLine($"<!-- ViewId: {viewId} -->");
             sbFetch.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
-            sbFetch.AppendLine($"<!-- To restore: call update_view with this file's content (excluding comments) -->");
+            sbFetch.AppendLine($"<!-- To restore: call upsert_view with this file's content (excluding comments) -->");
             sbFetch.AppendLine();
             if (!string.IsNullOrWhiteSpace(currentFetchXml))
                 sbFetch.Append(PrettyPrintXml(currentFetchXml));
@@ -1019,7 +1019,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sbLayout.AppendLine($"<!-- Backup: {viewName} ({entityName}) -->");
             sbLayout.AppendLine($"<!-- ViewId: {viewId} -->");
             sbLayout.AppendLine($"<!-- Timestamp: {DateTime.Now:yyyy-MM-dd HH:mm:ss} -->");
-            sbLayout.AppendLine($"<!-- To restore: call update_view with this file's content (excluding comments) -->");
+            sbLayout.AppendLine($"<!-- To restore: call upsert_view with this file's content (excluding comments) -->");
             sbLayout.AppendLine();
             if (!string.IsNullOrWhiteSpace(currentLayoutXml))
                 sbLayout.Append(PrettyPrintXml(currentLayoutXml));
@@ -1262,12 +1262,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 sb.AppendLine($"1. Read backup files from .devkit/backups/views/");
                 sb.AppendLine($"2. Remove the comment lines at the top (<!-- ... -->)");
-                sb.AppendLine($"3. Call update_view with the backup contents as layoutxml + fetchxml");
+                sb.AppendLine($"3. Call upsert_view with the backup contents as layoutxml + fetchxml");
             }
             else
             {
                 sb.AppendLine($"1. Retrieve the previous XMLs (no backup was created)");
-                sb.AppendLine($"2. Call update_view with view_id='{viewId}' and the original layoutxml + fetchxml");
+                sb.AppendLine($"2. Call upsert_view with view_id='{viewId}' and the original layoutxml + fetchxml");
             }
         }
 

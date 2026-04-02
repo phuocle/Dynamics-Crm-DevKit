@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpdateSiteMapResult)),
         Description(
             "Update a Model-Driven App's SiteMap XML with automatic backup, XSD validation, and publishing. " +
-            "This completes the UI customization trilogy: Forms (update_form) → Views (update_view) → SiteMap (update_sitemap).\n\n" +
+            "This completes the UI customization trilogy: Forms (upsert_form) → Views (upsert_view) → SiteMap (update_sitemap).\n\n" +
 
             "TWO ACTIONS (controlled by 'action' parameter):\n" +
             "- 'update' (default): Modify SiteMap XML of an existing app. " +

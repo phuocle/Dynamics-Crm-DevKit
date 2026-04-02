@@ -48,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "  option set, relationship, web resource, sitemap)\n" +
             "- When user reports 'I made changes but they are not showing up'\n" +
             "- As the final step in any customization workflow\n" +
-            "- After using update_form or update_view tools (if auto_publish was false)\n\n" +
+            "- After using upsert_form or upsert_view tools (if auto_publish was false)\n\n" +
 
             "TIPS:\n" +
             "- Publish specific entities when possible (faster than publish all)\n" +

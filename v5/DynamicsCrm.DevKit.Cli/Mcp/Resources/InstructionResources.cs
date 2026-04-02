@@ -91,8 +91,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - SubGrid: {E7A81278-8635-4d9e-8D4D-59480B391C5B}
 
 ## After Making Changes
-- Use the dedicated update_form tool (NOT execute_webapi) to apply changes
-- update_form auto-handles: backup > validate > update > publish
+- Use the dedicated upsert_form tool (NOT execute_webapi) to apply changes
+- upsert_form auto-handles: backup > validate > update > publish
 - Verify the form loads correctly in the browser
 ";
 
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
   Without backup, you may need to restore the entire environment.
 
 ## Rollback Procedure (If View Breaks)
-1. Call update_view with action='undo', view_id, layoutxml=<layout backup file path>, fetchxml=<fetch backup file path>
+1. Call upsert_view with action='undo', view_id, layoutxml=<layout backup file path>, fetchxml=<fetch backup file path>
 2. Tool auto-handles: read backups > validate > restore > publish (no new backup created)
 3. The backup file paths are returned in every update/rename response
 4. Backup files are at: {working_directory}/.devkit/backups/views/
@@ -226,8 +226,8 @@ DateTime, Boolean, etc.) can be used as Find Columns.
 Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/quick-find
 
 ## After Making Changes
-- Use the dedicated update_view tool (NOT execute_webapi) to apply changes
-- update_view auto-handles: backup > validate > sync-check > update > publish
+- Use the dedicated upsert_view tool (NOT execute_webapi) to apply changes
+- upsert_view auto-handles: backup > validate > sync-check > update > publish
 - If something breaks: use action='undo' with the backup file paths from the response
 - Verify the view loads correctly in the browser
 ";

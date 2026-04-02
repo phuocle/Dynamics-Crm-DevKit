@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_form", Title = "Update, rename, or undo a form with backup, validation & publish",
+        [McpServerTool(Name = "upsert_form", Title = "Update, rename, or undo a form with backup, validation & publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpdateFormResult)),
         Description(
@@ -64,17 +64,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WORKFLOW FOR 'update' (MUST follow this order):\n" +
             "1. Call get_forms with form_id to READ the current FormXML\n" +
             "2. Modify the FormXML as needed (follow docs://instructions_for_formxml rules)\n" +
-            "3. Call update_form with the modified FormXML\n" +
+            "3. Call upsert_form with the modified FormXML\n" +
             "4. Tool auto-handles: backup → validate → update → publish\n" +
             "5. If something breaks: use action='undo' with the backup file path\n\n" +
 
             "WORKFLOW FOR 'rename':\n" +
             "1. Call get_forms to find the form_id\n" +
-            "2. Call update_form with action='rename', form_id, and form_name\n" +
+            "2. Call upsert_form with action='rename', form_id, and form_name\n" +
             "3. Tool auto-handles: duplicate check → backup → rename → publish\n\n" +
 
             "WORKFLOW FOR 'undo':\n" +
-            "1. Call update_form with action='undo', form_id, and formxml=<backup file path>\n" +
+            "1. Call upsert_form with action='undo', form_id, and formxml=<backup file path>\n" +
             "2. Tool auto-handles: read backup → validate XSD → update → publish (no new backup)\n" +
             "3. The backup file path is returned in every update/rename success response\n\n" +
 
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Read docs://instructions_for_formxml for naming conventions and best practices\n" +
             "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
             "- Backup files are at: .devkit/backups/forms/{entity}_{formid}_{timestamp}.formxml.json")]
-        public CallToolResult update_form(
+        public CallToolResult upsert_form(
             [Description(
                 "Action to perform: 'update' (default), 'rename' (change name), or 'undo' (restore from backup). " +
                 "For 'update': modifies FormXML of existing form (requires form_id + formxml). " +
@@ -836,12 +836,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine("To rollback this change:");
             if (backupPath != null)
             {
-                sb.AppendLine($"  Call update_form with action='undo', form_id='{formId}', formxml='{backupPath}'");
+                sb.AppendLine($"  Call upsert_form with action='undo', form_id='{formId}', formxml='{backupPath}'");
             }
             else
             {
                 sb.AppendLine($"  1. Retrieve the previous FormXML (no backup was created)");
-                sb.AppendLine($"  2. Call update_form with form_id='{formId}' and the original formxml");
+                sb.AppendLine($"  2. Call upsert_form with form_id='{formId}' and the original formxml");
             }
         }
 
