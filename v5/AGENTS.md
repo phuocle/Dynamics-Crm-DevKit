@@ -123,9 +123,9 @@ Detection priority: `--plain` CLI flag > `NO_COLOR` env var > default (rich outp
 
 Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run CLI with `commandLineArgs`.
 
-### MCP Tools (27)
+### MCP Tools (26)
 
-`whoami`, `get_metadata_entities`, `get_messages`, `get_global_optionsets`, `get_record`, `get_components`, `execute_fetchxml`, `search`, `create_record`, `update_record`, `delete_record`, `execute_webapi`, `publish_customizations`, `get_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_form_xml`, `get_histories`, `upsert_entity`, `update_sitemap`, `create_attribute`, `get_variables`, `update_attribute`, `get_rules`
+`whoami`, `get_metadata_entities`, `get_messages`, `get_global_optionsets`, `get_record`, `get_components`, `execute_fetchxml`, `search`, `create_record`, `update_record`, `delete_record`, `execute_webapi`, `publish_customizations`, `get_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_form_xml`, `get_histories`, `upsert_entity`, `update_sitemap`, `upsert_attribute`, `get_variables`, `get_rules`
 
 ### MCP Resources (6)
 

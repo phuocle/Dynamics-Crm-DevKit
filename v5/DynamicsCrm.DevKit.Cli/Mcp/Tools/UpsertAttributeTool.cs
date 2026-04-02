@@ -16,65 +16,72 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class CreateAttributeTool
+    public class UpsertAttributeTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public CreateAttributeTool(ServiceClient serviceClient)
+        public UpsertAttributeTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "create_attribute", Title = "Add a new column (attribute) to a Dataverse entity",
+        [McpServerTool(Name = "upsert_attribute", Title = "Create or update a column (attribute) on a Dataverse entity",
             Destructive = false, ReadOnly = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(CreateAttributeResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertAttributeResult)),
         Description(
-            "Add a new column (attribute) to an existing Dataverse entity. " +
+            "Create a new column or update an existing column (attribute) on a Dataverse entity. " +
+            "Automatically detects whether the attribute exists: creates if new, updates if existing. " +
             "Supports all common types: string, memo, integer, bigint, decimal, money, float, boolean, " +
             "datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
+
+            "CREATE MODE (attribute does not exist):\n" +
+            "- attribute_type and display_name are REQUIRED\n" +
+            "- Creates the column with all specified properties\n" +
+            "- For lookup: creates 1:N relationship automatically\n" +
+            "- For customer: creates polymorphic lookup (account+contact)\n\n" +
+
+            "UPDATE MODE (attribute already exists):\n" +
+            "- attribute_type is IGNORED (cannot change type after creation)\n" +
+            "- Only provided parameters are updated, omitted ones keep current values\n" +
+            "- Supports: display_name, description, required_level, max_length, min/max_value, precision, format\n" +
+            "- For boolean: true_label, false_label\n" +
+            "- For picklist: add_options, update_options, delete_options\n" +
+            "- For audit/advanced find: is_audit_enabled, is_valid_for_advanced_find\n\n" +
 
             "PARAMETERS:\n" +
             "- entity_name (required): Entity logical name (e.g., 'account').\n" +
             "- attribute_name (required): Logical name with publisher prefix (e.g., 'new_priority').\n" +
-            "- attribute_type (required): Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', " +
-            "'money', 'float', 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.\n" +
-            "- display_name (required): Display name shown in forms.\n" +
+            "- attribute_type: Column type (required for create, ignored for update).\n" +
+            "- display_name: Display name shown in forms (required for create).\n" +
             "- description: Column description.\n" +
             "- required_level: 'None' (default), 'Recommended', or 'Required'.\n" +
-            "- max_length: For string: max characters (1-4000, default 100). For memo: (1-1048576, default 2000). For file: max KB (default 32768).\n" +
-            "- min_value: For integer/decimal/float/money: minimum value.\n" +
-            "- max_value: For integer/decimal/float/money: maximum value.\n" +
-            "- precision: For decimal/money/float: decimal places (0-10). Default: 2.\n" +
-            "- format: For string: 'Text','Email','Url','Phone','TextArea','TickerSymbol','RichText'. " +
-            "For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.\n" +
-            "- options: For picklist/multipicklist: JSON array [{\"label\":\"Low\",\"value\":100000000}].\n" +
-            "- global_optionset_name: For picklist/multipicklist: reuse existing global option set.\n" +
-            "- lookup_target: For lookup: target entity logical name (e.g., 'contact'). " +
-            "For customer: ignored (auto-targets account+contact).\n" +
-            "- lookup_relationship_name: For lookup: relationship schema name. Auto-generated if omitted.\n" +
-            "- true_label: For boolean: label for true (default 'Yes').\n" +
-            "- false_label: For boolean: label for false (default 'No').\n" +
-            "- solution_name: Add column to this solution.\n" +
-            "- auto_publish: Publish after creation (default: true).\n\n" +
+            "- max_length: For string/memo/file: max length.\n" +
+            "- min_value/max_value: For numeric types.\n" +
+            "- precision: For decimal/money/float: decimal places (0-10).\n" +
+            "- format: For string/datetime/integer.\n" +
+            "- options: For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].\n" +
+            "- global_optionset_name: For picklist (create): reuse existing global option set.\n" +
+            "- lookup_target: For lookup (create): target entity.\n" +
+            "- true_label/false_label: For boolean.\n" +
+            "- add_options: For picklist (update): JSON array of options to add.\n" +
+            "- update_options: For picklist (update): JSON array of options to rename.\n" +
+            "- delete_options: For picklist (update): JSON array of integer values to remove.\n" +
+            "- is_audit_enabled: Enable/disable auditing (update only).\n" +
+            "- is_valid_for_advanced_find: Show/hide in Advanced Find (update only).\n" +
+            "- solution_name: Solution unique name.\n" +
+            "- auto_publish: Publish after operation (default: true).\n\n" +
 
             "RETURNS:\n" +
-            "- Created attribute details: name, type, MetadataId\n" +
-            "- Options (for picklist), target (for lookup)\n" +
-            "- Solution and publish status\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- To add a new field to an entity\n" +
-            "- After creating a new entity with upsert_entity\n" +
-            "- When extending an existing entity's data model\n\n" +
+            "- Attribute details: name, type, MetadataId (create) or before/after changes (update)\n" +
+            "- Publish status\n\n" +
 
             "TIPS:\n" +
             "- Attribute name MUST include publisher prefix (e.g., 'new_', 'cr_')\n" +
-            "- Use get_metadata_entities to verify the attribute doesn't already exist\n" +
-            "- For lookups: also creates the 1:N relationship automatically\n" +
-            "- For customer: creates a polymorphic lookup targeting account+contact (like the OOB customerid field)\n" +
+            "- Use get_metadata_entities to check if attribute already exists\n" +
+            "- Cannot change attribute type after creation — Dataverse limitation\n" +
             "- For picklist with existing choices: use global_optionset_name instead of options\n" +
             "- After creation, use build_form_xml to add the new field to a form")]
-        public CallToolResult create_attribute(
+        public CallToolResult upsert_attribute(
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
@@ -144,17 +151,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Auto-generated as '{entity}_{target}_{attribute}' if omitted."
             )] string lookup_relationship_name = "",
             [Description(
-                "For boolean: label for the true/yes value. Default: 'Yes'."
+                "For boolean: label for the true/yes value. Default: 'Yes'. (Create: initial value. Update: leave empty to keep current.)"
             )] string true_label = "Yes",
             [Description(
-                "For boolean: label for the false/no value. Default: 'No'."
+                "For boolean: label for the false/no value. Default: 'No'. (Create: initial value. Update: leave empty to keep current.)"
             )] string false_label = "No",
+            [Description(
+                "For picklist/multipicklist (update only): JSON array of options to add. " +
+                "Each element: {\"label\":\"Critical\",\"value\":100000003}. " +
+                "Value is optional (auto-assigned if omitted)."
+            )] string add_options = "",
+            [Description(
+                "For picklist/multipicklist (update only): JSON array of options to rename. " +
+                "Each element: {\"label\":\"New Label\",\"value\":100000000}."
+            )] string update_options = "",
+            [Description(
+                "For picklist/multipicklist (update only): JSON array of integer values to remove. " +
+                "Example: [100000002, 100000003]."
+            )] string delete_options = "",
+            [Description(
+                "Enable or disable auditing on this column (update only). Leave null to keep current."
+            )] bool? is_audit_enabled = null,
+            [Description(
+                "Show or hide this column in Advanced Find (update only). Leave null to keep current."
+            )] bool? is_valid_for_advanced_find = null,
             [Description(
                 "Solution unique name to add the column to. Leave empty for default solution. " +
                 "Use get_components to find valid solution names."
             )] string solution_name = "",
             [Description(
-                "Publish the entity after creation. Default: true."
+                "Publish the entity after operation. Default: true."
             )] bool auto_publish = true)
         {
             // --- Validate required parameters ---
@@ -162,13 +188,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.");
             if (string.IsNullOrWhiteSpace(attribute_name))
                 return ErrorResult("Error: attribute_name is required.");
-            if (string.IsNullOrWhiteSpace(attribute_type))
-                return ErrorResult("Error: attribute_type is required.");
-            if (string.IsNullOrWhiteSpace(display_name))
-                return ErrorResult("Error: display_name is required.");
 
             entity_name = entity_name.Trim().ToLowerInvariant();
             attribute_name = attribute_name.Trim().ToLowerInvariant();
+
+            // --- Try to retrieve existing attribute to decide create vs update ---
+            AttributeMetadata existingMetadata = null;
+            try
+            {
+                var retrieveRequest = new RetrieveAttributeRequest
+                {
+                    EntityLogicalName = entity_name,
+                    LogicalName = attribute_name,
+                    RetrieveAsIfPublished = true
+                };
+                var retrieveResponse = (RetrieveAttributeResponse)_serviceClient.Execute(retrieveRequest);
+                existingMetadata = retrieveResponse.AttributeMetadata;
+            }
+            catch
+            {
+                // Attribute does not exist → create mode
+            }
+
+            if (existingMetadata != null)
+            {
+                // --- UPDATE MODE ---
+                return UpdateExistingAttribute(entity_name, attribute_name, existingMetadata,
+                    display_name, description, required_level, max_length, min_value, max_value,
+                    precision, format, true_label, false_label,
+                    add_options, update_options, delete_options,
+                    is_audit_enabled, is_valid_for_advanced_find, auto_publish);
+            }
+
+            // --- CREATE MODE ---
+            if (string.IsNullOrWhiteSpace(attribute_type))
+                return ErrorResult("Error: attribute_type is required when creating a new attribute.");
+            if (string.IsNullOrWhiteSpace(display_name))
+                return ErrorResult("Error: display_name is required when creating a new attribute.");
+
             attribute_type = attribute_type.Trim().ToLowerInvariant();
 
             // Validate publisher prefix on attribute name
@@ -988,7 +1045,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string displayName, AttributeRequiredLevel reqLevel, Guid metadataId, string solutionName, bool published,
             Dictionary<string, string> extra = null)
         {
-            var structured = new CreateAttributeResult
+            var structured = new UpsertAttributeResult
             {
                 EntityName = entityName,
                 AttributeName = logicalName,
@@ -1120,6 +1177,340 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return ErrorResult($"Error: Failed to create attribute '{entityName}.{attributeName}'\nMessage: {msg}");
+        }
+
+        // ========== UPDATE MODE ==========
+
+        private CallToolResult UpdateExistingAttribute(string entityName, string attributeName,
+            AttributeMetadata metadata, string displayName, string description, string requiredLevel,
+            int maxLength, double? minValue, double? maxValue, int precision, string format,
+            string trueLabel, string falseLabel,
+            string addOptions, string updateOptions, string deleteOptions,
+            bool? isAuditEnabled, bool? isValidForAdvancedFind, bool autoPublish)
+        {
+            try
+            {
+                var changes = new List<string>();
+                var structuredChanges = new Dictionary<string, UpdateAttributeChange>();
+
+                // --- Generic property updates (all types) ---
+                if (!string.IsNullOrWhiteSpace(displayName))
+                {
+                    var oldVal = metadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
+                    metadata.DisplayName = new Label(displayName.Trim(), 1033);
+                    changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
+                    structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
+                }
+
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    var oldVal = metadata.Description?.UserLocalizedLabel?.Label ?? "";
+                    metadata.Description = new Label(description.Trim(), 1033);
+                    changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
+                    structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
+                }
+
+                if (!string.IsNullOrWhiteSpace(requiredLevel))
+                {
+                    var oldLevel = metadata.RequiredLevel?.Value.ToString() ?? "None";
+                    var newLevel = ParseRequiredLevel(requiredLevel);
+                    metadata.RequiredLevel = new AttributeRequiredLevelManagedProperty(newLevel);
+                    changes.Add($"RequiredLevel: {oldLevel} -> {newLevel}");
+                    structuredChanges["requiredLevel"] = new UpdateAttributeChange { OldValue = oldLevel, NewValue = newLevel.ToString() };
+                }
+
+                if (isAuditEnabled.HasValue)
+                {
+                    var oldVal = metadata.IsAuditEnabled?.Value == true ? "true" : "false";
+                    metadata.IsAuditEnabled = new BooleanManagedProperty(isAuditEnabled.Value);
+                    changes.Add($"IsAuditEnabled: {oldVal} -> {isAuditEnabled.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isAuditEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isAuditEnabled.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (isValidForAdvancedFind.HasValue)
+                {
+                    var oldVal = metadata.IsValidForAdvancedFind?.Value == true ? "true" : "false";
+                    metadata.IsValidForAdvancedFind = new BooleanManagedProperty(isValidForAdvancedFind.Value);
+                    changes.Add($"IsValidForAdvancedFind: {oldVal} -> {isValidForAdvancedFind.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isValidForAdvancedFind"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isValidForAdvancedFind.Value.ToString().ToLowerInvariant() };
+                }
+
+                // --- Type-specific property updates ---
+                ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
+                    trueLabel, falseLabel, changes, structuredChanges);
+
+                // --- Execute metadata update (if any generic/type-specific changes) ---
+                if (changes.Count > 0)
+                {
+                    var updateRequest = new UpdateAttributeRequest
+                    {
+                        EntityName = entityName,
+                        Attribute = metadata,
+                        MergeLabels = true
+                    };
+                    _serviceClient.Execute(updateRequest);
+                }
+
+                // --- Picklist option management ---
+                var optionResults = ManagePicklistOptions(entityName, attributeName, metadata,
+                    addOptions, updateOptions, deleteOptions);
+
+                if (changes.Count == 0 && optionResults.Count == 0)
+                    return ErrorResult(
+                        $"[Error] No changes specified for '{entityName}.{attributeName}'\n" +
+                        "Tip: Provide at least one parameter to update (display_name, required_level, max_length, etc.)");
+
+                // --- Publish ---
+                var published = PublishIfNeeded(autoPublish, entityName);
+
+                // --- Format output ---
+                var typeName = GetAttributeTypeName(metadata);
+                var sb = new StringBuilder(512);
+                sb.AppendLine($"[AttributeUpdated] {entityName}.{attributeName}");
+                sb.AppendLine($"Type: {typeName}");
+
+                if (changes.Count > 0)
+                {
+                    sb.AppendLine("Changes:");
+                    foreach (var c in changes)
+                        sb.AppendLine($"  {c}");
+                }
+
+                foreach (var or in optionResults)
+                    sb.AppendLine(or);
+
+                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+                var structured = new UpsertAttributeResult
+                {
+                    EntityName = entityName,
+                    AttributeName = attributeName,
+                    AttributeType = typeName,
+                    Changes = structuredChanges.Count > 0 ? structuredChanges : null,
+                    OptionsAdded = optionResults.Where(r => r.StartsWith("OptionsAdded:")).Select(r => r.Substring("OptionsAdded: ".Length)).ToList(),
+                    OptionsRenamed = optionResults.Where(r => r.StartsWith("OptionsRenamed:")).Select(r => r.Substring("OptionsRenamed: ".Length)).ToList(),
+                    OptionsDeleted = optionResults.Where(r => r.StartsWith("OptionsDeleted:")).Select(r => r.Substring("OptionsDeleted: ".Length)).ToList(),
+                    Published = published,
+                    Status = "updated"
+                };
+                if (structured.OptionsAdded?.Count == 0) structured.OptionsAdded = null;
+                if (structured.OptionsRenamed?.Count == 0) structured.OptionsRenamed = null;
+                if (structured.OptionsDeleted?.Count == 0) structured.OptionsDeleted = null;
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                if (msg.Contains("could not be found", StringComparison.OrdinalIgnoreCase) ||
+                    msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase))
+                {
+                    return ErrorResult(
+                        $"[Error] Entity or attribute not found: '{entityName}.{attributeName}'\n" +
+                        $"Message: {msg}\n" +
+                        "Tip: Use get_metadata_entities to find the correct names");
+                }
+                return ErrorResult($"Error: Failed to update attribute '{entityName}.{attributeName}'\nMessage: {msg}");
+            }
+        }
+
+        // ========== Type-Specific Updates ==========
+
+        private static void ApplyTypeSpecificUpdates(AttributeMetadata metadata,
+            int maxLength, double? minValue, double? maxValue, int precision, string format,
+            string trueLabel, string falseLabel,
+            List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges)
+        {
+            if (metadata is StringAttributeMetadata stringMeta)
+            {
+                if (maxLength > 0)
+                {
+                    var oldVal = stringMeta.MaxLength?.ToString() ?? "";
+                    if (maxLength > 4000) maxLength = 4000;
+                    stringMeta.MaxLength = maxLength;
+                    changes.Add($"MaxLength: {oldVal} -> {maxLength}");
+                    structuredChanges["maxLength"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = maxLength.ToString() };
+                }
+                if (!string.IsNullOrWhiteSpace(format))
+                {
+                    var oldVal = stringMeta.FormatName?.Value ?? "Text";
+                    stringMeta.FormatName = ResolveStringFormat(format);
+                    changes.Add($"Format: {oldVal} -> {stringMeta.FormatName.Value}");
+                    structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = stringMeta.FormatName.Value };
+                }
+                return;
+            }
+
+            if (metadata is MemoAttributeMetadata memoMeta)
+            {
+                if (maxLength > 0)
+                {
+                    var oldVal = memoMeta.MaxLength?.ToString() ?? "";
+                    if (maxLength > 1048576) maxLength = 1048576;
+                    memoMeta.MaxLength = maxLength;
+                    changes.Add($"MaxLength: {oldVal} -> {maxLength}");
+                    structuredChanges["maxLength"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = maxLength.ToString() };
+                }
+                return;
+            }
+
+            if (metadata is IntegerAttributeMetadata intMeta)
+            {
+                if (minValue.HasValue)
+                {
+                    var oldVal = intMeta.MinValue?.ToString() ?? "";
+                    intMeta.MinValue = (int)minValue.Value;
+                    changes.Add($"MinValue: {oldVal} -> {(int)minValue.Value}");
+                    structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = ((int)minValue.Value).ToString() };
+                }
+                if (maxValue.HasValue)
+                {
+                    var oldVal = intMeta.MaxValue?.ToString() ?? "";
+                    intMeta.MaxValue = (int)maxValue.Value;
+                    changes.Add($"MaxValue: {oldVal} -> {(int)maxValue.Value}");
+                    structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = ((int)maxValue.Value).ToString() };
+                }
+                return;
+            }
+
+            if (metadata is DecimalAttributeMetadata decMeta)
+            {
+                if (minValue.HasValue) { var o = decMeta.MinValue?.ToString() ?? ""; decMeta.MinValue = (decimal)minValue.Value; changes.Add($"MinValue: {o} -> {(decimal)minValue.Value}"); structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = o, NewValue = ((decimal)minValue.Value).ToString() }; }
+                if (maxValue.HasValue) { var o = decMeta.MaxValue?.ToString() ?? ""; decMeta.MaxValue = (decimal)maxValue.Value; changes.Add($"MaxValue: {o} -> {(decimal)maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = ((decimal)maxValue.Value).ToString() }; }
+                if (precision >= 0) { var o = decMeta.Precision?.ToString() ?? ""; if (precision > 10) precision = 10; decMeta.Precision = precision; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
+                return;
+            }
+
+            if (metadata is MoneyAttributeMetadata moneyMeta)
+            {
+                if (minValue.HasValue) { var o = moneyMeta.MinValue?.ToString() ?? ""; moneyMeta.MinValue = minValue.Value; changes.Add($"MinValue: {o} -> {minValue.Value}"); structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = o, NewValue = minValue.Value.ToString() }; }
+                if (maxValue.HasValue) { var o = moneyMeta.MaxValue?.ToString() ?? ""; moneyMeta.MaxValue = maxValue.Value; changes.Add($"MaxValue: {o} -> {maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = maxValue.Value.ToString() }; }
+                if (precision >= 0) { var o = moneyMeta.Precision?.ToString() ?? ""; if (precision > 4) precision = 4; moneyMeta.Precision = precision; moneyMeta.PrecisionSource = 2; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
+                return;
+            }
+
+            if (metadata is DoubleAttributeMetadata dblMeta)
+            {
+                if (minValue.HasValue) { var o = dblMeta.MinValue?.ToString() ?? ""; dblMeta.MinValue = minValue.Value; changes.Add($"MinValue: {o} -> {minValue.Value}"); structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = o, NewValue = minValue.Value.ToString() }; }
+                if (maxValue.HasValue) { var o = dblMeta.MaxValue?.ToString() ?? ""; dblMeta.MaxValue = maxValue.Value; changes.Add($"MaxValue: {o} -> {maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = maxValue.Value.ToString() }; }
+                if (precision >= 0) { var o = dblMeta.Precision?.ToString() ?? ""; if (precision > 10) precision = 10; dblMeta.Precision = precision; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
+                return;
+            }
+
+            if (metadata is BooleanAttributeMetadata boolMeta)
+            {
+                if (!string.IsNullOrWhiteSpace(trueLabel))
+                {
+                    var oldVal = boolMeta.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label ?? "Yes";
+                    boolMeta.OptionSet.TrueOption.Label = new Label(trueLabel.Trim(), 1033);
+                    changes.Add($"TrueLabel: \"{oldVal}\" -> \"{trueLabel.Trim()}\"");
+                    structuredChanges["trueLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = trueLabel.Trim() };
+                }
+                if (!string.IsNullOrWhiteSpace(falseLabel))
+                {
+                    var oldVal = boolMeta.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label ?? "No";
+                    boolMeta.OptionSet.FalseOption.Label = new Label(falseLabel.Trim(), 1033);
+                    changes.Add($"FalseLabel: \"{oldVal}\" -> \"{falseLabel.Trim()}\"");
+                    structuredChanges["falseLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = falseLabel.Trim() };
+                }
+                return;
+            }
+
+            if (metadata is DateTimeAttributeMetadata dtMeta)
+            {
+                if (!string.IsNullOrWhiteSpace(format))
+                {
+                    var oldVal = dtMeta.Format?.ToString() ?? "DateAndTime";
+                    var newFormat = format.Trim().Equals("DateOnly", StringComparison.OrdinalIgnoreCase)
+                        ? DateTimeFormat.DateOnly : DateTimeFormat.DateAndTime;
+                    dtMeta.Format = newFormat;
+                    changes.Add($"Format: {oldVal} -> {newFormat}");
+                    structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = newFormat.ToString() };
+                }
+            }
+        }
+
+        // ========== Picklist Option Management ==========
+
+        private List<string> ManagePicklistOptions(string entityName, string attributeName,
+            AttributeMetadata metadata, string addOptionsJson, string updateOptionsJson, string deleteOptionsJson)
+        {
+            var results = new List<string>();
+            var isPicklist = metadata is PicklistAttributeMetadata || metadata is MultiSelectPicklistAttributeMetadata;
+            if (!isPicklist)
+            {
+                if (!string.IsNullOrWhiteSpace(addOptionsJson) || !string.IsNullOrWhiteSpace(updateOptionsJson) || !string.IsNullOrWhiteSpace(deleteOptionsJson))
+                    results.Add($"[Warning] Option management ignored — attribute type is {GetAttributeTypeName(metadata)}, not Picklist/MultiSelectPicklist");
+                return results;
+            }
+
+            if (!string.IsNullOrWhiteSpace(addOptionsJson))
+            {
+                var opts = ParseOptions(addOptionsJson);
+                if (opts != null)
+                    foreach (var opt in opts)
+                    {
+                        var req = new InsertOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Label = new Label(opt.Label, 1033) };
+                        if (opt.Value.HasValue) req.Value = opt.Value.Value;
+                        var resp = (InsertOptionValueResponse)_serviceClient.Execute(req);
+                        results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue})");
+                    }
+            }
+
+            if (!string.IsNullOrWhiteSpace(updateOptionsJson))
+            {
+                var opts = ParseOptions(updateOptionsJson);
+                if (opts != null)
+                    foreach (var opt in opts)
+                    {
+                        if (!opt.Value.HasValue) continue;
+                        _serviceClient.Execute(new UpdateOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Value = opt.Value.Value, Label = new Label(opt.Label, 1033), MergeLabels = true });
+                        results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
+                    }
+            }
+
+            if (!string.IsNullOrWhiteSpace(deleteOptionsJson))
+            {
+                var values = ParseDeleteValues(deleteOptionsJson);
+                if (values != null)
+                    foreach (var val in values)
+                    {
+                        _serviceClient.Execute(new DeleteOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Value = val });
+                        results.Add($"OptionsDeleted: {val}");
+                    }
+            }
+
+            return results;
+        }
+
+        private static string GetAttributeTypeName(AttributeMetadata metadata) => metadata switch
+        {
+            StringAttributeMetadata => "String",
+            MemoAttributeMetadata => "Memo",
+            IntegerAttributeMetadata => "Integer",
+            BigIntAttributeMetadata => "BigInt",
+            DecimalAttributeMetadata => "Decimal",
+            MoneyAttributeMetadata => "Money",
+            DoubleAttributeMetadata => "Float",
+            BooleanAttributeMetadata => "Boolean",
+            DateTimeAttributeMetadata => "DateTime",
+            LookupAttributeMetadata => "Lookup",
+            PicklistAttributeMetadata => "Picklist",
+            MultiSelectPicklistAttributeMetadata => "MultiSelectPicklist",
+            ImageAttributeMetadata => "Image",
+            FileAttributeMetadata => "File",
+            _ => metadata.AttributeTypeName?.Value ?? metadata.AttributeType?.ToString() ?? "Unknown"
+        };
+
+        private static List<int> ParseDeleteValues(string json)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return null;
+            try { return JsonSerializer.Deserialize<List<int>>(json); }
+            catch { return null; }
         }
 
         private static CallToolResult ErrorResult(string message) => new()

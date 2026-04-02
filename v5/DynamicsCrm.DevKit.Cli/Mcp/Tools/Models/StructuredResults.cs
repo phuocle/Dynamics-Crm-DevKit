@@ -279,7 +279,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RestoredFromBackup { get; set; }
     }
 
-    internal sealed class CreateAttributeResult
+    internal sealed class UpsertAttributeResult
     {
         [JsonPropertyName("entityName")]
         public string EntityName { get; set; }
@@ -291,17 +291,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string AttributeType { get; set; }
 
         [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DisplayName { get; set; }
 
         [JsonPropertyName("requiredLevel")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RequiredLevel { get; set; }
 
         [JsonPropertyName("metadataId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string MetadataId { get; set; }
 
         [JsonPropertyName("solutionName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
+
+        [JsonPropertyName("changes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, UpdateAttributeChange> Changes { get; set; }
+
+        [JsonPropertyName("optionsAdded")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsAdded { get; set; }
+
+        [JsonPropertyName("optionsRenamed")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsRenamed { get; set; }
+
+        [JsonPropertyName("optionsDeleted")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsDeleted { get; set; }
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
@@ -378,39 +397,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string NewValue { get; set; }
     }
 
-    internal sealed class UpdateAttributeResult
-    {
-        [JsonPropertyName("entityName")]
-        public string EntityName { get; set; }
 
-        [JsonPropertyName("attributeName")]
-        public string AttributeName { get; set; }
-
-        [JsonPropertyName("attributeType")]
-        public string AttributeType { get; set; }
-
-        [JsonPropertyName("changes")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, UpdateAttributeChange> Changes { get; set; }
-
-        [JsonPropertyName("optionsAdded")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> OptionsAdded { get; set; }
-
-        [JsonPropertyName("optionsRenamed")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> OptionsRenamed { get; set; }
-
-        [JsonPropertyName("optionsDeleted")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> OptionsDeleted { get; set; }
-
-        [JsonPropertyName("published")]
-        public bool Published { get; set; }
-
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
-    }
 
     internal sealed class EnvironmentVariableItem
     {

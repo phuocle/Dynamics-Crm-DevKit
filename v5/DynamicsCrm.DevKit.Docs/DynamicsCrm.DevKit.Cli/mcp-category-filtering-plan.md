@@ -52,9 +52,9 @@ devkit mcp --category read,advance  # Read + Advance tools (excludes normal writ
 | Category | Slug | Description | Tool Count |
 |---|---|---|---|
 | **Read** | `read` | All read-only, non-destructive tools — metadata discovery, querying, searching | 17 |
-| **Write** | `write` | Tools that create, update, or delete data/metadata with safety nets | 8 |
+| **Write** | `write` | Tools that create, update, or delete data/metadata with safety nets | 7 |
 | **Advance** | `advance` | Powerful/dangerous tools that bypass safety nets or have mixed R/W behavior | 3 |
-| **All** | `all` | Everything (default) | 28 |
+| **All** | `all` | Everything (default) | 27 |
 
 ---
 
@@ -84,18 +84,17 @@ devkit mcp --category read,advance  # Read + Advance tools (excludes normal writ
 | 16 | `get_rules` | ✅ true | ❌ false | List / Detail | List business rules or get one rule's XAML |
 | 17 | `build_form_xml` | ✅ true | ❌ false | Single | Build modified FormXML (read-only builder, returns XML) |
 
-#### `write` — 8 tools (`ReadOnly=false`, safe/targeted operations)
+#### `write` — 7 tools (`ReadOnly=false`, safe/targeted operations)
 
 | # | Tool Name | ReadOnly | Destructive | Purpose |
 |---|---|---|---|---|
 | 1 | `upsert_record` | ❌ false | ❌ false | Create, update, or upsert a data record |
 | 2 | `delete_record` | ❌ false | ✅ true | Delete a data record |
 | 3 | `create_entity` | ❌ false | ❌ false | Create a new custom table |
-| 4 | `create_attribute` | ❌ false | ❌ false | Add a new column to a table |
-| 5 | `update_attribute` | ❌ false | ❌ false | Update column properties |
-| 6 | `update_form` | ❌ false | ✅ true | Update, rename, or undo a form (has backup+XSD validation) |
-| 7 | `update_view` | ❌ false | ✅ true | Update, create, rename, or undo a view (has backup+sync validation) |
-| 8 | `update_sitemap` | ❌ false | ✅ true | Update app SiteMap (has backup+XSD validation) |
+| 4 | `upsert_attribute` | ❌ false | ❌ false | Create or update a column on a table |
+| 5 | `update_form` | ❌ false | ✅ true | Update, rename, or undo a form (has backup+XSD validation) |
+| 6 | `update_view` | ❌ false | ✅ true | Update, create, rename, or undo a view (has backup+sync validation) |
+| 7 | `update_sitemap` | ❌ false | ✅ true | Update app SiteMap (has backup+XSD validation) |
 
 #### `advance` — 3 tools (powerful/mixed behavior, bypass safety nets)
 
@@ -218,8 +217,7 @@ private static readonly Dictionary<Type, string> ToolCategories = new()
     { typeof(UpsertRecordTool), "write" },
     { typeof(DeleteRecordTool), "write" },
     { typeof(CreateEntityTool), "write" },
-    { typeof(CreateAttributeTool), "write" },
-    { typeof(UpdateAttributeTool), "write" },
+    { typeof(UpsertAttributeTool), "write" },
     { typeof(UpdateFormTool), "write" },
     { typeof(UpdateViewTool), "write" },
     { typeof(UpdateSiteMapTool), "write" },

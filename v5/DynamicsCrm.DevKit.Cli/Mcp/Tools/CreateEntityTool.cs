@@ -62,7 +62,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Entity name MUST include a publisher prefix (e.g., 'new_', 'cr_')\n" +
-            "- After creation, use create_attribute to add columns\n" +
+            "- After creation, use upsert_attribute to add columns\n" +
             "- Then use build_form_xml + upsert_form to customize the default form\n" +
             "- Activity entities inherit from activitypointer and have special behavior\n" +
             "- UserOwned entities support sharing, assigning, and team ownership\n" +
