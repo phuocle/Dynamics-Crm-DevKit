@@ -48,9 +48,9 @@ DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\mcp\docs\mcp.spec.template.md
    - Note real entity names, field names, record data from the output
 3. Use this real data to craft grounded, accurate Example Prompts in the next step
 
-**Example:** For `get_entities_metadata`, call:
-- `mcp__devkit__get_entities_metadata` with `filter="account"` — see real entity names
-- `mcp__devkit__get_entities_metadata` with `custom_only=true` — see custom entities with prefixes
+**Example:** For `get_metadata_entities`, call:
+- `mcp__devkit__get_metadata_entities` with `filter="account"` — see real entity names
+- `mcp__devkit__get_metadata_entities` with `custom_only=true` — see custom entities with prefixes
 
 ---
 

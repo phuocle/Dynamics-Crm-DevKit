@@ -38,12 +38,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- When you need to verify a record exists before performing operations on it\n" +
             "- After execute_fetchxml returns IDs, use this to get complete field values for a specific record\n\n" +
 
-            "TIP: Use get_entity_metadata first to discover available columns for the entity.")]
+            "TIP: Use get_metadata_entities first to discover available columns for the entity.")]
         public string get_record(
             [Description(
                 "The logical name of the entity (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "The GUID of the record to retrieve. " +
@@ -54,7 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Comma-separated list of column logical names to retrieve. " +
                 "Examples: 'name,accountnumber,primarycontactid' or 'fullname,emailaddress1,telephone1'. " +
                 "Leave empty to retrieve all columns. " +
-                "Use get_entity_metadata to discover available column names."
+                "Use get_metadata_entities to discover available column names."
             )] string columns = "")
         {
             if (string.IsNullOrWhiteSpace(entity_name))

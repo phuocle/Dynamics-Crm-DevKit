@@ -59,9 +59,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Upsert: entity_name=\"account\", record_id=\"a1b2c3d4-...\", fields_json={\"name\": \"Contoso\", \"revenue\": 5000}\n\n" +
 
             "TIPS:\n" +
-            "- Use get_entity_metadata to discover field names and types before writing\n" +
+            "- Use get_metadata_entities to discover field names and types before writing\n" +
             "- Lookup fields need the GUID of the target record — use execute_fetchxml to find it\n" +
-            "- Picklist fields need the integer option value — use get_entity_metadata to see available options\n" +
+            "- Picklist fields need the integer option value — use get_metadata_entities to see available options\n" +
             "- For polymorphic lookups (customerid, ownerid), use the 'field@entity' key syntax\n" +
             "- Only include fields you want to set — partial update is supported when upserting existing records\n" +
             "- Set a field to null to clear its value\n" +
@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Logical name of the entity/table (lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "JSON object with field values. Keys are field logical names (lowercase). " +
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 catch (Exception ex)
                 {
-                    return ErrorResult($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_entity_metadata to verify field names and types.");
+                    return ErrorResult($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_metadata_entities to verify field names and types.");
                 }
             }
 
@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Upsert failed for {entityName} {record_id}\nMessage: {ex.Message}\nHint: Use get_entity_metadata to verify field names and types.");
+                return ErrorResult($"Error: Upsert failed for {entityName} {record_id}\nMessage: {ex.Message}\nHint: Use get_metadata_entities to verify field names and types.");
             }
         }
 

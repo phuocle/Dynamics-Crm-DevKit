@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
             "Execute any Dataverse Web API request. Use this as a fallback when specialized " +
-            "tools (execute_fetchxml, get_entity_metadata, upsert_record) " +
+            "tools (execute_fetchxml, get_metadata_entities, upsert_record) " +
             "don't cover your use case.\n\n" +
 
             "WHEN TO USE:\n" +
@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Examples: 'RelationshipDefinitions', " +
                 "'EntityDefinitions(LogicalName=\\'account\\')?$select=LogicalName,DisplayName', " +
                 "'$metadata', 'accounts(guid)', 'PublishXml'. " +
-                "Use get_entity_metadata to discover entity/attribute names if unsure."
+                "Use get_metadata_entities to discover entity/attribute names if unsure."
             )] string url,
             [Description(
                 "Request body for POST/PUT/PATCH as a JSON string. " +

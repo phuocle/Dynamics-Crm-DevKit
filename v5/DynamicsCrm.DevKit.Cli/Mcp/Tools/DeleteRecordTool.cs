@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Logical name of the entity/table (lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "GUID of the record to delete. " +

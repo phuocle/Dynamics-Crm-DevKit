@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "5. If something breaks: use the backup file paths from the response to rollback\n\n" +
 
             "WORKFLOW FOR 'create':\n" +
-            "1. Call get_entity_metadata to discover available columns\n" +
+            "1. Call get_metadata_entities to discover available columns\n" +
             "2. Build LayoutXML with desired columns and FetchXML with desired filters\n" +
             "3. Call update_view with action='create', view_name, layoutxml, and optionally fetchxml\n" +
             "4. Tool auto-handles: duplicate check > validate > sync-check > create > publish\n\n" +
@@ -130,7 +130,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name = "",
             [Description(
                 "GUID of the view to update or rename. " +

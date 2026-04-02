@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Attribute name MUST include publisher prefix (e.g., 'new_', 'cr_')\n" +
-            "- Use get_entity_metadata to verify the attribute doesn't already exist\n" +
+            "- Use get_metadata_entities to verify the attribute doesn't already exist\n" +
             "- For lookups: also creates the 1:N relationship automatically\n" +
             "- For customer: creates a polymorphic lookup targeting account+contact (like the OOB customerid field)\n" +
             "- For picklist with existing choices: use global_optionset_name instead of options\n" +
@@ -78,7 +78,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "Logical name for the new column with publisher prefix (always lowercase). " +
@@ -1096,7 +1096,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"[Error] Attribute '{attributeName}' already exists on entity '{entityName}'\n" +
                     $"Message: {msg}\n" +
-                    $"Tip: Use get_entity_metadata to inspect existing attributes, or choose a different name");
+                    $"Tip: Use get_metadata_entities to inspect existing attributes, or choose a different name");
             }
 
             if (msg.Contains("entity", StringComparison.OrdinalIgnoreCase) &&
@@ -1106,7 +1106,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"[Error] Entity '{entityName}' not found\n" +
                     $"Message: {msg}\n" +
-                    $"Tip: Use get_entities_metadata to find the correct entity logical name");
+                    $"Tip: Use get_metadata_entities to find the correct entity logical name");
             }
 
             if (msg.Contains("solution", StringComparison.OrdinalIgnoreCase) &&

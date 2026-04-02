@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "When a solution contains an entity added with 'Include All Components' " +
             "(rootComponentBehavior = 0), this tool does NOT expand it into sub-components. " +
             "Instead, it lists the entity with a note indicating it was added as full, and " +
-            "instructs the AI to use the `get_entity_metadata` tool to fetch the complete " +
+            "instructs the AI to use the `get_metadata_entities` tool to fetch the complete " +
             "metadata (attributes, relationships, forms, views, etc.) for that entity. " +
             "This keeps the response lightweight and fast.\n\n" +
 
@@ -196,7 +196,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // 2) Find Entity components added with "Include All Components" (rootcomponentbehavior = 0)
             //    Instead of expanding into sub-components (which is very heavy), we only resolve
-            //    the entity logical name so we can instruct the AI to use get_entity_metadata.
+            //    the entity logical name so we can instruct the AI to use get_metadata_entities.
             var fullEntityIds = allComponents
                 .Where(c =>
                     c.GetAttributeValue<OptionSetValue>("componenttype")?.Value == 1 &&
@@ -280,7 +280,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (fullEntityNames.Count > 0)
             {
                 sb.AppendLine($"[Full Entities] {fullEntityNames.Count} entities");
-                sb.AppendLine("Use get_entity_metadata for details:");
+                sb.AppendLine("Use get_metadata_entities for details:");
                 foreach (var kvp in fullEntityNames.OrderBy(k => k.Value))
                     sb.AppendLine($"- {kvp.Value}");
                 sb.AppendLine();
@@ -317,7 +317,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     // Mark full entities
                     if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
-                        name = $"{name} (full — use get_entity_metadata)";
+                        name = $"{name} (full — use get_metadata_entities)";
 
                     sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? ""}");
                 }

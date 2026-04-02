@@ -336,7 +336,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult(
                         $"[Error] Entity '{entity_name}' already exists\n" +
                         $"Message: {msg}\n" +
-                        $"Tip: Use get_entity_metadata to inspect the existing entity, or choose a different name");
+                        $"Tip: Use get_metadata_entities to inspect the existing entity, or choose a different name");
                 }
 
                 // Handle solution not found

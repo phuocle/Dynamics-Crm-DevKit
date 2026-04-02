@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Entity logical name to get messages for (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
                 "Use 'none' or leave empty for global (none-bound) messages like WhoAmI. " +
-                "If unsure of the entity name, call get_entities_metadata first."
+                "If unsure of the entity name, call get_metadata_entities first."
             )] string entity_name = "none",
             [Description(
                 "true: include Custom Action messages in the results. " +

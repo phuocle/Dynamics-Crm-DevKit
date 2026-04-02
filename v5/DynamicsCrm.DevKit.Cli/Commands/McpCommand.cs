@@ -291,7 +291,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             {
                 var metadataNames = new HashSet<string>
                 {
-                    "whoami", "get_entities_metadata", "get_entity_metadata",
+                    "whoami", "get_metadata_entities",
                     "get_global_optionsets", "get_messages", "get_solution_components"
                 };
                 return metadataNames.Contains(name) ? "Metadata Discovery" : "Query & Read";

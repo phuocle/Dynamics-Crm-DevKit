@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Only provide parameters you want to change -- omitted params keep current values\n" +
-            "- Use get_entity_metadata first to see current attribute properties\n" +
+            "- Use get_metadata_entities first to see current attribute properties\n" +
             "- For picklist options: add_options, update_options, delete_options can be combined in one call\n" +
             "- MergeLabels is always true to preserve existing translations\n" +
             "- Cannot change attribute type (e.g., string to integer) -- Dataverse limitation\n" +
@@ -79,12 +79,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "Logical name of the column to update (always lowercase). " +
                 "Examples: 'new_priority', 'cr_projectcode', 'emailaddress1'. " +
-                "Use get_entity_metadata to find correct attribute logical names."
+                "Use get_metadata_entities to find correct attribute logical names."
             )] string attribute_name,
             [Description(
                 "New display name. Leave empty to keep current."
@@ -682,13 +682,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult(
                         $"[Error] Attribute '{attributeName}' not found on entity '{entityName}'\n" +
                         $"Message: {msg}\n" +
-                        "Tip: Use get_entity_metadata to find the correct attribute logical name");
+                        "Tip: Use get_metadata_entities to find the correct attribute logical name");
                 }
 
                 return ErrorResult(
                     $"[Error] Entity '{entityName}' not found\n" +
                     $"Message: {msg}\n" +
-                    "Tip: Use get_entities_metadata to find the correct entity logical name");
+                    "Tip: Use get_metadata_entities to find the correct entity logical name");
             }
 
             return ErrorResult($"Error: Failed to update attribute '{entityName}.{attributeName}'\nMessage: {msg}");

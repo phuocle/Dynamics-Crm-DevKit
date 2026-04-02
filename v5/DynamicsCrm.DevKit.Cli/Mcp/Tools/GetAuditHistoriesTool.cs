@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Required when record_id is provided (detail mode). " +
                 "Optional in browse mode (empty = search across all entities). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name = "",
             [Description(
                 "GUID of the record. When provided: detail mode (field-level changes). " +

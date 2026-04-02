@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "6. Returns the complete modified FormXML string\n\n" +
 
             "WORKFLOW:\n" +
-            "1. (Optional) Call get_entity_metadata to understand available fields\n" +
+            "1. (Optional) Call get_metadata_entities to understand available fields\n" +
             "2. (Optional) Call get_forms to see current form structure\n" +
             "3. Call build_form_xml with desired operations\n" +
             "4. Pass the returned FormXML to update_form to write it to Dataverse\n\n" +
@@ -99,7 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
                 "Used to resolve field metadata (AttributeType -> classid). " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "GUID of the form to modify. " +
@@ -201,7 +201,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (similar.Count > 0)
                             sb.AppendLine($"  Similar: {string.Join(", ", similar)}");
                     }
-                    sb.AppendLine($"\nTip: Use get_entity_metadata('{entityName}') to list all available fields.");
+                    sb.AppendLine($"\nTip: Use get_metadata_entities('{entityName}') to list all available fields.");
                     return ErrorResult(sb.ToString());
                 }
 

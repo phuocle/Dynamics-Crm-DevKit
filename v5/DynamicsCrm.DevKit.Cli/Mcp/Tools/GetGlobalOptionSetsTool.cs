@@ -38,17 +38,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- When you need to know the valid values for a global choice/picklist column\n" +
             "- When building FetchXML filters on option set fields and need the integer values\n" +
             "- When you see an integer value in query results and need to map it to a label\n" +
-            "- When get_entity_metadata shows a column is PicklistType but the options are empty " +
+            "- When get_metadata_entities shows a column is PicklistType but the options are empty " +
             "(this means it references a global option set — use this tool to get the values)\n\n" +
 
             "NOTE: This retrieves GLOBAL option sets only. For entity-specific (local) picklists, " +
-            "use get_entity_metadata which includes options in the attribute definition.")]
+            "use get_metadata_entities which includes options in the attribute definition.")]
         public string get_global_optionsets(
             [Description(
                 "The logical name of the global option set (always lowercase). " +
                 "Examples: 'msdyn_committype', 'budgetstatus', 'msdyn_bookingstatus'. " +
                 "Leave EMPTY to list all global option sets. " +
-                "If unsure of the name, use get_entity_metadata on the entity that uses the column — " +
+                "If unsure of the name, use get_metadata_entities on the entity that uses the column — " +
                 "if the options are empty, the column references a global option set."
             )] string optionset_name = "")
         {

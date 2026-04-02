@@ -79,7 +79,7 @@ For each test, record:
 > **Focus on SILENT FAILURES** — these are the most dangerous for AI agents. An error message is fine (the AI can retry). But wrong data returned silently causes the AI to make incorrect decisions downstream.
 
 **Tips for finding test data:**
-- Use `mcp__devkit__get_entities_metadata` to find entities that have relevant records
+- Use `mcp__devkit__get_metadata_entities` to find entities that have relevant records
 - Use `mcp__devkit__execute_fetchxml` to find specific records for detail-mode testing
 - Try at least one entity with data AND one entity without data
 - Test with both system entities and custom entities

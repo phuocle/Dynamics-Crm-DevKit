@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "PARAMETERS:\n" +
             "- entity_name (required): Entity logical name (e.g., 'account', 'contact'). " +
-            "Call get_entities_metadata first if unsure of the logical name.\n" +
+            "Call get_metadata_entities first if unsure of the logical name.\n" +
             "- form_id: GUID of a specific form to get full details including FormXML. " +
             "Leave empty to list all forms for the entity.\n" +
             "- form_name: Filter forms by name (contains match). If exactly 1 form matches, " +
@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "The entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "GUID of a specific form to get full details including FormXML. " +

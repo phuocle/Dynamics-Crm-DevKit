@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "PARAMETERS:\n" +
             "- entity_name (required): Entity logical name (e.g., 'account', 'contact'). " +
-            "Call get_entities_metadata first if unsure of the logical name.\n" +
+            "Call get_metadata_entities first if unsure of the logical name.\n" +
             "- view_id: GUID of a specific view to get full details including FetchXML/LayoutXML. " +
             "Leave empty to list all views for the entity.\n" +
             "- query_type: Filter by view type: 0=Public, 1=Lookup, 2=AdvancedSearch, 4=QuickFind, 64=SubGrid. " +
@@ -64,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "The entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_entities_metadata first."
+                "If unsure, call get_metadata_entities first."
             )] string entity_name,
             [Description(
                 "GUID of a specific view to get full details including FetchXML and LayoutXML. " +

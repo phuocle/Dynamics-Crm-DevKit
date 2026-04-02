@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "JOINS (link-entity):\n" +
             "- <link-entity name='related_entity' from='related_col' to='this_col' link-type='inner|outer' [alias='a']>\n" +
             "- from = column on the related (linked) entity, to = column on the parent entity\n" +
-            "- Use get_entity_metadata to find correct relationship columns\n" +
+            "- Use get_metadata_entities to find correct relationship columns\n" +
             "- For N:N joins, use the intersectEntityName as an intermediate link-entity\n\n" +
 
             "AGGREGATION (set aggregate='true' on <fetch>):\n" +
@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- DO NOT use top='N' in FetchXML — it will be stripped. Use the max_records parameter to limit results\n" +
             "- Always use entity logical names (lowercase): 'account' not 'Account', 'contact' not 'Contact'\n" +
             "- Always use attribute logical names (lowercase): 'accountid' not 'AccountId'\n" +
-            "- If unsure of entity/attribute names, call get_entity_metadata first\n" +
+            "- If unsure of entity/attribute names, call get_metadata_entities first\n" +
             "- If query fails, read the error message, fix the FetchXML, and retry\n\n" +
 
             "EXAMPLES:\n" +
