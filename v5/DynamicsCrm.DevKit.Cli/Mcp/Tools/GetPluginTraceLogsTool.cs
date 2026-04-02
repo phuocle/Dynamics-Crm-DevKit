@@ -105,10 +105,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // List mode: fetch multiple records WITHOUT messageblock/exceptiondetails
+            if (!string.IsNullOrWhiteSpace(mode))
+            {
+                var modeLower = mode.Trim().ToLowerInvariant();
+                if (modeLower != "sync" && modeLower != "synchronous" && modeLower != "async" && modeLower != "asynchronous")
+                    return $"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.";
+            }
+
+            if (!string.IsNullOrWhiteSpace(correlation_id) && !Guid.TryParse(correlation_id.Trim(), out _))
+                return $"Error: '{correlation_id.Trim()}' is not a valid GUID for correlation_id.";
+
+            var requestedMinutesAgo = minutes_ago;
             if (minutes_ago < 1) minutes_ago = 60;
             if (minutes_ago > 1440) minutes_ago = 1440;
             if (max_records < 1) max_records = 50;
             if (max_records > 200) max_records = 200;
+            var clampedNote = requestedMinutesAgo != minutes_ago
+                ? $"Note: minutes_ago was adjusted from {requestedMinutesAgo} to {minutes_ago} (valid range: 1–1440).\n"
+                : "";
 
             try
             {
@@ -116,9 +130,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
                 if (result.Entities.Count == 0)
-                    return FormatNoResults(type_name, minutes_ago, correlation_id, message_name, mode);
+                    return clampedNote + FormatNoResults(type_name, minutes_ago, correlation_id, message_name, mode);
 
-                return FormatListMode(result.Entities, minutes_ago);
+                return clampedNote + FormatListMode(result.Entities, minutes_ago);
             }
             catch (Exception ex)
             {

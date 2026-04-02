@@ -106,11 +106,34 @@ Replace the `Category` column with `Status` column, marking each as FIXED:
 
 ---
 
-## Step 4: Verify
+## Step 4: Build and Verify
 
 1. Re-read the modified .cs file to confirm changes are syntactically correct
 2. Re-read the modified .md file to confirm all findings are marked FIXED
-3. Report a summary of what was fixed
+3. Run `/build-cli` to build the CLI and confirm the fixes compile successfully
+4. **Rename the doc file**: rename from `{name}.md` to `{name}-fixed.md` (e.g., `11.get_plugin_trace_logs.md` → `11.get_plugin_trace_logs-fixed.md`)
+
+---
+
+## Step 5: Restart MCP and Re-test Fixes
+
+1. **Ask the user to restart the MCP server** — display this message:
+   ```
+   The CLI has been rebuilt with fixes. Please restart the MCP server so the new code is loaded.
+   (In VS Code: Ctrl+Shift+P → "MCP: List Servers" → restart the devkit server)
+   ```
+2. **Wait for user confirmation** that MCP has been restarted — do NOT proceed until the user confirms
+3. **Re-test each fixed finding** against the live MCP tool using the exact same inputs from the original adversarial review:
+   - For each finding, call the MCP tool with the input that previously caused the failure
+   - Verify the tool now returns the expected error message or corrected behavior
+   - Record the result: **RE-TEST PASS** or **RE-TEST FAIL**
+4. **Report re-test results** — show a summary table:
+   ```
+   | # | Finding | Re-test Input | Expected | Actual | Result |
+   |---|---------|---------------|----------|--------|--------|
+   | 1 | {title} | {input} | {expected} | {actual} | RE-TEST PASS/FAIL |
+   ```
+5. If any re-test **FAILS**, investigate and fix the issue, then repeat from Step 4 (rebuild + re-test)
 
 ---
 
@@ -118,6 +141,5 @@ Replace the `Category` column with `Status` column, marking each as FIXED:
 
 - **DO NOT skip any finding** — fix ALL findings that are not already FIXED
 - **DO NOT add new features** beyond fixing the reported issues
-- **DO NOT run builds** — this command only edits files. The user will build separately
-- **DO NOT modify any other files** — only the 2 files passed as arguments
+- **DO NOT modify any other files** — only the 2 files passed as arguments (plus the doc rename in Step 4)
 - If a finding cannot be fixed (e.g., requires architectural change), keep the original finding detail and append: `| **Status** | **DEFERRED** — {reason} |`
