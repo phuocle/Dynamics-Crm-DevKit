@@ -33,13 +33,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ReadOnly = true, Destructive = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXmlResult)),
         Description(
-            "Build modified FormXML by adding fields, sections, or tabs to an existing Dataverse form.\n" +
+            "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
             "This is a READ-ONLY builder -- it returns the modified FormXML string. Use update_form to write it.\n\n" +
 
-            "THREE LEVELS OF OPERATIONS:\n" +
+            "FIVE OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
             "- add_section: Add a new section (with fields) to an existing tab\n" +
-            "- add_tab: Add a new tab (with sections and fields) to the form\n\n" +
+            "- add_tab: Add a new tab (with sections and fields) to the form\n" +
+            "- add_library: Add a web resource library reference to <formLibraries>\n" +
+            "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n\n" +
 
             "PARAMETERS:\n" +
             "- entity_name (required): Entity logical name (e.g., 'account'). Used to resolve field metadata.\n" +
@@ -50,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "1. Reads current FormXML from Dataverse\n" +
             "2. Fetches entity metadata for all referenced fields\n" +
             "3. Resolves the correct classid GUID for each field based on its AttributeType\n" +
-            "4. Generates correct XML structure (tabs/columns/sections/rows/cells/controls)\n" +
+            "4. Generates correct XML structure (tabs/columns/sections/rows/cells/controls/events/handlers)\n" +
             "5. Generates unique GUIDs for all id attributes\n" +
             "6. Returns the complete modified FormXML string\n\n" +
 
@@ -65,7 +67,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Generates proper section column layout (fills rows, adds spacer cells)\n" +
             "- Creates unique GUIDs for all elements\n" +
             "- Validates field names against entity metadata\n" +
-            "- Follows Dataverse naming conventions (tab_$label, $tab_sec_$label)\n\n" +
+            "- Follows Dataverse naming conventions (tab_$label, $tab_sec_$label)\n" +
+            "- Correctly generates event/handler/library XML with proper structure and dependencies\n\n" +
 
             "SECTION COLUMNS:\n" +
             "- section_columns=1: One field per row (default)\n" +
@@ -78,11 +81,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- tab_columns=3: Three columns, width=\"33%\"/\"34%\"/\"33%\"\n" +
             "  Sections specify which tab_column (1-based) they belong to.\n\n" +
 
+            "EVENT OPERATIONS:\n" +
+            "- add_library: {\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}\n" +
+            "- add_event (form onload): {\"action\":\"add_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}\n" +
+            "- add_event (field onchange): {\"action\":\"add_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"field:name\"}\n" +
+            "- add_event (tab state): {\"action\":\"add_event\",\"event_name\":\"ontabstatechange\",\"function_name\":\"onTabChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"tab:tab_general\"}\n" +
+            "- add_event auto-adds the library to formLibraries if not already present\n\n" +
+
             "TIPS:\n" +
             "- Fields can be simple strings (\"createdon\") or objects with overrides (label, disabled, colspan)\n" +
             "- Positions: \"last\" (default), \"first\", \"after:element_name\"\n" +
             "- This tool does NOT modify Dataverse -- it only returns XML. Use update_form to apply changes.\n" +
-            "- Combine multiple operations in one call (add tab + sections + fields in a single request)")]
+            "- Combine multiple operations in one call (add tab + sections + fields + events in a single request)\n" +
+            "- Duplicate libraries and handlers are automatically detected and skipped")]
         public CallToolResult build_form_xml(
             [Description(
                 "Entity logical name (always lowercase). " +
@@ -98,9 +109,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string form_id,
             [Description(
                 "JSON array of operations to perform. Each operation is an object with an 'action' field.\n" +
-                "Actions: 'add_tab', 'add_section', 'add_fields'.\n" +
+                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event'.\n" +
                 "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +
+                "Example: [{\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "Example: [{\"action\":\"add_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "Example: [{\"action\":\"add_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"field:name\"}]\n" +
                 "Fields can be strings or objects: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true}"
             )] string operations)
         {
@@ -226,8 +240,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var fieldSummary = ExecuteAddFields(formDoc, op, attrMap, classIdMap);
                             opSummaries.Add(fieldSummary);
                             break;
+                        case "add_library":
+                            var libSummary = ExecuteAddLibrary(formDoc, op);
+                            opSummaries.Add(libSummary);
+                            break;
+                        case "add_event":
+                            var eventSummary = ExecuteAddEvent(formDoc, op);
+                            opSummaries.Add(eventSummary);
+                            break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields");
+                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_library, add_event");
                     }
                 }
 
@@ -521,6 +543,201 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         // ── XML Building Helpers ─────────────────────────────────────────────────
+
+        // ── Event / Library Operation Executors ─────────────────────────────────
+
+        private static string ExecuteAddLibrary(XDocument formDoc, JsonElement op)
+        {
+            var libraryName = GetStringProp(op, "library_name")
+                ?? throw new InvalidOperationException("add_library requires 'library_name'.");
+
+            var (added, _) = EnsureLibrary(formDoc, libraryName);
+            return added
+                ? $"add_library: \"{libraryName}\" added to formLibraries"
+                : $"add_library: \"{libraryName}\" already exists in formLibraries (skipped)";
+        }
+
+        private static string ExecuteAddEvent(XDocument formDoc, JsonElement op)
+        {
+            var eventName = GetStringProp(op, "event_name")
+                ?? throw new InvalidOperationException("add_event requires 'event_name'.");
+            var functionName = GetStringProp(op, "function_name")
+                ?? throw new InvalidOperationException("add_event requires 'function_name'.");
+            var libraryName = GetStringProp(op, "library_name")
+                ?? throw new InvalidOperationException("add_event requires 'library_name'.");
+            var passExecutionContext = GetBoolProp(op, "pass_execution_context", false);
+            var parameters = GetStringProp(op, "parameters") ?? "";
+            var enabled = GetBoolProp(op, "enabled", true);
+            var target = GetStringProp(op, "target") ?? "form";
+
+            // 1. Auto-add library if not present
+            var (_, libraryUniqueId) = EnsureLibrary(formDoc, libraryName);
+
+            // 2. Determine target scope and event type
+            XElement targetElement;
+            string eventType;
+            string attributeName = null;
+
+            if (target.StartsWith("field:", StringComparison.OrdinalIgnoreCase))
+            {
+                // field-level event (onchange)
+                var fieldName = target.Substring(6).Trim();
+                eventType = "DataEvent";
+                attributeName = fieldName;
+                targetElement = formDoc.Root; // form-level events element with attribute= for field events
+            }
+            else if (target.StartsWith("tab:", StringComparison.OrdinalIgnoreCase))
+            {
+                // tab-level event
+                var tabName = target.Substring(4).Trim();
+                targetElement = FindTab(formDoc, tabName)
+                    ?? throw new InvalidOperationException(
+                        $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+                eventType = "ControlEvent";
+            }
+            else
+            {
+                // form-level event
+                targetElement = formDoc.Root;
+                eventType = "ControlEvent";
+            }
+
+            // 3. Find or create <events> element
+            var eventsElement = targetElement.Element("events");
+            if (eventsElement == null)
+            {
+                eventsElement = new XElement("events");
+                // Insert events before externaldependencies/formparameters if they exist (for form root)
+                var insertBefore = targetElement.Element("externaldependencies")
+                    ?? targetElement.Element("formparameters");
+                if (insertBefore != null)
+                    insertBefore.AddBeforeSelf(eventsElement);
+                else
+                    targetElement.Add(eventsElement);
+            }
+
+            // 4. Find or create the specific <event> element
+            var eventElement = FindEvent(eventsElement, eventName, attributeName);
+            if (eventElement == null)
+            {
+                eventElement = new XElement("event",
+                    new XAttribute("name", eventName),
+                    new XAttribute("application", "false"),
+                    new XAttribute("active", "true"),
+                    new XAttribute("eventType", eventType));
+
+                if (attributeName != null)
+                    eventElement.Add(new XAttribute("attribute", attributeName));
+
+                eventsElement.Add(eventElement);
+            }
+
+            // 5. Find or create <Handlers> element
+            var handlersElement = eventElement.Element("Handlers");
+            if (handlersElement == null)
+            {
+                handlersElement = new XElement("Handlers");
+                eventElement.Add(handlersElement);
+            }
+
+            // 6. Check for duplicate handler (same functionName + libraryName)
+            var existingHandler = handlersElement.Elements("Handler")
+                .FirstOrDefault(h =>
+                    string.Equals(h.Attribute("functionName")?.Value, functionName, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(h.Attribute("libraryName")?.Value, libraryName, StringComparison.OrdinalIgnoreCase));
+
+            if (existingHandler != null)
+            {
+                var targetDesc = target == "form" ? "form" : target;
+                return $"add_event: handler \"{functionName}\" on \"{eventName}\" ({targetDesc}) already exists (skipped)";
+            }
+
+            // 7. Generate handler
+            var handlerUniqueId = NewGuid();
+            var handler = new XElement("Handler",
+                new XAttribute("functionName", functionName),
+                new XAttribute("libraryName", libraryName),
+                new XAttribute("handlerUniqueId", handlerUniqueId),
+                new XAttribute("enabled", enabled ? "true" : "false"),
+                new XAttribute("passExecutionContext", passExecutionContext ? "true" : "false"));
+
+            if (!string.IsNullOrEmpty(parameters))
+                handler.Add(new XAttribute("parameters", parameters));
+
+            // 8. Add library dependency
+            handler.Add(new XElement("dependencies",
+                new XElement("dependency",
+                    new XAttribute("id", libraryUniqueId))));
+
+            handlersElement.Add(handler);
+
+            var targetDescription = target == "form" ? "form" : target;
+            return $"add_event: \"{eventName}\" -> \"{functionName}\" from \"{libraryName}\" ({targetDescription})";
+        }
+
+        /// <summary>
+        /// Ensures a library reference exists in formLibraries. Returns (wasAdded, libraryUniqueId).
+        /// </summary>
+        private static (bool added, string libraryUniqueId) EnsureLibrary(XDocument formDoc, string libraryName)
+        {
+            var formLibraries = formDoc.Root.Element("formLibraries");
+            if (formLibraries == null)
+            {
+                formLibraries = new XElement("formLibraries");
+                // Insert after events or tabs, before externaldependencies
+                var insertBefore = formDoc.Root.Element("externaldependencies")
+                    ?? formDoc.Root.Element("formparameters");
+                var insertAfter = formDoc.Root.Element("events")
+                    ?? formDoc.Root.Element("footer")
+                    ?? formDoc.Root.Element("header")
+                    ?? formDoc.Root.Element("tabs");
+                if (insertBefore != null)
+                    insertBefore.AddBeforeSelf(formLibraries);
+                else if (insertAfter != null)
+                    insertAfter.AddAfterSelf(formLibraries);
+                else
+                    formDoc.Root.Add(formLibraries);
+            }
+
+            // Check if library already exists
+            var existingLib = formLibraries.Elements("Library")
+                .FirstOrDefault(lib =>
+                    string.Equals(lib.Attribute("name")?.Value, libraryName, StringComparison.OrdinalIgnoreCase));
+
+            if (existingLib != null)
+            {
+                return (false, existingLib.Attribute("libraryUniqueId")?.Value ?? NewGuid());
+            }
+
+            // Add new library
+            var libraryUniqueId = NewGuid();
+            formLibraries.Add(new XElement("Library",
+                new XAttribute("name", libraryName),
+                new XAttribute("libraryUniqueId", libraryUniqueId)));
+
+            return (true, libraryUniqueId);
+        }
+
+        /// <summary>
+        /// Finds an event element matching the event name and optional attribute name.
+        /// </summary>
+        private static XElement FindEvent(XElement eventsElement, string eventName, string attributeName)
+        {
+            return eventsElement.Elements("event")
+                .FirstOrDefault(e =>
+                {
+                    var nameMatch = string.Equals(e.Attribute("name")?.Value, eventName, StringComparison.OrdinalIgnoreCase);
+                    if (!nameMatch) return false;
+
+                    if (attributeName != null)
+                        return string.Equals(e.Attribute("attribute")?.Value, attributeName, StringComparison.OrdinalIgnoreCase);
+
+                    // For non-field events, match events without attribute
+                    return e.Attribute("attribute") == null || string.IsNullOrEmpty(e.Attribute("attribute")?.Value);
+                });
+        }
+
+        // ── XML Building Helpers (Fields/Sections) ──────────────────────────────
 
         private XElement BuildSectionElement(string name, string label, int sectionColumns,
             List<JsonElement> fields, Dictionary<string, AttributeMetadata> attrMap,
