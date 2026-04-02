@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "publish", Title = "Publish metadata changes",
-            Destructive = false, ReadOnly = false,
+            Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
             "Publish Dataverse customizations to make metadata changes visible to users.\n" +

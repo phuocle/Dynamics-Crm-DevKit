@@ -23,7 +23,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "execute_webapi", Title = "Execute any Dataverse Web API request",
-            ReadOnly = false,
+            Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
             "Execute any Dataverse Web API request. Use this as a fallback when specialized " +

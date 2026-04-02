@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "upsert_entity", Title = "Create a new custom Dataverse table (entity)",
-            Destructive = true, ReadOnly = false,
+            Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CreateEntityResult)),
         Description(
             "Create a new custom Dataverse entity (table) with guided parameters. " +
