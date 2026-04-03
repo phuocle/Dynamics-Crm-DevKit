@@ -399,6 +399,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
 
 
+    internal sealed class UpsertVariableResult
+    {
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [JsonPropertyName("variableName")]
+        public string VariableName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("defaultValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DefaultValue { get; set; }
+
+        [JsonPropertyName("currentValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CurrentValue { get; set; }
+
+        [JsonPropertyName("valueCleared")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool ValueCleared { get; set; }
+
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+    }
+
     internal sealed class EnvironmentVariableItem
     {
         [JsonPropertyName("name")]
