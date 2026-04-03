@@ -557,10 +557,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : $"add_library: \"{libraryName}\" already exists in formLibraries (skipped)";
         }
 
+        private static readonly HashSet<string> ValidEventNames = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "onload", "onsave", "onchange", "ontabstatechange", "onrecordselect"
+        };
+
         private static string ExecuteAddEvent(XDocument formDoc, JsonElement op)
         {
             var eventName = GetStringProp(op, "event_name")
                 ?? throw new InvalidOperationException("add_event requires 'event_name'.");
+            if (!ValidEventNames.Contains(eventName.Trim()))
+                throw new InvalidOperationException(
+                    $"Invalid event_name '{eventName}'. Valid values: {string.Join(", ", ValidEventNames.Order())}");
             var functionName = GetStringProp(op, "function_name")
                 ?? throw new InvalidOperationException("add_event requires 'function_name'.");
             var libraryName = GetStringProp(op, "library_name")
