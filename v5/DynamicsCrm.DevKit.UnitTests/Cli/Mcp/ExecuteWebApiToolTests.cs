@@ -209,6 +209,62 @@ public class ExecuteWebApiToolTests
     }
 
     [TestMethod]
+    public void GetBlockedReason_PATCH_EnvVarDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "environmentvariabledefinitions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("upsert_variable"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_EnvVarValues_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "environmentvariablevalues(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("upsert_variable"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_PublishXml_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "PublishXml");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("publish"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_PublishAllXml_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "PublishAllXml");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("publish"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_PublishXml_CaseInsensitive_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "publishxml");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_RegularEndpoint_ReturnsNull()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "accounts"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_EnvVarDefinitions_ReturnsNull()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "environmentvariabledefinitions(guid)"));
+    }
+
+    [TestMethod]
     public void GetBlockedReason_CaseInsensitive_Blocked()
     {
         var result = GetBlockedReason(HttpMethod.Patch, "SystemForms(00000000-0000-0000-0000-000000000001)");
