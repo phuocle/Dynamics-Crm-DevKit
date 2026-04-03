@@ -71,7 +71,7 @@ Entry point: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
 Commands/ → DevKitCommand<T> base (connection, validation)
 Models/   → DevKitCommandArgs → specific args
 Tasks/    → ITask → TaskXxx implementations
-Mcp/      → MCP server (27 Dataverse tools)
+Mcp/      → MCP server (28 Dataverse tools)
 ```
 
 ### Commands
@@ -123,9 +123,9 @@ Detection priority: `--plain` CLI flag > `NO_COLOR` env var > default (rich outp
 
 Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run CLI with `commandLineArgs`.
 
-### MCP Tools (27)
+### MCP Tools (28)
 
-`whoami`, `get_metadata_entities`, `get_messages`, `get_global_optionsets`, `get_record`, `get_components`, `execute_fetchxml`, `search`, `upsert_record`, `delete_record`, `execute_webapi`, `publish`, `get_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_formxml`, `get_histories`, `upsert_entity`, `upsert_sitemap`, `upsert_attribute`, `get_variables`, `get_rules`, `upsert_variable`
+`whoami`, `get_metadata_entities`, `get_messages`, `get_global_optionsets`, `get_record`, `get_components`, `execute_fetchxml`, `search`, `upsert_record`, `delete_record`, `execute_webapi`, `publish`, `get_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_formxml`, `get_histories`, `upsert_entity`, `upsert_sitemap`, `upsert_attribute`, `get_variables`, `get_rules`, `upsert_variable`, `get_workflows`
 
 ### MCP Resources (6)
 
