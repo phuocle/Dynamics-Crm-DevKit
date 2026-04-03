@@ -131,6 +131,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (userResult.Entities.Count == 0)
                 return $"Error: No user found with '{userId}'.";
 
+            if (userResult.Entities.Count > 1)
+                return FormatMultipleUsers(userId, userResult.Entities);
+
             var user = userResult.Entities[0];
             var userIdGuid = user.GetAttributeValue<Guid>("systemuserid");
             var fullName = user.GetAttributeValue<string>("fullname") ?? "";
@@ -451,6 +454,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+
+        private static string FormatMultipleUsers(string input, DataCollection<Entity> users)
+        {
+            var sb = new StringBuilder(users.Count * 120 + 256);
+            sb.AppendLine($"[Multiple Users] {users.Count} users match '{input}'. Re-call with the exact systemuserid GUID:");
+            sb.AppendLine();
+            sb.AppendLine("systemuserid\tfullname\temail\tstatus\tbusinessunit");
+            foreach (var u in users)
+            {
+                var id = u.GetAttributeValue<Guid>("systemuserid");
+                var name = u.GetAttributeValue<string>("fullname") ?? "";
+                var email = u.GetAttributeValue<string>("internalemailaddress") ?? "";
+                var disabled = u.GetAttributeValue<bool>("isdisabled");
+                var buRef = u.GetAttributeValue<EntityReference>("businessunitid");
+                var buName = buRef?.Name ?? "";
+                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(email)}\t{(disabled ? "Disabled" : "Active")}\t{EscapeTab(buName)}");
+            }
+            return sb.ToString();
+        }
 
         private sealed class PrivilegeInfo
         {

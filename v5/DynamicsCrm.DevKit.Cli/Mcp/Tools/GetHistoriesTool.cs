@@ -150,6 +150,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var resolvedUserFilter = ResolveUserFilter(user_filter?.Trim() ?? "");
+            if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
+                return resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length);
 
             DateTime sinceUtc, untilUtc;
             if (fromUtc.HasValue)
@@ -185,12 +187,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var userQuery = new QueryExpression("systemuser")
                     {
-                        ColumnSet = new ColumnSet("fullname", "internalemailaddress")
+                        ColumnSet = new ColumnSet("fullname", "internalemailaddress", "isdisabled", "businessunitid")
                     };
                     userQuery.Criteria.AddCondition("internalemailaddress", ConditionOperator.Equal, userFilter);
 
                     var result = _serviceClient.RetrieveMultiple(userQuery);
-                    if (result.Entities.Count > 0)
+                    if (result.Entities.Count > 1)
+                        return $"[AMBIGUOUS_USER]{FormatMultipleUsers(userFilter, result.Entities)}";
+                    if (result.Entities.Count == 1)
                     {
                         var fullName = result.Entities[0].GetAttributeValue<string>("fullname");
                         if (!string.IsNullOrWhiteSpace(fullName))
@@ -204,6 +208,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return userFilter;
+        }
+
+        private static string FormatMultipleUsers(string input, DataCollection<Entity> users)
+        {
+            var sb = new StringBuilder(users.Count * 120 + 256);
+            sb.AppendLine($"[Multiple Users] {users.Count} users match '{input}'. Re-call with the exact display name:");
+            sb.AppendLine();
+            sb.AppendLine("systemuserid\tfullname\temail\tstatus\tbusinessunit");
+            foreach (var u in users)
+            {
+                var id = u.GetAttributeValue<Guid>("systemuserid");
+                var name = u.GetAttributeValue<string>("fullname") ?? "";
+                var email = u.GetAttributeValue<string>("internalemailaddress") ?? "";
+                var disabled = u.GetAttributeValue<bool>("isdisabled");
+                var buRef = u.GetAttributeValue<EntityReference>("businessunitid");
+                var buName = buRef?.Name ?? "";
+                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(email)}\t{(disabled ? "Disabled" : "Active")}\t{EscapeTab(buName)}");
+            }
+            return sb.ToString();
         }
 
         private string ExecuteDetailMode(string entityName, Guid id,
