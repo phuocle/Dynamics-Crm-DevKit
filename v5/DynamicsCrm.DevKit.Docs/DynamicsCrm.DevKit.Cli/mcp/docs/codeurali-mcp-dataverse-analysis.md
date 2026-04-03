@@ -35,7 +35,7 @@
 | 3 | `build_formxml` | No form builder | HIGH — auto-resolves classid, generates FormXML |
 | 4 | `get_views` (with FetchXML/LayoutXML) | `list_views` only returns names | MEDIUM — no view content inspection |
 | 5 | `update_view` | No view editing | HIGH — auto-backup, sync validation |
-| 6 | `update_sitemap` | `create_sitemap` only (no update/undo) | MEDIUM — no edit or rollback |
+| 6 | `upsert_sitemap` | `create_sitemap` only (no update/undo) | MEDIUM — no edit or rollback |
 | 7 | `get_security_roles` (user-centric) | Separate `list_roles` + `get_user_roles` | LOW — different API design |
 | 8 | `get_audit_history` (record-centric) | `get_audit_log` (broader) | LOW — different granularity |
 | 9 | `parse_record_url` | Not available | MEDIUM — essential for URL-driven workflows |
@@ -92,7 +92,7 @@
 | 44 | `dataverse_update_entity` | Metadata | LOW | **MISSING** — update entity flags (HasNotes, ChangeTracking, Audit) |
 | 45 | `dataverse_delete_attribute` | Schema | MEDIUM | **MISSING** — delete column from table |
 | 46 | `dataverse_create_lookup_attribute` | Schema | MEDIUM | **MISSING** — create lookup via relationship |
-| 47 | `dataverse_create_sitemap` | Solutions | MEDIUM | DevKit has `update_sitemap` but no create |
+| 47 | `dataverse_create_sitemap` | Solutions | MEDIUM | DevKit has `upsert_sitemap` but no create |
 | 48 | `dataverse_environment_capabilities` | Admin | LOW | DevKit has `whoami` — **partially covered** |
 | 49 | `dataverse_suggest_tools` | Assistance | LOW | Not needed — AI clients have their own routing |
 | 50 | `dataverse_list_tool_tags` | Assistance | LOW | Not needed |
@@ -254,7 +254,7 @@ codeurali has **ZERO** equivalent for these DevKit capabilities:
 |-----------|-------------|---------------|
 | **Form Lifecycle** | `get_forms` → `build_formxml` → `update_form` (with backup/validate/undo) | The #1 customization task in Dynamics 365 |
 | **View Lifecycle** | `get_views` → `update_view` (with backup/sync-check/undo) | Critical for data presentation |
-| **SiteMap Lifecycle** | `update_sitemap` (with backup/validate/undo) | App navigation management |
+| **SiteMap Lifecycle** | `upsert_sitemap` (with backup/validate/undo) | App navigation management |
 | **XSD Schema Resources** | `schema://formxml`, `schema://layoutxml`, `schema://fetchxml`, `schema://sitemapxml` | AI can validate XML before writing |
 | **Manipulation Rules** | `docs://instructions_for_formxml`, `docs://instructions_for_views` | AI follows correct XML patterns |
 | **URL Parsing** | `parse_record_url` | Convert D365 URLs to entity + GUID |

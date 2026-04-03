@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- PATCH/PUT/DELETE systemforms(...) → Use upsert_form tool instead\n" +
             "- PATCH/PUT/DELETE savedqueries(...) → Use upsert_view tool instead\n" +
             "- PATCH/PUT/DELETE userqueries(...) → Use upsert_view tool instead\n" +
-            "- PATCH/PUT/DELETE sitemaps(...) → Use update_sitemap tool instead\n" +
+            "- PATCH/PUT/DELETE sitemaps(...) → Use upsert_sitemap tool instead\n" +
             "GET on these endpoints is allowed (reading is safe). " +
             "POST to create new records is allowed.\n" +
             "WHY BLOCKED: A malformed FormXML/LayoutXML/SiteMap breaks the UI for ALL users " +
@@ -192,7 +192,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
             ("userqueries(", "upsert_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
-            ("sitemaps(", "update_sitemap",
+            ("sitemaps(", "upsert_sitemap",
                 "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app.")
         ];
 

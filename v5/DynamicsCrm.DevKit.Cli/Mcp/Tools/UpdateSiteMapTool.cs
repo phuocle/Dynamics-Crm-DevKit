@@ -31,45 +31,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "update_sitemap", Title = "Update Model-Driven App SiteMap with backup + XSD validation + publish",
+        [McpServerTool(Name = "upsert_sitemap", Title = "Create, update, or undo a Model-Driven App SiteMap with backup + XSD validation + publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpdateSiteMapResult)),
         Description(
-            "Update a Model-Driven App's SiteMap XML with automatic backup, XSD validation, and publishing. " +
-            "This completes the UI customization trilogy: Forms (upsert_form) → Views (upsert_view) → SiteMap (update_sitemap).\n\n" +
+            "Create, update, or undo a Model-Driven App's SiteMap XML with automatic backup, XSD validation, and publishing. " +
+            "This completes the UI customization trilogy: Forms (upsert_form) → Views (upsert_view) → SiteMap (upsert_sitemap).\n\n" +
 
-            "TWO ACTIONS (controlled by 'action' parameter):\n" +
+            "THREE ACTIONS (controlled by 'action' parameter):\n" +
             "- 'update' (default): Modify SiteMap XML of an existing app. " +
             "Requires app_module_id + sitemapxml.\n" +
+            "- 'create': Create a new SiteMap and associate it with an app module. " +
+            "Requires app_module_id + sitemapxml. " +
+            "The app must NOT already have a SiteMap component.\n" +
             "- 'undo': Restore a SiteMap from a backup file. " +
             "Requires app_module_id + sitemapxml (= path to backup .json file). " +
             "Skips backup (no need), still validates XSD.\n\n" +
 
             "PARAMETERS:\n" +
-            "- action: 'update' (default) or 'undo' (restore from backup).\n" +
+            "- action: 'update' (default), 'create', or 'undo' (restore from backup).\n" +
             "- app_module_id (required): GUID of the Model-Driven App. " +
             "Query appmodule table to find IDs.\n" +
-            "- sitemapxml: For 'update': the new SiteMap XML content. " +
+            "- sitemapxml: For 'update'/'create': the new SiteMap XML content. " +
             "For 'undo': the file path to the backup .json file.\n" +
             "- validate: Validate against XSD before writing (default: true).\n" +
             "- backup: Save current SiteMap XML to backup before overwriting (default: true). " +
-            "Ignored for 'undo' (always skipped).\n" +
+            "Ignored for 'create' and 'undo' (no existing SiteMap to backup).\n" +
             "- auto_publish: Publish the app after changes (default: true).\n\n" +
 
             "WORKFLOW FOR 'update' (MUST follow this order):\n" +
             "1. Query appmodule to find the app and its SiteMap\n" +
             "2. Read current SiteMap XML\n" +
             "3. Modify as needed (refer to schema://sitemapxml for structure)\n" +
-            "4. Call update_sitemap with the modified XML\n" +
+            "4. Call upsert_sitemap with the modified XML\n" +
             "5. Tool auto-handles: backup → validate → update → publish\n" +
             "6. If something breaks: use action='undo' with the backup file path\n\n" +
 
+            "WORKFLOW FOR 'create':\n" +
+            "1. Query appmodule to verify the app exists and has NO SiteMap\n" +
+            "2. Build SiteMap XML (refer to schema://sitemapxml for structure)\n" +
+            "3. Call upsert_sitemap with action='create', app_module_id, and sitemapxml\n" +
+            "4. Tool auto-handles: validate → create sitemap record → associate with app → publish\n\n" +
+
             "WORKFLOW FOR 'undo':\n" +
-            "1. Call update_sitemap with action='undo', app_module_id, and sitemapxml=<backup file path>\n" +
+            "1. Call upsert_sitemap with action='undo', app_module_id, and sitemapxml=<backup file path>\n" +
             "2. Tool auto-handles: read backup → validate XSD → update → publish (no new backup)\n" +
             "3. The backup file path is returned in every update success response\n\n" +
 
             "WHEN TO USE:\n" +
+            "- To create a new SiteMap for an app that doesn't have one\n" +
             "- To add/remove/rearrange navigation areas, groups, and sub-areas\n" +
             "- To add a new entity to app navigation\n" +
             "- To customize app navigation structure\n" +
@@ -77,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- To undo/rollback a previous SiteMap change using a backup file\n\n" +
 
             "SAFETY:\n" +
-            "- Auto-backup saves current SiteMap XML before ANY modification\n" +
+            "- Auto-backup saves current SiteMap XML before ANY modification (update only)\n" +
             "- XSD validation blocks invalid XML from being written\n" +
             "- Undo action restores from backup\n" +
             "- If backup=true and backup fails, update is BLOCKED (fail-safe)\n\n" +
@@ -89,10 +99,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Set auto_publish=false when making multiple changes\n" +
             "- Backup files at: .devkit/backups/sitemaps/{appname}_{id}_{timestamp}.sitemap.json\n" +
             "- Use execute_fetchxml to query appmodule table for app IDs")]
-        public CallToolResult update_sitemap(
+        public CallToolResult upsert_sitemap(
             [Description(
-                "Action to perform: 'update' (default) or 'undo' (restore from backup). " +
+                "Action to perform: 'update' (default), 'create', or 'undo' (restore from backup). " +
                 "For 'update': modifies SiteMap XML (requires app_module_id + sitemapxml). " +
+                "For 'create': creates a new SiteMap and associates with the app (requires app_module_id + sitemapxml). " +
                 "For 'undo': restores SiteMap from a backup file (requires app_module_id + sitemapxml as file path)."
             )] string action = "update",
             [Description(
@@ -101,7 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use execute_fetchxml on appmodule to find app IDs."
             )] string app_module_id = "",
             [Description(
-                "For 'update': the new SiteMap XML content (must be valid XML). " +
+                "For 'update'/'create': the new SiteMap XML content (must be valid XML). " +
                 "For 'undo': the file path to the backup .json file " +
                 "(e.g. '.devkit/backups/sitemaps/saleshub_abc123_20260331.sitemap.json'). " +
                 "The tool will strip any XML declaration before writing."
@@ -113,7 +124,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool validate = true,
             [Description(
                 "Save current SiteMap XML to local backup before overwriting (default: true). " +
-                "Ignored for 'undo' (always skipped — no need to backup when restoring). " +
+                "Ignored for 'create' (no existing SiteMap) and 'undo' (restoring from backup). " +
                 "Strongly recommended to keep true. If backup fails, operation is BLOCKED (fail-safe)."
             )] bool backup = true,
             [Description(
@@ -136,6 +147,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 switch (actionName)
                 {
+                    case "create":
+                        return CreateSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
+
                     case "undo":
                         return UndoSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
 
@@ -167,6 +181,167 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"[Error] SiteMap {actionName} failed\n" +
                     $"AppModuleId: {appModuleId}\n" +
                     $"Message: {errorDetail}");
+            }
+        }
+
+        // ── Action: create ────────────────────────────────────────────────
+
+        private CallToolResult CreateSiteMap(Guid appModuleId,
+            string sitemapxml, bool validate, bool auto_publish)
+        {
+            // Step 1: Retrieve app module and check it does NOT already have a SiteMap
+            Entity appModule;
+            try
+            {
+                appModule = _serviceClient.Retrieve("appmodule", appModuleId,
+                    new ColumnSet("uniquename", "name", "appmoduleidunique"));
+            }
+            catch
+            {
+                return ErrorResult(
+                    $"[Error] App module not found\n" +
+                    $"AppModuleId: {appModuleId}\n" +
+                    $"Tip: Use execute_fetchxml to query appmodule table for valid app IDs.");
+            }
+
+            var appName = appModule.GetAttributeValue<string>("name") ?? appModule.GetAttributeValue<string>("uniquename") ?? "";
+            var appModuleIdUnique = appModule.GetAttributeValue<Guid>("appmoduleidunique");
+
+            // Check for existing SiteMap component (componenttype=62)
+            var componentQuery = new QueryExpression("appmodulecomponent")
+            {
+                ColumnSet = new ColumnSet("objectid"),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("appmoduleidunique", ConditionOperator.Equal, appModuleIdUnique),
+                        new ConditionExpression("componenttype", ConditionOperator.Equal, 62)
+                    }
+                }
+            };
+
+            var existingComponents = _serviceClient.RetrieveMultiple(componentQuery).Entities;
+            if (existingComponents.Count > 0)
+            {
+                var existingSiteMapId = existingComponents[0].GetAttributeValue<Guid>("objectid");
+                return ErrorResult(
+                    $"[Error] App '{appName}' already has a SiteMap component\n" +
+                    $"AppModuleId: {appModuleId}\n" +
+                    $"ExistingSiteMapId: {existingSiteMapId}\n" +
+                    $"Tip: Use action='update' to modify the existing SiteMap instead.");
+            }
+
+            // Step 2: Strip XML declaration and validate
+            var newSiteMapXml = StripXmlDeclaration(sitemapxml);
+
+            List<string> validationWarnings = null;
+            if (validate)
+            {
+                var (errors, warnings) = ValidateSiteMapXml(newSiteMapXml);
+                validationWarnings = warnings.Count > 0 ? warnings : null;
+
+                if (errors.Count > 0)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[SiteMapCreate] BLOCKED — Validation failed");
+                    sb.AppendLine($"AppModuleId: {appModuleId}");
+                    sb.AppendLine($"Errors: {errors.Count}");
+                    foreach (var e in errors)
+                        sb.AppendLine($"- {e}");
+                    if (warnings.Count > 0)
+                    {
+                        sb.AppendLine($"Warnings: {warnings.Count}");
+                        foreach (var w in warnings)
+                            sb.AppendLine($"- {w}");
+                    }
+                    sb.AppendLine($"Tip: Fix the SiteMap XML errors above and retry. Refer to schema://sitemapxml for valid structure.");
+
+                    var allIssues = new List<string>(errors);
+                    if (warnings.Count > 0) allIssues.AddRange(warnings);
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateSiteMapResult
+                        {
+                            Action = "created",
+                            AppModuleId = appModuleId.ToString(),
+                            AppName = appName,
+                            Status = "blocked_validation",
+                            Validated = true,
+                            ValidationErrors = allIssues,
+                            Published = false
+                        })
+                    };
+                }
+            }
+
+            // Step 3: Create the SiteMap record
+            var siteMapEntity = new Entity("sitemap");
+            siteMapEntity["sitemapxml"] = newSiteMapXml;
+            var siteMapId = _serviceClient.Create(siteMapEntity);
+
+            // Step 4: Associate the SiteMap with the App Module via AddAppComponents
+            try
+            {
+                var addComponentRequest = new Microsoft.Crm.Sdk.Messages.AddAppComponentsRequest
+                {
+                    AppId = appModuleIdUnique,
+                    Components = new EntityReferenceCollection
+                    {
+                        new EntityReference("sitemap", siteMapId)
+                    }
+                };
+                _serviceClient.Execute(addComponentRequest);
+            }
+            catch (Exception ex)
+            {
+                // Clean up: delete the orphaned SiteMap record
+                try { _serviceClient.Delete("sitemap", siteMapId); } catch { /* best effort */ }
+                return ErrorResult(
+                    $"[Error] SiteMap created but failed to associate with app '{appName}'\n" +
+                    $"AppModuleId: {appModuleId}\n" +
+                    $"SiteMapId: {siteMapId} (cleaned up)\n" +
+                    $"Message: {ex.Message}\n" +
+                    $"Tip: Verify the app module exists and supports SiteMap components.");
+            }
+
+            // Step 5: Publish
+            var published = TryPublish(auto_publish, appModuleId);
+
+            // Step 6: Return success
+            {
+                var sb = new StringBuilder(256);
+                sb.AppendLine($"[SiteMapCreate] {appName}");
+                sb.AppendLine($"AppModuleId: {appModuleId}");
+                sb.AppendLine($"SiteMapId: {siteMapId}");
+                sb.AppendLine($"Status: Created and associated successfully");
+                sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
+                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+                if (validationWarnings?.Count > 0)
+                {
+                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
+                    foreach (var w in validationWarnings)
+                        sb.AppendLine($"  - {w}");
+                }
+
+                var structured = new UpdateSiteMapResult
+                {
+                    Action = "created",
+                    AppModuleId = appModuleId.ToString(),
+                    AppName = appName,
+                    SiteMapId = siteMapId.ToString(),
+                    Status = published || !auto_publish ? "created" : "created_publish_failed",
+                    Validated = validate,
+                    ValidationWarnings = validationWarnings,
+                    Published = published
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
             }
         }
 
@@ -703,12 +878,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine("To rollback this change:");
             if (backupPath != null)
             {
-                sb.AppendLine($"  Call update_sitemap with action='undo', app_module_id='{appModuleId}', sitemapxml='{backupPath}'");
+                sb.AppendLine($"  Call upsert_sitemap with action='undo', app_module_id='{appModuleId}', sitemapxml='{backupPath}'");
             }
             else
             {
                 sb.AppendLine($"  1. Retrieve the previous SiteMap XML (no backup was created)");
-                sb.AppendLine($"  2. Call update_sitemap with app_module_id='{appModuleId}' and the original sitemapxml");
+                sb.AppendLine($"  2. Call upsert_sitemap with app_module_id='{appModuleId}' and the original sitemapxml");
             }
         }
 

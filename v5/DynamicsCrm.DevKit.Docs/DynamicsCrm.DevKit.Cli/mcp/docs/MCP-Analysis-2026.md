@@ -206,7 +206,7 @@ Wraps existing PAC CLI commands (solution management, auth management, plugin re
 
 1. **No Schema Write Operations** — Cannot create/modify tables, columns, or relationships without falling back to `execute_webapi` with raw JSON. This is a significant gap vs. mwhesse's implementation.
 
-2. **No SiteMap Tool** — Despite having the SiteMap resource (schema://sitemapxml) and blocking SiteMap writes via `execute_webapi`, there is no dedicated `update_sitemap` tool. It's marked as "coming soon" in the codebase.
+2. **No SiteMap Tool** — Despite having the SiteMap resource (schema://sitemapxml) and blocking SiteMap writes via `execute_webapi`, there is no dedicated `upsert_sitemap` tool. It's marked as "coming soon" in the codebase.
 
 3. **Local-Only** — Requires local installation and ServiceClient auth. Cannot be used as a managed cloud service like Microsoft's official MCP server.
 
@@ -304,7 +304,7 @@ These are **high-impact, high-demand** tools that a 20-year D365 architect would
 **Why Critical**: The SiteMap defines the navigation structure of a Model-Driven App. DevKit already:
 - Has the SiteMap XSD resource (`schema://sitemapxml`)
 - Blocks SiteMap writes via `execute_webapi`
-- References "update_sitemap (coming soon)" in the codebase
+- References "upsert_sitemap (coming soon)" in the codebase
 
 But the actual tool doesn't exist yet.
 
@@ -312,7 +312,7 @@ But the actual tool doesn't exist yet.
 
 | Tool | Description |
 |------|-------------|
-| `update_sitemap` | Read/update/undo SiteMap XML with backup + XSD validation + publish |
+| `upsert_sitemap` | Read/update/undo SiteMap XML with backup + XSD validation + publish |
 
 **Pattern**: Follow the exact same pattern as `update_form` and `update_view`:
 1. Read current SiteMap → backup → validate XSD → update → publish
@@ -437,7 +437,7 @@ Complete what's already started and fill the most critical gaps:
 
 | # | Action | Effort | Impact |
 |---|--------|--------|--------|
-| 1 | **Implement `update_sitemap`** (already referenced as "coming soon") | Medium | 🔴 High |
+| 1 | **Implement `upsert_sitemap`** (already referenced as "coming soon") | Medium | 🔴 High |
 | 2 | **Implement `create_attribute`** (add columns to entities) | Medium | 🔴 High |
 | 3 | **Implement `create_entity`** (create custom tables) | High | 🔴 High |
 | 4 | **Implement `manage_relationship`** (1:N & N:N) | Medium | 🟠 High |
