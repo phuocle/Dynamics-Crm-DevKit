@@ -1,6 +1,6 @@
 using System;
 
-namespace DynamicsCrm.DevKit.Tool.Lib
+namespace $NameSpace$
 {
     public enum DocumentMethodMessage
     {
