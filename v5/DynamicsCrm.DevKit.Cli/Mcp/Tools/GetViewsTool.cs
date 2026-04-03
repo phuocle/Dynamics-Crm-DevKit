@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (totalSystem == 0 && totalPersonal == 0)
             {
                 var typeHint = queryType >= 0 ? $" with querytype={queryType}" : "";
-                return $"[Views] {entityName} -- 0 views found{typeHint}";
+                return $"[Views] {entityName} — 0 views found{typeHint}";
             }
 
             var sb = new StringBuilder((totalSystem + totalPersonal) * 120 + 256);
@@ -129,7 +129,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (totalSystem > 0)
             {
                 var personalNote = includePersonal ? " system" : "";
-                sb.AppendLine($"[Views] {entityName} ({totalSystem}{personalNote} views)");
+                var viewLabel = totalSystem == 1 ? "view" : "views";
+                sb.AppendLine($"[Views] {entityName} ({totalSystem}{personalNote} {viewLabel})");
                 sb.AppendLine();
                 sb.AppendLine("viewid\tname\ttype\tdefault\tactive\tmanaged");
 
@@ -154,7 +155,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (totalSystem > 0)
                     sb.AppendLine();
 
-                sb.AppendLine($"[Personal Views] {entityName} ({totalPersonal} views)");
+                var personalLabel = totalPersonal == 1 ? "view" : "views";
+                sb.AppendLine($"[Personal Views] {entityName} ({totalPersonal} {personalLabel})");
                 sb.AppendLine();
                 sb.AppendLine("viewid\tname\ttype\tactive");
 

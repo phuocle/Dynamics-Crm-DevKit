@@ -193,12 +193,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 catch (Exception ex)
                 {
                     // Non-fatal: variable was created, just failed to add to solution
+                    var solWarning = $"Failed to add to solution '{solutionName}': {ex.Message}";
                     var sb = BuildCompactText("created", variableName, displayName.Trim(),
                         GetTypeLabel(typeValue), defaultValue, "", false, solutionName.Trim(), false);
-                    sb.AppendLine($"SolutionWarning: Failed to add to solution '{solutionName}': {ex.Message}");
+                    sb.AppendLine($"SolutionWarning: {solWarning}");
 
                     return BuildResult(sb, "created", variableName, displayName.Trim(),
-                        GetTypeLabel(typeValue), defaultValue, "", false, solutionName.Trim(), false);
+                        GetTypeLabel(typeValue), defaultValue, "", false, solutionName.Trim(), false, solWarning);
                 }
             }
 
@@ -218,7 +219,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 typeLbl, defaultValue, curVal, false, sol, published);
 
             return BuildResult(text, "created", variableName, displayName.Trim(),
-                typeLbl, defaultValue, curVal, false, sol, published);
+                typeLbl, defaultValue, curVal, false, sol, published, null);
         }
 
         private CallToolResult UpdateVariable(
@@ -275,7 +276,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 existingType, existingDefault, curVal, valueCleared, "", published);
 
             return BuildResult(text, "updated", variableName, existingDisplayName,
-                existingType, existingDefault, curVal, valueCleared, "", published);
+                existingType, existingDefault, curVal, valueCleared, "", published, null);
         }
 
         private Entity RetrieveDefinition(string schemaName)
@@ -414,7 +415,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static CallToolResult BuildResult(
             StringBuilder text, string action, string variableName, string displayName,
             string typeLbl, string defaultValue, string currentValue,
-            bool valueCleared, string solutionName, bool published)
+            bool valueCleared, string solutionName, bool published, string solutionWarning)
         {
             var structured = new UpsertVariableResult
             {
@@ -426,6 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CurrentValue = string.IsNullOrEmpty(currentValue) ? null : currentValue,
                 ValueCleared = valueCleared,
                 SolutionName = string.IsNullOrEmpty(solutionName) ? null : solutionName,
+                SolutionWarning = solutionWarning,
                 Published = published
             };
 

@@ -44,11 +44,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "SUPPORTED URL FORMATS:\n" +
             "- Model-driven app: main.aspx?etn=account&pagetype=entityrecord&id={guid}\n" +
             "- Model-driven app (legacy): main.aspx?etc=1&pagetype=entityrecord&id={guid}\n" +
+            "- Model-driven app (entity list): main.aspx?etn=account&pagetype=entitylist&viewid={guid}\n" +
             "- Web API: api/data/v9.2/accounts({guid})\n" +
             "- Power Apps maker: make.powerapps.com/environments/{env}/solutions/{sol}\n" +
             "- Power Automate: make.powerautomate.com/environments/{env}/flows/{flow}\n" +
+            "- Power Automate (flow run): make.powerautomate.com/environments/{env}/flows/{flow}/runs/{run}\n" +
             "- Workflow editor: sfa/workflow/edit.aspx?id={guid}\n" +
             "- Report viewer: crmreports/viewer/viewer.aspx?id={guid}\n" +
+            "- Solution editor: tools/solution/edit.aspx?id={guid}\n" +
+            "- Run dialog: rundialog.aspx?DialogId={guid}&EntityName={entity}&ObjectId={guid}\n" +
             "- Raw GUID: 1d27ebbc-afca-4fd7-b1ef-7ab01646490d\n\n" +
 
             "TIPS:\n" +
@@ -342,7 +346,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string ExtractQueryString(string input)
         {
             var idx = input.IndexOf('?');
-            return idx >= 0 ? input.Substring(idx) : null;
+            if (idx < 0) return null;
+            var qs = input.Substring(idx);
+            var hashIdx = qs.IndexOf('#');
+            return hashIdx >= 0 ? qs.Substring(0, hashIdx) : qs;
         }
 
         private static System.Collections.Specialized.NameValueCollection ExtractAndParseQueryString(string input)

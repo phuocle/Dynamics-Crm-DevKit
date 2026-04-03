@@ -430,6 +430,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
 
+        [JsonPropertyName("solutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionWarning { get; set; }
+
         [JsonPropertyName("published")]
         public bool Published { get; set; }
     }

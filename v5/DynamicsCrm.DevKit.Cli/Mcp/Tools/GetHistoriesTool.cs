@@ -133,6 +133,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entity_name = entity_name?.Trim().ToLowerInvariant() ?? "";
 
+            operation = operation?.Trim() ?? "";
+            if (!string.IsNullOrWhiteSpace(operation) && !ParseActionName(operation).HasValue)
+                return $"Error: '{operation}' is not a valid operation. Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.";
+
             DateTime? fromUtc = null, toUtc = null;
             if (!string.IsNullOrWhiteSpace(from_date))
             {
@@ -154,6 +158,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length);
 
             DateTime sinceUtc, untilUtc;
+            bool usedFromDate = fromUtc.HasValue;
             if (fromUtc.HasValue)
             {
                 sinceUtc = fromUtc.Value;
@@ -165,15 +170,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 untilUtc = toUtc ?? DateTime.UtcNow;
             }
 
+            var timeScope = usedFromDate
+                ? $"{sinceUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} to {untilUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}"
+                : $"last {FormatTimeWindow(minutes_ago)}";
+
             if (!string.IsNullOrWhiteSpace(record_id))
             {
                 var id = Guid.Parse(record_id.Trim());
                 return ExecuteDetailMode(entity_name, id, sinceUtc, untilUtc,
-                    resolvedUserFilter, operation, attribute_name, max_records, minutes_ago);
+                    resolvedUserFilter, operation, attribute_name, max_records, timeScope);
             }
 
             return ExecuteBrowseMode(entity_name, sinceUtc, untilUtc,
-                resolvedUserFilter, operation, max_records, minutes_ago);
+                resolvedUserFilter, operation, max_records, timeScope);
         }
 
         private string ResolveUserFilter(string userFilter)
@@ -232,7 +241,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private string ExecuteDetailMode(string entityName, Guid id,
             DateTime sinceUtc, DateTime untilUtc,
             string userFilter, string operation, string attributeName,
-            int maxRecords, int minutesAgo)
+            int maxRecords, string timeScope)
         {
             try
             {
@@ -250,7 +259,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var auditDetails = response.AuditDetailCollection;
 
                 if (auditDetails == null || auditDetails.AuditDetails.Count == 0)
-                    return FormatNoResults(entityName, id, minutesAgo);
+                    return FormatNoResults(entityName, id, timeScope);
 
                 return FormatAuditEntries(entityName, id, auditDetails,
                     sinceUtc, untilUtc, userFilter, operation, attributeName);
@@ -273,7 +282,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private string ExecuteBrowseMode(string entityName,
             DateTime sinceUtc, DateTime untilUtc,
             string userFilter, string operation,
-            int maxRecords, int minutesAgo)
+            int maxRecords, string timeScope)
         {
             try
             {
@@ -289,9 +298,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
                 if (result.Entities.Count == 0)
-                    return FormatBrowseNoResults(entityName, minutesAgo, userFilter, operation);
+                    return FormatBrowseNoResults(entityName, timeScope, userFilter, operation);
 
-                return FormatBrowseResults(result.Entities, entityName, minutesAgo, userFilter);
+                return FormatBrowseResults(result.Entities, entityName, timeScope, userFilter);
             }
             catch (Exception ex)
             {
@@ -368,7 +377,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         };
 
         private static string FormatBrowseResults(DataCollection<Entity> entities,
-            string entityName, int minutesAgo, string userFilter)
+            string entityName, string timeScope, string userFilter)
         {
             var scope = string.IsNullOrWhiteSpace(entityName) ? "all entities" : entityName;
             var filtered = new List<Entity>();
@@ -389,14 +398,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var sb2 = new StringBuilder(256);
                 sb2.AppendLine($"[AuditBrowse] 0 entries found after user filter");
-                sb2.AppendLine($"Scope: {scope}, last {FormatTimeWindow(minutesAgo)}");
+                sb2.AppendLine($"Scope: {scope}, {timeScope}");
                 sb2.AppendLine($"user_filter: \"{userFilter}\"");
                 sb2.AppendLine("Tip: Check if auditing is enabled at System Settings > Auditing tab");
                 return sb2.ToString();
             }
 
             var sb = new StringBuilder(filtered.Count * 120 + 256);
-            sb.AppendLine($"[AuditBrowse] {filtered.Count} entries ({scope}, last {FormatTimeWindow(minutesAgo)})");
+            sb.AppendLine($"[AuditBrowse] {filtered.Count} {(filtered.Count == 1 ? "entry" : "entries")} ({scope}, {timeScope})");
             sb.AppendLine();
             sb.AppendLine("timestamp\tuser\tentity\trecord\taction\toperation");
 
@@ -420,7 +429,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static string FormatBrowseNoResults(string entityName, int minutesAgo,
+        private static string FormatBrowseNoResults(string entityName, string timeScope,
             string userFilter, string operation)
         {
             var sb = new StringBuilder(256);
@@ -433,18 +442,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 filters.Add($"user contains \"{userFilter}\"");
             if (!string.IsNullOrWhiteSpace(operation))
                 filters.Add($"operation = \"{operation}\"");
-            filters.Add($"last {FormatTimeWindow(minutesAgo)}");
+            filters.Add(timeScope);
 
             sb.AppendLine($"Filters: {string.Join(", ", filters)}");
             sb.AppendLine("Tip: Check if auditing is enabled at System Settings > Auditing tab");
             return sb.ToString();
         }
 
-        private static string FormatNoResults(string entityName, Guid recordId, int minutesAgo)
+        private static string FormatNoResults(string entityName, Guid recordId, string timeScope)
         {
             var sb = new StringBuilder(256);
             sb.AppendLine($"[AuditHistory] {entityName}: {recordId}");
-            sb.AppendLine($"Entries: 0 (last {FormatTimeWindow(minutesAgo)})");
+            sb.AppendLine($"Entries: 0 ({timeScope})");
             sb.AppendLine("Tip: Audit may not be enabled for this entity. Check System Settings > Auditing.");
             return sb.ToString();
         }
@@ -592,7 +601,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = new StringBuilder(entries.Count * 100 + 256);
             sb.AppendLine($"[AuditHistory] {entityName}: {recordId}");
-            sb.AppendLine($"Entries: {entries.Count}");
+            sb.AppendLine($"{(entries.Count == 1 ? "Entry" : "Entries")}: {entries.Count}");
             sb.AppendLine();
 
             if (entries.Count == 0)

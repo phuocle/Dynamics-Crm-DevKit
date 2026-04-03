@@ -25,12 +25,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve a single Dataverse record by entity name and record ID. " +
-            "Returns the record's fields as a markdown table.\n\n" +
+            "Returns the record's fields as key-value pairs.\n\n" +
 
             "RETURNS:\n" +
             "- Entity type and record ID header\n" +
-            "- All requested columns (or all columns if none specified) as a two-column markdown table " +
-            "(Field | Value), with formatted values for lookups, option sets, money, dates, etc.\n\n" +
+            "- All requested columns (or all columns if none specified) as key-value pairs " +
+            "(field: value), with formatted values for lookups, option sets, money, dates, etc.\n\n" +
 
             "WHEN TO USE:\n" +
             "- When you have a record ID from a previous query and need to see its full details\n" +
