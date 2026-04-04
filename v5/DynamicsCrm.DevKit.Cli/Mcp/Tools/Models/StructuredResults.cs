@@ -795,6 +795,357 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int Waiting { get; set; }
     }
 
+    internal sealed class GetPluginsResult
+    {
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("assemblies")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<PluginAssemblyEntry> Assemblies { get; set; }
+
+        [JsonPropertyName("steps")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<PluginStepEntry> Steps { get; set; }
+
+        [JsonPropertyName("summary")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public PluginStepSummary Summary { get; set; }
+    }
+
+    internal sealed class PluginAssemblyEntry
+    {
+        [JsonPropertyName("assemblyId")]
+        public string AssemblyId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
+
+        [JsonPropertyName("isolationMode")]
+        public string IsolationMode { get; set; }
+
+        [JsonPropertyName("sourceType")]
+        public string SourceType { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("hasManagedIdentity")]
+        public bool HasManagedIdentity { get; set; }
+
+        [JsonPropertyName("typeCount")]
+        public int TypeCount { get; set; }
+
+        [JsonPropertyName("types")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<PluginTypeEntry> Types { get; set; }
+    }
+
+    internal sealed class PluginTypeEntry
+    {
+        [JsonPropertyName("typeId")]
+        public string TypeId { get; set; }
+
+        [JsonPropertyName("typeName")]
+        public string TypeName { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("isWorkflow")]
+        public bool IsWorkflow { get; set; }
+
+        [JsonPropertyName("stepCount")]
+        public int StepCount { get; set; }
+    }
+
+    internal sealed class PluginStepEntry
+    {
+        [JsonPropertyName("stepId")]
+        public string StepId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("assemblyName")]
+        public string AssemblyName { get; set; }
+
+        [JsonPropertyName("typeName")]
+        public string TypeName { get; set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        [JsonPropertyName("entity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Entity { get; set; }
+
+        [JsonPropertyName("stage")]
+        public string Stage { get; set; }
+
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("rank")]
+        public int Rank { get; set; }
+
+        [JsonPropertyName("filteringAttributes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FilteringAttributes { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("unsecureConfig")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string UnsecureConfig { get; set; }
+
+        [JsonPropertyName("secureConfigId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SecureConfigId { get; set; }
+
+        [JsonPropertyName("impersonatingUser")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ImpersonatingUser { get; set; }
+
+        [JsonPropertyName("asyncAutoDelete")]
+        public bool AsyncAutoDelete { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("images")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<PluginImageEntry> Images { get; set; }
+    }
+
+    internal sealed class PluginImageEntry
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("entityAlias")]
+        public string EntityAlias { get; set; }
+
+        [JsonPropertyName("imageType")]
+        public string ImageType { get; set; }
+
+        [JsonPropertyName("attributes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Attributes { get; set; }
+    }
+
+    internal sealed class PluginStepSummary
+    {
+        [JsonPropertyName("preValidation")]
+        public int PreValidation { get; set; }
+
+        [JsonPropertyName("preOperation")]
+        public int PreOperation { get; set; }
+
+        [JsonPropertyName("postOperation")]
+        public int PostOperation { get; set; }
+
+        [JsonPropertyName("syncCount")]
+        public int SyncCount { get; set; }
+
+        [JsonPropertyName("asyncCount")]
+        public int AsyncCount { get; set; }
+
+        [JsonPropertyName("disabledCount")]
+        public int DisabledCount { get; set; }
+    }
+
+    internal sealed class GetBpfsResult
+    {
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("bpfs")]
+        public List<BpfEntry> Bpfs { get; set; }
+    }
+
+    internal sealed class BpfEntry
+    {
+        [JsonPropertyName("workflowId")]
+        public string WorkflowId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("uniqueName")]
+        public string UniqueName { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("primaryEntity")]
+        public string PrimaryEntity { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("businessProcessType")]
+        public string BusinessProcessType { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("owner")]
+        public string Owner { get; set; }
+
+        [JsonPropertyName("createdOn")]
+        public string CreatedOn { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        public string ModifiedOn { get; set; }
+
+        [JsonPropertyName("modifiedBy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedBy { get; set; }
+
+        [JsonPropertyName("stageCount")]
+        public int StageCount { get; set; }
+
+        [JsonPropertyName("stages")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<BpfStageEntry> Stages { get; set; }
+    }
+
+    internal sealed class BpfStageEntry
+    {
+        [JsonPropertyName("stageId")]
+        public string StageId { get; set; }
+
+        [JsonPropertyName("stageName")]
+        public string StageName { get; set; }
+
+        [JsonPropertyName("stageCategory")]
+        public string StageCategory { get; set; }
+
+        [JsonPropertyName("primaryEntity")]
+        public string PrimaryEntity { get; set; }
+    }
+
+    internal sealed class GetJobsResult
+    {
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("jobs")]
+        public List<SystemJobEntry> Jobs { get; set; }
+
+        [JsonPropertyName("summary")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public JobSummary Summary { get; set; }
+    }
+
+    internal sealed class SystemJobEntry
+    {
+        [JsonPropertyName("jobId")]
+        public string JobId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("operationType")]
+        public string OperationType { get; set; }
+
+        [JsonPropertyName("primaryEntity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PrimaryEntity { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("messageName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string MessageName { get; set; }
+
+        [JsonPropertyName("startedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string StartedOn { get; set; }
+
+        [JsonPropertyName("completedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CompletedOn { get; set; }
+
+        [JsonPropertyName("executionTime")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ExecutionTime { get; set; }
+
+        [JsonPropertyName("retryCount")]
+        public int RetryCount { get; set; }
+
+        [JsonPropertyName("depth")]
+        public int Depth { get; set; }
+
+        [JsonPropertyName("errorCode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ErrorCode { get; set; }
+
+        [JsonPropertyName("correlationId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CorrelationId { get; set; }
+
+        [JsonPropertyName("owner")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Owner { get; set; }
+
+        [JsonPropertyName("pluginStep")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PluginStep { get; set; }
+
+        [JsonPropertyName("workflowName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WorkflowName { get; set; }
+
+        [JsonPropertyName("regardingRecord")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RegardingRecord { get; set; }
+
+        [JsonPropertyName("friendlyMessage")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FriendlyMessage { get; set; }
+
+        [JsonPropertyName("message")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Message { get; set; }
+    }
+
+    internal sealed class JobSummary
+    {
+        [JsonPropertyName("plugin")]
+        public int Plugin { get; set; }
+
+        [JsonPropertyName("workflow")]
+        public int Workflow { get; set; }
+
+        [JsonPropertyName("bulkDelete")]
+        public int BulkDelete { get; set; }
+
+        [JsonPropertyName("import")]
+        public int Import { get; set; }
+
+        [JsonPropertyName("solution")]
+        public int Solution { get; set; }
+
+        [JsonPropertyName("other")]
+        public int Other { get; set; }
+    }
+
     internal sealed class EnvironmentVariableGetResult
     {
         [JsonPropertyName("action")]
