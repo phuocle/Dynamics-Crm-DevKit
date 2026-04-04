@@ -687,6 +687,114 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Description { get; set; }
     }
 
+    internal sealed class GetFlowsResult
+    {
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [JsonPropertyName("flows")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<CloudFlowEntry> Flows { get; set; }
+
+        [JsonPropertyName("runs")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<FlowRunEntry> Runs { get; set; }
+
+        [JsonPropertyName("runSummary")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public FlowRunSummary RunSummary { get; set; }
+    }
+
+    internal sealed class CloudFlowEntry
+    {
+        [JsonPropertyName("workflowId")]
+        public string WorkflowId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("owner")]
+        public string Owner { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("uniqueName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string UniqueName { get; set; }
+
+        [JsonPropertyName("createdOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreatedOn { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        public string ModifiedOn { get; set; }
+
+        [JsonPropertyName("modifiedBy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedBy { get; set; }
+    }
+
+    internal sealed class FlowRunEntry
+    {
+        [JsonPropertyName("flowSessionId")]
+        public string FlowSessionId { get; set; }
+
+        [JsonPropertyName("startedOn")]
+        public string StartedOn { get; set; }
+
+        [JsonPropertyName("completedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CompletedOn { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("duration")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Duration { get; set; }
+
+        [JsonPropertyName("errorCode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ErrorCode { get; set; }
+
+        [JsonPropertyName("errorMessage")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ErrorMessage { get; set; }
+
+        [JsonPropertyName("triggerType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string TriggerType { get; set; }
+    }
+
+    internal sealed class FlowRunSummary
+    {
+        [JsonPropertyName("succeeded")]
+        public int Succeeded { get; set; }
+
+        [JsonPropertyName("failed")]
+        public int Failed { get; set; }
+
+        [JsonPropertyName("running")]
+        public int Running { get; set; }
+
+        [JsonPropertyName("cancelled")]
+        public int Cancelled { get; set; }
+
+        [JsonPropertyName("waiting")]
+        public int Waiting { get; set; }
+    }
+
     internal sealed class EnvironmentVariableGetResult
     {
         [JsonPropertyName("action")]
