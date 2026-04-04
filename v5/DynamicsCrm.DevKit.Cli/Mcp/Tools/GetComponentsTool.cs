@@ -120,7 +120,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Solution info: uniqueName, displayName, version, publisher, isManaged\n" +
             "- Component summary table: count per component type\n" +
             "- Full component detail table: componentType, typeId, objectId, name " +
-            "(name = logical/schema/display name; objectId can be passed to get_record or other tools)\n\n" +
+            "(name = logical/schema/display name; objectId can be passed to get_record or other tools)\n" +
+            "- When include_active_layers=true: adds ActiveLayer column (Yes/No) showing " +
+            "which components have unmanaged (active) customization layers\n\n" +
 
             "FUZZY MATCH BEHAVIOR:\n" +
             "- Matches against both uniqueName and displayName using a 'contains' search\n" +
@@ -137,11 +139,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "metadata (attributes, relationships, forms, views, etc.) for that entity. " +
             "This keeps the response lightweight and fast.\n\n" +
 
+            "ACTIVE LAYER CHECKING:\n" +
+            "Use include_active_layers=true to check which components have unmanaged customizations " +
+            "(active layers in the solution layering system). A component with an active layer means " +
+            "it has been customized outside of managed solutions. " +
+            "Use active_layers_only=true to filter and show ONLY components with active layers — " +
+            "useful for cleanup audits before deploying managed solutions.\n" +
+            "Note: Active layer checking requires additional API calls (batched in groups of 200) " +
+            "and may take longer for solutions with many components.\n\n" +
+
             "WHEN TO USE:\n" +
             "- Before packaging or deploying a solution, to audit its contents\n" +
             "- To find objectIds of specific components (plugin assemblies, web resources, workflows)\n" +
             "- To count entities, attributes, forms, or other component types in a solution\n" +
-            "- As a prerequisite step before operating on specific solution components\n\n" +
+            "- As a prerequisite step before operating on specific solution components\n" +
+            "- To identify components with unmanaged customizations (active layers) before deploying managed solutions\n" +
+            "- To audit which components need cleanup (active_layers_only=true)\n\n" +
 
             "TIP: The objectId column in the output is the primary key for the component — " +
             "pass it to get_record (with the appropriate entity name) to retrieve full details. " +
@@ -152,10 +165,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "(e.g. 'DevKit Core', 'My Solution'). " +
                 "Partial names are supported — fuzzy (contains) matching is applied to both uniqueName and displayName. " +
                 "If multiple solutions match, the tool returns the list and asks for the exact uniqueName."
-            )] string solution_name)
+            )] string solution_name,
+            [Description(
+                "When true, queries msdyn_componentlayer for each component and adds an ActiveLayer column " +
+                "(Yes/No) to the output. An active layer means the component has unmanaged customizations. " +
+                "Default: false (skipped for performance). Note: adds API calls batched in groups of 200."
+            )] bool include_active_layers = false,
+            [Description(
+                "When true, implies include_active_layers=true and filters the output to show ONLY " +
+                "components that have an active (unmanaged) layer. Useful for cleanup audits. " +
+                "Default: false."
+            )] bool active_layers_only = false)
         {
             if (string.IsNullOrWhiteSpace(solution_name))
                 return "Error: solution_name is required.";
+
+            // active_layers_only implies include_active_layers
+            if (active_layers_only)
+                include_active_layers = true;
 
             try
             {
@@ -170,7 +197,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var solution = solutions[0];
                 var (components, fullEntityNames) = LoadComponents(solution.Id);
-                return FormatResult(solution, components, fullEntityNames);
+
+                // Active layer checking (only when requested)
+                Dictionary<Guid, bool> activeLayers = null;
+                if (include_active_layers)
+                    activeLayers = CheckActiveLayers(components);
+
+                return FormatResult(solution, components, fullEntityNames, activeLayers, active_layers_only);
             }
             catch (Exception ex)
             {
@@ -305,7 +338,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private string FormatResult(Entity solution, List<Entity> components, Dictionary<Guid, string> fullEntityNames)
+        private string FormatResult(Entity solution, List<Entity> components, Dictionary<Guid, string> fullEntityNames,
+            Dictionary<Guid, bool> activeLayers, bool activeLayersOnly)
         {
             var uniqueName   = solution.GetAttributeValue<string>("uniquename")   ?? "";
             var displayName  = solution.GetAttributeValue<string>("friendlyname") ?? "";
@@ -314,6 +348,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var publisherName = solution.GetAttributeValue<AliasedValue>("pub.friendlyname")?.Value as string ?? "";
 
             var sb = new StringBuilder(components.Count * 60 + 1024);
+            var showActiveLayers = activeLayers != null;
 
             // ── Solution info ──
             sb.AppendLine($"[Solution] {displayName} ({uniqueName})");
@@ -321,6 +356,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Publisher: {publisherName}");
             sb.AppendLine($"IsManaged: {isManaged}");
             sb.AppendLine($"Components: {components.Count}");
+            if (showActiveLayers)
+            {
+                var activeCount = activeLayers.Count(kv => kv.Value);
+                sb.AppendLine($"ActiveLayers: {activeCount} of {components.Count} components");
+            }
             sb.AppendLine();
 
             // ── Full Entities guidance (if any) ──
@@ -340,21 +380,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // ── Summary ──
             sb.AppendLine("[Component Summary]");
-            sb.AppendLine("Type\tTypeId\tCount");
+            if (showActiveLayers)
+                sb.AppendLine("Type\tTypeId\tCount\tActiveLayers");
+            else
+                sb.AppendLine("Type\tTypeId\tCount");
             foreach (var grp in grouped)
             {
                 var typeName = GetTypeName(grp.Key);
-                sb.AppendLine($"{typeName}\t{grp.Key}\t{grp.Count()}");
+                if (showActiveLayers)
+                {
+                    var activeInGroup = grp.Count(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a);
+                    sb.AppendLine($"{typeName}\t{grp.Key}\t{grp.Count()}\t{activeInGroup}");
+                }
+                else
+                {
+                    sb.AppendLine($"{typeName}\t{grp.Key}\t{grp.Count()}");
+                }
             }
             sb.AppendLine();
 
             var nameMap = BuildNameMap(components, fullEntityNames);
 
             // ── Full component list ──
-            sb.AppendLine($"[Components] {components.Count} total");
+            // When activeLayersOnly, filter to only components with active layers
+            var displayComponents = activeLayersOnly
+                ? components.Where(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a).ToList()
+                : components;
+
+            var displayGrouped = displayComponents
+                .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
+                .OrderBy(g => g.Key)
+                .ToList();
+
+            if (activeLayersOnly)
+                sb.AppendLine($"[Components] {displayComponents.Count} with active layers (of {components.Count} total)");
+            else
+                sb.AppendLine($"[Components] {components.Count} total");
             sb.AppendLine();
-            sb.AppendLine("Type\tTypeId\tObjectId\tName");
-            foreach (var grp in grouped)
+
+            if (showActiveLayers)
+                sb.AppendLine("Type\tTypeId\tObjectId\tActiveLayer\tName");
+            else
+                sb.AppendLine("Type\tTypeId\tObjectId\tName");
+            foreach (var grp in displayGrouped)
             {
                 var typeName = GetTypeName(grp.Key);
                 foreach (var c in grp)
@@ -366,7 +434,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
                         name = $"{name} (full — use get_metadata_entities)";
 
-                    sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? "(unresolved)"}");
+                    if (showActiveLayers)
+                    {
+                        var isActive = activeLayers.TryGetValue(objectId, out var a) && a ? "Yes" : "No";
+                        sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{isActive}\t{name ?? "(unresolved)"}");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? "(unresolved)"}");
+                    }
                 }
             }
 
@@ -570,6 +646,181 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
             catch { /* skip unsupported or unavailable entity types */ }
+        }
+
+        // ── Active Layer checking ────────────────────────────────────────────
+
+        // Maps componenttype int → PascalCase API name used in msdyn_componentlayer.msdyn_solutioncomponentname
+        // Derived from TaskSolutionLayer.cs enum + GetSolutionComponentName() transformations
+        private static readonly Dictionary<int, string> ComponentApiNames = new()
+        {
+            { 1,   "Entity" },
+            { 2,   "Attribute" },
+            { 3,   "Relationship" },
+            { 4,   "AttributePicklistValue" },
+            { 5,   "AttributeLookupValue" },
+            { 6,   "ViewAttribute" },
+            { 7,   "LocalizedLabel" },
+            { 9,   "OptionSet" },
+            { 10,  "EntityRelationship" },
+            { 13,  "ManagedProperty" },
+            { 14,  "EntityKey" },
+            { 16,  "Privilege" },
+            { 18,  "Index" },
+            { 20,  "Role" },
+            { 21,  "RolePrivilege" },
+            { 22,  "DisplayString" },
+            { 23,  "DisplayStringMap" },
+            { 24,  "Form" },
+            { 25,  "Organization" },
+            { 26,  "SavedQuery" },
+            { 29,  "Workflow" },
+            { 31,  "Report" },
+            { 32,  "ReportEntity" },
+            { 33,  "ReportCategory" },
+            { 34,  "ReportVisibility" },
+            { 35,  "Attachment" },
+            { 36,  "EmailTemplate" },
+            { 37,  "ContractTemplate" },
+            { 38,  "KbArticleTemplate" },
+            { 39,  "MailMergeTemplate" },
+            { 44,  "DuplicateRule" },
+            { 45,  "DuplicateRuleCondition" },
+            { 46,  "EntityMap" },
+            { 47,  "AttributeMap" },
+            { 48,  "RibbonCommand" },
+            { 49,  "RibbonContextGroup" },
+            { 50,  "RibbonCustomization" },
+            { 52,  "RibbonRule" },
+            { 53,  "RibbonTabToCommandMap" },
+            { 55,  "RibbonDiff" },
+            { 59,  "SavedQueryVisualization" },
+            { 60,  "SystemForm" },
+            { 61,  "WebResource" },
+            { 62,  "SiteMap" },
+            { 63,  "ConnectionRole" },
+            { 64,  "ComplexControl" },
+            { 65,  "HierarchyRule" },
+            { 66,  "CustomControl" },
+            { 68,  "CustomControlDefaultConfig" },
+            { 70,  "FieldSecurityProfile" },
+            { 71,  "FieldPermission" },
+            { 80,  "ModelDrivenApp" },
+            { 90,  "PluginType" },
+            { 91,  "PluginAssembly" },
+            { 92,  "SdkMessageProcessingStep" },
+            { 93,  "SdkMessageProcessingStepImage" },
+            { 95,  "ServiceEndpoint" },
+            { 150, "RoutingRule" },
+            { 151, "RoutingRuleItem" },
+            { 152, "Sla" },
+            { 153, "SlaItem" },
+            { 154, "ConvertRule" },
+            { 155, "ConvertRuleItem" },
+            { 161, "MobileOfflineProfile" },
+            { 162, "MobileOfflineProfileItem" },
+            { 165, "SimilarityRule" },
+            { 166, "DataSourceMapping" },
+            { 201, "SdkMessage" },
+            { 202, "SdkMessageFilter" },
+            { 208, "ImportMap" },
+            { 300, "CanvasApp" },
+            { 371, "Connector" },
+            { 380, "EnvironmentVariableDefinition" },
+            { 381, "EnvironmentVariableValue" },
+            { 400, "AiConfiguration" },
+            { 401, "AiProject" },
+            { 402, "AiProjectType" },
+            { 418, "msdyn_dataflow" },
+            { 430, "EntityAnalyticsConfig" },
+            { 431, "AttributeImageConfig" },
+            { 432, "EntityImageConfig" },
+        };
+
+        private static string GetComponentApiName(int typeId)
+        {
+            if (ComponentApiNames.TryGetValue(typeId, out var name))
+                return name;
+            // Fallback: use the display name with spaces/parens removed
+            if (ComponentTypeNames.TryGetValue(typeId, out var displayName))
+                return displayName.Replace(" ", "").Replace("(", "").Replace(")", "");
+            return typeId.ToString();
+        }
+
+        /// <summary>
+        /// Batch-queries msdyn_componentlayer via ExecuteMultiple to determine which components have an active (unmanaged) layer.
+        /// Pattern from TaskSolutionLayer.CheckActiveLayers.
+        /// </summary>
+        private Dictionary<Guid, bool> CheckActiveLayers(List<Entity> components)
+        {
+            var result = new Dictionary<Guid, bool>();
+            if (components.Count == 0)
+                return result;
+
+            var bulk = new ExecuteMultipleRequest
+            {
+                Settings = new ExecuteMultipleSettings
+                {
+                    ContinueOnError = true,
+                    ReturnResponses = true
+                },
+                Requests = new OrganizationRequestCollection()
+            };
+
+            // Track which request index maps to which objectId
+            var requestMap = new List<Guid>();
+
+            for (var i = 0; i < components.Count; i++)
+            {
+                var entity = components[i];
+                var typeId = entity.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0;
+                var objectId = entity.GetAttributeValue<Guid>("objectid");
+                var apiName = GetComponentApiName(typeId);
+
+                var req = new RetrieveMultipleRequest
+                {
+                    Query = new QueryExpression("msdyn_componentlayer")
+                    {
+                        NoLock = true,
+                        ColumnSet = new ColumnSet("msdyn_solutionname"),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("msdyn_solutioncomponentname", ConditionOperator.Equal, apiName),
+                                new ConditionExpression("msdyn_componentid", ConditionOperator.Equal, objectId)
+                            }
+                        }
+                    }
+                };
+                bulk.Requests.Add(req);
+                requestMap.Add(objectId);
+
+                if (bulk.Requests.Count == 200 || i == components.Count - 1)
+                {
+                    try
+                    {
+                        var bulkResponse = (ExecuteMultipleResponse)_serviceClient.Execute(bulk);
+                        foreach (var response in bulkResponse.Responses)
+                        {
+                            if (response.Fault != null)
+                                continue;
+
+                            var layers = ((RetrieveMultipleResponse)response.Response).EntityCollection.Entities;
+                            var hasActive = layers.Any(x =>
+                                string.Equals(x.GetAttributeValue<string>("msdyn_solutionname"), "Active", StringComparison.OrdinalIgnoreCase));
+                            var objId = requestMap[response.RequestIndex];
+                            result[objId] = hasActive;
+                        }
+                    }
+                    catch { /* skip batch on failure */ }
+
+                    bulk.Requests.Clear();
+                    requestMap.Clear();
+                }
+            }
+
+            return result;
         }
 
         // Safe string getter for Entity attributes
