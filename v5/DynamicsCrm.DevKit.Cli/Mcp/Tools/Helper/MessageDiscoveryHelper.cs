@@ -10,8 +10,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         public static async Task<string> GetMessageMarkdownAsync(
             MetadataService metadataService,
             string scope,
-            bool includeCustomActions,
-            bool includeCustomApis)
+            bool includeCustomActions)
         {
             var normalizedScope = NormalizeScope(scope);
             var isNoneScope = normalizedScope == "none";
@@ -24,22 +23,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 ? (isNoneScope ? await metadataService.GetCustomActionsAsync() : await metadataService.GetCustomActionsAsync(normalizedScope))
                 : [];
 
-            var customApis = includeCustomApis
-                ? await metadataService.GetCustomApisAsync(normalizedScope)
-                : [];
-
             var customActionNames = customActions.Select(x => x.Name);
-            if (isNoneScope && customApis.Count > 0)
+            if (isNoneScope)
             {
-                var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
-                customActionNames = customActionNames.Where(x => !apiNames.Contains(x));
+                var customApis = await metadataService.GetCustomApisAsync(normalizedScope);
+                if (customApis.Count > 0)
+                {
+                    var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
+                    customActionNames = customActionNames.Where(x => !apiNames.Contains(x));
+                }
             }
 
             return CompactFormatter.FormatMessages(
                 normalizedScope,
                 sdkMessages.Select(x => x.Name),
-                customActionNames,
-                customApis.Select(x => x.Name));
+                customActionNames);
         }
 
         public static string NormalizeScope(string scope)

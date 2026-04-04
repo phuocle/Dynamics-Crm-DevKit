@@ -17,29 +17,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_messages", Title = "Discover Dataverse SDK messages & APIs",
+        [McpServerTool(Name = "get_messages", Title = "Discover Dataverse SDK messages & Custom Actions",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Discover SDK messages, Custom Actions, and Custom APIs available for a Dataverse entity. " +
+            "Discover SDK messages and Custom Actions available for a Dataverse entity. " +
             "Returns a markdown report with counts and categorized message lists.\n\n" +
 
             "RETURNS:\n" +
-            "- Summary table: category (SDK Messages, Custom Actions, Custom APIs) with counts\n" +
+            "- Summary table: category (SDK Messages, Custom Actions) with counts\n" +
             "- SDK Messages list: standard platform messages (Create, Update, Delete, Retrieve, RetrieveMultiple, " +
             "Associate, Disassociate, SetState, Assign, GrantAccess, etc.)\n" +
-            "- Custom Actions list: organization-defined actions registered for this entity\n" +
-            "- Custom APIs list: custom API messages registered for this entity\n\n" +
+            "- Custom Actions list: organization-defined actions registered for this entity\n\n" +
 
             "WHEN TO USE:\n" +
             "- When building plugins and you need to know which messages are available for an entity\n" +
-            "- When you need to discover Custom Actions or Custom APIs in the environment\n" +
+            "- When you need to discover Custom Actions in the environment\n" +
             "- When registering plugin steps and need to verify message availability\n" +
             "- When exploring what operations can be performed on a specific entity\n\n" +
 
             "SCOPING:\n" +
             "- Entity-bound: provide the entity logical name (e.g. 'account', 'contact') to get messages specific to that entity\n" +
             "- Global (none-bound): use 'none' or leave empty to get messages not bound to any entity " +
-            "(e.g. WhoAmI, RetrieveCurrentOrganization, global Custom Actions)")]
+            "(e.g. WhoAmI, RetrieveCurrentOrganization, global Custom Actions)\n\n" +
+
+            "NOTE: For Custom APIs, use the get_apis tool instead — it provides full detail " +
+            "including request parameters, response properties, and plugin bindings.")]
         public async Task<string> get_messages(
             [Description(
                 "Entity logical name to get messages for (always lowercase). " +
@@ -49,20 +51,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string entity_name = "none",
             [Description(
                 "true: include Custom Action messages in the results. " +
-                "false: exclude Custom Actions (only show SDK messages and Custom APIs)."
-            )] bool include_custom_actions = true,
-            [Description(
-                "true: include Custom API messages in the results. " +
-                "false: exclude Custom APIs (only show SDK messages and Custom Actions)."
-            )] bool include_custom_apis = true)
+                "false: exclude Custom Actions (only show SDK messages)."
+            )] bool include_custom_actions = true)
         {
             try
             {
                 return await MessageDiscoveryHelper.GetMessageMarkdownAsync(
                     _metadataService,
                     entity_name,
-                    include_custom_actions,
-                    include_custom_apis);
+                    include_custom_actions);
             }
             catch (Exception ex)
             {

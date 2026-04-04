@@ -104,12 +104,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         public static string FormatMessages(
             string scope,
             IEnumerable<string> sdkMessages,
-            IEnumerable<string> customActions,
-            IEnumerable<string> customApis)
+            IEnumerable<string> customActions)
         {
             var sdk = DistinctSorted(sdkMessages);
             var actions = DistinctSorted(customActions);
-            var apis = DistinctSorted(customApis);
 
             var sb = new StringBuilder(1024);
             sb.AppendLine($"[Messages for {scope}]");
@@ -118,8 +116,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 sb.AppendLine($"SDK Messages: {sdk.Count}");
             if (actions.Count > 0)
                 sb.AppendLine($"Custom Actions: {actions.Count}");
-            if (apis.Count > 0)
-                sb.AppendLine($"Custom APIs: {apis.Count}");
 
             sb.AppendLine();
 
@@ -135,14 +131,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 sb.AppendLine("[Custom Actions]");
                 foreach (var m in actions)
-                    sb.AppendLine($"- {m}");
-                sb.AppendLine();
-            }
-
-            if (apis.Count > 0)
-            {
-                sb.AppendLine("[Custom APIs]");
-                foreach (var m in apis)
                     sb.AppendLine($"- {m}");
                 sb.AppendLine();
             }
