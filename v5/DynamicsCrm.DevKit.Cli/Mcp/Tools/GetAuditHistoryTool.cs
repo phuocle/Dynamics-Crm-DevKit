@@ -27,97 +27,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_audit_history", Title = "Retrieve audit history for Dataverse records (who changed what, when)",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Retrieve audit history for Dataverse records. " +
-            "Shows who changed what fields, when, with old and new values.\n\n" +
+            "Retrieve audit history for Dataverse records. Shows who changed what, when, with old/new values.\n\n" +
 
             "TWO MODES:\n" +
-            "- record_id PROVIDED → Detail mode: field-level old/new values for a single record\n" +
-            "  Requires: entity_name + record_id\n" +
-            "- record_id EMPTY → Browse mode: summary list of audit entries across records/entities\n" +
-            "  entity_name is optional (empty = all entities)\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entity_name: Entity logical name. Required in detail mode. Optional in browse mode (empty = all entities).\n" +
-            "- record_id: GUID of the record. Empty = browse mode, provided = detail mode.\n" +
-            "- minutes_ago: Return entries from last N minutes (default: 1440 = 24h, max: 43200 = 30 days). Ignored when from_date is set.\n" +
-            "- from_date: ISO 8601 start date (e.g., '2026-03-01'). Overrides minutes_ago when set.\n" +
-            "- to_date: ISO 8601 end date (e.g., '2026-03-15'). Used with from_date. Defaults to now.\n" +
-            "- user_filter: Filter by user display name (contains match) or email address (auto-resolved to display name).\n" +
-            "- operation: Filter by operation type. Values: 'Create', 'Update', 'Delete', 'Activate', 'Deactivate', 'Assign', 'Merge', 'Cascade', 'SetState'.\n" +
-            "- attribute_name: Detail mode only. Show changes only for a specific field.\n" +
-            "- max_records: Maximum entries to return (default: 50, max: 500).\n\n" +
-
-            "RETURNS:\n" +
-            "- With record_id: Table of audit entries: timestamp, user, action, field, old value, new value\n" +
-            "- Without record_id: Summary table: timestamp, user, entity, record, action, operation\n\n" +
+            "- record_id PROVIDED: field-level old/new values for one record (requires entity_name)\n" +
+            "- record_id EMPTY: summary list across records/entities (entity_name optional)\n\n" +
 
             "WHEN TO USE:\n" +
-            "- When a user asks 'who changed this field?' or 'when was this record modified?'\n" +
-            "- To debug unexpected data changes (e.g., integration overwriting values)\n" +
-            "- For compliance auditing (GDPR, SOX data change trails)\n" +
-            "- To investigate data disputes ('the deal was supposed to be $1M')\n" +
-            "- To find all changes to an entity ('what changed on any account today?')\n" +
-            "- To audit deleted records ('show all deleted accounts this week')\n" +
-            "- To track user activity across entities ('what did the sync service change?')\n\n" +
+            "- 'Who changed this field?' or debug unexpected data changes\n" +
+            "- Compliance auditing or track user/integration activity\n\n" +
 
             "TIPS:\n" +
-            "- Audit must be enabled at organization level AND entity level to work\n" +
-            "- Not all field changes are audited - only fields with auditing enabled\n" +
-            "- Create actions show all initial field values\n" +
-            "- Use user_filter to find changes made by a specific user or integration account\n" +
-            "- Use attribute_name to focus on a specific field's change history (detail mode only)\n" +
-            "- Browse first (no record_id) to find records, then get detail (with record_id)")]
+            "- Audit must be enabled at org AND entity level\n" +
+            "- Use from_date/to_date for date ranges (overrides minutes_ago)")]
         public string get_audit_history(
-            [Description(
-                "Entity logical name (always lowercase). " +
-                "Required when record_id is provided (detail mode). " +
-                "Optional in browse mode (empty = search across all entities). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
+            [Description("Entity logical name. Required with record_id. Optional in browse mode."
             )] string entity_name = "",
-            [Description(
-                "GUID of the record. When provided: detail mode (field-level changes). " +
-                "When empty: browse mode (summary list). " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use execute_fetchxml or search to find the correct ID."
+            [Description("Record GUID for detail mode. Empty = browse mode."
             )] string record_id = "",
-            [Description(
-                "Return audit entries from the last N minutes. " +
-                "Default: 1440 (24 hours). Max: 43200 (30 days). " +
-                "Ignored when from_date is provided."
+            [Description("Entries from last N minutes. Default: 1440 (24h). Max: 43200. Ignored with from_date."
             )] int minutes_ago = 1440,
-            [Description(
-                "Filter by user display name (contains match) or email address. " +
-                "When value contains '@', resolves email to display name via systemuser lookup. " +
-                "Examples: 'John', 'admin', 'sync@contoso.com'. " +
-                "Leave empty for all users."
+            [Description("Filter by user name (contains) or email (auto-resolved)."
             )] string user_filter = "",
-            [Description(
-                "Filter by operation type. " +
-                "Values: 'Create', 'Update', 'Delete', 'Activate', 'Deactivate', " +
-                "'Assign', 'Merge', 'Cascade', 'SetState'. " +
-                "Leave empty for all operations."
+            [Description("Filter by operation: Create, Update, Delete, Activate, Deactivate, Assign, Merge, SetState."
             )] string operation = "",
-            [Description(
-                "Detail mode only. Filter to show changes for a specific attribute logical name. " +
-                "Examples: 'revenue', 'statuscode', 'name'. " +
-                "Leave empty for all attributes. Ignored in browse mode."
+            [Description("Detail mode only: filter to one field's changes."
             )] string attribute_name = "",
-            [Description(
-                "Maximum number of audit entries to return. " +
-                "Default: 50. Max: 500."
+            [Description("Max entries. Default: 50, max: 500."
             )] int max_records = 50,
-            [Description(
-                "ISO 8601 start date/datetime for the audit query range. " +
-                "When provided, overrides minutes_ago. " +
-                "Examples: '2026-03-01', '2026-03-01T00:00:00'. " +
-                "Leave empty to use minutes_ago."
+            [Description("ISO 8601 start date (e.g., '2026-03-01'). Overrides minutes_ago."
             )] string from_date = "",
-            [Description(
-                "ISO 8601 end date/datetime for the audit query range. " +
-                "Used together with from_date. " +
-                "Examples: '2026-03-15', '2026-03-15T23:59:59'. " +
-                "Leave empty to use current time as end."
+            [Description("ISO 8601 end date. Used with from_date. Default: now."
             )] string to_date = "")
         {
             if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))

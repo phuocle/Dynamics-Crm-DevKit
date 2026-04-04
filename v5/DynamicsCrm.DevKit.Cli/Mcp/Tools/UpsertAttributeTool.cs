@@ -30,158 +30,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertAttributeResult)),
         Description(
             "Create a new column or update an existing column (attribute) on a Dataverse entity. " +
-            "Automatically detects whether the attribute exists: creates if new, updates if existing. " +
-            "Supports all common types: string, memo, integer, bigint, decimal, money, float, boolean, " +
+            "Auto-detects create vs update. Supports: string, memo, integer, bigint, decimal, money, float, boolean, " +
             "datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
             "CREATE MODE (attribute does not exist):\n" +
             "- attribute_type and display_name are REQUIRED\n" +
-            "- Creates the column with all specified properties\n" +
             "- For lookup: creates 1:N relationship automatically\n" +
             "- For customer: creates polymorphic lookup (account+contact)\n\n" +
 
             "UPDATE MODE (attribute already exists):\n" +
             "- attribute_type is IGNORED (cannot change type after creation)\n" +
             "- Only provided parameters are updated, omitted ones keep current values\n" +
-            "- Supports: display_name, description, required_level, max_length, min/max_value, precision, format\n" +
-            "- For boolean: true_label, false_label\n" +
-            "- For picklist: add_options, update_options, delete_options\n" +
-            "- For audit/advanced find: is_audit_enabled, is_valid_for_advanced_find\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account').\n" +
-            "- attribute_name (required): Logical name with publisher prefix (e.g., 'new_priority').\n" +
-            "- attribute_type: Column type (required for create, ignored for update).\n" +
-            "- display_name: Display name shown in forms (required for create).\n" +
-            "- description: Column description.\n" +
-            "- required_level: 'None' (default), 'Recommended', or 'Required'.\n" +
-            "- max_length: For string/memo/file: max length.\n" +
-            "- min_value/max_value: For numeric types.\n" +
-            "- precision: For decimal/money/float: decimal places (0-10).\n" +
-            "- format: For string/datetime/integer.\n" +
-            "- options: For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].\n" +
-            "- global_optionset_name: For picklist (create): reuse existing global option set.\n" +
-            "- lookup_target: For lookup (create): target entity.\n" +
-            "- true_label/false_label: For boolean.\n" +
-            "- add_options: For picklist (update): JSON array of options to add.\n" +
-            "- update_options: For picklist (update): JSON array of options to rename.\n" +
-            "- delete_options: For picklist (update): JSON array of integer values to remove.\n" +
-            "- is_audit_enabled: Enable/disable auditing (update only).\n" +
-            "- is_valid_for_advanced_find: Show/hide in Advanced Find (update only).\n" +
-            "- solution_name: Solution unique name.\n" +
-            "- auto_publish: Publish after operation (default: true).\n\n" +
-
-            "RETURNS:\n" +
-            "- Attribute details: name, type, MetadataId (create) or before/after changes (update)\n" +
-            "- Publish status\n\n" +
+            "- For picklist: use add_options, update_options, delete_options\n\n" +
 
             "TIPS:\n" +
-            "- Attribute name MUST include publisher prefix (e.g., 'new_', 'cr_')\n" +
-            "- Use get_metadata_entities to check if attribute already exists\n" +
-            "- Cannot change attribute type after creation — Dataverse limitation\n" +
-            "- For picklist with existing choices: use global_optionset_name instead of options\n" +
+            "- Attribute name MUST include publisher prefix (e.g., 'new_priority')\n" +
             "- After creation, use build_formxml to add the new field to a form")]
         public CallToolResult upsert_attribute(
-            [Description(
-                "Entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name,
-            [Description(
-                "Logical name for the new column with publisher prefix (always lowercase). " +
-                "Must contain an underscore separating prefix from name. " +
-                "Examples: 'new_priority', 'cr_projectcode', 'msdyn_budget'."
-            )] string attribute_name,
-            [Description(
-                "Column type. One of: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', " +
-                "'float', 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'."
-            )] string attribute_type,
-            [Description(
-                "Display name shown in forms and views. " +
-                "Examples: 'Priority Level', 'Project Code', 'Budget Amount'."
-            )] string display_name,
-            [Description(
-                "Column description. Optional."
-            )] string description = "",
-            [Description(
-                "Requirement level: 'None' (default), 'Recommended', or 'Required'."
-            )] string required_level = "None",
-            [Description(
-                "For string: max characters (1-4000, default 100). " +
-                "For memo: max characters (1-1048576, default 2000). " +
-                "For file: max size in KB (default 32768 = 32MB). " +
-                "Ignored for other types."
-            )] int max_length = 0,
-            [Description(
-                "For integer/decimal/float/money: minimum value. " +
-                "Ignored for other types."
-            )] double? min_value = null,
-            [Description(
-                "For integer/decimal/float/money: maximum value. " +
-                "Ignored for other types."
-            )] double? max_value = null,
-            [Description(
-                "For decimal/money/float: decimal places (0-10, default 2). " +
-                "Ignored for other types."
-            )] int precision = 2,
-            [Description(
-                "For string: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'. " +
-                "For datetime: 'DateOnly', 'DateAndTime' (default). " +
-                "For integer: 'None', 'Duration', 'TimeZone', 'Language', 'Locale'. " +
-                "Ignored for other types."
-            )] string format = "",
-            [Description(
-                "For picklist/multipicklist: JSON array of local options. " +
-                "Each element: {\"label\":\"Low\",\"value\":100000000}. " +
-                "Value is optional (auto-assigned if omitted). " +
-                "Ignored if global_optionset_name is provided."
-            )] string options = "",
-            [Description(
-                "For picklist/multipicklist: use an existing global option set name instead of local options. " +
-                "Example: 'new_prioritylevel'. Use get_global_optionsets to find available names."
-            )] string global_optionset_name = "",
-            [Description(
-                "For lookup: target entity logical name (required for lookup type). " +
-                "Example: 'contact', 'account'. Creates a 1:N relationship automatically. " +
-                "For polymorphic lookup: comma-separated targets (e.g., 'account,contact,lead'). " +
-                "For customer: ignored (auto-targets account+contact)."
-            )] string lookup_target = "",
-            [Description(
-                "For lookup: relationship schema name. " +
-                "Auto-generated as '{entity}_{target}_{attribute}' if omitted."
-            )] string lookup_relationship_name = "",
-            [Description(
-                "For boolean: label for the true/yes value. Default: 'Yes'. (Create: initial value. Update: leave empty to keep current.)"
-            )] string true_label = "Yes",
-            [Description(
-                "For boolean: label for the false/no value. Default: 'No'. (Create: initial value. Update: leave empty to keep current.)"
-            )] string false_label = "No",
-            [Description(
-                "For picklist/multipicklist (update only): JSON array of options to add. " +
-                "Each element: {\"label\":\"Critical\",\"value\":100000003}. " +
-                "Value is optional (auto-assigned if omitted)."
-            )] string add_options = "",
-            [Description(
-                "For picklist/multipicklist (update only): JSON array of options to rename. " +
-                "Each element: {\"label\":\"New Label\",\"value\":100000000}."
-            )] string update_options = "",
-            [Description(
-                "For picklist/multipicklist (update only): JSON array of integer values to remove. " +
-                "Example: [100000002, 100000003]."
-            )] string delete_options = "",
-            [Description(
-                "Enable or disable auditing on this column (update only). Leave null to keep current."
-            )] bool? is_audit_enabled = null,
-            [Description(
-                "Show or hide this column in Advanced Find (update only). Leave null to keep current."
-            )] bool? is_valid_for_advanced_find = null,
-            [Description(
-                "Solution unique name to add the column to. Leave empty for default solution. " +
-                "Use get_solution_components to find valid solution names."
-            )] string solution_name = "",
-            [Description(
-                "Publish the entity after operation. Default: true."
-            )] bool auto_publish = true)
+            [Description("Entity logical name (e.g., 'account').")] string entity_name,
+            [Description("Logical name with publisher prefix (e.g., 'new_priority').")] string attribute_name,
+            [Description("Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', 'float', 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.")] string attribute_type,
+            [Description("Display name (e.g., 'Priority Level'). Required for create.")] string display_name,
+            [Description("Column description.")] string description = "",
+            [Description("'None' (default), 'Recommended', or 'Required'.")] string required_level = "None",
+            [Description("For string (1-4000, default 100), memo (1-1048576, default 2000), file (KB, default 32768).")] int max_length = 0,
+            [Description("For numeric types: minimum value.")] double? min_value = null,
+            [Description("For numeric types: maximum value.")] double? max_value = null,
+            [Description("For decimal/money/float: decimal places (0-10, default 2).")] int precision = 2,
+            [Description("For string: 'Text','Email','Url','Phone','TextArea','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
+            [Description("For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
+            [Description("For picklist (create): existing global option set name.")] string global_optionset_name = "",
+            [Description("For lookup (create): target entity. Comma-separated for polymorphic.")] string lookup_target = "",
+            [Description("For lookup: relationship schema name. Auto-generated if omitted.")] string lookup_relationship_name = "",
+            [Description("For boolean: true label. Default: 'Yes'.")] string true_label = "Yes",
+            [Description("For boolean: false label. Default: 'No'.")] string false_label = "No",
+            [Description("For picklist (update): JSON array of options to add.")] string add_options = "",
+            [Description("For picklist (update): JSON array of options to rename.")] string update_options = "",
+            [Description("For picklist (update): JSON array of integer values to remove.")] string delete_options = "",
+            [Description("Enable/disable auditing (update only).")] bool? is_audit_enabled = null,
+            [Description("Show/hide in Advanced Find (update only).")] bool? is_valid_for_advanced_find = null,
+            [Description("Solution unique name.")] string solution_name = "",
+            [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))

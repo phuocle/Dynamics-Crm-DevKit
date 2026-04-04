@@ -29,76 +29,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
-            "List classic workflows (background and real-time) for a Dataverse entity.\n" +
-            "Returns trigger configuration and execution behavior fields.\n\n" +
+            "List classic workflows (background and real-time) for a Dataverse entity.\n\n" +
 
-            "SCOPE: Classic workflows only (category=0). Does NOT include business rules,\n" +
-            "actions, BPFs, or cloud flows -- use dedicated tools for those.\n\n" +
+            "SCOPE: Classic workflows only (category=0). Use get_business_rules, get_custom_apis, get_bpfs, get_cloud_flows for others.\n\n" +
 
-            "PARAMETERS:\n" +
-            "- entity_name: Filter by entity (e.g., 'account'). Leave empty for all.\n" +
-            "- mode: Filter by execution mode: 'background' or 'realtime'. Leave empty for both.\n" +
-            "- active_only: Only return activated workflows (default: true).\n" +
-            "- trigger_field: Filter workflows that trigger on a specific field (e.g., 'revenue').\n" +
-            "  Searches triggeronupdateattributelist using contains match.\n" +
-            "- name_filter: Filter by workflow name (contains match).\n" +
-            "- max_records: Maximum records (default: 50, max: 250).\n\n" +
-
-            "RETURNS:\n" +
-            "- Table: name, mode, triggers (Create/Delete/Update), update fields,\n" +
-            "  pipeline stage, scope, runAs, rank, ondemand, subprocess, status, modified\n" +
-            "- Summary: count by mode, trigger type\n\n" +
-
-            "KEY FIELDS EXPLAINED:\n" +
-            "- triggeronupdateattributelist: comma-separated field names that trigger on Update.\n" +
-            "  'statecode'/'statuscode' in this list = triggered by status change.\n" +
-            "  'ownerid' in this list = triggered by record assignment.\n" +
-            "- mode: 0=Background (async, queued), 1=Realtime (sync, in pipeline)\n" +
-            "- createstage/updatestage/deletestage: pipeline stage (20=Pre, 40=Post).\n" +
-            "  Only meaningful for Realtime workflows. Pre-operation can cancel the operation.\n" +
-            "- scope: 1=User, 2=BU, 3=Parent:ChildBU, 4=Org\n" +
-            "- runas: 0=Owner (workflow owner's privileges), 1=CallingUser (triggering user's privileges)\n" +
-            "- rank: execution order when multiple real-time workflows fire on same event (lower=first)\n\n" +
+            "KEY FIELDS:\n" +
+            "- triggeronupdateattributelist: fields triggering on Update. 'statecode' = status change, 'ownerid' = assignment\n" +
+            "- mode: 0=Background (async), 1=Realtime (sync). Stages (20=Pre, 40=Post) only for Realtime\n" +
+            "- scope: 1=User, 2=BU, 3=Parent:ChildBU, 4=Org. runas: 0=Owner, 1=Caller\n\n" +
 
             "WHEN TO USE:\n" +
-            "- 'Does field X on entity Y have any workflow triggered?' -> trigger_field='X' + entity_name='Y'\n" +
-            "- 'What workflows trigger when a record status changes?' -> trigger_field='statecode'\n" +
-            "- 'What workflows trigger when a record is assigned?' -> trigger_field='ownerid'\n" +
-            "- 'What real-time (synchronous) workflows exist on this entity?' -> mode='realtime'\n" +
-            "- 'What automation runs before a record is created?' -> mode='realtime', check createstage=20\n" +
-            "- 'What is the full picture of automation on this entity?' -> combine with get_business_rules and plugin registrations\n\n" +
+            "- Check if a field triggers any workflow: trigger_field + entity_name\n" +
+            "- Find realtime/synchronous workflows: mode='realtime'\n\n" +
 
             "TIPS:\n" +
-            "- Background workflows always run Post-operation (async) -- stage fields are irrelevant\n" +
-            "- Realtime workflows with Pre-operation stage can cancel/rollback the operation\n" +
-            "- A non-empty triggeronupdateattributelist implies the workflow triggers on Update\n" +
-            "- If all trigger booleans are false and update list is empty, check ondemand=true")]
+            "- Background workflows always run Post-operation (async)\n" +
+            "- Realtime Pre-operation can cancel/rollback the operation")]
         public CallToolResult get_classic_workflows(
-            [Description(
-                "Entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "Leave empty for all entities. " +
-                "If unsure, call get_metadata_entities first."
+            [Description("Entity logical name (e.g., 'account'). Empty = all entities."
             )] string entity_name = "",
-            [Description(
-                "Filter by execution mode: 'background' (async, queued) or 'realtime' (sync, in pipeline). " +
-                "Leave empty to return both modes."
+            [Description("'background' (async) or 'realtime' (sync). Empty = both."
             )] string mode = "",
-            [Description(
-                "Only return activated workflows. Default: true. " +
-                "Set to false to include draft/deactivated workflows."
+            [Description("Only activated workflows. Default: true."
             )] bool active_only = true,
-            [Description(
-                "Filter workflows whose triggeronupdateattributelist contains this attribute. " +
-                "Examples: 'revenue', 'statecode', 'ownerid'. " +
-                "Uses contains match. Leave empty for no field filter."
+            [Description("Filter by update trigger field (contains match, e.g., 'revenue', 'statecode')."
             )] string trigger_field = "",
-            [Description(
-                "Filter by workflow name (contains match). " +
-                "Example: 'approval'. Leave empty for no name filter."
+            [Description("Filter by name (contains match)."
             )] string name_filter = "",
-            [Description(
-                "Maximum records to return. Default: 50, max: 250."
+            [Description("Max records. Default: 50, max: 250."
             )] int max_records = 50)
         {
             if (!string.IsNullOrWhiteSpace(mode))

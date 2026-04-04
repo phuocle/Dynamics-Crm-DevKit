@@ -113,52 +113,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List all components inside a Dataverse solution. " +
-            "Accepts either the solution unique name (logical name) or display name — " +
-            "uses fuzzy (contains) matching to find the correct solution.\n\n" +
+            "Accepts solution unique name or display name with fuzzy (contains) matching.\n\n" +
 
-            "RETURNS:\n" +
-            "- Solution info: uniqueName, displayName, version, publisher, isManaged\n" +
-            "- Component summary table: count per component type\n" +
-            "- Full component detail table: componentType, typeId, objectId, name " +
-            "(name = logical/schema/display name; objectId can be passed to get_record or other tools)\n" +
-            "- When include_active_layers=true: adds ActiveLayer column (Yes/No) showing " +
-            "which components have unmanaged (active) customization layers\n\n" +
+            "Returns: solution info + component summary (count per type) + full detail table (componentType, objectId, name).\n\n" +
 
-            "FUZZY MATCH BEHAVIOR:\n" +
-            "- Matches against both uniqueName and displayName using a 'contains' search\n" +
-            "- If exactly 1 solution matches → proceeds and returns components\n" +
-            "- If multiple solutions match → returns a list of all matching solutions and asks " +
-            "the user to re-call with the exact uniqueName to disambiguate\n" +
-            "- If no solution matches → returns an error message\n\n" +
-
-            "FULL ENTITY (Include All Components) BEHAVIOR:\n" +
-            "When a solution contains an entity added with 'Include All Components' " +
-            "(rootComponentBehavior = 0), this tool does NOT expand it into sub-components. " +
-            "Instead, it lists the entity with a note indicating it was added as full, and " +
-            "instructs the AI to use the `get_metadata_entities` tool to fetch the complete " +
-            "metadata (attributes, relationships, forms, views, etc.) for that entity. " +
-            "This keeps the response lightweight and fast.\n\n" +
-
-            "ACTIVE LAYER CHECKING:\n" +
-            "Use include_active_layers=true to check which components have unmanaged customizations " +
-            "(active layers in the solution layering system). A component with an active layer means " +
-            "it has been customized outside of managed solutions. " +
-            "Use active_layers_only=true to filter and show ONLY components with active layers — " +
-            "useful for cleanup audits before deploying managed solutions.\n" +
-            "Note: Active layer checking requires additional API calls (batched in groups of 200) " +
-            "and may take longer for solutions with many components.\n\n" +
+            "BEHAVIORS:\n" +
+            "- Fuzzy match: 1 match → show components; multiple → list for disambiguation; 0 → error\n" +
+            "- Full Entity (rootComponentBehavior=0): listed as-is, use get_metadata_entities for sub-components\n" +
+            "- include_active_layers=true: adds ActiveLayer column (Yes/No) for unmanaged customization audit\n" +
+            "- active_layers_only=true: shows ONLY components with active layers (cleanup audit)\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Before packaging or deploying a solution, to audit its contents\n" +
-            "- To find objectIds of specific components (plugin assemblies, web resources, workflows)\n" +
-            "- To count entities, attributes, forms, or other component types in a solution\n" +
-            "- As a prerequisite step before operating on specific solution components\n" +
-            "- To identify components with unmanaged customizations (active layers) before deploying managed solutions\n" +
-            "- To audit which components need cleanup (active_layers_only=true)\n\n" +
-
-            "TIP: The objectId column in the output is the primary key for the component — " +
-            "pass it to get_record (with the appropriate entity name) to retrieve full details. " +
-            "For example, Plugin Assembly objectId → get_record('pluginassembly', objectId).")]
+            "- Audit solution contents before packaging or deploying\n" +
+            "- Find objectIds of specific components (plugins, web resources, workflows)\n" +
+            "- Identify components with unmanaged customizations before deploying managed solutions")]
         public string get_solution_components(
             [Description(
                 "The solution unique name (e.g. 'DevKit_Core', 'mySolution') or display name " +

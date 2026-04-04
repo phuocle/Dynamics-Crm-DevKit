@@ -37,141 +37,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Update, create, rename, or undo a Dataverse view (saved query) with automatic backup, " +
-            "sync validation, and publishing.\n\n" +
+            "Update, create, rename, or undo a Dataverse view (saved query) with auto-backup, sync validation, and publishing.\n\n" +
 
-            "FOUR ACTIONS (controlled by 'action' parameter):\n" +
-            "- 'update' (default): Modify LayoutXML/FetchXML of an existing view. " +
-            "Requires view_id + layoutxml.\n" +
-            "- 'create': Create a new Public view. " +
-            "Requires view_name + entity_name + layoutxml. view_id is ignored.\n" +
-            "- 'rename': Change a view's display name. " +
-            "Requires view_id + view_name + entity_name. layoutxml is ignored.\n" +
-            "- 'undo': Restore a view from backup files. " +
-            "Requires view_id + layoutxml (= path to layout .bak file). " +
-            "fetchxml = path to fetch .bak file (optional, omit to restore layout only). " +
-            "Skips backup (no need). Still validates XSD.\n\n" +
+            "FOUR ACTIONS:\n" +
+            "- 'update': Modify LayoutXML/FetchXML. Requires view_id + layoutxml\n" +
+            "- 'create': New Public view. Requires view_name + entity_name + layoutxml\n" +
+            "- 'rename': Change display name. Requires view_id + view_name\n" +
+            "- 'undo': Restore from backup files. Requires view_id + layoutxml (= backup path)\n\n" +
 
-            "PARAMETERS:\n" +
-            "- action: 'update' (default), 'create', or 'rename'.\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account').\n" +
-            "- view_id: GUID of the view. Required for 'update' and 'rename'. Ignored for 'create'.\n" +
-            "- view_name: Name for the view. Required for 'create' (new name) and 'rename' (new name). " +
-            "Ignored for 'update'.\n" +
-            "- layoutxml: LayoutXML content. Required for 'update' and 'create'. Ignored for 'rename'.\n" +
-            "- fetchxml: FetchXML content. Optional for 'update' (empty = keep existing) and 'create' " +
-            "(empty = auto-generate default). Ignored for 'rename'.\n" +
-            "- validate: Validate XMLs and check FetchXML<>LayoutXML sync (default: true). " +
-            "Applies to 'update' and 'create'.\n" +
-            "- backup: Save current XMLs to local backup before overwriting (default: true). " +
-            "Applies to 'update' and 'rename'.\n" +
-            "- auto_publish: Publish the entity after changes (default: true).\n\n" +
+            "WORKFLOW: get_views (read) → modify XMLs (follow docs://instructions_for_views) → upsert_view (write)\n" +
+            "Tool auto-handles: backup → validate XSD → sync-check → update → publish. Undo path in every response.\n\n" +
 
-            "WORKFLOW FOR 'update' (MUST follow this order):\n" +
-            "1. Call get_views with view_id to READ the current FetchXML + LayoutXML\n" +
-            "2. Modify the XMLs as needed (follow docs://instructions_for_views rules)\n" +
-            "3. Call upsert_view with the modified XMLs\n" +
-            "4. Tool auto-handles: backup > validate > sync-check > update > publish\n" +
-            "5. If something breaks: use the backup file paths from the response to rollback\n\n" +
+            "SYNC RULE: Every <attribute> in FetchXML MUST have a matching <cell> in LayoutXML and vice versa. Tool validates and blocks if out of sync.\n\n" +
 
-            "WORKFLOW FOR 'create':\n" +
-            "1. Call get_metadata_entities to discover available columns\n" +
-            "2. Build LayoutXML with desired columns and FetchXML with desired filters\n" +
-            "3. Call upsert_view with action='create', view_name, layoutxml, and optionally fetchxml\n" +
-            "4. Tool auto-handles: duplicate check > validate > sync-check > create > publish\n\n" +
-
-            "WORKFLOW FOR 'rename':\n" +
-            "1. Call get_views to find the view_id\n" +
-            "2. Call upsert_view with action='rename', view_id, and view_name\n" +
-            "3. Tool auto-handles: duplicate check > backup > rename > publish\n\n" +
-
-            "WORKFLOW FOR 'undo':\n" +
-            "1. Call upsert_view with action='undo', view_id, layoutxml=<layout backup file path>, " +
-            "fetchxml=<fetch backup file path>\n" +
-            "2. Tool auto-handles: read backups > validate > restore > publish (no new backup)\n" +
-            "3. The backup file paths are returned in every update/rename response\n\n" +
-
-            "CRITICAL SYNC RULE (applies to 'update' and 'create'):\n" +
-            "A view has TWO XML parts that MUST stay in sync:\n" +
-            "- Every <attribute name=\"X\"> in FetchXML MUST have a <cell name=\"X\"> in LayoutXML\n" +
-            "- Every <cell name=\"X\"> in LayoutXML MUST have an <attribute name=\"X\"> in FetchXML\n" +
-            "- The tool validates this automatically and BLOCKS the operation if out of sync\n\n" +
-
-            "SAFETY:\n" +
-            "- Auto-backup saves current FetchXML + LayoutXML before ANY modification (update/rename)\n" +
-            "- Sync validation blocks mismatched FetchXML/LayoutXML from being written\n" +
-            "- XSD validation blocks structurally invalid XML\n" +
-            "- Duplicate name check for 'create' and 'rename' actions\n" +
-            "- Rollback instructions included in every success response\n" +
-            "- If backup=true and backup fails, the update is BLOCKED (fail-safe)\n\n" +
+            "SAFETY: auto-backup before changes, sync+XSD validation blocks invalid XML, backup failure blocks update.\n\n" +
 
             "TIPS:\n" +
-            "- Always read the current view first with get_views to understand the structure\n" +
-            "- Read docs://instructions_for_views for sync rules and best practices\n" +
-            "- The <row id=\"X\"> attribute in LayoutXML must be the primary key field (e.g., accountid)\n" +
-            "- The <grid jump=\"X\"> attribute is the clickable link column\n" +
-            "- Standard column widths: 100 (narrow), 150 (medium), 200 (wide), 300 (extra wide)\n" +
-            "- For related table columns: use entityalias.columnname in LayoutXML <cell name=\"alias.column\">, " +
-            "where alias matches the 'alias' attribute on <link-entity> in FetchXML\n" +
-            "- If FetchXML has <order attribute=\"X\">, that column MUST also be in LayoutXML cells\n" +
-            "- For related entity columns, use <link-entity link-type='outer'> with a unique alias\n" +
-            "- To hide a column from the grid but keep it in the query, add ishidden=\"1\" to the <cell>: " +
-            "<cell name=\"statuscode\" width=\"100\" ishidden=\"1\" /> — useful for icon rendering, JS logic, or sort/filter support\n" +
-            "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
-            "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
+            "- Read docs://instructions_for_views for sync rules. Read schema://layoutxml + schema://fetchxml for XSD\n" +
+            "- Set auto_publish=false when batching, then call publish_customizations once")]
         public CallToolResult upsert_view(
-            [Description(
-                "Action to perform: 'update' (default), 'create' (new view), 'rename' (change name), " +
-                "or 'undo' (restore from backup). " +
-                "For 'update': modifies LayoutXML/FetchXML of existing view (requires view_id + layoutxml). " +
-                "For 'create': creates a new Public view (requires view_name + layoutxml; view_id is ignored). " +
-                "For 'rename': changes the view name (requires view_id + view_name; layoutxml is ignored). " +
-                "For 'undo': restores view from backup files (requires view_id + layoutxml as layout backup path; " +
-                "fetchxml as fetch backup path is optional)."
-            )] string action = "update",
-            [Description(
-                "Entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name = "",
-            [Description(
-                "GUID of the view to update or rename. " +
-                "Required for 'update' and 'rename' actions. Ignored for 'create'. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use get_views to find valid view IDs."
-            )] string view_id = "",
-            [Description(
-                "Name for the view. Required for 'create' (new view name) and 'rename' (new name). " +
-                "Ignored for 'update' action."
-            )] string view_name = "",
-            [Description(
-                "The new LayoutXML content defining column order and widths in the grid. " +
-                "Required for 'update' and 'create' actions. Ignored for 'rename'. " +
-                "For 'undo': the file path to the layout backup .bak file. " +
-                "Must be valid XML. The tool will strip any XML declaration before writing."
-            )] string layoutxml = "",
-            [Description(
-                "The new FetchXML content. " +
-                "For 'update': leave empty to keep existing FetchXML unchanged. " +
-                "For 'create': leave empty to auto-generate a default FetchXML for the entity. " +
-                "Ignored for 'rename'. " +
-                "For 'undo': the file path to the fetch backup .bak file (optional, omit to restore layout only). " +
-                "If provided, must be valid XML. The tool will strip any XML declaration before writing."
-            )] string fetchxml = "",
-            [Description(
-                "Validate LayoutXML/FetchXML and check sync between them (default: true). " +
-                "Applies to 'update' and 'create' actions. " +
-                "Blocks operation if invalid. Set false only if you've already validated."
-            )] bool validate = true,
-            [Description(
-                "Save current XMLs to local backup before overwriting (default: true). " +
-                "Applies to 'update' and 'rename' actions. Ignored for 'undo' (always skipped). " +
-                "Strongly recommended to keep true. If backup fails, operation is BLOCKED (fail-safe)."
-            )] bool backup = true,
-            [Description(
-                "Publish the entity after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish_customizations once."
-            )] bool auto_publish = true)
+            [Description("'update' (default), 'create', 'rename', or 'undo'.")] string action = "update",
+            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
+            [Description("View GUID. Required for 'update'/'rename'. Use get_views to find IDs.")] string view_id = "",
+            [Description("View name. Required for 'create'/'rename'.")] string view_name = "",
+            [Description("For 'update'/'create': LayoutXML. For 'undo': layout backup path. Ignored for 'rename'.")] string layoutxml = "",
+            [Description("FetchXML. Empty = keep existing (update) or auto-generate (create). For 'undo': fetch backup path.")] string fetchxml = "",
+            [Description("Validate XMLs and check FetchXML<>LayoutXML sync (default: true). Blocks if invalid.")] bool validate = true,
+            [Description("Backup current XMLs before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
+            [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");

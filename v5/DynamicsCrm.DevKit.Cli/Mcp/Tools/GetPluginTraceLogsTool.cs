@@ -26,65 +26,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Query plugin execution trace logs from Dataverse for debugging. " +
             "Returns log entries with trace output, exception details, and execution timing.\n\n" +
 
-            "PARAMETERS:\n" +
-            "- record_id: Specific plugin trace log GUID for full detail (ignores all other filters when set)\n" +
-            "- type_name: Filter by plugin type name (contains match, e.g., 'AccountPlugin')\n" +
-            "- minutes_ago: Return logs from last N minutes (default: 60, max: 1440)\n" +
-            "- correlation_id: Filter by correlation ID (exact GUID match) to trace a single request\n" +
-            "- message_name: Filter by SDK message (e.g., 'Create', 'Update', 'Delete')\n" +
-            "- mode: Filter by execution mode: 'sync' or 'async'\n" +
-            "- max_records: Maximum log entries (default: 50, max: 200)\n\n" +
-
-            "RETURNS:\n" +
-            "- With record_id: FULL detail for one log — complete messageblock (trace output) and exceptiondetails, NEVER truncated\n" +
-            "- Without record_id: Compact list of logs with metadata ONLY (typename, message, entity, mode, depth, duration, created) — NO messageblock/exceptiondetails to save tokens\n" +
-            "- To see full trace output, first browse with filters, then call again with record_id for the specific log\n\n" +
+            "TWO MODES:\n" +
+            "- record_id PROVIDED: FULL detail (complete messageblock + exceptiondetails, never truncated)\n" +
+            "- record_id EMPTY: compact list (metadata only — typename, message, entity, mode, depth, duration)\n\n" +
 
             "WHEN TO USE:\n" +
-            "- When debugging a plugin that is failing or producing unexpected results\n" +
-            "- After deploying a plugin to verify it executes correctly\n" +
-            "- When a user reports 'my plugin isn't working' or 'I got an error'\n" +
-            "- To trace a specific request using correlation ID\n" +
-            "- When a user pastes a plugin trace log URL — use parse_record_url first to extract the GUID\n\n" +
+            "- Debug a failing plugin or verify plugin execution after deployment\n" +
+            "- Trace all plugins for a single request using correlation_id\n\n" +
 
             "TIPS:\n" +
             "- Plugin Trace Log must be enabled in Dataverse (System Settings > Customization)\n" +
-            "- Use correlation_id to trace all plugins that executed for a single request\n" +
-            "- Logs are retained for 24 hours by default\n" +
-            "- If no logs found, suggest enabling plugin trace logging\n" +
-            "- Browse first (no record_id) to find the log, then get full detail (with record_id)")]
+            "- Browse first (no record_id), then get full detail with record_id")]
         public string get_plugin_trace_logs(
             [Description(
-                "Specific plugin trace log GUID to retrieve in full detail. " +
-                "When provided, ALL other filters are ignored and the tool returns the FULL trace output + exception. " +
-                "Use parse_record_url to extract this from a Dynamics 365 URL. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
+                "Specific plugin trace log GUID for full detail. " +
+                "When provided, ALL other filters are ignored. Use parse_record_url to extract from a URL."
             )] string record_id = "",
             [Description(
-                "Filter by plugin type name (contains match). " +
-                "Examples: 'AccountPlugin', 'PreValidate', 'MyNamespace.Plugins'. " +
-                "Leave empty for all plugins."
+                "Filter by plugin type name (contains match). E.g., 'AccountPlugin'."
             )] string type_name = "",
             [Description(
-                "Return logs from the last N minutes. " +
-                "Default: 60 (last hour). Max: 1440 (24 hours)."
+                "Return logs from last N minutes. Default: 60. Max: 1440 (24h)."
             )] int minutes_ago = 60,
             [Description(
-                "Filter by specific correlation ID (exact GUID match). " +
-                "Useful for tracing all plugins that executed for a single request. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
+                "Filter by correlation ID (exact GUID) to trace all plugins from one request."
             )] string correlation_id = "",
             [Description(
-                "Filter by SDK message name. " +
-                "Examples: 'Create', 'Update', 'Delete', 'Retrieve', 'RetrieveMultiple'."
+                "Filter by SDK message: 'Create', 'Update', 'Delete', etc."
             )] string message_name = "",
             [Description(
-                "Filter by execution mode: 'sync' (synchronous) or 'async' (asynchronous). " +
-                "Leave empty for both."
+                "Filter by mode: 'sync' or 'async'. Empty for both."
             )] string mode = "",
             [Description(
-                "Maximum number of log entries to return. " +
-                "Default: 50. Max: 200."
+                "Max log entries. Default: 50. Max: 200."
             )] int max_records = 50)
         {
             // Detail mode: fetch one specific record with ALL fields

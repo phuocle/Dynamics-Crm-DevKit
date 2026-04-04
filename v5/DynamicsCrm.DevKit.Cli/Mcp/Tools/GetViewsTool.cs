@@ -24,67 +24,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_views", Title = "Get view definitions for an entity",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Retrieve view (saved query) definitions for a Dataverse entity. Returns view " +
-            "names, types, FetchXML queries, and LayoutXML column definitions.\n\n" +
+            "Retrieve view (saved query) definitions for a Dataverse entity.\n\n" +
 
             "TWO MODES:\n" +
-            "- If view_id is EMPTY: list all active views for the entity with name, type, status\n" +
-            "- If view_id is PROVIDED: get full FetchXML, LayoutXML, and metadata for a specific view\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account', 'contact'). " +
-            "Call get_metadata_entities first if unsure of the logical name.\n" +
-            "- view_id: GUID of a specific view to get full details including FetchXML/LayoutXML. " +
-            "Leave empty to list all views for the entity.\n" +
-            "- query_type: Filter by view type: 0=Public, 1=Lookup, 2=AdvancedSearch, 4=QuickFind, 64=SubGrid. " +
-            "Leave empty for all view types.\n" +
-            "- include_fetchxml: In list mode, also include FetchXML/LayoutXML for each view (default: false to save tokens). " +
-            "In detail mode: always included regardless.\n" +
-            "- include_personal: Also include personal views (userquery) owned by current user (default: false, system views only).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: Table of views with ID, name, type, default status, activation state\n" +
-            "- Detail mode: Full view metadata + FetchXML query + LayoutXML column layout\n\n" +
+            "- view_id EMPTY: list all active views with name, type, status\n" +
+            "- view_id PROVIDED: full FetchXML, LayoutXML, and metadata for one view\n\n" +
 
             "WHEN TO USE:\n" +
-            "- To understand how data is displayed in an entity's grid/list\n" +
-            "- To find which columns are shown in the default view\n" +
-            "- To get the FetchXML query behind a view for analysis or modification\n" +
-            "- Before modifying a view via upsert_view\n" +
-            "- To help users create or customize views\n\n" +
+            "- Find view columns, get FetchXML behind a view, or prepare for upsert_view\n" +
+            "- Understand grid/list display for an entity\n\n" +
 
             "TIPS:\n" +
-            "- querytype=0 (Public) views are what users see in the view selector\n" +
-            "- querytype=4 (QuickFind) defines what columns are searched\n" +
-            "- The default Public view (isdefault=true, querytype=0) is shown by default\n" +
-            "- LayoutXML defines column order and widths in the grid\n" +
-            "- To UPDATE a view: use upsert_view tool (auto-backup + sync validation + publish)\n" +
-            "- DO NOT use execute_webapi for view updates -- use upsert_view for safety")]
+            "- querytype: 0=Public (user sees), 4=QuickFind (search columns), 64=SubGrid\n" +
+            "- To UPDATE: use upsert_view (not execute_webapi). See docs://instructions_for_views")]
         public string get_views(
-            [Description(
-                "The entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
+            [Description("Entity logical name (e.g., 'account'). Use get_metadata_entities if unsure."
             )] string entity_name,
-            [Description(
-                "GUID of a specific view to get full details including FetchXML and LayoutXML. " +
-                "Leave empty to list all views for the entity. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use list mode first to discover view IDs."
+            [Description("GUID of a view for full detail. Empty = list all."
             )] string view_id = "",
-            [Description(
-                "Filter by view type: 0=Public, 1=Lookup, 2=AdvancedSearch, 4=QuickFind, 64=SubGrid. " +
-                "Leave empty for all view types. Use -1 (default) to return all types. " +
-                "Common types: 0 (Public), 4 (QuickFind), 64 (SubGrid)."
+            [Description("Filter by type: 0=Public, 1=Lookup, 4=QuickFind, 64=SubGrid. -1 = all."
             )] int query_type = -1,
-            [Description(
-                "In list mode, also include FetchXML/LayoutXML for each view (default: false to save tokens). " +
-                "In detail mode: always included regardless of this setting."
+            [Description("Include FetchXML/LayoutXML in list mode (default: false). Detail mode always includes."
             )] bool include_fetchxml = false,
-            [Description(
-                "Also include personal views (userquery table) owned by the current user. " +
-                "Default: false (system views only). " +
-                "Set to true to see both system and personal views."
+            [Description("Include personal views (userquery) owned by current user. Default: false."
             )] bool include_personal = false)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

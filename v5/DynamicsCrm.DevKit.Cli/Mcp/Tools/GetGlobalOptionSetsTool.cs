@@ -24,32 +24,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Retrieve global option sets (choices/picklists) from Dataverse metadata.\n\n" +
 
             "TWO MODES:\n" +
-            "- If optionset_name is EMPTY: returns a summary markdown table of ALL global option sets " +
-            "(name, displayName, type, isGlobal). Use this to discover available option sets.\n" +
-            "- If optionset_name is PROVIDED: returns detailed options for that specific option set " +
-            "(value, label, description for each option).\n\n" +
-
-            "RETURNS:\n" +
-            "- Summary mode: markdown table with name, displayName, type (Picklist/State/Status/Boolean), isGlobal\n" +
-            "- Detail mode: option set properties + options table with value (integer stored in Dataverse), " +
-            "label (display text), description\n\n" +
+            "- optionset_name EMPTY: list all global option sets (name, displayName, type)\n" +
+            "- optionset_name PROVIDED: detail with value/label pairs for each option\n\n" +
 
             "WHEN TO USE:\n" +
-            "- When you need to know the valid values for a global choice/picklist column\n" +
-            "- When building FetchXML filters on option set fields and need the integer values\n" +
-            "- When you see an integer value in query results and need to map it to a label\n" +
-            "- When get_metadata_entities shows a column is PicklistType but the options are empty " +
-            "(this means it references a global option set — use this tool to get the values)\n\n" +
+            "- Get valid integer values for FetchXML filters on option set fields\n" +
+            "- Map integer values in query results to display labels\n\n" +
 
-            "NOTE: This retrieves GLOBAL option sets only. For entity-specific (local) picklists, " +
+            "NOTE: GLOBAL option sets only. For entity-specific (local) picklists, " +
             "use get_metadata_entities which includes options in the attribute definition.")]
         public string get_global_optionsets(
             [Description(
-                "The logical name of the global option set (always lowercase). " +
-                "Examples: 'componentstate', 'socialprofile_community', 'workflow_stage'. " +
-                "Leave EMPTY to list all global option sets. " +
-                "If unsure of the name, use get_metadata_entities on the entity that uses the column — " +
-                "if the options are empty, the column references a global option set."
+                "Logical name of the global option set. Leave empty to list all. " +
+                "If get_metadata_entities shows empty options for a PicklistType column, " +
+                "it references a global option set — use this tool."
             )] string optionset_name = "")
         {
             try

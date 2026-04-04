@@ -26,76 +26,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Execute any Dataverse Web API request. Use this as a fallback when specialized " +
-            "tools (execute_fetchxml, get_metadata_entities, upsert_record) " +
-            "don't cover your use case.\n\n" +
+            "Execute any Dataverse Web API request. Fallback when specialized tools don't cover your use case.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Query metadata endpoints: RelationshipDefinitions, EntityDefinitions subpaths\n" +
-            "- PUT/PATCH metadata (relationship, entity, attribute metadata)\n" +
-            "- Call custom Actions or Functions\n" +
-            "- Read $metadata CSDL schema\n" +
-            "- Any Dataverse Web API operation not covered by other tools\n\n" +
+            "- Query/update metadata endpoints (RelationshipDefinitions, EntityDefinitions)\n" +
+            "- Call custom Actions/Functions, read $metadata\n\n" +
 
-            "BLOCKED OPERATIONS (execute_webapi will REJECT these with an error):\n" +
-            "You MUST NOT use execute_webapi to write to these endpoints. " +
-            "The tool will hard-block and return an error if you try.\n" +
-            "- PATCH/PUT/DELETE systemforms(...) → Use upsert_form tool instead\n" +
-            "- PATCH/PUT/DELETE savedqueries(...) → Use upsert_view tool instead\n" +
-            "- PATCH/PUT/DELETE userqueries(...) → Use upsert_view tool instead\n" +
-            "- PATCH/PUT/DELETE sitemaps(...) → Use upsert_sitemap tool instead\n" +
-            "- PATCH/PUT/DELETE environmentvariabledefinitions(...) → Use upsert_variable tool instead\n" +
-            "- PATCH/PUT/DELETE environmentvariablevalues(...) → Use upsert_variable tool instead\n" +
-            "- POST PublishXml → Use publish_customizations tool instead\n" +
-            "- POST PublishAllXml → Use publish_customizations tool instead\n" +
-            "GET on these endpoints is allowed (reading is safe). " +
-            "POST to create new records is allowed (except publish endpoints).\n" +
-            "WHY BLOCKED: A malformed FormXML/LayoutXML/SiteMap breaks the UI for ALL users " +
-            "with no undo. Dedicated tools auto-backup, validate XSD, and provide rollback.\n\n" +
+            "BLOCKED OPERATIONS (hard-blocked, returns error):\n" +
+            "- PATCH/PUT/DELETE systemforms → use upsert_form\n" +
+            "- PATCH/PUT/DELETE savedqueries/userqueries → use upsert_view\n" +
+            "- PATCH/PUT/DELETE sitemaps → use upsert_sitemap\n" +
+            "- PATCH/PUT/DELETE environmentvariable* → use upsert_variable\n" +
+            "- POST PublishXml/PublishAllXml → use publish_customizations\n" +
+            "GET is allowed. POST to create is allowed (except publish).\n" +
+            "WHY: Malformed FormXML/LayoutXML/SiteMap breaks UI for all users with no undo.\n\n" +
 
-            "URL PARAMETER:\n" +
-            "- Pass relative URL only — SDK handles base URL automatically\n" +
-            "- Examples: 'RelationshipDefinitions', 'EntityDefinitions(LogicalName=\\'account\\')', '$metadata'\n\n" +
-
-            "EXAMPLES:\n" +
-            "GET relationship metadata: method='GET', url='RelationshipDefinitions/Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata?$filter=ReferencedEntity eq \\'account\\'&$top=2'\n" +
-            "GET entity display names: method='GET', url='EntityDefinitions(LogicalName=\\'account\\')?$select=LogicalName,DisplayCollectionName,DisplayName'\n" +
-            "PUT update relationship: method='PUT', url='RelationshipDefinitions(guid)', body='{...}', headers='{\"MSCRM.MergeLabels\":\"true\"}'\n" +
-            "POST custom action: method='POST', url='PublishXml', body='{\"ParameterXml\":\"<importexportxml>...\"}'\n" +
-            "GET $metadata schema: method='GET', url='$metadata', max_response_lines=50\n\n" +
-
-            "CAUTION: PUT/PATCH/DELETE operations are destructive and irreversible. " +
-            "Always confirm with the user before executing write operations on metadata endpoints.")]
+            "URL: relative path only (SDK handles base URL). " +
+            "PUT/PATCH/DELETE are destructive — confirm with user first.")]
         public CallToolResult execute_webapi(
-            [Description(
-                "HTTP method: GET, POST, PUT, PATCH, or DELETE. " +
-                "Use GET for reading data/metadata. " +
-                "Use POST for custom actions or creating via Web API. " +
-                "Use PUT/PATCH for updating metadata. " +
-                "Use DELETE for removing records or metadata."
+            [Description("HTTP method: GET, POST, PUT, PATCH, or DELETE."
             )] string method,
-            [Description(
-                "Relative URL path — SDK handles the base URL automatically. " +
-                "Examples: 'RelationshipDefinitions', " +
-                "'EntityDefinitions(LogicalName=\\'account\\')?$select=LogicalName,DisplayName', " +
-                "'$metadata', 'accounts(guid)', 'PublishXml'. " +
-                "Use get_metadata_entities to discover entity/attribute names if unsure."
+            [Description("Relative URL path (SDK handles base URL). E.g., 'RelationshipDefinitions', '$metadata'."
             )] string url,
-            [Description(
-                "Request body for POST/PUT/PATCH as a JSON string. " +
-                "Must be valid JSON. Not needed for GET/DELETE. " +
-                "Example: '{\"name\": \"New Account\", \"revenue\": 50000}'"
+            [Description("JSON body for POST/PUT/PATCH. Not needed for GET/DELETE."
             )] string body = "",
-            [Description(
-                "Additional custom headers as a JSON string. " +
-                "Standard headers (Authorization, OData-Version) are handled by SDK. " +
-                "Only provide extra headers. " +
-                "Example: '{\"MSCRM.MergeLabels\": \"true\", \"If-Match\": \"*\"}'"
+            [Description("Extra headers as JSON. Standard headers handled by SDK."
             )] string headers = "",
-            [Description(
-                "true: include response headers in output. " +
-                "Default false to save tokens. " +
-                "Set true when you need OData-EntityId, Location, or other response headers."
+            [Description("Include response headers in output. Default: false."
             )] bool include_headers = false,
             [Description(
                 "Maximum response body lines to return. Default: 200. " +

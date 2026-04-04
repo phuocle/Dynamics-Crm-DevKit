@@ -25,31 +25,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Perform a Dataverse Relevance Search (full-text search) across one or more entities. " +
-            "Returns matching records ranked by relevance score.\n\n" +
+            "Returns records ranked by relevance score with highlights.\n\n" +
 
-            "RETURNS:\n" +
-            "- Total count of matching records\n" +
-            "- Markdown table with entity type, record ID, score, and attribute values\n" +
-            "- Highlights showing which parts of the text matched the search term\n" +
-            "- Results are ranked by relevance (best matches first)\n\n" +
+            "SEARCH SYNTAX: + (AND), | (OR), - (NOT), trailing wildcard (*), " +
+            "exact phrases (\"quoted\"), parentheses for grouping.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- When the user asks to 'find' or 'search for' something by name or keyword\n" +
-            "- When you need to search across multiple entities at once (e.g. find 'Contoso' in accounts, contacts, and leads)\n" +
-            "- When you don't know the exact field to filter on — Relevance Search searches across all indexed fields\n" +
-            "- As a quick alternative to FetchXML when you just need to find records by text\n\n" +
-
-            "SEARCH SYNTAX:\n" +
-            "- Boolean operators: + (AND), | (OR), - (NOT)\n" +
-            "- Wildcards: trailing wildcard supported (e.g. 'Alp*' matches 'alpine')\n" +
-            "- Exact matches: enclose in quotes (e.g. '\"Contoso Ltd\"')\n" +
-            "- Precedence: use parentheses (e.g. 'hotel+(wifi|luxury)')\n\n" +
+            "- Find records by name or keyword across multiple entities\n" +
+            "- Quick text search when you don't know the exact field to filter on\n\n" +
 
             "IMPORTANT:\n" +
-            "- Relevance Search must be enabled in the Dataverse environment\n" +
-            "- Only entities and columns configured for Relevance Search will be searched\n" +
-            "- Max 100 results per call. For larger datasets, use execute_fetchxml instead\n" +
-            "- For precise filtering (by date range, status, numeric values), use execute_fetchxml instead")]
+            "- Relevance Search must be enabled in the environment\n" +
+            "- Max 100 results. For larger datasets or precise filtering, use execute_fetchxml")]
         public string relevance_search(
             [Description(
                 "The text to search for (1-100 characters). " +

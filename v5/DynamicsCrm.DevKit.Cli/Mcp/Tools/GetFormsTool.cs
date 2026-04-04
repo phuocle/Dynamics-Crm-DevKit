@@ -24,72 +24,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_forms", Title = "Get form definitions for an entity",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Retrieve form definitions for a Dataverse entity. Returns form names, types, " +
-            "and optionally the full FormXML layout definition.\n\n" +
+            "Retrieve form definitions for a Dataverse entity.\n\n" +
 
             "TWO MODES:\n" +
-            "- If form_id is EMPTY: list all active forms for the entity with name, type, status\n" +
-            "- If form_id is PROVIDED: get full FormXML and metadata for a specific form\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account', 'contact'). " +
-            "Call get_metadata_entities first if unsure of the logical name.\n" +
-            "- form_id: GUID of a specific form to get full details including FormXML. " +
-            "Leave empty to list all forms for the entity.\n" +
-            "- form_name: Filter forms by name (contains match). If exactly 1 form matches, " +
-            "returns its full detail automatically. If multiple forms match, returns the list " +
-            "for disambiguation. Ignored if form_id is provided.\n" +
-            "- form_type: Filter by type: 2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. " +
-            "Leave empty for all form types.\n" +
-            "- include_formxml: In list mode, also include FormXML (default: false to save tokens). " +
-            "In detail mode: always included regardless.\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: Table of forms with ID, name, type, default status, activation state\n" +
-            "- Detail mode: Full form metadata + complete FormXML layout definition\n\n" +
+            "- form_id EMPTY: list all active forms with name, type, status\n" +
+            "- form_id PROVIDED: full FormXML and metadata for one form\n" +
+            "- form_name: if exactly 1 match, returns detail automatically\n\n" +
 
             "WHEN TO USE:\n" +
-            "- To understand the UI layout of an entity before making customizations\n" +
-            "- To find the form ID needed for form updates\n" +
-            "- To look up a form by name (e.g., form_name='Information')\n" +
-            "- To check which fields are on a form and how they are arranged\n" +
-            "- To identify the default main form for an entity\n" +
+            "- Find form IDs, check field layout, or look up a form by name\n" +
             "- Before adding/removing fields from a form\n\n" +
 
             "TIPS:\n" +
-            "- Most entities have multiple forms -- use form_type=2 to get only main forms\n" +
-            "- The default main form (isdefault=true, type=2) is what most users see\n" +
-            "- FormXML defines: tabs > columns > sections > rows > cells > controls\n" +
-            "- Use include_formxml=false (default) for quick discovery, true for detailed analysis\n" +
-            "- To UPDATE a form: use upsert_form tool (auto-backup + validate + publish)\n" +
-            "- DO NOT use execute_webapi for form updates -- use upsert_form for safety")]
+            "- form_type=2 for main forms only. FormXML: tabs > columns > sections > rows > cells > controls\n" +
+            "- To UPDATE: use upsert_form (not execute_webapi). See docs://instructions_for_formxml")]
         public string get_forms(
-            [Description(
-                "The entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
+            [Description("Entity logical name (e.g., 'account'). Use get_metadata_entities if unsure."
             )] string entity_name,
-            [Description(
-                "GUID of a specific form to get full details including FormXML. " +
-                "Leave empty to list all forms for the entity. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use list mode first to discover form IDs."
+            [Description("GUID of a form for full detail including FormXML. Empty = list all."
             )] string form_id = "",
-            [Description(
-                "Filter forms by name (contains match). " +
-                "If exactly 1 form matches, returns its full detail automatically. " +
-                "If multiple forms match, returns the list for disambiguation. " +
-                "Ignored if form_id is provided. " +
-                "Examples: 'Information', 'Quick Create', 'Card'."
+            [Description("Filter by name (contains match). 1 match = auto-detail. Ignored if form_id set."
             )] string form_name = "",
-            [Description(
-                "Filter by form type: 2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. " +
-                "Leave empty for all form types. " +
-                "Common types: 2 (Main), 7 (QuickCreate), 6 (QuickView)."
+            [Description("Filter by type: 2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 = all."
             )] int form_type = 0,
-            [Description(
-                "In list mode, also include FormXML for each form (default: false to save tokens). " +
-                "In detail mode: FormXML is always included regardless of this setting."
+            [Description("Include FormXML in list mode (default: false). Detail mode always includes it."
             )] bool include_formxml = false)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

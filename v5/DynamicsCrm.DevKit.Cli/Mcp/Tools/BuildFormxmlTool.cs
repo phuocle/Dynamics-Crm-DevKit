@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormxmlResult)),
         Description(
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
-            "This is a READ-ONLY builder -- it returns the modified FormXML string. Use upsert_form to write it.\n\n" +
+            "READ-ONLY builder — returns modified FormXML string. Use upsert_form to write it.\n\n" +
 
             "FIVE OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
@@ -43,72 +43,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- add_library: Add a web resource library reference to <formLibraries>\n" +
             "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n\n" +
 
-            "PARAMETERS:\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account'). Used to resolve field metadata.\n" +
-            "- form_id (required): GUID of the form. Tool reads current FormXML from Dataverse.\n" +
-            "- operations (required): JSON array of operations. Each has 'action' + parameters.\n\n" +
+            "Auto-resolves classid GUIDs, generates proper section/tab column layout, creates unique GUIDs, validates field names against metadata.\n\n" +
 
-            "HOW IT WORKS:\n" +
-            "1. Reads current FormXML from Dataverse\n" +
-            "2. Fetches entity metadata for all referenced fields\n" +
-            "3. Resolves the correct classid GUID for each field based on its AttributeType\n" +
-            "4. Generates correct XML structure (tabs/columns/sections/rows/cells/controls/events/handlers)\n" +
-            "5. Generates unique GUIDs for all id attributes\n" +
-            "6. Returns the complete modified FormXML string\n\n" +
-
-            "WORKFLOW:\n" +
-            "1. (Optional) Call get_metadata_entities to understand available fields\n" +
-            "2. (Optional) Call get_forms to see current form structure\n" +
-            "3. Call build_formxml with desired operations\n" +
-            "4. Pass the returned FormXML to upsert_form to write it to Dataverse\n\n" +
-
-            "WHY USE THIS INSTEAD OF EDITING FORMXML MANUALLY:\n" +
-            "- Automatically resolves classid GUIDs (most common source of errors)\n" +
-            "- Generates proper section column layout (fills rows, adds spacer cells)\n" +
-            "- Creates unique GUIDs for all elements\n" +
-            "- Validates field names against entity metadata\n" +
-            "- Follows Dataverse naming conventions (tab_$label, $tab_sec_$label)\n" +
-            "- Correctly generates event/handler/library XML with proper structure and dependencies\n\n" +
-
-            "SECTION COLUMNS:\n" +
-            "- section_columns=1: One field per row (default)\n" +
-            "- section_columns=2: Two fields per row, spacer if odd count\n" +
-            "- section_columns=3: Three fields per row, spacers to fill\n\n" +
-
-            "TAB COLUMNS:\n" +
-            "- tab_columns=1: Single column tab with width=\"100%\" (default)\n" +
-            "- tab_columns=2: Two columns, width=\"50%\"/\"50%\"\n" +
-            "- tab_columns=3: Three columns, width=\"33%\"/\"34%\"/\"33%\"\n" +
-            "  Sections specify which tab_column (1-based) they belong to.\n\n" +
-
-            "EVENT OPERATIONS:\n" +
-            "- add_library: {\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}\n" +
-            "- add_event (form onload): {\"action\":\"add_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}\n" +
-            "- add_event (field onchange): {\"action\":\"add_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"field:name\"}\n" +
-            "- add_event (tab state): {\"action\":\"add_event\",\"event_name\":\"ontabstatechange\",\"function_name\":\"onTabChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"tab:tab_general\"}\n" +
-            "- add_event auto-adds the library to formLibraries if not already present\n\n" +
+            "SECTION COLUMNS: 1 (default, one field/row), 2 (two fields/row), 3 (three fields/row, spacers to fill).\n" +
+            "TAB COLUMNS: 1 (100%, default), 2 (50%/50%), 3 (33%/34%/33%). Sections specify which tab_column (1-based).\n\n" +
 
             "TIPS:\n" +
-            "- Fields can be simple strings (\"createdon\") or objects with overrides (label, disabled, colspan)\n" +
-            "- Positions: \"last\" (default), \"first\", \"after:element_name\"\n" +
-            "- This tool does NOT modify Dataverse -- it only returns XML. Use upsert_form to apply changes.\n" +
-            "- Combine multiple operations in one call (add tab + sections + fields + events in a single request)\n" +
-            "- Duplicate libraries and handlers are automatically detected and skipped")]
+            "- Fields: strings (\"createdon\") or objects ({\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true})\n" +
+            "- This tool does NOT modify Dataverse — use upsert_form to apply the returned FormXML")]
         public CallToolResult build_formxml(
+            [Description("Entity logical name (e.g., 'account'). Used to resolve field metadata.")] string entity_name,
+            [Description("GUID of the form to modify. Use get_forms to find valid form IDs.")] string form_id,
             [Description(
-                "Entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "Used to resolve field metadata (AttributeType -> classid). " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name,
-            [Description(
-                "GUID of the form to modify. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Tool reads current FormXML from Dataverse. " +
-                "Use get_forms to find valid form IDs."
-            )] string form_id,
-            [Description(
-                "JSON array of operations to perform. Each operation is an object with an 'action' field.\n" +
+                "JSON array of operations. Each has 'action' + parameters.\n" +
                 "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event'.\n" +
                 "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +

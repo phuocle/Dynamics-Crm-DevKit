@@ -35,115 +35,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
-            "Update, rename, or undo a Dataverse form with automatic backup, schema validation, " +
-            "and publishing. This is the safe write companion to get_forms (read).\n\n" +
+            "Update, rename, or undo a Dataverse form with auto-backup, XSD validation, and publishing.\n\n" +
 
-            "THREE ACTIONS (controlled by 'action' parameter):\n" +
-            "- 'update' (default): Modify FormXML of an existing form. " +
-            "Requires form_id + formxml.\n" +
-            "- 'rename': Change a form's display name. " +
-            "Requires form_id + form_name + entity_name. formxml is ignored.\n" +
-            "- 'undo': Restore a form from a backup file. " +
-            "Requires form_id + formxml (= path to backup .json file). " +
-            "Skips backup (no need), still validates XSD.\n\n" +
+            "THREE ACTIONS:\n" +
+            "- 'update': Modify FormXML. Requires form_id + formxml\n" +
+            "- 'rename': Change display name. Requires form_id + form_name\n" +
+            "- 'undo': Restore from backup. Requires form_id + formxml (= backup file path)\n\n" +
 
-            "PARAMETERS:\n" +
-            "- action: 'update' (default), 'rename', or 'undo'.\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account'). " +
-            "Needed for backup naming and publishing.\n" +
-            "- form_id (required): GUID of the form. Use get_forms to find form IDs first.\n" +
-            "- form_name: New display name for the form. Required for 'rename'. Ignored for 'update'/'undo'.\n" +
-            "- formxml: For 'update': the new FormXML content. " +
-            "For 'undo': the file path to the backup .json file. " +
-            "Ignored for 'rename'.\n" +
-            "- validate: Validate against XSD before writing (default: true). Applies to 'update' and 'undo'.\n" +
-            "- backup: Save current FormXML to local backup before overwriting (default: true). " +
-            "Ignored for 'undo' (always skipped).\n" +
-            "- auto_publish: Publish the entity after changes (default: true).\n\n" +
+            "WORKFLOW: get_forms (read) → modify FormXML (follow docs://instructions_for_formxml) → upsert_form (write)\n" +
+            "Tool auto-handles: backup → validate XSD → update → publish. Undo path in every response.\n\n" +
 
-            "WORKFLOW FOR 'update' (MUST follow this order):\n" +
-            "1. Call get_forms with form_id to READ the current FormXML\n" +
-            "2. Modify the FormXML as needed (follow docs://instructions_for_formxml rules)\n" +
-            "3. Call upsert_form with the modified FormXML\n" +
-            "4. Tool auto-handles: backup → validate → update → publish\n" +
-            "5. If something breaks: use action='undo' with the backup file path\n\n" +
-
-            "WORKFLOW FOR 'rename':\n" +
-            "1. Call get_forms to find the form_id\n" +
-            "2. Call upsert_form with action='rename', form_id, and form_name\n" +
-            "3. Tool auto-handles: duplicate check → backup → rename → publish\n\n" +
-
-            "WORKFLOW FOR 'undo':\n" +
-            "1. Call upsert_form with action='undo', form_id, and formxml=<backup file path>\n" +
-            "2. Tool auto-handles: read backup → validate XSD → update → publish (no new backup)\n" +
-            "3. The backup file path is returned in every update/rename success response\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- After reading a form with get_forms and making modifications to the FormXML\n" +
-            "- To add/remove/rearrange tabs, sections, or fields on a form\n" +
-            "- To change form layout structure\n" +
-            "- To rename a form's display name\n" +
-            "- To undo/rollback a previous form change using a backup file\n\n" +
-
-            "WHEN NOT TO USE:\n" +
-            "- To read forms (use get_forms instead)\n" +
-            "- To create new forms (not supported)\n\n" +
-
-            "SAFETY:\n" +
-            "- Auto-backup saves current FormXML before ANY modification (update/rename)\n" +
-            "- XSD validation blocks invalid XML from being written (update/undo)\n" +
-            "- Duplicate name check for 'rename' action\n" +
-            "- Rollback instructions are included in every success response\n" +
-            "- If backup=true and backup fails, the update is BLOCKED (fail-safe)\n" +
-            "- Undo skips backup automatically (restoring, not changing)\n\n" +
+            "SAFETY: auto-backup before changes, XSD blocks invalid XML, backup failure blocks update.\n\n" +
 
             "TIPS:\n" +
-            "- Always read the current form first with get_forms to understand the structure\n" +
-            "- Read schema://formxml for the XSD schema reference\n" +
-            "- Read docs://instructions_for_formxml for naming conventions and best practices\n" +
-            "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
-            "- Backup files are at: .devkit/backups/forms/{entity}_{formid}_{timestamp}.formxml.json")]
+            "- Read schema://formxml for XSD. Read docs://instructions_for_formxml for rules\n" +
+            "- Set auto_publish=false when batching, then call publish_customizations once")]
         public CallToolResult upsert_form(
-            [Description(
-                "Action to perform: 'update' (default), 'rename' (change name), or 'undo' (restore from backup). " +
-                "For 'update': modifies FormXML of existing form (requires form_id + formxml). " +
-                "For 'rename': changes the form name (requires form_id + form_name; formxml is ignored). " +
-                "For 'undo': restores FormXML from a backup file (requires form_id + formxml as file path)."
-            )] string action = "update",
-            [Description(
-                "Entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name = "",
-            [Description(
-                "GUID of the form to update, rename, or undo. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use get_forms to find valid form IDs."
-            )] string form_id = "",
-            [Description(
-                "New display name for the form. Required for 'rename'. Ignored for 'update' and 'undo'."
-            )] string form_name = "",
-            [Description(
-                "For 'update': the new FormXML content (must be valid XML). " +
-                "For 'undo': the file path to the backup .json file (e.g. '.devkit/backups/forms/account_xxx.formxml.json'). " +
-                "Ignored for 'rename'. " +
-                "The tool will strip any XML declaration before writing."
-            )] string formxml = "",
-            [Description(
-                "Validate FormXML against XSD schema before writing (default: true). " +
-                "Applies to 'update' and 'undo' actions. " +
-                "Blocks update if invalid. Set false only if you've already validated."
-            )] bool validate = true,
-            [Description(
-                "Save current FormXML to local backup before overwriting (default: true). " +
-                "Applies to 'update' and 'rename'. " +
-                "Ignored for 'undo' (always skipped — no need to backup when restoring). " +
-                "Strongly recommended to keep true. If backup fails, operation is BLOCKED (fail-safe)."
-            )] bool backup = true,
-            [Description(
-                "Publish the entity after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish_customizations once."
-            )] bool auto_publish = true)
+            [Description("'update' (default), 'rename', or 'undo'.")] string action = "update",
+            [Description("Entity logical name (e.g., 'account').")] string entity_name = "",
+            [Description("Form GUID. Use get_forms to find IDs.")] string form_id = "",
+            [Description("New name. Required for 'rename' only.")] string form_name = "",
+            [Description("For 'update': FormXML. For 'undo': backup file path. Ignored for 'rename'.")] string formxml = "",
+            [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
+            [Description("Backup current FormXML before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
+            [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");

@@ -24,47 +24,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to extract entity name and record ID",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Parse a Dynamics 365 / Power Platform URL or string to extract the entity logical name and record ID (GUID).\n\n" +
+            "Parse a Dynamics 365 / Power Platform URL or string to extract entity logical name and record ID (GUID).\n\n" +
 
-            "PARAMETERS:\n" +
-            "- input: The URL, GUID, or text to parse. Accepts Dynamics 365 record URLs, Web API URLs, " +
-            "Power Platform maker portal URLs, or raw GUIDs.\n\n" +
+            "Supports: model-driven app URLs (main.aspx with etn/etc), Web API URLs, " +
+            "Power Apps/Automate maker URLs, workflow/report/solution editor URLs, " +
+            "rundialog URLs, and raw GUIDs.\n\n" +
 
-            "RETURNS:\n" +
-            "- EntityName: the entity logical name (e.g., 'account', 'plugintracelog', 'workflow')\n" +
-            "- RecordId: the record GUID\n" +
-            "- Source: what type of input was parsed (main.aspx, Web API, maker portal, raw GUID)\n" +
-            "- EnvironmentId: (if present in maker portal URLs)\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- When a user pastes a Dynamics 365 URL and you need to extract the entity name and record ID\n" +
-            "- Before calling get_record, get_plugin_trace_logs, or other tools that need entity_name + record_id\n" +
-            "- When a user references a record by URL instead of by entity name + GUID\n\n" +
-
-            "SUPPORTED URL FORMATS:\n" +
-            "- Model-driven app: main.aspx?etn=account&pagetype=entityrecord&id={guid}\n" +
-            "- Model-driven app (legacy): main.aspx?etc=1&pagetype=entityrecord&id={guid}\n" +
-            "- Model-driven app (entity list): main.aspx?etn=account&pagetype=entitylist&viewid={guid}\n" +
-            "- Web API: api/data/v9.2/accounts({guid})\n" +
-            "- Power Apps maker: make.powerapps.com/environments/{env}/solutions/{sol}\n" +
-            "- Power Automate: make.powerautomate.com/environments/{env}/flows/{flow}\n" +
-            "- Power Automate (flow run): make.powerautomate.com/environments/{env}/flows/{flow}/runs/{run}\n" +
-            "- Workflow editor: sfa/workflow/edit.aspx?id={guid}\n" +
-            "- Report viewer: crmreports/viewer/viewer.aspx?id={guid}\n" +
-            "- Solution editor: tools/solution/edit.aspx?id={guid}\n" +
-            "- Run dialog: rundialog.aspx?DialogId={guid}&EntityName={entity}&ObjectId={guid}\n" +
-            "- Raw GUID: 1d27ebbc-afca-4fd7-b1ef-7ab01646490d\n\n" +
+            "Returns: EntityName, RecordId, Source type, EnvironmentId (if present).\n\n" +
 
             "TIPS:\n" +
-            "- If entity name is 'unknown' (raw GUID), ask the user for the entity name or URL\n" +
-            "- For etc (entity type code) URLs, the tool resolves the code to entity logical name via Dataverse\n" +
-            "- For Web API URLs, the tool resolves entitySetName to entity logical name via Dataverse\n" +
-            "- GUID formats with braces {guid} or URL-encoded %7Bguid%7D are automatically handled")]
+            "- If entity name is 'unknown' (raw GUID), ask the user for the entity name or full URL\n" +
+            "- Automatically resolves etc (entity type codes) and entitySetNames via Dataverse")]
         public string parse_record_url(
             [Description(
-                "The URL, GUID, or text to parse. Accepts any string containing a Dynamics 365 URL or a raw GUID. " +
-                "Examples: 'https://org.crm.dynamics.com/main.aspx?etn=account&pagetype=entityrecord&id=...', " +
-                "'api/data/v9.2/accounts(guid)', or a raw GUID like '91330924-802a-4b0d-a900-34fd9d790829'."
+                "The URL, GUID, or text to parse. Accepts Dynamics 365 URLs, Web API URLs, " +
+                "maker portal URLs, or raw GUIDs."
             )] string input)
         {
             if (string.IsNullOrWhiteSpace(input))

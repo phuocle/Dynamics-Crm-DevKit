@@ -62,79 +62,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "workflow errors, bulk operations, imports, and solution operations.\n\n" +
 
             "TWO MODES:\n" +
-            "- job_id EMPTY: list system jobs matching filters (default: failed jobs last 24h)\n" +
-            "- job_id PROVIDED: full detail for one job including error message and stack trace\n\n" +
-
-            "PARAMETERS:\n" +
-            "- job_id: GUID of a specific system job. When provided: shows full detail including error message and stack trace.\n" +
-            "- entity_name: Filter by primary entity type (e.g., 'account', 'contact').\n" +
-            "- status: 'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'.\n" +
-            "- operation_type: Filter by type: 'plugin', 'workflow', 'bulk_delete', 'import', 'goal_rollup', 'solution', 'all'.\n" +
-            "- name_filter: Filter by job name (contains match).\n" +
-            "- correlation_id: Filter by correlation ID (exact GUID match) to trace all jobs from a single request.\n" +
-            "- minutes_ago: Return jobs from last N minutes. Default: 1440 (24h). Max: 43200 (30 days).\n" +
-            "- max_records: Maximum jobs to return (1-500). Default: 50.\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: TSV table of jobs with name, operationType, entity, status, startedOn, completedOn, message preview\n" +
-            "- Detail mode: Full job metadata including complete error message and stack trace\n" +
-            "- Summary: count by operation type\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- 'What system jobs failed in the last 24 hours?'\n" +
-            "- 'Show me the error details for job d9e875bf-...'\n" +
-            "- 'Are there any failed async plugin jobs on account?'\n" +
-            "- 'My plugin is failing asynchronously -- show me the error'\n" +
-            "- 'What workflow jobs are currently waiting?'\n" +
-            "- 'Show me all failed bulk delete operations this week'\n" +
-            "- 'What jobs ran for correlation ID abc-123?'\n" +
-            "- 'Are there any solution import jobs in progress?'\n\n" +
-
-            "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_plugin_trace_logs: plugin trace logs (ITracingService output) -- complementary, use both for async plugin debugging\n" +
-            "- get_classic_workflows: classic workflow definitions -- definitions only, not execution results\n" +
-            "- get_cloud_flows: cloud flow runs (flowsession) -- cloud flows only, not classic workflows or plugins\n\n" +
+            "- job_id EMPTY: list jobs matching filters (default: failed last 24h)\n" +
+            "- job_id PROVIDED: full detail including error message and stack trace\n\n" +
 
             "TIPS:\n" +
-            "- Default status is 'failed' because the primary use case is debugging failures\n" +
-            "- For async plugin failures: use get_jobs for the error message + get_plugin_trace_logs for trace output\n" +
-            "- The 'message' field (stack trace) is only shown in detail mode to save tokens\n" +
-            "- System jobs can have millions of records -- always use time filters and max_records")]
+            "- For async plugin failures: get_jobs for error + get_plugin_trace_logs for trace output\n" +
+            "- Stack trace only shown in detail mode to save tokens")]
         public CallToolResult get_jobs(
-            [Description(
-                "GUID of a specific system job for full detail including error message and stack trace. " +
-                "When provided, ALL other filters are ignored. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
-            )] string job_id = "",
-            [Description(
-                "Filter by primary entity type (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead'. " +
-                "Leave empty for all entities."
-            )] string entity_name = "",
-            [Description(
-                "Filter by job status: 'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'. " +
-                "Default is 'failed' because the primary use case is debugging failures."
-            )] string status = "failed",
-            [Description(
-                "Filter by operation type: 'plugin', 'workflow', 'bulk_delete', 'import', 'goal_rollup', 'solution', 'all'. " +
-                "Leave empty for all types."
-            )] string operation_type = "",
-            [Description(
-                "Filter by job name (contains match). " +
-                "Example: 'AccountPlugin'. Leave empty for no name filter."
-            )] string name_filter = "",
-            [Description(
-                "Filter by correlation ID (exact GUID match). " +
-                "Useful for tracing all jobs from a single request. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
-            )] string correlation_id = "",
-            [Description(
-                "Return jobs from the last N minutes. " +
-                "Default: 1440 (24 hours). Max: 43200 (30 days)."
-            )] int minutes_ago = 1440,
-            [Description(
-                "Maximum number of jobs to return. Default: 50. Max: 500."
-            )] int max_records = 50)
+            [Description("Job GUID for full detail. All other filters ignored when provided.")] string job_id = "",
+            [Description("Filter by entity (e.g., 'account'). Empty = all.")] string entity_name = "",
+            [Description("'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'.")] string status = "failed",
+            [Description("'plugin', 'workflow', 'bulk_delete', 'import', 'goal_rollup', 'solution', 'all'. Empty = all.")] string operation_type = "",
+            [Description("Filter by name (contains).")] string name_filter = "",
+            [Description("Filter by correlation ID (exact GUID).")] string correlation_id = "",
+            [Description("Last N minutes. Default: 1440 (24h). Max: 43200.")] int minutes_ago = 1440,
+            [Description("Max jobs (1-500). Default: 50.")] int max_records = 50)
         {
             if (max_records <= 0) max_records = 50;
             if (max_records > 500) max_records = 500;

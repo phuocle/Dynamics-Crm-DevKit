@@ -29,37 +29,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "List business rules (client-side logic) for a Dataverse entity.\n\n" +
 
-            "PARAMETERS:\n" +
-            "- entity_name (required): Entity logical name (e.g., 'account').\n" +
-            "- rule_id: GUID for full detail (conditions + actions). Leave empty to list all.\n" +
-            "- status: Filter by 'active' or 'draft'. Leave empty for all.\n" +
-            "- max_records: Maximum rules to return (default: 50, max: 200).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: Table of rules with name, scope, status, modifiedOn\n" +
-            "- Detail mode: Full rule info with conditions and actions parsed from XAML\n\n" +
+            "TWO MODES:\n" +
+            "- rule_id EMPTY: list rules with name, scope, status\n" +
+            "- rule_id PROVIDED: full detail with conditions and actions parsed from XAML\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debugging form behavior (fields hiding/showing unexpectedly)\n" +
-            "- Understanding existing logic before adding JavaScript\n" +
-            "- Auditing what client-side logic runs on an entity\n" +
-            "- Checking for conflicts between business rules and form scripts\n\n" +
+            "- Debug form behavior (fields hiding/showing unexpectedly)\n" +
+            "- Audit client-side logic before adding JavaScript\n\n" +
 
             "TIPS:\n" +
-            "- Business rules run client-side, not server-side\n" +
-            "- They execute BEFORE JavaScript form events\n" +
+            "- Business rules run client-side BEFORE JavaScript form events\n" +
             "- Scope 'Entity' means the rule runs on ALL forms\n" +
-            "- Business rules are stored as workflow records with category=2")]
+            "- Stored as workflow records with category=2")]
         public string get_business_rules(
             [Description(
-                "Entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
+                "Entity logical name (lowercase). Use get_metadata_entities to discover names."
             )] string entity_name,
             [Description(
-                "GUID of a specific business rule for full detail including conditions and actions. " +
-                "Leave empty to list all business rules for the entity. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
+                "GUID of a specific business rule for full detail. Leave empty to list all."
             )] string rule_id = "",
             [Description(
                 "Filter by status: 'active' (activated rules), 'draft' (deactivated/not yet activated). " +

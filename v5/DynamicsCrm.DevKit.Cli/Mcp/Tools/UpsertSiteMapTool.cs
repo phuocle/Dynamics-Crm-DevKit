@@ -35,102 +35,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertSiteMapResult)),
         Description(
-            "Create, update, or undo a Model-Driven App's SiteMap XML with automatic backup, XSD validation, and publishing. " +
-            "This completes the UI customization trilogy: Forms (upsert_form) → Views (upsert_view) → SiteMap (upsert_sitemap).\n\n" +
+            "Create, update, or undo a Model-Driven App's SiteMap XML with auto-backup, XSD validation, and publishing.\n\n" +
 
-            "THREE ACTIONS (controlled by 'action' parameter):\n" +
-            "- 'update' (default): Modify SiteMap XML of an existing app. " +
-            "Requires app_module_id + sitemapxml.\n" +
-            "- 'create': Create a new SiteMap and associate it with an app module. " +
-            "Requires app_module_id + sitemapxml. " +
-            "The app must NOT already have a SiteMap component.\n" +
-            "- 'undo': Restore a SiteMap from a backup file. " +
-            "Requires app_module_id + sitemapxml (= path to backup .json file). " +
-            "Skips backup (no need), still validates XSD.\n\n" +
+            "THREE ACTIONS:\n" +
+            "- 'update': Modify SiteMap XML. Requires app_module_id + sitemapxml\n" +
+            "- 'create': New SiteMap for an app with no existing one. Requires app_module_id + sitemapxml\n" +
+            "- 'undo': Restore from backup. Requires app_module_id + sitemapxml (= backup file path)\n\n" +
 
-            "PARAMETERS:\n" +
-            "- action: 'update' (default), 'create', or 'undo' (restore from backup).\n" +
-            "- app_module_id (required): GUID of the Model-Driven App. " +
-            "Query appmodule table to find IDs.\n" +
-            "- sitemapxml: For 'update'/'create': the new SiteMap XML content. " +
-            "For 'undo': the file path to the backup .json file.\n" +
-            "- validate: Validate against XSD before writing (default: true).\n" +
-            "- backup: Save current SiteMap XML to backup before overwriting (default: true). " +
-            "Ignored for 'create' and 'undo' (no existing SiteMap to backup).\n" +
-            "- auto_publish: Publish the app after changes (default: true).\n\n" +
+            "Tool auto-handles: backup → validate XSD → update → publish. Undo path in every response.\n\n" +
 
-            "WORKFLOW FOR 'update' (MUST follow this order):\n" +
-            "1. Query appmodule to find the app and its SiteMap\n" +
-            "2. Read current SiteMap XML\n" +
-            "3. Modify as needed (refer to schema://sitemapxml for structure)\n" +
-            "4. Call upsert_sitemap with the modified XML\n" +
-            "5. Tool auto-handles: backup → validate → update → publish\n" +
-            "6. If something breaks: use action='undo' with the backup file path\n\n" +
-
-            "WORKFLOW FOR 'create':\n" +
-            "1. Query appmodule to verify the app exists and has NO SiteMap\n" +
-            "2. Build SiteMap XML (refer to schema://sitemapxml for structure)\n" +
-            "3. Call upsert_sitemap with action='create', app_module_id, and sitemapxml\n" +
-            "4. Tool auto-handles: validate → create sitemap record → associate with app → publish\n\n" +
-
-            "WORKFLOW FOR 'undo':\n" +
-            "1. Call upsert_sitemap with action='undo', app_module_id, and sitemapxml=<backup file path>\n" +
-            "2. Tool auto-handles: read backup → validate XSD → update → publish (no new backup)\n" +
-            "3. The backup file path is returned in every update success response\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- To create a new SiteMap for an app that doesn't have one\n" +
-            "- To add/remove/rearrange navigation areas, groups, and sub-areas\n" +
-            "- To add a new entity to app navigation\n" +
-            "- To customize app navigation structure\n" +
-            "- After creating a new entity that needs to appear in the app\n" +
-            "- To undo/rollback a previous SiteMap change using a backup file\n\n" +
-
-            "SAFETY:\n" +
-            "- Auto-backup saves current SiteMap XML before ANY modification (update only)\n" +
-            "- XSD validation blocks invalid XML from being written\n" +
-            "- Undo action restores from backup\n" +
-            "- If backup=true and backup fails, update is BLOCKED (fail-safe)\n\n" +
+            "SAFETY: auto-backup before changes, XSD blocks invalid XML, backup failure blocks update.\n\n" +
 
             "TIPS:\n" +
             "- Read schema://sitemapxml for SiteMap XML structure and rules\n" +
-            "- SiteMap structure: SiteMap > Area > Group > SubArea\n" +
-            "- SubArea Entity attribute links to a Dataverse entity\n" +
-            "- Set auto_publish=false when making multiple changes\n" +
-            "- Backup files at: .devkit/backups/sitemaps/{appname}_{id}_{timestamp}.sitemap.json\n" +
-            "- Use execute_fetchxml to query appmodule table for app IDs")]
+            "- Set auto_publish=false when batching, then call publish_customizations once")]
         public CallToolResult upsert_sitemap(
-            [Description(
-                "Action to perform: 'update' (default), 'create', or 'undo' (restore from backup). " +
-                "For 'update': modifies SiteMap XML (requires app_module_id + sitemapxml). " +
-                "For 'create': creates a new SiteMap and associates with the app (requires app_module_id + sitemapxml). " +
-                "For 'undo': restores SiteMap from a backup file (requires app_module_id + sitemapxml as file path)."
-            )] string action = "update",
-            [Description(
-                "GUID of the Model-Driven App (appmodule) whose SiteMap to modify. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use execute_fetchxml on appmodule to find app IDs."
-            )] string app_module_id = "",
-            [Description(
-                "For 'update'/'create': the new SiteMap XML content (must be valid XML). " +
-                "For 'undo': the file path to the backup .json file " +
-                "(e.g. '.devkit/backups/sitemaps/saleshub_abc123_20260331.sitemap.json'). " +
-                "The tool will strip any XML declaration before writing."
-            )] string sitemapxml = "",
-            [Description(
-                "Validate SiteMap XML against XSD schema before writing (default: true). " +
-                "Applies to 'update' and 'undo' actions. " +
-                "Blocks update if invalid. Set false only if you've already validated."
-            )] bool validate = true,
-            [Description(
-                "Save current SiteMap XML to local backup before overwriting (default: true). " +
-                "Ignored for 'create' (no existing SiteMap) and 'undo' (restoring from backup). " +
-                "Strongly recommended to keep true. If backup fails, operation is BLOCKED (fail-safe)."
-            )] bool backup = true,
-            [Description(
-                "Publish the app module after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish_customizations once."
-            )] bool auto_publish = true)
+            [Description("'update' (default), 'create', or 'undo'.")] string action = "update",
+            [Description("GUID of the Model-Driven App. Use execute_fetchxml on appmodule to find IDs.")] string app_module_id = "",
+            [Description("For 'update'/'create': SiteMap XML. For 'undo': backup file path. Ignored for 'rename'.")] string sitemapxml = "",
+            [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
+            [Description("Backup current SiteMap before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
+            [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(app_module_id))
                 return ErrorResult("Error: app_module_id is required.");

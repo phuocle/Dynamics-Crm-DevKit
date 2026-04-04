@@ -27,123 +27,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertEntityResult)),
         Description(
-            "Create a new custom Dataverse entity (table) with guided parameters. " +
-            "Automatically creates the primary name attribute and configures common properties.\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entity_name (required): Logical name with publisher prefix (e.g., 'new_project').\n" +
-            "- display_name (required): Singular display name (e.g., 'Project').\n" +
-            "- display_collection_name (required): Plural display name (e.g., 'Projects').\n" +
-            "- description: Entity description.\n" +
-            "- primary_attribute_name: Primary name attribute logical name. Auto-derived if omitted.\n" +
-            "- primary_attribute_display_name: Display name for primary attribute (default: 'Name').\n" +
-            "- primary_attribute_max_length: Max length of primary attribute (default: 100, max: 4000).\n" +
-            "- ownership_type: 'User' (default, user/team owned) or 'Organization'.\n" +
-            "- is_activity: Create as activity entity (default: false).\n" +
-            "- has_notes: Enable notes/annotations (default: true).\n" +
-            "- has_activities: Enable activities (default: true).\n" +
-            "- has_feedback: Enable feedback/ratings (default: false).\n" +
-            "- is_quick_create_enabled: Enable quick create form (default: false).\n" +
-            "- is_duplicate_detection_enabled: Enable duplicate detection (default: true).\n" +
-            "- change_tracking_enabled: Enable change tracking (default: true).\n" +
-            "- entity_color: Hex color code (e.g., '#4A90D9').\n" +
-            "- solution_name (required): Solution unique name to add the entity to.\n" +
-            "- auto_publish: Publish after creation (default: true).\n\n" +
-
-            "RETURNS:\n" +
-            "- Created entity details: logical name, MetadataId, EntitySetName\n" +
-            "- Primary attribute details\n" +
-            "- Solution and publish status\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- To create a new custom table in Dataverse\n" +
-            "- At the start of a new feature or module development\n" +
-            "- When the data model requires a new entity\n\n" +
+            "Create a new custom Dataverse entity (table). Auto-creates primary name attribute and configures common properties.\n\n" +
 
             "TIPS:\n" +
-            "- Entity name MUST include a publisher prefix (e.g., 'new_', 'cr_')\n" +
-            "- After creation, use upsert_attribute to add columns\n" +
-            "- Then use build_formxml + upsert_form to customize the default form\n" +
-            "- Activity entities inherit from activitypointer and have special behavior\n" +
-            "- UserOwned entities support sharing, assigning, and team ownership\n" +
-            "- OrgOwned entities are visible to all users (no row-level security)\n" +
-            "- Use get_solution_components to find the solution unique name")]
+            "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
+            "- After creation: upsert_attribute to add columns, build_formxml + upsert_form to customize the form")]
         public CallToolResult upsert_entity(
-            [Description(
-                "Logical name with publisher prefix (always lowercase). " +
-                "Must contain an underscore separating the prefix from the name. " +
-                "Examples: 'new_project', 'cr_timeentry', 'msdyn_booking'. " +
-                "If unsure about the prefix, use get_solution_components to find the solution publisher."
-            )] string entity_name,
-            [Description(
-                "Singular display name shown in the UI. " +
-                "Examples: 'Project', 'Time Entry', 'Booking'."
-            )] string display_name,
-            [Description(
-                "Plural display name shown in the UI for collections/lists. " +
-                "Examples: 'Projects', 'Time Entries', 'Bookings'."
-            )] string display_collection_name,
-            [Description(
-                "Solution unique name to add the entity to. " +
-                "Use get_solution_components to find valid solution names."
-            )] string solution_name,
-            [Description(
-                "Entity description. Optional."
-            )] string description = "",
-            [Description(
-                "Logical name of the primary name attribute. " +
-                "Auto-derived as '{prefix}_name' if omitted. " +
-                "Examples: 'new_name', 'cr_title'."
-            )] string primary_attribute_name = "",
-            [Description(
-                "Display name for the primary name attribute. " +
-                "Default: 'Name'."
-            )] string primary_attribute_display_name = "Name",
-            [Description(
-                "Max length of the primary name attribute (1-4000). " +
-                "Default: 100."
-            )] int primary_attribute_max_length = 100,
-            [Description(
-                "Ownership type: 'User' (user/team owned, supports sharing/assigning) " +
-                "or 'Organization' (org-owned, visible to all, no row-level security). " +
-                "Default: 'User'."
-            )] string ownership_type = "User",
-            [Description(
-                "Create as an activity entity (inherits activitypointer). " +
-                "Default: false."
-            )] bool is_activity = false,
-            [Description(
-                "Enable notes (annotations) on the entity. " +
-                "Default: true."
-            )] bool has_notes = true,
-            [Description(
-                "Enable activities on the entity. " +
-                "Default: true."
-            )] bool has_activities = true,
-            [Description(
-                "Enable feedback/ratings on the entity. " +
-                "Default: false."
-            )] bool has_feedback = false,
-            [Description(
-                "Enable quick create form. " +
-                "Default: false."
-            )] bool is_quick_create_enabled = false,
-            [Description(
-                "Enable duplicate detection. " +
-                "Default: true."
-            )] bool is_duplicate_detection_enabled = true,
-            [Description(
-                "Enable change tracking (for data sync scenarios). " +
-                "Default: true."
-            )] bool change_tracking_enabled = true,
-            [Description(
-                "Hex color code for the entity icon (e.g., '#4A90D9'). " +
-                "Optional. Auto-assigned if empty."
-            )] string entity_color = "",
-            [Description(
-                "Publish the entity after creation. " +
-                "Default: true."
-            )] bool auto_publish = true)
+            [Description("Logical name with publisher prefix (e.g., 'new_project').")] string entity_name,
+            [Description("Singular display name (e.g., 'Project').")] string display_name,
+            [Description("Plural display name (e.g., 'Projects').")] string display_collection_name,
+            [Description("Solution unique name to add the entity to.")] string solution_name,
+            [Description("Entity description.")] string description = "",
+            [Description("Primary name attribute logical name. Auto-derived if omitted.")] string primary_attribute_name = "",
+            [Description("Display name for primary attribute. Default: 'Name'.")] string primary_attribute_display_name = "Name",
+            [Description("Max length of primary attribute (1-4000). Default: 100.")] int primary_attribute_max_length = 100,
+            [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security).")] string ownership_type = "User",
+            [Description("Create as activity entity. Default: false.")] bool is_activity = false,
+            [Description("Enable notes. Default: true.")] bool has_notes = true,
+            [Description("Enable activities. Default: true.")] bool has_activities = true,
+            [Description("Enable feedback/ratings. Default: false.")] bool has_feedback = false,
+            [Description("Enable quick create form. Default: false.")] bool is_quick_create_enabled = false,
+            [Description("Enable duplicate detection. Default: true.")] bool is_duplicate_detection_enabled = true,
+            [Description("Enable change tracking. Default: true.")] bool change_tracking_enabled = true,
+            [Description("Hex color code (e.g., '#4A90D9').")] string entity_color = "",
+            [Description("Publish after creation. Default: true.")] bool auto_publish = true)
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(entity_name))

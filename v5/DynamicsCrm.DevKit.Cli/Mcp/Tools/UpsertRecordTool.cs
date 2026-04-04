@@ -24,65 +24,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
-            "Create, update, or upsert a record in a Dataverse table using a single tool.\n\n" +
+            "Create, update, or upsert a record in a Dataverse table.\n\n" +
 
-            "BEHAVIOR (depends on record_id):\n" +
-            "- record_id is EMPTY or omitted → CREATE: a new record is created with an auto-generated ID\n" +
-            "- record_id is provided → UPSERT: if a record with that ID exists, it is updated; " +
-            "if it does not exist, a new record is created with that ID\n\n" +
+            "BEHAVIOR:\n" +
+            "- record_id EMPTY → CREATE with auto-generated ID\n" +
+            "- record_id PROVIDED → UPSERT (update if exists, create if not)\n\n" +
 
-            "This means:\n" +
-            "- To CREATE a new record: omit record_id (or pass empty string)\n" +
-            "- To UPDATE an existing record: pass its record_id (upsert will update it)\n" +
-            "- To UPSERT (create-or-update): pass the record_id — the tool handles both cases\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entity_name (required): lowercase logical name of the table (e.g. 'account', 'contact')\n" +
-            "- fields_json (required): JSON object with field logical names as keys and values matching Dataverse types\n" +
-            "- record_id (optional): GUID of the record. Omit for create, provide for upsert/update\n\n" +
-
-            "FIELD VALUE TYPES:\n" +
-            "- String/Memo: \"hello\" (string)\n" +
-            "- Integer: 42 (number, no decimal)\n" +
-            "- Decimal/Double/Money: 99.50 (number with decimal)\n" +
-            "- Boolean (Two Option): true or false\n" +
-            "- DateTime: \"2025-01-15\" or \"2025-01-15T10:30:00\" (ISO string)\n" +
-            "- Lookup: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\" (GUID string of the referenced record)\n" +
-            "- Polymorphic Lookup (Customer/Owner): use \"fieldname@targetentity\" as key, e.g. \"customerid@account\": \"guid\"\n" +
-            "- Picklist/Choice: 100000001 (integer option value)\n" +
-            "- MultiSelect Picklist: [100000001, 100000002] (array of integers)\n" +
-            "- Set field to null: null\n\n" +
-
-            "EXAMPLES:\n" +
-            "Create: entity_name=\"account\", fields_json={\"name\": \"Contoso Ltd\", \"revenue\": 1000000}\n" +
-            "Update: entity_name=\"account\", record_id=\"a1b2c3d4-...\", fields_json={\"name\": \"Contoso Updated\"}\n" +
-            "Upsert: entity_name=\"account\", record_id=\"a1b2c3d4-...\", fields_json={\"name\": \"Contoso\", \"revenue\": 5000}\n\n" +
+            "FIELD TYPES:\n" +
+            "- String: \"hello\", Integer: 42, Decimal/Money: 99.50, Boolean: true/false\n" +
+            "- DateTime: \"2025-01-15\" (ISO), Lookup: GUID string, Picklist: integer value\n" +
+            "- Polymorphic Lookup: use \"fieldname@targetentity\" as key (e.g., \"customerid@account\")\n" +
+            "- MultiSelect: [100000001, 100000002], null to clear a field\n\n" +
 
             "TIPS:\n" +
-            "- Use get_metadata_entities to discover field names and types before writing\n" +
-            "- Lookup fields need the GUID of the target record — use execute_fetchxml to find it\n" +
-            "- Picklist fields need the integer option value — use get_metadata_entities to see available options\n" +
-            "- For polymorphic lookups (customerid, ownerid), use the 'field@entity' key syntax\n" +
-            "- Only include fields you want to set — partial update is supported when upserting existing records\n" +
-            "- Set a field to null to clear its value\n" +
-            "- Omit record_id to let Dataverse auto-generate a new GUID\n" +
-            "- Useful for idempotent data migration, seeding reference data, or sync scenarios")]
+            "- Use get_metadata_entities for field names/types. Use execute_fetchxml to find lookup GUIDs\n" +
+            "- Partial update supported — only include fields you want to set")]
         public CallToolResult upsert_record(
-            [Description(
-                "Logical name of the entity/table (lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
+            [Description("Entity logical name (e.g., 'account')."
             )] string entity_name,
-            [Description(
-                "JSON object with field values. Keys are field logical names (lowercase). " +
-                "For polymorphic lookups, use 'fieldname@targetentity' as key. " +
-                "Example: {\"name\": \"Contoso\", \"revenue\": 5000, \"primarycontactid\": \"a1b2c3d4-...\"}"
+            [Description("JSON object with field values. Keys are lowercase logical names. Polymorphic: 'field@entity'."
             )] string fields_json,
-            [Description(
-                "GUID of the record. Optional. " +
-                "If omitted or empty: creates a new record with an auto-generated ID (pure create). " +
-                "If provided: upserts — creates the record if it doesn't exist, updates if it does. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
+            [Description("Record GUID. Empty = create. Provided = upsert (update or create)."
             )] string record_id = "")
         {
             if (string.IsNullOrWhiteSpace(entity_name))

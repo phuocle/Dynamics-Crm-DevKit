@@ -26,35 +26,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
-            "Publish Dataverse customizations to make metadata changes visible to users.\n" +
-            "After creating/updating entities, attributes, forms, views, option sets, or\n" +
-            "relationships, changes are NOT visible until published.\n\n" +
-
-            "PARAMETERS:\n" +
-            "- entities: Comma-separated entity logical names (e.g., 'account,contact').\n" +
-            "  Leave empty to publish ALL customizations.\n" +
-            "- include_global_optionset: Also publish global option sets (default: false).\n" +
-            "  Only applies when entities is specified.\n" +
-            "- include_sitemap: Also publish the sitemap (default: false).\n" +
-            "  Only applies when entities is specified.\n\n" +
-
-            "RETURNS:\n" +
-            "- Published entity count and names (or 'All' for publish all)\n" +
-            "- Duration of publish operation\n" +
-            "- Status (success/error)\n\n" +
+            "Publish Dataverse customizations to make metadata changes visible to users. " +
+            "Required after creating/updating entities, attributes, forms, views, option sets, or relationships.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- After ANY metadata change (create/update entity, attribute, form, view,\n" +
-            "  option set, relationship, web resource, sitemap)\n" +
-            "- When user reports 'I made changes but they are not showing up'\n" +
-            "- As the final step in any customization workflow\n" +
-            "- After using upsert_form or upsert_view tools (if auto_publish was false)\n\n" +
+            "- After ANY metadata change via execute_webapi or upsert_* tools (if auto_publish was false)\n" +
+            "- When user reports 'I made changes but they are not showing up'\n\n" +
 
             "TIPS:\n" +
             "- Publish specific entities when possible (faster than publish all)\n" +
             "- PublishAll can take 30+ seconds on large environments\n" +
-            "- This is REQUIRED after using execute_webapi to modify metadata\n" +
-            "- Publishing already-published changes is harmless (idempotent)")]
+            "- Idempotent — publishing already-published changes is harmless")]
         public CallToolResult publish_customizations(
             [Description(
                 "Comma-separated entity logical names to publish (e.g., 'account,contact,lead'). " +

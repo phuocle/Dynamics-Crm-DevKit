@@ -40,84 +40,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(
-            "List and inspect Power Automate cloud flows (category=5 in the workflow table) " +
-            "and their run history from the flowsession table.\n\n" +
+            "List and inspect Power Automate cloud flows (category=5) and their run history from flowsession.\n\n" +
 
             "THREE MODES:\n" +
             "- flow_id EMPTY + action='list': list all cloud flows matching filters\n" +
             "- flow_id PROVIDED + action='list': detail for a single flow + last 5 runs\n" +
             "- flow_id PROVIDED + action='runs': extended run history with filtering\n\n" +
 
-            "PARAMETERS:\n" +
-            "- flow_id: GUID of a specific cloud flow. When provided with action='list': shows detail + recent runs. " +
-            "When provided with action='runs': shows extended run history. When empty: list mode.\n" +
-            "- action: 'list' (default) or 'runs'. 'runs' requires flow_id.\n" +
-            "- name_filter: Filter flows by name (contains match). Only used in list mode.\n" +
-            "- owner_filter: Filter by owner display name (contains match). Only used in list mode.\n" +
-            "- status: 'active' (default), 'draft', 'suspended', or 'all'.\n" +
-            "- status_filter: For runs mode: 'succeeded', 'failed', 'running', 'cancelled'. Empty = all.\n" +
-            "- minutes_ago: For runs mode: return runs from last N minutes. Default: 1440 (24h). Max: 43200 (30 days).\n" +
-            "- max_records: Maximum results (1-250, default 50).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: TSV table of flows with name, status, owner, isManaged, modifiedOn\n" +
-            "- Detail mode: Key-value metadata + last 5 runs table\n" +
-            "- Runs mode: Extended run history table with summary counts\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- 'List all active Power Automate cloud flows'\n" +
-            "- 'Show details of a specific cloud flow'\n" +
-            "- 'What flows failed in the last 24 hours?' -> action='runs' + status_filter='failed'\n" +
-            "- 'Show run history for flow X' -> action='runs' + flow_id\n" +
-            "- 'Which flows are owned by John?' -> owner_filter='John'\n" +
-            "- 'Are there any suspended flows?' -> status='suspended'\n\n" +
-
-            "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_classic_workflows: classic workflows only (category=0) -- use get_cloud_flows for cloud flows (category=5)\n" +
-            "- get_business_rules: business rules only (category=2) -- no overlap\n" +
-            "- get_audit_history: audit trail (field-level changes) -- different from flow run history\n\n" +
-
             "TIPS:\n" +
-            "- Cloud flows are stored in the 'workflow' entity with category=5\n" +
-            "- Run history is stored in the 'flowsession' entity\n" +
-            "- Only definition records (type=1) are returned, not activations or templates\n" +
-            "- Detail mode automatically includes the last 5 runs for quick overview")]
+            "- Run history in 'flowsession' entity. Only definition records (type=1) returned\n" +
+            "- Use get_classic_workflows for category=0 workflows")]
         public CallToolResult get_cloud_flows(
-            [Description(
-                "GUID of a specific cloud flow. When provided with action='list': shows detail + last 5 runs. " +
-                "When provided with action='runs': shows extended run history. " +
-                "When empty: list mode. Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
-            )] string flow_id = "",
-            [Description(
-                "'list' (default) or 'runs'. " +
-                "'list' with empty flow_id = list all flows. " +
-                "'list' with flow_id = detail for one flow + last 5 runs. " +
-                "'runs' requires flow_id = extended run history with filtering."
-            )] string action = "list",
-            [Description(
-                "Filter flows by name (contains match). " +
-                "Only used in list mode. Example: 'Sync Accounts'."
-            )] string name_filter = "",
-            [Description(
-                "Filter by owner display name (contains match). " +
-                "Only used in list mode. Example: 'John Smith'."
-            )] string owner_filter = "",
-            [Description(
-                "Filter by flow status: 'active' (on), 'draft' (off), 'suspended', or 'all'. " +
-                "Default: 'active'."
-            )] string status = "active",
-            [Description(
-                "For runs mode: filter by run status. " +
-                "Values: 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', 'suspended'. " +
-                "Empty = all statuses."
-            )] string status_filter = "",
-            [Description(
-                "For runs mode: return runs from the last N minutes. " +
-                "Default: 1440 (24 hours). Max: 43200 (30 days)."
-            )] int minutes_ago = 1440,
-            [Description(
-                "Maximum results to return (1-250). Default: 50."
-            )] int max_records = 50)
+            [Description("Flow GUID. Empty = list mode. With action='list': detail + runs. With action='runs': run history.")] string flow_id = "",
+            [Description("'list' (default) or 'runs'. 'runs' requires flow_id.")] string action = "list",
+            [Description("Filter by name (contains). List mode only.")] string name_filter = "",
+            [Description("Filter by owner name (contains). List mode only.")] string owner_filter = "",
+            [Description("'active' (default), 'draft', 'suspended', or 'all'.")] string status = "active",
+            [Description("For runs: filter by status ('succeeded','failed','running','cancelled'). Empty = all.")] string status_filter = "",
+            [Description("For runs: last N minutes. Default: 1440 (24h). Max: 43200.")] int minutes_ago = 1440,
+            [Description("Max results (1-250). Default: 50.")] int max_records = 50)
         {
             var normalizedAction = (action ?? "list").Trim().ToLowerInvariant();
             if (normalizedAction != "list" && normalizedAction != "runs")

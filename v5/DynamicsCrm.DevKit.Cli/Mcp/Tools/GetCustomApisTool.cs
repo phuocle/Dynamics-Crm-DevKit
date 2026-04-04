@@ -60,66 +60,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
-            "Retrieve Custom API definitions from Dataverse. Custom APIs are the modern replacement " +
-            "for Custom Actions, with richer metadata (bound/unbound, private/public, plugin binding, " +
-            "typed request/response parameters).\n\n" +
+            "Retrieve Custom API definitions from Dataverse. Modern replacement for Custom Actions " +
+            "with richer metadata (bound/unbound, private/public, plugin binding, typed parameters).\n\n" +
 
             "TWO MODES:\n" +
-            "- If api_name is EMPTY: list all Custom APIs matching filters with summary metadata\n" +
-            "- If api_name is PROVIDED: get full detail for a single Custom API including " +
-            "request parameters, response properties, and plugin binding\n\n" +
-
-            "PARAMETERS:\n" +
-            "- api_name: Unique name of a specific Custom API for full detail. Leave empty to list.\n" +
-            "- entity_name: Filter by bound entity logical name. Empty + no api_name = list all.\n" +
-            "- include_microsoft: Include Microsoft-provided APIs (msdyn_, mspp_, etc.). Default false.\n" +
-            "- status: 'active' (default), 'inactive', or 'all'.\n" +
-            "- max_records: Maximum results in list mode (1-500, default 100).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: TSV table of APIs with name, boundTo, isFunction, pluginType, processingType, isPrivate\n" +
-            "- Detail mode: Key-value metadata + request parameters table + response properties table\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- When you need to discover what Custom APIs exist in the environment\n" +
-            "- When you need to know the request parameters or response properties of a Custom API\n" +
-            "- When checking which Custom APIs are bound to a specific entity\n" +
-            "- When investigating Custom API plugin bindings\n" +
-            "- When get_sdk_messages shows a Custom Action name but you need full parameter details\n\n" +
-
-            "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_sdk_messages: returns Custom API names only -- use get_custom_apis for full detail\n" +
-            "- execute_fetchxml: can query customapi entity directly but requires knowledge of " +
-            "3 joined entities and type value mappings\n\n" +
+            "- api_name EMPTY: list all Custom APIs matching filters\n" +
+            "- api_name PROVIDED: full detail including request parameters, response properties, plugin binding\n\n" +
 
             "TIPS:\n" +
-            "- By default, Microsoft-provided APIs are excluded (set include_microsoft=true to see them)\n" +
-            "- A Custom API with isFunction=true is called via GET (no side effects); " +
-            "isFunction=false is an Action called via POST\n" +
-            "- Custom APIs without a pluginType have no server-side logic (useful for client-only flows)")]
+            "- Microsoft APIs excluded by default (set include_microsoft=true to see them)\n" +
+            "- isFunction=true → GET (no side effects); isFunction=false → POST Action")]
         public CallToolResult get_custom_apis(
-            [Description(
-                "Unique name of a specific Custom API to get full detail " +
-                "(parameters + response properties + plugin binding). " +
-                "Leave empty to list all Custom APIs matching filters. " +
-                "Examples: 'v4_AccountCustomApi', 'new_ProcessOrder'."
-            )] string api_name = "",
-            [Description(
-                "Filter by bound entity logical name (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead'. " +
-                "Leave empty to include all binding types (global + entity-bound). " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name = "",
-            [Description(
-                "Include Microsoft-provided APIs (prefixed msdyn_, mspp_, etc.). " +
-                "Default false to reduce noise -- production environments can have 200+ Microsoft APIs."
-            )] bool include_microsoft = false,
-            [Description(
-                "Filter by status: 'active' (default), 'inactive', or 'all'."
-            )] string status = "active",
-            [Description(
-                "Maximum results in list mode (1-500). Default: 100. Ignored in detail mode."
-            )] int max_records = 100)
+            [Description("Unique name for full detail. Empty = list all.")] string api_name = "",
+            [Description("Filter by bound entity logical name (e.g., 'account'). Empty = all.")] string entity_name = "",
+            [Description("Include Microsoft APIs (msdyn_, mspp_). Default: false.")] bool include_microsoft = false,
+            [Description("'active' (default), 'inactive', or 'all'.")] string status = "active",
+            [Description("Max results in list mode (1-500). Default: 100.")] int max_records = 100)
         {
             if (!string.IsNullOrWhiteSpace(status))
             {

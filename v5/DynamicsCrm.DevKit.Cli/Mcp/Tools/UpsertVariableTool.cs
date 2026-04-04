@@ -31,92 +31,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Create or update a Dataverse environment variable (definition + current value) in a single call.\n\n" +
 
             "BEHAVIOR:\n" +
-            "- Queries environmentvariabledefinition by schema name\n" +
-            "- If not found: CREATES a new definition (requires display_name and type)\n" +
-            "- If found: UPDATES the definition with any provided fields (display_name, default_value, description)\n" +
-            "- If value is provided: creates or updates the environmentvariablevalue record\n" +
-            "- If clear_value is true: deletes the value record (reverts to default)\n\n" +
-
-            "PARAMETERS:\n" +
-            "- variable_name (required): Schema name with publisher prefix (e.g., 'new_ApiEndpoint')\n" +
-            "- display_name: Display name. Required when creating a new variable.\n" +
-            "- type: Variable type: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'. Required on create.\n" +
-            "- default_value: Default value for the definition.\n" +
-            "- value: Current value override. Creates or updates the value record.\n" +
-            "- clear_value: Set true to delete the current value record (reverts to default). Mutually exclusive with value.\n" +
-            "- description: Variable description.\n" +
-            "- solution_name: Solution to add the definition to (create only).\n" +
-            "- auto_publish: Publish after changes (default: false).\n\n" +
-
-            "RETURNS:\n" +
-            "- Action performed (created/updated)\n" +
-            "- Variable name, type, display name\n" +
-            "- Default value and current value\n" +
-            "- Whether value was cleared\n" +
-            "- Solution and publish status\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- To create a new environment variable with a specific type and value\n" +
-            "- To update the current value of an existing environment variable\n" +
-            "- To change the default value of an environment variable\n" +
-            "- To clear the current value (revert to default)\n" +
-            "- To set up environment-specific configuration (API endpoints, feature flags)\n\n" +
-
-            "EXAMPLES:\n" +
-            "Create: variable_name='new_ApiEndpoint', display_name='API Endpoint', type='string', value='https://api.example.com'\n" +
-            "Update value: variable_name='new_ApiEndpoint', value='https://api-v2.example.com'\n" +
-            "Clear value: variable_name='new_ApiEndpoint', clear_value=true\n" +
-            "Create JSON: variable_name='new_FeatureFlags', display_name='Feature Flags', type='json', default_value='{\"darkMode\": false}'\n\n" +
+            "- If not found: CREATES new definition (requires display_name and type)\n" +
+            "- If found: UPDATES definition with provided fields\n" +
+            "- If value provided: creates/updates the environmentvariablevalue record\n" +
+            "- If clear_value=true: deletes the value record (reverts to default)\n\n" +
 
             "TIPS:\n" +
-            "- Use get_variables first to check if a variable already exists\n" +
-            "- Type cannot be changed after creation (string, number, boolean, json, datasource, secret)\n" +
-            "- The current value overrides the default value; clearing it reverts to default\n" +
-            "- Environment variables typically do not require publishing\n" +
-            "- Use execute_webapi to delete a variable definition (this tool only creates/updates)")]
+            "- Type cannot be changed after creation\n" +
+            "- Environment variables typically do not require publishing")]
         public CallToolResult upsert_variable(
-            [Description(
-                "Schema name with publisher prefix (e.g., 'new_ApiEndpoint', 'cr_MaxRetries'). " +
-                "Used to find or create the definition. " +
-                "If unsure, use get_variables to check existing variables."
-            )] string variable_name,
-            [Description(
-                "Display name shown in the UI. " +
-                "Required when creating a new variable. " +
-                "On update, only applied if provided (non-empty)."
-            )] string display_name = "",
-            [Description(
-                "Variable type: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'. " +
-                "Required when creating a new variable. " +
-                "Ignored on update (type cannot be changed after creation)."
-            )] string type = "",
-            [Description(
-                "Default value for the definition. " +
-                "On create: sets the initial default. " +
-                "On update: changes the default value if provided."
-            )] string default_value = "",
-            [Description(
-                "Current value override. " +
-                "If provided, creates or updates the environmentvariablevalue record. " +
-                "If empty, leaves the current value unchanged (does NOT clear it). " +
-                "Mutually exclusive with clear_value."
-            )] string value = "",
-            [Description(
-                "Set to true to delete the current value record, reverting to the default value. " +
-                "Mutually exclusive with value. Default: false."
-            )] bool clear_value = false,
-            [Description(
-                "Variable description. Optional."
-            )] string description = "",
-            [Description(
-                "Solution unique name to add the definition to (create only). " +
-                "Leave empty for default solution. " +
-                "Use get_solution_components to find valid solution names."
-            )] string solution_name = "",
-            [Description(
-                "Publish after changes. Default: false. " +
-                "Environment variables typically do not require publishing."
-            )] bool auto_publish = false)
+            [Description("Schema name with publisher prefix (e.g., 'new_ApiEndpoint').")] string variable_name,
+            [Description("Display name. Required on create.")] string display_name = "",
+            [Description("Type: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'. Required on create, ignored on update.")] string type = "",
+            [Description("Default value for the definition.")] string default_value = "",
+            [Description("Current value override. Creates/updates the value record. Mutually exclusive with clear_value.")] string value = "",
+            [Description("Delete current value record (reverts to default). Mutually exclusive with value.")] bool clear_value = false,
+            [Description("Variable description.")] string description = "",
+            [Description("Solution to add definition to (create only).")] string solution_name = "",
+            [Description("Publish after changes. Default: false.")] bool auto_publish = false)
         {
             if (string.IsNullOrWhiteSpace(variable_name))
                 return ErrorResult("Error: variable_name is required.");

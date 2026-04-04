@@ -30,27 +30,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "List or get Dataverse environment variables (read-only).\n\n" +
 
             "TWO MODES:\n" +
-            "- If variable_name is EMPTY: list all environment variables with name, type, default value, current value\n" +
-            "- If variable_name is PROVIDED: get detailed info for a single variable\n\n" +
-
-            "PARAMETERS:\n" +
-            "- variable_name: Schema name of the environment variable definition. Leave empty to list all.\n" +
-            "- solution_name: Filter by solution (list mode only).\n" +
-            "- max_records: Max variables for list mode (default 50).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: TSV table of variables with name, type, default value, current value\n" +
-            "- Detail mode: Key-value details of a single variable\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- To check environment-specific configuration\n" +
-            "- To verify connection strings or API endpoints between environments\n" +
-            "- When debugging flows or plugins that use environment variables\n\n" +
+            "- variable_name EMPTY: list all variables with name, type, default/current value\n" +
+            "- variable_name PROVIDED: detail for a single variable\n\n" +
 
             "TIPS:\n" +
-            "- Environment variables have a default value and an optional current value\n" +
-            "- The current value overrides the default value\n" +
-            "- This tool is read-only -- to update a variable value, use a separate write tool")]
+            "- Current value overrides default value\n" +
+            "- Read-only — use upsert_variable to update values")]
         public CallToolResult get_variables(
             [Description(
                 "Schema name of the environment variable definition. " +

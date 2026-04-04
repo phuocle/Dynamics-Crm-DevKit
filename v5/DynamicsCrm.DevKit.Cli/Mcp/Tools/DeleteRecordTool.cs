@@ -24,31 +24,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Delete a record from a Dataverse table by its GUID.\n\n" +
 
-            "PARAMETERS:\n" +
-            "- entity_name: lowercase logical name of the table\n" +
-            "- record_id: GUID of the record to delete\n\n" +
-
-            "EXAMPLE:\n" +
-            "entity_name: \"account\"\n" +
-            "record_id: \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\"\n\n" +
-
-            "WARNING: This operation is PERMANENT and cannot be undone. " +
-            "Make sure you have the correct record_id before deleting.\n\n" +
+            "WARNING: PERMANENT and cannot be undone. Verify the record with execute_fetchxml or get_record first.\n\n" +
 
             "TIPS:\n" +
-            "- Use execute_fetchxml or get_record to verify the record exists and confirm it is the right one before deleting\n" +
-            "- Some records may fail to delete due to dependencies (child records, required lookups, etc.)\n" +
-            "- Deleting a parent record may cascade-delete child records depending on relationship configuration")]
+            "- Some records may fail to delete due to dependencies (child records, required lookups)\n" +
+            "- Deleting a parent record may cascade-delete child records depending on relationship config")]
         public CallToolResult delete_record(
             [Description(
-                "Logical name of the entity/table (lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity'. " +
-                "If unsure, call get_metadata_entities first."
+                "Entity logical name (lowercase). Use get_metadata_entities to discover names."
             )] string entity_name,
             [Description(
-                "GUID of the record to delete. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use execute_fetchxml or get_record to find the correct ID."
+                "GUID of the record to delete."
             )] string record_id)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

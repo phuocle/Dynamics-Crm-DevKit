@@ -40,77 +40,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(
             "List and inspect Business Process Flows (BPFs) and their stages. " +
-            "BPFs guide users through multi-stage business processes in Dynamics 365. " +
-            "They are stored in the workflow entity with category=4 and each BPF auto-creates its own Dataverse entity.\n\n" +
+            "Stored in workflow entity with category=4. Each BPF auto-creates its own Dataverse entity.\n\n" +
 
             "TWO MODES:\n" +
             "- bpf_id EMPTY (and bpf_name matches 0 or 2+): list all BPFs matching filters\n" +
-            "- bpf_id PROVIDED (or bpf_name matches exactly 1): detail for a single BPF with all stages\n\n" +
-
-            "PARAMETERS:\n" +
-            "- bpf_id: GUID of a specific BPF workflow. When provided: shows full detail including stages.\n" +
-            "- bpf_name: Filter by BPF name (contains match). If exactly 1 match: returns detail automatically.\n" +
-            "- entity_name: Filter BPFs by primary entity logical name (e.g., 'lead', 'opportunity').\n" +
-            "- status: 'active' (default), 'draft', or 'all'.\n" +
-            "- include_stages: In list mode: also include stages for each BPF (more queries, richer output). " +
-            "In detail mode: always included.\n" +
-            "- max_records: Maximum BPFs to return (1-250, default 50).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: TSV table of BPFs with name, primaryEntity, uniqueName, stageCount, status, isManaged, modifiedOn\n" +
-            "- Detail mode: Key-value metadata + ordered stages table (stageName, stageCategory, primaryEntity)\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- 'What Business Process Flows are available in this environment?'\n" +
-            "- 'Show me the stages of the Lead to Opportunity Sales Process'\n" +
-            "- 'Which BPFs are configured for the opportunity entity?' -> entity_name='opportunity'\n" +
-            "- 'Are there any draft/inactive BPFs?' -> status='draft'\n" +
-            "- 'What entities does a BPF span?' -> detail mode shows primaryEntity per stage\n" +
-            "- 'List all BPFs with their stages' -> include_stages=true\n\n" +
-
-            "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_classic_workflows: classic workflows only (category=0) -- use get_bpfs for BPFs (category=4)\n" +
-            "- get_business_rules: business rules only (category=2) -- no overlap\n" +
-            "- get_cloud_flows: cloud flows only (category=5) -- no overlap\n" +
-            "- get_metadata_entities: BPFs auto-create entities -- can verify with this tool\n\n" +
+            "- bpf_id PROVIDED (or bpf_name matches exactly 1): detail with all stages\n\n" +
 
             "TIPS:\n" +
-            "- BPFs can span multiple entities (e.g., Lead -> Opportunity). Each stage has its own primaryEntity.\n" +
-            "- The uniqueName of a BPF is also the logical name of its auto-created Dataverse entity.\n" +
-            "- businessProcessType: 0=Business Flow (standard), 1=Task Flow (mobile).\n" +
-            "- Stages are ordered by stagecategory value (0=Qualify -> 7=Approval).\n" +
-            "- Together with get_classic_workflows (category=0), get_business_rules (category=2), get_cloud_flows (category=5), " +
-            "this tool provides full coverage of the workflow entity categories.")]
+            "- BPFs can span multiple entities (e.g., Lead → Opportunity). Each stage has its own primaryEntity\n" +
+            "- The uniqueName is also the logical name of the BPF's auto-created entity")]
         public CallToolResult get_bpfs(
-            [Description(
-                "GUID of a specific BPF workflow. When provided: shows full detail including stages. " +
-                "When empty: list mode. Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use list mode first to discover BPF IDs."
-            )] string bpf_id = "",
-            [Description(
-                "Filter by BPF name (contains match). " +
-                "If exactly 1 BPF matches, returns its full detail automatically. " +
-                "If multiple BPFs match, returns the list for disambiguation. " +
-                "Ignored if bpf_id is provided. Examples: 'Lead to Opportunity', 'Case Resolution'."
-            )] string bpf_name = "",
-            [Description(
-                "Filter BPFs by primary entity logical name (always lowercase). " +
-                "Examples: 'lead', 'opportunity', 'incident', 'contact'. " +
-                "Leave empty to include all entities. " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name = "",
-            [Description(
-                "Filter by status: 'active' (activated BPFs), 'draft' (deactivated/not yet activated), or 'all'. " +
-                "Default: 'active'."
-            )] string status = "active",
-            [Description(
-                "In list mode: also include stages for each BPF (requires additional queries per BPF). " +
-                "In detail mode: stages are always included regardless of this setting. " +
-                "Default: false."
-            )] bool include_stages = false,
-            [Description(
-                "Maximum number of BPFs to return (1-250). Default: 50."
-            )] int max_records = 50)
+            [Description("BPF GUID for full detail. Empty = list mode.")] string bpf_id = "",
+            [Description("Filter by name (contains). If exactly 1 match, returns detail.")] string bpf_name = "",
+            [Description("Filter by primary entity (e.g., 'lead', 'opportunity').")] string entity_name = "",
+            [Description("'active' (default), 'draft', or 'all'.")] string status = "active",
+            [Description("Include stages in list mode (default: false). Always included in detail.")] bool include_stages = false,
+            [Description("Max BPFs (1-250). Default: 50.")] int max_records = 50)
         {
             if (!string.IsNullOrWhiteSpace(status))
             {

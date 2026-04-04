@@ -23,72 +23,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_roles", Title = "List security roles and their privileges",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "List security roles and their privileges for Dataverse entities. " +
-            "Shows what CRUD and other access rights each role has at which depth.\n\n" +
+            "List security roles and their CRUD privileges with access depth.\n\n" +
 
             "THREE MODES:\n" +
-            "- If user_id is PROVIDED: show which roles a specific user has, and optionally their effective privileges for an entity\n" +
-            "- If role_id is PROVIDED: show all privileges for that role, grouped by entity\n" +
-            "- If both are EMPTY: list all root security roles with basic info\n\n" +
-
-            "PARAMETERS:\n" +
-            "- user_id: Email or GUID of a user to check their assigned roles. " +
-            "When combined with entity_name, shows effective privileges across all roles.\n" +
-            "- role_id: GUID of a specific role for privilege details. Leave empty to list all roles.\n" +
-            "- role_name: Filter roles by name (contains match, e.g., 'Sales'). Only used in list mode.\n" +
-            "- business_unit_id: Filter by business unit GUID. Leave empty for root BU roles.\n" +
-            "- entity_name: In detail/user mode, show only privileges for this entity (e.g., 'account').\n" +
-            "- max_records: Max roles in list mode (default: 50, max: 250).\n\n" +
-
-            "RETURNS:\n" +
-            "- User mode: User info + assigned roles table + effective entity privileges (if entity_name provided)\n" +
-            "- Detail mode: All privileges grouped by entity with access depth (User/BU/Parent:Child/Org)\n" +
-            "- List mode: Table of roles with ID, name, managed status, customizable flag\n\n" +
+            "- user_id PROVIDED: user's assigned roles + effective privileges (combine with entity_name)\n" +
+            "- role_id PROVIDED: all privileges for that role, grouped by entity\n" +
+            "- Both EMPTY: list all root security roles\n\n" +
 
             "WHEN TO USE:\n" +
-            "- When a user reports 'access denied' -- pass their email + entity_name to see if they have the right\n" +
-            "- To check what roles a specific user has (pass email as user_id)\n" +
-            "- To understand what a role grants (pass role_id)\n" +
-            "- Before creating a new entity (need to set up role permissions)\n" +
-            "- To compare security roles (run twice with different role_ids)\n" +
-            "- When auditing security configuration\n\n" +
+            "- Debug 'access denied': pass user email + entity_name\n" +
+            "- Audit what a role grants, or compare roles\n\n" +
 
             "TIPS:\n" +
-            "- Depth levels: User < BusinessUnit < Parent:ChildBU < Organization\n" +
-            "- Only root roles are listed (parentroleid=null), not inherited BU copies\n" +
-            "- Use entity_name filter in detail mode to focus on one entity's privileges\n" +
-            "- System Administrator has all privileges at Organization depth\n" +
-            "- Use whoami to find the current user's security roles first")]
+            "- Depth: User < BU < Parent:ChildBU < Org\n" +
+            "- Only root roles listed (not inherited BU copies)")]
         public string get_roles(
-            [Description(
-                "Email address or GUID of a user to check their assigned security roles. " +
-                "Examples: 'john@contoso.com', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'. " +
-                "When combined with entity_name, also shows effective privileges for that entity across all user's roles."
+            [Description("Email or GUID of a user. Combine with entity_name for effective privileges."
             )] string user_id = "",
-            [Description(
-                "GUID of a specific security role to get privilege details. " +
-                "Leave empty to list all roles. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Use list mode first to discover role IDs."
+            [Description("GUID of a role for privilege details. Empty = list all roles."
             )] string role_id = "",
-            [Description(
-                "Filter roles by name (contains match). " +
-                "Examples: 'Sales', 'Admin', 'Custom'. " +
-                "Only used in list mode (when role_id is empty)."
+            [Description("Filter roles by name (contains match). List mode only."
             )] string role_name = "",
-            [Description(
-                "Filter by business unit GUID. " +
-                "Leave empty to show only root business unit roles. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'."
+            [Description("Filter by business unit GUID. Empty = root BU roles."
             )] string business_unit_id = "",
-            [Description(
-                "In detail/user mode, filter privileges to only show those for a specific entity. " +
-                "Examples: 'account', 'contact', 'lead'. " +
-                "Leave empty to show all entity privileges."
+            [Description("Filter privileges to a specific entity (e.g., 'account'). Detail/user mode only."
             )] string entity_name = "",
-            [Description(
-                "Maximum number of roles to return in list mode. " +
-                "Default: 50. Max: 250."
+            [Description("Max roles in list mode. Default: 50, max: 250."
             )] int max_records = 50)
         {
             try

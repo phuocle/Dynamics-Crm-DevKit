@@ -24,56 +24,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "execute_fetchxml", Title = "Query data using FetchXML",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Execute a FetchXML query against Microsoft Dataverse and return results as a markdown table. " +
-            "Supports auto-paging to retrieve large datasets. Max 5000 records per call.\n\n" +
+            "Execute a FetchXML query against Dataverse. Returns markdown table. Max 5000 records. Supports auto-paging.\n\n" +
 
             "FETCHXML STRUCTURE:\n" +
-            "- Root: <fetch [distinct='true'] [aggregate='true']>\n" +
-            "- Entity: <entity name='logical_name'> (exactly one, use logical name like 'account', not 'Account')\n" +
-            "- Columns: <attribute name='col'/> for each column. Omit all <attribute> to get all columns.\n" +
-            "- Order: <order attribute='col' [descending='true']/>\n" +
-            "- DO NOT use top/count/page attributes in <fetch> — use the max_records parameter instead\n\n" +
+            "- <fetch [distinct] [aggregate]> → <entity name='logical_name'> → <attribute>, <filter>, <order>, <link-entity>\n" +
+            "- DO NOT use top/count/page in <fetch> — use max_records parameter instead\n" +
+            "- Operators: eq, ne, gt, ge, lt, le, like (%), null, not-null, in, between, today, last-x-days, etc.\n" +
+            "- Joins: <link-entity name='entity' from='col' to='col' link-type='inner|outer' [alias='a']>\n" +
+            "- Aggregation: aggregate='true' on <fetch>, then count/sum/avg/min/max with alias + groupby\n\n" +
 
-            "FILTERING:\n" +
-            "- <filter [type='and|or']> wraps <condition> elements\n" +
-            "- <condition attribute='col' operator='op' [value='val']/>\n" +
-            "- Operators: eq, ne, gt, ge, lt, le, like (use % wildcard), not-like, begins-with, ends-with, " +
-            "in, not-in, between, not-between, null, not-null, " +
-            "today, yesterday, tomorrow, last-x-days, next-x-days, last-x-months, this-year, last-year\n" +
-            "- For 'in' operator: <condition attribute='col' operator='in'><value>v1</value><value>v2</value></condition>\n\n" +
-
-            "JOINS (link-entity):\n" +
-            "- <link-entity name='related_entity' from='related_col' to='this_col' link-type='inner|outer' [alias='a']>\n" +
-            "- from = column on the related (linked) entity, to = column on the parent entity\n" +
-            "- Use get_metadata_entities to find correct relationship columns\n" +
-            "- For N:N joins, use the intersectEntityName as an intermediate link-entity\n\n" +
-
-            "AGGREGATION (set aggregate='true' on <fetch>):\n" +
-            "- <attribute name='col' alias='alias_name' aggregate='count|countcolumn|sum|avg|min|max'/>\n" +
-            "- For counting all rows: <attribute name='primaryid' alias='total' aggregate='count'/>\n" +
-            "- Group by: <attribute name='col' alias='alias_name' groupby='true'/>\n" +
-            "- Distinct count: <attribute name='col' alias='alias_name' aggregate='countcolumn' distinct='true'/>\n\n" +
-
-            "IMPORTANT RULES:\n" +
-            "- DO NOT use top='N' in FetchXML — it will be stripped. Use the max_records parameter to limit results\n" +
-            "- Always use entity logical names (lowercase): 'account' not 'Account', 'contact' not 'Contact'\n" +
-            "- Always use attribute logical names (lowercase): 'accountid' not 'AccountId'\n" +
-            "- If unsure of entity/attribute names, call get_metadata_entities first\n" +
-            "- If query fails, read the error message, fix the FetchXML, and retry\n\n" +
-
-            "EXAMPLES:\n" +
-            "Count accounts: <fetch aggregate='true'><entity name='account'><attribute name='accountid' alias='count' aggregate='count'/></entity></fetch>\n" +
-            "Top 5 contacts (use max_records=5): <fetch><entity name='contact'><attribute name='fullname'/><order attribute='fullname'/></entity></fetch>\n" +
-            "Active accounts: <fetch><entity name='account'><attribute name='name'/><filter><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>\n\n" +
-
-            "TIPS:\n" +
-            "- For advanced FetchXML syntax or edge cases, read the resource schema://fetchxml for the full XSD schema")]
+            "RULES:\n" +
+            "- Use lowercase logical names. Use get_metadata_entities if unsure\n" +
+            "- For advanced syntax, read schema://fetchxml")]
         public string execute_fetchxml(
-            [Description(
-                "The FetchXML query string. Must be valid XML starting with <fetch> root element. " +
-                "Use single quotes for XML attribute values. " +
-                "Entity and attribute names must be logical names (lowercase). " +
-                "Example: <fetch><entity name='account'><attribute name='name'/></entity></fetch>"
+            [Description("FetchXML query starting with <fetch>. Use lowercase logical names."
             )] string fetchxml,
             [Description(
                 "Maximum records to return. Default: 5000. Capped at 5000. " +

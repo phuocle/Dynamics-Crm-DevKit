@@ -25,36 +25,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve a single Dataverse record by entity name and record ID. " +
-            "Returns the record's fields as key-value pairs.\n\n" +
-
-            "RETURNS:\n" +
-            "- Entity type and record ID header\n" +
-            "- All requested columns (or all columns if none specified) as key-value pairs " +
-            "(field: value), with formatted values for lookups, option sets, money, dates, etc.\n\n" +
+            "Returns fields as key-value pairs with formatted values for lookups, option sets, money, dates.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- When you have a record ID from a previous query and need to see its full details\n" +
-            "- When you need to inspect a specific record without writing FetchXML\n" +
-            "- When you need to verify a record exists before performing operations on it\n" +
-            "- After execute_fetchxml returns IDs, use this to get complete field values for a specific record\n\n" +
-
-            "TIP: Use get_metadata_entities first to discover available columns for the entity.")]
+            "- Inspect a specific record without writing FetchXML\n" +
+            "- Get full field values after execute_fetchxml returns IDs\n" +
+            "- Verify a record exists before performing operations on it")]
         public string get_record(
             [Description(
-                "The logical name of the entity (always lowercase). " +
-                "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +
-                "If unsure, call get_metadata_entities first."
+                "Entity logical name (lowercase). Use get_metadata_entities to discover names."
             )] string entity_name,
             [Description(
-                "The GUID of the record to retrieve. " +
-                "Format: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'. " +
-                "Typically obtained from a previous execute_fetchxml result or from the '_id' column."
+                "GUID of the record to retrieve."
             )] string record_id,
             [Description(
-                "Comma-separated list of column logical names to retrieve. " +
-                "Examples: 'name,accountnumber,primarycontactid' or 'fullname,emailaddress1,telephone1'. " +
-                "Leave empty to retrieve all columns. " +
-                "Use get_metadata_entities to discover available column names."
+                "Comma-separated column logical names. Leave empty for all columns. " +
+                "Use get_metadata_entities to discover column names."
             )] string columns = "")
         {
             if (string.IsNullOrWhiteSpace(entity_name))

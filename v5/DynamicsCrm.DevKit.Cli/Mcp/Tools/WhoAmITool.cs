@@ -29,25 +29,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Get the identity of the currently authenticated user, environment info, and access token.\n\n" +
 
-            "RETURNS:\n" +
-            "- UserId, FullName, DomainName, Email (the authenticated user)\n" +
-            "- BusinessUnitId (the user's business unit)\n" +
-            "- OrganizationId (the Dataverse organization)\n" +
-            "- Security Roles assigned to the user (name + roleId)\n" +
-            "- Environment URL, version, friendly name, unique name\n" +
-            "- TenantId, EnvironmentId\n" +
-            "- AccessToken (current OAuth bearer token, only when include_token=true)\n" +
-            "- Base language, base currency, fiscal settings, audit status\n" +
-            "- Warnings (if any sub-query failed, listed here instead of silently omitted)\n\n" +
+            "Returns: user (ID, name, email, roles), org (ID, URL, version, friendly name), " +
+            "tenant/environment IDs, base language, currency, fiscal settings, audit status.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- At the start of a session to confirm which user and environment you are connected to\n" +
-            "- When troubleshooting permission errors to check which security roles the user has\n" +
-            "- When you need the current user's ID for FetchXML filters (e.g. records owned by me)\n" +
-            "- To verify the connection is working before running other tools\n" +
-            "- When you need the Dataverse version for feature compatibility\n" +
-            "- When troubleshooting locale or currency issues\n" +
-            "- When you need the access token for direct Web API calls")]
+            "- Confirm which user and environment you are connected to\n" +
+            "- Check security roles when troubleshooting permission errors\n" +
+            "- Get current user's ID for FetchXML filters (e.g. records owned by me)")]
         public CallToolResult whoami(
             [Description(
                 "true: include the OAuth access token in the response (adds ~400 tokens). " +

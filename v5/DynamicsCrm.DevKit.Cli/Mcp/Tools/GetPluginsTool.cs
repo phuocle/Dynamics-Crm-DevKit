@@ -68,98 +68,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginsResult)),
         Description(
-            "List and inspect plugin assembly registrations, plugin types, and processing steps in Dataverse. " +
-            "Provides read-only discovery of all server-side plugin logic.\n\n" +
+            "List and inspect plugin assembly registrations, plugin types, and processing steps in Dataverse.\n\n" +
 
             "THREE MODES:\n" +
             "- No filters (or only assembly_name): list plugin assemblies with type counts\n" +
             "- assembly_name provided (single match): assembly detail with all types + steps + images\n" +
-            "- entity_name provided: all plugin steps registered on that entity across all assemblies\n\n" +
-
-            "PARAMETERS:\n" +
-            "- assembly_name: Filter by plugin assembly name (contains match). Shows types + steps for matching assemblies.\n" +
-            "- entity_name: Filter steps by entity logical name. Shows all plugin steps on this entity.\n" +
-            "- message_name: Filter steps by SDK message name (e.g., 'Create', 'Update', 'Delete').\n" +
-            "- type_name: Filter by plugin type name (contains match, e.g., 'AccountPlugin').\n" +
-            "- include_images: Include pre/post image details for each step (default: true).\n" +
-            "- include_config: Include unsecure/secure configuration values (default: false to avoid exposing sensitive data).\n" +
-            "- stage: Filter by stage: 'prevalidation', 'preoperation', 'postoperation', 'mainoperation'.\n" +
-            "- mode: Filter by execution mode: 'sync', 'async'.\n" +
-            "- active_only: Only return activated steps (default: true).\n" +
-            "- max_records: Maximum step results (1-500, default 100).\n\n" +
-
-            "RETURNS:\n" +
-            "- List mode: TSV table of assemblies with name, version, isolationMode, sourceType, typeCount, isManaged\n" +
-            "- Detail mode: Assembly info + plugin types table + steps table + images table\n" +
-            "- Entity mode: TSV table of steps with assembly, typeName, message, stage, mode, rank, filteringAttributes, status + summary\n\n" +
-
-            "WHEN TO USE:\n" +
-            "- 'What plugins are registered on the account entity?' -> entity_name='account'\n" +
-            "- 'Show me all plugin assemblies in this environment' -> no filters\n" +
-            "- 'What plugin steps fire on account Update?' -> entity_name='account', message_name='Update'\n" +
-            "- 'Show me the details of the Dev.DevKit.Plugins assembly' -> assembly_name='Dev.DevKit.Plugins'\n" +
-            "- 'Are there any disabled plugin steps on account?' -> entity_name='account', active_only=false\n" +
-            "- 'What pre-validation plugins exist for Create on contact?' -> entity_name='contact', message_name='Create', stage='prevalidation'\n" +
-            "- 'Which plugins run asynchronously on account?' -> entity_name='account', mode='async'\n\n" +
-
-            "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_sdk_messages: SDK message names only -- use get_plugins for step-level detail\n" +
-            "- get_classic_workflows: classic workflows (category=0) -- different automation type\n" +
-            "- get_plugin_trace_logs: plugin trace logs (execution output) -- debugging after execution, not registration discovery\n" +
-            "- get_custom_apis: Custom API definitions -- complementary, Custom API plugin bindings show as stage=MainOperation\n\n" +
+            "- entity_name provided: all plugin steps on that entity across all assemblies\n\n" +
 
             "TIPS:\n" +
-            "- Stage values: PreValidation (before validation), PreOperation (before DB write), PostOperation (after DB write), MainOperation (Custom API/DataProvider)\n" +
-            "- Always filters ishidden=false to exclude system assemblies\n" +
-            "- include_config defaults to false -- secure config values should not be casually exposed\n" +
-            "- Steps with stage=MainOperation are Custom API or DataProvider plugin bindings\n" +
-            "- Use get_metadata_entities first if unsure of entity logical name")]
+            "- Stage: PreValidation, PreOperation, PostOperation, MainOperation (Custom API/DataProvider)\n" +
+            "- include_config defaults to false — secure config should not be casually exposed")]
         public CallToolResult get_plugins(
-            [Description(
-                "Filter by plugin assembly name (contains match). " +
-                "When provided: shows all types + steps for matching assemblies. " +
-                "Examples: 'Dev.DevKit.Plugins', 'Contoso'. " +
-                "Leave empty to list all assemblies or use entity_name for entity-scoped steps."
-            )] string assembly_name = "",
-            [Description(
-                "Filter steps by entity logical name (always lowercase). " +
-                "Shows all plugin steps registered on this entity across all assemblies. " +
-                "Examples: 'account', 'contact', 'lead'. " +
-                "If unsure, call get_metadata_entities first."
-            )] string entity_name = "",
-            [Description(
-                "Filter steps by SDK message name. " +
-                "Examples: 'Create', 'Update', 'Delete', 'Retrieve', 'RetrieveMultiple'. " +
-                "Leave empty for all messages."
-            )] string message_name = "",
-            [Description(
-                "Filter by plugin type name (contains match). " +
-                "Examples: 'AccountPlugin', 'PreValidate'. " +
-                "Leave empty for all plugin types."
-            )] string type_name = "",
-            [Description(
-                "Include pre/post image details for each step. " +
-                "Default: true."
-            )] bool include_images = true,
-            [Description(
-                "Include unsecure/secure configuration values. " +
-                "Default: false to avoid exposing sensitive data."
-            )] bool include_config = false,
-            [Description(
-                "Filter by pipeline stage: 'prevalidation', 'preoperation', 'postoperation', 'mainoperation'. " +
-                "Leave empty for all stages."
-            )] string stage = "",
-            [Description(
-                "Filter by execution mode: 'sync' (synchronous) or 'async' (asynchronous). " +
-                "Leave empty for both."
-            )] string mode = "",
-            [Description(
-                "Only return activated steps. Default: true. " +
-                "Set to false to include disabled steps."
-            )] bool active_only = true,
-            [Description(
-                "Maximum step results to return (1-500). Default: 100."
-            )] int max_records = 100)
+            [Description("Filter by assembly name (contains). Empty = list all.")] string assembly_name = "",
+            [Description("Filter steps by entity (e.g., 'account'). Shows all steps on this entity.")] string entity_name = "",
+            [Description("Filter by SDK message (e.g., 'Create', 'Update', 'Delete').")] string message_name = "",
+            [Description("Filter by plugin type name (contains).")] string type_name = "",
+            [Description("Include pre/post images. Default: true.")] bool include_images = true,
+            [Description("Include config values. Default: false (security).")] bool include_config = false,
+            [Description("'prevalidation', 'preoperation', 'postoperation', 'mainoperation'. Empty = all.")] string stage = "",
+            [Description("'sync' or 'async'. Empty = both.")] string mode = "",
+            [Description("Only activated steps. Default: true.")] bool active_only = true,
+            [Description("Max steps (1-500). Default: 100.")] int max_records = 100)
         {
             if (!string.IsNullOrWhiteSpace(stage))
             {
