@@ -67,13 +67,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Activity entities inherit from activitypointer and have special behavior\n" +
             "- UserOwned entities support sharing, assigning, and team ownership\n" +
             "- OrgOwned entities are visible to all users (no row-level security)\n" +
-            "- Use get_components to find the solution unique name")]
+            "- Use get_solution_components to find the solution unique name")]
         public CallToolResult upsert_entity(
             [Description(
                 "Logical name with publisher prefix (always lowercase). " +
                 "Must contain an underscore separating the prefix from the name. " +
                 "Examples: 'new_project', 'cr_timeentry', 'msdyn_booking'. " +
-                "If unsure about the prefix, use get_components to find the solution publisher."
+                "If unsure about the prefix, use get_solution_components to find the solution publisher."
             )] string entity_name,
             [Description(
                 "Singular display name shown in the UI. " +
@@ -85,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string display_collection_name,
             [Description(
                 "Solution unique name to add the entity to. " +
-                "Use get_components to find valid solution names."
+                "Use get_solution_components to find valid solution names."
             )] string solution_name,
             [Description(
                 "Entity description. Optional."
@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"[Error] Cannot create entity\n" +
                     $"EntityName: {entity_name}\n" +
                     $"Message: Entity name must include a publisher prefix (e.g., 'new_project', 'cr_project')\n" +
-                    $"Tip: Check solution publisher prefix. Use get_components to find solution details.");
+                    $"Tip: Check solution publisher prefix. Use get_solution_components to find solution details.");
 
             var prefix = entity_name.Substring(0, underscoreIndex);
             var namePart = entity_name.Substring(underscoreIndex + 1);
@@ -347,7 +347,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult(
                         $"[Error] Solution '{solution_name}' not found\n" +
                         $"Message: {msg}\n" +
-                        $"Tip: Use get_components to find valid solution names");
+                        $"Tip: Use get_solution_components to find valid solution names");
                 }
 
                 return ErrorResult($"Error: Failed to create entity '{entity_name}'\nMessage: {msg}");

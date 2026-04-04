@@ -103,10 +103,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- 'Which plugins run asynchronously on account?' -> entity_name='account', mode='async'\n\n" +
 
             "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_messages: SDK message names only -- use get_plugins for step-level detail\n" +
-            "- get_workflows: classic workflows (category=0) -- different automation type\n" +
-            "- get_logs: plugin trace logs (execution output) -- debugging after execution, not registration discovery\n" +
-            "- get_apis: Custom API definitions -- complementary, Custom API plugin bindings show as stage=MainOperation\n\n" +
+            "- get_sdk_messages: SDK message names only -- use get_plugins for step-level detail\n" +
+            "- get_classic_workflows: classic workflows (category=0) -- different automation type\n" +
+            "- get_plugin_trace_logs: plugin trace logs (execution output) -- debugging after execution, not registration discovery\n" +
+            "- get_custom_apis: Custom API definitions -- complementary, Custom API plugin bindings show as stage=MainOperation\n\n" +
 
             "TIPS:\n" +
             "- Stage values: PreValidation (before validation), PreOperation (before DB write), PostOperation (after DB write), MainOperation (Custom API/DataProvider)\n" +

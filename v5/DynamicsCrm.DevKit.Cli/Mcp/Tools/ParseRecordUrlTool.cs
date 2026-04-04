@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "WHEN TO USE:\n" +
             "- When a user pastes a Dynamics 365 URL and you need to extract the entity name and record ID\n" +
-            "- Before calling get_record, get_logs, or other tools that need entity_name + record_id\n" +
+            "- Before calling get_record, get_plugin_trace_logs, or other tools that need entity_name + record_id\n" +
             "- When a user references a record by URL instead of by entity name + GUID\n\n" +
 
             "SUPPORTED URL FORMATS:\n" +

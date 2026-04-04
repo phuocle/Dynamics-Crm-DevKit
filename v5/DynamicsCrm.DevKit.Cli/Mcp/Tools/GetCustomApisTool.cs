@@ -14,11 +14,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetApisTool
+    public class GetCustomApisTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetApisTool(ServiceClient serviceClient)
+        public GetCustomApisTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [2] = "Sync and Async"
         };
 
-        [McpServerTool(Name = "get_apis", Title = "List and inspect Custom APIs in Dataverse",
+        [McpServerTool(Name = "get_custom_apis", Title = "List and inspect Custom APIs in Dataverse",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
@@ -85,10 +85,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- When you need to know the request parameters or response properties of a Custom API\n" +
             "- When checking which Custom APIs are bound to a specific entity\n" +
             "- When investigating Custom API plugin bindings\n" +
-            "- When get_messages shows a Custom Action name but you need full parameter details\n\n" +
+            "- When get_sdk_messages shows a Custom Action name but you need full parameter details\n\n" +
 
             "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_messages: returns Custom API names only -- use get_apis for full detail\n" +
+            "- get_sdk_messages: returns Custom API names only -- use get_custom_apis for full detail\n" +
             "- execute_fetchxml: can query customapi entity directly but requires knowledge of " +
             "3 joined entities and type value mappings\n\n" +
 
@@ -97,7 +97,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- A Custom API with isFunction=true is called via GET (no side effects); " +
             "isFunction=false is an Action called via POST\n" +
             "- Custom APIs without a pluginType have no server-side logic (useful for client-only flows)")]
-        public CallToolResult get_apis(
+        public CallToolResult get_custom_apis(
             [Description(
                 "Unique name of a specific Custom API to get full detail " +
                 "(parameters + response properties + plugin binding). " +

@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Always read the current form first with get_forms to understand the structure\n" +
             "- Read schema://formxml for the XSD schema reference\n" +
             "- Read docs://instructions_for_formxml for naming conventions and best practices\n" +
-            "- Set auto_publish=false when making multiple changes, then call publish once\n" +
+            "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
             "- Backup files are at: .devkit/backups/forms/{entity}_{formid}_{timestamp}.formxml.json")]
         public CallToolResult upsert_form(
             [Description(
@@ -142,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool backup = true,
             [Description(
                 "Publish the entity after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish once."
+                "Set false if batching multiple changes, then call publish_customizations once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

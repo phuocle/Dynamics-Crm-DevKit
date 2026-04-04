@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- For related entity columns, use <link-entity link-type='outer'> with a unique alias\n" +
             "- To hide a column from the grid but keep it in the query, add ishidden=\"1\" to the <cell>: " +
             "<cell name=\"statuscode\" width=\"100\" ishidden=\"1\" /> — useful for icon rendering, JS logic, or sort/filter support\n" +
-            "- Set auto_publish=false when making multiple changes, then call publish once\n" +
+            "- Set auto_publish=false when making multiple changes, then call publish_customizations once\n" +
             "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
         public CallToolResult upsert_view(
             [Description(
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool backup = true,
             [Description(
                 "Publish the entity after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish once."
+                "Set false if batching multiple changes, then call publish_customizations once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

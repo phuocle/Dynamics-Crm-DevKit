@@ -15,16 +15,16 @@ using System.Text;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetHistoriesTool
+    public class GetAuditHistoryTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetHistoriesTool(ServiceClient serviceClient)
+        public GetAuditHistoryTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_histories", Title = "Retrieve audit history for Dataverse records (who changed what, when)",
+        [McpServerTool(Name = "get_audit_history", Title = "Retrieve audit history for Dataverse records (who changed what, when)",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve audit history for Dataverse records. " +
@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use user_filter to find changes made by a specific user or integration account\n" +
             "- Use attribute_name to focus on a specific field's change history (detail mode only)\n" +
             "- Browse first (no record_id) to find records, then get detail (with record_id)")]
-        public string get_histories(
+        public string get_audit_history(
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Required when record_id is provided (detail mode). " +

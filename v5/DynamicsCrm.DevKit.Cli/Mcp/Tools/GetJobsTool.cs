@@ -91,13 +91,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- 'Are there any solution import jobs in progress?'\n\n" +
 
             "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_logs: plugin trace logs (ITracingService output) -- complementary, use both for async plugin debugging\n" +
-            "- get_workflows: classic workflow definitions -- definitions only, not execution results\n" +
-            "- get_flows: cloud flow runs (flowsession) -- cloud flows only, not classic workflows or plugins\n\n" +
+            "- get_plugin_trace_logs: plugin trace logs (ITracingService output) -- complementary, use both for async plugin debugging\n" +
+            "- get_classic_workflows: classic workflow definitions -- definitions only, not execution results\n" +
+            "- get_cloud_flows: cloud flow runs (flowsession) -- cloud flows only, not classic workflows or plugins\n\n" +
 
             "TIPS:\n" +
             "- Default status is 'failed' because the primary use case is debugging failures\n" +
-            "- For async plugin failures: use get_jobs for the error message + get_logs for trace output\n" +
+            "- For async plugin failures: use get_jobs for the error message + get_plugin_trace_logs for trace output\n" +
             "- The 'message' field (stack trace) is only shown in detail mode to save tokens\n" +
             "- System jobs can have millions of records -- always use time filters and max_records")]
         public CallToolResult get_jobs(

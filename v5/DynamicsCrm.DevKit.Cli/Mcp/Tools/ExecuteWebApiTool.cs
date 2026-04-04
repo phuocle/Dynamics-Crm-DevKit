@@ -46,8 +46,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- PATCH/PUT/DELETE sitemaps(...) → Use upsert_sitemap tool instead\n" +
             "- PATCH/PUT/DELETE environmentvariabledefinitions(...) → Use upsert_variable tool instead\n" +
             "- PATCH/PUT/DELETE environmentvariablevalues(...) → Use upsert_variable tool instead\n" +
-            "- POST PublishXml → Use publish tool instead\n" +
-            "- POST PublishAllXml → Use publish tool instead\n" +
+            "- POST PublishXml → Use publish_customizations tool instead\n" +
+            "- POST PublishAllXml → Use publish_customizations tool instead\n" +
             "GET on these endpoints is allowed (reading is safe). " +
             "POST to create new records is allowed (except publish endpoints).\n" +
             "WHY BLOCKED: A malformed FormXML/LayoutXML/SiteMap breaks the UI for ALL users " +
@@ -206,17 +206,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
         [
-            ("publishxml", "publish",
-                "PublishXml requires correctly formatted ParameterXml. The publish tool handles entity-specific vs all publishing with proper XML generation."),
-            ("publishallxml", "publish",
-                "PublishAllXml publishes ALL customizations. The publish tool provides a simpler interface with proper status reporting.")
+            ("publishxml", "publish_customizations",
+                "PublishXml requires correctly formatted ParameterXml. The publish_customizations tool handles entity-specific vs all publishing with proper XML generation."),
+            ("publishallxml", "publish_customizations",
+                "PublishAllXml publishes ALL customizations. The publish_customizations tool provides a simpler interface with proper status reporting.")
         ];
 
         private static string GetBlockedReason(HttpMethod method, string url)
         {
             var urlLower = url.ToLowerInvariant();
 
-            // Block POST on publish endpoints — redirect to publish tool
+            // Block POST on publish endpoints — redirect to publish_customizations tool
             if (method == HttpMethod.Post)
             {
                 foreach (var (pattern, tool, reason) in BlockedPostEndpoints)

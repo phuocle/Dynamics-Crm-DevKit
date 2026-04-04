@@ -69,9 +69,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- 'List all BPFs with their stages' -> include_stages=true\n\n" +
 
             "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_workflows: classic workflows only (category=0) -- use get_bpfs for BPFs (category=4)\n" +
-            "- get_rules: business rules only (category=2) -- no overlap\n" +
-            "- get_flows: cloud flows only (category=5) -- no overlap\n" +
+            "- get_classic_workflows: classic workflows only (category=0) -- use get_bpfs for BPFs (category=4)\n" +
+            "- get_business_rules: business rules only (category=2) -- no overlap\n" +
+            "- get_cloud_flows: cloud flows only (category=5) -- no overlap\n" +
             "- get_metadata_entities: BPFs auto-create entities -- can verify with this tool\n\n" +
 
             "TIPS:\n" +
@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- The uniqueName of a BPF is also the logical name of its auto-created Dataverse entity.\n" +
             "- businessProcessType: 0=Business Flow (standard), 1=Task Flow (mobile).\n" +
             "- Stages are ordered by stagecategory value (0=Qualify -> 7=Approval).\n" +
-            "- Together with get_workflows (category=0), get_rules (category=2), get_flows (category=5), " +
+            "- Together with get_classic_workflows (category=0), get_business_rules (category=2), get_cloud_flows (category=5), " +
             "this tool provides full coverage of the workflow entity categories.")]
         public CallToolResult get_bpfs(
             [Description(

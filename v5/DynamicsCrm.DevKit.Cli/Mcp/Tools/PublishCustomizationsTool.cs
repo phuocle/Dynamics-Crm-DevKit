@@ -13,16 +13,16 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class PublishTool
+    public class PublishCustomizationsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public PublishTool(ServiceClient serviceClient)
+        public PublishCustomizationsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "publish", Title = "Publish metadata changes",
+        [McpServerTool(Name = "publish_customizations", Title = "Publish metadata changes",
             Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- PublishAll can take 30+ seconds on large environments\n" +
             "- This is REQUIRED after using execute_webapi to modify metadata\n" +
             "- Publishing already-published changes is harmless (idempotent)")]
-        public CallToolResult publish(
+        public CallToolResult publish_customizations(
             [Description(
                 "Comma-separated entity logical names to publish (e.g., 'account,contact,lead'). " +
                 "Leave empty to publish ALL customizations. " +

@@ -14,11 +14,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetFlowsTool
+    public class GetCloudFlowsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetFlowsTool(ServiceClient serviceClient)
+        public GetCloudFlowsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [8] = "Failed"
         };
 
-        [McpServerTool(Name = "get_flows", Title = "List and inspect Power Automate cloud flows and their run history",
+        [McpServerTool(Name = "get_cloud_flows", Title = "List and inspect Power Automate cloud flows and their run history",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(
@@ -73,16 +73,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- 'Are there any suspended flows?' -> status='suspended'\n\n" +
 
             "RELATIONSHIP TO OTHER TOOLS:\n" +
-            "- get_workflows: classic workflows only (category=0) -- use get_flows for cloud flows (category=5)\n" +
-            "- get_rules: business rules only (category=2) -- no overlap\n" +
-            "- get_histories: audit trail (field-level changes) -- different from flow run history\n\n" +
+            "- get_classic_workflows: classic workflows only (category=0) -- use get_cloud_flows for cloud flows (category=5)\n" +
+            "- get_business_rules: business rules only (category=2) -- no overlap\n" +
+            "- get_audit_history: audit trail (field-level changes) -- different from flow run history\n\n" +
 
             "TIPS:\n" +
             "- Cloud flows are stored in the 'workflow' entity with category=5\n" +
             "- Run history is stored in the 'flowsession' entity\n" +
             "- Only definition records (type=1) are returned, not activations or templates\n" +
             "- Detail mode automatically includes the last 5 runs for quick overview")]
-        public CallToolResult get_flows(
+        public CallToolResult get_cloud_flows(
             [Description(
                 "GUID of a specific cloud flow. When provided with action='list': shows detail + last 5 runs. " +
                 "When provided with action='runs': shows extended run history. " +

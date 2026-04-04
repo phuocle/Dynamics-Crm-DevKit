@@ -16,16 +16,16 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetWorkflowsTool
+    public class GetClassicWorkflowsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetWorkflowsTool(ServiceClient serviceClient)
+        public GetClassicWorkflowsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_workflows", Title = "List classic workflows (background and real-time) for a Dataverse entity",
+        [McpServerTool(Name = "get_classic_workflows", Title = "List classic workflows (background and real-time) for a Dataverse entity",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
@@ -66,14 +66,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- 'What workflows trigger when a record is assigned?' -> trigger_field='ownerid'\n" +
             "- 'What real-time (synchronous) workflows exist on this entity?' -> mode='realtime'\n" +
             "- 'What automation runs before a record is created?' -> mode='realtime', check createstage=20\n" +
-            "- 'What is the full picture of automation on this entity?' -> combine with get_rules and plugin registrations\n\n" +
+            "- 'What is the full picture of automation on this entity?' -> combine with get_business_rules and plugin registrations\n\n" +
 
             "TIPS:\n" +
             "- Background workflows always run Post-operation (async) -- stage fields are irrelevant\n" +
             "- Realtime workflows with Pre-operation stage can cancel/rollback the operation\n" +
             "- A non-empty triggeronupdateattributelist implies the workflow triggers on Update\n" +
             "- If all trigger booleans are false and update list is empty, check ondemand=true")]
-        public CallToolResult get_workflows(
+        public CallToolResult get_classic_workflows(
             [Description(
                 "Entity logical name (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +

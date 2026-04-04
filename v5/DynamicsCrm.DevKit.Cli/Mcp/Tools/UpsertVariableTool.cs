@@ -111,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Solution unique name to add the definition to (create only). " +
                 "Leave empty for default solution. " +
-                "Use get_components to find valid solution names."
+                "Use get_solution_components to find valid solution names."
             )] string solution_name = "",
             [Description(
                 "Publish after changes. Default: false. " +

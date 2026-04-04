@@ -177,7 +177,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool? is_valid_for_advanced_find = null,
             [Description(
                 "Solution unique name to add the column to. Leave empty for default solution. " +
-                "Use get_components to find valid solution names."
+                "Use get_solution_components to find valid solution names."
             )] string solution_name = "",
             [Description(
                 "Publish the entity after operation. Default: true."
@@ -1173,7 +1173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"[Error] Solution '{solutionName}' not found\n" +
                     $"Message: {msg}\n" +
-                    $"Tip: Use get_components to find valid solution names");
+                    $"Tip: Use get_solution_components to find valid solution names");
             }
 
             return ErrorResult($"Error: Failed to create attribute '{entityName}.{attributeName}'\nMessage: {msg}");

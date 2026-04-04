@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetMessagesTool
+    public class GetSdkMessagesTool
     {
         private readonly MetadataService _metadataService;
 
-        public GetMessagesTool(MetadataService metadataService)
+        public GetSdkMessagesTool(MetadataService metadataService)
         {
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_messages", Title = "Discover Dataverse SDK messages & Custom Actions",
+        [McpServerTool(Name = "get_sdk_messages", Title = "Discover Dataverse SDK messages & Custom Actions",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Discover SDK messages and Custom Actions available for a Dataverse entity. " +
@@ -40,9 +40,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Global (none-bound): use 'none' or leave empty to get messages not bound to any entity " +
             "(e.g. WhoAmI, RetrieveCurrentOrganization, global Custom Actions)\n\n" +
 
-            "NOTE: For Custom APIs, use the get_apis tool instead — it provides full detail " +
+            "NOTE: For Custom APIs, use the get_custom_apis tool instead — it provides full detail " +
             "including request parameters, response properties, and plugin bindings.")]
-        public async Task<string> get_messages(
+        public async Task<string> get_sdk_messages(
             [Description(
                 "Entity logical name to get messages for (always lowercase). " +
                 "Examples: 'account', 'contact', 'lead', 'opportunity', 'incident'. " +

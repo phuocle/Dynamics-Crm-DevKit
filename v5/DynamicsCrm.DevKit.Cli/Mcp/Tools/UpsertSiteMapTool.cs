@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool backup = true,
             [Description(
                 "Publish the app module after changes (default: true). " +
-                "Set false if batching multiple changes, then call publish once."
+                "Set false if batching multiple changes, then call publish_customizations once."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(app_module_id))
