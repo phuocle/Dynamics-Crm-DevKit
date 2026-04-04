@@ -80,14 +80,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             var atIndex = key.IndexOf('@');
             if (atIndex > 0 && atIndex < key.Length - 1)
-                return (key.Substring(0, atIndex), key.Substring(atIndex + 1));
-            return (key, null);
+                return (key.Substring(0, atIndex).ToLowerInvariant(), key.Substring(atIndex + 1).ToLowerInvariant());
+            return (key.ToLowerInvariant(), null);
         }
 
         private static string ParseFieldName(string key)
         {
             var atIndex = key.IndexOf('@');
-            return atIndex > 0 ? key.Substring(0, atIndex) : key;
+            return (atIndex > 0 ? key.Substring(0, atIndex) : key).ToLowerInvariant();
         }
 
         private static object ConvertValue(AttributeMetadata attrMeta, JsonElement jsonVal, string fieldName, string targetEntityOverride)

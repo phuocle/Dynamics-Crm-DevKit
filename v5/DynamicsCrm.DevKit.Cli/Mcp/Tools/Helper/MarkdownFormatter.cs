@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             AppendAttributes(sb, meta, prefixFilter, hasPrefix);
             AppendOneToManyRelationships(sb, meta.OneToManyRelationships, prefixFilter, hasPrefix);
             AppendManyToOneRelationships(sb, meta.ManyToOneRelationships, prefixFilter, hasPrefix);
-            AppendManyToManyRelationships(sb, meta.ManyToManyRelationships);
+            AppendManyToManyRelationships(sb, meta.ManyToManyRelationships, prefixFilter, hasPrefix);
             AppendKeys(sb, meta.Keys);
 
             return sb.ToString();
@@ -338,15 +338,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             sb.AppendLine();
         }
 
-        private static void AppendManyToManyRelationships(StringBuilder sb, ManyToManyRelationshipMetadata[] rels)
+        private static void AppendManyToManyRelationships(
+            StringBuilder sb, ManyToManyRelationshipMetadata[] rels, string prefix, bool hasPrefix)
         {
             if (rels is not { Length: > 0 }) return;
 
-            sb.AppendLine($"## N:N Relationships — {rels.Length}");
+            var filtered = rels
+                .Where(r => !hasPrefix ||
+                    r.Entity1LogicalName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ||
+                    r.Entity2LogicalName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.IntersectEntityName)
+                .ToArray();
+
+            if (filtered.Length == 0) return;
+
+            sb.AppendLine($"## N:N Relationships — {filtered.Length}");
             sb.AppendLine();
             sb.AppendLine("| IntersectEntity | Entity1 | Entity2 | SchemaName |");
             sb.AppendLine("| --- | --- | --- | --- |");
-            foreach (var r in rels)
+            foreach (var r in filtered)
                 sb.AppendLine($"| {r.IntersectEntityName} | {r.Entity1LogicalName} | {r.Entity2LogicalName} | {r.SchemaName} |");
             sb.AppendLine();
         }

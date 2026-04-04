@@ -35,9 +35,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("orgUniqueName")]
         public string OrgUniqueName { get; set; }
 
-        [JsonPropertyName("orgId")]
-        public string OrgId { get; set; }
-
         [JsonPropertyName("tenantId")]
         public string TenantId { get; set; }
 
@@ -57,10 +54,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public bool? AuditEnabled { get; set; }
 
         [JsonPropertyName("roles")]
-        public List<string> Roles { get; set; } = [];
+        public List<RoleInfo> Roles { get; set; } = [];
 
         [JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }
+
+        [JsonPropertyName("warnings")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Warnings { get; set; }
+    }
+
+    internal sealed class RoleInfo
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("roleId")]
+        public string RoleId { get; set; }
     }
 
     internal sealed class CrudResult
@@ -125,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public bool IsSuccess { get; set; }
     }
 
-    internal sealed class UpdateFormResult
+    internal sealed class UpsertFormResult
     {
         [JsonPropertyName("action")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -193,7 +203,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string FormXml { get; set; }
     }
 
-    internal sealed class CreateEntityResult
+    internal sealed class UpsertEntityResult
     {
         [JsonPropertyName("entityName")]
         public string EntityName { get; set; }
@@ -236,7 +246,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Status { get; set; }
     }
 
-    internal sealed class UpdateSiteMapResult
+    internal sealed class UpsertSiteMapResult
     {
         [JsonPropertyName("action")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -333,7 +343,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public Dictionary<string, string> Extra { get; set; }
     }
 
-    internal sealed class UpdateViewResult
+    internal sealed class UpsertViewResult
     {
         [JsonPropertyName("action")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -225,6 +225,27 @@ DateTime, Boolean, etc.) can be used as Find Columns.
 
 Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/quick-find
 
+## Hidden Columns (ishidden)
+- Use `ishidden=""1""` on a `<cell>` to include a column in the query but hide it from the grid
+- The column's `<attribute>` MUST still be in FetchXML (sync rule still applies)
+- Valid values: `0` or omitted = visible, `1` = hidden
+- Common use cases:
+  - Custom icon rendering — hidden column provides data for `imageproviderwebresource`/`imageproviderfunctionname`
+  - JavaScript web resource data — column fetched for client-side logic but not displayed
+  - Sort/filter support — column used in `<order>` or `<filter>` but not shown to users
+
+### Hidden Column Example
+```xml
+<grid name=""resultset"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
+  <row name=""result"" id=""accountid"">
+    <cell name=""name"" width=""300"" />
+    <cell name=""primarycontactid"" width=""150"" />
+    <cell name=""statuscode"" width=""100"" ishidden=""1"" />
+  </row>
+</grid>
+```
+In this example, `statuscode` is fetched but not displayed in the grid.
+
 ## After Making Changes
 - Use the dedicated upsert_view tool (NOT execute_webapi) to apply changes
 - upsert_view auto-handles: backup > validate > sync-check > update > publish

@@ -74,13 +74,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var entityList = string.IsNullOrWhiteSpace(entities)
-                    ? []
-                    : entities.Split(',')
+                var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
+                var entityList = entitiesProvided
+                    ? entities.Split(',')
                         .Select(e => e.Trim().ToLowerInvariant())
                         .Where(e => !string.IsNullOrEmpty(e))
                         .Distinct()
-                        .ToList();
+                        .ToList()
+                    : [];
+
+                if (entitiesProvided && entityList.Count == 0)
+                {
+                    return ErrorResult("[Error] Publish failed\nMessage: No valid entity names found in the 'entities' parameter. Provide comma-separated logical names (e.g., 'account,contact') or leave empty for PublishAll.");
+                }
 
                 if (entityList.Count == 0)
                 {
@@ -135,7 +141,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 sw.Stop();
-                return ErrorResult($"[Error] Publish failed\nMessage: {ex.Message}");
+                var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
+                var errorMsg = entitiesProvided
+                    ? $"[Error] Publish failed\nEntities requested: {entities.Trim()}\nNONE of the entities were published (Dataverse rejects the entire batch if any entity is invalid).\nMessage: {ex.Message}"
+                    : $"[Error] Publish failed\nMessage: {ex.Message}";
+                return ErrorResult(errorMsg);
             }
         }
 

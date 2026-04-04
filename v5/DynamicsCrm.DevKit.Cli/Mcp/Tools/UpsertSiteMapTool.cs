@@ -20,20 +20,20 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpdateSiteMapTool
+    public class UpsertSiteMapTool
     {
         private readonly ServiceClient _serviceClient;
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
 
-        public UpdateSiteMapTool(ServiceClient serviceClient)
+        public UpsertSiteMapTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
         [McpServerTool(Name = "upsert_sitemap", Title = "Create, update, or undo a Model-Driven App SiteMap with backup + XSD validation + publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpdateSiteMapResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertSiteMapResult)),
         Description(
             "Create, update, or undo a Model-Driven App's SiteMap XML with automatic backup, XSD validation, and publishing. " +
             "This completes the UI customization trilogy: Forms (upsert_form) → Views (upsert_view) → SiteMap (upsert_sitemap).\n\n" +
@@ -263,7 +263,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateSiteMapResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertSiteMapResult
                         {
                             Action = "created",
                             AppModuleId = appModuleId.ToString(),
@@ -326,7 +326,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         sb.AppendLine($"  - {w}");
                 }
 
-                var structured = new UpdateSiteMapResult
+                var structured = new UpsertSiteMapResult
                 {
                     Action = "created",
                     AppModuleId = appModuleId.ToString(),
@@ -411,7 +411,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateSiteMapResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertSiteMapResult
                         {
                             Action = "updated",
                             AppModuleId = appModuleId.ToString(),
@@ -447,7 +447,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine();
                 AppendRollbackInfo(sb, backupPath, appModuleId);
 
-                var structured = new UpdateSiteMapResult
+                var structured = new UpsertSiteMapResult
                 {
                     Action = "updated",
                     AppModuleId = appModuleId.ToString(),
@@ -536,7 +536,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateSiteMapResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertSiteMapResult
                         {
                             Action = "undo",
                             AppModuleId = appModuleId.ToString(),
@@ -572,7 +572,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateSiteMapResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertSiteMapResult
                     {
                         Action = "undo",
                         AppModuleId = appModuleId.ToString(),
@@ -606,7 +606,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateSiteMapResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertSiteMapResult
                     {
                         Action = "undo",
                         AppModuleId = appModuleId.ToString(),

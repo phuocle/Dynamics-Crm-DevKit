@@ -172,7 +172,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return sb.ToString();
             }
 
-            sb.AppendLine($"[Roles] {rolesResult.Entities.Count} assigned");
+            sb.AppendLine($"[Roles] {rolesResult.Entities.Count} {(rolesResult.Entities.Count == 1 ? "role" : "roles")} assigned");
             sb.AppendLine();
             sb.AppendLine("roleid\tname\tmanaged");
 
@@ -256,8 +256,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(roleName))
                 query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{roleName}%");
 
-            if (!string.IsNullOrWhiteSpace(businessUnitId) && Guid.TryParse(businessUnitId, out var buId))
+            if (!string.IsNullOrWhiteSpace(businessUnitId))
+            {
+                if (!Guid.TryParse(businessUnitId, out var buId))
+                    return $"Error: '{businessUnitId}' is not a valid GUID for business_unit_id.";
                 query.Criteria.AddCondition("businessunitid", ConditionOperator.Equal, buId);
+            }
 
             query.AddOrder("name", OrderType.Ascending);
 
@@ -271,7 +275,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var sb = new StringBuilder(roles.Count * 100 + 128);
-            sb.AppendLine($"[SecurityRoles] {roles.Count} roles");
+            sb.AppendLine($"[SecurityRoles] {roles.Count} {(roles.Count == 1 ? "role" : "roles")}");
             sb.AppendLine();
             sb.AppendLine("roleid\tname\tbusinessunit\tmanaged\tcustomizable");
 
@@ -349,8 +353,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private List<PrivilegeInfo> GetRolePrivileges(Guid roleId)
         {
-            var fetchXml = $@"
-<fetch>
+            var privileges = new List<PrivilegeInfo>();
+            var page = 1;
+            string pagingCookie = null;
+
+            while (true)
+            {
+                var fetchXml = pagingCookie == null
+                    ? $@"
+<fetch count='5000' page='{page}'>
+  <entity name='roleprivileges'>
+    <attribute name='privilegedepthmask' />
+    <link-entity name='privilege' from='privilegeid' to='privilegeid' alias='priv'>
+      <attribute name='name' />
+      <attribute name='accessright' />
+    </link-entity>
+    <filter>
+      <condition attribute='roleid' operator='eq' value='{roleId}' />
+    </filter>
+  </entity>
+</fetch>"
+                    : $@"
+<fetch count='5000' page='{page}' paging-cookie='{System.Security.SecurityElement.Escape(pagingCookie)}'>
   <entity name='roleprivileges'>
     <attribute name='privilegedepthmask' />
     <link-entity name='privilege' from='privilegeid' to='privilegeid' alias='priv'>
@@ -363,24 +387,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            var privileges = new List<PrivilegeInfo>(result.Entities.Count);
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
-            foreach (var entity in result.Entities)
-            {
-                var privName = GetAliasedValue<string>(entity, "priv.name") ?? "";
-                var depthMask = entity.GetAttributeValue<int>("privilegedepthmask");
-
-                if (string.IsNullOrEmpty(privName)) continue;
-
-                var parsed = ParsePrivilegeName(privName);
-                privileges.Add(new PrivilegeInfo
+                foreach (var entity in result.Entities)
                 {
-                    FullName = privName,
-                    Right = parsed.right,
-                    EntityName = parsed.entity,
-                    Depth = MapDepthMask(depthMask)
-                });
+                    var privName = GetAliasedValue<string>(entity, "priv.name") ?? "";
+                    var depthMask = entity.GetAttributeValue<int>("privilegedepthmask");
+
+                    if (string.IsNullOrEmpty(privName)) continue;
+
+                    var parsed = ParsePrivilegeName(privName);
+                    privileges.Add(new PrivilegeInfo
+                    {
+                        FullName = privName,
+                        Right = parsed.right,
+                        EntityName = parsed.entity,
+                        Depth = MapDepthMask(depthMask)
+                    });
+                }
+
+                if (!result.MoreRecords)
+                    break;
+
+                pagingCookie = result.PagingCookie;
+                page++;
             }
 
             return privileges;

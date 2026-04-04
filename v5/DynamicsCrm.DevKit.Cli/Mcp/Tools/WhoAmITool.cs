@@ -33,11 +33,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- UserId, FullName, DomainName, Email (the authenticated user)\n" +
             "- BusinessUnitId (the user's business unit)\n" +
             "- OrganizationId (the Dataverse organization)\n" +
-            "- Security Roles assigned to the user\n" +
+            "- Security Roles assigned to the user (name + roleId)\n" +
             "- Environment URL, version, friendly name, unique name\n" +
             "- TenantId, EnvironmentId\n" +
             "- AccessToken (current OAuth bearer token, only when include_token=true)\n" +
-            "- Base language, base currency, fiscal settings, audit status\n\n" +
+            "- Base language, base currency, fiscal settings, audit status\n" +
+            "- Warnings (if any sub-query failed, listed here instead of silently omitted)\n\n" +
 
             "WHEN TO USE:\n" +
             "- At the start of a session to confirm which user and environment you are connected to\n" +
@@ -63,11 +64,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     UserId = response.UserId.ToString(),
                     BusinessUnitId = response.BusinessUnitId.ToString(),
                     OrganizationId = response.OrganizationId.ToString(),
-                    EnvironmentUrl = _serviceClient.ConnectedOrgUriActual?.ToString(),
+                    EnvironmentUrl = GetBaseUrl(_serviceClient.ConnectedOrgUriActual),
                     Version = _serviceClient.ConnectedOrgVersion?.ToString(),
                     OrgFriendlyName = _serviceClient.ConnectedOrgFriendlyName,
                     OrgUniqueName = _serviceClient.ConnectedOrgUniqueName,
-                    OrgId = _serviceClient.ConnectedOrgId.ToString(),
                     TenantId = _serviceClient.TenantId.ToString(),
                     EnvironmentId = _serviceClient.EnvironmentId.ToString()
                 };
@@ -82,7 +82,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (include_token)
                 {
                     try { structured.AccessToken = _serviceClient.CurrentAccessToken; }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        structured.Warnings ??= [];
+                        structured.Warnings.Add($"Failed to retrieve access token: {ex.Message}");
+                    }
                 }
 
                 // Security roles
@@ -117,7 +121,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 result.DomainName = user.GetAttributeValue<string>("domainname") ?? "";
                 result.Email = user.GetAttributeValue<string>("internalemailaddress") ?? "";
             }
-            catch { }
+            catch (Exception ex)
+            {
+                result.Warnings ??= [];
+                result.Warnings.Add($"Failed to retrieve user details: {ex.Message}");
+            }
         }
 
         private void PopulateOrgDetails(WhoAmIResult result)
@@ -151,7 +159,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 result.AuditEnabled = org.GetAttributeValue<bool?>("isauditenabled");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                result.Warnings ??= [];
+                result.Warnings.Add($"Failed to retrieve organization details: {ex.Message}");
+            }
         }
 
         private void PopulateRoles(WhoAmIResult result, Guid userId)
@@ -176,11 +188,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var role in qResult.Entities)
                 {
                     var name = role.GetAttributeValue<string>("name") ?? "";
+                    var roleId = role.GetAttributeValue<Guid>("roleid");
                     if (!string.IsNullOrEmpty(name))
-                        result.Roles.Add(name);
+                        result.Roles.Add(new Models.RoleInfo { Name = name, RoleId = roleId.ToString() });
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                result.Warnings ??= [];
+                result.Warnings.Add($"Failed to retrieve security roles: {ex.Message}");
+            }
         }
 
         private static string BuildCompactText(WhoAmIResult r)
@@ -200,7 +217,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrEmpty(r.EnvironmentUrl)) sb.AppendLine($"Url: {r.EnvironmentUrl}");
             if (!string.IsNullOrEmpty(r.Version)) sb.AppendLine($"Version: {r.Version}");
             sb.AppendLine($"OrgName: {r.OrgFriendlyName} ({r.OrgUniqueName})");
-            sb.AppendLine($"OrgId: {r.OrgId}");
             sb.AppendLine($"TenantId: {r.TenantId}");
             sb.AppendLine($"EnvironmentId: {r.EnvironmentId}");
             if (!string.IsNullOrEmpty(r.AccessToken)) sb.AppendLine($"AccessToken: {r.AccessToken}");
@@ -214,10 +230,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 sb.AppendLine($"[Roles] {r.Roles.Count} total");
                 foreach (var role in r.Roles)
-                    sb.AppendLine($"- {role}");
+                    sb.AppendLine($"- {role.Name} ({role.RoleId})");
+            }
+
+            if (r.Warnings is { Count: > 0 })
+            {
+                sb.AppendLine();
+                sb.AppendLine($"[Warnings] {r.Warnings.Count} total");
+                foreach (var warning in r.Warnings)
+                    sb.AppendLine($"- {warning}");
             }
 
             return sb.ToString();
+        }
+
+        private static string GetBaseUrl(Uri uri)
+        {
+            if (uri == null) return null;
+            return $"{uri.Scheme}://{uri.Host}";
         }
 
         private static string GetLanguageName(int lcid) => lcid switch

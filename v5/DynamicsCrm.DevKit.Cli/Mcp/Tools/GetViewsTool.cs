@@ -253,6 +253,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
+            // Column summary (parsed from LayoutXML)
+            if (!string.IsNullOrEmpty(layoutXml))
+            {
+                try
+                {
+                    var layoutDoc = XDocument.Parse(layoutXml);
+                    var rowId = layoutDoc.Descendants("row")
+                        .Select(r => r.Attribute("id")?.Value)
+                        .FirstOrDefault();
+                    var cells = layoutDoc.Descendants("cell").ToList();
+                    var visibleCount = 0;
+                    var hiddenCount = 0;
+                    var columnLines = new System.Collections.Generic.List<string>();
+
+                    foreach (var cell in cells)
+                    {
+                        var cellName = cell.Attribute("name")?.Value ?? "";
+                        var width = cell.Attribute("width")?.Value;
+                        var isHidden = cell.Attribute("ishidden")?.Value == "1";
+
+                        if (isHidden)
+                            hiddenCount++;
+                        else
+                            visibleCount++;
+
+                        var parts = new System.Collections.Generic.List<string>();
+                        if (width != null) parts.Add($"{width}px");
+                        if (isHidden) parts.Add("hidden");
+                        if (string.Equals(cellName, rowId, StringComparison.OrdinalIgnoreCase)) parts.Add("row key");
+
+                        var suffix = parts.Count > 0 ? $" ({string.Join(", ", parts)})" : "";
+                        columnLines.Add($"  {cellName}{suffix}");
+                    }
+
+                    var hiddenNote = hiddenCount > 0 ? $" ({hiddenCount} hidden)" : "";
+                    sb.AppendLine($"[Columns] {cells.Count} columns{hiddenNote}");
+                    foreach (var line in columnLines)
+                        sb.AppendLine(line);
+                    sb.AppendLine();
+                }
+                catch
+                {
+                    // Skip column summary if LayoutXML can't be parsed
+                }
+            }
+
             if (!string.IsNullOrEmpty(fetchXml))
             {
                 sb.AppendLine("[FetchXML]");

@@ -33,25 +33,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 13,  "Managed Property" },
             { 14,  "Entity Key" },
             { 16,  "Privilege" },
+            { 18,  "Index" },
             { 20,  "Role" },
+            { 21,  "Role Privilege" },
             { 22,  "Display String" },
+            { 23,  "Display String Map" },
             { 24,  "Form" },
             { 25,  "Organization" },
             { 26,  "Saved Query (View)" },
             { 29,  "Workflow" },
             { 31,  "Report" },
+            { 32,  "Report Entity" },
+            { 33,  "Report Category" },
+            { 34,  "Report Visibility" },
+            { 35,  "Attachment" },
             { 36,  "Email Template" },
+            { 37,  "Contract Template" },
+            { 38,  "KB Article Template" },
+            { 39,  "Mail Merge Template" },
             { 44,  "Duplicate Rule" },
+            { 45,  "Duplicate Rule Condition" },
             { 46,  "Entity Map" },
+            { 47,  "Attribute Map" },
             { 48,  "Ribbon Command" },
+            { 49,  "Ribbon Context Group" },
             { 50,  "Ribbon Customization" },
+            { 52,  "Ribbon Rule" },
+            { 53,  "Ribbon Tab To Command Map" },
             { 55,  "Ribbon Diff" },
             { 59,  "Chart (Visualization)" },
             { 60,  "System Form" },
             { 61,  "Web Resource" },
             { 62,  "Site Map" },
             { 63,  "Connection Role" },
+            { 64,  "Complex Control" },
+            { 65,  "Hierarchy Rule" },
             { 66,  "Custom Control" },
+            { 68,  "Custom Control Default Config" },
             { 70,  "Field Security Profile" },
             { 71,  "Field Permission" },
             { 80,  "Model Driven App" },
@@ -61,14 +79,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 93,  "SDK Message Processing Step Image" },
             { 95,  "Service Endpoint" },
             { 150, "Routing Rule" },
+            { 151, "Routing Rule Item" },
             { 152, "SLA" },
+            { 153, "SLA Item" },
             { 154, "Convert Rule" },
+            { 155, "Convert Rule Item" },
             { 161, "Mobile Offline Profile" },
+            { 162, "Mobile Offline Profile Item" },
+            { 165, "Similarity Rule" },
+            { 166, "Data Source Mapping" },
+            { 201, "SDK Message" },
+            { 202, "SDK Message Filter" },
+            { 208, "Import Map" },
+            { 300, "Canvas App" },
+            { 371, "Connector" },
             { 380, "Environment Variable Definition" },
             { 381, "Environment Variable Value" },
             { 400, "AI Configuration" },
             { 401, "AI Project" },
+            { 402, "AI Project Type" },
             { 418, "Dataflow" },
+            { 430, "Entity Analytics Config" },
+            { 431, "Attribute Image Config" },
+            { 432, "Entity Image Config" },
         };
 
         public GetComponentsTool(ServiceClient serviceClient)
@@ -160,10 +193,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Exclude hidden/system solutions
             query.Criteria.AddCondition("isvisible", ConditionOperator.Equal, true);
 
+            // Escape SQL LIKE wildcards (%, _, [) in user input before wrapping
+            var escaped = keyword.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+
             // Fuzzy match on either uniquename OR friendlyname
             var nameFilter = new FilterExpression(LogicalOperator.Or);
-            nameFilter.AddCondition("uniquename", ConditionOperator.Like, $"%{keyword}%");
-            nameFilter.AddCondition("friendlyname", ConditionOperator.Like, $"%{keyword}%");
+            nameFilter.AddCondition("uniquename", ConditionOperator.Like, $"%{escaped}%");
+            nameFilter.AddCondition("friendlyname", ConditionOperator.Like, $"%{escaped}%");
             query.Criteria.AddFilter(nameFilter);
 
             // Bring publisher display name along
@@ -171,7 +207,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             pubLink.Columns = new ColumnSet("friendlyname");
             pubLink.EntityAlias = "pub";
 
-            return _serviceClient.RetrieveMultiple(query).Entities.ToList();
+            var results = _serviceClient.RetrieveMultiple(query).Entities.ToList();
+
+            // Exact-match priority: if multiple fuzzy matches but one has exact uniquename, prefer it
+            if (results.Count > 1)
+            {
+                var exact = results.FirstOrDefault(s =>
+                    string.Equals(s.GetAttributeValue<string>("uniquename"), keyword, StringComparison.OrdinalIgnoreCase));
+                if (exact != null)
+                    return new List<Entity> { exact };
+            }
+
+            return results;
         }
 
         /// <summary>
@@ -319,7 +366,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
                         name = $"{name} (full — use get_metadata_entities)";
 
-                    sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? ""}");
+                    sb.AppendLine($"{typeName}\t{grp.Key}\t{objectId}\t{name ?? "(unresolved)"}");
                 }
             }
 
@@ -351,16 +398,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (byType.TryGetValue(2, out var attrIds))
             {
                 var missing = attrIds.Where(id => !nameMap.ContainsKey(id)).ToList();
-                if (missing.Count > 0 && missing.Count <= 250)
-                    ResolveAttributeMetadataNames(missing, nameMap);
+                if (missing.Count > 0)
+                {
+                    const int attrChunkSize = 250;
+                    for (var i = 0; i < missing.Count; i += attrChunkSize)
+                        ResolveAttributeMetadataNames(missing.Skip(i).Take(attrChunkSize).ToList(), nameMap);
+                }
             }
 
             // Step 4: Resolve relationship names (type 3) not already in cache
             if (byType.TryGetValue(3, out var relIds))
             {
                 var missing = relIds.Where(id => !nameMap.ContainsKey(id)).ToList();
-                if (missing.Count > 0 && missing.Count <= 250)
-                    ResolveRelationshipMetadataNames(missing, nameMap);
+                if (missing.Count > 0)
+                {
+                    const int relChunkSize = 250;
+                    for (var i = 0; i < missing.Count; i += relChunkSize)
+                        ResolveRelationshipMetadataNames(missing.Skip(i).Take(relChunkSize).ToList(), nameMap);
+                }
             }
 
             // Step 5: Batch-resolve entity-backed component types

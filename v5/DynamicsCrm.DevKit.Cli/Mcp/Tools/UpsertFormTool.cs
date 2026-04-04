@@ -20,20 +20,20 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpdateFormTool
+    public class UpsertFormTool
     {
         private readonly ServiceClient _serviceClient;
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
 
-        public UpdateFormTool(ServiceClient serviceClient)
+        public UpsertFormTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
         [McpServerTool(Name = "upsert_form", Title = "Update, rename, or undo a form with backup, validation & publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpdateFormResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
             "Update, rename, or undo a Dataverse form with automatic backup, schema validation, " +
             "and publishing. This is the safe write companion to get_forms (read).\n\n" +
@@ -252,7 +252,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
 
-                    var blockedResult = new UpdateFormResult
+                    var blockedResult = new UpsertFormResult
                     {
                         Action = "updated",
                         Entity = entityName,
@@ -299,7 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine();
                     AppendRollbackInfo(sb, backupPath, formId);
 
-                    var partialResult = new UpdateFormResult
+                    var partialResult = new UpsertFormResult
                     {
                         Action = "updated",
                         Entity = entityName,
@@ -330,7 +330,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine();
                 AppendRollbackInfo(sb, backupPath, formId);
 
-                var structured = new UpdateFormResult
+                var structured = new UpsertFormResult
                 {
                     Action = "updated",
                     Entity = entityName,
@@ -446,7 +446,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpdateFormResult
+                StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
                 {
                     Action = "renamed",
                     Entity = entityName,
@@ -535,7 +535,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateFormResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
                         {
                             Action = "undo",
                             Entity = entityName,
@@ -580,7 +580,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateFormResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
                         {
                             Action = "undo",
                             Entity = entityName,
@@ -614,7 +614,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateFormResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
                     {
                         Action = "undo",
                         Entity = entityName,

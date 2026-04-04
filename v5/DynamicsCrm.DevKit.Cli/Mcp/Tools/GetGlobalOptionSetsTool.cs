@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public string get_global_optionsets(
             [Description(
                 "The logical name of the global option set (always lowercase). " +
-                "Examples: 'msdyn_committype', 'budgetstatus', 'msdyn_bookingstatus'. " +
+                "Examples: 'componentstate', 'socialprofile_community', 'workflow_stage'. " +
                 "Leave EMPTY to list all global option sets. " +
                 "If unsure of the name, use get_metadata_entities on the entity that uses the column — " +
                 "if the options are empty, the column references a global option set."
@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (string.IsNullOrWhiteSpace(optionset_name))
                     return ListAllOptionSets();
 
-                return GetSingleOptionSet(optionset_name.Trim());
+                return GetSingleOptionSet(optionset_name.Trim().ToLowerInvariant());
             }
             catch (Exception ex)
             {
@@ -74,11 +74,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string GetSingleOptionSet(string name)
         {
-            var response = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest
+            try
             {
-                Name = name
-            });
-            return CompactFormatter.FormatOptionSetDetail(response.OptionSetMetadata);
+                var response = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest
+                {
+                    Name = name
+                });
+                return CompactFormatter.FormatOptionSetDetail(response.OptionSetMetadata);
+            }
+            catch (Exception)
+            {
+                return $"Error: Could not find global option set '{name}'. " +
+                       "Make sure you use the logical name (Name column), not the display name. " +
+                       "Call get_global_optionsets with empty optionset_name to list all available option sets.";
+            }
         }
     }
 }

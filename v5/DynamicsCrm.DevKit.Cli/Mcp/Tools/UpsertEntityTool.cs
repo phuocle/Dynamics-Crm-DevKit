@@ -14,18 +14,18 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class CreateEntityTool
+    public class UpsertEntityTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public CreateEntityTool(ServiceClient serviceClient)
+        public UpsertEntityTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
         [McpServerTool(Name = "upsert_entity", Title = "Create a new custom Dataverse table (entity)",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(CreateEntityResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertEntityResult)),
         Description(
             "Create a new custom Dataverse entity (table) with guided parameters. " +
             "Automatically creates the primary name attribute and configures common properties.\n\n" +
@@ -302,7 +302,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrEmpty(entitySetName))
                     sb.AppendLine($"EntitySetName: {entitySetName}");
 
-                var structured = new CreateEntityResult
+                var structured = new UpsertEntityResult
                 {
                     EntityName = entity_name,
                     DisplayName = display_name.Trim(),

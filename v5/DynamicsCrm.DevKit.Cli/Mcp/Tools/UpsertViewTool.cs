@@ -20,7 +20,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpdateViewTool
+    public class UpsertViewTool
     {
         private readonly ServiceClient _serviceClient;
         private static XmlSchemaSet _cachedLayoutSchemaSet;
@@ -28,14 +28,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly object _layoutSchemaLock = new();
         private static readonly object _fetchSchemaLock = new();
 
-        public UpdateViewTool(ServiceClient serviceClient)
+        public UpsertViewTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
         [McpServerTool(Name = "upsert_view", Title = "Update, create, rename, or undo a view with backup, sync validation & publish",
             Destructive = true, ReadOnly = false, Idempotent = true,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpdateViewResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
             "Update, create, rename, or undo a Dataverse view (saved query) with automatic backup, " +
             "sync validation, and publishing.\n\n" +
@@ -115,6 +115,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "where alias matches the 'alias' attribute on <link-entity> in FetchXML\n" +
             "- If FetchXML has <order attribute=\"X\">, that column MUST also be in LayoutXML cells\n" +
             "- For related entity columns, use <link-entity link-type='outer'> with a unique alias\n" +
+            "- To hide a column from the grid but keep it in the query, add ishidden=\"1\" to the <cell>: " +
+            "<cell name=\"statuscode\" width=\"100\" ishidden=\"1\" /> — useful for icon rendering, JS logic, or sort/filter support\n" +
             "- Set auto_publish=false when making multiple changes, then call publish once\n" +
             "- Backup files are at: .devkit/backups/views/{entity}_{viewid}_{timestamp}.{type}.bak")]
         public CallToolResult upsert_view(
@@ -331,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                         {
                             Action = "updated",
                             Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
@@ -357,7 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                         {
                             Action = "updated", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
                             Status = "blocked_validation", Validated = true,
@@ -392,7 +394,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                     {
                         Action = "updated", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
                         Status = "updated_publish_failed", Validated = validate,
@@ -412,7 +414,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                     {
                         Action = "updated", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
                         Status = "updated", Validated = validate,
@@ -487,7 +489,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                         {
                             Action = "created", Entity = entityName, ViewName = viewName,
                             Status = "blocked_validation", Validated = true, ValidationErrors = allIssues, Published = false
@@ -523,7 +525,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = resultSb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                 {
                     Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
                     Status = status, Validated = validate, Published = published
@@ -615,7 +617,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                 {
                     Action = "renamed", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
                     Status = status, Validated = false,
@@ -752,7 +754,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                         {
                             Action = "undo",
                             Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
@@ -780,7 +782,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return new CallToolResult
                     {
                         Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                         {
                             Action = "undo", Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
                             Status = "blocked_validation", Validated = true,
@@ -820,7 +822,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                     {
                         Action = "undo",
                         Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,
@@ -853,7 +855,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(new UpdateViewResult
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                     {
                         Action = "undo",
                         Entity = entityName, ViewId = viewId.ToString(), ViewName = viewName,

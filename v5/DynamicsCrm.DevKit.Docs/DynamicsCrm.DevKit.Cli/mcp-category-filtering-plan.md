@@ -29,11 +29,11 @@ The DevKit MCP server currently loads all **27 tools** at once via `WithToolsFro
 | 17 | `build_formxml` | BuildFormxmlTool | true | false | true |
 | 18 | `upsert_record` | UpsertRecordTool | false | true | false |
 | 19 | `delete_record` | DeleteRecordTool | false | true | false |
-| 20 | `upsert_entity` | CreateEntityTool | false | true | false |
+| 20 | `upsert_entity` | UpsertEntityTool | false | true | false |
 | 21 | `upsert_attribute` | UpsertAttributeTool | false | false | false |
-| 22 | `upsert_form` | UpdateFormTool | false | true | true |
-| 23 | `upsert_view` | UpdateViewTool | false | true | true |
-| 24 | `upsert_sitemap` | UpdateSiteMapTool | false | true | true |
+| 22 | `upsert_form` | UpsertFormTool | false | true | true |
+| 23 | `upsert_view` | UpsertViewTool | false | true | true |
+| 24 | `upsert_sitemap` | UpsertSiteMapTool | false | true | true |
 | 25 | `publish` | PublishTool | false | false | true |
 | 26 | `upsert_variable` | UpsertVariableTool | false | false | false |
 | 27 | `execute_webapi` | ExecuteWebApiTool | false | true | false |

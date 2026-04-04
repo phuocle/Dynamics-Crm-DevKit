@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Retrieve Dataverse entity/table metadata. TWO MODES based on entity_name:\n\n" +
 
             "MODE 1 — LIST ALL (entity_name is EMPTY):\n" +
-            "Returns a markdown table of ALL entities with logicalName, displayName, schemaName, ownershipType, isCustom, isActivity, isAuditEnabled.\n" +
+            "Returns a markdown table of ALL entities with logicalName, displayName, ownershipType, isCustom, isActivity.\n" +
             "Use 'filter' to narrow by keyword. Use 'custom_only' to show only custom entities.\n\n" +
 
             "MODE 2 — DETAIL ONE (entity_name is PROVIDED):\n" +
