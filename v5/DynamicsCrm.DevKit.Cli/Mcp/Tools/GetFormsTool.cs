@@ -117,8 +117,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
+        private static readonly int[] ValidFormTypes = { 0, 2, 4, 5, 6, 7, 8, 11, 12 };
+
         private string ListForms(string entityName, int formType, bool includeFormXml)
         {
+            if (formType != 0 && !ValidFormTypes.Contains(formType))
+                return $"Error: form_type={formType} is not valid. Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.";
+
             var query = BuildListQuery(entityName, formType, includeFormXml);
             var result = _serviceClient.RetrieveMultiple(query);
             var forms = result.Entities;
@@ -134,8 +139,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private string FindFormsByName(string entityName, string formName, int formType)
         {
+            if (formType != 0 && !ValidFormTypes.Contains(formType))
+                return $"Error: form_type={formType} is not valid. Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.";
+
             var query = BuildListQuery(entityName, formType, includeFormXml: false);
-            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{formName}%");
+            var escapedName = formName.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
 
             var result = _serviceClient.RetrieveMultiple(query);
             var forms = result.Entities;
@@ -204,7 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Entity: {objectTypeCode}");
             sb.AppendLine($"Type: {MapFormType(type)} ({type})");
             sb.AppendLine($"Default: {(isDefault ? "yes" : "no")}");
-            sb.AppendLine($"Active: {(activationState == 1 ? "yes" : "no")}");
+            sb.AppendLine($"Active: {(activationState == 1 ? "Active" : "Inactive")}");
             sb.AppendLine($"Managed: {(isManaged ? "yes" : "no")}");
             sb.AppendLine($"Version: {version}");
             if (publishedOn.HasValue)
@@ -240,7 +249,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("objecttypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("formactivationstate", ConditionOperator.Equal, 1);
 
-            if (formType > 0)
+            if (formType != 0)
                 query.Criteria.AddCondition("type", ConditionOperator.Equal, formType);
 
             query.AddOrder("type", OrderType.Ascending);

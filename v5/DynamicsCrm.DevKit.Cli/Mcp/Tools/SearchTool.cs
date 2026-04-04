@@ -79,7 +79,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (search_term.Trim().Length > 100)
                 return "Error: search_term must be 100 characters or less.";
 
-            if (top <= 0) top = 50;
+            if (top <= 0)
+                return "Error: top must be a positive number (1-100).";
             if (top > 100) top = 100;
 
             try
@@ -97,8 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("Expected non-empty Guid", StringComparison.OrdinalIgnoreCase))
+                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase))
                 {
                     return "Error: Relevance Search is not enabled in this Dataverse environment. " +
                            "Ask your admin to enable it in Power Platform admin center, " +
@@ -163,7 +163,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var records = results?.Value ?? [];
             var totalCount = results?.Count ?? records.Count;
 
-            sb.AppendLine($"[Search: \"{searchTerm}\"] {records.Count} results (total: {totalCount})");
+            var resultWord = records.Count == 1 ? "result" : "results";
+            sb.AppendLine($"[Search: \"{searchTerm}\"] {records.Count} {resultWord} (total: {totalCount})");
             sb.AppendLine();
 
             if (records.Count == 0)
@@ -172,13 +173,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return sb.ToString();
             }
 
-            sb.AppendLine("Entity\tId\tScore\tAttributes\tHighlights");
+            sb.AppendLine("| Entity | Id | Score | Attributes | Highlights |");
+            sb.AppendLine("|---|---|---|---|---|");
 
             foreach (var record in records)
             {
                 var attrs = FormatAttributes(record.Attributes);
                 var highlights = FormatHighlights(record.Highlights);
-                sb.AppendLine($"{record.EntityName}\t{record.Id}\t{record.Score:F2}\t{EscapeTab(attrs)}\t{EscapeTab(highlights)}");
+                sb.AppendLine($"| {EscapePipe(record.EntityName)} | {EscapePipe(record.Id)} | {record.Score:F2} | {EscapePipe(attrs)} | {EscapePipe(highlights)} |");
             }
 
             return sb.ToString();
@@ -215,8 +217,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }));
         }
 
-        private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+        private static string EscapePipe(string value) =>
+            value.Replace("|", "\\|").Replace("\n", " ").Replace("\r", "");
 
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {
