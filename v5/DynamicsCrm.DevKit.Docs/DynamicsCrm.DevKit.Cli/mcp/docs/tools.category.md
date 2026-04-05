@@ -196,6 +196,7 @@ private static readonly Dictionary<string, string> ToolCategoryMap = new()
     [nameof(GetCommandsTool)] = "standard",
     [nameof(UpsertVariableTool)] = "standard",
     [nameof(BuildFormxmlTool)] = "standard",
+    [nameof(GetWebResourcesTool)] = "standard",
 
     // advanced (6 additional tools)
     [nameof(UpsertFormTool)] = "advanced",

@@ -2,7 +2,7 @@
 
 **Date**: 2026-04-04
 **Status**: DONE
-**Scope**: (1) Rename 10 tools for clarity, (2) Rewrite `Description(...)` text in all 34 MCP tool `.cs` files to reduce token cost
+**Scope**: (1) Rename 10 tools for clarity, (2) Rewrite `Description(...)` text in all 35 MCP tool `.cs` files to reduce token cost
 **Location**: `DynamicsCrm.DevKit.Cli\Mcp\Tools\`
 **Commits**: Phase 1 = `bd6544792`, Phase 2 = `f1c15fa4c`
 
@@ -96,6 +96,7 @@ Each file has `# Before Optimization` (10 prompts) and `# After Optimization` (1
 | 32 | `get_jobs` | 2,400 | 800 | 880 | -63% | DONE |
 | 33 | `get_plugins` | 2,600 | 900 | 1,027 | -60% | DONE |
 | 34 | `get_commands` | — | 900 | 880 | — | DONE |
+| 35 | `get_webresources` | — | 800 | — | — | NEW |
 
 ---
 
