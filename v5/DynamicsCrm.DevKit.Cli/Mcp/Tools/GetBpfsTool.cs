@@ -118,13 +118,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else if (normalizedStatus == "draft")
                 filters.AppendLine("      <condition attribute='statecode' operator='eq' value='0'/>");
 
-            if (!string.IsNullOrWhiteSpace(entityName))
-                filters.AppendLine($"      <condition attribute='primaryentity' operator='eq' value='{EscapeXml(entityName.Trim().ToLowerInvariant())}'/>");
-
             if (!string.IsNullOrWhiteSpace(bpfName))
                 filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(bpfName.Trim())}%'/>");
 
-            var fetchXml = $@"<fetch top='{maxRecords}'>
+            // Note: primaryentity is EntityName type (Int32 internally), cannot filter in FetchXML with string.
+            // Fetch more records and filter client-side.
+            var fetchLimit = !string.IsNullOrWhiteSpace(entityName) ? 250 : maxRecords;
+
+            var fetchXml = $@"<fetch top='{fetchLimit}'>
   <entity name='workflow'>
     <attribute name='workflowid'/>
     <attribute name='name'/>
@@ -145,7 +146,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-            return _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
+            var entities = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml)).Entities.ToList();
+
+            if (!string.IsNullOrWhiteSpace(entityName))
+            {
+                var normalizedEntity = entityName.Trim().ToLowerInvariant();
+                entities = entities
+                    .Where(e => string.Equals(e.GetAttributeValue<string>("primaryentity"), normalizedEntity, StringComparison.OrdinalIgnoreCase))
+                    .Take(maxRecords)
+                    .ToList();
+            }
+
+            return entities;
         }
 
         private CallToolResult GetDetail(string bpfId)
@@ -314,7 +326,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <filter>
       <condition attribute='processid' operator='eq' value='{EscapeXml(bpfWorkflowId)}'/>
     </filter>
-    <order attribute='stagecategory'/>
   </entity>
 </fetch>";
 
@@ -328,10 +339,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         StageName = e.GetAttributeValue<string>("stagename") ?? "",
                         StageCategory = categoryValue.HasValue && StageCategoryMap.TryGetValue(categoryValue.Value, out var label)
                             ? label
-                            : categoryValue?.ToString() ?? "Unknown",
+                            : categoryValue.HasValue ? $"Custom ({categoryValue.Value})" : "Unknown",
+                        StageCategoryValue = categoryValue ?? int.MaxValue,
                         PrimaryEntity = e.GetAttributeValue<string>("primaryentitytypecode") ?? ""
                     };
-                }).ToList();
+                })
+                .OrderBy(s => s.StageCategoryValue)
+                .ToList();
             }
             catch
             {
@@ -364,7 +378,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
                 foreach (var e in result.Entities)
                 {
-                    var processId = e.GetAttributeValue<AliasedValue>("processId")?.Value?.ToString();
+                    var processIdValue = e.GetAttributeValue<AliasedValue>("processId")?.Value;
+                    var processId = processIdValue is EntityReference er ? er.Id.ToString() : processIdValue?.ToString();
                     var count = e.GetAttributeValue<AliasedValue>("stageCount")?.Value;
                     if (processId != null && count is int c)
                         counts[processId] = c;

@@ -1052,6 +1052,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("primaryEntity")]
         public string PrimaryEntity { get; set; }
+
+        [JsonIgnore]
+        public int StageCategoryValue { get; set; }
     }
 
     internal sealed class GetJobsResult
