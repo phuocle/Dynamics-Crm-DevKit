@@ -95,7 +95,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return ErrorResult("Error: layoutxml (layout backup file path) is required for 'undo' action.");
                         return UndoView(entityName, undoId, layoutxml.Trim(), string.IsNullOrWhiteSpace(fetchxml) ? null : fetchxml.Trim(), validate, auto_publish);
 
-                    default: // "update"
+                    case "update":
                         if (string.IsNullOrWhiteSpace(view_id))
                             return ErrorResult("Error: view_id is required for 'update' action.");
                         if (!Guid.TryParse(view_id.Trim(), out var updateId))
@@ -103,6 +103,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (string.IsNullOrWhiteSpace(layoutxml))
                             return ErrorResult("Error: layoutxml is required for 'update' action.");
                         return UpdateViewXml(entityName, updateId, layoutxml, fetchxml, validate, backup, auto_publish);
+
+                    default:
+                        return ErrorResult($"Error: '{actionName}' is not a valid action. Valid actions: update, create, rename, undo.");
                 }
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
@@ -970,14 +973,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         errors.Add($"Sync: '{attr}' in FetchXML has no matching <cell> in LayoutXML — column will be fetched but not displayed");
                 }
 
+                // Extract link-entity aliases from FetchXML
+                var linkAliases = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                if (mainEntity != null)
+                {
+                    foreach (var link in mainEntity.Descendants("link-entity"))
+                    {
+                        var alias = link.Attribute("alias")?.Value;
+                        if (alias != null)
+                            linkAliases.Add(alias);
+                    }
+                }
+
                 // Check LayoutXML cells not in FetchXML
                 foreach (var cell in layoutCells)
                 {
                     if (string.Equals(cell, rowId, StringComparison.OrdinalIgnoreCase))
                         continue;
-                    // Skip cells with dots (related entity columns like alias.columnname)
+                    // Dotted cells reference related entity columns (alias.columnname)
                     if (cell.Contains("."))
+                    {
+                        var alias = cell.Substring(0, cell.IndexOf('.'));
+                        if (!linkAliases.Contains(alias))
+                            errors.Add($"Sync: '{cell}' in LayoutXML references alias '{alias}' but no <link-entity alias=\"{alias}\"> exists in FetchXML");
                         continue;
+                    }
                     if (!fetchAttributes.Contains(cell))
                         errors.Add($"Sync: '{cell}' in LayoutXML has no matching <attribute> in FetchXML — column header shows but data is empty");
                 }
