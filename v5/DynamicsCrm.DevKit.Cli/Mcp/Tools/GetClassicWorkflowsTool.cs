@@ -25,11 +25,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_classic_workflows", Title = "List classic workflows (background and real-time) for a Dataverse entity",
+        [McpServerTool(Name = "get_classic_workflows", Title = "List and inspect classic workflows (background and real-time)",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
-            "List classic workflows (background and real-time) for a Dataverse entity.\n\n" +
+            "List and inspect classic workflows (background and real-time) for a Dataverse entity.\n\n" +
+
+            "TWO MODES:\n" +
+            "- workflow_id EMPTY: list workflows matching filters\n" +
+            "- workflow_id PROVIDED: full detail for a single workflow (description, solution, dependencies)\n\n" +
 
             "SCOPE: Classic workflows only (category=0). Use get_business_rules, get_custom_apis, get_bpfs, get_cloud_flows for others.\n\n" +
 
@@ -44,8 +48,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Background workflows always run Post-operation (async)\n" +
-            "- Realtime Pre-operation can cancel/rollback the operation")]
+            "- Realtime Pre-operation can cancel/rollback the operation\n" +
+            "- If name_filter matches exactly 1 workflow, auto-switches to detail mode")]
         public CallToolResult get_classic_workflows(
+            [Description("Workflow GUID for detail mode. Empty = list mode."
+            )] string workflow_id = "",
             [Description("Entity logical name (e.g., 'account'). Empty = all entities."
             )] string entity_name = "",
             [Description("'background' (async) or 'realtime' (sync). Empty = both."
@@ -54,11 +61,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool active_only = true,
             [Description("Filter by update trigger field (contains match, e.g., 'revenue', 'statecode')."
             )] string trigger_field = "",
-            [Description("Filter by name (contains match)."
+            [Description("Filter by name (contains match). If exactly 1 match, returns detail."
             )] string name_filter = "",
             [Description("Max records. Default: 50, max: 250."
             )] int max_records = 50)
         {
+            // Detail mode by ID
+            if (!string.IsNullOrWhiteSpace(workflow_id))
+            {
+                if (!Guid.TryParse(workflow_id.Trim(), out var wfId))
+                    return ErrorResult($"Error: Invalid workflow_id '{workflow_id.Trim()}'. Must be a GUID.");
+                try
+                {
+                    return GetWorkflowDetail(wfId);
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult($"Error: Failed to retrieve workflow: {ex.Message}");
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(mode))
             {
                 var m = mode.Trim().ToLowerInvariant();
@@ -100,12 +122,131 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                 }
 
+                // Auto-detail: if exactly 1 result, switch to detail mode
+                if (result.Entities.Count == 1 && !string.IsNullOrWhiteSpace(name_filter))
+                    return GetWorkflowDetail(result.Entities[0].Id);
+
                 return FormatResults(result.Entities, entity_name, trigger_field);
             }
             catch (Exception ex)
             {
                 return ErrorResult($"Error: Failed to retrieve workflows: {ex.Message}");
             }
+        }
+
+        private CallToolResult GetWorkflowDetail(Guid workflowId)
+        {
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='workflow'>
+    <attribute name='workflowid'/>
+    <attribute name='workflowidunique'/>
+    <attribute name='name'/>
+    <attribute name='uniquename'/>
+    <attribute name='primaryentity'/>
+    <attribute name='description'/>
+    <attribute name='triggeroncreate'/>
+    <attribute name='triggerondelete'/>
+    <attribute name='triggeronupdateattributelist'/>
+    <attribute name='createstage'/>
+    <attribute name='updatestage'/>
+    <attribute name='deletestage'/>
+    <attribute name='mode'/>
+    <attribute name='scope'/>
+    <attribute name='runas'/>
+    <attribute name='rank'/>
+    <attribute name='ondemand'/>
+    <attribute name='subprocess'/>
+    <attribute name='istransacted'/>
+    <attribute name='asyncautodelete'/>
+    <attribute name='statecode'/>
+    <attribute name='ismanaged'/>
+    <attribute name='iscustomizable'/>
+    <attribute name='businessprocesstype'/>
+    <attribute name='ownerid'/>
+    <attribute name='createdby'/>
+    <attribute name='createdon'/>
+    <attribute name='modifiedby'/>
+    <attribute name='modifiedon'/>
+    <filter>
+      <condition attribute='workflowid' operator='eq' value='{workflowId}'/>
+      <condition attribute='category' operator='eq' value='0'/>
+      <condition attribute='type' operator='eq' value='1'/>
+    </filter>
+  </entity>
+</fetch>";
+
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (result.Entities.Count == 0)
+                return ErrorResult($"Error: Classic workflow '{workflowId}' not found. Ensure it is category=0 (classic workflow).");
+
+            var e = result.Entities[0];
+            var entry = MapEntity(e);
+            var uniqueName = e.GetAttributeValue<string>("uniquename") ?? "";
+            var workflowIdUnique = e.GetAttributeValue<Guid?>("workflowidunique")?.ToString() ?? "";
+            var isCustomizable = e.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value;
+            var businessProcessType = e.GetAttributeValue<OptionSetValue>("businessprocesstype")?.Value;
+            var createdBy = e.GetAttributeValue<EntityReference>("createdby")?.Name ?? "";
+            var createdOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd") ?? "";
+            var description = e.GetAttributeValue<string>("description");
+
+            var sb = new StringBuilder(1024);
+            sb.AppendLine($"[Classic Workflow] {entry.Name}");
+            sb.AppendLine();
+            sb.AppendLine($"workflowId: {workflowId}");
+            sb.AppendLine($"workflowIdUnique: {workflowIdUnique}");
+            if (!string.IsNullOrWhiteSpace(uniqueName))
+                sb.AppendLine($"uniqueName: {uniqueName}");
+            sb.AppendLine($"primaryEntity: {entry.PrimaryEntity}");
+            sb.AppendLine($"mode: {entry.Mode}");
+            sb.AppendLine($"scope: {entry.Scope}");
+            sb.AppendLine($"runAs: {entry.RunAs}");
+            sb.AppendLine($"rank: {entry.Rank}");
+            sb.AppendLine($"status: {entry.Status}");
+            sb.AppendLine($"isManaged: {(entry.IsManaged ? "Yes" : "No")}");
+            if (isCustomizable.HasValue)
+                sb.AppendLine($"isCustomizable: {(isCustomizable.Value ? "Yes" : "No")}");
+            sb.AppendLine($"onDemand: {(entry.OnDemand ? "Yes" : "No")}");
+            sb.AppendLine($"subprocess: {(entry.Subprocess ? "Yes" : "No")}");
+            sb.AppendLine($"isTransacted: {(entry.IsTransacted ? "Yes" : "No")}");
+            sb.AppendLine($"asyncAutoDelete: {(entry.AsyncAutoDelete ? "Yes" : "No")}");
+            if (businessProcessType.HasValue)
+                sb.AppendLine($"businessProcessType: {businessProcessType.Value}");
+
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"[Description]");
+                sb.AppendLine(description.Trim());
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("[Triggers]");
+            var triggers = BuildTriggersDisplay(entry);
+            sb.AppendLine($"triggers: {triggers}");
+            if (!string.IsNullOrEmpty(entry.TriggerOnUpdateFields))
+                sb.AppendLine($"updateFields: {entry.TriggerOnUpdateFields}");
+            sb.AppendLine($"stage: {BuildStageDisplay(entry)}");
+
+            sb.AppendLine();
+            sb.AppendLine("[Audit]");
+            sb.AppendLine($"createdBy: {createdBy}");
+            sb.AppendLine($"createdOn: {createdOn}");
+            sb.AppendLine($"modifiedBy: {entry.ModifiedBy}");
+            sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
+            sb.AppendLine($"owner: {entry.Owner}");
+
+            var structured = new GetWorkflowsResult
+            {
+                TotalCount = 1,
+                EntityName = entry.PrimaryEntity,
+                Workflows = [entry]
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
         }
 
         private static string BuildFetchXml(int? objectTypeCode, string mode, bool activeOnly, string triggerField, string nameFilter, int maxRecords)

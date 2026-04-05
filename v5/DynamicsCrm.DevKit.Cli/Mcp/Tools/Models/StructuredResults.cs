@@ -1299,6 +1299,212 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string ContextValue { get; set; }
     }
 
+    // ── get_sdk_messages models ────────────────────────────────────────────
+
+    internal sealed class GetSdkMessagesResult
+    {
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("scope")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Scope { get; set; }
+
+        [JsonPropertyName("sdkMessageCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? SdkMessageCount { get; set; }
+
+        [JsonPropertyName("customActionCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? CustomActionCount { get; set; }
+
+        [JsonPropertyName("sdkMessages")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> SdkMessages { get; set; }
+
+        [JsonPropertyName("customActions")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> CustomActions { get; set; }
+
+        [JsonPropertyName("messageDetail")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public SdkMessageDetail MessageDetail { get; set; }
+
+        [JsonPropertyName("actionDetail")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public CustomActionDetail ActionDetail { get; set; }
+    }
+
+    internal sealed class SdkMessageDetail
+    {
+        [JsonPropertyName("messageId")]
+        public string MessageId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("isActive")]
+        public bool IsActive { get; set; }
+
+        [JsonPropertyName("isCustomAction")]
+        public bool IsCustomAction { get; set; }
+
+        [JsonPropertyName("availability")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Availability { get; set; }
+
+        [JsonPropertyName("supportedEntities")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> SupportedEntities { get; set; }
+
+        [JsonPropertyName("pluginStepCount")]
+        public int PluginStepCount { get; set; }
+    }
+
+    internal sealed class CustomActionDetail
+    {
+        [JsonPropertyName("workflowId")]
+        public string WorkflowId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("uniqueName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string UniqueName { get; set; }
+
+        [JsonPropertyName("primaryEntity")]
+        public string PrimaryEntity { get; set; }
+
+        [JsonPropertyName("scope")]
+        public string Scope { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("isCustomizable")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsCustomizable { get; set; }
+
+        [JsonPropertyName("owner")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Owner { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedOn { get; set; }
+
+        [JsonPropertyName("inputParameters")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ActionParameterEntry> InputParameters { get; set; }
+
+        [JsonPropertyName("outputParameters")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ActionParameterEntry> OutputParameters { get; set; }
+
+        [JsonPropertyName("pluginStepCount")]
+        public int PluginStepCount { get; set; }
+    }
+
+    internal sealed class ActionParameterEntry
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("isRequired")]
+        public bool IsRequired { get; set; }
+
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+    }
+
+    // ── get_webresources models ─────────────────────────────────────────
+
+    internal sealed class GetWebResourcesResult
+    {
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("webResources")]
+        public List<WebResourceEntry> WebResources { get; set; }
+    }
+
+    internal sealed class WebResourceEntry
+    {
+        [JsonPropertyName("webResourceId")]
+        public string WebResourceId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("typeCode")]
+        public int TypeCode { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("languageCode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? LanguageCode { get; set; }
+
+        [JsonPropertyName("isCustomizable")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsCustomizable { get; set; }
+
+        [JsonPropertyName("isHidden")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsHidden { get; set; }
+
+        [JsonPropertyName("isEnabledForMobile")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsEnabledForMobile { get; set; }
+
+        [JsonPropertyName("introducedVersion")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string IntroducedVersion { get; set; }
+
+        [JsonPropertyName("createdBy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreatedBy { get; set; }
+
+        [JsonPropertyName("createdOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreatedOn { get; set; }
+
+        [JsonPropertyName("modifiedBy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedBy { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedOn { get; set; }
+    }
+
     internal sealed class CommandChildEntry
     {
         [JsonPropertyName("commandId")]

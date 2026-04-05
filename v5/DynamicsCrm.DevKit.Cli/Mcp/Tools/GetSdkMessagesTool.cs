@@ -1,9 +1,18 @@
 using DynamicsCrm.DevKit.Shared.Services;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -11,47 +20,635 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class GetSdkMessagesTool
     {
         private readonly MetadataService _metadataService;
+        private readonly ServiceClient _serviceClient;
 
-        public GetSdkMessagesTool(MetadataService metadataService)
+        public GetSdkMessagesTool(MetadataService metadataService, ServiceClient serviceClient)
         {
             _metadataService = metadataService;
+            _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_sdk_messages", Title = "Discover Dataverse SDK messages & Custom Actions",
-            Idempotent = true, Destructive = false, ReadOnly = true),
+        private static readonly Dictionary<int, string> AvailabilityMap = new()
+        {
+            [0] = "Both",
+            [1] = "Server",
+            [2] = "Client"
+        };
+
+        private static readonly Dictionary<int, string> ScopeMap = new()
+        {
+            [1] = "User",
+            [2] = "BU",
+            [3] = "Parent:ChildBU",
+            [4] = "Org"
+        };
+
+        private static readonly Dictionary<int, string> ArgumentTypeMap = new()
+        {
+            [0] = "Boolean",
+            [1] = "DateTime",
+            [2] = "Decimal",
+            [3] = "Entity",
+            [4] = "EntityCollection",
+            [5] = "EntityReference",
+            [6] = "Float",
+            [7] = "Integer",
+            [8] = "Money",
+            [9] = "Picklist",
+            [10] = "String",
+            [11] = "StringArray",
+            [12] = "Guid"
+        };
+
+        [McpServerTool(Name = "get_sdk_messages", Title = "Discover SDK messages and Custom Actions for a Dataverse entity",
+            Idempotent = true, Destructive = false, ReadOnly = true,
+            UseStructuredContent = true, OutputSchemaType = typeof(GetSdkMessagesResult)),
         Description(
             "Discover SDK messages and Custom Actions available for a Dataverse entity.\n\n" +
 
+            "TWO MODES:\n" +
+            "- message_name EMPTY: list all SDK messages + Custom Action names for an entity or globally\n" +
+            "- message_name PROVIDED: detail for a specific message or Custom Action (parameters, supported entities, plugin steps)\n\n" +
+
             "SCOPING:\n" +
-            "- Entity-bound: provide entity logical name to get messages for that entity\n" +
+            "- Entity-bound: provide entity_name to get messages for that entity\n" +
             "- Global: use 'none' or empty for unbound messages (WhoAmI, global Custom Actions)\n\n" +
 
             "WHEN TO USE:\n" +
             "- Discover which SDK messages are available for plugin registration\n" +
-            "- Find Custom Actions registered for an entity\n\n" +
+            "- Find Custom Actions registered for an entity\n" +
+            "- Get input/output parameters of a Custom Action (workflow category=3)\n\n" +
 
-            "NOTE: For Custom API full detail (parameters, response properties), use get_custom_apis instead.")]
-        public async Task<string> get_sdk_messages(
+            "TIPS:\n" +
+            "- For Custom API detail (modern replacement), use get_custom_apis\n" +
+            "- This tool covers legacy Custom Actions (workflow-based) that get_custom_apis does NOT cover")]
+        public async Task<CallToolResult> get_sdk_messages(
             [Description(
                 "Entity logical name (lowercase). Use 'none' or empty for global messages. " +
                 "Use get_metadata_entities to discover names."
             )] string entity_name = "none",
             [Description(
-                "true: include Custom Action messages in the results. " +
-                "false: exclude Custom Actions (only show SDK messages)."
+                "Specific message or Custom Action name for detail mode. " +
+                "Empty = list all messages."
+            )] string message_name = "",
+            [Description(
+                "true: include Custom Action messages in list mode. " +
+                "false: exclude Custom Actions (only show SDK messages). Ignored in detail mode."
             )] bool include_custom_actions = true)
         {
             try
             {
-                return await MessageDiscoveryHelper.GetMessageMarkdownAsync(
-                    _metadataService,
-                    entity_name,
-                    include_custom_actions);
+                // Detail mode
+                if (!string.IsNullOrWhiteSpace(message_name))
+                    return await GetMessageDetailAsync(message_name.Trim(), entity_name);
+
+                // List mode
+                return await GetMessageListAsync(entity_name, include_custom_actions);
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to load messages for '{entity_name}': {ex.Message}";
+                return ErrorResult($"Error: Failed to load messages: {ex.Message}");
             }
         }
+
+        private async Task<CallToolResult> GetMessageListAsync(string entityName, bool includeCustomActions)
+        {
+            var normalizedScope = MessageDiscoveryHelper.NormalizeScope(entityName);
+            var text = await MessageDiscoveryHelper.GetMessageMarkdownAsync(
+                _metadataService, entityName, includeCustomActions);
+
+            // Parse counts from the formatted text for structured output
+            var sdkMessages = await GetSdkMessageNamesAsync(normalizedScope);
+            var customActions = includeCustomActions
+                ? await GetCustomActionNamesAsync(normalizedScope)
+                : [];
+
+            var structured = new GetSdkMessagesResult
+            {
+                TotalCount = sdkMessages.Count + customActions.Count,
+                Mode = "list",
+                Scope = normalizedScope,
+                SdkMessageCount = sdkMessages.Count,
+                CustomActionCount = customActions.Count,
+                SdkMessages = sdkMessages.Count > 0 ? sdkMessages : null,
+                CustomActions = customActions.Count > 0 ? customActions : null
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = text }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        private async Task<CallToolResult> GetMessageDetailAsync(string messageName, string entityName)
+        {
+            // Step 1: Try to find as SDK message
+            var sdkMsg = FindSdkMessage(messageName);
+            if (sdkMsg != null)
+            {
+                var isCustomAction = sdkMsg.GetAttributeValue<bool>("isreadonly") == false &&
+                                     sdkMsg.GetAttributeValue<bool>("isprivate") == false;
+
+                // Check if this is a Custom Action (workflow category=3)
+                var customAction = FindCustomAction(messageName);
+                if (customAction != null)
+                    return FormatCustomActionDetail(customAction, sdkMsg);
+
+                // Standard SDK message
+                return FormatSdkMessageDetail(sdkMsg);
+            }
+
+            // Step 2: Try as Custom Action name directly (workflow.name or workflow.uniquename)
+            var action = FindCustomAction(messageName);
+            if (action != null)
+            {
+                var sdkMsgForAction = FindSdkMessage(
+                    action.GetAttributeValue<string>("uniquename") ?? messageName);
+                return FormatCustomActionDetail(action, sdkMsgForAction);
+            }
+
+            return ErrorResult(
+                $"Error: Message or Custom Action '{messageName}' not found. " +
+                "Use get_sdk_messages (list mode) to discover available messages.");
+        }
+
+        private CallToolResult FormatSdkMessageDetail(Entity sdkMsg)
+        {
+            var msgId = sdkMsg.Id;
+            var name = sdkMsg.GetAttributeValue<string>("name") ?? "";
+            var isActive = sdkMsg.GetAttributeValue<bool?>("isactive") ?? true;
+            var availability = sdkMsg.GetAttributeValue<int?>("availability") ?? 0;
+
+            // Get supported entities from sdkmessagefilter
+            var supportedEntities = GetSupportedEntities(msgId);
+
+            // Count registered plugin steps
+            var pluginStepCount = CountPluginSteps(msgId);
+
+            var detail = new SdkMessageDetail
+            {
+                MessageId = msgId.ToString(),
+                Name = name,
+                IsActive = isActive,
+                IsCustomAction = false,
+                Availability = AvailabilityMap.TryGetValue(availability, out var avail) ? avail : availability.ToString(),
+                SupportedEntities = supportedEntities.Count > 0 ? supportedEntities : null,
+                PluginStepCount = pluginStepCount
+            };
+
+            var sb = new StringBuilder(512);
+            sb.AppendLine($"[SDK Message] {name}");
+            sb.AppendLine();
+            sb.AppendLine($"messageId: {msgId}");
+            sb.AppendLine($"isActive: {(isActive ? "Yes" : "No")}");
+            sb.AppendLine($"availability: {detail.Availability}");
+            sb.AppendLine($"pluginSteps: {pluginStepCount}");
+
+            if (supportedEntities.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"[Supported Entities] {supportedEntities.Count}");
+                foreach (var e in supportedEntities)
+                    sb.AppendLine($"- {e}");
+            }
+
+            var structured = new GetSdkMessagesResult
+            {
+                TotalCount = 1,
+                Mode = "detail",
+                MessageDetail = detail
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        private CallToolResult FormatCustomActionDetail(Entity workflow, Entity sdkMsg)
+        {
+            var workflowId = workflow.Id;
+            var name = workflow.GetAttributeValue<string>("name") ?? "";
+            var uniqueName = workflow.GetAttributeValue<string>("uniquename") ?? "";
+            var primaryEntity = workflow.GetAttributeValue<string>("primaryentity") ?? "none";
+            var scopeValue = workflow.GetAttributeValue<OptionSetValue>("scope")?.Value ?? 4;
+            var stateValue = workflow.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0;
+            var isManaged = workflow.GetAttributeValue<bool>("ismanaged");
+            var isCustomizable = workflow.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value;
+            var owner = workflow.GetAttributeValue<EntityReference>("ownerid")?.Name ?? "";
+            var modifiedOn = workflow.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd") ?? "";
+
+            // Get input/output parameters from process entity (argumentdescription XML)
+            var (inputParams, outputParams) = GetActionParameters(workflowId);
+
+            // Count plugin steps
+            var pluginStepCount = sdkMsg != null ? CountPluginSteps(sdkMsg.Id) : 0;
+
+            var detail = new CustomActionDetail
+            {
+                WorkflowId = workflowId.ToString(),
+                Name = name,
+                UniqueName = uniqueName,
+                PrimaryEntity = primaryEntity,
+                Scope = ScopeMap.TryGetValue(scopeValue, out var scope) ? scope : scopeValue.ToString(),
+                Status = stateValue == 1 ? "Active" : "Draft",
+                IsManaged = isManaged,
+                IsCustomizable = isCustomizable,
+                Owner = owner,
+                ModifiedOn = modifiedOn,
+                InputParameters = inputParams.Count > 0 ? inputParams : null,
+                OutputParameters = outputParams.Count > 0 ? outputParams : null,
+                PluginStepCount = pluginStepCount
+            };
+
+            var sb = new StringBuilder(1024);
+            sb.AppendLine($"[Custom Action] {name}");
+            sb.AppendLine();
+            sb.AppendLine($"workflowId: {workflowId}");
+            sb.AppendLine($"uniqueName: {uniqueName}");
+            sb.AppendLine($"primaryEntity: {primaryEntity}");
+            sb.AppendLine($"scope: {detail.Scope}");
+            sb.AppendLine($"status: {detail.Status}");
+            sb.AppendLine($"isManaged: {(isManaged ? "Yes" : "No")}");
+            if (isCustomizable.HasValue)
+                sb.AppendLine($"isCustomizable: {(isCustomizable.Value ? "Yes" : "No")}");
+            sb.AppendLine($"owner: {owner}");
+            sb.AppendLine($"modifiedOn: {modifiedOn}");
+            sb.AppendLine($"pluginSteps: {pluginStepCount}");
+
+            if (inputParams.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"[Input Parameters] {inputParams.Count}");
+                sb.AppendLine();
+                sb.AppendLine("Name\tType\tRequired\tEntityName\tDescription");
+                foreach (var p in inputParams)
+                    sb.AppendLine($"{EscapeTab(p.Name)}\t{p.Type}\t{(p.IsRequired ? "Yes" : "No")}\t{EscapeTab(p.EntityName ?? "-")}\t{EscapeTab(p.Description ?? "")}");
+            }
+
+            if (outputParams.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"[Output Parameters] {outputParams.Count}");
+                sb.AppendLine();
+                sb.AppendLine("Name\tType\tEntityName\tDescription");
+                foreach (var p in outputParams)
+                    sb.AppendLine($"{EscapeTab(p.Name)}\t{p.Type}\t{EscapeTab(p.EntityName ?? "-")}\t{EscapeTab(p.Description ?? "")}");
+            }
+
+            var structured = new GetSdkMessagesResult
+            {
+                TotalCount = 1,
+                Mode = "detail",
+                ActionDetail = detail
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Query helpers ────────────────────────────────────────────────────────
+
+        private Entity FindSdkMessage(string messageName)
+        {
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid'/>
+    <attribute name='name'/>
+    <attribute name='isactive'/>
+    <attribute name='availability'/>
+    <attribute name='isreadonly'/>
+    <attribute name='isprivate'/>
+    <filter>
+      <condition attribute='name' operator='eq' value='{EscapeXml(messageName)}'/>
+    </filter>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                return result.Entities.Count > 0 ? result.Entities[0] : null;
+            }
+            catch { return null; }
+        }
+
+        private Entity FindCustomAction(string actionName)
+        {
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='workflow'>
+    <attribute name='workflowid'/>
+    <attribute name='name'/>
+    <attribute name='uniquename'/>
+    <attribute name='primaryentity'/>
+    <attribute name='scope'/>
+    <attribute name='statecode'/>
+    <attribute name='ismanaged'/>
+    <attribute name='iscustomizable'/>
+    <attribute name='ownerid'/>
+    <attribute name='modifiedon'/>
+    <attribute name='description'/>
+    <filter type='and'>
+      <condition attribute='category' operator='eq' value='3'/>
+      <condition attribute='type' operator='eq' value='1'/>
+      <filter type='or'>
+        <condition attribute='name' operator='eq' value='{EscapeXml(actionName)}'/>
+        <condition attribute='uniquename' operator='eq' value='{EscapeXml(actionName)}'/>
+      </filter>
+    </filter>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                return result.Entities.Count > 0 ? result.Entities[0] : null;
+            }
+            catch { return null; }
+        }
+
+        private List<string> GetSupportedEntities(Guid sdkMessageId)
+        {
+            var fetchXml = $@"<fetch>
+  <entity name='sdkmessagefilter'>
+    <attribute name='primaryobjecttypecode'/>
+    <filter>
+      <condition attribute='sdkmessageid' operator='eq' value='{sdkMessageId}'/>
+      <condition attribute='isvisible' operator='eq' value='true'/>
+    </filter>
+    <order attribute='primaryobjecttypecode'/>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                return result.Entities
+                    .Select(e => e.GetAttributeValue<string>("primaryobjecttypecode") ?? "")
+                    .Where(s => !string.IsNullOrWhiteSpace(s) && s != "none")
+                    .Distinct()
+                    .OrderBy(s => s)
+                    .ToList();
+            }
+            catch { return []; }
+        }
+
+        private int CountPluginSteps(Guid sdkMessageId)
+        {
+            var fetchXml = $@"<fetch aggregate='true'>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='sdkmessageprocessingstepid' alias='cnt' aggregate='count'/>
+    <filter>
+      <condition attribute='sdkmessageid' operator='eq' value='{sdkMessageId}'/>
+      <condition attribute='statecode' operator='eq' value='0'/>
+    </filter>
+    <link-entity name='plugintype' from='plugintypeid' to='plugintypeid'>
+      <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid'>
+        <filter>
+          <condition attribute='ishidden' operator='eq' value='false'/>
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (result.Entities.Count > 0)
+                {
+                    var alias = result.Entities[0].GetAttributeValue<AliasedValue>("cnt");
+                    if (alias?.Value is int count) return count;
+                }
+            }
+            catch { }
+            return 0;
+        }
+
+        private (List<ActionParameterEntry> inputs, List<ActionParameterEntry> outputs) GetActionParameters(Guid workflowId)
+        {
+            var inputs = new List<ActionParameterEntry>();
+            var outputs = new List<ActionParameterEntry>();
+
+            // Custom Action parameters are stored in process XML (argumentdescription or clientdata)
+            // Query the workflow entity for XAML content and parse, OR query sdkmessagerequestfield/sdkmessageresponsefield
+            // More reliable: query via sdkmessage → sdkmessagepair → sdkmessagerequest/response fields
+
+            // First find the SDK message for this action
+            var fetchMsg = $@"<fetch top='1'>
+  <entity name='sdkmessage'>
+    <attribute name='sdkmessageid'/>
+    <filter>
+      <condition attribute='name' operator='eq' value='{EscapeXml(GetWorkflowUniqueName(workflowId))}'/>
+    </filter>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var msgResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchMsg));
+                if (msgResult.Entities.Count == 0) return (inputs, outputs);
+
+                var msgId = msgResult.Entities[0].Id;
+
+                // Query request fields
+                var fetchReq = $@"<fetch>
+  <entity name='sdkmessagerequest'>
+    <attribute name='sdkmessagerequestid'/>
+    <filter>
+      <condition attribute='sdkmessagepairid' operator='in'>
+        <value>{msgId}</value>
+      </condition>
+    </filter>
+    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid'>
+      <filter>
+        <condition attribute='sdkmessageid' operator='eq' value='{msgId}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+
+                // Fallback: use workflow's input/output arguments from process entity
+                inputs = GetActionParametersFromProcess(workflowId, true);
+                outputs = GetActionParametersFromProcess(workflowId, false);
+            }
+            catch { }
+
+            return (inputs, outputs);
+        }
+
+        private List<ActionParameterEntry> GetActionParametersFromProcess(Guid workflowId, bool isInput)
+        {
+            var parameters = new List<ActionParameterEntry>();
+
+            // Query workflow's XAML for argument definitions
+            // Custom Actions store their arguments in the workflow.xaml field as XAML Activity definitions
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='workflow'>
+    <attribute name='xaml'/>
+    <attribute name='clientdata'/>
+    <filter>
+      <condition attribute='workflowid' operator='eq' value='{workflowId}'/>
+    </filter>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (result.Entities.Count == 0) return parameters;
+
+                var xaml = result.Entities[0].GetAttributeValue<string>("xaml") ?? "";
+                if (string.IsNullOrEmpty(xaml)) return parameters;
+
+                // Parse XAML arguments: <x:Property Name="ArgumentName" Type="InArgument(xxx)" />
+                // or <x:Property Name="ArgumentName" Type="OutArgument(xxx)" />
+                var directionPrefix = isInput ? "InArgument" : "OutArgument";
+                var inOutPrefix = isInput ? "InOutArgument" : null;
+
+                var lines = xaml.Split('\n');
+                foreach (var line in lines)
+                {
+                    var trimmed = line.Trim();
+                    if (!trimmed.StartsWith("<x:Property ")) continue;
+
+                    // Extract Name and Type
+                    var nameMatch = ExtractAttribute(trimmed, "Name");
+                    var typeMatch = ExtractAttribute(trimmed, "Type");
+                    if (nameMatch == null || typeMatch == null) continue;
+
+                    var isMatch = typeMatch.StartsWith(directionPrefix + "(") ||
+                                  (inOutPrefix != null && typeMatch.StartsWith(inOutPrefix + "("));
+
+                    // InOutArgument counts as both input and output
+                    if (!isMatch && typeMatch.StartsWith("InOutArgument("))
+                        isMatch = true;
+
+                    if (!isMatch) continue;
+
+                    // Extract the inner type: InArgument(String) -> String
+                    var openParen = typeMatch.IndexOf('(');
+                    var closeParen = typeMatch.LastIndexOf(')');
+                    var innerType = openParen >= 0 && closeParen > openParen
+                        ? typeMatch.Substring(openParen + 1, closeParen - openParen - 1)
+                        : typeMatch;
+
+                    // Check Required attribute
+                    var requiredAttr = ExtractAttribute(trimmed, "IsRequired");
+                    var isRequired = requiredAttr != null && requiredAttr.Equals("True", StringComparison.OrdinalIgnoreCase);
+
+                    parameters.Add(new ActionParameterEntry
+                    {
+                        Name = nameMatch,
+                        Type = SimplifyType(innerType),
+                        IsRequired = isRequired,
+                        EntityName = innerType.Contains("Entity") && !innerType.Equals("EntityReference") && !innerType.Equals("EntityCollection")
+                            ? ExtractEntityType(innerType)
+                            : null
+                    });
+                }
+            }
+            catch { }
+
+            return parameters;
+        }
+
+        private string GetWorkflowUniqueName(Guid workflowId)
+        {
+            try
+            {
+                var entity = _serviceClient.Retrieve("workflow", workflowId, new ColumnSet("uniquename"));
+                return entity.GetAttributeValue<string>("uniquename") ?? "";
+            }
+            catch { return ""; }
+        }
+
+        private async Task<List<string>> GetSdkMessageNamesAsync(string scope)
+        {
+            var isNone = scope == "none";
+            var messages = isNone
+                ? await _metadataService.GetSdkMessagesNoneAsync()
+                : await _metadataService.GetSdkMessagesAsync(scope);
+
+            return messages
+                .Select(x => x.Name)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x)
+                .ToList();
+        }
+
+        private async Task<List<string>> GetCustomActionNamesAsync(string scope)
+        {
+            var isNone = scope == "none";
+            var actions = isNone
+                ? await _metadataService.GetCustomActionsAsync()
+                : await _metadataService.GetCustomActionsAsync(scope);
+
+            var names = actions.Select(x => x.Name);
+
+            if (isNone)
+            {
+                var customApis = await _metadataService.GetCustomApisAsync(scope);
+                if (customApis.Count > 0)
+                {
+                    var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
+                    names = names.Where(x => !apiNames.Contains(x));
+                }
+            }
+
+            return names
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x)
+                .ToList();
+        }
+
+        // ── Helpers ──────────────────────────────────────────────────────────────
+
+        private static string ExtractAttribute(string xml, string attrName)
+        {
+            var search = $"{attrName}=\"";
+            var idx = xml.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+            if (idx < 0) return null;
+            idx += search.Length;
+            var end = xml.IndexOf('"', idx);
+            return end > idx ? xml.Substring(idx, end - idx) : null;
+        }
+
+        private static string SimplifyType(string type)
+        {
+            if (type == null) return "Unknown";
+            // Remove namespace: System.String -> String
+            var lastDot = type.LastIndexOf('.');
+            return lastDot >= 0 ? type.Substring(lastDot + 1) : type;
+        }
+
+        private static string ExtractEntityType(string type)
+        {
+            // EntityReference(account) -> account
+            var open = type.IndexOf('(');
+            var close = type.LastIndexOf(')');
+            if (open >= 0 && close > open)
+                return type.Substring(open + 1, close - open - 1);
+            return null;
+        }
+
+        private static string EscapeXml(string value) =>
+            value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("\"", "&quot;");
+
+        private static string EscapeTab(string value) =>
+            value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }

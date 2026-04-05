@@ -1,6 +1,6 @@
 # MCP Tool Categories — Filter by `--category`
 
-**Date**: 2026-04-04
+**Date**: 2026-04-05
 **Status**: Proposal
 **Purpose**: Let users load only a subset of 34 tools via `devkit mcp --category <name>`
 
@@ -16,71 +16,72 @@ Loading 34 tools into an AI context costs ~8,500 tokens just for descriptions. M
 
 | Category | Slug | Description | Count |
 |----------|------|-------------|-------|
-| **Basic** | `basic` | Core essentials — query data, read metadata, CRUD. Enough for 80% of daily work. | 10 |
-| **Standard** | `standard` | Basic + inspection tools — forms, views, roles, workflows, flows, plugins, commands, auditing. Full read + safe writes. | 28 |
-| **Advanced** | `advanced` | Standard + schema changes + raw Web API. Creates entities, attributes, modifies forms/views/sitemaps. | 34 |
-| **All** | `all` | Alias for `advanced`. Default when no `--category` specified. | 34 |
+| **Basic** | `basic` | Core essentials — query data, read metadata, CRUD. Enough for 80% of daily work. | 9 |
+| **Standard** | `standard` | Basic + inspection tools — forms, views, roles, workflows, flows, plugins, commands, auditing, publish. Full read + safe writes. | 29 |
+| **Advanced** | `advanced` | Standard + schema changes + raw Web API. Creates entities, attributes, modifies forms/views/sitemaps. | 35 |
+| **All** | `all` | Alias for `advanced`. Loads all 35 tools. **This is the default when no `--category` is specified.** | 35 |
 
-**Key design**: Each level **includes all tools from the previous level** (cumulative, not exclusive).
+**Key design**: Each level **includes all tools from the previous level** (cumulative, not exclusive). Default is `all` — no category filter means load everything.
 
 ---
 
 ## Tool Assignment
 
-### `basic` — 10 tools
+### `basic` — 9 tools
 
-> Everyday Dataverse operations: identify, query, read/write data, publish.
+> Everyday Dataverse operations: identify, query, read/write data.
 
-| # | Tool | Purpose |
-|---|------|---------|
-| 1 | `whoami` | Identity + environment info |
-| 2 | `get_metadata_entities` | List/detail entity metadata (attributes, relationships) |
-| 3 | `get_global_optionsets` | List/detail global choice columns |
-| 4 | `get_record` | Retrieve a single record by ID |
-| 5 | `upsert_record` | Create/update/upsert a data record |
-| 6 | `delete_record` | Delete a record by ID |
-| 7 | `execute_fetchxml` | FetchXML queries (filters, joins, aggregation) |
-| 8 | `relevance_search` | Full-text search across entities |
-| 9 | `parse_record_url` | Extract entity + ID from Dynamics 365 URLs |
-| 10 | `publish_customizations` | Publish metadata changes |
+| # | Tool | Class | Purpose |
+|---|------|-------|---------|
+| 1 | `whoami` | `WhoAmITool` | Identity + environment info |
+| 2 | `get_metadata_entities` | `GetMetadataEntitiesTool` | List/detail entity metadata (attributes, relationships) |
+| 3 | `get_global_optionsets` | `GetGlobalOptionSetsTool` | List/detail global choice columns |
+| 4 | `get_record` | `GetRecordTool` | Retrieve a single record by ID |
+| 5 | `upsert_record` | `UpsertRecordTool` | Create/update/upsert a data record |
+| 6 | `delete_record` | `DeleteRecordTool` | Delete a record by ID |
+| 7 | `execute_fetchxml` | `ExecuteFetchXmlTool` | FetchXML queries (filters, joins, aggregation) |
+| 8 | `relevance_search` | `RelevanceSearchTool` | Full-text search across entities |
+| 9 | `parse_record_url` | `ParseRecordUrlTool` | Extract entity + ID from Dynamics 365 URLs |
 
-### `standard` — 28 tools (basic + 18 more)
+### `standard` — 29 tools (basic + 20 more)
 
-> Adds: inspection tools, process discovery, security, auditing, debugging, solution management, commands.
+> Adds: publish, inspection tools, process discovery, security, auditing, debugging, solution management, commands.
 
-| # | Tool | Purpose |
-|---|------|---------|
-| 11 | `get_forms` | List/detail form definitions (FormXML) |
-| 12 | `get_views` | List/detail view definitions (FetchXML + LayoutXML) |
-| 13 | `get_roles` | Security roles, privileges, user role assignments |
-| 14 | `get_sdk_messages` | SDK messages + Custom Actions for an entity |
-| 15 | `get_variables` | Environment variables (read-only) |
-| 16 | `get_classic_workflows` | Classic workflows (category=0) |
-| 17 | `get_cloud_flows` | Power Automate cloud flows (category=5) + run history |
-| 18 | `get_bpfs` | Business Process Flows (category=4) + stages |
-| 19 | `get_business_rules` | Business rules (category=2, client-side logic) |
-| 20 | `get_custom_apis` | Custom API definitions + parameters |
-| 21 | `get_audit_history` | Audit trail — who changed what, when |
-| 22 | `get_solution_components` | Components inside a solution + active layers |
-| 23 | `get_plugin_trace_logs` | Plugin trace log output + exceptions |
-| 24 | `get_jobs` | System jobs — async plugin/workflow failures |
-| 25 | `get_plugins` | Plugin assemblies, types, steps, images |
-| 26 | `get_commands` | List/inspect modern command bar buttons (appaction) |
-| 27 | `upsert_variable` | Create/update environment variables |
-| 28 | `build_formxml` | Build FormXML (read-only builder, returns XML) |
+| # | Tool | Class | Purpose |
+|---|------|-------|---------|
+| 10 | `publish_customizations` | `PublishCustomizationsTool` | Publish metadata changes |
+| 11 | `get_forms` | `GetFormsTool` | List/detail form definitions (FormXML) |
+| 12 | `get_views` | `GetViewsTool` | List/detail view definitions (FetchXML + LayoutXML) |
+| 13 | `get_roles` | `GetRolesTool` | Security roles, privileges, user role assignments |
+| 14 | `get_sdk_messages` | `GetSdkMessagesTool` | SDK messages + Custom Actions for an entity |
+| 15 | `get_variables` | `GetVariablesTool` | Environment variables (read-only) |
+| 16 | `get_classic_workflows` | `GetClassicWorkflowsTool` | Classic workflows (category=0) |
+| 17 | `get_cloud_flows` | `GetCloudFlowsTool` | Power Automate cloud flows (category=5) + run history |
+| 18 | `get_bpfs` | `GetBpfsTool` | Business Process Flows (category=4) + stages |
+| 19 | `get_business_rules` | `GetBusinessRulesTool` | Business rules (category=2, client-side logic) |
+| 20 | `get_custom_apis` | `GetCustomApisTool` | Custom API definitions + parameters |
+| 21 | `get_audit_history` | `GetAuditHistoryTool` | Audit trail — who changed what, when |
+| 22 | `get_solution_components` | `GetSolutionComponentsTool` | Components inside a solution + active layers |
+| 23 | `get_plugin_trace_logs` | `GetPluginTraceLogsTool` | Plugin trace log output + exceptions |
+| 24 | `get_jobs` | `GetJobsTool` | System jobs — async plugin/workflow failures |
+| 25 | `get_plugins` | `GetPluginsTool` | Plugin assemblies, types, steps, images |
+| 26 | `get_commands` | `GetCommandsTool` | List/inspect modern command bar buttons (appaction) |
+| 27 | `upsert_variable` | `UpsertVariableTool` | Create/update environment variables |
+| 28 | `build_formxml` | `BuildFormxmlTool` | Build FormXML (read-only builder, returns XML) |
+| 29 | `get_webresources` | `GetWebResourcesTool` | List/inspect web resources (JS, CSS, HTML, images, RESX) |
 
-### `advanced` — 34 tools (standard + 6 more)
+### `advanced` — 35 tools (standard + 6 more)
 
 > Adds: schema changes (entities, attributes), UI modification (forms, views, sitemaps), raw Web API.
 
-| # | Tool | Purpose |
-|---|------|---------|
-| 29 | `upsert_form` | Update/rename/undo forms (with backup + validation) |
-| 30 | `upsert_view` | Create/update/rename/undo views (with backup + sync check) |
-| 31 | `upsert_sitemap` | Create/update/undo app sitemaps (with backup + XSD) |
-| 32 | `upsert_entity` | Create a new custom entity/table |
-| 33 | `upsert_attribute` | Create/update columns on entities |
-| 34 | `execute_webapi` | Raw Web API — any HTTP method (the "escape hatch") |
+| # | Tool | Class | Purpose |
+|---|------|-------|---------|
+| 30 | `upsert_form` | `UpsertFormTool` | Update/rename/undo forms (with backup + validation) |
+| 31 | `upsert_view` | `UpsertViewTool` | Create/update/rename/undo views (with backup + sync check) |
+| 32 | `upsert_sitemap` | `UpsertSiteMapTool` | Create/update/undo app sitemaps (with backup + XSD) |
+| 33 | `upsert_entity` | `UpsertEntityTool` | Create a new custom entity/table |
+| 34 | `upsert_attribute` | `UpsertAttributeTool` | Create/update columns on entities |
+| 35 | `execute_webapi` | `ExecuteWebApiTool` | Raw Web API — any HTTP method (the "escape hatch") |
 
 ---
 
@@ -88,9 +89,9 @@ Loading 34 tools into an AI context costs ~8,500 tokens just for descriptions. M
 
 | Category | Tools | Est. tokens | vs All |
 |----------|-------|-------------|--------|
-| `basic` | 10 | ~2,600 | -69% |
-| `standard` | 28 | ~7,000 | -18% |
-| `advanced` / `all` | 34 | ~8,500 | baseline |
+| `basic` | 9 | ~2,350 | -72% |
+| `standard` | 29 | ~7,200 | -16% |
+| `advanced` / `all` | 35 | ~8,700 | baseline |
 
 ---
 
@@ -120,10 +121,10 @@ What the user sees on the MCP UI:
 
 | `--category` | Tools visible | Use case |
 |---|---|---|
-| `basic` | 10 tools | Daily data work, queries, simple CRUD |
-| `standard` | 28 tools | Full inspection + debugging + safe writes + commands |
-| `advanced` | 34 tools | Schema changes + raw Web API |
-| _(none)_ | 34 tools | Same as `advanced` (default) |
+| `basic` | 9 tools | Daily data work, queries, simple CRUD |
+| `standard` | 29 tools | Full inspection + debugging + safe writes + commands + web resources |
+| `advanced` | 35 tools | Schema changes + raw Web API |
+| _(none)_ | 35 tools | Same as `all` — **loads everything** (default) |
 
 ### Multi-Server Setup (split by role)
 
@@ -152,56 +153,57 @@ What the user sees on the MCP UI:
 
 ```csharp
 [CommandOption("--category")]
-[Description("Tool category: basic (10), standard (28), advanced (34, default). Controls which tools load.")]
-[DefaultValue("advanced")]
-public string Category { get; set; } = "advanced";
+[Description("Tool category: basic (9), standard (28), advanced (34). Default: all (loads everything).")]
+[DefaultValue("all")]
+public string Category { get; set; } = "all";
 ```
 
 ### Step 2: Define category map in `McpServerHost.cs`
 
 ```csharp
 // Tool category assignment — cumulative levels
+// Uses nameof() to reference tool classes for compile-time safety
 private static readonly Dictionary<string, string> ToolCategoryMap = new()
 {
-    // basic (10 tools)
-    ["whoami"] = "basic",
-    ["get_metadata_entities"] = "basic",
-    ["get_global_optionsets"] = "basic",
-    ["get_record"] = "basic",
-    ["upsert_record"] = "basic",
-    ["delete_record"] = "basic",
-    ["execute_fetchxml"] = "basic",
-    ["relevance_search"] = "basic",
-    ["parse_record_url"] = "basic",
-    ["publish_customizations"] = "basic",
+    // basic (9 tools)
+    [nameof(WhoAmITool)] = "basic",
+    [nameof(GetMetadataEntitiesTool)] = "basic",
+    [nameof(GetGlobalOptionSetsTool)] = "basic",
+    [nameof(GetRecordTool)] = "basic",
+    [nameof(UpsertRecordTool)] = "basic",
+    [nameof(DeleteRecordTool)] = "basic",
+    [nameof(ExecuteFetchXmlTool)] = "basic",
+    [nameof(RelevanceSearchTool)] = "basic",
+    [nameof(ParseRecordUrlTool)] = "basic",
 
-    // standard (18 additional tools)
-    ["get_forms"] = "standard",
-    ["get_views"] = "standard",
-    ["get_roles"] = "standard",
-    ["get_sdk_messages"] = "standard",
-    ["get_variables"] = "standard",
-    ["get_classic_workflows"] = "standard",
-    ["get_cloud_flows"] = "standard",
-    ["get_bpfs"] = "standard",
-    ["get_business_rules"] = "standard",
-    ["get_custom_apis"] = "standard",
-    ["get_audit_history"] = "standard",
-    ["get_solution_components"] = "standard",
-    ["get_plugin_trace_logs"] = "standard",
-    ["get_jobs"] = "standard",
-    ["get_plugins"] = "standard",
-    ["get_commands"] = "standard",
-    ["upsert_variable"] = "standard",
-    ["build_formxml"] = "standard",
+    // standard (19 additional tools)
+    [nameof(PublishCustomizationsTool)] = "standard",
+    [nameof(GetFormsTool)] = "standard",
+    [nameof(GetViewsTool)] = "standard",
+    [nameof(GetRolesTool)] = "standard",
+    [nameof(GetSdkMessagesTool)] = "standard",
+    [nameof(GetVariablesTool)] = "standard",
+    [nameof(GetClassicWorkflowsTool)] = "standard",
+    [nameof(GetCloudFlowsTool)] = "standard",
+    [nameof(GetBpfsTool)] = "standard",
+    [nameof(GetBusinessRulesTool)] = "standard",
+    [nameof(GetCustomApisTool)] = "standard",
+    [nameof(GetAuditHistoryTool)] = "standard",
+    [nameof(GetSolutionComponentsTool)] = "standard",
+    [nameof(GetPluginTraceLogsTool)] = "standard",
+    [nameof(GetJobsTool)] = "standard",
+    [nameof(GetPluginsTool)] = "standard",
+    [nameof(GetCommandsTool)] = "standard",
+    [nameof(UpsertVariableTool)] = "standard",
+    [nameof(BuildFormxmlTool)] = "standard",
 
     // advanced (6 additional tools)
-    ["upsert_form"] = "advanced",
-    ["upsert_view"] = "advanced",
-    ["upsert_sitemap"] = "advanced",
-    ["upsert_entity"] = "advanced",
-    ["upsert_attribute"] = "advanced",
-    ["execute_webapi"] = "advanced",
+    [nameof(UpsertFormTool)] = "advanced",
+    [nameof(UpsertViewTool)] = "advanced",
+    [nameof(UpsertSiteMapTool)] = "advanced",
+    [nameof(UpsertEntityTool)] = "advanced",
+    [nameof(UpsertAttributeTool)] = "advanced",
+    [nameof(ExecuteWebApiTool)] = "advanced",
 };
 
 private static readonly Dictionary<string, int> CategoryLevel = new()
@@ -209,14 +211,14 @@ private static readonly Dictionary<string, int> CategoryLevel = new()
     ["basic"] = 1,
     ["standard"] = 2,
     ["advanced"] = 3,
-    ["all"] = 3,
+    ["all"] = 3,  // all = load everything = same as advanced
 };
 ```
 
 ### Step 3: Replace `WithToolsFromAssembly()` in `McpServerHost.cs`
 
 ```csharp
-public async Task RunAsync(string category = "advanced")
+public async Task RunAsync(string category = "all")
 {
     var builder = Host.CreateApplicationBuilder();
     // ... logging, services ...
@@ -240,10 +242,6 @@ public async Task RunAsync(string category = "advanced")
         .WithResourcesFromAssembly();
 
     // Register only tools matching the requested level
-    var mcpBuilder = builder.Services.BuildServiceProvider()
-        .GetRequiredService<IMcpServerBuilder>(); // pseudo — see actual API below
-
-    // ACTUAL approach: use WithTools<T>() for each matching tool type
     RegisterFilteredTools(builder.Services, requestedLevel);
 
     await builder.Build().RunAsync();
@@ -257,27 +255,19 @@ private void RegisterFilteredTools(IServiceCollection services, int requestedLev
 
     foreach (var toolType in toolTypes)
     {
-        // Check if any method in this tool type matches the requested category
-        var shouldInclude = toolType.GetMethods()
-            .Where(m => m.GetCustomAttribute<McpServerToolAttribute>() != null)
-            .Any(m =>
-            {
-                var toolName = m.GetCustomAttribute<McpServerToolAttribute>()?.Name ?? m.Name;
-                if (!ToolCategoryMap.TryGetValue(toolName, out var toolCategory))
-                    return true; // unknown tools default to included
-                var toolLevel = CategoryLevel.TryGetValue(toolCategory, out var tl) ? tl : 3;
-                return toolLevel <= requestedLevel;
-            });
+        var typeName = toolType.Name;
+        if (!ToolCategoryMap.TryGetValue(typeName, out var toolCategory))
+            continue; // unknown tools are excluded — all tools must be in the map
 
-        if (shouldInclude)
-        {
-            // Use reflection to call WithTools<T>() for this type
-            // McpServerBuilderExtensions.WithTools<T>(builder) is generic
-            var method = typeof(McpServerBuilderExtensions)
-                .GetMethods()
-                .First(m => m.Name == "WithTools" && m.IsGenericMethod);
-            // ... invoke with toolType
-        }
+        var toolLevel = CategoryLevel.TryGetValue(toolCategory, out var tl) ? tl : 3;
+        if (toolLevel > requestedLevel)
+            continue; // skip tools above the requested level
+
+        // Use reflection to call WithTools<T>() for this type
+        var method = typeof(McpServerBuilderExtensions)
+            .GetMethods()
+            .First(m => m.Name == "WithTools" && m.IsGenericMethod);
+        // ... invoke with toolType
     }
 }
 ```
@@ -297,9 +287,9 @@ Update `GetCategory()` and `PrintTools()` to use the new 3-tier system.
 ### Step 5: Update `McpCommand.cs` — `GetCategory()`
 
 ```csharp
-private static string GetCategory(string name, bool readOnly, bool destructive)
+private static string GetCategory(string typeName)
 {
-    if (McpServerHost.ToolCategoryMap.TryGetValue(name, out var category))
+    if (McpServerHost.ToolCategoryMap.TryGetValue(typeName, out var category))
     {
         return category switch
         {
@@ -309,7 +299,7 @@ private static string GetCategory(string name, bool readOnly, bool destructive)
             _ => "Advanced"
         };
     }
-    return readOnly ? "Standard" : "Advanced";
+    return "Advanced"; // unknown tools default to advanced
 }
 ```
 
@@ -321,7 +311,7 @@ The existing `mcp-category-filtering-plan.md` proposed `read`/`write`/`advance` 
 
 | Old (attribute-based) | New (tier-based) | Why change |
 |---|---|---|
-| `read` (17 tools) | `basic` (10) + `standard` (28) | Users don't think "read vs write" — they think "I need basics" vs "I need everything" |
+| `read` (17 tools) | `basic` (9) + `standard` (28) | Users don't think "read vs write" — they think "I need basics" vs "I need everything" |
 | `write` (9 tools) | Distributed across `basic` and `advanced` | `upsert_record` is basic; `upsert_form` is advanced |
 | `advance` (1 tool) | Part of `advanced` (6 tools) | Group all risky/powerful tools together |
 
