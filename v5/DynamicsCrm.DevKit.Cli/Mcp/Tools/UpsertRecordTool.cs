@@ -119,10 +119,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var doc = JsonDocument.Parse(fieldsJson);
-                var count = 0;
-                foreach (var _ in doc.RootElement.EnumerateObject())
-                    count++;
-                return count;
+                var seen = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var prop in doc.RootElement.EnumerateObject())
+                    seen.Add(prop.Name);
+                return seen.Count;
             }
             catch
             {
