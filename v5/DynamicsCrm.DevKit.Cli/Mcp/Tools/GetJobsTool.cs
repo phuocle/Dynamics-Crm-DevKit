@@ -1,5 +1,7 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -54,6 +56,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [32] = "Canceled"
         };
 
+        private static readonly HashSet<string> ValidStatuses = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "failed", "succeeded", "waiting", "in_progress", "canceled", "all"
+        };
+
+        private static readonly HashSet<string> ValidOperationTypes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "plugin", "workflow", "bulk_delete", "import", "goal_rollup", "solution", "all"
+        };
+
         [McpServerTool(Name = "get_jobs", Title = "List and inspect system jobs (async operations) for debugging failures",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetJobsResult)),
@@ -82,6 +94,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (max_records > 500) max_records = 500;
             if (minutes_ago <= 0) minutes_ago = 1440;
             if (minutes_ago > 43200) minutes_ago = 43200;
+
+            var normalizedStatus = (status ?? "failed").Trim().ToLowerInvariant();
+            if (!ValidStatuses.Contains(normalizedStatus))
+                return ErrorResult($"Error: '{status?.Trim()}' is not a valid status. Valid values: failed, succeeded, waiting, in_progress, canceled, all.");
+
+            var normalizedOpType = (operation_type ?? "").Trim().ToLowerInvariant();
+            if (!string.IsNullOrEmpty(normalizedOpType) && !ValidOperationTypes.Contains(normalizedOpType))
+                return ErrorResult($"Error: '{operation_type?.Trim()}' is not a valid operation_type. Valid values: plugin, workflow, bulk_delete, import, goal_rollup, solution, all.");
 
             if (!string.IsNullOrWhiteSpace(correlation_id) && !Guid.TryParse(correlation_id.Trim(), out _))
                 return ErrorResult($"Error: '{correlation_id.Trim()}' is not a valid GUID for correlation_id.");
@@ -123,9 +143,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Time filter
             filters.AppendLine($"      <condition attribute='startedon' operator='ge' value='{fromDate}'/>");
 
-            // Entity filter
+            // Entity filter — resolve logical name to ObjectTypeCode
             if (!string.IsNullOrWhiteSpace(entityName))
-                filters.AppendLine($"      <condition attribute='primaryentitytype' operator='eq' value='{EscapeXml(entityName.Trim().ToLowerInvariant())}'/>");
+            {
+                var entityTypeCode = ResolveEntityTypeCode(entityName.Trim().ToLowerInvariant());
+                if (entityTypeCode == null)
+                    return ErrorResult($"Error: Entity '{entityName.Trim()}' not found. Use get_metadata_entities to find valid entity names.");
+                filters.AppendLine($"      <condition attribute='primaryentitytype' operator='eq' value='{entityTypeCode}'/>");
+            }
 
             // Name filter
             if (!string.IsNullOrWhiteSpace(nameFilter))
@@ -362,9 +387,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var normalizedStatus = (status ?? "failed").Trim().ToLowerInvariant();
             var countWord = entities.Count == 1 ? "job" : "jobs";
+            var statusLabel = normalizedStatus == "all" ? "" : $"{normalizedStatus} ";
 
             var sb = new StringBuilder(entities.Count * 200 + 256);
-            sb.AppendLine($"[System Jobs] {entities.Count} {normalizedStatus} {countWord} (last {FormatTimeLabel(minutesAgo)})");
+            sb.AppendLine($"[System Jobs] {entities.Count} {statusLabel}{countWord} (last {FormatTimeLabel(minutesAgo)})");
             sb.AppendLine();
             sb.AppendLine("#\tname\toperationType\tentity\tstatus\tstartedOn\tcompletedOn\tmessage");
 
@@ -456,6 +482,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string MapStatusCode(int value) =>
             StatusCodeMap.TryGetValue(value, out var label) ? label : value.ToString();
+
+        private int? ResolveEntityTypeCode(string entityLogicalName)
+        {
+            try
+            {
+                var request = new RetrieveEntityRequest
+                {
+                    LogicalName = entityLogicalName,
+                    EntityFilters = EntityFilters.Entity
+                };
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                return response.EntityMetadata.ObjectTypeCode;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         private static string FormatExecutionTime(double? seconds)
         {
