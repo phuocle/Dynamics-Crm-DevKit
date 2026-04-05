@@ -46,9 +46,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly Dictionary<int, string> StageMap = new()
         {
             [10] = "PreValidation",
+            [15] = "PreValidation (Internal)",
             [20] = "PreOperation",
+            [25] = "PreOperation (Internal)",
             [30] = "MainOperation",
-            [40] = "PostOperation"
+            [35] = "PostOperation (Internal Pre-Commit)",
+            [40] = "PostOperation",
+            [45] = "PostOperation (Internal Post-Commit)",
+            [50] = "PostOperation (Internal Async)",
+            [55] = "PostOperation (Internal Async)"
         };
 
         private static readonly Dictionary<int, string> ModeMap = new()
@@ -124,6 +130,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return GetAssemblyDetail(assembly_name.Trim(), message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
 
                 // Default: list all assemblies
+                if (!string.IsNullOrWhiteSpace(stage) || !string.IsNullOrWhiteSpace(mode) || !string.IsNullOrWhiteSpace(message_name) || !string.IsNullOrWhiteSpace(type_name))
+                    return ErrorResult("Error: stage, mode, message_name, and type_name filters require entity_name or assembly_name. Provide one of these to enable filtering.");
+
                 return GetAssemblyList();
             }
             catch (Exception ex)
@@ -346,6 +355,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var steps = GetSteps(null, objectTypeCode, messageName, typeName, stage, mode, activeOnly, includeConfig, maxRecords);
 
+            // Post-filter: outer join can leak steps from other entities or unbound steps
+            steps = steps.Where(s => string.Equals(s.Entity, entityName, StringComparison.OrdinalIgnoreCase)).ToList();
+
             if (steps.Count == 0)
             {
                 var label = $"'{entityName}'";
@@ -365,12 +377,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var summary = new PluginStepSummary();
             foreach (var s in steps)
             {
-                switch (s.Stage)
-                {
-                    case "PreValidation": summary.PreValidation++; break;
-                    case "PreOperation": summary.PreOperation++; break;
-                    case "PostOperation": summary.PostOperation++; break;
-                }
+                if (s.Stage.StartsWith("PreValidation")) summary.PreValidation++;
+                else if (s.Stage.StartsWith("PreOperation")) summary.PreOperation++;
+                else if (s.Stage == "MainOperation") summary.MainOperation++;
+                else if (s.Stage.StartsWith("PostOperation")) summary.PostOperation++;
+
                 if (s.Mode == "Sync") summary.SyncCount++;
                 else if (s.Mode == "Async") summary.AsyncCount++;
                 if (s.Status == "Disabled") summary.DisabledCount++;
@@ -395,6 +406,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine("Summary:");
             sb.AppendLine($"  PreValidation: {summary.PreValidation}");
             sb.AppendLine($"  PreOperation: {summary.PreOperation}");
+            sb.AppendLine($"  MainOperation: {summary.MainOperation}");
             sb.AppendLine($"  PostOperation: {summary.PostOperation}");
             sb.AppendLine($"  Sync: {summary.SyncCount}, Async: {summary.AsyncCount}");
             if (summary.DisabledCount > 0)
@@ -598,20 +610,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 </fetch>";
 
             var counts = new Dictionary<Guid, int>();
-            try
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            foreach (var e in result.Entities)
             {
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                foreach (var e in result.Entities)
+                var asmIdAlias = e.GetAttributeValue<AliasedValue>("asmId");
+                var countAlias = e.GetAttributeValue<AliasedValue>("typeCount");
+
+                Guid? asmId = asmIdAlias?.Value switch
                 {
-                    var asmIdAlias = e.GetAttributeValue<AliasedValue>("asmId");
-                    var countAlias = e.GetAttributeValue<AliasedValue>("typeCount");
-                    if (asmIdAlias?.Value is Guid asmId && countAlias?.Value is int count)
-                        counts[asmId] = count;
-                }
-            }
-            catch
-            {
-                // Return empty on error
+                    Guid g => g,
+                    EntityReference er => er.Id,
+                    _ => null
+                };
+
+                if (asmId.HasValue && countAlias?.Value is int count)
+                    counts[asmId.Value] = count;
             }
             return counts;
         }

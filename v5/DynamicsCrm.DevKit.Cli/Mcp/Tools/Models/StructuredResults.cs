@@ -966,6 +966,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("preOperation")]
         public int PreOperation { get; set; }
 
+        [JsonPropertyName("mainOperation")]
+        public int MainOperation { get; set; }
+
         [JsonPropertyName("postOperation")]
         public int PostOperation { get; set; }
 
