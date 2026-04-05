@@ -79,8 +79,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         {
             var normalizedCategory = category.Trim().ToLowerInvariant();
             var requestedLevel = CategoryLevel.TryGetValue(normalizedCategory, out var lvl) ? lvl : 3;
-            var filteredTypes = GetFilteredToolTypes(requestedLevel);
-            var toolCount = filteredTypes.Count;
+            var allowedTypeNames = GetFilteredToolTypeNames(requestedLevel);
+            var toolCount = allowedTypeNames.Count;
 
             var builder = Host.CreateApplicationBuilder();
 
@@ -109,13 +109,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Category: {displayCategory} ({toolCount} tools)";
                 })
                 .WithStdioServerTransport()
-                .WithTools(filteredTypes)
+                .WithToolsFromAssembly()
                 .WithResourcesFromAssembly();
+
+            // Filter tools by category after registration
+            if (requestedLevel < 3)
+            {
+                builder.Services.PostConfigure<McpServerOptions>(options =>
+                {
+                    if (options.ToolCollection == null) return;
+                    var toRemove = options.ToolCollection
+                        .Where(t => !allowedTypeNames.Contains(t.ProtocolTool.Name))
+                        .ToList();
+                    foreach (var tool in toRemove)
+                        options.ToolCollection.Remove(tool);
+                });
+            }
 
             await builder.Build().RunAsync();
         }
 
-        private static List<System.Type> GetFilteredToolTypes(int requestedLevel)
+        private static HashSet<string> GetFilteredToolTypeNames(int requestedLevel)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var allToolTypes = assembly.GetTypes()
@@ -132,14 +146,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                     $"MCP tools missing from ToolCategoryMap: {string.Join(", ", unmapped)}. " +
                     $"Add them to McpServerHost.ToolCategoryMap before running.");
 
-            return allToolTypes
-                .Where(t =>
+            // Resolve MCP tool names from [McpServerTool(Name = "...")] attributes
+            var allowedNames = new HashSet<string>();
+            foreach (var type in allToolTypes)
+            {
+                var toolCategory = ToolCategoryMap[type.Name];
+                var toolLevel = CategoryLevel.TryGetValue(toolCategory, out var tl) ? tl : 3;
+                if (toolLevel > requestedLevel) continue;
+
+                foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static))
                 {
-                    var toolCategory = ToolCategoryMap[t.Name];
-                    var toolLevel = CategoryLevel.TryGetValue(toolCategory, out var tl) ? tl : 3;
-                    return toolLevel <= requestedLevel;
-                })
-                .ToList();
+                    var attr = method.GetCustomAttribute<McpServerToolAttribute>();
+                    if (attr != null)
+                        allowedNames.Add(attr.Name ?? method.Name);
+                }
+            }
+
+            return allowedNames;
         }
 
         internal static int GetToolCount(int requestedLevel)

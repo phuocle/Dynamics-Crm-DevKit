@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Filter by name (contains). List mode only.")] string name_filter = "",
             [Description("Filter by owner name (contains). List mode only.")] string owner_filter = "",
             [Description("'active' (default), 'draft', 'suspended', or 'all'.")] string status = "active",
-            [Description("For runs: filter by status ('succeeded','failed','running','cancelled'). Empty = all.")] string status_filter = "",
+            [Description("For runs: filter by status ('succeeded','failed','running','cancelled','waiting','paused','skipped','suspended'). Empty = all.")] string status_filter = "",
             [Description("For runs: last N minutes. Default: 1440 (24h). Max: 43200.")] int minutes_ago = 1440,
             [Description("Max results (1-250). Default: 50.")] int max_records = 50)
         {
@@ -88,7 +88,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return ErrorResult($"Error: '{flow_id.Trim()}' is not a valid GUID.");
 
                     if (normalizedAction == "runs")
+                    {
+                        if (!string.IsNullOrWhiteSpace(status_filter) && !ValidStatusFilters.Contains(status_filter.Trim()))
+                            return ErrorResult($"Error: Invalid status_filter '{status_filter.Trim()}'. Use 'succeeded', 'failed', 'running', 'cancelled', 'waiting', 'paused', 'skipped', or 'suspended'.");
                         return GetRuns(flow_id.Trim(), status_filter, minutes_ago, max_records);
+                    }
                     else
                         return GetDetail(flow_id.Trim());
                 }
@@ -314,7 +318,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Failed = runs.Count(r => r.Status == "Failed"),
                 Running = runs.Count(r => r.Status == "Running"),
                 Cancelled = runs.Count(r => r.Status == "Cancelled"),
-                Waiting = runs.Count(r => r.Status == "Waiting")
+                Waiting = runs.Count(r => r.Status == "Waiting"),
+                Paused = runs.Count(r => r.Status == "Paused"),
+                Skipped = runs.Count(r => r.Status == "Skipped"),
+                Suspended = runs.Count(r => r.Status == "Suspended"),
+                NotSpecified = runs.Count(r => r.Status == "NotSpecified")
             };
 
             var timeLabel = minutesAgo switch
@@ -350,6 +358,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"  Running: {summary.Running}");
             sb.AppendLine($"  Cancelled: {summary.Cancelled}");
             sb.AppendLine($"  Waiting: {summary.Waiting}");
+            if (summary.Paused > 0) sb.AppendLine($"  Paused: {summary.Paused}");
+            if (summary.Skipped > 0) sb.AppendLine($"  Skipped: {summary.Skipped}");
+            if (summary.Suspended > 0) sb.AppendLine($"  Suspended: {summary.Suspended}");
+            if (summary.NotSpecified > 0) sb.AppendLine($"  NotSpecified: {summary.NotSpecified}");
 
             var structured = new GetFlowsResult
             {
@@ -469,6 +481,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (duration.TotalHours < 1) return $"{(int)duration.TotalMinutes}m {duration.Seconds}s";
             return $"{(int)duration.TotalHours}h {duration.Minutes}m";
         }
+
+        private static readonly HashSet<string> ValidStatusFilters = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "succeeded", "failed", "running", "cancelled", "waiting", "paused", "skipped", "suspended"
+        };
 
         private static string BuildStatusFilter(string statusFilter)
         {

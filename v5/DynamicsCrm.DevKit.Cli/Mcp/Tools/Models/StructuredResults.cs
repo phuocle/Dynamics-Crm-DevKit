@@ -793,6 +793,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("waiting")]
         public int Waiting { get; set; }
+
+        [JsonPropertyName("paused")]
+        public int Paused { get; set; }
+
+        [JsonPropertyName("skipped")]
+        public int Skipped { get; set; }
+
+        [JsonPropertyName("suspended")]
+        public int Suspended { get; set; }
+
+        [JsonPropertyName("notSpecified")]
+        public int NotSpecified { get; set; }
     }
 
     internal sealed class GetPluginsResult
