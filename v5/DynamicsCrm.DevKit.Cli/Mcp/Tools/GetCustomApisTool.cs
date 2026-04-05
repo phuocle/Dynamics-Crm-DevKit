@@ -1,5 +1,7 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -89,6 +91,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
+                if (!string.IsNullOrWhiteSpace(entity_name) && !EntityExists(entity_name.Trim().ToLowerInvariant()))
+                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_metadata_entities to discover valid entity names.");
+
                 if (!string.IsNullOrWhiteSpace(api_name))
                     return GetDetail(api_name.Trim());
                 else
@@ -106,6 +111,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(entityName))
                 filters.AppendLine($"      <condition attribute='boundentitylogicalname' operator='eq' value='{EscapeXml(entityName.Trim().ToLowerInvariant())}'/>");
+
+            if (!includeMicrosoft)
+            {
+                foreach (var prefix in MsftPrefixes)
+                    filters.AppendLine($"      <condition attribute='uniquename' operator='not-like' value='{EscapeXml(prefix)}%'/>");
+            }
 
             var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
             if (normalizedStatus == "active")
@@ -135,9 +146,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             var entities = result.Entities.ToList();
-
-            if (!includeMicrosoft)
-                entities = entities.Where(e => !IsMicrosoftApi(e.GetAttributeValue<string>("uniquename"))).ToList();
 
             if (entities.Count == 0)
             {
@@ -238,6 +246,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var responseResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchResponse));
 
             var entry = MapDetailEntry(api);
+            if (!string.IsNullOrEmpty(entry.SolutionId))
+                entry.SolutionId = ResolveSolutionName(entry.SolutionId) ?? entry.SolutionId;
             entry.RequestParameters = paramsResult.Entities.Select(MapRequestParameter).ToList();
             entry.ResponseProperties = responseResult.Entities.Select(MapResponseProperty).ToList();
 
@@ -355,6 +365,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (raw is EntityReference er) return er.Name;
             if (raw is Guid g) return g.ToString();
             return raw?.ToString();
+        }
+
+        private string ResolveSolutionName(string solutionId)
+        {
+            try
+            {
+                var fetchXml = $@"<fetch top='1'>
+  <entity name='solution'>
+    <attribute name='friendlyname'/>
+    <filter>
+      <condition attribute='solutionid' operator='eq' value='{EscapeXml(solutionId)}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                return result.Entities.Count > 0 ? result.Entities[0].GetAttributeValue<string>("friendlyname") : null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private bool EntityExists(string entityName)
+        {
+            try
+            {
+                var request = new RetrieveEntityRequest
+                {
+                    LogicalName = entityName,
+                    EntityFilters = EntityFilters.Entity
+                };
+                _serviceClient.Execute(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static CustomApiParameter MapRequestParameter(Entity e)
