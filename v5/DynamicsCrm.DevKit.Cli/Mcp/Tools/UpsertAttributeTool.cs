@@ -49,21 +49,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult upsert_attribute(
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
             [Description("Logical name with publisher prefix (e.g., 'new_priority').")] string attribute_name,
-            [Description("Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', 'float', 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.")] string attribute_type,
+            [Description("Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', 'float' (or 'double'), 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.")] string attribute_type,
             [Description("Display name (e.g., 'Priority Level'). Required for create.")] string display_name,
             [Description("Column description.")] string description = "",
-            [Description("'None' (default), 'Recommended', or 'Required'.")] string required_level = "None",
+            [Description("'None', 'Recommended', or 'Required'. Omit to keep current value on update.")] string required_level = "",
             [Description("For string (1-4000, default 100), memo (1-1048576, default 2000), file (KB, default 32768).")] int max_length = 0,
             [Description("For numeric types: minimum value.")] double? min_value = null,
             [Description("For numeric types: maximum value.")] double? max_value = null,
-            [Description("For decimal/money/float: decimal places (0-10, default 2).")] int precision = 2,
+            [Description("For decimal/money/float: decimal places (0-10, default 2). Omit to keep current value on update.")] int precision = -1,
             [Description("For string: 'Text','Email','Url','Phone','TextArea','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
             [Description("For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
             [Description("For picklist (create): existing global option set name.")] string global_optionset_name = "",
             [Description("For lookup (create): target entity. Comma-separated for polymorphic.")] string lookup_target = "",
             [Description("For lookup: relationship schema name. Auto-generated if omitted.")] string lookup_relationship_name = "",
-            [Description("For boolean: true label. Default: 'Yes'.")] string true_label = "Yes",
-            [Description("For boolean: false label. Default: 'No'.")] string false_label = "No",
+            [Description("For boolean: true label. Default: 'Yes'. Omit to keep current value on update.")] string true_label = "",
+            [Description("For boolean: false label. Default: 'No'. Omit to keep current value on update.")] string false_label = "",
             [Description("For picklist (update): JSON array of options to add.")] string add_options = "",
             [Description("For picklist (update): JSON array of options to rename.")] string update_options = "",
             [Description("For picklist (update): JSON array of integer values to remove.")] string delete_options = "",
@@ -134,42 +134,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
+            if (!reqLevel.HasValue)
+                return ErrorResult(
+                    $"[Error] Invalid required_level: '{required_level}'\n" +
+                    $"Valid values: 'None', 'Recommended', 'Required'");
 
             try
             {
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, max_length == 0 ? 100 : max_length, format, solution_name, auto_publish);
+                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, solution_name, auto_publish);
                     case "memo":
-                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, max_length == 0 ? 2000 : max_length, format, solution_name, auto_publish);
+                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, solution_name, auto_publish);
                     case "integer":
-                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, min_value, max_value, format, solution_name, auto_publish);
+                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, solution_name, auto_publish);
                     case "bigint":
-                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, solution_name, auto_publish);
+                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, solution_name, auto_publish);
                     case "decimal":
-                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, min_value, max_value, precision, solution_name, auto_publish);
+                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, min_value, max_value, precision, solution_name, auto_publish);
+                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
                     case "float":
                     case "double":
-                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, min_value, max_value, precision, solution_name, auto_publish);
+                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
                     case "boolean":
-                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, true_label, false_label, solution_name, auto_publish);
+                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, solution_name, auto_publish);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, format, solution_name, auto_publish);
+                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, solution_name, auto_publish);
                     case "lookup":
-                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, lookup_target, lookup_relationship_name, prefix, solution_name, auto_publish);
+                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, solution_name, auto_publish);
                     case "customer":
-                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, prefix, solution_name, auto_publish);
+                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, prefix, solution_name, auto_publish);
                     case "picklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, options, global_optionset_name, false, solution_name, auto_publish);
+                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, solution_name, auto_publish);
                     case "multipicklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, options, global_optionset_name, true, solution_name, auto_publish);
+                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, solution_name, auto_publish);
                     case "image":
-                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, solution_name, auto_publish);
+                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, solution_name, auto_publish);
                     case "file":
-                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel, max_length == 0 ? 32768 : max_length, solution_name, auto_publish);
+                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, solution_name, auto_publish);
                     default:
                         return ErrorResult(
                             $"[Error] Unknown attribute_type: '{attribute_type}'\n" +
@@ -392,6 +396,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string displayName, string description, AttributeRequiredLevel reqLevel,
             string trueLabel, string falseLabel, string solutionName, bool autoPublish)
         {
+            if (string.IsNullOrWhiteSpace(trueLabel)) trueLabel = "Yes";
+            if (string.IsNullOrWhiteSpace(falseLabel)) falseLabel = "No";
+
             var attr = new BooleanAttributeMetadata
             {
                 SchemaName = schemaName,
@@ -744,7 +751,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             else
             {
                 // Parse local options
-                var parsedOptions = ParseOptions(optionsJson);
+                var (parsedOptions, parseError) = ParseOptions(optionsJson);
+                if (parseError != null)
+                    return ErrorResult(
+                        $"[Error] Invalid options JSON for {typeName}\n" +
+                        $"Entity: {entityName}\n" +
+                        $"AttributeName: {logicalName}\n" +
+                        $"{parseError}\n" +
+                        $"Tip: options format: [{{\"label\":\"Low\",\"value\":100000000}},{{\"label\":\"High\",\"value\":100000001}}]");
                 if (parsedOptions == null || parsedOptions.Count == 0)
                     return ErrorResult(
                         $"[Error] Either 'options' or 'global_optionset_name' is required for {typeName}\n" +
@@ -955,15 +969,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static AttributeRequiredLevel ParseRequiredLevel(string value)
+        private static AttributeRequiredLevel? ParseRequiredLevel(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return AttributeRequiredLevel.None;
             return value.Trim().ToLowerInvariant() switch
             {
+                "none" => AttributeRequiredLevel.None,
                 "required" or "applicationrequired" => AttributeRequiredLevel.ApplicationRequired,
                 "recommended" => AttributeRequiredLevel.Recommended,
-                _ => AttributeRequiredLevel.None
+                _ => null
             };
         }
 
@@ -1014,21 +1029,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public int? Value { get; set; }
         }
 
-        private static List<OptionItem> ParseOptions(string optionsJson)
+        private static (List<OptionItem> Items, string Error) ParseOptions(string optionsJson)
         {
             if (string.IsNullOrWhiteSpace(optionsJson))
-                return null;
+                return (null, null);
             try
             {
                 var items = JsonSerializer.Deserialize<List<OptionItem>>(optionsJson, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
-                return items;
+                return (items, null);
             }
-            catch
+            catch (JsonException ex)
             {
-                return null;
+                return (null, $"Invalid JSON: {ex.Message}");
             }
         }
 
@@ -1086,26 +1101,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(displayName))
                 {
                     var oldVal = metadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
-                    metadata.DisplayName = new Label(displayName.Trim(), 1033);
-                    changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
-                    structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
+                    if (oldVal != displayName.Trim())
+                    {
+                        metadata.DisplayName = new Label(displayName.Trim(), 1033);
+                        changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
+                        structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
+                    }
                 }
 
                 if (!string.IsNullOrWhiteSpace(description))
                 {
                     var oldVal = metadata.Description?.UserLocalizedLabel?.Label ?? "";
-                    metadata.Description = new Label(description.Trim(), 1033);
-                    changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
-                    structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
+                    if (oldVal != description.Trim())
+                    {
+                        metadata.Description = new Label(description.Trim(), 1033);
+                        changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
+                        structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
+                    }
                 }
 
                 if (!string.IsNullOrWhiteSpace(requiredLevel))
                 {
-                    var oldLevel = metadata.RequiredLevel?.Value.ToString() ?? "None";
                     var newLevel = ParseRequiredLevel(requiredLevel);
-                    metadata.RequiredLevel = new AttributeRequiredLevelManagedProperty(newLevel);
-                    changes.Add($"RequiredLevel: {oldLevel} -> {newLevel}");
-                    structuredChanges["requiredLevel"] = new UpdateAttributeChange { OldValue = oldLevel, NewValue = newLevel.ToString() };
+                    if (!newLevel.HasValue)
+                        return ErrorResult(
+                            $"[Error] Invalid required_level: '{requiredLevel}'\n" +
+                            $"Valid values: 'None', 'Recommended', 'Required'");
+                    var oldLevel = metadata.RequiredLevel?.Value.ToString() ?? "None";
+                    metadata.RequiredLevel = new AttributeRequiredLevelManagedProperty(newLevel.Value);
+                    changes.Add($"RequiredLevel: {oldLevel} -> {newLevel.Value}");
+                    structuredChanges["requiredLevel"] = new UpdateAttributeChange { OldValue = oldLevel, NewValue = newLevel.Value.ToString() };
                 }
 
                 if (isAuditEnabled.HasValue)
@@ -1339,8 +1364,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(addOptionsJson))
             {
-                var opts = ParseOptions(addOptionsJson);
-                if (opts != null)
+                var (opts, parseError) = ParseOptions(addOptionsJson);
+                if (parseError != null)
+                    results.Add($"[Error] add_options: {parseError}");
+                else if (opts != null)
                     foreach (var opt in opts)
                     {
                         var req = new InsertOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Label = new Label(opt.Label, 1033) };
@@ -1352,8 +1379,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(updateOptionsJson))
             {
-                var opts = ParseOptions(updateOptionsJson);
-                if (opts != null)
+                var (opts, parseError) = ParseOptions(updateOptionsJson);
+                if (parseError != null)
+                    results.Add($"[Error] update_options: {parseError}");
+                else if (opts != null)
                     foreach (var opt in opts)
                     {
                         if (!opt.Value.HasValue) continue;
@@ -1364,8 +1393,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(deleteOptionsJson))
             {
-                var values = ParseDeleteValues(deleteOptionsJson);
-                if (values != null)
+                var (values, parseError) = ParseDeleteValues(deleteOptionsJson);
+                if (parseError != null)
+                    results.Add($"[Error] delete_options: {parseError}");
+                else if (values != null)
                     foreach (var val in values)
                     {
                         _serviceClient.Execute(new DeleteOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Value = val });
@@ -1395,11 +1426,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _ => metadata.AttributeTypeName?.Value ?? metadata.AttributeType?.ToString() ?? "Unknown"
         };
 
-        private static List<int> ParseDeleteValues(string json)
+        private static (List<int> Values, string Error) ParseDeleteValues(string json)
         {
-            if (string.IsNullOrWhiteSpace(json)) return null;
-            try { return JsonSerializer.Deserialize<List<int>>(json); }
-            catch { return null; }
+            if (string.IsNullOrWhiteSpace(json)) return (null, null);
+            try { return (JsonSerializer.Deserialize<List<int>>(json), null); }
+            catch (JsonException ex) { return (null, $"Invalid JSON: {ex.Message}"); }
         }
 
         private static CallToolResult ErrorResult(string message) => new()

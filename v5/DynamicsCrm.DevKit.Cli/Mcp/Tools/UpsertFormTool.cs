@@ -84,10 +84,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return ErrorResult("Error: formxml (backup file path) is required for 'undo' action.");
                         return UndoForm(entityName, formId, formxml.Trim(), validate, auto_publish);
 
-                    default: // "update"
+                    case "update":
                         if (string.IsNullOrWhiteSpace(formxml))
                             return ErrorResult("Error: formxml is required for 'update' action.");
                         return UpdateFormXml(entityName, formId, formxml, validate, backup, auto_publish);
+
+                    default:
+                        return ErrorResult($"Error: Invalid action '{actionName}'. Must be 'update', 'rename', or 'undo'.");
                 }
             }
             catch (Exception ex)
@@ -115,6 +118,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
+
+            // Validate entity name matches the form's actual entity
+            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] Entity mismatch\n" +
+                    $"FormId: {formId}\n" +
+                    $"FormEntity: {objectTypeCode}\n" +
+                    $"ProvidedEntity: {entityName}\n" +
+                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
 
             // Strip XML declaration from input
             var newFormXml = StripXmlDeclaration(formxml.Trim());
@@ -285,7 +297,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var oldName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
-            var formType = currentForm.GetAttributeValue<int?>("type");
+            var formType = currentForm.GetAttributeValue<OptionSetValue>("type")?.Value;
+
+            // Validate entity name matches the form's actual entity
+            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] Entity mismatch\n" +
+                    $"FormId: {formId}\n" +
+                    $"FormEntity: {objectTypeCode}\n" +
+                    $"ProvidedEntity: {entityName}\n" +
+                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
 
             // Step 2: Check for duplicate name (same entity + same form type, excluding current form)
             var duplicate = FindFormByName(objectTypeCode, formName, formType, excludeFormId: formId);
@@ -327,6 +348,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 5: Publish
             var published = false;
+            string publishError = null;
             if (auto_publish)
             {
                 try
@@ -337,9 +359,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     });
                     published = true;
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Rename succeeded but publish failed
+                    publishError = ex.Message;
                 }
             }
 
@@ -349,8 +371,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"FormId: {formId}");
             sb.AppendLine($"OldName: {oldName}");
             sb.AppendLine($"NewName: {formName}");
-            sb.AppendLine($"Status: Renamed successfully");
+            sb.AppendLine($"Status: Renamed{(publishError != null ? " (publish failed)" : "")} successfully");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (publishError != null)
+            {
+                sb.AppendLine($"PublishError: {publishError}");
+                sb.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
+            }
             if (backupPath != null)
                 sb.AppendLine($"Backup: {backupPath}");
             sb.AppendLine();
@@ -419,6 +446,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var formName = currentForm.GetAttributeValue<string>("name") ?? "";
             var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
+
+            // Validate entity name matches the form's actual entity
+            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] Entity mismatch\n" +
+                    $"FormId: {formId}\n" +
+                    $"FormEntity: {objectTypeCode}\n" +
+                    $"ProvidedEntity: {entityName}\n" +
+                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
 
             // Step 3: Validate restored FormXML against XSD (no backup, but still validate!)
             List<string> validationWarnings = null;

@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult upsert_sitemap(
             [Description("'update' (default), 'create', or 'undo'.")] string action = "update",
             [Description("GUID of the Model-Driven App. Use execute_fetchxml on appmodule to find IDs.")] string app_module_id = "",
-            [Description("For 'update'/'create': SiteMap XML. For 'undo': backup file path. Ignored for 'rename'.")] string sitemapxml = "",
+            [Description("For 'update'/'create': SiteMap XML. For 'undo': backup file path.")] string sitemapxml = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
             [Description("Backup current SiteMap before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
             [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true)
@@ -72,14 +72,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 switch (actionName)
                 {
+                    case "update":
+                        return UpdateSiteMapXml(appModuleId, sitemapxml, validate, backup, auto_publish);
+
                     case "create":
                         return CreateSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
 
                     case "undo":
                         return UndoSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
 
-                    default: // "update"
-                        return UpdateSiteMapXml(appModuleId, sitemapxml, validate, backup, auto_publish);
+                    default:
+                        return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'update', 'create', 'undo'.");
                 }
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
