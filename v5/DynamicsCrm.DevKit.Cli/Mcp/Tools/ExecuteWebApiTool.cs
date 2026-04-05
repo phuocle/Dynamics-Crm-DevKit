@@ -79,7 +79,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var customHeaders = ParseHeaders(headers);
+                var customHeaders = ParseHeaders(headers, out var headersError);
+                if (headersError != null)
+                    return ErrorResult(headersError);
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 var response = _serviceClient.ExecuteWebRequest(httpMethod, url.Trim(), requestBody, customHeaders, "application/json");
                 var statusCode = (int)response.StatusCode;
@@ -141,7 +143,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Web API request failed\nMethod: {method}\nUrl: {url}\nMessage: {ex.Message}");
+                var detail = new StringBuilder();
+                detail.AppendLine("Error: Web API request failed");
+                detail.AppendLine($"Method: {method}");
+                detail.AppendLine($"Url: {url}");
+                detail.AppendLine($"Message: {ex.Message}");
+                ExtractResponseContent(ex, detail);
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    detail.AppendLine($"Detail: {inner.Message}");
+                    ExtractResponseContent(inner, detail);
+                    inner = inner.InnerException;
+                }
+                if (ex is HttpRequestException httpEx && httpEx.StatusCode.HasValue)
+                    detail.AppendLine($"StatusCode: {(int)httpEx.StatusCode.Value} {httpEx.StatusCode.Value}");
+                return ErrorResult(detail.ToString().TrimEnd());
             }
         }
 
@@ -223,8 +240,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static Dictionary<string, List<string>> ParseHeaders(string headersJson)
+        private static Dictionary<string, List<string>> ParseHeaders(string headersJson, out string error)
         {
+            error = null;
             if (string.IsNullOrWhiteSpace(headersJson))
                 return null;
 
@@ -239,8 +257,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     kv => new List<string> { kv.Value }
                 );
             }
-            catch
+            catch (JsonException ex)
             {
+                error = $"Error: Invalid JSON in headers parameter.\nInput: {headersJson}\nDetail: {ex.Message}";
                 return null;
             }
         }
@@ -255,6 +274,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch
             {
                 return json;
+            }
+        }
+
+        private static void ExtractResponseContent(Exception ex, StringBuilder detail)
+        {
+            var responseProp = ex.GetType().GetProperty("Response");
+            if (responseProp?.GetValue(ex) is object response)
+            {
+                var contentProp = response.GetType().GetProperty("Content");
+                if (contentProp?.GetValue(response) is string content && !string.IsNullOrWhiteSpace(content))
+                    detail.AppendLine($"Response: {content}");
             }
         }
 
