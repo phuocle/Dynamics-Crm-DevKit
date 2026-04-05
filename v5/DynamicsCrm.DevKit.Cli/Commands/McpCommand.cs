@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 LogInfo($"Starting MCP server v{Shared.Const.Version}...");
 
                 var host = new Mcp.McpServerHost(serviceClient);
-                await host.RunAsync();
+                await host.RunAsync(settings.Category);
 
                 return 0;
             }
@@ -183,6 +183,9 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine();
             Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
+            Console.WriteLine("   Filter tools with --category: basic (9), standard (29), advanced (35)");
+            Console.WriteLine("   Default: all (loads everything)");
+            Console.WriteLine();
             foreach (var tool in tools)
             {
                 Console.WriteLine($"   - {tool.Name,-30}: {tool.Title}");
@@ -195,7 +198,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("     \"mcpServers\": {");
             Console.WriteLine("       \"dynamicscrm-devkit\": {");
             Console.WriteLine("         \"command\": \"devkit\",");
-            Console.WriteLine("         \"args\": [\"mcp\"],");
+            Console.WriteLine("         \"args\": [\"mcp\"],   // or [\"mcp\", \"--category\", \"basic\"]");
             Console.WriteLine("         \"env\": {");
             Console.WriteLine("           \"DEVKIT_AUTH_TYPE\": \"ClientSecret\",");
             Console.WriteLine("           \"DEVKIT_URL\": \"https://org.crm.dynamics.com\",");
@@ -216,9 +219,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             var tools = GetMcpToolInfos();
             var categories = new[]
             {
-                "Metadata Discovery",
-                "Query & Read",
-                "Data Operations",
+                "Basic",
+                "Standard",
                 "Advanced"
             };
 
@@ -233,7 +235,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 if (categoryTools.Count == 0) continue;
 
                 Console.WriteLine();
-                Console.WriteLine($"  {category}");
+                Console.WriteLine($"  {category} ({categoryTools.Count} tools)");
                 Console.WriteLine("  -------------------------------------------------------------------------");
                 foreach (var tool in categoryTools)
                 {
@@ -244,6 +246,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             Console.WriteLine();
             Console.WriteLine("=========================================================================");
+            Console.WriteLine("Filter with: devkit mcp --category basic|standard|advanced");
             Console.WriteLine("Run 'devkit mcp --setup-guide' for full configuration guide.");
         }
 
@@ -263,20 +266,17 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
                     var name = toolAttr.Name ?? method.Name;
                     var title = toolAttr.Title ?? name;
-                    var readOnly = toolAttr.ReadOnly;
-                    var destructive = toolAttr.Destructive;
 
-                    var category = GetCategory(name, readOnly, destructive);
+                    var category = GetCategory(type.Name);
                     results.Add(new McpToolInfo(name, title, category));
                 }
             }
 
             var categoryOrder = new Dictionary<string, int>
             {
-                ["Metadata Discovery"] = 0,
-                ["Query & Read"] = 1,
-                ["Data Operations"] = 2,
-                ["Advanced"] = 3
+                ["Basic"] = 0,
+                ["Standard"] = 1,
+                ["Advanced"] = 2
             };
 
             return results
@@ -285,20 +285,19 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 .ToList();
         }
 
-        private static string GetCategory(string name, bool readOnly, bool destructive)
+        private static string GetCategory(string typeName)
         {
-            if (readOnly)
+            if (Mcp.McpServerHost.ToolCategoryMap.TryGetValue(typeName, out var category))
             {
-                var metadataNames = new HashSet<string>
+                return category switch
                 {
-                    "whoami", "get_metadata_entities",
-                    "get_global_optionsets", "get_messages", "get_components"
+                    "basic" => "Basic",
+                    "standard" => "Standard",
+                    "advanced" => "Advanced",
+                    _ => "Advanced"
                 };
-                return metadataNames.Contains(name) ? "Metadata Discovery" : "Query & Read";
             }
-            if (name == "execute_webapi" || name == "publish")
-                return "Advanced";
-            return "Data Operations";
+            return "Advanced";
         }
 
         private record McpToolInfo(string Name, string Title, string Category);
