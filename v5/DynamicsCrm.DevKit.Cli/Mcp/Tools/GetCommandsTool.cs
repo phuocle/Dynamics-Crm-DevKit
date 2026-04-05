@@ -131,7 +131,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult($"Error: Invalid action_type '{action_type.Trim()}'. Use 'javascript', 'formula', or 'none'.");
             }
 
-            if (max_records <= 0) max_records = 50;
+            if (max_records <= 0)
+                return ErrorResult("Error: max_records must be between 1 and 500.");
             if (max_records > 500) max_records = 500;
 
             try
@@ -445,9 +446,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                 }).ToList();
             }
-            catch
+            catch (Exception ex)
             {
-                return [];
+                return [new CommandRuleEntry { Name = $"[Error] {ex.Message}", RuleType = "Error" }];
             }
         }
 
@@ -496,9 +497,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                 }).ToList();
             }
-            catch
+            catch (Exception ex)
             {
-                return [];
+                return [new CommandChildEntry { Name = $"[Error] {ex.Message}" }];
             }
         }
 
