@@ -24,13 +24,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "upsert_entity", Title = "Create a new custom Dataverse table (entity)",
-            Destructive = true, ReadOnly = false, Idempotent = false,
+            Destructive = false, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertEntityResult)),
         Description(
             "Create a new custom Dataverse entity (table). Auto-creates primary name attribute and configures common properties.\n\n" +
 
             "TIPS:\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
+            "- This tool creates NEW entities only — it does NOT update existing entities\n" +
             "- After creation: upsert_attribute to add columns, build_formxml + upsert_form to customize the form")]
         public CallToolResult upsert_entity(
             [Description("Logical name with publisher prefix (e.g., 'new_project').")] string entity_name,
@@ -40,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity description.")] string description = "",
             [Description("Primary name attribute logical name. Auto-derived if omitted.")] string primary_attribute_name = "",
             [Description("Display name for primary attribute. Default: 'Name'.")] string primary_attribute_display_name = "Name",
-            [Description("Max length of primary attribute (1-4000). Default: 100.")] int primary_attribute_max_length = 100,
+            [Description("Max length of primary attribute (1-850). Default: 100.")] int primary_attribute_max_length = 100,
             [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security).")] string ownership_type = "User",
             [Description("Create as activity entity. Default: false.")] bool is_activity = false,
             [Description("Enable notes. Default: true.")] bool has_notes = true,
@@ -78,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Validate max length
             if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;
-            if (primary_attribute_max_length > 4000) primary_attribute_max_length = 4000;
+            if (primary_attribute_max_length > 850) primary_attribute_max_length = 850;
 
             // Auto-derive schema name: new_project → new_Project
             var schemaName = prefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(namePart);
@@ -104,12 +105,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Parse ownership type
+            var ownershipTrimmed = ownership_type.Trim();
             OwnershipTypes ownershipTypeValue;
-            if (ownership_type.Trim().Equals("Organization", StringComparison.OrdinalIgnoreCase) ||
-                ownership_type.Trim().Equals("Org", StringComparison.OrdinalIgnoreCase))
+            if (ownershipTrimmed.Equals("Organization", StringComparison.OrdinalIgnoreCase) ||
+                ownershipTrimmed.Equals("Org", StringComparison.OrdinalIgnoreCase))
                 ownershipTypeValue = OwnershipTypes.OrganizationOwned;
-            else
+            else if (ownershipTrimmed.Equals("User", StringComparison.OrdinalIgnoreCase))
                 ownershipTypeValue = OwnershipTypes.UserOwned;
+            else
+                return ErrorResult(
+                    $"[Error] Invalid ownership_type: '{ownership_type}'\n" +
+                    $"Valid values: 'User' (default, supports sharing/assigning) or 'Organization' (no row-level security)\n" +
+                    $"Tip: Ownership cannot be changed after entity creation.");
 
             try
             {
@@ -223,6 +230,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntitySetName = string.IsNullOrEmpty(entitySetName) ? null : entitySetName,
                     SolutionName = solution_name.Trim(),
                     Published = published,
+                    HasNotes = has_notes,
+                    HasActivities = has_activities,
+                    IsActivity = is_activity,
+                    HasFeedback = has_feedback,
+                    IsQuickCreateEnabled = is_quick_create_enabled,
+                    DuplicateDetection = is_duplicate_detection_enabled,
+                    ChangeTracking = change_tracking_enabled,
+                    Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
+                    EntityColor = string.IsNullOrWhiteSpace(entity_color) ? null : entity_color.Trim(),
                     Status = "created"
                 };
 

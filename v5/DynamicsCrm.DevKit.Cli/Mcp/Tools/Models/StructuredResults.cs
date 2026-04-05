@@ -242,6 +242,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("published")]
         public bool Published { get; set; }
 
+        [JsonPropertyName("hasNotes")]
+        public bool HasNotes { get; set; }
+
+        [JsonPropertyName("hasActivities")]
+        public bool HasActivities { get; set; }
+
+        [JsonPropertyName("isActivity")]
+        public bool IsActivity { get; set; }
+
+        [JsonPropertyName("hasFeedback")]
+        public bool HasFeedback { get; set; }
+
+        [JsonPropertyName("isQuickCreateEnabled")]
+        public bool IsQuickCreateEnabled { get; set; }
+
+        [JsonPropertyName("duplicateDetection")]
+        public bool DuplicateDetection { get; set; }
+
+        [JsonPropertyName("changeTracking")]
+        public bool ChangeTracking { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("entityColor")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityColor { get; set; }
+
         [JsonPropertyName("status")]
         public string Status { get; set; }
     }
