@@ -1458,15 +1458,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Description { get; set; }
     }
 
-    // ── get_webresources models ─────────────────────────────────────────
+    // ── manage_webresources models ──────────────────────────────────────
 
-    internal sealed class GetWebResourcesResult
+    internal sealed class ManageWebResourcesResult
     {
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
         [JsonPropertyName("totalCount")]
         public int TotalCount { get; set; }
 
         [JsonPropertyName("webResources")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<WebResourceEntry> WebResources { get; set; }
+
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
+        [JsonPropertyName("published")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool Published { get; set; }
     }
 
     internal sealed class WebResourceEntry

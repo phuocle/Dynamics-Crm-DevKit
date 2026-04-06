@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetPluginsTool)] = "standard",
             [nameof(GetCommandsTool)] = "standard",
             [nameof(BuildFormxmlTool)] = "standard",
-            [nameof(GetWebResourcesTool)] = "standard",
+            [nameof(ManageWebResourcesTool)] = "standard",
 
             // advanced (6 additional tools)
             [nameof(UpsertFormTool)] = "advanced",
