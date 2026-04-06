@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "manage_form", Title = "List, inspect, update, rename, or undo a Dataverse form",
+        [McpServerTool(Name = "manage_form", Title = "Manage entity forms",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(

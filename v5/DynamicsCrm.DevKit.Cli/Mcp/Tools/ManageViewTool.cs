@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "manage_view", Title = "List, inspect, create, update, rename, or undo a Dataverse view",
+        [McpServerTool(Name = "manage_view", Title = "Manage entity views",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(

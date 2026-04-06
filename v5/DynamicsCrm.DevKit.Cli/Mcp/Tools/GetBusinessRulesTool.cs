@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_business_rules", Title = "List business rules for a Dataverse entity",
+        [McpServerTool(Name = "get_business_rules", Title = "List business rules for an entity",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "List business rules (client-side logic) for a Dataverse entity.\n\n" +

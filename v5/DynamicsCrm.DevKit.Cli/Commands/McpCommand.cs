@@ -217,11 +217,11 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         private static void PrintTools()
         {
             var tools = GetMcpToolInfos();
-            var categories = new[]
+            var categories = new (string Name, string Description)[]
             {
-                "Basic",
-                "Standard",
-                "Advanced"
+                ("Basic", "Query data, manage records, and explore metadata"),
+                ("Standard", "Forms, views, security, automation, and debugging"),
+                ("Advanced", "Schema changes and low-level Web API access")
             };
 
             Console.WriteLine();
@@ -229,17 +229,17 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine("=========================================================================");
 
             var index = 1;
-            foreach (var category in categories)
+            foreach (var (name, description) in categories)
             {
-                var categoryTools = tools.Where(t => t.Category == category).ToList();
+                var categoryTools = tools.Where(t => t.Category == name).ToList();
                 if (categoryTools.Count == 0) continue;
 
                 Console.WriteLine();
-                Console.WriteLine($"  {category} ({categoryTools.Count} tools)");
+                Console.WriteLine($"  {name} ({categoryTools.Count} tools) - {description}");
                 Console.WriteLine("  -------------------------------------------------------------------------");
                 foreach (var tool in categoryTools)
                 {
-                    Console.WriteLine($"  {index,3}. {tool.Name,-30} - {tool.Title}");
+                    Console.WriteLine($"  {index,3}. {tool.Name,-30} {tool.Title}");
                     index++;
                 }
             }

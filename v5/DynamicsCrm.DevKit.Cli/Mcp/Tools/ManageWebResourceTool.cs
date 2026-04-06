@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         };
 
         [McpServerTool(Name = "manage_webresource",
-            Title = "List, inspect, create, update, or delete web resources",
+            Title = "Manage web resources",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourceResult)),
         Description(

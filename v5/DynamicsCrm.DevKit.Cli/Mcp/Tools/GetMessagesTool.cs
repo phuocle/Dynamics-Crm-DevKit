@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [12] = "Guid"
         };
 
-        [McpServerTool(Name = "get_messages", Title = "Discover SDK messages and Custom Actions for a Dataverse entity",
+        [McpServerTool(Name = "get_messages", Title = "List SDK messages and custom actions",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(

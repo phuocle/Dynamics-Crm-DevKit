@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "publish_customizations", Title = "Publish metadata changes",
+        [McpServerTool(Name = "publish_customizations", Title = "Publish customizations to make changes visible",
             Destructive = false, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(

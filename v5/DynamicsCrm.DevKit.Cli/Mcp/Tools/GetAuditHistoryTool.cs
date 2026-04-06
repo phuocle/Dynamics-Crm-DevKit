@@ -27,7 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_audit_history", Title = "Retrieve audit history for Dataverse records (who changed what, when)",
+        [McpServerTool(Name = "get_audit_history", Title = "Get record audit history",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(

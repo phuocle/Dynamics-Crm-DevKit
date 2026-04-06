@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "manage_record", Title = "Create, read, update, or delete a single record",
+        [McpServerTool(Name = "manage_record", Title = "Manage a single record (CRUD)",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(

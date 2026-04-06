@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "execute_fetchxml", Title = "Query data using FetchXML",
+        [McpServerTool(Name = "execute_fetchxml", Title = "Run a FetchXML query",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Execute a FetchXML query against Dataverse. Returns markdown table. Max 5000 records. Supports auto-paging.\n\n" +

@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [7] = "Approval"
         };
 
-        [McpServerTool(Name = "get_business_process_flows", Title = "List and inspect Business Process Flows and their stages",
+        [McpServerTool(Name = "get_business_process_flows", Title = "List business process flows and stages",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(

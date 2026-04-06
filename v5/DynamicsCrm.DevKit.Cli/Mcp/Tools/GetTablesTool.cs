@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_tables", Title = "Get entity/table metadata (list all or detail one)",
+        [McpServerTool(Name = "get_tables", Title = "Inspect table metadata, columns, and relationships",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve Dataverse entity/table metadata.\n\n" +

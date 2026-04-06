@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [8] = "Failed"
         };
 
-        [McpServerTool(Name = "get_flows", Title = "List and inspect Power Automate cloud flows and their run history",
+        [McpServerTool(Name = "get_flows", Title = "List Power Automate cloud flows and run history",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(

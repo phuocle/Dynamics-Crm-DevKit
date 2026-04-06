@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to extract entity name and record ID",
+        [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to entity and record ID",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Parse a Dynamics 365 / Power Platform URL or string to extract entity logical name and record ID (GUID).\n\n" +

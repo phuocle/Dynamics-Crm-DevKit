@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "execute_webapi", Title = "Execute any Dataverse Web API request",
+        [McpServerTool(Name = "execute_webapi", Title = "Execute a raw Web API request",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "BLOCKED OPERATIONS (hard-blocked, returns error):\n" +
             "- PATCH/PUT/DELETE systemforms → use manage_form\n" +
             "- PATCH/PUT/DELETE savedqueries/userqueries → use upsert_view\n" +
-            "- PATCH/PUT/DELETE sitemaps → use upsert_sitemap\n" +
+            "- PATCH/PUT/DELETE sitemaps → use manage_sitemap\n" +
             "- PATCH/PUT/DELETE environmentvariable* → use upsert_variable\n" +
             "- POST PublishXml/PublishAllXml → use publish_customizations\n" +
             "GET is allowed. POST to create is allowed (except publish).\n" +
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
             ("userqueries(", "upsert_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
-            ("sitemaps(", "upsert_sitemap",
+            ("sitemaps(", "manage_sitemap",
                 "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app."),
             ("environmentvariabledefinitions(", "upsert_variable",
                 "Environment variable definitions have linked value records. The upsert_variable tool handles definition+value atomically with solution awareness."),

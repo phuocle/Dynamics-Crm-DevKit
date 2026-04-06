@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_workflows", Title = "List and inspect classic workflows (background and real-time)",
+        [McpServerTool(Name = "get_workflows", Title = "List classic workflows",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(

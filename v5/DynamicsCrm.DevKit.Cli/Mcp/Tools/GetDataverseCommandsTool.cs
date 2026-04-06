@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ["javascript"] = 2
         };
 
-        [McpServerTool(Name = "get_dataverse_commands", Title = "List and inspect modern command bar buttons (appaction) in Model-Driven Apps",
+        [McpServerTool(Name = "get_dataverse_commands", Title = "List command bar buttons in model-driven apps",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetCommandsResult)),
         Description(

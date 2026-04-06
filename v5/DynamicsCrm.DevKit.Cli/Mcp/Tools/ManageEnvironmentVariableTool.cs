@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "manage_environment_variable",
-            Title = "List, get, create, update, delete, or clear environment variables",
+            Title = "Manage environment variables",
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageEnvironmentVariableResult)),
         Description(

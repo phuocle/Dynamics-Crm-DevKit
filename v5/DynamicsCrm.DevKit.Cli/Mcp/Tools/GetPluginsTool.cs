@@ -70,7 +70,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [2] = "Both"
         };
 
-        [McpServerTool(Name = "get_plugins", Title = "List and inspect plugin registrations in Dataverse",
+        [McpServerTool(Name = "get_plugins", Title = "List plugin registrations and steps",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginsResult)),
         Description(

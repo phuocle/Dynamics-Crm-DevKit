@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [2] = "Sync and Async"
         };
 
-        [McpServerTool(Name = "get_custom_apis", Title = "List and inspect Custom APIs in Dataverse",
+        [McpServerTool(Name = "get_custom_apis", Title = "List custom API definitions",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(

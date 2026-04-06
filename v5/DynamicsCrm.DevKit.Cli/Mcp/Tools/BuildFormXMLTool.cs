@@ -29,7 +29,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "build_form_xml",
-            Title = "Build modified FormXML with fields, sections, or tabs -- returns XML for manage_form",
+            Title = "Build FormXML with fields, sections, tabs, and events",
             ReadOnly = true, Destructive = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXMLResult)),
         Description(

@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "plugin", "workflow", "bulk_delete", "import", "goal_rollup", "solution", "all"
         };
 
-        [McpServerTool(Name = "get_debugging", Title = "Query plugin trace logs and system jobs for debugging",
+        [McpServerTool(Name = "get_debugging", Title = "Debug with plugin trace logs and system jobs",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetDebuggingResult)),
         Description(
