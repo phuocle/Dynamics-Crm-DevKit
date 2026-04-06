@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
@@ -23,45 +24,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "upsert_table", Title = "Create a new custom Dataverse table (entity)",
+        [McpServerTool(Name = "upsert_table", Title = "Create or update a Dataverse table",
             Destructive = false, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertTableResult)),
         Description(
-            "Create a new custom Dataverse entity (table). Auto-creates primary name attribute and configures common properties.\n\n" +
+            "Create a new custom Dataverse entity (table) or update an existing one. " +
+            "Auto-detects create vs update. Auto-creates primary name attribute on create.\n\n" +
+
+            "CREATE MODE (entity does not exist):\n" +
+            "- display_name, display_collection_name, and solution_name are REQUIRED\n" +
+            "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
+            "- After creation: upsert_column to add columns, build_form_xml + manage_form to customize the form\n\n" +
+
+            "UPDATE MODE (entity already exists):\n" +
+            "- Only entity_name is required to identify the entity\n" +
+            "- Only provided parameters are updated, omitted ones keep current values\n" +
+            "- Immutable properties (ownership_type, is_activity, has_notes, primary attribute) are ignored with warnings\n\n" +
 
             "TIPS:\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
-            "- This tool creates NEW entities only — it does NOT update existing entities\n" +
-            "- After creation: upsert_column to add columns, build_form_xml + manage_form to customize the form")]
+            "- Use get_tables to inspect existing entity metadata before updating")]
         public CallToolResult upsert_table(
             [Description("Logical name with publisher prefix (e.g., 'new_project').")] string entity_name,
-            [Description("Singular display name (e.g., 'Project').")] string display_name,
-            [Description("Plural display name (e.g., 'Projects').")] string display_collection_name,
-            [Description("Solution unique name to add the entity to.")] string solution_name,
+            [Description("Singular display name (e.g., 'Project'). Required for create.")] string display_name = "",
+            [Description("Plural display name (e.g., 'Projects'). Required for create.")] string display_collection_name = "",
+            [Description("Solution unique name. Required for create. Optional for update.")] string solution_name = "",
             [Description("Entity description.")] string description = "",
-            [Description("Primary name attribute logical name. Auto-derived if omitted.")] string primary_attribute_name = "",
-            [Description("Display name for primary attribute. Default: 'Name'.")] string primary_attribute_display_name = "Name",
-            [Description("Max length of primary attribute (1-850). Default: 100.")] int primary_attribute_max_length = 100,
-            [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security).")] string ownership_type = "User",
-            [Description("Create as activity entity. Default: false.")] bool is_activity = false,
-            [Description("Enable notes. Default: true.")] bool has_notes = true,
-            [Description("Enable activities. Default: true.")] bool has_activities = true,
-            [Description("Enable feedback/ratings. Default: false.")] bool has_feedback = false,
-            [Description("Enable quick create form. Default: false.")] bool is_quick_create_enabled = false,
-            [Description("Enable duplicate detection. Default: true.")] bool is_duplicate_detection_enabled = true,
-            [Description("Enable change tracking. Default: true.")] bool change_tracking_enabled = true,
+            [Description("Primary name attribute logical name. Auto-derived if omitted. Create only.")] string primary_attribute_name = "",
+            [Description("Display name for primary attribute. Default: 'Name'. Create only.")] string primary_attribute_display_name = "Name",
+            [Description("Max length of primary attribute (1-850). Default: 100. Create only.")] int primary_attribute_max_length = 100,
+            [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security). Create only — cannot be changed after creation.")] string ownership_type = "User",
+            [Description("Create as activity entity. Default: false. Create only — cannot be changed after creation.")] bool is_activity = false,
+            [Description("Enable notes. Default: true. Create only — cannot be changed after creation.")] bool has_notes = true,
+            [Description("Enable activities. Default: true (create). Omit to keep current value (update).")] bool? has_activities = null,
+            [Description("Enable feedback/ratings. Default: false (create). Omit to keep current value (update).")] bool? has_feedback = null,
+            [Description("Enable quick create form. Default: false (create). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
+            [Description("Enable duplicate detection. Default: true (create). Omit to keep current value (update).")] bool? is_duplicate_detection_enabled = null,
+            [Description("Enable change tracking. Default: true (create). Omit to keep current value (update).")] bool? change_tracking_enabled = null,
             [Description("Hex color code (e.g., '#4A90D9').")] string entity_color = "",
-            [Description("Publish after creation. Default: true.")] bool auto_publish = true)
+            [Description("Enable/disable auditing (update only).")] bool? is_audit_enabled = null,
+            [Description("Enable/disable business process flows (update only).")] bool? is_business_process_enabled = null,
+            [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
-            if (string.IsNullOrWhiteSpace(display_name))
-                return ErrorResult("Error: display_name is required.");
-            if (string.IsNullOrWhiteSpace(display_collection_name))
-                return ErrorResult("Error: display_collection_name is required.");
-            if (string.IsNullOrWhiteSpace(solution_name))
-                return ErrorResult("Error: solution_name is required.");
 
             entity_name = entity_name.Trim().ToLowerInvariant();
 
@@ -69,10 +76,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var underscoreIndex = entity_name.IndexOf('_');
             if (underscoreIndex < 1 || underscoreIndex >= entity_name.Length - 1)
                 return ErrorResult(
-                    $"[Error] Cannot create entity\n" +
+                    $"[Error] Cannot create/update entity\n" +
                     $"EntityName: {entity_name}\n" +
                     $"Message: Entity name must include a publisher prefix (e.g., 'new_project', 'cr_project')\n" +
                     $"Tip: Check solution publisher prefix. Use get_solution_components to find solution details.");
+
+            // --- Auto-detect create vs update ---
+            EntityMetadata existingEntity = null;
+            try
+            {
+                var retrieveRequest = new RetrieveEntityRequest
+                {
+                    LogicalName = entity_name,
+                    EntityFilters = EntityFilters.Entity,
+                    RetrieveAsIfPublished = true
+                };
+                var retrieveResponse = (RetrieveEntityResponse)_serviceClient.Execute(retrieveRequest);
+                existingEntity = retrieveResponse.EntityMetadata;
+            }
+            catch
+            {
+                // Entity does not exist → create mode
+            }
+
+            if (existingEntity != null)
+            {
+                // --- UPDATE MODE ---
+                return UpdateExistingEntity(entity_name, existingEntity,
+                    display_name, display_collection_name, description,
+                    has_activities, has_feedback, is_quick_create_enabled,
+                    is_duplicate_detection_enabled, change_tracking_enabled, entity_color,
+                    is_audit_enabled, is_business_process_enabled,
+                    ownership_type, is_activity, has_notes,
+                    primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
+                    solution_name, auto_publish);
+            }
+
+            // --- CREATE MODE ---
+            // Validate required create fields
+            if (string.IsNullOrWhiteSpace(display_name))
+                return ErrorResult("Error: display_name is required when creating a new entity.");
+            if (string.IsNullOrWhiteSpace(display_collection_name))
+                return ErrorResult("Error: display_collection_name is required when creating a new entity.");
+            if (string.IsNullOrWhiteSpace(solution_name))
+                return ErrorResult("Error: solution_name is required when creating a new entity.");
 
             var prefix = entity_name.Substring(0, underscoreIndex);
             var namePart = entity_name.Substring(underscoreIndex + 1);
@@ -118,6 +165,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Valid values: 'User' (default, supports sharing/assigning) or 'Organization' (no row-level security)\n" +
                     $"Tip: Ownership cannot be changed after entity creation.");
 
+            // Apply null-coalesced defaults for create mode
+            var effectiveHasActivities = has_activities ?? true;
+            var effectiveHasFeedback = has_feedback ?? false;
+            var effectiveIsQuickCreateEnabled = is_quick_create_enabled ?? false;
+            var effectiveIsDuplicateDetectionEnabled = is_duplicate_detection_enabled ?? true;
+            var effectiveChangeTrackingEnabled = change_tracking_enabled ?? true;
+
             try
             {
                 var entityMetadata = new EntityMetadata
@@ -128,11 +182,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DisplayCollectionName = new Label(display_collection_name.Trim(), 1033),
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
-                    HasActivities = has_activities,
-                    HasFeedback = has_feedback,
-                    IsQuickCreateEnabled = is_quick_create_enabled,
-                    IsDuplicateDetectionEnabled = new BooleanManagedProperty(is_duplicate_detection_enabled),
-                    ChangeTrackingEnabled = change_tracking_enabled
+                    HasActivities = effectiveHasActivities,
+                    HasFeedback = effectiveHasFeedback,
+                    IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
+                    IsDuplicateDetectionEnabled = new BooleanManagedProperty(effectiveIsDuplicateDetectionEnabled),
+                    ChangeTrackingEnabled = effectiveChangeTrackingEnabled
                 };
 
                 if (!string.IsNullOrWhiteSpace(description))
@@ -157,7 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PrimaryAttribute = primaryAttribute,
                     SolutionUniqueName = solution_name.Trim(),
                     HasNotes = has_notes,
-                    HasActivities = has_activities
+                    HasActivities = effectiveHasActivities
                 };
 
                 var response = (CreateEntityResponse)_serviceClient.Execute(request);
@@ -206,10 +260,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"PrimaryAttribute: {primary_attribute_name} ({primary_attribute_display_name.Trim()})");
                 sb.AppendLine($"PrimaryAttrMaxLength: {primary_attribute_max_length}");
                 sb.AppendLine($"HasNotes: {(has_notes ? "yes" : "no")}");
-                sb.AppendLine($"HasActivities: {(has_activities ? "yes" : "no")}");
+                sb.AppendLine($"HasActivities: {(effectiveHasActivities ? "yes" : "no")}");
                 sb.AppendLine($"IsActivity: {(is_activity ? "yes" : "no")}");
-                sb.AppendLine($"DuplicateDetection: {(is_duplicate_detection_enabled ? "yes" : "no")}");
-                sb.AppendLine($"ChangeTracking: {(change_tracking_enabled ? "yes" : "no")}");
+                sb.AppendLine($"DuplicateDetection: {(effectiveIsDuplicateDetectionEnabled ? "yes" : "no")}");
+                sb.AppendLine($"ChangeTracking: {(effectiveChangeTrackingEnabled ? "yes" : "no")}");
                 sb.AppendLine($"Solution: {solution_name.Trim()}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {entityId}");
@@ -231,12 +285,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     SolutionName = solution_name.Trim(),
                     Published = published,
                     HasNotes = has_notes,
-                    HasActivities = has_activities,
+                    HasActivities = effectiveHasActivities,
                     IsActivity = is_activity,
-                    HasFeedback = has_feedback,
-                    IsQuickCreateEnabled = is_quick_create_enabled,
-                    DuplicateDetection = is_duplicate_detection_enabled,
-                    ChangeTracking = change_tracking_enabled,
+                    HasFeedback = effectiveHasFeedback,
+                    IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
+                    DuplicateDetection = effectiveIsDuplicateDetectionEnabled,
+                    ChangeTracking = effectiveChangeTrackingEnabled,
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                     EntityColor = string.IsNullOrWhiteSpace(entity_color) ? null : entity_color.Trim(),
                     Status = "created"
@@ -252,16 +306,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var msg = ex.Message;
 
-                // Handle duplicate entity name
-                if (msg.Contains("already exists", StringComparison.OrdinalIgnoreCase) ||
-                    msg.Contains("duplicate", StringComparison.OrdinalIgnoreCase))
-                {
-                    return ErrorResult(
-                        $"[Error] Entity '{entity_name}' already exists\n" +
-                        $"Message: {msg}\n" +
-                        $"Tip: Use get_tables to inspect the existing entity, or choose a different name");
-                }
-
                 // Handle solution not found
                 if (msg.Contains("solution", StringComparison.OrdinalIgnoreCase) &&
                     (msg.Contains("not found", StringComparison.OrdinalIgnoreCase) ||
@@ -274,6 +318,254 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 return ErrorResult($"Error: Failed to create entity '{entity_name}'\nMessage: {msg}");
+            }
+        }
+
+        // ========== UPDATE MODE ==========
+
+        private CallToolResult UpdateExistingEntity(
+            string entityName, EntityMetadata existingMetadata,
+            string displayName, string displayCollectionName, string description,
+            bool? hasActivities, bool? hasFeedback, bool? isQuickCreateEnabled,
+            bool? isDuplicateDetectionEnabled, bool? changeTrackingEnabled, string entityColor,
+            bool? isAuditEnabled, bool? isBusinessProcessEnabled,
+            string ownershipType, bool isActivity, bool hasNotes,
+            string primaryAttributeName, string primaryAttributeDisplayName, int primaryAttributeMaxLength,
+            string solutionName, bool autoPublish)
+        {
+            try
+            {
+                var changes = new List<string>();
+                var structuredChanges = new Dictionary<string, UpdateAttributeChange>();
+                var warnings = new List<string>();
+
+                // --- Label properties ---
+                if (!string.IsNullOrWhiteSpace(displayName))
+                {
+                    var oldVal = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
+                    if (oldVal != displayName.Trim())
+                    {
+                        existingMetadata.DisplayName = new Label(displayName.Trim(), 1033);
+                        changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
+                        structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(displayCollectionName))
+                {
+                    var oldVal = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "";
+                    if (oldVal != displayCollectionName.Trim())
+                    {
+                        existingMetadata.DisplayCollectionName = new Label(displayCollectionName.Trim(), 1033);
+                        changes.Add($"DisplayCollectionName: \"{oldVal}\" -> \"{displayCollectionName.Trim()}\"");
+                        structuredChanges["displayCollectionName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayCollectionName.Trim() };
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    var oldVal = existingMetadata.Description?.UserLocalizedLabel?.Label ?? "";
+                    if (oldVal != description.Trim())
+                    {
+                        existingMetadata.Description = new Label(description.Trim(), 1033);
+                        changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
+                        structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
+                    }
+                }
+
+                // --- Bool properties ---
+                if (hasActivities.HasValue && existingMetadata.HasActivities != hasActivities.Value)
+                {
+                    var oldVal = existingMetadata.HasActivities == true ? "true" : "false";
+                    existingMetadata.HasActivities = hasActivities.Value;
+                    changes.Add($"HasActivities: {oldVal} -> {hasActivities.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["hasActivities"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = hasActivities.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (hasFeedback.HasValue && existingMetadata.HasFeedback != hasFeedback.Value)
+                {
+                    var oldVal = existingMetadata.HasFeedback == true ? "true" : "false";
+                    existingMetadata.HasFeedback = hasFeedback.Value;
+                    changes.Add($"HasFeedback: {oldVal} -> {hasFeedback.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["hasFeedback"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = hasFeedback.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (isQuickCreateEnabled.HasValue && existingMetadata.IsQuickCreateEnabled != isQuickCreateEnabled.Value)
+                {
+                    var oldVal = existingMetadata.IsQuickCreateEnabled == true ? "true" : "false";
+                    existingMetadata.IsQuickCreateEnabled = isQuickCreateEnabled.Value;
+                    changes.Add($"IsQuickCreateEnabled: {oldVal} -> {isQuickCreateEnabled.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isQuickCreateEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isQuickCreateEnabled.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (changeTrackingEnabled.HasValue && existingMetadata.ChangeTrackingEnabled != changeTrackingEnabled.Value)
+                {
+                    var oldVal = existingMetadata.ChangeTrackingEnabled == true ? "true" : "false";
+                    existingMetadata.ChangeTrackingEnabled = changeTrackingEnabled.Value;
+                    changes.Add($"ChangeTrackingEnabled: {oldVal} -> {changeTrackingEnabled.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["changeTrackingEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = changeTrackingEnabled.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (isBusinessProcessEnabled.HasValue && existingMetadata.IsBusinessProcessEnabled != isBusinessProcessEnabled.Value)
+                {
+                    var oldVal = existingMetadata.IsBusinessProcessEnabled == true ? "true" : "false";
+                    existingMetadata.IsBusinessProcessEnabled = isBusinessProcessEnabled.Value;
+                    changes.Add($"IsBusinessProcessEnabled: {oldVal} -> {isBusinessProcessEnabled.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isBusinessProcessEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isBusinessProcessEnabled.Value.ToString().ToLowerInvariant() };
+                }
+
+                // --- BooleanManagedProperty properties ---
+                if (isDuplicateDetectionEnabled.HasValue && existingMetadata.IsDuplicateDetectionEnabled?.Value != isDuplicateDetectionEnabled.Value)
+                {
+                    var oldVal = existingMetadata.IsDuplicateDetectionEnabled?.Value == true ? "true" : "false";
+                    existingMetadata.IsDuplicateDetectionEnabled = new BooleanManagedProperty(isDuplicateDetectionEnabled.Value);
+                    changes.Add($"IsDuplicateDetectionEnabled: {oldVal} -> {isDuplicateDetectionEnabled.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["duplicateDetection"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isDuplicateDetectionEnabled.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (isAuditEnabled.HasValue && existingMetadata.IsAuditEnabled?.Value != isAuditEnabled.Value)
+                {
+                    var oldVal = existingMetadata.IsAuditEnabled?.Value == true ? "true" : "false";
+                    existingMetadata.IsAuditEnabled = new BooleanManagedProperty(isAuditEnabled.Value);
+                    changes.Add($"IsAuditEnabled: {oldVal} -> {isAuditEnabled.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isAuditEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isAuditEnabled.Value.ToString().ToLowerInvariant() };
+                }
+
+                // Note: EntityMetadata.IsValidForAdvancedFind is read-only at entity level — skipped
+
+                // --- String property ---
+                if (!string.IsNullOrWhiteSpace(entityColor))
+                {
+                    var oldVal = existingMetadata.EntityColor ?? "";
+                    if (oldVal != entityColor.Trim())
+                    {
+                        existingMetadata.EntityColor = entityColor.Trim();
+                        changes.Add($"EntityColor: \"{oldVal}\" -> \"{entityColor.Trim()}\"");
+                        structuredChanges["entityColor"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = entityColor.Trim() };
+                    }
+                }
+
+                // --- Warn for immutable properties passed with non-default values ---
+                if (!string.IsNullOrWhiteSpace(ownershipType) &&
+                    !ownershipType.Trim().Equals("User", StringComparison.OrdinalIgnoreCase))
+                    warnings.Add("ownership_type cannot be changed after entity creation (ignored)");
+
+                if (isActivity)
+                    warnings.Add("is_activity cannot be changed after entity creation (ignored)");
+
+                if (!hasNotes)
+                    warnings.Add("has_notes cannot be changed after entity creation (ignored)");
+
+                if (!string.IsNullOrWhiteSpace(primaryAttributeName) && primaryAttributeName != "Name")
+                    warnings.Add("primary_attribute_name cannot be changed after entity creation (ignored)");
+
+                if (primaryAttributeDisplayName != "Name")
+                    warnings.Add("primary_attribute_display_name cannot be changed after entity creation (ignored)");
+
+                if (primaryAttributeMaxLength != 100)
+                    warnings.Add("primary_attribute_max_length cannot be changed after entity creation (ignored)");
+
+                // --- Execute update ---
+                if (changes.Count == 0)
+                {
+                    var sb2 = new StringBuilder(256);
+                    sb2.AppendLine($"[Error] No changes specified for entity '{entityName}'");
+                    if (warnings.Count > 0)
+                    {
+                        sb2.AppendLine("Warnings:");
+                        foreach (var w in warnings)
+                            sb2.AppendLine($"  {w}");
+                    }
+                    sb2.AppendLine("Tip: Provide at least one updatable parameter (display_name, description, has_activities, entity_color, etc.)");
+                    return ErrorResult(sb2.ToString());
+                }
+
+                var updateRequest = new UpdateEntityRequest
+                {
+                    Entity = existingMetadata,
+                    MergeLabels = true
+                };
+                if (!string.IsNullOrWhiteSpace(solutionName))
+                    updateRequest.SolutionUniqueName = solutionName.Trim();
+
+                _serviceClient.Execute(updateRequest);
+
+                // --- Publish ---
+                var published = false;
+                if (autoPublish)
+                {
+                    try
+                    {
+                        var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
+                        _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                        published = true;
+                    }
+                    catch
+                    {
+                        // Non-critical
+                    }
+                }
+
+                // --- Format output ---
+                var sb = new StringBuilder(512);
+                sb.AppendLine($"[EntityUpdated] {entityName}");
+                sb.AppendLine("Changes:");
+                foreach (var c in changes)
+                    sb.AppendLine($"  {c}");
+                if (warnings.Count > 0)
+                {
+                    sb.AppendLine("Warnings:");
+                    foreach (var w in warnings)
+                        sb.AppendLine($"  {w}");
+                }
+                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+                sb.AppendLine($"MetadataId: {existingMetadata.MetadataId}");
+
+                var structured = new UpsertTableResult
+                {
+                    EntityName = entityName,
+                    DisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                    DisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "",
+                    SchemaName = existingMetadata.SchemaName,
+                    OwnershipType = existingMetadata.OwnershipType?.ToString() ?? "",
+                    MetadataId = existingMetadata.MetadataId?.ToString() ?? "",
+                    EntitySetName = existingMetadata.EntitySetName,
+                    Published = published,
+                    HasNotes = existingMetadata.HasNotes == true,
+                    HasActivities = existingMetadata.HasActivities == true,
+                    IsActivity = existingMetadata.IsActivity == true,
+                    HasFeedback = existingMetadata.HasFeedback == true,
+                    IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
+                    DuplicateDetection = existingMetadata.IsDuplicateDetectionEnabled?.Value == true,
+                    ChangeTracking = existingMetadata.ChangeTrackingEnabled == true,
+                    Description = existingMetadata.Description?.UserLocalizedLabel?.Label,
+                    EntityColor = existingMetadata.EntityColor,
+                    IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
+                    IsValidForAdvancedFind = existingMetadata.IsValidForAdvancedFind,
+                    IsBusinessProcessEnabled = existingMetadata.IsBusinessProcessEnabled,
+                    Changes = structuredChanges.Count > 0 ? structuredChanges : null,
+                    Warnings = warnings.Count > 0 ? warnings : null,
+                    Status = "updated"
+                };
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                if (msg.Contains("could not be found", StringComparison.OrdinalIgnoreCase) ||
+                    msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase))
+                {
+                    return ErrorResult(
+                        $"[Error] Entity not found: '{entityName}'\n" +
+                        $"Message: {msg}\n" +
+                        "Tip: Use get_tables to find the correct entity logical name");
+                }
+                return ErrorResult($"Error: Failed to update entity '{entityName}'\nMessage: {msg}");
             }
         }
 

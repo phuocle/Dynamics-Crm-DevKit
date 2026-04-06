@@ -275,11 +275,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string EntityColor { get; set; }
 
+        [JsonPropertyName("changes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, UpdateAttributeChange> Changes { get; set; }
+
+        [JsonPropertyName("warnings")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Warnings { get; set; }
+
+        [JsonPropertyName("isAuditEnabled")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAuditEnabled { get; set; }
+
+        [JsonPropertyName("isValidForAdvancedFind")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsValidForAdvancedFind { get; set; }
+
+        [JsonPropertyName("isBusinessProcessEnabled")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsBusinessProcessEnabled { get; set; }
+
         [JsonPropertyName("status")]
         public string Status { get; set; }
     }
 
-    internal sealed class UpsertSiteMapResult
+    internal sealed class ManageSiteMapResult
     {
         [JsonPropertyName("action")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
