@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (!string.IsNullOrWhiteSpace(entity_name) && !EntityExists(entity_name.Trim().ToLowerInvariant()))
-                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_metadata_entities to discover valid entity names.");
+                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
 
                 if (!string.IsNullOrWhiteSpace(api_name))
                     return GetDetail(api_name.Trim());

@@ -72,11 +72,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- action='delete': Permanently delete a web resource. Requires web_resource_id. WARNING: cannot be undone\n\n" +
 
             "TIPS:\n" +
-            "- Call this tool first to find library_name needed for build_formxml add_event/add_library\n" +
+            "- Call this tool first to find library_name needed for build_form_xml add_event/add_library\n" +
             "- Names follow convention: {prefix}_/path/filename.ext (e.g., v4_/entities/Account.form.js)\n" +
             "- content must be base64 encoded for create/update\n" +
             "- type values: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'\n" +
-            "- Related: build_formxml (add events/libraries), get_forms (inspect form structure)")]
+            "- Related: build_form_xml (add events/libraries), get_forms (inspect form structure)")]
         public CallToolResult manage_webresource(
             [Description(
                 "The action to perform: 'list', 'detail', 'create', 'update', or 'delete'."

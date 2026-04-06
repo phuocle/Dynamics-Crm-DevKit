@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- MultiSelect: [100000001, 100000002], null to clear a field\n\n" +
 
             "TIPS:\n" +
-            "- Use get_metadata_entities for field names/types. Use execute_fetchxml to find lookup GUIDs\n" +
+            "- Use get_tables for field names/types. Use execute_fetchxml to find lookup GUIDs\n" +
             "- Partial update supported — only include fields you want to set\n" +
             "- Some records may fail to delete due to dependencies (child records, required lookups)\n" +
             "- Deleting a parent record may cascade-delete child records depending on relationship config")]
@@ -64,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string fields_json = "",
             [Description(
                 "Comma-separated column logical names for 'read' action only. Leave empty for all columns. " +
-                "Use get_metadata_entities to discover column names."
+                "Use get_tables to discover column names."
             )] string columns = "")
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_metadata_entities to verify field names and types.");
+                return ErrorResult($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
             }
         }
 
@@ -191,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Update failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Use get_metadata_entities to verify field names and types.");
+                return ErrorResult($"Error: Update failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
             }
         }
 

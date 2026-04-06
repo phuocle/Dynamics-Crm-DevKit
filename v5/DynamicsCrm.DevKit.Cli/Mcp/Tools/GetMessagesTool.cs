@@ -17,12 +17,12 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetSdkMessagesTool
+    public class GetMessagesTool
     {
         private readonly MetadataService _metadataService;
         private readonly ServiceClient _serviceClient;
 
-        public GetSdkMessagesTool(MetadataService metadataService, ServiceClient serviceClient)
+        public GetMessagesTool(MetadataService metadataService, ServiceClient serviceClient)
         {
             _metadataService = metadataService;
             _serviceClient = serviceClient;
@@ -60,9 +60,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [12] = "Guid"
         };
 
-        [McpServerTool(Name = "get_sdk_messages", Title = "Discover SDK messages and Custom Actions for a Dataverse entity",
+        [McpServerTool(Name = "get_messages", Title = "Discover SDK messages and Custom Actions for a Dataverse entity",
             Idempotent = true, Destructive = false, ReadOnly = true,
-            UseStructuredContent = true, OutputSchemaType = typeof(GetSdkMessagesResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(
             "Discover SDK messages and Custom Actions available for a Dataverse entity.\n\n" +
 
@@ -82,10 +82,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- For Custom API detail (modern replacement), use get_custom_apis\n" +
             "- This tool covers legacy Custom Actions (workflow-based) that get_custom_apis does NOT cover")]
-        public async Task<CallToolResult> get_sdk_messages(
+        public async Task<CallToolResult> get_messages(
             [Description(
                 "Entity logical name (lowercase). Use 'none' or empty for global messages. " +
-                "Use get_metadata_entities to discover names."
+                "Use get_tables to discover names."
             )] string entity_name = "none",
             [Description(
                 "Specific message or Custom Action name for detail mode. " +
@@ -123,7 +123,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? await GetCustomActionNamesAsync(normalizedScope)
                 : [];
 
-            var structured = new GetSdkMessagesResult
+            var structured = new GetMessagesResult
             {
                 TotalCount = sdkMessages.Count + customActions.Count,
                 Mode = "list",
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return ErrorResult(
                 $"Error: Message or Custom Action '{messageName}' not found. " +
-                "Use get_sdk_messages (list mode) to discover available messages.");
+                "Use get_messages (list mode) to discover available messages.");
         }
 
         private CallToolResult FormatSdkMessageDetail(Entity sdkMsg)
@@ -213,7 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine($"- {e}");
             }
 
-            var structured = new GetSdkMessagesResult
+            var structured = new GetMessagesResult
             {
                 TotalCount = 1,
                 Mode = "detail",
@@ -298,7 +298,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine($"{EscapeTab(p.Name)}\t{p.Type}\t{EscapeTab(p.EntityName ?? "-")}\t{EscapeTab(p.Description ?? "")}");
             }
 
-            var structured = new GetSdkMessagesResult
+            var structured = new GetMessagesResult
             {
                 TotalCount = 1,
                 Mode = "detail",

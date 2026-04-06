@@ -15,19 +15,19 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageVariableTool
+    public class ManageEnvironmentVariableTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public ManageVariableTool(ServiceClient serviceClient)
+        public ManageEnvironmentVariableTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "manage_variable",
+        [McpServerTool(Name = "manage_environment_variable",
             Title = "List, get, create, update, delete, or clear environment variables",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(ManageVariableResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageEnvironmentVariableResult)),
         Description(
             "List or get Dataverse environment variables.\n\n" +
 
@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Current value overrides default value\n" +
             "- Type cannot be changed after creation\n" +
             "- Environment variables typically do not require publishing")]
-        public CallToolResult manage_variable(
+        public CallToolResult manage_environment_variable(
             [Description(
                 "The action to perform: 'list', 'detail', 'create', 'update', 'delete', or 'clear'."
             )] string action,
@@ -181,7 +181,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 });
             }
 
-            var structured = new ManageVariableResult
+            var structured = new ManageEnvironmentVariableResult
             {
                 Action = "list",
                 Count = definitions.Count,
@@ -224,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrEmpty(description))
                 sb.AppendLine($"Description: {description}");
 
-            var structured = new ManageVariableResult
+            var structured = new ManageEnvironmentVariableResult
             {
                 Action = "detail",
                 VariableName = schemaName,
@@ -249,14 +249,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"[Error] Cannot create environment variable '{variableName}':\n" +
                     "  display_name is required when creating a new variable.\n" +
-                    "Tip: Use manage_variable with action='list' to check if the variable already exists.");
+                    "Tip: Use manage_environment_variable with action='list' to check if the variable already exists.");
 
             if (string.IsNullOrWhiteSpace(type))
                 return ErrorResult(
                     $"[Error] Cannot create environment variable '{variableName}':\n" +
                     "  type is required when creating a new variable.\n" +
                     "  Valid types: string, number, boolean, json, datasource, secret\n" +
-                    "Tip: Use manage_variable with action='list' to check if the variable already exists.");
+                    "Tip: Use manage_environment_variable with action='list' to check if the variable already exists.");
 
             var typeValue = MapType(type.Trim().ToLowerInvariant());
             if (typeValue < 0)
@@ -310,7 +310,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var text = BuildCompactText("created", variableName, displayName.Trim(),
                 typeLbl, defaultValue, curVal, false, sol, published, solWarning);
 
-            var structured = new ManageVariableResult
+            var structured = new ManageEnvironmentVariableResult
             {
                 Action = "created",
                 VariableName = variableName,
@@ -371,7 +371,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var text = BuildCompactText("updated", variableName, existingDisplayName,
                 existingType, existingDefault, curVal, false, "", published, null);
 
-            var structured = new ManageVariableResult
+            var structured = new ManageEnvironmentVariableResult
             {
                 Action = "updated",
                 VariableName = variableName,
@@ -412,7 +412,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var text = BuildCompactText("cleared", variableName, existingDisplayName,
                 existingType, existingDefault, "", true, "", published, null);
 
-            var structured = new ManageVariableResult
+            var structured = new ManageEnvironmentVariableResult
             {
                 Action = "cleared",
                 VariableName = variableName,
@@ -449,7 +449,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             DeleteCurrentValue(defId);
             _serviceClient.Delete("environmentvariabledefinition", defId);
 
-            var structured = new ManageVariableResult
+            var structured = new ManageEnvironmentVariableResult
             {
                 Action = "deleted",
                 VariableName = variableName,

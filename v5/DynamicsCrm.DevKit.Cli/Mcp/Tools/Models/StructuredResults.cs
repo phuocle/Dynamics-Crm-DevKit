@@ -181,7 +181,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RestoredFromBackup { get; set; }
     }
 
-    internal sealed class BuildFormxmlResult
+    internal sealed class BuildFormXMLResult
     {
         [JsonPropertyName("entity")]
         public string Entity { get; set; }
@@ -207,7 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string FormXml { get; set; }
     }
 
-    internal sealed class UpsertEntityResult
+    internal sealed class UpsertTableResult
     {
         [JsonPropertyName("entityName")]
         public string EntityName { get; set; }
@@ -322,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RestoredFromBackup { get; set; }
     }
 
-    internal sealed class UpsertAttributeResult
+    internal sealed class UpsertColumnResult
     {
         [JsonPropertyName("entityName")]
         public string EntityName { get; set; }
@@ -442,7 +442,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
 
 
-    internal sealed class ManageVariableResult
+    internal sealed class ManageEnvironmentVariableResult
     {
         [JsonPropertyName("action")]
         public string Action { get; set; }
@@ -1325,9 +1325,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string ContextValue { get; set; }
     }
 
-    // ── get_sdk_messages models ────────────────────────────────────────────
+    // ── get_messages models ────────────────────────────────────────────
 
-    internal sealed class GetSdkMessagesResult
+    internal sealed class GetMessagesResult
     {
         [JsonPropertyName("totalCount")]
         public int TotalCount { get; set; }

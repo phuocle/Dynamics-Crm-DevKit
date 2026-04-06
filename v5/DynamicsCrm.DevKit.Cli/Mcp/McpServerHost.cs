@@ -27,8 +27,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         {
             // basic (7 tools)
             [nameof(WhoAmITool)] = "basic",
-            [nameof(GetMetadataEntitiesTool)] = "basic",
-            [nameof(GetGlobalOptionSetsTool)] = "basic",
+            [nameof(GetTablesTool)] = "basic",
+            [nameof(GetChoicesTool)] = "basic",
             [nameof(ManageRecordTool)] = "basic",
             [nameof(ExecuteFetchXmlTool)] = "basic",
             [nameof(SearchRecordsTool)] = "basic",
@@ -39,8 +39,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetFormsTool)] = "standard",
             [nameof(ManageViewTool)] = "standard",
             [nameof(GetRolesTool)] = "standard",
-            [nameof(GetSdkMessagesTool)] = "standard",
-            [nameof(ManageVariableTool)] = "standard",
+            [nameof(GetMessagesTool)] = "standard",
+            [nameof(ManageEnvironmentVariableTool)] = "standard",
             [nameof(GetWorkflowsTool)] = "standard",
             [nameof(GetFlowsTool)] = "standard",
             [nameof(GetBusinessProcessFlowsTool)] = "standard",
@@ -52,14 +52,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetSystemJobsTool)] = "standard",
             [nameof(GetPluginsTool)] = "standard",
             [nameof(GetDataverseCommandsTool)] = "standard",
-            [nameof(BuildFormxmlTool)] = "standard",
+            [nameof(BuildFormXMLTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
 
             // advanced (6 additional tools)
             [nameof(UpsertFormTool)] = "advanced",
             [nameof(UpsertSiteMapTool)] = "advanced",
-            [nameof(UpsertEntityTool)] = "advanced",
-            [nameof(UpsertAttributeTool)] = "advanced",
+            [nameof(UpsertTableTool)] = "advanced",
+            [nameof(UpsertColumnTool)] = "advanced",
             [nameof(ExecuteWebApiTool)] = "advanced",
         };
 

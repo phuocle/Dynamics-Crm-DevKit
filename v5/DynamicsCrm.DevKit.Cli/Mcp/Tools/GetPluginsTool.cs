@@ -120,7 +120,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var otc = GetObjectTypeCode(entity_name.Trim().ToLowerInvariant());
                     if (otc == null)
-                        return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_metadata_entities to discover valid entity names.");
+                        return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
 
                     return GetStepsByEntity(entity_name.Trim().ToLowerInvariant(), otc.Value, message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
                 }

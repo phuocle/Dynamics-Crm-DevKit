@@ -96,7 +96,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 objectTypeCode = GetObjectTypeCode(entity_name.Trim().ToLowerInvariant());
                 if (objectTypeCode == null)
-                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_metadata_entities to discover valid entity names.");
+                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
             }
 
             try

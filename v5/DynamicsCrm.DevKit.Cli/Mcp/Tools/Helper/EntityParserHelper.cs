@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 if (!attrMap.TryGetValue(resolvedField, out var attrMeta))
                     throw new ArgumentException(
                         $"Field '{resolvedField}' does not exist on entity '{entityLogicalName}'. " +
-                        "Use get_metadata_entities to discover valid field names.");
+                        "Use get_tables to discover valid field names.");
 
                 entity[resolvedField] = ConvertValue(attrMeta, jsonVal, resolvedField, targetEntity);
             }

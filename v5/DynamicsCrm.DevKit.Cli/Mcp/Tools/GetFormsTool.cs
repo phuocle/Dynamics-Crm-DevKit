@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- form_type=2 for main forms only. FormXML: tabs > columns > sections > rows > cells > controls\n" +
             "- To UPDATE: use upsert_form (not execute_webapi). See docs://instructions_for_formxml")]
         public string get_forms(
-            [Description("Entity logical name (e.g., 'account'). Use get_metadata_entities if unsure."
+            [Description("Entity logical name (e.g., 'account'). Use get_tables if unsure."
             )] string entity_name,
             [Description("GUID of a form for full detail including FormXML. Empty = list all."
             )] string form_id = "",

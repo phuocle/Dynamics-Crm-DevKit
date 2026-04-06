@@ -9,16 +9,16 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetGlobalOptionSetsTool
+    public class GetChoicesTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetGlobalOptionSetsTool(ServiceClient serviceClient)
+        public GetChoicesTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_global_optionsets", Title = "Get global choices/optionsets",
+        [McpServerTool(Name = "get_choices", Title = "Get global choices/optionsets",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve global option sets (choices/picklists) from Dataverse metadata.\n\n" +
@@ -32,11 +32,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Map integer values in query results to display labels\n\n" +
 
             "NOTE: GLOBAL option sets only. For entity-specific (local) picklists, " +
-            "use get_metadata_entities which includes options in the attribute definition.")]
-        public string get_global_optionsets(
+            "use get_tables which includes options in the attribute definition.")]
+        public string get_choices(
             [Description(
                 "Logical name of the global option set. Leave empty to list all. " +
-                "If get_metadata_entities shows empty options for a PicklistType column, " +
+                "If get_tables shows empty options for a PicklistType column, " +
                 "it references a global option set — use this tool."
             )] string optionset_name = "")
         {
@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return $"Error: Could not find global option set '{name}'. " +
                        "Make sure you use the logical name (Name column), not the display name. " +
-                       "Call get_global_optionsets with empty optionset_name to list all available option sets.";
+                       "Call get_choices with empty optionset_name to list all available option sets.";
             }
         }
     }

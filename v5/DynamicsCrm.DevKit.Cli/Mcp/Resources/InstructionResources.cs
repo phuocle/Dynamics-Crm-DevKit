@@ -32,9 +32,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 4. Verify form loads correctly in the browser
 
 ## CRITICAL: Verify Field Names Before Modifying Forms
-- Before adding ANY field to a form, you MUST call `get_metadata_entities` first to verify the field's logical name exists on the entity.
+- Before adding ANY field to a form, you MUST call `get_tables` first to verify the field's logical name exists on the entity.
 - Do NOT guess or assume field names. User-provided names may not match the actual logical name (e.g., ""fpt site"" could be ""ftpsiteurl"", ""websiteurl"", or a custom field with a publisher prefix).
-- After calling `get_metadata_entities`, search the attributes list for the field by display name or logical name to find the exact match.
+- After calling `get_tables`, search the attributes list for the field by display name or logical name to find the exact match.
 - If the field does not exist, inform the user and list similar fields as suggestions.
 
 ## Before Making Changes
@@ -124,9 +124,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 4. Backup files are at: {working_directory}/.devkit/backups/views/
 
 ## CRITICAL: Verify Field Names Before Modifying Views
-- Before adding ANY field to a view (FetchXML, LayoutXML, or Quick Find columns), you MUST call `get_metadata_entities` first to verify the field's logical name exists on the entity.
+- Before adding ANY field to a view (FetchXML, LayoutXML, or Quick Find columns), you MUST call `get_tables` first to verify the field's logical name exists on the entity.
 - Do NOT guess or assume field names. User-provided names like ""fpt site"" may not match the actual logical name (e.g., it could be ""ftpsiteurl"", ""websiteurl"", or a custom field with a publisher prefix).
-- After calling `get_metadata_entities`, search the attributes list for the field by display name or logical name to find the exact match.
+- After calling `get_tables`, search the attributes list for the field by display name or logical name to find the exact match.
 - If the field does not exist, inform the user and list similar fields as suggestions.
 - This prevents failed updates due to invalid field names and avoids wasting backup/restore cycles.
 

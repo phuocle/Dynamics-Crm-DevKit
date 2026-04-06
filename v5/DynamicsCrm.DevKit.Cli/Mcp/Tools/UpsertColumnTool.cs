@@ -16,18 +16,18 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpsertAttributeTool
+    public class UpsertColumnTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public UpsertAttributeTool(ServiceClient serviceClient)
+        public UpsertColumnTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "upsert_attribute", Title = "Create or update a column (attribute) on a Dataverse entity",
+        [McpServerTool(Name = "upsert_column", Title = "Create or update a column (attribute) on a Dataverse entity",
             Destructive = false, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpsertAttributeResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertColumnResult)),
         Description(
             "Create a new column or update an existing column (attribute) on a Dataverse entity. " +
             "Auto-detects create vs update. Supports: string, memo, integer, bigint, decimal, money, float, boolean, " +
@@ -45,8 +45,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Attribute name MUST include publisher prefix (e.g., 'new_priority')\n" +
-            "- After creation, use build_formxml to add the new field to a form")]
-        public CallToolResult upsert_attribute(
+            "- After creation, use build_form_xml to add the new field to a form")]
+        public CallToolResult upsert_column(
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
             [Description("Logical name with publisher prefix (e.g., 'new_priority').")] string attribute_name,
             [Description("Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', 'float' (or 'double'), 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.")] string attribute_type,
@@ -948,7 +948,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string displayName, AttributeRequiredLevel reqLevel, Guid metadataId, string solutionName, bool published,
             Dictionary<string, string> extra = null)
         {
-            var structured = new UpsertAttributeResult
+            var structured = new UpsertColumnResult
             {
                 EntityName = entityName,
                 AttributeName = logicalName,
@@ -1057,7 +1057,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"[Error] Attribute '{attributeName}' already exists on entity '{entityName}'\n" +
                     $"Message: {msg}\n" +
-                    $"Tip: Use get_metadata_entities to inspect existing attributes, or choose a different name");
+                    $"Tip: Use get_tables to inspect existing attributes, or choose a different name");
             }
 
             if (msg.Contains("entity", StringComparison.OrdinalIgnoreCase) &&
@@ -1067,7 +1067,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"[Error] Entity '{entityName}' not found\n" +
                     $"Message: {msg}\n" +
-                    $"Tip: Use get_metadata_entities to find the correct entity logical name");
+                    $"Tip: Use get_tables to find the correct entity logical name");
             }
 
             if (msg.Contains("solution", StringComparison.OrdinalIgnoreCase) &&
@@ -1195,7 +1195,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
-                var structured = new UpsertAttributeResult
+                var structured = new UpsertColumnResult
                 {
                     EntityName = entityName,
                     AttributeName = attributeName,
@@ -1226,7 +1226,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult(
                         $"[Error] Entity or attribute not found: '{entityName}.{attributeName}'\n" +
                         $"Message: {msg}\n" +
-                        "Tip: Use get_metadata_entities to find the correct names");
+                        "Tip: Use get_tables to find the correct names");
                 }
                 return ErrorResult($"Error: Failed to update attribute '{entityName}.{attributeName}'\nMessage: {msg}");
             }

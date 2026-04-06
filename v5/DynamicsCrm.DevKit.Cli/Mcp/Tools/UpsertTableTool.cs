@@ -14,26 +14,26 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpsertEntityTool
+    public class UpsertTableTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public UpsertEntityTool(ServiceClient serviceClient)
+        public UpsertTableTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "upsert_entity", Title = "Create a new custom Dataverse table (entity)",
+        [McpServerTool(Name = "upsert_table", Title = "Create a new custom Dataverse table (entity)",
             Destructive = false, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(UpsertEntityResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertTableResult)),
         Description(
             "Create a new custom Dataverse entity (table). Auto-creates primary name attribute and configures common properties.\n\n" +
 
             "TIPS:\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
             "- This tool creates NEW entities only — it does NOT update existing entities\n" +
-            "- After creation: upsert_attribute to add columns, build_formxml + upsert_form to customize the form")]
-        public CallToolResult upsert_entity(
+            "- After creation: upsert_column to add columns, build_form_xml + upsert_form to customize the form")]
+        public CallToolResult upsert_table(
             [Description("Logical name with publisher prefix (e.g., 'new_project').")] string entity_name,
             [Description("Singular display name (e.g., 'Project').")] string display_name,
             [Description("Plural display name (e.g., 'Projects').")] string display_collection_name,
@@ -216,7 +216,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrEmpty(entitySetName))
                     sb.AppendLine($"EntitySetName: {entitySetName}");
 
-                var structured = new UpsertEntityResult
+                var structured = new UpsertTableResult
                 {
                     EntityName = entity_name,
                     DisplayName = display_name.Trim(),
@@ -259,7 +259,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult(
                         $"[Error] Entity '{entity_name}' already exists\n" +
                         $"Message: {msg}\n" +
-                        $"Tip: Use get_metadata_entities to inspect the existing entity, or choose a different name");
+                        $"Tip: Use get_tables to inspect the existing entity, or choose a different name");
                 }
 
                 // Handle solution not found

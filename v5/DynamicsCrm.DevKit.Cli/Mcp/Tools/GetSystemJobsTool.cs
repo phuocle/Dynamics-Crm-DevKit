@@ -148,7 +148,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var entityTypeCode = ResolveEntityTypeCode(entityName.Trim().ToLowerInvariant());
                 if (entityTypeCode == null)
-                    return ErrorResult($"Error: Entity '{entityName.Trim()}' not found. Use get_metadata_entities to find valid entity names.");
+                    return ErrorResult($"Error: Entity '{entityName.Trim()}' not found. Use get_tables to find valid entity names.");
                 filters.AppendLine($"      <condition attribute='primaryentitytype' operator='eq' value='{entityTypeCode}'/>");
             }
 

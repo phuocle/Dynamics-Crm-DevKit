@@ -119,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "BEHAVIORS:\n" +
             "- Fuzzy match: 1 match → show components; multiple → list for disambiguation; 0 → error\n" +
-            "- Full Entity (rootComponentBehavior=0): listed as-is, use get_metadata_entities for sub-components\n" +
+            "- Full Entity (rootComponentBehavior=0): listed as-is, use get_tables for sub-components\n" +
             "- include_active_layers=true: adds ActiveLayer column (Yes/No) for unmanaged customization audit\n" +
             "- active_layers_only=true: shows ONLY components with active layers (cleanup audit)\n\n" +
 
@@ -244,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // 2) Find Entity components added with "Include All Components" (rootcomponentbehavior = 0)
             //    Instead of expanding into sub-components (which is very heavy), we only resolve
-            //    the entity logical name so we can instruct the AI to use get_metadata_entities.
+            //    the entity logical name so we can instruct the AI to use get_tables.
             var fullEntityIds = allComponents
                 .Where(c =>
                     c.GetAttributeValue<OptionSetValue>("componenttype")?.Value == 1 &&
@@ -335,7 +335,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (fullEntityNames.Count > 0)
             {
                 sb.AppendLine($"[Full Entities] {fullEntityNames.Count} entities");
-                sb.AppendLine("Use get_metadata_entities for details:");
+                sb.AppendLine("Use get_tables for details:");
                 foreach (var kvp in fullEntityNames.OrderBy(k => k.Value))
                     sb.AppendLine($"- {kvp.Value}");
                 sb.AppendLine();
@@ -400,7 +400,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     // Mark full entities
                     if (grp.Key == 1 && fullEntityNames.ContainsKey(objectId))
-                        name = $"{name} (full — use get_metadata_entities)";
+                        name = $"{name} (full — use get_tables)";
 
                     if (showActiveLayers)
                     {

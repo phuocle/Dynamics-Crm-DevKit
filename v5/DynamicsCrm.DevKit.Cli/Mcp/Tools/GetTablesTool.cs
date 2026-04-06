@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetMetadataEntitiesTool
+    public class GetTablesTool
     {
         private readonly MetadataService _metadataService;
 
-        public GetMetadataEntitiesTool(MetadataService metadataService)
+        public GetTablesTool(MetadataService metadataService)
         {
             _metadataService = metadataService;
         }
 
-        [McpServerTool(Name = "get_metadata_entities", Title = "Get entity/table metadata (list all or detail one)",
+        [McpServerTool(Name = "get_tables", Title = "Get entity/table metadata (list all or detail one)",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Retrieve Dataverse entity/table metadata.\n\n" +
@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Discover entity/attribute names before building FetchXML\n" +
             "- Find join columns, picklist options, required fields, or primary key")]
-        public async Task<string> get_metadata_entities(
+        public async Task<string> get_tables(
             [Description("Entity logical name for full detail. Empty = list all entities."
             )] string entity_name = "",
             [Description("LIST: keyword filter. DETAIL: prefix filter for attributes/relationships."

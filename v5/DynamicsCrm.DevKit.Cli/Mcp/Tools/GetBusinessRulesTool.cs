@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Stored as workflow records with category=2")]
         public string get_business_rules(
             [Description(
-                "Entity logical name (lowercase). Use get_metadata_entities to discover names."
+                "Entity logical name (lowercase). Use get_tables to discover names."
             )] string entity_name,
             [Description(
                 "GUID of a specific business rule for full detail. Leave empty to list all."

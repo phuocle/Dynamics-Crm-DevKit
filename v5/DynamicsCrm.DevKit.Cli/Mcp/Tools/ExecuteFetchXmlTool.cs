@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Aggregation: aggregate='true' on <fetch>, then count/sum/avg/min/max with alias + groupby\n\n" +
 
             "RULES:\n" +
-            "- Use lowercase logical names. Use get_metadata_entities if unsure\n" +
+            "- Use lowercase logical names. Use get_tables if unsure\n" +
             "- For advanced syntax, read schema://fetchxml")]
         public string execute_fetchxml(
             [Description("FetchXML query starting with <fetch>. Use lowercase logical names."

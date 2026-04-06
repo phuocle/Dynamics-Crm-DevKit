@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_view(
             [Description("The action to perform: 'list', 'detail', 'create', 'update', 'rename', or 'undo'."
             )] string action,
-            [Description("Entity logical name (e.g., 'account'). Use get_metadata_entities if unsure."
+            [Description("Entity logical name (e.g., 'account'). Use get_tables if unsure."
             )] string entity_name,
             [Description("GUID of a view. Required for detail/update/rename/undo. Empty for list/create."
             )] string view_id = "",
