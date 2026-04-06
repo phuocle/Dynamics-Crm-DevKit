@@ -239,7 +239,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                 Console.WriteLine("  -------------------------------------------------------------------------");
                 foreach (var tool in categoryTools)
                 {
-                    Console.WriteLine($"  {index,3}. {tool.Name,-25} - {tool.Title}");
+                    Console.WriteLine($"  {index,3}. {tool.Name,-30} - {tool.Title}");
                     index++;
                 }
             }

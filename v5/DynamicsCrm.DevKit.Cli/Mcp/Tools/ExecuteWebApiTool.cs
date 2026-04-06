@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Call custom Actions/Functions, read $metadata\n\n" +
 
             "BLOCKED OPERATIONS (hard-blocked, returns error):\n" +
-            "- PATCH/PUT/DELETE systemforms → use upsert_form\n" +
+            "- PATCH/PUT/DELETE systemforms → use manage_form\n" +
             "- PATCH/PUT/DELETE savedqueries/userqueries → use upsert_view\n" +
             "- PATCH/PUT/DELETE sitemaps → use upsert_sitemap\n" +
             "- PATCH/PUT/DELETE environmentvariable* → use upsert_variable\n" +
@@ -164,7 +164,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
         [
-            ("systemforms(", "upsert_form",
+            ("systemforms(", "manage_form",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
             ("savedqueries(", "upsert_view",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),

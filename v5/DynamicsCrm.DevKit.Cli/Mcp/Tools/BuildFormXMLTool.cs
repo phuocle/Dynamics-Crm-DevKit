@@ -29,12 +29,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "build_form_xml",
-            Title = "Build modified FormXML with fields, sections, or tabs -- returns XML for upsert_form",
+            Title = "Build modified FormXML with fields, sections, or tabs -- returns XML for manage_form",
             ReadOnly = true, Destructive = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXMLResult)),
         Description(
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
-            "READ-ONLY builder — returns modified FormXML string. Use upsert_form to write it.\n\n" +
+            "READ-ONLY builder — returns modified FormXML string. Use manage_form to write it.\n\n" +
 
             "FIVE OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
@@ -50,10 +50,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Fields: strings (\"createdon\") or objects ({\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true})\n" +
-            "- This tool does NOT modify Dataverse — use upsert_form to apply the returned FormXML")]
+            "- This tool does NOT modify Dataverse — use manage_form(action='update') to apply the returned FormXML")]
         public CallToolResult build_form_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve field metadata.")] string entity_name,
-            [Description("GUID of the form to modify. Use get_forms to find valid form IDs.")] string form_id,
+            [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
                 "JSON array of operations. Each has 'action' + parameters.\n" +
                 "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event'.\n" +
@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     return ErrorResult(
                         $"[Error] Form not found\nFormId: {formId}\nMessage: {ex.Message}\n" +
-                        $"Tip: Use get_forms with entity_name='{entityName}' to find valid form IDs");
+                        $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
                 }
 
                 var currentFormXml = formEntity.GetAttributeValue<string>("formxml") ?? "";
@@ -227,7 +227,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resultSb.AppendLine("Modified FormXML:");
                 resultSb.AppendLine(modifiedFormXml);
                 resultSb.AppendLine();
-                resultSb.AppendLine($"Next step: Pass this FormXML to upsert_form(entity_name='{entityName}', form_id='{formId}', formxml=<above>)");
+                resultSb.AppendLine($"Next step: Pass this FormXML to manage_form(action='update', entity_name='{entityName}', form_id='{formId}', formxml=<above>)");
 
                 var structured = new BuildFormXMLResult
                 {

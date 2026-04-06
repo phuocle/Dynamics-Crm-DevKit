@@ -76,7 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Names follow convention: {prefix}_/path/filename.ext (e.g., v4_/entities/Account.form.js)\n" +
             "- content must be base64 encoded for create/update\n" +
             "- type values: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'\n" +
-            "- Related: build_form_xml (add events/libraries), get_forms (inspect form structure)")]
+            "- Related: build_form_xml (add events/libraries), manage_form (inspect form structure)")]
         public CallToolResult manage_webresource(
             [Description(
                 "The action to perform: 'list', 'detail', 'create', 'update', or 'delete'."

@@ -34,9 +34,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(SearchRecordsTool)] = "basic",
             [nameof(ParseRecordUrlTool)] = "basic",
 
-            // standard (19 additional tools)
+            // standard (18 additional tools)
             [nameof(PublishCustomizationsTool)] = "standard",
-            [nameof(GetFormsTool)] = "standard",
+            [nameof(ManageFormTool)] = "standard",
             [nameof(ManageViewTool)] = "standard",
             [nameof(GetRolesTool)] = "standard",
             [nameof(GetMessagesTool)] = "standard",
@@ -54,8 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(BuildFormXMLTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
 
-            // advanced (6 additional tools)
-            [nameof(UpsertFormTool)] = "advanced",
+            // advanced (4 additional tools)
             [nameof(UpsertSiteMapTool)] = "advanced",
             [nameof(UpsertTableTool)] = "advanced",
             [nameof(UpsertColumnTool)] = "advanced",

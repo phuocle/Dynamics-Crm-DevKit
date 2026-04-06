@@ -108,9 +108,9 @@ Add `--plain` for clean AI/CI output (no ANSI, colors, spinners). Priority: `--p
 
 Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run with `commandLineArgs`.
 
-### MCP Tools (30)
+### MCP Tools (29)
 
-`whoami`, `get_tables`, `get_messages`, `get_choices`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_debugging`, `parse_record_url`, `get_forms`, `manage_view`, `get_roles`, `upsert_form`, `build_form_xml`, `get_audit_history`, `upsert_table`, `upsert_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
+`whoami`, `get_tables`, `get_messages`, `get_choices`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_debugging`, `parse_record_url`, `manage_form`, `manage_view`, `get_roles`, `build_form_xml`, `get_audit_history`, `upsert_table`, `upsert_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
 
 ### MCP Resources (6)
 

@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
             "- This tool creates NEW entities only — it does NOT update existing entities\n" +
-            "- After creation: upsert_column to add columns, build_form_xml + upsert_form to customize the form")]
+            "- After creation: upsert_column to add columns, build_form_xml + manage_form to customize the form")]
         public CallToolResult upsert_table(
             [Description("Logical name with publisher prefix (e.g., 'new_project').")] string entity_name,
             [Description("Singular display name (e.g., 'Project').")] string display_name,

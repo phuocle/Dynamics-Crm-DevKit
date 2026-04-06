@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 # FormXML Manipulation Rules
 
 ## CRITICAL: Backup Before ANY Modification
-- ALWAYS retrieve the current FormXML using get_forms with the specific form_id FIRST
+- ALWAYS retrieve the current FormXML using manage_form with action='detail' and the specific form_id FIRST
 - Save the current FormXML to a local backup file BEFORE making any changes
 - Backup file naming: {entity_name}_{form_id}_{yyyyMMddHHmmss}.formxml.bak
   Example: account_abc123_20260329180000.formxml.bak
@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - If the field does not exist, inform the user and list similar fields as suggestions.
 
 ## Before Making Changes
-- Always read the current FormXML using get_forms with the specific form_id
+- Always read the current FormXML using manage_form with action='detail' and the specific form_id
 - Understand the existing structure before modifying
 - Validate changes against schema://formxml XSD before writing
 
@@ -91,8 +91,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - SubGrid: {E7A81278-8635-4d9e-8D4D-59480B391C5B}
 
 ## After Making Changes
-- Use the dedicated upsert_form tool (NOT execute_webapi) to apply changes
-- upsert_form auto-handles: backup > validate > update > publish
+- Use the dedicated manage_form tool (NOT execute_webapi) to apply changes
+- manage_form auto-handles: backup > validate > update > publish
 - Verify the form loads correctly in the browser
 ";
 

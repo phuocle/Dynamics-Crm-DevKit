@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Use origin='default' to filter out hundreds of auto-migrated system commands\n" +
             "- Commands are app-scoped — same entity can have different commands in different apps\n" +
-            "- Related: get_forms (form layout), get_views (grid columns), build_form_xml (form events)")]
+            "- Related: manage_form (form layout), get_views (grid columns), build_form_xml (form events)")]
         public CallToolResult get_dataverse_commands(
             [Description("GUID of a specific appaction record. Returns full detail. All other filters ignored.")] string command_id = "",
             [Description("Filter by entity logical name (e.g., 'account').")] string entity_name = "",
