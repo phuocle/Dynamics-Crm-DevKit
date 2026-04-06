@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-**DynamicsCrm.DevKit** — Development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. Includes VS 2026 VSIX extension, .NET CLI tool (`devkit`), 21 Roslyn analyzers, and MCP server.
+**DynamicsCrm.DevKit** — Development toolkit for Dynamics 365 / Power Platform / Dataverse. Includes VS 2026 VSIX, .NET CLI (`devkit`), 21 Roslyn analyzers, and MCP server.
 
 ### Solutions
 
@@ -22,38 +22,33 @@
 | **VSIX** | `DynamicsCrm.DevKit/` | .NET Framework 4.8 |
 | **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET 10.0 |
 | **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 |
-| **Shared** | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) — referenced by VSIX, CLI, Tool |
+| **Shared** | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) |
 | **Tool** | `DynamicsCrm.DevKit.Tool/` | .NET Framework 4.8 |
 | **UnitTests** | `DynamicsCrm.DevKit.UnitTests/` | net48 (xUnit) + net10.0 (MSTest) |
-| **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration tests (15+ scenarios, live Dataverse) |
-| **Templates** | `ProjectTemplates/` + `ItemTemplates/` | .NET Framework 4.6.2 (13 project + 17 item templates) |
+| **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration tests (live Dataverse) |
+| **Templates** | `ProjectTemplates/` + `ItemTemplates/` | .NET Framework 4.6.2 |
 
 ---
 
 ## Critical Constraints
 
 > [!CAUTION]
-> **NEVER USE `dotnet build` OR `dotnet test` DIRECTLY!**
->
-> This project has **dedicated build workflows** that handle configuration, paths, MSBuild selection, and post-build steps correctly. Running `dotnet build` or `dotnet test` manually WILL produce incorrect results, miss steps, or break the build.
->
-> **ALWAYS use the appropriate workflow command instead:**
->
-> | Want to build... | Use this workflow | NEVER use |
-> |---|---|---|
-> | CLI (`DynamicsCrm.DevKit.Cli`) | `/build-cli` | ~~`dotnet build DynamicsCrm.DevKit.Cli`~~ |
-> | VSIX (`DynamicsCrm.DevKit`) | `/build-vsix` | ~~`MSBuild DynamicsCrm.DevKit`~~ |
-> | Analyzers (`DynamicsCrm.DevKit.Analyzers`) | `/build-analyzer` | ~~`dotnet build DynamicsCrm.DevKit.Analyzers`~~ |
-> | Tool (`DynamicsCrm.DevKit.Tool`) | `/build-tool` | ~~`dotnet build DynamicsCrm.DevKit.Tool`~~ |
-> | Everything (DEBUG) | `/build-debug` | ~~`dotnet build DynamicsCrm.DevKit.AllInOne.slnx`~~ |
-> | Everything (RELEASE) | `/build-release` | ~~`dotnet build --configuration Release`~~ |
-> | Unit tests | `/unit-test` | ~~`dotnet test`~~ |
->
-> **If you use `dotnet build` or `dotnet test` directly, you are doing it WRONG. Stop and use the workflow.**
+> **NEVER use `dotnet build` or `dotnet test` directly!** Always use workflows below.
+
+| Workflow | Builds | Replaces |
+|---|---|---|
+| `/build-cli` | CLI | ~~`dotnet build DynamicsCrm.DevKit.Cli`~~ |
+| `/build-vsix` | VSIX | ~~`MSBuild DynamicsCrm.DevKit`~~ |
+| `/build-analyzer` | Analyzers + tests | ~~`dotnet build DynamicsCrm.DevKit.Analyzers`~~ |
+| `/build-tool` | Tool | ~~`dotnet build DynamicsCrm.DevKit.Tool`~~ |
+| `/build-debug` | All (DEBUG) + install CLI | ~~`dotnet build`~~ |
+| `/build-release` | All (RELEASE) | ~~`dotnet build --configuration Release`~~ |
+| `/unit-test` | Run all unit tests + coverage | ~~`dotnet test`~~ |
+| `/clean-all` | Clean all artifacts | - |
+| `/create-new-analyzer` | Create new Roslyn analyzer | - |
 
 | Rule | Detail |
 |---|---|
-| **NO `dotnet build`** | **NEVER run `dotnet build` or `dotnet test` directly — ALWAYS use `/build-*` or `/unit-test` workflows** |
 | **No Git** | Never commit/push unless explicitly requested |
 | **Default DEBUG** | Use RELEASE only when explicitly requested |
 | **MSBuild for VSIX** | `"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"` |
@@ -65,36 +60,33 @@
 
 ## CLI (`devkit`)
 
-Entry point: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
+Entry: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
 
 ```
 Commands/ → DevKitCommand<T> base (connection, validation)
 Models/   → DevKitCommandArgs → specific args
 Tasks/    → ITask → TaskXxx implementations
-Mcp/      → MCP server (35 Dataverse tools)
+Mcp/      → MCP server (30 Dataverse tools)
 ```
 
 ### Commands
 
-| Command | Task | JSON Key | Note |
-|---|---|---|---|
-| `generator` | `TaskGenerator` | `generators` | |
-| `server` | `TaskServer` | `servers` | |
-| `webresource` | `TaskWebResource` | `webresources` | |
-| `modelbuilder` | `TaskModelBuilder` | `modelbuilders` | |
-| `solution` | `TaskPacSolutionPackager` | `solutionpackagers` | |
-| `downloadreport` | `TaskDownloadReport` | `downloadreports` | |
-| `uploadreport` | `TaskUploadReport` | `uploadreports` | |
-| `downloadwebresource` | `TaskDownloadWebResource` | `downloadwebresources` | |
-| `datasource` | `TaskDataSource` | `datasources` | |
-| `mcp` | `McpServerHost` | — | MCP server |
-| `plugin` | `TaskServer` | `plugins` | Deprecated |
-| `workflow` | `TaskServer` | `workflows` | Deprecated |
-| `dataprovider` | `TaskServer` | `dataproviders` | Deprecated |
-| `proxytype` | → `modelbuilder` | `proxytypes` | Deprecated |
-| `legacy-solution` | → `solution` | `solutionpackagers` | Deprecated |
+| Command | Task | JSON Key |
+|---|---|---|
+| `generator` | `TaskGenerator` | `generators` |
+| `server` | `TaskServer` | `servers` |
+| `webresource` | `TaskWebResource` | `webresources` |
+| `modelbuilder` | `TaskModelBuilder` | `modelbuilders` |
+| `solution` | `TaskPacSolutionPackager` | `solutionpackagers` |
+| `downloadreport` | `TaskDownloadReport` | `downloadreports` |
+| `uploadreport` | `TaskUploadReport` | `uploadreports` |
+| `downloadwebresource` | `TaskDownloadWebResource` | `downloadwebresources` |
+| `datasource` | `TaskDataSource` | `datasources` |
+| `mcp` | `McpServerHost` | — |
 
-### Auth & Env Vars (priority: CLI args > env vars > empty)
+Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`; `legacy-solution` → use `solution`
+
+### Auth (priority: CLI args > env vars > empty)
 
 | CLI Arg | Env Var |
 |---|---|
@@ -106,37 +98,30 @@ Mcp/      → MCP server (35 Dataverse tools)
 | `--username` / `--password` / `--domain` | `DEVKIT_USERNAME` / `DEVKIT_PASSWORD` / `DEVKIT_DOMAIN` |
 | `--plain` | `NO_COLOR` |
 
-Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
+Types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
 
-### Plain Mode (AI/CI Output)
+### Plain Mode
 
-When AI agents call `devkit` CLI commands directly (not via MCP), add `--plain` for clean text output without ANSI escape codes, colors, box-drawing characters, or spinners.
-
-Detection priority: `--plain` CLI flag > `NO_COLOR` env var > default (rich output)
-
-| Method | Detail |
-|---|---|
-| `--plain` flag | `devkit server --plain --json cli.json --profile CI` |
-| `NO_COLOR` env var | `NO_COLOR=1` (standard convention, https://no-color.org) |
+Add `--plain` for clean AI/CI output (no ANSI, colors, spinners). Priority: `--plain` > `NO_COLOR` env var > rich output.
 
 ### CLI Run Profile
 
-Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run CLI with `commandLineArgs`.
+Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run with `commandLineArgs`.
 
-### MCP Tools (31)
+### MCP Tools (30)
 
-`whoami`, `get_tables`, `get_messages`, `get_choices`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `parse_record_url`, `get_forms`, `manage_view`, `get_roles`, `upsert_form`, `build_form_xml`, `get_audit_history`, `upsert_table`, `upsert_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_system_jobs`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
+`whoami`, `get_tables`, `get_messages`, `get_choices`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_debugging`, `parse_record_url`, `get_forms`, `manage_view`, `get_roles`, `upsert_form`, `build_form_xml`, `get_audit_history`, `upsert_table`, `upsert_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
 
 ### MCP Resources (6)
 
-| URI | Type | Description |
-|-----|------|-------------|
-| `schema://formxml` | XSD | FormXml.xsd — form structure schema |
-| `schema://layoutxml` | XSD | LayoutXml.xsd — view column layout schema |
-| `schema://fetchxml` | XSD | Fetch.xsd — query schema |
-| `schema://sitemapxml` | Markdown + XSD | SiteMap.xsd + SiteMapType.xsd + rules |
-| `docs://instructions_for_formxml` | Markdown | FormXML manipulation rules |
-| `docs://instructions_for_views` | Markdown | View/LayoutXML manipulation rules |
+| URI | Description |
+|-----|-------------|
+| `schema://formxml` | FormXml.xsd |
+| `schema://layoutxml` | LayoutXml.xsd |
+| `schema://fetchxml` | Fetch.xsd |
+| `schema://sitemapxml` | SiteMap.xsd + rules |
+| `docs://instructions_for_formxml` | FormXML manipulation rules |
+| `docs://instructions_for_views` | View/LayoutXML manipulation rules |
 
 ---
 
@@ -153,63 +138,42 @@ Entry: `DynamicsCrm.DevKit/DevKitPackage.cs` (inherits `ToolkitPackage`). Contai
 | `Const.cs` | Version constants (replaced at release) |
 | `Helper.cs` | Code generation (~926 lines) |
 | `XrmHelper.cs` | Dataverse operations (metadata, forms, plugins) |
-| `ConnectionBuilder/` | 7 builders: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD, Legacy + Factory |
+| `ConnectionBuilder/` | 7 builders + Factory |
 | `Logic/` | `CSharpLateBound`, `CSharpEarlyBound`, `JsForm`, `JsWebApi`, `JsDialog`, `JsTypeScriptDeclaration`, `TsForm`, `TsWebApi`, `TsDialog`, `TsOptionSet` |
-| `Models/` | 42 model classes (JSON configs, CRM entities, plugin attributes) |
+| `Models/` | 42 model classes |
 
 ---
 
-## Analyzers (21: DEVKIT1001–DEVKIT1021)
+## Analyzers (21: DEVKIT1001-DEVKIT1021)
 
-Target: .NET Standard 2.0. All inherit `BaseDiagnosticAnalyzer`. Core files in `Core/`: `DiagnosticIdentifiers.cs`, `DiagnosticDescriptors.cs`, `AnalyzerHelper.cs`.
+Target: .NET Standard 2.0. All inherit `BaseDiagnosticAnalyzer`. Core: `DiagnosticIdentifiers.cs`, `DiagnosticDescriptors.cs`, `AnalyzerHelper.cs`.
 
 ---
 
 ## Tests
 
-> [!CAUTION]
-> **Do NOT run `dotnet test` directly!** Use `/unit-test` workflow instead.
+Use `/unit-test` workflow (never `dotnet test`).
 
-| Type | Framework | Target | Run |
-|---|---|---|---|
-| Analyzer | xUnit | net48 | `/unit-test` workflow |
-| CLI | MSTest | net10.0 | `/unit-test` workflow |
-| All | — | — | `/unit-test` workflow |
+| Type | Framework | Target |
+|---|---|---|
+| Analyzer | xUnit | net48 |
+| CLI | MSTest | net10.0 |
 
 Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClientCode, TestWebResource, TestSolutionPackager, TestReports, TestProxyTypes, etc.)
-
----
-
-## Build Workflows
-
-> [!CAUTION]
-> **STOP! Do NOT use `dotnet build` or `dotnet test`!** Use the workflows below. See [Critical Constraints](#critical-constraints).
-
-| Workflow | Description | Replaces |
-|----------|-------------|----------|
-| `/build-debug` | Build all projects (DEBUG) + install CLI locally | ~~`dotnet build`~~ |
-| `/build-cli` | CLI only - Build and install CLI tool | ~~`dotnet build DynamicsCrm.DevKit.Cli`~~ |
-| `/build-vsix` | VSIX only - Build Visual Studio extension | ~~`MSBuild` direct call~~ |
-| `/build-analyzer` | Analyzers - Build + run analyzer unit tests | ~~`dotnet build DynamicsCrm.DevKit.Analyzers`~~ |
-| `/build-tool` | Tool only - Build Tool package | ~~`dotnet build DynamicsCrm.DevKit.Tool`~~ |
-| `/build-release` | Release - Full release build for all projects | ~~`dotnet build --configuration Release`~~ |
-| `/unit-test` | Run all unit tests + code coverage report | ~~`dotnet test`~~ |
-| `/clean-all` | Clean all build artifacts | - |
-| `/create-new-analyzer` | Create a new Roslyn analyzer | - |
 
 ---
 
 ## Documentation Rules
 
 | Working On | Save To |
-|------------|---------|
+|---|---|
 | CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
 | VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
 | Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
 | Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
 | Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
 | Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
-| Others / Misc | `DynamicsCrm.DevKit.Docs/Others/` |
+| Others | `DynamicsCrm.DevKit.Docs/Others/` |
 
 ---
 
@@ -254,17 +218,12 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 
 | IDE | Rules | Commands | MCP | Entry |
 |---|---|---|---|---|
-| **Antigravity** | `.agent/rules/` (direct) | `.agent/workflows/` (direct) | `.agent/mcp.json` | `AGENTS.md` |
+| **Antigravity** | `.agent/rules/` | `.agent/workflows/` | `.agent/mcp.json` | `AGENTS.md` |
 | **Claude Code** | `.claude/rules/*.md` | `.claude/commands/claude-*.md` | `.vscode/mcp.json` | `CLAUDE.md` (@AGENTS.md) |
 | **Cursor** | `.cursor/rules/*.mdc` | `.cursor/commands/cursor-*.md` | `.cursor/mcp.json` | `AGENTS.md` |
 | **Copilot** | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` | `.vscode/mcp.json` | `AGENTS.md` |
 
-> Edit `.agent/` files first, then run `Sync-AI-Config.ps1`. MCP config synced manually.
-
-### Antigravity-specific
-
-- `// turbo` in workflows = auto-run next step
-- `// turbo-all` = auto-run all steps
+Edit `.agent/` first, then run `Sync-AI-Config.ps1`. Antigravity: `// turbo` = auto-run next step, `// turbo-all` = auto-run all.
 
 ---
 
