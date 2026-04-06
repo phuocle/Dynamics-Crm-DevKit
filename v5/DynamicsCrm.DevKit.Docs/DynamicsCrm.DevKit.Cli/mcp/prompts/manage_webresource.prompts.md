@@ -1,4 +1,4 @@
-# manage_webresources --- Prompt Validation
+# manage_webresource --- Prompt Validation
 
 ## Before Optimization
 

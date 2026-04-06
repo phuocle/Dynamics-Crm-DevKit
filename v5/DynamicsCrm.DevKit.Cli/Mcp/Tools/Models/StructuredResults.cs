@@ -1458,9 +1458,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Description { get; set; }
     }
 
-    // ── manage_webresources models ──────────────────────────────────────
+    // ── manage_webresource models ──────────────────────────────────────
 
-    internal sealed class ManageWebResourcesResult
+    internal sealed class ManageWebResourceResult
     {
         [JsonPropertyName("action")]
         public string Action { get; set; }

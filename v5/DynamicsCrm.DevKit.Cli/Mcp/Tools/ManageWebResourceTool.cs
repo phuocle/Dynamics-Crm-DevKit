@@ -15,11 +15,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageWebResourcesTool
+    public class ManageWebResourceTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public ManageWebResourcesTool(ServiceClient serviceClient)
+        public ManageWebResourceTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -56,10 +56,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ["resx"] = 12
         };
 
-        [McpServerTool(Name = "manage_webresources",
+        [McpServerTool(Name = "manage_webresource",
             Title = "List, inspect, create, update, or delete web resources",
             Destructive = true, ReadOnly = false, Idempotent = false,
-            UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourcesResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourceResult)),
         Description(
             "List and inspect web resources (JavaScript, CSS, HTML, images, RESX) in Dataverse. " +
             "Essential for mapping local files to their Dataverse web resource names/GUIDs.\n\n" +
@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- content must be base64 encoded for create/update\n" +
             "- type values: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'\n" +
             "- Related: build_formxml (add events/libraries), get_forms (inspect form structure)")]
-        public CallToolResult manage_webresources(
+        public CallToolResult manage_webresource(
             [Description(
                 "The action to perform: 'list', 'detail', 'create', 'update', or 'delete'."
             )] string action,
@@ -187,7 +187,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
             {
-                var emptyResult = new ManageWebResourcesResult { Action = "list", TotalCount = 0, WebResources = [] };
+                var emptyResult = new ManageWebResourceResult { Action = "list", TotalCount = 0, WebResources = [] };
                 return new CallToolResult
                 {
                     Content = [new TextContentBlock { Text = "0 web resources found." }],
@@ -208,7 +208,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"{e.WebResourceId}\t{EscapeTab(e.Name)}\t{e.Type}\t{EscapeTab(e.DisplayName ?? "")}\t{e.ModifiedOn ?? ""}");
             }
 
-            var structured = new ManageWebResourcesResult
+            var structured = new ManageWebResourceResult
             {
                 Action = "list",
                 TotalCount = entries.Count,
@@ -295,7 +295,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrEmpty(entry.ModifiedOn))
                 sb.AppendLine($"modifiedOn: {entry.ModifiedOn}");
 
-            var structured = new ManageWebResourcesResult
+            var structured = new ManageWebResourceResult
             {
                 Action = "detail",
                 TotalCount = 1,
@@ -382,7 +382,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"solutionWarning: {solWarning}");
             sb.AppendLine($"published: {(published ? "yes" : "no")}");
 
-            var structured = new ManageWebResourcesResult
+            var structured = new ManageWebResourceResult
             {
                 Action = "created",
                 TotalCount = 1,
@@ -463,7 +463,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"fieldsUpdated: {fieldsUpdated}");
             sb.AppendLine($"published: {(published ? "yes" : "no")}");
 
-            var structured = new ManageWebResourcesResult
+            var structured = new ManageWebResourceResult
             {
                 Action = "updated",
                 TotalCount = 1,
@@ -514,7 +514,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var published = autoPublish && PublishAll();
 
-            var structured = new ManageWebResourcesResult
+            var structured = new ManageWebResourceResult
             {
                 Action = "deleted",
                 TotalCount = 1,
