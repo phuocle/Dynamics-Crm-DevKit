@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             // standard (19 additional tools)
             [nameof(PublishCustomizationsTool)] = "standard",
             [nameof(GetFormsTool)] = "standard",
-            [nameof(GetViewsTool)] = "standard",
+            [nameof(ManageViewTool)] = "standard",
             [nameof(GetRolesTool)] = "standard",
             [nameof(GetSdkMessagesTool)] = "standard",
             [nameof(ManageVariableTool)] = "standard",
@@ -57,7 +57,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             // advanced (6 additional tools)
             [nameof(UpsertFormTool)] = "advanced",
-            [nameof(UpsertViewTool)] = "advanced",
             [nameof(UpsertSiteMapTool)] = "advanced",
             [nameof(UpsertEntityTool)] = "advanced",
             [nameof(UpsertAttributeTool)] = "advanced",

@@ -123,9 +123,9 @@ Detection priority: `--plain` CLI flag > `NO_COLOR` env var > default (rich outp
 
 Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run CLI with `commandLineArgs`.
 
-### MCP Tools (32)
+### MCP Tools (31)
 
-`whoami`, `get_metadata_entities`, `get_sdk_messages`, `get_global_optionsets`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_formxml`, `get_audit_history`, `upsert_entity`, `upsert_sitemap`, `upsert_attribute`, `manage_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_system_jobs`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
+`whoami`, `get_metadata_entities`, `get_sdk_messages`, `get_global_optionsets`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `parse_record_url`, `get_forms`, `manage_view`, `get_roles`, `upsert_form`, `build_formxml`, `get_audit_history`, `upsert_entity`, `upsert_sitemap`, `upsert_attribute`, `manage_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_system_jobs`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
 
 ### MCP Resources (6)
 
