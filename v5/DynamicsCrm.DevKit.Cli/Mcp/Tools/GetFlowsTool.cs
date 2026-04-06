@@ -14,11 +14,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetCloudFlowsTool
+    public class GetFlowsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetCloudFlowsTool(ServiceClient serviceClient)
+        public GetFlowsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [8] = "Failed"
         };
 
-        [McpServerTool(Name = "get_cloud_flows", Title = "List and inspect Power Automate cloud flows and their run history",
+        [McpServerTool(Name = "get_flows", Title = "List and inspect Power Automate cloud flows and their run history",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(
@@ -49,8 +49,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Run history in 'flowsession' entity. Only definition records (type=1) returned\n" +
-            "- Use get_classic_workflows for category=0 workflows")]
-        public CallToolResult get_cloud_flows(
+            "- Use get_workflows for category=0 workflows")]
+        public CallToolResult get_flows(
             [Description("Flow GUID. Empty = list mode. With action='list': detail + runs. With action='runs': run history.")] string flow_id = "",
             [Description("'list' (default) or 'runs'. 'runs' requires flow_id.")] string action = "list",
             [Description("Filter by name (contains). List mode only.")] string name_filter = "",

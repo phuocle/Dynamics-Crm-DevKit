@@ -12,16 +12,16 @@ using System.Text.Json.Serialization;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class RelevanceSearchTool
+    public class SearchRecordsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public RelevanceSearchTool(ServiceClient serviceClient)
+        public SearchRecordsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "relevance_search", Title = "Dataverse Relevance Search",
+        [McpServerTool(Name = "search_records", Title = "Dataverse Relevance Search",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
             "Perform a Dataverse Relevance Search (full-text search) across one or more entities. " +
@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "IMPORTANT:\n" +
             "- Relevance Search must be enabled in the environment\n" +
             "- Max 100 results. For larger datasets or precise filtering, use execute_fetchxml")]
-        public string relevance_search(
+        public string search_records(
             [Description(
                 "The text to search for (1-100 characters). " +
                 "Supports simple search syntax: + (AND), | (OR), - (NOT), trailing wildcards (*), " +

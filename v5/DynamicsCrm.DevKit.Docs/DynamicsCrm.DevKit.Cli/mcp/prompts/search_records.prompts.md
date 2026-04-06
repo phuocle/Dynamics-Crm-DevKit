@@ -1,4 +1,4 @@
-# relevance_search -- Prompt Validation
+# search_records -- Prompt Validation
 
 ## Before Optimization
 

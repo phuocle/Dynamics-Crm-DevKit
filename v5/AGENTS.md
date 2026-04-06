@@ -125,7 +125,7 @@ Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workin
 
 ### MCP Tools (32)
 
-`whoami`, `get_metadata_entities`, `get_sdk_messages`, `get_global_optionsets`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `relevance_search`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_formxml`, `get_audit_history`, `upsert_entity`, `upsert_sitemap`, `upsert_attribute`, `manage_variable`, `get_business_rules`, `get_classic_workflows`, `get_custom_apis`, `get_cloud_flows`, `get_bpfs`, `get_jobs`, `get_plugins`, `get_commands`, `manage_webresource`
+`whoami`, `get_metadata_entities`, `get_sdk_messages`, `get_global_optionsets`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `parse_record_url`, `get_forms`, `get_views`, `get_roles`, `upsert_form`, `upsert_view`, `build_formxml`, `get_audit_history`, `upsert_entity`, `upsert_sitemap`, `upsert_attribute`, `manage_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_system_jobs`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
 
 ### MCP Resources (6)
 

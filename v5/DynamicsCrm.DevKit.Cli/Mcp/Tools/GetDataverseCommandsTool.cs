@@ -14,11 +14,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetCommandsTool
+    public class GetDataverseCommandsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetCommandsTool(ServiceClient serviceClient)
+        public GetDataverseCommandsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ["javascript"] = 2
         };
 
-        [McpServerTool(Name = "get_commands", Title = "List and inspect modern command bar buttons (appaction) in Model-Driven Apps",
+        [McpServerTool(Name = "get_dataverse_commands", Title = "List and inspect modern command bar buttons (appaction) in Model-Driven Apps",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetCommandsResult)),
         Description(
@@ -101,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use origin='default' to filter out hundreds of auto-migrated system commands\n" +
             "- Commands are app-scoped — same entity can have different commands in different apps\n" +
             "- Related: get_forms (form layout), get_views (grid columns), build_formxml (form events)")]
-        public CallToolResult get_commands(
+        public CallToolResult get_dataverse_commands(
             [Description("GUID of a specific appaction record. Returns full detail. All other filters ignored.")] string command_id = "",
             [Description("Filter by entity logical name (e.g., 'account').")] string entity_name = "",
             [Description("Filter by location: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form'. Empty = all.")] string location = "",

@@ -1,4 +1,4 @@
-# get_bpfs — Prompt Validation
+# get_business_process_flows — Prompt Validation
 
 ## Before Optimization
 

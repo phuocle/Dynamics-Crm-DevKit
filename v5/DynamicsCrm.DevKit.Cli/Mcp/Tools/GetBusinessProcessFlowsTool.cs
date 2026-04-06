@@ -14,11 +14,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetBpfsTool
+    public class GetBusinessProcessFlowsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetBpfsTool(ServiceClient serviceClient)
+        public GetBusinessProcessFlowsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [7] = "Approval"
         };
 
-        [McpServerTool(Name = "get_bpfs", Title = "List and inspect Business Process Flows and their stages",
+        [McpServerTool(Name = "get_business_process_flows", Title = "List and inspect Business Process Flows and their stages",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(
@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- BPFs can span multiple entities (e.g., Lead → Opportunity). Each stage has its own primaryEntity\n" +
             "- The uniqueName is also the logical name of the BPF's auto-created entity")]
-        public CallToolResult get_bpfs(
+        public CallToolResult get_business_process_flows(
             [Description("BPF GUID for full detail. Empty = list mode.")] string bpf_id = "",
             [Description("Filter by name (contains). If exactly 1 match, returns detail.")] string bpf_name = "",
             [Description("Filter by primary entity (e.g., 'lead', 'opportunity').")] string entity_name = "",

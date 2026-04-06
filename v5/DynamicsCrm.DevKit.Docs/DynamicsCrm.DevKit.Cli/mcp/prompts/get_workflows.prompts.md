@@ -1,4 +1,4 @@
-# get_classic_workflows -- Prompt Validation
+# get_workflows -- Prompt Validation
 
 ## Before Optimization
 

@@ -16,16 +16,16 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetClassicWorkflowsTool
+    public class GetWorkflowsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetClassicWorkflowsTool(ServiceClient serviceClient)
+        public GetWorkflowsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
 
-        [McpServerTool(Name = "get_classic_workflows", Title = "List and inspect classic workflows (background and real-time)",
+        [McpServerTool(Name = "get_workflows", Title = "List and inspect classic workflows (background and real-time)",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- workflow_id EMPTY: list workflows matching filters\n" +
             "- workflow_id PROVIDED: full detail for a single workflow (description, solution, dependencies)\n\n" +
 
-            "SCOPE: Classic workflows only (category=0). Use get_business_rules, get_custom_apis, get_bpfs, get_cloud_flows for others.\n\n" +
+            "SCOPE: Classic workflows only (category=0). Use get_business_rules, get_custom_apis, get_business_process_flows, get_flows for others.\n\n" +
 
             "KEY FIELDS:\n" +
             "- triggeronupdateattributelist: fields triggering on Update. 'statecode' = status change, 'ownerid' = assignment\n" +
@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Background workflows always run Post-operation (async)\n" +
             "- Realtime Pre-operation can cancel/rollback the operation\n" +
             "- If name_filter matches exactly 1 workflow, auto-switches to detail mode")]
-        public CallToolResult get_classic_workflows(
+        public CallToolResult get_workflows(
             [Description("Workflow GUID for detail mode. Empty = list mode."
             )] string workflow_id = "",
             [Description("Entity logical name (e.g., 'account'). Empty = all entities."

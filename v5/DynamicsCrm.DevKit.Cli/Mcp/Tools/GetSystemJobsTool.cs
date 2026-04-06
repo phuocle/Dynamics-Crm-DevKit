@@ -16,11 +16,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetJobsTool
+    public class GetSystemJobsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetJobsTool(ServiceClient serviceClient)
+        public GetSystemJobsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "plugin", "workflow", "bulk_delete", "import", "goal_rollup", "solution", "all"
         };
 
-        [McpServerTool(Name = "get_jobs", Title = "List and inspect system jobs (async operations) for debugging failures",
+        [McpServerTool(Name = "get_system_jobs", Title = "List and inspect system jobs (async operations) for debugging failures",
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetJobsResult)),
         Description(
@@ -78,9 +78,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- job_id PROVIDED: full detail including error message and stack trace\n\n" +
 
             "TIPS:\n" +
-            "- For async plugin failures: get_jobs for error + get_plugin_trace_logs for trace output\n" +
+            "- For async plugin failures: get_system_jobs for error + get_plugin_trace_logs for trace output\n" +
             "- Stack trace only shown in detail mode to save tokens")]
-        public CallToolResult get_jobs(
+        public CallToolResult get_system_jobs(
             [Description("Job GUID for full detail. All other filters ignored when provided.")] string job_id = "",
             [Description("Filter by entity (e.g., 'account'). Empty = all.")] string entity_name = "",
             [Description("'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'.")] string status = "failed",
