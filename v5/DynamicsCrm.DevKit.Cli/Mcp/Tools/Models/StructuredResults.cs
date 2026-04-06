@@ -1252,6 +1252,72 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int Other { get; set; }
     }
 
+    internal sealed class GetAuditHistoryResult
+    {
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("recordId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RecordId { get; set; }
+
+        [JsonPropertyName("timeScope")]
+        public string TimeScope { get; set; }
+
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
+
+        [JsonPropertyName("entries")]
+        public List<AuditHistoryEntry> Entries { get; set; }
+    }
+
+    internal sealed class AuditHistoryEntry
+    {
+        [JsonPropertyName("timestamp")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Timestamp { get; set; }
+
+        [JsonPropertyName("user")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string User { get; set; }
+
+        [JsonPropertyName("action")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Action { get; set; }
+
+        [JsonPropertyName("entity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Entity { get; set; }
+
+        [JsonPropertyName("recordName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RecordName { get; set; }
+
+        [JsonPropertyName("recordId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RecordId { get; set; }
+
+        [JsonPropertyName("operation")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Operation { get; set; }
+
+        [JsonPropertyName("field")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Field { get; set; }
+
+        [JsonPropertyName("oldValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string OldValue { get; set; }
+
+        [JsonPropertyName("newValue")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string NewValue { get; set; }
+    }
+
     internal sealed class GetCommandsResult
     {
         [JsonPropertyName("totalCount")]

@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -25,7 +28,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "get_audit_history", Title = "Retrieve audit history for Dataverse records (who changed what, when)",
-            Idempotent = true, Destructive = false, ReadOnly = true),
+            Idempotent = true, Destructive = false, ReadOnly = true,
+            UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(
             "Retrieve audit history for Dataverse records. Shows who changed what, when, with old/new values.\n\n" +
 
@@ -40,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Audit must be enabled at org AND entity level\n" +
             "- Use from_date/to_date for date ranges (overrides minutes_ago)")]
-        public string get_audit_history(
+        public CallToolResult get_audit_history(
             [Description("Entity logical name. Required with record_id. Optional in browse mode."
             )] string entity_name = "",
             [Description("Record GUID for detail mode. Empty = browse mode."
@@ -61,10 +65,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string to_date = "")
         {
             if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))
-                return "Error: entity_name is required when record_id is provided.";
+                return ErrorResult("Error: entity_name is required when record_id is provided.");
 
             if (!string.IsNullOrWhiteSpace(record_id) && !Guid.TryParse(record_id.Trim(), out _))
-                return $"Error: '{record_id}' is not a valid GUID.";
+                return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
 
             if (minutes_ago < 1) minutes_ago = 1440;
             if (minutes_ago > 43200) minutes_ago = 43200;
@@ -75,27 +79,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             operation = operation?.Trim() ?? "";
             if (!string.IsNullOrWhiteSpace(operation) && !ParseActionName(operation).HasValue)
-                return $"Error: '{operation}' is not a valid operation. Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.";
+                return ErrorResult($"Error: '{operation}' is not a valid operation. Valid values: Create, Update, Delete, Activate, Deactivate, Assign, Merge, Cascade, SetState.");
 
             DateTime? fromUtc = null, toUtc = null;
             if (!string.IsNullOrWhiteSpace(from_date))
             {
                 if (!DateTime.TryParse(from_date.Trim(), CultureInfo.InvariantCulture,
                         DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var fd))
-                    return $"Error: '{from_date}' is not a valid ISO 8601 date.";
+                    return ErrorResult($"Error: '{from_date}' is not a valid ISO 8601 date.");
                 fromUtc = fd;
             }
             if (!string.IsNullOrWhiteSpace(to_date))
             {
                 if (!DateTime.TryParse(to_date.Trim(), CultureInfo.InvariantCulture,
                         DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var td))
-                    return $"Error: '{to_date}' is not a valid ISO 8601 date.";
+                    return ErrorResult($"Error: '{to_date}' is not a valid ISO 8601 date.");
                 toUtc = td;
             }
 
             var resolvedUserFilter = ResolveUserFilter(user_filter?.Trim() ?? "");
             if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
-                return resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length);
+                return ErrorResult(resolvedUserFilter.Substring("[AMBIGUOUS_USER]".Length));
 
             DateTime sinceUtc, untilUtc;
             bool usedFromDate = fromUtc.HasValue;
@@ -114,15 +118,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? $"{sinceUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)} to {untilUtc.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}"
                 : $"last {FormatTimeWindow(minutes_ago)}";
 
-            if (!string.IsNullOrWhiteSpace(record_id))
+            try
             {
-                var id = Guid.Parse(record_id.Trim());
-                return ExecuteDetailMode(entity_name, id, sinceUtc, untilUtc,
-                    resolvedUserFilter, operation, attribute_name, max_records, timeScope);
-            }
+                if (!string.IsNullOrWhiteSpace(record_id))
+                {
+                    var id = Guid.Parse(record_id.Trim());
+                    return ExecuteDetailMode(entity_name, id, sinceUtc, untilUtc,
+                        resolvedUserFilter, operation, attribute_name, max_records, timeScope);
+                }
 
-            return ExecuteBrowseMode(entity_name, sinceUtc, untilUtc,
-                resolvedUserFilter, operation, max_records, timeScope);
+                return ExecuteBrowseMode(entity_name, sinceUtc, untilUtc,
+                    resolvedUserFilter, operation, max_records, timeScope);
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                if (msg.Contains("auditing is not enabled", StringComparison.OrdinalIgnoreCase) ||
+                    (msg.Contains("audit", StringComparison.OrdinalIgnoreCase) && msg.Contains("not enabled", StringComparison.OrdinalIgnoreCase)))
+                {
+                    return ErrorResult(
+                        $"[Error] Audit is not enabled\n" +
+                        $"Entity: {entity_name}\n" +
+                        $"Message: {msg}\n" +
+                        "Tip: Enable auditing: Settings > Administration > System Settings > Auditing tab");
+                }
+                return ErrorResult($"Error: Failed to retrieve audit history: {msg}");
+            }
         }
 
         private string ResolveUserFilter(string userFilter)
@@ -178,74 +199,82 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private string ExecuteDetailMode(string entityName, Guid id,
+        private CallToolResult ExecuteDetailMode(string entityName, Guid id,
             DateTime sinceUtc, DateTime untilUtc,
             string userFilter, string operation, string attributeName,
             int maxRecords, string timeScope)
         {
-            try
+            var request = new RetrieveRecordChangeHistoryRequest
             {
-                var request = new RetrieveRecordChangeHistoryRequest
+                Target = new EntityReference(entityName, id),
+                PagingInfo = new PagingInfo
                 {
-                    Target = new EntityReference(entityName, id),
-                    PagingInfo = new Microsoft.Xrm.Sdk.Query.PagingInfo
-                    {
-                        PageNumber = 1,
-                        Count = maxRecords
-                    }
-                };
-
-                var response = (RetrieveRecordChangeHistoryResponse)_serviceClient.Execute(request);
-                var auditDetails = response.AuditDetailCollection;
-
-                if (auditDetails == null || auditDetails.AuditDetails.Count == 0)
-                    return FormatNoResults(entityName, id, timeScope);
-
-                return FormatAuditEntries(entityName, id, auditDetails,
-                    sinceUtc, untilUtc, userFilter, operation, attributeName);
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                if (msg.Contains("auditing is not enabled", StringComparison.OrdinalIgnoreCase) ||
-                    msg.Contains("audit", StringComparison.OrdinalIgnoreCase) && msg.Contains("not enabled", StringComparison.OrdinalIgnoreCase))
-                {
-                    return $"[Error] Audit is not enabled\n" +
-                           $"Entity: {entityName}\n" +
-                           $"Message: {msg}\n" +
-                           "Tip: Enable auditing: Settings > Administration > System Settings > Auditing tab";
+                    PageNumber = 1,
+                    Count = maxRecords
                 }
-                return $"Error: Failed to retrieve audit history: {msg}";
+            };
+
+            var response = (RetrieveRecordChangeHistoryResponse)_serviceClient.Execute(request);
+            var auditDetails = response.AuditDetailCollection;
+
+            if (auditDetails == null || auditDetails.AuditDetails.Count == 0)
+            {
+                var text = $"[AuditHistory] {entityName}: {id}\nEntries: 0 ({timeScope})\nTip: Audit may not be enabled for this entity. Check System Settings > Auditing.";
+                var emptyResult = new GetAuditHistoryResult
+                {
+                    Mode = "detail",
+                    EntityName = NullIfEmpty(entityName),
+                    RecordId = id.ToString(),
+                    TimeScope = timeScope,
+                    TotalCount = 0,
+                    Entries = []
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = text }],
+                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
+                };
             }
+
+            return FormatAuditEntries(entityName, id, auditDetails,
+                sinceUtc, untilUtc, userFilter, operation, attributeName, timeScope);
         }
 
-        private string ExecuteBrowseMode(string entityName,
+        private CallToolResult ExecuteBrowseMode(string entityName,
             DateTime sinceUtc, DateTime untilUtc,
             string userFilter, string operation,
             int maxRecords, string timeScope)
         {
-            try
+            int? objectTypeCode = null;
+            if (!string.IsNullOrWhiteSpace(entityName))
             {
-                int? objectTypeCode = null;
-                if (!string.IsNullOrWhiteSpace(entityName))
+                objectTypeCode = ResolveObjectTypeCode(entityName);
+                if (!objectTypeCode.HasValue)
+                    return ErrorResult($"Error: Could not resolve entity '{entityName}' to an ObjectTypeCode. Verify the entity name is correct.");
+            }
+
+            var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, maxRecords);
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+
+            if (result.Entities.Count == 0)
+            {
+                var text = FormatBrowseNoResults(entityName, timeScope, userFilter, operation);
+                var emptyResult = new GetAuditHistoryResult
                 {
-                    objectTypeCode = ResolveObjectTypeCode(entityName);
-                    if (!objectTypeCode.HasValue)
-                        return $"Error: Could not resolve entity '{entityName}' to an ObjectTypeCode. Verify the entity name is correct.";
-                }
-
-                var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, maxRecords);
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-
-                if (result.Entities.Count == 0)
-                    return FormatBrowseNoResults(entityName, timeScope, userFilter, operation);
-
-                return FormatBrowseResults(result.Entities, entityName, timeScope, userFilter);
+                    Mode = "browse",
+                    EntityName = NullIfEmpty(entityName),
+                    TimeScope = timeScope,
+                    TotalCount = 0,
+                    Entries = []
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = text }],
+                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
+                };
             }
-            catch (Exception ex)
-            {
-                return $"Error: Failed to retrieve audit entries: {ex.Message}";
-            }
+
+            return FormatBrowseResults(result.Entities, entityName, timeScope, userFilter);
         }
 
         private int? ResolveObjectTypeCode(string entityName)
@@ -316,7 +345,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _ => null
         };
 
-        private static string FormatBrowseResults(DataCollection<Entity> entities,
+        private static CallToolResult FormatBrowseResults(DataCollection<Entity> entities,
             string entityName, string timeScope, string userFilter)
         {
             var scope = string.IsNullOrWhiteSpace(entityName) ? "all entities" : entityName;
@@ -336,14 +365,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (filtered.Count == 0)
             {
-                var sb2 = new StringBuilder(256);
-                sb2.AppendLine($"[AuditBrowse] 0 entries found after user filter");
-                sb2.AppendLine($"Scope: {scope}, {timeScope}");
-                sb2.AppendLine($"user_filter: \"{userFilter}\"");
-                sb2.AppendLine("Tip: Check if auditing is enabled at System Settings > Auditing tab");
-                return sb2.ToString();
+                var text = $"[AuditBrowse] 0 entries found after user filter\nScope: {scope}, {timeScope}\nuser_filter: \"{userFilter}\"\nTip: Check if auditing is enabled at System Settings > Auditing tab";
+                var emptyResult = new GetAuditHistoryResult
+                {
+                    Mode = "browse",
+                    EntityName = NullIfEmpty(entityName),
+                    TimeScope = timeScope,
+                    TotalCount = 0,
+                    Entries = []
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = text }],
+                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
+                };
             }
 
+            var entries = new List<AuditHistoryEntry>();
             var sb = new StringBuilder(filtered.Count * 120 + 256);
             sb.AppendLine($"[AuditBrowse] {filtered.Count} {(filtered.Count == 1 ? "entry" : "entries")} ({scope}, {timeScope})");
             sb.AppendLine();
@@ -357,6 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var userName = userRef?.Name ?? userRef?.Id.ToString() ?? "";
                 var objectRef = e.GetAttributeValue<EntityReference>("objectid");
                 var recordName = objectRef?.Name ?? objectRef?.Id.ToString() ?? "";
+                var recordId = objectRef?.Id.ToString();
                 var objectTypeCode = e.GetAttributeValue<string>("objecttypecode") ?? "";
                 var actionValue = e.GetAttributeValue<OptionSetValue>("action")?.Value ?? 0;
                 var actionStr = FormatAction(actionValue);
@@ -364,9 +403,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var operationStr = FormatOperation(operationValue);
 
                 sb.AppendLine($"{createdStr}\t{EscapeTab(userName)}\t{EscapeTab(objectTypeCode)}\t{EscapeTab(recordName)}\t{actionStr}\t{operationStr}");
+
+                entries.Add(new AuditHistoryEntry
+                {
+                    Timestamp = createdStr,
+                    User = NullIfEmpty(userName),
+                    Entity = NullIfEmpty(objectTypeCode),
+                    RecordName = NullIfEmpty(recordName),
+                    RecordId = recordId,
+                    Action = actionStr,
+                    Operation = operationStr
+                });
             }
 
-            return sb.ToString();
+            var structured = new GetAuditHistoryResult
+            {
+                Mode = "browse",
+                EntityName = NullIfEmpty(entityName),
+                TimeScope = timeScope,
+                TotalCount = filtered.Count,
+                Entries = entries
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
         }
 
         private static string FormatBrowseNoResults(string entityName, string timeScope,
@@ -389,22 +452,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static string FormatNoResults(string entityName, Guid recordId, string timeScope)
-        {
-            var sb = new StringBuilder(256);
-            sb.AppendLine($"[AuditHistory] {entityName}: {recordId}");
-            sb.AppendLine($"Entries: 0 ({timeScope})");
-            sb.AppendLine("Tip: Audit may not be enabled for this entity. Check System Settings > Auditing.");
-            return sb.ToString();
-        }
-
-        private static string FormatAuditEntries(
+        private static CallToolResult FormatAuditEntries(
             string entityName, Guid recordId,
             AuditDetailCollection auditDetails,
             DateTime sinceUtc, DateTime untilUtc,
-            string userFilter, string operationFilter, string attributeFilter)
+            string userFilter, string operationFilter, string attributeFilter,
+            string timeScope)
         {
-            var entries = new List<AuditEntry>();
+            var entries = new List<AuditHistoryEntry>();
 
             foreach (var auditDetail in auditDetails.AuditDetails)
             {
@@ -444,6 +499,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     userName.IndexOf(userFilter, StringComparison.OrdinalIgnoreCase) < 0)
                     continue;
 
+                var timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "";
+
                 if (attrAudit != null)
                 {
                     var oldValues = attrAudit.OldValue?.Attributes;
@@ -457,9 +514,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                 !attr.Key.Equals(attributeFilter.Trim(), StringComparison.OrdinalIgnoreCase))
                                 continue;
 
-                            entries.Add(new AuditEntry
+                            entries.Add(new AuditHistoryEntry
                             {
-                                Timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "",
+                                Timestamp = timestamp,
                                 User = userName,
                                 Action = actionStr,
                                 Field = attr.Key,
@@ -487,9 +544,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                 ? FormatAttributeValue(nv, attrAudit.NewValue, field)
                                 : "-";
 
-                            entries.Add(new AuditEntry
+                            entries.Add(new AuditHistoryEntry
                             {
-                                Timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "",
+                                Timestamp = timestamp,
                                 User = userName,
                                 Action = actionStr,
                                 Field = field,
@@ -503,9 +560,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (!string.IsNullOrWhiteSpace(attributeFilter))
                             continue;
 
-                        entries.Add(new AuditEntry
+                        entries.Add(new AuditHistoryEntry
                         {
-                            Timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "",
+                            Timestamp = timestamp,
                             User = userName,
                             Action = actionStr,
                             Field = "-",
@@ -527,9 +584,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         _ => "Activity"
                     };
 
-                    entries.Add(new AuditEntry
+                    entries.Add(new AuditHistoryEntry
                     {
-                        Timestamp = createdOn?.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) ?? "",
+                        Timestamp = timestamp,
                         User = userName,
                         Action = actionStr,
                         Field = $"({detailType})",
@@ -547,16 +604,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (entries.Count == 0)
             {
                 sb.AppendLine("No matching audit entries found for the specified filters.");
-                return sb.ToString();
             }
-
-            sb.AppendLine("timestamp\tuser\taction\tfield\toldValue\tnewValue");
-            foreach (var e in entries)
+            else
             {
-                sb.AppendLine($"{e.Timestamp}\t{EscapeTab(e.User)}\t{e.Action}\t{e.Field}\t{EscapeTab(e.OldValue)}\t{EscapeTab(e.NewValue)}");
+                sb.AppendLine("timestamp\tuser\taction\tfield\toldValue\tnewValue");
+                foreach (var e in entries)
+                {
+                    sb.AppendLine($"{e.Timestamp}\t{EscapeTab(e.User)}\t{e.Action}\t{e.Field}\t{EscapeTab(e.OldValue)}\t{EscapeTab(e.NewValue)}");
+                }
             }
 
-            return sb.ToString();
+            var structured = new GetAuditHistoryResult
+            {
+                Mode = "detail",
+                EntityName = NullIfEmpty(entityName),
+                RecordId = recordId.ToString(),
+                TimeScope = timeScope,
+                TotalCount = entries.Count,
+                Entries = entries
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
         }
 
         private static string FormatAttributeValue(object value, Entity entity, string attributeName)
@@ -608,21 +680,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return $"{minutesAgo / 1440}d";
         }
 
+        private static string NullIfEmpty(string value) =>
+            string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
         private static string EscapeTab(string value) =>
-            value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+            value?.Replace("\t", " ").Replace("\n", " ").Replace("\r", "") ?? "";
 
         private static string EscapeXml(string value) =>
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
                  .Replace("'", "&apos;").Replace("\"", "&quot;");
 
-        private sealed class AuditEntry
+        private static CallToolResult ErrorResult(string message) => new()
         {
-            public string Timestamp { get; set; }
-            public string User { get; set; }
-            public string Action { get; set; }
-            public string Field { get; set; }
-            public string OldValue { get; set; }
-            public string NewValue { get; set; }
-        }
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }
