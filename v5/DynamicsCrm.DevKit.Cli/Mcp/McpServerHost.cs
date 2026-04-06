@@ -34,13 +34,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(RelevanceSearchTool)] = "basic",
             [nameof(ParseRecordUrlTool)] = "basic",
 
-            // standard (20 additional tools)
+            // standard (19 additional tools)
             [nameof(PublishCustomizationsTool)] = "standard",
             [nameof(GetFormsTool)] = "standard",
             [nameof(GetViewsTool)] = "standard",
             [nameof(GetRolesTool)] = "standard",
             [nameof(GetSdkMessagesTool)] = "standard",
-            [nameof(GetVariablesTool)] = "standard",
+            [nameof(ManageVariableTool)] = "standard",
             [nameof(GetClassicWorkflowsTool)] = "standard",
             [nameof(GetCloudFlowsTool)] = "standard",
             [nameof(GetBpfsTool)] = "standard",
@@ -52,7 +52,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetJobsTool)] = "standard",
             [nameof(GetPluginsTool)] = "standard",
             [nameof(GetCommandsTool)] = "standard",
-            [nameof(UpsertVariableTool)] = "standard",
             [nameof(BuildFormxmlTool)] = "standard",
             [nameof(GetWebResourcesTool)] = "standard",
 
