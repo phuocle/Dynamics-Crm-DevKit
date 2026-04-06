@@ -78,7 +78,7 @@ Loading 34 tools into an AI context costs ~8,500 tokens just for descriptions. M
 |---|------|-------|---------|
 | 30 | `upsert_form` | `UpsertFormTool` | Update/rename/undo forms (with backup + validation) |
 | 31 | `upsert_view` | `UpsertViewTool` | Create/update/rename/undo views (with backup + sync check) |
-| 32 | `upsert_sitemap` | `UpsertSiteMapTool` | Create/update/undo app sitemaps (with backup + XSD) |
+| 32 | `manage_sitemap` | `ManageSiteMapTool` | Create/update/undo app sitemaps (with backup + XSD) |
 | 33 | `upsert_entity` | `UpsertEntityTool` | Create a new custom entity/table |
 | 34 | `upsert_attribute` | `UpsertAttributeTool` | Create/update columns on entities |
 | 35 | `execute_webapi` | `ExecuteWebApiTool` | Raw Web API — any HTTP method (the "escape hatch") |
@@ -201,7 +201,7 @@ private static readonly Dictionary<string, string> ToolCategoryMap = new()
     // advanced (6 additional tools)
     [nameof(UpsertFormTool)] = "advanced",
     [nameof(UpsertViewTool)] = "advanced",
-    [nameof(UpsertSiteMapTool)] = "advanced",
+    [nameof(ManageSiteMapTool)] = "advanced",
     [nameof(UpsertEntityTool)] = "advanced",
     [nameof(UpsertAttributeTool)] = "advanced",
     [nameof(ExecuteWebApiTool)] = "advanced",

@@ -84,7 +84,7 @@
 | `get_` + **plural** | `get_tables`, `get_choices`, `get_forms`, `get_roles`, `get_messages`, `get_workflows`, `get_flows`, `get_business_process_flows`, `get_business_rules`, `get_custom_apis`, `get_plugins`, `get_plugin_trace_logs`, `get_system_jobs`, `get_solution_components`, `get_dataverse_commands` | 15 | Yes |
 | `get_` + **singular** (uncountable) | `get_audit_history` | 1 | Yes — "history" is uncountable |
 | `manage_` + **singular** | `manage_record`, `manage_view`, `manage_webresource`, `manage_environment_variable` | 4 | Yes |
-| `upsert_` + **singular** | `upsert_form`, `upsert_sitemap`, `upsert_table`, `upsert_column` | 4 | Yes |
+| `upsert_` + **singular** | `upsert_form`, `manage_sitemap`, `upsert_table`, `upsert_column` | 4 | Yes |
 | `execute_` | `execute_fetchxml`, `execute_webapi` | 2 | Yes |
 | Other `verb_noun` | `whoami`, `search_records`, `parse_record_url`, `publish_customizations`, `build_form_xml` | 5 | Yes |
 
@@ -138,7 +138,7 @@
 | 27 | `execute_webapi` | Advanced | `execute_` | Singular |
 | 28 | `upsert_column` | Advanced | `upsert_` | Singular |
 | 29 | `upsert_form` | Advanced | `upsert_` | Singular |
-| 30 | `upsert_sitemap` | Advanced | `upsert_` | Singular |
+| 30 | `manage_sitemap` | Advanced | `upsert_` | Singular |
 | 31 | `upsert_table` | Advanced | `upsert_` | Singular |
 
 ### Already Completed

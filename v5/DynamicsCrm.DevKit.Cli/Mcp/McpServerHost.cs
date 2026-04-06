@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(ManageWebResourceTool)] = "standard",
 
             // advanced (4 additional tools)
-            [nameof(UpsertSiteMapTool)] = "advanced",
+            [nameof(ManageSiteMapTool)] = "advanced",
             [nameof(UpsertTableTool)] = "advanced",
             [nameof(UpsertColumnTool)] = "advanced",
             [nameof(ExecuteWebApiTool)] = "advanced",

@@ -86,7 +86,7 @@ Each file has `# Before Optimization` (10 prompts) and `# After Optimization` (1
 | 22 | `upsert_form` | 3,265 | 1,200 | 1,204 | -63% | DONE |
 | 23 | `upsert_view` | 4,619 | 1,500 | 1,674 | -64% | DONE |
 | 24 | `build_formxml` | 3,468 | 1,300 | 2,077 | -40% | DONE |
-| 25 | `upsert_sitemap` | 3,175 | 1,100 | 1,126 | -65% | DONE |
+| 25 | `manage_sitemap` | 3,175 | 1,100 | 1,126 | -65% | DONE |
 | 26 | `upsert_entity` | 2,138 | 800 | 1,076 | -50% | DONE |
 | 27 | `upsert_variable` | 2,455 | 800 | 990 | -60% | DONE |
 | 28 | `upsert_attribute` | 2,806 | 900 | 2,259 | -19% | DONE |
@@ -117,7 +117,7 @@ Each file has `# Before Optimization` (10 prompts) and `# After Optimization` (1
   - Param descriptions were optimized but still need meaningful content (not just "see tool description")
   - Safety-critical sections kept in full (BLOCKED OPERATIONS in `execute_webapi`, deletion warnings, backup notes)
 
-- **Top performers** (>60% reduction): `parse_record_url` (-68%), `get_bpfs` (-66%), `upsert_sitemap` (-65%), `upsert_record` (-64%), `get_custom_apis` (-64%), `upsert_view` (-64%), `upsert_form` (-63%), `get_jobs` (-63%)
+- **Top performers** (>60% reduction): `parse_record_url` (-68%), `get_bpfs` (-66%), `manage_sitemap` (-65%), `upsert_record` (-64%), `get_custom_apis` (-64%), `upsert_view` (-64%), `upsert_form` (-63%), `get_jobs` (-63%)
 
 - **Lowest reduction**: `relevance_search` (0%), `get_business_rules` (-15%), `get_solution_components` (-15%), `upsert_attribute` (-19%) — these tools have unique content that couldn't be safely removed
 

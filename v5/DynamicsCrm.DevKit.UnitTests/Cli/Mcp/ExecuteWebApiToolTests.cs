@@ -199,7 +199,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "sitemaps(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_sitemap"));
+        Assert.IsTrue(result.Contains("manage_sitemap"));
     }
 
     [TestMethod]

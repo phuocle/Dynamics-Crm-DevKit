@@ -172,7 +172,7 @@ Based on Anthropic's guidance, here are ALL merge candidates:
 | `upsert_entity` + `upsert_attribute` | `manage_schema` | High — very different params | **-1 tool** |
 | `get_plugins` + `get_plugin_trace_logs` | `manage_plugins` | Medium — different queries | **-1 tool** |
 | `get_classic_workflows` + `get_cloud_flows` | `manage_flows` | Medium — different engines | **-1 tool** |
-| `upsert_sitemap` + (standalone) | Keep separate | N/A | **0** |
+| `manage_sitemap` + (standalone) | Keep separate | N/A | **0** |
 
 **Tier 2 total: 29 -> 26 tools (-3 more)**
 

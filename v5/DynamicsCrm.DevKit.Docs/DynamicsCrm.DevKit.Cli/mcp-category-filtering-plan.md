@@ -33,7 +33,7 @@ The DevKit MCP server currently loads all **27 tools** at once via `WithToolsFro
 | 21 | `upsert_attribute` | UpsertAttributeTool | false | false | false |
 | 22 | `upsert_form` | UpsertFormTool | false | true | true |
 | 23 | `upsert_view` | UpsertViewTool | false | true | true |
-| 24 | `upsert_sitemap` | UpsertSiteMapTool | false | true | true |
+| 24 | `manage_sitemap` | ManageSiteMapTool | false | true | true |
 | 25 | `publish` | PublishTool | false | false | true |
 | 26 | `upsert_variable` | UpsertVariableTool | false | false | false |
 | 27 | `execute_webapi` | ExecuteWebApiTool | false | true | false |
@@ -98,7 +98,7 @@ Categories are derived from MCP tool annotations (`ReadOnly`, `Destructive`, `Id
 | 4 | `upsert_attribute` | false | false | — | Create or update a column on a table |
 | 5 | `upsert_form` | true | true | Auto-backup + XSD validation | Update, rename, or undo a form |
 | 6 | `upsert_view` | true | true | Auto-backup + sync validation | Update, create, rename, or undo a view |
-| 7 | `upsert_sitemap` | true | true | Auto-backup + XSD validation | Create, update, or undo app SiteMap |
+| 7 | `manage_sitemap` | true | true | Auto-backup + XSD validation | Create, update, or undo app SiteMap |
 | 8 | `publish` | false | true | Idempotent (safe to repeat) | Publish metadata changes |
 | 9 | `upsert_variable` | false | false | — | Create or update environment variable |
 
