@@ -31,7 +31,9 @@ Test a prompt file against the live Dataverse MCP server. Execute each of the 20
 
 ---
 
-## Step 2: Execute Each Prompt (1-20)
+## Step 2: Execute All Prompts (Parallel)
+
+Execute **all 20 prompts in parallel** when possible. Group independent prompts together and call MCP tools concurrently. Only sequence prompts when one depends on the result of another.
 
 For each prompt:
 
@@ -45,7 +47,7 @@ Call `mcp__devkit__{tool_name}` with the appropriate parameters. Record every st
 
 ### 2c. Record Result
 
-Use this exact format:
+Use this exact **multi-line** format for each prompt:
 
 ```markdown
 #### Prompt {n}: "{exact prompt text}"
@@ -73,11 +75,7 @@ When multiple calls are needed:
 **Notes:** Used get_roles with entity_name for effective privilege check
 ```
 
-### 2d. Write Immediately
-
-After each prompt, **immediately update the file** with the result. Do NOT batch.
-
-### 2e. Handle Errors
+### 2d. Handle Errors
 
 If an MCP tool returns an error:
 
@@ -94,7 +92,9 @@ If an MCP tool returns an error:
 
 ---
 
-## Step 3: Write Results to File
+## Step 3: Write Results to File (Once)
+
+After **ALL 20 prompts are completed**, write the results to the file in a single operation. Do NOT write after each individual prompt — write everything at once.
 
 Append an `## Execution Results` section at the end of the prompt file:
 
@@ -166,7 +166,9 @@ This signals the file has been fully validated.
 | Rule | Detail |
 |------|--------|
 | **Complete all 20** | Do not skip any prompt |
-| **Update after each** | Enables session resume on timeout |
+| **Parallel execution** | Execute prompts in parallel when possible — only sequence dependent prompts |
+| **Write once** | Collect all results, then write to file in a single operation at the end |
+| **Multi-line format** | Each Prompt/Step/Result/Verdict on its own line for readability |
 | **Exact format** | Follow the Step/Result/Verdict format precisely |
 | **Concise results** | Key data points only, not full JSON |
 | **No fabrication** | Every step must reflect an actual MCP call |

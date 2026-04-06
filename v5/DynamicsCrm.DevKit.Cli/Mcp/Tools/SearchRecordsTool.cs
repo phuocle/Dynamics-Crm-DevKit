@@ -85,11 +85,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase))
+                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("non-empty Guid", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("Expected non-empty", StringComparison.OrdinalIgnoreCase))
                 {
-                    return "Error: Relevance Search is not enabled in this Dataverse environment. " +
-                           "Ask your admin to enable it in Power Platform admin center, " +
-                           "or use execute_fetchxml with a 'like' filter instead.";
+                    return "Error: Relevance Search is not enabled or not available in this Dataverse environment.\n\n" +
+                           "HOW TO ENABLE:\n" +
+                           "1. Go to Power Platform admin center (https://admin.powerplatform.microsoft.com)\n" +
+                           "2. Select your environment → Settings → Product → Features\n" +
+                           "3. Turn ON 'Dataverse Search' (formerly Relevance Search)\n" +
+                           "4. Wait for indexing to complete (can take minutes to hours)\n\n" +
+                           "NOTE: If using an S2S app user (Client Credentials), Relevance Search may not be supported. " +
+                           "Try with an interactive user instead.\n\n" +
+                           "WORKAROUND: Use execute_fetchxml with a 'like' filter to search records without Relevance Search.";
                 }
 
                 return $"Error: Search failed: {ex.Message}";
