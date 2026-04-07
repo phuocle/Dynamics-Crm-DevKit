@@ -233,15 +233,15 @@ public class CrudToolValidationTests
     }
 
     // ──────────────────────────────────────────────
-    // SearchTool
+    // SearchRecordsTool
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchTool _searchTool = new(null!);
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool _searchTool = new(null!);
 
     [TestMethod]
     public void Search_EmptySearchTerm_ReturnsError()
     {
-        var result = _searchTool.search("");
+        var result = _searchTool.search_records(action: "search", search_term: "");
 
         Assert.IsTrue(result.Contains("search_term is required"));
     }
@@ -249,7 +249,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void Search_NullSearchTerm_ReturnsError()
     {
-        var result = _searchTool.search(null!);
+        var result = _searchTool.search_records(action: "search", search_term: null!);
 
         Assert.IsTrue(result.Contains("search_term is required"));
     }
@@ -258,9 +258,25 @@ public class CrudToolValidationTests
     public void Search_SearchTermTooLong_ReturnsError()
     {
         var longTerm = new string('a', 101);
-        var result = _searchTool.search(longTerm);
+        var result = _searchTool.search_records(action: "search", search_term: longTerm);
 
         Assert.IsTrue(result.Contains("100 characters or less"));
+    }
+
+    [TestMethod]
+    public void Search_InvalidAction_ReturnsError()
+    {
+        var result = _searchTool.search_records(action: "invalid");
+
+        Assert.IsTrue(result.Contains("Invalid action"));
+    }
+
+    [TestMethod]
+    public void Search_EmptyAction_ReturnsError()
+    {
+        var result = _searchTool.search_records(action: "");
+
+        Assert.IsTrue(result.Contains("action is required"));
     }
 
     // ──────────────────────────────────────────────

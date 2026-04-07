@@ -7,14 +7,15 @@ using System.Text.Json;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for SearchTool private static methods:
-/// FormatSearchResults, FormatAttributes, FormatHighlights, BuildSearchRequest, EscapeTab.
-/// All accessed via reflection on the public SearchTool type.
+/// Tests for SearchRecordsTool private static methods:
+/// FormatSearchResults, FormatAttributes, FormatHighlights, BuildSearchRequestBody, EscapePipe,
+/// FormatStatusResults, FormatProvisionStatus.
+/// All accessed via reflection on the public SearchRecordsTool type.
 /// </summary>
 [TestClass]
 public class SearchToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SearchRecordsTool);
 
     // ──────────────────────────────────────────────
     // FormatSearchResults (private static)
@@ -62,8 +63,8 @@ public class SearchToolTests
         var result = FormatSearchResults(json, "Contoso");
 
         Assert.IsTrue(result.Contains("[Search: \"Contoso\"]"));
-        Assert.IsTrue(result.Contains("1 results"));
-        Assert.IsTrue(result.Contains("Entity\tId\tScore\tAttributes\tHighlights"));
+        Assert.IsTrue(result.Contains("1 result"));
+        Assert.IsTrue(result.Contains("| Entity | Id | Score | Attributes | Highlights |"));
         Assert.IsTrue(result.Contains("account"));
         Assert.IsTrue(result.Contains("11111111-1111-1111-1111-111111111111"));
     }
@@ -147,7 +148,6 @@ public class SearchToolTests
 
         Assert.IsTrue(result.Contains("city=Seattle"));
         Assert.IsTrue(result.Contains("name=Contoso"));
-        // Should be alphabetically sorted and semicolon-separated
         Assert.IsTrue(result.Contains("; "));
     }
 
@@ -252,96 +252,303 @@ public class SearchToolTests
     }
 
     // ──────────────────────────────────────────────
-    // BuildSearchRequest (private static)
+    // BuildSearchRequestBody (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo BuildSearchRequestMethod = ToolType
-        .GetMethod("BuildSearchRequest", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo BuildSearchRequestBodyMethod = ToolType
+        .GetMethod("BuildSearchRequestBody", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static Microsoft.Xrm.Sdk.OrganizationRequest BuildSearchRequest(string searchTerm, string entities, int top, string filter)
+    private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
     {
-        return (Microsoft.Xrm.Sdk.OrganizationRequest)BuildSearchRequestMethod.Invoke(null, new object[] { searchTerm, entities, top, filter })!;
+        return (string)BuildSearchRequestBodyMethod.Invoke(null, new object[] { searchTerm, entities, top, filter })!;
     }
 
     [TestMethod]
-    public void BuildSearchRequest_BasicQuery_SetsSearchAndTop()
+    public void BuildSearchRequestBody_BasicQuery_SetsSearchAndTop()
     {
-        var request = BuildSearchRequest("Contoso", "", 50, "");
+        var json = BuildSearchRequestBody("Contoso", "", 50, "");
+        var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
 
-        Assert.AreEqual("searchquery", request.RequestName);
-        Assert.AreEqual("Contoso", request["search"]);
-        Assert.AreEqual(true, request["count"]);
-        Assert.AreEqual(50, request["top"]);
+        Assert.AreEqual("Contoso", root.GetProperty("search").GetString());
+        Assert.IsTrue(root.GetProperty("count").GetBoolean());
+        Assert.AreEqual(50, root.GetProperty("top").GetInt32());
     }
 
     [TestMethod]
-    public void BuildSearchRequest_WithEntities_SetsEntitiesJson()
+    public void BuildSearchRequestBody_WithEntities_SetsEntitiesJson()
     {
-        var request = BuildSearchRequest("test", "account,contact", 10, "");
+        var json = BuildSearchRequestBody("test", "account,contact", 10, "");
+        var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
 
-        Assert.IsTrue(request.Parameters.ContainsKey("entities"));
-        var entityJson = (string)request["entities"];
+        Assert.IsTrue(root.TryGetProperty("entities", out var entitiesProp));
+        var entityJson = entitiesProp.GetString()!;
         Assert.IsTrue(entityJson.Contains("account"));
         Assert.IsTrue(entityJson.Contains("contact"));
     }
 
     [TestMethod]
-    public void BuildSearchRequest_WithFilter_SetsFilter()
+    public void BuildSearchRequestBody_WithFilter_SetsFilter()
     {
-        var request = BuildSearchRequest("test", "", 50, "statecode eq 0");
+        var json = BuildSearchRequestBody("test", "", 50, "statecode eq 0");
+        var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
 
-        Assert.AreEqual("statecode eq 0", request["filter"]);
+        Assert.AreEqual("statecode eq 0", root.GetProperty("filter").GetString());
     }
 
     [TestMethod]
-    public void BuildSearchRequest_EmptyEntities_NoEntitiesParameter()
+    public void BuildSearchRequestBody_EmptyEntities_NoEntitiesParameter()
     {
-        var request = BuildSearchRequest("test", "", 50, "");
+        var json = BuildSearchRequestBody("test", "", 50, "");
+        var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
 
-        Assert.IsFalse(request.Parameters.ContainsKey("entities"));
+        Assert.IsFalse(root.TryGetProperty("entities", out _));
     }
 
     [TestMethod]
-    public void BuildSearchRequest_EmptyFilter_NoFilterParameter()
+    public void BuildSearchRequestBody_EmptyFilter_NoFilterParameter()
     {
-        var request = BuildSearchRequest("test", "", 50, "");
+        var json = BuildSearchRequestBody("test", "", 50, "");
+        var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
 
-        Assert.IsFalse(request.Parameters.ContainsKey("filter"));
+        Assert.IsFalse(root.TryGetProperty("filter", out _));
     }
 
     // ──────────────────────────────────────────────
-    // EscapeTab (private static)
+    // EscapePipe (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo EscapeTabMethod = ToolType
-        .GetMethod("EscapeTab", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo EscapePipeMethod = ToolType
+        .GetMethod("EscapePipe", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string EscapeTab(string value)
+    private static string EscapePipe(string value)
     {
-        return (string)EscapeTabMethod.Invoke(null, new object[] { value })!;
+        return (string)EscapePipeMethod.Invoke(null, new object[] { value })!;
     }
 
     [TestMethod]
-    public void EscapeTab_TabReplacedWithSpace()
+    public void EscapePipe_PipeReplacedWithEscaped()
     {
-        Assert.AreEqual("a b", EscapeTab("a\tb"));
+        Assert.AreEqual("a\\|b", EscapePipe("a|b"));
     }
 
     [TestMethod]
-    public void EscapeTab_NewlineReplacedWithSpace()
+    public void EscapePipe_NewlineReplacedWithSpace()
     {
-        Assert.AreEqual("a b", EscapeTab("a\nb"));
+        Assert.AreEqual("a b", EscapePipe("a\nb"));
     }
 
     [TestMethod]
-    public void EscapeTab_CarriageReturnRemoved()
+    public void EscapePipe_CarriageReturnRemoved()
     {
-        Assert.AreEqual("ab", EscapeTab("a\rb"));
+        Assert.AreEqual("ab", EscapePipe("a\rb"));
     }
 
     [TestMethod]
-    public void EscapeTab_NoSpecialChars_Unchanged()
+    public void EscapePipe_NoSpecialChars_Unchanged()
     {
-        Assert.AreEqual("hello world", EscapeTab("hello world"));
+        Assert.AreEqual("hello world", EscapePipe("hello world"));
+    }
+
+    // ──────────────────────────────────────────────
+    // FormatStatusResults (private static)
+    // ──────────────────────────────────────────────
+
+    private static readonly MethodInfo FormatStatusResultsMethod = ToolType
+        .GetMethod("FormatStatusResults", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static string FormatStatusResults(string statusJson, string statisticsJson)
+    {
+        return (string)FormatStatusResultsMethod.Invoke(null, new object[] { statusJson, statisticsJson! })!;
+    }
+
+    [TestMethod]
+    public void FormatStatusResults_NotProvisioned_ShowsStatus()
+    {
+        var statusJson = JsonSerializer.Serialize(new
+        {
+            value = new { status = "notprovisioned", lockboxstatus = "Unknown" }
+        });
+
+        var result = FormatStatusResults(statusJson, null);
+
+        Assert.IsTrue(result.Contains("[Dataverse Relevance Search Status]"));
+        Assert.IsTrue(result.Contains("Not Provisioned"));
+        Assert.IsTrue(result.Contains("Search is not provisioned"));
+    }
+
+    [TestMethod]
+    public void FormatStatusResults_Provisioned_ShowsEntities()
+    {
+        var statusJson = JsonSerializer.Serialize(new
+        {
+            value = new
+            {
+                status = "provisioned",
+                lockboxstatus = "Disabled",
+                cmkstatus = "Disabled",
+                entitystatusresults = new[]
+                {
+                    new
+                    {
+                        entitylogicalname = "account",
+                        objecttypecode = 1,
+                        primarynamefield = "name",
+                        lastdatasynctimestamp = "12345!01/01/2026 00:00:00",
+                        entitystatus = "EntitySyncComplete",
+                        searchableindexedfieldinfomap = new Dictionary<string, object>
+                        {
+                            ["name"] = new { indexfieldname = "d_0" },
+                            ["accountnumber"] = new { indexfieldname = "a0w" }
+                        }
+                    }
+                }
+            }
+        });
+
+        var result = FormatStatusResults(statusJson, null);
+
+        Assert.IsTrue(result.Contains("Provisioned"));
+        Assert.IsTrue(result.Contains("Indexed Entities (1)"));
+        Assert.IsTrue(result.Contains("account"));
+        Assert.IsTrue(result.Contains("EntitySyncComplete"));
+        Assert.IsTrue(result.Contains("2 fields"));
+        Assert.IsTrue(result.Contains("accountnumber"));
+        Assert.IsTrue(result.Contains("name"));
+    }
+
+    [TestMethod]
+    public void FormatStatusResults_WithStatistics_ShowsStorageAndDocCount()
+    {
+        var statusJson = JsonSerializer.Serialize(new
+        {
+            value = new
+            {
+                status = "provisioned",
+                lockboxstatus = "Disabled",
+                entitystatusresults = Array.Empty<object>()
+            }
+        });
+        var statsJson = JsonSerializer.Serialize(new
+        {
+            value = new
+            {
+                storagesizeinbytes = 1341090,
+                storagesizeinmb = 1,
+                documentcount = 1309
+            }
+        });
+
+        var result = FormatStatusResults(statusJson, statsJson);
+
+        Assert.IsTrue(result.Contains("1 MB"));
+        Assert.IsTrue(result.Contains("1,341,090 bytes"));
+        Assert.IsTrue(result.Contains("1,309"));
+    }
+
+    [TestMethod]
+    public void FormatStatusResults_InvalidJson_FallsBackToRaw()
+    {
+        var result = FormatStatusResults("not valid json", null);
+
+        Assert.IsTrue(result.Contains("[Search Status]"));
+        Assert.IsTrue(result.Contains("not valid json"));
+    }
+
+    [TestMethod]
+    public void FormatStatusResults_WithManyToMany_ShowsRelationships()
+    {
+        var statusJson = JsonSerializer.Serialize(new
+        {
+            value = new
+            {
+                status = "provisioned",
+                lockboxstatus = "Disabled",
+                entitystatusresults = new[]
+                {
+                    new
+                    {
+                        entitylogicalname = "account",
+                        objecttypecode = 1,
+                        primarynamefield = "name",
+                        entitystatus = "EntitySyncComplete",
+                        searchableindexedfieldinfomap = new Dictionary<string, object>
+                        {
+                            ["name"] = new { indexfieldname = "d_0" }
+                        }
+                    }
+                },
+                manytomanyrelationshipsyncstatus = new[]
+                {
+                    new
+                    {
+                        relationshipName = "accountleads_association",
+                        searchEntity = "account",
+                        relatedEntity = "lead",
+                        intersectEntity = "accountleads"
+                    }
+                }
+            }
+        });
+
+        var result = FormatStatusResults(statusJson, null);
+
+        Assert.IsTrue(result.Contains("Many-to-Many Relationships (1)"));
+        Assert.IsTrue(result.Contains("accountleads_association"));
+        Assert.IsTrue(result.Contains("account"));
+        Assert.IsTrue(result.Contains("lead"));
+        Assert.IsTrue(result.Contains("accountleads"));
+    }
+
+    // ──────────────────────────────────────────────
+    // FormatProvisionStatus (private static)
+    // ──────────────────────────────────────────────
+
+    private static readonly MethodInfo FormatProvisionStatusMethod = ToolType
+        .GetMethod("FormatProvisionStatus", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static string FormatProvisionStatus(string status)
+    {
+        return (string)FormatProvisionStatusMethod.Invoke(null, new object[] { status })!;
+    }
+
+    [TestMethod]
+    public void FormatProvisionStatus_NotProvisioned_FormatsCorrectly()
+    {
+        Assert.AreEqual("Not Provisioned", FormatProvisionStatus("notprovisioned"));
+    }
+
+    [TestMethod]
+    public void FormatProvisionStatus_Provisioned_FormatsCorrectly()
+    {
+        Assert.AreEqual("Provisioned", FormatProvisionStatus("provisioned"));
+    }
+
+    [TestMethod]
+    public void FormatProvisionStatus_InProgress_FormatsCorrectly()
+    {
+        Assert.AreEqual("Provisioning In Progress", FormatProvisionStatus("provisioninginprogress"));
+    }
+
+    [TestMethod]
+    public void FormatProvisionStatus_Unknown_ReturnsAsIs()
+    {
+        Assert.AreEqual("somethingelse", FormatProvisionStatus("somethingelse"));
+    }
+
+    [TestMethod]
+    public void FormatProvisionStatus_Empty_ReturnsUnknown()
+    {
+        Assert.AreEqual("Unknown", FormatProvisionStatus(""));
+    }
+
+    [TestMethod]
+    public void FormatProvisionStatus_Null_ReturnsUnknown()
+    {
+        Assert.AreEqual("Unknown", FormatProvisionStatus(null!));
     }
 }
