@@ -6,47 +6,47 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for GetHistoriesTool private static methods:
+/// Tests for GetAuditHistoryTool private static methods:
 /// BuildBrowseFetchXml, ParseActionName, FormatAction, FormatOperation,
 /// FormatTimeWindow, FormatBrowseNoResults, EscapeTab, EscapeXml.
 /// </summary>
 [TestClass]
 public class GetAuditHistoriesToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetHistoriesTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetAuditHistoryTool);
 
     // ──────────────────────────────────────────────
     // Input validation via public method
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetHistoriesTool _tool = new(null!);
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetAuditHistoryTool _tool = new(null!);
 
     [TestMethod]
     public void GetAuditHistories_RecordIdWithoutEntityName_ReturnsError()
     {
-        var result = _tool.get_histories(record_id: "11111111-1111-1111-1111-111111111111");
-        Assert.IsTrue(result.Contains("entity_name is required when record_id is provided"));
+        var result = _tool.get_audit_history(record_id: "11111111-1111-1111-1111-111111111111");
+        Assert.IsTrue(GetText(result).Contains("entity_name is required when record_id is provided"));
     }
 
     [TestMethod]
     public void GetAuditHistories_InvalidRecordId_ReturnsError()
     {
-        var result = _tool.get_histories(entity_name: "account", record_id: "not-a-guid");
-        Assert.IsTrue(result.Contains("not a valid GUID"));
+        var result = _tool.get_audit_history(entity_name: "account", record_id: "not-a-guid");
+        Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
     }
 
     [TestMethod]
     public void GetAuditHistories_InvalidFromDate_ReturnsError()
     {
-        var result = _tool.get_histories(from_date: "not-a-date");
-        Assert.IsTrue(result.Contains("not a valid ISO 8601 date"));
+        var result = _tool.get_audit_history(from_date: "not-a-date");
+        Assert.IsTrue(GetText(result).Contains("not a valid ISO 8601 date"));
     }
 
     [TestMethod]
     public void GetAuditHistories_InvalidToDate_ReturnsError()
     {
-        var result = _tool.get_histories(to_date: "not-a-date");
-        Assert.IsTrue(result.Contains("not a valid ISO 8601 date"));
+        var result = _tool.get_audit_history(to_date: "not-a-date");
+        Assert.IsTrue(GetText(result).Contains("not a valid ISO 8601 date"));
     }
 
     // ──────────────────────────────────────────────
@@ -359,16 +359,16 @@ public class GetAuditHistoriesToolTests
     private static readonly MethodInfo FormatBrowseNoResultsMethod = ToolType
         .GetMethod("FormatBrowseNoResults", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string FormatBrowseNoResults(string entityName, int minutesAgo, string userFilter, string operation)
+    private static string FormatBrowseNoResults(string entityName, string timeScope, string userFilter, string operation)
     {
         return (string)FormatBrowseNoResultsMethod.Invoke(null,
-            new object[] { entityName, minutesAgo, userFilter, operation })!;
+            new object[] { entityName, timeScope, userFilter, operation })!;
     }
 
     [TestMethod]
     public void FormatBrowseNoResults_Basic_ShowsZeroEntries()
     {
-        var result = FormatBrowseNoResults("", 1440, "", "");
+        var result = FormatBrowseNoResults("", "last 24h", "", "");
 
         Assert.IsTrue(result.Contains("[AuditBrowse] 0 entries found"));
         Assert.IsTrue(result.Contains("auditing is enabled"));
@@ -377,7 +377,7 @@ public class GetAuditHistoriesToolTests
     [TestMethod]
     public void FormatBrowseNoResults_WithFilters_ShowsFilterDetails()
     {
-        var result = FormatBrowseNoResults("account", 1440, "John", "Create");
+        var result = FormatBrowseNoResults("account", "last 24h", "John", "Create");
 
         Assert.IsTrue(result.Contains("entity = \"account\""));
         Assert.IsTrue(result.Contains("user contains \"John\""));
@@ -454,5 +454,18 @@ public class GetAuditHistoriesToolTests
     public void EscapeXml_QuoteEscaped()
     {
         Assert.AreEqual("a&quot;b", EscapeXml("a\"b"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Helper
+    // ──────────────────────────────────────────────
+
+    private static string GetText(ModelContextProtocol.Protocol.CallToolResult result)
+    {
+        if (result.Content == null || result.Content.Count == 0) return "";
+        var first = result.Content[0];
+        if (first is ModelContextProtocol.Protocol.TextContentBlock textBlock)
+            return textBlock.Text ?? "";
+        return "";
     }
 }

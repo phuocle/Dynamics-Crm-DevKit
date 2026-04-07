@@ -6,23 +6,23 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for CRUD tool input validation (Upsert, Delete, GetRecord).
+/// Tests for ManageRecordTool input validation (Create, Read, Update, Delete).
 /// These tools are public and we test their error paths by passing null ServiceClient.
-/// For Upsert — also tests CountFields private static method.
+/// Also tests CountFields private static method.
 /// </summary>
 [TestClass]
 public class CrudToolValidationTests
 {
-    // ──────────────────────────────────────────────
-    // DeleteRecordTool
-    // ──────────────────────────────────────────────
+    private readonly ManageRecordTool _tool = new(null!);
 
-    private readonly DeleteRecordTool _deleteTool = new(null!);
+    // ──────────────────────────────────────────────
+    // Delete action
+    // ──────────────────────────────────────────────
 
     [TestMethod]
     public void DeleteRecord_EmptyEntityName_ReturnsError()
     {
-        var result = _deleteTool.delete_record("", "11111111-1111-1111-1111-111111111111");
+        var result = _tool.manage_record("delete", "", "11111111-1111-1111-1111-111111111111");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
@@ -31,7 +31,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void DeleteRecord_NullEntityName_ReturnsError()
     {
-        var result = _deleteTool.delete_record(null!, "11111111-1111-1111-1111-111111111111");
+        var result = _tool.manage_record("delete", null!, "11111111-1111-1111-1111-111111111111");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
@@ -40,7 +40,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void DeleteRecord_EmptyRecordId_ReturnsError()
     {
-        var result = _deleteTool.delete_record("account", "");
+        var result = _tool.manage_record("delete", "account", "");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("record_id is required"));
@@ -49,7 +49,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void DeleteRecord_InvalidGuid_ReturnsError()
     {
-        var result = _deleteTool.delete_record("account", "not-a-guid");
+        var result = _tool.manage_record("delete", "account", "not-a-guid");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
@@ -59,22 +59,20 @@ public class CrudToolValidationTests
     public void DeleteRecord_ValidInputs_NullServiceClient_ReturnsError()
     {
         // Valid inputs but null ServiceClient will cause NullReferenceException in Delete
-        var result = _deleteTool.delete_record("account", "11111111-1111-1111-1111-111111111111");
+        var result = _tool.manage_record("delete", "account", "11111111-1111-1111-1111-111111111111");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("Error"));
     }
 
     // ──────────────────────────────────────────────
-    // UpsertRecordTool (Create mode — no record_id)
+    // Create action (no record_id)
     // ──────────────────────────────────────────────
-
-    private readonly UpsertRecordTool _upsertTool = new(null!);
 
     [TestMethod]
     public void UpsertCreate_EmptyEntityName_ReturnsError()
     {
-        var result = _upsertTool.upsert_record("", "{\"name\": \"Test\"}");
+        var result = _tool.manage_record("create", "", fields_json: "{\"name\": \"Test\"}");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
@@ -83,7 +81,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void UpsertCreate_NullEntityName_ReturnsError()
     {
-        var result = _upsertTool.upsert_record(null!, "{\"name\": \"Test\"}");
+        var result = _tool.manage_record("create", null!, fields_json: "{\"name\": \"Test\"}");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
@@ -92,7 +90,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void UpsertCreate_EmptyFieldsJson_ReturnsError()
     {
-        var result = _upsertTool.upsert_record("account", "");
+        var result = _tool.manage_record("create", "account", fields_json: "");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("fields_json is required"));
@@ -101,20 +99,20 @@ public class CrudToolValidationTests
     [TestMethod]
     public void UpsertCreate_NullFieldsJson_ReturnsError()
     {
-        var result = _upsertTool.upsert_record("account", null!);
+        var result = _tool.manage_record("create", "account", fields_json: null!);
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("fields_json is required"));
     }
 
     // ──────────────────────────────────────────────
-    // UpsertRecordTool (Update/Upsert mode — with record_id)
+    // Update action (with record_id)
     // ──────────────────────────────────────────────
 
     [TestMethod]
     public void UpsertUpdate_EmptyEntityName_ReturnsError()
     {
-        var result = _upsertTool.upsert_record("", "{\"name\":\"x\"}", "11111111-1111-1111-1111-111111111111");
+        var result = _tool.manage_record("update", "", record_id: "11111111-1111-1111-1111-111111111111", fields_json: "{\"name\":\"x\"}");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("entity_name is required"));
@@ -123,7 +121,7 @@ public class CrudToolValidationTests
     [TestMethod]
     public void UpsertUpdate_EmptyFieldsJson_ReturnsError()
     {
-        var result = _upsertTool.upsert_record("account", "", "11111111-1111-1111-1111-111111111111");
+        var result = _tool.manage_record("update", "account", record_id: "11111111-1111-1111-1111-111111111111", fields_json: "");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("fields_json is required"));
@@ -132,17 +130,17 @@ public class CrudToolValidationTests
     [TestMethod]
     public void UpsertUpdate_InvalidGuid_ReturnsError()
     {
-        var result = _upsertTool.upsert_record("account", "{\"name\":\"x\"}", "invalid-guid");
+        var result = _tool.manage_record("update", "account", record_id: "invalid-guid", fields_json: "{\"name\":\"x\"}");
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
     }
 
     // ──────────────────────────────────────────────
-    // UpsertRecordTool.CountFields (private static)
+    // ManageRecordTool.CountFields (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo CountFieldsMethod = typeof(UpsertRecordTool)
+    private static readonly MethodInfo CountFieldsMethod = typeof(ManageRecordTool)
         .GetMethod("CountFields", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static int CountFields(string fieldsJson)
@@ -181,33 +179,34 @@ public class CrudToolValidationTests
     }
 
     // ──────────────────────────────────────────────
-    // GetRecordTool
+    // Read action
     // ──────────────────────────────────────────────
-
-    private readonly GetRecordTool _getRecordTool = new(null!);
 
     [TestMethod]
     public void GetRecord_EmptyEntityName_ReturnsError()
     {
-        var result = _getRecordTool.get_record("", "11111111-1111-1111-1111-111111111111");
+        var result = _tool.manage_record("read", "", record_id: "11111111-1111-1111-1111-111111111111");
 
-        Assert.IsTrue(result.Contains("entity_name is required"));
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("entity_name is required"));
     }
 
     [TestMethod]
     public void GetRecord_EmptyRecordId_ReturnsError()
     {
-        var result = _getRecordTool.get_record("account", "");
+        var result = _tool.manage_record("read", "account", record_id: "");
 
-        Assert.IsTrue(result.Contains("record_id is required"));
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("record_id is required"));
     }
 
     [TestMethod]
     public void GetRecord_InvalidGuid_ReturnsError()
     {
-        var result = _getRecordTool.get_record("account", "not-a-guid");
+        var result = _tool.manage_record("read", "account", record_id: "not-a-guid");
 
-        Assert.IsTrue(result.Contains("not a valid GUID"));
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
     }
 
     // ──────────────────────────────────────────────

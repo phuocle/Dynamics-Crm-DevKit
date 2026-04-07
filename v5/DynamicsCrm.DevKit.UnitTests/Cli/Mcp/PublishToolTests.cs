@@ -12,7 +12,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 [TestClass]
 public class PublishToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.PublishTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.PublishCustomizationsTool);
 
     private static readonly MethodInfo BuildParameterXmlMethod = ToolType
         .GetMethod("BuildParameterXml", BindingFlags.NonPublic | BindingFlags.Static)!;

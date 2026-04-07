@@ -150,7 +150,7 @@ public class FetchXmlAndRecordToolTests
     // GetRecordTool.BuildColumnSet (private static)
     // ──────────────────────────────────────────────
 
-    private static readonly Type GetRecordToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetRecordTool);
+    private static readonly Type GetRecordToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRecordTool);
 
     private static readonly MethodInfo BuildColumnSetMethod = GetRecordToolType
         .GetMethod("BuildColumnSet", BindingFlags.NonPublic | BindingFlags.Static)!;

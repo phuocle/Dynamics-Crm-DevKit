@@ -5,40 +5,40 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for GetViewsTool private static methods:
-/// MapQueryType, PrettyPrintXml, EscapeTab.
-/// Also tests input validation via the public get_views method.
+/// Tests for ManageViewTool private static methods:
+/// MapQueryType, EscapeTab.
+/// Also tests ViewXmlHelper.PrettyPrintXml and input validation via the public manage_view method.
 /// </summary>
 [TestClass]
 public class GetViewsToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetViewsTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageViewTool);
 
     // ──────────────────────────────────────────────
     // Input validation via public method
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetViewsTool _tool = new(null!);
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageViewTool _tool = new(null!);
 
     [TestMethod]
     public void GetViews_EmptyEntityName_ReturnsError()
     {
-        var result = _tool.get_views("");
-        Assert.IsTrue(result.Contains("entity_name is required"));
+        var result = _tool.manage_view("list", "");
+        Assert.IsTrue(GetText(result).Contains("entity_name is required"));
     }
 
     [TestMethod]
     public void GetViews_WhitespaceEntityName_ReturnsError()
     {
-        var result = _tool.get_views("   ");
-        Assert.IsTrue(result.Contains("entity_name is required"));
+        var result = _tool.manage_view("list", "   ");
+        Assert.IsTrue(GetText(result).Contains("entity_name is required"));
     }
 
     [TestMethod]
     public void GetViews_InvalidViewId_ReturnsError()
     {
-        var result = _tool.get_views("account", view_id: "not-a-guid");
-        Assert.IsTrue(result.Contains("not a valid GUID"));
+        var result = _tool.manage_view("detail", "account", view_id: "not-a-guid");
+        Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
     }
 
     // ──────────────────────────────────────────────
@@ -96,11 +96,14 @@ public class GetViewsToolTests
     }
 
     // ──────────────────────────────────────────────
-    // PrettyPrintXml (private static)
+    // PrettyPrintXml (ViewXmlHelper, internal — accessed via reflection)
     // ──────────────────────────────────────────────
 
-    private static readonly MethodInfo PrettyPrintXmlMethod = ToolType
-        .GetMethod("PrettyPrintXml", BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly Type ViewXmlHelperType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageViewTool).Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.ViewXmlHelper")!;
+
+    private static readonly MethodInfo PrettyPrintXmlMethod = ViewXmlHelperType
+        .GetMethod("PrettyPrintXml", BindingFlags.Public | BindingFlags.Static)!;
 
     private static string PrettyPrintXml(string xml)
     {
@@ -163,5 +166,18 @@ public class GetViewsToolTests
     public void EscapeTab_CarriageReturnRemoved()
     {
         Assert.AreEqual("ab", EscapeTab("a\rb"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Helper
+    // ──────────────────────────────────────────────
+
+    private static string GetText(ModelContextProtocol.Protocol.CallToolResult result)
+    {
+        if (result.Content == null || result.Content.Count == 0) return "";
+        var first = result.Content[0];
+        if (first is ModelContextProtocol.Protocol.TextContentBlock textBlock)
+            return textBlock.Text ?? "";
+        return "";
     }
 }
