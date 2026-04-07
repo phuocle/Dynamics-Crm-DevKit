@@ -143,8 +143,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     // If {DialogClassName}.ts doesn't exist, add it so template creates it
                     return !IsFilePathExist;
                 }
-                // Always add the .dialog.ts file
-                return true;
+                return !IsFilePathExist;
             });
         }
 

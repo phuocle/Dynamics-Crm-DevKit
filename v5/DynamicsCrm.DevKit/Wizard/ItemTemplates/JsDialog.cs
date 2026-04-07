@@ -154,8 +154,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     return !IsFilePathExist;
                 }
 
-                // Always overwrite the generated .dialog.js and .d.ts files
-                return true;
+                return !IsFilePathExist;
             });
         }
     }
