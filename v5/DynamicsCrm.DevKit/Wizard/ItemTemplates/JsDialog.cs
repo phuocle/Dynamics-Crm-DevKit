@@ -9,10 +9,8 @@ using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -25,6 +23,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private string DialogLogicalName { get; set; }
         private ServiceClient ServiceClient { get; set; }
         private SystemForm SelectedDialogForm { get; set; }
+        private bool IsDialogJsExisting { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -59,9 +58,12 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var jsProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.js");
                 var jsPath = jsProjectItem.FileNames[0];
 
-                // For JsDialog we don't append. If it exists, we skip overwrite of user code unless it was just created by template.
-                // The template creates the default content.
-                await FileHelper.ForceWriteAllTextAsync(jsPath, _JavaScript_);
+                if (!IsDialogJsExisting)
+                {
+                    // Dialog.js was just created - write initial content
+                    await FileHelper.ForceWriteAllTextAsync(jsPath, _JavaScript_);
+                }
+                // If Dialog.js already exists, don't touch it - user has customized their code
 
                 // 4. Nest .dialog.js and .d.ts under .js
                 try
@@ -151,6 +153,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 // For the user script (.js), do not overwrite if exists
                 if (filePath == "JavaScript.js")
                 {
+                    IsDialogJsExisting = IsFilePathExist;
                     return !IsFilePathExist;
                 }
 

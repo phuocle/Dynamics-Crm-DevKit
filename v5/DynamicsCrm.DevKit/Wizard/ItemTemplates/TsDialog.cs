@@ -9,10 +9,8 @@ using EnvDTE;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -54,19 +52,12 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var dialogTsProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.ts");
                 var dialogTsPath = dialogTsProjectItem.FileNames[0];
 
-                if (IsDialogTsExisting)
-                {
-                    // APPEND mode: Dialog.ts already exists
-                    var existingContent = await FileHelper.ReadAllTextAsync(dialogTsPath);
-                var importStatement = $"import {{ DevKitDialog as Dialog }} from './{DialogClassName}.dialog';";
-                var updatedContent = AppendDialogToExistingFile(existingContent, importStatement, _TypeScript_, DialogClassName);
-                    await FileHelper.ForceWriteAllTextAsync(dialogTsPath, updatedContent);
-                }
-                else
+                if (!IsDialogTsExisting)
                 {
                     // Dialog.ts was just created - write initial content
                     await FileHelper.ForceWriteAllTextAsync(dialogTsPath, _TypeScript_);
                 }
+                // If Dialog.ts already exists, don't touch it - user has customized their code
 
                 // 3. Nest .dialog.ts under Dialog.ts
                 try
@@ -145,55 +136,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 }
                 return !IsFilePathExist;
             });
-        }
-
-        private static string AppendDialogToExistingFile(
-            string existingContent, string importStatement,
-            string fullIifeContent, string exportVarName)
-        {
-            var lines = existingContent.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).ToList();
-
-            // 1. Find the last import line and insert new import AFTER it
-            if (!lines.Any(l => l.Contains("import { DevKitDialog as Dialog }")))
-            {
-                var lastImportIndex = lines.FindLastIndex(l => l.TrimStart().StartsWith("import "));
-                if (lastImportIndex >= 0)
-                    lines.Insert(lastImportIndex + 1, importStatement);
-                else
-                    lines.Insert(0, importStatement);
-            }
-
-            // 2. Find the `export { ... }` line
-            var exportIndex = lines.FindLastIndex(l => l.TrimStart().StartsWith("export {"));
-            if (exportIndex >= 0)
-            {
-                // Extract the IIFE block from fullIifeContent (skip import, skip export)
-                var iifeLines = fullIifeContent.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).ToList();
-                // Remove the import line (first line) and empty line after it
-                var iifeStartIndex = iifeLines.FindIndex(l => l.StartsWith("const "));
-                if (iifeStartIndex < 0) iifeStartIndex = 0;
-                // Remove the export line at the end
-                var iifeEndIndex = iifeLines.FindLastIndex(l => l.TrimStart().StartsWith("export {"));
-                if (iifeEndIndex < 0) iifeEndIndex = iifeLines.Count;
-                var iifeBlock = iifeLines.GetRange(iifeStartIndex, iifeEndIndex - iifeStartIndex);
-
-                // Insert IIFE block BEFORE the export line
-                lines.InsertRange(exportIndex, iifeBlock);
-
-                // Update export line to include new variable
-                var newExportIndex = exportIndex + iifeBlock.Count;
-                var exportLine = lines[newExportIndex];
-                var updatedExport = exportLine.Replace(" };", $", {exportVarName} }};");
-                lines[newExportIndex] = updatedExport;
-            }
-            else
-            {
-                // No export found, append IIFE + export at end
-                lines.Add("");
-                lines.Add(fullIifeContent);
-            }
-
-            return string.Join("\r\n", lines);
         }
     }
 }
