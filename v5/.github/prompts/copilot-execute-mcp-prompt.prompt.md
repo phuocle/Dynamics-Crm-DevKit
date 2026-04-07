@@ -46,6 +46,59 @@ Execute a pre-defined MCP prompt validation file against the live Dataverse MCP 
 
 ---
 
+## EXACT Output Format (MUST Follow)
+
+> [!CAUTION]
+> **You MUST follow this EXACT format for every prompt result. Do NOT deviate.**
+
+### Heading Levels
+
+- `## Execution Results` --- H2 for the results section header
+- `### Before Optimization` / `### After Optimization` --- H3 for section headers
+- `#### Prompt B.{n}:` / `#### Prompt A.{n}:` --- H4 for each prompt result (`B` = Before, `A` = After)
+- `### Summary` / `### Fixes Applied` --- H3 for final synthesis sections
+
+### Single Prompt Result Format
+
+```markdown
+#### Prompt B.1: "{exact prompt text from the file}"
+
+**Step 1:** Call `mcp__devkit__{tool_name}` with `{param1: value1, param2: value2}`
+**Step 1 Result:** {concise summary with key data: counts, names, IDs, values}
+
+**Verdict:** SUCCESS
+**Total MCP Calls:** 1
+```
+
+### When Multiple MCP Calls Are Needed
+
+```markdown
+#### Prompt B.7: "{exact prompt text}"
+
+**Step 1:** Call `mcp__devkit__whoami` with `{}`
+**Step 1 Result:** User=# DEVKIT, Roles: System Administrator (9876ab54-...)
+
+**Step 2:** Call `mcp__devkit__get_roles` with `{user_id: "791882ab-...", entity_name: "account"}`
+**Step 2 Result:** 1 role (System Administrator). Effective privileges on account: Create/Read/Write/Delete — all at Organization depth
+
+**Verdict:** SUCCESS
+**Total MCP Calls:** 2
+**Notes:** Used get_roles with entity_name to show effective privileges on account entity for troubleshooting
+```
+
+### Key Rules for Each Prompt
+
+| Field | Rule |
+|-------|------|
+| **Prompt header** | `#### Prompt {B/A}.{n}: "{exact text}"` --- use `B` for Before, `A` for After |
+| **Step N** | `**Step {N}:** Call \`mcp__devkit__{tool}\` with \`{params_as_JSON}\`` |
+| **Step N Result** | `**Step {N} Result:** {concise summary}` --- include key data points, NOT full JSON |
+| **Verdict** | `**Verdict:** SUCCESS` or `FAILED` or `ERROR` |
+| **Total MCP Calls** | `**Total MCP Calls:** {number}` --- always present |
+| **Notes** | `**Notes:** {observation}` --- **ONLY include when there is something noteworthy** (e.g. extra calls needed, unexpected result). Omit this line when the result is straightforward |
+
+---
+
 ## Step 1: Validate and Prepare
 
 1. Verify the prompt file exists --- if not, stop and report error
@@ -66,23 +119,7 @@ Read the prompt as if you are an AI agent receiving it from a user. Decide which
 
 ### 2b. Execute and Record Steps
 
-Call the MCP tool(s) through `mcp__devkit__{tool_name}` and record **every step**:
-
-```
-### Prompt {section}.{number}: "{prompt text}"
-
-**Step 1:** Call `mcp__devkit__{tool_name}` with parameters: `{param1: value1, param2: value2}`
-**Step 1 Result:** {summary of what was returned --- keep concise but include key data points}
-
-**Step 2:** Call `mcp__devkit__{tool_name2}` with parameters: `{...}`
-**Step 2 Result:** {summary}
-
-...
-
-**Verdict:** SUCCESS | FAILED | ERROR
-**Total MCP Calls:** {number}
-**Notes:** {any observations --- e.g. "required 2 calls instead of 1", "had to call get_metadata_entities first to find the entity name"}
-```
+Call the MCP tool(s) through `mcp__devkit__{tool_name}` and record **every step** using the EXACT format defined above.
 
 ### 2c. Handle Errors
 
@@ -111,7 +148,7 @@ After each prompt execution, **immediately update the prompt file** with the res
 
 ## Step 3: Write Results to File
 
-Append a `## Execution Results` section to the **end** of the prompt file. Structure:
+Append a `## Execution Results` section to the **end** of the prompt file (after a `---` horizontal rule). Structure:
 
 ```markdown
 ---
@@ -142,28 +179,13 @@ Append a `## Execution Results` section to the **end** of the prompt file. Struc
 **Total MCP Calls:** 2
 **Notes:** Required additional call to resolve entity metadata first
 
-...
+...continue B.3 through B.10...
 
 ### After Optimization
 
 #### Prompt A.1: "{prompt text}"
 
-...
-
-### Summary
-
-| Section | Total Prompts | Success | Failed | Error | Avg MCP Calls |
-|---------|--------------|---------|--------|-------|---------------|
-| Before Optimization | {n} | {n} | {n} | {n} | {avg} |
-| After Optimization | {n} | {n} | {n} | {n} | {avg} |
-
-### Fixes Applied
-
-| # | Tool | File | Error | Fix Description |
-|---|------|------|-------|-----------------|
-| 1 | {tool_name} | {file.cs} | {error} | {fix description} |
-
-> **Observation:** {Compare Before vs After --- did the optimized prompts require fewer MCP calls on average? Were they more direct?}
+...continue A.1 through A.10...
 ```
 
 ---
@@ -175,14 +197,69 @@ Append a `## Execution Results` section to the **end** of the prompt file. Struc
 
 ---
 
+## Step 5: Write Summary (REQUIRED --- Do NOT Skip)
+
+> [!CAUTION]
+> **After ALL 20 prompts are executed, you MUST write the Summary section at the end of the results. This is NOT optional.**
+
+Append these sections immediately after the last `After Optimization` prompt result:
+
+### 5a. Summary Table
+
+```markdown
+### Summary
+
+| Section | Total Prompts | Success | Failed | Error | Avg MCP Calls |
+|---------|--------------|---------|--------|-------|---------------|
+| Before Optimization | {n} | {n} | {n} | {n} | {avg} |
+| After Optimization | {n} | {n} | {n} | {n} | {avg} |
+```
+
+### 5b. Fixes Applied Table
+
+```markdown
+### Fixes Applied
+
+| # | Tool | File | Error | Fix Description |
+|---|------|------|-------|-----------------|
+| 1 | {tool_name} | {file.cs} | {error} | {fix description} |
+```
+
+If no fixes were needed, write:
+
+```markdown
+### Fixes Applied
+
+| # | Tool | File | Error | Fix Description |
+|---|------|------|-------|-----------------|
+| — | — | — | — | No fixes needed |
+```
+
+### 5c. Observation (REQUIRED)
+
+```markdown
+> **Observation:** {Your analysis comparing Before vs After results. Address ALL of these:}
+> - Did optimized prompts require fewer MCP calls on average?
+> - Were they more direct in tool selection?
+> - Which prompts (if any) required extra calls and why?
+> - Any patterns or insights about tool description quality?
+```
+
+**This Observation paragraph is the most valuable output** --- it tells us whether the tool description optimization actually improved AI tool-calling efficiency. Write a thoughtful analysis, not a one-liner.
+
+---
+
 ## Rules
 
 - **MUST complete ALL prompts** --- both Before and After Optimization sections. Do not skip any.
 - **MUST update file after EACH prompt** --- this enables session resume on timeout
+- **MUST follow the EXACT format** defined in the "EXACT Output Format" section above
 - **MUST record every MCP call** --- step number, tool name, parameters, and result summary
 - **MUST keep result summaries concise** --- include key data points (counts, names, IDs) but not full JSON dumps
+- **MUST write the Summary + Fixes Applied + Observation** at the end --- this is the synthesis that makes the execution useful
 - **DO NOT fabricate results** --- every step must reflect an actual MCP call
 - **DO NOT skip prompts** that seem similar --- each prompt tests a different angle
+- **DO NOT include `**Notes:**` line** when the result is straightforward --- only add notes when there is something noteworthy
 - **CAN fix MCP tool code** if an error is found --- but record the fix and flag for MCP restart
 - **CAN call supporting MCP tools** (like `get_metadata_entities`, `whoami`) if needed to resolve a prompt --- but record them as steps
 - The purpose is to verify AI tool-calling efficiency --- roundabout paths should be visible in the step log
