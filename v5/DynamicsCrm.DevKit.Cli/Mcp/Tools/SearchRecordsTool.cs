@@ -1,10 +1,10 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -72,41 +72,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var request = BuildSearchRequest(search_term.Trim(), entities, top, filter);
-                var response = (OrganizationResponse)_serviceClient.Execute(request);
+                var requestBody = BuildSearchRequestBody(search_term.Trim(), entities, top, filter);
+                var response = _serviceClient.ExecuteWebRequest(
+                    HttpMethod.Post, "searchquery", requestBody, null, "application/json");
 
-                if (!response.Results.TryGetValue("response", out var responseBody) || responseBody is not string jsonResponse)
+                var jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                if (!response.IsSuccessStatusCode)
+                    return $"Error: Search API returned {(int)response.StatusCode} {response.ReasonPhrase}.\n{jsonResponse}";
+
+                // Web API wraps result in { "response": "..." }
+                var wrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(jsonResponse, _jsonOptions);
+                if (wrapper?.Response == null)
                     return "Error: Unexpected response format from search API.";
 
-                return FormatSearchResults(jsonResponse, search_term.Trim());
+                return FormatSearchResults(wrapper.Response, search_term.Trim());
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
+                if (ex.Message.Contains("0x80048d0b", StringComparison.OrdinalIgnoreCase) ||
+                    ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
                     ex.Message.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("not enabled", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("non-empty Guid", StringComparison.OrdinalIgnoreCase) ||
-                    ex.Message.Contains("Expected non-empty", StringComparison.OrdinalIgnoreCase))
+                    ex.Message.Contains("Search feature is disabled", StringComparison.OrdinalIgnoreCase))
                 {
-                    return "Error: Relevance Search is not enabled or not available in this Dataverse environment.\n\n" +
+                    return "Error: Dataverse Search is not enabled in this environment.\n\n" +
                            "HOW TO ENABLE:\n" +
-                           "1. Go to Power Platform admin center (https://admin.powerplatform.microsoft.com)\n" +
+                           "1. Go to Power Platform admin center: https://admin.powerplatform.microsoft.com\n" +
                            "2. Select your environment → Settings → Product → Features\n" +
-                           "3. Turn ON 'Dataverse Search' (formerly Relevance Search)\n" +
-                           "4. Wait for indexing to complete (can take minutes to hours)\n\n" +
-                           "NOTE: If using an S2S app user (Client Credentials), Relevance Search may not be supported. " +
-                           "Try with an interactive user instead.\n\n" +
-                           "WORKAROUND: Use execute_fetchxml with a 'like' filter to search records without Relevance Search.";
+                           "3. Under 'Dataverse Search', select 'On'\n" +
+                           "4. Select 'Save' and wait for indexing to complete\n\n" +
+                           "Docs: https://learn.microsoft.com/en-us/power-platform/admin/configure-relevance-search-organization\n\n" +
+                           "WORKAROUND: Use execute_fetchxml with a 'like' filter to search records.";
                 }
 
                 return $"Error: Search failed: {ex.Message}";
             }
         }
 
-        private static OrganizationRequest BuildSearchRequest(string searchTerm, string entities, int top, string filter)
+        private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
         {
-            var request = new OrganizationRequest("searchquery")
+            var body = new Dictionary<string, object>
             {
                 ["search"] = searchTerm,
                 ["count"] = true,
@@ -123,13 +129,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     .ToList();
 
                 if (entityList.Count > 0)
-                    request["entities"] = JsonSerializer.Serialize(entityList, _jsonOptions);
+                    body["entities"] = JsonSerializer.Serialize(entityList, _jsonOptions);
             }
 
             if (!string.IsNullOrWhiteSpace(filter))
-                request["filter"] = filter.Trim();
+                body["filter"] = filter.Trim();
 
-            return request;
+            return JsonSerializer.Serialize(body, _jsonOptions);
         }
 
         private static string FormatSearchResults(string jsonResponse, string searchTerm)
@@ -222,6 +228,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         };
 
         #region Search API Models (per Microsoft docs)
+
+        private sealed class SearchResponseWrapper
+        {
+            [JsonPropertyName("response")]
+            public string Response { get; set; }
+        }
 
         private sealed class SearchEntity
         {
