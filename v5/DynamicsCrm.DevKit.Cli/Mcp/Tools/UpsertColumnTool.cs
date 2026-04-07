@@ -1362,6 +1362,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return results;
             }
 
+            // Detect global vs local option set
+            OptionSetMetadata optionSetMeta = null;
+            if (metadata is PicklistAttributeMetadata plm)
+                optionSetMeta = plm.OptionSet;
+            else if (metadata is MultiSelectPicklistAttributeMetadata msp)
+                optionSetMeta = msp.OptionSet;
+
+            var isGlobal = optionSetMeta?.IsGlobal == true;
+            var optionSetName = optionSetMeta?.Name;
+
             if (!string.IsNullOrWhiteSpace(addOptionsJson))
             {
                 var (opts, parseError) = ParseOptions(addOptionsJson);
@@ -1370,7 +1380,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else if (opts != null)
                     foreach (var opt in opts)
                     {
-                        var req = new InsertOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Label = new Label(opt.Label, 1033) };
+                        var req = new InsertOptionValueRequest { Label = new Label(opt.Label, 1033) };
+                        if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
+                            req.OptionSetName = optionSetName;
+                        else
+                        {
+                            req.EntityLogicalName = entityName;
+                            req.AttributeLogicalName = attributeName;
+                        }
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
                         var resp = (InsertOptionValueResponse)_serviceClient.Execute(req);
                         results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue})");
@@ -1386,7 +1403,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var opt in opts)
                     {
                         if (!opt.Value.HasValue) continue;
-                        _serviceClient.Execute(new UpdateOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Value = opt.Value.Value, Label = new Label(opt.Label, 1033), MergeLabels = true });
+                        var req = new UpdateOptionValueRequest { Value = opt.Value.Value, Label = new Label(opt.Label, 1033), MergeLabels = true };
+                        if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
+                            req.OptionSetName = optionSetName;
+                        else
+                        {
+                            req.EntityLogicalName = entityName;
+                            req.AttributeLogicalName = attributeName;
+                        }
+                        _serviceClient.Execute(req);
                         results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
                     }
             }
@@ -1399,7 +1424,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else if (values != null)
                     foreach (var val in values)
                     {
-                        _serviceClient.Execute(new DeleteOptionValueRequest { EntityLogicalName = entityName, AttributeLogicalName = attributeName, Value = val });
+                        var req = new DeleteOptionValueRequest { Value = val };
+                        if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
+                            req.OptionSetName = optionSetName;
+                        else
+                        {
+                            req.EntityLogicalName = entityName;
+                            req.AttributeLogicalName = attributeName;
+                        }
+                        _serviceClient.Execute(req);
                         results.Add($"OptionsDeleted: {val}");
                     }
             }

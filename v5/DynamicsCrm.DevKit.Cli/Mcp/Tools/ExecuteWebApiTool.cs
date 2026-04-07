@@ -83,7 +83,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (headersError != null)
                     return ErrorResult(headersError);
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
-                var response = _serviceClient.ExecuteWebRequest(httpMethod, url.Trim(), requestBody, customHeaders, "application/json");
+                var trimmedUrl = url.Trim();
+                HttpResponseMessage response;
+                if (trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase))
+                {
+                    using var httpClient = new HttpClient();
+                    var baseUrl = _serviceClient.ConnectedOrgUriActual.ToString().TrimEnd('/');
+                    var apiUrl = $"{baseUrl}/api/data/v{_serviceClient.ConnectedOrgVersion.ToString(2)}/{trimmedUrl}";
+                    var request = new HttpRequestMessage(httpMethod, apiUrl);
+                    request.Headers.Add("Authorization", $"Bearer {_serviceClient.CurrentAccessToken}");
+                    request.Headers.Add("Accept", "application/xml");
+                    response = httpClient.SendAsync(request).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    response = _serviceClient.ExecuteWebRequest(httpMethod, trimmedUrl, requestBody, customHeaders, "application/json");
+                }
                 var statusCode = (int)response.StatusCode;
                 var reasonPhrase = response.ReasonPhrase ?? response.StatusCode.ToString();
                 var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();

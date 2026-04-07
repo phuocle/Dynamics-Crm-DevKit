@@ -137,7 +137,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex MakerSolutionRegex = new(
-            @"make\.powerapps\.com/environments/([0-9a-fA-F-]+)/solutions/([0-9a-fA-F-]+)",
+            @"make\.powerapps\.com/environments/([0-9a-fA-F-]+)/solutions/([^\s/]+)",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex AdminPortalRegex = new(
+            @"admin\.powerplatform\.microsoft\.com/environments/([0-9a-fA-F-]+)",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static string TryParseMakerPortal(string input)
@@ -169,6 +173,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var envId = match.Groups[1].Value.ToLowerInvariant();
                 var solId = match.Groups[2].Value.ToLowerInvariant();
                 return FormatMakerResult("solution", solId, envId, "make.powerapps.com (solution)");
+            }
+
+            // Admin portal
+            match = AdminPortalRegex.Match(input);
+            if (match.Success)
+            {
+                var envId = match.Groups[1].Value.ToLowerInvariant();
+                return FormatMakerResult("environment", envId, envId, "admin.powerplatform.microsoft.com");
             }
 
             return null;

@@ -25,8 +25,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient = serviceClient;
         }
 
-        private static readonly string[] MsftPrefixes = ["msdyn_", "mspp_", "msdynce_", "msdyncrm_", "Microsoft."];
-
         private static readonly Dictionary<int, string> ParameterTypeMap = new()
         {
             [0] = "Boolean",
@@ -114,8 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!includeMicrosoft)
             {
-                foreach (var prefix in MsftPrefixes)
-                    filters.AppendLine($"      <condition attribute='uniquename' operator='not-like' value='{EscapeXml(prefix)}%'/>");
+                filters.AppendLine("      <condition attribute='ismanaged' operator='eq' value='0'/>");
             }
 
             var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
@@ -429,12 +426,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 LogicalEntityName = NullIfEmpty(e.GetAttributeValue<string>("logicalentityname")),
                 Description = NullIfEmpty(e.GetAttributeValue<string>("description"))
             };
-        }
-
-        private static bool IsMicrosoftApi(string uniqueName)
-        {
-            if (string.IsNullOrEmpty(uniqueName)) return false;
-            return MsftPrefixes.Any(p => uniqueName.StartsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
         private static string NullIfEmpty(string value) =>

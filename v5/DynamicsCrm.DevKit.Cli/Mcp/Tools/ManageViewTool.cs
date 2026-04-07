@@ -1,6 +1,8 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -256,6 +258,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
+            if (validate)
+            {
+                var fieldError = ValidateFieldNames(entityName, newFetchXml, "ViewCreate");
+                if (fieldError != null) return fieldError;
+            }
+
             var newView = new Entity("savedquery")
             {
                 ["name"] = viewName,
@@ -344,6 +352,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         validationResult.Value.Errors, validationResult.Value.Warnings,
                         fetchBackupPath, layoutBackupPath, "updated");
                 }
+            }
+
+            if (validate)
+            {
+                var fieldError = ValidateFieldNames(entityName, effectiveFetchXml, "ViewUpdate");
+                if (fieldError != null) return fieldError;
             }
 
             if (validate && newFetchXml != null)
@@ -1195,6 +1209,145 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(query);
             return result.Entities.Count > 0 ? result.Entities[0] : null;
+        }
+
+        // ── Field Name Validation ─────────────────────────────────────
+
+        private CallToolResult ValidateFieldNames(string entityName, string fetchXml, string prefix)
+        {
+            XDocument fetchDoc;
+            try
+            {
+                fetchDoc = XDocument.Parse(fetchXml);
+            }
+            catch
+            {
+                return null;
+            }
+
+            var mainEntity = fetchDoc.Root?.Element("entity");
+            if (mainEntity == null)
+                return null;
+
+            var mainFields = ExtractFieldNames(mainEntity);
+            var linkEntities = mainEntity.Elements("link-entity").ToList();
+
+            Dictionary<string, AttributeMetadata> attrMap;
+            try
+            {
+                var request = new RetrieveEntityRequest
+                {
+                    LogicalName = entityName,
+                    EntityFilters = EntityFilters.Attributes
+                };
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                attrMap = response.EntityMetadata.Attributes
+                    .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"[{prefix}] BLOCKED — Failed to retrieve metadata for entity '{entityName}': {ex.Message}");
+            }
+
+            var allMissing = new List<(string Field, string Entity)>();
+
+            var missingMain = mainFields.Where(f => !attrMap.ContainsKey(f)).ToList();
+            foreach (var f in missingMain)
+                allMissing.Add((f, entityName));
+
+            var linkAttrMaps = new Dictionary<string, Dictionary<string, AttributeMetadata>>(StringComparer.OrdinalIgnoreCase);
+            foreach (var le in linkEntities)
+            {
+                var linkedEntityName = le.Attribute("name")?.Value;
+                if (string.IsNullOrEmpty(linkedEntityName))
+                    continue;
+
+                var linkFields = ExtractFieldNames(le);
+                if (linkFields.Count == 0)
+                    continue;
+
+                if (!linkAttrMaps.TryGetValue(linkedEntityName, out var linkMap))
+                {
+                    try
+                    {
+                        var linkRequest = new RetrieveEntityRequest
+                        {
+                            LogicalName = linkedEntityName,
+                            EntityFilters = EntityFilters.Attributes
+                        };
+                        var linkResponse = (RetrieveEntityResponse)_serviceClient.Execute(linkRequest);
+                        linkMap = linkResponse.EntityMetadata.Attributes
+                            .ToDictionary(a => a.LogicalName, a => a, StringComparer.OrdinalIgnoreCase);
+                        linkAttrMaps[linkedEntityName] = linkMap;
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+
+                var missingLink = linkFields.Where(f => !linkMap.ContainsKey(f)).ToList();
+                foreach (var f in missingLink)
+                    allMissing.Add((f, linkedEntityName));
+            }
+
+            if (allMissing.Count == 0)
+                return null;
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[{prefix}] BLOCKED — Field(s) not found in entity metadata");
+            foreach (var (field, entity) in allMissing)
+            {
+                sb.AppendLine($"- '{field}' not found on '{entity}'");
+                var map = entity == entityName ? attrMap : linkAttrMaps.GetValueOrDefault(entity);
+                if (map != null)
+                {
+                    var similar = map.Keys
+                        .Where(k => k.Contains(field) || field.Contains(k) || LevenshteinClose(k, field))
+                        .Take(5)
+                        .ToList();
+                    if (similar.Count > 0)
+                        sb.AppendLine($"  Similar: {string.Join(", ", similar)}");
+                }
+            }
+            sb.AppendLine($"\nTip: Use get_tables('{entityName}') to list all available fields.");
+            return ErrorResult(sb.ToString());
+        }
+
+        private static HashSet<string> ExtractFieldNames(XElement entityElement)
+        {
+            var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var attr in entityElement.Elements("attribute"))
+            {
+                var name = attr.Attribute("name")?.Value;
+                if (!string.IsNullOrEmpty(name))
+                    names.Add(name);
+            }
+            foreach (var cond in entityElement.Descendants("condition"))
+            {
+                var name = cond.Attribute("attribute")?.Value;
+                if (!string.IsNullOrEmpty(name))
+                    names.Add(name);
+            }
+            foreach (var order in entityElement.Elements("order"))
+            {
+                var name = order.Attribute("attribute")?.Value;
+                if (!string.IsNullOrEmpty(name))
+                    names.Add(name);
+            }
+            return names;
+        }
+
+        private static bool LevenshteinClose(string a, string b)
+        {
+            if (Math.Abs(a.Length - b.Length) > 3) return false;
+            var dist = 0;
+            var len = Math.Min(a.Length, b.Length);
+            for (var i = 0; i < len; i++)
+                if (char.ToLowerInvariant(a[i]) != char.ToLowerInvariant(b[i]))
+                    dist++;
+            dist += Math.Abs(a.Length - b.Length);
+            return dist <= 2;
         }
 
         private Entity RetrieveView(Guid viewId)

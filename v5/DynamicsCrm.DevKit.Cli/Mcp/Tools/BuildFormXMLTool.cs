@@ -36,12 +36,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
             "READ-ONLY builder — returns modified FormXML string. Use manage_form to write it.\n\n" +
 
-            "FIVE OPERATIONS:\n" +
+            "EIGHT OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
             "- add_section: Add a new section (with fields) to an existing tab\n" +
             "- add_tab: Add a new tab (with sections and fields) to the form\n" +
             "- add_library: Add a web resource library reference to <formLibraries>\n" +
-            "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n\n" +
+            "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n" +
+            "- remove_tab: Remove an entire tab from the form\n" +
+            "- remove_section: Remove a section from a tab\n" +
+            "- remove_fields: Remove specific fields from a section (replaces with spacers to preserve layout)\n\n" +
 
             "Auto-resolves classid GUIDs, generates proper section/tab column layout, creates unique GUIDs, validates field names against metadata.\n\n" +
 
@@ -56,12 +59,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
                 "JSON array of operations. Each has 'action' + parameters.\n" +
-                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event'.\n" +
+                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event', 'remove_tab', 'remove_section', 'remove_fields'.\n" +
                 "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +
                 "Example: [{\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
                 "Example: [{\"action\":\"add_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
                 "Example: [{\"action\":\"add_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"field:name\"}]\n" +
+                "Example: [{\"action\":\"remove_tab\",\"tab\":\"tab_audit\"}]\n" +
+                "Example: [{\"action\":\"remove_section\",\"tab\":\"tab_general\",\"section\":\"sec_dates\"}]\n" +
+                "Example: [{\"action\":\"remove_fields\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\",\"modifiedon\"]}]\n" +
                 "Fields can be strings or objects: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true}"
             )] string operations)
         {
@@ -195,8 +201,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var eventSummary = ExecuteAddEvent(formDoc, op);
                             opSummaries.Add(eventSummary);
                             break;
+                        case "remove_tab":
+                            opSummaries.Add(ExecuteRemoveTab(formDoc, op));
+                            break;
+                        case "remove_section":
+                            opSummaries.Add(ExecuteRemoveSection(formDoc, op));
+                            break;
+                        case "remove_fields":
+                            opSummaries.Add(ExecuteRemoveFields(formDoc, op));
+                            break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_library, add_event");
+                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_library, add_event, remove_tab, remove_section, remove_fields");
                     }
                 }
 
@@ -630,6 +645,130 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return $"add_event: \"{eventName}\" -> \"{functionName}\" from \"{libraryName}\" ({targetDescription})";
         }
 
+        // ── Remove Operation Executors ──────────────────────────────────────────
+
+        private static string ExecuteRemoveTab(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("remove_tab requires 'tab'.");
+
+            var tabElement = FindTab(formDoc, tabName);
+            if (tabElement == null)
+                throw new InvalidOperationException(
+                    $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+
+            tabElement.Remove();
+            return $"remove_tab: \"{tabName}\" removed";
+        }
+
+        private static string ExecuteRemoveSection(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("remove_section requires 'tab'.");
+            var sectionName = GetStringProp(op, "section")
+                ?? throw new InvalidOperationException("remove_section requires 'section'.");
+
+            var tabElement = FindTab(formDoc, tabName);
+            if (tabElement == null)
+                throw new InvalidOperationException(
+                    $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+
+            var sectionElement = FindSection(tabElement, sectionName);
+            if (sectionElement == null)
+                throw new InvalidOperationException(
+                    $"Section '{sectionName}' not found in tab '{tabName}'. Available sections: {string.Join(", ", GetSectionNames(tabElement))}");
+
+            sectionElement.Remove();
+            return $"remove_section: \"{sectionName}\" from tab \"{tabName}\"";
+        }
+
+        private static string ExecuteRemoveFields(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("remove_fields requires 'tab'.");
+            var sectionName = GetStringProp(op, "section")
+                ?? throw new InvalidOperationException("remove_fields requires 'section'.");
+
+            if (!op.TryGetProperty("fields", out var fieldsArray) || fieldsArray.ValueKind != JsonValueKind.Array)
+                throw new InvalidOperationException("remove_fields requires 'fields' array.");
+
+            var fieldNames = fieldsArray.EnumerateArray()
+                .Where(f => f.ValueKind == JsonValueKind.String)
+                .Select(f => f.GetString())
+                .ToList();
+
+            if (fieldNames.Count == 0)
+                throw new InvalidOperationException("remove_fields requires at least one field name string.");
+
+            var tabElement = FindTab(formDoc, tabName);
+            if (tabElement == null)
+                throw new InvalidOperationException(
+                    $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+
+            var sectionElement = FindSection(tabElement, sectionName);
+            if (sectionElement == null)
+                throw new InvalidOperationException(
+                    $"Section '{sectionName}' not found in tab '{tabName}'. Available sections: {string.Join(", ", GetSectionNames(tabElement))}");
+
+            var rowsElement = sectionElement.Element("rows");
+            if (rowsElement == null)
+                return $"remove_fields: section \"{sectionName}\" has no rows — nothing to remove";
+
+            var toRemove = new HashSet<string>(fieldNames, StringComparer.OrdinalIgnoreCase);
+            var removed = new List<string>();
+            var notFound = new List<string>(fieldNames);
+
+            var rowsToDelete = new List<XElement>();
+            foreach (var row in rowsElement.Elements("row").ToList())
+            {
+                var cells = row.Elements("cell").ToList();
+                var cellsToReplace = new List<XElement>();
+
+                foreach (var cell in cells)
+                {
+                    var control = cell.Element("control");
+                    if (control == null) continue;
+
+                    var dataFieldName = control.Attribute("datafieldname")?.Value;
+                    if (dataFieldName != null && toRemove.Contains(dataFieldName))
+                    {
+                        cellsToReplace.Add(cell);
+                        if (!removed.Any(r => string.Equals(r, dataFieldName, StringComparison.OrdinalIgnoreCase)))
+                            removed.Add(dataFieldName);
+                        notFound.RemoveAll(f => string.Equals(f, dataFieldName, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+
+                if (cellsToReplace.Count == 0) continue;
+
+                var nonSpacerCells = cells.Where(c => c.Element("control") != null).ToList();
+                if (cellsToReplace.Count >= nonSpacerCells.Count)
+                {
+                    rowsToDelete.Add(row);
+                }
+                else
+                {
+                    foreach (var cell in cellsToReplace)
+                    {
+                        cell.AddAfterSelf(CreateSpacerCell());
+                        cell.Remove();
+                    }
+                }
+            }
+
+            foreach (var row in rowsToDelete)
+                row.Remove();
+
+            var summary = new StringBuilder();
+            summary.Append($"remove_fields: {removed.Count} field(s) removed from \"{sectionName}\" in \"{tabName}\"");
+            if (removed.Count > 0)
+                summary.Append($" [{string.Join(", ", removed)}]");
+            if (notFound.Count > 0)
+                summary.Append($" | not found: [{string.Join(", ", notFound)}]");
+
+            return summary.ToString();
+        }
+
         /// <summary>
         /// Ensures a library reference exists in formLibraries. Returns (wasAdded, libraryUniqueId).
         /// </summary>
@@ -975,6 +1114,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var op in ops)
             {
+                var action = GetStringProp(op, "action")?.ToLowerInvariant() ?? "";
+                if (action.StartsWith("remove_")) continue;
+
                 CollectFieldsFromArray(op, "fields", names);
                 if (op.TryGetProperty("sections", out var sections) && sections.ValueKind == JsonValueKind.Array)
                 {
