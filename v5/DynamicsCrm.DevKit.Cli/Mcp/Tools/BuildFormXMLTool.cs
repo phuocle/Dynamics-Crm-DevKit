@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
             "READ-ONLY builder — returns modified FormXML string. Use manage_form to write it.\n\n" +
 
-            "EIGHT OPERATIONS:\n" +
+            "TEN OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
             "- add_section: Add a new section (with fields) to an existing tab\n" +
             "- add_tab: Add a new tab (with sections and fields) to the form\n" +
@@ -44,7 +44,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n" +
             "- remove_tab: Remove an entire tab from the form\n" +
             "- remove_section: Remove a section from a tab\n" +
-            "- remove_fields: Remove specific fields from a section (replaces with spacers to preserve layout)\n\n" +
+            "- remove_fields: Remove specific fields from a section (replaces with spacers to preserve layout)\n" +
+            "- remove_library: Remove a library from <formLibraries> and clean up its event handlers\n" +
+            "- remove_event: Remove an event handler or entire event from the form\n\n" +
 
             "Auto-resolves classid GUIDs, generates proper section/tab column layout, creates unique GUIDs, validates field names against metadata.\n\n" +
 
@@ -68,6 +70,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Example: [{\"action\":\"remove_tab\",\"tab\":\"tab_audit\"}]\n" +
                 "Example: [{\"action\":\"remove_section\",\"tab\":\"tab_general\",\"section\":\"sec_dates\"}]\n" +
                 "Example: [{\"action\":\"remove_fields\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\",\"modifiedon\"]}]\n" +
+                "Example: [{\"action\":\"remove_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "Example: [{\"action\":\"remove_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "Example: [{\"action\":\"remove_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"target\":\"field:name\"}]\n" +
                 "Fields can be strings or objects: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true}"
             )] string operations)
         {
@@ -210,8 +215,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         case "remove_fields":
                             opSummaries.Add(ExecuteRemoveFields(formDoc, op));
                             break;
+                        case "remove_library":
+                            opSummaries.Add(ExecuteRemoveLibrary(formDoc, op));
+                            break;
+                        case "remove_event":
+                            opSummaries.Add(ExecuteRemoveEvent(formDoc, op));
+                            break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_library, add_event, remove_tab, remove_section, remove_fields");
+                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_library, add_event, remove_tab, remove_section, remove_fields, remove_library, remove_event");
                     }
                 }
 
@@ -767,6 +778,157 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 summary.Append($" | not found: [{string.Join(", ", notFound)}]");
 
             return summary.ToString();
+        }
+
+        private static string ExecuteRemoveLibrary(XDocument formDoc, JsonElement op)
+        {
+            var libraryName = GetStringProp(op, "library_name")
+                ?? throw new InvalidOperationException("remove_library requires 'library_name'.");
+
+            var formLibraries = formDoc.Root.Element("formLibraries");
+            if (formLibraries == null)
+                return $"remove_library: no formLibraries element found — nothing to remove";
+
+            var existingLib = formLibraries.Elements("Library")
+                .FirstOrDefault(lib =>
+                    string.Equals(lib.Attribute("name")?.Value, libraryName, StringComparison.OrdinalIgnoreCase));
+
+            if (existingLib == null)
+            {
+                var available = formLibraries.Elements("Library")
+                    .Select(lib => lib.Attribute("name")?.Value)
+                    .Where(n => n != null)
+                    .ToList();
+                var availableStr = available.Count > 0 ? string.Join(", ", available) : "(none)";
+                return $"remove_library: \"{libraryName}\" not found. Available: {availableStr}";
+            }
+
+            var libraryUniqueId = existingLib.Attribute("libraryUniqueId")?.Value;
+
+            // Remove all event handler dependencies that reference this library
+            if (!string.IsNullOrEmpty(libraryUniqueId))
+            {
+                foreach (var dep in formDoc.Descendants("dependency").ToList())
+                {
+                    if (string.Equals(dep.Attribute("id")?.Value, libraryUniqueId, StringComparison.OrdinalIgnoreCase))
+                        dep.Remove();
+                }
+            }
+
+            // Remove handlers that reference this library
+            var removedHandlers = 0;
+            foreach (var handler in formDoc.Descendants("Handler").ToList())
+            {
+                if (string.Equals(handler.Attribute("libraryName")?.Value, libraryName, StringComparison.OrdinalIgnoreCase))
+                {
+                    handler.Remove();
+                    removedHandlers++;
+                }
+            }
+
+            existingLib.Remove();
+
+            // Clean up empty formLibraries element
+            if (!formLibraries.HasElements)
+                formLibraries.Remove();
+
+            var summary = $"remove_library: \"{libraryName}\" removed";
+            if (removedHandlers > 0)
+                summary += $" (also removed {removedHandlers} handler(s) referencing it)";
+            return summary;
+        }
+
+        private static string ExecuteRemoveEvent(XDocument formDoc, JsonElement op)
+        {
+            var eventName = GetStringProp(op, "event_name")
+                ?? throw new InvalidOperationException("remove_event requires 'event_name'.");
+            var functionName = GetStringProp(op, "function_name");
+            var libraryName = GetStringProp(op, "library_name");
+            var target = GetStringProp(op, "target") ?? "form";
+
+            // Determine target element
+            XElement targetElement;
+            if (target.StartsWith("field:", StringComparison.OrdinalIgnoreCase))
+            {
+                targetElement = formDoc.Root;
+            }
+            else if (target.StartsWith("tab:", StringComparison.OrdinalIgnoreCase))
+            {
+                var tabName = target.Substring(4).Trim();
+                targetElement = FindTab(formDoc, tabName)
+                    ?? throw new InvalidOperationException(
+                        $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+            }
+            else
+            {
+                targetElement = formDoc.Root;
+            }
+
+            var eventsElement = targetElement.Element("events");
+            if (eventsElement == null)
+                return $"remove_event: no events element found on {target} — nothing to remove";
+
+            // Resolve attribute name for field-level events
+            string attributeName = null;
+            if (target.StartsWith("field:", StringComparison.OrdinalIgnoreCase))
+                attributeName = target.Substring(6).Trim();
+
+            var eventElement = FindEvent(eventsElement, eventName, attributeName);
+            if (eventElement == null)
+            {
+                var targetDesc = target == "form" ? "form" : target;
+                return $"remove_event: event \"{eventName}\" not found on {targetDesc}";
+            }
+
+            // If functionName is specified, remove only that specific handler
+            if (!string.IsNullOrEmpty(functionName))
+            {
+                var handlersElement = eventElement.Element("Handlers");
+                if (handlersElement == null)
+                    return $"remove_event: event \"{eventName}\" has no handlers";
+
+                var matchingHandler = handlersElement.Elements("Handler")
+                    .FirstOrDefault(h =>
+                    {
+                        var fnMatch = string.Equals(h.Attribute("functionName")?.Value, functionName, StringComparison.OrdinalIgnoreCase);
+                        if (!fnMatch) return false;
+                        if (!string.IsNullOrEmpty(libraryName))
+                            return string.Equals(h.Attribute("libraryName")?.Value, libraryName, StringComparison.OrdinalIgnoreCase);
+                        return true;
+                    });
+
+                if (matchingHandler == null)
+                {
+                    var available = handlersElement.Elements("Handler")
+                        .Select(h => $"{h.Attribute("functionName")?.Value} ({h.Attribute("libraryName")?.Value})")
+                        .ToList();
+                    var availableStr = available.Count > 0 ? string.Join(", ", available) : "(none)";
+                    return $"remove_event: handler \"{functionName}\" not found on \"{eventName}\". Available: {availableStr}";
+                }
+
+                matchingHandler.Remove();
+
+                // Clean up empty Handlers/event elements
+                if (!handlersElement.HasElements)
+                {
+                    handlersElement.Remove();
+                    if (!eventElement.HasElements && eventElement.Attributes().All(a => a.Name == "name" || a.Name == "application" || a.Name == "active" || a.Name == "eventType" || a.Name == "attribute"))
+                        eventElement.Remove();
+                }
+
+                var targetDescription = target == "form" ? "form" : target;
+                return $"remove_event: handler \"{functionName}\" removed from \"{eventName}\" ({targetDescription})";
+            }
+
+            // No functionName specified — remove the entire event element
+            eventElement.Remove();
+
+            // Clean up empty events element
+            if (!eventsElement.HasElements)
+                eventsElement.Remove();
+
+            var desc = target == "form" ? "form" : target;
+            return $"remove_event: entire \"{eventName}\" event removed from {desc}";
         }
 
         /// <summary>
