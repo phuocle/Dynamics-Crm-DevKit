@@ -85,16 +85,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 sb.AppendLine($"{boolOs.TrueOption?.Value}\t{boolOs.TrueOption?.Label?.UserLocalizedLabel?.Label}");
                 sb.AppendLine($"{boolOs.FalseOption?.Value}\t{boolOs.FalseOption?.Label?.UserLocalizedLabel?.Label}");
             }
-            else if (optionSet is OptionSetMetadata osm && osm.Options?.Count > 0)
+            else if (optionSet is OptionSetMetadata osm)
             {
-                sb.AppendLine($"[Options] {osm.Options.Count} total");
-                sb.AppendLine();
-                sb.AppendLine("Value\tLabel\tDescription");
-                foreach (var o in osm.Options.OrderBy(x => x.Value))
+                if (osm.Options?.Count > 0)
                 {
-                    var label = o.Label?.UserLocalizedLabel?.Label ?? "";
-                    var desc = o.Description?.UserLocalizedLabel?.Label ?? "";
-                    sb.AppendLine($"{o.Value}\t{label}\t{desc}");
+                    sb.AppendLine($"[Options] {osm.Options.Count} total");
+                    sb.AppendLine();
+                    sb.AppendLine("Value\tLabel\tDescription");
+                    foreach (var o in osm.Options.OrderBy(x => x.Value))
+                    {
+                        var label = o.Label?.UserLocalizedLabel?.Label ?? "";
+                        var desc = o.Description?.UserLocalizedLabel?.Label ?? "";
+                        sb.AppendLine($"{o.Value}\t{label}\t{desc}");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine("[Options] 0 total");
                 }
             }
 

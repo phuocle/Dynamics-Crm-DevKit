@@ -1,5 +1,4 @@
 using System;
-using System.Security;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
@@ -25,7 +24,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             }
             else
             {
-                fetch.SetAttributeValue("paging-cookie", SecurityElement.Escape(pagingCookie));
+                fetch.SetAttributeValue("paging-cookie", pagingCookie);
             }
 
             return document.ToString(SaveOptions.DisableFormatting);

@@ -102,6 +102,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 430, "Entity Analytics Config" },
             { 431, "Attribute Image Config" },
             { 432, "Entity Image Config" },
+            // Modern component types (from solutioncomponentdefinition)
+            { 181,   "SDK Message Pair" },
+            { 10032, "Managed Identity" },
+            { 10036, "Custom API" },
+            { 10037, "Custom API Request Parameter" },
+            { 10038, "Custom API Response Property" },
+            { 10039, "Plugin Package" },
+            { 10088, "App Element" },
+            { 10091, "App Setting" },
+            { 10326, "App Action" },
         };
 
         public GetSolutionComponentsTool(ServiceClient serviceClient)
@@ -487,6 +497,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             BatchResolve(byType, nameMap, 150, "routingrule",                   "routingruleid",                   new ColumnSet("name"),                                e => S(e, "name"));
             BatchResolve(byType, nameMap, 152, "sla",                           "slaid",                           new ColumnSet("name"),                                e => S(e, "name"));
             BatchResolve(byType, nameMap, 380, "environmentvariabledefinition", "environmentvariabledefinitionid", new ColumnSet("schemaname", "displayname"),          e => $"{S(e, "schemaname")} ({S(e, "displayname")})");
+            BatchResolve(byType, nameMap, 381, "environmentvariablevalue",      "environmentvariablevalueid",      new ColumnSet("schemaname", "value"),                e => S(e, "schemaname") is { Length: > 0 } n ? n : S(e, "value"));
+            BatchResolve(byType, nameMap, 300, "canvasapp",                     "canvasappid",                     new ColumnSet("name", "displayname"),                e => S(e, "displayname") is { Length: > 0 } n ? n : S(e, "name"));
+            BatchResolve(byType, nameMap, 10032, "managedidentity",             "managedidentityid",               new ColumnSet("managedidentityid"),                  e => e.Id.ToString());
+            BatchResolve(byType, nameMap, 10036, "customapi",                   "customapiid",                     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
+            BatchResolve(byType, nameMap, 10037, "customapirequestparameter",   "customapirequestparameterid",     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
+            BatchResolve(byType, nameMap, 10038, "customapiresponseproperty",   "customapiresponsepropertyid",     new ColumnSet("name", "uniquename"),                 e => S(e, "uniquename") is { Length: > 0 } n ? n : S(e, "name"));
+            BatchResolve(byType, nameMap, 10039, "pluginpackage",               "pluginpackageid",                 new ColumnSet("name", "version"),                    e => $"{S(e, "name")} v{S(e, "version")}");
+            BatchResolve(byType, nameMap, 10326, "appaction",                   "appactionid",                     new ColumnSet("name"),                                e => S(e, "name"));
 
             return nameMap;
         }
@@ -703,6 +721,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             { 430, "EntityAnalyticsConfig" },
             { 431, "AttributeImageConfig" },
             { 432, "EntityImageConfig" },
+            // Modern component types (from solutioncomponentdefinition)
+            { 181,   "SdkMessagePair" },
+            { 10032, "ManagedIdentity" },
+            { 10036, "CustomApi" },
+            { 10037, "CustomApiRequestParameter" },
+            { 10038, "CustomApiResponseProperty" },
+            { 10039, "PluginPackage" },
+            { 10088, "AppElement" },
+            { 10091, "AppSetting" },
+            { 10326, "AppAction" },
         };
 
         private static string GetComponentApiName(int typeId)

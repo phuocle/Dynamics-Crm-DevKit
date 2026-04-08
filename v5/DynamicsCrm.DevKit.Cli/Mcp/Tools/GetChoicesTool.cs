@@ -1,5 +1,6 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Messages;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
@@ -33,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "NOTE: GLOBAL option sets only. For entity-specific (local) picklists, " +
             "use get_tables which includes options in the attribute definition.")]
-        public string get_choices(
+        public CallToolResult get_choices(
             [Description(
                 "Logical name of the global option set. Leave empty to list all. " +
                 "If get_tables shows empty options for a PicklistType column, " +
@@ -43,13 +44,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (string.IsNullOrWhiteSpace(optionset_name))
-                    return ListAllOptionSets();
+                    return SuccessResult(ListAllOptionSets());
 
                 return GetSingleOptionSet(optionset_name.Trim().ToLowerInvariant());
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to load global option sets: {ex.Message}";
+                return ErrorResult($"Error: Failed to load global option sets: {ex.Message}");
             }
         }
 
@@ -60,7 +61,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return CompactFormatter.FormatOptionSetList(sorted);
         }
 
-        private string GetSingleOptionSet(string name)
+        private CallToolResult GetSingleOptionSet(string name)
         {
             try
             {
@@ -68,14 +69,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Name = name
                 });
-                return CompactFormatter.FormatOptionSetDetail(response.OptionSetMetadata);
+                return SuccessResult(CompactFormatter.FormatOptionSetDetail(response.OptionSetMetadata));
             }
             catch (Exception)
             {
-                return $"Error: Could not find global option set '{name}'. " +
+                return ErrorResult($"Error: Could not find global option set '{name}'. " +
                        "Make sure you use the logical name (Name column), not the display name. " +
-                       "Call get_choices with empty optionset_name to list all available option sets.";
+                       "Call get_choices with empty optionset_name to list all available option sets.");
             }
         }
+
+        private static CallToolResult SuccessResult(string text) => new()
+        {
+            Content = [new TextContentBlock { Text = text }]
+        };
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }

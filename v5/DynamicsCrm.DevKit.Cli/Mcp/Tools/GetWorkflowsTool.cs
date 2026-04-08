@@ -335,7 +335,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = new StringBuilder(entities.Count * 200 + 256);
             sb.AppendLine($"[Workflows] {entities.Count} classic {countWord}{entityLabel}{fieldLabel}");
             sb.AppendLine();
-            sb.AppendLine("#\tName\tMode\tTriggers\tUpdateFields\tStage\tScope\tRunAs\tRank\tOnDemand\tSubprocess\tOwner\tStatus\tModified");
+            sb.AppendLine("#\tName\tEntity\tMode\tTriggers\tUpdateFields\tStage\tScope\tRunAs\tRank\tOnDemand\tSubprocess\tOwner\tStatus\tModified");
 
             for (var i = 0; i < workflows.Count; i++)
             {
@@ -343,7 +343,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var triggers = BuildTriggersDisplay(w);
                 var updateFields = EscapeTab(w.TriggerOnUpdateFields ?? "-");
                 var stage = BuildStageDisplay(w);
-                sb.AppendLine($"{i + 1}\t{EscapeTab(w.Name)}\t{w.Mode}\t{triggers}\t{updateFields}\t{stage}\t{w.Scope}\t{w.RunAs}\t{w.Rank}\t{(w.OnDemand ? "Yes" : "No")}\t{(w.Subprocess ? "Yes" : "No")}\t{EscapeTab(w.Owner)}\t{w.Status}\t{w.ModifiedOn}");
+                sb.AppendLine($"{i + 1}\t{EscapeTab(w.Name)}\t{w.PrimaryEntity}\t{w.Mode}\t{triggers}\t{updateFields}\t{stage}\t{w.Scope}\t{w.RunAs}\t{w.Rank}\t{(w.OnDemand ? "Yes" : "No")}\t{(w.Subprocess ? "Yes" : "No")}\t{EscapeTab(w.Owner)}\t{w.Status}\t{w.ModifiedOn}");
             }
 
             sb.AppendLine();
