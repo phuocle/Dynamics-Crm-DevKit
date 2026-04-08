@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "upsert_column", Title = "Create or update a table column",
-            Destructive = false, ReadOnly = false, Idempotent = false,
+            Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertColumnResult)),
         Description(
             "Create a new column or update an existing column (attribute) on a Dataverse entity. " +
