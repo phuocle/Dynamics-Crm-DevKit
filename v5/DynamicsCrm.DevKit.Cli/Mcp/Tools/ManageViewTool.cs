@@ -213,6 +213,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             viewName = viewName.Trim();
             var newLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutxml.Trim());
+            newLayoutXml = EnsureObjectTypeCode(newLayoutXml, entityName);
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml)
                 ? $"<fetch><entity name='{entityName}'><attribute name='{entityName}id'/></entity></fetch>"
                 : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
@@ -309,6 +310,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: layoutxml is required for 'update' action.");
 
             var newLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutxml.Trim());
+            newLayoutXml = EnsureObjectTypeCode(newLayoutXml, entityName);
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
             var currentView = RetrieveView(updateId);
@@ -541,6 +543,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Tip: This backup has no LayoutXML to restore. Try an earlier backup.");
                 var layoutDoc = XDocument.Parse(strippedLayout);
                 restoredLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutDoc.ToString());
+                restoredLayoutXml = EnsureObjectTypeCode(restoredLayoutXml, entityName);
             }
             catch (Exception ex)
             {
@@ -1348,6 +1351,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     dist++;
             dist += Math.Abs(a.Length - b.Length);
             return dist <= 2;
+        }
+
+        private string EnsureObjectTypeCode(string layoutXml, string entityName)
+        {
+            try
+            {
+                var doc = XDocument.Parse(layoutXml);
+                var grid = doc.Root;
+                if (grid?.Name.LocalName != "grid" || grid.Attribute("object") != null)
+                    return layoutXml;
+
+                var request = new RetrieveEntityRequest
+                {
+                    LogicalName = entityName,
+                    EntityFilters = EntityFilters.Entity
+                };
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                var otc = response.EntityMetadata.ObjectTypeCode;
+                if (otc.HasValue)
+                {
+                    grid.SetAttributeValue("object", otc.Value);
+                    return grid.ToString(SaveOptions.DisableFormatting);
+                }
+                return layoutXml;
+            }
+            catch
+            {
+                return layoutXml;
+            }
         }
 
         private Entity RetrieveView(Guid viewId)

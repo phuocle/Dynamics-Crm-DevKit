@@ -154,7 +154,7 @@ A view has TWO XML parts that must be kept in sync:
 
 ## LayoutXML (Columns)
 ```xml
-<grid name=""resultset"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
+<grid name=""resultset"" object=""1"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
   <row name=""result"" id=""accountid"">
     <cell name=""name"" width=""300"" />
     <cell name=""primarycontactid"" width=""150"" />
@@ -167,6 +167,7 @@ A view has TWO XML parts that must be kept in sync:
 - Every `<attribute>` in FetchXML MUST have a corresponding `<cell>` in LayoutXML
 - The `id` attribute in `<row>` must be the primary key field (e.g., accountid)
 - The `jump` attribute in `<grid>` is the column that becomes a clickable link
+- The `object` attribute in `<grid>` is the entity's Object Type Code (integer, e.g., 1=account, 2=contact). The tool auto-populates it if omitted
 - Column widths are in pixels
 - Standard column widths: 100 (narrow), 150 (medium), 200 (wide), 300 (extra wide)
 
@@ -236,7 +237,7 @@ Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/qui
 
 ### Hidden Column Example
 ```xml
-<grid name=""resultset"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
+<grid name=""resultset"" object=""1"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
   <row name=""result"" id=""accountid"">
     <cell name=""name"" width=""300"" />
     <cell name=""primarycontactid"" width=""150"" />
