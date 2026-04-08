@@ -58,6 +58,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("For numeric types: maximum value.")] double? max_value = null,
             [Description("For decimal/money/float: decimal places (0-10, default 2). Omit to keep current value on update.")] int precision = -1,
             [Description("For string: 'Text','Email','Url','Phone','TextArea','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
+            [Description("For datetime: 'UserLocal' (default),'DateOnly','TimeZoneIndependent'. DateOnly behavior forces DateOnly format.")] string behavior = "",
+            [Description("For money: 0 (Attribute, default), 1 (Organization), 2 (Currency). Controls which precision setting governs the column at runtime.")] int precision_source = -1,
             [Description("For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
             [Description("For picklist (create): existing global option set name.")] string global_optionset_name = "",
             [Description("For lookup (create): target entity. Comma-separated for polymorphic.")] string lookup_target = "",
@@ -106,7 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     display_name, description, required_level, max_length, min_value, max_value,
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
-                    is_audit_enabled, is_valid_for_advanced_find, auto_publish);
+                    is_audit_enabled, is_valid_for_advanced_find, behavior, precision_source, auto_publish);
             }
 
             // --- CREATE MODE ---
@@ -154,14 +156,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "decimal":
                         return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
+                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, solution_name, auto_publish);
                     case "float":
                     case "double":
                         return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
                     case "boolean":
                         return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, solution_name, auto_publish);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, solution_name, auto_publish);
+                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, solution_name, auto_publish);
                     case "lookup":
                         return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, solution_name, auto_publish);
                     case "customer":
@@ -321,10 +323,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- Money ---
         private CallToolResult CreateMoneyAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName, bool autoPublish)
+            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName, bool autoPublish)
         {
             if (precision < 0) precision = 2;
             if (precision > 4) precision = 4;
+            if (precisionSource < 0 || precisionSource > 2) precisionSource = 0;
 
             var attr = new MoneyAttributeMetadata
             {
@@ -333,7 +336,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = new Label(displayName.Trim(), 1033),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Precision = precision,
-                PrecisionSource = 2, // 2 = attribute's own precision
+                PrecisionSource = precisionSource,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (minValue.HasValue) attr.MinValue = minValue.Value;
@@ -343,13 +346,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
 
+            var precisionSourceLabel = precisionSource switch { 0 => "Attribute", 1 => "Organization", 2 => "Currency", _ => precisionSource.ToString() };
             var sb = FormatHeader(entityName, logicalName, "Money", displayName, reqLevel);
             sb.AppendLine($"Precision: {precision}");
+            sb.AppendLine($"PrecisionSource: {precisionSource} ({precisionSourceLabel})");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
             AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
 
-            var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
+            var extra = new Dictionary<string, string> { { "precision", precision.ToString() }, { "precisionSource", precisionSource.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
             return BuildResult(sb, entityName, logicalName, "Money", displayName, reqLevel, metadataId, solutionName, autoPublish, extra);
@@ -427,10 +432,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- DateTime ---
         private CallToolResult CreateDateTimeAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string format, string solutionName, bool autoPublish)
+            string format, string behavior, string solutionName, bool autoPublish)
         {
+            var dtBehavior = ResolveDateTimeBehavior(behavior);
             var dateFormat = DateTimeFormat.DateAndTime;
             if (!string.IsNullOrWhiteSpace(format) && format.Trim().Equals("DateOnly", StringComparison.OrdinalIgnoreCase))
+                dateFormat = DateTimeFormat.DateOnly;
+            // DateOnly behavior forces DateOnly format
+            if (dtBehavior.Value == DateTimeBehavior.DateOnly.Value)
                 dateFormat = DateTimeFormat.DateOnly;
 
             var attr = new DateTimeAttributeMetadata
@@ -440,7 +449,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = new Label(displayName.Trim(), 1033),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Format = dateFormat,
-                DateTimeBehavior = DateTimeBehavior.UserLocal,
+                DateTimeBehavior = dtBehavior,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
@@ -448,13 +457,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
 
+            var behaviorName = dtBehavior.Value;
             var sb = FormatHeader(entityName, logicalName, "DateTime", displayName, reqLevel);
             sb.AppendLine($"Format: {dateFormat}");
-            sb.AppendLine($"Behavior: UserLocal");
+            sb.AppendLine($"Behavior: {behaviorName}");
             AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "DateTime", displayName, reqLevel, metadataId, solutionName, autoPublish,
-                extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", "UserLocal" } });
+                extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", behaviorName } });
+        }
+
+        private static DateTimeBehavior ResolveDateTimeBehavior(string behavior)
+        {
+            if (string.IsNullOrWhiteSpace(behavior))
+                return DateTimeBehavior.UserLocal;
+            return behavior.Trim().ToLowerInvariant() switch
+            {
+                "dateonly" => DateTimeBehavior.DateOnly,
+                "timezoneindependent" => DateTimeBehavior.TimeZoneIndependent,
+                _ => DateTimeBehavior.UserLocal
+            };
         }
 
         // --- Lookup (single target) or Polymorphic Lookup (multiple targets) ---
@@ -1090,7 +1112,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel,
             string addOptions, string updateOptions, string deleteOptions,
-            bool? isAuditEnabled, bool? isValidForAdvancedFind, bool autoPublish)
+            bool? isAuditEnabled, bool? isValidForAdvancedFind, string behavior, int precisionSource, bool autoPublish)
         {
             try
             {
@@ -1151,7 +1173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // --- Type-specific property updates ---
                 ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
-                    trueLabel, falseLabel, changes, structuredChanges);
+                    trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges);
 
                 // --- Execute metadata update (if any generic/type-specific changes) ---
                 if (changes.Count > 0)
@@ -1236,7 +1258,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static void ApplyTypeSpecificUpdates(AttributeMetadata metadata,
             int maxLength, double? minValue, double? maxValue, int precision, string format,
-            string trueLabel, string falseLabel,
+            string trueLabel, string falseLabel, string behavior, int precisionSource,
             List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges)
         {
             if (metadata is StringAttributeMetadata stringMeta)
@@ -1303,7 +1325,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (minValue.HasValue) { var o = moneyMeta.MinValue?.ToString() ?? ""; moneyMeta.MinValue = minValue.Value; changes.Add($"MinValue: {o} -> {minValue.Value}"); structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = o, NewValue = minValue.Value.ToString() }; }
                 if (maxValue.HasValue) { var o = moneyMeta.MaxValue?.ToString() ?? ""; moneyMeta.MaxValue = maxValue.Value; changes.Add($"MaxValue: {o} -> {maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = maxValue.Value.ToString() }; }
-                if (precision >= 0) { var o = moneyMeta.Precision?.ToString() ?? ""; if (precision > 4) precision = 4; moneyMeta.Precision = precision; moneyMeta.PrecisionSource = 2; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
+                if (precision >= 0) { var o = moneyMeta.Precision?.ToString() ?? ""; if (precision > 4) precision = 4; moneyMeta.Precision = precision; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
+                if (precisionSource >= 0 && precisionSource <= 2) { var o = moneyMeta.PrecisionSource?.ToString() ?? ""; moneyMeta.PrecisionSource = precisionSource; changes.Add($"PrecisionSource: {o} -> {precisionSource}"); structuredChanges["precisionSource"] = new UpdateAttributeChange { OldValue = o, NewValue = precisionSource.ToString() }; }
                 return;
             }
 
@@ -1336,14 +1359,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (metadata is DateTimeAttributeMetadata dtMeta)
             {
+                if (!string.IsNullOrWhiteSpace(behavior))
+                {
+                    var newBehavior = ResolveDateTimeBehavior(behavior);
+                    var oldVal = dtMeta.DateTimeBehavior?.Value ?? "UserLocal";
+                    dtMeta.DateTimeBehavior = newBehavior;
+                    changes.Add($"Behavior: {oldVal} -> {newBehavior.Value}");
+                    structuredChanges["behavior"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = newBehavior.Value };
+                    // DateOnly behavior forces DateOnly format
+                    if (newBehavior.Value == DateTimeBehavior.DateOnly.Value && dtMeta.Format != DateTimeFormat.DateOnly)
+                    {
+                        var oldFormat = dtMeta.Format?.ToString() ?? "DateAndTime";
+                        dtMeta.Format = DateTimeFormat.DateOnly;
+                        changes.Add($"Format: {oldFormat} -> DateOnly (forced by DateOnly behavior)");
+                        structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldFormat, NewValue = "DateOnly" };
+                    }
+                }
                 if (!string.IsNullOrWhiteSpace(format))
                 {
-                    var oldVal = dtMeta.Format?.ToString() ?? "DateAndTime";
-                    var newFormat = format.Trim().Equals("DateOnly", StringComparison.OrdinalIgnoreCase)
-                        ? DateTimeFormat.DateOnly : DateTimeFormat.DateAndTime;
-                    dtMeta.Format = newFormat;
-                    changes.Add($"Format: {oldVal} -> {newFormat}");
-                    structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = newFormat.ToString() };
+                    // Skip if already set by behavior enforcement above
+                    if (!structuredChanges.ContainsKey("format"))
+                    {
+                        var oldVal = dtMeta.Format?.ToString() ?? "DateAndTime";
+                        var newFormat = format.Trim().Equals("DateOnly", StringComparison.OrdinalIgnoreCase)
+                            ? DateTimeFormat.DateOnly : DateTimeFormat.DateAndTime;
+                        dtMeta.Format = newFormat;
+                        changes.Add($"Format: {oldVal} -> {newFormat}");
+                        structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = newFormat.ToString() };
+                    }
                 }
             }
         }

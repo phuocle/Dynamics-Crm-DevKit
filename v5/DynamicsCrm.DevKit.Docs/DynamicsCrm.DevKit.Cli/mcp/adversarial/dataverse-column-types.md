@@ -86,7 +86,7 @@ The `execute_webapi` tool returns `statusCode: 200` and `isSuccess: true` but **
 | 8 | Memo | Text | Standard multiline text box (MaxLen 1-1,048,576, default 2000) |
 | 9 | Memo | RichText | Multiline rich text editor |
 
-### C. INTEGER (Whole Number) — 4 formats
+### C. INTEGER (Whole Number) — 5 formats
 
 | # | Type | Format | Description |
 |---|------|--------|-------------|
@@ -94,38 +94,39 @@ The `execute_webapi` tool returns `statusCode: 200` and `isSuccess: true` but **
 | 11 | Integer | Duration | Dropdown with time intervals (stored as minutes) |
 | 12 | Integer | Language | Dropdown with enabled languages (stored as LCID) |
 | 13 | Integer | TimeZone | Dropdown with time zones (-1500 to 1500) |
+| 14 | Integer | Locale | Dropdown with locale identifiers |
 
 ### D. NUMERIC TYPES
 
 | # | Type | Description |
 |---|------|-------------|
-| 14 | BigInt | Large integer (system use, e.g., versionnumber) |
-| 15 | Decimal | Decimal number (precision 0-10, default 2) |
-| 16 | Double (Float) | Floating point number (precision 0-5, default 2) |
+| 15 | BigInt | Large integer (system use, e.g., versionnumber) |
+| 16 | Decimal | Decimal number (precision 0-10, default 2) |
+| 17 | Double (Float) | Floating point number (precision 0-5, default 2) |
 
 ### E. MONEY (Currency) — 3 precision sources
 
 | # | Type | PrecisionSource | Description |
 |---|------|-----------------|-------------|
-| 17 | Money | 0 (Attribute) | Precision set on the column itself (P=0-4) |
-| 18 | Money | 1 (Organization) | Uses `Organization.PricingDecimalPrecision` |
-| 19 | Money | 2 (Currency) | Uses `TransactionCurrency.CurrencyPrecision` |
+| 18 | Money | 0 (Attribute) | Precision set on the column itself (P=0-4) |
+| 19 | Money | 1 (Organization) | Uses `Organization.PricingDecimalPrecision` |
+| 20 | Money | 2 (Currency) | Uses `TransactionCurrency.CurrencyPrecision` |
 
 ### F. BOOLEAN (Yes/No)
 
 | # | Type | Description |
 |---|------|-------------|
-| 20 | Boolean | True/False with custom labels (e.g., Yes/No, Allow/Do Not Allow) |
+| 21 | Boolean | True/False with custom labels (e.g., Yes/No, Allow/Do Not Allow) |
 
 ### G. DATETIME — 5 valid combinations (3 behaviors x 2 formats, minus 1 invalid)
 
 | # | Behavior | Format | Description |
 |---|----------|--------|-------------|
-| 21 | UserLocal | DateAndTime | Stores UTC, displays in user's timezone, full date+time |
-| 22 | UserLocal | DateOnly | Stores UTC, displays in user's timezone, date only |
-| 23 | DateOnly | DateOnly | Stores actual date, no time, no timezone conversion |
-| 24 | TimeZoneIndependent | DateAndTime | Stores as-is, no timezone conversion, full date+time |
-| 25 | TimeZoneIndependent | DateOnly | Stores as-is, no timezone conversion, date only |
+| 22 | UserLocal | DateAndTime | Stores UTC, displays in user's timezone, full date+time |
+| 23 | UserLocal | DateOnly | Stores UTC, displays in user's timezone, date only |
+| 24 | DateOnly | DateOnly | Stores actual date, no time, no timezone conversion |
+| 25 | TimeZoneIndependent | DateAndTime | Stores as-is, no timezone conversion, full date+time |
+| 26 | TimeZoneIndependent | DateOnly | Stores as-is, no timezone conversion, date only |
 
 > **Note:** DateOnly behavior + DateAndTime format is **invalid** — DateOnly behavior forces DateOnly format.
 
@@ -133,43 +134,43 @@ The `execute_webapi` tool returns `statusCode: 200` and `isSuccess: true` but **
 
 | # | Type | Description |
 |---|------|-------------|
-| 26 | Picklist (local) | Single choice, options defined on the column |
-| 27 | Picklist (global) | Single choice, references a shared global option set |
-| 28 | MultiSelectPicklist | Multiple choices allowed |
-| 29 | State | Record status (Active/Inactive) — system managed |
-| 30 | Status | Status reason — system managed |
+| 27 | Picklist (local) | Single choice, options defined on the column |
+| 28 | Picklist (global) | Single choice, references a shared global option set |
+| 29 | MultiSelectPicklist | Multiple choices allowed |
+| 30 | State | Record status (Active/Inactive) — system managed |
+| 31 | Status | Status reason — system managed |
 
 ### I. REFERENCE (Lookup) — 4 types
 
 | # | Type | Description |
 |---|------|-------------|
-| 31 | Lookup | Reference to 1 specific entity |
-| 32 | Customer | Polymorphic lookup to `account` OR `contact` |
-| 33 | Owner | Polymorphic lookup to `systemuser` OR `team` — system managed |
-| 34 | Polymorphic Lookup | Custom lookup to multiple entities |
+| 32 | Lookup | Reference to 1 specific entity |
+| 33 | Customer | Polymorphic lookup to `account` OR `contact` |
+| 34 | Owner | Polymorphic lookup to `systemuser` OR `team` — system managed |
+| 35 | Polymorphic Lookup | Custom lookup to multiple entities |
 
 ### J. FILE & IMAGE
 
 | # | Type | Description |
 |---|------|-------------|
-| 35 | File | Binary file storage (MaxKB default 32768 = 32MB) |
-| 36 | Image | Image for record display |
+| 36 | File | Binary file storage (MaxKB default 32768 = 32MB) |
+| 37 | Image | Image for record display |
 
 ### K. IDENTIFIER
 
 | # | Type | Description |
 |---|------|-------------|
-| 37 | Uniqueidentifier | GUID, used for primary keys and internal references |
+| 38 | Uniqueidentifier | GUID, used for primary keys and internal references |
 
 ### L. SYSTEM-ONLY TYPES (cannot create custom)
 
 | # | Type | Description |
 |---|------|-------------|
-| 38 | EntityName | Contains entity logical name (internal use) |
-| 39 | CalendarRules | Collection of CalendarRules records (internal) |
-| 40 | PartyList | Collection of ActivityParty records (activity entities) |
-| 41 | ManagedProperty | Solution managed properties (internal) |
-| 42 | Virtual | Virtual columns, no actual data stored (internal) |
+| 39 | EntityName | Contains entity logical name (internal use) |
+| 40 | CalendarRules | Collection of CalendarRules records (internal) |
+| 41 | PartyList | Collection of ActivityParty records (activity entities) |
+| 42 | ManagedProperty | Solution managed properties (internal) |
+| 43 | Virtual | Virtual columns, no actual data stored (internal) |
 
 ---
 
@@ -179,7 +180,7 @@ The `execute_webapi` tool returns `statusCode: 200` and `isSuccess: true` but **
 |----------|-------|
 | String (Single Line) | 7 |
 | Memo (Multi Line) | 2 |
-| Integer (Whole Number) | 4 |
+| Integer (Whole Number) | 5 |
 | BigInt | 1 |
 | Decimal | 1 |
 | Double/Float | 1 |
@@ -192,7 +193,7 @@ The `execute_webapi` tool returns `statusCode: 200` and `isSuccess: true` but **
 | Image | 1 |
 | Uniqueidentifier | 1 |
 | System-only types | 5 |
-| **Total** | **42** |
+| **Total** | **43** |
 
 ---
 
