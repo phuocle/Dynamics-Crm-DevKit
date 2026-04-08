@@ -85,8 +85,18 @@ namespace DynamicsCrm.DevKit.Shared.Models
             if (string.IsNullOrEmpty(Url))
                 Url = Environment.GetEnvironmentVariable("DEVKIT_URL") ?? string.Empty;
 
+            // Interactive/DeviceCode have built-in Microsoft multi-tenant AppId defaults.
+            // Don't inherit DEVKIT_CLIENT_ID from env vars for these types,
+            // as it may point to a single-tenant app meant for other auth types (e.g., ClientSecret).
+            // The --clientid CLI arg still takes priority if explicitly provided.
             if (string.IsNullOrEmpty(ClientId))
-                ClientId = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_ID") ?? string.Empty;
+            {
+                var hasDefaultClientId =
+                    AuthType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
+                    AuthType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase);
+                if (!hasDefaultClientId)
+                    ClientId = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_ID") ?? string.Empty;
+            }
 
             if (string.IsNullOrEmpty(ClientSecret))
                 ClientSecret = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_SECRET") ?? string.Empty;
