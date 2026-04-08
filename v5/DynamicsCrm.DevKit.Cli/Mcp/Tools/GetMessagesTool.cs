@@ -85,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public async Task<CallToolResult> get_messages(
             [Description(
                 "Entity logical name (lowercase). Use 'none' or empty for global messages. " +
-                "Use get_tables to discover names."
+                "Use get_tables to discover names. Ignored in detail mode."
             )] string entity_name = "none",
             [Description(
                 "Specific message or Custom Action name for detail mode. " +
@@ -147,16 +147,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sdkMsg = FindSdkMessage(messageName);
             if (sdkMsg != null)
             {
-                var isCustomAction = sdkMsg.GetAttributeValue<bool>("isreadonly") == false &&
-                                     sdkMsg.GetAttributeValue<bool>("isprivate") == false;
+                var categoryName = sdkMsg.GetAttributeValue<string>("categoryname") ?? "";
+                var isCustomOperation = categoryName.Equals("CustomOperation", StringComparison.OrdinalIgnoreCase);
 
                 // Check if this is a Custom Action (workflow category=3)
                 var customAction = FindCustomAction(messageName);
                 if (customAction != null)
                     return FormatCustomActionDetail(customAction, sdkMsg);
 
-                // Standard SDK message
-                return FormatSdkMessageDetail(sdkMsg);
+                // Standard SDK message (or Custom Action/API without workflow record)
+                return FormatSdkMessageDetail(sdkMsg, isCustomOperation);
             }
 
             // Step 2: Try as Custom Action name directly (workflow.name or workflow.uniquename)
@@ -173,7 +173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Use get_messages (list mode) to discover available messages.");
         }
 
-        private CallToolResult FormatSdkMessageDetail(Entity sdkMsg)
+        private CallToolResult FormatSdkMessageDetail(Entity sdkMsg, bool isCustomOperation)
         {
             var msgId = sdkMsg.Id;
             var name = sdkMsg.GetAttributeValue<string>("name") ?? "";
@@ -191,14 +191,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 MessageId = msgId.ToString(),
                 Name = name,
                 IsActive = isActive,
-                IsCustomAction = false,
+                IsCustomAction = isCustomOperation,
                 Availability = AvailabilityMap.TryGetValue(availability, out var avail) ? avail : availability.ToString(),
                 SupportedEntities = supportedEntities.Count > 0 ? supportedEntities : null,
                 PluginStepCount = pluginStepCount
             };
 
+            var label = isCustomOperation ? "Custom Action" : "SDK Message";
             var sb = new StringBuilder(512);
-            sb.AppendLine($"[SDK Message] {name}");
+            sb.AppendLine($"[{label}] {name}");
             sb.AppendLine();
             sb.AppendLine($"messageId: {msgId}");
             sb.AppendLine($"isActive: {(isActive ? "Yes" : "No")}");
@@ -324,6 +325,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='availability'/>
     <attribute name='isreadonly'/>
     <attribute name='isprivate'/>
+    <attribute name='categoryname'/>
     <filter>
       <condition attribute='name' operator='eq' value='{EscapeXml(messageName)}'/>
     </filter>
@@ -592,14 +594,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var names = actions.Select(x => x.Name);
 
-            if (isNone)
+            var customApis = await _metadataService.GetCustomApisAsync(scope);
+            if (customApis.Count > 0)
             {
-                var customApis = await _metadataService.GetCustomApisAsync(scope);
-                if (customApis.Count > 0)
-                {
-                    var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
-                    names = names.Where(x => !apiNames.Contains(x));
-                }
+                var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
+                names = names.Where(x => !apiNames.Contains(x));
             }
 
             return names

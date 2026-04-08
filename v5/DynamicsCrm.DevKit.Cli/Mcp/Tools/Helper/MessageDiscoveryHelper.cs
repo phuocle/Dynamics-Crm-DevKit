@@ -24,14 +24,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 : [];
 
             var customActionNames = customActions.Select(x => x.Name);
-            if (isNoneScope)
+            var customApis = await metadataService.GetCustomApisAsync(normalizedScope);
+            if (customApis.Count > 0)
             {
-                var customApis = await metadataService.GetCustomApisAsync(normalizedScope);
-                if (customApis.Count > 0)
-                {
-                    var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
-                    customActionNames = customActionNames.Where(x => !apiNames.Contains(x));
-                }
+                var apiNames = new HashSet<string>(customApis.Select(x => x.Name));
+                customActionNames = customActionNames.Where(x => !apiNames.Contains(x));
             }
 
             return CompactFormatter.FormatMessages(
