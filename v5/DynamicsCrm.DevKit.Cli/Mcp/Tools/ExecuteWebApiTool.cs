@@ -124,6 +124,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
 
+                string structuredBody = null;
                 if (!string.IsNullOrWhiteSpace(responseBody))
                 {
                     sb.AppendLine();
@@ -132,11 +133,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var lines = formattedBody.Split('\n');
                     if (lines.Length > max_response_lines)
                     {
-                        sb.AppendLine(string.Join("\n", lines.Take(max_response_lines)));
+                        structuredBody = string.Join("\n", lines.Take(max_response_lines));
+                        sb.AppendLine(structuredBody);
                         sb.AppendLine($"(truncated, showing first {max_response_lines} lines of {lines.Length} total)");
                     }
                     else
                     {
+                        structuredBody = formattedBody;
                         sb.Append(formattedBody);
                     }
                 }
@@ -147,7 +150,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Url = url.Trim(),
                     StatusCode = statusCode,
                     StatusText = reasonPhrase,
-                    IsSuccess = response.IsSuccessStatusCode
+                    IsSuccess = response.IsSuccessStatusCode,
+                    ResponseBody = structuredBody
                 };
 
                 return new CallToolResult

@@ -137,6 +137,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("isSuccess")]
         public bool IsSuccess { get; set; }
+
+        [JsonPropertyName("responseBody")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ResponseBody { get; set; }
     }
 
     internal sealed class UpsertFormResult

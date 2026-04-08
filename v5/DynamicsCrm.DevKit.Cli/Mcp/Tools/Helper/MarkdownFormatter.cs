@@ -279,13 +279,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         private static string FormatConstraints(AttributeMetadata attr) => attr switch
         {
-            StringAttributeMetadata s => $"MaxLen={s.MaxLength}",
-            MemoAttributeMetadata m => $"MaxLen={m.MaxLength}",
-            IntegerAttributeMetadata i => $"[{i.MinValue}..{i.MaxValue}]",
+            StringAttributeMetadata s => s.FormatName?.Value is not null and not "Text"
+                ? $"MaxLen={s.MaxLength} {s.FormatName.Value}"
+                : $"MaxLen={s.MaxLength}",
+            MemoAttributeMetadata m => m.FormatName?.Value is not null and not "Text"
+                ? $"MaxLen={m.MaxLength} {m.FormatName.Value}"
+                : $"MaxLen={m.MaxLength}",
+            IntegerAttributeMetadata i => i.Format is not null and not IntegerFormat.None
+                ? $"[{i.MinValue}..{i.MaxValue}] {i.Format}"
+                : $"[{i.MinValue}..{i.MaxValue}]",
             DoubleAttributeMetadata d => $"[{d.MinValue}..{d.MaxValue}] P={d.Precision}",
             DecimalAttributeMetadata dc => $"[{dc.MinValue}..{dc.MaxValue}] P={dc.Precision}",
             MoneyAttributeMetadata mn => $"[{mn.MinValue}..{mn.MaxValue}] P={mn.Precision}",
-            DateTimeAttributeMetadata dt => dt.DateTimeBehavior?.Value ?? "",
+            DateTimeAttributeMetadata dt => $"{dt.DateTimeBehavior?.Value} {dt.Format}".Trim(),
             BooleanAttributeMetadata b when b.OptionSet is not null =>
                 $"True={b.OptionSet.TrueOption?.Label?.UserLocalizedLabel?.Label}; False={b.OptionSet.FalseOption?.Label?.UserLocalizedLabel?.Label}",
             ImageAttributeMetadata img => $"MaxH={img.MaxHeight} MaxW={img.MaxWidth} MaxKB={img.MaxSizeInKB}",
