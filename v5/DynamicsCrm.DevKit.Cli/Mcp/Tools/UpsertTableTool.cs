@@ -2,12 +2,14 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -37,18 +39,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "CREATE MODE (entity does not exist):\n" +
             "- display_name, display_collection_name, and solution_name are REQUIRED\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
+            "- If entity_name has NO prefix (no underscore), the tool auto-resolves the prefix from solution_name's publisher\n" +
+            "- table_type: 'Standard' (default) or 'Elastic' (Cosmos DB). ownership_type: 'User' (default) or 'Organization'\n" +
+            "- For activity entities: set is_activity=true (auto-sets User ownership, notes, feedback, Subject primary attr)\n" +
             "- After creation: upsert_column to add columns, build_form_xml + manage_form to customize the form\n\n" +
 
             "UPDATE MODE (entity already exists):\n" +
             "- Only entity_name is required to identify the entity\n" +
             "- Only provided parameters are updated, omitted ones keep current values\n" +
-            "- Immutable properties (ownership_type, is_activity, has_notes, primary attribute) are ignored with warnings\n\n" +
+            "- Immutable properties (ownership_type, table_type, is_activity, has_notes, primary attribute) are ignored with warnings\n\n" +
 
             "TIPS:\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
+            "- Or provide just the name (e.g., 'project') with solution_name — prefix is auto-resolved from the solution's publisher\n" +
             "- Use get_tables to inspect existing entity metadata before updating")]
         public CallToolResult upsert_table(
-            [Description("Logical name with publisher prefix (e.g., 'new_project').")] string entity_name,
+            [Description("Logical name with publisher prefix (e.g., 'new_project'). Or just the name (e.g., 'project') — prefix is auto-resolved from solution_name's publisher.")] string entity_name,
             [Description("Singular display name (e.g., 'Project'). Required for create.")] string display_name = "",
             [Description("Plural display name (e.g., 'Projects'). Required for create.")] string display_collection_name = "",
             [Description("Solution unique name. Required for create. Optional for update.")] string solution_name = "",
@@ -57,7 +63,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Display name for primary attribute. Default: 'Name'. Create only.")] string primary_attribute_display_name = "Name",
             [Description("Max length of primary attribute (1-850). Default: 100. Create only.")] int primary_attribute_max_length = 100,
             [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security). Create only — cannot be changed after creation.")] string ownership_type = "User",
-            [Description("Create as activity entity. Default: false. Create only — cannot be changed after creation.")] bool is_activity = false,
+            [Description("Table type: 'Standard' (default), 'Elastic' (for high-volume/IoT scenarios with Azure Cosmos DB). Elastic tables have limited charting support. Create only.")] string table_type = "Standard",
+            [Description("Create as activity entity. Default: false. When true, sets ownership to User, enables notes/feedback, and uses 'Subject' as primary attribute. Create only — cannot be changed after creation.")] bool is_activity = false,
             [Description("Enable notes. Default: true. Create only — cannot be changed after creation.")] bool has_notes = true,
             [Description("Enable activities. Default: true (create). Omit to keep current value (update).")] bool? has_activities = null,
             [Description("Enable feedback/ratings. Default: false (create). Omit to keep current value (update).")] bool? has_feedback = null,
@@ -75,14 +82,64 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entity_name = entity_name.Trim().ToLowerInvariant();
 
-            // Validate publisher prefix
+            // Resolve publisher prefix from solution if provided
+            string resolvedPrefix = null;
+            string resolvedSolutionUniqueName = null;
+            if (!string.IsNullOrWhiteSpace(solution_name))
+            {
+                var (solPrefix, uniqueName, error) = ResolveSolution(solution_name.Trim());
+                if (error != null)
+                    return ErrorResult(
+                        $"[Error] {error}\n" +
+                        $"Tip: Use get_solution_components to find valid solution names.");
+                resolvedPrefix = solPrefix;
+                resolvedSolutionUniqueName = uniqueName;
+
+                // If entity_name does NOT already start with the publisher prefix, prepend it
+                // e.g., "sale_order" + prefix "abc" → "abc_sale_order"
+                // e.g., "abc_sale_order" + prefix "abc" → keep as-is
+                var prefixWithUnderscore = resolvedPrefix + "_";
+                if (!entity_name.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                {
+                    entity_name = $"{resolvedPrefix}_{entity_name}";
+                }
+            }
+
+            // Validate publisher prefix exists in entity_name
             var underscoreIndex = entity_name.IndexOf('_');
             if (underscoreIndex < 1 || underscoreIndex >= entity_name.Length - 1)
+            {
+                // No prefix — could be a system entity (e.g., "account", "contact") for update mode
+                // Try to retrieve the entity first before rejecting
+                try
+                {
+                    var checkRequest = new RetrieveEntityRequest
+                    {
+                        LogicalName = entity_name,
+                        EntityFilters = EntityFilters.Entity,
+                        RetrieveAsIfPublished = true
+                    };
+                    var checkResponse = (RetrieveEntityResponse)_serviceClient.Execute(checkRequest);
+                    // Entity exists — go to update mode directly
+                    return UpdateExistingEntity(entity_name, checkResponse.EntityMetadata,
+                        display_name, display_collection_name, description,
+                        has_activities, has_feedback, is_quick_create_enabled,
+                        is_duplicate_detection_enabled, change_tracking_enabled, entity_color,
+                        is_audit_enabled, is_business_process_enabled,
+                        ownership_type, table_type, is_activity, has_notes,
+                        primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
+                        resolvedSolutionUniqueName ?? solution_name, auto_publish);
+                }
+                catch
+                {
+                    // Entity doesn't exist and no prefix — error
+                }
+
                 return ErrorResult(
-                    $"[Error] Cannot create/update entity\n" +
-                    $"EntityName: {entity_name}\n" +
-                    $"Message: Entity name must include a publisher prefix (e.g., 'new_project', 'cr_project')\n" +
-                    $"Tip: Check solution publisher prefix. Use get_solution_components to find solution details.");
+                    $"[Error] Cannot determine publisher prefix for entity '{entity_name}'\n" +
+                    $"Message: Entity name has no prefix (e.g., 'new_project') and no solution_name was provided to resolve it.\n" +
+                    $"Tip: Either include the prefix in entity_name (e.g., 'new_project') or provide solution_name so the prefix can be auto-resolved from the solution's publisher.");
+            }
 
             // --- Auto-detect create vs update ---
             EntityMetadata existingEntity = null;
@@ -110,9 +167,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     has_activities, has_feedback, is_quick_create_enabled,
                     is_duplicate_detection_enabled, change_tracking_enabled, entity_color,
                     is_audit_enabled, is_business_process_enabled,
-                    ownership_type, is_activity, has_notes,
+                    ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
-                    solution_name, auto_publish);
+                    resolvedSolutionUniqueName ?? solution_name, auto_publish);
             }
 
             // --- CREATE MODE ---
@@ -158,9 +215,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var ownershipTrimmed = ownership_type.Trim();
             OwnershipTypes ownershipTypeValue;
             if (ownershipTrimmed.Equals("Organization", StringComparison.OrdinalIgnoreCase) ||
-                ownershipTrimmed.Equals("Org", StringComparison.OrdinalIgnoreCase))
+                ownershipTrimmed.Equals("Org", StringComparison.OrdinalIgnoreCase) ||
+                ownershipTrimmed.Equals("OrganizationOwned", StringComparison.OrdinalIgnoreCase))
                 ownershipTypeValue = OwnershipTypes.OrganizationOwned;
-            else if (ownershipTrimmed.Equals("User", StringComparison.OrdinalIgnoreCase))
+            else if (ownershipTrimmed.Equals("User", StringComparison.OrdinalIgnoreCase) ||
+                     ownershipTrimmed.Equals("UserOwned", StringComparison.OrdinalIgnoreCase))
                 ownershipTypeValue = OwnershipTypes.UserOwned;
             else
                 return ErrorResult(
@@ -168,12 +227,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Valid values: 'User' (default, supports sharing/assigning) or 'Organization' (no row-level security)\n" +
                     $"Tip: Ownership cannot be changed after entity creation.");
 
+            // Parse table type
+            var tableTypeTrimmed = table_type.Trim();
+            bool isElastic = tableTypeTrimmed.Equals("Elastic", StringComparison.OrdinalIgnoreCase);
+            if (!isElastic && !tableTypeTrimmed.Equals("Standard", StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] Invalid table_type: '{table_type}'\n" +
+                    $"Valid values: 'Standard' (default) or 'Elastic' (Azure Cosmos DB backed)");
+
+            // Activity + Elastic is not supported by Dataverse
+            if (is_activity && isElastic)
+                return ErrorResult(
+                    "[Error] Cannot create an Elastic Activity entity.\n" +
+                    "Tip: Activity entities do not support Elastic table type.");
+
             // Apply null-coalesced defaults for create mode
             var effectiveHasActivities = has_activities ?? true;
             var effectiveHasFeedback = has_feedback ?? false;
             var effectiveIsQuickCreateEnabled = is_quick_create_enabled ?? false;
             var effectiveIsDuplicateDetectionEnabled = is_duplicate_detection_enabled ?? true;
             var effectiveChangeTrackingEnabled = change_tracking_enabled ?? true;
+
+            // Activity overrides
+            if (is_activity)
+            {
+                ownershipTypeValue = OwnershipTypes.UserOwned;
+                has_notes = true;
+                effectiveHasFeedback = true;
+                primarySchemaName = "Subject";
+                primary_attribute_name = "subject";
+                primary_attribute_display_name = "Subject";
+            }
 
             try
             {
@@ -185,6 +269,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DisplayCollectionName = new Label(display_collection_name.Trim(), 1033),
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
+                    IsAuditEnabled = new BooleanManagedProperty(true),
                     HasActivities = effectiveHasActivities,
                     HasFeedback = effectiveHasFeedback,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
@@ -197,6 +282,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!string.IsNullOrWhiteSpace(entity_color))
                     entityMetadata.EntityColor = entity_color.Trim();
+
+                // Elastic table overrides
+                if (isElastic)
+                {
+                    entityMetadata.TableType = "Elastic";
+                    entityMetadata.CanCreateCharts = new BooleanManagedProperty(false);
+                }
+
+                // Activity entity overrides
+                if (is_activity)
+                    entityMetadata.IsAvailableOffline = true;
 
                 var primaryAttribute = new StringAttributeMetadata
                 {
@@ -212,7 +308,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Entity = entityMetadata,
                     PrimaryAttribute = primaryAttribute,
-                    SolutionUniqueName = solution_name.Trim(),
+                    SolutionUniqueName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     HasNotes = has_notes,
                     HasActivities = effectiveHasActivities
                 };
@@ -263,6 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"PluralName: {display_collection_name.Trim()}");
                 sb.AppendLine($"SchemaName: {schemaName}");
                 sb.AppendLine($"Ownership: {ownershipTypeValue}");
+                sb.AppendLine($"TableType: {(isElastic ? "Elastic" : "Standard")}");
                 sb.AppendLine($"PrimaryAttribute: {primary_attribute_name} ({primary_attribute_display_name.Trim()})");
                 sb.AppendLine($"PrimaryAttrMaxLength: {primary_attribute_max_length}");
                 sb.AppendLine($"HasNotes: {(has_notes ? "yes" : "no")}");
@@ -270,7 +367,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"IsActivity: {(is_activity ? "yes" : "no")}");
                 sb.AppendLine($"DuplicateDetection: {(effectiveIsDuplicateDetectionEnabled ? "yes" : "no")}");
                 sb.AppendLine($"ChangeTracking: {(effectiveChangeTrackingEnabled ? "yes" : "no")}");
-                sb.AppendLine($"Solution: {solution_name.Trim()}");
+                sb.AppendLine($"Solution: {resolvedSolutionUniqueName ?? solution_name.Trim()}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {entityId}");
                 if (!string.IsNullOrEmpty(entitySetName))
@@ -283,12 +380,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DisplayCollectionName = display_collection_name.Trim(),
                     SchemaName = schemaName,
                     OwnershipType = ownershipTypeValue.ToString(),
+                    TableType = isElastic ? "Elastic" : null,
                     PrimaryAttributeName = primary_attribute_name,
                     PrimaryAttributeDisplayName = primary_attribute_display_name.Trim(),
                     PrimaryAttributeMaxLength = primary_attribute_max_length,
                     MetadataId = entityId.ToString(),
                     EntitySetName = string.IsNullOrEmpty(entitySetName) ? null : entitySetName,
-                    SolutionName = solution_name.Trim(),
+                    SolutionName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     Published = published,
                     HasNotes = has_notes,
                     HasActivities = effectiveHasActivities,
@@ -335,7 +433,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool? hasActivities, bool? hasFeedback, bool? isQuickCreateEnabled,
             bool? isDuplicateDetectionEnabled, bool? changeTrackingEnabled, string entityColor,
             bool? isAuditEnabled, bool? isBusinessProcessEnabled,
-            string ownershipType, bool isActivity, bool hasNotes,
+            string ownershipType, string tableType, bool isActivity, bool hasNotes,
             string primaryAttributeName, string primaryAttributeDisplayName, int primaryAttributeMaxLength,
             string solutionName, bool autoPublish)
         {
@@ -458,6 +556,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (isActivity)
                     warnings.Add("is_activity cannot be changed after entity creation (ignored)");
+
+                if (!string.IsNullOrWhiteSpace(tableType) &&
+                    !tableType.Trim().Equals("Standard", StringComparison.OrdinalIgnoreCase))
+                    warnings.Add("table_type cannot be changed after entity creation (ignored)");
 
                 if (!hasNotes)
                     warnings.Add("has_notes cannot be changed after entity creation (ignored)");
@@ -591,5 +693,96 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
+
+        private (string Prefix, string UniqueName, string Error) ResolveSolution(string solutionInput)
+        {
+            try
+            {
+                // Step 1: Try exact match by uniquename
+                var byUniqueName = new QueryExpression("solution")
+                {
+                    ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions =
+                        {
+                            new ConditionExpression("uniquename", ConditionOperator.Equal, solutionInput)
+                        }
+                    }
+                };
+                var uniqueResults = _serviceClient.RetrieveMultiple(byUniqueName).Entities;
+                if (uniqueResults.Count == 1)
+                {
+                    var prefix = GetPrefixFromSolution(uniqueResults[0]);
+                    if (prefix == null) return (null, null, $"Solution '{solutionInput}' found but has no publisher.");
+                    return (prefix, uniqueResults[0].GetAttributeValue<string>("uniquename"), null);
+                }
+
+                // Step 2: Try exact match by friendlyname (display name)
+                var byDisplayName = new QueryExpression("solution")
+                {
+                    ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions =
+                        {
+                            new ConditionExpression("friendlyname", ConditionOperator.Equal, solutionInput)
+                        }
+                    }
+                };
+                var displayResults = _serviceClient.RetrieveMultiple(byDisplayName).Entities;
+
+                if (displayResults.Count == 0)
+                {
+                    // Step 3: Try contains match by friendlyname as fallback
+                    var byContains = new QueryExpression("solution")
+                    {
+                        ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{solutionInput}%")
+                            }
+                        }
+                    };
+                    displayResults = _serviceClient.RetrieveMultiple(byContains).Entities;
+                }
+
+                if (displayResults.Count == 0)
+                    return (null, null, $"Solution '{solutionInput}' not found (searched by unique name and display name).");
+
+                if (displayResults.Count > 1)
+                {
+                    var names = string.Join(", ", displayResults.Select(e =>
+                        $"'{e.GetAttributeValue<string>("uniquename")}' ({e.GetAttributeValue<string>("friendlyname")})"));
+                    return (null, null, $"Multiple solutions match '{solutionInput}': {names}. Please provide the exact unique name.");
+                }
+
+                var sol = displayResults[0];
+                var resolvedPrefix = GetPrefixFromSolution(sol);
+                if (resolvedPrefix == null) return (null, null, $"Solution '{solutionInput}' found but has no publisher.");
+                return (resolvedPrefix, sol.GetAttributeValue<string>("uniquename"), null);
+            }
+            catch (Exception ex)
+            {
+                return (null, null, $"Failed to resolve solution '{solutionInput}': {ex.Message}");
+            }
+        }
+
+        private string GetPrefixFromSolution(Entity solutionEntity)
+        {
+            var publisherReference = solutionEntity.GetAttributeValue<EntityReference>("publisherid");
+            if (publisherReference == null) return null;
+            try
+            {
+                var publisher = _serviceClient.Retrieve("publisher", publisherReference.Id, new ColumnSet("customizationprefix"));
+                return publisher.GetAttributeValue<string>("customizationprefix");
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

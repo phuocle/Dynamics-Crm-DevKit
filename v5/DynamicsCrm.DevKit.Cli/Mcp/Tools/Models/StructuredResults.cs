@@ -57,6 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public List<RoleInfo> Roles { get; set; } = [];
 
         [JsonPropertyName("accessToken")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string AccessToken { get; set; }
 
         [JsonPropertyName("warnings")]
@@ -227,6 +228,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("ownershipType")]
         public string OwnershipType { get; set; }
+
+        [JsonPropertyName("tableType")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string TableType { get; set; }
 
         [JsonPropertyName("primaryAttributeName")]
         public string PrimaryAttributeName { get; set; }
