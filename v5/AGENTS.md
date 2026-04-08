@@ -183,7 +183,7 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 |---|---|
 | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | Release with current date |
 | `Release-DynamicsCrm-DevKit.ps1` | Full release |
-| `Sync-AI-Config.ps1` | Sync `.agent/` → `.claude/`, `.cursor/`, `.github/` |
+| `Sync-AI-Config.ps1` | Sync `.agent/` → `.claude/`, `.github/` |
 | `Clean-Repository.ps1` | Clean all artifacts |
 
 ---
@@ -220,7 +220,6 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 |---|---|---|---|---|
 | **Antigravity** | `.agent/rules/` | `.agent/workflows/` | `.agent/mcp.json` | `AGENTS.md` |
 | **Claude Code** | `.claude/rules/*.md` | `.claude/commands/claude-*.md` | `.vscode/mcp.json` | `CLAUDE.md` (@AGENTS.md) |
-| **Cursor** | `.cursor/rules/*.mdc` | `.cursor/commands/cursor-*.md` | `.cursor/mcp.json` | `AGENTS.md` |
 | **Copilot** | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` | `.vscode/mcp.json` | `AGENTS.md` |
 
 Edit `.agent/` first, then run `Sync-AI-Config.ps1`. Antigravity: `// turbo` = auto-run next step, `// turbo-all` = auto-run all.

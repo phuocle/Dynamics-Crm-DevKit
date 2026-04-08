@@ -10,13 +10,10 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Pa
 $AgentRulesDir = Join-Path $ProjectRoot ".agent\rules"
 $AgentWorkflowsDir = Join-Path $ProjectRoot ".agent\workflows"
 $AgentSkillsDir = Join-Path $ProjectRoot ".agent\skills"
-$CursorRulesDir = Join-Path $ProjectRoot ".cursor\rules"
-$CursorCommandsDir = Join-Path $ProjectRoot ".cursor\commands"
 $ClaudeRulesDir = Join-Path $ProjectRoot ".claude\rules"
 $ClaudeCommandsDir = Join-Path $ProjectRoot ".claude\commands"
 $GithubDir = Join-Path $ProjectRoot ".github"
 $GithubPromptsDir = Join-Path $ProjectRoot ".github\prompts"
-$VsCodeDir = Join-Path $ProjectRoot ".vscode"
 
 $ChangesDetected = 0
 $FilesUpdated = 0
@@ -41,41 +38,6 @@ function Get-AgentRuleBody($FilePath) {
         return $Matches[1].TrimStart()
     }
     return $content
-}
-
-function Get-CursorFrontmatter($RuleFileName) {
-    $frontmatters = @{
-        "core-rule" = @"
----
-description: Mandatory core rules for AI agents working with DynamicsCrm.DevKit codebase
-alwaysApply: true
----
-"@
-        "devkit-analyzer" = @"
----
-description: Development rules for DynamicsCrm.DevKit Roslyn analyzers (DEVKIT1001-DEVKIT1021)
-alwaysApply: true
----
-"@
-        "skill-powershell-windows" = @"
----
-description: PowerShell Windows patterns - critical pitfalls, operator syntax, error handling
-alwaysApply: true
----
-"@
-    }
-
-    $baseName = [System.IO.Path]::GetFileNameWithoutExtension($RuleFileName)
-    if ($frontmatters.ContainsKey($baseName)) {
-        return $frontmatters[$baseName]
-    }
-
-    return @"
----
-description: $baseName rules
-alwaysApply: true
----
-"@
 }
 
 function Get-WorkflowBody($FilePath) {
@@ -107,25 +69,6 @@ function Get-WorkflowDescription($FilePath) {
         return $Matches[1].Trim()
     }
     $baseName = [System.IO.Path]::GetFileNameWithoutExtension($FilePath)
-    return $baseName
-}
-
-function Get-CursorCommandTitle($WorkflowFileName) {
-    $titles = @{
-        "build-debug"          = "Build Debug - DynamicsCrm.DevKit"
-        "build-cli"            = "Build CLI - DynamicsCrm.DevKit.Cli"
-        "build-vsix"           = "Build VSIX - DynamicsCrm.DevKit"
-        "build-analyzer"       = "Build Analyzer - DynamicsCrm.DevKit.Analyzers"
-        "build-tool"           = "Build Tool - DynamicsCrm.DevKit.Tool"
-        "build-release"        = "Build Release - DynamicsCrm.DevKit"
-        "clean-all"            = "Clean Repository"
-        "create-new-analyzer"  = "Create New Analyzer"
-    }
-
-    $baseName = [System.IO.Path]::GetFileNameWithoutExtension($WorkflowFileName)
-    if ($titles.ContainsKey($baseName)) {
-        return $titles[$baseName]
-    }
     return $baseName
 }
 
@@ -210,31 +153,8 @@ if ($wfSourceFiles) {
 Write-Host "--- Cleaning up old files (no prefix / wrong prefix) ---" -ForegroundColor White
 Write-Host ""
 
-Remove-OldFiles $CursorCommandsDir "cursor-" ".md" $sourceWorkflowNames
 Remove-OldFiles $GithubPromptsDir "copilot-" ".md" $sourceWorkflowNames
 Remove-OldFiles $ClaudeCommandsDir "claude-" ".md" $sourceWorkflowNames
-
-# ── Sync Rules → Cursor ──────────────────────────────────────────────────────
-
-Write-Host ""
-Write-Host "--- Syncing Rules (.agent/rules/ -> .cursor/rules/) ---" -ForegroundColor White
-Write-Host ""
-
-$ruleFiles = Get-ChildItem -Path $AgentRulesDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($ruleFiles) {
-    foreach ($ruleFile in $ruleFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($ruleFile.Name)
-        $targetPath = Join-Path $CursorRulesDir "$baseName.mdc"
-
-        $body = Get-AgentRuleBody $ruleFile.FullName
-        $frontmatter = Get-CursorFrontmatter $ruleFile.Name
-        $cursorContent = "$frontmatter`n`n$body"
-
-        Compare-And-Write $targetPath $cursorContent
-    }
-} else {
-    Write-Status "No rule files found in $AgentRulesDir" "WARN"
-}
 
 # ── Sync Rules → Claude ──────────────────────────────────────────────────────
 
@@ -255,29 +175,6 @@ if ($ruleFiles) {
     Write-Status "No rule files found in $AgentRulesDir" "WARN"
 }
 
-# ── Sync Skills → Cursor (as rule files: skill-{name}.mdc) ───────────────────
-
-Write-Host ""
-Write-Host "--- Syncing Skills (.agent/skills/ -> .cursor/rules/skill-*) ---" -ForegroundColor White
-Write-Host ""
-
-$skillDirs = Get-ChildItem -Path $AgentSkillsDir -Directory -ErrorAction SilentlyContinue
-if ($skillDirs) {
-    foreach ($skillDir in ($skillDirs | Sort-Object Name)) {
-        $skillFile = Join-Path $skillDir.FullName "SKILL.md"
-        if (Test-Path $skillFile) {
-            $skillBody = Get-AgentRuleBody $skillFile
-            if ($skillBody -and $skillBody.Trim().Length -gt 0) {
-                $targetName = "skill-$($skillDir.Name)"
-                $targetPath = Join-Path $CursorRulesDir "$targetName.mdc"
-                $frontmatter = Get-CursorFrontmatter "$targetName.mdc"
-                $cursorContent = "$frontmatter`n`n$skillBody"
-                Compare-And-Write $targetPath $cursorContent
-            }
-        }
-    }
-}
-
 # ── Sync Skills → Claude (as rule files: skill-{name}.md) ────────────────────
 
 Write-Host ""
@@ -296,28 +193,6 @@ if ($skillDirs) {
             }
         }
     }
-}
-
-# ── Sync Workflows → Cursor (prefix: cursor-) ────────────────────────────────
-
-Write-Host ""
-Write-Host "--- Syncing Workflows (.agent/workflows/ -> .cursor/commands/cursor-*) ---" -ForegroundColor White
-Write-Host ""
-
-$workflowFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($workflowFiles) {
-    foreach ($wfFile in $workflowFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
-        $targetPath = Join-Path $CursorCommandsDir "cursor-$baseName.md"
-
-        $title = Get-CursorCommandTitle $wfFile.Name
-        $body = Get-WorkflowBody $wfFile.FullName
-        $cursorContent = "# $title`n`n$body"
-
-        Compare-And-Write $targetPath $cursorContent
-    }
-} else {
-    Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
 }
 
 # ── Sync Workflows → Claude (prefix: claude-) ────────────────────────────────
@@ -411,27 +286,6 @@ $body
     }
 } else {
     Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
-}
-
-# ── Sync MCP Config (.vscode/mcp.json -> .cursor/mcp.json) ────────────────────
-
-Write-Host ""
-Write-Host "--- Syncing MCP Config (.vscode/mcp.json -> .cursor/mcp.json) ---" -ForegroundColor White
-Write-Host ""
-
-$vscodeMcpPath = Join-Path $VsCodeDir "mcp.json"
-$cursorMcpPath = Join-Path $ProjectRoot ".cursor\mcp.json"
-
-if (Test-Path $vscodeMcpPath) {
-    # Read source JSON and convert "servers" key to "mcpServers" for Cursor format
-    $sourceContent = [System.IO.File]::ReadAllText($vscodeMcpPath, [System.Text.Encoding]::UTF8)
-    $cursorMcpContent = $sourceContent -replace '"servers"', '"mcpServers"'
-    Compare-And-Write $cursorMcpPath $cursorMcpContent
-
-    Write-Host ""
-    Write-Status "Antigravity MCP: user-level config at C:\Users\p\.gemini\antigravity\mcp_config.json (manual sync required)" "INFO"
-} else {
-    Write-Status "Source MCP config not found: $vscodeMcpPath" "WARN"
 }
 
 # ── Summary ───────────────────────────────────────────────────────────────────
