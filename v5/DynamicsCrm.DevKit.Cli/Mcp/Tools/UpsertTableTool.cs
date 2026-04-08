@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -18,10 +19,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class UpsertTableTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public UpsertTableTool(ServiceClient serviceClient)
+        public UpsertTableTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "upsert_table", Title = "Create or update a Dataverse table",
@@ -213,6 +216,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     HasNotes = has_notes,
                     HasActivities = effectiveHasActivities
                 };
+
+                if (_options.DryRun)
+                    return DryRunResult($"Would CREATE entity '{entity_name}' (display: '{display_name}').");
 
                 var response = (CreateEntityResponse)_serviceClient.Execute(request);
                 var entityId = response.EntityId;
@@ -488,6 +494,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(solutionName))
                     updateRequest.SolutionUniqueName = solutionName.Trim();
 
+                if (_options.DryRun)
+                {
+                    var changesSummary = string.Join("; ", changes);
+                    return DryRunResult($"Would UPDATE entity '{entityName}' with changes: {changesSummary}");
+                }
+
                 _serviceClient.Execute(updateRequest);
 
                 // --- Publish ---
@@ -573,6 +585,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
     }
 }

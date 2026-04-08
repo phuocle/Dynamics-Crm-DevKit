@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -19,10 +20,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class UpsertColumnTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public UpsertColumnTool(ServiceClient serviceClient)
+        public UpsertColumnTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "upsert_column", Title = "Create or update a table column",
@@ -210,6 +213,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "String", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
@@ -243,6 +248,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Memo", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
@@ -272,6 +279,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Integer", displayName, reqLevel);
             if (minValue.HasValue) sb.AppendLine($"MinValue: {(int)minValue.Value}");
@@ -307,6 +316,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Decimal", displayName, reqLevel);
             sb.AppendLine($"Precision: {precision}");
@@ -345,6 +356,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var precisionSourceLabel = precisionSource switch { 0 => "Attribute", 1 => "Organization", 2 => "Currency", _ => precisionSource.ToString() };
             var sb = FormatHeader(entityName, logicalName, "Money", displayName, reqLevel);
@@ -383,6 +396,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Float", displayName, reqLevel);
             sb.AppendLine($"Precision: {precision}");
@@ -419,6 +434,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Boolean", displayName, reqLevel);
             sb.AppendLine($"TrueLabel: {trueLabel.Trim()}");
@@ -456,6 +473,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var behaviorName = dtBehavior.Value;
             var sb = FormatHeader(entityName, logicalName, "DateTime", displayName, reqLevel);
@@ -549,6 +568,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(solutionName))
                 request.SolutionUniqueName = solutionName.Trim();
 
+            if (_options.DryRun) return DryRunResult($"Would CREATE lookup column '{logicalName}' on entity '{entityName}'.");
+
             var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
             var metadataId = response.AttributeId;
 
@@ -619,6 +640,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(solutionName))
                 request["SolutionUniqueName"] = solutionName.Trim();
+
+            if (_options.DryRun) return DryRunResult($"Would CREATE polymorphic lookup column '{logicalName}' on entity '{entityName}'.");
 
             var response = _serviceClient.Execute(request);
             var metadataId = (Guid)response.Results["AttributeId"];
@@ -710,6 +733,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(solutionName))
                 request.SolutionUniqueName = solutionName.Trim();
+
+            if (_options.DryRun) return DryRunResult($"Would CREATE customer column '{logicalName}' on entity '{entityName}'.");
 
             var response = (CreateCustomerRelationshipsResponse)_serviceClient.Execute(request);
             var metadataId = response.AttributeId;
@@ -823,6 +848,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, typeName, displayName, reqLevel);
             sb.AppendLine($"Options: {string.Join(", ", optionLabels)}");
@@ -849,6 +876,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "BigInt", displayName, reqLevel);
             AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
@@ -874,6 +903,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Image", displayName, reqLevel);
             AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
@@ -902,6 +933,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 attr.Description = new Label(description.Trim(), 1033);
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "File", displayName, reqLevel);
             sb.AppendLine($"MaxSizeInKB: {maxSizeInKB}");
@@ -922,6 +955,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(solutionName))
                 request.SolutionUniqueName = solutionName.Trim();
+
+            if (_options.DryRun) return Guid.Empty;
 
             var response = (CreateAttributeResponse)_serviceClient.Execute(request);
             return response.AttributeId;
@@ -1178,6 +1213,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- Execute metadata update (if any generic/type-specific changes) ---
                 if (changes.Count > 0)
                 {
+                    if (_options.DryRun)
+                    {
+                        var changesSummary = string.Join(", ", changes);
+                        return DryRunResult($"Would UPDATE column '{entityName}.{attributeName}' with changes: {changesSummary}");
+                    }
+
                     var updateRequest = new UpdateAttributeRequest
                     {
                         EntityName = entityName,
@@ -1405,6 +1446,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return results;
             }
 
+            if (_options.DryRun)
+            {
+                var opsSummary = new List<string>();
+                if (!string.IsNullOrWhiteSpace(addOptionsJson)) opsSummary.Add("add options");
+                if (!string.IsNullOrWhiteSpace(updateOptionsJson)) opsSummary.Add("update options");
+                if (!string.IsNullOrWhiteSpace(deleteOptionsJson)) opsSummary.Add("delete options");
+                if (opsSummary.Count > 0)
+                    results.Add($"[DRY-RUN] Would manage picklist options on '{entityName}.{attributeName}': {string.Join(", ", opsSummary)}.");
+                return results;
+            }
+
             // Detect global vs local option set
             OptionSetMetadata optionSetMeta = null;
             if (metadata is PicklistAttributeMetadata plm)
@@ -1513,6 +1565,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
     }
 }

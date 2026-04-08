@@ -41,10 +41,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
                 LogInfo($"Org: {serviceClient.ConnectedOrgFriendlyName} ({serviceClient.ConnectedOrgUniqueName})");
                 LogInfo($"Version: {serviceClient.ConnectedOrgVersion}");
+                if (settings.DryRun)
+                    LogInfo("DRY-RUN MODE: Mutating operations will NOT execute.");
                 LogInfo($"Starting MCP server v{Shared.Const.Version}...");
 
                 var host = new Mcp.McpServerHost(serviceClient);
-                await host.RunAsync(settings.Category);
+                await host.RunAsync(settings.Category, settings.DryRun);
 
                 return 0;
             }

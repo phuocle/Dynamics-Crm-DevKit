@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -18,10 +19,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageEnvironmentVariableTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public ManageEnvironmentVariableTool(ServiceClient serviceClient)
+        public ManageEnvironmentVariableTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "manage_environment_variable",
@@ -275,6 +278,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 newDef["description"] = description.Trim();
 
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE environment variable '{variableName}' (type: {GetVariableTypeLabel(new OptionSetValue(typeValue))}).");
+
             var defId = _serviceClient.Create(newDef);
 
             string solWarning = null;
@@ -353,11 +359,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 update["description"] = description.Trim();
 
             if (update.Attributes.Count > 0)
+            {
+                if (_options.DryRun)
+                    return DryRunResult($"Would UPDATE environment variable '{variableName}'.");
                 _serviceClient.Update(update);
+            }
 
             var curVal = "";
             if (!string.IsNullOrWhiteSpace(currentValue))
             {
+                if (_options.DryRun)
+                    return DryRunResult($"Would UPDATE environment variable '{variableName}' (including current value).");
                 UpsertCurrentValue(defId, currentValue);
                 curVal = currentValue;
             }
@@ -405,6 +417,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var existingType = GetVariableTypeLabel(def.GetAttributeValue<OptionSetValue>("type"));
             var existingDefault = def.GetAttributeValue<string>("defaultvalue") ?? "";
 
+            if (_options.DryRun)
+                return DryRunResult($"Would CLEAR current value of environment variable '{variableName}' (reverts to default).");
+
             DeleteCurrentValue(defId);
 
             var published = autoPublish && Publish();
@@ -446,6 +461,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var existingType = GetVariableTypeLabel(def.GetAttributeValue<OptionSetValue>("type"));
 
             // Delete current value first (if exists), then delete definition
+            if (_options.DryRun)
+                return DryRunResult($"Would DELETE environment variable '{variableName}'.");
             DeleteCurrentValue(defId);
             _serviceClient.Delete("environmentvariabledefinition", defId);
 
@@ -718,6 +735,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
         #endregion

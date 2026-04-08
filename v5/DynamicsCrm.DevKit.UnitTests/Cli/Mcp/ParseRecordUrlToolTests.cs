@@ -266,4 +266,73 @@ public class ParseRecordUrlToolTests
 
         Assert.IsTrue(result.Contains("EntityName: account"));
     }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: Maker solution with non-GUID unique name
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void ParseRecordUrl_MakerSolutionUniqueName_IndicatesNotGuid()
+    {
+        var url = "https://make.powerapps.com/environments/11111111-1111-1111-1111-111111111111/solutions/MyCustomSolution";
+
+        var result = _tool.parse_record_url(url);
+
+        Assert.IsTrue(result.Contains("EntityName: solution"));
+        Assert.IsTrue(result.Contains("RecordId: mycustomsolution"));
+        Assert.IsTrue(result.Contains("unique name - not a record GUID"));
+    }
+
+    [TestMethod]
+    public void ParseRecordUrl_MakerSolutionGuid_NoUniqueNameNote()
+    {
+        var url = "https://make.powerapps.com/environments/11111111-1111-1111-1111-111111111111/solutions/22222222-2222-2222-2222-222222222222";
+
+        var result = _tool.parse_record_url(url);
+
+        Assert.IsTrue(result.Contains("EntityName: solution"));
+        Assert.IsTrue(result.Contains("RecordId: 22222222-2222-2222-2222-222222222222"));
+        Assert.IsTrue(result.Contains("Source: make.powerapps.com (solution)"));
+        Assert.IsFalse(result.Contains("unique name"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: rundialog without ObjectId
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void ParseRecordUrl_RunDialogNoObjectId_ReturnsDialogInfo()
+    {
+        var url = "https://org.crm.dynamics.com/cs/dialog/rundialog.aspx?DialogId={AAAA1111-1111-1111-1111-111111111111}&EntityName=account";
+
+        var result = _tool.parse_record_url(url);
+
+        Assert.IsTrue(result.Contains("EntityName: workflow"));
+        Assert.IsTrue(result.Contains("RecordId: aaaa1111-1111-1111-1111-111111111111"));
+        Assert.IsTrue(result.Contains("targets account"));
+    }
+
+    [TestMethod]
+    public void ParseRecordUrl_RunDialogNoObjectIdNoEntityName_ReturnsDialogIdOnly()
+    {
+        var url = "https://org.crm.dynamics.com/cs/dialog/rundialog.aspx?DialogId={AAAA1111-1111-1111-1111-111111111111}";
+
+        var result = _tool.parse_record_url(url);
+
+        Assert.IsTrue(result.Contains("EntityName: workflow"));
+        Assert.IsTrue(result.Contains("RecordId: aaaa1111-1111-1111-1111-111111111111"));
+        Assert.IsTrue(result.Contains("DialogId only"));
+    }
+
+    [TestMethod]
+    public void ParseRecordUrl_RunDialogWithObjectId_StillReturnsObjectId()
+    {
+        var url = "https://org.crm.dynamics.com/cs/dialog/rundialog.aspx?DialogId={AAAA1111-1111-1111-1111-111111111111}&EntityName=account&ObjectId={11111111-2222-3333-4444-555555555555}";
+
+        var result = _tool.parse_record_url(url);
+
+        Assert.IsTrue(result.Contains("EntityName: account"));
+        Assert.IsTrue(result.Contains("RecordId: 11111111-2222-3333-4444-555555555555"));
+        Assert.IsTrue(result.Contains("rundialog.aspx (EntityName+ObjectId)"));
+    }
 }

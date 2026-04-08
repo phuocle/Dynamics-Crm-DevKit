@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -13,7 +14,7 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 [TestClass]
 public class CrudToolValidationTests
 {
-    private readonly ManageRecordTool _tool = new(null!);
+    private readonly ManageRecordTool _tool = new(null!, new McpDryRunOptions());
 
     // ──────────────────────────────────────────────
     // Delete action
@@ -207,6 +208,89 @@ public class CrudToolValidationTests
 
         Assert.IsTrue(result.IsError);
         Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: action validation
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void ManageRecord_InvalidAction_ReturnsError()
+    {
+        var result = _tool.manage_record("INVALID_ACTION", "account");
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("Invalid action"));
+    }
+
+    [TestMethod]
+    public void ManageRecord_WhitespaceAction_ReturnsError()
+    {
+        var result = _tool.manage_record("   ", "account");
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("action is required"));
+    }
+
+    [TestMethod]
+    public void ManageRecord_ActionNormalized_CaseInsensitive()
+    {
+        // "READ" should normalize to "read" and hit the read path (then fail on empty record_id)
+        var result = _tool.manage_record("READ", "account");
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("record_id is required"));
+    }
+
+    [TestMethod]
+    public void ManageRecord_CreateWithRecordId_ReturnsError()
+    {
+        var result = _tool.manage_record("create", "account", record_id: "11111111-1111-1111-1111-111111111111", fields_json: "{\"name\":\"x\"}");
+        Assert.IsTrue(result.IsError);
+        Assert.IsTrue(GetText(result).Contains("record_id must be empty"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: BuildColumnSet (private static)
+    // ──────────────────────────────────────────────
+
+    private static readonly MethodInfo BuildColumnSetMethod = typeof(ManageRecordTool)
+        .GetMethod("BuildColumnSet", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static Microsoft.Xrm.Sdk.Query.ColumnSet BuildColumnSet(string columns)
+    {
+        return (Microsoft.Xrm.Sdk.Query.ColumnSet)BuildColumnSetMethod.Invoke(null, new object[] { columns })!;
+    }
+
+    [TestMethod]
+    public void BuildColumnSet_EmptyString_ReturnsAllColumns()
+    {
+        var cs = BuildColumnSet("");
+        Assert.IsTrue(cs.AllColumns);
+    }
+
+    [TestMethod]
+    public void BuildColumnSet_CommasOnly_ReturnsAllColumns()
+    {
+        var cs = BuildColumnSet(",,,");
+        Assert.IsTrue(cs.AllColumns);
+    }
+
+    [TestMethod]
+    public void BuildColumnSet_ValidColumns_ReturnsParsed()
+    {
+        var cs = BuildColumnSet("name, telephone1");
+        Assert.IsFalse(cs.AllColumns);
+        Assert.AreEqual(2, cs.Columns.Count);
+        Assert.IsTrue(cs.Columns.Contains("name"));
+        Assert.IsTrue(cs.Columns.Contains("telephone1"));
+    }
+
+    [TestMethod]
+    public void BuildColumnSet_ColumnsWithExtraSpaces_Trimmed()
+    {
+        var cs = BuildColumnSet("  name  ,  telephone1  ");
+        Assert.IsFalse(cs.AllColumns);
+        Assert.AreEqual(2, cs.Columns.Count);
+        Assert.IsTrue(cs.Columns.Contains("name"));
+        Assert.IsTrue(cs.Columns.Contains("telephone1"));
     }
 
     // ──────────────────────────────────────────────

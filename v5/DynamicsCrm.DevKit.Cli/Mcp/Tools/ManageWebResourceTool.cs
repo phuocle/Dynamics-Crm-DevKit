@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -18,10 +19,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageWebResourceTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public ManageWebResourceTool(ServiceClient serviceClient)
+        public ManageWebResourceTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         private static readonly Dictionary<int, string> TypeCodeMap = new()
@@ -347,6 +350,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 webResource["description"] = description.Trim();
 
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE web resource '{name}' (type: {typeTrimmed}).");
+
             var webResourceId = _serviceClient.Create(webResource);
 
             string solWarning = null;
@@ -452,6 +458,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (fieldsUpdated == 0)
                 return ErrorResult("Error: No fields to update. Provide at least one of: content, display_name, description.");
 
+            if (_options.DryRun)
+            {
+                var existingNameDry = existing.GetAttributeValue<string>("name") ?? "";
+                return DryRunResult($"Would UPDATE web resource '{existingNameDry}' ({webResourceId}), {fieldsUpdated} field(s).");
+            }
+
             _serviceClient.Update(update);
 
             var published = autoPublish && PublishWebResource(id);
@@ -509,6 +521,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
             var typeValue = existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0;
+
+            if (_options.DryRun)
+                return DryRunResult($"Would DELETE web resource '{existingName}' ({id}).");
 
             _serviceClient.Delete("webresource", id);
 
@@ -642,6 +657,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
         #endregion

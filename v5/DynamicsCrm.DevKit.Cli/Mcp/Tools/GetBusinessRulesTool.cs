@@ -352,11 +352,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 if (conditions.Count == 0 && actions.Count == 0)
-                    sb.AppendLine("[XAML] (no conditions or actions extracted - use get_record with columns 'xaml' to inspect raw)");
+                    sb.AppendLine("[XAML] (no conditions or actions extracted - use manage_record(action='read') with columns 'xaml' to inspect raw)");
             }
             catch
             {
-                sb.AppendLine("[XAML] (unable to parse - use get_record with columns 'xaml' to inspect raw)");
+                sb.AppendLine("[XAML] (unable to parse - use manage_record(action='read') with columns 'xaml' to inspect raw)");
             }
         }
 

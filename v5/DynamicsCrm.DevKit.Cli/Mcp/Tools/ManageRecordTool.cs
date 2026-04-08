@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -19,10 +20,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageRecordTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public ManageRecordTool(ServiceClient serviceClient)
+        public ManageRecordTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "manage_record", Title = "Manage a single record (CRUD)",
@@ -96,6 +99,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var fieldCount = CountFields(fieldsJson);
 
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE a '{entityName}' record with {fieldCount} fields.");
+
             try
             {
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson);
@@ -167,6 +173,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var fieldCount = CountFields(fieldsJson);
 
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE '{entityName}' record {id} with {fieldCount} fields.");
+
             try
             {
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson, id);
@@ -177,7 +186,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 var structured = new CrudResult
                 {
-                    Action = "update",
+                    Action = wasCreated ? "upsert" : "update",
                     Entity = entityName,
                     Id = id.ToString(),
                     Status = status,
@@ -202,6 +211,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!Guid.TryParse(recordId.Trim(), out var id))
                 return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+
+            if (_options.DryRun)
+                return DryRunResult($"Would DELETE '{entityName}' record {id}.");
 
             try
             {
@@ -270,6 +282,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
     }
 }

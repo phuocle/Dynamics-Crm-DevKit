@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string role_id = "",
             [Description("Filter roles by name (contains match). List mode only."
             )] string role_name = "",
-            [Description("Filter by business unit GUID. Empty = root BU roles."
+            [Description("Filter by business unit GUID. List mode only. Empty = all business units (root roles only)."
             )] string business_unit_id = "",
             [Description("Filter privileges to a specific entity (e.g., 'account'). Detail/user mode only."
             )] string entity_name = "",
@@ -54,14 +54,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (!string.IsNullOrWhiteSpace(user_id))
-                    return GetUserRoles(user_id.Trim(), entity_name?.Trim().ToLowerInvariant());
+                {
+                    var warnings = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(business_unit_id))
+                        warnings.Add("business_unit_id is ignored in user mode (list mode only)");
+                    if (!string.IsNullOrWhiteSpace(role_name))
+                        warnings.Add("role_name is ignored in user mode (list mode only)");
+
+                    var result = GetUserRoles(user_id.Trim(), entity_name?.Trim().ToLowerInvariant());
+                    return warnings.Count > 0
+                        ? $"Warning: {string.Join("; ", warnings)}.\n\n{result}"
+                        : result;
+                }
 
                 if (!string.IsNullOrWhiteSpace(role_id))
                 {
                     if (!Guid.TryParse(role_id.Trim(), out var id))
                         return $"Error: '{role_id}' is not a valid GUID.";
 
-                    return GetRoleDetail(id, entity_name?.Trim().ToLowerInvariant());
+                    var warnings = new List<string>();
+                    if (!string.IsNullOrWhiteSpace(business_unit_id))
+                        warnings.Add("business_unit_id is ignored in detail mode (list mode only)");
+                    if (!string.IsNullOrWhiteSpace(role_name))
+                        warnings.Add("role_name is ignored in detail mode (list mode only)");
+
+                    var result = GetRoleDetail(id, entity_name?.Trim().ToLowerInvariant());
+                    return warnings.Count > 0
+                        ? $"Warning: {string.Join("; ", warnings)}.\n\n{result}"
+                        : result;
                 }
 
                 if (max_records < 1) max_records = 50;
@@ -214,7 +234,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             query.Criteria.AddCondition("parentroleid", ConditionOperator.Null);
 
             if (!string.IsNullOrWhiteSpace(roleName))
-                query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{roleName}%");
+            {
+                var escapedName = roleName.Replace("[", "[[]").Replace("%", "[%]");
+                query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
+            }
 
             if (!string.IsNullOrWhiteSpace(businessUnitId))
             {

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -16,10 +17,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class PublishCustomizationsTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public PublishCustomizationsTool(ServiceClient serviceClient)
+        public PublishCustomizationsTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "publish_customizations", Title = "Publish customizations to make changes visible",
@@ -68,6 +71,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (entitiesProvided && entityList.Count == 0)
                 {
                     return ErrorResult("[Error] Publish failed\nMessage: No valid entity names found in the 'entities' parameter. Provide comma-separated logical names (e.g., 'account,contact') or leave empty for PublishAll.");
+                }
+
+                if (_options.DryRun)
+                {
+                    var target = entityList.Count == 0
+                        ? "ALL customizations"
+                        : $"{entityList.Count} entities: {string.Join(", ", entityList)}";
+                    return DryRunResult($"Would PUBLISH {target}.");
                 }
 
                 if (entityList.Count == 0)
@@ -154,6 +165,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
     }
 }

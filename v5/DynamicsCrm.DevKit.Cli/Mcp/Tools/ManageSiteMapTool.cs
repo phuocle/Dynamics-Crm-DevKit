@@ -16,6 +16,7 @@ using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -23,12 +24,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageSiteMapTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
 
-        public ManageSiteMapTool(ServiceClient serviceClient)
+        public ManageSiteMapTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "manage_sitemap", Title = "Manage app site map",
@@ -206,6 +209,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Step 3: Create the SiteMap record
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE SiteMap for app '{appName}' ({appModuleId}).");
+
             var siteMapEntity = new Entity("sitemap");
             siteMapEntity["sitemapxml"] = newSiteMapXml;
             var siteMapId = _serviceClient.Create(siteMapEntity);
@@ -356,6 +362,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Step 4: Update SiteMap record in Dataverse
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE SiteMap for app '{appName}' ({appModuleId}).");
+
             var update = new Entity("sitemap", siteMapId);
             update["sitemapxml"] = newSiteMapXml;
             _serviceClient.Update(update);
@@ -481,6 +490,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Step 4: Update SiteMap with restored XML (NO backup — we're restoring!)
+            if (_options.DryRun)
+                return DryRunResult($"Would RESTORE SiteMap for app '{appName}' ({appModuleId}) from backup.");
+
             var update = new Entity("sitemap", siteMapId);
             update["sitemapxml"] = restoredSiteMapXml;
             _serviceClient.Update(update);
@@ -866,6 +878,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
         // ── Backup model ──────────────────────────────────────────────────

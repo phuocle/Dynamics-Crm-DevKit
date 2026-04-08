@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -16,10 +17,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ExecuteWebApiTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public ExecuteWebApiTool(ServiceClient serviceClient)
+        public ExecuteWebApiTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "execute_webapi", Title = "Execute a raw Web API request",
@@ -76,6 +79,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var blockedReason = GetBlockedReason(httpMethod, url.Trim());
             if (blockedReason != null)
                 return ErrorResult(blockedReason);
+
+            if (_options.DryRun && httpMethod != HttpMethod.Get)
+                return DryRunResult($"Would execute {httpMethod.Method} {url.Trim()}" +
+                    (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".");
 
             try
             {
@@ -311,6 +318,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
     }
 }

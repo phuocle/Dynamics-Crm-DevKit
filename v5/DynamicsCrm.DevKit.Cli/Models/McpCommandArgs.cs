@@ -24,5 +24,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Tool category: basic (9), standard (29), advanced (35). Default: all (loads everything).")]
         [DefaultValue("all")]
         public string Category { get; set; } = "all";
+
+        [CommandOption("--dry-run")]
+        [Description("Prevent mutating operations from executing. Read operations still work normally.")]
+        [DefaultValue(false)]
+        public bool DryRun { get; set; }
     }
 }

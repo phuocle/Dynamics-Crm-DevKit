@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -23,10 +24,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class ManageViewTool
     {
         private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
 
-        public ManageViewTool(ServiceClient serviceClient)
+        public ManageViewTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "manage_view", Title = "Manage entity views",
@@ -273,6 +276,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["fetchxml"] = newFetchXml,
                 ["layoutxml"] = newLayoutXml
             };
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE view '{viewName}' on entity '{entityName}'.");
+
             var newViewId = _serviceClient.Create(newView);
 
             var published = TryPublish(entityName, auto_publish);
@@ -377,6 +383,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 update["fetchxml"] = newFetchXml;
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE view '{viewName}' ({updateId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             var published = TryPublish(returnedTypeCode, auto_publish);
@@ -478,6 +486,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var update = new Entity(currentView.LogicalName, renameId) { ["name"] = viewName };
+            if (_options.DryRun)
+                return DryRunResult($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             var published = TryPublish(returnedTypeCode, auto_publish);
@@ -669,6 +679,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 update["fetchxml"] = restoredFetchXml;
             if (!isPersonalView)
                 update["returnedtypecode"] = returnedTypeCode;
+            if (_options.DryRun)
+                return DryRunResult($"Would RESTORE view '{viewName}' ({undoId}) from backup.");
             _serviceClient.Update(update);
 
             var published = TryPublish(returnedTypeCode, auto_publish);
@@ -1060,6 +1072,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
         // ── Shared Validation Helpers ─────────────────────────────────────

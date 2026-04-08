@@ -171,8 +171,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (match.Success)
             {
                 var envId = match.Groups[1].Value.ToLowerInvariant();
-                var solId = match.Groups[2].Value.ToLowerInvariant();
-                return FormatMakerResult("solution", solId, envId, "make.powerapps.com (solution)");
+                var solRaw = match.Groups[2].Value;
+                if (Guid.TryParse(solRaw, out var solGuid))
+                    return FormatMakerResult("solution", solGuid.ToString().ToLowerInvariant(), envId, "make.powerapps.com (solution)");
+                else
+                    return FormatMakerResult("solution", solRaw.ToLowerInvariant(), envId, "make.powerapps.com (solution, unique name - not a record GUID)");
             }
 
             // Admin portal
@@ -200,6 +203,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var objectId = CleanGuid(qs["ObjectId"]);
                     if (objectId != null && !string.IsNullOrEmpty(entityName))
                         return FormatResult(entityName.ToLowerInvariant(), objectId, "rundialog.aspx (EntityName+ObjectId)");
+
+                    var dialogId = CleanGuid(qs["DialogId"]);
+                    if (dialogId != null)
+                    {
+                        var source = !string.IsNullOrEmpty(entityName)
+                            ? $"rundialog.aspx (DialogId, targets {entityName.ToLowerInvariant()})"
+                            : "rundialog.aspx (DialogId only)";
+                        return FormatResult("workflow", dialogId, source);
+                    }
                 }
             }
 

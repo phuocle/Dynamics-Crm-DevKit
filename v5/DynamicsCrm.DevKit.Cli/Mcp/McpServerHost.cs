@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             ["all"] = 3,
         };
 
-        public async Task RunAsync(string category = "all")
+        public async Task RunAsync(string category = "all", bool dryRun = false)
         {
             var normalizedCategory = category.Trim().ToLowerInvariant();
             var requestedLevel = CategoryLevel.TryGetValue(normalizedCategory, out var lvl) ? lvl : 3;
@@ -85,6 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             builder.Services.AddSingleton(_serviceClient);
             builder.Services.AddSingleton(new MetadataService(_serviceClient));
+            builder.Services.AddSingleton(new McpDryRunOptions { DryRun = dryRun });
 
             var displayCategory = normalizedCategory == "all" ? "all" : normalizedCategory;
 
@@ -100,7 +101,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                         $"Connected to Dataverse environment: {_serviceClient.ConnectedOrgUriActual} | " +
                         $"Org: {_serviceClient.ConnectedOrgFriendlyName} ({_serviceClient.ConnectedOrgUniqueName}) | " +
                         $"Version: {_serviceClient.ConnectedOrgVersion} | " +
-                        $"Category: {displayCategory} ({toolCount} tools)";
+                        $"Category: {displayCategory} ({toolCount} tools)" +
+                        (dryRun ? " | DRY-RUN MODE ACTIVE: All mutating operations are blocked. Read operations work normally." : "");
                 })
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly()

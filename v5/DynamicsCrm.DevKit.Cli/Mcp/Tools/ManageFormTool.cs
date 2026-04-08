@@ -17,6 +17,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -27,9 +28,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();
 
-        public ManageFormTool(ServiceClient serviceClient)
+        private readonly McpDryRunOptions _options;
+
+        public ManageFormTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
             _serviceClient = serviceClient;
+            _options = options;
         }
 
         [McpServerTool(Name = "manage_form", Title = "Manage entity forms",
@@ -404,6 +408,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Step 4: Update form record in Dataverse
             var update = new Entity("systemform", id);
             update["formxml"] = newFormXml;
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE FormXML for form '{formName}' ({id}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             // Step 5: Publish entity
@@ -552,6 +558,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ["name"] = formName
             };
+            if (_options.DryRun)
+                return DryRunResult($"Would RENAME form '{oldName}' to '{formName}' ({id}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             // Step 5: Publish
@@ -724,6 +732,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Step 4: Update form with restored FormXML (NO backup — we're restoring!)
             var update = new Entity("systemform", id);
             update["formxml"] = restoredFormXml;
+            if (_options.DryRun)
+                return DryRunResult($"Would RESTORE form '{formName}' ({id}) from backup on entity '{entityName}'.");
             _serviceClient.Update(update);
 
             // Step 5: Publish
@@ -915,6 +925,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = message }],
             IsError = true
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
         // ── Shared Helpers (write actions) ────────────────────────────────
