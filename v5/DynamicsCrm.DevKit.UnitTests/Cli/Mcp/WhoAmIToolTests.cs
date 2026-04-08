@@ -17,11 +17,17 @@ public class WhoAmIToolTests
     private static readonly Type WhoAmIResultType = CliAssembly
         .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.WhoAmIResult")!;
 
+    private static readonly Type RoleInfoType = CliAssembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.RoleInfo")!;
+
     private static readonly MethodInfo GetLanguageNameMethod = ToolType
         .GetMethod("GetLanguageName", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static readonly MethodInfo BuildCompactTextMethod = ToolType
         .GetMethod("BuildCompactText", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static readonly MethodInfo GetBaseUrlMethod = ToolType
+        .GetMethod("GetBaseUrl", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // ──────────────────────────────────────────────
     // GetLanguageName
@@ -129,6 +135,14 @@ public class WhoAmIToolTests
         return (string)BuildCompactTextMethod.Invoke(null, new[] { result })!;
     }
 
+    private static object CreateRoleInfo(string name, string roleId)
+    {
+        var role = Activator.CreateInstance(RoleInfoType)!;
+        RoleInfoType.GetProperty("Name")!.SetValue(role, name);
+        RoleInfoType.GetProperty("RoleId")!.SetValue(role, roleId);
+        return role;
+    }
+
     [TestMethod]
     public void BuildCompactText_FullResult_AllSectionsPresent()
     {
@@ -143,7 +157,6 @@ public class WhoAmIToolTests
         SetProperty(r, "Version", "9.2.26032.168");
         SetProperty(r, "OrgFriendlyName", "SANDBOX");
         SetProperty(r, "OrgUniqueName", "sandbox123");
-        SetProperty(r, "OrgId", "org-id");
         SetProperty(r, "TenantId", "tenant-id");
         SetProperty(r, "EnvironmentId", "env-id");
         SetProperty(r, "Language", "1033 (English)");
@@ -151,8 +164,8 @@ public class WhoAmIToolTests
         SetProperty(r, "AuditEnabled", (bool?)true);
 
         var roles = WhoAmIResultType.GetProperty("Roles")!.GetValue(r) as System.Collections.IList;
-        roles!.Add("System Administrator");
-        roles.Add("Custom Role");
+        roles!.Add(CreateRoleInfo("System Administrator", "role-id-1"));
+        roles.Add(CreateRoleInfo("Custom Role", "role-id-2"));
 
         var text = BuildCompactText(r);
 
@@ -170,8 +183,8 @@ public class WhoAmIToolTests
         Assert.IsTrue(text.Contains("AuditEnabled: Yes"));
 
         Assert.IsTrue(text.Contains("[Roles] 2 total"));
-        Assert.IsTrue(text.Contains("- System Administrator"));
-        Assert.IsTrue(text.Contains("- Custom Role"));
+        Assert.IsTrue(text.Contains("- System Administrator (role-id-1)"));
+        Assert.IsTrue(text.Contains("- Custom Role (role-id-2)"));
     }
 
     [TestMethod]
@@ -184,7 +197,6 @@ public class WhoAmIToolTests
         // FullName, DomainName, Email left empty/null
         SetProperty(r, "OrgFriendlyName", "Test");
         SetProperty(r, "OrgUniqueName", "test");
-        SetProperty(r, "OrgId", "org");
         SetProperty(r, "TenantId", "tenant");
         SetProperty(r, "EnvironmentId", "env");
 
@@ -206,7 +218,6 @@ public class WhoAmIToolTests
         SetProperty(r, "OrganizationId", "org-id");
         SetProperty(r, "OrgFriendlyName", "Test");
         SetProperty(r, "OrgUniqueName", "test");
-        SetProperty(r, "OrgId", "org");
         SetProperty(r, "TenantId", "tenant");
         SetProperty(r, "EnvironmentId", "env");
         // Roles list is empty by default
@@ -225,7 +236,6 @@ public class WhoAmIToolTests
         SetProperty(r, "OrganizationId", "org-id");
         SetProperty(r, "OrgFriendlyName", "Test");
         SetProperty(r, "OrgUniqueName", "test");
-        SetProperty(r, "OrgId", "org");
         SetProperty(r, "TenantId", "tenant");
         SetProperty(r, "EnvironmentId", "env");
         SetProperty(r, "AccessToken", "eyJ0eXAiOiJKV1Q...");
@@ -244,7 +254,6 @@ public class WhoAmIToolTests
         SetProperty(r, "OrganizationId", "org-id");
         SetProperty(r, "OrgFriendlyName", "Test");
         SetProperty(r, "OrgUniqueName", "test");
-        SetProperty(r, "OrgId", "org");
         SetProperty(r, "TenantId", "tenant");
         SetProperty(r, "EnvironmentId", "env");
         SetProperty(r, "AuditEnabled", (bool?)false);
@@ -252,5 +261,71 @@ public class WhoAmIToolTests
         var text = BuildCompactText(r);
 
         Assert.IsTrue(text.Contains("AuditEnabled: No"));
+    }
+
+    // ──────────────────────────────────────────────
+    // GetBaseUrl
+    // ──────────────────────────────────────────────
+
+    private static string GetBaseUrl(Uri uri)
+    {
+        return (string)GetBaseUrlMethod.Invoke(null, new object[] { uri })!;
+    }
+
+    [TestMethod]
+    public void GetBaseUrl_NullUri_ReturnsNull()
+    {
+        var result = GetBaseUrlMethod.Invoke(null, new object[] { null! });
+        Assert.IsNull(result);
+    }
+
+    [TestMethod]
+    public void GetBaseUrl_StandardUrl_ReturnsSchemeAndHost()
+    {
+        var uri = new Uri("https://org.crm.dynamics.com/api/data/v9.2");
+        Assert.AreEqual("https://org.crm.dynamics.com", GetBaseUrl(uri));
+    }
+
+    // ──────────────────────────────────────────────
+    // BuildCompactText — Warnings
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void BuildCompactText_WithWarnings_ShowsWarningsSection()
+    {
+        var r = CreateWhoAmIResult();
+        SetProperty(r, "UserId", "user-id");
+        SetProperty(r, "BusinessUnitId", "bu-id");
+        SetProperty(r, "OrganizationId", "org-id");
+        SetProperty(r, "OrgFriendlyName", "Test");
+        SetProperty(r, "OrgUniqueName", "test");
+        SetProperty(r, "TenantId", "tenant");
+        SetProperty(r, "EnvironmentId", "env");
+
+        var warnings = new System.Collections.Generic.List<string> { "Failed to retrieve access token: timeout" };
+        SetProperty(r, "Warnings", warnings);
+
+        var text = BuildCompactText(r);
+
+        Assert.IsTrue(text.Contains("[Warnings] 1 total"));
+        Assert.IsTrue(text.Contains("- Failed to retrieve access token: timeout"));
+    }
+
+    [TestMethod]
+    public void BuildCompactText_NullWarnings_OmitsWarningsSection()
+    {
+        var r = CreateWhoAmIResult();
+        SetProperty(r, "UserId", "user-id");
+        SetProperty(r, "BusinessUnitId", "bu-id");
+        SetProperty(r, "OrganizationId", "org-id");
+        SetProperty(r, "OrgFriendlyName", "Test");
+        SetProperty(r, "OrgUniqueName", "test");
+        SetProperty(r, "TenantId", "tenant");
+        SetProperty(r, "EnvironmentId", "env");
+        // Warnings is null by default
+
+        var text = BuildCompactText(r);
+
+        Assert.IsFalse(text.Contains("[Warnings]"));
     }
 }

@@ -67,7 +67,7 @@ public class FetchXmlPagingHelperTests
     }
 
     [TestMethod]
-    public void ApplyPaging_WithPagingCookie_SetsEscapedCookie()
+    public void ApplyPaging_WithPagingCookie_PreservesCookieExactly()
     {
         var cookie = "<cookie page=\"1\"><accountid last=\"{11111111-1111-1111-1111-111111111111}\" /></cookie>";
 
@@ -77,9 +77,24 @@ public class FetchXmlPagingHelperTests
         var fetch = doc.Root!;
         var pagingCookieAttr = fetch.Attribute("paging-cookie");
         Assert.IsNotNull(pagingCookieAttr, "paging-cookie attribute should be set");
-        // The value should be XML-escaped via SecurityElement.Escape
-        Assert.IsTrue(pagingCookieAttr.Value.Contains("&lt;cookie") || pagingCookieAttr.Value.Contains("<cookie"),
-            "Cookie value should be present (escaped or unescaped depending on XDocument serialization)");
+        // XDocument.SetAttributeValue stores the raw string; XDocument.Parse decodes XML escaping.
+        // So the .Value property returns the original cookie string.
+        Assert.AreEqual(cookie, pagingCookieAttr.Value,
+            "Cookie must be preserved exactly — XDocument handles XML encoding internally");
+    }
+
+    [TestMethod]
+    public void ApplyPaging_WithPagingCookie_NotDoubleEncoded()
+    {
+        var cookie = "<cookie page=\"1\"><accountid last=\"{22222222-2222-2222-2222-222222222222}\" /></cookie>";
+
+        var result = ApplyPaging(BasicFetchXml, 2, 100, cookie);
+
+        // The serialized XML string must NOT contain double-encoded sequences like &amp;lt;
+        Assert.IsFalse(result.Contains("&amp;lt;"),
+            "Paging cookie must not be double-encoded — &amp;lt; found in output");
+        Assert.IsFalse(result.Contains("&amp;quot;"),
+            "Paging cookie must not be double-encoded — &amp;quot; found in output");
     }
 
     [TestMethod]
