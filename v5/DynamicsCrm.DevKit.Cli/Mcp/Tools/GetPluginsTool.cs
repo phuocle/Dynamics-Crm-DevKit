@@ -460,7 +460,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var typeNameFilter = "";
             if (!string.IsNullOrWhiteSpace(typeName))
-                typeNameFilter = $"\n      <condition attribute='typename' operator='like' value='%{EscapeXml(typeName.Trim())}%'/>";
+                typeNameFilter = $"\n      <filter><condition attribute='typename' operator='like' value='%{EscapeXml(typeName.Trim())}%'/></filter>";
 
             var entityFilter = "";
             if (objectTypeCode.HasValue)
