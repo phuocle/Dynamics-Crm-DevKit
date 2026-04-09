@@ -703,6 +703,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PluginType { get; set; }
 
+        [JsonPropertyName("pluginTypeName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PluginTypeName { get; set; }
+
+        [JsonPropertyName("pluginTypeFullName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PluginTypeFullName { get; set; }
+
+        [JsonPropertyName("pluginAssemblyName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PluginAssemblyName { get; set; }
+
+        [JsonPropertyName("pluginAssemblyVersion")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PluginAssemblyVersion { get; set; }
+
+        [JsonPropertyName("pluginIsolationMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PluginIsolationMode { get; set; }
+
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
@@ -891,6 +911,56 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("summary")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public PluginStepSummary Summary { get; set; }
+
+        [JsonPropertyName("packages")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<PluginPackageEntry> Packages { get; set; }
+    }
+
+    internal sealed class PluginPackageEntry
+    {
+        [JsonPropertyName("packageId")]
+        public string PackageId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Version { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("hasManagedIdentity")]
+        public bool HasManagedIdentity { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedOn { get; set; }
+
+        [JsonPropertyName("assemblies")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Assemblies { get; set; }
+    }
+
+    internal sealed class ManagedIdentityEntry
+    {
+        [JsonPropertyName("managedIdentityId")]
+        public string ManagedIdentityId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("applicationId")]
+        public string ApplicationId { get; set; }
+
+        [JsonPropertyName("tenantId")]
+        public string TenantId { get; set; }
+
+        [JsonPropertyName("credentialSource")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CredentialSource { get; set; }
     }
 
     internal sealed class PluginAssemblyEntry
@@ -915,6 +985,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("hasManagedIdentity")]
         public bool HasManagedIdentity { get; set; }
+
+        [JsonPropertyName("managedIdentity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ManagedIdentityEntry ManagedIdentity { get; set; }
+
+        [JsonPropertyName("packageName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PackageName { get; set; }
 
         [JsonPropertyName("typeCount")]
         public int TypeCount { get; set; }
@@ -941,6 +1019,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("isWorkflow")]
         public bool IsWorkflow { get; set; }
+
+        [JsonPropertyName("workflowActivityGroupName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WorkflowActivityGroupName { get; set; }
 
         [JsonPropertyName("stepCount")]
         public int StepCount { get; set; }
@@ -991,12 +1073,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SecureConfigId { get; set; }
 
+        [JsonPropertyName("secureConfig")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SecureConfig { get; set; }
+
         [JsonPropertyName("impersonatingUser")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ImpersonatingUser { get; set; }
 
         [JsonPropertyName("asyncAutoDelete")]
         public bool AsyncAutoDelete { get; set; }
+
+        [JsonPropertyName("supportedDeployment")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SupportedDeployment { get; set; }
 
         [JsonPropertyName("description")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -54,10 +54,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(BuildFormXMLTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
 
-            // advanced (4 additional tools)
+            // advanced (5 additional tools)
             [nameof(ManageSiteMapTool)] = "advanced",
             [nameof(UpsertTableTool)] = "advanced",
             [nameof(UpsertColumnTool)] = "advanced",
+            [nameof(UpsertRelationshipTool)] = "advanced",
             [nameof(ExecuteWebApiTool)] = "advanced",
         };
 

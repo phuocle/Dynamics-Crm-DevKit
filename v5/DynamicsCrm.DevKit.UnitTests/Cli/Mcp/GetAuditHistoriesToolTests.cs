@@ -49,6 +49,22 @@ public class GetAuditHistoriesToolTests
         Assert.IsTrue(GetText(result).Contains("not a valid ISO 8601 date"));
     }
 
+    [TestMethod]
+    public void GetAuditHistories_FromDateAfterToDate_ReturnsError()
+    {
+        var result = _tool.get_audit_history(from_date: "2026-04-08", to_date: "2026-04-01");
+        Assert.IsTrue(result.IsError, "from_date after to_date should return error");
+        Assert.IsTrue(GetText(result).Contains("is after to_date"));
+    }
+
+    [TestMethod]
+    public void GetAuditHistories_AttributeNameInBrowseMode_ReturnsError()
+    {
+        var result = _tool.get_audit_history(attribute_name: "name");
+        Assert.IsTrue(result.IsError, "attribute_name without record_id should return error");
+        Assert.IsTrue(GetText(result).Contains("attribute_name requires record_id"));
+    }
+
     // ──────────────────────────────────────────────
     // BuildBrowseFetchXml (private static)
     // ──────────────────────────────────────────────
@@ -347,10 +363,16 @@ public class GetAuditHistoriesToolTests
     public void FormatTimeWindow_1440_Returns24h() => Assert.AreEqual("24h", FormatTimeWindow(1440));
 
     [TestMethod]
+    public void FormatTimeWindow_90_Returns1h30min() => Assert.AreEqual("1h 30min", FormatTimeWindow(90));
+
+    [TestMethod]
     public void FormatTimeWindow_2880_Returns2d() => Assert.AreEqual("2d", FormatTimeWindow(2880));
 
     [TestMethod]
     public void FormatTimeWindow_43200_Returns30d() => Assert.AreEqual("30d", FormatTimeWindow(43200));
+
+    [TestMethod]
+    public void FormatTimeWindow_1500_Returns1d1h() => Assert.AreEqual("1d 1h", FormatTimeWindow(1500));
 
     // ──────────────────────────────────────────────
     // FormatBrowseNoResults (private static)

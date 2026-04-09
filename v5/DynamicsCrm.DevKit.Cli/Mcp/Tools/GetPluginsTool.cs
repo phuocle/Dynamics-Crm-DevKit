@@ -63,6 +63,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [1] = "Async"
         };
 
+        private static readonly Dictionary<int, string> SupportedDeploymentMap = new()
+        {
+            [0] = "ServerOnly",
+            [1] = "OfflineOnly",
+            [2] = "Both"
+        };
+
         private static readonly Dictionary<int, string> ImageTypeMap = new()
         {
             [0] = "PreImage",
@@ -156,6 +163,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
       <condition attribute='ishidden' operator='eq' value='false'/>
     </filter>
     <order attribute='name'/>
+    <link-entity name='pluginpackage' from='pluginpackageid' to='packageid' link-type='outer' alias='pkg'>
+      <attribute name='name'/>
+      <attribute name='version'/>
+    </link-entity>
+    <link-entity name='managedidentity' from='managedidentityid' to='managedidentityid' link-type='outer' alias='mi'>
+      <attribute name='name'/>
+      <attribute name='applicationid'/>
+      <attribute name='tenantid'/>
+      <attribute name='credentialsource'/>
+    </link-entity>
   </entity>
 </fetch>";
 
@@ -175,22 +192,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var assemblies = result.Entities.Select(e => MapAssemblyEntry(e, typeCounts)).ToList();
 
+            // Get packages
+            var packages = GetPackages();
+
             var sb = new StringBuilder(assemblies.Count * 100 + 128);
             sb.AppendLine($"[Plugin Assemblies] {assemblies.Count} registered");
             sb.AppendLine();
-            sb.AppendLine("#\tname\tversion\tisolationMode\tsourceType\ttypeCount\tisManaged");
+            sb.AppendLine("#\tname\tversion\tisolationMode\tsourceType\ttypeCount\tisManaged\tpackageName");
 
             for (var i = 0; i < assemblies.Count; i++)
             {
                 var a = assemblies[i];
-                sb.AppendLine($"{i + 1}\t{EscapeTab(a.Name)}\t{a.Version}\t{a.IsolationMode}\t{a.SourceType}\t{a.TypeCount}\t{(a.IsManaged ? "Yes" : "No")}");
+                sb.AppendLine($"{i + 1}\t{EscapeTab(a.Name)}\t{a.Version}\t{a.IsolationMode}\t{a.SourceType}\t{a.TypeCount}\t{(a.IsManaged ? "Yes" : "No")}\t{EscapeTab(a.PackageName ?? "-")}");
+            }
+
+            if (packages.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"[Plugin Packages] {packages.Count} registered");
+                sb.AppendLine();
+                sb.AppendLine("#\tname\tversion\tisManaged\thasManagedIdentity\tassemblyCount");
+
+                for (var i = 0; i < packages.Count; i++)
+                {
+                    var p = packages[i];
+                    sb.AppendLine($"{i + 1}\t{EscapeTab(p.Name)}\t{p.Version ?? "-"}\t{(p.IsManaged ? "Yes" : "No")}\t{(p.HasManagedIdentity ? "Yes" : "No")}\t{p.Assemblies?.Count ?? 0}");
+                }
             }
 
             var structured = new GetPluginsResult
             {
                 TotalCount = assemblies.Count,
                 Mode = "assemblies",
-                Assemblies = assemblies
+                Assemblies = assemblies,
+                Packages = packages.Count > 0 ? packages : null
             };
 
             return new CallToolResult
@@ -212,11 +247,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='sourcetype'/>
     <attribute name='ismanaged'/>
     <attribute name='managedidentityid'/>
+    <attribute name='packageid'/>
     <filter type='and'>
       <condition attribute='ishidden' operator='eq' value='false'/>
       <condition attribute='name' operator='like' value='%{EscapeXml(assemblyName)}%'/>
     </filter>
     <order attribute='name'/>
+    <link-entity name='pluginpackage' from='pluginpackageid' to='packageid' link-type='outer' alias='pkg'>
+      <attribute name='name'/>
+      <attribute name='version'/>
+    </link-entity>
+    <link-entity name='managedidentity' from='managedidentityid' to='managedidentityid' link-type='outer' alias='mi'>
+      <attribute name='name'/>
+      <attribute name='applicationid'/>
+      <attribute name='tenantid'/>
+      <attribute name='credentialsource'/>
+    </link-entity>
   </entity>
 </fetch>";
 
@@ -233,12 +279,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var sb = new StringBuilder(assemblies.Count * 100 + 128);
                 sb.AppendLine($"[Plugin Assemblies] {assemblies.Count} matching '{assemblyName}'");
                 sb.AppendLine();
-                sb.AppendLine("#\tname\tversion\tisolationMode\tsourceType\ttypeCount\tisManaged");
+                sb.AppendLine("#\tname\tversion\tisolationMode\tsourceType\ttypeCount\tisManaged\tpackageName");
 
                 for (var i = 0; i < assemblies.Count; i++)
                 {
                     var a = assemblies[i];
-                    sb.AppendLine($"{i + 1}\t{EscapeTab(a.Name)}\t{a.Version}\t{a.IsolationMode}\t{a.SourceType}\t{a.TypeCount}\t{(a.IsManaged ? "Yes" : "No")}");
+                    sb.AppendLine($"{i + 1}\t{EscapeTab(a.Name)}\t{a.Version}\t{a.IsolationMode}\t{a.SourceType}\t{a.TypeCount}\t{(a.IsManaged ? "Yes" : "No")}\t{EscapeTab(a.PackageName ?? "-")}");
                 }
 
                 var structured = new GetPluginsResult
@@ -300,8 +346,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb2.AppendLine($"isolationMode: {entry.IsolationMode}");
             sb2.AppendLine($"sourceType: {entry.SourceType}");
             sb2.AppendLine($"isManaged: {(entry.IsManaged ? "Yes" : "No")}");
+            if (entry.PackageName != null)
+                sb2.AppendLine($"packageName: {entry.PackageName}");
             if (entry.HasManagedIdentity)
+            {
                 sb2.AppendLine("hasManagedIdentity: Yes");
+                if (entry.ManagedIdentity != null)
+                {
+                    sb2.AppendLine("managedIdentity:");
+                    sb2.AppendLine($"  applicationId: {entry.ManagedIdentity.ApplicationId}");
+                    sb2.AppendLine($"  tenantId: {entry.ManagedIdentity.TenantId}");
+                    if (entry.ManagedIdentity.CredentialSource != null)
+                        sb2.AppendLine($"  credentialSource: {entry.ManagedIdentity.CredentialSource}");
+                }
+            }
             sb2.AppendLine($"typeCount: {types.Count}");
             sb2.AppendLine();
 
@@ -309,13 +367,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 sb2.AppendLine($"[Plugin Types] {types.Count} total");
                 sb2.AppendLine();
-                sb2.AppendLine("#\ttypeName\tpluginType\tstepCount");
+                sb2.AppendLine("#\ttypeName\tpluginType\tgroupName\tstepCount");
 
                 for (var i = 0; i < types.Count; i++)
                 {
                     var t = types[i];
                     var pluginType = t.IsWorkflow ? "Workflow" : "Plugin";
-                    sb2.AppendLine($"{i + 1}\t{EscapeTab(t.TypeName)}\t{pluginType}\t{t.StepCount}");
+                    var groupName = t.WorkflowActivityGroupName ?? "-";
+                    sb2.AppendLine($"{i + 1}\t{EscapeTab(t.TypeName)}\t{pluginType}\t{EscapeTab(groupName)}\t{t.StepCount}");
                 }
                 sb2.AppendLine();
             }
@@ -324,12 +383,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 sb2.AppendLine($"[Steps] {steps.Count} total");
                 sb2.AppendLine();
-                sb2.AppendLine("#\ttypeName\tmessage\tentity\tstage\tmode\trank\tfilteringAttributes\tstatus");
+                sb2.AppendLine("#\ttypeName\tmessage\tentity\tstage\tmode\trank\tsupportedDeployment\tfilteringAttributes\tstatus");
 
                 for (var i = 0; i < steps.Count; i++)
                 {
                     var s = steps[i];
-                    sb2.AppendLine($"{i + 1}\t{EscapeTab(s.TypeName)}\t{EscapeTab(s.Message)}\t{s.Entity ?? "none"}\t{s.Stage}\t{s.Mode}\t{s.Rank}\t{EscapeTab(s.FilteringAttributes ?? "-")}\t{s.Status}");
+                    sb2.AppendLine($"{i + 1}\t{EscapeTab(s.TypeName)}\t{EscapeTab(s.Message)}\t{s.Entity ?? "none"}\t{s.Stage}\t{s.Mode}\t{s.Rank}\t{s.SupportedDeployment ?? "ServerOnly"}\t{EscapeTab(s.FilteringAttributes ?? "-")}\t{s.Status}");
                 }
 
                 if (includeImages)
@@ -391,12 +450,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var countWord = steps.Count == 1 ? "step" : "steps";
             sb.AppendLine($"[Plugin Steps] {steps.Count} {countWord} on {entityName}");
             sb.AppendLine();
-            sb.AppendLine("#\tassembly\ttypeName\tmessage\tstage\tmode\trank\tfilteringAttributes\tstatus");
+            sb.AppendLine("#\tassembly\ttypeName\tmessage\tstage\tmode\trank\tsupportedDeployment\tfilteringAttributes\tstatus");
 
             for (var i = 0; i < steps.Count; i++)
             {
                 var s = steps[i];
-                sb.AppendLine($"{i + 1}\t{EscapeTab(s.AssemblyName)}\t{EscapeTab(s.TypeName)}\t{EscapeTab(s.Message)}\t{s.Stage}\t{s.Mode}\t{s.Rank}\t{EscapeTab(s.FilteringAttributes ?? "-")}\t{s.Status}");
+                sb.AppendLine($"{i + 1}\t{EscapeTab(s.AssemblyName)}\t{EscapeTab(s.TypeName)}\t{EscapeTab(s.Message)}\t{s.Stage}\t{s.Mode}\t{s.Rank}\t{s.SupportedDeployment ?? "ServerOnly"}\t{EscapeTab(s.FilteringAttributes ?? "-")}\t{s.Status}");
             }
 
             if (includeImages)
@@ -480,6 +539,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? "\n    <attribute name='configuration'/>\n    <attribute name='sdkmessageprocessingstepsecureconfigid'/>"
                 : "";
 
+            var secureConfigJoin = includeConfig
+                ? @"
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='sc'>
+      <attribute name='secureconfig'/>
+    </link-entity>"
+                : "";
+
             var fetchXml = $@"<fetch top='{maxRecords}'>
   <entity name='sdkmessageprocessingstep'>
     <attribute name='sdkmessageprocessingstepid'/>
@@ -491,7 +557,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='statecode'/>
     <attribute name='asyncautodelete'/>
     <attribute name='impersonatinguserid'/>
-    <attribute name='description'/>{configAttributes}
+    <attribute name='description'/>
+    <attribute name='supporteddeployment'/>{configAttributes}
     <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' alias='pt'>
       <attribute name='typename'/>{typeNameFilter}{assemblyFilter}
       <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid' alias='pa'>
@@ -506,7 +573,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     </link-entity>
     <link-entity name='sdkmessagefilter' from='sdkmessagefilterid' to='sdkmessagefilterid' link-type='outer' alias='mf'>
       <attribute name='primaryobjecttypecode'/>{entityFilter}
-    </link-entity>
+    </link-entity>{secureConfigJoin}
     <filter type='and'>
 {filters}      {messageFilter}
     </filter>
@@ -656,8 +723,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var isoValue = e.GetAttributeValue<OptionSetValue>("isolationmode")?.Value ?? 0;
             var srcValue = e.GetAttributeValue<OptionSetValue>("sourcetype")?.Value ?? 0;
             var typeCount = typeCounts != null && typeCounts.TryGetValue(e.Id, out var tc) ? tc : 0;
+            var hasManagedIdentity = e.GetAttributeValue<EntityReference>("managedidentityid") != null;
 
-            return new PluginAssemblyEntry
+            var entry = new PluginAssemblyEntry
             {
                 AssemblyId = e.Id.ToString(),
                 Name = e.GetAttributeValue<string>("name") ?? "",
@@ -665,9 +733,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsolationMode = IsolationModeMap.TryGetValue(isoValue, out var iso) ? iso : isoValue.ToString(),
                 SourceType = SourceTypeMap.TryGetValue(srcValue, out var src) ? src : srcValue.ToString(),
                 IsManaged = e.GetAttributeValue<bool>("ismanaged"),
-                HasManagedIdentity = e.GetAttributeValue<EntityReference>("managedidentityid") != null,
+                HasManagedIdentity = hasManagedIdentity,
+                PackageName = NullIfEmpty(GetAliasedString(e, "pkg.name")),
                 TypeCount = typeCount
             };
+
+            // Populate managed identity detail when available
+            var miName = NullIfEmpty(GetAliasedString(e, "mi.name"));
+            if (miName != null)
+            {
+                entry.ManagedIdentity = new ManagedIdentityEntry
+                {
+                    ManagedIdentityId = e.GetAttributeValue<EntityReference>("managedidentityid")?.Id.ToString(),
+                    Name = miName,
+                    ApplicationId = GetAliasedValue<Guid?>(e, "mi.applicationid")?.ToString(),
+                    TenantId = GetAliasedValue<Guid?>(e, "mi.tenantid")?.ToString(),
+                    CredentialSource = GetAliasedValue<int?>(e, "mi.credentialsource") == 2 ? "Certificate" : GetAliasedValue<int?>(e, "mi.credentialsource")?.ToString()
+                };
+            }
+
+            return entry;
         }
 
         private static PluginTypeEntry MapTypeEntry(Entity e)
@@ -679,7 +764,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 TypeName = e.GetAttributeValue<string>("typename") ?? "",
                 Name = e.GetAttributeValue<string>("name") ?? "",
                 Description = NullIfEmpty(e.GetAttributeValue<string>("description")),
-                IsWorkflow = !string.IsNullOrWhiteSpace(workflowGroup)
+                IsWorkflow = !string.IsNullOrWhiteSpace(workflowGroup),
+                WorkflowActivityGroupName = NullIfEmpty(workflowGroup)
             };
         }
 
@@ -688,6 +774,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var stageValue = e.GetAttributeValue<OptionSetValue>("stage")?.Value ?? 0;
             var modeValue = e.GetAttributeValue<OptionSetValue>("mode")?.Value ?? 0;
             var stateValue = e.GetAttributeValue<OptionSetValue>("statecode")?.Value ?? 0;
+            var deploymentValue = e.GetAttributeValue<OptionSetValue>("supporteddeployment")?.Value ?? 0;
 
             var entry = new PluginStepEntry
             {
@@ -702,6 +789,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Rank = e.GetAttributeValue<int>("rank"),
                 FilteringAttributes = NullIfEmpty(e.GetAttributeValue<string>("filteringattributes")),
                 Status = stateValue == 0 ? "Active" : "Disabled",
+                SupportedDeployment = SupportedDeploymentMap.TryGetValue(deploymentValue, out var dep) ? dep : deploymentValue.ToString(),
                 AsyncAutoDelete = e.GetAttributeValue<bool>("asyncautodelete"),
                 Description = NullIfEmpty(e.GetAttributeValue<string>("description")),
                 ImpersonatingUser = e.GetAttributeValue<EntityReference>("impersonatinguserid")?.Name
@@ -712,6 +800,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entry.UnsecureConfig = NullIfEmpty(e.GetAttributeValue<string>("configuration"));
                 var secureRef = e.GetAttributeValue<EntityReference>("sdkmessageprocessingstepsecureconfigid");
                 entry.SecureConfigId = secureRef?.Id.ToString();
+                entry.SecureConfig = NullIfEmpty(GetAliasedString(e, "sc.secureconfig"));
             }
 
             return entry;
@@ -723,11 +812,84 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return aliased?.Value?.ToString() ?? "";
         }
 
+        private static T GetAliasedValue<T>(Entity e, string alias)
+        {
+            var aliased = e.GetAttributeValue<AliasedValue>(alias);
+            if (aliased?.Value is T val) return val;
+            return default;
+        }
+
         private static string ShortTypeName(string fullTypeName)
         {
             if (string.IsNullOrEmpty(fullTypeName)) return fullTypeName;
             var lastDot = fullTypeName.LastIndexOf('.');
             return lastDot >= 0 ? fullTypeName.Substring(lastDot + 1) : fullTypeName;
+        }
+
+        private List<PluginPackageEntry> GetPackages()
+        {
+            try
+            {
+                var fetchXml = @"<fetch>
+  <entity name='pluginpackage'>
+    <attribute name='pluginpackageid'/>
+    <attribute name='name'/>
+    <attribute name='version'/>
+    <attribute name='ismanaged'/>
+    <attribute name='managedidentityid'/>
+    <attribute name='modifiedon'/>
+    <order attribute='name'/>
+  </entity>
+</fetch>";
+
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (result.Entities.Count == 0) return [];
+
+                // Get assembly names per package
+                var packageAssemblies = new Dictionary<string, List<string>>();
+                var fetchAsm = @"<fetch>
+  <entity name='pluginassembly'>
+    <attribute name='name'/>
+    <attribute name='packageid'/>
+    <filter>
+      <condition attribute='packageid' operator='not-null'/>
+      <condition attribute='ishidden' operator='eq' value='false'/>
+    </filter>
+  </entity>
+</fetch>";
+
+                var asmResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchAsm));
+                foreach (var asm in asmResult.Entities)
+                {
+                    var pkgRef = asm.GetAttributeValue<EntityReference>("packageid");
+                    if (pkgRef == null) continue;
+                    var pkgId = pkgRef.Id.ToString();
+                    if (!packageAssemblies.ContainsKey(pkgId))
+                        packageAssemblies[pkgId] = [];
+                    var asmName = asm.GetAttributeValue<string>("name");
+                    if (!string.IsNullOrEmpty(asmName))
+                        packageAssemblies[pkgId].Add(asmName);
+                }
+
+                return result.Entities.Select(e =>
+                {
+                    var pkgId = e.Id.ToString();
+                    return new PluginPackageEntry
+                    {
+                        PackageId = pkgId,
+                        Name = e.GetAttributeValue<string>("name") ?? "",
+                        Version = NullIfEmpty(e.GetAttributeValue<string>("version")),
+                        IsManaged = e.GetAttributeValue<bool>("ismanaged"),
+                        HasManagedIdentity = e.GetAttributeValue<EntityReference>("managedidentityid") != null,
+                        ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd HH:mm"),
+                        Assemblies = packageAssemblies.TryGetValue(pkgId, out var asmNames) && asmNames.Count > 0 ? asmNames : null
+                    };
+                }).ToList();
+            }
+            catch
+            {
+                return [];
+            }
         }
 
         private int? GetObjectTypeCode(string entityName)

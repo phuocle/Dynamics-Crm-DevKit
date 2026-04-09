@@ -49,10 +49,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
+                var trimmedFilter = string.IsNullOrWhiteSpace(filter) ? "" : filter.Trim();
                 if (!string.IsNullOrWhiteSpace(entity_name))
-                    return await GetEntityDetail(entity_name.Trim().ToLowerInvariant(), filter);
+                    return await GetEntityDetail(entity_name.Trim().ToLowerInvariant(), trimmedFilter);
 
-                return await ListAllEntities(filter, custom_only, include_intersect);
+                return await ListAllEntities(trimmedFilter, custom_only, include_intersect);
             }
             catch (Exception ex)
             {

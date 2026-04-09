@@ -215,7 +215,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!Guid.TryParse(formId.Trim(), out var id))
                     return ErrorResult($"Error: '{formId}' is not a valid GUID.");
-                return TextResult(GetFormDetail(id));
+                return GetFormDetailResult(entityName, id);
             }
 
             // form_name provided, no form_id
@@ -231,7 +231,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult($"Error: No form found matching name '{nameFilter}' for entity '{entityName}'.");
 
             if (forms.Count == 1)
-                return TextResult(GetFormDetail(forms[0].GetAttributeValue<Guid>("formid")));
+                return GetFormDetailResult(entityName, forms[0].GetAttributeValue<Guid>("formid"));
 
             // Multiple matches
             var sb = new StringBuilder(256);
@@ -248,7 +248,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return ErrorResult(sb.ToString());
         }
 
-        private string GetFormDetail(Guid formId)
+        private CallToolResult GetFormDetailResult(string entityName, Guid formId)
         {
             var query = new QueryExpression("systemform")
             {
@@ -259,9 +259,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(query);
 
             if (result.Entities.Count == 0)
-                return $"Error: No form found with ID '{formId}'.";
+                return ErrorResult($"Error: No form found with ID '{formId}'.");
 
             var form = result.Entities[0];
+            var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
+
+            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] Entity mismatch\n" +
+                    $"FormId: {formId}\n" +
+                    $"FormEntity: {objectTypeCode}\n" +
+                    $"ProvidedEntity: {entityName}\n" +
+                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+
+            return TextResult(FormatFormDetail(form, formId));
+        }
+
+        private static string FormatFormDetail(Entity form, Guid formId)
+        {
             var name = form.GetAttributeValue<string>("name") ?? "";
             var type = form.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             var isDefault = form.GetAttributeValue<bool>("isdefault");

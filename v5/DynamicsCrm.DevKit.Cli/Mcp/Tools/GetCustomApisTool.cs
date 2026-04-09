@@ -68,12 +68,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- api_name PROVIDED: full detail including request parameters, response properties, plugin binding\n\n" +
 
             "TIPS:\n" +
-            "- Microsoft APIs excluded by default (set include_microsoft=true to see them)\n" +
+            "- Managed APIs (Microsoft and third-party) excluded by default (set include_microsoft=true to see them)\n" +
             "- isFunction=true → GET (no side effects); isFunction=false → POST Action")]
         public CallToolResult get_custom_apis(
             [Description("Unique name for full detail. Empty = list all.")] string api_name = "",
             [Description("Filter by bound entity logical name (e.g., 'account'). Empty = all.")] string entity_name = "",
-            [Description("Include Microsoft APIs (msdyn_, mspp_). Default: false.")] bool include_microsoft = false,
+            [Description("Include managed APIs (Microsoft and third-party). Default: false.")] bool include_microsoft = false,
             [Description("'active' (default), 'inactive', or 'all'.")] string status = "active",
             [Description("Max results in list mode (1-500). Default: 100.")] int max_records = 100)
         {
@@ -89,13 +89,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
+                if (!string.IsNullOrWhiteSpace(api_name))
+                    return GetDetail(api_name.Trim());
+
                 if (!string.IsNullOrWhiteSpace(entity_name) && !EntityExists(entity_name.Trim().ToLowerInvariant()))
                     return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
 
-                if (!string.IsNullOrWhiteSpace(api_name))
-                    return GetDetail(api_name.Trim());
-                else
-                    return GetList(entity_name, include_microsoft, status, max_records);
+                return GetList(entity_name, include_microsoft, status, max_records);
             }
             catch (Exception ex)
             {
@@ -197,6 +197,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fetchApi = $@"<fetch>
   <entity name='customapi'>
     <all-attributes/>
+    <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='outer' alias='pt'>
+      <attribute name='typename'/>
+      <attribute name='name'/>
+      <attribute name='friendlyname'/>
+      <attribute name='description'/>
+      <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid' link-type='outer' alias='pa'>
+        <attribute name='name'/>
+        <attribute name='version'/>
+        <attribute name='isolationmode'/>
+      </link-entity>
+    </link-entity>
     <filter>
       <condition attribute='uniquename' operator='eq' value='{EscapeXml(apiName)}'/>
     </filter>
@@ -265,6 +276,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"isPrivate: {(entry.IsPrivate ? "Yes" : "No")}");
             sb.AppendLine($"processingType: {entry.ProcessingType}");
             sb.AppendLine($"pluginType: {entry.PluginType ?? "(none)"}");
+            if (!string.IsNullOrEmpty(entry.PluginTypeFullName))
+                sb.AppendLine($"pluginTypeFullName: {entry.PluginTypeFullName}");
+            if (!string.IsNullOrEmpty(entry.PluginAssemblyName))
+                sb.AppendLine($"pluginAssembly: {entry.PluginAssemblyName} ({entry.PluginAssemblyVersion})");
+            if (!string.IsNullOrEmpty(entry.PluginIsolationMode))
+                sb.AppendLine($"isolationMode: {entry.PluginIsolationMode}");
             sb.AppendLine($"status: {entry.Status}");
 
             if (!string.IsNullOrEmpty(entry.Owner))
@@ -352,6 +369,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entry.SolutionId = GetLookupName(e, "solutionid");
             entry.CreatedOn = e.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd");
             entry.ModifiedOn = e.GetAttributeValue<DateTime?>("modifiedon")?.ToString("yyyy-MM-dd");
+            // Plugin type detail
+            entry.PluginTypeName = NullIfEmpty(GetAliasedString(e, "pt.name"));
+            entry.PluginTypeFullName = NullIfEmpty(GetAliasedString(e, "pt.typename"));
+            entry.PluginAssemblyName = NullIfEmpty(GetAliasedString(e, "pa.name"));
+            entry.PluginAssemblyVersion = NullIfEmpty(GetAliasedString(e, "pa.version"));
+            var isoValue = GetAliasedValue<int?>(e, "pa.isolationmode");
+            if (isoValue.HasValue)
+            {
+                entry.PluginIsolationMode = isoValue.Value switch
+                {
+                    1 => "None",
+                    2 => "Sandbox",
+                    3 => "External",
+                    _ => isoValue.Value.ToString()
+                };
+            }
             return entry;
         }
 
@@ -362,6 +395,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (raw is EntityReference er) return er.Name;
             if (raw is Guid g) return g.ToString();
             return raw?.ToString();
+        }
+
+        private static string GetAliasedString(Entity e, string alias)
+        {
+            var aliased = e.GetAttributeValue<AliasedValue>(alias);
+            return aliased?.Value?.ToString() ?? "";
+        }
+
+        private static T GetAliasedValue<T>(Entity e, string alias)
+        {
+            var aliased = e.GetAttributeValue<AliasedValue>(alias);
+            if (aliased?.Value is T val) return val;
+            return default;
         }
 
         private string ResolveSolutionName(string solutionId)

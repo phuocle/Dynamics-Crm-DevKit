@@ -69,7 +69,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ["main_grid"] = 1,
             ["sub_grid"] = 2,
             ["associated_grid"] = 3,
-            ["quick_form"] = 4
+            ["quick_form"] = 4,
+            ["global_header"] = 5,
+            ["dashboard"] = 6
         };
 
         private static readonly Dictionary<string, int> OriginFilterMap = new(StringComparer.OrdinalIgnoreCase)
@@ -104,7 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult get_dataverse_commands(
             [Description("GUID of a specific appaction record. Returns full detail. All other filters ignored.")] string command_id = "",
             [Description("Filter by entity logical name (e.g., 'account').")] string entity_name = "",
-            [Description("Filter by location: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form'. Empty = all.")] string location = "",
+            [Description("Filter by location: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'. Empty = all.")] string location = "",
             [Description("Filter by Model-Driven App name (contains match).")] string app_name = "",
             [Description("'default' (custom), 'migrated' (from ribbon), 'enhanced_migrated', or 'all'. Empty = all.")] string origin = "",
             [Description("Filter by onclick event type: 'javascript', 'formula' (Power Fx), 'none'. Empty = all.")] string action_type = "",
@@ -116,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(location))
             {
                 if (!LocationFilterMap.ContainsKey(location.Trim()))
-                    return ErrorResult($"Error: Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', or 'quick_form'.");
+                    return ErrorResult($"Error: Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
             }
 
             if (!string.IsNullOrWhiteSpace(origin) && !origin.Trim().Equals("all", StringComparison.OrdinalIgnoreCase))

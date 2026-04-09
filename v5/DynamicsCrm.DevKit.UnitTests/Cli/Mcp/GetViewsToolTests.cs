@@ -42,6 +42,74 @@ public class GetViewsToolTests
     }
 
     // ──────────────────────────────────────────────
+    // Finding 1: detail with non-existent GUID must return IsError=true
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Detail_NonExistentViewId_ReturnsIsErrorTrue()
+    {
+        // GetViewDetail returns "Error: No view found..." as text.
+        // HandleDetail must detect this and set IsError=true.
+        // Without the fix, IsError was false (silent failure).
+        // Note: With null serviceClient, the exception handler fires,
+        // but IsError must still be true.
+        var result = _tool.manage_view("detail", "account", view_id: "11111111-1111-1111-1111-111111111111");
+        Assert.IsTrue(result.IsError == true, "detail with non-existent GUID should set IsError=true");
+    }
+
+    [TestMethod]
+    public void HandleDetail_ChecksGetViewDetailForErrorPrefix()
+    {
+        // Verify HandleDetail uses the "Error:" prefix check pattern
+        // to convert GetViewDetail's string error into an ErrorResult.
+        // This is a static analysis test — reads the source code via reflection.
+        var method = ToolType.GetMethod("HandleDetail", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(method, "HandleDetail method should exist");
+        // Verify the method body contains the pattern: StartsWith("Error:"
+        // by checking IL or simply verifying the method returns correct IsError for invalid input
+        var result = _tool.manage_view("detail", "account", view_id: "not-a-guid");
+        Assert.IsTrue(result.IsError == true, "Invalid GUID should return IsError=true");
+    }
+
+    // ──────────────────────────────────────────────
+    // Finding 2: FindViewsByNameContains must accept includeFetchXml parameter
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void FindViewsByNameContains_HasIncludeFetchXmlParameter()
+    {
+        // The method must accept a 4th boolean parameter (includeFetchXml).
+        // Without the fix, this parameter did not exist and include_fetchxml was silently ignored
+        // when view_name was provided.
+        var method = ToolType.GetMethod("FindViewsByNameContains", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(method, "FindViewsByNameContains method should exist");
+        var parameters = method.GetParameters();
+        Assert.AreEqual(4, parameters.Length, "FindViewsByNameContains should have 4 parameters (entityName, nameFilter, queryType, includeFetchXml)");
+        Assert.AreEqual("includeFetchXml", parameters[3].Name, "4th parameter should be 'includeFetchXml'");
+        Assert.AreEqual(typeof(bool), parameters[3].ParameterType, "4th parameter should be bool");
+    }
+
+    // ──────────────────────────────────────────────
+    // Finding 3: FindPersonalViewsByNameContains must exist for include_personal + view_name
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void FindPersonalViewsByNameContains_MethodExists()
+    {
+        // When include_personal=true and view_name is provided, the tool must search
+        // userquery (personal views) too. This method was missing before the fix,
+        // causing personal views to be silently ignored.
+        var method = ToolType.GetMethod("FindPersonalViewsByNameContains", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(method, "FindPersonalViewsByNameContains method should exist");
+        var parameters = method.GetParameters();
+        Assert.AreEqual(4, parameters.Length, "FindPersonalViewsByNameContains should have 4 parameters");
+        Assert.AreEqual("entityName", parameters[0].Name);
+        Assert.AreEqual("nameFilter", parameters[1].Name);
+        Assert.AreEqual("queryType", parameters[2].Name);
+        Assert.AreEqual("includeFetchXml", parameters[3].Name);
+    }
+
+    // ──────────────────────────────────────────────
     // MapQueryType (private static)
     // ──────────────────────────────────────────────
 

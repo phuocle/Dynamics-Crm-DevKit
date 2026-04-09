@@ -67,6 +67,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required when record_id is provided.");
 
+            if (string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
+                return ErrorResult("Error: attribute_name requires record_id (detail mode). In browse mode, attribute-level filtering is not available.");
+
             if (!string.IsNullOrWhiteSpace(record_id) && !Guid.TryParse(record_id.Trim(), out _))
                 return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
 
@@ -96,6 +99,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult($"Error: '{to_date}' is not a valid ISO 8601 date.");
                 toUtc = td;
             }
+
+            if (fromUtc.HasValue && toUtc.HasValue && fromUtc.Value > toUtc.Value)
+                return ErrorResult($"Error: from_date '{from_date}' is after to_date '{to_date}'. Swap the values or correct the range.");
 
             var resolvedUserFilter = ResolveUserFilter(user_filter?.Trim() ?? "");
             if (resolvedUserFilter.StartsWith("[AMBIGUOUS_USER]"))
@@ -676,8 +682,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string FormatTimeWindow(int minutesAgo)
         {
             if (minutesAgo <= 60) return $"{minutesAgo} min";
-            if (minutesAgo <= 1440) return $"{minutesAgo / 60}h";
-            return $"{minutesAgo / 1440}d";
+            if (minutesAgo <= 1440)
+            {
+                var hours = minutesAgo / 60;
+                var remainder = minutesAgo % 60;
+                return remainder == 0 ? $"{hours}h" : $"{hours}h {remainder}min";
+            }
+            var days = minutesAgo / 1440;
+            var remainingHours = (minutesAgo % 1440) / 60;
+            return remainingHours == 0 ? $"{days}d" : $"{days}d {remainingHours}h";
         }
 
         private static string NullIfEmpty(string value) =>

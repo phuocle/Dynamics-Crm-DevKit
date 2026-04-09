@@ -102,28 +102,34 @@ public class ExecuteWebApiToolTests
     private static readonly MethodInfo ParseHeadersMethod = ToolType
         .GetMethod("ParseHeaders", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static Dictionary<string, List<string>>? ParseHeaders(string headersJson)
+    private static Dictionary<string, List<string>>? ParseHeaders(string headersJson, out string? error)
     {
-        return (Dictionary<string, List<string>>?)ParseHeadersMethod.Invoke(null, new object[] { headersJson });
+        var args = new object[] { headersJson, null! };
+        var result = (Dictionary<string, List<string>>?)ParseHeadersMethod.Invoke(null, args);
+        error = (string?)args[1];
+        return result;
     }
 
     [TestMethod]
     public void ParseHeaders_Empty_ReturnsNull()
     {
-        Assert.IsNull(ParseHeaders(""));
+        Assert.IsNull(ParseHeaders("", out var error));
+        Assert.IsNull(error);
     }
 
     [TestMethod]
     public void ParseHeaders_Null_ReturnsNull()
     {
-        Assert.IsNull(ParseHeaders(null!));
+        Assert.IsNull(ParseHeaders(null!, out var error));
+        Assert.IsNull(error);
     }
 
     [TestMethod]
     public void ParseHeaders_ValidJson_ReturnsDictionary()
     {
-        var result = ParseHeaders("{\"MSCRM.MergeLabels\": \"true\", \"If-Match\": \"*\"}");
+        var result = ParseHeaders("{\"MSCRM.MergeLabels\": \"true\", \"If-Match\": \"*\"}", out var error);
 
+        Assert.IsNull(error);
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
         Assert.AreEqual("true", result["MSCRM.MergeLabels"][0]);
@@ -131,15 +137,19 @@ public class ExecuteWebApiToolTests
     }
 
     [TestMethod]
-    public void ParseHeaders_InvalidJson_ReturnsNull()
+    public void ParseHeaders_InvalidJson_ReturnsNullWithError()
     {
-        Assert.IsNull(ParseHeaders("not json"));
+        var result = ParseHeaders("not json", out var error);
+        Assert.IsNull(result);
+        Assert.IsNotNull(error);
+        Assert.IsTrue(error.Contains("Invalid JSON"));
     }
 
     [TestMethod]
     public void ParseHeaders_EmptyObject_ReturnsNull()
     {
-        Assert.IsNull(ParseHeaders("{}"));
+        Assert.IsNull(ParseHeaders("{}", out var error));
+        Assert.IsNull(error);
     }
 
     // ──────────────────────────────────────────────
@@ -172,7 +182,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "systemforms(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_form"));
+        Assert.IsTrue(result.Contains("manage_form"));
     }
 
     [TestMethod]
@@ -181,7 +191,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Put, "savedqueries(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_view"));
+        Assert.IsTrue(result.Contains("manage_view"));
     }
 
     [TestMethod]
@@ -190,7 +200,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Delete, "userqueries(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_view"));
+        Assert.IsTrue(result.Contains("manage_view"));
     }
 
     [TestMethod]
@@ -214,7 +224,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Patch, "environmentvariabledefinitions(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_variable"));
+        Assert.IsTrue(result.Contains("manage_environment_variable"));
     }
 
     [TestMethod]
@@ -223,7 +233,7 @@ public class ExecuteWebApiToolTests
         var result = GetBlockedReason(HttpMethod.Delete, "environmentvariablevalues(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
-        Assert.IsTrue(result.Contains("upsert_variable"));
+        Assert.IsTrue(result.Contains("manage_environment_variable"));
     }
 
     [TestMethod]
@@ -303,6 +313,54 @@ public class ExecuteWebApiToolTests
     {
         var result = TryFormatJson("{}");
         Assert.AreEqual("{}", result);
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial Round 1: wrong redirect tool names
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_SavedQueries_RedirectsToManageView()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "savedqueries(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("manage_view"), $"Expected 'manage_view' but got: {result}");
+        Assert.IsFalse(result.Contains("upsert_view"), "Should not reference old tool name 'upsert_view'");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_UserQueries_RedirectsToManageView()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "userqueries(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("manage_view"), $"Expected 'manage_view' but got: {result}");
+        Assert.IsFalse(result.Contains("upsert_view"), "Should not reference old tool name 'upsert_view'");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_EnvVarDefinitions_RedirectsToManageEnvironmentVariable()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "environmentvariabledefinitions(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("manage_environment_variable"), $"Expected 'manage_environment_variable' but got: {result}");
+        Assert.IsFalse(result.Contains("upsert_variable"), "Should not reference old tool name 'upsert_variable'");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_EnvVarValues_RedirectsToManageEnvironmentVariable()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "environmentvariablevalues(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("manage_environment_variable"), $"Expected 'manage_environment_variable' but got: {result}");
+        Assert.IsFalse(result.Contains("upsert_variable"), "Should not reference old tool name 'upsert_variable'");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_SystemForms_RedirectsToManageForm()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "systemforms(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("manage_form"), $"Expected 'manage_form' but got: {result}");
     }
 
     // ──────────────────────────────────────────────

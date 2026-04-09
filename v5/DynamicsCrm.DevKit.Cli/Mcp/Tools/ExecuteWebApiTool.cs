@@ -37,9 +37,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "BLOCKED OPERATIONS (hard-blocked, returns error):\n" +
             "- PATCH/PUT/DELETE systemforms → use manage_form\n" +
-            "- PATCH/PUT/DELETE savedqueries/userqueries → use upsert_view\n" +
+            "- PATCH/PUT/DELETE savedqueries/userqueries → use manage_view\n" +
             "- PATCH/PUT/DELETE sitemaps → use manage_sitemap\n" +
-            "- PATCH/PUT/DELETE environmentvariable* → use upsert_variable\n" +
+            "- PATCH/PUT/DELETE environmentvariable* → use manage_environment_variable\n" +
             "- POST PublishXml/PublishAllXml → use publish_customizations\n" +
             "GET is allowed. POST to create is allowed (except publish).\n" +
             "WHY: Malformed FormXML/LayoutXML/SiteMap breaks UI for all users with no undo.\n\n" +
@@ -95,8 +95,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (trimmedUrl.StartsWith("$metadata", StringComparison.OrdinalIgnoreCase))
                 {
                     using var httpClient = new HttpClient();
-                    var baseUrl = _serviceClient.ConnectedOrgUriActual.ToString().TrimEnd('/');
-                    var apiUrl = $"{baseUrl}/api/data/v{_serviceClient.ConnectedOrgVersion.ToString(2)}/{trimmedUrl}";
+                    var orgUri = _serviceClient.ConnectedOrgUriActual;
+                    var apiUrl = $"{orgUri.Scheme}://{orgUri.Host}/api/data/v{_serviceClient.ConnectedOrgVersion.ToString(2)}/{trimmedUrl}";
                     var request = new HttpRequestMessage(httpMethod, apiUrl);
                     request.Headers.Add("Authorization", $"Bearer {_serviceClient.CurrentAccessToken}");
                     request.Headers.Add("Accept", "application/xml");
@@ -192,16 +192,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [
             ("systemforms(", "manage_form",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
-            ("savedqueries(", "upsert_view",
+            ("savedqueries(", "manage_view",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
-            ("userqueries(", "upsert_view",
+            ("userqueries(", "manage_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
             ("sitemaps(", "manage_sitemap",
                 "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app."),
-            ("environmentvariabledefinitions(", "upsert_variable",
-                "Environment variable definitions have linked value records. The upsert_variable tool handles definition+value atomically with solution awareness."),
-            ("environmentvariablevalues(", "upsert_variable",
-                "Environment variable values are linked to definitions. The upsert_variable tool handles create/update/clear correctly with definition lookup.")
+            ("environmentvariabledefinitions(", "manage_environment_variable",
+                "Environment variable definitions have linked value records. The manage_environment_variable tool handles definition+value atomically with solution awareness."),
+            ("environmentvariablevalues(", "manage_environment_variable",
+                "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup.")
         ];
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =

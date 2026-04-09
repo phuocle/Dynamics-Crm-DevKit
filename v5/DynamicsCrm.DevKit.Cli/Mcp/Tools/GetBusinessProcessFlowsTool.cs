@@ -57,12 +57,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Include stages in list mode (default: false). Always included in detail.")] bool include_stages = false,
             [Description("Max BPFs (1-250). Default: 50.")] int max_records = 50)
         {
-            if (!string.IsNullOrWhiteSpace(status))
-            {
-                var s = status.Trim().ToLowerInvariant();
-                if (s != "active" && s != "draft" && s != "all")
-                    return ErrorResult($"Error: Invalid status '{status.Trim()}'. Use 'active', 'draft', or 'all'.");
-            }
+            if (string.IsNullOrWhiteSpace(status))
+                status = "active";
+            else
+                status = status.Trim().ToLowerInvariant();
+
+            if (status != "active" && status != "draft" && status != "all")
+                return ErrorResult($"Error: Invalid status '{status}'. Use 'active', 'draft', or 'all'.");
 
             if (max_records <= 0) max_records = 50;
             if (max_records > 250) max_records = 250;
@@ -112,10 +113,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             filters.AppendLine("      <condition attribute='category' operator='eq' value='4'/>");
             filters.AppendLine("      <condition attribute='type' operator='eq' value='1'/>");
 
-            var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
-            if (normalizedStatus == "active")
+            if (status == "active")
                 filters.AppendLine("      <condition attribute='statecode' operator='eq' value='1'/>");
-            else if (normalizedStatus == "draft")
+            else if (status == "draft")
                 filters.AppendLine("      <condition attribute='statecode' operator='eq' value='0'/>");
 
             if (!string.IsNullOrWhiteSpace(bpfName))
@@ -266,8 +266,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            var normalizedStatus = (status ?? "active").Trim().ToLowerInvariant();
-            var statusLabel = normalizedStatus == "all" ? "" : $" {normalizedStatus}";
+            var statusLabel = status == "all" ? "" : $" {status}";
             var countWord = bpfs.Count == 1 ? "BPF" : "BPFs";
 
             var sb = new StringBuilder(bpfs.Count * 150 + 256);

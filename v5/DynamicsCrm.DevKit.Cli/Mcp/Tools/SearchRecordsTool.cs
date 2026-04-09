@@ -164,11 +164,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string HandleSearchException(Exception ex)
         {
-            if (ex.Message.Contains("0x80048d0b", StringComparison.OrdinalIgnoreCase) ||
-                ex.Message.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
-                ex.Message.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
-                ex.Message.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
-                ex.Message.Contains("Search feature is disabled", StringComparison.OrdinalIgnoreCase))
+            var fullMessage = BuildFullExceptionMessage(ex);
+
+            if (fullMessage.Contains("0x80048d0b", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("0x80060203", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("SearchNotEnabled", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
+                fullMessage.Contains("Search feature is disabled", StringComparison.OrdinalIgnoreCase))
             {
                 return "Error: Dataverse Search is not enabled in this environment.\n\n" +
                        "HOW TO ENABLE:\n" +
@@ -180,7 +182,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                        "WORKAROUND: Use execute_fetchxml with a 'like' filter to search records.";
             }
 
-            return $"Error: Search failed: {ex.Message}";
+            var errorDetail = ex.InnerException != null
+                ? $"{ex.Message} → {ex.InnerException.Message}"
+                : ex.Message;
+            return $"Error: Search failed: {errorDetail}";
+        }
+
+        private static string BuildFullExceptionMessage(Exception ex)
+        {
+            var messages = new StringBuilder();
+            var current = ex;
+            while (current != null)
+            {
+                messages.Append(current.Message);
+                messages.Append(' ');
+                current = current.InnerException;
+            }
+            return messages.ToString();
         }
 
         private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
@@ -371,7 +389,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var fieldNames = entity.SearchableIndexedFieldInfoMap != null
                     ? string.Join(", ", entity.SearchableIndexedFieldInfoMap.Keys.OrderBy(k => k))
                     : "";
-                sb.AppendLine($"| {EscapePipe(entity.EntityLogicalName)} | {entity.ObjectTypeCode} | {EscapePipe(entity.PrimaryNameField ?? "")} | {EscapePipe(entity.EntityStatus ?? "")} | {fieldCount} fields: {EscapePipe(fieldNames)} |");
+                var fieldsSummary = fieldCount > 0 ? $"{fieldCount} fields: {EscapePipe(fieldNames)}" : "0 fields";
+                sb.AppendLine($"| {EscapePipe(entity.EntityLogicalName)} | {entity.ObjectTypeCode} | {EscapePipe(entity.PrimaryNameField ?? "")} | {EscapePipe(entity.EntityStatus ?? "")} | {fieldsSummary} |");
             }
 
             // Many-to-many relationships

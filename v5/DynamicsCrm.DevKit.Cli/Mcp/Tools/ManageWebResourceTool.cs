@@ -108,7 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Filter by solution unique name (list mode). Solution to add to (create mode)."
             )] string solution_name = "",
             [Description(
-                "Filter by type in list mode: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx'. Empty = all."
+                "Filter by type in list mode: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'. Empty = all."
             )] string type_filter = "",
             [Description(
                 "Max results for list mode (1-500). Default: 50."
@@ -145,9 +145,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleList(string nameFilter, string typeFilter, string solutionName, int maxRecords)
         {
             if (!string.IsNullOrWhiteSpace(typeFilter) && !TypeFilterMap.ContainsKey(typeFilter.Trim()))
-                return ErrorResult($"Error: Invalid type_filter '{typeFilter.Trim()}'. Use: js, html, css, xml, png, jpg, gif, svg, ico, resx.");
+                return ErrorResult($"Error: Invalid type_filter '{typeFilter.Trim()}'. Use: {string.Join(", ", TypeFilterMap.Keys)}.");
 
-            if (maxRecords <= 0) maxRecords = 50;
+            if (maxRecords <= 0)
+                return ErrorResult("Error: max_records must be between 1 and 500.");
             if (maxRecords > 500) maxRecords = 500;
 
             var filters = new StringBuilder();

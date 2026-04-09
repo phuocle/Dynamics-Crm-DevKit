@@ -140,15 +140,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(viewName))
             {
                 var nameFilter = viewName.Trim();
-                var matchingViews = FindViewsByNameContains(entityName, nameFilter, queryType);
-                if (matchingViews.Count == 0)
+                var matchingViews = FindViewsByNameContains(entityName, nameFilter, queryType, includeFetchXml);
+                var matchingPersonal = includePersonal
+                    ? FindPersonalViewsByNameContains(entityName, nameFilter, queryType, includeFetchXml)
+                    : new EntityCollection().Entities;
+
+                if (matchingViews.Count == 0 && matchingPersonal.Count == 0)
                     return TextResult($"[Views] {entityName} — 0 views found matching '{nameFilter}'");
-                if (matchingViews.Count == 1)
+                if (matchingViews.Count == 1 && matchingPersonal.Count == 0)
                 {
                     var matchId = matchingViews[0].GetAttributeValue<Guid>("savedqueryid");
                     return HandleDetail(entityName, matchId.ToString(), "");
                 }
-                return TextResult(FormatViewList(entityName, matchingViews, includeFetchXml, includePersonal, nameFilter));
+                return TextResult(FormatViewList(entityName, matchingViews, includeFetchXml, includePersonal, nameFilter, matchingPersonal.Count > 0 ? matchingPersonal : null));
             }
 
             var systemViews = GetSystemViews(entityName, queryType, includeFetchXml);
@@ -176,7 +180,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!Guid.TryParse(viewId.Trim(), out var id))
                     return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
-                return TextResult(GetViewDetail(id, entityName));
+                var detailText = GetViewDetail(id, entityName);
+                return detailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
+                    ? ErrorResult(detailText)
+                    : TextResult(detailText);
             }
 
             var nameFilter = viewName.Trim();
@@ -186,7 +193,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (matches.Count == 1)
             {
                 var matchId = matches[0].GetAttributeValue<Guid>("savedqueryid");
-                return TextResult(GetViewDetail(matchId, entityName));
+                var detailText = GetViewDetail(matchId, entityName);
+                return detailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
+                    ? ErrorResult(detailText)
+                    : TextResult(detailText);
             }
 
             var sb = new StringBuilder(256);
@@ -950,11 +960,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Data Helpers ──────────────────────────────────────────────────
 
-        private DataCollection<Entity> FindViewsByNameContains(string entityName, string nameFilter, int queryType)
+        private DataCollection<Entity> FindViewsByNameContains(string entityName, string nameFilter, int queryType, bool includeFetchXml = false)
         {
+            var columns = new ColumnSet("savedqueryid", "name", "querytype", "isdefault", "statecode", "ismanaged");
+            if (includeFetchXml)
+            {
+                columns.AddColumn("fetchxml");
+                columns.AddColumn("layoutxml");
+            }
             var query = new QueryExpression("savedquery")
             {
-                ColumnSet = new ColumnSet("savedqueryid", "name", "querytype", "isdefault", "statecode", "ismanaged")
+                ColumnSet = columns
+            };
+            query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
+            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
+            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
+            if (queryType >= 0)
+                query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
+            query.AddOrder("name", OrderType.Ascending);
+            return _serviceClient.RetrieveMultiple(query).Entities;
+        }
+
+        private DataCollection<Entity> FindPersonalViewsByNameContains(string entityName, string nameFilter, int queryType, bool includeFetchXml = false)
+        {
+            var columns = new ColumnSet("userqueryid", "name", "querytype", "statecode");
+            if (includeFetchXml)
+            {
+                columns.AddColumn("fetchxml");
+                columns.AddColumn("layoutxml");
+            }
+            var query = new QueryExpression("userquery")
+            {
+                ColumnSet = columns
             };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);

@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageEnvironmentVariableResult)),
         Description(
-            "List or get Dataverse environment variables.\n\n" +
+            "List, get, create, update, delete, or clear Dataverse environment variables.\n\n" +
 
             "SIX ACTIONS:\n" +
             "- action='list': List all variables with name, type, default/current value. Optional: solution_name, max_records\n" +
@@ -358,18 +358,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 update["description"] = description.Trim();
 
-            if (update.Attributes.Count > 0)
+            var hasDefChanges = update.Attributes.Count > 0;
+            var hasValueChange = !string.IsNullOrWhiteSpace(currentValue);
+
+            if (_options.DryRun && (hasDefChanges || hasValueChange))
             {
-                if (_options.DryRun)
-                    return DryRunResult($"Would UPDATE environment variable '{variableName}'.");
-                _serviceClient.Update(update);
+                var parts = new List<string>();
+                if (hasDefChanges) parts.Add("definition");
+                if (hasValueChange) parts.Add("current value");
+                return DryRunResult($"Would UPDATE environment variable '{variableName}' ({string.Join(" + ", parts)}).");
             }
 
+            if (hasDefChanges)
+                _serviceClient.Update(update);
+
             var curVal = "";
-            if (!string.IsNullOrWhiteSpace(currentValue))
+            if (hasValueChange)
             {
-                if (_options.DryRun)
-                    return DryRunResult($"Would UPDATE environment variable '{variableName}' (including current value).");
                 UpsertCurrentValue(defId, currentValue);
                 curVal = currentValue;
             }

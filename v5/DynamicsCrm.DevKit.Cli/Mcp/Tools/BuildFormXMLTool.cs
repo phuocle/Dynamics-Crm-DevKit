@@ -61,7 +61,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
                 "JSON array of operations. Each has 'action' + parameters.\n" +
-                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event', 'remove_tab', 'remove_section', 'remove_fields'.\n" +
+                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event', 'remove_tab', 'remove_section', 'remove_fields', 'remove_library', 'remove_event'.\n" +
                 "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +
                 "Example: [{\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}]\n" +

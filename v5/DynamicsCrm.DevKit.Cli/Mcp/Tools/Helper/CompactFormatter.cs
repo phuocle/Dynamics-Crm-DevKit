@@ -271,15 +271,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             LookupAttributeMetadata lk =>
                 $"Lookup -> {string.Join(", ", lk.Targets ?? [])}",
             PicklistAttributeMetadata { OptionSet.Options: not null } pk =>
-                $"Picklist ({string.Join("; ", pk.OptionSet.Options.Take(10).Select(FormatOption))})",
+                $"Picklist ({FormatOptionsWithLimit(pk.OptionSet.Options)})",
             StatusAttributeMetadata { OptionSet.Options: not null } st =>
-                $"Status ({string.Join("; ", st.OptionSet.Options.Take(10).Select(FormatOption))})",
+                $"Status ({FormatOptionsWithLimit(st.OptionSet.Options)})",
             StateAttributeMetadata { OptionSet.Options: not null } sa =>
-                $"State ({string.Join("; ", sa.OptionSet.Options.Take(10).Select(FormatOption))})",
+                $"State ({FormatOptionsWithLimit(sa.OptionSet.Options)})",
             MultiSelectPicklistAttributeMetadata { OptionSet.Options: not null } mp =>
-                $"MultiSelect ({string.Join("; ", mp.OptionSet.Options.Take(10).Select(FormatOption))})",
+                $"MultiSelect ({FormatOptionsWithLimit(mp.OptionSet.Options)})",
             _ => attr.AttributeType?.ToString() ?? "Unknown"
         };
+
+        private const int MaxInlineOptions = 10;
+
+        private static string FormatOptionsWithLimit(IEnumerable<OptionMetadata> options)
+        {
+            var list = options.ToList();
+            var shown = string.Join("; ", list.Take(MaxInlineOptions).Select(FormatOption));
+            return list.Count > MaxInlineOptions
+                ? $"{shown}; +{list.Count - MaxInlineOptions} more"
+                : shown;
+        }
 
         private static string FormatConstraints(AttributeMetadata attr) => attr switch
         {
@@ -318,7 +329,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             if (filtered.Length == 0) return;
 
-            sb.AppendLine($"[1:N Relationships] {filtered.Length} total");
+            sb.AppendLine($"[1:N Relationships] {filtered.Length}" +
+                (hasPrefix ? $" (filtered: {prefix}*)" : " total"));
             sb.AppendLine();
             sb.AppendLine("ChildEntity\tChildLookupField\tSchemaName");
             foreach (var r in filtered)
@@ -338,7 +350,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             if (filtered.Length == 0) return;
 
-            sb.AppendLine($"[N:1 Relationships] {filtered.Length} total");
+            sb.AppendLine($"[N:1 Relationships] {filtered.Length}" +
+                (hasPrefix ? $" (filtered: {prefix}*)" : " total"));
             sb.AppendLine();
             sb.AppendLine("ParentEntity\tLookupField\tSchemaName");
             foreach (var r in filtered)
@@ -360,7 +373,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             if (filtered.Length == 0) return;
 
-            sb.AppendLine($"[N:N Relationships] {filtered.Length} total");
+            sb.AppendLine($"[N:N Relationships] {filtered.Length}" +
+                (hasPrefix ? $" (filtered: {prefix}*)" : " total"));
             sb.AppendLine();
             sb.AppendLine("IntersectEntity\tEntity1\tEntity2\tSchemaName");
             foreach (var r in filtered)

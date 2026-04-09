@@ -551,4 +551,135 @@ public class SearchToolTests
     {
         Assert.AreEqual("Unknown", FormatProvisionStatus(null!));
     }
+
+    // ──────────────────────────────────────────────
+    // HandleSearchException (private static)
+    // ──────────────────────────────────────────────
+
+    private static readonly MethodInfo HandleSearchExceptionMethod = ToolType
+        .GetMethod("HandleSearchException", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static string HandleSearchException(Exception ex)
+    {
+        return (string)HandleSearchExceptionMethod.Invoke(null, new object[] { ex })!;
+    }
+
+    [TestMethod]
+    public void HandleSearchException_ErrorCodeInMessage_ReturnsEnableGuide()
+    {
+        var ex = new Exception("Request failed with error 0x80048d0b");
+        var result = HandleSearchException(ex);
+
+        Assert.IsTrue(result.Contains("Dataverse Search is not enabled"));
+        Assert.IsTrue(result.Contains("HOW TO ENABLE"));
+    }
+
+    [TestMethod]
+    public void HandleSearchException_ErrorCodeInInnerException_ReturnsEnableGuide()
+    {
+        var inner = new Exception("SearchNotEnabled: feature is not provisioned");
+        var outer = new Exception("Request failed", inner);
+        var result = HandleSearchException(outer);
+
+        Assert.IsTrue(result.Contains("Dataverse Search is not enabled"));
+        Assert.IsTrue(result.Contains("HOW TO ENABLE"));
+    }
+
+    [TestMethod]
+    public void HandleSearchException_ErrorCodeInDeepInnerException_ReturnsEnableGuide()
+    {
+        var deepInner = new Exception("Error code 0x80060203");
+        var inner = new Exception("Wrapper", deepInner);
+        var outer = new Exception("Request failed", inner);
+        var result = HandleSearchException(outer);
+
+        Assert.IsTrue(result.Contains("Dataverse Search is not enabled"));
+        Assert.IsTrue(result.Contains("HOW TO ENABLE"));
+    }
+
+    [TestMethod]
+    public void HandleSearchException_GenericError_IncludesInnerExceptionMessage()
+    {
+        var inner = new Exception("Detailed API error info");
+        var outer = new Exception("Operation failed", inner);
+        var result = HandleSearchException(outer);
+
+        Assert.IsTrue(result.Contains("Operation failed"));
+        Assert.IsTrue(result.Contains("Detailed API error info"));
+        Assert.IsTrue(result.Contains("→"));
+    }
+
+    [TestMethod]
+    public void HandleSearchException_NoInnerException_ShowsMessageOnly()
+    {
+        var ex = new Exception("Simple error");
+        var result = HandleSearchException(ex);
+
+        Assert.AreEqual("Error: Search failed: Simple error", result);
+    }
+
+    // ──────────────────────────────────────────────
+    // BuildFullExceptionMessage (private static)
+    // ──────────────────────────────────────────────
+
+    private static readonly MethodInfo BuildFullExceptionMessageMethod = ToolType
+        .GetMethod("BuildFullExceptionMessage", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static string BuildFullExceptionMessage(Exception ex)
+    {
+        return (string)BuildFullExceptionMessageMethod.Invoke(null, new object[] { ex })!;
+    }
+
+    [TestMethod]
+    public void BuildFullExceptionMessage_SingleException_ReturnsMessage()
+    {
+        var ex = new Exception("test error");
+        var result = BuildFullExceptionMessage(ex);
+
+        Assert.IsTrue(result.Contains("test error"));
+    }
+
+    [TestMethod]
+    public void BuildFullExceptionMessage_NestedExceptions_ReturnsAllMessages()
+    {
+        var inner = new Exception("inner detail");
+        var outer = new Exception("outer wrapper", inner);
+        var result = BuildFullExceptionMessage(outer);
+
+        Assert.IsTrue(result.Contains("outer wrapper"));
+        Assert.IsTrue(result.Contains("inner detail"));
+    }
+
+    // ──────────────────────────────────────────────
+    // FormatStatusResults — 0 fields cosmetic fix
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void FormatStatusResults_EntityWithZeroFields_ShowsNoTrailingColon()
+    {
+        var statusJson = JsonSerializer.Serialize(new
+        {
+            value = new
+            {
+                status = "provisioned",
+                lockboxstatus = "Disabled",
+                entitystatusresults = new[]
+                {
+                    new
+                    {
+                        entitylogicalname = "account",
+                        objecttypecode = 1,
+                        primarynamefield = "name",
+                        entitystatus = "EntitySyncComplete",
+                        searchableindexedfieldinfomap = (Dictionary<string, object>)null!
+                    }
+                }
+            }
+        });
+
+        var result = FormatStatusResults(statusJson, null);
+
+        Assert.IsTrue(result.Contains("0 fields"));
+        Assert.IsFalse(result.Contains("0 fields:"));
+    }
 }
