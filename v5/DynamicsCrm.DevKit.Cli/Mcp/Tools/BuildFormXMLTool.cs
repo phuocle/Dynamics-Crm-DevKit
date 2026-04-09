@@ -1141,7 +1141,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Email" => ControlClassId.SINGLE_LINE_OF_TEXT_EMAIL,
                     "Url" => ControlClassId.SINGLE_LINE_OF_TEXT_URL,
                     "TickerSymbol" => ControlClassId.SINGLE_LINE_OF_TEXT_TICKER_SYMBOL,
-                    "Phone" => ControlClassId.SINGLE_LINE_OF_TEXT_PHONE,
+                    "TextArea" => ControlClassId.MULTI_LINES_OF_TEXT,
                     _ => ControlClassId.SINGLE_LINE_OF_TEXT
                 },
                 IntegerAttributeMetadata i => i.Format switch
@@ -1153,7 +1153,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 },
                 MemoAttributeMetadata => ControlClassId.MULTI_LINES_OF_TEXT,
                 DateTimeAttributeMetadata => ControlClassId.DATE_TIME,
-                BooleanAttributeMetadata => ControlClassId.TWO_OPTIONS_2,
+                BooleanAttributeMetadata => ControlClassId.TWO_OPTIONS,
                 PicklistAttributeMetadata => ControlClassId.STATE_CODE,
                 StateAttributeMetadata => ControlClassId.STATE_CODE,
                 StatusAttributeMetadata => ControlClassId.STATE_CODE,
