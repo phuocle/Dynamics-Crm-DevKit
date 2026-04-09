@@ -654,7 +654,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "nocascade" => CascadeType.NoCascade,
                 "removelink" => CascadeType.RemoveLink,
                 "restrict" => CascadeType.Restrict,
-                _ => null
+                _ => throw new ArgumentException($"Invalid cascade type '{value}'. Valid values: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict")
             };
         }
 
@@ -662,7 +662,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string assign, string delete, string merge, string reparent, string share, string unshare)
         {
             CascadeConfiguration config;
-            switch ((preset ?? "").Trim().ToLowerInvariant())
+            var normalizedPreset = (preset ?? "").Trim().ToLowerInvariant();
+            switch (normalizedPreset)
             {
                 case "parental":
                     config = new CascadeConfiguration
@@ -686,7 +687,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Unshare = CascadeType.NoCascade
                     };
                     break;
-                default: // "referential" or empty
+                case "referential":
+                case "":
                     config = new CascadeConfiguration
                     {
                         Assign = CascadeType.NoCascade,
@@ -697,6 +699,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Unshare = CascadeType.NoCascade
                     };
                     break;
+                default:
+                    throw new ArgumentException($"Invalid cascade_preset '{preset}'. Valid values: Parental, Referential, ReferentialRestrictDelete");
             }
 
             // Apply individual overrides
@@ -715,9 +719,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(value)) return AssociatedMenuBehavior.UseCollectionName;
             return value.Trim().ToLowerInvariant() switch
             {
+                "usecollectionname" => AssociatedMenuBehavior.UseCollectionName,
                 "uselabel" => AssociatedMenuBehavior.UseLabel,
                 "donotdisplay" => AssociatedMenuBehavior.DoNotDisplay,
-                _ => AssociatedMenuBehavior.UseCollectionName
+                _ => throw new ArgumentException($"Invalid menu_behavior '{value}'. Valid values: UseCollectionName, UseLabel, DoNotDisplay")
             };
         }
 
@@ -726,10 +731,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(value)) return AssociatedMenuGroup.Details;
             return value.Trim().ToLowerInvariant() switch
             {
+                "details" => AssociatedMenuGroup.Details,
                 "sales" => AssociatedMenuGroup.Sales,
                 "service" => AssociatedMenuGroup.Service,
                 "marketing" => AssociatedMenuGroup.Marketing,
-                _ => AssociatedMenuGroup.Details
+                _ => throw new ArgumentException($"Invalid menu_group '{value}'. Valid values: Details, Sales, Service, Marketing")
             };
         }
 

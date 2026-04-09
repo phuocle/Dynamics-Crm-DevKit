@@ -65,9 +65,10 @@ public class UpsertRelationshipToolTests
     }
 
     [TestMethod]
-    public void ParseCascadeType_Invalid_ReturnsNull()
+    public void ParseCascadeType_Invalid_ThrowsArgumentException()
     {
-        Assert.IsNull(ParseCascadeType("invalid"));
+        try { ParseCascadeType("invalid"); Assert.Fail("Expected exception"); }
+        catch (TargetInvocationException ex) { Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException)); }
     }
 
     [TestMethod]
@@ -167,9 +168,10 @@ public class UpsertRelationshipToolTests
     }
 
     [TestMethod]
-    public void ParseMenuBehavior_Invalid_DefaultsToUseCollectionName()
+    public void ParseMenuBehavior_Invalid_ThrowsArgumentException()
     {
-        Assert.AreEqual(AssociatedMenuBehavior.UseCollectionName, ParseMenuBehavior("something"));
+        try { ParseMenuBehavior("something"); Assert.Fail("Expected exception"); }
+        catch (TargetInvocationException ex) { Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException)); }
     }
 
     // ──────────────────────────────────────────────
@@ -416,5 +418,89 @@ public class UpsertRelationshipToolTests
         Assert.IsTrue(desc.Contains("Parental"), "Description should mention Parental preset");
         Assert.IsTrue(desc.Contains("Referential"), "Description should mention Referential preset");
         Assert.IsTrue(desc.Contains("ReferentialRestrictDelete"), "Description should mention ReferentialRestrictDelete preset");
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: Invalid cascade_preset throws
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void BuildCascadeConfiguration_InvalidPreset_ThrowsArgumentException()
+    {
+        try { BuildCascadeConfiguration("TOTALLY_BOGUS"); Assert.Fail("Expected exception"); }
+        catch (TargetInvocationException ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Invalid cascade_preset"));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Parental"));
+        }
+    }
+
+    [TestMethod]
+    public void BuildCascadeConfiguration_ExplicitReferential_Works()
+    {
+        var config = BuildCascadeConfiguration("Referential");
+        Assert.AreEqual(CascadeType.NoCascade, config.Assign);
+        Assert.AreEqual(CascadeType.RemoveLink, config.Delete);
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: Invalid cascade type override throws
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void ParseCascadeType_InvalidNonEmpty_ThrowsArgumentException()
+    {
+        try { ParseCascadeType("BOGUS_VALUE"); Assert.Fail("Expected exception"); }
+        catch (TargetInvocationException ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Invalid cascade type"));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Cascade"));
+        }
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: Invalid menu_behavior throws
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void ParseMenuBehavior_InvalidNonEmpty_ThrowsArgumentException()
+    {
+        try { ParseMenuBehavior("BOGUS"); Assert.Fail("Expected exception"); }
+        catch (TargetInvocationException ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Invalid menu_behavior"));
+            Assert.IsTrue(ex.InnerException.Message.Contains("UseCollectionName"));
+        }
+    }
+
+    [TestMethod]
+    public void ParseMenuBehavior_UseCollectionName_Explicit_Works()
+    {
+        Assert.AreEqual(AssociatedMenuBehavior.UseCollectionName, ParseMenuBehavior("UseCollectionName"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Adversarial: Invalid menu_group throws
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void ParseMenuGroup_InvalidNonEmpty_ThrowsArgumentException()
+    {
+        try { ParseMenuGroup("BOGUS_GROUP"); Assert.Fail("Expected exception"); }
+        catch (TargetInvocationException ex)
+        {
+            Assert.IsInstanceOfType(ex.InnerException, typeof(ArgumentException));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Invalid menu_group"));
+            Assert.IsTrue(ex.InnerException.Message.Contains("Details"));
+        }
+    }
+
+    [TestMethod]
+    public void ParseMenuGroup_Details_Explicit_Works()
+    {
+        Assert.AreEqual(AssociatedMenuGroup.Details, ParseMenuGroup("Details"));
     }
 }

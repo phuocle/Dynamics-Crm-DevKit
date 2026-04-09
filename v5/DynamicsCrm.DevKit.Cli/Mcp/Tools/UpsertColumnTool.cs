@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("For string (1-4000, default 100), memo (1-1048576, default 2000), file (KB, default 32768).")] int max_length = 0,
             [Description("For numeric types: minimum value.")] double? min_value = null,
             [Description("For numeric types: maximum value.")] double? max_value = null,
-            [Description("For decimal/money/float: decimal places (0-10, default 2). Omit to keep current value on update.")] int precision = -1,
+            [Description("For decimal/money/float: decimal places (0-10, default 2; money max is 4). Omit to keep current value on update.")] int precision = -1,
             [Description("For string: 'Text','Email','Url','Phone','TextArea','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
             [Description("For datetime: 'UserLocal' (default),'DateOnly','TimeZoneIndependent'. DateOnly behavior forces DateOnly format.")] string behavior = "",
             [Description("For money: 0 (Attribute, default), 1 (Organization), 2 (Currency). Controls which precision setting governs the column at runtime.")] int precision_source = -1,
@@ -132,10 +132,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Message: Attribute name must include a publisher prefix (e.g., 'new_priority', 'cr_priority')\n" +
                     $"Tip: Check solution publisher prefix and use it as attribute name prefix");
 
-            // Derive schema name: new_priority → new_Priority
+            // Derive schema name from display_name: remove spaces and dashes first (preserving original casing), then remove remaining non-alphanumeric characters
             var prefix = attribute_name.Substring(0, underscoreIndex);
-            var namePart = attribute_name.Substring(underscoreIndex + 1);
-            var schemaName = prefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(namePart);
+            var schemaNamePart = display_name.Trim().Replace(" ", "").Replace("-", "");
+            schemaNamePart = new string(schemaNamePart.Where(c => char.IsLetterOrDigit(c)).ToArray());
+            var schemaName = prefix + "_" + schemaNamePart;
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
@@ -199,6 +200,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxLength < 1) maxLength = 100;
             if (maxLength > 4000) maxLength = 4000;
 
+            var resolvedFormat = ResolveStringFormat(format, out var formatError);
+            if (formatError != null) return ErrorResult(formatError);
+
             var attr = new StringAttributeMetadata
             {
                 SchemaName = schemaName,
@@ -206,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = new Label(displayName.Trim(), 1033),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 MaxLength = maxLength,
-                FormatName = ResolveStringFormat(format),
+                FormatName = resolvedFormat,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
@@ -233,7 +237,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxLength < 1) maxLength = 2000;
             if (maxLength > 1048576) maxLength = 1048576;
 
-            var memoFormat = ResolveMemoFormat(format);
+            var memoFormat = ResolveMemoFormat(format, out var formatError);
+            if (formatError != null) return ErrorResult(formatError);
             var attr = new MemoAttributeMetadata
             {
                 SchemaName = schemaName,
@@ -264,13 +269,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string displayName, string description, AttributeRequiredLevel reqLevel,
             double? minValue, double? maxValue, string format, string solutionName, bool autoPublish)
         {
+            var resolvedFormat = ResolveIntegerFormat(format, out var formatError);
+            if (formatError != null) return ErrorResult(formatError);
+
             var attr = new IntegerAttributeMetadata
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), 1033),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                Format = ResolveIntegerFormat(format),
+                Format = resolvedFormat,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (minValue.HasValue) attr.MinValue = (int)minValue.Value;
@@ -451,7 +459,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string displayName, string description, AttributeRequiredLevel reqLevel,
             string format, string behavior, string solutionName, bool autoPublish)
         {
-            var dtBehavior = ResolveDateTimeBehavior(behavior);
+            var dtBehavior = ResolveDateTimeBehavior(behavior, out var behaviorError);
+            if (behaviorError != null) return ErrorResult(behaviorError);
             var dateFormat = DateTimeFormat.DateAndTime;
             if (!string.IsNullOrWhiteSpace(format) && format.Trim().Equals("DateOnly", StringComparison.OrdinalIgnoreCase))
                 dateFormat = DateTimeFormat.DateOnly;
@@ -486,16 +495,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", behaviorName } });
         }
 
-        private static DateTimeBehavior ResolveDateTimeBehavior(string behavior)
+        private static DateTimeBehavior ResolveDateTimeBehavior(string behavior, out string error)
         {
+            error = null;
             if (string.IsNullOrWhiteSpace(behavior))
                 return DateTimeBehavior.UserLocal;
-            return behavior.Trim().ToLowerInvariant() switch
+            var result = behavior.Trim().ToLowerInvariant() switch
             {
                 "dateonly" => DateTimeBehavior.DateOnly,
                 "timezoneindependent" => DateTimeBehavior.TimeZoneIndependent,
-                _ => DateTimeBehavior.UserLocal
+                "userlocal" => DateTimeBehavior.UserLocal,
+                _ => (DateTimeBehavior)null
             };
+            if (result == null)
+                error = $"[Error] Invalid behavior: '{behavior}'\nValid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'";
+            return result ?? DateTimeBehavior.UserLocal;
         }
 
         // --- Lookup (single target) or Polymorphic Lookup (multiple targets) ---
@@ -1039,11 +1053,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static StringFormatName ResolveStringFormat(string format)
+        private static StringFormatName ResolveStringFormat(string format, out string error)
         {
+            error = null;
             if (string.IsNullOrWhiteSpace(format))
                 return StringFormatName.Text;
-            return format.Trim().ToLowerInvariant() switch
+            var result = format.Trim().ToLowerInvariant() switch
             {
                 "email" => StringFormatName.Email,
                 "url" => StringFormatName.Url,
@@ -1051,33 +1066,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "textarea" => StringFormatName.TextArea,
                 "tickersymbol" => StringFormatName.TickerSymbol,
                 "richtext" => StringFormatName.RichText,
-                _ => StringFormatName.Text
+                "text" => StringFormatName.Text,
+                _ => (StringFormatName)null
             };
+            if (result == null)
+                error = $"[Error] Invalid format: '{format}'\nValid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'";
+            return result ?? StringFormatName.Text;
         }
 
-        private static IntegerFormat ResolveIntegerFormat(string format)
+        private static IntegerFormat ResolveIntegerFormat(string format, out string error)
         {
+            error = null;
             if (string.IsNullOrWhiteSpace(format))
                 return IntegerFormat.None;
-            return format.Trim().ToLowerInvariant() switch
+            var result = format.Trim().ToLowerInvariant() switch
             {
+                "none" => (IntegerFormat?)IntegerFormat.None,
                 "duration" => IntegerFormat.Duration,
                 "timezone" => IntegerFormat.TimeZone,
                 "language" => IntegerFormat.Language,
                 "locale" => IntegerFormat.Locale,
-                _ => IntegerFormat.None
+                _ => null
             };
+            if (result == null)
+                error = $"[Error] Invalid format for integer: '{format}'\nValid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'";
+            return result ?? IntegerFormat.None;
         }
 
-        private static MemoFormatName ResolveMemoFormat(string format)
+        private static MemoFormatName ResolveMemoFormat(string format, out string error)
         {
+            error = null;
             if (string.IsNullOrWhiteSpace(format))
                 return MemoFormatName.Text;
-            return format.Trim().ToLowerInvariant() switch
+            var result = format.Trim().ToLowerInvariant() switch
             {
+                "text" => MemoFormatName.Text,
                 "richtext" => MemoFormatName.RichText,
-                _ => MemoFormatName.Text
+                _ => (MemoFormatName)null
             };
+            if (result == null)
+                error = $"[Error] Invalid format for memo: '{format}'\nValid values: 'Text' (default), 'RichText'";
+            return result ?? MemoFormatName.Text;
         }
 
         private sealed class OptionItem
@@ -1207,8 +1236,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 // --- Type-specific property updates ---
-                ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
+                var typeError = ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
                     trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges);
+                if (typeError != null)
+                    return ErrorResult(typeError);
 
                 // --- Execute metadata update (if any generic/type-specific changes) ---
                 if (changes.Count > 0)
@@ -1297,7 +1328,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ========== Type-Specific Updates ==========
 
-        private static void ApplyTypeSpecificUpdates(AttributeMetadata metadata,
+        private static string ApplyTypeSpecificUpdates(AttributeMetadata metadata,
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel, string behavior, int precisionSource,
             List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges)
@@ -1315,11 +1346,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(format))
                 {
                     var oldVal = stringMeta.FormatName?.Value ?? "Text";
-                    stringMeta.FormatName = ResolveStringFormat(format);
+                    var resolved = ResolveStringFormat(format, out var formatError);
+                    if (formatError != null) return formatError;
+                    stringMeta.FormatName = resolved;
                     changes.Add($"Format: {oldVal} -> {stringMeta.FormatName.Value}");
                     structuredChanges["format"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = stringMeta.FormatName.Value };
                 }
-                return;
+                return null;
             }
 
             if (metadata is MemoAttributeMetadata memoMeta)
@@ -1332,7 +1365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     changes.Add($"MaxLength: {oldVal} -> {maxLength}");
                     structuredChanges["maxLength"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = maxLength.ToString() };
                 }
-                return;
+                return null;
             }
 
             if (metadata is IntegerAttributeMetadata intMeta)
@@ -1351,7 +1384,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     changes.Add($"MaxValue: {oldVal} -> {(int)maxValue.Value}");
                     structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = ((int)maxValue.Value).ToString() };
                 }
-                return;
+                return null;
             }
 
             if (metadata is DecimalAttributeMetadata decMeta)
@@ -1359,7 +1392,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (minValue.HasValue) { var o = decMeta.MinValue?.ToString() ?? ""; decMeta.MinValue = (decimal)minValue.Value; changes.Add($"MinValue: {o} -> {(decimal)minValue.Value}"); structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = o, NewValue = ((decimal)minValue.Value).ToString() }; }
                 if (maxValue.HasValue) { var o = decMeta.MaxValue?.ToString() ?? ""; decMeta.MaxValue = (decimal)maxValue.Value; changes.Add($"MaxValue: {o} -> {(decimal)maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = ((decimal)maxValue.Value).ToString() }; }
                 if (precision >= 0) { var o = decMeta.Precision?.ToString() ?? ""; if (precision > 10) precision = 10; decMeta.Precision = precision; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
-                return;
+                return null;
             }
 
             if (metadata is MoneyAttributeMetadata moneyMeta)
@@ -1368,7 +1401,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (maxValue.HasValue) { var o = moneyMeta.MaxValue?.ToString() ?? ""; moneyMeta.MaxValue = maxValue.Value; changes.Add($"MaxValue: {o} -> {maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = maxValue.Value.ToString() }; }
                 if (precision >= 0) { var o = moneyMeta.Precision?.ToString() ?? ""; if (precision > 4) precision = 4; moneyMeta.Precision = precision; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
                 if (precisionSource >= 0 && precisionSource <= 2) { var o = moneyMeta.PrecisionSource?.ToString() ?? ""; moneyMeta.PrecisionSource = precisionSource; changes.Add($"PrecisionSource: {o} -> {precisionSource}"); structuredChanges["precisionSource"] = new UpdateAttributeChange { OldValue = o, NewValue = precisionSource.ToString() }; }
-                return;
+                return null;
             }
 
             if (metadata is DoubleAttributeMetadata dblMeta)
@@ -1376,7 +1409,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (minValue.HasValue) { var o = dblMeta.MinValue?.ToString() ?? ""; dblMeta.MinValue = minValue.Value; changes.Add($"MinValue: {o} -> {minValue.Value}"); structuredChanges["minValue"] = new UpdateAttributeChange { OldValue = o, NewValue = minValue.Value.ToString() }; }
                 if (maxValue.HasValue) { var o = dblMeta.MaxValue?.ToString() ?? ""; dblMeta.MaxValue = maxValue.Value; changes.Add($"MaxValue: {o} -> {maxValue.Value}"); structuredChanges["maxValue"] = new UpdateAttributeChange { OldValue = o, NewValue = maxValue.Value.ToString() }; }
                 if (precision >= 0) { var o = dblMeta.Precision?.ToString() ?? ""; if (precision > 10) precision = 10; dblMeta.Precision = precision; changes.Add($"Precision: {o} -> {precision}"); structuredChanges["precision"] = new UpdateAttributeChange { OldValue = o, NewValue = precision.ToString() }; }
-                return;
+                return null;
             }
 
             if (metadata is BooleanAttributeMetadata boolMeta)
@@ -1395,14 +1428,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     changes.Add($"FalseLabel: \"{oldVal}\" -> \"{falseLabel.Trim()}\"");
                     structuredChanges["falseLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = falseLabel.Trim() };
                 }
-                return;
+                return null;
             }
 
             if (metadata is DateTimeAttributeMetadata dtMeta)
             {
                 if (!string.IsNullOrWhiteSpace(behavior))
                 {
-                    var newBehavior = ResolveDateTimeBehavior(behavior);
+                    var newBehavior = ResolveDateTimeBehavior(behavior, out var behaviorErr);
+                    if (behaviorErr != null) return behaviorErr;
                     var oldVal = dtMeta.DateTimeBehavior?.Value ?? "UserLocal";
                     dtMeta.DateTimeBehavior = newBehavior;
                     changes.Add($"Behavior: {oldVal} -> {newBehavior.Value}");
@@ -1430,6 +1464,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
             }
+            return null;
         }
 
         // ========== Picklist Option Management ==========

@@ -41,13 +41,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
             "- If entity_name has NO prefix (no underscore), the tool auto-resolves the prefix from solution_name's publisher\n" +
             "- table_type: 'Standard' (default) or 'Elastic' (Cosmos DB). ownership_type: 'User' (default) or 'Organization'\n" +
-            "- For activity entities: set is_activity=true (auto-sets User ownership, notes, feedback, Subject primary attr)\n" +
+            "- For activity entities: set is_activity=true (auto-sets User ownership, notes, Subject primary attr)\n" +
             "- After creation: upsert_column to add columns, build_form_xml + manage_form to customize the form\n\n" +
 
             "UPDATE MODE (entity already exists):\n" +
             "- Only entity_name is required to identify the entity\n" +
             "- Only provided parameters are updated, omitted ones keep current values\n" +
             "- Immutable properties (ownership_type, table_type, is_activity, has_notes, primary attribute) are ignored with warnings\n\n" +
+
+            "IRREVERSIBLE OPTIONS (manage via Power Apps UI — not exposed here):\n" +
+            "- Activities, Feedback, Change Tracking, Business Process Flows, Connections, Queues, Sending Email\n" +
+            "- These options CANNOT be turned off once enabled, so they must be set deliberately via the UI\n\n" +
 
             "TIPS:\n" +
             "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
@@ -64,23 +68,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Max length of primary attribute (1-850). Default: 100. Create only.")] int primary_attribute_max_length = 100,
             [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security). Create only — cannot be changed after creation.")] string ownership_type = "User",
             [Description("Table type: 'Standard' (default), 'Elastic' (for high-volume/IoT scenarios with Azure Cosmos DB). Elastic tables have limited charting support. Create only.")] string table_type = "Standard",
-            [Description("Create as activity entity. Default: false. When true, sets ownership to User, enables notes/feedback, and uses 'Subject' as primary attribute. Create only — cannot be changed after creation.")] bool is_activity = false,
-            [Description("Enable notes. Default: true. Create only — cannot be changed after creation.")] bool has_notes = true,
-            [Description("Enable activities. Default: true (create). Omit to keep current value (update).")] bool? has_activities = null,
-            [Description("Enable feedback/ratings. Default: false (create). Omit to keep current value (update).")] bool? has_feedback = null,
+            [Description("Create as activity entity. Default: false. When true, sets ownership to User, enables notes, and uses 'Subject' as primary attribute. Create only — cannot be changed after creation.")] bool is_activity = false,
+            [Description("Enable notes. Default: false. Create only — cannot be changed after creation.")] bool has_notes = false,
             [Description("Enable quick create form. Default: false (create). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
-            [Description("Enable duplicate detection. Default: true (create). Omit to keep current value (update).")] bool? is_duplicate_detection_enabled = null,
-            [Description("Enable change tracking. Default: true (create). Omit to keep current value (update).")] bool? change_tracking_enabled = null,
+            [Description("Enable duplicate detection. Default: false (create). Omit to keep current value (update).")] bool? is_duplicate_detection_enabled = null,
             [Description("Hex color code (e.g., '#4A90D9').")] string entity_color = "",
             [Description("Enable/disable auditing (update only).")] bool? is_audit_enabled = null,
-            [Description("Enable/disable business process flows (update only).")] bool? is_business_process_enabled = null,
             [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
 
-            entity_name = entity_name.Trim().ToLowerInvariant();
+            // Sanitize entity_name: remove spaces (keep original casing for schema name derivation)
+            var originalEntityName = entity_name.Trim().Replace(" ", "");
+            entity_name = originalEntityName.ToLowerInvariant();
 
             // Resolve publisher prefix from solution if provided
             string resolvedPrefix = null;
@@ -101,6 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var prefixWithUnderscore = resolvedPrefix + "_";
                 if (!entity_name.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
                 {
+                    originalEntityName = $"{resolvedPrefix}_{originalEntityName}";
                     entity_name = $"{resolvedPrefix}_{entity_name}";
                 }
             }
@@ -123,9 +126,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     // Entity exists — go to update mode directly
                     return UpdateExistingEntity(entity_name, checkResponse.EntityMetadata,
                         display_name, display_collection_name, description,
-                        has_activities, has_feedback, is_quick_create_enabled,
-                        is_duplicate_detection_enabled, change_tracking_enabled, entity_color,
-                        is_audit_enabled, is_business_process_enabled,
+                        is_quick_create_enabled,
+                        is_duplicate_detection_enabled, entity_color,
+                        is_audit_enabled,
                         ownership_type, table_type, is_activity, has_notes,
                         primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
                         resolvedSolutionUniqueName ?? solution_name, auto_publish);
@@ -164,9 +167,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- UPDATE MODE ---
                 return UpdateExistingEntity(entity_name, existingEntity,
                     display_name, display_collection_name, description,
-                    has_activities, has_feedback, is_quick_create_enabled,
-                    is_duplicate_detection_enabled, change_tracking_enabled, entity_color,
-                    is_audit_enabled, is_business_process_enabled,
+                    is_quick_create_enabled,
+                    is_duplicate_detection_enabled, entity_color,
+                    is_audit_enabled,
                     ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
                     resolvedSolutionUniqueName ?? solution_name, auto_publish);
@@ -188,8 +191,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;
             if (primary_attribute_max_length > 850) primary_attribute_max_length = 850;
 
-            // Auto-derive schema name: new_project → new_Project
-            var schemaName = prefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(namePart);
+            // Auto-derive schema name from originalEntityName or display_name
+            // Priority: if entity_name has casing info, use it; otherwise fall back to display_name
+            // e.g., entity_name="MCPDevKitV5" with prefix "v4" → schemaName = "v4_MCPDevKitV5"
+            // e.g., entity_name="mcpdevkitv5", display_name="MCP DevKit V5" → schemaName = "v4_MCPDevKitV5"
+            // e.g., entity_name="project" with prefix "new" → schemaName = "new_Project" (fallback to TitleCase)
+            var originalUnderscoreIndex = originalEntityName.IndexOf('_');
+            var originalNamePart = originalEntityName.Substring(originalUnderscoreIndex + 1);
+            string schemaName;
+            if (originalNamePart.Any(char.IsUpper))
+            {
+                // entity_name has mixed/upper casing (e.g., "MCPDevKitV5"), use it as-is
+                schemaName = originalEntityName;
+            }
+            else if (!string.IsNullOrWhiteSpace(display_name) && display_name.Trim().Any(char.IsUpper))
+            {
+                // entity_name is all lowercase but display_name has casing info
+                // Derive schema name from display_name by removing spaces
+                // e.g., display_name="MCP DevKit V5" → "MCPDevKitV5" → schemaName="v4_MCPDevKitV5"
+                var derivedName = display_name.Trim().Replace(" ", "");
+                schemaName = prefix + "_" + derivedName;
+            }
+            else
+            {
+                // Both are all lowercase, apply TitleCase as fallback
+                schemaName = prefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(namePart);
+            }
 
             // Auto-derive primary attribute name
             if (string.IsNullOrWhiteSpace(primary_attribute_name))
@@ -242,18 +269,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Tip: Activity entities do not support Elastic table type.");
 
             // Apply null-coalesced defaults for create mode
-            var effectiveHasActivities = has_activities ?? true;
-            var effectiveHasFeedback = has_feedback ?? false;
             var effectiveIsQuickCreateEnabled = is_quick_create_enabled ?? false;
-            var effectiveIsDuplicateDetectionEnabled = is_duplicate_detection_enabled ?? true;
-            var effectiveChangeTrackingEnabled = change_tracking_enabled ?? true;
+            var effectiveIsDuplicateDetectionEnabled = is_duplicate_detection_enabled ?? false;
 
             // Activity overrides
             if (is_activity)
             {
                 ownershipTypeValue = OwnershipTypes.UserOwned;
                 has_notes = true;
-                effectiveHasFeedback = true;
                 primarySchemaName = "Subject";
                 primary_attribute_name = "subject";
                 primary_attribute_display_name = "Subject";
@@ -269,12 +292,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DisplayCollectionName = new Label(display_collection_name.Trim(), 1033),
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
-                    IsAuditEnabled = new BooleanManagedProperty(true),
-                    HasActivities = effectiveHasActivities,
-                    HasFeedback = effectiveHasFeedback,
+                    IsAuditEnabled = new BooleanManagedProperty(false),
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
-                    IsDuplicateDetectionEnabled = new BooleanManagedProperty(effectiveIsDuplicateDetectionEnabled),
-                    ChangeTrackingEnabled = effectiveChangeTrackingEnabled
+                    IsDuplicateDetectionEnabled = new BooleanManagedProperty(effectiveIsDuplicateDetectionEnabled)
                 };
 
                 if (!string.IsNullOrWhiteSpace(description))
@@ -310,7 +330,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     PrimaryAttribute = primaryAttribute,
                     SolutionUniqueName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     HasNotes = has_notes,
-                    HasActivities = effectiveHasActivities
+                    HasActivities = false
                 };
 
                 if (_options.DryRun)
@@ -363,10 +383,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"PrimaryAttribute: {primary_attribute_name} ({primary_attribute_display_name.Trim()})");
                 sb.AppendLine($"PrimaryAttrMaxLength: {primary_attribute_max_length}");
                 sb.AppendLine($"HasNotes: {(has_notes ? "yes" : "no")}");
-                sb.AppendLine($"HasActivities: {(effectiveHasActivities ? "yes" : "no")}");
                 sb.AppendLine($"IsActivity: {(is_activity ? "yes" : "no")}");
                 sb.AppendLine($"DuplicateDetection: {(effectiveIsDuplicateDetectionEnabled ? "yes" : "no")}");
-                sb.AppendLine($"ChangeTracking: {(effectiveChangeTrackingEnabled ? "yes" : "no")}");
                 sb.AppendLine($"Solution: {resolvedSolutionUniqueName ?? solution_name.Trim()}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {entityId}");
@@ -389,12 +407,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     SolutionName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     Published = published,
                     HasNotes = has_notes,
-                    HasActivities = effectiveHasActivities,
+                    HasActivities = false,
                     IsActivity = is_activity,
-                    HasFeedback = effectiveHasFeedback,
+                    HasFeedback = false,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
                     DuplicateDetection = effectiveIsDuplicateDetectionEnabled,
-                    ChangeTracking = effectiveChangeTrackingEnabled,
+                    ChangeTracking = false,
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                     EntityColor = string.IsNullOrWhiteSpace(entity_color) ? null : entity_color.Trim(),
                     Status = "created"
@@ -430,9 +448,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult UpdateExistingEntity(
             string entityName, EntityMetadata existingMetadata,
             string displayName, string displayCollectionName, string description,
-            bool? hasActivities, bool? hasFeedback, bool? isQuickCreateEnabled,
-            bool? isDuplicateDetectionEnabled, bool? changeTrackingEnabled, string entityColor,
-            bool? isAuditEnabled, bool? isBusinessProcessEnabled,
+            bool? isQuickCreateEnabled,
+            bool? isDuplicateDetectionEnabled, string entityColor,
+            bool? isAuditEnabled,
             string ownershipType, string tableType, bool isActivity, bool hasNotes,
             string primaryAttributeName, string primaryAttributeDisplayName, int primaryAttributeMaxLength,
             string solutionName, bool autoPublish)
@@ -478,44 +496,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 // --- Bool properties ---
-                if (hasActivities.HasValue && existingMetadata.HasActivities != hasActivities.Value)
-                {
-                    var oldVal = existingMetadata.HasActivities == true ? "true" : "false";
-                    existingMetadata.HasActivities = hasActivities.Value;
-                    changes.Add($"HasActivities: {oldVal} -> {hasActivities.Value.ToString().ToLowerInvariant()}");
-                    structuredChanges["hasActivities"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = hasActivities.Value.ToString().ToLowerInvariant() };
-                }
-
-                if (hasFeedback.HasValue && existingMetadata.HasFeedback != hasFeedback.Value)
-                {
-                    var oldVal = existingMetadata.HasFeedback == true ? "true" : "false";
-                    existingMetadata.HasFeedback = hasFeedback.Value;
-                    changes.Add($"HasFeedback: {oldVal} -> {hasFeedback.Value.ToString().ToLowerInvariant()}");
-                    structuredChanges["hasFeedback"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = hasFeedback.Value.ToString().ToLowerInvariant() };
-                }
-
                 if (isQuickCreateEnabled.HasValue && existingMetadata.IsQuickCreateEnabled != isQuickCreateEnabled.Value)
                 {
                     var oldVal = existingMetadata.IsQuickCreateEnabled == true ? "true" : "false";
                     existingMetadata.IsQuickCreateEnabled = isQuickCreateEnabled.Value;
                     changes.Add($"IsQuickCreateEnabled: {oldVal} -> {isQuickCreateEnabled.Value.ToString().ToLowerInvariant()}");
                     structuredChanges["isQuickCreateEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isQuickCreateEnabled.Value.ToString().ToLowerInvariant() };
-                }
-
-                if (changeTrackingEnabled.HasValue && existingMetadata.ChangeTrackingEnabled != changeTrackingEnabled.Value)
-                {
-                    var oldVal = existingMetadata.ChangeTrackingEnabled == true ? "true" : "false";
-                    existingMetadata.ChangeTrackingEnabled = changeTrackingEnabled.Value;
-                    changes.Add($"ChangeTrackingEnabled: {oldVal} -> {changeTrackingEnabled.Value.ToString().ToLowerInvariant()}");
-                    structuredChanges["changeTrackingEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = changeTrackingEnabled.Value.ToString().ToLowerInvariant() };
-                }
-
-                if (isBusinessProcessEnabled.HasValue && existingMetadata.IsBusinessProcessEnabled != isBusinessProcessEnabled.Value)
-                {
-                    var oldVal = existingMetadata.IsBusinessProcessEnabled == true ? "true" : "false";
-                    existingMetadata.IsBusinessProcessEnabled = isBusinessProcessEnabled.Value;
-                    changes.Add($"IsBusinessProcessEnabled: {oldVal} -> {isBusinessProcessEnabled.Value.ToString().ToLowerInvariant()}");
-                    structuredChanges["isBusinessProcessEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isBusinessProcessEnabled.Value.ToString().ToLowerInvariant() };
                 }
 
                 // --- BooleanManagedProperty properties ---
@@ -584,7 +570,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         foreach (var w in warnings)
                             sb2.AppendLine($"  {w}");
                     }
-                    sb2.AppendLine("Tip: Provide at least one updatable parameter (display_name, description, has_activities, entity_color, etc.)");
+                    sb2.AppendLine("Tip: Provide at least one updatable parameter (display_name, description, entity_color, is_quick_create_enabled, is_audit_enabled, etc.)");
+                    sb2.AppendLine("Note: Irreversible options (activities, feedback, change tracking, business process flows, connections, queues) must be managed via the Power Apps portal.");
                     return ErrorResult(sb2.ToString());
                 }
 
