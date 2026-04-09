@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(PublishCustomizationsTool)] = "standard",
             [nameof(ManageFormTool)] = "standard",
             [nameof(ManageViewTool)] = "standard",
-            [nameof(GetRolesTool)] = "standard",
+            [nameof(ManageRoleTool)] = "standard",
             [nameof(GetMessagesTool)] = "standard",
             [nameof(ManageEnvironmentVariableTool)] = "standard",
             [nameof(GetWorkflowsTool)] = "standard",
