@@ -337,7 +337,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 area.AddFirst(BuildTitlesElement(label));
                 changes.Add($"label='{label}'");
             }
-            var showGroups = GetStringProp(op, "show_groups");
+            var showGroups = NormalizeBoolProp(op, "show_groups");
             if (showGroups != null) { area.SetAttributeValue("ShowGroups", showGroups); changes.Add($"ShowGroups={showGroups}"); }
             var icon = GetStringProp(op, "icon");
             if (icon != null) { area.SetAttributeValue("Icon", icon); changes.Add($"Icon='{icon}'"); }
@@ -365,7 +365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 group.AddFirst(BuildTitlesElement(label));
                 changes.Add($"label='{label}'");
             }
-            var isProfile = GetStringProp(op, "is_profile");
+            var isProfile = NormalizeBoolProp(op, "is_profile");
             if (isProfile != null) { group.SetAttributeValue("IsProfile", isProfile); changes.Add($"IsProfile={isProfile}"); }
 
             return $"Updated Group '{GetGroupLabel(group)}' in Area '{GetAreaLabel(area)}': {string.Join(", ", changes)}";
@@ -400,8 +400,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (entity != null) { subArea.SetAttributeValue("Entity", entity); changes.Add($"Entity='{entity}'"); }
             var url = GetStringProp(op, "url");
             if (url != null) { subArea.SetAttributeValue("Url", url); changes.Add($"Url='{url}'"); }
-            var icon = GetStringProp(op, "icon");
-            if (icon != null) { subArea.SetAttributeValue("Icon", icon); changes.Add($"Icon='{icon}'"); }
+            var passParams = NormalizeBoolProp(op, "pass_params");
+            if (passParams != null) { subArea.SetAttributeValue("PassParams", passParams); changes.Add($"PassParams='{passParams}'"); }
+            var defaultDashboard = GetStringProp(op, "default_dashboard");
+            if (defaultDashboard != null) { subArea.SetAttributeValue("DefaultDashboard", defaultDashboard); changes.Add($"DefaultDashboard='{defaultDashboard}'"); }
+            var saIcon = GetStringProp(op, "icon");
+            if (saIcon != null) { subArea.SetAttributeValue("Icon", saIcon); changes.Add($"Icon='{saIcon}'"); }
             var vectorIcon = GetStringProp(op, "vector_icon");
             if (vectorIcon != null) { subArea.SetAttributeValue("VectorIcon", vectorIcon); changes.Add($"VectorIcon='{vectorIcon}'"); }
             var client = GetStringProp(op, "client");
@@ -602,16 +606,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string GetStringProp(JsonElement el, string name)
         {
             if (el.TryGetProperty(name, out var prop) && prop.ValueKind == JsonValueKind.String)
-                return prop.GetString();
+            {
+                var val = prop.GetString();
+                return string.IsNullOrWhiteSpace(val) ? null : val.Trim();
+            }
             return null;
         }
 
-        private static bool GetBoolProp(JsonElement el, string name, bool defaultValue)
+        private static string NormalizeBoolProp(JsonElement el, string name)
         {
-            if (el.TryGetProperty(name, out var prop) &&
-                (prop.ValueKind == JsonValueKind.True || prop.ValueKind == JsonValueKind.False))
-                return prop.GetBoolean();
-            return defaultValue;
+            var val = GetStringProp(el, name);
+            if (val == null) return null;
+            if (string.Equals(val, "true", StringComparison.OrdinalIgnoreCase) || val == "1" || string.Equals(val, "yes", StringComparison.OrdinalIgnoreCase))
+                return "true";
+            if (string.Equals(val, "false", StringComparison.OrdinalIgnoreCase) || val == "0" || string.Equals(val, "no", StringComparison.OrdinalIgnoreCase))
+                return "false";
+            throw new InvalidOperationException($"Property '{name}' must be a boolean ('true' or 'false'). Got: '{val}'");
         }
 
         private static string Sanitize(string s)
@@ -729,6 +739,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var entity = GetStringProp(sa, "entity");
             var url = GetStringProp(sa, "url");
+            var defaultDashboard = GetStringProp(sa, "default_dashboard");
+
+            if (entity == null && url == null && defaultDashboard == null)
+                throw new InvalidOperationException("SubArea requires 'entity', 'url', or 'default_dashboard'.");
+
             var saLabel = GetStringProp(sa, "label");
             var saId = GetStringProp(sa, "id")
                 ?? (entity != null ? $"sa_{Sanitize(entity)}" : $"sa_{Sanitize(saLabel ?? "item")}");
@@ -740,9 +755,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var client = GetStringProp(sa, "client");
             if (client != null) subArea.Add(new XAttribute("Client", client));
-            var passParams = GetStringProp(sa, "pass_params");
+            var passParams = NormalizeBoolProp(sa, "pass_params");
             if (passParams != null) subArea.Add(new XAttribute("PassParams", passParams));
-            var defaultDashboard = GetStringProp(sa, "default_dashboard");
             if (defaultDashboard != null) subArea.Add(new XAttribute("DefaultDashboard", defaultDashboard));
             var saIcon = GetStringProp(sa, "icon");
             if (saIcon != null) subArea.Add(new XAttribute("Icon", saIcon));
@@ -754,13 +768,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static void InsertElement(XElement parent, XElement newElement, string position, string childName)
         {
-            if (string.IsNullOrEmpty(position) || position == "last")
+            if (string.IsNullOrEmpty(position) || string.Equals(position, "last", StringComparison.OrdinalIgnoreCase))
             {
                 parent.Add(newElement);
                 return;
             }
 
-            if (position == "first")
+            if (string.Equals(position, "first", StringComparison.OrdinalIgnoreCase))
             {
                 var first = parent.Elements(childName).FirstOrDefault();
                 if (first != null)
@@ -778,11 +792,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (target != null)
                     target.AddAfterSelf(newElement);
                 else
-                    parent.Add(newElement);
+                    throw new InvalidOperationException($"Position target '{afterId}' not found for insertion.");
                 return;
             }
 
-            parent.Add(newElement);
+            throw new InvalidOperationException($"Invalid position '{position}'. Must be 'first', 'last', or 'after:<id>'.");
         }
     }
 }
