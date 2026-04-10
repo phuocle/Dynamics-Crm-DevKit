@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             // basic (7 tools)
             [nameof(WhoAmITool)] = "basic",
             [nameof(GetTablesTool)] = "basic",
-            [nameof(GetChoicesTool)] = "basic",
+            [nameof(ManageChoiceTool)] = "basic",
             [nameof(ManageRecordTool)] = "basic",
             [nameof(ExecuteFetchXmlTool)] = "basic",
             [nameof(SearchRecordsTool)] = "basic",
