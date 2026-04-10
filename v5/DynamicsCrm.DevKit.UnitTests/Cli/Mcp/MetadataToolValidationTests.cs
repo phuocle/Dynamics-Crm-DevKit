@@ -6,56 +6,53 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
 /// Tests for metadata tool input validation:
-/// GetEntityMetadataTool — the only metadata tool with a testable validation path.
-/// Other metadata tools (GetEntitiesMetadata, GetGlobalOptionSets, GetMessages, GetSolutionComponents)
-/// have no static methods and no input validation — they depend entirely on MetadataService/ServiceClient.
+/// GetTablesTool — the only metadata tool with a testable validation path.
+/// Other metadata tools have no static methods and no input validation — they depend entirely on MetadataService/ServiceClient.
 /// </summary>
 [TestClass]
 public class MetadataToolValidationTests
 {
     // ──────────────────────────────────────────────
-    // GetEntityMetadataTool
+    // ──────────────────────────────────────────────
+    // GetTablesTool
     // ──────────────────────────────────────────────
 
-    private static readonly Type GetEntityMetadataToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.McpServerHost).Assembly
-        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.GetEntityMetadataTool")!;
+    private static readonly Type GetTablesToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.McpServerHost).Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.GetTablesTool")!;
 
-    private static object CreateGetEntityMetadataTool()
+    private static object CreateGetTablesTool()
     {
-        return Activator.CreateInstance(GetEntityMetadataToolType, new object?[] { null })!;
+        return Activator.CreateInstance(GetTablesToolType, new object?[] { null })!;
     }
 
-    private static string InvokeGetEntityMetadata(object tool, string entityName, string attributePrefix)
+    private static string InvokeGetTables(object tool, string entityName)
     {
-        var method = GetEntityMetadataToolType.GetMethod("get_entity_metadata")!;
-        var task = (System.Threading.Tasks.Task<string>)method.Invoke(tool, new object[] { entityName, attributePrefix })!;
+        var method = GetTablesToolType.GetMethod("get_tables")!;
+        var task = (System.Threading.Tasks.Task<string>)method.Invoke(tool, new object[] { entityName, "", false, false })!;
         return task.GetAwaiter().GetResult();
     }
 
     [TestMethod]
-    public void GetEntityMetadata_EmptyEntityName_ReturnsError()
+    public void GetTables_EmptyEntityName_ReturnsErrorWhenServiceClientNull()
     {
-        var tool = CreateGetEntityMetadataTool();
-        var result = InvokeGetEntityMetadata(tool, "", "");
-
-        Assert.IsTrue(result.Contains("entity_name is required"));
+        var tool = CreateGetTablesTool();
+        var result = InvokeGetTables(tool, "");
+        Assert.IsTrue(result.StartsWith("Error:"));
     }
 
     [TestMethod]
-    public void GetEntityMetadata_WhitespaceEntityName_ReturnsError()
+    public void GetTables_WhitespaceEntityName_ReturnsErrorWhenServiceClientNull()
     {
-        var tool = CreateGetEntityMetadataTool();
-        var result = InvokeGetEntityMetadata(tool, "   ", "");
-
-        Assert.IsTrue(result.Contains("entity_name is required"));
+        var tool = CreateGetTablesTool();
+        var result = InvokeGetTables(tool, "   ");
+        Assert.IsTrue(result.StartsWith("Error:"));
     }
 
     [TestMethod]
-    public void GetEntityMetadata_NullEntityName_ReturnsError()
+    public void GetTables_NullEntityName_ReturnsErrorWhenServiceClientNull()
     {
-        var tool = CreateGetEntityMetadataTool();
-        var result = InvokeGetEntityMetadata(tool, null!, "");
-
-        Assert.IsTrue(result.Contains("entity_name is required"));
+        var tool = CreateGetTablesTool();
+        var result = InvokeGetTables(tool, null!);
+        Assert.IsTrue(result.StartsWith("Error:"));
     }
 }

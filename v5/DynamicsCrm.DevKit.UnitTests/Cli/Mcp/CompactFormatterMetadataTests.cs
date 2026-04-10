@@ -194,7 +194,7 @@ public class CompactFormatterMetadataTests
         var result = FormatOptionSetDetail(os);
 
         Assert.IsTrue(result.Contains("[empty_optionset]"));
-        Assert.IsFalse(result.Contains("[Options]"));
+        Assert.IsTrue(result.Contains("[Options] 0 total"));
     }
 
     [TestMethod]

@@ -22,27 +22,26 @@ public class CompactFormatterTests
     private static readonly MethodInfo FormatMessagesMethod = FormatterType
         .GetMethod("FormatMessages", BindingFlags.Public | BindingFlags.Static)!;
 
-    private static string FormatMessages(string scope, IEnumerable<string> sdk, IEnumerable<string> actions, IEnumerable<string> apis)
+    private static string FormatMessages(string scope, IEnumerable<string> sdk, IEnumerable<string> actions)
     {
-        return (string)FormatMessagesMethod.Invoke(null, new object[] { scope, sdk, actions, apis })!;
+        return (string)FormatMessagesMethod.Invoke(null, new object[] { scope, sdk, actions })!;
     }
 
     [TestMethod]
     public void FormatMessages_AllEmpty_ReturnsHeaderOnly()
     {
-        var result = FormatMessages("account", Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
+        var result = FormatMessages("account", Array.Empty<string>(), Array.Empty<string>());
 
         Assert.IsTrue(result.Contains("[Messages for account]"));
         Assert.IsFalse(result.Contains("[SDK Messages]"));
         Assert.IsFalse(result.Contains("[Custom Actions]"));
-        Assert.IsFalse(result.Contains("[Custom APIs]"));
     }
 
     [TestMethod]
     public void FormatMessages_WithSdkMessages_ListsThem()
     {
         var sdk = new[] { "Create", "Update", "Delete" };
-        var result = FormatMessages("account", sdk, Array.Empty<string>(), Array.Empty<string>());
+        var result = FormatMessages("account", sdk, Array.Empty<string>());
 
         Assert.IsTrue(result.Contains("[SDK Messages]"));
         Assert.IsTrue(result.Contains("- Create"));
@@ -55,30 +54,20 @@ public class CompactFormatterTests
     public void FormatMessages_WithCustomActions_ListsThem()
     {
         var actions = new[] { "MyAction" };
-        var result = FormatMessages("account", Array.Empty<string>(), actions, Array.Empty<string>());
+        var result = FormatMessages("account", Array.Empty<string>(), actions);
 
         Assert.IsTrue(result.Contains("[Custom Actions]"));
         Assert.IsTrue(result.Contains("- MyAction"));
         Assert.IsTrue(result.Contains("Custom Actions: 1"));
     }
 
-    [TestMethod]
-    public void FormatMessages_WithCustomApis_ListsThem()
-    {
-        var apis = new[] { "my_api_1", "my_api_2" };
-        var result = FormatMessages("none", Array.Empty<string>(), Array.Empty<string>(), apis);
 
-        Assert.IsTrue(result.Contains("[Custom APIs]"));
-        Assert.IsTrue(result.Contains("- my_api_1"));
-        Assert.IsTrue(result.Contains("- my_api_2"));
-        Assert.IsTrue(result.Contains("Custom APIs: 2"));
-    }
 
     [TestMethod]
     public void FormatMessages_DeduplicatesAndSorts()
     {
         var sdk = new[] { "Update", "Create", "Update", "DELETE", "Create" };
-        var result = FormatMessages("account", sdk, Array.Empty<string>(), Array.Empty<string>());
+        var result = FormatMessages("account", sdk, Array.Empty<string>());
 
         // DistinctSorted uses OrdinalIgnoreCase, so "Update"/"UPDATE" counted once
         Assert.IsTrue(result.Contains("SDK Messages: 3"));
@@ -93,7 +82,7 @@ public class CompactFormatterTests
     [TestMethod]
     public void FormatMessages_NullLists_HandlesGracefully()
     {
-        var result = FormatMessages("account", null!, null!, null!);
+        var result = FormatMessages("account", null!, null!);
 
         Assert.IsTrue(result.Contains("[Messages for account]"));
         Assert.IsFalse(result.Contains("[SDK Messages]"));
@@ -103,7 +92,7 @@ public class CompactFormatterTests
     public void FormatMessages_WhitespaceValues_AreFiltered()
     {
         var sdk = new[] { "Create", "", "  ", "Update" };
-        var result = FormatMessages("account", sdk, Array.Empty<string>(), Array.Empty<string>());
+        var result = FormatMessages("account", sdk, Array.Empty<string>());
 
         Assert.IsTrue(result.Contains("SDK Messages: 2"));
     }

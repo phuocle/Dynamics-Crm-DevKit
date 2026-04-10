@@ -71,8 +71,15 @@ public class StructuredResultsTests
         WhoAmIResultType.GetProperty("AuditEnabled")!.SetValue(instance, true);
 
         var roles = WhoAmIResultType.GetProperty("Roles")!.GetValue(instance) as System.Collections.IList;
-        roles!.Add("System Administrator");
-        roles.Add("Custom Role");
+        var roleInfoType = CliAssembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Models.RoleInfo")!;
+        
+        var role1 = Activator.CreateInstance(roleInfoType)!;
+        roleInfoType.GetProperty("Name")!.SetValue(role1, "System Administrator");
+        roles!.Add(role1);
+
+        var role2 = Activator.CreateInstance(roleInfoType)!;
+        roleInfoType.GetProperty("Name")!.SetValue(role2, "Custom Role");
+        roles.Add(role2);
 
         var json = JsonSerializer.Serialize(instance, WhoAmIResultType);
         var deserialized = JsonSerializer.Deserialize(json, WhoAmIResultType)!;
