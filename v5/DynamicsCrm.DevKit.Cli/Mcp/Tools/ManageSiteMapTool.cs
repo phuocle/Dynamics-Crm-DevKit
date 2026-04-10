@@ -39,38 +39,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageSiteMapResult)),
         Description(
-            "Create, update, or undo a Model-Driven App's SiteMap XML with auto-backup, XSD validation, and publishing.\n\n" +
+            "List, inspect, create, update, or undo a Model-Driven App's SiteMap XML with auto-backup, XSD validation, and publishing.\n\n" +
 
-            "THREE ACTIONS:\n" +
-            "- 'update': Modify SiteMap XML. Requires app_module_id + sitemapxml\n" +
-            "- 'create': New SiteMap for an app with no existing one. Requires app_module_id + sitemapxml\n" +
-            "- 'undo': Restore from backup. Requires app_module_id + sitemapxml (= backup file path)\n\n" +
+            "FIVE ACTIONS:\n" +
+            "- 'list': List all Model-Driven Apps with their SiteMap info. Optional: app_name filter\n" +
+            "- 'detail': Show current SiteMap XML for an app. Requires app (name or GUID)\n" +
+            "- 'update': Modify SiteMap XML. Requires app + sitemapxml\n" +
+            "- 'create': New SiteMap for an app with no existing one. Requires app + sitemapxml\n" +
+            "- 'undo': Restore from backup. Requires app + sitemapxml (= backup file path)\n\n" +
 
             "Tool auto-handles: backup → validate XSD → update → publish. Undo path in every response.\n\n" +
 
             "SAFETY: auto-backup before changes, XSD blocks invalid XML, backup failure blocks update.\n\n" +
 
             "TIPS:\n" +
+            "- app parameter accepts app display name OR GUID — auto-resolves internally\n" +
+            "- Use build_sitemap_xml to construct SiteMap XML modifications, then pass result to action='update'\n" +
             "- Read schema://sitemapxml for SiteMap XML structure and rules\n" +
             "- Set auto_publish=false when batching, then call publish_customizations once")]
         public CallToolResult manage_sitemap(
-            [Description("'update' (default), 'create', or 'undo'.")] string action = "update",
-            [Description("GUID of the Model-Driven App. Use execute_fetchxml on appmodule to find IDs.")] string app_module_id = "",
-            [Description("For 'update'/'create': SiteMap XML. For 'undo': backup file path.")] string sitemapxml = "",
+            [Description("'list', 'detail', 'update' (default), 'create', or 'undo'.")] string action = "update",
+            [Description("App display name or GUID. Accepts fuzzy name match (e.g., 'Sales Hub'). Required for detail/update/create/undo. For list: use app_name instead.")] string app = "",
+            [Description("For 'update'/'create': SiteMap XML. For 'undo': backup file path. Ignored for list/detail.")] string sitemapxml = "",
+            [Description("Filter apps by name (contains match). Only used with action='list'.")] string app_name = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
             [Description("Backup current SiteMap before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
             [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true)
         {
-            if (string.IsNullOrWhiteSpace(app_module_id))
-                return ErrorResult("Error: app_module_id is required.");
+            var actionName = (action ?? "update").Trim().ToLowerInvariant();
 
-            if (!Guid.TryParse(app_module_id.Trim(), out var appModuleId))
-                return ErrorResult($"Error: '{app_module_id}' is not a valid GUID.");
+            // List and detail don't require sitemapxml
+            if (actionName == "list")
+                return ListApps(app_name);
+            if (actionName == "detail")
+            {
+                if (string.IsNullOrWhiteSpace(app))
+                    return ErrorResult("Error: app is required for action='detail'. Provide app name or GUID.");
+                return DetailApp(app.Trim());
+            }
+
+            // For update/create/undo: resolve app name → GUID
+            if (string.IsNullOrWhiteSpace(app))
+                return ErrorResult("Error: app is required. Provide app display name or GUID.");
+
+            var (appModuleId, resolvedAppName, resolveError) = ResolveAppModule(app.Trim());
+            if (resolveError != null)
+                return ErrorResult(resolveError);
 
             if (string.IsNullOrWhiteSpace(sitemapxml))
-                return ErrorResult("Error: sitemapxml is required.");
-
-            var actionName = (action ?? "update").Trim().ToLowerInvariant();
+                return ErrorResult("Error: sitemapxml is required for action='" + actionName + "'.");
 
             try
             {
@@ -86,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return UndoSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
 
                     default:
-                        return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'update', 'create', 'undo'.");
+                        return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'list', 'detail', 'update', 'create', 'undo'.");
                 }
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
@@ -114,6 +131,159 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"AppModuleId: {appModuleId}\n" +
                     $"Message: {errorDetail}");
             }
+        }
+
+        // ── App Name Resolution ───────────────────────────────────────────
+
+        private (Guid AppModuleId, string AppName, string Error) ResolveAppModule(string app)
+        {
+            if (Guid.TryParse(app, out var appGuid))
+            {
+                try
+                {
+                    var entity = _serviceClient.Retrieve("appmodule", appGuid,
+                        new ColumnSet("name", "uniquename"));
+                    var name = entity.GetAttributeValue<string>("name")
+                        ?? entity.GetAttributeValue<string>("uniquename") ?? "";
+                    return (appGuid, name, null);
+                }
+                catch
+                {
+                    return (Guid.Empty, null,
+                        $"[Error] App module not found for GUID '{app}'\n" +
+                        "Tip: Use manage_sitemap(action='list') to find valid apps.");
+                }
+            }
+
+            var query = new QueryExpression("appmodule")
+            {
+                ColumnSet = new ColumnSet("appmoduleid", "name", "uniquename"),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.Like, $"%{app}%")
+                    }
+                }
+            };
+
+            var results = _serviceClient.RetrieveMultiple(query).Entities;
+            if (results.Count == 0)
+                return (Guid.Empty, null,
+                    $"[Error] No app found matching '{app}'\n" +
+                    "Tip: Use manage_sitemap(action='list') to see all available apps.");
+
+            if (results.Count > 1)
+            {
+                var exact = results.FirstOrDefault(e =>
+                    string.Equals(e.GetAttributeValue<string>("name"), app, StringComparison.OrdinalIgnoreCase));
+                if (exact != null)
+                    return (exact.Id, exact.GetAttributeValue<string>("name"), null);
+
+                var sb = new StringBuilder();
+                sb.AppendLine($"[Error] Multiple apps match '{app}'. Please specify exact name or GUID:");
+                foreach (var e in results)
+                    sb.AppendLine($"  - {e.GetAttributeValue<string>("name")} ({e.Id})");
+                return (Guid.Empty, null, sb.ToString());
+            }
+
+            return (results[0].Id, results[0].GetAttributeValue<string>("name"), null);
+        }
+
+        // ── Action: list ──────────────────────────────────────────────────
+
+        private CallToolResult ListApps(string appNameFilter)
+        {
+            var query = new QueryExpression("appmodule")
+            {
+                ColumnSet = new ColumnSet("appmoduleid", "name", "uniquename", "appmoduleidunique"),
+                Orders = { new OrderExpression("name", OrderType.Ascending) }
+            };
+
+            if (!string.IsNullOrWhiteSpace(appNameFilter))
+            {
+                query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{appNameFilter}%");
+            }
+
+            var apps = _serviceClient.RetrieveMultiple(query).Entities;
+            if (apps.Count == 0)
+            {
+                var filterMsg = string.IsNullOrWhiteSpace(appNameFilter) ? "" : $" matching '{appNameFilter}'";
+                return ErrorResult($"No Model-Driven Apps found{filterMsg}.");
+            }
+
+            var sb = new StringBuilder(512);
+            sb.AppendLine($"[SiteMapList] {apps.Count} app(s) found");
+            sb.AppendLine();
+            sb.AppendLine("| App Name | App ID | Has SiteMap |");
+            sb.AppendLine("|----------|--------|-------------|");
+
+            foreach (var a in apps)
+            {
+                var name = a.GetAttributeValue<string>("name") ?? a.GetAttributeValue<string>("uniquename") ?? "?";
+                var appId = a.Id;
+                var appIdUnique = a.GetAttributeValue<Guid>("appmoduleidunique");
+
+                var hasSiteMap = false;
+                try
+                {
+                    var componentQuery = new QueryExpression("appmodulecomponent")
+                    {
+                        ColumnSet = new ColumnSet("objectid"),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("appmoduleidunique", ConditionOperator.Equal, appIdUnique),
+                                new ConditionExpression("componenttype", ConditionOperator.Equal, 62)
+                            }
+                        }
+                    };
+                    hasSiteMap = _serviceClient.RetrieveMultiple(componentQuery).Entities.Count > 0;
+                }
+                catch { /* ignore */ }
+
+                sb.AppendLine($"| {name} | {appId} | {(hasSiteMap ? "Yes" : "No")} |");
+            }
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }]
+            };
+        }
+
+        // ── Action: detail ────────────────────────────────────────────────
+
+        private CallToolResult DetailApp(string app)
+        {
+            var (appModuleId, appName, resolveError) = ResolveAppModule(app);
+            if (resolveError != null)
+                return ErrorResult(resolveError);
+
+            var (_, siteMapId, currentSiteMapXml, error) = RetrieveAppSiteMap(appModuleId);
+            if (error != null)
+                return ErrorResult(error);
+
+            var prettyXml = PrettyPrintXml(currentSiteMapXml);
+            var sb = new StringBuilder(512);
+            sb.AppendLine($"[SiteMapDetail] {appName}");
+            sb.AppendLine($"AppModuleId: {appModuleId}");
+            sb.AppendLine($"SiteMapId: {siteMapId}");
+            sb.AppendLine();
+            sb.AppendLine(prettyXml);
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new ManageSiteMapResult
+                {
+                    Action = "detail",
+                    AppModuleId = appModuleId.ToString(),
+                    AppName = appName,
+                    SiteMapId = siteMapId.ToString(),
+                    Status = "success"
+                })
+            };
         }
 
         // ── Action: create ────────────────────────────────────────────────

@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(SearchRecordsTool)] = "basic",
             [nameof(ParseRecordUrlTool)] = "basic",
 
-            // standard (18 additional tools)
+            // standard (19 additional tools)
             [nameof(PublishCustomizationsTool)] = "standard",
             [nameof(ManageFormTool)] = "standard",
             [nameof(ManageViewTool)] = "standard",
@@ -52,6 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetPluginsTool)] = "standard",
             [nameof(GetDataverseCommandsTool)] = "standard",
             [nameof(BuildFormXMLTool)] = "standard",
+            [nameof(BuildSiteMapXmlTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
 
             // advanced (5 additional tools)

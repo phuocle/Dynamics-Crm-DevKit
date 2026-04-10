@@ -308,6 +308,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Status { get; set; }
     }
 
+    internal sealed class BuildSiteMapXmlResult
+    {
+        [JsonPropertyName("appModuleId")]
+        public string AppModuleId { get; set; }
+
+        [JsonPropertyName("appName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AppName { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("operationsCount")]
+        public int OperationsCount { get; set; }
+
+        [JsonPropertyName("operationSummaries")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OperationSummaries { get; set; }
+
+        [JsonPropertyName("siteMapXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SiteMapXml { get; set; }
+    }
+
     internal sealed class ManageSiteMapResult
     {
         [JsonPropertyName("action")]
