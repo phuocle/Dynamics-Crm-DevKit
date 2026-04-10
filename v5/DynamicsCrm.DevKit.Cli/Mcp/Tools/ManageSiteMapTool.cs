@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml;
@@ -674,18 +675,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupFile = $"{safeName}_{appModuleId:N}_{timestamp}.sitemap.json";
             var backupPath = Path.Combine(backupDir, backupFile);
 
+            var prettyXml = PrettyPrintXml(currentSiteMapXml);
+            var singleLineXml = prettyXml
+                .Replace("\r\n", "").Replace("\n", "").Replace("\r", "");
+            singleLineXml = System.Text.RegularExpressions.Regex.Replace(singleLineXml, @">\s+<", "><");
+
             var backupData = new SiteMapBackup
             {
                 AppName = appName,
                 AppModuleId = appModuleId.ToString(),
                 SiteMapId = siteMapId.ToString(),
                 Timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
-                SiteMapXml = PrettyPrintXml(currentSiteMapXml)
+                SiteMapXml = singleLineXml
             };
 
             var json = JsonSerializer.Serialize(backupData, new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
 
             File.WriteAllText(backupPath, json, Encoding.UTF8);

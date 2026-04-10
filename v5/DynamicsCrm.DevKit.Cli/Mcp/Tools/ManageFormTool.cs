@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml;
@@ -992,18 +993,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var backupFile = $"{entityName}_{formId:N}_{timestamp}.formxml.json";
             var backupPath = Path.Combine(backupDir, backupFile);
 
+            var prettyXml = PrettyPrintXml(currentFormXml);
+            var singleLineXml = prettyXml
+                .Replace("\r\n", "").Replace("\n", "").Replace("\r", "");
+            singleLineXml = System.Text.RegularExpressions.Regex.Replace(singleLineXml, @">\s+<", "><");
+
             var backupData = new FormBackup
             {
                 Entity = entityName,
                 FormId = formId.ToString(),
                 FormName = formName,
                 Timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
-                FormXml = PrettyPrintXml(currentFormXml)
+                FormXml = singleLineXml
             };
 
             var json = JsonSerializer.Serialize(backupData, new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             });
 
             File.WriteAllText(backupPath, json, Encoding.UTF8);

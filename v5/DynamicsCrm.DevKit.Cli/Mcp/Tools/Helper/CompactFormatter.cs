@@ -228,7 +228,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         private static void AppendAttributes(StringBuilder sb, EntityMetadata meta, string prefix, bool hasPrefix)
         {
             var attrs = meta.Attributes
-                .Where(a => a.AttributeOf == null)
+                .Where(a => a.AttributeOf == null || a is ImageAttributeMetadata)
                 .Where(a => !hasPrefix || a.LogicalName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 .OrderBy(a => a.LogicalName)
                 .ToArray();
@@ -278,6 +278,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 $"State ({FormatOptionsWithLimit(sa.OptionSet.Options)})",
             MultiSelectPicklistAttributeMetadata { OptionSet.Options: not null } mp =>
                 $"MultiSelect ({FormatOptionsWithLimit(mp.OptionSet.Options)})",
+            ImageAttributeMetadata => "Image",
+            FileAttributeMetadata => "File",
             _ => attr.AttributeType?.ToString() ?? "Unknown"
         };
 

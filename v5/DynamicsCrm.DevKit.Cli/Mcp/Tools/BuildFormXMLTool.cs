@@ -36,15 +36,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
             "READ-ONLY builder — returns modified FormXML string. Use manage_form to write it.\n\n" +
 
-            "TEN OPERATIONS:\n" +
+            "TWELVE OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
             "- add_section: Add a new section (with fields) to an existing tab\n" +
             "- add_tab: Add a new tab (with sections and fields) to the form\n" +
+            "- add_header_fields: Add fields to the form header (auto-prefixes control ID with header_)\n" +
             "- add_library: Add a web resource library reference to <formLibraries>\n" +
             "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n" +
             "- remove_tab: Remove an entire tab from the form\n" +
             "- remove_section: Remove a section from a tab\n" +
             "- remove_fields: Remove specific fields from a section (replaces with spacers to preserve layout)\n" +
+            "- remove_header_fields: Remove specific fields from the form header (replaces with spacers)\n" +
             "- remove_library: Remove a library from <formLibraries> and clean up its event handlers\n" +
             "- remove_event: Remove an event handler or entire event from the form\n\n" +
 
@@ -61,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
                 "JSON array of operations. Each has 'action' + parameters.\n" +
-                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_library', 'add_event', 'remove_tab', 'remove_section', 'remove_fields', 'remove_library', 'remove_event'.\n" +
+                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_header_fields', 'add_library', 'add_event', 'remove_tab', 'remove_section', 'remove_fields', 'remove_header_fields', 'remove_library', 'remove_event'.\n" +
                 "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +
                 "Example: [{\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
@@ -73,6 +75,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Example: [{\"action\":\"remove_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
                 "Example: [{\"action\":\"remove_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
                 "Example: [{\"action\":\"remove_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"target\":\"field:name\"}]\n" +
+                "Example: [{\"action\":\"add_header_fields\",\"fields\":[\"ownerid\"]}]\n" +
+                "Example: [{\"action\":\"remove_header_fields\",\"fields\":[\"ownerid\"]}]\n" +
                 "Fields can be strings or objects: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true}"
             )] string operations)
         {
@@ -143,6 +147,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult($"Error: Failed to retrieve metadata for entity '{entityName}': {ex.Message}");
                 }
 
+                // 4a. Auto-correct image backing fields (e.g. v4_37imageid -> v4_37image)
+                // Image columns have AttributeOf pointing to their backing UniqueIdentifier field.
+                // AI agents may pass the backing field name instead of the actual image field.
+                // Overwrite the backing field entry in attrMap so it resolves as ImageAttributeMetadata.
+                foreach (var attr in attrMap.Values.ToList())
+                {
+                    if (attr is ImageAttributeMetadata imgAttr && !string.IsNullOrEmpty(imgAttr.AttributeOf)
+                        && attrMap.ContainsKey(imgAttr.AttributeOf))
+                    {
+                        attrMap[imgAttr.AttributeOf] = imgAttr;
+                    }
+                }
+
                 // 5. Validate all field names exist in metadata
                 var missingFields = fieldNames.Where(f => !attrMap.ContainsKey(f)).ToList();
                 if (missingFields.Count > 0)
@@ -202,6 +219,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var libSummary = ExecuteAddLibrary(formDoc, op);
                             opSummaries.Add(libSummary);
                             break;
+                        case "add_header_fields":
+                            opSummaries.Add(ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap));
+                            break;
                         case "add_event":
                             var eventSummary = ExecuteAddEvent(formDoc, op);
                             opSummaries.Add(eventSummary);
@@ -215,6 +235,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         case "remove_fields":
                             opSummaries.Add(ExecuteRemoveFields(formDoc, op));
                             break;
+                        case "remove_header_fields":
+                            opSummaries.Add(ExecuteRemoveHeaderFields(formDoc, op));
+                            break;
                         case "remove_library":
                             opSummaries.Add(ExecuteRemoveLibrary(formDoc, op));
                             break;
@@ -222,7 +245,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             opSummaries.Add(ExecuteRemoveEvent(formDoc, op));
                             break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_library, add_event, remove_tab, remove_section, remove_fields, remove_library, remove_event");
+                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_header_fields, add_library, add_event, remove_tab, remove_section, remove_fields, remove_header_fields, remove_library, remove_event");
                     }
                 }
 
@@ -477,6 +500,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel) = ParseFieldSpec(fieldEl);
                 var attr = attrMap[fieldName];
+                fieldName = CorrectFieldName(fieldName, attr);
                 var classid = ResolveClassId(attr);
                 classIdMap[fieldName] = classid;
 
@@ -513,6 +537,156 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return $"add_fields: {fields.Count} field(s) to section \"{sectionName}\" in tab \"{tabName}\"";
+        }
+
+        // ── Header Operation Executors ───────────────────────────────────────────
+
+        private string ExecuteAddHeaderFields(XDocument formDoc, JsonElement op,
+            Dictionary<string, AttributeMetadata> attrMap, Dictionary<string, string> classIdMap)
+        {
+            if (!op.TryGetProperty("fields", out var fieldsArray) || fieldsArray.ValueKind != JsonValueKind.Array)
+                throw new InvalidOperationException("add_header_fields requires 'fields' array.");
+
+            var fields = fieldsArray.EnumerateArray().ToList();
+            if (fields.Count == 0)
+                throw new InvalidOperationException("add_header_fields requires at least one field.");
+
+            // Find or create <header>
+            var header = formDoc.Root.Element("header");
+            if (header == null)
+            {
+                header = new XElement("header",
+                    new XAttribute("id", NewGuid()),
+                    new XAttribute("celllabelposition", "Top"),
+                    new XAttribute("columns", "111"),
+                    new XAttribute("labelwidth", "115"),
+                    new XAttribute("celllabelalignment", "Left"),
+                    new XElement("rows",
+                        new XElement("row")));
+
+                // Insert after <tabs> (XSD order: tabs, header, footer, events, ...)
+                var tabs = formDoc.Root.Element("tabs");
+                if (tabs != null)
+                    tabs.AddAfterSelf(header);
+                else
+                    formDoc.Root.Add(header);
+            }
+
+            var rowsElement = header.Element("rows");
+            if (rowsElement == null)
+            {
+                rowsElement = new XElement("rows", new XElement("row"));
+                header.Add(rowsElement);
+            }
+
+            var firstRow = rowsElement.Elements("row").FirstOrDefault();
+            if (firstRow == null)
+            {
+                firstRow = new XElement("row");
+                rowsElement.Add(firstRow);
+            }
+
+            var existingControlIds = CollectExistingControlIds(formDoc);
+            var addedFields = new List<string>();
+
+            foreach (var fieldEl in fields)
+            {
+                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel) = ParseFieldSpec(fieldEl);
+
+                if (!attrMap.TryGetValue(fieldName, out var attr))
+                    throw new InvalidOperationException(
+                        $"add_header_fields: field '{fieldName}' not found in entity metadata.");
+
+                fieldName = CorrectFieldName(fieldName, attr);
+                var classid = ResolveClassId(attr);
+                classIdMap[fieldName] = classid;
+
+                var resolvedLabel = fieldLabel
+                    ?? attr.DisplayName?.UserLocalizedLabel?.Label
+                    ?? fieldName;
+
+                // Header controls use "header_" prefix
+                var headerControlId = $"header_{fieldName}";
+                var controlId = DeduplicateControlId(headerControlId, existingControlIds);
+
+                var newCell = BuildCellElement(controlId, fieldName, resolvedLabel, classid,
+                    disabled, visible, colspan, rowspan, showlabel);
+
+                // Try to replace an empty spacer cell first
+                var spacerCell = firstRow.Elements("cell")
+                    .FirstOrDefault(c => c.Element("control") == null);
+
+                if (spacerCell != null)
+                {
+                    spacerCell.AddAfterSelf(newCell);
+                    spacerCell.Remove();
+                }
+                else
+                {
+                    // Append as new cell
+                    firstRow.Add(newCell);
+                }
+
+                addedFields.Add(fieldName);
+            }
+
+            return $"add_header_fields: {addedFields.Count} field(s) added to header ({string.Join(", ", addedFields)})";
+        }
+
+        private static string ExecuteRemoveHeaderFields(XDocument formDoc, JsonElement op)
+        {
+            if (!op.TryGetProperty("fields", out var fieldsArray) || fieldsArray.ValueKind != JsonValueKind.Array)
+                throw new InvalidOperationException("remove_header_fields requires 'fields' array.");
+
+            var fieldNames = fieldsArray.EnumerateArray()
+                .Where(f => f.ValueKind == JsonValueKind.String)
+                .Select(f => f.GetString())
+                .ToList();
+
+            if (fieldNames.Count == 0)
+                throw new InvalidOperationException("remove_header_fields requires at least one field name string.");
+
+            var header = formDoc.Root.Element("header");
+            if (header == null)
+                return "remove_header_fields: no <header> element found — nothing to remove";
+
+            var rowsElement = header.Element("rows");
+            if (rowsElement == null)
+                return "remove_header_fields: header has no rows — nothing to remove";
+
+            var toRemove = new HashSet<string>(fieldNames, StringComparer.OrdinalIgnoreCase);
+            var removed = new List<string>();
+
+            foreach (var row in rowsElement.Elements("row").ToList())
+            {
+                foreach (var cell in row.Elements("cell").ToList())
+                {
+                    var control = cell.Element("control");
+                    if (control == null) continue;
+
+                    var dataFieldName = control.Attribute("datafieldname")?.Value;
+                    if (dataFieldName != null && toRemove.Contains(dataFieldName))
+                    {
+                        // Replace with spacer cell to preserve layout
+                        cell.AddAfterSelf(CreateSpacerCell());
+                        cell.Remove();
+                        if (!removed.Any(r => string.Equals(r, dataFieldName, StringComparison.OrdinalIgnoreCase)))
+                            removed.Add(dataFieldName);
+                    }
+                }
+            }
+
+            var notFound = fieldNames
+                .Where(f => !removed.Any(r => string.Equals(r, f, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            var summary = new StringBuilder();
+            summary.Append($"remove_header_fields: {removed.Count} field(s) removed from header");
+            if (removed.Count > 0)
+                summary.Append($" ({string.Join(", ", removed)})");
+            if (notFound.Count > 0)
+                summary.Append($". Not found: {string.Join(", ", notFound)}");
+            return summary.ToString();
         }
 
         // ── XML Building Helpers ─────────────────────────────────────────────────
@@ -1020,6 +1194,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel) = ParseFieldSpec(fieldEl);
                     var attr = attrMap[fieldName];
+                    fieldName = CorrectFieldName(fieldName, attr);
                     var classid = ResolveClassId(attr);
                     classIdMap[fieldName] = classid;
 
@@ -1278,6 +1453,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var action = GetStringProp(op, "action")?.ToLowerInvariant() ?? "";
                 if (action.StartsWith("remove_")) continue;
+                if (action == "add_header_fields")
+                {
+                    CollectFieldsFromArray(op, "fields", names);
+                    continue;
+                }
 
                 CollectFieldsFromArray(op, "fields", names);
                 if (op.TryGetProperty("sections", out var sections) && sections.ValueKind == JsonValueKind.Array)
@@ -1288,6 +1468,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             return names;
         }
+
+        /// <summary>
+        /// If the attribute is an ImageAttributeMetadata (resolved via the backing field alias),
+        /// return the actual image field logical name. Otherwise return the original fieldName.
+        /// </summary>
+        private static string CorrectFieldName(string fieldName, AttributeMetadata attr)
+            => attr is ImageAttributeMetadata && !string.Equals(fieldName, attr.LogicalName, StringComparison.OrdinalIgnoreCase)
+                ? attr.LogicalName
+                : fieldName;
 
         private static void CollectFieldsFromArray(JsonElement parent, string propName, HashSet<string> names)
         {
