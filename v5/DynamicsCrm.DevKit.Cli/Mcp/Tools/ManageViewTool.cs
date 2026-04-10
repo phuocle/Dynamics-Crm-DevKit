@@ -152,6 +152,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var matchId = matchingViews[0].GetAttributeValue<Guid>("savedqueryid");
                     return HandleDetail(entityName, matchId.ToString(), "");
                 }
+                if (matchingViews.Count == 0 && matchingPersonal.Count == 1)
+                {
+                    var matchId = matchingPersonal[0].GetAttributeValue<Guid>("userqueryid");
+                    return HandleDetail(entityName, matchId.ToString(), "");
+                }
                 return TextResult(FormatViewList(entityName, matchingViews, includeFetchXml, includePersonal, nameFilter, matchingPersonal.Count > 0 ? matchingPersonal : null));
             }
 
@@ -188,11 +193,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var nameFilter = viewName.Trim();
             var matches = FindViewsByNameContains(entityName, nameFilter, -1);
-            if (matches.Count == 0)
+            var personalMatches = FindPersonalViewsByNameContains(entityName, nameFilter, -1);
+
+            if (matches.Count == 0 && personalMatches.Count == 0)
                 return ErrorResult($"Error: No view found matching name '{nameFilter}' for entity '{entityName}'.");
-            if (matches.Count == 1)
+
+            if (matches.Count == 1 && personalMatches.Count == 0)
             {
                 var matchId = matches[0].GetAttributeValue<Guid>("savedqueryid");
+                var detailText = GetViewDetail(matchId, entityName);
+                return detailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
+                    ? ErrorResult(detailText)
+                    : TextResult(detailText);
+            }
+
+            if (matches.Count == 0 && personalMatches.Count == 1)
+            {
+                var matchId = personalMatches[0].GetAttributeValue<Guid>("userqueryid");
                 var detailText = GetViewDetail(matchId, entityName);
                 return detailText.StartsWith("Error:", StringComparison.OrdinalIgnoreCase)
                     ? ErrorResult(detailText)
@@ -202,13 +219,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = new StringBuilder(256);
             sb.AppendLine($"[Views] Multiple views match '{nameFilter}' — provide view_id for detail");
             sb.AppendLine();
-            sb.AppendLine("viewid\tname\ttype");
+            sb.AppendLine("viewid\tname\ttype\tsource");
             foreach (var v in matches)
             {
                 var vid = v.GetAttributeValue<Guid>("savedqueryid");
                 var name = v.GetAttributeValue<string>("name") ?? "";
                 var qt = v.GetAttributeValue<int>("querytype");
-                sb.AppendLine($"{vid}\t{EscapeTab(name)}\t{MapQueryType(qt)}");
+                sb.AppendLine($"{vid}\t{EscapeTab(name)}\t{MapQueryType(qt)}\tsystem");
+            }
+            foreach (var v in personalMatches)
+            {
+                var vid = v.GetAttributeValue<Guid>("userqueryid");
+                var name = v.GetAttributeValue<string>("name") ?? "";
+                var qt = v.GetAttributeValue<int>("querytype");
+                sb.AppendLine($"{vid}\t{EscapeTab(name)}\t{MapQueryType(qt)}\tpersonal");
             }
             return ErrorResult(sb.ToString());
         }
@@ -274,8 +298,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (validate)
             {
-                var fieldError = ValidateFieldNames(entityName, newFetchXml, "ViewCreate");
-                if (fieldError != null) return fieldError;
+                var fieldErrors = ValidateFieldNames(entityName, newFetchXml);
+                if (fieldErrors.Count > 0)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[ViewCreate] BLOCKED — Field(s) not found in entity metadata");
+                    sb.AppendLine($"Entity: {entityName}");
+                    sb.AppendLine($"ViewName: {viewName}");
+                    sb.AppendLine($"Errors: {fieldErrors.Count}");
+                    foreach (var error in fieldErrors)
+                        sb.AppendLine($"- {error}");
+                    sb.AppendLine($"Tip: Use get_tables('{entityName}') to list all available fields.");
+
+                    var allIssues = new List<string>(fieldErrors);
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
+                        {
+                            Action = "created", Entity = entityName, ViewName = viewName,
+                            Status = "blocked_validation", Validated = true, ValidationErrors = allIssues, Published = false
+                        })
+                    };
+                }
             }
 
             var newView = new Entity("savedquery")
@@ -374,8 +420,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (validate)
             {
-                var fieldError = ValidateFieldNames(entityName, effectiveFetchXml, "ViewUpdate");
-                if (fieldError != null) return fieldError;
+                var fieldErrors = ValidateFieldNames(entityName, effectiveFetchXml);
+                if (fieldErrors.Count > 0)
+                {
+                    return BuildValidationBlockedResult("ViewUpdate", entityName, updateId, viewName,
+                        fieldErrors, new List<string>(), fetchBackupPath, layoutBackupPath, "updated");
+                }
             }
 
             if (validate && newFetchXml != null)
@@ -973,7 +1023,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ColumnSet = columns
             };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
             if (queryType >= 0)
                 query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
@@ -994,7 +1043,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ColumnSet = columns
             };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{nameFilter}%");
             if (queryType >= 0)
                 query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
@@ -1016,7 +1064,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var query = new QueryExpression("savedquery") { ColumnSet = columns };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
             if (queryType >= 0)
                 query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
             query.AddOrder("querytype", OrderType.Ascending);
@@ -1037,7 +1084,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var query = new QueryExpression("userquery") { ColumnSet = columns };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
             if (queryType >= 0)
                 query.Criteria.AddCondition("querytype", ConditionOperator.Equal, queryType);
             query.AddOrder("querytype", OrderType.Ascending);
@@ -1055,14 +1101,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private Entity TryGetPersonalView(Guid viewId)
         {
-            try
-            {
-                var query = new QueryExpression("userquery") { ColumnSet = new ColumnSet(true) };
-                query.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
-                var result = _serviceClient.RetrieveMultiple(query);
-                return result.Entities.Count > 0 ? result.Entities[0] : null;
-            }
-            catch { return null; }
+            var query = new QueryExpression("userquery") { ColumnSet = new ColumnSet(true) };
+            query.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
+            var result = _serviceClient.RetrieveMultiple(query);
+            return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
         // ── Static Helpers ────────────────────────────────────────────────
@@ -1259,7 +1301,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             query.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
             query.Criteria.AddCondition("name", ConditionOperator.Equal, viewName);
-            query.Criteria.AddCondition("statecode", ConditionOperator.Equal, 0);
 
             if (excludeViewId.HasValue)
                 query.Criteria.AddCondition("savedqueryid", ConditionOperator.NotEqual, excludeViewId.Value);
@@ -1270,8 +1311,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Field Name Validation ─────────────────────────────────────
 
-        private CallToolResult ValidateFieldNames(string entityName, string fetchXml, string prefix)
+        private List<string> ValidateFieldNames(string entityName, string fetchXml)
         {
+            var errors = new List<string>();
             XDocument fetchDoc;
             try
             {
@@ -1279,12 +1321,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch
             {
-                return null;
+                return errors;
             }
 
             var mainEntity = fetchDoc.Root?.Element("entity");
             if (mainEntity == null)
-                return null;
+                return errors;
 
             var mainFields = ExtractFieldNames(mainEntity);
             var linkEntities = mainEntity.Elements("link-entity").ToList();
@@ -1303,7 +1345,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"[{prefix}] BLOCKED — Failed to retrieve metadata for entity '{entityName}': {ex.Message}");
+                errors.Add($"Failed to retrieve metadata for entity '{entityName}': {ex.Message}");
+                return errors;
             }
 
             var allMissing = new List<(string Field, string Entity)>();
@@ -1349,13 +1392,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (allMissing.Count == 0)
-                return null;
+                return errors;
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"[{prefix}] BLOCKED — Field(s) not found in entity metadata");
             foreach (var (field, entity) in allMissing)
             {
-                sb.AppendLine($"- '{field}' not found on '{entity}'");
+                var error = $"'{field}' not found on '{entity}'";
                 var map = entity == entityName ? attrMap : linkAttrMaps.GetValueOrDefault(entity);
                 if (map != null)
                 {
@@ -1364,11 +1405,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         .Take(5)
                         .ToList();
                     if (similar.Count > 0)
-                        sb.AppendLine($"  Similar: {string.Join(", ", similar)}");
+                        error += $" (Similar: {string.Join(", ", similar)})";
                 }
+                errors.Add(error);
             }
-            sb.AppendLine($"\nTip: Use get_tables('{entityName}') to list all available fields.");
-            return ErrorResult(sb.ToString());
+            return errors;
         }
 
         private static HashSet<string> ExtractFieldNames(XElement entityElement)
@@ -1438,24 +1479,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private Entity RetrieveView(Guid viewId)
         {
-            try
+            var sqQuery = new QueryExpression("savedquery")
             {
-                return _serviceClient.Retrieve("savedquery", viewId,
-                    new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype"));
-            }
-            catch { }
+                ColumnSet = new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype")
+            };
+            sqQuery.Criteria.AddCondition("savedqueryid", ConditionOperator.Equal, viewId);
+            var sqResult = _serviceClient.RetrieveMultiple(sqQuery);
+            if (sqResult.Entities.Count > 0) return sqResult.Entities[0];
 
-            try
+            var uqQuery = new QueryExpression("userquery")
             {
-                var query = new QueryExpression("userquery")
-                {
-                    ColumnSet = new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype")
-                };
-                query.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
-                var result = _serviceClient.RetrieveMultiple(query);
-                return result.Entities.Count > 0 ? result.Entities[0] : null;
-            }
-            catch { return null; }
+                ColumnSet = new ColumnSet("fetchxml", "layoutxml", "name", "returnedtypecode", "querytype")
+            };
+            uqQuery.Criteria.AddCondition("userqueryid", ConditionOperator.Equal, viewId);
+            var uqResult = _serviceClient.RetrieveMultiple(uqQuery);
+            return uqResult.Entities.Count > 0 ? uqResult.Entities[0] : null;
         }
     }
 }
