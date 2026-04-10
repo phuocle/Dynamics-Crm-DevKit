@@ -164,17 +164,7 @@ public class ExecuteWebApiToolTests
         return (string?)GetBlockedReasonMethod.Invoke(null, new object[] { method, url });
     }
 
-    [TestMethod]
-    public void GetBlockedReason_GET_AlwaysReturnsNull()
-    {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "systemforms(guid)"));
-    }
-
-    [TestMethod]
-    public void GetBlockedReason_POST_AlwaysReturnsNull()
-    {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "savedqueries(guid)"));
-    }
+    // ── Existing: UI / Forms / Views / SiteMaps ──
 
     [TestMethod]
     public void GetBlockedReason_PATCH_SystemForms_Blocked()
@@ -213,12 +203,6 @@ public class ExecuteWebApiToolTests
     }
 
     [TestMethod]
-    public void GetBlockedReason_PATCH_RegularEndpoint_ReturnsNull()
-    {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Patch, "accounts(00000000-0000-0000-0000-000000000001)"));
-    }
-
-    [TestMethod]
     public void GetBlockedReason_PATCH_EnvVarDefinitions_Blocked()
     {
         var result = GetBlockedReason(HttpMethod.Patch, "environmentvariabledefinitions(00000000-0000-0000-0000-000000000001)");
@@ -235,6 +219,221 @@ public class ExecuteWebApiToolTests
         Assert.IsTrue(result.Contains("BLOCKED"));
         Assert.IsTrue(result.Contains("manage_environment_variable"));
     }
+
+    // ── NEW: Schema / Metadata ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_EntityDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("upsert_table"));
+        Assert.IsTrue(result.Contains("IRREVERSIBLE"), "Should warn about irreversible flags");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PUT_EntityDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Put, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_EntityDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "EntityDefinitions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_EntityDefinitions_Attributes_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "EntityDefinitions(guid)/Attributes(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("upsert_column"), $"Expected 'upsert_column' but got: {result}");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_RelationshipDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "RelationshipDefinitions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("upsert_relationship"), $"Expected 'upsert_relationship' but got: {result}");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_ManagedPropertyDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "ManagedPropertyDefinitions(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: Choice / OptionSet ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_GlobalOptionSetDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "GlobalOptionSetDefinitions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_choice"), $"Expected 'manage_choice' but got: {result}");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_GlobalOptionSetDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "GlobalOptionSetDefinitions(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_choice"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_OptionSetDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "OptionSetDefinitions(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: Web Resources ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_WebResources_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "webresources(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_webresource"), $"Expected 'manage_webresource' but got: {result}");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_WebResources_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "webresources(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_webresource"));
+    }
+
+    // ── NEW: Security ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_Roles_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "roles(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_role"), $"Expected 'manage_role' but got: {result}");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_Roles_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "roles(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_role"));
+    }
+
+    // ── NEW: Solution Management ──
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_Solutions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "solutions(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("Power Apps UI"), $"Expected UI redirect but got: {result}");
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_SolutionComponents_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "solutioncomponents(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: Plugin / Server-side ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_PluginAssemblies_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "pluginassemblies(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_SdkMessageProcessingSteps_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "sdkmessageprocessingsteps(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_PluginTypes_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "plugintypes(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: Workflows / Processes ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_Workflows_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "workflows(00000000-0000-0000-0000-000000000001)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_Processes_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "processes(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: Apps ──
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_CanvasApps_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Delete, "canvasapps(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_AppModules_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "appmodules(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: Connections ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_ConnectionReferences_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "connectionreferences(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    // ── NEW: POST metadata actions blocked ──
 
     [TestMethod]
     public void GetBlockedReason_POST_PublishXml_Blocked()
@@ -263,61 +462,183 @@ public class ExecuteWebApiToolTests
     }
 
     [TestMethod]
-    public void GetBlockedReason_POST_RegularEndpoint_ReturnsNull()
+    public void GetBlockedReason_POST_CreateOptionSet_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "CreateOptionSet");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_choice"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_InsertOptionValue_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "InsertOptionValue");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_UpdateOptionValue_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "UpdateOptionValue");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_DeleteOptionValue_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "DeleteOptionValue");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_WebResources_Create_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "webresources");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_webresource"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_Roles_Create_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Post, "roles");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+        Assert.IsTrue(result.Contains("manage_role"));
+    }
+
+    // ── Data record CRUD: must remain ALLOWED ──
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_Accounts_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Patch, "accounts(00000000-0000-0000-0000-000000000001)"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_Accounts_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Delete, "accounts(00000000-0000-0000-0000-000000000001)"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_PATCH_Contacts_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Patch, "contacts(00000000-0000-0000-0000-000000000001)"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_Accounts_Create_Allowed()
     {
         Assert.IsNull(GetBlockedReason(HttpMethod.Post, "accounts"));
     }
 
     [TestMethod]
-    public void GetBlockedReason_GET_EnvVarDefinitions_ReturnsNull()
+    public void GetBlockedReason_PATCH_CustomEntity_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Patch, "new_customentity(00000000-0000-0000-0000-000000000001)"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_DELETE_CustomEntity_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Delete, "cr_mytable(00000000-0000-0000-0000-000000000001)"));
+    }
+
+    // ── GET is always safe — allow all reads ──
+
+    [TestMethod]
+    public void GetBlockedReason_GET_EntityDefinitions_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "EntityDefinitions"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_GlobalOptionSetDefinitions_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "GlobalOptionSetDefinitions"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_Roles_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "roles"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_WebResources_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "webresources"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_SystemForms_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "systemforms(guid)"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_EnvVarDefinitions_Allowed()
     {
         Assert.IsNull(GetBlockedReason(HttpMethod.Get, "environmentvariabledefinitions(guid)"));
     }
 
     [TestMethod]
-    public void GetBlockedReason_CaseInsensitive_Blocked()
+    public void GetBlockedReason_GET_Solutions_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "solutions"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_PluginAssemblies_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "pluginassemblies"));
+    }
+
+    // ── POST custom actions: must remain ALLOWED ──
+
+    [TestMethod]
+    public void GetBlockedReason_POST_CustomAction_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "new_MyCustomAction"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_WhoAmI_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "WhoAmI"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_POST_Contacts_Create_Allowed()
+    {
+        Assert.IsNull(GetBlockedReason(HttpMethod.Post, "contacts"));
+    }
+
+    // ── Case insensitivity ──
+
+    [TestMethod]
+    public void GetBlockedReason_CaseInsensitive_EntityDefinitions_Blocked()
+    {
+        var result = GetBlockedReason(HttpMethod.Patch, "ENTITYDEFINITIONS(guid)");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("BLOCKED"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_CaseInsensitive_SystemForms_Blocked()
     {
         var result = GetBlockedReason(HttpMethod.Patch, "SystemForms(00000000-0000-0000-0000-000000000001)");
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Contains("BLOCKED"));
     }
 
-    // ──────────────────────────────────────────────
-    // TryFormatJson (private static)
-    // ──────────────────────────────────────────────
-
-    private static readonly MethodInfo TryFormatJsonMethod = ToolType
-        .GetMethod("TryFormatJson", BindingFlags.NonPublic | BindingFlags.Static)!;
-
-    private static string TryFormatJson(string json)
-    {
-        return (string)TryFormatJsonMethod.Invoke(null, new object[] { json })!;
-    }
-
-    [TestMethod]
-    public void TryFormatJson_ValidJson_ReturnsIndented()
-    {
-        var result = TryFormatJson("{\"name\":\"test\"}");
-        Assert.IsTrue(result.Contains("  \"name\": \"test\""));
-    }
-
-    [TestMethod]
-    public void TryFormatJson_InvalidJson_ReturnsOriginal()
-    {
-        var result = TryFormatJson("not json at all");
-        Assert.AreEqual("not json at all", result);
-    }
-
-    [TestMethod]
-    public void TryFormatJson_EmptyObject_ReturnsFormatted()
-    {
-        var result = TryFormatJson("{}");
-        Assert.AreEqual("{}", result);
-    }
-
-    // ──────────────────────────────────────────────
-    // Adversarial Round 1: wrong redirect tool names
-    // ──────────────────────────────────────────────
+    // ── Redirect tool correctness (adversarial) ──
 
     [TestMethod]
     public void GetBlockedReason_PATCH_SavedQueries_RedirectsToManageView()
@@ -364,6 +685,39 @@ public class ExecuteWebApiToolTests
     }
 
     // ──────────────────────────────────────────────
+    // TryFormatJson (private static)
+    // ──────────────────────────────────────────────
+
+    private static readonly MethodInfo TryFormatJsonMethod = ToolType
+        .GetMethod("TryFormatJson", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static string TryFormatJson(string json)
+    {
+        return (string)TryFormatJsonMethod.Invoke(null, new object[] { json })!;
+    }
+
+    [TestMethod]
+    public void TryFormatJson_ValidJson_ReturnsIndented()
+    {
+        var result = TryFormatJson("{\"name\":\"test\"}");
+        Assert.IsTrue(result.Contains("  \"name\": \"test\""));
+    }
+
+    [TestMethod]
+    public void TryFormatJson_InvalidJson_ReturnsOriginal()
+    {
+        var result = TryFormatJson("not json at all");
+        Assert.AreEqual("not json at all", result);
+    }
+
+    [TestMethod]
+    public void TryFormatJson_EmptyObject_ReturnsFormatted()
+    {
+        var result = TryFormatJson("{}");
+        Assert.AreEqual("{}", result);
+    }
+
+    // ──────────────────────────────────────────────
     // Helper
     // ──────────────────────────────────────────────
 
@@ -373,3 +727,4 @@ public class ExecuteWebApiToolTests
         return result.Content[0] is ModelContextProtocol.Protocol.TextContentBlock tb ? tb.Text ?? "" : "";
     }
 }
+

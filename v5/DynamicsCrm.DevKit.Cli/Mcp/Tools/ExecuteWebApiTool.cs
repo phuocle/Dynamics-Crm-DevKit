@@ -29,20 +29,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Execute any Dataverse Web API request. Fallback when specialized tools don't cover your use case.\n\n" +
+            "Execute Dataverse Web API requests for data queries and custom actions.\n\n" +
 
-            "WHEN TO USE:\n" +
-            "- Query/update metadata endpoints (RelationshipDefinitions, EntityDefinitions)\n" +
-            "- Call custom Actions/Functions, read $metadata\n\n" +
+            "ALLOWED:\n" +
+            "- GET on any endpoint (read-only, always safe)\n" +
+            "- POST/PATCH/PUT/DELETE on standard data records (accounts, contacts, custom entities)\n" +
+            "- POST custom actions/functions (WhoAmI, new_MyCustomAction, etc.)\n\n" +
 
-            "BLOCKED OPERATIONS (hard-blocked, returns error):\n" +
-            "- PATCH/PUT/DELETE systemforms → use manage_form\n" +
-            "- PATCH/PUT/DELETE savedqueries/userqueries → use manage_view\n" +
-            "- PATCH/PUT/DELETE sitemaps → use manage_sitemap\n" +
-            "- PATCH/PUT/DELETE environmentvariable* → use manage_environment_variable\n" +
-            "- POST PublishXml/PublishAllXml → use publish_customizations\n" +
-            "GET is allowed. POST to create is allowed (except publish).\n" +
-            "WHY: Malformed FormXML/LayoutXML/SiteMap breaks UI for all users with no undo.\n\n" +
+            "BLOCKED (use specialized tools instead):\n" +
+            "- EntityDefinitions / Attributes → upsert_table, upsert_column\n" +
+            "- RelationshipDefinitions → upsert_relationship\n" +
+            "- GlobalOptionSetDefinitions → manage_choice\n" +
+            "- systemforms → manage_form / build_form_xml\n" +
+            "- savedqueries / userqueries → manage_view\n" +
+            "- sitemaps → manage_sitemap\n" +
+            "- environmentvariable* → manage_environment_variable\n" +
+            "- webresources → manage_webresource\n" +
+            "- roles → manage_role\n" +
+            "- PublishXml / PublishAllXml → publish_customizations\n" +
+            "- solutions, plugins, workflows, apps → manage via Power Apps UI or CLI\n\n" +
 
             "URL: relative path only (SDK handles base URL). " +
             "PUT/PATCH/DELETE are destructive — confirm with user first.")]
@@ -190,7 +195,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
         [
-            ("systemforms(", "manage_form",
+            // ── UI / Forms / Views / SiteMaps ──
+            ("systemforms(", "manage_form or build_form_xml",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
             ("savedqueries(", "manage_view",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
@@ -198,55 +204,131 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
             ("sitemaps(", "manage_sitemap",
                 "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app."),
+
+            // ── Environment Variables ──
             ("environmentvariabledefinitions(", "manage_environment_variable",
                 "Environment variable definitions have linked value records. The manage_environment_variable tool handles definition+value atomically with solution awareness."),
             ("environmentvariablevalues(", "manage_environment_variable",
-                "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup.")
+                "Environment variable values are linked to definitions. The manage_environment_variable tool handles create/update/clear correctly with definition lookup."),
+
+            // ── Schema / Metadata ──
+            ("entitydefinitions", "upsert_table or upsert_column",
+                "Entity metadata contains IRREVERSIBLE flags (ChangeTracking, Activities, BPF, Feedback, Connections, Queues). These cannot be turned off once enabled. Use upsert_table for entity-level changes, upsert_column for attribute-level changes."),
+            ("relationshipdefinitions", "upsert_relationship",
+                "Relationship metadata controls cascading behavior and referential integrity. Incorrect changes can cause data loss. Use upsert_relationship for safe relationship management."),
+            ("managedpropertydefinitions", "upsert_table",
+                "Managed properties control solution layering behavior. Incorrect changes affect solution export/import."),
+
+            // ── Choice / OptionSet ──
+            ("globaloptionsetdefinitions", "manage_choice",
+                "Global option sets are shared across multiple entities. Use manage_choice to list, create, update, add/remove options safely."),
+            ("optionsetdefinitions", "manage_choice or upsert_column",
+                "Option set definitions should be managed via manage_choice (global) or upsert_column (local picklist)."),
+
+            // ── Web Resources ──
+            ("webresources(", "manage_webresource",
+                "Web resources require base64 content encoding and proper type codes. manage_webresource handles encoding, validation, publish, and solution assignment."),
+
+            // ── Security ──
+            ("roles(", "manage_role",
+                "Security roles control access for ALL users in a business unit. manage_role provides safe CRUD, privilege copying, and user assignment."),
+
+            // ── Solution Management ──
+            ("solutions(", null,
+                "Solution manipulation can corrupt customizations and break deployments. Manage solutions via Power Apps UI, PAC CLI, or the DevKit solution command."),
+            ("solutioncomponents(", null,
+                "Adding/removing solution components incorrectly can break solution exports. Manage via Power Apps UI or PAC CLI."),
+
+            // ── Plugin / Server-side ──
+            ("pluginassemblies(", null,
+                "Plugin assemblies contain server-side business logic. Register/update plugins via the DevKit server command or Plugin Registration Tool."),
+            ("plugintypes(", null,
+                "Plugin type registrations link assemblies to message processing. Manage via DevKit server command or Plugin Registration Tool."),
+            ("sdkmessageprocessingsteps(", null,
+                "SDK message processing steps control plugin execution pipeline. Incorrect step registration can break all CRUD operations. Manage via DevKit server command."),
+            ("serviceendpoints(", null,
+                "Service endpoints configure Azure integration. Manage via Plugin Registration Tool or Power Apps UI."),
+            ("pluginpackages(", null,
+                "Plugin packages (dependent assemblies) must be managed together with their plugin assemblies. Use DevKit server command."),
+
+            // ── Workflows / Processes ──
+            ("workflows(", null,
+                "Workflows contain business process definitions. Modifying workflow XAML incorrectly breaks automation. Manage via Power Apps UI or Power Automate."),
+            ("processes(", null,
+                "Process definitions control business logic flows. Manage via Power Apps UI."),
+
+            // ── Apps ──
+            ("canvasapps(", null,
+                "Canvas apps have complex internal structure. Manage via Power Apps Studio."),
+            ("appmodules(", null,
+                "Model-driven app definitions control app structure and navigation. Manage via Power Apps UI."),
+
+            // ── Connections ──
+            ("connectionreferences(", null,
+                "Connection references link flows/apps to external services. Manage via Power Apps UI or solution import.")
         ];
 
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
         [
+            // ── Publish ──
             ("publishxml", "publish_customizations",
                 "PublishXml requires correctly formatted ParameterXml. The publish_customizations tool handles entity-specific vs all publishing with proper XML generation."),
             ("publishallxml", "publish_customizations",
-                "PublishAllXml publishes ALL customizations. The publish_customizations tool provides a simpler interface with proper status reporting.")
+                "PublishAllXml publishes ALL customizations. The publish_customizations tool provides a simpler interface with proper status reporting."),
+
+            // ── Metadata Actions ──
+            ("createoptionset", "manage_choice",
+                "Creating option sets requires proper metadata structure. Use manage_choice for global option sets or upsert_column for local picklists."),
+            ("updateoptionset", "manage_choice",
+                "Updating option set metadata requires proper label handling. Use manage_choice for safe updates."),
+            ("insertoptionvalue", "manage_choice or upsert_column",
+                "Inserting option values requires correct value/label pairs. Use manage_choice (global) or upsert_column (local) for safe option management."),
+            ("updateoptionvalue", "manage_choice or upsert_column",
+                "Updating option value labels requires merge label handling. Use manage_choice (global) or upsert_column (local)."),
+            ("deleteoptionvalue", "manage_choice or upsert_column",
+                "Deleting option values is irreversible. Use manage_choice (global) or upsert_column (local) for safe deletion."),
+
+            // ── Data endpoints with dedicated tools ──
+            ("webresources", "manage_webresource",
+                "Creating web resources requires base64 encoding and type codes. Use manage_webresource for safe creation with solution assignment."),
+            ("roles", "manage_role",
+                "Creating security roles requires proper business unit assignment. Use manage_role for safe role management.")
         ];
 
         private static string GetBlockedReason(HttpMethod method, string url)
         {
             var urlLower = url.ToLowerInvariant();
 
-            // Block POST on publish endpoints — redirect to publish_customizations tool
+            // Phase 1: Block POST on specific patterns (publish, metadata actions, dedicated-tool endpoints)
             if (method == HttpMethod.Post)
             {
                 foreach (var (pattern, tool, reason) in BlockedPostEndpoints)
                 {
                     if (urlLower.Contains(pattern))
                     {
+                        var toolHint = tool != null
+                            ? $"USE INSTEAD: {tool}"
+                            : "Manage via Power Apps UI, PAC CLI, or DevKit CLI commands.";
                         return $"BLOCKED: Direct POST to {pattern} is not allowed via execute_webapi.\n\n" +
-                               $"REASON: {reason}\n\n" +
-                               $"USE INSTEAD: {tool} tool — pass entity names (e.g. entities='account,contact') or leave empty for publish all.";
+                               $"REASON: {reason}\n\n{toolHint}";
                     }
                 }
             }
 
-            // GET and POST are allowed on all other endpoints
+            // Phase 2: GET is always safe — allow all reads
             if (method == HttpMethod.Get || method == HttpMethod.Post)
                 return null;
 
-            // Block PATCH/PUT/DELETE on system-critical endpoints
+            // Phase 3: Block PATCH/PUT/DELETE on metadata/system/config endpoints
             foreach (var (pattern, tool, reason) in BlockedEndpoints)
             {
-                if (urlLower.Contains(pattern))
+                if (urlLower.Contains(pattern.ToLowerInvariant()))
                 {
+                    var toolHint = tool != null
+                        ? $"USE INSTEAD: {tool}"
+                        : "Manage via Power Apps UI, PAC CLI, or DevKit CLI commands.";
                     return $"BLOCKED: Direct {method.Method} on {pattern.TrimEnd('(')} is not allowed via execute_webapi.\n\n" +
-                           $"REASON: {reason}\n\n" +
-                           $"USE INSTEAD: {tool} — it auto-handles: backup → validate XSD → update → publish → rollback path.\n\n" +
-                           $"If {tool} is not yet available, you MUST manually:\n" +
-                           $"1. GET the current XML first (backup)\n" +
-                           $"2. Validate your changes against the schema resource\n" +
-                           $"3. Save backup to a local file\n" +
-                           $"4. Only then consider using execute_webapi";
+                           $"REASON: {reason}\n\n{toolHint}";
                 }
             }
 
