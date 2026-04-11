@@ -207,9 +207,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("fieldsResolved")]
         public int FieldsResolved { get; set; }
 
-        [JsonPropertyName("formXml")]
+        [JsonPropertyName("formXmlPath")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string FormXml { get; set; }
+        public string FormXmlPath { get; set; }
     }
 
     internal sealed class UpsertTableResult

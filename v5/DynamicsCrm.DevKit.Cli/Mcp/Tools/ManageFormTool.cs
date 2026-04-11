@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] int form_type = 0,
             [Description("Include FormXML in list mode (default: false). Detail mode always includes it."
             )] bool include_formxml = false,
-            [Description("For 'update': FormXML. For 'undo': backup file path. Ignored for list/detail/rename."
+            [Description("For 'update': FormXML string or file path from build_form_xml (.formxml). For 'undo': backup file path. Auto-detects file vs inline XML."
             )] string formxml = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid."
             )] bool validate = true,
@@ -329,6 +329,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(formxml))
                 return ErrorResult("Error: formxml is required for 'update' action.");
 
+            // Resolve formxml: if it's a file path, read content from file
+            var resolvedFormXml = ResolveFormXmlInput(formxml.Trim());
+            if (resolvedFormXml == null)
+                return ErrorResult(
+                    $"[Error] FormXML file not found\n" +
+                    $"Path: {formxml.Trim()}\n" +
+                    $"Tip: The file path from build_form_xml may have been deleted. Re-run build_form_xml to regenerate.");
+
             // Step 1: Retrieve current form
             var currentForm = RetrieveForm(id);
             if (currentForm == null)
@@ -351,7 +359,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
 
             // Strip XML declaration from input
-            var newFormXml = StripXmlDeclaration(formxml.Trim());
+            var newFormXml = StripXmlDeclaration(resolvedFormXml);
 
             // Step 2: Backup current FormXML
             string backupPath = null;
@@ -961,6 +969,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Resolves the formxml input: if it's a file path (from build_form_xml), reads the file content.
+        /// If it's inline XML, returns as-is. Returns null if the file path doesn't exist.
+        /// </summary>
+        private static string ResolveFormXmlInput(string formxml)
+        {
+            // Detect file path: must end with .formxml and NOT start with '<' (which means inline XML)
+            if (!formxml.TrimStart().StartsWith("<") && formxml.EndsWith(".formxml", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!File.Exists(formxml))
+                    return null;
+
+                var content = File.ReadAllText(formxml, Encoding.UTF8).Trim();
+
+                // Clean up temp file after reading
+                try { File.Delete(formxml); } catch { /* best effort cleanup */ }
+
+                return content;
+            }
+
+            // Inline XML — return as-is
+            return formxml;
         }
 
         private Entity FindFormByName(string entityName, string formName, int? formType, Guid? excludeFormId = null)

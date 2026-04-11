@@ -10,6 +10,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -57,7 +58,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Fields: strings (\"createdon\") or objects ({\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true})\n" +
-            "- This tool does NOT modify Dataverse — use manage_form(action='update') to apply the returned FormXML")]
+            "- This tool does NOT modify Dataverse — saves FormXML to a temp file and returns the file path\n" +
+            "- Pass the returned formXmlPath to manage_form(action='update', formxml='<path>') to apply changes")]
         public CallToolResult build_form_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve field metadata.")] string entity_name,
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
@@ -252,7 +254,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // 8. Serialize modified XDocument back to string
                 var modifiedFormXml = formDoc.ToString(SaveOptions.None);
 
-                // 9. Build response
+                // 9. Save modified FormXML to temp file (avoids AI truncation for large XML)
+                var tempDir = Path.Combine(Directory.GetCurrentDirectory(), ".devkit", "modified_forms");
+                Directory.CreateDirectory(tempDir);
+                var tempFileName = $"{entityName}_{formId:N}.formxml";
+                var tempFilePath = Path.Combine(tempDir, tempFileName);
+                File.WriteAllText(tempFilePath, modifiedFormXml, Encoding.UTF8);
+
+                // 10. Build response
                 var resultSb = new StringBuilder(2048);
                 resultSb.AppendLine($"[BuildFormXML] {entityName} -- {formName}");
                 resultSb.AppendLine();
@@ -273,10 +282,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     resultSb.AppendLine();
                 }
 
-                resultSb.AppendLine("Modified FormXML:");
-                resultSb.AppendLine(modifiedFormXml);
+                resultSb.AppendLine($"FormXML saved to: {tempFilePath}");
                 resultSb.AppendLine();
-                resultSb.AppendLine($"Next step: Pass this FormXML to manage_form(action='update', entity_name='{entityName}', form_id='{formId}', formxml=<above>)");
+                resultSb.AppendLine($"Next step: manage_form(action='update', entity_name='{entityName}', form_id='{formId}', formxml='{tempFilePath}')");
 
                 var structured = new BuildFormXMLResult
                 {
@@ -286,7 +294,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "success",
                     OperationsCount = ops.Count,
                     FieldsResolved = classIdMap.Count,
-                    FormXml = modifiedFormXml
+                    FormXmlPath = tempFilePath
                 };
 
                 return new CallToolResult
