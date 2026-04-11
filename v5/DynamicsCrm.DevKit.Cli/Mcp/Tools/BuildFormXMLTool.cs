@@ -34,60 +34,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ReadOnly = true, Destructive = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXMLResult)),
         Description(
-            "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
-            "READ-ONLY builder — returns modified FormXML string. Use manage_form to write it.\n\n" +
+            "Build modified FormXML for an existing Dataverse form. READ-ONLY builder — use manage_form to apply.\n\n" +
 
-            "FOURTEEN OPERATIONS:\n" +
-            "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
-            "- add_section: Add a new section (with fields) to an existing tab\n" +
-            "- add_tab: Add a new tab (with sections and fields) to the form\n" +
-            "- add_header_fields: Add fields to the form header (auto-prefixes control ID with header_)\n" +
-            "- add_library: Add a web resource library reference to <formLibraries>\n" +
-            "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n" +
-            "- move_tab: Move an existing tab to a new position (first, last, before/after another tab)\n" +
-            "- move_section: Move an existing section to a new position within same or different tab\n" +
-            "- remove_tab: Remove an entire tab from the form\n" +
-            "- remove_section: Remove a section from a tab\n" +
-            "- remove_fields: Remove specific fields from a section (replaces with spacers to preserve layout)\n" +
-            "- remove_header_fields: Remove specific fields from the form header (replaces with spacers)\n" +
-            "- remove_library: Remove a library from <formLibraries> and clean up its event handlers\n" +
-            "- remove_event: Remove an event handler or entire event from the form\n\n" +
+            "5 ACTIONS (each requires 'manage_action' sub-field):\n" +
+            "- manage_tab:     manage_action = add | remove | move | update\n" +
+            "- manage_section: manage_action = add | remove | move | update\n" +
+            "- manage_fields:  manage_action = add | remove | update | add_header | remove_header | update_header\n" +
+            "- manage_library: manage_action = add | remove\n" +
+            "- manage_event:   manage_action = add | remove\n\n" +
 
-            "Auto-resolves classid GUIDs, generates proper section/tab column layout, creates unique GUIDs, validates field names against metadata.\n\n" +
-
-            "SECTION COLUMNS: 1 (default, one field/row), 2 (two fields/row), 3 (three fields/row, spacers to fill).\n" +
-            "TAB COLUMNS: 1 (100%, default), 2 (50%/50%), 3 (33%/34%/33%). Sections specify which tab_column (1-based).\n\n" +
+            "Auto-resolves classid GUIDs, validates field names against metadata.\n" +
+            "SECTION COLUMNS: 1 (default), 2, 3. TAB COLUMNS: 1 (100%), 2 (50%/50%), 3 (33%/34%/33%).\n\n" +
 
             "TIPS:\n" +
             "- Fields: strings (\"createdon\") or objects ({\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true})\n" +
-            "- This tool does NOT modify Dataverse — saves FormXML to a temp file and returns the file path\n" +
-            "- Pass the returned formXmlPath to manage_form(action='update', formxml='<path>') to apply changes")]
+            "- Tabs/Sections/Fields support: \"visible\", \"show_label\", \"hide_on_phone\", \"disabled\" (fields only)\n" +
+            "- Use manage_action='update' to safely modify existing elements without removing them\n" +
+            "- Saves FormXML to temp file. Pass formXmlPath to manage_form(action='update') to apply")]
         public CallToolResult build_form_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve field metadata.")] string entity_name,
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
-                "JSON array of operations. Each has 'action' + parameters.\n" +
-                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_header_fields', 'add_library', 'add_event', 'move_tab', 'move_section', 'remove_tab', 'remove_section', 'remove_fields', 'remove_header_fields', 'remove_library', 'remove_event'.\n" +
-                "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
-                "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +
-                "Example: [{\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "Example: [{\"action\":\"add_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "Example: [{\"action\":\"add_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"field:name\"}]\n" +
-                "Example: [{\"action\":\"move_tab\",\"tab\":\"tab_audit\",\"position\":\"last\"}]\n" +
-                "Example: [{\"action\":\"move_tab\",\"tab\":\"tab_details\",\"position\":\"first\"}]\n" +
-                "Example: [{\"action\":\"move_tab\",\"tab\":\"tab_string\",\"position\":\"before:tab_lookup\"}]\n" +
-                "Example: [{\"action\":\"move_section\",\"tab\":\"tab_general\",\"section\":\"sec_dates\",\"position\":\"last\"}]\n" +
-                "Example: [{\"action\":\"move_section\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"target_tab\":\"tab_details\",\"position\":\"first\"}]\n" +
-                "Example: [{\"action\":\"remove_tab\",\"tab\":\"tab_audit\"}]\n" +
-                "Example: [{\"action\":\"remove_section\",\"tab\":\"tab_general\",\"section\":\"sec_dates\"}]\n" +
-                "Example: [{\"action\":\"remove_fields\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\",\"modifiedon\"]}]\n" +
-                "Example: [{\"action\":\"remove_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "Example: [{\"action\":\"remove_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "Example: [{\"action\":\"remove_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"target\":\"field:name\"}]\n" +
-                "Example: [{\"action\":\"add_header_fields\",\"fields\":[\"ownerid\"]}]\n" +
-                "Example: [{\"action\":\"remove_header_fields\",\"fields\":[\"ownerid\"]}]\n" +
-                "Fields can be strings or objects: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true}"
+                "JSON array of operations. Each requires 'action' + 'manage_action' sub-field.\n" +
+                "manage_tab:     [{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\"]}]}]\n" +
+                "                [{\"action\":\"manage_tab\",\"manage_action\":\"move\",\"name\":\"tab_audit\",\"position\":\"before:tab_lookup\"}]\n" +
+                "                [{\"action\":\"manage_tab\",\"manage_action\":\"update\",\"name\":\"tab_general\",\"visible\":false,\"hide_on_phone\":true}]\n" +
+                "                [{\"action\":\"manage_tab\",\"manage_action\":\"remove\",\"name\":\"tab_audit\"}]\n" +
+                "manage_section: [{\"action\":\"manage_section\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"label\":\"Dates\",\"fields\":[\"createdon\"]}]\n" +
+                "                [{\"action\":\"manage_section\",\"manage_action\":\"move\",\"tab\":\"tab_general\",\"name\":\"sec_info\",\"target_tab\":\"tab_details\",\"position\":\"first\"}]\n" +
+                "                [{\"action\":\"manage_section\",\"manage_action\":\"update\",\"tab\":\"tab_general\",\"name\":\"sec_info\",\"show_label\":false}]\n" +
+                "                [{\"action\":\"manage_section\",\"manage_action\":\"remove\",\"tab\":\"tab_general\",\"name\":\"sec_dates\"}]\n" +
+                "manage_fields:  [{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"]}]\n" +
+                "                [{\"action\":\"manage_fields\",\"manage_action\":\"update\",\"fields\":[{\"field\":\"name\",\"visible\":false,\"disabled\":true}]}]\n" +
+                "                [{\"action\":\"manage_fields\",\"manage_action\":\"remove\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"]}]\n" +
+                "                [{\"action\":\"manage_fields\",\"manage_action\":\"add_header\",\"fields\":[\"ownerid\"]}]\n" +
+                "                [{\"action\":\"manage_fields\",\"manage_action\":\"remove_header\",\"fields\":[\"ownerid\"]}]\n" +
+                "manage_library: [{\"action\":\"manage_library\",\"manage_action\":\"add\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "                [{\"action\":\"manage_library\",\"manage_action\":\"remove\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "manage_event:   [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
+                "                [{\"action\":\"manage_event\",\"manage_action\":\"remove\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"target\":\"field:name\"}]"
             )] string operations)
+
         {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
@@ -210,57 +197,65 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return ErrorResult("Error: Each operation must have an 'action' field.");
 
                     var action = actionProp.GetString()?.ToLowerInvariant();
+                    var manageAction = GetStringProp(op, "manage_action")?.ToLowerInvariant() ?? "";
+
                     switch (action)
                     {
-                        case "add_tab":
-                            var tabSummary = ExecuteAddTab(formDoc, op, attrMap, classIdMap);
-                            opSummaries.Add(tabSummary);
+                        case "manage_tab":
+                            opSummaries.Add(manageAction switch
+                            {
+                                "add" => ExecuteAddTab(formDoc, op, attrMap, classIdMap),
+                                "remove" => ExecuteRemoveTab(formDoc, op),
+                                "move" => ExecuteMoveTab(formDoc, op),
+                                "update" => ExecuteUpdateTab(formDoc, op),
+                                _ => throw new InvalidOperationException(
+                                    $"Unknown manage_action '{manageAction}' for manage_tab. Valid: add, remove, move, update")
+                            });
                             break;
-                        case "add_section":
-                            var secSummary = ExecuteAddSection(formDoc, op, attrMap, classIdMap);
-                            opSummaries.Add(secSummary);
+                        case "manage_section":
+                            opSummaries.Add(manageAction switch
+                            {
+                                "add" => ExecuteAddSection(formDoc, op, attrMap, classIdMap),
+                                "remove" => ExecuteRemoveSection(formDoc, op),
+                                "move" => ExecuteMoveSection(formDoc, op),
+                                "update" => ExecuteUpdateSection(formDoc, op),
+                                _ => throw new InvalidOperationException(
+                                    $"Unknown manage_action '{manageAction}' for manage_section. Valid: add, remove, move, update")
+                            });
                             break;
-                        case "add_fields":
-                            var fieldSummary = ExecuteAddFields(formDoc, op, attrMap, classIdMap);
-                            opSummaries.Add(fieldSummary);
+                        case "manage_fields":
+                            opSummaries.Add(manageAction switch
+                            {
+                                "add" => ExecuteAddFields(formDoc, op, attrMap, classIdMap),
+                                "remove" => ExecuteRemoveFields(formDoc, op),
+                                "update" => ExecuteUpdateFields(formDoc, op, attrMap, classIdMap),
+                                "add_header" => ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap),
+                                "remove_header" => ExecuteRemoveHeaderFields(formDoc, op),
+                                "update_header" => ExecuteUpdateHeaderFields(formDoc, op, attrMap, classIdMap),
+                                _ => throw new InvalidOperationException(
+                                    $"Unknown manage_action '{manageAction}' for manage_fields. Valid: add, remove, update, add_header, remove_header, update_header")
+                            });
                             break;
-                        case "add_library":
-                            var libSummary = ExecuteAddLibrary(formDoc, op);
-                            opSummaries.Add(libSummary);
+                        case "manage_library":
+                            opSummaries.Add(manageAction switch
+                            {
+                                "add" => ExecuteAddLibrary(formDoc, op),
+                                "remove" => ExecuteRemoveLibrary(formDoc, op),
+                                _ => throw new InvalidOperationException(
+                                    $"Unknown manage_action '{manageAction}' for manage_library. Valid: add, remove")
+                            });
                             break;
-                        case "add_header_fields":
-                            opSummaries.Add(ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap));
-                            break;
-                        case "add_event":
-                            var eventSummary = ExecuteAddEvent(formDoc, op);
-                            opSummaries.Add(eventSummary);
-                            break;
-                        case "move_tab":
-                            opSummaries.Add(ExecuteMoveTab(formDoc, op));
-                            break;
-                        case "move_section":
-                            opSummaries.Add(ExecuteMoveSection(formDoc, op));
-                            break;
-                        case "remove_tab":
-                            opSummaries.Add(ExecuteRemoveTab(formDoc, op));
-                            break;
-                        case "remove_section":
-                            opSummaries.Add(ExecuteRemoveSection(formDoc, op));
-                            break;
-                        case "remove_fields":
-                            opSummaries.Add(ExecuteRemoveFields(formDoc, op));
-                            break;
-                        case "remove_header_fields":
-                            opSummaries.Add(ExecuteRemoveHeaderFields(formDoc, op));
-                            break;
-                        case "remove_library":
-                            opSummaries.Add(ExecuteRemoveLibrary(formDoc, op));
-                            break;
-                        case "remove_event":
-                            opSummaries.Add(ExecuteRemoveEvent(formDoc, op));
+                        case "manage_event":
+                            opSummaries.Add(manageAction switch
+                            {
+                                "add" => ExecuteAddEvent(formDoc, op),
+                                "remove" => ExecuteRemoveEvent(formDoc, op),
+                                _ => throw new InvalidOperationException(
+                                    $"Unknown manage_action '{manageAction}' for manage_event. Valid: add, remove")
+                            });
                             break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_header_fields, add_library, add_event, move_tab, move_section, remove_tab, remove_section, remove_fields, remove_header_fields, remove_library, remove_event");
+                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: manage_tab, manage_section, manage_fields, manage_library, manage_event. Each requires a 'manage_action' sub-field.");
                     }
                 }
 
@@ -336,9 +331,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var tabColumns = GetIntProp(op, "tab_columns", 1);
             var expanded = GetBoolProp(op, "expanded", true);
             var position = GetStringProp(op, "position") ?? "last";
+            var visible = GetBoolProp(op, "visible", true);
+            var showLabel = GetBoolProp(op, "show_label", true);
+            var hideOnPhone = GetBoolProp(op, "hide_on_phone", false);
 
             // Parse sections
-            var sections = new List<(string name, string label, int sectionColumns, int tabColumn, bool showLabel, List<JsonElement> fields)>();
+            var sections = new List<(string name, string label, int sectionColumns, int tabColumn, bool showLabel, bool visible, bool hideOnPhone, List<JsonElement> fields)>();
             if (op.TryGetProperty("sections", out var secArray) && secArray.ValueKind == JsonValueKind.Array)
             {
                 foreach (var sec in secArray.EnumerateArray())
@@ -348,13 +346,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var secColumns = GetIntProp(sec, "section_columns", 1);
                     var secTabColumn = GetIntProp(sec, "tab_column", 0); // 0 = auto-distribute
                     var secShowLabel = GetBoolProp(sec, "show_label", true);
+                    var secVisible = GetBoolProp(sec, "visible", true);
+                    var secHideOnPhone = GetBoolProp(sec, "hide_on_phone", false);
                     var fields = new List<JsonElement>();
                     if (sec.TryGetProperty("fields", out var fieldsArray) && fieldsArray.ValueKind == JsonValueKind.Array)
                     {
                         foreach (var f in fieldsArray.EnumerateArray())
                             fields.Add(f);
                     }
-                    sections.Add((secName, secLabel, secColumns, secTabColumn, secShowLabel, fields));
+                    sections.Add((secName, secLabel, secColumns, secTabColumn, secShowLabel, secVisible, secHideOnPhone, fields));
                 }
             }
 
@@ -363,13 +363,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var tabElement = new XElement("tab",
                 new XAttribute("name", tabName),
                 new XAttribute("id", tabId),
-                new XAttribute("showlabel", "true"),
+                new XAttribute("showlabel", showLabel ? "true" : "false"),
                 new XAttribute("locklevel", "0"),
-                new XAttribute("expanded", expanded ? "true" : "false"),
-                new XElement("labels",
-                    new XElement("label",
-                        new XAttribute("description", label),
-                        new XAttribute("languagecode", "1033"))));
+                new XAttribute("expanded", expanded ? "true" : "false"));
+
+            if (!visible) tabElement.Add(new XAttribute("visible", "false"));
+            if (hideOnPhone) tabElement.Add(new XAttribute("availableforphone", "false"));
+
+            tabElement.Add(new XElement("labels",
+                new XElement("label",
+                    new XAttribute("description", label),
+                    new XAttribute("languagecode", "1033"))));
 
             var columnsElement = new XElement("columns");
             var columnWidths = GetTabColumnWidths(tabColumns);
@@ -391,7 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Distribute sections to columns
             for (var secIdx = 0; secIdx < sections.Count; secIdx++)
             {
-                var (secName, secLabel, secColumns, tabColumn, showLabel, fields) = sections[secIdx];
+                var (secName, secLabel, secColumns, tabColumn, secShowLabel, secVisible, secHideOnPhone, fields) = sections[secIdx];
                 // If tab_column was explicitly set, use it; otherwise auto-distribute round-robin
                 var targetColIdx = tabColumn > 0
                     ? Math.Min(tabColumn - 1, tabColumns - 1)
@@ -399,7 +403,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 targetColIdx = Math.Max(0, targetColIdx);
                 var targetSections = columnElements[targetColIdx].Element("sections");
 
-                var sectionElement = BuildSectionElement(secName, secLabel, secColumns, fields, attrMap, classIdMap, showLabel, existingControlIds);
+                var sectionElement = BuildSectionElement(secName, secLabel, secColumns, fields, attrMap, classIdMap, secShowLabel, secVisible, secHideOnPhone, existingControlIds);
                 targetSections.Add(sectionElement);
             }
 
@@ -408,7 +412,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var defaultSection = BuildSectionElement(
                     AutoSectionName(tabName, "default"), label, 1,
-                    new List<JsonElement>(), attrMap, classIdMap, true, existingControlIds);
+                    new List<JsonElement>(), attrMap, classIdMap, true, true, false, existingControlIds);
                 columnElements[0].Element("sections").Add(defaultSection);
             }
 
@@ -439,6 +443,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var secColumns = GetIntProp(op, "section_columns", 1);
             var tabColumn = GetIntProp(op, "tab_column", 1);
             var showLabel = GetBoolProp(op, "show_label", true);
+            var visible = GetBoolProp(op, "visible", true);
+            var hideOnPhone = GetBoolProp(op, "hide_on_phone", false);
             var position = GetStringProp(op, "position") ?? "last";
 
             var fields = new List<JsonElement>();
@@ -468,7 +474,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 columns[targetColIdx].Add(sectionsElement);
             }
 
-            var sectionElement = BuildSectionElement(secName, label, secColumns, fields, attrMap, classIdMap, showLabel, CollectExistingControlIds(formDoc));
+            var sectionElement = BuildSectionElement(secName, label, secColumns, fields, attrMap, classIdMap, showLabel, visible, hideOnPhone, CollectExistingControlIds(formDoc));
             InsertElement(sectionsElement, sectionElement, position, "section", "name");
 
             return $"add_section: \"{label}\" in tab \"{tabName}\" ({secColumns} column(s), {fields.Count} field(s))";
@@ -519,7 +525,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var cells = new List<XElement>();
             foreach (var fieldEl in fields)
             {
-                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel) = ParseFieldSpec(fieldEl);
+                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel, hideOnPhone) = ParseFieldSpec(fieldEl);
                 var attr = attrMap[fieldName];
                 fieldName = CorrectFieldName(fieldName, attr);
                 var classid = ResolveClassId(attr);
@@ -530,7 +536,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ?? fieldName;
 
                 var controlId = DeduplicateControlId(fieldName, existingControlIds);
-                var cell = BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel);
+                var cell = BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel, hideOnPhone);
                 cells.Add(cell);
             }
 
@@ -612,7 +618,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             foreach (var fieldEl in fields)
             {
-                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel) = ParseFieldSpec(fieldEl);
+                var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel, hideOnPhone) = ParseFieldSpec(fieldEl);
 
                 if (!attrMap.TryGetValue(fieldName, out var attr))
                     throw new InvalidOperationException(
@@ -631,7 +637,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var controlId = DeduplicateControlId(headerControlId, existingControlIds);
 
                 var newCell = BuildCellElement(controlId, fieldName, resolvedLabel, classid,
-                    disabled, visible, colspan, rowspan, showlabel);
+                    disabled, visible, colspan, rowspan, showlabel, hideOnPhone);
 
                 // Try to replace an empty spacer cell first
                 var spacerCell = firstRow.Elements("cell")
@@ -1238,6 +1244,313 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return $"remove_event: entire \"{eventName}\" event removed from {desc}";
         }
 
+        // ── Update Operation Executors ───────────────────────────────────────────
+
+        private string ExecuteUpdateTab(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "name")
+                ?? throw new InvalidOperationException("update_tab requires 'name'.");
+                
+            var tabElement = FindTab(formDoc, tabName);
+            if (tabElement == null)
+                throw new InvalidOperationException($"Tab '{tabName}' not found.");
+
+            if (op.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
+            {
+                var labelDesc = labelProp.GetString();
+                var labelEl = tabElement.Element("labels")?.Element("label");
+                if (labelEl != null)
+                    labelEl.SetAttributeValue("description", labelDesc);
+            }
+
+            if (op.TryGetProperty("visible", out var visProp))
+            {
+                if (visProp.ValueKind == JsonValueKind.True)
+                    tabElement.Attribute("visible")?.Remove();
+                else if (visProp.ValueKind == JsonValueKind.False)
+                    tabElement.SetAttributeValue("visible", "false");
+            }
+
+            if (op.TryGetProperty("show_label", out var showLabelProp))
+            {
+                if (showLabelProp.ValueKind == JsonValueKind.True)
+                    tabElement.SetAttributeValue("showlabel", "true");
+                else if (showLabelProp.ValueKind == JsonValueKind.False)
+                    tabElement.SetAttributeValue("showlabel", "false");
+            }
+
+            if (op.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
+            {
+                if (hideOnPhoneProp.ValueKind == JsonValueKind.False)
+                    tabElement.Attribute("availableforphone")?.Remove();
+                else if (hideOnPhoneProp.ValueKind == JsonValueKind.True)
+                    tabElement.SetAttributeValue("availableforphone", "false");
+            }
+
+            if (op.TryGetProperty("expanded", out var expandedProp))
+            {
+                if (expandedProp.ValueKind == JsonValueKind.True)
+                    tabElement.SetAttributeValue("expanded", "true");
+                else if (expandedProp.ValueKind == JsonValueKind.False)
+                    tabElement.SetAttributeValue("expanded", "false");
+            }
+
+            return $"update_tab: \"{tabName}\" updated";
+        }
+
+        private string ExecuteUpdateSection(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("update_section requires 'tab'.");
+            var secName = GetStringProp(op, "name")
+                ?? throw new InvalidOperationException("update_section requires 'name'.");
+
+            var tabElement = FindTab(formDoc, tabName);
+            if (tabElement == null)
+                throw new InvalidOperationException($"Tab '{tabName}' not found.");
+
+            var sectionElement = FindSection(tabElement, secName);
+            if (sectionElement == null)
+                throw new InvalidOperationException($"Section '{secName}' not found in tab '{tabName}'.");
+
+            if (op.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
+            {
+                var labelDesc = labelProp.GetString();
+                var labelEl = sectionElement.Element("labels")?.Element("label");
+                if (labelEl != null)
+                    labelEl.SetAttributeValue("description", labelDesc);
+            }
+
+            if (op.TryGetProperty("visible", out var visProp))
+            {
+                if (visProp.ValueKind == JsonValueKind.True)
+                    sectionElement.Attribute("visible")?.Remove();
+                else if (visProp.ValueKind == JsonValueKind.False)
+                    sectionElement.SetAttributeValue("visible", "false");
+            }
+
+            if (op.TryGetProperty("show_label", out var showLabelProp))
+            {
+                if (showLabelProp.ValueKind == JsonValueKind.True)
+                    sectionElement.SetAttributeValue("showlabel", "true");
+                else if (showLabelProp.ValueKind == JsonValueKind.False)
+                    sectionElement.SetAttributeValue("showlabel", "false");
+            }
+
+            if (op.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
+            {
+                if (hideOnPhoneProp.ValueKind == JsonValueKind.False)
+                    sectionElement.Attribute("availableforphone")?.Remove();
+                else if (hideOnPhoneProp.ValueKind == JsonValueKind.True)
+                    sectionElement.SetAttributeValue("availableforphone", "false");
+            }
+
+            return $"update_section: \"{secName}\" in tab \"{tabName}\" updated";
+        }
+
+        private string ExecuteUpdateFields(XDocument formDoc, JsonElement op,
+            Dictionary<string, AttributeMetadata> attrMap, Dictionary<string, string> classIdMap)
+        {
+            if (!op.TryGetProperty("fields", out var fieldsArray) || fieldsArray.ValueKind != JsonValueKind.Array)
+                throw new InvalidOperationException("update_fields requires 'fields' array.");
+
+            var fields = fieldsArray.EnumerateArray().ToList();
+            if (fields.Count == 0)
+                throw new InvalidOperationException("update_fields requires at least one field.");
+
+            var updatedFields = new List<string>();
+
+            // Find all cells with a control in the form
+            var allCells = formDoc.Descendants("cell")
+                .Where(c => c.Element("control") != null)
+                .ToList();
+
+            foreach (var fieldEl in fields)
+            {
+                var fieldName = GetStringProp(fieldEl, "field");
+                if (fieldName == null) continue;
+
+                if (attrMap.TryGetValue(fieldName, out var attr))
+                    fieldName = CorrectFieldName(fieldName, attr);
+
+                // Find matching cells for this field
+                var matchingCells = allCells.Where(c =>
+                {
+                    var control = c.Element("control");
+                    return control != null && string.Equals(control.Attribute("datafieldname")?.Value, fieldName, StringComparison.OrdinalIgnoreCase);
+                }).ToList();
+
+                foreach (var cellElement in matchingCells)
+                {
+                    if (fieldEl.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
+                    {
+                        var labelDesc = labelProp.GetString();
+                        var labelEl = cellElement.Element("labels")?.Element("label");
+                        if (labelEl != null)
+                            labelEl.SetAttributeValue("description", labelDesc);
+                    }
+
+                    if (fieldEl.TryGetProperty("visible", out var visProp))
+                    {
+                        if (visProp.ValueKind == JsonValueKind.True)
+                            cellElement.Attribute("visible")?.Remove();
+                        else if (visProp.ValueKind == JsonValueKind.False)
+                            cellElement.SetAttributeValue("visible", "false");
+                    }
+
+                    if (fieldEl.TryGetProperty("showlabel", out var showLabelProp))
+                    {
+                        if (showLabelProp.ValueKind == JsonValueKind.True)
+                            cellElement.SetAttributeValue("showlabel", "true");
+                        else if (showLabelProp.ValueKind == JsonValueKind.False)
+                            cellElement.SetAttributeValue("showlabel", "false");
+                    }
+
+                    if (fieldEl.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
+                    {
+                        if (hideOnPhoneProp.ValueKind == JsonValueKind.False)
+                            cellElement.Attribute("availableforphone")?.Remove();
+                        else if (hideOnPhoneProp.ValueKind == JsonValueKind.True)
+                            cellElement.SetAttributeValue("availableforphone", "false");
+                    }
+
+                    if (fieldEl.TryGetProperty("disabled", out var disabledProp))
+                    {
+                        var controlEl = cellElement.Element("control");
+                        if (controlEl != null)
+                        {
+                            if (disabledProp.ValueKind == JsonValueKind.False)
+                                controlEl.Attribute("disabled")?.Remove();
+                            else if (disabledProp.ValueKind == JsonValueKind.True)
+                                controlEl.SetAttributeValue("disabled", "true");
+                        }
+                    }
+
+                    if (fieldEl.TryGetProperty("colspan", out var colSpanProp) && colSpanProp.ValueKind == JsonValueKind.Number)
+                    {
+                        var colspan = colSpanProp.GetInt32();
+                        if (colspan <= 1) cellElement.Attribute("colspan")?.Remove();
+                        else cellElement.SetAttributeValue("colspan", colspan.ToString());
+                    }
+
+                    if (fieldEl.TryGetProperty("rowspan", out var rowSpanProp) && rowSpanProp.ValueKind == JsonValueKind.Number)
+                    {
+                        var rowspan = rowSpanProp.GetInt32();
+                        if (rowspan <= 1) cellElement.Attribute("rowspan")?.Remove();
+                        else cellElement.SetAttributeValue("rowspan", rowspan.ToString());
+                    }
+                }
+                
+                if (matchingCells.Count > 0)
+                    updatedFields.Add(fieldName);
+            }
+
+            return $"update_fields: {updatedFields.Count} field(s) updated ({string.Join(", ", updatedFields)})";
+        }
+
+        private string ExecuteUpdateHeaderFields(XDocument formDoc, JsonElement op,
+            Dictionary<string, AttributeMetadata> attrMap, Dictionary<string, string> classIdMap)
+        {
+            if (!op.TryGetProperty("fields", out var fieldsArray) || fieldsArray.ValueKind != JsonValueKind.Array)
+                throw new InvalidOperationException("update_header requires 'fields' array.");
+
+            var fields = fieldsArray.EnumerateArray().ToList();
+            if (fields.Count == 0)
+                throw new InvalidOperationException("update_header requires at least one field.");
+
+            var updatedFields = new List<string>();
+
+            var header = formDoc.Root.Element("header");
+            if (header == null) return "update_header: form has no header elements to update.";
+
+            // Find all cells with a control in the header
+            var allCells = header.Descendants("cell")
+                .Where(c => c.Element("control") != null)
+                .ToList();
+
+            foreach (var fieldEl in fields)
+            {
+                var fieldName = GetStringProp(fieldEl, "field");
+                if (fieldName == null) continue;
+
+                if (attrMap.TryGetValue(fieldName, out var attr))
+                    fieldName = CorrectFieldName(fieldName, attr);
+
+                // Find matching cells for this field
+                var matchingCells = allCells.Where(c =>
+                {
+                    var control = c.Element("control");
+                    return control != null && string.Equals(control.Attribute("datafieldname")?.Value, fieldName, StringComparison.OrdinalIgnoreCase);
+                }).ToList();
+
+                foreach (var cellElement in matchingCells)
+                {
+                    if (fieldEl.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
+                    {
+                        var labelDesc = labelProp.GetString();
+                        var labelEl = cellElement.Element("labels")?.Element("label");
+                        if (labelEl != null)
+                            labelEl.SetAttributeValue("description", labelDesc);
+                    }
+
+                    if (fieldEl.TryGetProperty("visible", out var visProp))
+                    {
+                        if (visProp.ValueKind == JsonValueKind.True)
+                            cellElement.Attribute("visible")?.Remove();
+                        else if (visProp.ValueKind == JsonValueKind.False)
+                            cellElement.SetAttributeValue("visible", "false");
+                    }
+
+                    if (fieldEl.TryGetProperty("showlabel", out var showLabelProp))
+                    {
+                        if (showLabelProp.ValueKind == JsonValueKind.True)
+                            cellElement.SetAttributeValue("showlabel", "true");
+                        else if (showLabelProp.ValueKind == JsonValueKind.False)
+                            cellElement.SetAttributeValue("showlabel", "false");
+                    }
+
+                    if (fieldEl.TryGetProperty("hide_on_phone", out var hideOnPhoneProp))
+                    {
+                        if (hideOnPhoneProp.ValueKind == JsonValueKind.False)
+                            cellElement.Attribute("availableforphone")?.Remove();
+                        else if (hideOnPhoneProp.ValueKind == JsonValueKind.True)
+                            cellElement.SetAttributeValue("availableforphone", "false");
+                    }
+
+                    if (fieldEl.TryGetProperty("disabled", out var disabledProp))
+                    {
+                        var controlEl = cellElement.Element("control");
+                        if (controlEl != null)
+                        {
+                            if (disabledProp.ValueKind == JsonValueKind.False)
+                                controlEl.Attribute("disabled")?.Remove();
+                            else if (disabledProp.ValueKind == JsonValueKind.True)
+                                controlEl.SetAttributeValue("disabled", "true");
+                        }
+                    }
+
+                    if (fieldEl.TryGetProperty("colspan", out var colSpanProp) && colSpanProp.ValueKind == JsonValueKind.Number)
+                    {
+                        var colspan = colSpanProp.GetInt32();
+                        if (colspan <= 1) cellElement.Attribute("colspan")?.Remove();
+                        else cellElement.SetAttributeValue("colspan", colspan.ToString());
+                    }
+
+                    if (fieldEl.TryGetProperty("rowspan", out var rowSpanProp) && rowSpanProp.ValueKind == JsonValueKind.Number)
+                    {
+                        var rowspan = rowSpanProp.GetInt32();
+                        if (rowspan <= 1) cellElement.Attribute("rowspan")?.Remove();
+                        else cellElement.SetAttributeValue("rowspan", rowspan.ToString());
+                    }
+                }
+                
+                if (matchingCells.Count > 0)
+                    updatedFields.Add(fieldName);
+            }
+
+            return $"update_header: {updatedFields.Count} field(s) updated ({string.Join(", ", updatedFields)})";
+        }
+
         /// <summary>
         /// Ensures a library reference exists in formLibraries. Returns (wasAdded, libraryUniqueId).
         /// </summary>
@@ -1304,7 +1617,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private XElement BuildSectionElement(string name, string label, int sectionColumns,
             List<JsonElement> fields, Dictionary<string, AttributeMetadata> attrMap,
-            Dictionary<string, string> classIdMap, bool showLabel, HashSet<string> existingControlIds)
+            Dictionary<string, string> classIdMap, bool showLabel, bool visible, bool hideOnPhone, HashSet<string> existingControlIds)
         {
             var section = new XElement("section",
                 new XAttribute("name", name),
@@ -1312,11 +1625,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("id", NewGuid()),
                 new XAttribute("columns", sectionColumns.ToString()),
                 new XAttribute("celllabelposition", "Left"),
-                new XAttribute("labelwidth", "115"),
-                new XElement("labels",
-                    new XElement("label",
-                        new XAttribute("description", label),
-                        new XAttribute("languagecode", "1033"))));
+                new XAttribute("labelwidth", "115"));
+
+            if (!visible) section.Add(new XAttribute("visible", "false"));
+            if (hideOnPhone) section.Add(new XAttribute("availableforphone", "false"));
+
+            section.Add(new XElement("labels",
+                new XElement("label",
+                    new XAttribute("description", label),
+                    new XAttribute("languagecode", "1033"))));
 
             var rowsElement = new XElement("rows");
 
@@ -1325,7 +1642,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var cells = new List<XElement>();
                 foreach (var fieldEl in fields)
                 {
-                    var (fieldName, fieldLabel, disabled, visible, colspan, rowspan, showlabel) = ParseFieldSpec(fieldEl);
+                    var (fieldName, fieldLabel, disabled, fieldVisible, colspan, rowspan, fieldShowlabel, hideOnPhoneField) = ParseFieldSpec(fieldEl);
                     var attr = attrMap[fieldName];
                     fieldName = CorrectFieldName(fieldName, attr);
                     var classid = ResolveClassId(attr);
@@ -1336,7 +1653,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         ?? fieldName;
 
                     var controlId = DeduplicateControlId(fieldName, existingControlIds);
-                    cells.Add(BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, visible, colspan, rowspan, showlabel));
+                    cells.Add(BuildCellElement(controlId, fieldName, resolvedLabel, classid, disabled, fieldVisible, colspan, rowspan, fieldShowlabel, hideOnPhoneField));
                 }
 
                 var rows = BuildRows(cells, sectionColumns);
@@ -1349,7 +1666,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private static XElement BuildCellElement(string controlId, string fieldName, string label, string classid,
-            bool disabled, bool visible, int colspan, int rowspan, bool showlabel)
+            bool disabled, bool visible, int colspan, int rowspan, bool showlabel, bool hideOnPhone)
         {
             var cell = new XElement("cell",
                 new XAttribute("id", NewGuid()),
@@ -1358,6 +1675,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!visible)
                 cell.Add(new XAttribute("visible", "false"));
+            if (hideOnPhone)
+                cell.Add(new XAttribute("availableforphone", "false"));
             if (colspan > 1)
                 cell.Add(new XAttribute("colspan", colspan.ToString()));
             if (rowspan > 1)
@@ -1582,11 +1901,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Field Parsing ────────────────────────────────────────────────────────
 
         private static (string fieldName, string label, bool disabled, bool visible,
-            int colspan, int rowspan, bool showlabel) ParseFieldSpec(JsonElement fieldEl)
+            int colspan, int rowspan, bool showlabel, bool hideOnPhone) ParseFieldSpec(JsonElement fieldEl)
         {
             if (fieldEl.ValueKind == JsonValueKind.String)
             {
-                return (fieldEl.GetString(), null, false, true, 1, 1, true);
+                return (fieldEl.GetString(), null, false, true, 1, 1, true, false);
             }
 
             var fieldName = GetStringProp(fieldEl, "field")
@@ -1597,8 +1916,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var colspan = GetIntProp(fieldEl, "colspan", 1);
             var rowspan = GetIntProp(fieldEl, "rowspan", 1);
             var showlabel = GetBoolProp(fieldEl, "showlabel", true);
+            var hideOnPhone = GetBoolProp(fieldEl, "hide_on_phone", false);
 
-            return (fieldName, label, disabled, visible, colspan, rowspan, showlabel);
+            return (fieldName, label, disabled, visible, colspan, rowspan, showlabel, hideOnPhone);
         }
 
         private static HashSet<string> CollectFieldNames(List<JsonElement> ops)
