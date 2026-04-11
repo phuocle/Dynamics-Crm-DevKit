@@ -37,13 +37,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Build modified FormXML by adding fields, sections, tabs, libraries, or event handlers to an existing Dataverse form.\n" +
             "READ-ONLY builder — returns modified FormXML string. Use manage_form to write it.\n\n" +
 
-            "TWELVE OPERATIONS:\n" +
+            "FOURTEEN OPERATIONS:\n" +
             "- add_fields: Add fields to an existing section (resolves classid automatically)\n" +
             "- add_section: Add a new section (with fields) to an existing tab\n" +
             "- add_tab: Add a new tab (with sections and fields) to the form\n" +
             "- add_header_fields: Add fields to the form header (auto-prefixes control ID with header_)\n" +
             "- add_library: Add a web resource library reference to <formLibraries>\n" +
             "- add_event: Add an event handler (onload, onsave, onchange) with auto library registration\n" +
+            "- move_tab: Move an existing tab to a new position (first, last, before/after another tab)\n" +
+            "- move_section: Move an existing section to a new position within same or different tab\n" +
             "- remove_tab: Remove an entire tab from the form\n" +
             "- remove_section: Remove a section from a tab\n" +
             "- remove_fields: Remove specific fields from a section (replaces with spacers to preserve layout)\n" +
@@ -65,12 +67,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
                 "JSON array of operations. Each has 'action' + parameters.\n" +
-                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_header_fields', 'add_library', 'add_event', 'remove_tab', 'remove_section', 'remove_fields', 'remove_header_fields', 'remove_library', 'remove_event'.\n" +
+                "Actions: 'add_tab', 'add_section', 'add_fields', 'add_header_fields', 'add_library', 'add_event', 'move_tab', 'move_section', 'remove_tab', 'remove_section', 'remove_fields', 'remove_header_fields', 'remove_library', 'remove_event'.\n" +
                 "Example: [{\"action\":\"add_fields\",\"tab\":\"tab_general\",\"section\":\"general_sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "Example: [{\"action\":\"add_tab\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\",\"modifiedon\"]}]}]\n" +
                 "Example: [{\"action\":\"add_library\",\"library_name\":\"new_/js/account.js\"}]\n" +
                 "Example: [{\"action\":\"add_event\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
                 "Example: [{\"action\":\"add_event\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"library_name\":\"new_/js/account.js\",\"target\":\"field:name\"}]\n" +
+                "Example: [{\"action\":\"move_tab\",\"tab\":\"tab_audit\",\"position\":\"last\"}]\n" +
+                "Example: [{\"action\":\"move_tab\",\"tab\":\"tab_details\",\"position\":\"first\"}]\n" +
+                "Example: [{\"action\":\"move_tab\",\"tab\":\"tab_string\",\"position\":\"before:tab_lookup\"}]\n" +
+                "Example: [{\"action\":\"move_section\",\"tab\":\"tab_general\",\"section\":\"sec_dates\",\"position\":\"last\"}]\n" +
+                "Example: [{\"action\":\"move_section\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"target_tab\":\"tab_details\",\"position\":\"first\"}]\n" +
                 "Example: [{\"action\":\"remove_tab\",\"tab\":\"tab_audit\"}]\n" +
                 "Example: [{\"action\":\"remove_section\",\"tab\":\"tab_general\",\"section\":\"sec_dates\"}]\n" +
                 "Example: [{\"action\":\"remove_fields\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\",\"modifiedon\"]}]\n" +
@@ -228,6 +235,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             var eventSummary = ExecuteAddEvent(formDoc, op);
                             opSummaries.Add(eventSummary);
                             break;
+                        case "move_tab":
+                            opSummaries.Add(ExecuteMoveTab(formDoc, op));
+                            break;
+                        case "move_section":
+                            opSummaries.Add(ExecuteMoveSection(formDoc, op));
+                            break;
                         case "remove_tab":
                             opSummaries.Add(ExecuteRemoveTab(formDoc, op));
                             break;
@@ -247,7 +260,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             opSummaries.Add(ExecuteRemoveEvent(formDoc, op));
                             break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_header_fields, add_library, add_event, remove_tab, remove_section, remove_fields, remove_header_fields, remove_library, remove_event");
+                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: add_tab, add_section, add_fields, add_header_fields, add_library, add_event, move_tab, move_section, remove_tab, remove_section, remove_fields, remove_header_fields, remove_library, remove_event");
                     }
                 }
 
@@ -838,6 +851,118 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return $"add_event: \"{eventName}\" -> \"{functionName}\" from \"{libraryName}\" ({targetDescription})";
         }
 
+        // ── Move Operation Executors ───────────────────────────────────────────
+
+        private static string ExecuteMoveTab(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("move_tab requires 'tab'.");
+            var position = GetStringProp(op, "position")
+                ?? throw new InvalidOperationException("move_tab requires 'position'. Valid values: 'first', 'last', 'before:<tab_name>', 'after:<tab_name>'.");
+
+            var tabElement = FindTab(formDoc, tabName);
+            if (tabElement == null)
+                throw new InvalidOperationException(
+                    $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+
+            var tabsElement = tabElement.Parent;
+            if (tabsElement == null)
+                throw new InvalidOperationException("Tab has no parent <tabs> element.");
+
+            // Remove from current position (preserving entire element with all content)
+            tabElement.Remove();
+
+            // Insert at new position
+            InsertElement(tabsElement, tabElement, position, "tab", "name");
+
+            return $"move_tab: \"{tabName}\" moved to position \"{position}\"";
+        }
+
+        private static string ExecuteMoveSection(XDocument formDoc, JsonElement op)
+        {
+            var tabName = GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("move_section requires 'tab'.");
+            var sectionName = GetStringProp(op, "section")
+                ?? throw new InvalidOperationException("move_section requires 'section'.");
+            var position = GetStringProp(op, "position")
+                ?? throw new InvalidOperationException("move_section requires 'position'. Valid values: 'first', 'last', 'before:<section_name>', 'after:<section_name>'.");
+            var targetTabName = GetStringProp(op, "target_tab");
+            var targetTabColumn = GetIntProp(op, "tab_column", 0); // 0 = keep current or use first column
+
+            // Find source tab and section
+            var sourceTab = FindTab(formDoc, tabName);
+            if (sourceTab == null)
+                throw new InvalidOperationException(
+                    $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+
+            var sectionElement = FindSection(sourceTab, sectionName);
+            if (sectionElement == null)
+                throw new InvalidOperationException(
+                    $"Section '{sectionName}' not found in tab '{tabName}'. Available sections: {string.Join(", ", GetSectionNames(sourceTab))}");
+
+            // Determine target tab (same tab or different)
+            XElement targetTab;
+            if (!string.IsNullOrEmpty(targetTabName))
+            {
+                targetTab = FindTab(formDoc, targetTabName);
+                if (targetTab == null)
+                    throw new InvalidOperationException(
+                        $"Target tab '{targetTabName}' not found. Available tabs: {string.Join(", ", GetTabNames(formDoc))}");
+            }
+            else
+            {
+                targetTab = sourceTab;
+            }
+
+            // Find target column's <sections> element
+            var targetColumns = targetTab.Element("columns")?.Elements("column").ToList();
+            if (targetColumns == null || targetColumns.Count == 0)
+                throw new InvalidOperationException($"Target tab '{targetTabName ?? tabName}' has no columns.");
+
+            int targetColIdx;
+            if (targetTabColumn > 0)
+            {
+                targetColIdx = Math.Min(targetTabColumn - 1, targetColumns.Count - 1);
+            }
+            else if (targetTab == sourceTab)
+            {
+                // Same tab: keep in same column by finding which column the section is currently in
+                targetColIdx = 0;
+                for (var i = 0; i < targetColumns.Count; i++)
+                {
+                    if (targetColumns[i].Descendants("section").Any(s =>
+                        string.Equals(s.Attribute("name")?.Value, sectionElement.Attribute("name")?.Value, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        targetColIdx = i;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                targetColIdx = 0; // Default to first column for cross-tab moves
+            }
+            targetColIdx = Math.Max(0, targetColIdx);
+
+            var targetSections = targetColumns[targetColIdx].Element("sections");
+            if (targetSections == null)
+            {
+                targetSections = new XElement("sections");
+                targetColumns[targetColIdx].Add(targetSections);
+            }
+
+            // Remove from current position (preserving entire element with all content)
+            sectionElement.Remove();
+
+            // Insert at new position
+            InsertElement(targetSections, sectionElement, position, "section", "name");
+
+            var targetDesc = !string.IsNullOrEmpty(targetTabName) && !string.Equals(targetTabName, tabName, StringComparison.OrdinalIgnoreCase)
+                ? $" (moved to tab \"{targetTabName}\")"
+                : "";
+            return $"move_section: \"{sectionName}\" moved to position \"{position}\"{targetDesc}";
+        }
+
         // ── Remove Operation Executors ──────────────────────────────────────────
 
         private static string ExecuteRemoveTab(XDocument formDoc, JsonElement op)
@@ -1421,8 +1546,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var afterName = position.Substring(6).Trim();
                 var target = parent.Elements(childElementName).FirstOrDefault(e =>
                     string.Equals(e.Attribute(nameAttribute)?.Value, afterName, StringComparison.OrdinalIgnoreCase));
+                // Fallback: match by label text (fuzzy)
+                target ??= parent.Elements(childElementName).FirstOrDefault(e =>
+                {
+                    var labelDesc = e.Element("labels")?.Element("label")?.Attribute("description")?.Value;
+                    return string.Equals(labelDesc, afterName, StringComparison.OrdinalIgnoreCase);
+                });
                 if (target != null)
                     target.AddAfterSelf(newElement);
+                else
+                    parent.Add(newElement); // Fallback to last
+            }
+            else if (position.StartsWith("before:", StringComparison.OrdinalIgnoreCase))
+            {
+                var beforeName = position.Substring(7).Trim();
+                var target = parent.Elements(childElementName).FirstOrDefault(e =>
+                    string.Equals(e.Attribute(nameAttribute)?.Value, beforeName, StringComparison.OrdinalIgnoreCase));
+                // Fallback: match by label text (fuzzy)
+                target ??= parent.Elements(childElementName).FirstOrDefault(e =>
+                {
+                    var labelDesc = e.Element("labels")?.Element("label")?.Attribute("description")?.Value;
+                    return string.Equals(labelDesc, beforeName, StringComparison.OrdinalIgnoreCase);
+                });
+                if (target != null)
+                    target.AddBeforeSelf(newElement);
                 else
                     parent.Add(newElement); // Fallback to last
             }

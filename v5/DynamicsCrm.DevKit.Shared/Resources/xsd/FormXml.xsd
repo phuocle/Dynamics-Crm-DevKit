@@ -408,6 +408,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="headerdensity" type="xs:string" use="optional" />
 		
 	</xs:complexType>
 	<xs:complexType name="FormXmlControlType">

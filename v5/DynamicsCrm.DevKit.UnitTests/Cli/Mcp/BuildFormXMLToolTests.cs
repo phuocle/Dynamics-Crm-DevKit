@@ -30,8 +30,9 @@ public class BuildFormXMLToolTests
 
         var expectedActions = new[]
         {
-            "add_tab", "add_section", "add_fields", "add_library", "add_event",
-            "remove_tab", "remove_section", "remove_fields", "remove_library", "remove_event"
+            "add_tab", "add_section", "add_fields", "add_header_fields", "add_library", "add_event",
+            "move_tab", "move_section",
+            "remove_tab", "remove_section", "remove_fields", "remove_header_fields", "remove_library", "remove_event"
         };
 
         foreach (var action in expectedActions)
@@ -42,7 +43,7 @@ public class BuildFormXMLToolTests
     }
 
     [TestMethod]
-    public void ToolDescription_ListsAllTenOperations()
+    public void ToolDescription_ListsAllFourteenOperations()
     {
         var method = ToolType.GetMethod("build_form_xml", BindingFlags.Public | BindingFlags.Instance)!;
         var descAttr = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()!;
@@ -50,8 +51,9 @@ public class BuildFormXMLToolTests
 
         var expectedOperations = new[]
         {
-            "add_fields", "add_section", "add_tab", "add_library", "add_event",
-            "remove_tab", "remove_section", "remove_fields", "remove_library", "remove_event"
+            "add_fields", "add_section", "add_tab", "add_header_fields", "add_library", "add_event",
+            "move_tab", "move_section",
+            "remove_tab", "remove_section", "remove_fields", "remove_header_fields", "remove_library", "remove_event"
         };
 
         foreach (var op in expectedOperations)
