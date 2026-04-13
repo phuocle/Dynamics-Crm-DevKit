@@ -31,53 +31,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRoleResult)),
         Description(
-            "List, inspect, create, update, delete, copy security roles, and assign/unassign roles to users.\n\n" +
+            "Manage security roles: list, inspect, CRUD, copy, assign/unassign users.\n\n" +
 
-            "NINE ACTIONS:\n" +
-            "- action='list': List all root security roles. Optional: role_name, business_unit_id, max_records\n" +
-            "- action='detail': All privileges for a role, grouped by entity. Requires role_id. Optional: entity_name\n" +
-            "- action='user': User's assigned roles + effective privileges. Requires user_id. Optional: entity_name\n" +
-            "- action='assign': Assign a role to a user. Requires role_id + user_id\n" +
-            "- action='unassign': Remove a role from a user. Requires role_id + user_id\n" +
-            "- action='create': Create a new custom security role. Requires role_name. Optional: business_unit_id\n" +
-            "- action='update': Rename an existing role. Requires role_id + role_name\n" +
-            "- action='delete': Delete a custom security role. Requires role_id. WARNING: cannot be undone\n" +
-            "- action='copy': Clone a role with all its privileges. Requires role_id + role_name\n\n" +
+            "ACTIONS:\n" +
+            "- action='list': List root roles. Optional: role_name, business_unit_id, max_records\n" +
+            "- action='detail': Role privileges grouped by entity. Required: role_id. Optional: entity_name\n" +
+            "- action='user': User's roles + effective privileges. Required: user_id. Optional: entity_name\n" +
+            "- action='assign': Assign role to user. Required: role_id + user_id\n" +
+            "- action='unassign': Remove role from user. Required: role_id + user_id\n" +
+            "- action='create': Create custom role. Required: role_name. Optional: business_unit_id\n" +
+            "- action='update': Rename role. Required: role_id + role_name\n" +
+            "- action='delete': Delete custom role (irreversible). Required: role_id\n" +
+            "- action='copy': Clone role with all privileges. Required: role_id + role_name\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug 'access denied': action='user' with user email + entity_name\n" +
-            "- Audit what a role grants: action='detail' with role_id\n" +
-            "- Provision access: action='assign' / action='unassign'\n" +
-            "- Create custom roles: action='create' or action='copy' from existing\n\n" +
+            "- Debug 'access denied': action='user' + entity_name\n" +
+            "- Audit role grants: action='detail'\n" +
+            "- Provision access: action='assign'/'unassign', or action='create'/'copy'\n\n" +
 
             "TIPS:\n" +
-            "- Depth: User < BU < Parent:ChildBU < Org\n" +
+            "- Depth levels: User < BU < Parent:ChildBU < Org\n" +
             "- Only root roles listed (not inherited BU copies)\n" +
-            "- Managed roles cannot be deleted\n" +
-            "- Use action='copy' to clone a role with all privileges, then customize via UI")]
+            "- Managed roles cannot be deleted; use action='copy' to clone then customize")]
         public CallToolResult manage_role(
             [Description(
-                "The action to perform: 'list', 'detail', 'user', 'assign', 'unassign', 'create', 'update', 'delete', or 'copy'."
+                "Action: list, detail, user, assign, unassign, create, update, delete, copy."
             )] string action,
             [Description(
-                "Email or GUID of a user. Required for 'user', 'assign', 'unassign'. " +
-                "Combine with entity_name in 'user' mode for effective privileges."
+                "Email or GUID. Required for: user, assign, unassign."
             )] string user_id = "",
             [Description(
-                "GUID of a role. Required for 'detail', 'assign', 'unassign', 'update', 'delete', 'copy'. " +
-                "Empty = list all roles."
+                "Role GUID. Required for: detail, assign, unassign, update, delete, copy."
             )] string role_id = "",
             [Description(
-                "Filter roles by name (contains match) in 'list' mode. " +
-                "New role name for 'create', 'update', 'copy'."
+                "Filter (contains) in list. New name for create/update/copy."
             )] string role_name = "",
             [Description(
-                "Filter by business unit GUID in 'list' mode. " +
-                "Target BU for 'create' (empty = root BU). " +
-                "Empty = all business units (root roles only)."
+                "BU GUID. Filter in list. Target BU for create (empty = root BU)."
             )] string business_unit_id = "",
             [Description(
-                "Filter privileges to a specific entity (e.g., 'account'). 'detail' and 'user' modes only."
+                "Filter privileges by entity (e.g. 'account'). For detail and user only."
             )] string entity_name = "",
             [Description(
                 "Max roles in list mode. Default: 50, max: 250."
