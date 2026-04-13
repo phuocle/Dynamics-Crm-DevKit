@@ -1236,10 +1236,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int StageCategoryValue { get; set; }
     }
 
-    internal sealed class GetDebuggingResult
+    internal sealed class GetPluginTraceLogsResult
     {
-        [JsonPropertyName("action")]
-        public string Action { get; set; }
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
 
         [JsonPropertyName("totalCount")]
         public int TotalCount { get; set; }
@@ -1247,6 +1247,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("traces")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<PluginTraceLogEntry> Traces { get; set; }
+    }
+
+    internal sealed class GetSystemJobsResult
+    {
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("totalCount")]
+        public int TotalCount { get; set; }
 
         [JsonPropertyName("jobs")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -16,11 +16,11 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetDebuggingTool
+    public class GetSystemJobsTool
     {
         private readonly ServiceClient _serviceClient;
 
-        public GetDebuggingTool(ServiceClient serviceClient)
+        public GetSystemJobsTool(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }
@@ -66,84 +66,58 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "plugin", "workflow", "bulk_delete", "import", "goal_rollup", "solution", "all"
         };
 
-        [McpServerTool(Name = "get_debugging", Title = "Debug with plugin trace logs and system jobs",
+        [McpServerTool(Name = "get_system_jobs", Title = "List and inspect system jobs",
             Idempotent = true, Destructive = false, ReadOnly = true,
-            UseStructuredContent = true, OutputSchemaType = typeof(GetDebuggingResult)),
+            UseStructuredContent = true, OutputSchemaType = typeof(GetSystemJobsResult)),
         Description(
-            "Query plugin trace logs and system jobs (asyncoperation) for debugging plugin failures, " +
+            "List and inspect system jobs (asyncoperation) for debugging async failures, " +
             "workflow errors, bulk operations, imports, and solution operations.\n\n" +
 
-            "FOUR ACTIONS:\n" +
-            "- action='traces': list plugin trace logs with filters (default: last 60 min)\n" +
-            "- action='trace_detail': full detail for one trace log (complete messageblock + exceptiondetails, never truncated). Requires record_id\n" +
-            "- action='jobs': list system jobs with filters (default: failed last 24h)\n" +
-            "- action='job_detail': full detail for one system job including error message and stack trace. Requires record_id\n\n" +
+            "TWO MODES:\n" +
+            "- record_id EMPTY: list system jobs with filters (default: failed last 24h)\n" +
+            "- record_id PROVIDED: full detail including error message and stack trace\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug a failing plugin: action='traces' to browse, then action='trace_detail' for full output\n" +
-            "- Debug async failures: action='jobs' for errors, then action='job_detail' for stack trace\n" +
-            "- Trace a single request end-to-end: use correlation_id across both traces and jobs\n\n" +
+            "- Debug async failures: list failed jobs, then detail for full stack trace\n" +
+            "- Monitor bulk operations: filter by operation_type ('bulk_delete', 'import', 'solution')\n" +
+            "- Trace a specific request: use correlation_id to find all jobs for one operation\n\n" +
 
             "TIPS:\n" +
-            "- Plugin Trace Log must be enabled in Dataverse (System Settings > Customization)\n" +
-            "- For async plugin failures: action='jobs' for error + action='traces' for trace output\n" +
-            "- Browse first (list), then get full detail with record_id")]
-        public CallToolResult get_debugging(
+            "- For async plugin failures: combine with get_plugin_trace_logs for trace output\n" +
+            "- Use entity_name to filter jobs for a specific entity")]
+        public CallToolResult get_system_jobs(
             [Description(
-                "The action to perform: 'traces', 'trace_detail', 'jobs', or 'job_detail'."
-            )] string action,
-            [Description(
-                "Record GUID for detail actions (trace_detail, job_detail). " +
+                "Record GUID for detail mode. Empty = list mode. " +
                 "Use parse_record_url to extract from a URL."
             )] string record_id = "",
             [Description(
-                "traces only: filter by plugin type name (contains match). E.g., 'AccountPlugin'."
-            )] string type_name = "",
-            [Description(
-                "jobs only: filter by entity (e.g., 'account'). Empty = all."
+                "Filter by entity (e.g., 'account'). Empty = all."
             )] string entity_name = "",
             [Description(
-                "jobs only: 'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'."
+                "'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'."
             )] string status = "failed",
             [Description(
-                "jobs only: 'plugin', 'workflow', 'bulk_delete', 'import', 'goal_rollup', 'solution', 'all'. Empty = all."
+                "'plugin', 'workflow', 'bulk_delete', 'import', 'goal_rollup', 'solution', 'all'. Empty = all."
             )] string operation_type = "",
             [Description(
-                "jobs only: filter by name (contains)."
+                "Filter by name (contains)."
             )] string name_filter = "",
             [Description(
-                "Filter by correlation ID (exact GUID). Works for both traces and jobs — " +
-                "trace a single request end-to-end."
+                "Filter by correlation ID (exact GUID). Trace a single request across jobs."
             )] string correlation_id = "",
             [Description(
-                "traces only: filter by SDK message: 'Create', 'Update', 'Delete', etc."
-            )] string message_name = "",
-            [Description(
-                "traces only: filter by mode: 'sync' or 'async'. Empty for both."
-            )] string mode = "",
-            [Description(
-                "Time range in minutes. Default: 60 for traces, 1440 (24h) for jobs. " +
-                "Max: 1440 for traces, 43200 for jobs."
+                "Time range in minutes. Default: 1440 (24h). Max: 43200."
             )] int minutes_ago = 0,
             [Description(
-                "Max results. Default: 50. Max: 200 for traces, 500 for jobs."
+                "Max results. Default: 50. Max: 500."
             )] int max_records = 50)
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'traces', 'trace_detail', 'jobs', 'job_detail'.");
-
-            var normalizedAction = action.Trim().ToLowerInvariant();
-
             try
             {
-                return normalizedAction switch
-                {
-                    "traces" => HandleTraces(type_name, minutes_ago, correlation_id, message_name, mode, max_records),
-                    "trace_detail" => HandleTraceDetail(record_id),
-                    "jobs" => HandleJobs(entity_name, status, operation_type, name_filter, correlation_id, minutes_ago, max_records),
-                    "job_detail" => HandleJobDetail(record_id),
-                    _ => ErrorResult($"Error: '{action.Trim()}' is not a valid action. Valid values: 'traces', 'trace_detail', 'jobs', 'job_detail'.")
-                };
+                if (!string.IsNullOrWhiteSpace(record_id))
+                    return HandleDetail(record_id);
+
+                return HandleList(entity_name, status, operation_type, name_filter, correlation_id, minutes_ago, max_records);
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
             {
@@ -155,249 +129,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        // ========== TRACES (from GetPluginTraceLogsTool) ==========
-
-        private CallToolResult HandleTraces(string typeName, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
+        private CallToolResult HandleList(string entityName, string status, string operationType, string nameFilter, string correlationId, int minutesAgo, int maxRecords)
         {
-            if (!string.IsNullOrWhiteSpace(mode))
-            {
-                var modeLower = mode.Trim().ToLowerInvariant();
-                if (modeLower != "sync" && modeLower != "synchronous" && modeLower != "async" && modeLower != "asynchronous")
-                    return ErrorResult($"Error: Invalid mode '{mode.Trim()}'. Use 'sync' or 'async'.");
-            }
-
-            if (!string.IsNullOrWhiteSpace(correlationId) && !Guid.TryParse(correlationId.Trim(), out _))
-                return ErrorResult($"Error: '{correlationId.Trim()}' is not a valid GUID for correlation_id.");
-
-            // Default minutes_ago for traces: 60
-            if (minutesAgo <= 0) minutesAgo = 60;
-            if (minutesAgo > 1440) minutesAgo = 1440;
-            if (maxRecords <= 0) maxRecords = 50;
-            if (maxRecords > 200) maxRecords = 200;
-
-            var fetchXml = BuildTraceListFetchXml(typeName, minutesAgo, correlationId, messageName, mode, maxRecords);
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-
-            if (result.Entities.Count == 0)
-            {
-                var text = FormatTraceNoResults(typeName, minutesAgo, correlationId, messageName, mode);
-                var emptyResult = new GetDebuggingResult
-                {
-                    Action = "traces",
-                    TotalCount = 0,
-                    Traces = []
-                };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(emptyResult)
-                };
-            }
-
-            return FormatTraceListResults(result.Entities, minutesAgo);
-        }
-
-        private CallToolResult HandleTraceDetail(string recordId)
-        {
-            if (string.IsNullOrWhiteSpace(recordId))
-                return ErrorResult("Error: record_id is required for action='trace_detail'.");
-
-            if (!Guid.TryParse(recordId.Trim(), out var id))
-                return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
-
-            var entity = _serviceClient.Retrieve("plugintracelog", id, new ColumnSet(true));
-            return FormatTraceDetailResult(entity);
-        }
-
-        private static string BuildTraceListFetchXml(string typeName, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
-        {
-            var sb = new StringBuilder(512);
-            sb.Append($"<fetch top='{maxRecords}'>");
-            sb.Append("<entity name='plugintracelog'>");
-            sb.Append("<attribute name='plugintracelogid'/>");
-            sb.Append("<attribute name='typename'/>");
-            sb.Append("<attribute name='messagename'/>");
-            sb.Append("<attribute name='primaryentity'/>");
-            sb.Append("<attribute name='mode'/>");
-            sb.Append("<attribute name='depth'/>");
-            sb.Append("<attribute name='performanceexecutionduration'/>");
-            sb.Append("<attribute name='correlationid'/>");
-            sb.Append("<attribute name='createdon'/>");
-            sb.Append("<filter type='and'>");
-            var sinceUtc = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("yyyy-MM-ddTHH:mm:ssZ");
-            sb.Append($"<condition attribute='createdon' operator='ge' value='{sinceUtc}'/>");
-
-            if (!string.IsNullOrWhiteSpace(typeName))
-                sb.Append($"<condition attribute='typename' operator='like' value='%{EscapeXml(typeName.Trim())}%'/>");
-
-            if (!string.IsNullOrWhiteSpace(correlationId) && Guid.TryParse(correlationId.Trim(), out _))
-                sb.Append($"<condition attribute='correlationid' operator='eq' value='{EscapeXml(correlationId.Trim())}'/>");
-
-            if (!string.IsNullOrWhiteSpace(messageName))
-                sb.Append($"<condition attribute='messagename' operator='eq' value='{EscapeXml(messageName.Trim())}'/>");
-
-            if (!string.IsNullOrWhiteSpace(mode))
-            {
-                var modeValue = mode.Trim().ToLowerInvariant() switch
-                {
-                    "sync" or "synchronous" => "0",
-                    "async" or "asynchronous" => "1",
-                    _ => null
-                };
-                if (modeValue != null)
-                    sb.Append($"<condition attribute='mode' operator='eq' value='{modeValue}'/>");
-            }
-
-            sb.Append("</filter>");
-            sb.Append("<order attribute='createdon' descending='true'/>");
-            sb.Append("</entity>");
-            sb.Append("</fetch>");
-            return sb.ToString();
-        }
-
-        private static string FormatTraceNoResults(string typeName, int minutesAgo, string correlationId, string messageName, string mode)
-        {
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[PluginTraceLogs] 0 logs found");
-
-            var filters = new List<string>();
-            if (!string.IsNullOrWhiteSpace(typeName))
-                filters.Add($"typename contains \"{typeName}\"");
-            if (!string.IsNullOrWhiteSpace(correlationId))
-                filters.Add($"correlationid = \"{correlationId}\"");
-            if (!string.IsNullOrWhiteSpace(messageName))
-                filters.Add($"message = \"{messageName}\"");
-            if (!string.IsNullOrWhiteSpace(mode))
-                filters.Add($"mode = \"{mode}\"");
-            filters.Add($"last {minutesAgo} minutes");
-
-            sb.AppendLine($"Filters: {string.Join(", ", filters)}");
-            sb.AppendLine("Tip: Check if Plugin Trace Log is enabled in System Settings > Customization");
-            return sb.ToString();
-        }
-
-        private static CallToolResult FormatTraceListResults(DataCollection<Entity> entities, int minutesAgo)
-        {
-            var traces = new List<PluginTraceLogEntry>();
-            var sb = new StringBuilder(entities.Count * 120 + 256);
-            sb.AppendLine($"[PluginTraceLogs] {entities.Count} logs (last {minutesAgo} min)");
-            sb.AppendLine();
-            sb.AppendLine("id\ttypename\tmessage\tentity\tmode\tdepth\tduration\tcreated");
-
-            foreach (var e in entities)
-            {
-                var typeName = e.GetAttributeValue<string>("typename") ?? "";
-                var msgName = e.GetAttributeValue<string>("messagename") ?? "";
-                var entity = e.GetAttributeValue<string>("primaryentity") ?? "";
-                var modeValue = e.GetAttributeValue<OptionSetValue>("mode");
-                var modeStr = modeValue?.Value == 0 ? "Sync" : modeValue?.Value == 1 ? "Async" : "";
-                var depth = e.GetAttributeValue<int?>("depth") ?? 0;
-                var duration = e.GetAttributeValue<int?>("performanceexecutionduration");
-                var durationStr = duration.HasValue ? $"{duration}ms" : "";
-                var created = e.GetAttributeValue<DateTime?>("createdon");
-                var createdStr = created?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
-                var correlationId = e.GetAttributeValue<Guid?>("correlationid");
-
-                sb.AppendLine($"{e.Id}\t{EscapeTab(typeName)}\t{EscapeTab(msgName)}\t{EscapeTab(entity)}\t{modeStr}\t{depth}\t{durationStr}\t{createdStr}");
-
-                traces.Add(new PluginTraceLogEntry
-                {
-                    Id = e.Id.ToString(),
-                    TypeName = typeName,
-                    MessageName = NullIfEmpty(msgName),
-                    PrimaryEntity = NullIfEmpty(entity),
-                    Mode = NullIfEmpty(modeStr),
-                    Depth = depth,
-                    Duration = NullIfEmpty(durationStr),
-                    CorrelationId = correlationId?.ToString(),
-                    CreatedOn = createdStr
-                });
-            }
-
-            var structured = new GetDebuggingResult
-            {
-                Action = "traces",
-                TotalCount = entities.Count,
-                Traces = traces
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
-        }
-
-        private static CallToolResult FormatTraceDetailResult(Entity e)
-        {
-            var typeName = e.GetAttributeValue<string>("typename") ?? "";
-            var msgName = e.GetAttributeValue<string>("messagename") ?? "";
-            var entity = e.GetAttributeValue<string>("primaryentity") ?? "";
-            var modeValue = e.GetAttributeValue<OptionSetValue>("mode");
-            var modeStr = modeValue?.Value == 0 ? "Synchronous" : modeValue?.Value == 1 ? "Asynchronous" : "";
-            var depth = e.GetAttributeValue<int?>("depth") ?? 0;
-            var duration = e.GetAttributeValue<int?>("performanceexecutionduration");
-            var durationStr = duration.HasValue ? $"{duration}ms" : "";
-            var correlationId = e.GetAttributeValue<Guid?>("correlationid");
-            var created = e.GetAttributeValue<DateTime?>("createdon");
-            var messageBlock = e.GetAttributeValue<string>("messageblock") ?? "";
-            var exceptionDetails = e.GetAttributeValue<string>("exceptiondetails") ?? "";
-
-            var sb = new StringBuilder(4096);
-            sb.AppendLine($"[PluginTraceLog] {typeName}");
-            sb.AppendLine($"Id: {e.Id}");
-            sb.AppendLine($"Message: {msgName}");
-            sb.AppendLine($"Entity: {entity}");
-            sb.AppendLine($"Mode: {modeStr}");
-            sb.AppendLine($"Depth: {depth}");
-            sb.AppendLine($"Duration: {durationStr}");
-            if (correlationId.HasValue)
-                sb.AppendLine($"CorrelationId: {correlationId}");
-            if (created.HasValue)
-                sb.AppendLine($"Created: {created.Value:yyyy-MM-dd HH:mm:ss}");
-
-            sb.AppendLine();
-            sb.AppendLine("[Trace Output]");
-            sb.AppendLine(string.IsNullOrWhiteSpace(messageBlock) ? "(none)" : messageBlock);
-
-            sb.AppendLine();
-            sb.AppendLine("[Exception]");
-            sb.AppendLine(string.IsNullOrWhiteSpace(exceptionDetails) ? "(none)" : exceptionDetails);
-
-            var entry = new PluginTraceLogEntry
-            {
-                Id = e.Id.ToString(),
-                TypeName = typeName,
-                MessageName = NullIfEmpty(msgName),
-                PrimaryEntity = NullIfEmpty(entity),
-                Mode = NullIfEmpty(modeStr),
-                Depth = depth,
-                Duration = NullIfEmpty(durationStr),
-                CorrelationId = correlationId?.ToString(),
-                CreatedOn = created?.ToString("yyyy-MM-dd HH:mm:ss"),
-                MessageBlock = NullIfEmpty(messageBlock),
-                ExceptionDetails = NullIfEmpty(exceptionDetails)
-            };
-
-            var structured = new GetDebuggingResult
-            {
-                Action = "trace_detail",
-                TotalCount = 1,
-                Traces = [entry]
-            };
-
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
-        }
-
-        // ========== JOBS (from GetSystemJobsTool) ==========
-
-        private CallToolResult HandleJobs(string entityName, string status, string operationType, string nameFilter, string correlationId, int minutesAgo, int maxRecords)
-        {
-            // Default minutes_ago for jobs: 1440 (24h)
             if (minutesAgo <= 0) minutesAgo = 1440;
             if (minutesAgo > 43200) minutesAgo = 43200;
             if (maxRecords <= 0) maxRecords = 50;
@@ -468,9 +201,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (result.Entities.Count == 0)
             {
                 var text = $"0 system jobs found (status={normalizedStatus}, last {FormatTimeLabel(minutesAgo)}).";
-                var emptyResult = new GetDebuggingResult
+                var emptyResult = new GetSystemJobsResult
                 {
-                    Action = "jobs",
+                    Mode = "list",
                     TotalCount = 0,
                     Jobs = [],
                     Summary = new JobSummary()
@@ -482,14 +215,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
             }
 
-            return FormatJobListResults(result.Entities, status, minutesAgo);
+            return FormatListResults(result.Entities, status, minutesAgo);
         }
 
-        private CallToolResult HandleJobDetail(string recordId)
+        private CallToolResult HandleDetail(string recordId)
         {
-            if (string.IsNullOrWhiteSpace(recordId))
-                return ErrorResult("Error: record_id is required for action='job_detail'.");
-
             if (!Guid.TryParse(recordId.Trim(), out _))
                 return ErrorResult($"Error: '{recordId.Trim()}' is not a valid GUID.");
 
@@ -610,9 +340,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Message = NullIfEmpty(message)
             };
 
-            var structured = new GetDebuggingResult
+            var structured = new GetSystemJobsResult
             {
-                Action = "job_detail",
+                Mode = "detail",
                 TotalCount = 1,
                 Jobs = [entry]
             };
@@ -624,7 +354,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static CallToolResult FormatJobListResults(DataCollection<Entity> entities, string status, int minutesAgo)
+        private static CallToolResult FormatListResults(DataCollection<Entity> entities, string status, int minutesAgo)
         {
             var jobs = new List<SystemJobEntry>();
             var pluginCount = 0;
@@ -696,9 +426,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (solutionCount > 0) sb.AppendLine($"  Solution: {solutionCount}");
             if (otherCount > 0) sb.AppendLine($"  Other: {otherCount}");
 
-            var structured = new GetDebuggingResult
+            var structured = new GetSystemJobsResult
             {
-                Action = "jobs",
+                Mode = "list",
                 TotalCount = entities.Count,
                 Jobs = jobs,
                 Summary = new JobSummary
@@ -719,7 +449,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        // ========== SHARED HELPERS ==========
+        // ========== HELPERS ==========
 
         private static string BuildStatusFilter(string status)
         {
