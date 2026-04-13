@@ -18,7 +18,7 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 > Available tools:
 >   get_tables, get_messages, manage_choice, manage_record,
 >   get_solution_components, execute_fetchxml, search_records,
->   execute_webapi, publish_customizations, get_debugging,
+>   execute_webapi, publish_customizations,
 >   parse_record_url, manage_form, manage_view,
 >   build_form_xml, build_sitemap_xml, get_audit_history,
 >   upsert_table, upsert_relationship, manage_sitemap,

@@ -70,25 +70,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetSystemJobsResult)),
         Description(
-            "List and inspect system jobs (asyncoperation) for debugging async failures, " +
-            "workflow errors, bulk operations, imports, and solution operations.\n\n" +
+            "List/inspect system jobs (asyncoperation): async failures, workflow errors, bulk ops, imports, solutions.\n\n" +
 
-            "TWO MODES:\n" +
-            "- record_id EMPTY: list system jobs with filters (default: failed last 24h)\n" +
-            "- record_id PROVIDED: full detail including error message and stack trace\n\n" +
+            "MODES:\n" +
+            "- record_id empty: list jobs with filters (default: failed, last 24h)\n" +
+            "- record_id provided: full detail with error message + stack trace\n\n" +
 
             "WHEN TO USE:\n" +
             "- Debug async failures: list failed jobs, then detail for full stack trace\n" +
-            "- Monitor bulk operations: filter by operation_type ('bulk_delete', 'import', 'solution')\n" +
-            "- Trace a specific request: use correlation_id to find all jobs for one operation\n\n" +
+            "- Monitor bulk ops: filter by operation_type ('bulk_delete', 'import', 'solution')\n" +
+            "- Trace a request: use correlation_id to find all jobs for one operation\n\n" +
 
             "TIPS:\n" +
-            "- For async plugin failures: combine with get_plugin_trace_logs for trace output\n" +
+            "- Async plugin failures: combine with get_plugin_trace_logs for trace output\n" +
             "- Use entity_name to filter jobs for a specific entity")]
         public CallToolResult get_system_jobs(
             [Description(
-                "Record GUID for detail mode. Empty = list mode. " +
-                "Use parse_record_url to extract from a URL."
+                "GUID for detail mode. Empty = list. Use parse_record_url to extract from URL."
             )] string record_id = "",
             [Description(
                 "Filter by entity (e.g., 'account'). Empty = all."
@@ -103,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Filter by name (contains)."
             )] string name_filter = "",
             [Description(
-                "Filter by correlation ID (exact GUID). Trace a single request across jobs."
+                "Exact GUID. Traces a single request across jobs."
             )] string correlation_id = "",
             [Description(
                 "Time range in minutes. Default: 1440 (24h). Max: 43200."

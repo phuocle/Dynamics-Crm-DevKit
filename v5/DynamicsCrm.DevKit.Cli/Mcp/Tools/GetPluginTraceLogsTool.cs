@@ -27,19 +27,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginTraceLogsResult)),
         Description(
-            "List and inspect plugin trace logs (plugintracelog) for debugging plugin and custom action execution.\n\n" +
+            "List and inspect plugin trace logs for debugging plugin/custom action execution.\n\n" +
 
-            "TWO MODES:\n" +
-            "- record_id EMPTY: list recent trace logs with filters (default: last 60 min)\n" +
-            "- record_id PROVIDED: full detail including complete messageblock + exceptiondetails (never truncated)\n\n" +
+            "MODES:\n" +
+            "- record_id EMPTY: list recent logs with filters (default: last 60 min)\n" +
+            "- record_id PROVIDED: full detail with complete messageblock + exceptiondetails\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug a failing plugin: list first, then detail with record_id for full trace output\n" +
-            "- Trace a specific request: use correlation_id to find all traces for one operation\n\n" +
+            "- Debug failing plugin: list first, then detail with record_id for full trace\n" +
+            "- Trace specific request: use correlation_id for all traces of one operation\n\n" +
 
             "TIPS:\n" +
             "- Plugin Trace Log must be enabled in Dataverse (System Settings > Customization)\n" +
-            "- For async plugin failures: combine with get_system_jobs for error + trace output")]
+            "- Async failures: combine with get_system_jobs for error + trace output")]
         public CallToolResult get_plugin_trace_logs(
             [Description(
                 "Record GUID for detail mode. Empty = list mode. " +
@@ -123,7 +123,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string recordId)
         {
             if (!Guid.TryParse(recordId.Trim(), out var id))
-                return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+                return ErrorResult($"Error: '{recordId}' is not a valid GUID. Use a plugintracelog ID from list mode.");
 
             var entity = _serviceClient.Retrieve("plugintracelog", id, new ColumnSet(true));
             return FormatDetailResult(entity);
