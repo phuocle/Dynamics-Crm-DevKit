@@ -559,6 +559,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"RelationshipName: {relName}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {metadataId}");
+                sb.AppendLine();
+                sb.AppendLine("[IMPORTANT] The new target entity was added to the polymorphic lookup metadata, but any existing form controls for this field still display the OLD list of entity types. To make the new target appear in the lookup dialog on the form, you MUST remove the field from the form and re-add it. Use build_form_xml(manage_fields, remove) then build_form_xml(manage_fields, add) followed by manage_form(update) to refresh the form control.");
 
                 return BuildResult(sb.ToString(), new UpsertRelationshipResult
                 {

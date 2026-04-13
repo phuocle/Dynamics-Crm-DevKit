@@ -48,6 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Fields: strings (\"createdon\") or objects ({\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true})\n" +
+            "- Field position: \"first\", \"last\" (default), \"before:<fieldname>\", \"after:<fieldname>\" (e.g., \"after:name\")\n" +
             "- Tabs/Sections/Fields support: \"visible\", \"show_label\", \"hide_on_phone\", \"disabled\" (fields only)\n" +
             "- Use manage_action='update' to safely modify existing elements without removing them\n" +
             "- Saves FormXML to temp file. Pass formXmlPath to manage_form(action='update') to apply")]
@@ -65,6 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "                [{\"action\":\"manage_section\",\"manage_action\":\"update\",\"tab\":\"tab_general\",\"name\":\"sec_info\",\"show_label\":false}]\n" +
                 "                [{\"action\":\"manage_section\",\"manage_action\":\"remove\",\"tab\":\"tab_general\",\"name\":\"sec_dates\"}]\n" +
                 "manage_fields:  [{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"]}]\n" +
+                "                [{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"],\"position\":\"after:name\"}]\n" +
                 "                [{\"action\":\"manage_fields\",\"manage_action\":\"update\",\"fields\":[{\"field\":\"name\",\"visible\":false,\"disabled\":true}]}]\n" +
                 "                [{\"action\":\"manage_fields\",\"manage_action\":\"remove\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"]}]\n" +
                 "                [{\"action\":\"manage_fields\",\"manage_action\":\"add_header\",\"fields\":[\"ownerid\"]}]\n" +
@@ -543,27 +545,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Fill rows respecting section columns
             var newRows = BuildRows(cells, secColumns);
 
-            if (position == "first")
-            {
-                var firstRow = rowsElement.Elements("row").FirstOrDefault();
-                if (firstRow != null)
-                {
-                    foreach (var row in newRows.Reverse<XElement>())
-                        firstRow.AddBeforeSelf(row);
-                }
-                else
-                {
-                    foreach (var row in newRows)
-                        rowsElement.Add(row);
-                }
-            }
-            else
-            {
-                foreach (var row in newRows)
-                    rowsElement.Add(row);
-            }
+            InsertFieldRows(rowsElement, newRows, position);
 
-            return $"add_fields: {fields.Count} field(s) to section \"{sectionName}\" in tab \"{tabName}\"";
+            return $"add_fields: {fields.Count} field(s) to section \"{sectionName}\" in tab \"{tabName}\" (position: {position})";
         }
 
         // ── Header Operation Executors ───────────────────────────────────────────
@@ -1847,6 +1831,84 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return tabElement.Descendants("section")
                 .Select(s => s.Attribute("name")?.Value ?? "(unnamed)")
                 .ToList();
+        }
+
+        /// <summary>
+        /// Finds the row containing a field (by datafieldname) within a rows element.
+        /// Returns null if not found.
+        /// </summary>
+        private static XElement FindRowByFieldName(XElement rowsElement, string fieldName)
+        {
+            return rowsElement.Elements("row").FirstOrDefault(row =>
+                row.Descendants("control").Any(c =>
+                    string.Equals(c.Attribute("datafieldname")?.Value, fieldName, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        /// <summary>
+        /// Inserts new field rows into a rows element at the specified position.
+        /// Supports: "first", "last" (default), "before:fieldname", "after:fieldname".
+        /// </summary>
+        private static void InsertFieldRows(XElement rowsElement, List<XElement> newRows, string position)
+        {
+            if (newRows.Count == 0) return;
+
+            if (position.StartsWith("after:", StringComparison.OrdinalIgnoreCase))
+            {
+                var afterField = position.Substring(6).Trim();
+                var targetRow = FindRowByFieldName(rowsElement, afterField);
+                if (targetRow != null)
+                {
+                    // Insert all new rows after the target row (in order)
+                    var insertAfter = targetRow;
+                    foreach (var row in newRows)
+                    {
+                        insertAfter.AddAfterSelf(row);
+                        insertAfter = row;
+                    }
+                }
+                else
+                {
+                    // Fallback to last
+                    foreach (var row in newRows)
+                        rowsElement.Add(row);
+                }
+            }
+            else if (position.StartsWith("before:", StringComparison.OrdinalIgnoreCase))
+            {
+                var beforeField = position.Substring(7).Trim();
+                var targetRow = FindRowByFieldName(rowsElement, beforeField);
+                if (targetRow != null)
+                {
+                    // Insert all new rows before the target row (in order)
+                    foreach (var row in newRows.AsEnumerable().Reverse())
+                        targetRow.AddBeforeSelf(row);
+                }
+                else
+                {
+                    // Fallback to last
+                    foreach (var row in newRows)
+                        rowsElement.Add(row);
+                }
+            }
+            else if (position == "first")
+            {
+                var firstRow = rowsElement.Elements("row").FirstOrDefault();
+                if (firstRow != null)
+                {
+                    foreach (var row in newRows.AsEnumerable().Reverse())
+                        firstRow.AddBeforeSelf(row);
+                }
+                else
+                {
+                    foreach (var row in newRows)
+                        rowsElement.Add(row);
+                }
+            }
+            else // "last" or default
+            {
+                foreach (var row in newRows)
+                    rowsElement.Add(row);
+            }
         }
 
         private static void InsertElement(XElement parent, XElement newElement, string position,
