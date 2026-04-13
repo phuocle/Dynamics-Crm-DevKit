@@ -253,5 +253,436 @@ In this example, `statuscode` is fetched but not displayed in the grid.
 - If something breaks: use action='undo' with the backup file paths from the response
 - Verify the view loads correctly in the browser
 ";
+
+        [McpServerResource(
+            MimeType = "text/markdown",
+            Name = "schema_tools_guide",
+            Title = "Guide for Dataverse schema tools (upsert_table, upsert_column, upsert_relationship)",
+            UriTemplate = "docs://schema_tools_guide"),
+        Description(
+            "Rules, type matrices, and immutable property lists for schema tools. " +
+            "Read this when upsert_table, upsert_column, or upsert_relationship returns an error.")]
+        public static string SchemaToolsGuide() => @"
+# Schema Tools Guide
+
+Reference for `upsert_table`, `upsert_column`, and `upsert_relationship`.
+
+## upsert_table
+
+### Create Mode
+- display_name, display_collection_name, solution_name are REQUIRED
+- entity_name MUST include publisher prefix (e.g., 'new_project')
+- If no prefix (no underscore), prefix auto-resolved from solution_name's publisher
+- Auto-creates primary name attribute (default: 'Name', max 100 chars)
+
+### Create-Only Properties (Immutable After Creation)
+| Property | Default | Notes |
+|----------|---------|-------|
+| ownership_type | 'User' | 'User' (supports sharing/assigning) or 'Organization' (no row-level security) |
+| table_type | 'Standard' | 'Standard' or 'Elastic' (Cosmos DB, limited charting) |
+| is_activity | false | When true: auto-sets User ownership, enables notes, uses 'Subject' as primary attr |
+| has_notes | false | Cannot be disabled once enabled |
+| primary_attribute_name | auto-derived | From display_name |
+| primary_attribute_display_name | 'Name' | Display name of primary field |
+
+### Update Mode
+- Only entity_name required to identify the entity
+- Only provided params are updated; omitted ones keep current values
+- Immutable properties are IGNORED with warnings if passed during update
+
+### Irreversible Options (Manage via Power Apps UI Only)
+Activities, Feedback, Change Tracking, Business Process Flows, Connections, Queues, Sending Email.
+These CANNOT be turned off once enabled.
+
+### Post-Create Workflow
+1. `upsert_table` -- create entity
+2. `upsert_column` -- add columns
+3. `build_form_xml` + `manage_form` -- customize the form
+4. `publish_customizations` -- publish (if auto_publish=false)
+
+---
+
+## upsert_column
+
+### Attribute Type Matrix
+
+| Type | Required Params (Create) | Optional Params | Defaults |
+|------|-------------------------|-----------------|----------|
+| string | entity_name, attribute_name, attribute_type, display_name | max_length, format, required_level | max_length=100, format='Text' |
+| memo | same | max_length, format | max_length=2000 |
+| integer | same | min_value, max_value, format | format='None' |
+| bigint | same | -- | No range limits |
+| decimal | same | min_value, max_value, precision | precision=2 (max 10) |
+| money | same | min_value, max_value, precision, precision_source | precision=2 (max 4), source=0 (Attribute) |
+| float | same | min_value, max_value, precision | precision=2 (max 10) |
+| boolean | same | true_label, false_label | 'Yes'/'No' |
+| datetime | same | format, behavior | format='DateAndTime', behavior='UserLocal' |
+| lookup | same + lookup_target | lookup_relationship_name | Auto-creates 1:N relationship |
+| customer | same | -- | Polymorphic: account + contact |
+| picklist | same + options OR global_optionset_name | -- | Local or global option set |
+| multipicklist | same + options OR global_optionset_name | -- | Multi-select version of picklist |
+| image | same | -- | -- |
+| file | same | max_length | max_length=32768 (KB) |
+
+### Format Values by Type
+
+| Type | Valid Formats |
+|------|-------------|
+| string | Text (default), Email, Url, Phone, TextArea, RichText |
+| memo | Text (default), Email, TextArea, RichText |
+| integer | None (default), Duration, TimeZone, Language, Locale |
+| datetime format | DateOnly, DateAndTime (default) |
+| datetime behavior | UserLocal (default), DateOnly, TimeZoneIndependent |
+
+### Money Precision Source
+| Value | Meaning |
+|-------|---------|
+| 0 | Attribute (use column's precision setting) |
+| 1 | Organization (use org-level pricing precision) |
+| 2 | Currency (use currency record's precision) |
+
+### Picklist Options Format (Create)
+JSON array: [{""label"": ""Low"", ""value"": 100000000}, {""label"": ""Medium"", ""value"": 100000001}, {""label"": ""High"", ""value"": 100000002}]
+
+### Picklist Options (Update)
+- add_options: JSON array of options to add (same format as create)
+- update_options: JSON array of options to rename: [{""value"": 100000000, ""label"": ""Very Low""}]
+- delete_options: JSON array of integer values to remove: [100000002]
+
+### Create-Only Properties (Cannot Change After Creation)
+- attribute_type -- type is permanently set
+- lookup_target -- target entity fixed
+- global_optionset_name -- option set binding fixed
+
+---
+
+## upsert_relationship
+
+### Actions
+
+| Action | Required Params | Description |
+|--------|----------------|-------------|
+| create_1n | referenced_entity, referencing_entity | Create 1:N + lookup column |
+| create_nn | entity1, entity2 | Create N:N + intersect entity |
+| update | relationship_name | Update cascade/menu config |
+| delete | relationship_name | Delete relationship |
+| add_target | entity_name, attribute_name, referenced_entity | Add target to polymorphic lookup |
+| remove_target | entity_name, attribute_name, referenced_entity | Remove target (DATA LOSS!) |
+
+### Cascade Presets
+
+| Preset | Assign | Delete | Merge | Reparent | Share | Unshare |
+|--------|--------|--------|-------|----------|-------|---------|
+| Parental | Cascade | Cascade | Cascade | Cascade | Cascade | Cascade |
+| Referential (default) | NoCascade | RemoveLink | NoCascade | NoCascade | NoCascade | NoCascade |
+| ReferentialRestrictDelete | NoCascade | Restrict | NoCascade | NoCascade | NoCascade | NoCascade |
+
+### Cascade Types (Individual Overrides)
+Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict
+
+### Menu Configuration
+- menu_behavior: 'UseCollectionName' (default), 'UseLabel', 'DoNotDisplay'
+- menu_group: 'Details' (default), 'Sales', 'Service', 'Marketing'
+- menu_order: integer (default 10000)
+
+### Polymorphic Lookup Notes
+- add_target: Creates a new 1:N relationship pointing existing lookup to a new target entity
+- remove_target: Deletes the relationship AND ALL DATA stored in that lookup target
+- Only polymorphic lookups support add_target/remove_target -- regular lookups will error
+";
+
+        [McpServerResource(
+            MimeType = "text/markdown",
+            Name = "data_operations_guide",
+            Title = "Guide for Dataverse data operations (manage_record, execute_fetchxml, search_records)",
+            UriTemplate = "docs://data_operations_guide"),
+        Description(
+            "Field type formats, FetchXML relationship joins, and search syntax. " +
+            "Read this when manage_record, execute_fetchxml, or search_records returns an error.")]
+        public static string DataOperationsGuide() => @"
+# Data Operations Guide
+
+Reference for `manage_record`, `execute_fetchxml`, and `search_records`.
+
+## manage_record -- Field Type Formats
+
+### fields_json Format by Type
+
+| Field Type | JSON Value Format | Example |
+|-----------|------------------|---------|
+| String/Memo | ""value"" | {""name"": ""Contoso Ltd""} |
+| Integer | 42 | {""numberofemployees"": 250} |
+| Decimal/Money | 99.50 | {""revenue"": 1000000.00} |
+| Boolean | true or false | {""isprimary"": true} |
+| DateTime | ""YYYY-MM-DD"" or ""YYYY-MM-DDTHH:mm:ssZ"" | {""createdon"": ""2025-01-15""} |
+| Lookup | GUID string | {""primarycontactid"": ""a1b2c3d4-...""} |
+| Picklist/Status | integer value | {""statuscode"": 1} |
+| MultiSelect | [int, int, ...] | {""preferences"": [100000001, 100000002]} |
+| Clear a field | null | {""fax"": null} |
+
+### Polymorphic Lookup Syntax
+For fields that can point to multiple entity types (e.g., customerid -> Account or Contact):
+
+Key format: ""fieldname@targetentity"". Example: ""customerid@account"": ""a1b2c3d4-e5f6-7890-abcd-ef1234567890""
+
+The @ separator tells the system which entity type the GUID belongs to.
+
+Common polymorphic lookups:
+- customerid -> account, contact
+- regardingobjectid -> multiple entities (context-dependent)
+- ownerid -> systemuser, team
+
+### Delete Considerations
+- Some records fail to delete due to dependencies (child records, required lookups)
+- Deleting a parent record may cascade-delete child records depending on relationship cascade config
+- Use get_tables with entity_name to check relationships before deleting parent records
+
+---
+
+## execute_fetchxml -- Curated Reference
+
+### Basic Structure
+<fetch [distinct='true'] [aggregate='true']>
+  <entity name='account'>
+    <attribute name='name' />
+    <attribute name='accountid' />
+    <filter type='and'>
+      <condition attribute='statecode' operator='eq' value='0' />
+    </filter>
+    <order attribute='name' descending='false' />
+  </entity>
+</fetch>
+
+### Common Operators
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| eq | Equals | value='0' |
+| ne | Not equals | value='1' |
+| gt, ge, lt, le | Greater/less than | value='2025-01-01' |
+| like | Wildcard match | value='%contoso%' |
+| null | Is null | (no value attr) |
+| not-null | Is not null | (no value attr) |
+| in | In list | <value>1</value><value>2</value> |
+| between | Range | <value>1</value><value>100</value> |
+| today | Today's date | (no value attr) |
+| last-x-days | Last N days | value='30' |
+
+### Relationship Joins (link-entity)
+
+N:1 (Many-to-One): child -> parent
+<link-entity name='contact' from='contactid' to='primarycontactid' link-type='inner' alias='c'>
+  <attribute name='fullname' />
+</link-entity>
+
+1:N (One-to-Many): parent -> children
+<link-entity name='contact' from='parentcustomerid' to='accountid' link-type='inner' alias='c'>
+  <attribute name='fullname' />
+</link-entity>
+
+N:N (Many-to-Many): through intersect entity
+<link-entity name='accountleads' from='accountid' to='accountid' link-type='inner'>
+  <link-entity name='lead' from='leadid' to='leadid' link-type='inner' alias='l'>
+    <attribute name='fullname' />
+  </link-entity>
+</link-entity>
+
+### Aggregation
+<fetch aggregate='true'>
+  <entity name='opportunity'>
+    <attribute name='estimatedvalue' alias='total_value' aggregate='sum' />
+    <attribute name='statuscode' alias='status' groupby='true' />
+  </entity>
+</fetch>
+
+Functions: count, sum, avg, min, max. Use groupby='true' for grouping.
+
+### Rules
+- Use lowercase logical names for everything
+- Use get_tables to discover entity/attribute names if unsure
+- DO NOT use top/count/page in <fetch> -- use the max_records parameter instead
+- For advanced syntax, read schema://fetchxml
+
+---
+
+## search_records -- Search Syntax
+
+### Search Operators
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| (default) | OR between words | john smith -> john OR smith |
+| + | AND | hotel+wifi -> both required |
+| | | OR (explicit) | wifi|luxury |
+| - | NOT | -pool -> exclude pool |
+| * | Trailing wildcard | Alp* -> Alpine, Alpha, etc. |
+| (quotes) | Exact phrase | use double quotes around phrase |
+| () | Grouping | hotel+(wifi|luxury) |
+
+### Prerequisite
+Relevance Search must be enabled in Power Platform admin center:
+1. Go to https://admin.powerplatform.microsoft.com
+2. Select environment -> Settings -> Product -> Features
+3. Under 'Dataverse Search', select 'On'
+4. Save and wait for indexing to complete
+
+### Limitations
+- Max 100 results per query
+- For larger datasets or precise filtering, use execute_fetchxml
+- Only searches fields indexed by Relevance Search (use action='status' to check)
+
+### OData Filter Syntax
+Use the filter parameter for pre-filtering:
+- statecode eq 0 -- active records only
+- createdon gt 2024-01-01 -- created after date
+- Operators: eq, ne, gt, ge, lt, le, and, or, not
+";
+
+        [McpServerResource(
+            MimeType = "text/markdown",
+            Name = "server_logic_guide",
+            Title = "Guide for server-side logic tools (plugins, workflows, flows, BPFs, business rules, custom APIs)",
+            UriTemplate = "docs://server_logic_guide"),
+        Description(
+            "Filtering patterns, list/detail modes, and entity scoping for server-logic tools. " +
+            "Read this when get_plugins, get_workflows, get_flows, etc. returns an error.")]
+        public static string ServerLogicGuide() => @"
+# Server-Side Logic Guide
+
+Reference for all 6 server-logic inspection tools.
+
+## Tool Overview
+
+| Tool | What It Inspects | Dataverse Entity | Category Filter |
+|------|-----------------|------------------|-----------------|
+| get_plugins | Plugin assemblies, types, steps, images | pluginassembly, plugintype, sdkmessageprocessingstep | N/A |
+| get_workflows | Classic workflows (background + realtime) | workflow | category=0 |
+| get_custom_apis | Custom API definitions | customapi | N/A |
+| get_flows | Power Automate cloud flows + run history | workflow + flowsession | category=5 |
+| get_business_process_flows | BPF definitions + stages | workflow | category=4 |
+| get_business_rules | Business rules | workflow | category=2 |
+
+## Common Pattern: List vs Detail
+
+All 6 tools share a list/detail pattern:
+
+| Mode | When | What You Get |
+|------|------|-------------|
+| List | No ID provided | Summary table of all matching items |
+| Detail | ID provided | Full detail for a single item |
+
+For get_plugins: detail mode triggers when assembly_name matches exactly 1 assembly.
+For get_workflows: detail mode also triggers when name_filter matches exactly 1 workflow.
+
+## get_plugins
+
+### Three Modes
+1. No filters: List all plugin assemblies with type counts
+2. assembly_name: Assembly detail with all types + steps + images
+3. entity_name: All plugin steps on that entity across all assemblies
+
+### Filter Parameters
+| Parameter | Description | List Mode | Detail Mode |
+|-----------|------------|-----------|-------------|
+| assembly_name | Assembly name (contains) | Yes | Yes |
+| entity_name | Entity logical name | No | Yes (shows all steps) |
+| message_name | SDK message (Create, Update, Delete) | No | Yes |
+| type_name | Plugin type name (contains) | No | Yes |
+| stage | prevalidation, preoperation, postoperation, mainoperation | No | Yes |
+| mode | sync or async | No | Yes |
+| active_only | Only active steps (default: true) | No | Yes |
+
+### Stage Values
+| Stage | Value | When |
+|-------|-------|------|
+| PreValidation | 10 | Before validation, can cancel |
+| PreOperation | 20 | Before DB write, can modify values |
+| MainOperation | 30 | Custom API / DataProvider only |
+| PostOperation | 40 | After DB write, most common |
+
+### Image Types
+| Type | Value | Content |
+|------|-------|---------|
+| PreImage | 0 | Record state BEFORE the operation |
+| PostImage | 1 | Record state AFTER the operation |
+| Both | 2 | Both pre and post states |
+
+## get_workflows
+
+### Filter Parameters
+| Parameter | Description |
+|-----------|------------|
+| entity_name | Entity logical name (e.g., 'account') |
+| mode | 'background' (async) or 'realtime' (sync) |
+| active_only | Only activated workflows (default: true) |
+| trigger_field | Filter by update trigger field (contains, e.g., 'statecode') |
+| name_filter | Filter by workflow name (contains). 1 match -> auto-detail |
+
+### Key Concepts
+- mode: Background=async (always PostOperation), Realtime=sync (Pre or Post)
+- scope: 1=User, 2=BusinessUnit, 3=Parent:ChildBU, 4=Organization
+- runas: 0=Owner (of workflow), 1=Caller (triggering user)
+- triggeronupdateattributelist: comma-separated field names that trigger on Update
+
+## get_custom_apis
+
+### Filter Parameters
+| Parameter | Description |
+|-----------|------------|
+| api_name | Unique name or display name (contains) |
+| entity_name | Bound entity logical name |
+| active_only | Only active APIs (default: true) |
+
+### Key Fields Returned
+- unique_name, display_name, binding_type (Global, Entity, EntityCollection)
+- is_private, allowed_custom_processing_step_type
+- request_parameters, response_properties (with type, is_optional)
+- plugin_type (backing implementation)
+
+## get_flows
+
+### Three Modes
+1. flow_id EMPTY + action='list': List all cloud flows
+2. flow_id PROVIDED + action='list': Flow detail + last 5 runs
+3. flow_id PROVIDED + action='runs': Extended run history
+
+### Filter Parameters
+| Parameter | List Mode | Runs Mode |
+|-----------|-----------|-----------|
+| name_filter | Yes (contains) | No |
+| owner_filter | Yes (contains) | No |
+| status | active/draft/suspended/all | No |
+| status_filter | No | succeeded/failed/running/cancelled/waiting/paused/skipped/suspended |
+| minutes_ago | No | Last N minutes (default 1440 = 24h) |
+
+### Run Status Values
+NotSpecified(0), Paused(1), Running(2), Waiting(3), Succeeded(4), Skipped(5), Suspended(6), Cancelled(7), Failed(8)
+
+## get_business_process_flows
+
+### Filter Parameters
+| Parameter | Description |
+|-----------|------------|
+| bpf_id | GUID for detail mode |
+| entity_name | Primary entity logical name |
+| active_only | Only active BPFs (default: true) |
+
+### Detail Includes
+- Stages (ordered), required fields per stage
+- Primary entity, related entities
+- Status (Active/Draft), owner
+
+## get_business_rules
+
+### Filter Parameters
+| Parameter | Description |
+|-----------|------------|
+| entity_name | Entity logical name (REQUIRED) |
+| rule_id | GUID for detail (shows conditions + actions + XAML) |
+| active_only | Only active rules (default: true) |
+
+### Notes
+- Business rules are entity-specific (no global list without entity_name)
+- Detail mode returns the full XAML definition which can be complex
+- Business rules execute client-side (form) or server-side depending on scope
+";
     }
 }

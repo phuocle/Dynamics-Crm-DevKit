@@ -327,9 +327,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OperationSummaries { get; set; }
 
-        [JsonPropertyName("siteMapXml")]
+        [JsonPropertyName("siteMapXmlPath")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string SiteMapXml { get; set; }
+        public string SiteMapXmlPath { get; set; }
     }
 
     internal sealed class ManageSiteMapResult

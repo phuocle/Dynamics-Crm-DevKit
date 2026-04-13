@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_sitemap(
             [Description("'list', 'detail', 'update' (default), 'create', or 'undo'.")] string action = "update",
             [Description("App display name or GUID. Accepts fuzzy name match (e.g., 'Sales Hub'). Required for detail/update/create/undo. For list: use app_name instead.")] string app = "",
-            [Description("For 'update'/'create': SiteMap XML. For 'undo': backup file path. Ignored for list/detail.")] string sitemapxml = "",
+            [Description("For 'update'/'create': SiteMap XML string or file path from build_sitemap_xml. For 'undo': backup file path. Ignored for list/detail.")] string sitemapxml = "",
             [Description("Filter apps by name (contains match). Only used with action='list'.")] string app_name = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
             [Description("Backup current SiteMap before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
@@ -89,18 +89,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(sitemapxml))
                 return ErrorResult("Error: sitemapxml is required for action='" + actionName + "'.");
 
+            // Resolve temp file path (from build_sitemap_xml) or keep inline XML
+            var resolvedSiteMapXml = (actionName == "undo")
+                ? sitemapxml.Trim()  // undo expects backup file path, not sitemap temp file
+                : ResolveSiteMapXmlInput(sitemapxml.Trim());
+            if (resolvedSiteMapXml == null)
+                return ErrorResult(
+                    $"[Error] SiteMapXml file not found\n" +
+                    $"Path: {sitemapxml.Trim()}\n" +
+                    $"Tip: The file path from build_sitemap_xml may have been deleted. Re-run build_sitemap_xml to regenerate.");
+
             try
             {
                 switch (actionName)
                 {
                     case "update":
-                        return UpdateSiteMapXml(appModuleId, sitemapxml, validate, backup, auto_publish);
+                        return UpdateSiteMapXml(appModuleId, resolvedSiteMapXml, validate, backup, auto_publish);
 
                     case "create":
-                        return CreateSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
+                        return CreateSiteMap(appModuleId, resolvedSiteMapXml.Trim(), validate, auto_publish);
 
                     case "undo":
-                        return UndoSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish);
+                        return UndoSiteMap(appModuleId, resolvedSiteMapXml.Trim(), validate, auto_publish);
 
                     default:
                         return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'list', 'detail', 'update', 'create', 'undo'.");
@@ -1013,6 +1023,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return xml.Substring(endIndex + 2).TrimStart();
             }
             return xml;
+        }
+
+        /// <summary>
+        /// Resolves the sitemapxml input: if it's a file path (from build_sitemap_xml), reads the file content.
+        /// If it's inline XML, returns as-is. Returns null if the file path doesn't exist.
+        /// </summary>
+        private static string ResolveSiteMapXmlInput(string sitemapxml)
+        {
+            // Detect file path: must end with .sitemap and NOT start with '<' (which means inline XML)
+            if (!sitemapxml.TrimStart().StartsWith("<") && sitemapxml.EndsWith(".sitemap", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!File.Exists(sitemapxml))
+                    return null;
+
+                var content = File.ReadAllText(sitemapxml, Encoding.UTF8).Trim();
+
+                // Clean up temp file after reading
+                try { File.Delete(sitemapxml); } catch { /* best effort cleanup */ }
+
+                return content;
+            }
+
+            // Inline XML — return as-is
+            return sitemapxml;
         }
 
         private static string PrettyPrintXml(string xml)

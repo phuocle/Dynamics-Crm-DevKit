@@ -6,6 +6,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -116,8 +117,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Step 7: Serialize and return
+            // Step 7: Serialize and save to temp file (avoids AI truncation)
             var modifiedXml = siteMapDoc.ToString(SaveOptions.None);
+            var tempDir = Path.Combine(Directory.GetCurrentDirectory(), ".devkit", "modified_sitemaps");
+            Directory.CreateDirectory(tempDir);
+            var tempFileName = $"{appModuleId:N}.sitemap";
+            var tempFilePath = Path.Combine(tempDir, tempFileName);
+            File.WriteAllText(tempFilePath, modifiedXml, Encoding.UTF8);
+
+            // Step 8: Build response
             var resultSb = new StringBuilder(256);
             resultSb.AppendLine($"[BuildSiteMapXml] {appName}");
             resultSb.AppendLine($"AppModuleId: {appModuleId}");
@@ -125,9 +133,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var s in opSummaries)
                 resultSb.AppendLine($"  - {s}");
             resultSb.AppendLine();
-            resultSb.AppendLine("Next step: Call manage_sitemap(action='update') with the siteMapXml below to apply changes.");
+            resultSb.AppendLine($"SiteMapXml saved to: {tempFilePath}");
             resultSb.AppendLine();
-            resultSb.AppendLine(modifiedXml);
+            resultSb.AppendLine($"Next step: manage_sitemap(action='update', app='{appName}', sitemapxml='{tempFilePath}')");
 
             return new CallToolResult
             {
@@ -139,7 +147,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "success",
                     OperationsCount = opSummaries.Count,
                     OperationSummaries = opSummaries,
-                    SiteMapXml = modifiedXml
+                    SiteMapXmlPath = tempFilePath
                 })
             };
         }
