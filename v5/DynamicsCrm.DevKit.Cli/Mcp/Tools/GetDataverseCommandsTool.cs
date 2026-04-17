@@ -92,17 +92,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetCommandsResult)),
         Description(
-            "List and inspect modern command bar buttons (appaction entity) that replace classic Ribbon XML in Model-Driven Apps. " +
-            "Covers command definitions, visibility/enable rules (appactionrule), and migration status.\n\n" +
+            "List and inspect modern command bar buttons (appaction) replacing Ribbon XML in Model-Driven Apps. " +
+            "Includes visibility/enable rules (appactionrule) and migration status.\n\n" +
 
             "TWO MODES:\n" +
             "- command_id EMPTY: list commands filtered by entity, location, app, origin, action type\n" +
             "- command_id PROVIDED: full detail including rules, children, and component library info\n\n" +
 
             "TIPS:\n" +
-            "- Use origin='default' to filter out hundreds of auto-migrated system commands\n" +
-            "- Commands are app-scoped — same entity can have different commands in different apps\n" +
-            "- Related: manage_form (form layout), get_views (grid columns), build_form_xml (form events)")]
+            "- Use origin='default' to exclude hundreds of auto-migrated system commands\n" +
+            "- Commands are app-scoped — same entity can differ across apps\n" +
+            "- Related: manage_form (form layout), manage_view (grid columns), build_form_xml (form events)")]
         public CallToolResult get_dataverse_commands(
             [Description("GUID of a specific appaction record. Returns full detail. All other filters ignored.")] string command_id = "",
             [Description("Filter by entity logical name (e.g., 'account').")] string entity_name = "",
