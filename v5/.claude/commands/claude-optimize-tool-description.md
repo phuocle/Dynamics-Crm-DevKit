@@ -17,7 +17,7 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >
 > TODO (not yet optimized):
 >   get_tables,
->   execute_fetchxml, search_records,
+>   search_records,
 >   execute_webapi, publish_customizations,
 >   manage_form,
 >   build_form_xml, build_sitemap_xml,
@@ -33,7 +33,8 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   get_plugins, get_flows, get_audit_history,
 >   get_custom_apis, get_workflows,
 >   get_business_process_flows, manage_view,
->   manage_environment_variable, manage_choice
+>   manage_environment_variable, manage_choice,
+>   execute_fetchxml
 >
 > Usage: /optimize-tool-description <tool_name>
 > ```

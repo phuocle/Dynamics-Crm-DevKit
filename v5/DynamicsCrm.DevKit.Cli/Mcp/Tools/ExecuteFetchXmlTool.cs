@@ -26,31 +26,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Execute a FetchXML query against Dataverse. Returns markdown table. Max 5000 records. Supports auto-paging.\n\n" +
 
-            "FETCHXML STRUCTURE:\n" +
-            "- <fetch [distinct] [aggregate]> → <entity name='logical_name'> → <attribute>, <filter>, <order>, <link-entity>\n" +
-            "- DO NOT use top/count/page in <fetch> — use max_records parameter instead\n" +
-            "- Operators: eq, ne, gt, ge, lt, le, like (%), null, not-null, in, between, today, last-x-days, etc.\n" +
-            "- Joins: <link-entity name='entity' from='col' to='col' link-type='inner|outer' [alias='a']>\n" +
-            "- Aggregation: aggregate='true' on <fetch>, then count/sum/avg/min/max with alias + groupby\n\n" +
-
             "RULES:\n" +
-            "- Use lowercase logical names. Use get_tables if unsure\n" +
-            "- For advanced syntax, read schema://fetchxml")]
+            "- Use lowercase logical names; call get_tables if unsure\n" +
+            "- DO NOT use top/count/page in <fetch> — use max_records instead\n" +
+            "- Read schema://fetchxml for structure, operators, joins, and aggregation syntax")]
         public string execute_fetchxml(
-            [Description("FetchXML query starting with <fetch>. Use lowercase logical names."
+            [Description("FetchXML query starting with <fetch>. Must use lowercase logical names."
             )] string fetchxml,
             [Description(
-                "Maximum records to return. Default: 5000. Capped at 5000. " +
-                "Use a smaller value (e.g. 10, 50, 100) when you only need a sample or top-N results."
+                "Max records to return (1–5000, default 5000). Use a smaller value (e.g. 10–100) for samples."
             )] int max_records = 5000,
             [Description(
-                "true: automatically page through all results until max_records is reached or no more rows exist. " +
-                "false: return first page only (default). " +
-                "Use true when you need complete datasets (e.g. reporting, counting all records)."
+                "true: auto-page until max_records or no more rows. false: first page only (default). " +
+                "Use true for complete datasets."
             )] bool get_all = false)
         {
             if (string.IsNullOrWhiteSpace(fetchxml))
-                return "Error: fetchxml is required.";
+                return "Error: fetchxml is required.\n" +
+                       "Read schema://fetchxml for FetchXML query structure and examples.";
 
             if (max_records <= 0)
                 return "Error: max_records must be a positive integer (1-5000).";
@@ -65,7 +58,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to execute FetchXML: {ex.Message}";
+                return $"Error: Failed to execute FetchXML: {ex.Message}\n" +
+                       "Hint: Use get_tables to verify logical names and available columns.\n" +
+                       "Read schema://fetchxml for valid FetchXML syntax.";
             }
         }
 
