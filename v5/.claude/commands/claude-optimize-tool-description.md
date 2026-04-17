@@ -32,7 +32,8 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   get_business_process_flows, manage_view,
 >   manage_environment_variable, manage_choice,
 >   execute_fetchxml, search_records, publish_customizations,
->   get_tables, execute_webapi
+>   get_tables, execute_webapi,
+>   build_sitemap_xml
 >
 > Usage: /optimize-tool-description <tool_name>
 > ```

@@ -30,39 +30,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = true, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildSiteMapXmlResult)),
         Description(
-            "Build modified SiteMap XML by adding, removing, updating, or moving areas, groups, and subareas in an existing Model-Driven App navigation.\n" +
-            "READ-ONLY builder — returns modified SiteMap XML string. Use manage_sitemap to write it.\n\n" +
-            "TWELVE OPERATIONS:\n" +
-            "- add_area: Add a new area to the sitemap\n" +
-            "- add_group: Add a new group to an existing area\n" +
-            "- add_subarea: Add a new subarea (entity, URL, dashboard, web resource) to a group\n" +
-            "- remove_area: Remove an entire area\n" +
-            "- remove_group: Remove a group from an area\n" +
-            "- remove_subarea: Remove a subarea from a group\n" +
-            "- update_area: Update area properties (label, icon, show_groups)\n" +
-            "- update_group: Update group properties (label, is_profile)\n" +
-            "- update_subarea: Update subarea properties (label, entity, url, icon)\n" +
-            "- move_area: Reorder an area within the sitemap\n" +
-            "- move_group: Reorder a group within an area\n" +
-            "- move_subarea: Reorder a subarea within a group\n\n" +
-            "Auto-generates IDs (area_, group_, sa_ prefixes), supports fuzzy element finding by ID or label.\n\n" +
-            "TIPS:\n" +
-            "- app parameter accepts app name OR GUID — auto-resolves internally\n" +
-            "- This tool does NOT modify Dataverse — use manage_sitemap(action='update') to apply the returned SiteMap XML\n" +
-            "- Read schema://sitemapxml for SiteMap XML structure and rules")]
+            "Build modified SiteMap XML for a Model-Driven App (areas/groups/subareas). " +
+            "READ-ONLY — returns XML; use manage_sitemap(action='update') to apply.\n\n" +
+            "12 OPERATIONS (pass as JSON array in 'operations'):\n" +
+            "- add_area: label req. Optional: id, icon, show_groups, groups[]\n" +
+            "- add_group: area+label req. Optional: id, is_profile, subareas[]\n" +
+            "- add_subarea: area+group+(entity or url) req. Optional: id, label, icon, pass_params, default_dashboard, vector_icon, client\n" +
+            "- remove_area: area req.\n" +
+            "- remove_group: area+group req.\n" +
+            "- remove_subarea: area+group+subarea req.\n" +
+            "- update_area: area req. Optional: label, icon, show_groups\n" +
+            "- update_group: area+group req. Optional: label, is_profile\n" +
+            "- update_subarea: area+group+subarea req. Optional: label, entity, url, icon, pass_params, default_dashboard, vector_icon, client\n" +
+            "- move_area: area+position req.\n" +
+            "- move_group: area+group+position req.\n" +
+            "- move_subarea: area+group+subarea+position req.\n\n" +
+            "position values: 'first', 'last', 'after:<id>'. Auto-generates IDs (area_, group_, sa_). Fuzzy lookup by ID or label.\n" +
+            "Read schema://sitemapxml for SiteMap XML structure and rules.")]
         public CallToolResult build_sitemap_xml(
-            [Description("Model-Driven App name or GUID. Accepts app display name (fuzzy match) or exact GUID. The tool resolves the name to app_module_id internally and retrieves the current SiteMap XML.")] string app,
-            [Description("JSON array of operations. Each has 'action' + parameters.\n" +
-                "Actions: 'add_area', 'add_group', 'add_subarea', 'remove_area', 'remove_group', 'remove_subarea', 'update_area', 'update_group', 'update_subarea', 'move_area', 'move_group', 'move_subarea'.\n" +
-                "Example: [{\"action\":\"add_subarea\",\"area\":\"Sales\",\"group\":\"Customers\",\"entity\":\"account\"}]\n" +
-                "Example: [{\"action\":\"add_area\",\"label\":\"Reports\",\"groups\":[{\"label\":\"My Reports\",\"subareas\":[{\"entity\":\"report\"}]}]}]\n" +
-                "Example: [{\"action\":\"remove_subarea\",\"area\":\"Sales\",\"group\":\"Customers\",\"subarea\":\"sa_account\"}]")] string operations)
+            [Description("Model-Driven App name (fuzzy match) or GUID. Resolves to app_module_id and retrieves current SiteMap XML.")] string app,
+            [Description("JSON array of operation objects. Each requires 'action' + operation-specific fields (see tool description for required/optional fields per action).\n" +
+                "Example: [{\"action\":\"add_subarea\",\"area\":\"Sales\",\"group\":\"Customers\",\"entity\":\"account\"}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(app))
                 return ErrorResult("Error: app is required. Provide app display name or GUID.");
             if (string.IsNullOrWhiteSpace(operations))
-                return ErrorResult("Error: operations is required.");
+                return ErrorResult(
+                    "Error: operations is required.\n" +
+                    "Provide a non-empty JSON array, e.g. [{\"action\":\"add_area\",\"label\":\"Sales\"}].\n" +
+                    "Read schema://sitemapxml for SiteMap XML structure and operation format.");
 
             // Step 2: Resolve app name/GUID to app module
             var (appModuleId, appName, resolveError) = ResolveAppModule(app.Trim());
@@ -80,11 +77,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
                 if (ops == null || ops.Count == 0)
-                    return ErrorResult("Error: operations must be a non-empty JSON array.");
+                    return ErrorResult(
+                        "Error: operations must be a non-empty JSON array.\n" +
+                        "Example: [{\"action\":\"add_area\",\"label\":\"Sales\"}].\n" +
+                        "Read schema://sitemapxml for SiteMap XML structure and operation format.");
             }
             catch (JsonException ex)
             {
-                return ErrorResult($"Error: Invalid operations JSON: {ex.Message}");
+                return ErrorResult(
+                    $"Error: Invalid operations JSON: {ex.Message}\n" +
+                    "Expected a JSON array of operation objects, each with an 'action' field.\n" +
+                    "Read schema://sitemapxml for SiteMap XML structure and operation format.");
             }
 
             // Step 5: Parse SiteMap XML
@@ -103,7 +106,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var op in ops)
             {
                 if (!op.TryGetProperty("action", out var actionProp))
-                    return ErrorResult("Error: Each operation must have an 'action' field.");
+                    return ErrorResult(
+                        "Error: Each operation must have an 'action' field.\n" +
+                        "Valid actions: add_area, add_group, add_subarea, remove_area, remove_group, remove_subarea, update_area, update_group, update_subarea, move_area, move_group, move_subarea.\n" +
+                        "Read schema://sitemapxml for SiteMap XML structure and operation format.");
 
                 var action = actionProp.GetString()?.ToLowerInvariant();
                 try
