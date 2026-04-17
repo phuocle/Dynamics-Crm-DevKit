@@ -24,25 +24,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to entity and record ID",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Parse a Dynamics 365 / Power Platform URL or string to extract entity logical name and record ID (GUID).\n\n" +
+            "Parse a Dynamics 365/Power Platform URL or string to extract entity logical name and record ID.\n\n" +
 
-            "Supports: model-driven app URLs (main.aspx with etn/etc), Web API URLs, " +
-            "Power Apps/Automate maker URLs, workflow/report/solution editor URLs, " +
-            "rundialog URLs, and raw GUIDs.\n\n" +
+            "Supports: main.aspx (etn/etc), Web API, Power Apps/Automate maker portal, " +
+            "rundialog, workflow/report/solution editor URLs, and raw GUIDs.\n\n" +
 
-            "Returns: EntityName, RecordId, Source type, EnvironmentId (if present).\n\n" +
+            "Returns: EntityName, RecordId, Source, EnvironmentId (maker URLs only).\n\n" +
 
             "TIPS:\n" +
-            "- If entity name is 'unknown' (raw GUID), ask the user for the entity name or full URL\n" +
-            "- Automatically resolves etc (entity type codes) and entitySetNames via Dataverse")]
+            "- If EntityName is '(unknown)', ask user for entity name or a full record URL\n" +
+            "- Auto-resolves entity type codes (etc) and entitySetNames via Dataverse")]
         public string parse_record_url(
             [Description(
-                "The URL, GUID, or text to parse. Accepts Dynamics 365 URLs, Web API URLs, " +
-                "maker portal URLs, or raw GUIDs."
+                "URL, GUID, or text to parse (Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID)."
             )] string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                return "[ParsedUrl] Error: input is required.\nTip: Paste a Dynamics 365 record URL or a raw GUID";
+                return "[ParsedUrl] Error: 'input' is required.\n" +
+                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.";
 
             var decoded = Uri.UnescapeDataString(input.Trim());
 
@@ -54,7 +53,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                       ?? TryParseRawGuid(decoded);
 
             if (result == null)
-                return "[ParsedUrl] No GUID found in input\nTip: Paste a Dynamics 365 record URL or a raw GUID";
+                return "[ParsedUrl] Error: No GUID found in input.\n" +
+                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.";
 
             return result;
         }
