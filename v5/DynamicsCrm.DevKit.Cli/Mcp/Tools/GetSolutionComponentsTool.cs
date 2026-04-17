@@ -122,41 +122,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_solution_components", Title = "List all components inside a solution",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "List all components inside a Dataverse solution. " +
-            "Accepts solution unique name or display name with fuzzy (contains) matching.\n\n" +
+            "List all components inside a Dataverse solution by uniqueName or displayName (fuzzy/contains matching).\n\n" +
 
             "Returns: solution info + component summary (count per type) + full detail table (componentType, objectId, name).\n\n" +
 
             "BEHAVIORS:\n" +
-            "- Fuzzy match: 1 match → show components; multiple → list for disambiguation; 0 → error\n" +
-            "- Full Entity (rootComponentBehavior=0): listed as-is, use get_tables for sub-components\n" +
-            "- include_active_layers=true: adds ActiveLayer column (Yes/No) for unmanaged customization audit\n" +
-            "- active_layers_only=true: shows ONLY components with active layers (cleanup audit)\n\n" +
+            "- 1 match → components; multiple → disambiguation list; 0 → error\n" +
+            "- Full Entity (rootComponentBehavior=0): listed as-is; use get_tables for sub-components\n" +
+            "- include_active_layers=true: adds ActiveLayer (Yes/No) via msdyn_componentlayer\n" +
+            "- active_layers_only=true: implies include_active_layers=true; shows only components with active layers\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Audit solution contents before packaging or deploying\n" +
-            "- Find objectIds of specific components (plugins, web resources, workflows)\n" +
-            "- Identify components with unmanaged customizations before deploying managed solutions")]
+            "- Audit solution contents before packaging/deploying\n" +
+            "- Find objectIds of components (plugins, web resources, workflows)\n" +
+            "- Identify unmanaged customizations before deploying managed solutions")]
         public string get_solution_components(
             [Description(
-                "The solution unique name (e.g. 'DevKit_Core', 'mySolution') or display name " +
-                "(e.g. 'DevKit Core', 'My Solution'). " +
-                "Partial names are supported — fuzzy (contains) matching is applied to both uniqueName and displayName. " +
-                "If multiple solutions match, the tool returns the list and asks for the exact uniqueName."
+                "Solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core'). " +
+                "Fuzzy (contains) matching on both fields. " +
+                "If multiple match, the tool returns the list — re-call with exact uniqueName."
             )] string solution_name,
             [Description(
-                "When true, queries msdyn_componentlayer for each component and adds an ActiveLayer column " +
-                "(Yes/No) to the output. An active layer means the component has unmanaged customizations. " +
-                "Default: false (skipped for performance). Note: adds API calls batched in groups of 200."
+                "When true, queries msdyn_componentlayer and adds an ActiveLayer (Yes/No) column. " +
+                "Active layer = unmanaged customization exists. Batched in groups of 200. Default: false."
             )] bool include_active_layers = false,
             [Description(
-                "When true, implies include_active_layers=true and filters the output to show ONLY " +
-                "components that have an active (unmanaged) layer. Useful for cleanup audits. " +
-                "Default: false."
+                "When true, implies include_active_layers=true and filters to only components with an active layer. Default: false."
             )] bool active_layers_only = false)
         {
             if (string.IsNullOrWhiteSpace(solution_name))
-                return "Error: solution_name is required.";
+                return "Error: solution_name is required.\n" +
+                       "Provide the solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core').";
 
             // active_layers_only implies include_active_layers
             if (active_layers_only)
