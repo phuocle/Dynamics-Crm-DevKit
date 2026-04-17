@@ -36,28 +36,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Retrieve view (saved query) definitions for a Dataverse entity.\n\n" +
+            "Manage Dataverse views (savedquery/userquery) — list, read, create, update, rename, restore.\n\n" +
 
-            "SIX ACTIONS:\n" +
-            "- action='list': List all active views with name, type, status. Optional: query_type, include_fetchxml, include_personal\n" +
-            "- action='detail': Full FetchXML, LayoutXML, and metadata for one view. Requires view_id\n" +
-            "- action='create': New Public view. Requires view_name + entity_name + layoutxml\n" +
-            "- action='update': Modify LayoutXML/FetchXML. Requires view_id + layoutxml\n" +
-            "- action='rename': Change display name. Requires view_id + view_name\n" +
-            "- action='undo': Restore from backup files. Requires view_id + layoutxml (= backup path)\n\n" +
+            "ACTIONS:\n" +
+            "- action='list': List views with name, type, status. Optional: query_type, include_fetchxml, include_personal\n" +
+            "- action='detail': Full FetchXML + LayoutXML + metadata for one view. Requires: view_id\n" +
+            "- action='create': New Public view. Requires: view_name + layoutxml\n" +
+            "- action='update': Modify LayoutXML/FetchXML. Requires: view_id + layoutxml\n" +
+            "- action='rename': Change display name. Requires: view_id + view_name\n" +
+            "- action='undo': Restore from backup. Requires: view_id + layoutxml (= backup file path)\n\n" +
 
-            "WORKFLOW: manage_view(list) → modify XMLs (follow docs://instructions_for_views) → manage_view(update)\n" +
-            "Tool auto-handles: backup → validate XSD → sync-check → update → publish. Undo path in every response.\n\n" +
-
-            "SYNC RULE: Every <attribute> in FetchXML MUST have a matching <cell> in LayoutXML and vice versa. Tool validates and blocks if out of sync.\n\n" +
-
-            "SAFETY: auto-backup before changes, sync+XSD validation blocks invalid XML, backup failure blocks update.\n\n" +
+            "WORKFLOW: list → modify XMLs → update. Auto: backup → XSD+sync validate → update → publish.\n" +
+            "SYNC RULE: Every FetchXML <attribute> MUST match a LayoutXML <cell>. Tool blocks if out of sync.\n\n" +
 
             "TIPS:\n" +
-            "- querytype: 0=Public (user sees), 4=QuickFind (search columns), 64=SubGrid\n" +
-            "- view_name: if exactly 1 match, returns detail automatically\n" +
-            "- Read docs://instructions_for_views for sync rules. Read schema://layoutxml + schema://fetchxml for XSD\n" +
-            "- Set auto_publish=false when batching, then call publish_customizations once")]
+            "- querytype: 0=Public, 4=QuickFind (search bar), 64=SubGrid\n" +
+            "- view_name: 1 exact match = auto-returns detail\n" +
+            "- Read docs://instructions_for_views for sync rules; schema://layoutxml + schema://fetchxml for XSD\n" +
+            "- Set auto_publish=false when batching; call publish_customizations once after")]
         public CallToolResult manage_view(
             [Description("The action to perform: 'list', 'detail', 'create', 'update', 'rename', or 'undo'."
             )] string action,
@@ -1239,7 +1235,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"[{prefix}] BLOCKED — FetchXML validation failed (server-side)");
             sb.AppendLine($"ViewId: {viewId}");
             sb.AppendLine($"Error: {error}");
-            sb.AppendLine($"Tip: Fix the FetchXML and retry.");
+            sb.AppendLine($"Tip: Fix the FetchXML and retry. Read schema://fetchxml for valid FetchXML structure.");
 
             var result = new UpsertViewResult
             {
