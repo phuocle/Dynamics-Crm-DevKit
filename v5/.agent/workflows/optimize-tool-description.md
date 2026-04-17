@@ -1,5 +1,5 @@
 ---
-description: ""Optimize an MCP tool's [Description] for token efficiency using error-guided resource pattern""
+description: "Optimize an MCP tool's [Description] for token efficiency using error-guided resource pattern"
 ---
 
 # Optimize MCP Tool Description

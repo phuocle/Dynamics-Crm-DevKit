@@ -32,25 +32,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
-            "Perform CRUD operations on a single Dataverse record.\n\n" +
+            "Perform CRUD on a single Dataverse record.\n\n" +
 
-            "FOUR ACTIONS:\n" +
-            "- action='create': Create a new record. Requires entity_name + fields_json. Returns new GUID\n" +
-            "- action='read': Retrieve a record by ID. Requires entity_name + record_id. Optional: columns\n" +
-            "- action='update': Update an existing record. Requires entity_name + record_id + fields_json. Internally uses UpsertRequest for robustness\n" +
-            "- action='delete': Permanently delete a record. Requires entity_name + record_id. WARNING: cannot be undone\n\n" +
-
-            "FIELD TYPES (for create/update):\n" +
-            "- String: \"hello\", Integer: 42, Decimal/Money: 99.50, Boolean: true/false\n" +
-            "- DateTime: \"2025-01-15\" (ISO), Lookup: GUID string, Picklist: integer value\n" +
-            "- Polymorphic Lookup: use \"fieldname@targetentity\" as key (e.g., \"customerid@account\")\n" +
-            "- MultiSelect: [100000001, 100000002], null to clear a field\n\n" +
+            "ACTIONS:\n" +
+            "- action='create': Requires entity_name + fields_json. Returns new GUID.\n" +
+            "- action='read': Requires entity_name + record_id. Optional: columns.\n" +
+            "- action='update': Requires entity_name + record_id + fields_json.\n" +
+            "- action='delete': Requires entity_name + record_id. WARNING: irreversible.\n\n" +
 
             "TIPS:\n" +
-            "- Use get_tables for field names/types. Use execute_fetchxml to find lookup GUIDs\n" +
-            "- Partial update supported — only include fields you want to set\n" +
-            "- Some records may fail to delete due to dependencies (child records, required lookups)\n" +
-            "- Deleting a parent record may cascade-delete child records depending on relationship config")]
+            "- Use get_tables for field names/types; use execute_fetchxml to find lookup GUIDs.\n" +
+            "- Partial update: include only fields to change.\n" +
+            "- Delete may fail on dependencies; may cascade-delete children per relationship config.")]
         public CallToolResult manage_record(
             [Description(
                 "The CRUD action to perform: 'create', 'read', 'update', or 'delete'."
@@ -62,12 +55,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Record GUID. Required for read, update, and delete. Must be empty for create."
             )] string record_id = "",
             [Description(
-                "JSON object with field values. Keys are lowercase logical names. Polymorphic: 'field@entity'. " +
-                "Required for create and update. Ignored for read and delete."
+                "JSON object of field values for create/update. Required for create and update; ignored for read and delete."
             )] string fields_json = "",
             [Description(
-                "Comma-separated column logical names for 'read' action only. Leave empty for all columns. " +
-                "Use get_tables to discover column names."
+                "Comma-separated column logical names for 'read' only. Empty = all columns."
             )] string columns = "")
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -95,7 +86,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
 
             if (string.IsNullOrWhiteSpace(fieldsJson))
-                return ErrorResult("Error: fields_json is required for 'create'.");
+                return ErrorResult(
+                    "Error: fields_json is required for 'create'.\n" +
+                    "Required: JSON object with field logical names as keys.\n" +
+                    "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
 
             var fieldCount = CountFields(fieldsJson);
 
@@ -156,7 +150,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to retrieve record: {ex.Message}");
+                return ErrorResult($"Error: Failed to retrieve record: {ex.Message}\n" +
+                    "Hint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
             }
         }
 
@@ -166,7 +161,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: record_id is required for 'update'.");
 
             if (string.IsNullOrWhiteSpace(fieldsJson))
-                return ErrorResult("Error: fields_json is required for 'update'.");
+                return ErrorResult(
+                    "Error: fields_json is required for 'update'.\n" +
+                    "Required: JSON object with field logical names as keys.\n" +
+                    "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
 
             if (!Guid.TryParse(recordId.Trim(), out var id))
                 return ErrorResult($"Error: '{recordId}' is not a valid GUID.");

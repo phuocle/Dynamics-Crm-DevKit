@@ -1,5 +1,6 @@
 ---
 description: ""Optimize an MCP tool's [Description] for token efficiency using error-guided resource pattern""
+mode: agent
 ---
 
 # Optimize MCP Tool Description
