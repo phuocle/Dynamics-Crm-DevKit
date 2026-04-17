@@ -64,8 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourceResult)),
         Description(
-            "List and inspect web resources (JavaScript, CSS, HTML, images, RESX) in Dataverse. " +
-            "Essential for mapping local files to their Dataverse web resource names/GUIDs.\n\n" +
+            "List, inspect, create, update, or delete web resources in Dataverse.\n\n" +
 
             "FIVE ACTIONS:\n" +
             "- action='list': List web resources filtered by name, type, solution. Optional: name, type_filter, solution_name, max_records\n" +
@@ -77,8 +76,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Call this tool first to find library_name needed for build_form_xml add_event/add_library\n" +
             "- Names follow convention: {prefix}_/path/filename.ext (e.g., v4_/entities/Account.form.js)\n" +
-            "- content must be base64 encoded for create/update\n" +
-            "- type values: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'\n" +
             "- Related: build_form_xml (add events/libraries), manage_form (inspect form structure)")]
         public CallToolResult manage_webresource(
             [Description(
@@ -229,7 +226,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDetail(string webResourceId)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
-                return ErrorResult("Error: web_resource_id is required for 'detail'.");
+                return ErrorResult("Error: web_resource_id is required for 'detail'.\n" +
+                                   "Use action='list' to find web resource IDs.");
 
             webResourceId = webResourceId.Trim();
             if (!Guid.TryParse(webResourceId, out _))
@@ -248,7 +246,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: Web resource '{webResourceId}' not found.");
+                return ErrorResult($"Error: Web resource '{webResourceId}' not found.\n" +
+                                   $"Use action='list' to find valid web resource IDs.");
 
             var entity = result.Entities[0];
             var entry = MapEntry(entity);
@@ -317,7 +316,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string content, string type, string solutionName, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return ErrorResult("Error: name is required for 'create'.");
+                return ErrorResult("Error: name is required for 'create'.\n" +
+                                   "Provide a unique name, e.g. 'prefix_/entities/Account.form.js'.");
 
             if (string.IsNullOrWhiteSpace(content))
                 return ErrorResult("Error: content (base64 encoded) is required for 'create'.");
@@ -421,7 +421,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string description, string content, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
-                return ErrorResult("Error: web_resource_id is required for 'update'.");
+                return ErrorResult("Error: web_resource_id is required for 'update'.\n" +
+                                   "Use action='list' to find web resource IDs.");
 
             webResourceId = webResourceId.Trim();
             if (!Guid.TryParse(webResourceId, out var id))
@@ -429,7 +430,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var existing = RetrieveById(id);
             if (existing == null)
-                return ErrorResult($"Error: Web resource '{webResourceId}' not found.");
+                return ErrorResult($"Error: Web resource '{webResourceId}' not found.\n" +
+                                   $"Use action='list' to find valid web resource IDs.");
 
             // Check managed/customizable
             var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
@@ -505,7 +507,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDelete(string webResourceId, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
-                return ErrorResult("Error: web_resource_id is required for 'delete'.");
+                return ErrorResult("Error: web_resource_id is required for 'delete'.\n" +
+                                   "Use action='list' to find web resource IDs.");
 
             webResourceId = webResourceId.Trim();
             if (!Guid.TryParse(webResourceId, out var id))
@@ -513,7 +516,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var existing = RetrieveById(id);
             if (existing == null)
-                return ErrorResult($"Error: Web resource '{webResourceId}' not found.");
+                return ErrorResult($"Error: Web resource '{webResourceId}' not found.\n" +
+                                   $"Use action='list' to find valid web resource IDs.");
 
             var isManaged = existing.GetAttributeValue<bool?>("ismanaged");
             var isCustomizable = existing.GetAttributeValue<BooleanManagedProperty>("iscustomizable");
