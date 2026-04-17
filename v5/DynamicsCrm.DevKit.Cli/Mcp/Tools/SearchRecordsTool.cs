@@ -24,51 +24,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "search_records", Title = "Search records by keyword",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Perform a Dataverse Relevance Search (full-text search) across one or more entities. " +
-            "Returns records ranked by relevance score with highlights.\n\n" +
+            "Dataverse Relevance Search (full-text) across one or more entities. Returns records ranked by relevance with highlights.\n\n" +
 
-            "TWO ACTIONS:\n" +
-            "- action='search' (default): Full-text search across entities. Requires search_term\n" +
-            "- action='status': Show Relevance Search configuration — enabled/disabled, indexed entities, " +
-            "searchable fields, sync status, storage size, and document count. No search_term needed\n\n" +
-
-            "SEARCH SYNTAX (for action='search'): + (AND), | (OR), - (NOT), trailing wildcard (*), " +
-            "exact phrases (\"quoted\"), parentheses for grouping.\n\n" +
+            "ACTIONS:\n" +
+            "- action='search' (default): Full-text search. Required: search_term\n" +
+            "- action='status': Relevance Search config — enabled status, indexed entities/fields, sync status, storage size, document count\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Find records by name or keyword across multiple entities\n" +
-            "- Quick text search when you don't know the exact field to filter on\n" +
-            "- Check if Relevance Search is enabled and which entities/fields are indexed (action='status')\n\n" +
+            "- Find records by keyword across multiple entities\n" +
+            "- Quick text search without knowing the exact field to filter on\n" +
+            "- Check if Relevance Search is enabled and which entities are indexed (action='status')\n\n" +
 
-            "IMPORTANT:\n" +
-            "- Relevance Search must be enabled in the environment\n" +
-            "- Max 100 results. For larger datasets or precise filtering, use execute_fetchxml")]
+            "IMPORTANT: Relevance Search must be enabled. Max 100 results. For larger datasets or precise filtering, use execute_fetchxml.")]
         public string search_records(
             [Description(
-                "The action to perform: 'search' (default) or 'status'.\n" +
-                "- 'search': Full-text search. Requires search_term\n" +
-                "- 'status': Show search configuration, indexed entities/fields, sync status, and storage statistics"
+                "'search' (default): full-text search, requires search_term. 'status': show configuration, indexed entities/fields, sync status, storage statistics."
             )] string action = "search",
             [Description(
-                "The text to search for (1-100 characters). Required when action='search', ignored for 'status'. " +
-                "Supports simple search syntax: + (AND), | (OR), - (NOT), trailing wildcards (*), " +
-                "exact phrases (\"quoted text\"), and precedence grouping with parentheses. " +
-                "Examples: 'Contoso', 'john smith', '\"Contoso Ltd\"', 'hotel+(wifi|luxury)', 'Alp*'."
+                "Text to search (1-100 chars). Required for action='search'. Syntax: + (AND), | (OR), - (NOT), * (wildcard), \"quoted\" (phrase), () (grouping)."
             )] string search_term = "",
             [Description(
-                "Comma-separated entity logical names to limit the search scope. " +
-                "Examples: 'account,contact', 'lead', 'opportunity,incident'. " +
-                "Leave empty to search across all searchable entities."
+                "Comma-separated entity logical names to scope the search (e.g., 'account,contact'). Empty = all searchable entities."
             )] string entities = "",
             [Description(
                 "Maximum number of results to return. Default: 50. Max: 100. " +
                 "Use a smaller value (e.g. 10) for quick lookups."
             )] int top = 50,
             [Description(
-                "OData-style filter to narrow results. Applied across all searched entities. " +
-                "Operators: eq, ne, gt, ge, lt, le, and, or, not. " +
-                "Example: 'statecode eq 0' (active records only), 'createdon gt 2024-01-01'. " +
-                "Leave empty for no filter."
+                "OData-style filter (eq, ne, gt, ge, lt, le, and, or, not). E.g., 'statecode eq 0'. Empty = no filter."
             )] string filter = "")
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -172,14 +155,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 fullMessage.Contains("not provisioned", StringComparison.OrdinalIgnoreCase) ||
                 fullMessage.Contains("Search feature is disabled", StringComparison.OrdinalIgnoreCase))
             {
-                return "Error: Dataverse Search is not enabled in this environment.\n\n" +
-                       "HOW TO ENABLE:\n" +
-                       "1. Go to Power Platform admin center: https://admin.powerplatform.microsoft.com\n" +
-                       "2. Select your environment → Settings → Product → Features\n" +
-                       "3. Under 'Dataverse Search', select 'On'\n" +
-                       "4. Select 'Save' and wait for indexing to complete\n\n" +
-                       "Docs: https://learn.microsoft.com/en-us/power-platform/admin/configure-relevance-search-organization\n\n" +
-                       "WORKAROUND: Use execute_fetchxml with a 'like' filter to search records.";
+                return "Error: Dataverse Search is not enabled in this environment.\n" +
+                       "Enable it: Power Platform admin center → select environment → Settings → Product → Features → Dataverse Search → On → Save.\n" +
+                       "Workaround: Use execute_fetchxml with a 'like' filter. Read docs://data_operations_guide for FetchXML search patterns.";
             }
 
             var errorDetail = ex.InnerException != null
