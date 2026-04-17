@@ -28,13 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- entity_name EMPTY: summary table of all entities (filter by keyword or custom_only)\n" +
             "- entity_name PROVIDED: full detail — attributes (type, options, required), relationships (1:N, N:1, N:N), alternate keys\n\n" +
 
-            "RELATIONSHIPS IN FETCHXML:\n" +
-            "- N:1: <link-entity name='[parent]' from='[parentPK]' to='[lookupField]'>\n" +
-            "- 1:N: <link-entity name='[child]' from='[childLookup]' to='[thisPK]'>\n" +
-            "- N:N: chain two link-entity through intersectEntity\n\n" +
-
-            "COMMON NAMES: Account=account, Contact=contact, Lead=lead, Opportunity=opportunity, " +
-            "Case=incident, User=systemuser, Team=team, Note=annotation\n\n" +
+            "COMMON NAMES: account, contact, lead, opportunity, incident (Case), systemuser (User), team, annotation (Note)\n\n" +
 
             "WHEN TO USE:\n" +
             "- Discover entity/attribute names before building FetchXML\n" +
