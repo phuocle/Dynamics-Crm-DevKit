@@ -43,25 +43,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Retrieve and modify form definitions for a Dataverse entity.\n\n" +
 
-            "FIVE ACTIONS:\n" +
-            "- action='list': List all active forms with name, type, status. Optional: form_type, include_formxml\n" +
-            "- action='detail': Full FormXML and metadata for one form. Requires form_id\n" +
-            "- action='update': Modify FormXML. Requires form_id + formxml\n" +
-            "- action='rename': Change display name. Requires form_id + form_name\n" +
-            "- action='undo': Restore from backup. Requires form_id + formxml (= backup file path)\n\n" +
+            "ACTIONS:\n" +
+            "- action='list': List active forms. Optional: form_type, include_formxml\n" +
+            "- action='detail': Full FormXML + metadata. Required: form_id (or form_name for auto-resolve)\n" +
+            "- action='update': Replace FormXML. Required: form_id + formxml\n" +
+            "- action='rename': Change display name. Required: form_id + form_name\n" +
+            "- action='undo': Restore from backup. Required: form_id + formxml (= backup file path)\n\n" +
 
-            "WORKFLOW: build_form_xml (build correct FormXML) → manage_form(action='update', formxml=<result>)\n" +
-            "Tool auto-handles: backup → validate XSD → update → publish. Undo path in every response.\n\n" +
-
-            "IMPORTANT: To add fields/sections/tabs/events to a form, ALWAYS use build_form_xml first.\n" +
-            "build_form_xml auto-resolves classid GUIDs, validates field names, and generates correct XML.\n" +
-            "Do NOT manually construct FormXML — use build_form_xml, then pass its output to manage_form(action='update').\n\n" +
-
-            "SAFETY: auto-backup before changes, XSD blocks invalid XML, backup failure blocks update.\n\n" +
+            "WORKFLOW: build_form_xml → manage_form(action='update', formxml=<result>)\n" +
+            "SAFETY: auto-backup before update/rename, XSD validates before write, backup failure blocks update.\n" +
+            "ALWAYS use build_form_xml to construct FormXML — never write it manually.\n\n" +
 
             "TIPS:\n" +
-            "- form_type=2 for main forms only. FormXML: tabs > columns > sections > rows > cells > controls\n" +
-            "- form_name: if exactly 1 match, returns detail automatically\n" +
+            "- form_type=2 for main forms only\n" +
+            "- form_name with 1 match auto-returns detail\n" +
             "- Read schema://formxml for XSD. Read docs://instructions_for_formxml for rules\n" +
             "- Set auto_publish=false when batching, then call publish_customizations once")]
         public CallToolResult manage_form(
@@ -90,7 +85,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'update', 'rename', 'undo'.");
 
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return ErrorResult(
+                    "Error: entity_name is required.\n" +
+                    "Use get_tables to find the entity logical name.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
             var entityName = entity_name.Trim().ToLowerInvariant();
@@ -229,7 +226,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var forms = result.Entities;
 
             if (forms.Count == 0)
-                return ErrorResult($"Error: No form found matching name '{nameFilter}' for entity '{entityName}'.");
+                return ErrorResult(
+                    $"Error: No form found matching name '{nameFilter}' for entity '{entityName}'.\n" +
+                    $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
 
             if (forms.Count == 1)
                 return GetFormDetailResult(entityName, forms[0].GetAttributeValue<Guid>("formid"));
@@ -260,7 +259,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var result = _serviceClient.RetrieveMultiple(query);
 
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: No form found with ID '{formId}'.");
+                return ErrorResult(
+                    $"Error: No form found with ID '{formId}'.\n" +
+                    $"Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs.");
 
             var form = result.Entities[0];
             var objectTypeCode = form.GetAttributeValue<string>("objecttypecode") ?? "";
@@ -404,7 +405,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         sb.AppendLine($"Backup: saved (no changes made) — {backupPath}");
                     else
                         sb.AppendLine($"Backup: not needed (no changes made)");
-                    sb.AppendLine($"Tip: Fix the FormXML errors above and retry. Refer to schema://formxml for valid structure.");
+                    sb.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
 
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
@@ -729,7 +730,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         foreach (var warning in warnings)
                             sb.AppendLine($"- {warning}");
                     }
-                    sb.AppendLine($"Tip: The backup file may be corrupted. Set validate=false to force restore (not recommended).");
+                    sb.AppendLine($"Tip: The backup file may be corrupted. Set validate=false to force restore (not recommended). Read schema://formxml for valid FormXML structure.");
 
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
