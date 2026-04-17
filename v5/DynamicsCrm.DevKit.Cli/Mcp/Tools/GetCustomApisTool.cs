@@ -60,15 +60,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
-            "Retrieve Custom API definitions from Dataverse. Modern replacement for Custom Actions " +
-            "with richer metadata (bound/unbound, private/public, plugin binding, typed parameters).\n\n" +
+            "Retrieve Custom API definitions from Dataverse — modern replacement for Custom Actions " +
+            "(binding, visibility, plugin attachment, typed params).\n\n" +
 
-            "TWO MODES:\n" +
-            "- api_name EMPTY: list all Custom APIs matching filters\n" +
-            "- api_name PROVIDED: full detail including request parameters, response properties, plugin binding\n\n" +
+            "MODES:\n" +
+            "- api_name empty: list matching APIs (filter by entity_name, status, include_microsoft)\n" +
+            "- api_name set: full detail — request parameters, response properties, plugin binding\n\n" +
 
             "TIPS:\n" +
-            "- Managed APIs (Microsoft and third-party) excluded by default (set include_microsoft=true to see them)\n" +
+            "- Managed APIs excluded by default; set include_microsoft=true to include them\n" +
             "- isFunction=true → GET (no side effects); isFunction=false → POST Action")]
         public CallToolResult get_custom_apis(
             [Description("Unique name for full detail. Empty = list all.")] string api_name = "",
@@ -216,7 +216,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var apiResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchApi));
             if (apiResult.Entities.Count == 0)
-                return ErrorResult($"Error: Custom API '{apiName}' not found.");
+                return ErrorResult(
+                    $"Error: Custom API '{apiName}' not found.\n" +
+                    "Verify the unique name using get_custom_apis (list mode, api_name empty).");
 
             var api = apiResult.Entities[0];
             var customApiId = api.Id;
