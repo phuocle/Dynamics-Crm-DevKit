@@ -39,27 +39,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageSiteMapResult)),
         Description(
-            "List, inspect, create, update, or undo a Model-Driven App's SiteMap XML with auto-backup, XSD validation, and publishing.\n\n" +
+            "List, create, update, or restore a Model-Driven App's SiteMap XML with auto-backup, XSD validation, and publish.\n\n" +
 
-            "FIVE ACTIONS:\n" +
-            "- 'list': List all Model-Driven Apps with their SiteMap info. Optional: app_name filter\n" +
-            "- 'detail': Show current SiteMap XML for an app. Requires app (name or GUID)\n" +
-            "- 'update': Modify SiteMap XML. Requires app + sitemapxml\n" +
-            "- 'create': New SiteMap for an app with no existing one. Requires app + sitemapxml\n" +
-            "- 'undo': Restore from backup. Requires app + sitemapxml (= backup file path)\n\n" +
+            "ACTIONS:\n" +
+            "- 'list': List all Model-Driven Apps with SiteMap info. Optional: app_name filter\n" +
+            "- 'detail': Show current SiteMap XML. Required: app\n" +
+            "- 'update' (default): Modify SiteMap XML. Required: app + sitemapxml\n" +
+            "- 'create': Create SiteMap for app with no existing SiteMap. Required: app + sitemapxml\n" +
+            "- 'undo': Restore from backup. Required: app + sitemapxml (= backup file path)\n\n" +
 
-            "Tool auto-handles: backup → validate XSD → update → publish. Undo path in every response.\n\n" +
-
-            "SAFETY: auto-backup before changes, XSD blocks invalid XML, backup failure blocks update.\n\n" +
+            "SAFETY: Auto-backup before changes, XSD validates XML, backup failure blocks update.\n\n" +
 
             "TIPS:\n" +
-            "- app parameter accepts app display name OR GUID — auto-resolves internally\n" +
-            "- Use build_sitemap_xml to construct SiteMap XML modifications, then pass result to action='update'\n" +
-            "- Read schema://sitemapxml for SiteMap XML structure and rules\n" +
-            "- Set auto_publish=false when batching, then call publish_customizations once")]
+            "- app accepts display name OR GUID (fuzzy match)\n" +
+            "- Use build_sitemap_xml to build XML, pass result to sitemapxml for update/create\n" +
+            "- Read schema://sitemapxml for SiteMap XML structure and rules")]
         public CallToolResult manage_sitemap(
             [Description("'list', 'detail', 'update' (default), 'create', or 'undo'.")] string action = "update",
-            [Description("App display name or GUID. Accepts fuzzy name match (e.g., 'Sales Hub'). Required for detail/update/create/undo. For list: use app_name instead.")] string app = "",
+            [Description("App display name or GUID (fuzzy match). Required for detail/update/create/undo; for list use app_name.")] string app = "",
             [Description("For 'update'/'create': SiteMap XML string or file path from build_sitemap_xml. For 'undo': backup file path. Ignored for list/detail.")] string sitemapxml = "",
             [Description("Filter apps by name (contains match). Only used with action='list'.")] string app_name = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
@@ -74,20 +71,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (actionName == "detail")
             {
                 if (string.IsNullOrWhiteSpace(app))
-                    return ErrorResult("Error: app is required for action='detail'. Provide app name or GUID.");
+                    return ErrorResult(
+                        "Error: app is required for action='detail'.\n" +
+                        "Provide: app display name or GUID.\n" +
+                        "Tip: Use action='list' to find available apps and their IDs.");
                 return DetailApp(app.Trim());
             }
 
             // For update/create/undo: resolve app name → GUID
             if (string.IsNullOrWhiteSpace(app))
-                return ErrorResult("Error: app is required. Provide app display name or GUID.");
+                return ErrorResult(
+                    $"Error: app is required for action='{actionName}'.\n" +
+                    $"Provide: app display name or GUID.\n" +
+                    $"Tip: Use action='list' to find available apps and their IDs.");
 
             var (appModuleId, resolvedAppName, resolveError) = ResolveAppModule(app.Trim());
             if (resolveError != null)
                 return ErrorResult(resolveError);
 
             if (string.IsNullOrWhiteSpace(sitemapxml))
-                return ErrorResult("Error: sitemapxml is required for action='" + actionName + "'.");
+                return ErrorResult(
+                    $"Error: sitemapxml is required for action='{actionName}'.\n" +
+                    $"For update/create: SiteMap XML string or file path from build_sitemap_xml. For undo: backup file path from .devkit/backups/sitemaps/.\n" +
+                    $"Read schema://sitemapxml for SiteMap XML structure.");
 
             // Resolve temp file path (from build_sitemap_xml) or keep inline XML
             var resolvedSiteMapXml = (actionName == "undo")
