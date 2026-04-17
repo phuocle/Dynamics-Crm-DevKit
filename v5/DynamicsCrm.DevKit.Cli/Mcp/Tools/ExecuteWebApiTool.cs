@@ -29,32 +29,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Execute Dataverse Web API requests for data queries and custom actions.\n\n" +
+            "Execute raw Dataverse Web API requests.\n\n" +
 
             "ALLOWED:\n" +
-            "- GET on any endpoint (read-only, always safe)\n" +
-            "- POST/PATCH/PUT/DELETE on standard data records (accounts, contacts, custom entities)\n" +
-            "- POST custom actions/functions (WhoAmI, new_MyCustomAction, etc.)\n\n" +
+            "- GET any endpoint (always safe)\n" +
+            "- POST/PATCH/PUT/DELETE on data records and custom actions (e.g. accounts, WhoAmI)\n\n" +
 
-            "BLOCKED (use specialized tools instead):\n" +
-            "- EntityDefinitions / Attributes → upsert_table, upsert_column\n" +
-            "- RelationshipDefinitions → upsert_relationship\n" +
-            "- GlobalOptionSetDefinitions → manage_choice\n" +
-            "- systemforms → manage_form / build_form_xml\n" +
-            "- savedqueries / userqueries → manage_view\n" +
-            "- sitemaps → manage_sitemap\n" +
-            "- environmentvariable* → manage_environment_variable\n" +
-            "- webresources → manage_webresource\n" +
-            "- roles → manage_role\n" +
-            "- PublishXml / PublishAllXml → publish_customizations\n" +
-            "- solutions, plugins, workflows, apps → manage via Power Apps UI or CLI\n\n" +
+            "BLOCKED (runtime-enforced — use specialized tools):\n" +
+            "- Schema/metadata → upsert_table, upsert_column, upsert_relationship\n" +
+            "- Choice/OptionSet → manage_choice\n" +
+            "- Forms/Views/SiteMaps → manage_form, manage_view, manage_sitemap\n" +
+            "- Environment variables → manage_environment_variable\n" +
+            "- Web resources → manage_webresource\n" +
+            "- Security roles → manage_role\n" +
+            "- Publish → publish_customizations\n" +
+            "- Solutions/Plugins/Workflows/Apps → Power Apps UI or DevKit CLI\n\n" +
 
-            "URL: relative path only (SDK handles base URL). " +
-            "PUT/PATCH/DELETE are destructive — confirm with user first.")]
+            "url is a relative path; SDK handles base URL. PUT/PATCH/DELETE are destructive — confirm with user first.")]
         public CallToolResult execute_webapi(
             [Description("HTTP method: GET, POST, PUT, PATCH, or DELETE."
             )] string method,
-            [Description("Relative URL path (SDK handles base URL). E.g., 'RelationshipDefinitions', '$metadata'."
+            [Description("Relative URL path (SDK handles base URL). E.g., 'accounts', 'contacts(guid)', '$metadata'."
             )] string url,
             [Description("JSON body for POST/PUT/PATCH. Not needed for GET/DELETE."
             )] string body = "",
@@ -64,15 +59,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool include_headers = false,
             [Description(
                 "Maximum response body lines to return. Default: 200. " +
-                "Use smaller values (e.g. 50) for large responses like $metadata. " +
-                "If response exceeds this, output is truncated."
+                "Use smaller values (e.g. 50) for large responses like $metadata."
             )] int max_response_lines = 200)
         {
             if (string.IsNullOrWhiteSpace(method))
-                return ErrorResult("Error: method is required (GET, POST, PUT, PATCH, DELETE).");
+                return ErrorResult(
+                    "Error: method is required.\n" +
+                    "Valid values: GET, POST, PUT, PATCH, DELETE.");
 
             if (string.IsNullOrWhiteSpace(url))
-                return ErrorResult("Error: url is required.");
+                return ErrorResult(
+                    "Error: url is required.\n" +
+                    "Provide a relative URL path, e.g., 'accounts', 'contacts?$select=name', '$metadata'.");
 
             var httpMethod = ParseHttpMethod(method.Trim().ToUpperInvariant());
             if (httpMethod == null)
