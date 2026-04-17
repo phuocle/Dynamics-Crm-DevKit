@@ -7,24 +7,24 @@ using System.Text;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 /// <summary>
-/// Tests for GetDebuggingTool private static methods:
+/// Tests for GetPluginTraceLogsTool private static methods:
 /// BuildTraceListFetchXml, FormatTraceNoResults, FormatTraceDetailResult, EscapeTab, EscapeXml.
 /// </summary>
 [TestClass]
 public class GetPluginTraceLogsToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDebuggingTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginTraceLogsTool);
 
     // ──────────────────────────────────────────────
     // Input validation via public method
     // ──────────────────────────────────────────────
 
-    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDebuggingTool _tool = new(null!);
+    private readonly DynamicsCrm.DevKit.Cli.Mcp.Tools.GetPluginTraceLogsTool _tool = new(null!);
 
     [TestMethod]
     public void GetPluginTraceLogs_InvalidRecordId_ReturnsError()
     {
-        var result = _tool.get_debugging(action: "trace_detail", record_id: "not-a-guid");
+        var result = _tool.get_plugin_trace_logs(record_id: "not-a-guid");
         Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
     }
 
@@ -33,7 +33,7 @@ public class GetPluginTraceLogsToolTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo BuildTraceListFetchXmlMethod = ToolType
-        .GetMethod("BuildTraceListFetchXml", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("BuildListFetchXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static string BuildTraceListFetchXml(string typeName, int minutesAgo, string correlationId,
         string messageName, string mode, int maxRecords)
@@ -134,7 +134,7 @@ public class GetPluginTraceLogsToolTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo FormatTraceNoResultsMethod = ToolType
-        .GetMethod("FormatTraceNoResults", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("FormatNoResults", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static string FormatTraceNoResults(string typeName, int minutesAgo, string correlationId,
         string messageName, string mode)
@@ -170,7 +170,7 @@ public class GetPluginTraceLogsToolTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo FormatTraceDetailResultMethod = ToolType
-        .GetMethod("FormatTraceDetailResult", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("FormatDetailResult", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     private static ModelContextProtocol.Protocol.CallToolResult FormatTraceDetailResult(Entity entity)
     {

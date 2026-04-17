@@ -220,6 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(
                     $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
                      "Use get_flows without flow_id to list available flows.");
+            var entity = result.Entities[0];
             var entry = MapFlowEntry(entity);
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
             entry.CreatedOn = entity.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd");
