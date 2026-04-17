@@ -31,19 +31,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(
-            "Retrieve audit history for Dataverse records. Shows who changed what, when, with old/new values.\n\n" +
+            "Retrieve audit history for Dataverse records — who changed what, when, old/new values.\n\n" +
 
-            "TWO MODES:\n" +
-            "- record_id PROVIDED: field-level old/new values for one record (requires entity_name)\n" +
-            "- record_id EMPTY: summary list across records/entities (entity_name optional)\n\n" +
+            "MODES:\n" +
+            "- record_id set: field-level old/new for one record (entity_name required)\n" +
+            "- record_id empty: summary list across records/entities (entity_name optional)\n\n" +
 
-            "WHEN TO USE:\n" +
-            "- 'Who changed this field?' or debug unexpected data changes\n" +
-            "- Compliance auditing or track user/integration activity\n\n" +
+            "WHEN TO USE: debug unexpected changes, compliance auditing, track user/integration activity.\n\n" +
 
-            "TIPS:\n" +
-            "- Audit must be enabled at org AND entity level\n" +
-            "- Use from_date/to_date for date ranges (overrides minutes_ago)")]
+            "TIPS: Audit must be enabled at org AND entity level. Use from_date/to_date for ranges (overrides minutes_ago).")]
         public CallToolResult get_audit_history(
             [Description("Entity logical name. Required with record_id. Optional in browse mode."
             )] string entity_name = "",
@@ -65,7 +61,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string to_date = "")
         {
             if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required when record_id is provided.");
+                return ErrorResult(
+                    "Error: entity_name is required when record_id is provided.\n" +
+                    "Required: entity_name (logical name, e.g. 'account') + record_id.");
 
             if (string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
                 return ErrorResult("Error: attribute_name requires record_id (detail mode). In browse mode, attribute-level filtering is not available.");
@@ -89,14 +87,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 if (!DateTime.TryParse(from_date.Trim(), CultureInfo.InvariantCulture,
                         DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var fd))
-                    return ErrorResult($"Error: '{from_date}' is not a valid ISO 8601 date.");
+                    return ErrorResult(
+                        $"Error: '{from_date}' is not a valid ISO 8601 date.\n" +
+                        "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
                 fromUtc = fd;
             }
             if (!string.IsNullOrWhiteSpace(to_date))
             {
                 if (!DateTime.TryParse(to_date.Trim(), CultureInfo.InvariantCulture,
                         DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var td))
-                    return ErrorResult($"Error: '{to_date}' is not a valid ISO 8601 date.");
+                    return ErrorResult(
+                        $"Error: '{to_date}' is not a valid ISO 8601 date.\n" +
+                        "Expected format: 'YYYY-MM-DD' or 'YYYY-MM-DDTHH:mm:ssZ'.");
                 toUtc = td;
             }
 
@@ -143,10 +145,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     (msg.Contains("audit", StringComparison.OrdinalIgnoreCase) && msg.Contains("not enabled", StringComparison.OrdinalIgnoreCase)))
                 {
                     return ErrorResult(
-                        $"[Error] Audit is not enabled\n" +
-                        $"Entity: {entity_name}\n" +
-                        $"Message: {msg}\n" +
-                        "Tip: Enable auditing: Settings > Administration > System Settings > Auditing tab");
+                        $"Error: Auditing is not enabled for '{entity_name}'.\n" +
+                        $"Detail: {msg}\n" +
+                        "Enable auditing: Settings > Administration > System Settings > Auditing tab.");
                 }
                 return ErrorResult($"Error: Failed to retrieve audit history: {msg}");
             }
@@ -256,7 +257,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 objectTypeCode = ResolveObjectTypeCode(entityName);
                 if (!objectTypeCode.HasValue)
-                    return ErrorResult($"Error: Could not resolve entity '{entityName}' to an ObjectTypeCode. Verify the entity name is correct.");
+                    return ErrorResult(
+                        $"Error: Could not resolve entity '{entityName}' to an ObjectTypeCode.\n" +
+                        "Verify the logical name is correct. Use get_tables to list available entities.");
             }
 
             var fetchXml = BuildBrowseFetchXml(objectTypeCode, sinceUtc, untilUtc, operation, maxRecords);
