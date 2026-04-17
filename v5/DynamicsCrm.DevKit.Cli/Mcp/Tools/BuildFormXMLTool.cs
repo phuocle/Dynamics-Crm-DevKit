@@ -34,58 +34,48 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ReadOnly = true, Destructive = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildFormXMLResult)),
         Description(
-            "Build modified FormXML for an existing Dataverse form. READ-ONLY builder — use manage_form to apply.\n\n" +
+            "Build modified FormXML for an existing Dataverse form. READ-ONLY — saves to temp file; use manage_form(action='update') to apply.\n\n" +
 
-            "5 ACTIONS (each requires 'manage_action' sub-field):\n" +
-            "- manage_tab:     manage_action = add | remove | move | update\n" +
-            "- manage_section: manage_action = add | remove | move | update\n" +
-            "- manage_fields:  manage_action = add | remove | update | add_header | remove_header | update_header\n" +
-            "- manage_library: manage_action = add | remove\n" +
-            "- manage_event:   manage_action = add | remove\n\n" +
+            "5 ACTIONS (each requires 'manage_action'):\n" +
+            "- manage_tab:     add | remove | move | update\n" +
+            "- manage_section: add | remove | move | update\n" +
+            "- manage_fields:  add | remove | update | add_header | remove_header | update_header\n" +
+            "- manage_library: add | remove\n" +
+            "- manage_event:   add | remove\n\n" +
 
             "Auto-resolves classid GUIDs, validates field names against metadata.\n" +
-            "SECTION COLUMNS: 1 (default), 2, 3. TAB COLUMNS: 1 (100%), 2 (50%/50%), 3 (33%/34%/33%).\n\n" +
+            "Section columns: 1 (default), 2, 3. Tab columns: 1 (100%), 2 (50%/50%), 3 (33%/34%/33%).\n\n" +
 
             "TIPS:\n" +
-            "- Fields: strings (\"createdon\") or objects ({\"field\":\"createdon\",\"label\":\"Date Created\",\"disabled\":true})\n" +
-            "- Field position: \"first\", \"last\" (default), \"before:<fieldname>\", \"after:<fieldname>\" (e.g., \"after:name\")\n" +
-            "- Tabs/Sections/Fields support: \"visible\", \"show_label\", \"hide_on_phone\", \"disabled\" (fields only)\n" +
-            "- Use manage_action='update' to safely modify existing elements without removing them\n" +
-            "- Saves FormXML to temp file. Pass formXmlPath to manage_form(action='update') to apply")]
+            "- Fields: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date\",\"disabled\":true}\n" +
+            "- Position: \"first\", \"last\" (default), \"before:<name>\", \"after:<name>\"\n" +
+            "- Tabs/Sections: visible, show_label, hide_on_phone. Fields also: disabled\n" +
+            "- Use manage_action='update' to modify existing elements without removing them")]
         public CallToolResult build_form_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve field metadata.")] string entity_name,
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
-                "JSON array of operations. Each requires 'action' + 'manage_action' sub-field.\n" +
-                "manage_tab:     [{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"label\":\"Audit\",\"sections\":[{\"label\":\"Dates\",\"fields\":[\"createdon\"]}]}]\n" +
-                "                [{\"action\":\"manage_tab\",\"manage_action\":\"move\",\"name\":\"tab_audit\",\"position\":\"before:tab_lookup\"}]\n" +
-                "                [{\"action\":\"manage_tab\",\"manage_action\":\"update\",\"name\":\"tab_general\",\"visible\":false,\"hide_on_phone\":true}]\n" +
-                "                [{\"action\":\"manage_tab\",\"manage_action\":\"remove\",\"name\":\"tab_audit\"}]\n" +
-                "manage_section: [{\"action\":\"manage_section\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"label\":\"Dates\",\"fields\":[\"createdon\"]}]\n" +
-                "                [{\"action\":\"manage_section\",\"manage_action\":\"move\",\"tab\":\"tab_general\",\"name\":\"sec_info\",\"target_tab\":\"tab_details\",\"position\":\"first\"}]\n" +
-                "                [{\"action\":\"manage_section\",\"manage_action\":\"update\",\"tab\":\"tab_general\",\"name\":\"sec_info\",\"show_label\":false}]\n" +
-                "                [{\"action\":\"manage_section\",\"manage_action\":\"remove\",\"tab\":\"tab_general\",\"name\":\"sec_dates\"}]\n" +
-                "manage_fields:  [{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"]}]\n" +
-                "                [{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"],\"position\":\"after:name\"}]\n" +
-                "                [{\"action\":\"manage_fields\",\"manage_action\":\"update\",\"fields\":[{\"field\":\"name\",\"visible\":false,\"disabled\":true}]}]\n" +
-                "                [{\"action\":\"manage_fields\",\"manage_action\":\"remove\",\"tab\":\"tab_general\",\"section\":\"sec_info\",\"fields\":[\"createdon\"]}]\n" +
-                "                [{\"action\":\"manage_fields\",\"manage_action\":\"add_header\",\"fields\":[\"ownerid\"]}]\n" +
-                "                [{\"action\":\"manage_fields\",\"manage_action\":\"remove_header\",\"fields\":[\"ownerid\"]}]\n" +
-                "manage_library: [{\"action\":\"manage_library\",\"manage_action\":\"add\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "                [{\"action\":\"manage_library\",\"manage_action\":\"remove\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "manage_event:   [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"accOnload\",\"library_name\":\"new_/js/account.js\"}]\n" +
-                "                [{\"action\":\"manage_event\",\"manage_action\":\"remove\",\"event_name\":\"onchange\",\"function_name\":\"onNameChange\",\"target\":\"field:name\"}]"
+                "JSON array of operations. Each requires 'action' (manage_tab | manage_section | manage_fields | manage_library | manage_event) + 'manage_action' sub-field.\n" +
+                "Common fields: tab, section, fields[], label, name, position, visible, show_label, hide_on_phone, disabled, tab_column, section_columns, library_name, event_name, function_name, target.\n" +
+                "Read docs://instructions_for_formxml for full format and examples."
             )] string operations)
 
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return ErrorResult(
+                    "Error: entity_name is required.\n" +
+                    "Expected: entity logical name string (e.g., 'account', 'contact').");
             if (string.IsNullOrWhiteSpace(form_id))
-                return ErrorResult("Error: form_id is required.");
+                return ErrorResult(
+                    "Error: form_id is required.\n" +
+                    $"Use manage_form(action='list', entity_name='{entity_name.Trim().ToLowerInvariant()}') to find valid form IDs.");
             if (!Guid.TryParse(form_id.Trim(), out var formId))
                 return ErrorResult($"Error: '{form_id}' is not a valid GUID.");
             if (string.IsNullOrWhiteSpace(operations))
-                return ErrorResult("Error: operations is required.");
+                return ErrorResult(
+                    "Error: operations is required.\n" +
+                    "Expected: non-empty JSON array of operation objects.\n" +
+                    "Read docs://instructions_for_formxml for format and examples.");
 
             var entityName = entity_name.Trim().ToLowerInvariant();
 
@@ -97,11 +87,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
                     if (ops == null || ops.Count == 0)
-                        return ErrorResult("Error: operations must be a non-empty JSON array.");
+                        return ErrorResult(
+                            "Error: operations must be a non-empty JSON array.\n" +
+                            "Read docs://instructions_for_formxml for format and examples.");
                 }
                 catch (JsonException ex)
                 {
-                    return ErrorResult($"Error: Invalid operations JSON: {ex.Message}");
+                    return ErrorResult(
+                        $"Error: Invalid operations JSON: {ex.Message}\n" +
+                        $"Read docs://instructions_for_formxml for format and examples.");
                 }
 
                 // 2. Retrieve current FormXML from Dataverse
@@ -114,8 +108,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 catch (Exception ex)
                 {
                     return ErrorResult(
-                        $"[Error] Form not found\nFormId: {formId}\nMessage: {ex.Message}\n" +
-                        $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+                        $"Error: Form '{formId}' not found for entity '{entityName}'.\n" +
+                        $"Message: {ex.Message}\n" +
+                        $"Use manage_form(action='list', entity_name='{entityName}') to find valid form IDs.");
                 }
 
                 var currentFormXml = formEntity.GetAttributeValue<string>("formxml") ?? "";
@@ -196,7 +191,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var op in ops)
                 {
                     if (!op.TryGetProperty("action", out var actionProp))
-                        return ErrorResult("Error: Each operation must have an 'action' field.");
+                        return ErrorResult(
+                            "Error: Each operation must have an 'action' field.\n" +
+                            "Valid actions: manage_tab, manage_section, manage_fields, manage_library, manage_event.\n" +
+                            "Read docs://instructions_for_formxml for operation format and examples.");
 
                     var action = actionProp.GetString()?.ToLowerInvariant();
                     var manageAction = GetStringProp(op, "manage_action")?.ToLowerInvariant() ?? "";
@@ -257,7 +255,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             });
                             break;
                         default:
-                            return ErrorResult($"Error: Unknown action '{action}'. Valid actions: manage_tab, manage_section, manage_fields, manage_library, manage_event. Each requires a 'manage_action' sub-field.");
+                            return ErrorResult(
+                                $"Error: Unknown action '{action}'.\n" +
+                                $"Valid: manage_tab | manage_section | manage_fields | manage_library | manage_event (each requires 'manage_action').\n" +
+                                $"Read docs://instructions_for_formxml for operation format and examples.");
                     }
                 }
 
@@ -316,8 +317,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 return ErrorResult(
-                    $"[Error] build_form_xml failed\n" +
-                    $"Entity: {entityName}\nFormId: {formId}\n" +
+                    $"Error: build_form_xml failed for entity '{entityName}', form '{formId}'.\n" +
                     $"Message: {ex.Message}");
             }
         }
