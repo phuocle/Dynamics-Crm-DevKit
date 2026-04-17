@@ -24,13 +24,14 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   upsert_table, upsert_relationship, manage_sitemap,
 >   upsert_column, manage_environment_variable,
 >   get_workflows, get_custom_apis, get_flows,
->   get_business_process_flows, get_plugins
+>   get_business_process_flows
 >
 > DONE (already optimized):
 >   whoami, manage_role,
 >   get_plugin_trace_logs, get_system_jobs,
 >   get_business_rules, manage_webresource,
->   manage_record, get_dataverse_commands, parse_record_url
+>   manage_record, get_dataverse_commands, parse_record_url,
+>   get_plugins
 >
 > Usage: /optimize-tool-description <tool_name>
 > ```

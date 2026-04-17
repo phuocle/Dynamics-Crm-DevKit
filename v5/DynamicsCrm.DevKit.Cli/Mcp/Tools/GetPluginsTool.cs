@@ -81,16 +81,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginsResult)),
         Description(
-            "List and inspect plugin assembly registrations, plugin types, and processing steps in Dataverse.\n\n" +
+            "List and inspect Dataverse plugin assemblies, types, and processing steps.\n\n" +
 
             "THREE MODES:\n" +
-            "- No filters (or only assembly_name): list plugin assemblies with type counts\n" +
-            "- assembly_name provided (single match): assembly detail with all types + steps + images\n" +
-            "- entity_name provided: all plugin steps on that entity across all assemblies\n\n" +
+            "- No filters: list all assemblies with type counts\n" +
+            "- assembly_name (single match): assembly detail with types + steps + images\n" +
+            "- entity_name: all steps on that entity across all assemblies\n\n" +
 
             "TIPS:\n" +
-            "- Stage: PreValidation, PreOperation, PostOperation, MainOperation (Custom API/DataProvider)\n" +
-            "- include_config defaults to false — secure config should not be casually exposed")]
+            "- Stages: PreValidation, PreOperation, PostOperation, MainOperation (Custom API/DataProvider)\n" +
+            "- include_config defaults to false — set true only when secure config inspection is needed")]
         public CallToolResult get_plugins(
             [Description("Filter by assembly name (contains). Empty = list all.")] string assembly_name = "",
             [Description("Filter steps by entity (e.g., 'account'). Shows all steps on this entity.")] string entity_name = "",
@@ -268,7 +268,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var asmResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchAsm));
             if (asmResult.Entities.Count == 0)
-                return ErrorResult($"Error: No plugin assembly matching '{assemblyName}' found.");
+                return ErrorResult($"Error: No plugin assembly matching '{assemblyName}' found.\n" +
+                                   "Use get_plugins without assembly_name to list all available assemblies.");
 
             // If multiple matches, list them
             if (asmResult.Entities.Count > 1)
