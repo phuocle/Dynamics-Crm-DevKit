@@ -16,7 +16,7 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   1. Tool name (snake_case, e.g., "manage_record")
 >
 > TODO (not yet optimized):
->   get_tables, manage_choice,
+>   get_tables,
 >   execute_fetchxml, search_records,
 >   execute_webapi, publish_customizations,
 >   manage_form,
@@ -33,7 +33,7 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   get_plugins, get_flows, get_audit_history,
 >   get_custom_apis, get_workflows,
 >   get_business_process_flows, manage_view,
->   manage_environment_variable
+>   manage_environment_variable, manage_choice
 >
 > Usage: /optimize-tool-description <tool_name>
 > ```

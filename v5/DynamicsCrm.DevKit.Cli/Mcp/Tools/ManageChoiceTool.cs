@@ -29,37 +29,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Title = "Manage global option sets (choices)",
             Destructive = true, ReadOnly = false, Idempotent = false),
         Description(
-            "List, inspect, create, or update global option sets (choices/picklists) in Dataverse metadata.\n\n" +
+            "List, inspect, create, or update global option sets (choices/picklists) in Dataverse.\n\n" +
 
-            "FOUR ACTIONS:\n" +
-            "- action='list': List all global option sets (name, displayName, type). No other params needed\n" +
-            "- action='detail': Show value/label pairs for a specific option set. Requires optionset_name\n" +
-            "- action='create': Create a new global option set. Requires optionset_name + display_name + options (value:label pairs)\n" +
-            "- action='update': Add, update, or remove options from an existing global option set. Requires optionset_name + at least one of: display_name, description, add_options, update_options, remove_option_values\n\n" +
+            "ACTIONS:\n" +
+            "- action='list': List all global option sets (name, displayName, type). No extra params needed.\n" +
+            "- action='detail': Show value/label pairs. Requires optionset_name.\n" +
+            "- action='create': Create a new global option set. Requires optionset_name + display_name + options.\n" +
+            "- action='update': Modify options/metadata on an existing global option set. Requires optionset_name + at least one of: display_name, description, add_options, update_options, remove_option_values.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Get valid integer values for FetchXML filters on option set fields\n" +
-            "- Map integer values in query results to display labels\n" +
-            "- Create a new global choice for use in picklist columns via upsert_column\n" +
-            "- Add, rename, or remove option values from an existing global choice\n\n" +
+            "- Resolve integer values \u2194 labels for option set fields in FetchXML or query results.\n" +
+            "- Create a global choice for use in picklist columns via upsert_column.\n" +
+            "- Add, rename, or remove option values from an existing global choice.\n\n" +
 
             "TIPS:\n" +
-            "- GLOBAL option sets only. For entity-specific (local) picklists, use get_tables\n" +
-            "- After create/update, call publish_customizations to make changes visible\n" +
-            "- Options format for create: 'value1:label1;value2:label2' (e.g., '100000000:Active;100000001:Inactive')\n" +
-            "- add_options format: same as options — 'value:label;value:label'\n" +
-            "- update_options format: 'value:newLabel;value:newLabel' — updates the label of existing option values\n" +
-            "- remove_option_values format: comma-separated values — '100000002,100000003'\n" +
-            "- Related: upsert_column (create picklist column referencing this global choice), publish_customizations")]
+            "- GLOBAL option sets only. For entity-specific (local) picklists, use get_tables.\n" +
+            "- After create/update, changes are auto-published unless auto_publish=false.\n" +
+            "- Related: upsert_column (create picklist column referencing this choice).")]
         public CallToolResult manage_choice(
             [Description(
                 "The action to perform: 'list', 'detail', 'create', or 'update'."
             )] string action,
             [Description(
                 "Logical name of the global option set. " +
-                "Required for detail, create, and update. Leave empty for list. " +
-                "If get_tables shows empty options for a PicklistType column, " +
-                "it references a global option set — use this tool."
+                "Required for detail, create, update; omit for list. " +
+                "Tip: if get_tables shows empty options for a PicklistType column, it references a global option set."
             )] string optionset_name = "",
             [Description(
                 "Display name for the option set. Required for create. Optional for update."
