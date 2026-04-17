@@ -16,7 +16,6 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   1. Tool name (snake_case, e.g., "manage_record")
 >
 > TODO (not yet optimized):
->   manage_form,
 >   upsert_relationship,
 >   upsert_column
 >
@@ -33,7 +32,7 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >   execute_fetchxml, search_records, publish_customizations,
 >   get_tables, execute_webapi,
 >   build_sitemap_xml, build_form_xml, manage_sitemap,
->   upsert_table
+>   upsert_table, manage_form
 >
 > Usage: /optimize-tool-description <tool_name>
 > ```

@@ -32,23 +32,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertRelationshipResult)),
         Description(
             "Create, update, or delete Dataverse relationships (1:N, N:N) and manage polymorphic lookup targets.\n\n" +
-            "SIX ACTIONS:\n" +
-            "- action='create_1n': Create 1:N relationship + lookup column. Requires referenced_entity + referencing_entity\n" +
-            "- action='create_nn': Create N:N relationship + intersect entity. Requires entity1 + entity2\n" +
-            "- action='update': Update cascade behaviors on existing relationship. Requires relationship_name\n" +
-            "- action='delete': Delete a relationship by schema name. Requires relationship_name\n" +
-            "- action='add_target': Add a new target entity to existing polymorphic lookup. Requires entity_name + attribute_name + referenced_entity\n" +
-            "- action='remove_target': Remove a target entity from existing polymorphic lookup. Requires entity_name + attribute_name + referenced_entity\n\n" +
-            "CASCADE PRESETS (for create_1n/update):\n" +
-            "- 'Parental': Assign=Cascade, Delete=Cascade, Merge=Cascade, Reparent=Cascade, Share=Cascade, Unshare=Cascade\n" +
-            "- 'Referential': Assign=NoCascade, Delete=RemoveLink, Merge=NoCascade, Reparent=NoCascade, Share=NoCascade, Unshare=NoCascade\n" +
-            "- 'ReferentialRestrictDelete': Same as Referential but Delete=Restrict\n\n" +
-            "CASCADE TYPES (individual overrides): Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict\n\n" +
+            "ACTIONS:\n" +
+            "- action='create_1n': Create 1:N + lookup column. Required: referenced_entity + referencing_entity\n" +
+            "- action='create_nn': Create N:N + intersect entity. Required: entity1 + entity2\n" +
+            "- action='update': Update cascade/menu on existing relationship. Required: relationship_name\n" +
+            "- action='delete': Delete relationship by schema name. Required: relationship_name\n" +
+            "- action='add_target': Add target to polymorphic lookup. Required: entity_name + attribute_name + referenced_entity\n" +
+            "- action='remove_target': Remove target from polymorphic lookup. Required: entity_name + attribute_name + referenced_entity\n\n" +
             "TIPS:\n" +
-            "- Use get_tables to inspect existing relationships and find relationship_name\n" +
-            "- After creating, use build_form_xml to add the lookup field to a form\n" +
-            "- add_target/remove_target work on polymorphic lookups (multiple targets)\n" +
-            "- WARNING: remove_target will delete data stored in that lookup target")]
+            "- Use get_tables to find relationship_name; use build_form_xml to add lookup to a form\n" +
+            "- WARNING: remove_target permanently deletes data in that lookup target\n" +
+            "- Read docs://schema_tools_guide for cascade preset values and cascade type options")]
         public CallToolResult upsert_relationship(
             [Description("The action to perform: 'create_1n', 'create_nn', 'update', 'delete', 'add_target', 'remove_target'.")] string action = "",
             [Description("Relationship schema name. Required for update/delete. Auto-generated for create.")] string relationship_name = "",
@@ -59,13 +53,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Intersect entity name for N:N. Auto-generated if empty.")] string intersect_entity_name = "",
             [Description("Entity with the polymorphic lookup (add/remove target).")] string entity_name = "",
             [Description("Polymorphic lookup logical name (add/remove target).")] string attribute_name = "",
-            [Description("Cascade preset: 'Parental', 'Referential' (default), 'ReferentialRestrictDelete'.")] string cascade_preset = "",
-            [Description("Override cascade Assign: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.")] string cascade_assign = "",
-            [Description("Override cascade Delete: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.")] string cascade_delete = "",
-            [Description("Override cascade Merge: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.")] string cascade_merge = "",
-            [Description("Override cascade Reparent: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.")] string cascade_reparent = "",
-            [Description("Override cascade Share: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.")] string cascade_share = "",
-            [Description("Override cascade Unshare: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.")] string cascade_unshare = "",
+            [Description("Cascade preset: 'Parental', 'Referential' (default), 'ReferentialRestrictDelete'. Read docs://schema_tools_guide for values.")] string cascade_preset = "",
+            [Description("Override cascade Assign behavior.")] string cascade_assign = "",
+            [Description("Override cascade Delete behavior.")] string cascade_delete = "",
+            [Description("Override cascade Merge behavior.")] string cascade_merge = "",
+            [Description("Override cascade Reparent behavior.")] string cascade_reparent = "",
+            [Description("Override cascade Share behavior.")] string cascade_share = "",
+            [Description("Override cascade Unshare behavior.")] string cascade_unshare = "",
             [Description("Associated menu behavior: 'UseCollectionName' (default), 'UseLabel', 'DoNotDisplay'.")] string menu_behavior = "",
             [Description("Associated menu group: 'Details' (default), 'Sales', 'Service', 'Marketing'.")] string menu_group = "",
             [Description("Associated menu order. Default: 10000.")] int menu_order = 10000,
@@ -112,9 +106,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string menuBehavior, string menuGroup, int menuOrder, string lookupDisplayName, string solutionName, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(referencedEntity))
-                return ErrorResult("Error: referenced_entity is required for create_1n (the parent/referenced entity).");
+                return ErrorResult("Error: referenced_entity is required for create_1n (the parent/referenced entity).\nRead docs://schema_tools_guide for relationship creation examples.");
             if (string.IsNullOrWhiteSpace(referencingEntity))
-                return ErrorResult("Error: referencing_entity is required for create_1n (the child/referencing entity).");
+                return ErrorResult("Error: referencing_entity is required for create_1n (the child/referencing entity).\nRead docs://schema_tools_guide for relationship creation examples.");
 
             referencedEntity = referencedEntity.Trim().ToLowerInvariant();
             referencingEntity = referencingEntity.Trim().ToLowerInvariant();
@@ -216,9 +210,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string solutionName, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(entity1))
-                return ErrorResult("Error: entity1 is required for create_nn.");
+                return ErrorResult("Error: entity1 is required for create_nn.\nRead docs://schema_tools_guide for relationship creation examples.");
             if (string.IsNullOrWhiteSpace(entity2))
-                return ErrorResult("Error: entity2 is required for create_nn.");
+                return ErrorResult("Error: entity2 is required for create_nn.\nRead docs://schema_tools_guide for relationship creation examples.");
 
             entity1 = entity1.Trim().ToLowerInvariant();
             entity2 = entity2.Trim().ToLowerInvariant();
@@ -308,7 +302,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string menuBehavior, string menuGroup, int menuOrder, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
-                return ErrorResult("Error: relationship_name is required for update.");
+                return ErrorResult("Error: relationship_name is required for update.\nTip: Use get_tables with entity_name to find relationship_name.\nRead docs://schema_tools_guide for cascade preset and type values.");
 
             relationshipName = relationshipName.Trim();
 
@@ -386,7 +380,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (changes.Count == 0 && warnings.Count == 0)
-                return ErrorResult($"No changes detected for relationship '{relationshipName}'.");
+                return ErrorResult($"Error: No changes detected for relationship '{relationshipName}'. Provide cascade_preset, cascade_* overrides, or menu_* values to update.");
 
             if (changes.Count > 0)
             {
@@ -432,7 +426,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleDelete(string relationshipName)
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
-                return ErrorResult("Error: relationship_name is required for delete.");
+                return ErrorResult("Error: relationship_name is required for delete.\nTip: Use get_tables with entity_name to find relationship_name.");
 
             relationshipName = relationshipName.Trim();
 
@@ -506,7 +500,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .FirstOrDefault(a => a.LogicalName == attributeName);
 
             if (lookupAttr == null)
-                return ErrorResult($"Error: Lookup attribute '{attributeName}' not found on entity '{entityName}'.");
+                return ErrorResult($"Error: Lookup attribute '{attributeName}' not found on entity '{entityName}'.\nTip: Use get_tables with entity_name='{entityName}' to inspect lookup columns.");
 
             // Resolve prefix for relationship name
             var prefix = "new";
@@ -656,7 +650,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "nocascade" => CascadeType.NoCascade,
                 "removelink" => CascadeType.RemoveLink,
                 "restrict" => CascadeType.Restrict,
-                _ => throw new ArgumentException($"Invalid cascade type '{value}'. Valid values: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict")
+                _ => throw new ArgumentException($"Error: Invalid cascade type '{value}'.\nValid values: Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict.\nRead docs://schema_tools_guide for cascade behavior details.")
             };
         }
 
@@ -702,7 +696,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                     break;
                 default:
-                    throw new ArgumentException($"Invalid cascade_preset '{preset}'. Valid values: Parental, Referential, ReferentialRestrictDelete");
+                    throw new ArgumentException($"Error: Invalid cascade_preset '{preset}'.\nValid values: Parental, Referential, ReferentialRestrictDelete.\nRead docs://schema_tools_guide for cascade preset behavior details.");
             }
 
             // Apply individual overrides
@@ -724,7 +718,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "usecollectionname" => AssociatedMenuBehavior.UseCollectionName,
                 "uselabel" => AssociatedMenuBehavior.UseLabel,
                 "donotdisplay" => AssociatedMenuBehavior.DoNotDisplay,
-                _ => throw new ArgumentException($"Invalid menu_behavior '{value}'. Valid values: UseCollectionName, UseLabel, DoNotDisplay")
+                _ => throw new ArgumentException($"Error: Invalid menu_behavior '{value}'.\nValid values: UseCollectionName, UseLabel, DoNotDisplay.")
             };
         }
 
@@ -737,7 +731,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "sales" => AssociatedMenuGroup.Sales,
                 "service" => AssociatedMenuGroup.Service,
                 "marketing" => AssociatedMenuGroup.Marketing,
-                _ => throw new ArgumentException($"Invalid menu_group '{value}'. Valid values: Details, Sales, Service, Marketing")
+                _ => throw new ArgumentException($"Error: Invalid menu_group '{value}'.\nValid values: Details, Sales, Service, Marketing.")
             };
         }
 
