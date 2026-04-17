@@ -64,36 +64,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(
-            "Discover SDK messages and Custom Actions available for a Dataverse entity.\n\n" +
+            "Discover SDK messages and Custom Actions for a Dataverse entity.\n\n" +
 
-            "TWO MODES:\n" +
-            "- message_name EMPTY: list all SDK messages + Custom Action names for an entity or globally\n" +
-            "- message_name PROVIDED: detail for a specific message or Custom Action (parameters, supported entities, plugin steps)\n\n" +
+            "TWO MODES (controlled by message_name):\n" +
+            "- List (message_name empty): all SDK messages + Custom Action names for entity or globally\n" +
+            "- Detail (message_name set): parameters, supported entities, plugin steps for a specific message\n\n" +
 
-            "SCOPING:\n" +
-            "- Entity-bound: provide entity_name to get messages for that entity\n" +
-            "- Global: use 'none' or empty for unbound messages (WhoAmI, global Custom Actions)\n\n" +
+            "SCOPING: entity_name for entity-bound; 'none'/empty for global/unbound messages (WhoAmI, etc.).\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Discover which SDK messages are available for plugin registration\n" +
-            "- Find Custom Actions registered for an entity\n" +
-            "- Get input/output parameters of a Custom Action (workflow category=3)\n\n" +
+            "- Find SDK messages available for plugin registration\n" +
+            "- Discover Custom Actions registered on an entity\n" +
+            "- Get input/output parameters of a legacy Custom Action (workflow category=3)\n\n" +
 
             "TIPS:\n" +
-            "- For Custom API detail (modern replacement), use get_custom_apis\n" +
-            "- This tool covers legacy Custom Actions (workflow-based) that get_custom_apis does NOT cover")]
+            "- For modern Custom APIs use get_custom_apis instead\n" +
+            "- This covers legacy Custom Actions (workflow-based) that get_custom_apis does NOT")]
         public async Task<CallToolResult> get_messages(
             [Description(
-                "Entity logical name (lowercase). Use 'none' or empty for global messages. " +
-                "Use get_tables to discover names. Ignored in detail mode."
+                "Entity logical name (lowercase). Use 'none'/empty for global/unbound messages. " +
+                "Use get_tables to discover names. Ignored when message_name is set."
             )] string entity_name = "none",
             [Description(
-                "Specific message or Custom Action name for detail mode. " +
-                "Empty = list all messages."
+                "Message or Custom Action name for detail mode. Empty = list mode."
             )] string message_name = "",
             [Description(
-                "true: include Custom Action messages in list mode. " +
-                "false: exclude Custom Actions (only show SDK messages). Ignored in detail mode."
+                "true: include Custom Actions in list results. false: SDK messages only. " +
+                "Ignored when message_name is set."
             )] bool include_custom_actions = true)
         {
             try
@@ -169,8 +166,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return ErrorResult(
-                $"Error: Message or Custom Action '{messageName}' not found. " +
-                "Use get_messages (list mode) to discover available messages.");
+                $"Error: Message or Custom Action '{messageName}' not found.\n" +
+                $"Call get_messages without message_name to list all available messages for the entity.");
         }
 
         private CallToolResult FormatSdkMessageDetail(Entity sdkMsg, bool isCustomOperation)
