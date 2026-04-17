@@ -40,16 +40,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(
-            "List and inspect Power Automate cloud flows (category=5) and their run history from flowsession.\n\n" +
+            "List and inspect Power Automate cloud flows and their run history.\n\n" +
 
             "THREE MODES:\n" +
-            "- flow_id EMPTY + action='list': list all cloud flows matching filters\n" +
-            "- flow_id PROVIDED + action='list': detail for a single flow + last 5 runs\n" +
-            "- flow_id PROVIDED + action='runs': extended run history with filtering\n\n" +
+            "- No flow_id: list all flows matching filters\n" +
+            "- flow_id + action='list': single flow detail + last 5 runs\n" +
+            "- flow_id + action='runs': extended run history with filtering\n\n" +
 
             "TIPS:\n" +
-            "- Run history in 'flowsession' entity. Only definition records (type=1) returned\n" +
-            "- Use get_workflows for category=0 workflows")]
+            "- Use get_workflows for classic (category=0) workflows")]
         public CallToolResult get_flows(
             [Description("Flow GUID. Empty = list mode. With action='list': detail + runs. With action='runs': run history.")] string flow_id = "",
             [Description("'list' (default) or 'runs'. 'runs' requires flow_id.")] string action = "list",
@@ -65,7 +64,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult($"Error: Invalid action '{action?.Trim()}'. Use 'list' or 'runs'.");
 
             if (normalizedAction == "runs" && string.IsNullOrWhiteSpace(flow_id))
-                return ErrorResult("Error: action='runs' requires flow_id.");
+                return ErrorResult(
+                    "Error: action='runs' requires flow_id.\n" +
+                    "Provide a valid flow GUID as flow_id.");
 
             if (!string.IsNullOrWhiteSpace(status))
             {
@@ -216,9 +217,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (result.Entities.Count == 0)
-                return ErrorResult($"Error: Cloud flow '{flowId}' not found (or not a cloud flow).");
-
-            var entity = result.Entities[0];
+                return ErrorResult(
+                    $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
+                     "Use get_flows without flow_id to list available flows.");
             var entry = MapFlowEntry(entity);
             entry.Description = NullIfEmpty(entity.GetAttributeValue<string>("description"));
             entry.CreatedOn = entity.GetAttributeValue<DateTime?>("createdon")?.ToString("yyyy-MM-dd");
@@ -284,7 +285,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // First get the flow name
             var flowName = GetFlowName(flowId);
             if (flowName == null)
-                return ErrorResult($"Error: Cloud flow '{flowId}' not found (or not a cloud flow).");
+                return ErrorResult(
+                    $"Error: Cloud flow '{flowId}' not found (or not a cloud flow).\n" +
+                     "Use get_flows without flow_id to list available flows.");
 
             var fromDate = DateTime.UtcNow.AddMinutes(-minutesAgo).ToString("o");
             var statusCondition = BuildStatusFilter(statusFilter);
