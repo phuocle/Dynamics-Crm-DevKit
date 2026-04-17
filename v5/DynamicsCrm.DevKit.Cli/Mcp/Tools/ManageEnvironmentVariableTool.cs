@@ -34,18 +34,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "List, get, create, update, delete, or clear Dataverse environment variables.\n\n" +
 
-            "SIX ACTIONS:\n" +
-            "- action='list': List all variables with name, type, default/current value. Optional: solution_name, max_records\n" +
-            "- action='detail': Get detailed info for a single variable. Requires variable_name\n" +
-            "- action='create': Create a new variable definition. Requires variable_name + display_name + type. Optional: default_value, value, description, solution_name\n" +
-            "- action='update': Update an existing variable. Requires variable_name. Optional: display_name, default_value, value, description\n" +
-            "- action='delete': Permanently delete the variable definition and its value. Requires variable_name. WARNING: cannot be undone\n" +
-            "- action='clear': Delete the current value record only (reverts to default). Requires variable_name\n\n" +
+            "ACTIONS:\n" +
+            "- action='list': List all variables (name, type, default/current value). Optional: solution_name, max_records\n" +
+            "- action='detail': Get details for one variable. Requires variable_name\n" +
+            "- action='create': Create variable definition. Requires variable_name + display_name + type. Optional: default_value, value, description, solution_name\n" +
+            "- action='update': Update existing variable. Requires variable_name. Optional: display_name, default_value, value, description\n" +
+            "- action='delete': Permanently delete definition + current value. Requires variable_name. WARNING: irreversible\n" +
+            "- action='clear': Delete current value only (reverts to default). Requires variable_name\n\n" +
 
             "TIPS:\n" +
             "- Current value overrides default value\n" +
             "- Type cannot be changed after creation\n" +
-            "- Environment variables typically do not require publishing")]
+            "- Does not require publishing in most cases")]
         public CallToolResult manage_environment_variable(
             [Description(
                 "The action to perform: 'list', 'detail', 'create', 'update', 'delete', or 'clear'."
@@ -55,9 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Required for detail, create, update, delete, and clear. Leave empty for list."
             )] string variable_name = "",
             [Description(
-                "Filter variables by solution unique name (list mode only). " +
-                "Solution to add definition to (create only). " +
-                "Leave empty to list all environment variables in the environment."
+                "Solution unique name. Filters results (list only) or adds definition to solution (create only). Leave empty for all."
             )] string solution_name = "",
             [Description(
                 "Maximum number of variables to return in list mode. Default is 50."
@@ -250,22 +248,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(displayName))
                 return ErrorResult(
-                    $"[Error] Cannot create environment variable '{variableName}':\n" +
-                    "  display_name is required when creating a new variable.\n" +
-                    "Tip: Use manage_environment_variable with action='list' to check if the variable already exists.");
+                    $"Error: Cannot create environment variable '{variableName}'.\n" +
+                    "Required for action='create': display_name (human-readable label).");
 
             if (string.IsNullOrWhiteSpace(type))
                 return ErrorResult(
-                    $"[Error] Cannot create environment variable '{variableName}':\n" +
-                    "  type is required when creating a new variable.\n" +
-                    "  Valid types: string, number, boolean, json, datasource, secret\n" +
-                    "Tip: Use manage_environment_variable with action='list' to check if the variable already exists.");
+                    $"Error: Cannot create environment variable '{variableName}'.\n" +
+                    "Required for action='create': type. Valid values: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'.");
 
             var typeValue = MapType(type.Trim().ToLowerInvariant());
             if (typeValue < 0)
                 return ErrorResult(
-                    $"[Error] Invalid type '{type}'.\n" +
-                    "Valid types: string, number, boolean, json, datasource, secret");
+                    $"Error: Invalid type '{type}'.\n" +
+                    "Valid values: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'.");
 
             var newDef = new Entity("environmentvariabledefinition")
             {
