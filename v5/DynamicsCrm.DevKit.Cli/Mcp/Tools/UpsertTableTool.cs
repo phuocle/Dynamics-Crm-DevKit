@@ -33,30 +33,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertTableResult)),
         Description(
-            "Create a new custom Dataverse entity (table) or update an existing one. " +
-            "Auto-detects create vs update. Auto-creates primary name attribute on create.\n\n" +
-
-            "CREATE MODE (entity does not exist):\n" +
-            "- display_name, display_collection_name, and solution_name are REQUIRED\n" +
-            "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
-            "- If entity_name has NO prefix (no underscore), the tool auto-resolves the prefix from solution_name's publisher\n" +
-            "- table_type: 'Standard' (default) or 'Elastic' (Cosmos DB). ownership_type: 'User' (default) or 'Organization'\n" +
-            "- For activity entities: set is_activity=true (auto-sets User ownership, notes, Subject primary attr)\n" +
-            "- After creation: upsert_column to add columns, build_form_xml + manage_form to customize the form\n\n" +
-
-            "UPDATE MODE (entity already exists):\n" +
-            "- Only entity_name is required to identify the entity\n" +
-            "- Only provided parameters are updated, omitted ones keep current values\n" +
-            "- Immutable properties (ownership_type, table_type, is_activity, has_notes, primary attribute) are ignored with warnings\n\n" +
-
-            "IRREVERSIBLE OPTIONS (manage via Power Apps UI — not exposed here):\n" +
-            "- Activities, Feedback, Change Tracking, Business Process Flows, Connections, Queues, Sending Email\n" +
-            "- These options CANNOT be turned off once enabled, so they must be set deliberately via the UI\n\n" +
-
+            "Create or update a Dataverse table (auto-detects create vs update by entity lookup).\n\n" +
+            "CREATE (entity absent): display_name + display_collection_name + solution_name required. " +
+            "Auto-creates primary name attribute. Next: upsert_column → build_form_xml + manage_form.\n" +
+            "UPDATE (entity exists): only entity_name required; omitted params keep current values; " +
+            "immutable props (ownership_type, table_type, is_activity, has_notes, primary attribute) ignored with warnings.\n\n" +
+            "Note: activities, feedback, change tracking, BPF, connections, queues — " +
+            "irreversible once enabled; manage via Power Apps UI only.\n\n" +
             "TIPS:\n" +
-            "- Entity name MUST include publisher prefix (e.g., 'new_project')\n" +
-            "- Or provide just the name (e.g., 'project') with solution_name — prefix is auto-resolved from the solution's publisher\n" +
-            "- Use get_tables to inspect existing entity metadata before updating")]
+            "- entity_name must include publisher prefix (e.g., 'new_project'); " +
+            "or provide solution_name to auto-resolve prefix.\n" +
+            "- is_activity=true: forces User ownership, enables notes, sets Subject as primary attr.\n" +
+            "- Use get_tables to inspect existing table metadata before updating.")]
         public CallToolResult upsert_table(
             [Description("Logical name with publisher prefix (e.g., 'new_project'). Or just the name (e.g., 'project') — prefix is auto-resolved from solution_name's publisher.")] string entity_name,
             [Description("Singular display name (e.g., 'Project'). Required for create.")] string display_name = "",
@@ -66,9 +54,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Primary name attribute logical name. Auto-derived if omitted. Create only.")] string primary_attribute_name = "",
             [Description("Display name for primary attribute. Default: 'Name'. Create only.")] string primary_attribute_display_name = "Name",
             [Description("Max length of primary attribute (1-850). Default: 100. Create only.")] int primary_attribute_max_length = 100,
-            [Description("'User' (default, supports sharing/assigning) or 'Organization' (no row-level security). Create only — cannot be changed after creation.")] string ownership_type = "User",
-            [Description("Table type: 'Standard' (default), 'Elastic' (for high-volume/IoT scenarios with Azure Cosmos DB). Elastic tables have limited charting support. Create only.")] string table_type = "Standard",
-            [Description("Create as activity entity. Default: false. When true, sets ownership to User, enables notes, and uses 'Subject' as primary attribute. Create only — cannot be changed after creation.")] bool is_activity = false,
+            [Description("'User' (default) or 'Organization'. Create only — immutable.")] string ownership_type = "User",
+            [Description("'Standard' (default) or 'Elastic' (Azure Cosmos DB; no chart support). Create only — immutable.")] string table_type = "Standard",
+            [Description("Activity entity flag. When true: forces User ownership, enables notes, sets Subject primary attr. Create only — immutable.")] bool is_activity = false,
             [Description("Enable notes. Default: false. Create only — cannot be changed after creation.")] bool has_notes = false,
             [Description("Enable quick create form. Default: false (create). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
             [Description("Enable duplicate detection. Default: false (create). Omit to keep current value (update).")] bool? is_duplicate_detection_enabled = null,
@@ -78,7 +66,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return ErrorResult(
+                    "Error: entity_name is required.\n" +
+                    "Provide the logical name with publisher prefix (e.g., 'new_project'), " +
+                    "or just the name (e.g., 'project') with solution_name to auto-resolve the prefix.");
 
             // Sanitize entity_name: remove spaces (keep original casing for schema name derivation)
             var originalEntityName = entity_name.Trim().Replace(" ", "");
@@ -178,11 +169,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // --- CREATE MODE ---
             // Validate required create fields
             if (string.IsNullOrWhiteSpace(display_name))
-                return ErrorResult("Error: display_name is required when creating a new entity.");
+                return ErrorResult(
+                    "Error: display_name is required when creating a new entity.\n" +
+                    "Required for create: display_name, display_collection_name, solution_name.");
             if (string.IsNullOrWhiteSpace(display_collection_name))
-                return ErrorResult("Error: display_collection_name is required when creating a new entity.");
+                return ErrorResult(
+                    "Error: display_collection_name is required when creating a new entity.\n" +
+                    "Required for create: display_name, display_collection_name, solution_name.");
             if (string.IsNullOrWhiteSpace(solution_name))
-                return ErrorResult("Error: solution_name is required when creating a new entity.");
+                return ErrorResult(
+                    "Error: solution_name is required when creating a new entity.\n" +
+                    "Required for create: display_name, display_collection_name, solution_name.\n" +
+                    "Read docs://schema_tools_guide for prefix resolution and solution requirements.");
 
             var prefix = entity_name.Substring(0, underscoreIndex);
             var namePart = entity_name.Substring(underscoreIndex + 1);
