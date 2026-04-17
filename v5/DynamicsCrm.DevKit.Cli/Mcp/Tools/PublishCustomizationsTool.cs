@@ -29,22 +29,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
-            "Publish Dataverse customizations to make metadata changes visible to users. " +
-            "Required after creating/updating entities, attributes, forms, views, option sets, or relationships.\n\n" +
+            "Publish Dataverse customizations to make metadata changes visible. " +
+            "Required after changes to entities, attributes, forms, views, option sets, or relationships.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- After ANY metadata change via execute_webapi or upsert_* tools (if auto_publish was false)\n" +
-            "- When user reports 'I made changes but they are not showing up'\n\n" +
+            "- After upsert_*/execute_webapi metadata changes (if auto_publish was false)\n" +
+            "- When user reports changes not showing up\n\n" +
 
             "TIPS:\n" +
-            "- Publish specific entities when possible (faster than publish all)\n" +
+            "- Publish specific entities for faster execution than PublishAll\n" +
             "- PublishAll can take 30+ seconds on large environments\n" +
-            "- Idempotent — publishing already-published changes is harmless")]
+            "- Idempotent — safe to republish already-published changes")]
         public CallToolResult publish_customizations(
             [Description(
-                "Comma-separated entity logical names to publish (e.g., 'account,contact,lead'). " +
-                "Leave empty to publish ALL customizations. " +
-                "Use specific entities when possible for faster execution."
+                "Comma-separated entity logical names (e.g., 'account,contact'). Empty = publish ALL customizations."
             )] string entities = "",
             [Description(
                 "Also publish global option sets. Only applies when entities is specified. " +
@@ -70,7 +68,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (entitiesProvided && entityList.Count == 0)
                 {
-                    return ErrorResult("[Error] Publish failed\nMessage: No valid entity names found in the 'entities' parameter. Provide comma-separated logical names (e.g., 'account,contact') or leave empty for PublishAll.");
+                    return ErrorResult(
+                        "Error: No valid entity names found after parsing the 'entities' parameter.\n" +
+                        "Valid format: comma-separated logical names (e.g., 'account,contact,lead') or leave empty to publish all customizations.");
                 }
 
                 if (_options.DryRun)
@@ -136,8 +136,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sw.Stop();
                 var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
                 var errorMsg = entitiesProvided
-                    ? $"[Error] Publish failed\nEntities requested: {entities.Trim()}\nNONE of the entities were published (Dataverse rejects the entire batch if any entity is invalid).\nMessage: {ex.Message}"
-                    : $"[Error] Publish failed\nMessage: {ex.Message}";
+                    ? $"Error: Publish failed for entities '{entities.Trim()}'.\n" +
+                      $"Note: Dataverse rejects the entire batch if any entity name is invalid — verify logical names via get_tables.\n" +
+                      $"Details: {ex.Message}"
+                    : $"Error: PublishAll failed.\n" +
+                      $"Details: {ex.Message}";
                 return ErrorResult(errorMsg);
             }
         }
