@@ -1,1 +1,88 @@
----ntrigger: always_onn---nn# DynamicsCrm.DevKit - AI Agent Core Rulesnn> **Purpose**: Supplementary rules for AI agents. Primary project context is in `AGENTS.md`.nn---nn## Communication Protocolnn- **Start every response with**: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` (based on user's local time)n- **End every response with**: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`nn---nn## User Timezone (for greeting)nn- **Timezone**: Vietnam (Asia/Ho_Chi_Minh, UTC+7)n- **Greeting mapping**: morning (5h-11h), noon (11h-13h), afternoon (13h-17h), evening (17h-21h), night (21h-5h)n- **How to determine current time**: Run `date +"%H"` in the terminal — this returns the user's **local time** (already Vietnam time). Use the hour value directly with the greeting mapping above. Do NOT add 7 hours — the system clock is already in the correct timezone.n- **Build start/end times**: Use the actual timestamp when the command was executed (from terminal output or system), not assumed time. If unknown, omit or use "N/A".nn---nn## PowerShell Commands (Windows Only)nn> [!CAUTION]n> This project runs on **Windows with PowerShell**. Unix/Bash commands do NOT work here. Always use PowerShell equivalents.nn### Forbidden Unix Commands -> PowerShell Equivalentsnn| Forbidden (Unix/Bash) | Use Instead (PowerShell) |n|---|---|n| `grep "pattern" file` | `Select-String -Pattern "pattern" -Path file` |n| `grep -r "pattern" .` | `Get-ChildItem -Recurse \| Select-String "pattern"` |n| `ls` | `Get-ChildItem` |n| `cat file` | `Get-Content file` |n| `find . -name "*.cs"` | `Get-ChildItem -Recurse -Filter "*.cs"` |n| `rm -rf folder` | `Remove-Item -Recurse -Force folder` |n| `touch file.txt` | `New-Item -ItemType File file.txt` |n| `mkdir -p path` | `New-Item -ItemType Directory -Force path` |n| `cmd1 && cmd2` | `cmd1 ; cmd2` (or run separately) |n| `<<'EOF'` heredoc | Use `@" ... "@` here-string or separate lines |n| `which devkit` | `Get-Command devkit` |n| `export VAR=value` | `$env:VAR = "value"` |nn---nn## Git Operations (PowerShell)nn> [!IMPORTANT]n> This project runs on **Windows with PowerShell**. When performing git operations, you **MUST** use PowerShell-compatible syntax. Bash syntax will fail.nn**Rules**:n- Do NOT use `&&` to chain commands — use `;` or run commands separatelyn- Do NOT use heredoc `<<'EOF'` — it is bash-only syntaxn- For multi-line commit messages, use multiple `-m` flags: `git commit -m "title" -m "body"`n- Always run `git add` and `git commit` as **separate commands**, not chainedn- **CRLF Warning**: Always append `2>$null` to `git add` to suppress the `"LF will be replaced by CRLF"` warningnn**Example**:nn```powershelln# Step 1: Stage files (2>$null suppresses CRLF warning on Windows)ngit add "file1.md" "file2.ps1" 2>$nullnn# Step 2: Commit (separate command)ngit commit -m "Short summary of changes" -m "Longer description of what was changed and why."n```nn---nn## MCP Configuration (Per IDE)nnThe DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations. Each IDE stores MCP config in a different location:nn| IDE | MCP Config File |n|---|---|n| **Antigravity** | `C:\Users\p\.gemini\antigravity\mcp_config.json` |n| **VS Code** | `.vscode/mcp.json` |nn> [!IMPORTANT]n> When updating MCP config in one IDE, you **MUST** sync the changes to all other IDEs. The MCP server name and args should be identical across all IDEs (only the JSON format may differ per IDE).nn### MCP Sync Rulesnn1. After updating MCP config in any IDE, copy the equivalent config to the other IDE locationsn2. VS Code config is in the workspace (`.vscode/mcp.json`)n3. Antigravity config is at a global user-level path: `C:\Users\p\.gemini\antigravity\mcp_config.json`n4. The `Sync-AI-Config.ps1` script handles rules/workflows sync but **MCP config must be synced manually** due to different JSON formats per IDEn
+# DynamicsCrm.DevKit - AI Agent Core Rules
+
+> **Purpose**: Supplementary rules for AI agents. Primary project context is in `AGENTS.md`.
+
+---
+
+## Communication Protocol
+
+- **Start every response with**: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` (based on user's local time)
+- **End every response with**: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
+
+---
+
+## User Timezone (for greeting)
+
+- **Timezone**: Vietnam (Asia/Ho_Chi_Minh, UTC+7)
+- **Greeting mapping**: morning (5h-11h), noon (11h-13h), afternoon (13h-17h), evening (17h-21h), night (21h-5h)
+- **How to determine current time**: Run `date +"%H"` in the terminal — this returns the user's **local time** (already Vietnam time). Use the hour value directly with the greeting mapping above. Do NOT add 7 hours — the system clock is already in the correct timezone.
+- **Build start/end times**: Use the actual timestamp when the command was executed (from terminal output or system), not assumed time. If unknown, omit or use "N/A".
+
+---
+
+## PowerShell Commands (Windows Only)
+
+> [!CAUTION]
+> This project runs on **Windows with PowerShell**. Unix/Bash commands do NOT work here. Always use PowerShell equivalents.
+
+### Forbidden Unix Commands -> PowerShell Equivalents
+
+| Forbidden (Unix/Bash) | Use Instead (PowerShell) |
+|---|---|
+| `grep "pattern" file` | `Select-String -Pattern "pattern" -Path file` |
+| `grep -r "pattern" .` | `Get-ChildItem -Recurse \| Select-String "pattern"` |
+| `ls` | `Get-ChildItem` |
+| `cat file` | `Get-Content file` |
+| `find . -name "*.cs"` | `Get-ChildItem -Recurse -Filter "*.cs"` |
+| `rm -rf folder` | `Remove-Item -Recurse -Force folder` |
+| `touch file.txt` | `New-Item -ItemType File file.txt` |
+| `mkdir -p path` | `New-Item -ItemType Directory -Force path` |
+| `cmd1 && cmd2` | `cmd1 ; cmd2` (or run separately) |
+| `<<'EOF'` heredoc | Use `@" ... "@` here-string or separate lines |
+| `which devkit` | `Get-Command devkit` |
+| `export VAR=value` | `$env:VAR = "value"` |
+
+---
+
+## Git Operations (PowerShell)
+
+> [!IMPORTANT]
+> This project runs on **Windows with PowerShell**. When performing git operations, you **MUST** use PowerShell-compatible syntax. Bash syntax will fail.
+
+**Rules**:
+- Do NOT use `&&` to chain commands — use `;` or run commands separately
+- Do NOT use heredoc `<<'EOF'` — it is bash-only syntax
+- For multi-line commit messages, use multiple `-m` flags: `git commit -m "title" -m "body"`
+- Always run `git add` and `git commit` as **separate commands**, not chained
+- **CRLF Warning**: Always append `2>$null` to `git add` to suppress the `"LF will be replaced by CRLF"` warning
+
+**Example**:
+
+```powershell
+# Step 1: Stage files (2>$null suppresses CRLF warning on Windows)
+git add "file1.md" "file2.ps1" 2>$null
+
+# Step 2: Commit (separate command)
+git commit -m "Short summary of changes" -m "Longer description of what was changed and why."
+```
+
+---
+
+## MCP Configuration (Per IDE)
+
+The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations. Each IDE stores MCP config in a different location:
+
+| IDE | MCP Config File |
+|---|---|
+| **Antigravity** | `C:\Users\p\.gemini\antigravity\mcp_config.json` |
+| **VS Code** | `.vscode/mcp.json` |
+
+> [!IMPORTANT]
+> When updating MCP config in one IDE, you **MUST** sync the changes to all other IDEs. The MCP server name and args should be identical across all IDEs (only the JSON format may differ per IDE).
+
+### MCP Sync Rules
+
+1. After updating MCP config in any IDE, copy the equivalent config to the other IDE locations
+2. VS Code config is in the workspace (`.vscode/mcp.json`)
+3. Antigravity config is at a global user-level path: `C:\Users\p\.gemini\antigravity\mcp_config.json`
+4. The `Sync-AI-Config.ps1` script handles rules/workflows sync but **MCP config must be synced manually** due to different JSON formats per IDE
