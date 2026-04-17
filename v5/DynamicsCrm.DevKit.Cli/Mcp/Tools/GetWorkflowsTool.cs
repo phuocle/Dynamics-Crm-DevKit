@@ -33,21 +33,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TWO MODES:\n" +
             "- workflow_id EMPTY: list workflows matching filters\n" +
-            "- workflow_id PROVIDED: full detail for a single workflow (description, solution, dependencies)\n\n" +
+            "- workflow_id PROVIDED: full detail for a single workflow\n\n" +
 
-            "SCOPE: Classic workflows only (category=0). Use get_business_rules, get_custom_apis, get_business_process_flows, get_flows for others.\n\n" +
+            "SCOPE: Classic workflows only. Use get_business_rules, get_custom_apis, get_business_process_flows, get_flows for others.\n\n" +
 
-            "KEY FIELDS:\n" +
-            "- triggeronupdateattributelist: fields triggering on Update. 'statecode' = status change, 'ownerid' = assignment\n" +
-            "- mode: 0=Background (async), 1=Realtime (sync). Stages (20=Pre, 40=Post) only for Realtime\n" +
-            "- scope: 1=User, 2=BU, 3=Parent:ChildBU, 4=Org. runas: 0=Owner, 1=Caller\n\n" +
+            "KEY OUTPUT FIELDS:\n" +
+            "- triggeronupdateattributelist: update-trigger fields ('statecode'=status change, 'ownerid'=assignment)\n" +
+            "- mode: Background (async, always Post) or Realtime (sync, Pre/Post stages)\n" +
+            "- scope: User/BU/Parent:ChildBU/Org. runas: Owner/Caller\n\n" +
 
             "WHEN TO USE:\n" +
             "- Check if a field triggers any workflow: trigger_field + entity_name\n" +
-            "- Find realtime/synchronous workflows: mode='realtime'\n\n" +
+            "- Find synchronous workflows: mode='realtime'\n\n" +
 
             "TIPS:\n" +
-            "- Background workflows always run Post-operation (async)\n" +
             "- Realtime Pre-operation can cancel/rollback the operation\n" +
             "- If name_filter matches exactly 1 workflow, auto-switches to detail mode")]
         public CallToolResult get_workflows(
@@ -96,7 +95,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 objectTypeCode = GetObjectTypeCode(entity_name.Trim().ToLowerInvariant());
                 if (objectTypeCode == null)
-                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
+                    return ErrorResult(
+                        $"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found.\n" +
+                        $"Use get_tables to discover valid entity logical names.\n" +
+                        $"Read docs://server_logic_guide for entity scoping and filtering.");
             }
 
             try
