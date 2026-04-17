@@ -17,7 +17,7 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 >
 > TODO (not yet optimized):
 >   manage_form,
->   build_form_xml, build_sitemap_xml,
+>   build_form_xml,
 >   upsert_table, upsert_relationship, manage_sitemap,
 >   upsert_column
 >
