@@ -32,23 +32,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertColumnResult)),
         Description(
-            "Create a new column or update an existing column (attribute) on a Dataverse entity. " +
-            "Auto-detects create vs update. Supports: string, memo, integer, bigint, decimal, money, float, boolean, " +
-            "datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
+            "Create or update a Dataverse column (attribute). Auto-detects create vs update. " +
+            "Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
-            "CREATE MODE (attribute does not exist):\n" +
-            "- attribute_type and display_name are REQUIRED\n" +
-            "- For lookup: creates 1:N relationship automatically\n" +
-            "- For customer: creates polymorphic lookup (account+contact)\n\n" +
+            "CREATE (attribute does not exist): attribute_type + display_name required.\n" +
+            "- lookup: auto-creates 1:N relationship. Required: lookup_target\n" +
+            "- customer: polymorphic lookup (account+contact), no lookup_target needed\n" +
+            "- picklist/multipicklist: provide options JSON or global_optionset_name\n\n" +
 
-            "UPDATE MODE (attribute already exists):\n" +
-            "- attribute_type is IGNORED (cannot change type after creation)\n" +
-            "- Only provided parameters are updated, omitted ones keep current values\n" +
-            "- For picklist: use add_options, update_options, delete_options\n\n" +
+            "UPDATE (attribute already exists): attribute_type ignored (immutable). Omit params to keep values.\n" +
+            "- picklist/multipicklist: use add_options, update_options, delete_options\n\n" +
 
             "TIPS:\n" +
-            "- Attribute name MUST include publisher prefix (e.g., 'new_priority')\n" +
-            "- After creation, use build_form_xml to add the new field to a form")]
+            "- attribute_name must include publisher prefix (e.g., 'new_priority')\n" +
+            "- After create, use build_form_xml to add the column to a form")]
         public CallToolResult upsert_column(
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
             [Description("Logical name with publisher prefix (e.g., 'new_priority').")] string attribute_name,
@@ -60,9 +57,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("For numeric types: minimum value.")] double? min_value = null,
             [Description("For numeric types: maximum value.")] double? max_value = null,
             [Description("For decimal/money/float: decimal places (0-10, default 2; money max is 4). Omit to keep current value on update.")] int precision = -1,
-            [Description("For string: 'Text','Email','Url','Phone','TextArea','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
+            [Description("For string: 'Text','Email','Url','Phone','TextArea','TickerSymbol','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
             [Description("For datetime: 'UserLocal' (default),'DateOnly','TimeZoneIndependent'. DateOnly behavior forces DateOnly format.")] string behavior = "",
-            [Description("For money: 0 (Attribute, default), 1 (Organization), 2 (Currency). Controls which precision setting governs the column at runtime.")] int precision_source = -1,
+            [Description("For money: 0 (Attribute, default), 1 (Organization), 2 (Currency).")] int precision_source = -1,
             [Description("For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
             [Description("For picklist (create): existing global option set name.")] string global_optionset_name = "",
             [Description("For lookup (create): target entity. Comma-separated for polymorphic.")] string lookup_target = "",
@@ -126,11 +123,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var underscoreIndex = attribute_name.IndexOf('_');
             if (underscoreIndex < 1 || underscoreIndex >= attribute_name.Length - 1)
                 return ErrorResult(
-                    $"[Error] Cannot create attribute\n" +
-                    $"Entity: {entity_name}\n" +
-                    $"AttributeName: {attribute_name}\n" +
-                    $"Message: Attribute name must include a publisher prefix (e.g., 'new_priority', 'cr_priority')\n" +
-                    $"Tip: Check solution publisher prefix and use it as attribute name prefix");
+                    $"Error: attribute_name must include a publisher prefix (e.g., 'new_priority', 'cr_priority').\n" +
+                    $"Received: '{attribute_name}' on entity '{entity_name}'.\n" +
+                    $"Read docs://schema_tools_guide for column naming conventions and prefix rules.");
 
             // Derive schema name from display_name: remove spaces and dashes first (preserving original casing), then remove remaining non-alphanumeric characters
             var prefix = attribute_name.Substring(0, underscoreIndex);
@@ -142,8 +137,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var reqLevel = ParseRequiredLevel(required_level);
             if (!reqLevel.HasValue)
                 return ErrorResult(
-                    $"[Error] Invalid required_level: '{required_level}'\n" +
-                    $"Valid values: 'None', 'Recommended', 'Required'");
+                    $"Error: Invalid required_level '{required_level}'.\n" +
+                    $"Valid values: 'None' (default), 'Recommended', 'Required'.");
 
             try
             {
@@ -182,8 +177,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, solution_name, auto_publish);
                     default:
                         return ErrorResult(
-                            $"[Error] Unknown attribute_type: '{attribute_type}'\n" +
-                            $"Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file");
+                            $"Error: Unknown attribute_type '{attribute_type}'.\n" +
+                            $"Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n" +
+                            $"Read docs://schema_tools_guide for column type matrix and usage per type.");
                 }
             }
             catch (Exception ex)
@@ -508,7 +504,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (DateTimeBehavior)null
             };
             if (result == null)
-                error = $"[Error] Invalid behavior: '{behavior}'\nValid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'";
+                error = $"Error: Invalid behavior '{behavior}'.\nValid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.";
             return result ?? DateTimeBehavior.UserLocal;
         }
 
@@ -519,11 +515,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(lookupTarget))
                 return ErrorResult(
-                    $"[Error] lookup_target is required for lookup type\n" +
-                    $"Entity: {entityName}\n" +
-                    $"AttributeName: {logicalName}\n" +
-                    $"Tip: Specify the target entity logical name (e.g., 'contact', 'account'). " +
-                    $"For polymorphic lookup, use comma-separated: 'account,contact,lead'");
+                    $"Error: lookup_target is required for lookup type.\n" +
+                    $"Provide a target entity logical name (e.g., 'contact'). For polymorphic, comma-separate: 'account,contact,lead'.\n" +
+                    $"Use get_tables to find valid entity logical names.");
 
             var targets = lookupTarget.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(t => t.Trim().ToLowerInvariant())
@@ -815,17 +809,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var (parsedOptions, parseError) = ParseOptions(optionsJson);
                 if (parseError != null)
                     return ErrorResult(
-                        $"[Error] Invalid options JSON for {typeName}\n" +
-                        $"Entity: {entityName}\n" +
-                        $"AttributeName: {logicalName}\n" +
-                        $"{parseError}\n" +
-                        $"Tip: options format: [{{\"label\":\"Low\",\"value\":100000000}},{{\"label\":\"High\",\"value\":100000001}}]");
+                        $"Error: Invalid options JSON for {typeName} — {parseError}.\n" +
+                        $"Expected format: [{{\"label\":\"Low\",\"value\":100000000}},{{\"label\":\"High\",\"value\":100000001}}].\n" +
+                        $"Read docs://schema_tools_guide for picklist option formats and global option set usage.");
                 if (parsedOptions == null || parsedOptions.Count == 0)
                     return ErrorResult(
-                        $"[Error] Either 'options' or 'global_optionset_name' is required for {typeName}\n" +
-                        $"Entity: {entityName}\n" +
-                        $"AttributeName: {logicalName}\n" +
-                        $"Tip: options format: [{{\"label\":\"Low\",\"value\":100000000}},{{\"label\":\"High\",\"value\":100000001}}]");
+                        $"Error: options or global_optionset_name is required for {typeName}.\n" +
+                        $"Provide options as JSON array or set global_optionset_name to an existing option set name.\n" +
+                        $"Read docs://schema_tools_guide for picklist option formats and global option set usage.");
 
                 var optionSet = new OptionSetMetadata { IsGlobal = false, OptionSetType = OptionSetType.Picklist };
                 foreach (var opt in parsedOptions)
@@ -1070,7 +1061,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (StringFormatName)null
             };
             if (result == null)
-                error = $"[Error] Invalid format: '{format}'\nValid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'";
+                error = $"Error: Invalid format '{format}'.\nValid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'.";
             return result ?? StringFormatName.Text;
         }
 
@@ -1089,7 +1080,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => null
             };
             if (result == null)
-                error = $"[Error] Invalid format for integer: '{format}'\nValid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'";
+                error = $"Error: Invalid format for integer '{format}'.\nValid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'.";
             return result ?? IntegerFormat.None;
         }
 
@@ -1105,7 +1096,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (MemoFormatName)null
             };
             if (result == null)
-                error = $"[Error] Invalid format for memo: '{format}'\nValid values: 'Text' (default), 'RichText'";
+                error = $"Error: Invalid format for memo '{format}'.\nValid values: 'Text' (default), 'RichText'.";
             return result ?? MemoFormatName.Text;
         }
 
@@ -1141,7 +1132,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 msg.Contains("duplicate", StringComparison.OrdinalIgnoreCase))
             {
                 return ErrorResult(
-                    $"[Error] Attribute '{attributeName}' already exists on entity '{entityName}'\n" +
+                    $"Error: Attribute '{attributeName}' already exists on entity '{entityName}'.\n" +
                     $"Message: {msg}\n" +
                     $"Tip: Use get_tables to inspect existing attributes, or choose a different name");
             }
@@ -1151,7 +1142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                  msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase)))
             {
                 return ErrorResult(
-                    $"[Error] Entity '{entityName}' not found\n" +
+                    $"Error: Entity '{entityName}' not found.\n" +
                     $"Message: {msg}\n" +
                     $"Tip: Use get_tables to find the correct entity logical name");
             }
@@ -1161,7 +1152,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                  msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase)))
             {
                 return ErrorResult(
-                    $"[Error] Solution '{solutionName}' not found\n" +
+                    $"Error: Solution '{solutionName}' not found.\n" +
                     $"Message: {msg}\n" +
                     $"Tip: Use get_solution_components to find valid solution names");
             }
@@ -1211,8 +1202,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var newLevel = ParseRequiredLevel(requiredLevel);
                     if (!newLevel.HasValue)
                         return ErrorResult(
-                            $"[Error] Invalid required_level: '{requiredLevel}'\n" +
-                            $"Valid values: 'None', 'Recommended', 'Required'");
+                            $"Error: Invalid required_level '{requiredLevel}'.\n" +
+                            $"Valid values: 'None' (default), 'Recommended', 'Required'.");
                     var oldLevel = metadata.RequiredLevel?.Value.ToString() ?? "None";
                     metadata.RequiredLevel = new AttributeRequiredLevelManagedProperty(newLevel.Value);
                     changes.Add($"RequiredLevel: {oldLevel} -> {newLevel.Value}");
@@ -1265,8 +1256,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (changes.Count == 0 && optionResults.Count == 0)
                     return ErrorResult(
-                        $"[Error] No changes specified for '{entityName}.{attributeName}'\n" +
-                        "Tip: Provide at least one parameter to update (display_name, required_level, max_length, etc.)");
+                        $"Error: No changes specified for '{entityName}.{attributeName}'.\n" +
+                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find.");
 
                 // --- Publish ---
                 var published = PublishIfNeeded(autoPublish, entityName);
@@ -1318,7 +1309,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     msg.Contains("does not exist", StringComparison.OrdinalIgnoreCase))
                 {
                     return ErrorResult(
-                        $"[Error] Entity or attribute not found: '{entityName}.{attributeName}'\n" +
+                        $"Error: Entity or attribute not found: '{entityName}.{attributeName}'.\n" +
                         $"Message: {msg}\n" +
                         "Tip: Use get_tables to find the correct names");
                 }
