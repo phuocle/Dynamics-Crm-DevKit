@@ -39,16 +39,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(
-            "List and inspect Business Process Flows (BPFs) and their stages. " +
-            "Stored in workflow entity with category=4. Each BPF auto-creates its own Dataverse entity.\n\n" +
+            "List and inspect Business Process Flows (BPFs) and their stages. Each BPF auto-creates its own Dataverse entity.\n\n" +
 
             "TWO MODES:\n" +
-            "- bpf_id EMPTY (and bpf_name matches 0 or 2+): list all BPFs matching filters\n" +
-            "- bpf_id PROVIDED (or bpf_name matches exactly 1): detail with all stages\n\n" +
+            "- bpf_id empty (and bpf_name matches 0 or 2+): list all matching BPFs\n" +
+            "- bpf_id provided (or bpf_name matches exactly 1): detail with all stages\n\n" +
 
             "TIPS:\n" +
-            "- BPFs can span multiple entities (e.g., Lead → Opportunity). Each stage has its own primaryEntity\n" +
-            "- The uniqueName is also the logical name of the BPF's auto-created entity")]
+            "- BPFs can span multiple entities (e.g., Lead → Opportunity); each stage has its own primaryEntity\n" +
+            "- uniqueName is also the logical name of the BPF's auto-created entity")]
         public CallToolResult get_business_process_flows(
             [Description("BPF GUID for full detail. Empty = list mode.")] string bpf_id = "",
             [Description("Filter by name (contains). If exactly 1 match, returns detail.")] string bpf_name = "",
