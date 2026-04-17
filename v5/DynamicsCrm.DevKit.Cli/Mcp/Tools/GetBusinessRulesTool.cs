@@ -39,8 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- Business rules run client-side BEFORE JavaScript form events\n" +
-            "- Scope 'Entity' means the rule runs on ALL forms\n" +
-            "- Stored as workflow records with category=2")]
+            "- Scope 'Entity' means the rule runs on ALL forms")]
         public string get_business_rules(
             [Description(
                 "Entity logical name (lowercase). Use get_tables to discover names."
@@ -57,7 +56,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] int max_records = 50)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return "Error: entity_name is required.";
+                return "Error: entity_name is required.\n" +
+                       "Provide the entity logical name (e.g., 'account', 'contact'). Use get_tables to discover names.";
 
             entity_name = entity_name.Trim().ToLowerInvariant();
 
@@ -90,7 +90,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var objectTypeCode = GetObjectTypeCode(entityName);
                 if (objectTypeCode == null)
-                    return $"Error: Entity '{entityName}' not found.";
+                    return $"Error: Entity '{entityName}' not found.\n" +
+                           $"Use get_tables to find valid entity logical names.";
 
                 var fetchXml = BuildListFetchXml(objectTypeCode.Value, status, maxRecords);
                 var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));

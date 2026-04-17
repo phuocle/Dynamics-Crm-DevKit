@@ -15,17 +15,22 @@ Optimize an MCP tool's `[Description("...")]` attribute to reduce AI token consu
 > Error: /optimize-tool-description requires 1 argument:
 >   1. Tool name (snake_case, e.g., "manage_record")
 >
-> Available tools:
+> TODO (not yet optimized):
 >   get_tables, get_messages, manage_choice, manage_record,
 >   get_solution_components, execute_fetchxml, search_records,
 >   execute_webapi, publish_customizations,
 >   parse_record_url, manage_form, manage_view,
 >   build_form_xml, build_sitemap_xml, get_audit_history,
 >   upsert_table, upsert_relationship, manage_sitemap,
->   upsert_column, manage_environment_variable, get_business_rules,
+>   upsert_column, manage_environment_variable,
 >   get_workflows, get_custom_apis, get_flows,
 >   get_business_process_flows, get_plugins, get_dataverse_commands,
 >   manage_webresource
+>
+> DONE (already optimized):
+>   whoami, manage_role,
+>   get_plugin_trace_logs, get_system_jobs,
+>   get_business_rules
 >
 > Usage: /optimize-tool-description <tool_name>
 > ```
