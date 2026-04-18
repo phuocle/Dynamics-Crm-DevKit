@@ -263,10 +263,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IsAuditEnabled { get; set; }
 
-        [JsonPropertyName("isValidForAdvancedFind")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? IsValidForAdvancedFind { get; set; }
-
         [JsonPropertyName("isQuickCreateEnabled")]
         public bool IsQuickCreateEnabled { get; set; }
 

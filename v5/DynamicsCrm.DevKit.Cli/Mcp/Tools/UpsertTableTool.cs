@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Create or update a Dataverse table (auto-detects create vs update by entity lookup).\n\n" +
             "CREATE (entity absent): display_name + display_collection_name + solution_name required. " +
             "Auto-creates primary name attribute. Next: upsert_column → build_form_xml + manage_form.\n" +
-            "UPDATE (entity exists): only entity_name required. Updatable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_valid_for_advanced_find. All other props are immutable after creation.\n\n" +
+            "UPDATE (entity exists): only entity_name required. Updatable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled. All other props are immutable after creation.\n\n" +
             "CREATE PREFIX CONFIRMATION FLOW:\n" +
             "1. First call (confirmed_prefix empty): tool resolves prefix and returns [PrefixConfirmationRequired] with preview of SchemaName/LogicalName — NOT an error.\n" +
             "2. Ask user to confirm the prefix shown.\n" +
@@ -60,7 +60,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Enable notes. Default: false. Create only — cannot be changed after creation.")] bool has_notes = false,
             [Description("Enable quick create form. Default: false (create, update). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
             [Description("Enable/disable auditing. Default: true (create). Omit to keep current value (update).")] bool? is_audit_enabled = null,
-            [Description("Appear in search results (Dataverse search / Advanced Find). Default: true (create). Omit to keep current value (update).")] bool? is_valid_for_advanced_find = null,
             [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // Validate required fields
@@ -116,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     // Entity exists — go to update mode directly
                 return UpdateExistingEntity(entity_name, checkResponse.EntityMetadata,
                         display_name, display_collection_name, description,
-                        is_quick_create_enabled, is_audit_enabled, is_valid_for_advanced_find,
+                        is_quick_create_enabled, is_audit_enabled,
                         ownership_type, table_type, is_activity, has_notes,
                         primary_attribute_name, primary_attribute_display_name,
                         resolvedSolutionUniqueName ?? solution_name, auto_publish);
@@ -155,7 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- UPDATE MODE ---
                 return UpdateExistingEntity(entity_name, existingEntity,
                     display_name, display_collection_name, description,
-                    is_quick_create_enabled, is_audit_enabled, is_valid_for_advanced_find,
+                    is_quick_create_enabled, is_audit_enabled,
                     ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name,
                     resolvedSolutionUniqueName ?? solution_name, auto_publish);
@@ -310,8 +309,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
                     IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
-                    IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
-                    IsValidForAdvancedFind = new BooleanManagedProperty(is_valid_for_advanced_find ?? true)
+                    IsQuickCreateEnabled = effectiveIsQuickCreateEnabled
                 };
 
                 if (!string.IsNullOrWhiteSpace(description))
@@ -420,7 +418,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     SolutionName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     Published = published,
                     IsAuditEnabled = is_audit_enabled ?? true,
-                    IsValidForAdvancedFind = is_valid_for_advanced_find ?? true,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                     Status = "created"
@@ -456,7 +453,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult UpdateExistingEntity(
             string entityName, EntityMetadata existingMetadata,
             string displayName, string displayCollectionName, string description,
-            bool? isQuickCreateEnabled, bool? isAuditEnabled, bool? isValidForAdvancedFind,
+            bool? isQuickCreateEnabled, bool? isAuditEnabled,
             string ownershipType, string tableType, bool isActivity, bool hasNotes,
             string primaryAttributeName, string primaryAttributeDisplayName,
             string solutionName, bool autoPublish)
@@ -517,14 +514,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     existingMetadata.IsAuditEnabled = new BooleanManagedProperty(isAuditEnabled.Value);
                     changes.Add($"IsAuditEnabled: {oldVal} -> {isAuditEnabled.Value.ToString().ToLowerInvariant()}");
                     structuredChanges["isAuditEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isAuditEnabled.Value.ToString().ToLowerInvariant() };
-                }
-
-                if (isValidForAdvancedFind.HasValue && existingMetadata.IsValidForAdvancedFind?.Value != isValidForAdvancedFind.Value)
-                {
-                    var oldVal = existingMetadata.IsValidForAdvancedFind?.Value == true ? "true" : "false";
-                    existingMetadata.IsValidForAdvancedFind = new BooleanManagedProperty(isValidForAdvancedFind.Value);
-                    changes.Add($"IsValidForAdvancedFind: {oldVal} -> {isValidForAdvancedFind.Value.ToString().ToLowerInvariant()}");
-                    structuredChanges["isValidForAdvancedFind"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isValidForAdvancedFind.Value.ToString().ToLowerInvariant() };
                 }
 
                 // --- Warn for immutable properties passed with non-default values ---
@@ -622,7 +611,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntitySetName = existingMetadata.EntitySetName,
                     Published = published,
                     IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
-                    IsValidForAdvancedFind = existingMetadata.IsValidForAdvancedFind?.Value,
                     IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
                     Changes = structuredChanges.Count > 0 ? structuredChanges : null,
                     Warnings = warnings.Count > 0 ? warnings : null,
