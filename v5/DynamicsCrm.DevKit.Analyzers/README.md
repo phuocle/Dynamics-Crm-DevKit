@@ -1,12 +1,12 @@
 ```text
-  ____                              _           ____                  ____             _  ___ _        _                _                        
- |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_     / \   _ __   __ _| |_   _ _______ _ __ ___ 
+  ____                              _           ____                  ____             _  ___ _        _                _
+ |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_     / \   _ __   __ _| |_   _ _______ _ __ ___
  | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|   / _ \ | '_ \ / _` | | | | |_  / _ \ '__/ __|
  | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ _ / ___ \| | | | (_| | | |_| |/ /  __/ |  \__ \
  |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)_/   \_\_| |_|\__,_|_|\__, /___\___|_|  |___/
-        |___/                         https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss|___/                                   
+        |___/                         https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss|___/
 ```
-# 🔍 DynamicsCrm.DevKit.Analyzers
+# DynamicsCrm.DevKit.Analyzers
 
 A Roslyn-based code analyzer package for Microsoft Dynamics 365 / Power Platform development. It provides compile-time diagnostics to help developers follow best practices and avoid common pitfalls when building plugins, custom workflows, and other CRM customizations.
 
@@ -62,24 +62,24 @@ This analyzer ensures that plugin registrations for `Create`, `CreateMultiple`, 
 **Bad Code:**
 ```csharp
 // ❌ Empty filtering attributes
-[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
+[CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
     filteringAttributes: "",
     stepName: "Pre-Create Account")]
 
 // ❌ All attributes
-[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
-    filteringAttributes: "*", 
+[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
+    filteringAttributes: "*",
     stepName: "Pre-Update Account")]
 ```
 
 **Good Code:**
 ```csharp
 // ✅ Specific attributes
-[CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, 
+[CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous,
     filteringAttributes: "name,accountnumber",
     stepName: "Post-Create Account")]
 // ✅ Specific attributes
-[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, 
+[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
     filteringAttributes: "name,accountnumber",
     stepName: "Pre-Update Account")]
 ```
@@ -149,7 +149,7 @@ Validates that plugin image configurations are compatible with the message and s
 [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name")]
 
-// ❌ Pre-Update cannot have Post-Image  
+// ❌ Pre-Update cannot have Post-Image
 [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous,
     Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "name")]
 ```
@@ -317,7 +317,7 @@ public class MyPlugin : IPlugin
     // ❌ Mutable instance field
     private IOrganizationService _service;
     private IPluginExecutionContext _context;
-    
+
     public void Execute(IServiceProvider serviceProvider)
     {
         // ❌ Assigning to instance field during execution
@@ -333,12 +333,12 @@ public class MyPlugin : IPlugin
 {
     // ✅ Readonly field assigned in constructor (for configuration)
     private readonly string _secureConfig;
-    
+
     public MyPlugin(string unsecure, string secure)
     {
         _secureConfig = secure;
     }
-    
+
     public void Execute(IServiceProvider serviceProvider)
     {
         // ✅ Local variables instead of instance fields
@@ -374,15 +374,15 @@ public class MyPlugin : IPlugin
     public void Execute(IServiceProvider serviceProvider)
     {
         var entities = GetEntities();
-        
+
         // ❌ Using Parallel.ForEach
         Parallel.ForEach(entities, entity => {
             service.Update(entity);
         });
-        
+
         // ❌ Using Task.Run
         Task.Run(() => DoSomething());
-        
+
         // ❌ Using Thread
         var thread = new Thread(() => DoWork());
         thread.Start();
@@ -397,13 +397,13 @@ public class MyPlugin : IPlugin
     public void Execute(IServiceProvider serviceProvider)
     {
         var entities = GetEntities();
-        
+
         // ✅ Sequential processing
         foreach (var entity in entities)
         {
             service.Update(entity);
         }
-        
+
         // ✅ Direct method call
         DoSomething();
     }
@@ -490,7 +490,7 @@ Warns when a plugin is registered on `Retrieve` or `RetrieveMultiple` messages. 
 **Bad Code:**
 ```csharp
 // ❌ Plugin on RetrieveMultiple - runs EVERY time a view is loaded
-[CrmPluginRegistration("RetrieveMultiple", "account", StageEnum.PostOperation, 
+[CrmPluginRegistration("RetrieveMultiple", "account", StageEnum.PostOperation,
     ExecutionModeEnum.Synchronous, "", "RetrieveMultiple Account")]
 public class RetrieveMultipleAccountPlugin : IPlugin { }
 ```
@@ -498,7 +498,7 @@ public class RetrieveMultipleAccountPlugin : IPlugin { }
 **Good Code:**
 ```csharp
 // ✅ Use Create/Update to pre-calculate values instead
-[CrmPluginRegistration("Update", "account", StageEnum.PreOperation, 
+[CrmPluginRegistration("Update", "account", StageEnum.PreOperation,
     ExecutionModeEnum.Synchronous, "revenue", "Calculate Account Rating")]
 public class CalculateAccountRatingPlugin : IPlugin { }
 ```
@@ -691,15 +691,15 @@ public class MyPlugin : IPlugin
     {
         // ❌ File.ReadAllText - blocked in sandbox
         var content = File.ReadAllText("config.txt");
-        
+
         // ❌ File.WriteAllText - blocked in sandbox
         File.WriteAllText("log.txt", "Plugin executed");
-        
+
         // ❌ new FileStream - blocked in sandbox
         using (var stream = new FileStream("data.bin", FileMode.Open))
         {
         }
-        
+
         // ❌ new StreamReader - blocked in sandbox
         using (var reader = new StreamReader("input.txt"))
         {
@@ -717,7 +717,7 @@ public class MyPlugin : IPlugin
         // ✅ Use Dataverse storage instead of files
         var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
         tracingService.Trace("Use tracing instead of file logging");
-        
+
         // ✅ Store data using Note attachments
         var note = new Entity("annotation")
         {
@@ -750,7 +750,7 @@ public class AccountPlugin : IPlugin
         var context = (IPluginExecutionContext)serviceProvider
             .GetService(typeof(IPluginExecutionContext));
         var target = (Entity)context.InputParameters["Target"];
-        
+
         // This update triggers the plugin again!
         var update = new Entity("account", target.Id);
         update["modifiedon"] = DateTime.UtcNow;
@@ -767,12 +767,12 @@ public class AccountPlugin : IPlugin
     {
         var context = (IPluginExecutionContext)serviceProvider
             .GetService(typeof(IPluginExecutionContext));
-        
+
         // ✅ Exit early if this is a recursive call
         if (context.Depth > 1) return;
-        
+
         var target = (Entity)context.InputParameters["Target"];
-        
+
         // Now safe to update
         var update = new Entity("account", target.Id);
         update["modifiedon"] = DateTime.UtcNow;
@@ -799,7 +799,7 @@ This analyzer detects when a `CrmPluginRegistration` attribute uses `PluginType.
 public class MyPlugin : IPlugin
 {
     // ❌ DataSource is empty - will fail at runtime
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", 
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve",
         PluginType.DataProvider, DataSource = "")]
     public void Execute(IServiceProvider serviceProvider) { }
 }
@@ -810,7 +810,7 @@ public class MyPlugin : IPlugin
 public class MyPlugin : IPlugin
 {
     // ✅ DataSource is specified with valid data source name
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", 
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve",
         PluginType.DataProvider, DataSource = "v4_sql_datasource")]
     public void Execute(IServiceProvider serviceProvider) { }
 }
@@ -855,7 +855,7 @@ public class MyPlugin : IPlugin
     public void Execute(IServiceProvider serviceProvider)
     {
         var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-        
+
         try
         {
             tracingService.Trace("Starting operation");
