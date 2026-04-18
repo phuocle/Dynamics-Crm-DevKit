@@ -115,37 +115,37 @@ public class DataverseNamerTests
     // ── Edge / Error cases ────────────────────────────────────────────────────
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void Resolve_EmptyInput_ThrowsArgumentException()
     {
-        DataverseNamer.Resolve("", "new");
+        try { DataverseNamer.Resolve("", "new"); Assert.Fail("Expected ArgumentException"); }
+        catch (ArgumentException) { }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void Resolve_WhitespaceInput_ThrowsArgumentException()
     {
-        DataverseNamer.Resolve("   ", "new");
+        try { DataverseNamer.Resolve("   ", "new"); Assert.Fail("Expected ArgumentException"); }
+        catch (ArgumentException) { }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void Resolve_EmptyPrefix_ThrowsArgumentException()
     {
-        DataverseNamer.Resolve("Project", "");
+        try { DataverseNamer.Resolve("Project", ""); Assert.Fail("Expected ArgumentException"); }
+        catch (ArgumentException) { }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void Resolve_NullInput_ThrowsArgumentException()
     {
-        DataverseNamer.Resolve(null, "new");
+        try { DataverseNamer.Resolve(null!, "new"); Assert.Fail("Expected ArgumentException"); }
+        catch (ArgumentException) { }
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void Resolve_OnlySpecialChars_ThrowsArgumentException()
     {
-        DataverseNamer.Resolve("!@#$%", "new");
+        try { DataverseNamer.Resolve("!@#$%", "new"); Assert.Fail("Expected ArgumentException"); }
+        catch (ArgumentException) { }
     }
 }
