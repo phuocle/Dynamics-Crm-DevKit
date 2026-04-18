@@ -67,5 +67,6 @@
 	  <PackageReference Include="Mono.Cecil" Version="*" />
 	  <PackageReference Include="Newtonsoft.Json" Version="*" />
 	  <PackageReference Include="NUglify" Version="1.21.17" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
 	</ItemGroup>
 </Project>

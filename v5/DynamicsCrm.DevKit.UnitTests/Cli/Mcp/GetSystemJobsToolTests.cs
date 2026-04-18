@@ -41,10 +41,10 @@ public class GetSystemJobsToolTests
 
     // ── Helpers ──────────────────────────────────────────────────────────────
 
-    private static string BuildStatusFilter(string status) =>
+    private static string BuildStatusFilter(string? status) =>
         (string)BuildStatusFilterMethod.Invoke(null, [status])!;
 
-    private static string BuildOperationTypeFilter(string operationType) =>
+    private static string BuildOperationTypeFilter(string? operationType) =>
         (string)BuildOperationTypeFilterMethod.Invoke(null, [operationType])!;
 
     private static string MapOperationType(int value) =>
@@ -59,11 +59,11 @@ public class GetSystemJobsToolTests
     private static string FormatTimeLabel(int minutesAgo) =>
         (string)FormatTimeLabelMethod.Invoke(null, [minutesAgo])!;
 
-    private static string TruncateMessage(string message, int maxLength) =>
-        (string)TruncateMessageMethod.Invoke(null, [message, maxLength])!;
+    private static string? TruncateMessage(string? message, int maxLength) =>
+        (string?)TruncateMessageMethod.Invoke(null, [message, maxLength]);
 
-    private static string NullIfEmpty(string value) =>
-        (string)NullIfEmptyMethod.Invoke(null, [value]);
+    private static string? NullIfEmpty(string? value) =>
+        (string?)NullIfEmptyMethod.Invoke(null, [value]);
 
     private static string EscapeXml(string value) =>
         (string)EscapeXmlMethod.Invoke(null, [value])!;
@@ -347,7 +347,7 @@ public class GetSystemJobsToolTests
     {
         var message = new string('A', 200);
         var result = TruncateMessage(message, 100);
-        Assert.AreEqual(103, result.Length, "Truncated message should be maxLength + 3 chars for '...'");
+        Assert.AreEqual(103, result!.Length, "Truncated message should be maxLength + 3 chars for '...'");
         Assert.IsTrue(result.EndsWith("..."), "Truncated message should end with '...'");
     }
 
@@ -355,7 +355,7 @@ public class GetSystemJobsToolTests
     public void TruncateMessage_NewLines_ReplacedWithSpaces()
     {
         var result = TruncateMessage("line1\nline2\r\nline3", 100);
-        Assert.IsFalse(result.Contains("\n"), "Newlines should be replaced");
+        Assert.IsFalse(result!.Contains("\n"), "Newlines should be replaced");
         Assert.IsFalse(result.Contains("\r"), "Carriage returns should be replaced");
     }
 

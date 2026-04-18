@@ -22,7 +22,7 @@ public class UpsertTableToolTests
     //
     // The safest approach without live Dataverse: test static helper methods.
 
-    private static readonly MethodInfo SanitizeFileNameMethod = ToolType
+    private static readonly MethodInfo? SanitizeFileNameMethod = ToolType
         .GetMethod("SanitizeFileName", BindingFlags.NonPublic | BindingFlags.Static);
 
     // ── EntityName prefix extraction (via public surface via reflection) ──────
@@ -133,7 +133,7 @@ public class UpsertTableToolTests
 
         var result = resolveMethod.Invoke(null, ["Project", "new"]);
         // Result is (string SchemaName, string LogicalName)
-        dynamic tuple = result;
+        dynamic tuple = result!;
         string schemaName = tuple.Item1;
         string logicalName = tuple.Item2;
 

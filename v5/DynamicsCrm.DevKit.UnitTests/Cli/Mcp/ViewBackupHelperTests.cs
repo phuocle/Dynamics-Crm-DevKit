@@ -28,14 +28,14 @@ public class ViewBackupHelperTests
 
     private static StringBuilder BuildSuccessText(
         string entityName, Guid viewId, string viewName,
-        string fetchBackupPath, string layoutBackupPath,
+        string? fetchBackupPath, string? layoutBackupPath,
         bool validated, bool fetchXmlUpdated, bool published)
     {
         return (StringBuilder)BuildSuccessTextMethod.Invoke(null,
             [entityName, viewId, viewName, fetchBackupPath, layoutBackupPath, validated, fetchXmlUpdated, published])!;
     }
 
-    private static string AppendRollbackInfo(string fetchBackupPath, string layoutBackupPath, Guid viewId)
+    private static string AppendRollbackInfo(string? fetchBackupPath, string? layoutBackupPath, Guid viewId)
     {
         var sb = new StringBuilder();
         AppendRollbackInfoMethod.Invoke(null, [sb, fetchBackupPath, layoutBackupPath, viewId]);
@@ -194,9 +194,9 @@ public class ViewBackupHelperTests
             var layoutXml = "<grid name='resultset'><row name='result'/></grid>";
 
             var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", fetchXml, layoutXml]);
-            dynamic tuple = result;
-            string fetchPath = tuple.Item1;
-            string layoutPath = tuple.Item2;
+            dynamic tuple = result!;
+            string? fetchPath = tuple.Item1;
+            string? layoutPath = tuple.Item2;
 
             Assert.IsTrue(File.Exists(fetchPath), "FetchXML backup file should be created");
             Assert.IsTrue(File.Exists(layoutPath), "LayoutXML backup file should be created");
@@ -229,8 +229,8 @@ public class ViewBackupHelperTests
             var viewId = Guid.NewGuid();
             var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View",
                 "<fetch><entity name='account'></entity></fetch>", "<grid/>"]);
-            dynamic tuple = result;
-            string fetchPath = tuple.Item1;
+            dynamic tuple = result!;
+            string? fetchPath = tuple.Item1;
 
             var content = File.ReadAllText(fetchPath);
             Assert.IsTrue(content.Contains(viewId.ToString()), "FetchXML backup should contain ViewId comment");
@@ -279,8 +279,8 @@ public class ViewBackupHelperTests
         {
             var viewId = Guid.NewGuid();
             var result = SaveBackupMethod.Invoke(null, ["account", viewId, "Test View", "", "<grid/>"]);
-            dynamic tuple = result;
-            string fetchPath = tuple.Item1;
+            dynamic tuple = result!;
+            string? fetchPath = tuple.Item1;
 
             var content = File.ReadAllText(fetchPath);
             Assert.IsTrue(content.Contains("empty"), "Empty FetchXML should write placeholder comment mentioning 'empty'");

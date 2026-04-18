@@ -15,36 +15,36 @@ public class UpsertColumnToolTests
     // Helper: invoke private static methods via reflection
     // ──────────────────────────────────────────────
 
-    private static (DateTimeBehavior Result, string Error) CallResolveDateTimeBehavior(string behavior)
+    private static (DateTimeBehavior Result, string? Error) CallResolveDateTimeBehavior(string? behavior)
     {
         var method = ToolType.GetMethod("ResolveDateTimeBehavior", BindingFlags.NonPublic | BindingFlags.Static)!;
-        var args = new object[] { behavior, null };
+        var args = new object?[] { behavior, null };
         var result = (DateTimeBehavior)method.Invoke(null, args)!;
-        return (result, (string)args[1]);
+        return (result, (string?)args[1]);
     }
 
-    private static (StringFormatName Result, string Error) CallResolveStringFormat(string format)
+    private static (StringFormatName Result, string? Error) CallResolveStringFormat(string? format)
     {
         var method = ToolType.GetMethod("ResolveStringFormat", BindingFlags.NonPublic | BindingFlags.Static)!;
-        var args = new object[] { format, null };
+        var args = new object?[] { format, null };
         var result = (StringFormatName)method.Invoke(null, args)!;
-        return (result, (string)args[1]);
+        return (result, (string?)args[1]);
     }
 
-    private static (IntegerFormat Result, string Error) CallResolveIntegerFormat(string format)
+    private static (IntegerFormat Result, string? Error) CallResolveIntegerFormat(string? format)
     {
         var method = ToolType.GetMethod("ResolveIntegerFormat", BindingFlags.NonPublic | BindingFlags.Static)!;
-        var args = new object[] { format, null };
+        var args = new object?[] { format, null };
         var result = (IntegerFormat)method.Invoke(null, args)!;
-        return (result, (string)args[1]);
+        return (result, (string?)args[1]);
     }
 
-    private static (MemoFormatName Result, string Error) CallResolveMemoFormat(string format)
+    private static (MemoFormatName Result, string? Error) CallResolveMemoFormat(string? format)
     {
         var method = ToolType.GetMethod("ResolveMemoFormat", BindingFlags.NonPublic | BindingFlags.Static)!;
-        var args = new object[] { format, null };
+        var args = new object?[] { format, null };
         var result = (MemoFormatName)method.Invoke(null, args)!;
-        return (result, (string)args[1]);
+        return (result, (string?)args[1]);
     }
 
     private static AttributeRequiredLevel? CallParseRequiredLevel(string value)

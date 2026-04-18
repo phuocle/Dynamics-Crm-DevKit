@@ -26,14 +26,14 @@ public class GetFlowsToolTests
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private static string BuildStatusFilter(string statusFilter) =>
+    private static string BuildStatusFilter(string? statusFilter) =>
         (string)BuildStatusFilterMethod.Invoke(null, [statusFilter])!;
 
-    private static string FormatDuration(DateTime? started, DateTime? completed) =>
-        (string)FormatDurationMethod.Invoke(null, [started, completed]);
+    private static string? FormatDuration(DateTime? started, DateTime? completed) =>
+        (string?)FormatDurationMethod.Invoke(null, [started, completed]);
 
-    private static string NullIfEmpty(string value) =>
-        (string)NullIfEmptyMethod.Invoke(null, [value]);
+    private static string? NullIfEmpty(string? value) =>
+        (string?)NullIfEmptyMethod.Invoke(null, [value]);
 
     private static string EscapeXml(string value) =>
         (string)EscapeXmlMethod.Invoke(null, [value])!;

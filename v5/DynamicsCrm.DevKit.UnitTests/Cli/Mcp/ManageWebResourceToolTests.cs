@@ -68,9 +68,9 @@ public class ManageWebResourceToolTests
     private static readonly MethodInfo NullIfEmptyMethod = ToolType
         .GetMethod("NullIfEmpty", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string NullIfEmpty(string value)
+    private static string? NullIfEmpty(string? value)
     {
-        return (string)NullIfEmptyMethod.Invoke(null, new object[] { value });
+        return (string?)NullIfEmptyMethod.Invoke(null, new object?[] { value });
     }
 
     // ═══════════════════════════════════════════════

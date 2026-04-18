@@ -361,9 +361,9 @@ public class SearchToolTests
     private static readonly MethodInfo FormatStatusResultsMethod = ToolType
         .GetMethod("FormatStatusResults", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string FormatStatusResults(string statusJson, string statisticsJson)
+    private static string FormatStatusResults(string statusJson, string? statisticsJson)
     {
-        return (string)FormatStatusResultsMethod.Invoke(null, new object[] { statusJson, statisticsJson! })!;
+        return (string)FormatStatusResultsMethod.Invoke(null, new object?[] { statusJson, statisticsJson })!;
     }
 
     [TestMethod]

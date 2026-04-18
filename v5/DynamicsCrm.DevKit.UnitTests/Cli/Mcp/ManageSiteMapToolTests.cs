@@ -37,22 +37,22 @@ public class ManageSiteMapToolTests
     private static string PrettyPrintXml(string xml) =>
         (string)PrettyPrintXmlMethod.Invoke(null, [xml])!;
 
-    private static string SanitizeFileName(string name) =>
+    private static string SanitizeFileName(string? name) =>
         (string)SanitizeFileNameMethod.Invoke(null, [name])!;
 
     private static (System.Collections.Generic.List<string> Errors, System.Collections.Generic.List<string> Warnings) ValidateSiteMapXml(string xml)
     {
         var result = ValidateSiteMapXmlMethod.Invoke(null, [xml]);
         // Returns (List<string> Errors, List<string> Warnings) tuple
-        dynamic tuple = result;
+        dynamic tuple = result!;
         return (tuple.Item1, tuple.Item2);
     }
 
     private static bool IsSchemaEvolutionError(string message) =>
         (bool)IsSchemaEvolutionErrorMethod.Invoke(null, [message])!;
 
-    private static string ResolveSiteMapXmlInput(string sitemapxml) =>
-        (string)ResolveSiteMapXmlInputMethod.Invoke(null, [sitemapxml]);
+    private static string? ResolveSiteMapXmlInput(string? sitemapxml) =>
+        (string?)ResolveSiteMapXmlInputMethod.Invoke(null, [sitemapxml]);
 
     // ── StripXmlDeclaration ───────────────────────────────────────────────────
 
