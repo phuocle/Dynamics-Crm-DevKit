@@ -36,17 +36,23 @@
 
 ## Git Operations (PowerShell)
 
+> [!CAUTION]
+> **NEVER commit or push to Git unless explicitly requested by the user.**
+> The **only** allowed way to commit is via the `/claude-commit` skill.
+> Do NOT run `git add` / `git commit` / `git push` on your own initiative — even after completing a task.
+
 > [!IMPORTANT]
 > This project runs on **Windows with PowerShell**. When performing git operations, you **MUST** use PowerShell-compatible syntax. Bash syntax will fail.
 
 **Rules**:
+- **NO self-initiated commits** — wait for the user to run `/claude-commit`
 - Do NOT use `&&` to chain commands — use `;` or run commands separately
 - Do NOT use heredoc `<<'EOF'` — it is bash-only syntax
 - For multi-line commit messages, use multiple `-m` flags: `git commit -m "title" -m "body"`
 - Always run `git add` and `git commit` as **separate commands**, not chained
 - **CRLF Warning**: Always append `2>$null` to `git add` to suppress the `"LF will be replaced by CRLF"` warning
 
-**Example**:
+**Example** (only when invoked via `/claude-commit`):
 
 ```powershell
 # Step 1: Stage files (2>$null suppresses CRLF warning on Windows)
