@@ -17,6 +17,7 @@
 		<BaseOutputPath>bin</BaseOutputPath>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<!-- .NET Global Tool Configuration -->
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>devkit</ToolCommandName>
@@ -78,4 +79,7 @@
 	  <PackageReference Include="Mono.TextTemplating" Version="3.0.0" />
 	</ItemGroup>
 	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 </Project>
