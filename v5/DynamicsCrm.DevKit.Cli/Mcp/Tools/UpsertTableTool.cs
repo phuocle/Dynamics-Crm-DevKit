@@ -35,10 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Create or update a Dataverse table (auto-detects create vs update by entity lookup).\n\n" +
             "CREATE (entity absent): display_name + display_collection_name + solution_name required. " +
             "Auto-creates primary name attribute. Next: upsert_column → build_form_xml + manage_form.\n" +
-            "UPDATE (entity exists): only entity_name required; omitted params keep current values; " +
-            "immutable props (ownership_type, table_type, is_activity, has_notes, primary attribute) ignored with warnings.\n\n" +
-            "Note: activities, feedback, change tracking, BPF, connections, queues — " +
-            "irreversible once enabled; manage via Power Apps UI only.\n\n" +
+            "UPDATE (entity exists): only entity_name required. Updatable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_valid_for_advanced_find. All other props are immutable after creation.\n\n" +
             "CREATE PREFIX CONFIRMATION FLOW:\n" +
             "1. First call (confirmed_prefix empty): tool resolves prefix and returns [PrefixConfirmationRequired] with preview of SchemaName/LogicalName — NOT an error.\n" +
             "2. Ask user to confirm the prefix shown.\n" +
@@ -57,15 +54,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity description.")] string description = "",
             [Description("Primary name attribute logical name. Auto-derived if omitted. Create only.")] string primary_attribute_name = "",
             [Description("Display name for primary attribute. Default: 'Name'. Create only.")] string primary_attribute_display_name = "Name",
-            [Description("Max length of primary attribute (1-850). Default: 100. Create only.")] int primary_attribute_max_length = 100,
             [Description("'User' (default) or 'Organization'. Create only — immutable.")] string ownership_type = "User",
             [Description("'Standard' (default) or 'Elastic' (Azure Cosmos DB; no chart support). Create only — immutable.")] string table_type = "Standard",
             [Description("Activity entity flag. When true: forces User ownership, enables notes, sets Subject primary attr. Create only — immutable.")] bool is_activity = false,
             [Description("Enable notes. Default: false. Create only — cannot be changed after creation.")] bool has_notes = false,
-            [Description("Enable quick create form. Default: false (create). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
-            [Description("Enable duplicate detection. Default: false (create). Omit to keep current value (update).")] bool? is_duplicate_detection_enabled = null,
-            [Description("Hex color code (e.g., '#4A90D9').")] string entity_color = "",
-            [Description("Enable/disable auditing (update only).")] bool? is_audit_enabled = null,
+            [Description("Enable quick create form. Default: false (create, update). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
+            [Description("Enable/disable auditing. Default: true (create). Omit to keep current value (update).")] bool? is_audit_enabled = null,
+            [Description("Appear in search results (Dataverse search / Advanced Find). Default: true (create). Omit to keep current value (update).")] bool? is_valid_for_advanced_find = null,
             [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // Validate required fields
@@ -119,13 +114,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                     var checkResponse = (RetrieveEntityResponse)_serviceClient.Execute(checkRequest);
                     // Entity exists — go to update mode directly
-                    return UpdateExistingEntity(entity_name, checkResponse.EntityMetadata,
+                return UpdateExistingEntity(entity_name, checkResponse.EntityMetadata,
                         display_name, display_collection_name, description,
-                        is_quick_create_enabled,
-                        is_duplicate_detection_enabled, entity_color,
-                        is_audit_enabled,
+                        is_quick_create_enabled, is_audit_enabled, is_valid_for_advanced_find,
                         ownership_type, table_type, is_activity, has_notes,
-                        primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
+                        primary_attribute_name, primary_attribute_display_name,
                         resolvedSolutionUniqueName ?? solution_name, auto_publish);
                 }
                 catch
@@ -162,11 +155,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- UPDATE MODE ---
                 return UpdateExistingEntity(entity_name, existingEntity,
                     display_name, display_collection_name, description,
-                    is_quick_create_enabled,
-                    is_duplicate_detection_enabled, entity_color,
-                    is_audit_enabled,
+                    is_quick_create_enabled, is_audit_enabled, is_valid_for_advanced_find,
                     ownership_type, table_type, is_activity, has_notes,
-                    primary_attribute_name, primary_attribute_display_name, primary_attribute_max_length,
+                    primary_attribute_name, primary_attribute_display_name,
                     resolvedSolutionUniqueName ?? solution_name, auto_publish);
             }
 
@@ -229,8 +220,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var namePart = entity_name.Substring(entity_name.IndexOf('_') + 1);
 
             // Validate max length
-            if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;
-            if (primary_attribute_max_length > 850) primary_attribute_max_length = 850;
+            var primary_attribute_max_length = 850;
 
             // Derive SchemaName and LogicalName via DataverseNamer (uses display_name for proper PascalCase)
             string schemaName;
@@ -298,7 +288,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Apply null-coalesced defaults for create mode
             var effectiveIsQuickCreateEnabled = is_quick_create_enabled ?? false;
-            var effectiveIsDuplicateDetectionEnabled = is_duplicate_detection_enabled ?? false;
 
             // Activity overrides
             if (is_activity)
@@ -320,16 +309,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     DisplayCollectionName = new Label(display_collection_name.Trim(), 1033),
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
-                    IsAuditEnabled = new BooleanManagedProperty(false),
+                    IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
-                    IsDuplicateDetectionEnabled = new BooleanManagedProperty(effectiveIsDuplicateDetectionEnabled)
+                    IsValidForAdvancedFind = new BooleanManagedProperty(is_valid_for_advanced_find ?? true)
                 };
 
                 if (!string.IsNullOrWhiteSpace(description))
                     entityMetadata.Description = new Label(description.Trim(), 1033);
-
-                if (!string.IsNullOrWhiteSpace(entity_color))
-                    entityMetadata.EntityColor = entity_color.Trim();
 
                 // Elastic table overrides
                 if (isElastic)
@@ -412,7 +398,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"PrimaryAttrMaxLength: {primary_attribute_max_length}");
                 sb.AppendLine($"HasNotes: {(has_notes ? "yes" : "no")}");
                 sb.AppendLine($"IsActivity: {(is_activity ? "yes" : "no")}");
-                sb.AppendLine($"DuplicateDetection: {(effectiveIsDuplicateDetectionEnabled ? "yes" : "no")}");
                 sb.AppendLine($"Solution: {resolvedSolutionUniqueName ?? solution_name.Trim()}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {entityId}");
@@ -434,15 +419,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntitySetName = string.IsNullOrEmpty(entitySetName) ? null : entitySetName,
                     SolutionName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     Published = published,
-                    HasNotes = has_notes,
-                    HasActivities = false,
-                    IsActivity = is_activity,
-                    HasFeedback = false,
+                    IsAuditEnabled = is_audit_enabled ?? true,
+                    IsValidForAdvancedFind = is_valid_for_advanced_find ?? true,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
-                    DuplicateDetection = effectiveIsDuplicateDetectionEnabled,
-                    ChangeTracking = false,
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
-                    EntityColor = string.IsNullOrWhiteSpace(entity_color) ? null : entity_color.Trim(),
                     Status = "created"
                 };
 
@@ -476,11 +456,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult UpdateExistingEntity(
             string entityName, EntityMetadata existingMetadata,
             string displayName, string displayCollectionName, string description,
-            bool? isQuickCreateEnabled,
-            bool? isDuplicateDetectionEnabled, string entityColor,
-            bool? isAuditEnabled,
+            bool? isQuickCreateEnabled, bool? isAuditEnabled, bool? isValidForAdvancedFind,
             string ownershipType, string tableType, bool isActivity, bool hasNotes,
-            string primaryAttributeName, string primaryAttributeDisplayName, int primaryAttributeMaxLength,
+            string primaryAttributeName, string primaryAttributeDisplayName,
             string solutionName, bool autoPublish)
         {
             try
@@ -533,14 +511,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 // --- BooleanManagedProperty properties ---
-                if (isDuplicateDetectionEnabled.HasValue && existingMetadata.IsDuplicateDetectionEnabled?.Value != isDuplicateDetectionEnabled.Value)
-                {
-                    var oldVal = existingMetadata.IsDuplicateDetectionEnabled?.Value == true ? "true" : "false";
-                    existingMetadata.IsDuplicateDetectionEnabled = new BooleanManagedProperty(isDuplicateDetectionEnabled.Value);
-                    changes.Add($"IsDuplicateDetectionEnabled: {oldVal} -> {isDuplicateDetectionEnabled.Value.ToString().ToLowerInvariant()}");
-                    structuredChanges["duplicateDetection"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isDuplicateDetectionEnabled.Value.ToString().ToLowerInvariant() };
-                }
-
                 if (isAuditEnabled.HasValue && existingMetadata.IsAuditEnabled?.Value != isAuditEnabled.Value)
                 {
                     var oldVal = existingMetadata.IsAuditEnabled?.Value == true ? "true" : "false";
@@ -549,18 +519,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     structuredChanges["isAuditEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isAuditEnabled.Value.ToString().ToLowerInvariant() };
                 }
 
-                // Note: EntityMetadata.IsValidForAdvancedFind is read-only at entity level — skipped
-
-                // --- String property ---
-                if (!string.IsNullOrWhiteSpace(entityColor))
+                if (isValidForAdvancedFind.HasValue && existingMetadata.IsValidForAdvancedFind?.Value != isValidForAdvancedFind.Value)
                 {
-                    var oldVal = existingMetadata.EntityColor ?? "";
-                    if (oldVal != entityColor.Trim())
-                    {
-                        existingMetadata.EntityColor = entityColor.Trim();
-                        changes.Add($"EntityColor: \"{oldVal}\" -> \"{entityColor.Trim()}\"");
-                        structuredChanges["entityColor"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = entityColor.Trim() };
-                    }
+                    var oldVal = existingMetadata.IsValidForAdvancedFind?.Value == true ? "true" : "false";
+                    existingMetadata.IsValidForAdvancedFind = new BooleanManagedProperty(isValidForAdvancedFind.Value);
+                    changes.Add($"IsValidForAdvancedFind: {oldVal} -> {isValidForAdvancedFind.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isValidForAdvancedFind"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isValidForAdvancedFind.Value.ToString().ToLowerInvariant() };
                 }
 
                 // --- Warn for immutable properties passed with non-default values ---
@@ -583,9 +547,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (primaryAttributeDisplayName != "Name")
                     warnings.Add("primary_attribute_display_name cannot be changed after entity creation (ignored)");
-
-                if (primaryAttributeMaxLength != 100)
-                    warnings.Add("primary_attribute_max_length cannot be changed after entity creation (ignored)");
 
                 // --- Execute update ---
                 if (changes.Count == 0)
@@ -660,18 +621,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     MetadataId = existingMetadata.MetadataId?.ToString() ?? "",
                     EntitySetName = existingMetadata.EntitySetName,
                     Published = published,
-                    HasNotes = existingMetadata.HasNotes == true,
-                    HasActivities = existingMetadata.HasActivities == true,
-                    IsActivity = existingMetadata.IsActivity == true,
-                    HasFeedback = existingMetadata.HasFeedback == true,
-                    IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
-                    DuplicateDetection = existingMetadata.IsDuplicateDetectionEnabled?.Value == true,
-                    ChangeTracking = existingMetadata.ChangeTrackingEnabled == true,
-                    Description = existingMetadata.Description?.UserLocalizedLabel?.Label,
-                    EntityColor = existingMetadata.EntityColor,
                     IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
-                    IsValidForAdvancedFind = existingMetadata.IsValidForAdvancedFind,
-                    IsBusinessProcessEnabled = existingMetadata.IsBusinessProcessEnabled,
+                    IsValidForAdvancedFind = existingMetadata.IsValidForAdvancedFind?.Value,
+                    IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
                     Changes = structuredChanges.Count > 0 ? structuredChanges : null,
                     Warnings = warnings.Count > 0 ? warnings : null,
                     Status = "updated"
