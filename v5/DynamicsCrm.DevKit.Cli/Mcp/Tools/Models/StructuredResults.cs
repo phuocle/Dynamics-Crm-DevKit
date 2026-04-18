@@ -1864,6 +1864,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LookupAttributeName { get; set; }
 
+        [JsonPropertyName("isHierarchical")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsHierarchical { get; set; }
+
         [JsonPropertyName("cascadeAssign")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CascadeAssign { get; set; }

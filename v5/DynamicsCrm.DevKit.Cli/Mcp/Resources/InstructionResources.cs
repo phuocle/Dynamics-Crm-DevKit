@@ -385,6 +385,13 @@ Cascade, Active, UserOwned, NoCascade, RemoveLink, Restrict
 - menu_group: 'Details' (default), 'Sales', 'Service', 'Marketing'
 - menu_order: integer (default 10000)
 
+### Hierarchy Relationship
+- is_hierarchical: bool (default false). Only valid for self-referential 1:N (referenced_entity == referencing_entity).
+- Only ONE hierarchy relationship per entity is allowed at a time.
+- Enabling hierarchy unlocks OOB features: Hierarchy visualization chart, rollup columns (Sum/Count/Min/Max/Avg over children), position hierarchy security.
+- Works with create_1n (set at creation time) and update (enable on existing self-referential relationship).
+- Example: account entity uses 'account_parent_account' as its OOB hierarchy relationship.
+
 ### Polymorphic Lookup Notes
 - add_target: Creates a new 1:N relationship pointing existing lookup to a new target entity
 - remove_target: Deletes the relationship AND ALL DATA stored in that lookup target
