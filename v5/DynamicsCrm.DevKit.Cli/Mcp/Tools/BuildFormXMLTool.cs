@@ -409,15 +409,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 targetSections.Add(sectionElement);
             }
 
-            // If no sections specified, add empty default section
-            if (sections.Count == 0)
-            {
-                var defaultSection = BuildSectionElement(
-                    AutoSectionName(tabName, "default"), label, 1,
-                    new List<JsonElement>(), attrMap, classIdMap, true, true, false, existingControlIds);
-                columnElements[0].Element("sections").Add(defaultSection);
-            }
-
             tabElement.Add(columnsElement);
 
             // Insert tab into form
