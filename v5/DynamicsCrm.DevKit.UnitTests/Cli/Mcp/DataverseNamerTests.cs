@@ -16,9 +16,9 @@ public class DataverseNamerTests
     [TestMethod]
     public void Resolve_MultiWord_ReturnsPascalCaseSchema()
     {
-        var (schema, logical) = DataverseNamer.Resolve("Hello Xin Chao", "new");
-        Assert.AreEqual("new_HelloXinChao", schema);
-        Assert.AreEqual("new_helloxinchao", logical);
+        var (schema, logical) = DataverseNamer.Resolve("Hello Xin Chao", "cr123");
+        Assert.AreEqual("cr123_HelloXinChao", schema);
+        Assert.AreEqual("cr123_helloxinchao", logical);
     }
 
     [TestMethod]
@@ -32,9 +32,9 @@ public class DataverseNamerTests
     [TestMethod]
     public void Resolve_SingleWord_ReturnsTitleCasedSchema()
     {
-        var (schema, logical) = DataverseNamer.Resolve("project", "new");
-        Assert.AreEqual("new_Project", schema);
-        Assert.AreEqual("new_project", logical);
+        var (schema, logical) = DataverseNamer.Resolve("project", "v4");
+        Assert.AreEqual("v4_Project", schema);
+        Assert.AreEqual("v4_project", logical);
     }
 
     [TestMethod]
@@ -77,9 +77,9 @@ public class DataverseNamerTests
     [TestMethod]
     public void Resolve_NumbersInWords_PreservedInOutput()
     {
-        var (schema, logical) = DataverseNamer.Resolve("Order Line 2", "new");
-        Assert.AreEqual("new_OrderLine2", schema);
-        Assert.AreEqual("new_orderline2", logical);
+        var (schema, logical) = DataverseNamer.Resolve("Order Line 2", "cr123");
+        Assert.AreEqual("cr123_OrderLine2", schema);
+        Assert.AreEqual("cr123_orderline2", logical);
     }
 
     // ── Prefix variants ───────────────────────────────────────────────────────
@@ -95,9 +95,9 @@ public class DataverseNamerTests
     [TestMethod]
     public void Resolve_PrefixWithSpaces_Trimmed()
     {
-        var (schema, logical) = DataverseNamer.Resolve("Project", "  new  ");
-        Assert.AreEqual("new_Project", schema);
-        Assert.AreEqual("new_project", logical);
+        var (schema, logical) = DataverseNamer.Resolve("Project", "  abc  ");
+        Assert.AreEqual("abc_Project", schema);
+        Assert.AreEqual("abc_project", logical);
     }
 
     // ── LogicalName is always lowercase ──────────────────────────────────────
@@ -117,14 +117,16 @@ public class DataverseNamerTests
     [TestMethod]
     public void Resolve_EmptyInput_ThrowsArgumentException()
     {
-        try { DataverseNamer.Resolve("", "new"); Assert.Fail("Expected ArgumentException"); }
+        // Input validation fires before prefix guard
+        try { DataverseNamer.Resolve("", "abc"); Assert.Fail("Expected ArgumentException"); }
         catch (ArgumentException) { }
     }
 
     [TestMethod]
     public void Resolve_WhitespaceInput_ThrowsArgumentException()
     {
-        try { DataverseNamer.Resolve("   ", "new"); Assert.Fail("Expected ArgumentException"); }
+        // Input validation fires before prefix guard
+        try { DataverseNamer.Resolve("   ", "abc"); Assert.Fail("Expected ArgumentException"); }
         catch (ArgumentException) { }
     }
 
@@ -138,14 +140,37 @@ public class DataverseNamerTests
     [TestMethod]
     public void Resolve_NullInput_ThrowsArgumentException()
     {
-        try { DataverseNamer.Resolve(null!, "new"); Assert.Fail("Expected ArgumentException"); }
+        // Input validation fires before prefix guard
+        try { DataverseNamer.Resolve(null!, "abc"); Assert.Fail("Expected ArgumentException"); }
         catch (ArgumentException) { }
     }
 
     [TestMethod]
     public void Resolve_OnlySpecialChars_ThrowsArgumentException()
     {
-        try { DataverseNamer.Resolve("!@#$%", "new"); Assert.Fail("Expected ArgumentException"); }
+        try { DataverseNamer.Resolve("!@#$%", "abc"); Assert.Fail("Expected ArgumentException"); }
         catch (ArgumentException) { }
+    }
+
+    // ── Layer-2 guard: prefix "new" is forbidden ──────────────────────────────
+
+    [TestMethod]
+    public void Resolve_NewPrefix_ThrowsInvalidOperationException()
+    {
+        // "new" is the Dataverse default publisher prefix — must never slip through
+        try { DataverseNamer.Resolve("Project", "new"); Assert.Fail("Expected InvalidOperationException"); }
+        catch (InvalidOperationException ex)
+        {
+            Assert.IsTrue(ex.Message.Contains("[DataverseNamer]"),
+                "Exception message should contain [DataverseNamer] tag for easy identification");
+        }
+    }
+
+    [TestMethod]
+    public void Resolve_NewPrefixWithSpaces_ThrowsInvalidOperationException()
+    {
+        // Ensure trimming before guard catches "  new  " as well
+        try { DataverseNamer.Resolve("Project", "  new  "); Assert.Fail("Expected InvalidOperationException"); }
+        catch (InvalidOperationException) { }
     }
 }

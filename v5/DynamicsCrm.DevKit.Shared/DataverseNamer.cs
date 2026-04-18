@@ -18,19 +18,30 @@ namespace DynamicsCrm.DevKit.Shared
         /// Human-readable name, e.g. "Hello Xin Chao", "sale order", "My-Table #1".
         /// Special characters are removed; words are PascalCased and joined.
         /// </param>
-        /// <param name="prefix">Publisher prefix without underscore, e.g. "new", "v4", "cr123".</param>
+        /// <param name="prefix">Publisher prefix without underscore, e.g. "v4", "cr123", "myorg". Must NOT be "new" (Dataverse default publisher).</param>
         /// <returns>
         /// A tuple of (SchemaName, LogicalName):
-        ///   SchemaName = prefix + "_" + PascalCasedJoinedWords  (e.g. "new_HelloXinChao")
-        ///   LogicalName = SchemaName.ToLowerInvariant()          (e.g. "new_helloxinchao")
+        ///   SchemaName = prefix + "_" + PascalCasedJoinedWords  (e.g. "v4_HelloXinChao")
+        ///   LogicalName = SchemaName.ToLowerInvariant()          (e.g. "v4_helloxinchao")
         /// </returns>
         /// <exception cref="ArgumentException">Thrown when input or prefix is null or empty.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when prefix is "new" (Dataverse default publisher — layer-2 guard).</exception>
         public static (string SchemaName, string LogicalName) Resolve(string input, string prefix)
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentException("Input cannot be null or empty.", nameof(input));
             if (string.IsNullOrWhiteSpace(prefix))
                 throw new ArgumentException("Prefix cannot be null or empty.", nameof(prefix));
+
+            // Layer-2 safety guard: prefix "new" is the Dataverse default publisher prefix.
+            // If this value reaches here it means the caller's prefix resolver failed silently.
+            // Hard-stop so the AI / caller is forced to fix the upstream resolution instead of
+            // accidentally creating entities/columns under the default publisher.
+            if (prefix.Trim().ToLowerInvariant() == "new")
+                throw new InvalidOperationException(
+                    "[DataverseNamer] Prefix 'new' is the Dataverse default publisher prefix and MUST NOT be used " +
+                    "for custom entities or columns. This indicates the solution resolver returned a fallback value. " +
+                    "Provide a valid publisher prefix (e.g. 'cr123', 'v4', 'myorg') before proceeding.");
 
             // Step 1: Trim
             var trimmed = input.Trim();

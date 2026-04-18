@@ -8,10 +8,12 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -33,11 +35,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Create, update, or delete Dataverse relationships (1:N, N:N) and manage polymorphic lookup targets.\n\n" +
             "ACTIONS:\n" +
-            "- action='create_1n': Create 1:N + lookup column. Required: referenced_entity + referencing_entity\n" +
-            "- action='create_nn': Create N:N + intersect entity. Required: entity1 + entity2\n" +
+            "- action='create_1n': Create 1:N + lookup column. Required: referenced_entity + referencing_entity + solution_name\n" +
+            "- action='create_nn': Create N:N + intersect entity. Required: entity1 + entity2 + solution_name\n" +
             "- action='update': Update cascade/menu/hierarchy on existing relationship. Required: relationship_name\n" +
             "- action='delete': Delete relationship by schema name. Required: relationship_name\n" +
-            "- action='add_target': Add target to polymorphic lookup. Required: entity_name + attribute_name + referenced_entity\n" +
+            "- action='add_target': Add target to polymorphic lookup. Required: entity_name + attribute_name + referenced_entity + solution_name\n" +
             "- action='remove_target': Remove target from polymorphic lookup. Required: entity_name + attribute_name + referenced_entity\n\n" +
             "TIPS:\n" +
             "- Use get_tables to find relationship_name; use build_form_xml to add lookup to a form\n" +
@@ -65,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Associated menu group: 'Details' (default), 'Sales', 'Service', 'Marketing'.")] string menu_group = "",
             [Description("Associated menu order. Default: 10000.")] int menu_order = 10000,
             [Description("Display name for the lookup column (1:N create).")] string lookup_display_name = "",
-            [Description("Solution unique name.")] string solution_name = "",
+            [Description("Solution unique name. Required for create_1n, create_nn, and add_target to resolve the publisher prefix.")] string solution_name = "",
             [Description("Mark this self-referential 1:N as the OOB hierarchy relationship (create_1n and update only). Only one hierarchy relationship per entity is allowed. Only valid when referenced_entity == referencing_entity.")] bool is_hierarchical = false,
             [Description("Publish after changes. Default: true.")] bool auto_publish = true)
         {
@@ -118,16 +120,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (isHierarchical && referencedEntity != referencingEntity)
                 return ErrorResult($"Error: is_hierarchical=true is only valid for self-referential relationships (referenced_entity must equal referencing_entity). Got: referenced='{referencedEntity}', referencing='{referencingEntity}'.");
 
-            // Resolve prefix from solution if needed
-            var prefix = "new";
-            var resolvedSolution = "";
-            if (!string.IsNullOrWhiteSpace(solutionName))
-            {
-                var (p, u, err) = ResolveSolution(solutionName);
-                if (err != null) return ErrorResult($"Error: {err}");
-                prefix = p;
-                resolvedSolution = u;
-            }
+            // Resolve prefix from solution — solution_name is required to get the correct publisher prefix
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult(
+                    "Error: solution_name is required for create_1n so the publisher prefix can be resolved.\n" +
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
+                    "Tip: Use get_solution_components to find valid solution names.");
+
+            var (prefix, resolvedSolution, resolveErr) = ResolveSolution(solutionName);
+            if (resolveErr != null) return ErrorResult($"Error: {resolveErr}");
 
             // Auto-generate relationship name if not provided
             if (string.IsNullOrWhiteSpace(relationshipName))
@@ -135,9 +136,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (relationshipName.Length > 100)
                 relationshipName = relationshipName[..100];
 
-            // Auto-generate lookup attribute name
+            // Auto-generate lookup attribute name and SchemaName via DataverseNamer for correct PascalCase
             var lookupLogicalName = $"{prefix}_{referencedEntity}id";
-            var lookupSchemaName = lookupLogicalName;
+            string lookupSchemaName;
+            try
+            {
+                (lookupSchemaName, _) = DataverseNamer.Resolve($"{referencedEntity}id", prefix);
+            }
+            catch
+            {
+                // Fallback: capitalize first char after prefix
+                lookupSchemaName = $"{prefix}_{CultureInfo.InvariantCulture.TextInfo.ToTitleCase(referencedEntity)}id";
+            }
             if (string.IsNullOrWhiteSpace(lookupDisplayName))
                 lookupDisplayName = referencedEntity;
 
@@ -225,15 +235,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entity1 = entity1.Trim().ToLowerInvariant();
             entity2 = entity2.Trim().ToLowerInvariant();
 
-            var prefix = "new";
-            var resolvedSolution = "";
-            if (!string.IsNullOrWhiteSpace(solutionName))
-            {
-                var (p, u, err) = ResolveSolution(solutionName);
-                if (err != null) return ErrorResult($"Error: {err}");
-                prefix = p;
-                resolvedSolution = u;
-            }
+            // Resolve prefix from solution — solution_name is required for N:N to get the correct publisher prefix
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult(
+                    "Error: solution_name is required for create_nn so the publisher prefix can be resolved.\n" +
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
+                    "Tip: Use get_solution_components to find valid solution names.");
+
+            var (prefix, resolvedSolution, resolveErrNN) = ResolveSolution(solutionName);
+            if (resolveErrNN != null) return ErrorResult($"Error: {resolveErrNN}");
 
             if (string.IsNullOrWhiteSpace(relationshipName))
                 relationshipName = $"{prefix}_{entity1}_{entity2}";
@@ -523,16 +533,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (lookupAttr == null)
                 return ErrorResult($"Error: Lookup attribute '{attributeName}' not found on entity '{entityName}'.\nTip: Use get_tables with entity_name='{entityName}' to inspect lookup columns.");
 
-            // Resolve prefix for relationship name
-            var prefix = "new";
-            var resolvedSolution = "";
-            if (!string.IsNullOrWhiteSpace(solutionName))
-            {
-                var (p, u, err) = ResolveSolution(solutionName);
-                if (err != null) return ErrorResult($"Error: {err}");
-                prefix = p;
-                resolvedSolution = u;
-            }
+            // Resolve prefix for relationship name — solution_name is required
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult(
+                    "Error: solution_name is required for add_target so the publisher prefix can be resolved.\n" +
+                    "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
+                    "Tip: Use get_solution_components to find valid solution names.");
+
+            var (prefix, resolvedSolution, resolveErrAT) = ResolveSolution(solutionName);
+            if (resolveErrAT != null) return ErrorResult($"Error: {resolveErrAT}");
 
             var relName = $"{prefix}_{referencedEntity}_{entityName}_{attributeName}";
             if (relName.Length > 100) relName = relName[..100];
