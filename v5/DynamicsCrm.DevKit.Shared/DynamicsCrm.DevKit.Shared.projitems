@@ -82,6 +82,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\CodeGenService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataverseNamer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataverseSolutionResolver.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.FromPac.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.DeviceCode.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.Interactive.cs" />

@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -43,14 +44,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "UPDATE (attribute already exists): attribute_type ignored (immutable). Omit params to keep values.\n" +
             "- picklist/multipicklist: use add_options, update_options, delete_options\n\n" +
 
+            "CREATE PREFIX CONFIRMATION FLOW:\n" +
+            "1. First call (confirmed_prefix empty): tool resolves prefix from solution_name or attribute_name and returns [PrefixConfirmationRequired] — NOT an error.\n" +
+            "2. Ask user to confirm the prefix shown.\n" +
+            "3. Re-call with confirmed_prefix set to the agreed prefix to proceed.\n\n" +
+
             "TIPS:\n" +
-            "- attribute_name must include publisher prefix (e.g., 'new_priority')\n" +
+            "- attribute_name must include publisher prefix (e.g., 'new_priority'); or provide solution_name to auto-resolve prefix.\n" +
             "- After create, use build_form_xml to add the column to a form")]
         public CallToolResult upsert_column(
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
-            [Description("Logical name with publisher prefix (e.g., 'new_priority').")] string attribute_name,
+            [Description("Logical name with publisher prefix (e.g., 'new_priority'). Or just the name (e.g., 'priority') — prefix is auto-resolved from solution_name's publisher.")] string attribute_name,
             [Description("Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', 'float' (or 'double'), 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.")] string attribute_type,
             [Description("Display name (e.g., 'Priority Level'). Required for create.")] string display_name,
+            [Description("Solution unique name. Used to auto-resolve publisher prefix when attribute_name has no prefix.")] string solution_name = "",
+            [Description("Confirmed publisher prefix for create. Leave empty on first call — tool returns [PrefixConfirmationRequired] with preview. Re-call with this set to the agreed prefix to proceed.")] string confirmed_prefix = "",
             [Description("Column description.")] string description = "",
             [Description("'None', 'Recommended', or 'Required'. Omit to keep current value on update.")] string required_level = "",
             [Description("For string (1-4000, default 100), memo (1-1048576, default 2000), file (KB, default 32768).")] int max_length = 0,
@@ -71,7 +79,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("For picklist (update): JSON array of integer values to remove.")] string delete_options = "",
             [Description("Enable/disable auditing (update only).")] bool? is_audit_enabled = null,
             [Description("Show/hide in Advanced Find (update only).")] bool? is_valid_for_advanced_find = null,
-            [Description("Solution unique name.")] string solution_name = "",
             [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // --- Validate required parameters ---
@@ -119,19 +126,88 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             attribute_type = attribute_type.Trim().ToLowerInvariant();
 
-            // Validate publisher prefix on attribute name
-            var underscoreIndex = attribute_name.IndexOf('_');
-            if (underscoreIndex < 1 || underscoreIndex >= attribute_name.Length - 1)
-                return ErrorResult(
-                    $"Error: attribute_name must include a publisher prefix (e.g., 'new_priority', 'cr_priority').\n" +
-                    $"Received: '{attribute_name}' on entity '{entity_name}'.\n" +
-                    $"Read docs://schema_tools_guide for column naming conventions and prefix rules.");
+            // Resolve publisher prefix:
+            // Priority: confirmed_prefix > extract from attribute_name > resolve from solution_name
+            string resolvedPrefix = null;
+            string resolvedSolutionUniqueName = null;
 
-            // Derive schema name from display_name: remove spaces and dashes first (preserving original casing), then remove remaining non-alphanumeric characters
-            var prefix = attribute_name.Substring(0, underscoreIndex);
-            var schemaNamePart = display_name.Trim().Replace(" ", "").Replace("-", "");
-            schemaNamePart = new string(schemaNamePart.Where(c => char.IsLetterOrDigit(c)).ToArray());
-            var schemaName = prefix + "_" + schemaNamePart;
+            var underscoreIndex = attribute_name.IndexOf('_');
+            var hasPrefix = underscoreIndex >= 1 && underscoreIndex < attribute_name.Length - 1;
+
+            if (!string.IsNullOrWhiteSpace(solution_name))
+            {
+                var (solPrefix, uniqueName, solError) = DataverseSolutionResolver.ResolveSolution(_serviceClient, solution_name.Trim());
+                if (solError != null)
+                    return ErrorResult(
+                        $"[Error] {solError}\n" +
+                        $"Tip: Use get_solution_components to find valid solution names.");
+                resolvedPrefix = solPrefix;
+                resolvedSolutionUniqueName = uniqueName;
+
+                // Prepend prefix to attribute_name if not already prefixed
+                var prefixWithUnderscore = resolvedPrefix + "_";
+                if (!attribute_name.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                {
+                    var namePart = hasPrefix ? attribute_name.Substring(underscoreIndex + 1) : attribute_name;
+                    attribute_name = $"{resolvedPrefix}_{namePart}";
+                    underscoreIndex = attribute_name.IndexOf('_');
+                    hasPrefix = true;
+                }
+            }
+            else if (!hasPrefix)
+            {
+                return ErrorResult(
+                    $"Error: attribute_name must include a publisher prefix (e.g., 'new_priority').\n" +
+                    $"Received: '{attribute_name}' on entity '{entity_name}'.\n" +
+                    $"Tip: Either include the prefix in attribute_name (e.g., 'new_priority') or provide solution_name to auto-resolve the prefix.");
+            }
+
+            var prefix = resolvedPrefix ?? attribute_name.Substring(0, underscoreIndex);
+
+            // --- PREFIX CONFIRMATION FLOW ---
+            if (string.IsNullOrWhiteSpace(confirmed_prefix))
+            {
+                string previewSchema, previewLogical;
+                try
+                {
+                    (previewSchema, previewLogical) = DataverseNamer.Resolve(display_name, prefix);
+                }
+                catch
+                {
+                    previewSchema = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
+                    previewLogical = previewSchema.ToLowerInvariant();
+                }
+                var confirmSb = new StringBuilder(256);
+                confirmSb.AppendLine("[PrefixConfirmationRequired]");
+                confirmSb.AppendLine($"ResolvedPrefix: {prefix}");
+                confirmSb.AppendLine($"AttributeName (preview): {previewLogical}");
+                confirmSb.AppendLine($"SchemaName (preview): {previewSchema}");
+                confirmSb.AppendLine($"Entity: {entity_name}");
+                confirmSb.AppendLine();
+                confirmSb.AppendLine($"→ Prefix is correct: re-call upsert_column with confirmed_prefix=\"{prefix}\"");
+                confirmSb.AppendLine($"→ Wrong prefix: re-call upsert_column with confirmed_prefix=\"<correct_prefix>\"");
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = confirmSb.ToString() }],
+                    IsError = false
+                };
+            }
+
+            // Use confirmed_prefix (may differ from resolved if user corrected it)
+            prefix = confirmed_prefix.Trim().ToLowerInvariant();
+            var confirmedNamePart = hasPrefix ? attribute_name.Substring(underscoreIndex + 1) : attribute_name;
+            attribute_name = $"{prefix}_{confirmedNamePart}";
+
+            // Derive SchemaName via DataverseNamer (PascalCase from display_name)
+            string schemaName;
+            try
+            {
+                (schemaName, _) = DataverseNamer.Resolve(display_name, prefix);
+            }
+            catch
+            {
+                schemaName = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
+            }
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
@@ -140,41 +216,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Error: Invalid required_level '{required_level}'.\n" +
                     $"Valid values: 'None' (default), 'Recommended', 'Required'.");
 
+            var effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
+
             try
             {
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, solution_name, auto_publish);
+                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, auto_publish);
                     case "memo":
-                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, solution_name, auto_publish);
+                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, auto_publish);
                     case "integer":
-                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, solution_name, auto_publish);
+                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName, auto_publish);
                     case "bigint":
-                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, solution_name, auto_publish);
+                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName, auto_publish);
                     case "decimal":
-                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
+                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, auto_publish);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, solution_name, auto_publish);
+                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName, auto_publish);
                     case "float":
                     case "double":
-                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, solution_name, auto_publish);
+                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, auto_publish);
                     case "boolean":
-                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, solution_name, auto_publish);
+                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName, auto_publish);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, solution_name, auto_publish);
+                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName, auto_publish);
                     case "lookup":
-                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, solution_name, auto_publish);
+                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName, auto_publish);
                     case "customer":
-                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, prefix, solution_name, auto_publish);
+                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, prefix, effectiveSolutionName, auto_publish);
                     case "picklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, solution_name, auto_publish);
+                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, effectiveSolutionName, auto_publish);
                     case "multipicklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, solution_name, auto_publish);
+                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, effectiveSolutionName, auto_publish);
                     case "image":
-                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, solution_name, auto_publish);
+                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName, auto_publish);
                     case "file":
-                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, solution_name, auto_publish);
+                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, effectiveSolutionName, auto_publish);
                     default:
                         return ErrorResult(
                             $"Error: Unknown attribute_type '{attribute_type}'.\n" +
@@ -184,7 +262,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                return HandleException(ex, entity_name, attribute_name, solution_name);
+                return HandleException(ex, entity_name, attribute_name, effectiveSolutionName);
             }
         }
 

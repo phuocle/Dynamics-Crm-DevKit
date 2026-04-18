@@ -2,14 +2,12 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -86,7 +84,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solution_name))
             {
-                var (solPrefix, uniqueName, error) = ResolveSolution(solution_name.Trim());
+                var (solPrefix, uniqueName, error) = DataverseSolutionResolver.ResolveSolution(_serviceClient, solution_name.Trim());
                 if (error != null)
                     return ErrorResult(
                         $"[Error] {error}\n" +
@@ -711,95 +709,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
-        private (string Prefix, string UniqueName, string Error) ResolveSolution(string solutionInput)
-        {
-            try
-            {
-                // Step 1: Try exact match by uniquename
-                var byUniqueName = new QueryExpression("solution")
-                {
-                    ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                    Criteria = new FilterExpression
-                    {
-                        Conditions =
-                        {
-                            new ConditionExpression("uniquename", ConditionOperator.Equal, solutionInput)
-                        }
-                    }
-                };
-                var uniqueResults = _serviceClient.RetrieveMultiple(byUniqueName).Entities;
-                if (uniqueResults.Count == 1)
-                {
-                    var prefix = GetPrefixFromSolution(uniqueResults[0]);
-                    if (prefix == null) return (null, null, $"Solution '{solutionInput}' found but has no publisher.");
-                    return (prefix, uniqueResults[0].GetAttributeValue<string>("uniquename"), null);
-                }
-
-                // Step 2: Try exact match by friendlyname (display name)
-                var byDisplayName = new QueryExpression("solution")
-                {
-                    ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                    Criteria = new FilterExpression
-                    {
-                        Conditions =
-                        {
-                            new ConditionExpression("friendlyname", ConditionOperator.Equal, solutionInput)
-                        }
-                    }
-                };
-                var displayResults = _serviceClient.RetrieveMultiple(byDisplayName).Entities;
-
-                if (displayResults.Count == 0)
-                {
-                    // Step 3: Try contains match by friendlyname as fallback
-                    var byContains = new QueryExpression("solution")
-                    {
-                        ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                        Criteria = new FilterExpression
-                        {
-                            Conditions =
-                            {
-                                new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{solutionInput}%")
-                            }
-                        }
-                    };
-                    displayResults = _serviceClient.RetrieveMultiple(byContains).Entities;
-                }
-
-                if (displayResults.Count == 0)
-                    return (null, null, $"Solution '{solutionInput}' not found (searched by unique name and display name).");
-
-                if (displayResults.Count > 1)
-                {
-                    var names = string.Join(", ", displayResults.Select(e =>
-                        $"'{e.GetAttributeValue<string>("uniquename")}' ({e.GetAttributeValue<string>("friendlyname")})"));
-                    return (null, null, $"Multiple solutions match '{solutionInput}': {names}. Please provide the exact unique name.");
-                }
-
-                var sol = displayResults[0];
-                var resolvedPrefix = GetPrefixFromSolution(sol);
-                if (resolvedPrefix == null) return (null, null, $"Solution '{solutionInput}' found but has no publisher.");
-                return (resolvedPrefix, sol.GetAttributeValue<string>("uniquename"), null);
-            }
-            catch (Exception ex)
-            {
-                return (null, null, $"Failed to resolve solution '{solutionInput}': {ex.Message}");
-            }
-        }
-
-        private string GetPrefixFromSolution(Entity solutionEntity)
-        {
-            var publisherReference = solutionEntity.GetAttributeValue<EntityReference>("publisherid");
-            if (publisherReference == null) return null;
-            try
-            {
-                var publisher = _serviceClient.Retrieve("publisher", publisherReference.Id, new ColumnSet("customizationprefix"));
-                return publisher.GetAttributeValue<string>("customizationprefix");
-            }
-            catch
-            {
-                return null;
-            }
-        }
     }
 }
