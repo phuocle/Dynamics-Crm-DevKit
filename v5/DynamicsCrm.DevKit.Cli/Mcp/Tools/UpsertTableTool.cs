@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -40,6 +41,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "immutable props (ownership_type, table_type, is_activity, has_notes, primary attribute) ignored with warnings.\n\n" +
             "Note: activities, feedback, change tracking, BPF, connections, queues — " +
             "irreversible once enabled; manage via Power Apps UI only.\n\n" +
+            "CREATE PREFIX CONFIRMATION FLOW:\n" +
+            "1. First call (confirmed_prefix empty): tool resolves prefix and returns [PrefixConfirmationRequired] with preview of SchemaName/LogicalName — NOT an error.\n" +
+            "2. Ask user to confirm the prefix shown.\n" +
+            "3. Re-call with confirmed_prefix set to the agreed prefix to proceed with creation.\n\n" +
             "TIPS:\n" +
             "- entity_name must include publisher prefix (e.g., 'new_project'); " +
             "or provide solution_name to auto-resolve prefix.\n" +
@@ -50,6 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Singular display name (e.g., 'Project'). Required for create.")] string display_name = "",
             [Description("Plural display name (e.g., 'Projects'). Required for create.")] string display_collection_name = "",
             [Description("Solution unique name. Required for create. Optional for update.")] string solution_name = "",
+            [Description("Confirmed publisher prefix for create. Leave empty on first call — tool returns [PrefixConfirmationRequired] with preview. Re-call with this set to the agreed prefix to proceed.")] string confirmed_prefix = "",
             [Description("Entity description.")] string description = "",
             [Description("Primary name attribute logical name. Auto-derived if omitted. Create only.")] string primary_attribute_name = "",
             [Description("Display name for primary attribute. Default: 'Name'. Create only.")] string primary_attribute_display_name = "Name",
@@ -182,39 +188,65 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Required for create: display_name, display_collection_name, solution_name.\n" +
                     "Read docs://schema_tools_guide for prefix resolution and solution requirements.");
 
-            var prefix = entity_name.Substring(0, underscoreIndex);
-            var namePart = entity_name.Substring(underscoreIndex + 1);
+            var prefix = resolvedPrefix ?? entity_name.Substring(0, underscoreIndex);
+
+            // --- PREFIX CONFIRMATION FLOW ---
+            // If confirmed_prefix is not set, show preview and ask user to confirm before creating.
+            if (string.IsNullOrWhiteSpace(confirmed_prefix))
+            {
+                string previewSchema, previewLogical;
+                try
+                {
+                    (previewSchema, previewLogical) = DataverseNamer.Resolve(display_name, prefix);
+                }
+                catch
+                {
+                    previewSchema = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
+                    previewLogical = previewSchema.ToLowerInvariant();
+                }
+                var confirmSb = new StringBuilder(256);
+                confirmSb.AppendLine("[PrefixConfirmationRequired]");
+                confirmSb.AppendLine($"ResolvedPrefix: {prefix}");
+                confirmSb.AppendLine($"EntityName (preview): {previewLogical}");
+                confirmSb.AppendLine($"SchemaName (preview): {previewSchema}");
+                confirmSb.AppendLine($"LogicalName (preview): {previewLogical}");
+                confirmSb.AppendLine();
+                confirmSb.AppendLine($"→ Prefix is correct: re-call upsert_table with confirmed_prefix=\"{prefix}\"");
+                confirmSb.AppendLine($"→ Wrong prefix: re-call upsert_table with confirmed_prefix=\"<correct_prefix>\"");
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = confirmSb.ToString() }],
+                    IsError = false
+                };
+            }
+
+            // Use confirmed_prefix (user may have corrected it)
+            prefix = confirmed_prefix.Trim().ToLowerInvariant();
+
+            // Rebuild entity_name with confirmed prefix if needed
+            var prefixWithUnderscore2 = prefix + "_";
+            if (!entity_name.StartsWith(prefixWithUnderscore2, StringComparison.OrdinalIgnoreCase))
+                entity_name = $"{prefix}_{entity_name.Substring(underscoreIndex + 1)}";
+
+            var namePart = entity_name.Substring(entity_name.IndexOf('_') + 1);
 
             // Validate max length
             if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;
             if (primary_attribute_max_length > 850) primary_attribute_max_length = 850;
 
-            // Auto-derive schema name from originalEntityName or display_name
-            // Priority: if entity_name has casing info, use it; otherwise fall back to display_name
-            // e.g., entity_name="MCPDevKitV5" with prefix "v4" → schemaName = "v4_MCPDevKitV5"
-            // e.g., entity_name="mcpdevkitv5", display_name="MCP DevKit V5" → schemaName = "v4_MCPDevKitV5"
-            // e.g., entity_name="project" with prefix "new" → schemaName = "new_Project" (fallback to TitleCase)
-            var originalUnderscoreIndex = originalEntityName.IndexOf('_');
-            var originalNamePart = originalEntityName.Substring(originalUnderscoreIndex + 1);
+            // Derive SchemaName and LogicalName via DataverseNamer (uses display_name for proper PascalCase)
             string schemaName;
-            if (originalNamePart.Any(char.IsUpper))
+            try
             {
-                // entity_name has mixed/upper casing (e.g., "MCPDevKitV5"), use it as-is
-                schemaName = originalEntityName;
+                (schemaName, _) = DataverseNamer.Resolve(display_name, prefix);
             }
-            else if (!string.IsNullOrWhiteSpace(display_name) && display_name.Trim().Any(char.IsUpper))
+            catch
             {
-                // entity_name is all lowercase but display_name has casing info
-                // Derive schema name from display_name by removing spaces
-                // e.g., display_name="MCP DevKit V5" → "MCPDevKitV5" → schemaName="v4_MCPDevKitV5"
-                var derivedName = display_name.Trim().Replace(" ", "");
-                schemaName = prefix + "_" + derivedName;
-            }
-            else
-            {
-                // Both are all lowercase, apply TitleCase as fallback
+                // Fallback: use namePart with TitleCase
                 schemaName = prefix + "_" + CultureInfo.InvariantCulture.TextInfo.ToTitleCase(namePart);
             }
+            // Always re-derive entity_name (logical) from schemaName to stay in sync
+            entity_name = schemaName.ToLowerInvariant();
 
             // Auto-derive primary attribute name
             if (string.IsNullOrWhiteSpace(primary_attribute_name))

@@ -170,14 +170,14 @@ upsert_table(entity_name, solution_name, ...)
     │            → không có prefix + không có solution → ERROR ❌
     │
     ├─ confirmed_prefix == "" ?
-    │   ├─ YES → tính SchemaName/LogicalName dự kiến via TableNameHelper
+    │   ├─ YES → tính SchemaName/LogicalName dự kiến via DataverseNamer.Resolve()
     │   │        → trả về ConfirmationRequiredResult (non-error)
     │   │        → AI hỏi user confirm prefix
     │   └─ NO  → dùng confirmed_prefix (user đã xác nhận hoặc override)
     │
     ├─ validate display_name, display_collection_name (required)
     │
-    ├─ TableNameHelper.Resolve(display_name hoặc namePart, prefix)
+    ├─ DataverseNamer.Resolve(display_name hoặc namePart, prefix)
     │   → SchemaName, LogicalName chính xác
     │
     └─ CreateEntityRequest → publish → return success
