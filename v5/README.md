@@ -91,22 +91,79 @@ Static code analysis for Dataverse development best practices:
 
 ### MCP Server (AI Agent Integration)
 
-The `devkit mcp` command starts a Model Context Protocol server, enabling AI agents (GitHub Copilot, Cursor, Claude, etc.) to interact with Dataverse directly:
+The `devkit mcp` command starts a Model Context Protocol server, enabling AI agents (GitHub Copilot, Cursor, Claude, etc.) to interact with Dataverse directly.
 
+#### MCP Tools (32)
+
+**Schema & Metadata**
 | Tool | Description |
 |------|-------------|
-| `get_entities_metadata` | List all entities/tables in the environment |
-| `get_entity_metadata` | Get full metadata for a single entity |
-| `get_messages` | Discover SDK messages, Custom Actions, Custom APIs |
-| `get_global_optionsets` | Get global option set definitions |
-| `get_environment_info` | Get environment/organization info |
-| `whoami` | Get current user identity and roles |
-| `get_record` | Retrieve a single record by ID |
-| `execute_fetchxml` | Execute FetchXML query with auto-paging |
-| `search` | Dataverse Relevance Search across entities |
-| `create_record` | Create a new record |
-| `update_record` | Update an existing record (partial update) |
-| `delete_record` | Delete a record by ID |
+| `whoami` | Get current user identity, roles, and environment info |
+| `get_tables` | Inspect table metadata, columns, and relationships |
+| `get_messages` | List SDK messages and custom actions |
+| `get_solution_components` | List all components inside a solution |
+
+**Data Operations**
+| Tool | Description |
+|------|-------------|
+| `manage_record` | CRUD on a single Dataverse record |
+| `execute_fetchxml` | Run a FetchXML query with auto-paging |
+| `search_records` | Dataverse Relevance Search by keyword |
+| `execute_webapi` | Execute a raw Web API request |
+| `manage_choice` | Manage global option sets (choices) |
+| `manage_environment_variable` | Manage environment variables |
+
+**Forms, Views & SiteMaps**
+| Tool | Description |
+|------|-------------|
+| `manage_form` | Manage entity forms |
+| `build_form_xml` | Build FormXML with fields, sections, tabs, and events |
+| `manage_view` | Manage entity views |
+| `manage_sitemap` | Manage app site map |
+| `build_sitemap_xml` | Build SiteMap XML with areas, groups, and subareas |
+
+**Schema Management**
+| Tool | Description |
+|------|-------------|
+| `upsert_table` | Create or update a Dataverse table |
+| `upsert_column` | Create or update a table column |
+| `upsert_relationship` | Create, update, or delete relationships |
+
+**Server-Side Logic**
+| Tool | Description |
+|------|-------------|
+| `get_plugins` | List plugin registrations and steps |
+| `get_plugin_trace_logs` | List and inspect plugin trace logs |
+| `get_workflows` | List classic workflows |
+| `get_flows` | List Power Automate cloud flows and run history |
+| `get_business_rules` | List business rules for an entity |
+| `get_business_process_flows` | List business process flows and stages |
+| `get_custom_apis` | List custom API definitions |
+| `get_system_jobs` | List and inspect system jobs |
+
+**Security & Utilities**
+| Tool | Description |
+|------|-------------|
+| `manage_role` | Manage security roles |
+| `manage_webresource` | Manage web resources |
+| `get_dataverse_commands` | List command bar buttons in model-driven apps |
+| `get_audit_history` | Get record audit history |
+| `parse_record_url` | Parse a Dynamics 365 URL to entity and record ID |
+| `publish_customizations` | Publish customizations to make changes visible |
+
+#### MCP Resources (9)
+
+| URI | Description |
+|-----|-------------|
+| `schema://formxml` | FormXml.xsd |
+| `schema://layoutxml` | LayoutXml.xsd |
+| `schema://fetchxml` | Fetch.xsd |
+| `schema://sitemapxml` | SiteMap.xsd + rules |
+| `docs://instructions_for_formxml` | FormXML manipulation rules |
+| `docs://instructions_for_views` | View/LayoutXML manipulation rules |
+| `docs://schema_tools_guide` | Schema tools guide |
+| `docs://data_operations_guide` | Data operations guide |
+| `docs://server_logic_guide` | Server logic guide |
 
 📚 [MCP Server Documentation](DynamicsCrm.DevKit.Cli/README.md#mcp-server-model-context-protocol)
 

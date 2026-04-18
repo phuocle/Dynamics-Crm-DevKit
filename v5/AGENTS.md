@@ -112,7 +112,7 @@ Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workin
 
 `whoami`, `get_tables`, `get_messages`, `manage_choice`, `manage_record`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `get_system_jobs`, `parse_record_url`, `manage_form`, `manage_view`, `manage_role`, `build_form_xml`, `build_sitemap_xml`, `get_audit_history`, `upsert_table`, `upsert_relationship`, `manage_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `get_dataverse_commands`, `manage_webresource`
 
-### MCP Resources (6)
+### MCP Resources (9)
 
 | URI | Description |
 |-----|-------------|
@@ -122,6 +122,9 @@ Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workin
 | `schema://sitemapxml` | SiteMap.xsd + rules |
 | `docs://instructions_for_formxml` | FormXML manipulation rules |
 | `docs://instructions_for_views` | View/LayoutXML manipulation rules |
+| `docs://schema_tools_guide` | Schema tools: type matrices, immutable properties, cascade |
+| `docs://data_operations_guide` | Data ops: field type formats, FetchXML joins, search syntax |
+| `docs://server_logic_guide` | Server logic: list/detail modes, filtering, entity scoping |
 
 ---
 
@@ -183,7 +186,6 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 |---|---|
 | `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | Release with current date |
 | `Release-DynamicsCrm-DevKit.ps1` | Full release |
-| `Sync-AI-Config.ps1` | Sync `.agent/` → `.claude/`, `.github/` |
 | `Clean-Repository.ps1` | Clean all artifacts |
 
 ---
@@ -214,15 +216,10 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 
 ## AI Agent Configuration
 
-`.agent/` = **source of truth**. Synced via `Sync-AI-Config.ps1`.
-
 | IDE | Rules | Commands | MCP | Entry |
 |---|---|---|---|---|
-| **Antigravity** | `.agent/rules/` | `.agent/workflows/` | `.agent/mcp.json` | `AGENTS.md` |
 | **Claude Code** | `.claude/rules/*.md` | `.claude/commands/claude-*.md` | `.vscode/mcp.json` | `CLAUDE.md` (@AGENTS.md) |
 | **Copilot** | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` | `.vscode/mcp.json` | `AGENTS.md` |
-
-Edit `.agent/` first, then run `Sync-AI-Config.ps1`. Antigravity: `// turbo` = auto-run next step, `// turbo-all` = auto-run all.
 
 ---
 

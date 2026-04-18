@@ -1,3 +1,11 @@
+```text
+  ____                              _           ____                  ____             _  ___ _      ____ _ _ 
+ |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_   / ___| (_)
+ | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __| | |   | | |
+ | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ | |___| | |
+ |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)____|_|_|
+        |___/                          https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss
+```
 # DynamicsCrm.DevKit.Cli
 
 A comprehensive .NET global CLI tool for Dynamics 365/Dataverse deployment automation, code generation, and AI agent integration via MCP (Model Context Protocol).
@@ -224,31 +232,46 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 }
 ```
 
-### Available MCP Tools (12)
+### Available MCP Tools (32)
 
-| Tool | Description |
-|------|-------------|
-| `whoami` | Get current user identity, roles, environment info & access token |
-| `get_entities_metadata` | List all entities/tables in the environment |
-| `get_entity_metadata` | Get full metadata for a single entity (attributes, relationships, keys) |
-| `get_messages` | Discover SDK messages, Custom Actions, Custom APIs |
-| `get_global_optionsets` | Get global option set definitions |
-| `get_record` | Retrieve a single record by entity name and GUID |
-| `execute_fetchxml` | Execute FetchXML query with auto-paging |
-| `search` | Dataverse Relevance Search across entities |
-| `create_record` | Create a new record with JSON attributes |
-| `update_record` | Update an existing record (partial update) |
-| `delete_record` | Delete a record by entity name and GUID |
+**Schema & Metadata**: `whoami`, `get_tables`, `get_messages`, `get_solution_components`
+
+**Data Operations**: `manage_record`, `execute_fetchxml`, `search_records`, `execute_webapi`, `manage_choice`, `manage_environment_variable`
+
+**Forms, Views & SiteMaps**: `manage_form`, `build_form_xml`, `manage_view`, `manage_sitemap`, `build_sitemap_xml`
+
+**Schema Management**: `upsert_table`, `upsert_column`, `upsert_relationship`
+
+**Server-Side Logic**: `get_plugins`, `get_plugin_trace_logs`, `get_workflows`, `get_flows`, `get_business_rules`, `get_business_process_flows`, `get_custom_apis`, `get_system_jobs`
+
+**Security & Utilities**: `manage_role`, `manage_webresource`, `get_dataverse_commands`, `get_audit_history`, `parse_record_url`, `publish_customizations`
+
+### Available MCP Resources (9)
+
+| URI | Description |
+|-----|-------------|
+| `schema://formxml` | FormXml.xsd |
+| `schema://layoutxml` | LayoutXml.xsd |
+| `schema://fetchxml` | Fetch.xsd |
+| `schema://sitemapxml` | SiteMap.xsd + rules |
+| `docs://instructions_for_formxml` | FormXML manipulation rules |
+| `docs://instructions_for_views` | View/LayoutXML manipulation rules |
+| `docs://schema_tools_guide` | Schema tools guide |
+| `docs://data_operations_guide` | Data operations guide |
+| `docs://server_logic_guide` | Server logic guide |
 
 ### MCP Tool Examples
 
 Once connected, AI agents can use these tools naturally:
 
-- *"Show me all custom tables in this environment"* — uses `get_entities_metadata`
-- *"What fields does the account entity have?"* — uses `get_entity_metadata`
+- *"Show me all custom tables in this environment"* — uses `get_tables`
+- *"What fields does the account entity have?"* — uses `get_tables` with entity_name
 - *"Query all active contacts created this month"* — uses `execute_fetchxml`
-- *"Create a new account named Contoso"* — uses `create_record`
+- *"Create a new account named Contoso"* — uses `manage_record` with action='create'
 - *"What SDK messages are available for the contact entity?"* — uses `get_messages`
+- *"Add a new text column to the account table"* — uses `upsert_column`
+- *"Show me failed system jobs in the last hour"* — uses `get_system_jobs`
+- *"What security roles does the current user have?"* — uses `manage_role` with action='user'
 
 ## Configuration File
 
@@ -340,11 +363,10 @@ Create `DynamicsCrm.DevKit.Cli.json` in your project:
 
 ### MCP Server
 - Stdio transport for seamless IDE integration
-- Full CRUD operations on Dataverse records
-- Entity metadata and schema exploration
-- FetchXML query execution
-- Plugin code generation from T4 templates
-- Compatible with any MCP-enabled AI agent
+- 32 tools for full Dataverse operations (CRUD, schema, forms, views, sitemaps, security, plugins, workflows, flows)
+- 9 resources (XSD schemas + instruction guides for error-guided AI usage)
+- FetchXML query execution with auto-paging
+- Compatible with any MCP-enabled AI agent (Cursor, VS Code Copilot, Claude Desktop)
 
 ## Support
 

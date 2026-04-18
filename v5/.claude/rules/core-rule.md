@@ -6,17 +6,7 @@
 
 ## Communication Protocol
 
-- **Start every response with**: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` (based on user's local time)
 - **End every response with**: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
-
----
-
-## User Timezone (for greeting)
-
-- **Timezone**: Vietnam (Asia/Ho_Chi_Minh, UTC+7)
-- **Greeting mapping**: morning (5h-11h), noon (11h-13h), afternoon (13h-17h), evening (17h-21h), night (21h-5h)
-- **How to determine current time**: Run `date +"%H"` in the terminal — this returns the user's **local time** (already Vietnam time). Use the hour value directly with the greeting mapping above. Do NOT add 7 hours — the system clock is already in the correct timezone.
-- **Build start/end times**: Use the actual timestamp when the command was executed (from terminal output or system), not assumed time. If unknown, omit or use "N/A".
 
 ---
 
@@ -68,21 +58,10 @@ git commit -m "Short summary of changes" -m "Longer description of what was chan
 
 ---
 
-## MCP Configuration (Per IDE)
+## MCP Configuration
 
-The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations. Each IDE stores MCP config in a different location:
+The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations.
 
 | IDE | MCP Config File |
 |---|---|
-| **Antigravity** | `C:\Users\p\.gemini\antigravity\mcp_config.json` |
 | **VS Code** | `.vscode/mcp.json` |
-
-> [!IMPORTANT]
-> When updating MCP config in one IDE, you **MUST** sync the changes to all other IDEs. The MCP server name and args should be identical across all IDEs (only the JSON format may differ per IDE).
-
-### MCP Sync Rules
-
-1. After updating MCP config in any IDE, copy the equivalent config to the other IDE locations
-2. VS Code config is in the workspace (`.vscode/mcp.json`)
-3. Antigravity config is at a global user-level path: `C:\Users\p\.gemini\antigravity\mcp_config.json`
-4. The `Sync-AI-Config.ps1` script handles rules/workflows sync but **MCP config must be synced manually** due to different JSON formats per IDE

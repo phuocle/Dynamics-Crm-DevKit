@@ -1,3 +1,11 @@
+```text
+  ____                              _           ____                  ____             _  ___ _   __     _____ _____  __
+ |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_  \ \   / / __|_ _|\ \/ /
+ | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|  \ \ / /\__ \| |  \  /
+ | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_    \ V / ___) | |  /  \
+ |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__|    \_/ |____/___|/_/\_\
+        |___/                            https://github.com/phuocle/Dynamics-Crm-DevKit x.xx.xx.xx Build: xxxx.yy.zz HH.mm.ss
+```
 # DynamicsCrm.DevKit
 
 [![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/phuocle.DynamicsCrmDevKit?label=VS%20Marketplace&logo=visualstudio)](https://marketplace.visualstudio.com/items?itemName=phuocle.DynamicsCrmDevKit)
@@ -29,7 +37,7 @@ Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dat
 | 12 | Report | SSRS Reports |
 | 13 | WebResourceTs | TypeScript web resources |
 
-## Item Templates (15 Total)
+## Item Templates (17 Total)
 
 | # | Template | Description |
 |---|----------|-------------|
@@ -48,6 +56,8 @@ Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dat
 | 13 | BatFile | Batch file for CLI commands |
 | 14 | TsForm | TypeScript form script |
 | 15 | TsWebApi | TypeScript WebAPI script |
+| 16 | TsDialog | TypeScript dialog script |
+| 17 | JsDialog | JavaScript dialog script |
 
 ## Requirements
 
