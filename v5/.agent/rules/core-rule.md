@@ -1,90 +1,23 @@
-# Core Rules
+# Antigravity IDE Overrides
 
-> Supplementary rules. Primary context: `AGENTS.md`.
+> Primary context: `AGENTS.md` (read that first). This file contains only IDE-specific overrides for the Antigravity assistant.
 
----
+## IDE-Specific Command Prefixes
 
-## 🔴 End Every Response With
+When `AGENTS.md` instructs you to use a workflow like `/*-build-cli` or `/*-commit`, you MUST use the `anti-` prefix because you are running in Antigravity IDE.
 
-`"[emoji] I'm done, Phuoc — please review my work [emoji]"`
+- Build Analyzers: `/anti-build-analyzer`
+- Build CLI: `/anti-build-cli`
+- Build Tool: `/anti-build-tool`
+- Build VSIX: `/anti-build-vsix`
+- Build All Debug: `/anti-build-debug`
+- Build All Release: `/anti-build-release`
+- Run Tests: `/anti-unit-test`
+- Commit code: `/anti-commit`
 
----
-
-## ⛔ ABSOLUTE FORBIDDEN — NEVER DO THESE
-
-> [!CAUTION]
-> **NEVER** do any of the following — no exceptions, ever:
-> - `git add` / `git commit` / `git push` — only allowed via `/anti-commit` skill
-> - `/anti-build-debug` or `/anti-build-release` — forbidden build commands
-
----
-
-## PowerShell (Windows Only)
+## IDE-Specific Forbidden Actions
 
 > [!CAUTION]
-> Unix/Bash commands do NOT work. Use PowerShell equivalents.
-
-| Unix/Bash | PowerShell |
-|---|---|
-| `grep "p" file` | `Select-String -Pattern "p" -Path file` |
-| `grep -r "p" .` | `Get-ChildItem -Recurse \| Select-String "p"` |
-| `ls` / `cat` / `which` | `Get-ChildItem` / `Get-Content` / `Get-Command` |
-| `find . -name "*.cs"` | `Get-ChildItem -Recurse -Filter "*.cs"` |
-| `rm -rf` / `touch` / `mkdir -p` | `Remove-Item -Recurse -Force` / `New-Item -ItemType File/Directory -Force` |
-| `cmd1 && cmd2` / `<<'EOF'` | `cmd1 ; cmd2` / `@" ... "@` here-string |
-| `export VAR=value` | `$env:VAR = "value"` |
-
----
-
-## Git (only via `/anti-commit`)
-
-```powershell
-git add "file1" 2>$null   # 2>$null suppresses CRLF warning
-git commit -m "title" -m "body"   # separate commands, no &&
-```
-
----
-
-## Build After Editing
-
-After editing files in these projects, run the corresponding build command:
-
-| Project Folder | Build Command |
-|---|---|
-| `DynamicsCrm.DevKit.Analyzers\**` | `/anti-build-analyzer` |
-| `DynamicsCrm.DevKit.Cli\**` | `/anti-build-cli` |
-| `DynamicsCrm.DevKit.Tool\**` | `/anti-build-tool` |
-| `DynamicsCrm.DevKit\**` | `/anti-build-vsix` |
-
----
-
-## Documentation / Saving .md Files
-
-> [!IMPORTANT]
-> All docs must be saved as `.md` files inside `DynamicsCrm.DevKit.Docs\`. Auto-resolve the subfolder by keyword:
-
-| Keyword / Context | Save To |
-|---|---|
-| `cli`, `command`, `mcp`, `task`, `devkit mcp` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\` |
-| `vsix`, `extension`, `wizard`, `package` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit\` |
-| `analyzer`, `diagnostic`, `roslyn` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` |
-| `tool` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tool\` |
-| `script`, `ps1`, `powershell` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Scripts\` |
-| `test`, `unittest`, `integration` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tests\` |
-| anything else / unclear | `DynamicsCrm.DevKit.Docs\Others\` |
-
-**Example**: "save .md mcp" → `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\<filename>.md`
-
----
-
-## MCP
-
-DevKit MCP server: `devkit mcp` · Config: `.vscode/mcp.json`
-
-> [!IMPORTANT]
-> After editing any file in `DynamicsCrm.DevKit.Cli\Mcp\*.*`:
-> 1. Run `/anti-build-cli` to rebuild
-> 2. Kill the current MCP process so the system auto-restarts it:
-> ```powershell
-> Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force
-> ```
+> - NEVER run `/claude-*` workflows. Those are for Claude Code only.
+> - NEVER run `/copilot-*` workflows. Those are for GitHub Copilot only.
+> - NEVER use raw Git (`git add`, `git commit`, `git push`) locally — **strictly** use the `/anti-commit` workflow.
