@@ -22,13 +22,6 @@ cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Scripts"
 .\Run-Analyzer-Coverage.ps1
 ```
 
-## Copy to VS Test Project (for Integration Testing)
-
-```powershell
-Copy-Item -Path "DynamicsCrm.DevKit.Analyzers\bin\Debug\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" `
-  -Destination "DynamicsCrm.DevKit.Analyzers.Test.Vs\packages\DynamicsCrm.DevKit.Analyzers.4.0.0\analyzers\dotnet\cs\" -Force
-```
-
 ## Pack NuGet (Optional)
 
 To create the NuGet package manually:
