@@ -1,16 +1,16 @@
 # DynamicsCrm.DevKit - AI Agent Instructions
 
-> Respond in English. Start: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` End: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
+> Respond in English. Start: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` End: `"[emoji] I'm done, Phuoc â€” please review my work [emoji]"`
 
 ## Project Overview
 
-**DynamicsCrm.DevKit** — Development toolkit for Dynamics 365 / Power Platform / Dataverse. Includes VS 2026 VSIX, .NET CLI (`devkit`), 21 Roslyn analyzers, and MCP server.
+**DynamicsCrm.DevKit** â€” Development toolkit for Dynamics 365 / Power Platform / Dataverse. Includes VS 2026 VSIX, .NET CLI (`devkit`), 21 Roslyn analyzers, and MCP server.
 
 ### Solutions
 
 | Solution | Purpose |
 |---|---|
-| `DynamicsCrm.DevKit.AllInOne.slnx` | **Main** — all components |
+| `DynamicsCrm.DevKit.AllInOne.slnx` | **Main** â€” all components |
 | `DynamicsCrm.DevKit.slnx` | VSIX only |
 | `DynamicsCrm.DevKit.Cli.slnx` | CLI only |
 | `DynamicsCrm.DevKit.Analyzers.slnx` | Analyzers only |
@@ -52,9 +52,47 @@
 | **No Git** | Never commit/push unless explicitly requested |
 | **Default DEBUG** | Use RELEASE only when explicitly requested |
 | **MSBuild for VSIX** | `"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"` |
-| **Naming** | `ServiceClient` → `serviceClient`, `IOrganizationService` → `crmService` |
+| **Naming** | `ServiceClient` â†’ `serviceClient`, `IOrganizationService` â†’ `crmService` |
 | **Docs location** | `DynamicsCrm.DevKit.Docs/{ComponentName}/` |
 | **Security** | Never commit credentials. Use env vars or Azure Key Vault |
+
+### Build After Editing
+
+After editing files in these projects, run the corresponding build command:
+
+| Project Folder | Build Command |
+|---|---|
+| `DynamicsCrm.DevKit.Analyzers\**` | `/build-analyzer` |
+| `DynamicsCrm.DevKit.Cli\**` | `/build-cli` |
+| `DynamicsCrm.DevKit.Tool\**` | `/build-tool` |
+| `DynamicsCrm.DevKit\**` | `/build-vsix` |
+
+### Git â€” Only via `/commit` workflow
+
+> [!CAUTION]
+> **NEVER** `git add` / `git commit` / `git push` directly â€” only via the IDE's commit workflow.
+
+```powershell
+git add "file1" 2>$null   # 2>$null suppresses CRLF warning
+git commit -m "title" -m "body"   # separate commands, no &&
+```
+
+---
+
+## PowerShell (Windows Only)
+
+> [!CAUTION]
+> Unix/Bash commands do NOT work. Use PowerShell equivalents.
+
+| Unix/Bash | PowerShell |
+|---|---|
+| `grep "p" file` | `Select-String -Pattern "p" -Path file` |
+| `grep -r "p" .` | `Get-ChildItem -Recurse \| Select-String "p"` |
+| `ls` / `cat` / `which` | `Get-ChildItem` / `Get-Content` / `Get-Command` |
+| `find . -name "*.cs"` | `Get-ChildItem -Recurse -Filter "*.cs"` |
+| `rm -rf` / `touch` / `mkdir -p` | `Remove-Item -Recurse -Force` / `New-Item -ItemType File/Directory -Force` |
+| `cmd1 && cmd2` / `<<'EOF'` | `cmd1 ; cmd2` / `@" ... "@` here-string |
+| `export VAR=value` | `$env:VAR = "value"` |
 
 ---
 
@@ -63,10 +101,10 @@
 Entry: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
 
 ```
-Commands/ → DevKitCommand<T> base (connection, validation)
-Models/   → DevKitCommandArgs → specific args
-Tasks/    → ITask → TaskXxx implementations
-Mcp/      → MCP server (31 Dataverse tools)
+Commands/ â†’ DevKitCommand<T> base (connection, validation)
+Models/   â†’ DevKitCommandArgs â†’ specific args
+Tasks/    â†’ ITask â†’ TaskXxx implementations
+Mcp/      â†’ MCP server (31 Dataverse tools)
 ```
 
 ### Commands
@@ -82,9 +120,9 @@ Mcp/      → MCP server (31 Dataverse tools)
 | `uploadreport` | `TaskUploadReport` | `uploadreports` |
 | `downloadwebresource` | `TaskDownloadWebResource` | `downloadwebresources` |
 | `datasource` | `TaskDataSource` | `datasources` |
-| `mcp` | `McpServerHost` | — |
+| `mcp` | `McpServerHost` | â€” |
 
-Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`; `legacy-solution` → use `solution`
+Deprecated: `plugin`, `workflow`, `dataprovider` â†’ use `server`; `proxytype` â†’ use `modelbuilder`; `legacy-solution` â†’ use `solution`
 
 ### Auth (priority: CLI args > env vars > empty)
 
@@ -106,7 +144,7 @@ Add `--plain` for clean AI/CI output (no ANSI, colors, spinners). Priority: `--p
 
 ### CLI Run Profile
 
-Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workingDirectory` → run with `commandLineArgs`.
+Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` â†’ `cd` to `workingDirectory` â†’ run with `commandLineArgs`.
 
 ### MCP Tools (32)
 
@@ -125,6 +163,16 @@ Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` → `cd` to `workin
 | `docs://schema_tools_guide` | Schema tools: type matrices, immutable properties, cascade |
 | `docs://data_operations_guide` | Data ops: field type formats, FetchXML joins, search syntax |
 | `docs://server_logic_guide` | Server logic: list/detail modes, filtering, entity scoping |
+
+### MCP Server Restart
+
+> [!IMPORTANT]
+> After editing any file in `DynamicsCrm.DevKit.Cli\Mcp\*.*`:
+> 1. Run `/build-cli` to rebuild
+> 2. Kill the current MCP process so the system auto-restarts it:
+> ```powershell
+> Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force
+> ```
 
 ---
 
@@ -168,15 +216,18 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 
 ## Documentation Rules
 
-| Working On | Save To |
+> [!IMPORTANT]
+> All docs must be saved as `.md` files inside `DynamicsCrm.DevKit.Docs\`. Auto-resolve the subfolder by keyword:
+
+| Keyword / Context | Save To |
 |---|---|
-| CLI | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Cli/` |
-| VSIX | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit/` |
-| Analyzers | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Analyzers/` |
-| Tool | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tool/` |
-| Scripts | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Scripts/` |
-| Tests | `DynamicsCrm.DevKit.Docs/DynamicsCrm.DevKit.Tests/` |
-| Others | `DynamicsCrm.DevKit.Docs/Others/` |
+| `cli`, `command`, `mcp`, `task`, `devkit mcp` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\` |
+| `vsix`, `extension`, `wizard`, `package` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit\` |
+| `analyzer`, `diagnostic`, `roslyn` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` |
+| `tool` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tool\` |
+| `script`, `ps1`, `powershell` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Scripts\` |
+| `test`, `unittest`, `integration` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tests\` |
+| anything else / unclear | `DynamicsCrm.DevKit.Docs\Others\` |
 
 ---
 
@@ -216,11 +267,22 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 
 ## AI Agent Configuration
 
-| IDE | Rules | Commands/Workflows | MCP | Entry |
-|---|---|---|---|---|
-| **Claude Code** | `.claude/rules/*.md` | `.claude/commands/claude-*.md` | `.vscode/mcp.json` | `CLAUDE.md` (@AGENTS.md) |
-| **Copilot** | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` | `.vscode/mcp.json` | `AGENTS.md` |
-| **Antigravity** | `AGENTS.md` (user rules) | `.agent/workflows/anti-*.md` | `.vscode/mcp.json` | `AGENTS.md` |
+Each IDE reads this file (`AGENTS.md`) as source of truth. IDE-specific overrides (command prefixes, forbidden commands) go in the rules folder:
+
+| IDE | Entry Point | Rules (IDE-specific only) | Commands/Workflows |
+|---|---|---|---|
+| **Claude Code** | `CLAUDE.md` â†’ `@AGENTS.md` | `.claude/rules/core-rule.md` | `.claude/commands/claude-*.md` |
+| **Copilot** | `AGENTS.md` (direct) | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` |
+| **Antigravity** | `AGENTS.md` (direct) | `.agent/rules/core-rule.md` | `.agent/workflows/anti-*.md` |
+
+### What goes WHERE
+
+| Content | Location | Reason |
+|---|---|---|
+| Project knowledge, architecture, constraints | **This file** (`AGENTS.md`) | Shared across all IDEs |
+| Command prefix (`/claude-*` vs `/anti-*`) | `{ide}/rules/core-rule.md` | IDE-specific |
+| Forbidden commands list | `{ide}/rules/core-rule.md` | IDE-specific |
+| PowerShell, docs, git, MCP | **This file** | Shared â€” no IDE dependency |
 
 ---
 
