@@ -216,10 +216,11 @@ Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClient
 
 ## AI Agent Configuration
 
-| IDE | Rules | Commands | MCP | Entry |
+| IDE | Rules | Commands/Workflows | MCP | Entry |
 |---|---|---|---|---|
 | **Claude Code** | `.claude/rules/*.md` | `.claude/commands/claude-*.md` | `.vscode/mcp.json` | `CLAUDE.md` (@AGENTS.md) |
 | **Copilot** | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` | `.vscode/mcp.json` | `AGENTS.md` |
+| **Antigravity** | `AGENTS.md` (user rules) | `.agent/workflows/anti-*.md` | `.vscode/mcp.json` | `AGENTS.md` |
 
 ---
 
