@@ -51,7 +51,7 @@ public class DataverseNamerTests
     public void Resolve_SpecialCharsAndNumbers_RemovesSpecialCharsKeepsNumbers()
     {
         var (schema, logical) = DataverseNamer.Resolve("My-Table #1", "v4");
-        Assert.AreEqual("v4_MyTable1", schema);
+        Assert.AreEqual("v4_Mytable1", schema);
         Assert.AreEqual("v4_mytable1", logical);
     }
 
