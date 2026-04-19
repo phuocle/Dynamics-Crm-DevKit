@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Tool
             if (args.Length == 1 && (args[0] == "--version" || args[0] == "-v"))
             {
                 var ver = Assembly.GetExecutingAssembly().GetName().Version;
-                AnsiConsole.MarkupLine($"devkit-tool [green]{ver}[/] Build: [green]{Const.Build}[/]");
+                Console.WriteLine($"{ver} Build: {Const.Build}");
                 return 0;
             }
 
@@ -64,21 +64,21 @@ namespace DynamicsCrm.DevKit.Tool
 
         internal static void WriteBanner()
         {
-            var width = 112;
+            var width = 119;
             var colorBox = "green";
             var colorText = "white";
             AnsiConsole.MarkupLine($"[{colorBox}]╔{new string('═', width)}╗[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]  ____                              _           ____                  ____             _  ___ _     ____ _ _ [/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)[/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |[/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |[/][{colorBox}]  ║[/]");
-            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|[/][{colorBox}]  ║[/]");
-            var part1 = "        |___/            ";
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]  ____                              _           ____                  ____             _  ___ _   _____           _ [/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_|_   _|__   ___ | |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __| | |/ _ \\ / _ \\| |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ _| | (_) | (_) | |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)_|\\___/ \\___/|_|[/][{colorBox}]  ║[/]");
+            var part1 = "        |___/                   ";
             var part2 = "https://github.com/phuocle/Dynamics-Crm-DevKit ";
             var part3 = $"{Const.Version} [green]Build:[/] {Const.Build}";
             var part3Len = $"{Const.Version} Build: {Const.Build}".Length;
             var currentLen = part1.Length + part2.Length + part3Len;
-            var padding = new string(' ', 109 - currentLen);
+            var padding = new string(' ', 116 - currentLen);
             AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorBox}]  ║[/]");
             AnsiConsole.MarkupLine($"[{colorBox}]╚{new string('═', width)}╝[/]");
         }
@@ -112,7 +112,7 @@ namespace DynamicsCrm.DevKit.Tool
                 BorderStyle = new Style(Color.Green),
                 Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Tool Help [/] ", Justify.Left),
                 Padding = new Padding(2, 1),
-                Width = 114
+                Width = 121
             };
             AnsiConsole.Write(panel);
         }

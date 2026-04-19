@@ -83,7 +83,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public async Task<CallToolResult> get_messages(
             [Description(
                 "Entity logical name (lowercase). Use 'none'/empty for global/unbound messages. " +
-                "Use get_tables to discover names. Ignored when message_name is set."
+                "Use get_tables to discover names. Ignored in detail mode when message_name is set."
             )] string entity_name = "none",
             [Description(
                 "Message or Custom Action name for detail mode. Empty = list mode."

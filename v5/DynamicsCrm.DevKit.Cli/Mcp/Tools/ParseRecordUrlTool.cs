@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                return "[ParsedUrl] Error: 'input' is required.\n" +
+                return "Error: input is required.\n" +
                        "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.";
 
             var decoded = Uri.UnescapeDataString(input.Trim());

@@ -55,8 +55,8 @@ namespace DynamicsCrm.DevKit.Shared
             if (words.Length == 0)
                 throw new ArgumentException($"Input '{input}' contains no valid characters after cleaning.", nameof(input));
 
-            // Step 4 & 5: PascalCase each word and join
-            var joined = string.Join("_", words.Select(PascalCaseWord));
+            // Step 4 & 5: PascalCase each word and join (no separator)
+            var joined = string.Join("", words.Select(PascalCaseWord));
 
             // Step 6: SchemaName = prefix_JoinedPascalCase
             var schemaName = $"{prefix.Trim()}_{joined}";
@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (word.Length == 0) return word;
             if (word.Length == 1) return word.ToUpperInvariant();
-            return char.ToUpperInvariant(word[0]) + word.Substring(1);
+            return char.ToUpperInvariant(word[0]) + word.Substring(1).ToLowerInvariant();
         }
     }
 }

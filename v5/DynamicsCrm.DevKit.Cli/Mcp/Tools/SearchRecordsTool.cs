@@ -156,7 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 fullMessage.Contains("Search feature is disabled", StringComparison.OrdinalIgnoreCase))
             {
                 return "Error: Dataverse Search is not enabled in this environment.\n" +
-                       "Enable it: Power Platform admin center → select environment → Settings → Product → Features → Dataverse Search → On → Save.\n" +
+                       "HOW TO ENABLE: Power Platform admin center → select environment → Settings → Product → Features → Dataverse Search → On → Save.\n" +
                        "Workaround: Use execute_fetchxml with a 'like' filter. Read docs://data_operations_guide for FetchXML search patterns.";
             }
 
