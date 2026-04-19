@@ -14,7 +14,7 @@ Build the VSIX project using MSBuild in Debug mode.
 ```powershell
 cd "d:\github\Dynamics-Crm-DevKit\v5"
 $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
-& $msbuild "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj" /t:Build /p:Configuration=Debug /v:m
+& $msbuild "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj" /t:Build /p:Configuration=Debug /p:DeployExtension=false /v:m
 ```
 
 ## Output Location

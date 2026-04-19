@@ -43,6 +43,7 @@ $PublishedRoot = Join-Path $ProjectRoot $Config.buildConfig.publishedRoot
 
 # Files to update (loaded from config)
 $VersionFiles = $Config.files.versionReplacement
+$CodeVersionFiles = $Config.files.codeVersionReplacement
 $DateFiles = $Config.files.dateReplacement
 
 # --- Helper Functions ---
@@ -91,6 +92,12 @@ function Update-FileContent {
     if ($Version) {
         $versionPattern = [regex]::Escape($Config.placeholders.version)
         $content = $content -replace $versionPattern, $Version
+
+        # Also replace codeVersion placeholder (1.0.0.0) with actual version
+        if ($Config.placeholders.codeVersion) {
+            $codeVersionPattern = [regex]::Escape($Config.placeholders.codeVersion)
+            $content = $content -replace $codeVersionPattern, $Version
+        }
     }
     if ($Date) {
         $datePattern = [regex]::Escape($Config.placeholders.date)
@@ -147,11 +154,11 @@ try {
     Write-Host "`nUpdating placeholders..." -ForegroundColor Yellow
     $backups = @()
 
-    # Get unique list of files
-    $allFiles = $VersionFiles + $DateFiles | Select-Object -Unique
+    # Get unique list of files (version + date + codeVersion)
+    $allFiles = ($VersionFiles + $CodeVersionFiles + $DateFiles) | Select-Object -Unique
 
     foreach ($file in $allFiles) {
-        $v = if ($VersionFiles -contains $file) { $Version } else { $null }
+        $v = if (($VersionFiles + $CodeVersionFiles) -contains $file) { $Version } else { $null }
         $d = if ($DateFiles -contains $file) { $BuildDate } else { $null }
 
         $backup = Update-FileContent -FilePath $file -Version $v -Date $d -Config $Config -ProjectRoot $ProjectRoot

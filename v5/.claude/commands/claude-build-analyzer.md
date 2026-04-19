@@ -18,8 +18,7 @@ dotnet build "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj" 
 ## Run Unit Tests
 
 ```powershell
-cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Scripts"
-.\Run-Analyzer-Coverage.ps1
+powershell -File "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Scripts\Run-Analyzer-Coverage.ps1"
 ```
 
 ## Pack NuGet (Optional)
@@ -29,7 +28,7 @@ To create the NuGet package manually:
 ```powershell
 cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\Nuget"
 $nugetExe = ".\nuget.exe"
-& $nugetExe pack "DynamicsCrm.DevKit.Analyzers.nuspec" -Version "4.12.34.56" -OutputDirectory "..\..\published\4.12.34.56"
+& $nugetExe pack "DynamicsCrm.DevKit.Analyzers.nuspec" -Version "x.xx.xx.xx" -OutputDirectory "..\..\published\x.xx.xx.xx"
 ```
 
 ## Notes

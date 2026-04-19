@@ -33,7 +33,6 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<PlatformTarget>x64</PlatformTarget>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Nuget\**" />
@@ -80,7 +79,4 @@
 	  <PackageReference Include="Mono.TextTemplating" Version="3.0.0" />
 	</ItemGroup>
 	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
-	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
 </Project>

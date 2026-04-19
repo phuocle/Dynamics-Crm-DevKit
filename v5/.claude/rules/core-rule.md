@@ -1,73 +1,90 @@
-# DynamicsCrm.DevKit - AI Agent Core Rules
+# Core Rules
 
-> **Purpose**: Supplementary rules for AI agents. Primary project context is in `AGENTS.md`.
-
----
-
-## Communication Protocol
-
-- **End every response with**: `"[emoji] I'm done, Phuoc — please review my work [emoji]"`
+> Supplementary rules. Primary context: `AGENTS.md`.
 
 ---
 
-## PowerShell Commands (Windows Only)
+## 🔴 End Every Response With
+
+`"[emoji] I'm done, Phuoc — please review my work [emoji]"`
+
+---
+
+## ⛔ ABSOLUTE FORBIDDEN — NEVER DO THESE
 
 > [!CAUTION]
-> This project runs on **Windows with PowerShell**. Unix/Bash commands do NOT work here. Always use PowerShell equivalents.
+> **NEVER** do any of the following — no exceptions, ever:
+> - `git add` / `git commit` / `git push` — only allowed via `/claude-commit` skill
+> - `/claude-build-debug` or `/claude-build-release` — forbidden build commands
 
-### Forbidden Unix Commands -> PowerShell Equivalents
+---
 
-| Forbidden (Unix/Bash) | Use Instead (PowerShell) |
+## PowerShell (Windows Only)
+
+> [!CAUTION]
+> Unix/Bash commands do NOT work. Use PowerShell equivalents.
+
+| Unix/Bash | PowerShell |
 |---|---|
-| `grep "pattern" file` | `Select-String -Pattern "pattern" -Path file` |
-| `grep -r "pattern" .` | `Get-ChildItem -Recurse \| Select-String "pattern"` |
-| `ls` | `Get-ChildItem` |
-| `cat file` | `Get-Content file` |
+| `grep "p" file` | `Select-String -Pattern "p" -Path file` |
+| `grep -r "p" .` | `Get-ChildItem -Recurse \| Select-String "p"` |
+| `ls` / `cat` / `which` | `Get-ChildItem` / `Get-Content` / `Get-Command` |
 | `find . -name "*.cs"` | `Get-ChildItem -Recurse -Filter "*.cs"` |
-| `rm -rf folder` | `Remove-Item -Recurse -Force folder` |
-| `touch file.txt` | `New-Item -ItemType File file.txt` |
-| `mkdir -p path` | `New-Item -ItemType Directory -Force path` |
-| `cmd1 && cmd2` | `cmd1 ; cmd2` (or run separately) |
-| `<<'EOF'` heredoc | Use `@" ... "@` here-string or separate lines |
-| `which devkit` | `Get-Command devkit` |
+| `rm -rf` / `touch` / `mkdir -p` | `Remove-Item -Recurse -Force` / `New-Item -ItemType File/Directory -Force` |
+| `cmd1 && cmd2` / `<<'EOF'` | `cmd1 ; cmd2` / `@" ... "@` here-string |
 | `export VAR=value` | `$env:VAR = "value"` |
 
 ---
 
-## Git Operations (PowerShell)
-
-> [!CAUTION]
-> **NEVER commit or push to Git unless explicitly requested by the user.**
-> The **only** allowed way to commit is via the `/claude-commit` skill.
-> Do NOT run `git add` / `git commit` / `git push` on your own initiative — even after completing a task.
-
-> [!IMPORTANT]
-> This project runs on **Windows with PowerShell**. When performing git operations, you **MUST** use PowerShell-compatible syntax. Bash syntax will fail.
-
-**Rules**:
-- **NO self-initiated commits** — wait for the user to run `/claude-commit`
-- Do NOT use `&&` to chain commands — use `;` or run commands separately
-- Do NOT use heredoc `<<'EOF'` — it is bash-only syntax
-- For multi-line commit messages, use multiple `-m` flags: `git commit -m "title" -m "body"`
-- Always run `git add` and `git commit` as **separate commands**, not chained
-- **CRLF Warning**: Always append `2>$null` to `git add` to suppress the `"LF will be replaced by CRLF"` warning
-
-**Example** (only when invoked via `/claude-commit`):
+## Git (only via `/claude-commit`)
 
 ```powershell
-# Step 1: Stage files (2>$null suppresses CRLF warning on Windows)
-git add "file1.md" "file2.ps1" 2>$null
-
-# Step 2: Commit (separate command)
-git commit -m "Short summary of changes" -m "Longer description of what was changed and why."
+git add "file1" 2>$null   # 2>$null suppresses CRLF warning
+git commit -m "title" -m "body"   # separate commands, no &&
 ```
 
 ---
 
-## MCP Configuration
+## Build After Editing
 
-The DevKit CLI includes an MCP server (`devkit mcp`) for Dataverse operations.
+After editing files in these projects, run the corresponding build command:
 
-| IDE | MCP Config File |
+| Project Folder | Build Command |
 |---|---|
-| **VS Code** | `.vscode/mcp.json` |
+| `DynamicsCrm.DevKit.Analyzers\**` | `/claude-build-analyzer` |
+| `DynamicsCrm.DevKit.Cli\**` | `/claude-build-cli` |
+| `DynamicsCrm.DevKit.Tool\**` | `/claude-build-tool` |
+| `DynamicsCrm.DevKit\**` | `/claude-build-vsix` |
+
+---
+
+## Documentation / Saving .md Files
+
+> [!IMPORTANT]
+> All docs must be saved as `.md` files inside `DynamicsCrm.DevKit.Docs\`. Auto-resolve the subfolder by keyword:
+
+| Keyword / Context | Save To |
+|---|---|
+| `cli`, `command`, `mcp`, `task`, `devkit mcp` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\` |
+| `vsix`, `extension`, `wizard`, `package` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit\` |
+| `analyzer`, `diagnostic`, `roslyn` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` |
+| `tool` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tool\` |
+| `script`, `ps1`, `powershell` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Scripts\` |
+| `test`, `unittest`, `integration` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tests\` |
+| anything else / unclear | `DynamicsCrm.DevKit.Docs\Others\` |
+
+**Example**: "save .md mcp" → `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\<filename>.md`
+
+---
+
+## MCP
+
+DevKit MCP server: `devkit mcp` · Config: `.vscode/mcp.json`
+
+> [!IMPORTANT]
+> After editing any file in `DynamicsCrm.DevKit.Cli\Mcp\*.*`:
+> 1. Run `/claude-build-cli` to rebuild
+> 2. Kill the current MCP process so the system auto-restarts it:
+> ```powershell
+> Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force
+> ```

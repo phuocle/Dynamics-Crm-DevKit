@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>DynamicsCrm.DevKit.Analyzers</id>
-    <version>4.12.34.56</version>
+    <version>1.0.0.0</version>
     <title>DynamicsCrm.DevKit.Analyzers</title>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
@@ -12,7 +12,7 @@
     <repository type="git" url="https://github.com/phuocle/Dynamics-Crm-DevKit.git" branch="main" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A collection of Roslyn-based code analyzers for Microsoft Dynamics 365 / Power Platform development. Provides 21 compile-time diagnostics (DEVKIT1001-DEVKIT1021) to help developers follow best practices and avoid common pitfalls when building plugins and custom workflows.</description>
-    <releaseNotes>Version 4.12.34.56:
+    <releaseNotes>Version 1.0.0.0:
 - 21 diagnostic rules covering plugin best practices
 - DEVKIT1001-DEVKIT1021 analyzers for common Dynamics 365 pitfalls
 - Support for filtering attributes, ColumnSet validation, image validation

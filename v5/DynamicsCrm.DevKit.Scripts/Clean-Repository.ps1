@@ -32,6 +32,10 @@ param(
 
 $ErrorActionPreference = 'SilentlyContinue'
 
+# Read protected version dynamically from single source of truth
+$ReleaseConfig = Get-Content (Join-Path $PSScriptRoot "DevKit.ReleaseConfig.json") -Raw | ConvertFrom-Json
+$ProtectedVersion = $ReleaseConfig.version
+
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host "  DynamicsCrm.DevKit - Clean All Build Artifacts" -ForegroundColor Cyan
@@ -173,8 +177,8 @@ if ($IncludePublished) {
     
     $packages = Get-ChildItem -Path "$ProjectRoot\Published" -File -Include "*.nupkg", "*.vsix" -Recurse -ErrorAction SilentlyContinue
     foreach ($item in $packages) {
-        # Exclude specific version folder 4.12.34.56
-        if ($item.FullName -like "*\Published\4.12.34.56\*") {
+        # Exclude specific version folder (protected version from DevKit.ReleaseConfig.json)
+        if ($item.FullName -like "*\Published\$ProtectedVersion\*") {
             if ($DryRun) {
                 Write-Host "  [SKIPPING] $($item.FullName) (Protected Version)" -ForegroundColor Gray
             }

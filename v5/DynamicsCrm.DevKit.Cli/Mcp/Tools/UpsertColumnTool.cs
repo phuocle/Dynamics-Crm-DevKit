@@ -90,6 +90,58 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entity_name = entity_name.Trim().ToLowerInvariant();
             attribute_name = attribute_name.Trim().ToLowerInvariant();
 
+            // --- Early validation: attribute_type, required_level, format, behavior ---
+            // Validate these before touching Dataverse so errors return fast even in DryRun mode.
+            if (!string.IsNullOrWhiteSpace(attribute_type))
+            {
+                var normalizedType = attribute_type.Trim().ToLowerInvariant();
+                var validTypes = new[] { "string", "memo", "integer", "bigint", "decimal", "money", "float", "double",
+                    "boolean", "datetime", "lookup", "customer", "picklist", "multipicklist", "image", "file" };
+                if (!Array.Exists(validTypes, t => t == normalizedType))
+                    return ErrorResult(
+                        $"Error: Unknown attribute_type '{attribute_type}'.\n" +
+                        $"Valid types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n" +
+                        $"Read docs://schema_tools_guide for column type matrix and usage per type.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(required_level))
+            {
+                if (!ParseRequiredLevel(required_level).HasValue)
+                    return ErrorResult(
+                        $"Error: Invalid required_level '{required_level}'.\n" +
+                        $"Valid values: 'None' (default), 'Recommended', 'Required'.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(format) && !string.IsNullOrWhiteSpace(attribute_type))
+            {
+                var normalizedType = attribute_type.Trim().ToLowerInvariant();
+                if (normalizedType == "string")
+                {
+                    ResolveStringFormat(format, out var fmtErr);
+                    if (fmtErr != null) return ErrorResult($"[Error] Invalid format for string: {fmtErr}");
+                }
+                else if (normalizedType == "integer")
+                {
+                    ResolveIntegerFormat(format, out var fmtErr);
+                    if (fmtErr != null) return ErrorResult($"[Error] Invalid format for integer: {fmtErr}");
+                }
+                else if (normalizedType == "memo")
+                {
+                    ResolveMemoFormat(format, out var fmtErr);
+                    if (fmtErr != null) return ErrorResult($"[Error] Invalid format for memo: {fmtErr}");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(behavior) && !string.IsNullOrWhiteSpace(attribute_type))
+            {
+                var normalizedType = attribute_type.Trim().ToLowerInvariant();
+                if (normalizedType == "datetime")
+                {
+                    ResolveDateTimeBehavior(behavior, out var behaviorErr);
+                    if (behaviorErr != null) return ErrorResult($"[Error] Invalid behavior for datetime: {behaviorErr}");
+                }
+            }
+
             // --- Try to retrieve existing attribute to decide create vs update ---
             AttributeMetadata existingMetadata = null;
             try
@@ -582,7 +634,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (DateTimeBehavior)null
             };
             if (result == null)
-                error = $"Error: Invalid behavior '{behavior}'.\nValid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.";
+                error = $"[Error] Invalid behavior '{behavior}'.\nValid values: 'UserLocal' (default), 'DateOnly', 'TimeZoneIndependent'.";
             return result ?? DateTimeBehavior.UserLocal;
         }
 
@@ -1139,7 +1191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (StringFormatName)null
             };
             if (result == null)
-                error = $"Error: Invalid format '{format}'.\nValid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'.";
+                error = $"[Error] Invalid format '{format}'.\nValid values: 'Text' (default), 'Email', 'Url', 'Phone', 'TextArea', 'TickerSymbol', 'RichText'.";
             return result ?? StringFormatName.Text;
         }
 
@@ -1158,7 +1210,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => null
             };
             if (result == null)
-                error = $"Error: Invalid format for integer '{format}'.\nValid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'.";
+                error = $"[Error] Invalid format for integer '{format}'.\nValid values: 'None' (default), 'Duration', 'TimeZone', 'Language', 'Locale'.";
             return result ?? IntegerFormat.None;
         }
 
@@ -1174,7 +1226,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _ => (MemoFormatName)null
             };
             if (result == null)
-                error = $"Error: Invalid format for memo '{format}'.\nValid values: 'Text' (default), 'RichText'.";
+                error = $"[Error] Invalid format for memo '{format}'.\nValid values: 'Text' (default), 'RichText'.";
             return result ?? MemoFormatName.Text;
         }
 

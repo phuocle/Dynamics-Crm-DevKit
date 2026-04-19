@@ -23,13 +23,14 @@ git status
 **Step 2: Critical Check**
 
 > [!CAUTION]
-> **Warning about `Const.cs`**
-> AI must check if `DynamicsCrm.DevKit.Shared\Const.cs` is in the list of changed files.
-> If it has changes, read the file to check whether it still contains the original placeholders:
-> - Version: `x.xx.xx.xx`
-> - Date: `xxxx.yy.zz HH.mm.ss`
+> **Warning about placeholder files**
+> AI must check if any file from `DevKit.ReleaseConfig.json` → `files.versionReplacement` or `files.codeVersionReplacement` is in the list of changed files.
+> These files get their placeholders replaced at build time:
+> - `DynamicsCrm.DevKit.Shared\Const.cs` — version placeholder: `x.xx.xx.xx`, date: `xxxx.yy.zz HH.mm.ss`
+> - `DynamicsCrm.DevKit\Properties\AssemblyInfo.cs`, `DynamicsCrm.DevKit.Analyzers\Properties\AssemblyInfo.cs`, `DynamicsCrm.DevKit.Tool\Properties\AssemblyInfo.cs` — code version placeholder: `1.0.0.0`
+> - `.claude\commands\*.md`, `.vstemplate`, `NuGet.config`, etc. — version placeholder: `x.xx.xx.xx`
 >
-> If the file shows a real version number (e.g., `4.12.34.56`), you absolutely **MUST NOT** commit this file. AI must automatically run `git restore "DynamicsCrm.DevKit.Shared\Const.cs"` or use a tool to revert the file before staging anything.
+> If any of these files shows a real version number (e.g., `x.xx.xx.xx` → `4.12.34.56`, or `1.0.0.0` → any real version), you absolutely **MUST NOT** commit this file. AI must automatically run `git restore "<file>"` or use a tool to revert the file before staging anything.
 
 **Step 3: Carefully select files to stage**
 

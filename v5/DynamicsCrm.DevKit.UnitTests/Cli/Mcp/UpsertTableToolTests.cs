@@ -131,14 +131,14 @@ public class UpsertTableToolTests
             null, [typeof(string), typeof(string)], null);
         Assert.IsNotNull(resolveMethod, "DataverseNamer.Resolve method must exist");
 
-        var result = resolveMethod.Invoke(null, ["Project", "new"]);
+        var result = resolveMethod.Invoke(null, ["Project", "cr123"]);
         // Result is (string SchemaName, string LogicalName)
         dynamic tuple = result!;
         string schemaName = tuple.Item1;
         string logicalName = tuple.Item2;
 
-        Assert.IsTrue(schemaName.StartsWith("new_", StringComparison.OrdinalIgnoreCase),
-            $"SchemaName should start with prefix 'new_', got: {schemaName}");
+        Assert.IsTrue(schemaName.StartsWith("cr123_", StringComparison.OrdinalIgnoreCase),
+            $"SchemaName should start with prefix 'cr123_', got: {schemaName}");
         Assert.AreEqual(schemaName.ToLowerInvariant(), logicalName,
             "LogicalName should be lowercase version of SchemaName");
     }

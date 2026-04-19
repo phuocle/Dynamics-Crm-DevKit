@@ -45,6 +45,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use get_tables to find relationship_name; use build_form_xml to add lookup to a form\n" +
             "- WARNING: remove_target permanently deletes data in that lookup target\n" +
             "- is_hierarchical=true: marks this self-referential 1:N as the OOB hierarchy relationship (only one per entity; only valid when referenced_entity == referencing_entity)\n" +
+            "- Cascade presets: Parental (all Cascade), Referential (NoCascade + RemoveLink on delete), ReferentialRestrictDelete (NoCascade + Restrict on delete)\n" +
+            "- Cascade types: Cascade, NoCascade, RemoveLink, Restrict, Active, UserOwned\n" +
             "- Read docs://schema_tools_guide for cascade preset values and cascade type options")]
         public CallToolResult upsert_relationship(
             [Description("The action to perform: 'create_1n', 'create_nn', 'update', 'delete', 'add_target', 'remove_target'.")] string action = "",

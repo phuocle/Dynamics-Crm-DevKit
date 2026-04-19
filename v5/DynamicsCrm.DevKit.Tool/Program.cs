@@ -110,7 +110,7 @@ namespace DynamicsCrm.DevKit.Tool
             {
                 Border = BoxBorder.Double,
                 BorderStyle = new Style(Color.Green),
-                Header = new PanelHeader(" [bold] devkit-tool Help [/] ", Justify.Left),
+                Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Tool Help [/] ", Justify.Left),
                 Padding = new Padding(2, 1),
                 Width = 114
             };
