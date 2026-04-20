@@ -126,16 +126,38 @@ function Restore-Files {
 
 try {
     # 0. Kill CLI process (may be running as MCP server, causing file locks)
-    # Must kill both assembly name and tool shim name to release all file locks
-    $cliProcess = Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue
-    $devkitProcess = Get-Process -Name "devkit" -ErrorAction SilentlyContinue
-    if ($cliProcess -or $devkitProcess) {
-        Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
-        if ($cliProcess) { $cliProcess | Stop-Process -Force -ErrorAction SilentlyContinue }
-        if ($devkitProcess) { $devkitProcess | Stop-Process -Force -ErrorAction SilentlyContinue }
-        Start-Sleep -Seconds 1
-        Write-Host "CLI/devkit processes killed." -ForegroundColor Green
+    # On .NET 10 framework-dependent tools the actual host is dotnet.exe, NOT devkit.exe.
+    # We must kill by process name AND by dotnet.exe instances whose CommandLine contains devkit/Cli.
+    Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
+    $killed = 0
+
+    # Kill by exact process name (self-contained or shim exe)
+    foreach ($name in @("DynamicsCrm.DevKit.Cli", "devkit")) {
+        $procs = Get-Process -Name $name -ErrorAction SilentlyContinue
+        if ($procs) {
+            $procs | Stop-Process -Force -ErrorAction SilentlyContinue
+            $killed += $procs.Count
+        }
     }
+
+    # Kill dotnet.exe processes that are hosting devkit (framework-dependent on .NET 10)
+    Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | ForEach-Object {
+        try {
+            $cmdline = (Get-CimInstance Win32_Process -Filter "ProcessId=$($_.Id)" -ErrorAction SilentlyContinue).CommandLine
+            if ($cmdline -match "devkit|DynamicsCrm\.DevKit\.Cli") {
+                Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue
+                $killed++
+            }
+        } catch {}
+    }
+
+    if ($killed -gt 0) {
+        Write-Host "$killed CLI/devkit process(es) killed." -ForegroundColor Green
+    } else {
+        Write-Host "No CLI/devkit processes found." -ForegroundColor DarkGray
+    }
+    # Wait for OS to fully release kernel-level directory handles before uninstall
+    Start-Sleep -Seconds 3
 
     # 1. Determine Build Date
     # If no BuildDate provided, use Dec 31 of current year (annual release)
