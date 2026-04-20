@@ -354,15 +354,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private bool Publish()
         {
-            try
-            {
-                _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishAllXmlRequest());
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            McpHelper.FireAndForgetPublishAll(_serviceClient);
+            return true; // publishing is running in background
         }
 
         /// <summary>

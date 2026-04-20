@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
@@ -610,15 +611,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private bool Publish()
         {
-            try
-            {
-                _serviceClient.Execute(new PublishAllXmlRequest());
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            McpHelper.FireAndForgetPublishAll(_serviceClient);
+            return true; // publishing is running in background
         }
 
         #endregion

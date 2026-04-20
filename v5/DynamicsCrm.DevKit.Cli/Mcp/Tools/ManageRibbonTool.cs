@@ -16,6 +16,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
@@ -309,7 +310,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Solution: {SOLUTION_NAME}");
             sb.AppendLine($"Status: Updated successfully");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            sb.AppendLine($"Published: {(autoPublish ? "publishing in background..." : "no (auto_publish=false)")}");
             sb.AppendLine();
             if (backupPath != null)
                 sb.AppendLine($"To rollback: manage_ribbon(action='undo', entity_name='{entityName}', ribbonxml='{backupPath}')");
@@ -372,7 +373,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"[ManageRibbon] undo — {entityName}");
             sb.AppendLine($"Restored from: {backupFilePath}");
             sb.AppendLine($"Status: Restored successfully");
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            sb.AppendLine($"Published: {(autoPublish ? "publishing in background..." : "no (auto_publish=false)")}");
 
             return new CallToolResult
             {
@@ -635,12 +636,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private bool TryPublish(bool autoPublish, string entityName)
         {
             if (!autoPublish) return false;
-            try
-            {
-                _serviceClient.Execute(new PublishAllXmlRequest());
-                return true;
-            }
-            catch { return false; }
+            McpHelper.FireAndForgetPublishAll(_serviceClient);
+            return true; // publishing is running in background
         }
 
         private static CallToolResult ErrorResult(string message) => new()
