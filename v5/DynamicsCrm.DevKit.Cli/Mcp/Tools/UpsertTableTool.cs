@@ -60,7 +60,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Enable notes. Default: false. Create only — cannot be changed after creation.")] bool has_notes = false,
             [Description("Enable quick create form. Default: false (create, update). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
             [Description("Enable/disable auditing. Default: true (create). Omit to keep current value (update).")] bool? is_audit_enabled = null,
-            [Description("Max length for the primary name attribute (1-850, default 100). Create only.")] int primary_attribute_max_length = 100,
+            [Description("Max length for the primary name attribute (1-850, default 850). Create only.")] int primary_attribute_max_length = 850,
             [Description("Publish after operation. Default: true.")] bool auto_publish = true)
         {
             // Validate required fields

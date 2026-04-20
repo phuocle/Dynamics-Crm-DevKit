@@ -1,6 +1,15 @@
 # DynamicsCrm.DevKit - AI Agent Instructions
 
-> Respond in English. Start: `"[emoji] Good [morning/afternoon/evening] Phuoc [emoji]"` End: `"[emoji] I'm done, Phuoc â€” please review my work [emoji]"`
+## ⛔ ABSOLUTE FORBIDDEN
+
+> [!CAUTION]
+> **NEVER** do any of the following — no exceptions, ever:
+> - `git add` / `git commit` / `git push` — only via the IDE's commit workflow
+> - `dotnet build` or `dotnet test` directly — always use the build workflows below
+> - Running workflows that belong to other IDEs — use only the prefix for your current IDE (`/claude-*`, `/copilot-*`, or `/anti-*`)
+> - `/build-debug` or `/build-release` — dangerous, must NOT be auto-executed; only run when explicitly requested
+
+---
 
 ## Project Overview
 
@@ -30,10 +39,9 @@
 
 ---
 
-## Critical Constraints
+## Build Workflows
 
-> [!CAUTION]
-> **NEVER use `dotnet build` or `dotnet test` directly!** Always use workflows below.
+> Always use these instead of `dotnet build` / `dotnet test` directly.
 
 | Workflow | Builds | Replaces |
 |---|---|---|
