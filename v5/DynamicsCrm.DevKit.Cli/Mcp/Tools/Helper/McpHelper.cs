@@ -1,4 +1,3 @@
-// McpHelper.cs
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System.Threading.Tasks;
