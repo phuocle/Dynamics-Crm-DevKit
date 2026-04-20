@@ -11,10 +11,13 @@ using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -24,6 +27,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private const string SOLUTION_NAME = "devkit-ribbon";
+
+        // Cached XSD schema set for ribbon validation
+        private static XmlSchemaSet _cachedSchemaSet;
+        private static readonly object _schemaLock = new();
 
         public BuildRibbonXmlTool(ServiceClient serviceClient)
         {
@@ -36,30 +43,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Build modified RibbonDiffXml for a Dataverse entity. " +
             "READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
-            "OPERATIONS: add_button\n" +
+            "OPERATIONS: add_button, update_button\n" +
             "[Future: remove_button, hide_button, add_flyout, add_group, remove_group, add_rule, remove_rule]\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
             "Surface types: form (main form), main_grid (home page grid), sub_grid (associated/sub grid).\n" +
-            "Validates webresource existence before referencing.\n\n" +
-            "REQUIRED for add_button — all 5 must be provided:\n" +
+            "Validates webresource existence before referencing.\n" +
+            "Validates output XML against Ribbon XSD schema.\n\n" +
+            "REQUIRED for add_button — all 6 must be provided:\n" +
             "1. entity_name (top-level param)\n" +
             "2. surface — form | main_grid | sub_grid\n" +
             "3. label — button display name shown in ribbon\n" +
-            "4. library — web resource JS file name (must exist in Dataverse)\n" +
-            "5. function — JavaScript function name to call\n" +
-            "Missing any one of these will cause the operation to fail.")]
+            "4. library — web resource JS file for button click\n" +
+            "5. function — JavaScript function name for button click\n" +
+            "6. enable_library — web resource JS file for enable rule\n" +
+            "7. enable_function — JavaScript function name for enable rule\n" +
+            "Missing any one of these will cause the operation to fail.\n\n" +
+            "REQUIRED for update_button — button_id or label must identify the button:\n" +
+            "  Updatable fields: label, library, function, enable_library, enable_function,\n" +
+            "  modern_image, tooltip_title, tooltip_description, sequence.\n" +
+            "  Omit a field to keep its current value.")]
         public CallToolResult build_ribbon_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve ribbon customization.")] string entity_name,
             [Description("JSON array of operations. Each requires 'action' field.\n" +
-                "Actions: add_button\n" +
-                "add_button REQUIRED fields (all 4 must be provided — missing any one will fail):\n" +
-                "  - surface: ribbon surface type. Must be one of: 'form' (main form), 'main_grid' (home page grid), 'sub_grid' (associated/sub grid).\n" +
-                "  - label: button display text shown in the ribbon.\n" +
-                "  - library: web resource name (JS file). Must exist in Dataverse. E.g. 'new_/scripts/account.js'.\n" +
-                "  - function: JavaScript function name to call. E.g. 'Account.runReport'.\n" +
-                "add_button OPTIONAL fields: icon16, icon32, tooltip_title, tooltip_description, pass_primary_control, sequence.\n" +
-                "IMPORTANT: Always ask the user for all 4 required fields before calling this tool.\n" +
-                "Example: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run Report\",\"library\":\"new_/scripts/account.js\",\"function\":\"Account.runReport\"}]")] string operations)
+                "Actions: add_button, update_button\n" +
+                "add_button REQUIRED fields:\n" +
+                "  - surface: 'form' | 'main_grid' | 'sub_grid'\n" +
+                "  - label: button display text\n" +
+                "  - library: web resource JS for button click (must exist in Dataverse)\n" +
+                "  - function: JS function name for button click\n" +
+                "  - enable_library: web resource JS for enable rule (must exist in Dataverse)\n" +
+                "  - enable_function: JS function name for enable rule\n" +
+                "add_button OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+                "update_button REQUIRED: button_id OR label (to identify the button)\n" +
+                "update_button OPTIONAL (all updatable): label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence\n" +
+                "Example add: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run Report\",\"library\":\"new_/scripts/account.js\",\"function\":\"Account.runReport\",\"enable_library\":\"new_/scripts/account.js\",\"enable_function\":\"Account.isEnabled\"}]\n" +
+                "Example update: [{\"action\":\"update_button\",\"button_id\":\"devkit.account.RunReport.Button\",\"label\":\"New Label\",\"sequence\":90}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -67,7 +85,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(operations))
                 return ErrorResult(
                     "Error: operations is required.\n" +
-                    "Provide a non-empty JSON array, e.g. [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"My Button\",\"library\":\"...\",\"function\":\"...\"}].");
+                    "Provide a non-empty JSON array, e.g. [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"My Button\",\"library\":\"...\",\"function\":\"...\",\"enable_library\":\"...\",\"enable_function\":\"...\"}].");
 
             entity_name = entity_name.Trim().ToLowerInvariant();
 
@@ -116,37 +134,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 switch (action)
                 {
                     case "add_button":
-                        var result = ExecuteAddButton(ribbonDoc, entity_name, op);
-                        if (result.error != null)
-                            return ErrorResult(result.error);
-                        summaries.Add(result.summary);
+                        var addResult = ExecuteAddButton(ribbonDoc, entity_name, op);
+                        if (addResult.error != null)
+                            return ErrorResult(addResult.error);
+                        summaries.Add(addResult.summary);
+                        break;
+
+                    case "update_button":
+                        var updResult = ExecuteUpdateButton(ribbonDoc, entity_name, op);
+                        if (updResult.error != null)
+                            return ErrorResult(updResult.error);
+                        summaries.Add(updResult.summary);
                         break;
 
                     default:
                         return ErrorResult(
                             $"Error: Unknown action '{action}'.\n" +
-                            "Valid actions: add_button\n" +
+                            "Valid actions: add_button, update_button\n" +
                             "Future: remove_button, hide_button, add_flyout, add_group, remove_group, add_rule, remove_rule");
                 }
             }
 
-            // Step 7: Save to temp file
+            // Step 7: Validate output XML against Ribbon XSD
+            var xmlString = ribbonDoc.ToString(SaveOptions.None);
+            var (xsdErrors, xsdWarnings) = ValidateRibbonXml(xmlString);
+            if (xsdErrors.Count > 0)
+                return ErrorResult($"Error: Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}");
+
+            // Step 8: Save to temp file
             var workingDir = Directory.GetCurrentDirectory();
             var outputDir = Path.Combine(workingDir, ".devkit", "modified_ribbons");
             Directory.CreateDirectory(outputDir);
 
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             var outputFile = Path.Combine(outputDir, $"{entity_name}_{timestamp}.ribbondiffxml");
-            var xmlString = ribbonDoc.ToString(SaveOptions.None);
             File.WriteAllText(outputFile, xmlString, Encoding.UTF8);
 
-            // Step 8: Return result
+            // Step 9: Return result
             var newButtonCount = CountExistingButtons(ribbonDoc);
             var sb = new StringBuilder();
             sb.AppendLine($"[BuildRibbonXml] {entity_name}");
             sb.AppendLine($"Operations: {ops.Count}");
             foreach (var s in summaries)
                 sb.AppendLine($"  ✓ {s}");
+            if (xsdWarnings.Count > 0)
+            {
+                sb.AppendLine($"XSD Warnings ({xsdWarnings.Count}):");
+                foreach (var w in xsdWarnings)
+                    sb.AppendLine($"  ⚠ {w}");
+            }
             sb.AppendLine($"Existing buttons preserved: {existingButtonCount}");
             sb.AppendLine($"Total buttons after: {newButtonCount}");
             sb.AppendLine($"Output: {outputFile}");
@@ -178,9 +214,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static readonly Dictionary<string, string> SurfaceLocationMap = new()
         {
-            ["form"] = "Mscrm.Form.{entity}.MainTab.Save.Controls._children",
+            ["form"]      = "Mscrm.Form.{entity}.MainTab.Save.Controls._children",
             ["main_grid"] = "Mscrm.HomepageGrid.{entity}.MainTab.Actions.Controls._children",
-            ["sub_grid"] = "Mscrm.SubGrid.{entity}.MainTab.Actions.Controls._children",
+            ["sub_grid"]  = "Mscrm.SubGrid.{entity}.MainTab.Actions.Controls._children",
         };
 
         // ── Validation ───────────────────────────────────────────────────
@@ -212,7 +248,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(webResourceName)) return null;
 
-            // Strip $webresource: prefix if present
             var name = webResourceName.TrimStart();
             if (name.StartsWith("$webresource:", StringComparison.OrdinalIgnoreCase))
                 name = name.Substring("$webresource:".Length);
@@ -235,6 +270,90 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 return $"Error: Failed to validate web resource '{name}': {ex.Message}";
+            }
+        }
+
+        private static (List<string> Errors, List<string> Warnings) ValidateRibbonXml(string ribbonXml)
+        {
+            var errors = new List<string>();
+            var warnings = new List<string>();
+
+            try
+            {
+                var schemaSet = GetRibbonSchemaSet();
+                if (schemaSet == null || schemaSet.Count == 0)
+                    return (errors, warnings); // No schema — skip validation
+
+                var settings = new XmlReaderSettings
+                {
+                    ValidationType = ValidationType.Schema,
+                    Schemas = schemaSet
+                };
+
+                settings.ValidationEventHandler += (sender, e) =>
+                {
+                    var location = e.Exception?.LineNumber > 0
+                        ? $"Line {e.Exception.LineNumber}, Col {e.Exception.LinePosition}: "
+                        : "";
+                    var msg = $"{location}{e.Message}";
+
+                    // Treat "not declared" as warning — schema evolution tolerance
+                    if (e.Message.Contains("not declared") || e.Severity == XmlSeverityType.Warning)
+                        warnings.Add($"Warning: {msg}");
+                    else
+                        errors.Add($"Error: {msg}");
+                };
+
+                using var stringReader = new StringReader(ribbonXml);
+                using var xmlReader = XmlReader.Create(stringReader, settings);
+                while (xmlReader.Read()) { }
+            }
+            catch (XmlException xmlEx)
+            {
+                errors.Add($"Error: XML parse error at Line {xmlEx.LineNumber}, Col {xmlEx.LinePosition}: {xmlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"Error: Validation failed: {ex.Message}");
+            }
+
+            return (errors, warnings);
+        }
+
+        private static XmlSchemaSet GetRibbonSchemaSet()
+        {
+            if (_cachedSchemaSet != null) return _cachedSchemaSet;
+
+            lock (_schemaLock)
+            {
+                if (_cachedSchemaSet != null) return _cachedSchemaSet;
+
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceNames = assembly.GetManifestResourceNames();
+
+                string[] schemaFiles = ["RibbonCore.xsd", "RibbonTypes.xsd", "RibbonWSS.xsd"];
+
+                var schemas = new XmlSchemaSet();
+                foreach (var schemaFile in schemaFiles)
+                {
+                    var resourceName = resourceNames.FirstOrDefault(n => n.EndsWith(schemaFile));
+                    if (resourceName == null) continue;
+
+                    using var stream = assembly.GetManifestResourceStream(resourceName);
+                    if (stream == null) continue;
+
+                    var schema = XmlSchema.Read(stream, null);
+                    if (schema != null)
+                        schemas.Add(schema);
+                }
+
+                if (schemas.Count > 0)
+                {
+                    schemas.Compile();
+                    _cachedSchemaSet = schemas;
+                }
+
+                return _cachedSchemaSet;
             }
         }
 
@@ -263,7 +382,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     using var entryStream = customizationsEntry.Open();
                     var doc = XDocument.Load(entryStream);
 
-                    // Find entity in customizations.xml
                     var entityNode = doc.Descendants("Entity")
                         .FirstOrDefault(e =>
                         {
@@ -315,6 +433,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         // ── add_button ───────────────────────────────────────────────────
+
         private (string error, string summary) ExecuteAddButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             // Required fields
@@ -342,7 +461,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!SurfaceLocationMap.ContainsKey(surface))
                 return ($"Error: Invalid surface '{surface}'. Valid: form, main_grid, sub_grid.", null);
 
-            // Validate web resources exist
+            // Validate web resources
             var libError = ValidateWebResourceExists(library);
             if (libError != null) return (libError, null);
             var enableLibError = ValidateWebResourceExists(enableLibrary);
@@ -352,7 +471,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var modernImage = GetJsonString(op, "modern_image");
             var tooltipTitle = GetJsonString(op, "tooltip_title") ?? label;
             var tooltipDesc = GetJsonString(op, "tooltip_description");
-            var passPrimaryControl = GetJsonBool(op, "pass_primary_control", true);
             var sequence = GetJsonInt(op, "sequence", 85);
 
             if (!string.IsNullOrWhiteSpace(modernImage))
@@ -361,89 +479,281 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (imgError != null) return (imgError, null);
             }
 
-            // Generate IDs
+            // Generate IDs from label slug
             var slug = GenerateSlug(label);
             var customActionId = $"devkit.{entityName}.{slug}.CustomAction";
             var buttonId = $"devkit.{entityName}.{slug}.Button";
             var commandId = $"devkit.{entityName}.{slug}.Command";
             var enableRuleId = $"devkit.{entityName}.{slug}.EnableRule";
 
-            // Resolve location
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
             // Remove existing nodes with same IDs (idempotent)
-            RemoveExistingById(ribbonDoc, "CustomActions", "CustomAction", "Id", customActionId);
-            RemoveExistingById(ribbonDoc, "CommandDefinitions", "CommandDefinition", "Id", commandId);
-            RemoveExistingById(ribbonDoc, "RuleDefinitions", "EnableRule", "Id", enableRuleId);
+            RemoveById(ribbonDoc.Root, "CustomActions", "CustomAction", customActionId);
+            RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", commandId);
 
-            // Create CustomAction + Button
+            // ── CustomAction + Button ──
             var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
-            var buttonEl = new XElement("Button",
-                new XAttribute("Id", buttonId),
-                new XAttribute("Command", commandId),
-                new XAttribute("LabelText", $"$LocLabels:{buttonId}.LabelText"),
-                new XAttribute("ToolTipTitle", tooltipTitle),
-                new XAttribute("TemplateAlias", "isv"),
-                new XAttribute("Sequence", sequence));
+            var buttonEl = BuildButtonElement(buttonId, commandId, tooltipTitle, sequence, modernImage, tooltipDesc);
 
-            if (!string.IsNullOrWhiteSpace(tooltipDesc))
-                buttonEl.Add(new XAttribute("ToolTipDescription", tooltipDesc));
-            if (!string.IsNullOrWhiteSpace(modernImage))
-                buttonEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
-
-            var customActionEl = new XElement("CustomAction",
+            customActionsEl.Add(new XElement("CustomAction",
                 new XAttribute("Id", customActionId),
                 new XAttribute("Location", location),
                 new XAttribute("Sequence", sequence),
-                new XElement("CommandUIDefinition", buttonEl));
+                new XElement("CommandUIDefinition", buttonEl)));
 
-            customActionsEl.Add(customActionEl);
-
-            // Create CommandDefinition
+            // ── CommandDefinition ──
             var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
             var jsFunctionEl = new XElement("JavaScriptFunction",
                 new XAttribute("Library", $"$webresource:{library}"),
                 new XAttribute("FunctionName", function),
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")));
+                new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+                new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds")));
 
-            var commandDefEl = new XElement("CommandDefinition",
+            XElement displayRulesInCommand;
+            if (surface == "form")
+            {
+                var displayRuleId = $"devkit.{entityName}.{slug}.DisplayRule";
+                displayRulesInCommand = new XElement("DisplayRules",
+                    new XElement("DisplayRule", new XAttribute("Id", displayRuleId)));
+            }
+            else
+            {
+                displayRulesInCommand = new XElement("DisplayRules");
+            }
+
+            commandDefsEl.Add(new XElement("CommandDefinition",
                 new XAttribute("Id", commandId),
                 new XElement("EnableRules",
                     new XElement("EnableRule", new XAttribute("Id", enableRuleId))),
-                new XElement("DisplayRules"),
-                new XElement("Actions", jsFunctionEl));
+                displayRulesInCommand,
+                new XElement("Actions", jsFunctionEl)));
 
-            commandDefsEl.Add(commandDefEl);
-
-            // Create EnableRule
+            // ── RuleDefinitions ──
             var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
+
+            // EnableRule
+            RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", enableRuleId);
             var enableRulesEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
-
-            var customRuleEl = new XElement("CustomRule",
-                new XAttribute("FunctionName", enableFunction),
-                new XAttribute("Library", $"$webresource:{enableLibrary}"),
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")));
-
             enableRulesEl.Add(new XElement("EnableRule",
                 new XAttribute("Id", enableRuleId),
-                customRuleEl));
+                new XElement("CustomRule",
+                    new XAttribute("FunctionName", enableFunction),
+                    new XAttribute("Library", $"$webresource:{enableLibrary}"),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds")))));
 
-            // Create LocLabel
-            var locLabelsEl = GetOrCreateElement(ribbonDoc.Root, "LocLabels");
-            var locLabelId = $"{buttonId}.LabelText";
-            var existingLabel = locLabelsEl.Elements("LocLabel")
+            // DisplayRule (form only)
+            if (surface == "form")
+            {
+                var displayRuleId = $"devkit.{entityName}.{slug}.DisplayRule";
+                RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
+                var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
+                displayRulesEl.Add(new XElement("DisplayRule",
+                    new XAttribute("Id", displayRuleId),
+                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+            }
+
+            // ── LocLabels ──
+            UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.LabelText", label);
+            UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.ToolTipTitle", tooltipTitle);
+            if (!string.IsNullOrWhiteSpace(tooltipDesc))
+                UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.ToolTipDescription", tooltipDesc);
+
+            return (null, $"add_button: '{label}' [{surface}] click={function} enable={enableFunction}");
+        }
+
+        // ── update_button ────────────────────────────────────────────────
+
+        private (string error, string summary) ExecuteUpdateButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            // Identify button: by button_id or by label (derives button_id via slug)
+            var buttonId = GetJsonString(op, "button_id");
+            var labelHint = GetJsonString(op, "label");
+
+            if (string.IsNullOrWhiteSpace(buttonId))
+            {
+                if (string.IsNullOrWhiteSpace(labelHint))
+                    return ("Error: update_button requires 'button_id' or 'label' to identify the button.", null);
+                var slug = GenerateSlug(labelHint);
+                buttonId = $"devkit.{entityName}.{slug}.Button";
+            }
+
+            // Find the Button element in CustomActions
+            var buttonEl = ribbonDoc.Root
+                ?.Element("CustomActions")
+                ?.Descendants("Button")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
+
+            if (buttonEl == null)
+                return ($"Error: Button '{buttonId}' not found in existing RibbonDiffXml.\n" +
+                        "Tip: Use add_button to create it first.", null);
+
+            // Derive sibling IDs from buttonId
+            // buttonId pattern: devkit.{entity}.{slug}.Button
+            var commandId = buttonId.Replace(".Button", ".Command");
+            var enableRuleId = buttonId.Replace(".Button", ".EnableRule");
+
+            // Find CommandDefinition
+            var commandDefEl = ribbonDoc.Root
+                ?.Element("CommandDefinitions")
+                ?.Elements("CommandDefinition")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, commandId, StringComparison.OrdinalIgnoreCase));
+
+            // Find EnableRule
+            var ruleDefsEl = ribbonDoc.Root?.Element("RuleDefinitions");
+            var enableRuleEl = ruleDefsEl
+                ?.Element("EnableRules")
+                ?.Elements("EnableRule")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, enableRuleId, StringComparison.OrdinalIgnoreCase));
+
+            var updatedFields = new List<string>();
+
+            // ── label ──
+            var newLabel = GetJsonString(op, "label");
+            if (!string.IsNullOrWhiteSpace(newLabel))
+            {
+                // LabelText uses $LocLabels reference — update LocLabel
+                UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.LabelText", newLabel);
+                updatedFields.Add("label");
+            }
+
+            // ── tooltip_title ──
+            var newTooltipTitle = GetJsonString(op, "tooltip_title");
+            if (!string.IsNullOrWhiteSpace(newTooltipTitle))
+            {
+                UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.ToolTipTitle", newTooltipTitle);
+                updatedFields.Add("tooltip_title");
+            }
+
+            // ── tooltip_description ──
+            var newTooltipDesc = GetJsonString(op, "tooltip_description");
+            if (!string.IsNullOrWhiteSpace(newTooltipDesc))
+            {
+                UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.ToolTipDescription", newTooltipDesc);
+                // Also set attribute on button if not yet present
+                if (buttonEl.Attribute("ToolTipDescription") == null)
+                    buttonEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{buttonId}.ToolTipDescription"));
+                updatedFields.Add("tooltip_description");
+            }
+
+            // ── sequence ──
+            if (op.TryGetProperty("sequence", out _))
+            {
+                var newSeq = GetJsonInt(op, "sequence", 85);
+                buttonEl.SetAttributeValue("Sequence", newSeq);
+                // Also update parent CustomAction sequence
+                buttonEl.Parent?.Parent?.SetAttributeValue("Sequence", newSeq);
+                updatedFields.Add($"sequence={newSeq}");
+            }
+
+            // ── modern_image ──
+            var newModernImage = GetJsonString(op, "modern_image");
+            if (!string.IsNullOrWhiteSpace(newModernImage))
+            {
+                var imgError = ValidateWebResourceExists(newModernImage);
+                if (imgError != null) return (imgError, null);
+                buttonEl.SetAttributeValue("ModernImage", $"$webresource:{newModernImage}");
+                updatedFields.Add("modern_image");
+            }
+
+            // ── library (button click) ──
+            var newLibrary = GetJsonString(op, "library");
+            if (!string.IsNullOrWhiteSpace(newLibrary))
+            {
+                var libError = ValidateWebResourceExists(newLibrary);
+                if (libError != null) return (libError, null);
+
+                if (commandDefEl != null)
+                {
+                    var jsFnEl = commandDefEl
+                        .Element("Actions")
+                        ?.Element("JavaScriptFunction");
+                    jsFnEl?.SetAttributeValue("Library", $"$webresource:{newLibrary}");
+                }
+                updatedFields.Add("library");
+            }
+
+            // ── function (button click) ──
+            var newFunction = GetJsonString(op, "function");
+            if (!string.IsNullOrWhiteSpace(newFunction))
+            {
+                if (commandDefEl != null)
+                {
+                    var jsFnEl = commandDefEl
+                        .Element("Actions")
+                        ?.Element("JavaScriptFunction");
+                    jsFnEl?.SetAttributeValue("FunctionName", newFunction);
+                }
+                updatedFields.Add("function");
+            }
+
+            // ── enable_library ──
+            var newEnableLibrary = GetJsonString(op, "enable_library");
+            if (!string.IsNullOrWhiteSpace(newEnableLibrary))
+            {
+                var libError = ValidateWebResourceExists(newEnableLibrary);
+                if (libError != null) return (libError, null);
+
+                var customRuleEl = enableRuleEl?.Element("CustomRule");
+                customRuleEl?.SetAttributeValue("Library", $"$webresource:{newEnableLibrary}");
+                updatedFields.Add("enable_library");
+            }
+
+            // ── enable_function ──
+            var newEnableFunction = GetJsonString(op, "enable_function");
+            if (!string.IsNullOrWhiteSpace(newEnableFunction))
+            {
+                var customRuleEl = enableRuleEl?.Element("CustomRule");
+                customRuleEl?.SetAttributeValue("FunctionName", newEnableFunction);
+                updatedFields.Add("enable_function");
+            }
+
+            if (updatedFields.Count == 0)
+                return ("Error: update_button requires at least one updatable field: " +
+                        "label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence.", null);
+
+            return (null, $"update_button: '{buttonId}' updated [{string.Join(", ", updatedFields)}]");
+        }
+
+        // ── Button element builder ───────────────────────────────────────
+
+        private XElement BuildButtonElement(string buttonId, string commandId, string tooltipTitle, int sequence, string modernImage, string tooltipDesc)
+        {
+            var el = new XElement("Button",
+                new XAttribute("Id", buttonId),
+                new XAttribute("Command", commandId),
+                new XAttribute("LabelText", $"$LocLabels:{buttonId}.LabelText"),
+                new XAttribute("ToolTipTitle", $"$LocLabels:{buttonId}.ToolTipTitle"),
+                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("Sequence", sequence));
+
+            if (!string.IsNullOrWhiteSpace(tooltipDesc))
+                el.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{buttonId}.ToolTipDescription"));
+
+            if (!string.IsNullOrWhiteSpace(modernImage))
+                el.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+
+            return el;
+        }
+
+        // ── LocLabel helpers ─────────────────────────────────────────────
+
+        private void UpsertLocLabel(XElement root, string locLabelId, string description)
+        {
+            var locLabelsEl = GetOrCreateElement(root, "LocLabels");
+
+            var existing = locLabelsEl.Elements("LocLabel")
                 .Where(e => string.Equals(e.Attribute("Id")?.Value, locLabelId, StringComparison.OrdinalIgnoreCase))
                 .ToList();
-            foreach (var e in existingLabel) e.Remove();
+            foreach (var e in existing) e.Remove();
 
             locLabelsEl.Add(new XElement("LocLabel",
                 new XAttribute("Id", locLabelId),
                 new XElement("Titles",
                     new XElement("Title",
-                        new XAttribute("description", label),
+                        new XAttribute("description", description),
                         new XAttribute("languagecode", GetBaseLanguageCode())))));
-
-            return (null, $"add_button: '{label}' on {surface} -> {function} / enable: {enableFunction}");
         }
 
         // ── XML helpers ──────────────────────────────────────────────────
@@ -454,27 +764,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (el == null)
             {
                 el = new XElement(name);
-                parent.AddFirst(el);
+                parent.Add(el);
             }
             return el;
         }
 
-        private static void RemoveExistingById(XDocument doc, string parentName, string childName, string attrName, string attrValue)
+        private static void RemoveById(XElement root, string parentName, string childName, string id)
         {
-            var parent = doc.Root?.Element(parentName);
+            var parent = root?.Element(parentName);
             if (parent == null) return;
+            parent.Elements(childName)
+                .Where(e => string.Equals(e.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase))
+                .ToList()
+                .ForEach(e => e.Remove());
+        }
 
-            var existing = parent.Elements(childName)
-                .Where(e => string.Equals(e.Attribute(attrName)?.Value, attrValue, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-            foreach (var e in existing)
-                e.Remove();
+        private static void RemoveByIdInChild(XElement parent, string childContainerName, string childName, string id)
+        {
+            var container = parent?.Element(childContainerName);
+            if (container == null) return;
+            container.Elements(childName)
+                .Where(e => string.Equals(e.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase))
+                .ToList()
+                .ForEach(e => e.Remove());
         }
 
         private static string GenerateSlug(string label)
         {
             if (string.IsNullOrWhiteSpace(label)) return "Button";
-            // Remove non-alphanumeric, PascalCase
             var words = Regex.Split(label.Trim(), @"[\s_\-]+");
             var sb = new StringBuilder();
             foreach (var word in words)
@@ -502,6 +819,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch { }
             return 1033;
         }
+
         // ── JSON helpers ─────────────────────────────────────────────────
 
         private static string GetJsonString(JsonElement el, string propertyName)
