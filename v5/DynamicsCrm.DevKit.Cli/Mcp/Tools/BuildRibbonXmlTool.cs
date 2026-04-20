@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     public class BuildRibbonXmlTool
     {
         private readonly ServiceClient _serviceClient;
-        private const string SOLUTION_NAME = "devkit-ribbon";
+        private const string SOLUTION_NAME = "devkit_ribbon";
 
         // Cached XSD schema set for ribbon validation
         private static XmlSchemaSet _cachedSchemaSet;
