@@ -349,6 +349,65 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string RestoredFromBackup { get; set; }
     }
 
+    internal sealed class BuildRibbonXmlResult
+    {
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("operationsCount")]
+        public int OperationsCount { get; set; }
+
+        [JsonPropertyName("operationSummaries")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OperationSummaries { get; set; }
+
+        [JsonPropertyName("existingButtonsPreserved")]
+        public int ExistingButtonsPreserved { get; set; }
+
+        [JsonPropertyName("totalButtons")]
+        public int TotalButtons { get; set; }
+
+        [JsonPropertyName("ribbonXmlPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RibbonXmlPath { get; set; }
+    }
+
+    internal sealed class ManageRibbonResult
+    {
+        [JsonPropertyName("action")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Action { get; set; }
+
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("entities")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Entities { get; set; }
+
+        [JsonPropertyName("ribbonDiffXml")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RibbonDiffXml { get; set; }
+
+        [JsonPropertyName("backupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string BackupPath { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("restoredFromBackup")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RestoredFromBackup { get; set; }
+    }
+
     internal sealed class UpsertColumnResult
     {
         [JsonPropertyName("entityName")]

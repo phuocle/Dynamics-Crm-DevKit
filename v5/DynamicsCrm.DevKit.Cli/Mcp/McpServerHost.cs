@@ -55,6 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(BuildFormXMLTool)] = "standard",
             [nameof(BuildSiteMapXmlTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
+            [nameof(BuildRibbonXmlTool)] = "standard",
 
             // advanced (5 additional tools)
             [nameof(ManageSiteMapTool)] = "advanced",
@@ -62,6 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(UpsertColumnTool)] = "advanced",
             [nameof(UpsertRelationshipTool)] = "advanced",
             [nameof(ExecuteWebApiTool)] = "advanced",
+            [nameof(ManageRibbonTool)] = "advanced",
         };
 
         internal static readonly Dictionary<string, int> CategoryLevel = new()

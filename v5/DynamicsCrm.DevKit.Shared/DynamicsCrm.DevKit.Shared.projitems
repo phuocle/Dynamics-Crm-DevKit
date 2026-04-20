@@ -239,4 +239,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ManagedIdentity\Plugin-Managed-Identity-Config.json" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ManagedIdentity\Plugin-Managed-Identity.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ribbon\ribbon.zip" />
+  </ItemGroup>
 </Project>
