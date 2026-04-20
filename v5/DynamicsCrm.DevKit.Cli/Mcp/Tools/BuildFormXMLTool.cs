@@ -6,6 +6,7 @@ using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using System;
 using System.Collections.Generic;
@@ -374,7 +375,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             tabElement.Add(new XElement("labels",
                 new XElement("label",
                     new XAttribute("description", label),
-                    new XAttribute("languagecode", "1033"))));
+                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()))));
 
             var columnsElement = new XElement("columns");
             var columnWidths = GetTabColumnWidths(tabColumns);
@@ -1607,7 +1608,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             section.Add(new XElement("labels",
                 new XElement("label",
                     new XAttribute("description", label),
-                    new XAttribute("languagecode", "1033"))));
+                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()))));
 
             var rowsElement = new XElement("rows");
 
@@ -1639,7 +1640,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return section;
         }
 
-        private static XElement BuildCellElement(string controlId, string fieldName, string label, string classid,
+        private XElement BuildCellElement(string controlId, string fieldName, string label, string classid,
             bool disabled, bool visible, int colspan, int rowspan, bool showlabel, bool hideOnPhone)
         {
             var cell = new XElement("cell",
@@ -1659,7 +1660,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             cell.Add(new XElement("labels",
                 new XElement("label",
                     new XAttribute("description", label),
-                    new XAttribute("languagecode", "1033"))));
+                    new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()))));
 
             var control = new XElement("control",
                 new XAttribute("id", controlId),

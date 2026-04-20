@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Shared;
@@ -175,7 +176,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = lookupSchemaName,
                     LogicalName = lookupLogicalName,
-                    DisplayName = new Label(lookupDisplayName.Trim(), 1033),
+                    DisplayName = new Label(lookupDisplayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None)
                 }
             };

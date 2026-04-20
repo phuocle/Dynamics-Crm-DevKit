@@ -1,4 +1,5 @@
 // BuildRibbonXmlTool.cs
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
@@ -753,7 +754,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XElement("Titles",
                     new XElement("Title",
                         new XAttribute("description", description),
-                        new XAttribute("languagecode", GetBaseLanguageCode())))));
+                        new XAttribute("languagecode", McpHelper.GetBaseLanguageCode(_serviceClient))))));
         }
 
         // ── XML helpers ──────────────────────────────────────────────────
@@ -801,23 +802,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (word.Length > 1) sb.Append(word.Substring(1));
             }
             return sb.Length > 0 ? sb.ToString() : "Button";
-        }
-
-        private int GetBaseLanguageCode()
-        {
-            try
-            {
-                var fetch = "<fetch top='1'><entity name='organization'><attribute name='languagecode' /></entity></fetch>";
-                var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
-                if (results.Entities.Count > 0)
-                {
-                    var lang = results.Entities[0].GetAttributeValue<int?>("languagecode");
-                    if (lang.HasValue && lang.Value > 0)
-                        return lang.Value;
-                }
-            }
-            catch { }
-            return 1033;
         }
 
         // ── JSON helpers ─────────────────────────────────────────────────

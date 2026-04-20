@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Shared;
@@ -333,14 +334,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 MaxLength = maxLength,
                 FormatName = resolvedFormat,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -369,14 +370,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 MaxLength = maxLength,
                 FormatName = memoFormat,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -402,7 +403,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Format = resolvedFormat,
                 IsAuditEnabled = new BooleanManagedProperty(true)
@@ -410,7 +411,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) attr.MinValue = (int)minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = (int)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -439,7 +440,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Precision = precision,
                 IsAuditEnabled = new BooleanManagedProperty(true)
@@ -447,7 +448,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) attr.MinValue = (decimal)minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = (decimal)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -478,7 +479,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Precision = precision,
                 PrecisionSource = precisionSource,
@@ -487,7 +488,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) attr.MinValue = minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -519,7 +520,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Precision = precision,
                 IsAuditEnabled = new BooleanManagedProperty(true)
@@ -527,7 +528,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) attr.MinValue = minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -557,15 +558,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 OptionSet = new BooleanOptionSetMetadata(
-                    new OptionMetadata(new Label(trueLabel.Trim(), 1033), 1),
-                    new OptionMetadata(new Label(falseLabel.Trim(), 1033), 0)),
+                    new OptionMetadata(new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 1),
+                    new OptionMetadata(new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 0)),
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -598,14 +599,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Format = dateFormat,
                 DateTimeBehavior = dtBehavior,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -696,13 +697,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = schemaName,
                     LogicalName = logicalName,
-                    DisplayName = new Label(displayName.Trim(), 1033),
+                    DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                     IsAuditEnabled = new BooleanManagedProperty(true)
                 }
             };
             if (!string.IsNullOrWhiteSpace(description))
-                request.Lookup.Description = new Label(description.Trim(), 1033);
+                request.Lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
             if (!string.IsNullOrWhiteSpace(solutionName))
                 request.SolutionUniqueName = solutionName.Trim();
 
@@ -762,12 +763,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                lookup.Description = new Label(description.Trim(), 1033);
+                lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             // Use OrganizationRequest since CreatePolymorphicLookupAttributeRequest
             // is not available in the Microsoft.PowerPlatform.Dataverse.Client SDK
@@ -813,12 +814,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                lookup.Description = new Label(description.Trim(), 1033);
+                lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var request = new CreateCustomerRelationshipsRequest
             {
@@ -915,7 +916,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), 1033),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                         RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = new OptionSetMetadata { IsGlobal = true, Name = globalOptionSetName.Trim() }
                     };
@@ -926,7 +927,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), 1033),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                         RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = new OptionSetMetadata { IsGlobal = true, Name = globalOptionSetName.Trim() }
                     };
@@ -951,7 +952,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var optionSet = new OptionSetMetadata { IsGlobal = false, OptionSetType = OptionSetType.Picklist };
                 foreach (var opt in parsedOptions)
                 {
-                    optionSet.Options.Add(new OptionMetadata(new Label(opt.Label, 1033), opt.Value));
+                    optionSet.Options.Add(new OptionMetadata(new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)), opt.Value));
                     optionLabels.Add($"{opt.Label} ({opt.Value})");
                 }
 
@@ -961,7 +962,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), 1033),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                         RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = optionSet
                     };
@@ -972,7 +973,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         SchemaName = schemaName,
                         LogicalName = logicalName,
-                        DisplayName = new Label(displayName.Trim(), 1033),
+                        DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                         RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = optionSet
                     };
@@ -980,7 +981,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -1003,12 +1004,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -1029,13 +1030,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 IsAuditEnabled = new BooleanManagedProperty(true),
                 IsPrimaryImage = false
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -1059,13 +1060,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 MaxSizeInKB = maxSizeInKB,
                 IsAuditEnabled = new BooleanManagedProperty(true)
             };
             if (!string.IsNullOrWhiteSpace(description))
-                attr.Description = new Label(description.Trim(), 1033);
+                attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
             if (_options.DryRun)
@@ -1310,7 +1311,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = metadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != displayName.Trim())
                     {
-                        metadata.DisplayName = new Label(displayName.Trim(), 1033);
+                        metadata.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                         changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
                         structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
                     }
@@ -1321,7 +1322,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = metadata.Description?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != description.Trim())
                     {
-                        metadata.Description = new Label(description.Trim(), 1033);
+                        metadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                         changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
                         structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
                     }
@@ -1449,7 +1450,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ========== Type-Specific Updates ==========
 
-        private static string ApplyTypeSpecificUpdates(AttributeMetadata metadata,
+        private string ApplyTypeSpecificUpdates(AttributeMetadata metadata,
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel, string behavior, int precisionSource,
             List<string> changes, Dictionary<string, UpdateAttributeChange> structuredChanges)
@@ -1538,14 +1539,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(trueLabel))
                 {
                     var oldVal = boolMeta.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label ?? "Yes";
-                    boolMeta.OptionSet.TrueOption.Label = new Label(trueLabel.Trim(), 1033);
+                    boolMeta.OptionSet.TrueOption.Label = new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                     changes.Add($"TrueLabel: \"{oldVal}\" -> \"{trueLabel.Trim()}\"");
                     structuredChanges["trueLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = trueLabel.Trim() };
                 }
                 if (!string.IsNullOrWhiteSpace(falseLabel))
                 {
                     var oldVal = boolMeta.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label ?? "No";
-                    boolMeta.OptionSet.FalseOption.Label = new Label(falseLabel.Trim(), 1033);
+                    boolMeta.OptionSet.FalseOption.Label = new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                     changes.Add($"FalseLabel: \"{oldVal}\" -> \"{falseLabel.Trim()}\"");
                     structuredChanges["falseLabel"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = falseLabel.Trim() };
                 }
@@ -1631,7 +1632,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else if (opts != null)
                     foreach (var opt in opts)
                     {
-                        var req = new InsertOptionValueRequest { Label = new Label(opt.Label, 1033) };
+                        var req = new InsertOptionValueRequest { Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)) };
                         if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
                             req.OptionSetName = optionSetName;
                         else
@@ -1654,7 +1655,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var opt in opts)
                     {
                         if (!opt.Value.HasValue) continue;
-                        var req = new UpdateOptionValueRequest { Value = opt.Value.Value, Label = new Label(opt.Label, 1033), MergeLabels = true };
+                        var req = new UpdateOptionValueRequest { Value = opt.Value.Value, Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)), MergeLabels = true };
                         if (isGlobal && !string.IsNullOrWhiteSpace(optionSetName))
                             req.OptionSetName = optionSetName;
                         else

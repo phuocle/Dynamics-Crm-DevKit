@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -739,17 +740,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Titles helper ─────────────────────────────────────────────────
 
-        private static XElement BuildTitlesElement(string label)
+        private XElement BuildTitlesElement(string label)
         {
             return new XElement("Titles",
                 new XElement("Title",
-                    new XAttribute("LCID", "1033"),
+                    new XAttribute("LCID", McpHelper.GetBaseLanguageCode(_serviceClient).ToString()),
                     new XAttribute("Title", label)));
         }
 
         // ── Insert with position ──────────────────────────────────────────
 
-        private static XElement BuildSubAreaElement(JsonElement sa)
+        private XElement BuildSubAreaElement(JsonElement sa)
         {
             var entity = GetStringProp(sa, "entity");
             var url = GetStringProp(sa, "url");

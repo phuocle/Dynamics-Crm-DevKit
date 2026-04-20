@@ -171,17 +171,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var optionSetMetadata = new OptionSetMetadata
             {
                 Name = name,
-                DisplayName = new Label(displayName.Trim(), 1033),
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                 IsGlobal = true,
                 OptionSetType = OptionSetType.Picklist
             };
 
             if (!string.IsNullOrWhiteSpace(description))
-                optionSetMetadata.Description = new Label(description.Trim(), 1033);
+                optionSetMetadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
             foreach (var (value, label) in parsedOptions)
             {
-                optionSetMetadata.Options.Add(new OptionMetadata(new Label(label, 1033), value));
+                optionSetMetadata.Options.Add(new OptionMetadata(new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient)), value));
             }
 
             _serviceClient.Execute(new CreateOptionSetRequest { OptionSet = optionSetMetadata });
@@ -274,12 +274,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
                 if (hasDisplayName)
                 {
-                    updateMeta.DisplayName = new Label(displayName.Trim(), 1033);
+                    updateMeta.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                     sb.AppendLine($"DisplayName: {displayName.Trim()}");
                 }
                 if (hasDescription)
                 {
-                    updateMeta.Description = new Label(description.Trim(), 1033);
+                    updateMeta.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                     sb.AppendLine($"Description: {description.Trim()}");
                 }
                 _serviceClient.Execute(new UpdateOptionSetRequest { OptionSet = updateMeta });
@@ -308,7 +308,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         OptionSetName = name,
                         Value = value,
-                        Label = new Label(label, 1033)
+                        Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient))
                     });
                     sb.AppendLine($"Added: {value}: {label}");
                 }
@@ -323,7 +323,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         OptionSetName = name,
                         Value = value,
-                        Label = new Label(label, 1033)
+                        Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient))
                     });
                     sb.AppendLine($"Updated: {value}: {label}");
                 }

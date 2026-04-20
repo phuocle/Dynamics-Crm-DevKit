@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 using DynamicsCrm.DevKit.Shared;
@@ -306,8 +307,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = schemaName,
                     LogicalName = entity_name,
-                    DisplayName = new Label(display_name.Trim(), 1033),
-                    DisplayCollectionName = new Label(display_collection_name.Trim(), 1033),
+                    DisplayName = new Label(display_name.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                    DisplayCollectionName = new Label(display_collection_name.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
                     IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
@@ -315,7 +316,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
 
                 if (!string.IsNullOrWhiteSpace(description))
-                    entityMetadata.Description = new Label(description.Trim(), 1033);
+                    entityMetadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
                 // Elastic table overrides
                 if (isElastic)
@@ -332,7 +333,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = primarySchemaName,
                     LogicalName = primary_attribute_name,
-                    DisplayName = new Label(primary_attribute_display_name.Trim(), 1033),
+                    DisplayName = new Label(primary_attribute_display_name.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
                     MaxLength = primary_attribute_max_length,
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.ApplicationRequired),
                     FormatName = StringFormatName.Text
@@ -472,7 +473,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != displayName.Trim())
                     {
-                        existingMetadata.DisplayName = new Label(displayName.Trim(), 1033);
+                        existingMetadata.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                         changes.Add($"DisplayName: \"{oldVal}\" -> \"{displayName.Trim()}\"");
                         structuredChanges["displayName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayName.Trim() };
                     }
@@ -483,7 +484,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != displayCollectionName.Trim())
                     {
-                        existingMetadata.DisplayCollectionName = new Label(displayCollectionName.Trim(), 1033);
+                        existingMetadata.DisplayCollectionName = new Label(displayCollectionName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                         changes.Add($"DisplayCollectionName: \"{oldVal}\" -> \"{displayCollectionName.Trim()}\"");
                         structuredChanges["displayCollectionName"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = displayCollectionName.Trim() };
                     }
@@ -494,7 +495,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var oldVal = existingMetadata.Description?.UserLocalizedLabel?.Label ?? "";
                     if (oldVal != description.Trim())
                     {
-                        existingMetadata.Description = new Label(description.Trim(), 1033);
+                        existingMetadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
                         changes.Add($"Description: \"{oldVal}\" -> \"{description.Trim()}\"");
                         structuredChanges["description"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = description.Trim() };
                     }
