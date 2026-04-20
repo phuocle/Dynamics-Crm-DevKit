@@ -22,6 +22,9 @@ lcov.info
 **/obj/
 **/nupkg/
 
+# DevKit MCP working directory
+.devkit/
+
 # Tool test data
 DynamicsCrm.DevKit.Tool/Test/
 
