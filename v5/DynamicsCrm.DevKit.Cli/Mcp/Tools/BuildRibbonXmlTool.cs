@@ -737,7 +737,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var menuSectionId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.MenuSection";
             var controlsId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Controls";
             var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.{surfaceSuffix}.DisplayRule" : null;
-            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.{surfaceSuffix}.SelectionEnableRule" : null;
+            string selectionEnableRuleId = null; // flyout/split use no SelectionCountRule — items must always be visible
 
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
@@ -882,10 +882,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     new XAttribute("FunctionName", itemFunc));
                 foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
 
+                var itemEnableRulesEl = new XElement("EnableRules",
+                    new XElement("EnableRule", new XAttribute("Id", itemEnRuleId)));
+                if (selectionEnableRuleId != null)
+                    itemEnableRulesEl.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
+
                 commandDefsEl.Add(new XElement("CommandDefinition",
                     new XAttribute("Id", itemCmdId),
-                    new XElement("EnableRules",
-                        new XElement("EnableRule", new XAttribute("Id", itemEnRuleId))),
+                    itemEnableRulesEl,
                     new XElement("DisplayRules"),
                     new XElement("Actions", jsFuncEl)));
             }
@@ -1323,7 +1327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var menuSectionId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.MenuSection";
             var controlsId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Controls";
             var displayRuleId = surface == "form" ? $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.DisplayRule" : null;
-            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.SelectionEnableRule" : null;
+            string selectionEnableRuleId = null; // flyout/split use no SelectionCountRule — items must always be visible
 
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
@@ -1458,10 +1462,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     new XAttribute("FunctionName", itemFunc));
                 foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
 
+                var itemEnableRulesEl = new XElement("EnableRules",
+                    new XElement("EnableRule", new XAttribute("Id", itemEnRuleId)));
+                if (selectionEnableRuleId != null)
+                    itemEnableRulesEl.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
+
                 commandDefsEl.Add(new XElement("CommandDefinition",
                     new XAttribute("Id", itemCmdId),
-                    new XElement("EnableRules",
-                        new XElement("EnableRule", new XAttribute("Id", itemEnRuleId))),
+                    itemEnableRulesEl,
                     new XElement("DisplayRules"),
                     new XElement("Actions", jsFuncEl)));
             }
