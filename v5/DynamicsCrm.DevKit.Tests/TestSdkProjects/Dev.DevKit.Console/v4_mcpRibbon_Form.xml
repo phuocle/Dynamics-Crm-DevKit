@@ -38,9 +38,9 @@
                   <Button Id="Mscrm.Form.v4_mcp.OpenActiveStage" ToolTipTitle="$Resources:Mscrm_Form_Other_MainTab_OpenActiveStage_ToolTipTitle" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Form.Tooltip.OpenActiveStage" Command="Mscrm.Form.OpenActiveStage" Sequence="80" LabelText="$Resources:Ribbon.Form.MainTab.OpenActiveStage" Alt="$Resources:Ribbon.Form.MainTab.OpenActiveStage" Image16by16="/_imgs/ribbon/formdesign16.png" Image32by32="/_imgs/ribbon/EditForm_32.png" TemplateAlias="o2" ModernImage="FormDesign" SolutionUniqueName="System" />
                   <Button Id="devkit.v4_mcp.MCPForm.Form.Button" Command="devkit.v4_mcp.MCPForm.Form.Command" LabelText="$LocLabels:devkit.v4_mcp.MCPForm.Form.Button.LabelText" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPForm.Form.Button.ToolTipTitle" TemplateAlias="isv" Sequence="85" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                   <FlyoutAnchor Id="devkit.v4_mcp.ExportData.Form.FlyoutAnchor" Command="devkit.v4_mcp.ExportData.Form.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.ToolTipTitle" TemplateAlias="isv" Sequence="86" PopulateOnlyOnce="true" ToolTipDescription="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.ToolTipDescription" ModernImage="$webresource:Activities/Images/embed_32.svg">
-                    <Menu Id="devkit.v4_mcp.ExportData.Form.Menu">
+                    <Menu Id="devkit.v4_mcp.ExportData.Form.FlyoutAnchor.Menu">
                       <MenuSection Id="devkit.v4_mcp.ExportData.Form.MenuSection" Sequence="10" DisplayMode="Menu16">
-                        <Controls Id="devkit.v4_mcp.ExportData.Form.Controls">
+                        <Controls Id="devkit.v4_mcp.ExportData.Form.MenuSection.Controls">
                           <Button Id="devkit.v4_mcp.ExportData.Form.ExportToExcel.Button" Command="devkit.v4_mcp.ExportData.Form.ExportToExcel.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToExcel.Button.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToExcel.Button.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToExcel.Button.ToolTipTitle" Sequence="10" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                           <Button Id="devkit.v4_mcp.ExportData.Form.ExportToPDF.Button" Command="devkit.v4_mcp.ExportData.Form.ExportToPDF.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToPDF.Button.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToPDF.Button.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToPDF.Button.ToolTipTitle" Sequence="20" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                           <Button Id="devkit.v4_mcp.ExportData.Form.ExportToCSV.Button" Command="devkit.v4_mcp.ExportData.Form.ExportToCSV.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToCSV.Button.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToCSV.Button.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.Form.ExportToCSV.Button.ToolTipTitle" Sequence="30" ModernImage="$webresource:Activities/Images/embed_32.svg" />
@@ -48,12 +48,12 @@
                       </MenuSection>
                     </Menu>
                   </FlyoutAnchor>
-                  <SplitButton Id="devkit.v4_mcp.Send.Form.SplitButton" Command="devkit.v4_mcp.Send.Form.Command" LabelText="Send" Alt="Send" ToolTipTitle="Send" TemplateAlias="isv" Sequence="87" PopulateOnlyOnce="true" ToolTipDescription="Send notification via email or SMS" ModernImage="$webresource:Activities/Images/embed_32.svg">
-                    <Menu Id="devkit.v4_mcp.Send.Form.Menu">
+                  <SplitButton Alt="$LocLabels:devkit.v4_mcp.Send.Form.SplitButton.Alt" Command="devkit.v4_mcp.Send.Form.Command" Id="devkit.v4_mcp.Send.Form.SplitButton" LabelText="$LocLabels:devkit.v4_mcp.Send.Form.SplitButton.LabelText" PopulateOnlyOnce="true" Sequence="87" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.Send.Form.SplitButton.ToolTipTitle" ToolTipDescription="$LocLabels:devkit.v4_mcp.Send.Form.SplitButton.ToolTipDescription" ModernImage="$webresource:Activities/Images/embed_32.svg">
+                    <Menu Id="devkit.v4_mcp.Send.Form.SplitButton.Menu">
                       <MenuSection Id="devkit.v4_mcp.Send.Form.MenuSection" Sequence="10" DisplayMode="Menu16">
-                        <Controls Id="devkit.v4_mcp.Send.Form.Controls">
-                          <Button Id="devkit.v4_mcp.Send.Form.SendEmail.Button" Command="devkit.v4_mcp.Send.Form.SendEmail.Command" LabelText="Send Email" Alt="Send Email" ToolTipTitle="Send Email" Sequence="10" ModernImage="$webresource:Activities/Images/embed_32.svg" />
-                          <Button Id="devkit.v4_mcp.Send.Form.SendSMS.Button" Command="devkit.v4_mcp.Send.Form.SendSMS.Command" LabelText="Send SMS" Alt="Send SMS" ToolTipTitle="Send SMS" Sequence="20" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                        <Controls Id="devkit.v4_mcp.Send.Form.MenuSection.Controls">
+                          <Button Alt="$LocLabels:devkit.v4_mcp.Send.Form.SendEmail.Button.Alt" Command="devkit.v4_mcp.Send.Form.SendEmail.Command" Id="devkit.v4_mcp.Send.Form.SendEmail.Button" LabelText="$LocLabels:devkit.v4_mcp.Send.Form.SendEmail.Button.LabelText" Sequence="10" ToolTipTitle="$LocLabels:devkit.v4_mcp.Send.Form.SendEmail.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                          <Button Alt="$LocLabels:devkit.v4_mcp.Send.Form.SendSMS.Button.Alt" Command="devkit.v4_mcp.Send.Form.SendSMS.Command" Id="devkit.v4_mcp.Send.Form.SendSMS.Button" LabelText="$LocLabels:devkit.v4_mcp.Send.Form.SendSMS.Button.LabelText" Sequence="20" ToolTipTitle="$LocLabels:devkit.v4_mcp.Send.Form.SendSMS.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                         </Controls>
                       </MenuSection>
                     </Menu>
@@ -839,6 +839,21 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
+      <CommandDefinition Id="devkit.v4_mcp.MCPForm.Form.Command">
+        <EnableRules>
+          <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule" />
+        </EnableRules>
+        <DisplayRules>
+          <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule" />
+        </DisplayRules>
+        <Actions>
+          <JavaScriptFunction FunctionName="MCP.buttonFormClick" Library="$webresource:devkit_/TestMcp/js/button.js">
+            <CrmParameter Value="PrimaryControl" />
+            <CrmParameter Value="PrimaryEntityTypeName" />
+            <CrmParameter Value="PrimaryItemIds" />
+          </JavaScriptFunction>
+        </Actions>
+      </CommandDefinition>
       <CommandDefinition Id="devkit.v4_mcp.ExportData.Form.Command">
         <EnableRules />
         <DisplayRules>
@@ -853,7 +868,7 @@
         </EnableRules>
         <DisplayRules />
         <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/flyout.js" FunctionName="MCP.exportExcelForm">
+          <JavaScriptFunction FunctionName="MCP.exportExcelForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -866,7 +881,7 @@
         </EnableRules>
         <DisplayRules />
         <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/flyout.js" FunctionName="MCP.exportPdfForm">
+          <JavaScriptFunction FunctionName="MCP.exportPdfForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -879,7 +894,7 @@
         </EnableRules>
         <DisplayRules />
         <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/flyout.js" FunctionName="MCP.exportCsvForm">
+          <JavaScriptFunction FunctionName="MCP.exportCsvForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -894,7 +909,7 @@
           <DisplayRule Id="devkit.v4_mcp.Send.Form.DisplayRule" />
         </DisplayRules>
         <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/split.js" FunctionName="MCP.sendForm">
+          <JavaScriptFunction FunctionName="MCP.sendForm" Library="$webresource:devkit_/TestMcp/js/split.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -907,7 +922,7 @@
         </EnableRules>
         <DisplayRules />
         <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/split.js" FunctionName="MCP.sendEmailForm">
+          <JavaScriptFunction FunctionName="MCP.sendEmailForm" Library="$webresource:devkit_/TestMcp/js/split.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -920,22 +935,7 @@
         </EnableRules>
         <DisplayRules />
         <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/split.js" FunctionName="MCP.sendSmsForm">
-            <CrmParameter Value="PrimaryControl" />
-            <CrmParameter Value="PrimaryEntityTypeName" />
-            <CrmParameter Value="PrimaryItemIds" />
-          </JavaScriptFunction>
-        </Actions>
-      </CommandDefinition>
-      <CommandDefinition Id="devkit.v4_mcp.MCPForm.Form.Command">
-        <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule" />
-        </EnableRules>
-        <DisplayRules>
-          <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule" />
-        </DisplayRules>
-        <Actions>
-          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/button.js" FunctionName="MCP.buttonFormClick">
+          <JavaScriptFunction FunctionName="MCP.sendSmsForm" Library="$webresource:devkit_/TestMcp/js/split.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -2001,13 +2001,13 @@
     </CommandDefinitions>
     <RuleDefinitions>
       <DisplayRules>
+        <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule">
+          <FormStateRule State="Existing" />
+        </DisplayRule>
         <DisplayRule Id="devkit.v4_mcp.ExportData.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
         <DisplayRule Id="devkit.v4_mcp.Send.Form.DisplayRule">
-          <FormStateRule State="Existing" />
-        </DisplayRule>
-        <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
         <DisplayRule Id="Mscrm.SharePrimaryPermission">
@@ -2331,6 +2331,13 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
+        <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule">
+          <CustomRule FunctionName="MCP.isButtonFormEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
+            <CrmParameter Value="PrimaryControl" />
+            <CrmParameter Value="PrimaryEntityTypeName" />
+            <CrmParameter Value="PrimaryItemIds" />
+          </CustomRule>
+        </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.Form.ExportToExcel.EnableRule">
           <CustomRule FunctionName="MCP.isExcelEnabledForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
             <CrmParameter Value="PrimaryControl" />
@@ -2371,13 +2378,6 @@
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.Send.Form.SendSMS.EnableRule">
           <CustomRule FunctionName="MCP.isSmsEnabledForm" Library="$webresource:devkit_/TestMcp/js/split.js">
-            <CrmParameter Value="PrimaryControl" />
-            <CrmParameter Value="PrimaryEntityTypeName" />
-            <CrmParameter Value="PrimaryItemIds" />
-          </CustomRule>
-        </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule">
-          <CustomRule FunctionName="MCP.isButtonFormEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
