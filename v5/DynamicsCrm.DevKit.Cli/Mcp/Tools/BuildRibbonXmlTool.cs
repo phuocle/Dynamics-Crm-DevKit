@@ -545,27 +545,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("FunctionName", function));
             foreach (var p in crmParams) jsFunctionEl.Add(p);
 
-            // DisplayRule reference inside CommandDefinition
-            // form: FormStateRule(Existing)  |  sub_grid: SelectionCountRule(Min=1)  |  main_grid: none
-            var displayRuleId = (surface == "form" || surface == "sub_grid")
-                ? $"devkit.{entityName}.{slug}.DisplayRule"
-                : null;
+            // DisplayRule reference inside CommandDefinition (form only)
+            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.DisplayRule" : null;
+
+            // sub_grid: extra EnableRule for SelectionCountRule(Min=1) — button disabled when no row selected
+            // SelectionCountRule is only valid inside EnableRule (not DisplayRule per XSD)
+            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.SelectionEnableRule" : null;
 
             XElement displayRulesInCommand = displayRuleId != null
                 ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
                 : new XElement("DisplayRules");
 
+            var enableRulesInCommand = new XElement("EnableRules",
+                new XElement("EnableRule", new XAttribute("Id", enableRuleId)));
+            if (selectionEnableRuleId != null)
+                enableRulesInCommand.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
+
             commandDefsEl.Add(new XElement("CommandDefinition",
                 new XAttribute("Id", commandId),
-                new XElement("EnableRules",
-                    new XElement("EnableRule", new XAttribute("Id", enableRuleId))),
+                enableRulesInCommand,
                 displayRulesInCommand,
                 new XElement("Actions", jsFunctionEl)));
 
             // ── RuleDefinitions ──
             var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
 
-            // EnableRule — same CrmParameters as click function
+            // EnableRule (custom JS) — same CrmParameters as click function
             RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", enableRuleId);
             var enableRulesEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
             var enableCustomRuleEl = new XElement("CustomRule",
@@ -576,20 +581,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("Id", enableRuleId),
                 enableCustomRuleEl));
 
-            // DisplayRule
-            // form:     FormStateRule State="Existing"
-            // sub_grid: SelectionCountRule Minimum="1"
-            // main_grid: none
+            // sub_grid: SelectionCountRule Minimum="1" as a separate EnableRule
+            if (selectionEnableRuleId != null)
+            {
+                RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", selectionEnableRuleId);
+                enableRulesEl.Add(new XElement("EnableRule",
+                    new XAttribute("Id", selectionEnableRuleId),
+                    new XElement("SelectionCountRule", new XAttribute("Minimum", "1"))));
+            }
+
+            // DisplayRule (form only): FormStateRule State="Existing"
             if (displayRuleId != null)
             {
                 RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
                 var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
-                XElement displayRuleContent = surface == "form"
-                    ? new XElement("FormStateRule", new XAttribute("State", "Existing"))
-                    : new XElement("SelectionCountRule", new XAttribute("Minimum", "1"));
                 displayRulesEl.Add(new XElement("DisplayRule",
                     new XAttribute("Id", displayRuleId),
-                    displayRuleContent));
+                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
             }
 
             // ── LocLabels ──
@@ -756,7 +764,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── hide_button ──────────────────────────────────────────────────
 
-        private static (string error, string summary) ExecuteHideButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        private (string error, string summary) ExecuteHideButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var buttonId = GetJsonString(op, "button_id");
             if (string.IsNullOrWhiteSpace(buttonId))
@@ -765,29 +773,83 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             buttonId = buttonId.Trim();
 
-            // Generate a stable HideActionId from the buttonId
-            var safeId = buttonId.Replace(".", "_").Replace(" ", "_");
-            var hideActionId = $"devkit.{safeId}.Hide";
+            // Determine if OOB or custom by checking SolutionUniqueName from merged ribbon
+            var isOob = IsOobButton(entityName, buttonId);
 
-            // Remove existing HideCustomAction for this button (idempotent)
-            ribbonDoc.Root
-                ?.Descendants("HideCustomAction")
-                .Where(e => string.Equals(e.Attribute("Location")?.Value, buttonId, StringComparison.OrdinalIgnoreCase))
-                .ToList()
-                .ForEach(e => e.Remove());
+            if (isOob)
+            {
+                // OOB: HideCustomAction approach
+                var safeId = buttonId.Replace(".", "_").Replace(" ", "_");
+                var hideActionId = $"devkit.{safeId}.Hide";
 
-            // Add HideCustomAction
-            var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
-            customActionsEl.Add(new XElement("HideCustomAction",
-                new XAttribute("HideActionId", hideActionId),
-                new XAttribute("Location", buttonId)));
+                ribbonDoc.Root
+                    ?.Descendants("HideCustomAction")
+                    .Where(e => string.Equals(e.Attribute("Location")?.Value, buttonId, StringComparison.OrdinalIgnoreCase))
+                    .ToList()
+                    .ForEach(e => e.Remove());
 
-            return (null, $"hide_button: '{buttonId}' → HideCustomAction added");
+                var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
+                customActionsEl.Add(new XElement("HideCustomAction",
+                    new XAttribute("HideActionId", hideActionId),
+                    new XAttribute("Location", buttonId)));
+
+                return (null, $"hide_button (OOB): '{buttonId}' → HideCustomAction added");
+            }
+            else
+            {
+                // Custom button: inject always-hidden DisplayRule (empty OrRule = always false)
+                // Find Command from Button element in CustomActions
+                var buttonEl = ribbonDoc.Root
+                    ?.Descendants("Button")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
+
+                if (buttonEl == null)
+                    return ($"Error: Button '{buttonId}' not found in RibbonDiffXml.\n" +
+                            "Tip: Use manage_ribbon(action='buttons') to verify the Button Id.", null);
+
+                var commandId = buttonEl.Attribute("Command")?.Value;
+                if (string.IsNullOrWhiteSpace(commandId))
+                    return ($"Error: Button '{buttonId}' has no Command attribute.", null);
+
+                var commandDefEl = ribbonDoc.Root
+                    ?.Element("CommandDefinitions")
+                    ?.Elements("CommandDefinition")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, commandId, StringComparison.OrdinalIgnoreCase));
+
+                if (commandDefEl == null)
+                    return ($"Error: CommandDefinition '{commandId}' not found for button '{buttonId}'.", null);
+
+                // Always-disabled EnableRule: SelectionCountRule(Min=9999, Max=9999) = never true
+                var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
+
+                // Add reference in CommandDefinition/EnableRules (idempotent)
+                var enableRulesInCmd = GetOrCreateElement(commandDefEl, "EnableRules");
+                if (!enableRulesInCmd.Elements("EnableRule").Any(e =>
+                    string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase)))
+                {
+                    enableRulesInCmd.Add(new XElement("EnableRule", new XAttribute("Id", alwaysDisabledRuleId)));
+                }
+
+                // Add EnableRule definition in RuleDefinitions (idempotent)
+                var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
+                var enableRulesDefEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
+                if (!enableRulesDefEl.Elements("EnableRule").Any(e =>
+                    string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase)))
+                {
+                    enableRulesDefEl.Add(new XElement("EnableRule",
+                        new XAttribute("Id", alwaysDisabledRuleId),
+                        new XElement("SelectionCountRule",
+                            new XAttribute("Minimum", "9999"),
+                            new XAttribute("Maximum", "9999"))));
+                }
+
+                return (null, $"hide_button (custom): '{buttonId}' → AlwaysDisabled EnableRule injected into '{commandId}'");
+            }
         }
 
         // ── show_button ──────────────────────────────────────────────────
 
-        private static (string error, string summary) ExecuteShowButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        private (string error, string summary) ExecuteShowButton(XDocument ribbonDoc, string entityName, JsonElement op)
         {
             var buttonId = GetJsonString(op, "button_id");
             if (string.IsNullOrWhiteSpace(buttonId))
@@ -796,16 +858,118 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             buttonId = buttonId.Trim();
 
-            var removed = ribbonDoc.Root
-                ?.Descendants("HideCustomAction")
-                .Where(e => string.Equals(e.Attribute("Location")?.Value, buttonId, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            var isOob = IsOobButton(entityName, buttonId);
 
-            if (removed == null || removed.Count == 0)
-                return (null, $"show_button: '{buttonId}' — no HideCustomAction found (button already visible)");
+            if (isOob)
+            {
+                // OOB: remove HideCustomAction
+                var removed = ribbonDoc.Root
+                    ?.Descendants("HideCustomAction")
+                    .Where(e => string.Equals(e.Attribute("Location")?.Value, buttonId, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
 
-            removed.ForEach(e => e.Remove());
-            return (null, $"show_button: '{buttonId}' → HideCustomAction removed (button restored)");
+                if (removed == null || removed.Count == 0)
+                    return (null, $"show_button (OOB): '{buttonId}' — no HideCustomAction found (button already visible)");
+
+                removed.ForEach(e => e.Remove());
+                return (null, $"show_button (OOB): '{buttonId}' → HideCustomAction removed");
+            }
+            else
+            {
+                // Custom button: remove AlwaysDisabled EnableRule reference from CommandDefinition
+                var buttonEl = ribbonDoc.Root
+                    ?.Descendants("Button")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
+
+                if (buttonEl == null)
+                    return ($"Error: Button '{buttonId}' not found in RibbonDiffXml.", null);
+
+                var commandId = buttonEl.Attribute("Command")?.Value;
+                var commandDefEl = ribbonDoc.Root
+                    ?.Element("CommandDefinitions")
+                    ?.Elements("CommandDefinition")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, commandId, StringComparison.OrdinalIgnoreCase));
+
+                var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
+
+                // Remove reference from CommandDefinition/EnableRules
+                commandDefEl?.Element("EnableRules")
+                    ?.Elements("EnableRule")
+                    .Where(e => string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase))
+                    .ToList()
+                    .ForEach(e => e.Remove());
+
+                // Remove rule definition only if no other CommandDefinition still references it
+                var stillReferenced = ribbonDoc.Root
+                    ?.Descendants("CommandDefinition")
+                    .Any(cd => cd.Element("EnableRules")
+                        ?.Elements("EnableRule")
+                        .Any(er => string.Equals(er.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase)) == true) == true;
+
+                if (!stillReferenced)
+                {
+                    ribbonDoc.Root
+                        ?.Element("RuleDefinitions")
+                        ?.Element("EnableRules")
+                        ?.Elements("EnableRule")
+                        .Where(e => string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase))
+                        .ToList()
+                        .ForEach(e => e.Remove());
+                }
+
+                return (null, $"show_button (custom): '{buttonId}' → AlwaysDisabled EnableRule removed from '{commandId}'");
+            }
+        }
+
+        // ── Detect OOB vs custom via RetrieveEntityRibbon ────────────────
+
+        private bool IsOobButton(string entityName, string buttonId)
+        {
+            try
+            {
+                var filter = DetectRibbonFilter(buttonId);
+                var request = new RetrieveEntityRibbonRequest
+                {
+                    EntityName = entityName,
+                    RibbonLocationFilter = filter
+                };
+                var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(request);
+
+                using var ms = new MemoryStream(response.CompressedEntityXml);
+                using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
+                var entry = zip.GetEntry("RibbonXml.xml");
+                using var strm = entry.Open();
+                var doc = XDocument.Load(strm);
+
+                var buttonEl = doc.Descendants("Button")
+                    .Concat(doc.Descendants("FlyoutAnchor"))
+                    .Concat(doc.Descendants("SplitButton"))
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
+
+                if (buttonEl == null) return true; // not found → assume OOB safe
+
+                var solutionName = (string)buttonEl.Attribute("SolutionUniqueName") ?? "";
+                return solutionName.Equals("System", StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return true; // on error, default to OOB path (safer)
+            }
+        }
+
+        private static RibbonLocationFilters DetectRibbonFilter(string buttonId)
+        {
+            if (buttonId.StartsWith("Mscrm.HomepageGrid.", StringComparison.OrdinalIgnoreCase) ||
+                buttonId.StartsWith("Mscrm.Form.", StringComparison.OrdinalIgnoreCase) == false &&
+                buttonId.Contains(".HomepageGrid.", StringComparison.OrdinalIgnoreCase))
+                return RibbonLocationFilters.HomepageGrid;
+
+            if (buttonId.StartsWith("Mscrm.SubGrid.", StringComparison.OrdinalIgnoreCase) ||
+                buttonId.Contains(".SubGrid.", StringComparison.OrdinalIgnoreCase))
+                return RibbonLocationFilters.SubGrid;
+
+            // Default to Form (also handles devkit.entity.Slug.Button pattern)
+            return RibbonLocationFilters.Form;
         }
 
         // ── Button element builder ───────────────────────────────────────
