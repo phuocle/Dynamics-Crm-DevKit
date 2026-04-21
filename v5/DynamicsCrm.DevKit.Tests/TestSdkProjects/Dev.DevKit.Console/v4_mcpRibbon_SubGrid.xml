@@ -779,21 +779,6 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
-      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Command">
-        <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule" />
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule" />
-        </EnableRules>
-        <DisplayRules />
-        <Actions>
-          <JavaScriptFunction FunctionName="MCP.buttonSubGridClick" Library="$webresource:devkit_/TestMcp/js/button.js">
-            <CrmParameter Value="SelectedControl" />
-            <CrmParameter Value="SelectedEntityTypeName" />
-            <CrmParameter Value="FirstSelectedItemId" />
-            <CrmParameter Value="SelectedControlSelectedItemIds" />
-          </JavaScriptFunction>
-        </Actions>
-      </CommandDefinition>
       <CommandDefinition Id="devkit.v4_mcp.ExportData.SubGrid.Command">
         <EnableRules />
         <DisplayRules />
@@ -834,6 +819,21 @@
         <DisplayRules />
         <Actions>
           <JavaScriptFunction FunctionName="MCP.exportCsvSubGrid" Library="$webresource:devkit_/TestMcp/js/flyout.js">
+            <CrmParameter Value="SelectedControl" />
+            <CrmParameter Value="SelectedEntityTypeName" />
+            <CrmParameter Value="FirstSelectedItemId" />
+            <CrmParameter Value="SelectedControlSelectedItemIds" />
+          </JavaScriptFunction>
+        </Actions>
+      </CommandDefinition>
+      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Command">
+        <EnableRules>
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule" />
+        </EnableRules>
+        <DisplayRules />
+        <Actions>
+          <JavaScriptFunction FunctionName="MCP.buttonSubGridClick" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="SelectedControl" />
             <CrmParameter Value="SelectedEntityTypeName" />
             <CrmParameter Value="FirstSelectedItemId" />
@@ -2175,17 +2175,6 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule">
-          <CustomRule FunctionName="MCP.isButtonSubGridEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
-            <CrmParameter Value="SelectedControl" />
-            <CrmParameter Value="SelectedEntityTypeName" />
-            <CrmParameter Value="FirstSelectedItemId" />
-            <CrmParameter Value="SelectedControlSelectedItemIds" />
-          </CustomRule>
-        </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule">
-          <SelectionCountRule Minimum="1" />
-        </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.EnableRule">
           <CustomRule FunctionName="MCP.isExcelEnabledSubGrid" Library="$webresource:devkit_/TestMcp/js/flyout.js">
             <CrmParameter Value="SelectedControl" />
@@ -2209,6 +2198,17 @@
             <CrmParameter Value="FirstSelectedItemId" />
             <CrmParameter Value="SelectedControlSelectedItemIds" />
           </CustomRule>
+        </EnableRule>
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule">
+          <CustomRule FunctionName="MCP.isButtonSubGridEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
+            <CrmParameter Value="SelectedControl" />
+            <CrmParameter Value="SelectedEntityTypeName" />
+            <CrmParameter Value="FirstSelectedItemId" />
+            <CrmParameter Value="SelectedControlSelectedItemIds" />
+          </CustomRule>
+        </EnableRule>
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule">
+          <SelectionCountRule Minimum="1" />
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.Send.SubGrid.EnableRule">
           <CustomRule FunctionName="MCP.isSendEnabledSubGrid" Library="$webresource:devkit_/TestMcp/js/split.js">

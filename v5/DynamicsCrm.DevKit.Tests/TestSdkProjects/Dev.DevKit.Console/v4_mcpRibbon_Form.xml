@@ -841,21 +841,6 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
-      <CommandDefinition Id="devkit.v4_mcp.MCPForm.Form.Command">
-        <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule" />
-        </EnableRules>
-        <DisplayRules>
-          <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule" />
-        </DisplayRules>
-        <Actions>
-          <JavaScriptFunction FunctionName="MCP.buttonFormClick" Library="$webresource:devkit_/TestMcp/js/button.js">
-            <CrmParameter Value="PrimaryControl" />
-            <CrmParameter Value="PrimaryEntityTypeName" />
-            <CrmParameter Value="PrimaryItemIds" />
-          </JavaScriptFunction>
-        </Actions>
-      </CommandDefinition>
       <CommandDefinition Id="devkit.v4_mcp.ExportData.Form.Command">
         <EnableRules />
         <DisplayRules>
@@ -896,6 +881,21 @@
         <DisplayRules />
         <Actions>
           <JavaScriptFunction FunctionName="MCP.exportCsvForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
+            <CrmParameter Value="PrimaryControl" />
+            <CrmParameter Value="PrimaryEntityTypeName" />
+            <CrmParameter Value="PrimaryItemIds" />
+          </JavaScriptFunction>
+        </Actions>
+      </CommandDefinition>
+      <CommandDefinition Id="devkit.v4_mcp.MCPForm.Form.Command">
+        <EnableRules>
+          <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule" />
+        </EnableRules>
+        <DisplayRules>
+          <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule" />
+        </DisplayRules>
+        <Actions>
+          <JavaScriptFunction FunctionName="MCP.buttonFormClick" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -2002,10 +2002,10 @@
     </CommandDefinitions>
     <RuleDefinitions>
       <DisplayRules>
-        <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule">
+        <DisplayRule Id="devkit.v4_mcp.ExportData.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
-        <DisplayRule Id="devkit.v4_mcp.ExportData.Form.DisplayRule">
+        <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
         <DisplayRule Id="devkit.v4_mcp.Send.Form.DisplayRule">
@@ -2332,13 +2332,6 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
-        <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule">
-          <CustomRule FunctionName="MCP.isButtonFormEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
-            <CrmParameter Value="PrimaryControl" />
-            <CrmParameter Value="PrimaryEntityTypeName" />
-            <CrmParameter Value="PrimaryItemIds" />
-          </CustomRule>
-        </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.Form.ExportToExcel.EnableRule">
           <CustomRule FunctionName="MCP.isExcelEnabledForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
             <CrmParameter Value="PrimaryControl" />
@@ -2355,6 +2348,13 @@
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.Form.ExportToCSV.EnableRule">
           <CustomRule FunctionName="MCP.isCsvEnabledForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
+            <CrmParameter Value="PrimaryControl" />
+            <CrmParameter Value="PrimaryEntityTypeName" />
+            <CrmParameter Value="PrimaryItemIds" />
+          </CustomRule>
+        </EnableRule>
+        <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule">
+          <CustomRule FunctionName="MCP.isButtonFormEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
