@@ -37,10 +37,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Build modified FormXML for an existing Dataverse form. READ-ONLY — saves to temp file; use manage_form(action='update') to apply.\n\n" +
 
-            "14 OPERATIONS: add_tab, add_section, add_fields, add_header_fields, add_library, add_event, " +
-            "move_tab, move_section, remove_tab, remove_section, remove_fields, remove_header_fields, remove_library, remove_event\n\n" +
-
-            "Each operation requires 'action' field matching one of the 14 operations above.\n\n" +
+            "5 ACTION GROUPS (use action + manage_action): manage_tab, manage_section, manage_fields, manage_library, manage_event\n\n" +
+            "Valid combinations:\n" +
+            "- manage_tab: add | update | move | remove\n" +
+            "- manage_section: add | update | move | remove\n" +
+            "- manage_fields: add | update | remove | add_header | update_header | remove_header\n" +
+            "- manage_library: add | remove\n" +
+            "- manage_event: add | remove\n\n" +
+            "Each operation object requires both 'action' and 'manage_action'.\n\n" +
 
             "Auto-resolves classid GUIDs, validates field names against metadata.\n" +
             "Section columns: 1 (default), 2, 3. Tab columns: 1 (100%), 2 (50%/50%), 3 (33%/34%/33%).\n\n" +
@@ -49,13 +53,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Fields: \"createdon\" or {\"field\":\"createdon\",\"label\":\"Date\",\"disabled\":true}\n" +
             "- Position: \"first\", \"last\" (default), \"before:<name>\", \"after:<name>\"\n" +
             "- Tabs/Sections: visible, show_label, hide_on_phone. Fields also: disabled\n" +
-            "- Use action='update' (add_fields/add_section/add_tab) to modify existing elements")]
+            "- Use manage_action='update' to modify existing tabs/sections/fields")]
         public CallToolResult build_form_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve field metadata.")] string entity_name,
             [Description("GUID of the form to modify. Use manage_form with action='list' to find valid form IDs.")] string form_id,
             [Description(
-                "JSON array of operations. Each requires 'action' field.\n" +
-                "Actions: add_tab, add_section, add_fields, add_header_fields, add_library, add_event, move_tab, move_section, remove_tab, remove_section, remove_fields, remove_header_fields, remove_library, remove_event\n" +
+                "JSON array of operations. Each requires 'action' + 'manage_action'.\n" +
+                "Actions: manage_tab, manage_section, manage_fields, manage_library, manage_event.\n" +
+                "manage_action values depend on action (see tool description).\n" +
                 "Common fields: tab, section, fields[], label, name, position, visible, show_label, hide_on_phone, disabled, tab_column, section_columns, library_name, event_name, function_name, target.\n" +
                 "Read docs://instructions_for_formxml for full format and examples."
             )] string operations)

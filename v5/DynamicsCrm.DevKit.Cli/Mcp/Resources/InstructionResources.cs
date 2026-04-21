@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             UriTemplate = "docs://instructions_for_formxml"),
         Description(
             "Rules and best practices for modifying Dataverse form XML definitions. " +
-            "Read this before making any changes to FormXML via execute_webapi.")]
+            "Read this before making any changes to FormXML via manage_form.")]
         public static string FormXmlInstructions() => @"
 # FormXML Manipulation Rules
 
@@ -91,7 +91,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - SubGrid: {E7A81278-8635-4d9e-8D4D-59480B391C5B}
 
 ## After Making Changes
-- Use the dedicated manage_form tool (NOT execute_webapi) to apply changes
+- Use the dedicated manage_form tool to apply changes
 - manage_form auto-handles: backup > validate > update > publish
 - Verify the form loads correctly in the browser
 ";
@@ -103,12 +103,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
             UriTemplate = "docs://instructions_for_views"),
         Description(
             "Rules and best practices for modifying Dataverse view definitions. " +
-            "Read this before creating or modifying views via execute_webapi.")]
+            "Read this before creating or modifying views via manage_view.")]
         public static string ViewInstructions() => @"
 # View (SavedQuery) Manipulation Rules
 
 ## CRITICAL: Backup Before ANY Modification
-- ALWAYS retrieve the current FetchXML + LayoutXML using get_views with the specific view_id FIRST
+- ALWAYS retrieve the current FetchXML + LayoutXML using manage_view with action='detail' and the specific view_id FIRST
 - Save BOTH XMLs to local backup files BEFORE making any changes
 - Backup file naming:
   - {entity_name}_{view_id}_{yyyyMMddHHmmss}.fetchxml.bak
@@ -118,7 +118,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
   Without backup, you may need to restore the entire environment.
 
 ## Rollback Procedure (If View Breaks)
-1. Call upsert_view with action='undo', view_id, layoutxml=<layout backup file path>, fetchxml=<fetch backup file path>
+1. Call manage_view with action='undo', view_id, layoutxml=<layout backup file path>, fetchxml=<fetch backup file path>
 2. Tool auto-handles: read backups > validate > restore > publish (no new backup created)
 3. The backup file paths are returned in every update/rename response
 4. Backup files are at: {working_directory}/.devkit/backups/views/
@@ -248,8 +248,8 @@ Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/qui
 In this example, `statuscode` is fetched but not displayed in the grid.
 
 ## After Making Changes
-- Use the dedicated upsert_view tool (NOT execute_webapi) to apply changes
-- upsert_view auto-handles: backup > validate > sync-check > update > publish
+- Use the dedicated manage_view tool to apply changes
+- manage_view auto-handles: backup > validate > sync-check > update > publish
 - If something breaks: use action='undo' with the backup file paths from the response
 - Verify the view loads correctly in the browser
 ";

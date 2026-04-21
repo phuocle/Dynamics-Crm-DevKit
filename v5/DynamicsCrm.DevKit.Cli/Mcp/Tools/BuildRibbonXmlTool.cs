@@ -51,9 +51,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "JSON array of operations. Each requires 'action' field.\n" +
                 "add_button REQUIRED: surface, label, library, function, enable_library, enable_function. OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
-                "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence\n" +
-                "hide_button REQUIRED: button_id\n" +
-                "show_button REQUIRED: button_id\n" +
+                "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence. NOTE: only works on custom buttons (in RibbonDiffXml); OOB buttons cannot be updated — use hide_button/show_button instead\n" +
+                "hide_button REQUIRED: button_id. Supports both OOB and custom buttons\n" +
+                "show_button REQUIRED: button_id. Supports both OOB and custom buttons\n" +
                 "add_flyout_static REQUIRED: surface, label, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85). Per item OPTIONAL: modern_image, tooltip_title, sequence (auto: 10,20,30...)\n" +
                 "update_flyout_static REQUIRED: flyout_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
                 "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
@@ -1301,8 +1301,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, buttonId, StringComparison.OrdinalIgnoreCase));
 
             if (buttonEl == null)
-                return ($"Error: Button '{buttonId}' not found in existing RibbonDiffXml.\n" +
-                        "Tip: Use add_button to create it first.", null);
+                return ($"Error: Button '{buttonId}' not found in existing RibbonDiffXml. " +
+                        "This is likely an OOB (out-of-the-box) button. " +
+                        "update_button only supports custom buttons defined in RibbonDiffXml. " +
+                        "For OOB buttons, only hide_button and show_button are supported.", null);
 
             // Derive sibling IDs from buttonId
             // buttonId pattern: devkit.{entity}.{slug}.Button
