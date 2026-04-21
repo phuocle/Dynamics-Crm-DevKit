@@ -44,8 +44,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Build modified RibbonDiffXml for a Dataverse entity. " +
             "READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
-            "OPERATIONS: add_button, update_button\n" +
-            "[Future: remove_button, hide_button, add_flyout, add_group, remove_group, add_rule, remove_rule]\n\n" +
+            "OPERATIONS: add_button, update_button, hide_button, show_button\n" +
+            "[Future: remove_button, add_flyout, add_group, remove_group, add_rule, remove_rule]\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
             "Surface types: form (main form), main_grid (home page grid), sub_grid (associated/sub grid).\n" +
             "Validates webresource existence before referencing.\n" +
@@ -77,8 +77,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "add_button OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
                 "update_button REQUIRED: button_id OR label (to identify the button)\n" +
                 "update_button OPTIONAL (all updatable): label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence\n" +
+                "hide_button REQUIRED: button_id (the OOB or custom button's Id, e.g. 'Mscrm.Form.v4_mcp.Deactivate')\n" +
+                "show_button REQUIRED: button_id (removes the HideCustomAction to restore the button)\n" +
                 "Example add: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run Report\",\"library\":\"new_/scripts/account.js\",\"function\":\"Account.runReport\",\"enable_library\":\"new_/scripts/account.js\",\"enable_function\":\"Account.isEnabled\"}]\n" +
-                "Example update: [{\"action\":\"update_button\",\"button_id\":\"devkit.account.RunReport.Button\",\"label\":\"New Label\",\"sequence\":90}]")] string operations)
+                "Example update: [{\"action\":\"update_button\",\"button_id\":\"devkit.account.RunReport.Button\",\"label\":\"New Label\",\"sequence\":90}]\n" +
+                "Example hide: [{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
+                "Example show: [{\"action\":\"show_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -148,11 +152,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         summaries.Add(updResult.summary);
                         break;
 
+                    case "hide_button":
+                        var hideResult = ExecuteHideButton(ribbonDoc, entity_name, op);
+                        if (hideResult.error != null)
+                            return ErrorResult(hideResult.error);
+                        summaries.Add(hideResult.summary);
+                        break;
+
+                    case "show_button":
+                        var showResult = ExecuteShowButton(ribbonDoc, entity_name, op);
+                        if (showResult.error != null)
+                            return ErrorResult(showResult.error);
+                        summaries.Add(showResult.summary);
+                        break;
+
                     default:
                         return ErrorResult(
                             $"Error: Unknown action '{action}'.\n" +
-                            "Valid actions: add_button, update_button\n" +
-                            "Future: remove_button, hide_button, add_flyout, add_group, remove_group, add_rule, remove_rule");
+                            "Valid actions: add_button, update_button, hide_button, show_button\n" +
+                            "Future: remove_button, add_flyout, add_group, remove_group, add_rule, remove_rule");
                 }
             }
 
@@ -715,6 +733,60 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence.", null);
 
             return (null, $"update_button: '{buttonId}' updated [{string.Join(", ", updatedFields)}]");
+        }
+
+        // ── hide_button ──────────────────────────────────────────────────
+
+        private static (string error, string summary) ExecuteHideButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            var buttonId = GetJsonString(op, "button_id");
+            if (string.IsNullOrWhiteSpace(buttonId))
+                return ("Error: hide_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').\n" +
+                        "Tip: Use manage_ribbon(action='buttons') to see Button Id column.", null);
+
+            buttonId = buttonId.Trim();
+
+            // Generate a stable HideActionId from the buttonId
+            var safeId = buttonId.Replace(".", "_").Replace(" ", "_");
+            var hideActionId = $"devkit.{safeId}.Hide";
+
+            // Remove existing HideCustomAction for this button (idempotent)
+            ribbonDoc.Root
+                ?.Descendants("HideCustomAction")
+                .Where(e => string.Equals(e.Attribute("Location")?.Value, buttonId, StringComparison.OrdinalIgnoreCase))
+                .ToList()
+                .ForEach(e => e.Remove());
+
+            // Add HideCustomAction
+            var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
+            customActionsEl.Add(new XElement("HideCustomAction",
+                new XAttribute("HideActionId", hideActionId),
+                new XAttribute("Location", buttonId)));
+
+            return (null, $"hide_button: '{buttonId}' → HideCustomAction added");
+        }
+
+        // ── show_button ──────────────────────────────────────────────────
+
+        private static (string error, string summary) ExecuteShowButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            var buttonId = GetJsonString(op, "button_id");
+            if (string.IsNullOrWhiteSpace(buttonId))
+                return ("Error: show_button requires 'button_id' (e.g. 'Mscrm.Form.v4_mcp.Deactivate').\n" +
+                        "Tip: Use manage_ribbon(action='buttons') to see Button Id column.", null);
+
+            buttonId = buttonId.Trim();
+
+            var removed = ribbonDoc.Root
+                ?.Descendants("HideCustomAction")
+                .Where(e => string.Equals(e.Attribute("Location")?.Value, buttonId, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (removed == null || removed.Count == 0)
+                return (null, $"show_button: '{buttonId}' — no HideCustomAction found (button already visible)");
+
+            removed.ForEach(e => e.Remove());
+            return (null, $"show_button: '{buttonId}' → HideCustomAction removed (button restored)");
         }
 
         // ── Button element builder ───────────────────────────────────────

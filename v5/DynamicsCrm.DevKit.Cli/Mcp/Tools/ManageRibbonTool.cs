@@ -43,6 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Retrieve and modify RibbonDiffXml for Dataverse entities via solution import.\n\n" +
             "ACTIONS:\n" +
             "- 'list': List entities with ribbon customizations in solution 'devkit-ribbon'\n" +
+            "- 'buttons': List ALL ribbon buttons (OOB + custom) for an entity across 3 surfaces (form, main_grid, sub_grid). Shows sequence, label, IsOOB, IsCustom.\n" +
             "- 'detail': Show current RibbonDiffXml for an entity\n" +
             "- 'update': Apply modified RibbonDiffXml (from build_ribbon_xml). Backup → Import → Publish\n" +
             "- 'undo': Restore from backup file\n\n" +
@@ -51,9 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "TIPS:\n" +
             "- Uses solution 'devkit-ribbon' for all ribbon customizations\n" +
             "- Solution is auto-created on first update if it doesn't exist\n" +
-            "- Existing buttons are preserved (build_ribbon_xml merges automatically)")]
+            "- Existing buttons are preserved (build_ribbon_xml merges automatically)\n" +
+            "- action='buttons' uses RetrieveEntityRibbon to get the full merged ribbon (OOB + custom)")]
         public CallToolResult manage_ribbon(
-            [Description("'list', 'detail', 'update', or 'undo'.")] string action,
+            [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity logical name (e.g., 'account'). Required for detail/update/undo.")] string entity_name = "",
             [Description("For 'update': RibbonDiffXml file path from build_ribbon_xml. For 'undo': backup file path.")] string ribbonxml = "",
             [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true,
@@ -62,7 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var actionName = (action ?? "").Trim().ToLowerInvariant();
 
             if (string.IsNullOrWhiteSpace(actionName))
-                return ErrorResult("Error: action is required. Valid actions: 'list', 'detail', 'update', 'undo'.");
+                return ErrorResult("Error: action is required. Valid actions: 'list', 'buttons', 'detail', 'update', 'undo'.");
 
             try
             {
@@ -70,6 +72,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     case "list":
                         return ListEntitiesWithRibbon();
+
+                    case "buttons":
+                        if (string.IsNullOrWhiteSpace(entity_name))
+                            return ErrorResult("Error: entity_name is required for action='buttons'.");
+                        return ListRibbonButtons(entity_name.Trim().ToLowerInvariant());
 
                     case "detail":
                         if (string.IsNullOrWhiteSpace(entity_name))
@@ -95,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return UndoRibbon(entity_name.Trim().ToLowerInvariant(), ribbonxml.Trim(), auto_publish);
 
                     default:
-                        return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'list', 'detail', 'update', 'undo'.");
+                        return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'list', 'buttons', 'detail', 'update', 'undo'.");
                 }
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
@@ -181,6 +188,269 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Entities = entities.Select(e => e.Name).ToList()
                 })
             };
+        }
+
+        // ── Action: buttons ──────────────────────────────────────────────
+
+        // Surface → (RibbonLocationFilter, GroupId suffix containing devkit buttons)
+        // form      → Form    → Mscrm.Form.{entity}.MainTab.Save.Controls
+        // main_grid → HomepageGrid → Mscrm.HomepageGrid.{entity}.MainTab.Actions.Controls
+        // sub_grid  → SubGrid → Mscrm.SubGrid.{entity}.MainTab.Actions.Controls
+        private static readonly Dictionary<string, (RibbonLocationFilters Filter, string GroupSuffix)> SurfaceRibbonMap = new()
+        {
+            ["form"]      = (RibbonLocationFilters.Form,     "MainTab.Save"),
+            ["main_grid"] = (RibbonLocationFilters.HomepageGrid, "MainTab.Actions"),
+            ["sub_grid"]  = (RibbonLocationFilters.SubGrid,  "MainTab.Actions"),
+        };
+
+        private CallToolResult ListRibbonButtons(string entityName)
+        {
+            var allSurfaces = new List<RibbonSurfaceButtons>();
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ManageRibbon] buttons — {entityName}");
+            sb.AppendLine($"Showing buttons in devkit-managed locations (form, main_grid, sub_grid)");
+            sb.AppendLine();
+
+            // Load hidden buttons and LocLabels from devkit solution RibbonDiffXml (single export)
+            LoadDevKitRibbonData(entityName, out var hiddenBySurface, out var locLabels);
+
+            foreach (var (surface, (filter, groupSuffix)) in SurfaceRibbonMap)
+            {
+                var surfaceResult = new RibbonSurfaceButtons { Surface = surface };
+                hiddenBySurface.TryGetValue(surface, out var hiddenForSurface);
+                hiddenForSurface ??= [];
+
+                try
+                {
+                    var request = new RetrieveEntityRibbonRequest
+                    {
+                        EntityName = entityName,
+                        RibbonLocationFilter = filter
+                    };
+                    var response = (RetrieveEntityRibbonResponse)_serviceClient.Execute(request);
+                    var xml = UnzipRibbonXml(response.CompressedEntityXml);
+
+                    surfaceResult.Items = ParseButtonsFromRibbon(xml, entityName, groupSuffix, locLabels);
+                }
+                catch (Exception ex)
+                {
+                    sb.AppendLine($"### {surface.ToUpperInvariant()}");
+                    sb.AppendLine($"Error retrieving ribbon: {ex.Message}");
+                    sb.AppendLine();
+                    allSurfaces.Add(surfaceResult);
+                    continue;
+                }
+
+                // Append hidden buttons that no longer appear in the merged ribbon XML
+                foreach (var hiddenBtn in hiddenForSurface)
+                {
+                    if (!surfaceResult.Items.Any(b => string.Equals(b.Id, hiddenBtn.Id, StringComparison.OrdinalIgnoreCase)))
+                        surfaceResult.Items.Add(hiddenBtn);
+                }
+
+                // Re-sort after appending hidden buttons
+                surfaceResult.Items = surfaceResult.Items.OrderBy(b => b.Sequence).ThenBy(b => b.IsHide ? 1 : 0).ToList();
+
+                sb.AppendLine($"### {surface.ToUpperInvariant()} (Mscrm.{{entity}}.{groupSuffix}.Controls)");
+                sb.AppendLine($"| # | Sequence | Button Label | Button Id | OOB | Custom | Hide |");
+                sb.AppendLine($"|---|----------|-------------|-----------|-----|--------|------|");
+                var idx = 1;
+                foreach (var btn in surfaceResult.Items)
+                {
+                    var oob = btn.IsOob ? "✓" : "";
+                    var custom = btn.IsCustom ? "✓" : "";
+                    var hide = btn.IsHide ? "✓" : "";
+                    var label = string.IsNullOrWhiteSpace(btn.Label) ? $"[{btn.Id}]" : btn.Label;
+                    var seqDisplay = btn.Sequence == 0 && btn.IsHide ? "(hidden)" : btn.Sequence.ToString();
+                    sb.AppendLine($"| {idx++} | {seqDisplay} | {label} | {btn.Id} | {oob} | {custom} | {hide} |");
+                }
+
+                sb.AppendLine();
+                allSurfaces.Add(surfaceResult);
+            }
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new ManageRibbonResult
+                {
+                    Action = "buttons",
+                    EntityName = entityName,
+                    Status = "ok",
+                    Buttons = allSurfaces
+                })
+            };
+        }
+
+        // Single export: returns hidden buttons by surface + LocLabels dictionary
+        private void LoadDevKitRibbonData(string entityName,
+            out Dictionary<string, List<RibbonButtonInfo>> hiddenBySurface,
+            out Dictionary<string, string> locLabels)
+        {
+            hiddenBySurface = new Dictionary<string, List<RibbonButtonInfo>>(StringComparer.OrdinalIgnoreCase);
+            locLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var exportReq = new ExportSolutionRequest { SolutionName = SOLUTION_NAME, Managed = false };
+                var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
+                var ribbonDiffXml = ExtractRibbonDiffXml(exportResp.ExportSolutionFile, entityName);
+                if (string.IsNullOrWhiteSpace(ribbonDiffXml)) return;
+
+                var doc = XDocument.Parse(ribbonDiffXml);
+
+                // LocLabels: Id → first Title/@description
+                foreach (var locLabelEl in doc.Descendants("LocLabel"))
+                {
+                    var id = (string)locLabelEl.Attribute("Id") ?? "";
+                    var desc = (string)locLabelEl.Descendants("Title").FirstOrDefault()?.Attribute("description") ?? "";
+                    if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(desc))
+                        locLabels[id] = desc;
+                }
+
+                // HideCustomAction: Location = hidden button ID
+                foreach (var hideEl in doc.Descendants("HideCustomAction"))
+                {
+                    var buttonId = (string)hideEl.Attribute("Location") ?? "";
+                    if (string.IsNullOrWhiteSpace(buttonId)) continue;
+
+                    var surface = DetectSurfaceFromButtonId(buttonId, entityName);
+                    if (surface == null) continue;
+
+                    if (!hiddenBySurface.ContainsKey(surface))
+                        hiddenBySurface[surface] = [];
+
+                    hiddenBySurface[surface].Add(new RibbonButtonInfo
+                    {
+                        Id = buttonId,
+                        Sequence = 0,
+                        Label = ExtractReadableNameFromId(buttonId),
+                        IsOob = true,
+                        IsCustom = false,
+                        IsHide = true
+                    });
+                }
+            }
+            catch { /* solution may not exist */ }
+        }
+
+        private static string DetectSurfaceFromButtonId(string buttonId, string entityName)
+        {
+            // e.g. "Mscrm.Form.v4_mcp.Activate" → form
+            // "Mscrm.HomepageGrid.v4_mcp.xxx" → main_grid
+            // "Mscrm.SubGrid.v4_mcp.xxx" → sub_grid
+            if (buttonId.StartsWith($"Mscrm.Form.{entityName}.", StringComparison.OrdinalIgnoreCase) ||
+                buttonId.StartsWith($"Mscrm.Form.", StringComparison.OrdinalIgnoreCase))
+                return "form";
+            if (buttonId.StartsWith($"Mscrm.HomepageGrid.", StringComparison.OrdinalIgnoreCase))
+                return "main_grid";
+            if (buttonId.StartsWith($"Mscrm.SubGrid.", StringComparison.OrdinalIgnoreCase))
+                return "sub_grid";
+            return null;
+        }
+
+        private static List<RibbonButtonInfo> ParseButtonsFromRibbon(string ribbonXml, string entityName, string groupSuffix, Dictionary<string, string> locLabels = null)
+        {
+            var doc = XDocument.Parse(ribbonXml);
+
+            // Find the group whose Id ends with the expected suffix
+            // e.g. "Mscrm.Form.v4_mcp.MainTab.Save" or "Mscrm.HomepageGrid.v4_mcp.MainTab.Actions"
+            var targetGroupIdSuffix = $".{entityName}.{groupSuffix}";
+
+            var group = doc.Descendants("Group")
+                .FirstOrDefault(g =>
+                {
+                    var id = (string)g.Attribute("Id") ?? "";
+                    return id.EndsWith(targetGroupIdSuffix, StringComparison.OrdinalIgnoreCase);
+                });
+
+            if (group == null)
+                return [];
+
+            var controls = group.Element("Controls");
+            if (controls == null)
+                return [];
+
+            var result = new List<RibbonButtonInfo>();
+            foreach (var el in controls.Elements())
+            {
+                var tagName = el.Name.LocalName;
+                if (tagName != "Button" && tagName != "FlyoutAnchor" && tagName != "SplitButton")
+                    continue;
+
+                var id = (string)el.Attribute("Id") ?? "";
+                var seqStr = (string)el.Attribute("Sequence") ?? "0";
+                if (!int.TryParse(seqStr, out var seq)) seq = 0;
+
+                var labelText = (string)el.Attribute("LabelText") ?? "";
+                var label = ResolveLabel(labelText, id, locLabels);
+
+                var solutionName = (string)el.Attribute("SolutionUniqueName") ?? "";
+                var isOob = solutionName.Equals("System", StringComparison.OrdinalIgnoreCase);
+                var isCustom = !isOob;
+
+                result.Add(new RibbonButtonInfo
+                {
+                    Id = id,
+                    Sequence = seq,
+                    Label = label,
+                    IsOob = isOob,
+                    IsCustom = isCustom,
+                    IsHide = false
+                });
+            }
+
+            return result.OrderBy(b => b.Sequence).ToList();
+        }
+
+        private static string ResolveLabel(string labelText, string buttonId, Dictionary<string, string> locLabels = null)
+        {
+            if (string.IsNullOrWhiteSpace(labelText))
+                return ExtractReadableNameFromId(buttonId);
+
+            // $LocLabels:devkit.v4_mcp.MCPForm.Button.LabelText → look up in locLabels dict first
+            if (labelText.StartsWith("$LocLabels:", StringComparison.OrdinalIgnoreCase))
+            {
+                var key = labelText.Substring("$LocLabels:".Length);
+                if (locLabels != null && locLabels.TryGetValue(key, out var resolved))
+                    return resolved;
+                // Fallback: last segment
+                var parts = key.Split('.');
+                return parts.Last();
+            }
+
+            // $Resources:Ribbon.Form.MainTab.Save.Save → take last segment
+            if (labelText.StartsWith("$Resources:", StringComparison.OrdinalIgnoreCase))
+            {
+                var key = labelText.Substring("$Resources:".Length);
+                var parts = key.Split('.');
+                return parts.Last();
+            }
+
+            // {!EntityDisplayName:email} → "email"
+            if (labelText.StartsWith("{!"))
+            {
+                var inner = labelText.TrimStart('{', '!').TrimEnd('}');
+                return inner.Contains(':') ? inner.Substring(inner.IndexOf(':') + 1) : inner;
+            }
+
+            return labelText;
+        }
+
+        private static string ExtractReadableNameFromId(string buttonId)
+        {
+            if (string.IsNullOrWhiteSpace(buttonId)) return "";
+            var parts = buttonId.Split('.');
+            return parts.Last();
+        }
+
+        private static string UnzipRibbonXml(byte[] data)
+        {
+            using var memStream = new MemoryStream(data);
+            using var zip = new ZipArchive(memStream, ZipArchiveMode.Read);
+            var entry = zip.GetEntry("RibbonXml.xml");
+            using var strm = entry.Open();
+            using var reader = new StreamReader(strm, Encoding.UTF8);
+            return reader.ReadToEnd();
         }
 
         // ── Action: detail ───────────────────────────────────────────────
