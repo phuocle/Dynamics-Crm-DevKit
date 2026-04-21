@@ -11,7 +11,9 @@ namespace Dev.DevKit.Console
         static void Main()
         {
             //CheckWhoAmI();
-            RetrieveEntityRibbon("v4_mcp");
+            RetrieveEntityRibbon("v4_mcp", RibbonLocationFilters.Form, "v4_mcpRibbon_Form.xml");
+            RetrieveEntityRibbon("v4_mcp", RibbonLocationFilters.HomepageGrid, "v4_mcpRibbon_HomepageGrid.xml");
+            RetrieveEntityRibbon("v4_mcp", RibbonLocationFilters.SubGrid, "v4_mcpRibbon_SubGrid.xml");
             //DebugPlugin();
             //DebugWorkflow();
         }
@@ -23,19 +25,18 @@ namespace Dev.DevKit.Console
             System.Console.ReadKey();
         }
 
-        private static void RetrieveEntityRibbon(string entityName)
+        private static void RetrieveEntityRibbon(string entityName, RibbonLocationFilters filter, string fileName)
         {
             var request = new RetrieveEntityRibbonRequest
             {
                 EntityName = entityName,
-                RibbonLocationFilter = RibbonLocationFilters.Form
+                RibbonLocationFilter = filter
             };
             var response = (RetrieveEntityRibbonResponse)App.Service.Execute(request);
             var xml = UnzipRibbon(response.CompressedEntityXml);
-            var outputPath = Path.GetFullPath($"{entityName}Ribbon.xml");
+            var outputPath = Path.GetFullPath(fileName);
             File.WriteAllText(outputPath, xml, Encoding.UTF8);
             System.Console.WriteLine($"Saved: {outputPath}");
-            System.Console.ReadKey();
         }
 
         private static string UnzipRibbon(byte[] data)

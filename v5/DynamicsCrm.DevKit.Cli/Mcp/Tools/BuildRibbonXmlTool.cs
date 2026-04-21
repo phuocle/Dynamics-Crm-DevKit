@@ -521,25 +521,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("Sequence", sequence),
                 new XElement("CommandUIDefinition", buttonEl)));
 
+            // ── CrmParameters per surface ──
+            // form:      PrimaryControl, PrimaryEntityTypeName, PrimaryItemIds
+            // main_grid: SelectedControl, SelectedEntityTypeName, FirstSelectedItemId, SelectedControlSelectedItemIds
+            // sub_grid:  SelectedControl, SelectedEntityTypeName, FirstSelectedItemId, SelectedControlSelectedItemIds
+            XElement[] crmParams = surface == "form"
+                ? [
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryEntityTypeName")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds"))
+                  ]
+                : [
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedEntityTypeName")),
+                    new XElement("CrmParameter", new XAttribute("Value", "FirstSelectedItemId")),
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedControlSelectedItemIds"))
+                  ];
+
             // ── CommandDefinition ──
             var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
             var jsFunctionEl = new XElement("JavaScriptFunction",
                 new XAttribute("Library", $"$webresource:{library}"),
-                new XAttribute("FunctionName", function),
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds")));
+                new XAttribute("FunctionName", function));
+            foreach (var p in crmParams) jsFunctionEl.Add(p);
 
-            XElement displayRulesInCommand;
-            if (surface == "form")
-            {
-                var displayRuleId = $"devkit.{entityName}.{slug}.DisplayRule";
-                displayRulesInCommand = new XElement("DisplayRules",
-                    new XElement("DisplayRule", new XAttribute("Id", displayRuleId)));
-            }
-            else
-            {
-                displayRulesInCommand = new XElement("DisplayRules");
-            }
+            // DisplayRule reference inside CommandDefinition
+            // form: FormStateRule(Existing)  |  sub_grid: SelectionCountRule(Min=1)  |  main_grid: none
+            var displayRuleId = (surface == "form" || surface == "sub_grid")
+                ? $"devkit.{entityName}.{slug}.DisplayRule"
+                : null;
+
+            XElement displayRulesInCommand = displayRuleId != null
+                ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
+                : new XElement("DisplayRules");
 
             commandDefsEl.Add(new XElement("CommandDefinition",
                 new XAttribute("Id", commandId),
@@ -551,26 +565,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── RuleDefinitions ──
             var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
 
-            // EnableRule
+            // EnableRule — same CrmParameters as click function
             RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", enableRuleId);
             var enableRulesEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
+            var enableCustomRuleEl = new XElement("CustomRule",
+                new XAttribute("FunctionName", enableFunction),
+                new XAttribute("Library", $"$webresource:{enableLibrary}"));
+            foreach (var p in crmParams) enableCustomRuleEl.Add(new XElement(p)); // clone
             enableRulesEl.Add(new XElement("EnableRule",
                 new XAttribute("Id", enableRuleId),
-                new XElement("CustomRule",
-                    new XAttribute("FunctionName", enableFunction),
-                    new XAttribute("Library", $"$webresource:{enableLibrary}"),
-                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
-                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds")))));
+                enableCustomRuleEl));
 
-            // DisplayRule (form only)
-            if (surface == "form")
+            // DisplayRule
+            // form:     FormStateRule State="Existing"
+            // sub_grid: SelectionCountRule Minimum="1"
+            // main_grid: none
+            if (displayRuleId != null)
             {
-                var displayRuleId = $"devkit.{entityName}.{slug}.DisplayRule";
                 RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
                 var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
+                XElement displayRuleContent = surface == "form"
+                    ? new XElement("FormStateRule", new XAttribute("State", "Existing"))
+                    : new XElement("SelectionCountRule", new XAttribute("Minimum", "1"));
                 displayRulesEl.Add(new XElement("DisplayRule",
                     new XAttribute("Id", displayRuleId),
-                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+                    displayRuleContent));
             }
 
             // ── LocLabels ──
