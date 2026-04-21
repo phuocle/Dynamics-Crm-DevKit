@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Build modified RibbonDiffXml for a Dataverse entity. " +
             "READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
-            "OPERATIONS: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static\n" +
+            "OPERATIONS: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
             "[Future: add_flyout_dynamic]\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
             "Surface types: form (main form), main_grid (home page grid), sub_grid (associated/sub grid).\n" +
@@ -72,7 +72,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "  flyout_id OR label (to identify the flyout)\n" +
             "  Updatable flyout-level: label, tooltip_title, tooltip_description, modern_image, sequence.\n" +
             "  Updatable per item (via items[]): item_label (REQUIRED), then: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function.\n" +
-            "  Omit a field to keep its current value.")]
+            "  Omit a field to keep its current value.\n\n" +
+            "REQUIRED for hide_flyout_item — disable a child button inside a static flyout:\n" +
+            "  flyout_label OR flyout_id (to identify the flyout)\n" +
+            "  item_label (to identify which child button to hide)\n\n" +
+            "REQUIRED for show_flyout_item — re-enable a previously hidden child button:\n" +
+            "  flyout_label OR flyout_id (to identify the flyout)\n" +
+            "  item_label (to identify which child button to show)")]
         public CallToolResult build_ribbon_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve ribbon customization.")] string entity_name,
             [Description("JSON array of operations. Each requires 'action' field.\n" +
@@ -103,7 +109,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "update_flyout_static REQUIRED: flyout_id OR label (to identify the flyout)\n" +
                 "update_flyout_static OPTIONAL (flyout-level): label, tooltip_title, tooltip_description, modern_image, sequence\n" +
                 "update_flyout_static OPTIONAL items[]: item_label (REQUIRED to identify button), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
-                "Example update_flyout_static: [{\"action\":\"update_flyout_static\",\"label\":\"Export Data\",\"items\":[{\"item_label\":\"Export to Excel\",\"modern_image\":\"v4_/images/excel.svg\"}]}]")] string operations)
+                "Example update_flyout_static: [{\"action\":\"update_flyout_static\",\"label\":\"Export Data\",\"items\":[{\"item_label\":\"Export to Excel\",\"modern_image\":\"v4_/images/excel.svg\"}]}]\n" +
+                "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
+                "show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
+                "Example hide_flyout_item: [{\"action\":\"hide_flyout_item\",\"flyout_label\":\"Export Data\",\"item_label\":\"Export to Excel\"}]\n" +
+                "Example show_flyout_item: [{\"action\":\"show_flyout_item\",\"flyout_label\":\"Export Data\",\"item_label\":\"Export to Excel\"}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -201,10 +211,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         summaries.Add(updFlyoutResult.summary);
                         break;
 
+                    case "hide_flyout_item":
+                        var hideFiResult = ExecuteHideFlyoutItem(ribbonDoc, entity_name, op);
+                        if (hideFiResult.error != null)
+                            return ErrorResult(hideFiResult.error);
+                        summaries.Add(hideFiResult.summary);
+                        break;
+
+                    case "show_flyout_item":
+                        var showFiResult = ExecuteShowFlyoutItem(ribbonDoc, entity_name, op);
+                        if (showFiResult.error != null)
+                            return ErrorResult(showFiResult.error);
+                        summaries.Add(showFiResult.summary);
+                        break;
+
                     default:
                         return ErrorResult(
                             $"Error: Unknown action '{action}'.\n" +
-                            "Valid actions: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static\n" +
+                            "Valid actions: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
                             "Future: add_flyout_dynamic");
                 }
             }
@@ -1124,6 +1148,134 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ("Error: No fields to update. Provide at least one field to change.", null);
 
             return (null, $"update_flyout_static: '{flyoutId}' updated [{string.Join(", ", updatedFields)}]");
+        }
+
+        // ── hide_flyout_item ────────────────────────────────────────────
+
+        private (string error, string summary) ExecuteHideFlyoutItem(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            var (flyoutId, itemBtnId, itemCmdId, err) = ResolveFlyoutItemIds(ribbonDoc, entityName, op);
+            if (err != null) return (err, null);
+
+            var commandDefEl = ribbonDoc.Root
+                ?.Element("CommandDefinitions")
+                ?.Elements("CommandDefinition")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
+
+            if (commandDefEl == null)
+                return ($"Error: CommandDefinition '{itemCmdId}' not found for item '{itemBtnId}'.", null);
+
+            var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
+
+            var enableRulesInCmd = GetOrCreateElement(commandDefEl, "EnableRules");
+            if (!enableRulesInCmd.Elements("EnableRule").Any(e =>
+                string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase)))
+            {
+                enableRulesInCmd.Add(new XElement("EnableRule", new XAttribute("Id", alwaysDisabledRuleId)));
+            }
+
+            var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
+            var enableRulesDefEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
+            if (!enableRulesDefEl.Elements("EnableRule").Any(e =>
+                string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase)))
+            {
+                enableRulesDefEl.Add(new XElement("EnableRule",
+                    new XAttribute("Id", alwaysDisabledRuleId),
+                    new XElement("SelectionCountRule",
+                        new XAttribute("Minimum", "9999"),
+                        new XAttribute("Maximum", "9999"))));
+            }
+
+            return (null, $"hide_flyout_item: '{itemBtnId}' → AlwaysDisabled EnableRule injected into '{itemCmdId}'");
+        }
+
+        // ── show_flyout_item ────────────────────────────────────────────
+
+        private (string error, string summary) ExecuteShowFlyoutItem(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            var (flyoutId, itemBtnId, itemCmdId, err) = ResolveFlyoutItemIds(ribbonDoc, entityName, op);
+            if (err != null) return (err, null);
+
+            var alwaysDisabledRuleId = $"devkit.{entityName}.AlwaysDisabled.EnableRule";
+
+            var commandDefEl = ribbonDoc.Root
+                ?.Element("CommandDefinitions")
+                ?.Elements("CommandDefinition")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
+
+            commandDefEl?.Element("EnableRules")
+                ?.Elements("EnableRule")
+                .Where(e => string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase))
+                .ToList()
+                .ForEach(e => e.Remove());
+
+            var stillReferenced = ribbonDoc.Root
+                ?.Descendants("CommandDefinition")
+                .Any(cd => cd.Element("EnableRules")
+                    ?.Elements("EnableRule")
+                    .Any(er => string.Equals(er.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase)) == true) == true;
+
+            if (!stillReferenced)
+            {
+                ribbonDoc.Root
+                    ?.Element("RuleDefinitions")
+                    ?.Element("EnableRules")
+                    ?.Elements("EnableRule")
+                    .Where(e => string.Equals(e.Attribute("Id")?.Value, alwaysDisabledRuleId, StringComparison.OrdinalIgnoreCase))
+                    .ToList()
+                    .ForEach(e => e.Remove());
+            }
+
+            return (null, $"show_flyout_item: '{itemBtnId}' → AlwaysDisabled EnableRule removed from '{itemCmdId}'");
+        }
+
+        // ── Resolve flyout item IDs (shared by hide/show) ───────────────
+
+        private (string flyoutId, string itemBtnId, string itemCmdId, string error) ResolveFlyoutItemIds(
+            XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            var flyoutIdParam = GetJsonString(op, "flyout_id");
+            var flyoutLabel = GetJsonString(op, "flyout_label");
+            var itemLabel = GetJsonString(op, "item_label");
+
+            if (string.IsNullOrWhiteSpace(itemLabel))
+                return (null, null, null, "Error: 'item_label' is required to identify the flyout item.");
+
+            string flyoutId;
+            if (!string.IsNullOrWhiteSpace(flyoutIdParam))
+                flyoutId = flyoutIdParam.Trim();
+            else if (!string.IsNullOrWhiteSpace(flyoutLabel))
+            {
+                var slug = GenerateSlug(flyoutLabel);
+                flyoutId = $"devkit.{entityName}.{slug}.FlyoutAnchor";
+            }
+            else
+                return (null, null, null, "Error: 'flyout_id' or 'flyout_label' is required to identify the flyout.");
+
+            var flyoutEl = ribbonDoc.Root
+                ?.Element("CustomActions")
+                ?.Descendants("FlyoutAnchor")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, flyoutId, StringComparison.OrdinalIgnoreCase));
+
+            if (flyoutEl == null)
+                return (null, null, null, $"Error: FlyoutAnchor '{flyoutId}' not found.");
+
+            var idParts = flyoutId.Split('.');
+            var flyoutSlug = idParts.Length >= 3 ? idParts[idParts.Length - 2] : "";
+            var itemSlug = GenerateSlug(itemLabel);
+            var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+            var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+
+            var btnEl = flyoutEl.Descendants("Button")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemBtnId, StringComparison.OrdinalIgnoreCase));
+
+            if (btnEl == null)
+            {
+                var existing = string.Join(", ", flyoutEl.Descendants("Button").Select(b => b.Attribute("Id")?.Value ?? "?"));
+                return (null, null, null, $"Error: Item button '{itemBtnId}' not found in flyout.\nExisting items: {existing}");
+            }
+
+            return (flyoutId, itemBtnId, itemCmdId, null);
         }
 
         // ── update_button ────────────────────────────────────────────────
