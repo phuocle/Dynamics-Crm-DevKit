@@ -406,6 +406,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RestoredFromBackup { get; set; }
+
+        [JsonPropertyName("buttons")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RibbonSurfaceButtons> Buttons { get; set; }
+    }
+
+    internal sealed class RibbonSurfaceButtons
+    {
+        [JsonPropertyName("surface")]
+        public string Surface { get; set; }
+
+        [JsonPropertyName("items")]
+        public List<RibbonButtonInfo> Items { get; set; } = [];
+    }
+
+    internal sealed class RibbonButtonInfo
+    {
+        [JsonPropertyName("sequence")]
+        public int Sequence { get; set; }
+
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+
+        [JsonPropertyName("isOob")]
+        public bool IsOob { get; set; }
+
+        [JsonPropertyName("isCustom")]
+        public bool IsCustom { get; set; }
+
+        [JsonPropertyName("isHide")]
+        public bool IsHide { get; set; }
     }
 
     internal sealed class UpsertColumnResult

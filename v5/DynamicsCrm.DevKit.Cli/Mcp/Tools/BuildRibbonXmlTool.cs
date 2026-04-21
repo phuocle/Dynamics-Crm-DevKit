@@ -45,7 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Build modified RibbonDiffXml for a Dataverse entity. " +
             "READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
             "OPERATIONS: add_button, update_button, hide_button, show_button\n" +
-            "[Future: remove_button, add_flyout, add_group, remove_group, add_rule, remove_rule]\n\n" +
+            "[Future: add_flyout]\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
             "Surface types: form (main form), main_grid (home page grid), sub_grid (associated/sub grid).\n" +
             "Validates webresource existence before referencing.\n" +
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return ErrorResult(
                             $"Error: Unknown action '{action}'.\n" +
                             "Valid actions: add_button, update_button, hide_button, show_button\n" +
-                            "Future: remove_button, add_flyout, add_group, remove_group, add_rule, remove_rule");
+                            "Future: add_flyout");
                 }
             }
 
