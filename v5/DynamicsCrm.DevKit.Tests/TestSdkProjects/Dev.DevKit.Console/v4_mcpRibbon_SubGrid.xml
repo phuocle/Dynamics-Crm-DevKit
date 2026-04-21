@@ -59,14 +59,15 @@
                 </Group>
                 <Group Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions" Command="Mscrm.Enabled" Sequence="20" Title="$Resources:Ribbon.HomepageGrid.MainTab.Actions" Image32by32Popup="/_imgs/ribbon/Actions_32.png" Template="Mscrm.Templates.Flexible4" TabSequence="0">
                   <Controls Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions.Controls">
-                    <Button Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Button" Command="devkit.v4_mcp.MCPSubgrid.SubGrid.Command" LabelText="$LocLabels:devkit.v4_mcp.MCPSubgrid.SubGrid.Button.LabelText" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPSubgrid.SubGrid.Button.ToolTipTitle" TemplateAlias="isv" Sequence="85" ModernImage="$webresource:Activities/Images/embed_32.svg" />
-                    <FlyoutAnchor Id="devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor" Command="devkit.v4_mcp.ExportData.SubGrid.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.ToolTipTitle" TemplateAlias="isv" Sequence="86" PopulateOnlyOnce="true" ModernImage="$webresource:Activities/Images/embed_32.svg">
+                    <Button Command="devkit.v4_mcp.MCPSubgrid.SubGrid.Command" Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Button" LabelText="$LocLabels:devkit.v4_mcp.MCPSubgrid.SubGrid.Button.LabelText" Sequence="85" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPSubgrid.SubGrid.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                    <Button Command="devkit.v4_mcp.MCPSubgrid2.SubGrid.Command" Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.Button" LabelText="$LocLabels:devkit.v4_mcp.MCPSubgrid2.SubGrid.Button.LabelText" Sequence="85" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPSubgrid2.SubGrid.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                    <FlyoutAnchor Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.Alt" Command="devkit.v4_mcp.ExportData.SubGrid.Command" Id="devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.LabelText" PopulateOnlyOnce="true" Sequence="86" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg">
                       <Menu Id="devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.Menu">
                         <MenuSection Id="devkit.v4_mcp.ExportData.SubGrid.MenuSection" Sequence="10" DisplayMode="Menu16">
                           <Controls Id="devkit.v4_mcp.ExportData.SubGrid.MenuSection.Controls">
-                            <Button Id="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button" Command="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button.ToolTipTitle" Sequence="10" ModernImage="$webresource:Activities/Images/embed_32.svg" />
-                            <Button Id="devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button" Command="devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button.ToolTipTitle" Sequence="20" ModernImage="$webresource:Activities/Images/embed_32.svg" />
-                            <Button Id="devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button" Command="devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Command" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button.LabelText" Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button.Alt" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button.ToolTipTitle" Sequence="30" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                            <Button Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button.Alt" Command="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Command" Id="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button.LabelText" Sequence="10" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                            <Button Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button.Alt" Command="devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Command" Id="devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button.LabelText" Sequence="20" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToPDF.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                            <Button Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button.Alt" Command="devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Command" Id="devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button.LabelText" Sequence="30" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.ExportToCSV.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                           </Controls>
                         </MenuSection>
                       </Menu>
@@ -777,10 +778,10 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
-      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Command">
+      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.Command">
         <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule" />
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.EnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.SelectionEnableRule" />
         </EnableRules>
         <DisplayRules />
         <Actions>
@@ -874,6 +875,21 @@
         <DisplayRules />
         <Actions>
           <JavaScriptFunction FunctionName="MCP.sendSmsSubGrid" Library="$webresource:devkit_/TestMcp/js/split.js">
+            <CrmParameter Value="SelectedControl" />
+            <CrmParameter Value="SelectedEntityTypeName" />
+            <CrmParameter Value="FirstSelectedItemId" />
+            <CrmParameter Value="SelectedControlSelectedItemIds" />
+          </JavaScriptFunction>
+        </Actions>
+      </CommandDefinition>
+      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Command">
+        <EnableRules>
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule" />
+        </EnableRules>
+        <DisplayRules />
+        <Actions>
+          <JavaScriptFunction FunctionName="MCP.buttonSubGridClick" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="SelectedControl" />
             <CrmParameter Value="SelectedEntityTypeName" />
             <CrmParameter Value="FirstSelectedItemId" />
@@ -2173,7 +2189,7 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule">
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.EnableRule">
           <CustomRule FunctionName="MCP.isButtonSubGridEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="SelectedControl" />
             <CrmParameter Value="SelectedEntityTypeName" />
@@ -2181,7 +2197,7 @@
             <CrmParameter Value="SelectedControlSelectedItemIds" />
           </CustomRule>
         </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule">
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.SelectionEnableRule">
           <SelectionCountRule Minimum="1" />
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.EnableRule">
@@ -2231,6 +2247,17 @@
             <CrmParameter Value="FirstSelectedItemId" />
             <CrmParameter Value="SelectedControlSelectedItemIds" />
           </CustomRule>
+        </EnableRule>
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule">
+          <CustomRule FunctionName="MCP.isButtonSubGridEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
+            <CrmParameter Value="SelectedControl" />
+            <CrmParameter Value="SelectedEntityTypeName" />
+            <CrmParameter Value="FirstSelectedItemId" />
+            <CrmParameter Value="SelectedControlSelectedItemIds" />
+          </CustomRule>
+        </EnableRule>
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule">
+          <SelectionCountRule Minimum="1" />
         </EnableRule>
         <EnableRule Id="Mscrm.SubGrid.{!EntityLogicalName}.MainTab">
           <EntityRule AppliesTo="SelectedEntity" EntityName="{!EntityLogicalName}" />
