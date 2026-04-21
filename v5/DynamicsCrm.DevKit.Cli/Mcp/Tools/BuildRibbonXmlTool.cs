@@ -44,8 +44,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Build modified RibbonDiffXml for a Dataverse entity. " +
             "READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
-            "OPERATIONS: add_button, update_button, hide_button, show_button\n" +
-            "[Future: add_flyout]\n\n" +
+            "OPERATIONS: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static\n" +
+            "[Future: add_flyout_dynamic]\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
             "Surface types: form (main form), main_grid (home page grid), sub_grid (associated/sub grid).\n" +
             "Validates webresource existence before referencing.\n" +
@@ -62,6 +62,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "REQUIRED for update_button — button_id or label must identify the button:\n" +
             "  Updatable fields: label, library, function, enable_library, enable_function,\n" +
             "  modern_image, tooltip_title, tooltip_description, sequence.\n" +
+            "  Omit a field to keep its current value.\n\n" +
+            "REQUIRED for add_flyout_static — static flyout menu with fixed child buttons:\n" +
+            "  surface, label, items[] (each item needs: label, library, function, enable_library, enable_function)\n" +
+            "  OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+            "  OPTIONAL per item: modern_image, tooltip_title, sequence (auto: 10, 20, 30...)\n" +
+            "  Currently supports 'form' surface only.\n\n" +
+            "REQUIRED for update_flyout_static — modify existing static flyout:\n" +
+            "  flyout_id OR label (to identify the flyout)\n" +
+            "  Updatable flyout-level: label, tooltip_title, tooltip_description, modern_image, sequence.\n" +
+            "  Updatable per item (via items[]): item_label (REQUIRED), then: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function.\n" +
             "  Omit a field to keep its current value.")]
         public CallToolResult build_ribbon_xml(
             [Description("Entity logical name (e.g., 'account'). Used to resolve ribbon customization.")] string entity_name,
@@ -82,7 +92,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Example add: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run Report\",\"library\":\"new_/scripts/account.js\",\"function\":\"Account.runReport\",\"enable_library\":\"new_/scripts/account.js\",\"enable_function\":\"Account.isEnabled\"}]\n" +
                 "Example update: [{\"action\":\"update_button\",\"button_id\":\"devkit.account.RunReport.Button\",\"label\":\"New Label\",\"sequence\":90}]\n" +
                 "Example hide: [{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
-                "Example show: [{\"action\":\"show_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]")] string operations)
+                "Example show: [{\"action\":\"show_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
+                "add_flyout_static REQUIRED fields:\n" +
+                "  - surface: 'form' (grid surfaces coming soon)\n" +
+                "  - label: flyout display text\n" +
+                "  - items: array of child buttons, each with: label, library, function, enable_library, enable_function\n" +
+                "add_flyout_static OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+                "add_flyout_static OPTIONAL per item: modern_image, tooltip_title, sequence (auto: 10, 20, 30...)\n" +
+                "Example add_flyout_static: [{\"action\":\"add_flyout_static\",\"surface\":\"form\",\"label\":\"Export Data\",\"modern_image\":\"v4_/images/export.svg\",\"items\":[{\"label\":\"Export Excel\",\"library\":\"v4_/scripts/mcp.js\",\"function\":\"MCP.exportExcel\",\"enable_library\":\"v4_/scripts/mcp.js\",\"enable_function\":\"MCP.isEnabled\"},{\"label\":\"Export PDF\",\"library\":\"v4_/scripts/mcp.js\",\"function\":\"MCP.exportPdf\",\"enable_library\":\"v4_/scripts/mcp.js\",\"enable_function\":\"MCP.isEnabled\"}]}]\n" +
+                "update_flyout_static REQUIRED: flyout_id OR label (to identify the flyout)\n" +
+                "update_flyout_static OPTIONAL (flyout-level): label, tooltip_title, tooltip_description, modern_image, sequence\n" +
+                "update_flyout_static OPTIONAL items[]: item_label (REQUIRED to identify button), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
+                "Example update_flyout_static: [{\"action\":\"update_flyout_static\",\"label\":\"Export Data\",\"items\":[{\"item_label\":\"Export to Excel\",\"modern_image\":\"v4_/images/excel.svg\"}]}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -166,11 +187,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         summaries.Add(showResult.summary);
                         break;
 
+                    case "add_flyout_static":
+                        var flyoutResult = ExecuteAddFlyoutStatic(ribbonDoc, entity_name, op);
+                        if (flyoutResult.error != null)
+                            return ErrorResult(flyoutResult.error);
+                        summaries.Add(flyoutResult.summary);
+                        break;
+
+                    case "update_flyout_static":
+                        var updFlyoutResult = ExecuteUpdateFlyoutStatic(ribbonDoc, entity_name, op);
+                        if (updFlyoutResult.error != null)
+                            return ErrorResult(updFlyoutResult.error);
+                        summaries.Add(updFlyoutResult.summary);
+                        break;
+
                     default:
                         return ErrorResult(
                             $"Error: Unknown action '{action}'.\n" +
-                            "Valid actions: add_button, update_button, hide_button, show_button\n" +
-                            "Future: add_flyout");
+                            "Valid actions: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static\n" +
+                            "Future: add_flyout_dynamic");
                 }
             }
 
@@ -607,6 +642,488 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 UpsertLocLabel(ribbonDoc.Root, $"{buttonId}.ToolTipDescription", tooltipDesc);
 
             return (null, $"add_button: '{label}' [{surface}] click={function} enable={enableFunction}");
+        }
+
+        // ── add_flyout_static ────────────────────────────────────────────
+
+        private (string error, string summary) ExecuteAddFlyoutStatic(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            // ── Required fields ──
+            var surface = GetJsonString(op, "surface");
+            var label = GetJsonString(op, "label");
+
+            if (string.IsNullOrWhiteSpace(surface))
+                return ("Error: add_flyout_static requires 'surface' (form, main_grid, or sub_grid).", null);
+            if (string.IsNullOrWhiteSpace(label))
+                return ("Error: add_flyout_static requires 'label' (flyout display text).", null);
+
+            surface = surface.Trim().ToLowerInvariant();
+            if (!SurfaceLocationMap.ContainsKey(surface))
+                return ($"Error: Invalid surface '{surface}'. Valid: form, main_grid, sub_grid.", null);
+
+            // Phase 1: form only
+            if (surface != "form")
+                return ($"Error: add_flyout_static currently supports 'form' surface only. Grid surfaces coming soon.", null);
+
+            // ── Items array ──
+            if (!op.TryGetProperty("items", out var itemsProp) || itemsProp.ValueKind != JsonValueKind.Array)
+                return ("Error: add_flyout_static requires 'items' array with at least 1 item.", null);
+
+            var items = itemsProp.EnumerateArray().ToList();
+            if (items.Count == 0)
+                return ("Error: add_flyout_static requires 'items' array with at least 1 item.", null);
+
+            // ── Validate each item + check duplicate slugs ──
+            var slugSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemLib = GetJsonString(item, "library");
+                var itemFunc = GetJsonString(item, "function");
+                var itemEnLib = GetJsonString(item, "enable_library");
+                var itemEnFunc = GetJsonString(item, "enable_function");
+
+                if (string.IsNullOrWhiteSpace(itemLabel))
+                    return ("Error: Each item requires 'label'.", null);
+                if (string.IsNullOrWhiteSpace(itemLib))
+                    return ($"Error: Item '{itemLabel}' requires 'library'.", null);
+                if (string.IsNullOrWhiteSpace(itemFunc))
+                    return ($"Error: Item '{itemLabel}' requires 'function'.", null);
+                if (string.IsNullOrWhiteSpace(itemEnLib))
+                    return ($"Error: Item '{itemLabel}' requires 'enable_library'.", null);
+                if (string.IsNullOrWhiteSpace(itemEnFunc))
+                    return ($"Error: Item '{itemLabel}' requires 'enable_function'.", null);
+
+                var libErr = ValidateWebResourceExists(itemLib);
+                if (libErr != null) return (libErr, null);
+                var enLibErr = ValidateWebResourceExists(itemEnLib);
+                if (enLibErr != null) return (enLibErr, null);
+
+                var itemImage = GetJsonString(item, "modern_image");
+                if (!string.IsNullOrWhiteSpace(itemImage))
+                {
+                    var imgErr = ValidateWebResourceExists(itemImage);
+                    if (imgErr != null) return (imgErr, null);
+                }
+
+                var itemSlug = GenerateSlug(itemLabel);
+                if (!slugSet.Add(itemSlug))
+                    return ($"Error: Duplicate item slug '{itemSlug}' — two items resolve to the same ID. Use different labels.", null);
+            }
+
+            // ── Optional fields ──
+            var modernImage = GetJsonString(op, "modern_image");
+            var tooltipTitle = GetJsonString(op, "tooltip_title") ?? label;
+            var tooltipDesc = GetJsonString(op, "tooltip_description");
+            var sequence = GetJsonInt(op, "sequence", 85);
+
+            if (!string.IsNullOrWhiteSpace(modernImage))
+            {
+                var imgErr = ValidateWebResourceExists(modernImage);
+                if (imgErr != null) return (imgErr, null);
+            }
+
+            // ── Generate IDs ──
+            var flyoutSlug = GenerateSlug(label);
+            var customActionId = $"devkit.{entityName}.{flyoutSlug}.CustomAction";
+            var flyoutAnchorId = $"devkit.{entityName}.{flyoutSlug}.FlyoutAnchor";
+            var flyoutCommandId = $"devkit.{entityName}.{flyoutSlug}.Command";
+            var menuId = $"devkit.{entityName}.{flyoutSlug}.Menu";
+            var menuSectionId = $"devkit.{entityName}.{flyoutSlug}.MenuSection";
+            var controlsId = $"devkit.{entityName}.{flyoutSlug}.Controls";
+            var displayRuleId = $"devkit.{entityName}.{flyoutSlug}.DisplayRule";
+
+            var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
+
+            // ── Idempotent cleanup ──
+            RemoveById(ribbonDoc.Root, "CustomActions", "CustomAction", customActionId);
+            RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", flyoutCommandId);
+            var ruleDefsClean = ribbonDoc.Root.Element("RuleDefinitions");
+            if (ruleDefsClean != null)
+                RemoveByIdInChild(ruleDefsClean, "DisplayRules", "DisplayRule", displayRuleId);
+
+            foreach (var item in items)
+            {
+                var itemSlug = GenerateSlug(GetJsonString(item, "label"));
+                var itemCommandId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+
+                RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", itemCommandId);
+                if (ruleDefsClean != null)
+                    RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", itemEnRuleId);
+            }
+
+            // ── CrmParameters for form ──
+            XElement[] MakeCrmParams() =>
+            [
+                new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+                new XElement("CrmParameter", new XAttribute("Value", "PrimaryEntityTypeName")),
+                new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds"))
+            ];
+
+            // ── Build CustomAction + FlyoutAnchor + Menu ──
+            var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
+
+            var controlsEl = new XElement("Controls", new XAttribute("Id", controlsId));
+            var autoSeq = 10;
+
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+                var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+                var itemSeq = GetJsonInt(item, "sequence", autoSeq);
+                var itemImage = GetJsonString(item, "modern_image");
+                var itemTT = GetJsonString(item, "tooltip_title") ?? itemLabel;
+
+                var btnEl = new XElement("Button",
+                    new XAttribute("Id", itemBtnId),
+                    new XAttribute("Command", itemCmdId),
+                    new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
+                    new XAttribute("Alt", $"$LocLabels:{itemBtnId}.Alt"),
+                    new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"),
+                    new XAttribute("Sequence", itemSeq));
+
+                if (!string.IsNullOrWhiteSpace(itemImage))
+                    btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
+
+                controlsEl.Add(btnEl);
+                autoSeq += 10;
+            }
+
+            var menuSectionEl = new XElement("MenuSection",
+                new XAttribute("Id", menuSectionId),
+                new XAttribute("Sequence", "10"),
+                new XAttribute("DisplayMode", "Menu16"),
+                controlsEl);
+
+            var menuEl = new XElement("Menu",
+                new XAttribute("Id", menuId),
+                menuSectionEl);
+
+            var flyoutEl = new XElement("FlyoutAnchor",
+                new XAttribute("Id", flyoutAnchorId),
+                new XAttribute("Command", flyoutCommandId),
+                new XAttribute("LabelText", $"$LocLabels:{flyoutAnchorId}.LabelText"),
+                new XAttribute("Alt", $"$LocLabels:{flyoutAnchorId}.Alt"),
+                new XAttribute("ToolTipTitle", $"$LocLabels:{flyoutAnchorId}.ToolTipTitle"),
+                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("Sequence", sequence),
+                new XAttribute("PopulateOnlyOnce", "true"));
+
+            if (!string.IsNullOrWhiteSpace(tooltipDesc))
+                flyoutEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{flyoutAnchorId}.ToolTipDescription"));
+
+            if (!string.IsNullOrWhiteSpace(modernImage))
+                flyoutEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+
+            flyoutEl.Add(menuEl);
+
+            customActionsEl.Add(new XElement("CustomAction",
+                new XAttribute("Id", customActionId),
+                new XAttribute("Location", location),
+                new XAttribute("Sequence", sequence),
+                new XElement("CommandUIDefinition", flyoutEl)));
+
+            // ── Flyout anchor CommandDefinition (empty actions, DisplayRule ref) ──
+            var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
+
+            commandDefsEl.Add(new XElement("CommandDefinition",
+                new XAttribute("Id", flyoutCommandId),
+                new XElement("EnableRules"),
+                new XElement("DisplayRules",
+                    new XElement("DisplayRule", new XAttribute("Id", displayRuleId))),
+                new XElement("Actions")));
+
+            // ── Per-item CommandDefinitions (click action + enable rule ref) ──
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+                var itemLib = GetJsonString(item, "library");
+                var itemFunc = GetJsonString(item, "function");
+
+                var jsFuncEl = new XElement("JavaScriptFunction",
+                    new XAttribute("Library", $"$webresource:{itemLib}"),
+                    new XAttribute("FunctionName", itemFunc));
+                foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
+
+                commandDefsEl.Add(new XElement("CommandDefinition",
+                    new XAttribute("Id", itemCmdId),
+                    new XElement("EnableRules",
+                        new XElement("EnableRule", new XAttribute("Id", itemEnRuleId))),
+                    new XElement("DisplayRules"),
+                    new XElement("Actions", jsFuncEl)));
+            }
+
+            // ── RuleDefinitions ──
+            var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
+
+            // Per-item EnableRules (custom JS)
+            var enableRulesEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+                var itemEnLib = GetJsonString(item, "enable_library");
+                var itemEnFunc = GetJsonString(item, "enable_function");
+
+                RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", itemEnRuleId);
+
+                var customRuleEl = new XElement("CustomRule",
+                    new XAttribute("FunctionName", itemEnFunc),
+                    new XAttribute("Library", $"$webresource:{itemEnLib}"));
+                foreach (var p in MakeCrmParams()) customRuleEl.Add(new XElement(p));
+
+                enableRulesEl.Add(new XElement("EnableRule",
+                    new XAttribute("Id", itemEnRuleId),
+                    customRuleEl));
+            }
+
+            // DisplayRule (form only): FormStateRule State="Existing"
+            RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
+            var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
+            displayRulesEl.Add(new XElement("DisplayRule",
+                new XAttribute("Id", displayRuleId),
+                new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+
+            // ── LocLabels ──
+            UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.LabelText", label);
+            UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.Alt", label);
+            UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.ToolTipTitle", tooltipTitle);
+            if (!string.IsNullOrWhiteSpace(tooltipDesc))
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.ToolTipDescription", tooltipDesc);
+
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+                var itemTT = GetJsonString(item, "tooltip_title") ?? itemLabel;
+
+                UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.LabelText", itemLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.Alt", itemLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.ToolTipTitle", itemTT);
+            }
+
+            var itemLabels = string.Join(", ", items.Select(i => GetJsonString(i, "label")));
+            return (null, $"add_flyout_static: '{label}' [{surface}] items=[{itemLabels}]");
+        }
+
+        // ── update_flyout_static ─────────────────────────────────────────
+
+        private (string error, string summary) ExecuteUpdateFlyoutStatic(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            // ── Identify flyout: by flyout_id or by label ──
+            var flyoutId = GetJsonString(op, "flyout_id");
+            var labelHint = GetJsonString(op, "label");
+
+            if (string.IsNullOrWhiteSpace(flyoutId))
+            {
+                if (string.IsNullOrWhiteSpace(labelHint))
+                    return ("Error: update_flyout_static requires 'flyout_id' or 'label' to identify the flyout.", null);
+                var slug = GenerateSlug(labelHint);
+                flyoutId = $"devkit.{entityName}.{slug}.FlyoutAnchor";
+            }
+
+            // Find the FlyoutAnchor element
+            var flyoutEl = ribbonDoc.Root
+                ?.Element("CustomActions")
+                ?.Descendants("FlyoutAnchor")
+                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, flyoutId, StringComparison.OrdinalIgnoreCase));
+
+            if (flyoutEl == null)
+                return ($"Error: FlyoutAnchor '{flyoutId}' not found in existing RibbonDiffXml.\n" +
+                        "Tip: Use add_flyout_static to create it first.", null);
+
+            // Derive base slug from flyoutId: devkit.{entity}.{slug}.FlyoutAnchor → {slug}
+            var idParts = flyoutId.Split('.');
+            var flyoutSlug = idParts.Length >= 3 ? idParts[idParts.Length - 2] : "";
+
+            var updatedFields = new List<string>();
+
+            // ── Flyout-level updates ──
+
+            // label → update LocLabels for LabelText + Alt
+            if (!string.IsNullOrWhiteSpace(labelHint) && !string.IsNullOrWhiteSpace(GetJsonString(op, "flyout_id")))
+            {
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutId}.LabelText", labelHint);
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutId}.Alt", labelHint);
+                updatedFields.Add("label");
+            }
+            else if (!string.IsNullOrWhiteSpace(GetJsonString(op, "new_label")))
+            {
+                var newLabel = GetJsonString(op, "new_label");
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutId}.LabelText", newLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutId}.Alt", newLabel);
+                updatedFields.Add("label");
+            }
+
+            // tooltip_title
+            var newTT = GetJsonString(op, "tooltip_title");
+            if (!string.IsNullOrWhiteSpace(newTT))
+            {
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutId}.ToolTipTitle", newTT);
+                updatedFields.Add("tooltip_title");
+            }
+
+            // tooltip_description
+            var newTD = GetJsonString(op, "tooltip_description");
+            if (!string.IsNullOrWhiteSpace(newTD))
+            {
+                UpsertLocLabel(ribbonDoc.Root, $"{flyoutId}.ToolTipDescription", newTD);
+                updatedFields.Add("tooltip_description");
+            }
+
+            // modern_image
+            var newImage = GetJsonString(op, "modern_image");
+            if (!string.IsNullOrWhiteSpace(newImage))
+            {
+                var imgErr = ValidateWebResourceExists(newImage);
+                if (imgErr != null) return (imgErr, null);
+                flyoutEl.SetAttributeValue("ModernImage", $"$webresource:{newImage}");
+                updatedFields.Add("modern_image");
+            }
+
+            // sequence
+            if (op.TryGetProperty("sequence", out _))
+            {
+                var newSeq = GetJsonInt(op, "sequence", 85);
+                flyoutEl.SetAttributeValue("Sequence", newSeq);
+                // Also update parent CustomAction sequence
+                flyoutEl.Parent?.Parent?.SetAttributeValue("Sequence", newSeq);
+                updatedFields.Add($"sequence={newSeq}");
+            }
+
+            // ── Item-level updates ──
+            if (op.TryGetProperty("items", out var itemsProp) && itemsProp.ValueKind == JsonValueKind.Array)
+            {
+                var items = itemsProp.EnumerateArray().ToList();
+                foreach (var item in items)
+                {
+                    var itemLabel = GetJsonString(item, "item_label");
+                    if (string.IsNullOrWhiteSpace(itemLabel))
+                        return ("Error: Each item in update_flyout_static requires 'item_label' to identify which button to update.", null);
+
+                    var itemSlug = GenerateSlug(itemLabel);
+                    var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+                    var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+                    var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+
+                    // Find child button
+                    var btnEl = flyoutEl.Descendants("Button")
+                        .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemBtnId, StringComparison.OrdinalIgnoreCase));
+
+                    if (btnEl == null)
+                        return ($"Error: Item button '{itemBtnId}' not found in flyout.\n" +
+                                $"Tip: Check item_label matches an existing item. Current items: {string.Join(", ", flyoutEl.Descendants("Button").Select(b => b.Attribute("LabelText")?.Value ?? b.Attribute("Id")?.Value))}", null);
+
+                    var itemUpdated = new List<string>();
+
+                    // label (rename) → update LocLabels
+                    var newItemLabel = GetJsonString(item, "label");
+                    if (!string.IsNullOrWhiteSpace(newItemLabel))
+                    {
+                        UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.LabelText", newItemLabel);
+                        UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.Alt", newItemLabel);
+                        itemUpdated.Add("label");
+                    }
+
+                    // tooltip_title → update LocLabel
+                    var newItemTT = GetJsonString(item, "tooltip_title");
+                    if (!string.IsNullOrWhiteSpace(newItemTT))
+                    {
+                        UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.ToolTipTitle", newItemTT);
+                        itemUpdated.Add("tooltip_title");
+                    }
+
+                    // modern_image
+                    var newItemImage = GetJsonString(item, "modern_image");
+                    if (!string.IsNullOrWhiteSpace(newItemImage))
+                    {
+                        var imgErr = ValidateWebResourceExists(newItemImage);
+                        if (imgErr != null) return (imgErr, null);
+                        btnEl.SetAttributeValue("ModernImage", $"$webresource:{newItemImage}");
+                        itemUpdated.Add("modern_image");
+                    }
+
+                    // sequence
+                    if (item.TryGetProperty("sequence", out _))
+                    {
+                        var newItemSeq = GetJsonInt(item, "sequence", 10);
+                        btnEl.SetAttributeValue("Sequence", newItemSeq);
+                        itemUpdated.Add($"sequence={newItemSeq}");
+                    }
+
+                    // library (click function JS file)
+                    var newItemLib = GetJsonString(item, "library");
+                    if (!string.IsNullOrWhiteSpace(newItemLib))
+                    {
+                        var libErr = ValidateWebResourceExists(newItemLib);
+                        if (libErr != null) return (libErr, null);
+
+                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
+                            ?.Elements("CommandDefinition")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
+                        var jsFnEl = cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction");
+                        jsFnEl?.SetAttributeValue("Library", $"$webresource:{newItemLib}");
+                        itemUpdated.Add("library");
+                    }
+
+                    // function (click function name)
+                    var newItemFunc = GetJsonString(item, "function");
+                    if (!string.IsNullOrWhiteSpace(newItemFunc))
+                    {
+                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
+                            ?.Elements("CommandDefinition")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
+                        var jsFnEl = cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction");
+                        jsFnEl?.SetAttributeValue("FunctionName", newItemFunc);
+                        itemUpdated.Add("function");
+                    }
+
+                    // enable_library
+                    var newItemEnLib = GetJsonString(item, "enable_library");
+                    if (!string.IsNullOrWhiteSpace(newItemEnLib))
+                    {
+                        var libErr = ValidateWebResourceExists(newItemEnLib);
+                        if (libErr != null) return (libErr, null);
+
+                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")
+                            ?.Element("EnableRules")
+                            ?.Elements("EnableRule")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
+                        var customRuleEl = enRuleEl?.Element("CustomRule");
+                        customRuleEl?.SetAttributeValue("Library", $"$webresource:{newItemEnLib}");
+                        itemUpdated.Add("enable_library");
+                    }
+
+                    // enable_function
+                    var newItemEnFunc = GetJsonString(item, "enable_function");
+                    if (!string.IsNullOrWhiteSpace(newItemEnFunc))
+                    {
+                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")
+                            ?.Element("EnableRules")
+                            ?.Elements("EnableRule")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
+                        var customRuleEl = enRuleEl?.Element("CustomRule");
+                        customRuleEl?.SetAttributeValue("FunctionName", newItemEnFunc);
+                        itemUpdated.Add("enable_function");
+                    }
+
+                    if (itemUpdated.Count > 0)
+                        updatedFields.Add($"item[{itemLabel}]: {string.Join(", ", itemUpdated)}");
+                }
+            }
+
+            if (updatedFields.Count == 0)
+                return ("Error: No fields to update. Provide at least one field to change.", null);
+
+            return (null, $"update_flyout_static: '{flyoutId}' updated [{string.Join(", ", updatedFields)}]");
         }
 
         // ── update_button ────────────────────────────────────────────────

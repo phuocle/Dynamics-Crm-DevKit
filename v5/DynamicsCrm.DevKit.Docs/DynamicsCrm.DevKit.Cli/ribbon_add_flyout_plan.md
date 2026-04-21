@@ -510,3 +510,525 @@ const BUTTONS = [
 ### Ước tính thời gian
 - `add_flyout_static`: ~3 giờ
 - `add_flyout_dynamic`: ~2.5 giờ (ít fields hơn nhưng XML phức tạp hơn về structure)
+
+---
+
+## PHẦN 3: Implementation Detail — `add_flyout_static` (Form Only)
+
+> Scope: chỉ `surface = "form"`. Grid surfaces sẽ bổ sung sau.
+
+### 3.1 Method signature
+
+```csharp
+private (string error, string summary) ExecuteAddFlyoutStatic(XDocument ribbonDoc, string entityName, JsonElement op)
+```
+
+Gọi từ switch trong `ExecuteOperation()`:
+
+```csharp
+case "add_flyout_static":
+    return ExecuteAddFlyoutStatic(ribbonDoc, entityName, op);
+```
+
+### 3.2 Parse & Validate
+
+```csharp
+// ── Required ──
+var surface = GetJsonString(op, "surface");           // "form"
+var label   = GetJsonString(op, "label");             // "Export Data"
+
+if (string.IsNullOrWhiteSpace(surface))
+    return ("Error: add_flyout_static requires 'surface' (form, main_grid, or sub_grid).", null);
+if (string.IsNullOrWhiteSpace(label))
+    return ("Error: add_flyout_static requires 'label' (flyout display text).", null);
+
+surface = surface.Trim().ToLowerInvariant();
+if (!SurfaceLocationMap.ContainsKey(surface))
+    return ($"Error: Invalid surface '{surface}'. Valid: form, main_grid, sub_grid.", null);
+
+// ── Items array ──
+if (!op.TryGetProperty("items", out var itemsProp) || itemsProp.ValueKind != JsonValueKind.Array)
+    return ("Error: add_flyout_static requires 'items' array with at least 1 item.", null);
+
+var items = itemsProp.EnumerateArray().ToList();
+if (items.Count == 0)
+    return ("Error: add_flyout_static requires 'items' array with at least 1 item.", null);
+
+// ── Validate each item ──
+var autoSequence = 10;
+foreach (var item in items)
+{
+    var itemLabel    = GetJsonString(item, "label");
+    var itemLib      = GetJsonString(item, "library");
+    var itemFunc     = GetJsonString(item, "function");
+    var itemEnLib    = GetJsonString(item, "enable_library");
+    var itemEnFunc   = GetJsonString(item, "enable_function");
+
+    if (string.IsNullOrWhiteSpace(itemLabel))
+        return ("Error: Each item requires 'label'.", null);
+    if (string.IsNullOrWhiteSpace(itemLib))
+        return ($"Error: Item '{itemLabel}' requires 'library'.", null);
+    if (string.IsNullOrWhiteSpace(itemFunc))
+        return ($"Error: Item '{itemLabel}' requires 'function'.", null);
+    if (string.IsNullOrWhiteSpace(itemEnLib))
+        return ($"Error: Item '{itemLabel}' requires 'enable_library'.", null);
+    if (string.IsNullOrWhiteSpace(itemEnFunc))
+        return ($"Error: Item '{itemLabel}' requires 'enable_function'.", null);
+
+    // Validate web resources
+    var libErr = ValidateWebResourceExists(itemLib);
+    if (libErr != null) return (libErr, null);
+    var enLibErr = ValidateWebResourceExists(itemEnLib);
+    if (enLibErr != null) return (enLibErr, null);
+
+    var itemImage = GetJsonString(item, "modern_image");
+    if (!string.IsNullOrWhiteSpace(itemImage))
+    {
+        var imgErr = ValidateWebResourceExists(itemImage);
+        if (imgErr != null) return (imgErr, null);
+    }
+}
+
+// ── Optional ──
+var modernImage  = GetJsonString(op, "modern_image");
+var tooltipTitle = GetJsonString(op, "tooltip_title") ?? label;
+var tooltipDesc  = GetJsonString(op, "tooltip_description");
+var sequence     = GetJsonInt(op, "sequence", 85);
+
+if (!string.IsNullOrWhiteSpace(modernImage))
+{
+    var imgErr = ValidateWebResourceExists(modernImage);
+    if (imgErr != null) return (imgErr, null);
+}
+```
+
+### 3.3 ID Generation
+
+```csharp
+var flyoutSlug = GenerateSlug(label);                      // "ExportData"
+
+// Flyout anchor IDs
+var customActionId  = $"devkit.{entityName}.{flyoutSlug}.CustomAction";
+var flyoutAnchorId  = $"devkit.{entityName}.{flyoutSlug}.FlyoutAnchor";
+var flyoutCommandId = $"devkit.{entityName}.{flyoutSlug}.Command";
+var menuId          = $"devkit.{entityName}.{flyoutSlug}.Menu";
+var menuSectionId   = $"devkit.{entityName}.{flyoutSlug}.MenuSection";
+var controlsId      = $"devkit.{entityName}.{flyoutSlug}.Controls";
+
+// DisplayRule (form only)
+var displayRuleId = $"devkit.{entityName}.{flyoutSlug}.DisplayRule";
+
+var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
+```
+
+Per-item IDs (trong loop):
+
+```csharp
+var itemSlug         = GenerateSlug(itemLabel);             // "ExportExcel"
+var itemButtonId     = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+var itemCommandId    = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+var itemEnableRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+```
+
+### 3.4 Idempotent Cleanup
+
+```csharp
+// Remove existing flyout CustomAction
+RemoveById(ribbonDoc.Root, "CustomActions", "CustomAction", customActionId);
+// Remove flyout command
+RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", flyoutCommandId);
+
+// Remove per-item nodes
+foreach (var item in items)
+{
+    var itemSlug      = GenerateSlug(GetJsonString(item, "label"));
+    var itemCommandId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+    var itemEnRuleId  = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+
+    RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", itemCommandId);
+    var ruleDefsEl = ribbonDoc.Root.Element("RuleDefinitions");
+    if (ruleDefsEl != null)
+        RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", itemEnRuleId);
+}
+
+// Remove DisplayRule
+var ruleDefs = ribbonDoc.Root.Element("RuleDefinitions");
+if (ruleDefs != null)
+    RemoveByIdInChild(ruleDefs, "DisplayRules", "DisplayRule", displayRuleId);
+```
+
+### 3.5 Build CustomAction + FlyoutAnchor + Menu (Form)
+
+```csharp
+var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
+
+// ── Build child buttons inside Menu ──
+var controlsEl = new XElement("Controls", new XAttribute("Id", controlsId));
+var autoSeq = 10;
+
+foreach (var item in items)
+{
+    var itemLabel  = GetJsonString(item, "label");
+    var itemSlug   = GenerateSlug(itemLabel);
+    var itemBtnId  = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+    var itemCmdId  = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+    var itemSeq    = GetJsonInt(item, "sequence", autoSeq);
+    var itemTT     = GetJsonString(item, "tooltip_title") ?? itemLabel;
+    var itemImage  = GetJsonString(item, "modern_image");
+
+    var btnEl = new XElement("Button",
+        new XAttribute("Id", itemBtnId),
+        new XAttribute("Command", itemCmdId),
+        new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
+        new XAttribute("Alt", $"$LocLabels:{itemBtnId}.LabelText"),
+        new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"),
+        new XAttribute("Sequence", itemSeq));
+
+    // Child buttons: NO TemplateAlias (confirmed from template)
+    if (!string.IsNullOrWhiteSpace(itemImage))
+        btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
+
+    controlsEl.Add(btnEl);
+    autoSeq += 10;
+}
+
+var menuSectionEl = new XElement("MenuSection",
+    new XAttribute("Id", menuSectionId),
+    new XAttribute("Sequence", "10"),
+    new XAttribute("DisplayMode", "Menu16"),
+    controlsEl);
+
+var menuEl = new XElement("Menu",
+    new XAttribute("Id", menuId),
+    menuSectionEl);
+
+// ── FlyoutAnchor ──
+var flyoutEl = new XElement("FlyoutAnchor",
+    new XAttribute("Id", flyoutAnchorId),
+    new XAttribute("Command", flyoutCommandId),
+    new XAttribute("LabelText", $"$LocLabels:{flyoutAnchorId}.LabelText"),
+    new XAttribute("Alt", $"$LocLabels:{flyoutAnchorId}.LabelText"),
+    new XAttribute("ToolTipTitle", $"$LocLabels:{flyoutAnchorId}.ToolTipTitle"),
+    new XAttribute("TemplateAlias", "isv"),
+    new XAttribute("Sequence", sequence),
+    new XAttribute("PopulateOnlyOnce", "true"));
+
+if (!string.IsNullOrWhiteSpace(tooltipDesc))
+    flyoutEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{flyoutAnchorId}.ToolTipDescription"));
+
+if (!string.IsNullOrWhiteSpace(modernImage))
+    flyoutEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+
+flyoutEl.Add(menuEl);
+
+// ── CustomAction wrapper ──
+customActionsEl.Add(new XElement("CustomAction",
+    new XAttribute("Id", customActionId),
+    new XAttribute("Location", location),
+    new XAttribute("Sequence", sequence),
+    new XElement("CommandUIDefinition", flyoutEl)));
+```
+
+### 3.6 Build CommandDefinitions
+
+#### 3.6.1 Flyout anchor command (empty actions + DisplayRule ref)
+
+```csharp
+var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
+
+// Flyout anchor command — empty EnableRules, DisplayRules (form only), empty Actions
+commandDefsEl.Add(new XElement("CommandDefinition",
+    new XAttribute("Id", flyoutCommandId),
+    new XElement("EnableRules"),
+    new XElement("DisplayRules",
+        new XElement("DisplayRule", new XAttribute("Id", displayRuleId))),
+    new XElement("Actions")));
+```
+
+#### 3.6.2 Per-item commands (click action + enable rule ref)
+
+```csharp
+// CrmParameters for form surface
+XElement[] MakeCrmParams() => [
+    new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+    new XElement("CrmParameter", new XAttribute("Value", "PrimaryEntityTypeName")),
+    new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds"))
+];
+
+foreach (var item in items)
+{
+    var itemLabel    = GetJsonString(item, "label");
+    var itemSlug     = GenerateSlug(itemLabel);
+    var itemCmdId    = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+    var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+    var itemLib      = GetJsonString(item, "library");
+    var itemFunc     = GetJsonString(item, "function");
+
+    var jsFuncEl = new XElement("JavaScriptFunction",
+        new XAttribute("Library", $"$webresource:{itemLib}"),
+        new XAttribute("FunctionName", itemFunc));
+    foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
+
+    commandDefsEl.Add(new XElement("CommandDefinition",
+        new XAttribute("Id", itemCmdId),
+        new XElement("EnableRules",
+            new XElement("EnableRule", new XAttribute("Id", itemEnRuleId))),
+        new XElement("DisplayRules"),
+        new XElement("Actions", jsFuncEl)));
+}
+```
+
+### 3.7 Build RuleDefinitions
+
+#### 3.7.1 Per-item EnableRules (custom JS)
+
+```csharp
+var ruleDefsEl    = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
+var enableRulesEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
+
+foreach (var item in items)
+{
+    var itemLabel    = GetJsonString(item, "label");
+    var itemSlug     = GenerateSlug(itemLabel);
+    var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+    var itemEnLib    = GetJsonString(item, "enable_library");
+    var itemEnFunc   = GetJsonString(item, "enable_function");
+
+    RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", itemEnRuleId);
+
+    var customRuleEl = new XElement("CustomRule",
+        new XAttribute("FunctionName", itemEnFunc),
+        new XAttribute("Library", $"$webresource:{itemEnLib}"));
+    foreach (var p in MakeCrmParams()) customRuleEl.Add(new XElement(p));
+
+    enableRulesEl.Add(new XElement("EnableRule",
+        new XAttribute("Id", itemEnRuleId),
+        customRuleEl));
+}
+```
+
+#### 3.7.2 DisplayRule (form only)
+
+```csharp
+// DisplayRule: FormStateRule State="Existing" — consistent with add_button
+RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
+var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
+displayRulesEl.Add(new XElement("DisplayRule",
+    new XAttribute("Id", displayRuleId),
+    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+```
+
+### 3.8 Build LocLabels
+
+```csharp
+// Flyout anchor labels
+UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.LabelText", label);
+UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.ToolTipTitle", tooltipTitle);
+if (!string.IsNullOrWhiteSpace(tooltipDesc))
+    UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.ToolTipDescription", tooltipDesc);
+
+// Per-item labels
+foreach (var item in items)
+{
+    var itemLabel  = GetJsonString(item, "label");
+    var itemSlug   = GenerateSlug(itemLabel);
+    var itemBtnId  = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+    var itemTT     = GetJsonString(item, "tooltip_title") ?? itemLabel;
+
+    UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.LabelText", itemLabel);
+    UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.ToolTipTitle", itemTT);
+}
+```
+
+### 3.9 Return summary
+
+```csharp
+var itemLabels = string.Join(", ", items.Select(i => GetJsonString(i, "label")));
+return (null, $"add_flyout_static: '{label}' [{surface}] items=[{itemLabels}]");
+```
+
+### 3.10 Full XML Output (form, entity=v4_mcp, label="Export Data")
+
+```xml
+<RibbonDiffXml>
+  <CustomActions>
+    <CustomAction Id="devkit.v4_mcp.ExportData.CustomAction"
+                  Location="Mscrm.Form.v4_mcp.MainTab.Save.Controls._children"
+                  Sequence="86">
+      <CommandUIDefinition>
+        <FlyoutAnchor Id="devkit.v4_mcp.ExportData.FlyoutAnchor"
+                      Command="devkit.v4_mcp.ExportData.Command"
+                      LabelText="$LocLabels:devkit.v4_mcp.ExportData.FlyoutAnchor.LabelText"
+                      Alt="$LocLabels:devkit.v4_mcp.ExportData.FlyoutAnchor.LabelText"
+                      ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.FlyoutAnchor.ToolTipTitle"
+                      ToolTipDescription="$LocLabels:devkit.v4_mcp.ExportData.FlyoutAnchor.ToolTipDescription"
+                      TemplateAlias="isv"
+                      Sequence="86"
+                      PopulateOnlyOnce="true"
+                      ModernImage="$webresource:v4_/images/export.svg">
+          <Menu Id="devkit.v4_mcp.ExportData.Menu">
+            <MenuSection Id="devkit.v4_mcp.ExportData.MenuSection"
+                         Sequence="10"
+                         DisplayMode="Menu16">
+              <Controls Id="devkit.v4_mcp.ExportData.Controls">
+                <Button Id="devkit.v4_mcp.ExportData.ExportExcel.Button"
+                        Command="devkit.v4_mcp.ExportData.ExportExcel.Command"
+                        LabelText="$LocLabels:devkit.v4_mcp.ExportData.ExportExcel.Button.LabelText"
+                        Alt="$LocLabels:devkit.v4_mcp.ExportData.ExportExcel.Button.LabelText"
+                        ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.ExportExcel.Button.ToolTipTitle"
+                        Sequence="10"
+                        ModernImage="$webresource:v4_/images/excel.svg" />
+                <Button Id="devkit.v4_mcp.ExportData.ExportPdf.Button"
+                        Command="devkit.v4_mcp.ExportData.ExportPdf.Command"
+                        LabelText="$LocLabels:devkit.v4_mcp.ExportData.ExportPdf.Button.LabelText"
+                        Alt="$LocLabels:devkit.v4_mcp.ExportData.ExportPdf.Button.LabelText"
+                        ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.ExportPdf.Button.ToolTipTitle"
+                        Sequence="20" />
+              </Controls>
+            </MenuSection>
+          </Menu>
+        </FlyoutAnchor>
+      </CommandUIDefinition>
+    </CustomAction>
+  </CustomActions>
+  <Templates>
+    <RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates>
+  </Templates>
+  <CommandDefinitions>
+    <!-- Flyout anchor command: empty actions, DisplayRule ref (form only) -->
+    <CommandDefinition Id="devkit.v4_mcp.ExportData.Command">
+      <EnableRules />
+      <DisplayRules>
+        <DisplayRule Id="devkit.v4_mcp.ExportData.DisplayRule" />
+      </DisplayRules>
+      <Actions />
+    </CommandDefinition>
+    <!-- Item: Export to Excel -->
+    <CommandDefinition Id="devkit.v4_mcp.ExportData.ExportExcel.Command">
+      <EnableRules>
+        <EnableRule Id="devkit.v4_mcp.ExportData.ExportExcel.EnableRule" />
+      </EnableRules>
+      <DisplayRules />
+      <Actions>
+        <JavaScriptFunction Library="$webresource:v4_/scripts/mcp.js"
+                            FunctionName="MCP.exportExcel">
+          <CrmParameter Value="PrimaryControl" />
+          <CrmParameter Value="PrimaryEntityTypeName" />
+          <CrmParameter Value="PrimaryItemIds" />
+        </JavaScriptFunction>
+      </Actions>
+    </CommandDefinition>
+    <!-- Item: Export to PDF -->
+    <CommandDefinition Id="devkit.v4_mcp.ExportData.ExportPdf.Command">
+      <EnableRules>
+        <EnableRule Id="devkit.v4_mcp.ExportData.ExportPdf.EnableRule" />
+      </EnableRules>
+      <DisplayRules />
+      <Actions>
+        <JavaScriptFunction Library="$webresource:v4_/scripts/mcp.js"
+                            FunctionName="MCP.exportPdf">
+          <CrmParameter Value="PrimaryControl" />
+          <CrmParameter Value="PrimaryEntityTypeName" />
+          <CrmParameter Value="PrimaryItemIds" />
+        </JavaScriptFunction>
+      </Actions>
+    </CommandDefinition>
+  </CommandDefinitions>
+  <RuleDefinitions>
+    <TabDisplayRules />
+    <DisplayRules>
+      <DisplayRule Id="devkit.v4_mcp.ExportData.DisplayRule">
+        <FormStateRule State="Existing" />
+      </DisplayRule>
+    </DisplayRules>
+    <EnableRules>
+      <EnableRule Id="devkit.v4_mcp.ExportData.ExportExcel.EnableRule">
+        <CustomRule FunctionName="MCP.isEnabled"
+                    Library="$webresource:v4_/scripts/mcp.js">
+          <CrmParameter Value="PrimaryControl" />
+          <CrmParameter Value="PrimaryEntityTypeName" />
+          <CrmParameter Value="PrimaryItemIds" />
+        </CustomRule>
+      </EnableRule>
+      <EnableRule Id="devkit.v4_mcp.ExportData.ExportPdf.EnableRule">
+        <CustomRule FunctionName="MCP.isEnabled"
+                    Library="$webresource:v4_/scripts/mcp.js">
+          <CrmParameter Value="PrimaryControl" />
+          <CrmParameter Value="PrimaryEntityTypeName" />
+          <CrmParameter Value="PrimaryItemIds" />
+        </CustomRule>
+      </EnableRule>
+    </EnableRules>
+  </RuleDefinitions>
+  <LocLabels>
+    <LocLabel Id="devkit.v4_mcp.ExportData.FlyoutAnchor.LabelText">
+      <Titles><Title description="Export Data" languagecode="1033" /></Titles>
+    </LocLabel>
+    <LocLabel Id="devkit.v4_mcp.ExportData.FlyoutAnchor.ToolTipTitle">
+      <Titles><Title description="Export Data" languagecode="1033" /></Titles>
+    </LocLabel>
+    <LocLabel Id="devkit.v4_mcp.ExportData.FlyoutAnchor.ToolTipDescription">
+      <Titles><Title description="Export record in various formats" languagecode="1033" /></Titles>
+    </LocLabel>
+    <LocLabel Id="devkit.v4_mcp.ExportData.ExportExcel.Button.LabelText">
+      <Titles><Title description="Export to Excel" languagecode="1033" /></Titles>
+    </LocLabel>
+    <LocLabel Id="devkit.v4_mcp.ExportData.ExportExcel.Button.ToolTipTitle">
+      <Titles><Title description="Export to Excel" languagecode="1033" /></Titles>
+    </LocLabel>
+    <LocLabel Id="devkit.v4_mcp.ExportData.ExportPdf.Button.LabelText">
+      <Titles><Title description="Export to PDF" languagecode="1033" /></Titles>
+    </LocLabel>
+    <LocLabel Id="devkit.v4_mcp.ExportData.ExportPdf.Button.ToolTipTitle">
+      <Titles><Title description="Export to PDF" languagecode="1033" /></Titles>
+    </LocLabel>
+  </LocLabels>
+</RibbonDiffXml>
+```
+
+### 3.11 So sánh `add_button` vs `add_flyout_static` (form only)
+
+| Khía cạnh | `add_button` (form) | `add_flyout_static` (form) |
+|---|---|---|
+| **CustomAction** | 1 (chứa `<Button>`) | 1 (chứa `<FlyoutAnchor>` + `<Menu>` + child `<Button>`s) |
+| **CommandDefinition** | 1 (click + enable ref + display ref) | 1 (flyout: empty actions + display ref) + N (per-item: click + enable ref) |
+| **EnableRule** | 1 (custom JS) | N (per-item custom JS) |
+| **DisplayRule** | 1 (`FormStateRule State="Existing"`) | 1 (`FormStateRule State="Existing"`) — trên flyout command |
+| **LocLabel** | 2-3 (LabelText, ToolTipTitle, ToolTipDescription?) | 2-3 (flyout anchor) + 2×N (per-item: LabelText, ToolTipTitle) |
+| **CrmParameter set** | PrimaryControl, PrimaryEntityTypeName, PrimaryItemIds | Same — per-item commands |
+| **TemplateAlias** | `"isv"` trên Button | `"isv"` trên FlyoutAnchor, **không có** trên child Buttons |
+| **Alt attribute** | Không có trên Button | Có trên FlyoutAnchor và child Buttons (= LabelText) |
+| **Web resource validation** | 1 library + 1 enable_library + 1 modern_image? | N×(library + enable_library + modern_image?) + 1 flyout modern_image? |
+
+### 3.12 Điểm khác biệt quan trọng với `add_button`
+
+1. **FlyoutAnchor thay vì Button** trong `<CommandUIDefinition>` — FlyoutAnchor chứa `<Menu>` con.
+2. **`PopulateOnlyOnce="true"`** — flyout chỉ render menu 1 lần, sau đó cache.
+3. **Flyout anchor command empty** — không có `<Actions>`, không có `<EnableRules>` (chỉ có DisplayRule). Khác với button command vừa có click action vừa có enable rule.
+4. **Per-item commands riêng biệt** — mỗi child button có command riêng với click function và enable rule riêng. Button trong `add_button` chỉ có 1 command.
+5. **Child buttons không có `TemplateAlias`** — confirmed từ template. Chỉ FlyoutAnchor root mới có.
+6. **Child buttons có `Alt` attribute** — dùng cùng LocLabel với LabelText.
+7. **Child buttons không có `ToolTipDescription`** — chỉ có LabelText và ToolTipTitle.
+
+### 3.13 Edge Cases
+
+| Case | Xử lý |
+|---|---|
+| Items có cùng label | `GenerateSlug` cho cùng slug → duplicate IDs → lỗi. **Validate** trước: collect slugs, nếu trùng → return error |
+| Item không có sequence | Auto-assign: 10, 20, 30... |
+| Item có sequence trùng | Cho phép — Dataverse xử lý được, hiển thị theo thứ tự XML |
+| Flyout label trùng với button label đã có | Cho phép — IDs khác nhau (FlyoutAnchor vs Button pattern) |
+| Re-run cùng input | Idempotent — cleanup trước rồi tạo lại |
+
+### 3.14 Validate duplicate slugs
+
+```csharp
+// After parsing all items, check for duplicate slugs
+var slugs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+foreach (var item in items)
+{
+    var itemSlug = GenerateSlug(GetJsonString(item, "label"));
+    if (!slugs.Add(itemSlug))
+        return ($"Error: Duplicate item slug '{itemSlug}' — two items resolve to the same ID. Use different labels.", null);
+}
+```
