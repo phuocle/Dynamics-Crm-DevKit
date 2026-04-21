@@ -972,27 +972,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var flyoutId = GetJsonString(op, "flyout_id");
             var labelHint = GetJsonString(op, "label");
 
-            if (string.IsNullOrWhiteSpace(flyoutId))
+            // Find the FlyoutAnchor element
+            XElement flyoutEl = null;
+            if (!string.IsNullOrWhiteSpace(flyoutId))
+            {
+                flyoutEl = ribbonDoc.Root
+                    ?.Element("CustomActions")
+                    ?.Descendants("FlyoutAnchor")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, flyoutId, StringComparison.OrdinalIgnoreCase));
+            }
+            else
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
                     return ("Error: update_flyout_static requires 'flyout_id' or 'label' to identify the flyout.", null);
+                // Search by LabelText (inline text) or Id suffix
                 var slug = GenerateSlug(labelHint);
-                flyoutId = $"devkit.{entityName}.{slug}.FlyoutAnchor";
+                flyoutEl = ribbonDoc.Root
+                    ?.Element("CustomActions")
+                    ?.Descendants("FlyoutAnchor")
+                    .FirstOrDefault(e =>
+                        string.Equals(e.Attribute("LabelText")?.Value, labelHint, StringComparison.OrdinalIgnoreCase) ||
+                        (e.Attribute("Id")?.Value?.Contains($".{slug}.", StringComparison.OrdinalIgnoreCase) == true &&
+                         e.Attribute("Id")?.Value?.EndsWith(".FlyoutAnchor", StringComparison.OrdinalIgnoreCase) == true));
+                if (flyoutEl != null)
+                    flyoutId = flyoutEl.Attribute("Id")?.Value;
             }
-
-            // Find the FlyoutAnchor element
-            var flyoutEl = ribbonDoc.Root
-                ?.Element("CustomActions")
-                ?.Descendants("FlyoutAnchor")
-                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, flyoutId, StringComparison.OrdinalIgnoreCase));
 
             if (flyoutEl == null)
                 return ($"Error: FlyoutAnchor '{flyoutId}' not found in existing RibbonDiffXml.\n" +
                         "Tip: Use add_flyout_static to create it first.", null);
 
-            // Derive base slug from flyoutId: devkit.{entity}.{slug}.FlyoutAnchor → {slug}
-            var idParts = flyoutId.Split('.');
-            var flyoutSlug = idParts.Length >= 3 ? idParts[idParts.Length - 2] : "";
+            // Derive base prefix from flyoutId: "devkit.{entity}.{slug}.{suffix}.FlyoutAnchor"
+            // Strip leading "devkit.{entity}." and trailing ".FlyoutAnchor" to get "{slug}.{suffix}"
+            var flyoutPrefix = flyoutId;
+            var prefixStrip = $"devkit.{entityName}.";
+            if (flyoutPrefix.StartsWith(prefixStrip, StringComparison.OrdinalIgnoreCase))
+                flyoutPrefix = flyoutPrefix.Substring(prefixStrip.Length);
+            if (flyoutPrefix.EndsWith(".FlyoutAnchor", StringComparison.OrdinalIgnoreCase))
+                flyoutPrefix = flyoutPrefix.Substring(0, flyoutPrefix.Length - ".FlyoutAnchor".Length);
+            // flyoutPrefix is now e.g. "ExportData.Form" or legacy "ExportData"
+            var flyoutSlug = flyoutPrefix; // used to build item IDs: devkit.{entity}.{flyoutSlug}.{itemSlug}.Button
 
             var updatedFields = new List<string>();
 
@@ -1268,36 +1287,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return (null, null, null, "Error: 'item_label' is required to identify the flyout item.");
 
             string flyoutId;
+            XElement flyoutEl2;
             if (!string.IsNullOrWhiteSpace(flyoutIdParam))
+            {
                 flyoutId = flyoutIdParam.Trim();
+                flyoutEl2 = ribbonDoc.Root?.Element("CustomActions")?.Descendants("FlyoutAnchor")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, flyoutId, StringComparison.OrdinalIgnoreCase));
+            }
             else if (!string.IsNullOrWhiteSpace(flyoutLabel))
             {
                 var slug = GenerateSlug(flyoutLabel);
-                flyoutId = $"devkit.{entityName}.{slug}.FlyoutAnchor";
+                flyoutEl2 = ribbonDoc.Root?.Element("CustomActions")?.Descendants("FlyoutAnchor")
+                    .FirstOrDefault(e =>
+                        string.Equals(e.Attribute("LabelText")?.Value, flyoutLabel, StringComparison.OrdinalIgnoreCase) ||
+                        (e.Attribute("Id")?.Value?.Contains($".{slug}.", StringComparison.OrdinalIgnoreCase) == true &&
+                         e.Attribute("Id")?.Value?.EndsWith(".FlyoutAnchor", StringComparison.OrdinalIgnoreCase) == true));
+                flyoutId = flyoutEl2?.Attribute("Id")?.Value ?? $"devkit.{entityName}.{slug}.FlyoutAnchor";
             }
             else
                 return (null, null, null, "Error: 'flyout_id' or 'flyout_label' is required to identify the flyout.");
 
-            var flyoutEl = ribbonDoc.Root
-                ?.Element("CustomActions")
-                ?.Descendants("FlyoutAnchor")
-                .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, flyoutId, StringComparison.OrdinalIgnoreCase));
-
-            if (flyoutEl == null)
+            if (flyoutEl2 == null)
                 return (null, null, null, $"Error: FlyoutAnchor '{flyoutId}' not found.");
 
-            var idParts = flyoutId.Split('.');
-            var flyoutSlug = idParts.Length >= 3 ? idParts[idParts.Length - 2] : "";
+            var flyoutPrefix2 = flyoutId;
+            var prefixStrip2 = $"devkit.{entityName}.";
+            if (flyoutPrefix2.StartsWith(prefixStrip2, StringComparison.OrdinalIgnoreCase))
+                flyoutPrefix2 = flyoutPrefix2.Substring(prefixStrip2.Length);
+            if (flyoutPrefix2.EndsWith(".FlyoutAnchor", StringComparison.OrdinalIgnoreCase))
+                flyoutPrefix2 = flyoutPrefix2.Substring(0, flyoutPrefix2.Length - ".FlyoutAnchor".Length);
             var itemSlug = GenerateSlug(itemLabel);
-            var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
-            var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+            var itemBtnId = $"devkit.{entityName}.{flyoutPrefix2}.{itemSlug}.Button";
+            var itemCmdId = $"devkit.{entityName}.{flyoutPrefix2}.{itemSlug}.Command";
 
-            var btnEl = flyoutEl.Descendants("Button")
+            var btnEl = flyoutEl2.Descendants("Button")
                 .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemBtnId, StringComparison.OrdinalIgnoreCase));
 
             if (btnEl == null)
             {
-                var existing = string.Join(", ", flyoutEl.Descendants("Button").Select(b => b.Attribute("Id")?.Value ?? "?"));
+                var existing = string.Join(", ", flyoutEl2.Descendants("Button").Select(b => b.Attribute("Id")?.Value ?? "?"));
                 return (null, null, null, $"Error: Item button '{itemBtnId}' not found in flyout.\nExisting items: {existing}");
             }
 
