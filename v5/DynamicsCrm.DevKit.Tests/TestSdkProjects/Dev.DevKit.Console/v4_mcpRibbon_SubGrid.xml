@@ -60,12 +60,14 @@
                   </Controls>
                 </Group>
                 <Group Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions" Command="Mscrm.Enabled" Sequence="20" Title="$Resources:Ribbon.HomepageGrid.MainTab.Actions" Image32by32Popup="/_imgs/ribbon/Actions_32.png" Template="Mscrm.Templates.Flexible4" TabSequence="0">
-                  <Controls Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions.Controls" />
+                  <Controls Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions.Controls">
+                    <Button Id="devkit.v4_mcp.MCPGrid.Button" Command="devkit.v4_mcp.MCPGrid.Command" LabelText="$LocLabels:devkit.v4_mcp.MCPGrid.Button.LabelText" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPGrid.Button.ToolTipTitle" TemplateAlias="isv" Sequence="79" ToolTipDescription="$LocLabels:devkit.v4_mcp.MCPGrid.Button.ToolTipDescription" ModernImage="$webresource:Activities/Images/embed_32.svg" />
+                  </Controls>
                 </Group>
                 <Group Id="Mscrm.SubGrid.v4_mcp.MainTab.Collaborate" Command="Mscrm.Enabled" Sequence="30" Title="$Resources:Ribbon.HomepageGrid.MainTab.Collaborate" Image32by32Popup="/_imgs/ribbon/Assign_32.png" Template="Mscrm.Templates.Flexible4" TabSequence="0">
                   <Controls Id="Mscrm.SubGrid.v4_mcp.MainTab.Collaborate.Controls">
                     <Button Id="Mscrm.SubGrid.v4_mcp.AddEmail" Command="Mscrm.AddEmailToSelectedRecord" Sequence="10" ToolTipTitle="$Resources:Ribbon.HomepageGrid.SendDirectEmail.ToolTip" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.DirectEmail" LabelText="$Resources:Ribbon.HomepageGrid.SendDirectEmail" Alt="$Resources:Ribbon.HomepageGrid.SendDirectEmail" Image16by16="/_imgs/ribbon/AddEmail_16.png" Image32by32="/_imgs/ribbon/Email_32.png" TemplateAlias="o1" ModernImage="EmailLink" SolutionUniqueName="System" />
-                    <Button Id="Mscrm.SubGrid.v4_mcp.modern.AddEmail" Command="Mscrm.modern.AddEmailToSelectedRecord" Sequence="10" ToolTipTitle="$Resources:Ribbon.HomepageGrid.SendDirectEmail.ToolTip" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.DirectEmail" LabelText="$Resources:Ribbon.HomepageGrid.SendDirectEmail" Alt="$Resources:Ribbon.HomepageGrid.SendDirectEmail" Image16by16="/_imgs/ribbon/AddEmail_16.png" Image32by32="/_imgs/ribbon/Email_32.png" TemplateAlias="o1" ModernImage="EmailLink" />
+                    <Button Id="Mscrm.SubGrid.v4_mcp.modern.AddEmail" Command="Mscrm.modern.AddEmailToSelectedRecord" Sequence="10" ToolTipTitle="$Resources:Ribbon.HomepageGrid.SendDirectEmail.ToolTip" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.DirectEmail" LabelText="$Resources:Ribbon.HomepageGrid.SendDirectEmail" Alt="$Resources:Ribbon.HomepageGrid.SendDirectEmail" Image16by16="/_imgs/ribbon/AddEmail_16.png" Image32by32="/_imgs/ribbon/Email_32.png" TemplateAlias="o1" ModernImage="EmailLink" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.AdvMergeRecords" ToolTipTitle="$Resources:Ribbon.HomepageGrid.account.Record.Merge.MergeRecords" ToolTipDescription="$Resources:Ribbon.Tooltip.Merge" Command="Mscrm.HideAdvMergeRecords" Sequence="12" LabelText="$Resources:Ribbon.HomepageGrid.account.Record.Merge.MergeRecords" Alt="$Resources:Ribbon.HomepageGrid.account.Record.Merge.MergeRecords" Image16by16="/_imgs/ribbon/MergeRecords_16.png" Image32by32="/_imgs/ribbon/MergeRecords_32.png" TemplateAlias="o2" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.AssociateParentChildCase" ToolTipTitle="$Resources:Ribbon.Form.incident.MainTab.Actions.AssociateParentChildCase" ToolTipDescription="$Resources:Ribbon.Tooltip.AssociateParentChildCase" Command="Mscrm.AssociateParentChildCase" Sequence="13" LabelText="$Resources:Ribbon.Form.incident.MainTab.Actions.AssociateParentChildCase" Alt="$Resources:Ribbon.Form.incident.MainTab.Actions.AssociateParentChildCase" Image16by16="/_imgs/ribbon/AssociateChildCase_16.png" Image32by32="/_imgs/ribbon/AssociateChildCase_32.png" TemplateAlias="o3" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.MailMerge" ToolTipTitle="$Resources:Ribbon.HomepageGrid.account.MainTab.Actions.MailMerge" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.MailMerge" Command="Mscrm.MailMergeSelected" Sequence="20" Alt="$Resources:Ribbon.HomepageGrid.account.MainTab.Actions.MailMerge" LabelText="$Resources:Ribbon.HomepageGrid.account.MainTab.Actions.MailMerge" Image16by16="/_imgs/ribbon/mailmerge16.png" Image32by32="/_imgs/ribbon/mailmerge32.png" TemplateAlias="o2" SolutionUniqueName="System" />
@@ -112,7 +114,7 @@
                   <Controls Id="Mscrm.SubGrid.v4_mcp.MainTab.Workflow.Controls">
                     <Button Id="Mscrm.SubGrid.v4_mcp.RunWorkflow" ToolTipTitle="$Resources:Ribbon.HomepageGrid.Data.Workflow.RunWorkflow" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.RunWorkflow" Command="Mscrm.RunWorkflowSelected" Sequence="30" LabelText="$Resources:Ribbon.HomepageGrid.Data.Workflow.RunWorkflow" Alt="$Resources:Ribbon.HomepageGrid.Data.Workflow.RunWorkflow" Image16by16="/_imgs/ribbon/RunWorkflow_16.png" Image32by32="/_imgs/ribbon/runworkflow32.png" TemplateAlias="o1" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.RunScript" ToolTipTitle="$Resources:Ribbon.HomepageGrid.Data.InteractiveWorkflow.RunScript" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.RunScript" Command="Mscrm.RunInteractiveWorkflowSelected" Sequence="40" LabelText="$Resources:Ribbon.HomepageGrid.Data.InteractiveWorkflow.RunScript" Alt="$Resources:Ribbon.HomepageGrid.Data.InteractiveWorkflow.RunScript" Image16by16="/_imgs/ribbon/StartDialog_16.png" Image32by32="/_imgs/ribbon/StartDialog_32.png" TemplateAlias="o1" SolutionUniqueName="System" />
-                    <FlyoutAnchor Id="Mscrm.SubGrid.v4_mcp.Flows.RefreshCommandBar" Sequence="60" ToolTipTitle="$Resources:Ribbon.HomepageGrid.Data.Workflow.RunFlow" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.RunFlow" Command="Mscrm.Form.Flows.ManageRunFlow" Image16by16="/_imgs/Ribbon/OpenFlows_16.png" Image32by32="/_imgs/Ribbon/OpenFlows_32.png" LabelText="$Resources:RefreshCommandBar.Flows" Alt="$Resources:RefreshCommandBar.Flows" PopulateDynamically="true" PopulateQueryCommand="Mscrm.DynamicMenu.Grid.Flows.PopulateMenu" TemplateAlias="o1" ModernImage="Flows" />
+                    <FlyoutAnchor Id="Mscrm.SubGrid.v4_mcp.Flows.RefreshCommandBar" Sequence="60" ToolTipTitle="$Resources:Ribbon.HomepageGrid.Data.Workflow.RunFlow" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.RunFlow" Command="Mscrm.Form.Flows.ManageRunFlow" Image16by16="/_imgs/Ribbon/OpenFlows_16.png" Image32by32="/_imgs/Ribbon/OpenFlows_32.png" LabelText="$Resources:RefreshCommandBar.Flows" Alt="$Resources:RefreshCommandBar.Flows" PopulateDynamically="true" PopulateQueryCommand="Mscrm.DynamicMenu.Grid.Flows.PopulateMenu" TemplateAlias="o1" ModernImage="Flows" SolutionUniqueName="System" />
                   </Controls>
                 </Group>
                 <Group Id="Mscrm.SubGrid.v4_mcp.MainTab.ExportData" Command="Mscrm.Enabled" Sequence="80" Title="$Resources:Ribbon.HomepageGrid.MainTab.ExportData" Image32by32Popup="/_imgs/ribbon/runreport32.png" Template="Mscrm.Templates.Flexible3" TabSequence="0">
@@ -756,6 +758,21 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
+      <CommandDefinition Id="devkit.v4_mcp.MCPGrid.Command">
+        <EnableRules>
+          <EnableRule Id="devkit.v4_mcp.MCPGrid.EnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPGrid.SelectionEnableRule" />
+        </EnableRules>
+        <DisplayRules />
+        <Actions>
+          <JavaScriptFunction Library="$webresource:devkit_/TestMcp/js/ieff.js" FunctionName="Ieff.onButtonClick">
+            <CrmParameter Value="SelectedControl" />
+            <CrmParameter Value="SelectedEntityTypeName" />
+            <CrmParameter Value="FirstSelectedItemId" />
+            <CrmParameter Value="SelectedControlSelectedItemIds" />
+          </JavaScriptFunction>
+        </Actions>
+      </CommandDefinition>
       <CommandDefinition Id="Mscrm.SubGrid.{!EntityLogicalName}.MainTab">
         <EnableRules>
           <EnableRule Id="Mscrm.SubGrid.{!EntityLogicalName}.MainTab" />
@@ -2048,6 +2065,17 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
+        <EnableRule Id="devkit.v4_mcp.MCPGrid.EnableRule">
+          <CustomRule FunctionName="Ieff.isButtonEnabled" Library="$webresource:devkit_/TestMcp/js/ieff.js">
+            <CrmParameter Value="SelectedControl" />
+            <CrmParameter Value="SelectedEntityTypeName" />
+            <CrmParameter Value="FirstSelectedItemId" />
+            <CrmParameter Value="SelectedControlSelectedItemIds" />
+          </CustomRule>
+        </EnableRule>
+        <EnableRule Id="devkit.v4_mcp.MCPGrid.SelectionEnableRule">
+          <SelectionCountRule Minimum="1" />
+        </EnableRule>
         <EnableRule Id="Mscrm.SubGrid.{!EntityLogicalName}.MainTab">
           <EntityRule AppliesTo="SelectedEntity" EntityName="{!EntityLogicalName}" />
         </EnableRule>
