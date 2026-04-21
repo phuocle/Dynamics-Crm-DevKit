@@ -55,7 +55,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "hide_button REQUIRED: button_id. Supports both OOB and custom buttons\n" +
                 "show_button REQUIRED: button_id. Supports both OOB and custom buttons\n" +
                 "add_split_button REQUIRED: surface, label, library, function, enable_library, enable_function (main button action), items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85). Per item OPTIONAL: modern_image, tooltip_title, sequence (auto: 10,20,30...). NOTE: click main button runs function directly; dropdown arrow opens item list\n" +
-                "update_split_button REQUIRED: split_button_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence, library, function, enable_library, enable_function. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function. NOTE: SplitButton uses inline text (not $LocLabels), so label/tooltip update attributes directly\n" +
+                "update_split_button REQUIRED: split_button_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence, library, function, enable_library, enable_function. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function.\n" +
                 "add_flyout_static REQUIRED: surface, label, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85). Per item OPTIONAL: modern_image, tooltip_title, sequence (auto: 10,20,30...)\n" +
                 "update_flyout_static REQUIRED: flyout_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
                 "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
@@ -196,13 +196,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Step 7: Validate output XML against Ribbon XSD
+            // Step 7: Sort CommandDefinitions, DisplayRules, EnableRules by Id (matches Ribbon Workbench output)
+            SortChildrenById(ribbonDoc.Root?.Element("CommandDefinitions"), "CommandDefinition");
+            var ruleDefsSortEl = ribbonDoc.Root?.Element("RuleDefinitions");
+            SortChildrenById(ruleDefsSortEl?.Element("DisplayRules"), "DisplayRule");
+            SortChildrenById(ruleDefsSortEl?.Element("EnableRules"), "EnableRule");
+
+            // Step 8: Validate output XML against Ribbon XSD
             var xmlString = ribbonDoc.ToString(SaveOptions.None);
             var (xsdErrors, xsdWarnings) = ValidateRibbonXml(xmlString);
             if (xsdErrors.Count > 0)
                 return ErrorResult($"Error: Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}");
 
-            // Step 8: Save to temp file
+            // Step 9: Save to temp file
             var workingDir = Directory.GetCurrentDirectory();
             var outputDir = Path.Combine(workingDir, ".devkit", "modified_ribbons");
             Directory.CreateDirectory(outputDir);
@@ -211,7 +217,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var outputFile = Path.Combine(outputDir, $"{entity_name}_{timestamp}.ribbondiffxml");
             File.WriteAllText(outputFile, xmlString, Encoding.UTF8);
 
-            // Step 9: Return result
+            // Step 10: Return result
             var newButtonCount = CountExistingButtons(ribbonDoc);
             var sb = new StringBuilder();
             sb.AppendLine($"[BuildRibbonXml] {entity_name}");
@@ -565,8 +571,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── CommandDefinition ──
             var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
             var jsFunctionEl = new XElement("JavaScriptFunction",
-                new XAttribute("Library", $"$webresource:{library}"),
-                new XAttribute("FunctionName", function));
+                new XAttribute("FunctionName", function),
+                new XAttribute("Library", $"$webresource:{library}"));
             foreach (var p in crmParams) jsFunctionEl.Add(p);
 
             // DisplayRule reference inside CommandDefinition (form only)
@@ -733,9 +739,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var splitButtonId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.SplitButton";
             var mainCommandId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Command";
             var mainEnRuleId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.EnableRule";
-            var menuId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Menu";
+            var menuId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.SplitButton.Menu";
             var menuSectionId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.MenuSection";
-            var controlsId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Controls";
+            var controlsId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.MenuSection.Controls";
             var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.{surfaceSuffix}.DisplayRule" : null;
             string selectionEnableRuleId = null; // flyout/split use no SelectionCountRule — items must always be visible
 
@@ -793,14 +799,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var itemSeq = GetJsonInt(item, "sequence", autoSeq);
                 var itemImage = GetJsonString(item, "modern_image");
 
-                var itemTTInline = GetJsonString(item, "tooltip_title") ?? itemLabel;
                 var btnEl = new XElement("Button",
-                    new XAttribute("Id", itemBtnId),
+                    new XAttribute("Alt", $"$LocLabels:{itemBtnId}.Alt"),
                     new XAttribute("Command", itemCmdId),
-                    new XAttribute("LabelText", itemLabel),
-                    new XAttribute("Alt", itemLabel),
-                    new XAttribute("ToolTipTitle", itemTTInline),
-                    new XAttribute("Sequence", itemSeq));
+                    new XAttribute("Id", itemBtnId),
+                    new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
+                    new XAttribute("Sequence", itemSeq),
+                    new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
 
                 if (!string.IsNullOrWhiteSpace(itemImage))
                     btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
@@ -819,19 +824,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("Id", menuId),
                 menuSectionEl);
 
-            // ── Build SplitButton element — SplitButton does not resolve $LocLabels in UCI, use inline text ──
+            // ── Build SplitButton element ──
             var splitButtonEl = new XElement("SplitButton",
-                new XAttribute("Id", splitButtonId),
+                new XAttribute("Alt", $"$LocLabels:{splitButtonId}.Alt"),
                 new XAttribute("Command", mainCommandId),
-                new XAttribute("LabelText", label),
-                new XAttribute("Alt", label),
-                new XAttribute("ToolTipTitle", tooltipTitle),
-                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("Id", splitButtonId),
+                new XAttribute("LabelText", $"$LocLabels:{splitButtonId}.LabelText"),
+                new XAttribute("PopulateOnlyOnce", "true"),
                 new XAttribute("Sequence", sequence),
-                new XAttribute("PopulateOnlyOnce", "true"));
+                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("ToolTipTitle", $"$LocLabels:{splitButtonId}.ToolTipTitle"));
 
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
-                splitButtonEl.Add(new XAttribute("ToolTipDescription", tooltipDesc));
+                splitButtonEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{splitButtonId}.ToolTipDescription"));
 
             if (!string.IsNullOrWhiteSpace(modernImage))
                 splitButtonEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
@@ -857,8 +862,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : new XElement("DisplayRules");
 
             var mainJsFuncEl = new XElement("JavaScriptFunction",
-                new XAttribute("Library", $"$webresource:{library}"),
-                new XAttribute("FunctionName", function));
+                new XAttribute("FunctionName", function),
+                new XAttribute("Library", $"$webresource:{library}"));
             foreach (var p in MakeCrmParams()) mainJsFuncEl.Add(p);
 
             commandDefsEl.Add(new XElement("CommandDefinition",
@@ -878,8 +883,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var itemFunc = GetJsonString(item, "function");
 
                 var jsFuncEl = new XElement("JavaScriptFunction",
-                    new XAttribute("Library", $"$webresource:{itemLib}"),
-                    new XAttribute("FunctionName", itemFunc));
+                    new XAttribute("FunctionName", itemFunc),
+                    new XAttribute("Library", $"$webresource:{itemLib}"));
                 foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
 
                 var itemEnableRulesEl = new XElement("EnableRules",
@@ -1022,35 +1027,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var updatedFields = new List<string>();
 
-            // ── label — inline text, set attribute directly ──
+            // ── label — update LocLabel ──
             var newLabel = GetJsonString(op, "label");
             if (!string.IsNullOrWhiteSpace(newLabel) && !string.IsNullOrWhiteSpace(GetJsonString(op, "split_button_id")))
             {
-                splitButtonEl.SetAttributeValue("LabelText", newLabel);
-                splitButtonEl.SetAttributeValue("Alt", newLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.LabelText", newLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.Alt", newLabel);
                 updatedFields.Add("label");
             }
             else if (!string.IsNullOrWhiteSpace(GetJsonString(op, "new_label")))
             {
                 var newLbl = GetJsonString(op, "new_label");
-                splitButtonEl.SetAttributeValue("LabelText", newLbl);
-                splitButtonEl.SetAttributeValue("Alt", newLbl);
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.LabelText", newLbl);
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.Alt", newLbl);
                 updatedFields.Add("label");
             }
 
-            // ── tooltip_title — inline text ──
+            // ── tooltip_title ──
             var newTT = GetJsonString(op, "tooltip_title");
             if (!string.IsNullOrWhiteSpace(newTT))
             {
-                splitButtonEl.SetAttributeValue("ToolTipTitle", newTT);
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.ToolTipTitle", newTT);
                 updatedFields.Add("tooltip_title");
             }
 
-            // ── tooltip_description — inline text ──
+            // ── tooltip_description ──
             var newTD = GetJsonString(op, "tooltip_description");
             if (!string.IsNullOrWhiteSpace(newTD))
             {
-                splitButtonEl.SetAttributeValue("ToolTipDescription", newTD);
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.ToolTipDescription", newTD);
                 updatedFields.Add("tooltip_description");
             }
 
@@ -1149,20 +1154,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     var itemUpdated = new List<string>();
 
-                    // label — inline text
+                    // label → update LocLabel
                     var newItemLabel = GetJsonString(item, "label");
                     if (!string.IsNullOrWhiteSpace(newItemLabel))
                     {
-                        btnEl.SetAttributeValue("LabelText", newItemLabel);
-                        btnEl.SetAttributeValue("Alt", newItemLabel);
+                        UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.LabelText", newItemLabel);
+                        UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.Alt", newItemLabel);
                         itemUpdated.Add("label");
                     }
 
-                    // tooltip_title — inline text
+                    // tooltip_title → update LocLabel
                     var newItemTT = GetJsonString(item, "tooltip_title");
                     if (!string.IsNullOrWhiteSpace(newItemTT))
                     {
-                        btnEl.SetAttributeValue("ToolTipTitle", newItemTT);
+                        UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.ToolTipTitle", newItemTT);
                         itemUpdated.Add("tooltip_title");
                     }
 
@@ -1323,9 +1328,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var customActionId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.CustomAction";
             var flyoutAnchorId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.FlyoutAnchor";
             var flyoutCommandId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Command";
-            var menuId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Menu";
+            var menuId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.FlyoutAnchor.Menu";
             var menuSectionId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.MenuSection";
-            var controlsId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Controls";
+            var controlsId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.MenuSection.Controls";
             var displayRuleId = surface == "form" ? $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.DisplayRule" : null;
             string selectionEnableRuleId = null; // flyout/split use no SelectionCountRule — items must always be visible
 
@@ -1382,12 +1387,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var itemTT = GetJsonString(item, "tooltip_title") ?? itemLabel;
 
                 var btnEl = new XElement("Button",
-                    new XAttribute("Id", itemBtnId),
-                    new XAttribute("Command", itemCmdId),
-                    new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
                     new XAttribute("Alt", $"$LocLabels:{itemBtnId}.Alt"),
-                    new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"),
-                    new XAttribute("Sequence", itemSeq));
+                    new XAttribute("Command", itemCmdId),
+                    new XAttribute("Id", itemBtnId),
+                    new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
+                    new XAttribute("Sequence", itemSeq),
+                    new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
 
                 if (!string.IsNullOrWhiteSpace(itemImage))
                     btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
@@ -1407,14 +1412,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 menuSectionEl);
 
             var flyoutEl = new XElement("FlyoutAnchor",
-                new XAttribute("Id", flyoutAnchorId),
-                new XAttribute("Command", flyoutCommandId),
-                new XAttribute("LabelText", $"$LocLabels:{flyoutAnchorId}.LabelText"),
                 new XAttribute("Alt", $"$LocLabels:{flyoutAnchorId}.Alt"),
-                new XAttribute("ToolTipTitle", $"$LocLabels:{flyoutAnchorId}.ToolTipTitle"),
-                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("Command", flyoutCommandId),
+                new XAttribute("Id", flyoutAnchorId),
+                new XAttribute("LabelText", $"$LocLabels:{flyoutAnchorId}.LabelText"),
+                new XAttribute("PopulateOnlyOnce", "true"),
                 new XAttribute("Sequence", sequence),
-                new XAttribute("PopulateOnlyOnce", "true"));
+                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("ToolTipTitle", $"$LocLabels:{flyoutAnchorId}.ToolTipTitle"));
 
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 flyoutEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{flyoutAnchorId}.ToolTipDescription"));
@@ -1458,8 +1463,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var itemFunc = GetJsonString(item, "function");
 
                 var jsFuncEl = new XElement("JavaScriptFunction",
-                    new XAttribute("Library", $"$webresource:{itemLib}"),
-                    new XAttribute("FunctionName", itemFunc));
+                    new XAttribute("FunctionName", itemFunc),
+                    new XAttribute("Library", $"$webresource:{itemLib}"));
                 foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
 
                 var itemEnableRulesEl = new XElement("EnableRules",
@@ -2278,12 +2283,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private XElement BuildButtonElement(string buttonId, string commandId, string tooltipTitle, int sequence, string modernImage, string tooltipDesc)
         {
             var el = new XElement("Button",
-                new XAttribute("Id", buttonId),
                 new XAttribute("Command", commandId),
+                new XAttribute("Id", buttonId),
                 new XAttribute("LabelText", $"$LocLabels:{buttonId}.LabelText"),
-                new XAttribute("ToolTipTitle", $"$LocLabels:{buttonId}.ToolTipTitle"),
+                new XAttribute("Sequence", sequence),
                 new XAttribute("TemplateAlias", "isv"),
-                new XAttribute("Sequence", sequence));
+                new XAttribute("ToolTipTitle", $"$LocLabels:{buttonId}.ToolTipTitle"));
 
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 el.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{buttonId}.ToolTipDescription"));
@@ -2345,6 +2350,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     .Any(d => string.Equals(d.Attribute("Id")?.Value, innerElementId, StringComparison.OrdinalIgnoreCase)))
                 .ToList()
                 .ForEach(e => e.Remove());
+        }
+
+        private static void SortChildrenById(XElement container, string childName)
+        {
+            if (container == null) return;
+            var elements = container.Elements(childName).ToList();
+            if (elements.Count < 2) return;
+            foreach (var e in elements) e.Remove();
+            foreach (var e in elements.OrderBy(e => e.Attribute("Id")?.Value ?? "", StringComparer.Ordinal))
+                container.Add(e);
         }
 
         private static void RemoveByIdInChild(XElement parent, string childContainerName, string childName, string id)
