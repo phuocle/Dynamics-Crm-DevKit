@@ -906,8 +906,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private bool TryPublish(bool autoPublish, string entityName)
         {
             if (!autoPublish) return false;
-            McpHelper.FireAndForgetPublishAll(_serviceClient);
-            return true; // publishing is running in background
+            try
+            {
+                var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
+                _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static CallToolResult ErrorResult(string message) => new()

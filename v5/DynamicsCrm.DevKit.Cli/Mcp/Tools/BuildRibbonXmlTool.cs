@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "  surface, label, items[] (each item needs: label, library, function, enable_library, enable_function)\n" +
             "  OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
             "  OPTIONAL per item: modern_image, tooltip_title, sequence (auto: 10, 20, 30...)\n" +
-            "  Currently supports 'form' surface only.\n\n" +
+            "  Supports all 3 surfaces: form, main_grid, sub_grid.\n\n" +
             "REQUIRED for update_flyout_static — modify existing static flyout:\n" +
             "  flyout_id OR label (to identify the flyout)\n" +
             "  Updatable flyout-level: label, tooltip_title, tooltip_description, modern_image, sequence.\n" +
@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Example hide: [{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
                 "Example show: [{\"action\":\"show_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
                 "add_flyout_static REQUIRED fields:\n" +
-                "  - surface: 'form' (grid surfaces coming soon)\n" +
+                "  - surface: 'form' | 'main_grid' | 'sub_grid'\n" +
                 "  - label: flyout display text\n" +
                 "  - items: array of child buttons, each with: label, library, function, enable_library, enable_function\n" +
                 "add_flyout_static OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
@@ -557,12 +557,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (imgError != null) return (imgError, null);
             }
 
-            // Generate IDs from label slug
+            // Generate IDs from label slug — include surface suffix to avoid cross-surface ID collisions
             var slug = GenerateSlug(label);
-            var customActionId = $"devkit.{entityName}.{slug}.CustomAction";
-            var buttonId = $"devkit.{entityName}.{slug}.Button";
-            var commandId = $"devkit.{entityName}.{slug}.Command";
-            var enableRuleId = $"devkit.{entityName}.{slug}.EnableRule";
+            var btnSurfaceSuffix = surface == "form" ? "Form" : surface == "main_grid" ? "HomepageGrid" : "SubGrid";
+            var customActionId = $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.CustomAction";
+            var buttonId = $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.Button";
+            var commandId = $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.Command";
+            var enableRuleId = $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.EnableRule";
 
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
@@ -606,11 +607,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var p in crmParams) jsFunctionEl.Add(p);
 
             // DisplayRule reference inside CommandDefinition (form only)
-            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.DisplayRule" : null;
+            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.DisplayRule" : null;
 
             // sub_grid: extra EnableRule for SelectionCountRule(Min=1) — button disabled when no row selected
             // SelectionCountRule is only valid inside EnableRule (not DisplayRule per XSD)
-            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.SelectionEnableRule" : null;
+            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.SelectionEnableRule" : null;
 
             XElement displayRulesInCommand = displayRuleId != null
                 ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
@@ -686,10 +687,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!SurfaceLocationMap.ContainsKey(surface))
                 return ($"Error: Invalid surface '{surface}'. Valid: form, main_grid, sub_grid.", null);
 
-            // Phase 1: form only
-            if (surface != "form")
-                return ($"Error: add_flyout_static currently supports 'form' surface only. Grid surfaces coming soon.", null);
-
             // ── Items array ──
             if (!op.TryGetProperty("items", out var itemsProp) || itemsProp.ValueKind != JsonValueKind.Array)
                 return ("Error: add_flyout_static requires 'items' array with at least 1 item.", null);
@@ -748,44 +745,53 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (imgErr != null) return (imgErr, null);
             }
 
-            // ── Generate IDs ──
+            // ── Generate IDs — include surface suffix to avoid cross-surface ID collisions ──
             var flyoutSlug = GenerateSlug(label);
-            var customActionId = $"devkit.{entityName}.{flyoutSlug}.CustomAction";
-            var flyoutAnchorId = $"devkit.{entityName}.{flyoutSlug}.FlyoutAnchor";
-            var flyoutCommandId = $"devkit.{entityName}.{flyoutSlug}.Command";
-            var menuId = $"devkit.{entityName}.{flyoutSlug}.Menu";
-            var menuSectionId = $"devkit.{entityName}.{flyoutSlug}.MenuSection";
-            var controlsId = $"devkit.{entityName}.{flyoutSlug}.Controls";
-            var displayRuleId = $"devkit.{entityName}.{flyoutSlug}.DisplayRule";
+            var surfaceSuffix = surface == "form" ? "Form" : surface == "main_grid" ? "HomepageGrid" : "SubGrid";
+            var customActionId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.CustomAction";
+            var flyoutAnchorId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.FlyoutAnchor";
+            var flyoutCommandId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Command";
+            var menuId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Menu";
+            var menuSectionId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.MenuSection";
+            var controlsId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.Controls";
+            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.DisplayRule" : null;
+            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.SelectionEnableRule" : null;
 
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
             // ── Idempotent cleanup ──
-            // Match by inner element Id (FlyoutAnchor) because Ribbon Workbench may change CustomAction Id
             RemoveCustomActionByInnerElementId(ribbonDoc.Root, flyoutAnchorId);
             RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", flyoutCommandId);
             var ruleDefsClean = ribbonDoc.Root.Element("RuleDefinitions");
-            if (ruleDefsClean != null)
+            if (ruleDefsClean != null && displayRuleId != null)
                 RemoveByIdInChild(ruleDefsClean, "DisplayRules", "DisplayRule", displayRuleId);
+            if (ruleDefsClean != null && selectionEnableRuleId != null)
+                RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", selectionEnableRuleId);
 
             foreach (var item in items)
             {
                 var itemSlug = GenerateSlug(GetJsonString(item, "label"));
-                var itemCommandId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
-                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+                var itemCommandId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Command";
+                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.EnableRule";
 
                 RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", itemCommandId);
                 if (ruleDefsClean != null)
                     RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", itemEnRuleId);
             }
 
-            // ── CrmParameters for form ──
-            XElement[] MakeCrmParams() =>
-            [
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryEntityTypeName")),
-                new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds"))
-            ];
+            // ── CrmParameters per surface ──
+            XElement[] MakeCrmParams() => surface == "form"
+                ? [
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryEntityTypeName")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds"))
+                  ]
+                : [
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedEntityTypeName")),
+                    new XElement("CrmParameter", new XAttribute("Value", "FirstSelectedItemId")),
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedControlSelectedItemIds"))
+                  ];
 
             // ── Build CustomAction + FlyoutAnchor + Menu ──
             var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
@@ -797,8 +803,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var itemLabel = GetJsonString(item, "label");
                 var itemSlug = GenerateSlug(itemLabel);
-                var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
-                var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
+                var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Button";
+                var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Command";
                 var itemSeq = GetJsonInt(item, "sequence", autoSeq);
                 var itemImage = GetJsonString(item, "modern_image");
                 var itemTT = GetJsonString(item, "tooltip_title") ?? itemLabel;
@@ -852,14 +858,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("Sequence", sequence),
                 new XElement("CommandUIDefinition", flyoutEl)));
 
-            // ── Flyout anchor CommandDefinition (empty actions, DisplayRule ref) ──
+            // ── Flyout anchor CommandDefinition ──
             var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
+
+            var flyoutEnableRulesEl = new XElement("EnableRules");
+            if (selectionEnableRuleId != null)
+                flyoutEnableRulesEl.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
+
+            var flyoutDisplayRulesEl = displayRuleId != null
+                ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
+                : new XElement("DisplayRules");
 
             commandDefsEl.Add(new XElement("CommandDefinition",
                 new XAttribute("Id", flyoutCommandId),
-                new XElement("EnableRules"),
-                new XElement("DisplayRules",
-                    new XElement("DisplayRule", new XAttribute("Id", displayRuleId))),
+                flyoutEnableRulesEl,
+                flyoutDisplayRulesEl,
                 new XElement("Actions")));
 
             // ── Per-item CommandDefinitions (click action + enable rule ref) ──
@@ -867,8 +880,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var itemLabel = GetJsonString(item, "label");
                 var itemSlug = GenerateSlug(itemLabel);
-                var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Command";
-                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+                var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Command";
+                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.EnableRule";
                 var itemLib = GetJsonString(item, "library");
                 var itemFunc = GetJsonString(item, "function");
 
@@ -894,7 +907,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var itemLabel = GetJsonString(item, "label");
                 var itemSlug = GenerateSlug(itemLabel);
-                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.EnableRule";
+                var itemEnRuleId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.EnableRule";
                 var itemEnLib = GetJsonString(item, "enable_library");
                 var itemEnFunc = GetJsonString(item, "enable_function");
 
@@ -910,12 +923,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     customRuleEl));
             }
 
-            // DisplayRule (form only): FormStateRule State="Existing"
-            RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
-            var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
-            displayRulesEl.Add(new XElement("DisplayRule",
-                new XAttribute("Id", displayRuleId),
-                new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+            // DisplayRule (form only)
+            if (displayRuleId != null)
+            {
+                RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
+                var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
+                displayRulesEl.Add(new XElement("DisplayRule",
+                    new XAttribute("Id", displayRuleId),
+                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+            }
+
+            // sub_grid: SelectionCountRule on flyout anchor command
+            if (selectionEnableRuleId != null)
+            {
+                enableRulesEl.Add(new XElement("EnableRule",
+                    new XAttribute("Id", selectionEnableRuleId),
+                    new XElement("SelectionCountRule", new XAttribute("Minimum", "1"))));
+            }
 
             // ── LocLabels ──
             UpsertLocLabel(ribbonDoc.Root, $"{flyoutAnchorId}.LabelText", label);
@@ -928,7 +952,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var itemLabel = GetJsonString(item, "label");
                 var itemSlug = GenerateSlug(itemLabel);
-                var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{itemSlug}.Button";
+                var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Button";
                 var itemTT = GetJsonString(item, "tooltip_title") ?? itemLabel;
 
                 UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.LabelText", itemLabel);
