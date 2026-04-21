@@ -34,10 +34,11 @@
                   <Button Id="Mscrm.Form.v4_mcp.SaveAndNew" ToolTipTitle="$Resources:Mscrm_Form_Other_MainTab_Save_SaveAndNew_ToolTipTitle" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.SaveAndNew" Command="Mscrm.SaveAndNewPrimary" Sequence="40" LabelText="$Resources:Ribbon.Form.MainTab.Save.SaveAndNew" Alt="$Resources:Ribbon.Form.MainTab.Save.SaveAndNew" Image16by16="/_imgs/ribbon/saveandnew16.png" Image32by32="/_imgs/ribbon/saveandnew32.png" TemplateAlias="o2" SolutionUniqueName="System" />
                   <Button Id="Mscrm.Form.v4_mcp.NewRecord" ToolTipTitle="$Resources:Ribbon.HomepageGrid.MainTab.New" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.New" Command="Mscrm.NewRecordFromForm" Sequence="45" LabelText="$Resources:Ribbon.HomepageGrid.MainTab.New" Alt="$Resources:Ribbon.HomepageGrid.MainTab.New" Image16by16="/_imgs/ribbon/NewRecord_16.png" Image32by32="/_imgs/ribbon/newrecord32.png" TemplateAlias="o1" ModernImage="New" SolutionUniqueName="System" />
                   <Button Id="Mscrm.Form.v4_mcp.NewRecordForBPFEntity" ToolTipTitle="$Resources:Ribbon.HomepageGrid.MainTab.New" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.New" Command="Mscrm.Form.NewRecordForBPFEntity" Sequence="45" LabelText="$Resources:Ribbon.HomepageGrid.MainTab.New" Alt="$Resources:Ribbon.HomepageGrid.MainTab.New" Image16by16="/_imgs/ribbon/NewRecord_16.png" Image32by32="/_imgs/ribbon/newrecord32.png" TemplateAlias="o1" ModernImage="New" SolutionUniqueName="System" />
+                  <Button Id="Mscrm.Form.v4_mcp.Activate" ToolTipTitle="$Resources:Ribbon.HomepageGrid.account.Record.Status.Activate" ToolTipDescription="$Resources(EntityPluralDisplayName):Ribbon.Tooltip.Activate" Command="Mscrm.Form.Activate" Sequence="50" Alt="$Resources:Ribbon.HomepageGrid.account.Record.Status.Activate" LabelText="$Resources:Ribbon.HomepageGrid.account.Record.Status.Activate" Image16by16="/_imgs/ribbon/Activate_16.png" Image32by32="/_imgs/ribbon/Activate_32.png" TemplateAlias="o2" ModernImage="Activate" SolutionUniqueName="System" />
+                  <Button Id="Mscrm.Form.v4_mcp.Deactivate" ToolTipTitle="$Resources:Ribbon.HomepageGrid.account.Record.Status.Deactivate" ToolTipDescription="$Resources(EntityPluralDisplayName):Ribbon.Tooltip.Deactivate" Command="Mscrm.Form.Deactivate" Sequence="60" Alt="$Resources:Ribbon.HomepageGrid.account.Record.Status.Deactivate" LabelText="$Resources:Ribbon.HomepageGrid.account.Record.Status.Deactivate" Image16by16="/_imgs/ribbon/Deactivate_16.png" Image32by32="/_imgs/ribbon/Deactivate_32.png" TemplateAlias="o2" ModernImage="DeActivate" SolutionUniqueName="System" />
                   <Button Id="Mscrm.Form.v4_mcp.Delete" ToolTipTitle="$Resources:Mscrm_Form_Other_MainTab_Management_Delete_ToolTipTitle" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Form.Tooltip.Delete" Command="Mscrm.DeletePrimaryRecord" Sequence="70" LabelText="$Resources:Ribbon.HomepageGrid.MainTab.Management.Delete" Alt="$Resources:Ribbon.HomepageGrid.MainTab.Management.Delete" Image16by16="/_imgs/ribbon/Delete_16.png" Image32by32="/_imgs/Workplace/remove_32.png" TemplateAlias="o2" ModernImage="Remove" SolutionUniqueName="System" />
                   <Button Id="Mscrm.Form.v4_mcp.OpenActiveStage" ToolTipTitle="$Resources:Mscrm_Form_Other_MainTab_OpenActiveStage_ToolTipTitle" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Form.Tooltip.OpenActiveStage" Command="Mscrm.Form.OpenActiveStage" Sequence="80" LabelText="$Resources:Ribbon.Form.MainTab.OpenActiveStage" Alt="$Resources:Ribbon.Form.MainTab.OpenActiveStage" Image16by16="/_imgs/ribbon/formdesign16.png" Image32by32="/_imgs/ribbon/EditForm_32.png" TemplateAlias="o2" ModernImage="FormDesign" SolutionUniqueName="System" />
                   <Button Command="devkit.v4_mcp.MCPForm.Form.Command" Id="devkit.v4_mcp.MCPForm.Form.Button" LabelText="$LocLabels:devkit.v4_mcp.MCPForm.Form.Button.LabelText" Sequence="85" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPForm.Form.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
-                  <Button Command="devkit.v4_mcp.MCPForm2.Form.Command" Id="devkit.v4_mcp.MCPForm2.Form.Button" LabelText="$LocLabels:devkit.v4_mcp.MCPForm2.Form.Button.LabelText" Sequence="85" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPForm2.Form.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                   <FlyoutAnchor Alt="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.Alt" Command="devkit.v4_mcp.ExportData.Form.Command" Id="devkit.v4_mcp.ExportData.Form.FlyoutAnchor" LabelText="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.LabelText" PopulateOnlyOnce="true" Sequence="86" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.ToolTipTitle" ToolTipDescription="$LocLabels:devkit.v4_mcp.ExportData.Form.FlyoutAnchor.ToolTipDescription" ModernImage="$webresource:Activities/Images/embed_32.svg">
                     <Menu Id="devkit.v4_mcp.ExportData.Form.FlyoutAnchor.Menu">
                       <MenuSection Id="devkit.v4_mcp.ExportData.Form.MenuSection" Sequence="10" DisplayMode="Menu16">
@@ -840,12 +841,12 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
-      <CommandDefinition Id="devkit.v4_mcp.MCPForm2.Form.Command">
+      <CommandDefinition Id="devkit.v4_mcp.MCPForm.Form.Command">
         <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPForm2.Form.EnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule" />
         </EnableRules>
         <DisplayRules>
-          <DisplayRule Id="devkit.v4_mcp.MCPForm2.Form.DisplayRule" />
+          <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule" />
         </DisplayRules>
         <Actions>
           <JavaScriptFunction FunctionName="MCP.buttonFormClick" Library="$webresource:devkit_/TestMcp/js/button.js">
@@ -865,7 +866,6 @@
       <CommandDefinition Id="devkit.v4_mcp.ExportData.Form.ExportToExcel.Command">
         <EnableRules>
           <EnableRule Id="devkit.v4_mcp.ExportData.Form.ExportToExcel.EnableRule" />
-          <EnableRule Id="devkit.v4_mcp.AlwaysDisabled.EnableRule" />
         </EnableRules>
         <DisplayRules />
         <Actions>
@@ -937,21 +937,6 @@
         <DisplayRules />
         <Actions>
           <JavaScriptFunction FunctionName="MCP.sendSmsForm" Library="$webresource:devkit_/TestMcp/js/split.js">
-            <CrmParameter Value="PrimaryControl" />
-            <CrmParameter Value="PrimaryEntityTypeName" />
-            <CrmParameter Value="PrimaryItemIds" />
-          </JavaScriptFunction>
-        </Actions>
-      </CommandDefinition>
-      <CommandDefinition Id="devkit.v4_mcp.MCPForm.Form.Command">
-        <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule" />
-        </EnableRules>
-        <DisplayRules>
-          <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule" />
-        </DisplayRules>
-        <Actions>
-          <JavaScriptFunction FunctionName="MCP.buttonFormClick" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
@@ -2017,16 +2002,13 @@
     </CommandDefinitions>
     <RuleDefinitions>
       <DisplayRules>
-        <DisplayRule Id="devkit.v4_mcp.MCPForm2.Form.DisplayRule">
+        <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
         <DisplayRule Id="devkit.v4_mcp.ExportData.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
         <DisplayRule Id="devkit.v4_mcp.Send.Form.DisplayRule">
-          <FormStateRule State="Existing" />
-        </DisplayRule>
-        <DisplayRule Id="devkit.v4_mcp.MCPForm.Form.DisplayRule">
           <FormStateRule State="Existing" />
         </DisplayRule>
         <DisplayRule Id="Mscrm.SharePrimaryPermission">
@@ -2350,7 +2332,7 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
-        <EnableRule Id="devkit.v4_mcp.MCPForm2.Form.EnableRule">
+        <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule">
           <CustomRule FunctionName="MCP.isButtonFormEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
@@ -2363,9 +2345,6 @@
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />
           </CustomRule>
-        </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.AlwaysDisabled.EnableRule">
-          <SelectionCountRule Minimum="9999" Maximum="9999" />
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.Form.ExportToPDF.EnableRule">
           <CustomRule FunctionName="MCP.isPdfEnabledForm" Library="$webresource:devkit_/TestMcp/js/flyout.js">
@@ -2397,13 +2376,6 @@
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.Send.Form.SendSMS.EnableRule">
           <CustomRule FunctionName="MCP.isSmsEnabledForm" Library="$webresource:devkit_/TestMcp/js/split.js">
-            <CrmParameter Value="PrimaryControl" />
-            <CrmParameter Value="PrimaryEntityTypeName" />
-            <CrmParameter Value="PrimaryItemIds" />
-          </CustomRule>
-        </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPForm.Form.EnableRule">
-          <CustomRule FunctionName="MCP.isButtonFormEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="PrimaryControl" />
             <CrmParameter Value="PrimaryEntityTypeName" />
             <CrmParameter Value="PrimaryItemIds" />

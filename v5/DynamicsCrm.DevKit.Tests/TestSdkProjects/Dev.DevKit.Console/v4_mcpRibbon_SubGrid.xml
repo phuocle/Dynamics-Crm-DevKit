@@ -36,6 +36,8 @@
                     <Button Id="Mscrm.SubGrid.v4_mcp.AddExistingStandard" Command="Mscrm.AddExistingRecordFromSubGridStandard" Sequence="30" LabelText="$Resources(EntityDisplayName):Ribbon.SubGrid.AddExisting" Alt="$Resources(EntityDisplayName):Ribbon.SubGrid.AddExisting" Image16by16="/_imgs/ribbon/AddExistingStandard_16.png" Image32by32="/_imgs/ribbon/AddExistingStandard_32.png" TemplateAlias="o1" ToolTipTitle="$Resources(EntityDisplayName):Mscrm_SubGrid_EntityLogicalName_MainTab_Management_AddExistingStandard_ToolTipTitle" ToolTipDescription="$Resources(EntityDisplayName):Mscrm_SubGrid_EntityLogicalName_MainTab_Management_AddExistingStandard_ToolTipDescription" ModernImage="AddExisting" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.AddExistingAssoc" Command="Mscrm.AddExistingRecordFromSubGridAssociated" Sequence="40" LabelText="$Resources(EntityDisplayName):Ribbon.SubGrid.AddExisting" Alt="$Resources(EntityDisplayName):Ribbon.SubGrid.AddExisting" Image16by16="/_imgs/ribbon/AddExistingStandard_16.png" Image32by32="/_imgs/ribbon/AddExistingStandard_32.png" TemplateAlias="o1" ToolTipTitle="$Resources(EntityDisplayName):Mscrm_SubGrid_EntityLogicalName_MainTab_Management_AddExistingAssoc_ToolTipTitle" ToolTipDescription="$Resources(EntityDisplayName):Mscrm_SubGrid_EntityLogicalName_MainTab_Management_AddExistingAssoc_ToolTipDescription" ModernImage="AddExisting" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.Edit" ToolTipTitle="$Resources:Ribbon.HomepageGrid.MainTab.Management.Edit" ToolTipDescription="$Resources(EntityDisplayName):Ribbon.Tooltip.Edit" Command="Mscrm.EditSelectedRecord" Sequence="50" LabelText="$Resources:Ribbon.HomepageGrid.MainTab.Management.Edit" Alt="$Resources:Ribbon.HomepageGrid.MainTab.Management.Edit" Image16by16="/_imgs/ribbon/Edit_16.png" Image32by32="/_imgs/ribbon/edit32.png" TemplateAlias="o1" ModernImage="Edit" SolutionUniqueName="System" />
+                    <Button Id="Mscrm.SubGrid.v4_mcp.Activate" ToolTipTitle="$Resources:Ribbon.HomepageGrid.account.Record.Status.Activate" ToolTipDescription="$Resources(EntityPluralDisplayName):Ribbon.Tooltip.Activate" Command="Mscrm.HomepageGrid.Activate" Sequence="60" Alt="$Resources:Ribbon.HomepageGrid.account.Record.Status.Activate" LabelText="$Resources:Ribbon.HomepageGrid.account.Record.Status.Activate" Image16by16="/_imgs/ribbon/Activate_16.png" Image32by32="/_imgs/ribbon/Activate_32.png" TemplateAlias="o2" ModernImage="Activate" SolutionUniqueName="System" />
+                    <Button Id="Mscrm.SubGrid.v4_mcp.Deactivate" ToolTipTitle="$Resources:Ribbon.HomepageGrid.account.Record.Status.Deactivate" ToolTipDescription="$Resources(EntityPluralDisplayName):Ribbon.Tooltip.Deactivate" Command="Mscrm.HomepageGrid.Deactivate" Sequence="70" Alt="$Resources:Ribbon.HomepageGrid.account.Record.Status.Deactivate" LabelText="$Resources:Ribbon.HomepageGrid.account.Record.Status.Deactivate" Image16by16="/_imgs/ribbon/Deactivate_16.png" Image32by32="/_imgs/ribbon/Deactivate_32.png" TemplateAlias="o2" ModernImage="DeActivate" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.Delete" ToolTipTitle="$Resources(EntityDisplayName):Mscrm_SubGrid_EntityLogicalName_MainTab_Management_Delete_ToolTipTitle" ToolTipDescription="$Resources(EntityPluralDisplayName):Ribbon.HomepageGrid.Tooltip.Delete" Command="Mscrm.DeleteSelectedRecord" Sequence="80" LabelText="$Resources(EntityDisplayName):Ribbon.SubGrid.MainTab.Management.Delete" Alt="$Resources:Ribbon.HomepageGrid.MainTab.Management.Delete" Image16by16="/_imgs/ribbon/Delete_16.png" Image32by32="/_imgs/Workplace/remove_32.png" TemplateAlias="o2" ModernImage="Remove" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.Remove" Command="Mscrm.RemoveSelectedRecord" Sequence="90" LabelText="$Resources:MenuItem_Label_Remove" Alt="$Resources:MenuItem_Label_Remove" Image16by16="/_imgs/ribbon/Delete_16.png" Image32by32="/_imgs/Workplace/Remove_32.png" TemplateAlias="o2" ToolTipTitle="$Resources:Mscrm_SubGrid_Other_MainTab_Management_Remove_ToolTipTitle" ToolTipDescription="$Resources:Mscrm_SubGrid_Other_MainTab_Management_Remove_ToolTipDescription" ModernImage="Remove" SolutionUniqueName="System" />
                     <Button Id="Mscrm.SubGrid.v4_mcp.BulkDelete" Command="Mscrm.HomepageGrid.BulkDelete" Sequence="100" LabelText="$Resources:Ribbon.HomepageGrid.MainTab.Management.BulkDelete" ToolTipTitle="$Resources:Ribbon.HomepageGrid.MainTab.Management.BulkDelete" ToolTipDescription="$Resources:Ribbon.HomepageGrid.MainTab.Management.BulkDelete.TooltipDescription" Image16by16="/_imgs/ribbon/BulkDelete_16.png" Image32by32="/_imgs/ribbon/BulkDelete_32.png" TemplateAlias="o2" ModernImage="DeleteBulk" SolutionUniqueName="System" />
@@ -60,7 +62,6 @@
                 <Group Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions" Command="Mscrm.Enabled" Sequence="20" Title="$Resources:Ribbon.HomepageGrid.MainTab.Actions" Image32by32Popup="/_imgs/ribbon/Actions_32.png" Template="Mscrm.Templates.Flexible4" TabSequence="0">
                   <Controls Id="Mscrm.SubGrid.v4_mcp.MainTab.Actions.Controls">
                     <Button Command="devkit.v4_mcp.MCPSubgrid.SubGrid.Command" Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Button" LabelText="$LocLabels:devkit.v4_mcp.MCPSubgrid.SubGrid.Button.LabelText" Sequence="85" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPSubgrid.SubGrid.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
-                    <Button Command="devkit.v4_mcp.MCPSubgrid2.SubGrid.Command" Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.Button" LabelText="$LocLabels:devkit.v4_mcp.MCPSubgrid2.SubGrid.Button.LabelText" Sequence="85" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.MCPSubgrid2.SubGrid.Button.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg" />
                     <FlyoutAnchor Alt="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.Alt" Command="devkit.v4_mcp.ExportData.SubGrid.Command" Id="devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor" LabelText="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.LabelText" PopulateOnlyOnce="true" Sequence="86" TemplateAlias="isv" ToolTipTitle="$LocLabels:devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.ToolTipTitle" ModernImage="$webresource:Activities/Images/embed_32.svg">
                       <Menu Id="devkit.v4_mcp.ExportData.SubGrid.FlyoutAnchor.Menu">
                         <MenuSection Id="devkit.v4_mcp.ExportData.SubGrid.MenuSection" Sequence="10" DisplayMode="Menu16">
@@ -778,10 +779,10 @@
       </RibbonTemplates>
     </Templates>
     <CommandDefinitions>
-      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.Command">
+      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Command">
         <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.EnableRule" />
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.SelectionEnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule" />
+          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule" />
         </EnableRules>
         <DisplayRules />
         <Actions>
@@ -875,21 +876,6 @@
         <DisplayRules />
         <Actions>
           <JavaScriptFunction FunctionName="MCP.sendSmsSubGrid" Library="$webresource:devkit_/TestMcp/js/split.js">
-            <CrmParameter Value="SelectedControl" />
-            <CrmParameter Value="SelectedEntityTypeName" />
-            <CrmParameter Value="FirstSelectedItemId" />
-            <CrmParameter Value="SelectedControlSelectedItemIds" />
-          </JavaScriptFunction>
-        </Actions>
-      </CommandDefinition>
-      <CommandDefinition Id="devkit.v4_mcp.MCPSubgrid.SubGrid.Command">
-        <EnableRules>
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule" />
-          <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule" />
-        </EnableRules>
-        <DisplayRules />
-        <Actions>
-          <JavaScriptFunction FunctionName="MCP.buttonSubGridClick" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="SelectedControl" />
             <CrmParameter Value="SelectedEntityTypeName" />
             <CrmParameter Value="FirstSelectedItemId" />
@@ -2189,7 +2175,7 @@
         </DisplayRule>
       </DisplayRules>
       <EnableRules>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.EnableRule">
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule">
           <CustomRule FunctionName="MCP.isButtonSubGridEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
             <CrmParameter Value="SelectedControl" />
             <CrmParameter Value="SelectedEntityTypeName" />
@@ -2197,7 +2183,7 @@
             <CrmParameter Value="SelectedControlSelectedItemIds" />
           </CustomRule>
         </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid2.SubGrid.SelectionEnableRule">
+        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule">
           <SelectionCountRule Minimum="1" />
         </EnableRule>
         <EnableRule Id="devkit.v4_mcp.ExportData.SubGrid.ExportToExcel.EnableRule">
@@ -2247,17 +2233,6 @@
             <CrmParameter Value="FirstSelectedItemId" />
             <CrmParameter Value="SelectedControlSelectedItemIds" />
           </CustomRule>
-        </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.EnableRule">
-          <CustomRule FunctionName="MCP.isButtonSubGridEnabled" Library="$webresource:devkit_/TestMcp/js/button.js">
-            <CrmParameter Value="SelectedControl" />
-            <CrmParameter Value="SelectedEntityTypeName" />
-            <CrmParameter Value="FirstSelectedItemId" />
-            <CrmParameter Value="SelectedControlSelectedItemIds" />
-          </CustomRule>
-        </EnableRule>
-        <EnableRule Id="devkit.v4_mcp.MCPSubgrid.SubGrid.SelectionEnableRule">
-          <SelectionCountRule Minimum="1" />
         </EnableRule>
         <EnableRule Id="Mscrm.SubGrid.{!EntityLogicalName}.MainTab">
           <EntityRule AppliesTo="SelectedEntity" EntityName="{!EntityLogicalName}" />
