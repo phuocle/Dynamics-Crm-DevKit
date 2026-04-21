@@ -567,7 +567,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
             // Remove existing nodes with same IDs (idempotent)
-            RemoveById(ribbonDoc.Root, "CustomActions", "CustomAction", customActionId);
+            // Match by inner element Id (Button) because Ribbon Workbench may change CustomAction Id
+            RemoveCustomActionByInnerElementId(ribbonDoc.Root, buttonId);
             RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", commandId);
 
             // ── CustomAction + Button ──
@@ -760,7 +761,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
 
             // ── Idempotent cleanup ──
-            RemoveById(ribbonDoc.Root, "CustomActions", "CustomAction", customActionId);
+            // Match by inner element Id (FlyoutAnchor) because Ribbon Workbench may change CustomAction Id
+            RemoveCustomActionByInnerElementId(ribbonDoc.Root, flyoutAnchorId);
             RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", flyoutCommandId);
             var ruleDefsClean = ribbonDoc.Root.Element("RuleDefinitions");
             if (ruleDefsClean != null)
@@ -1700,6 +1702,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (parent == null) return;
             parent.Elements(childName)
                 .Where(e => string.Equals(e.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase))
+                .ToList()
+                .ForEach(e => e.Remove());
+        }
+
+        private static void RemoveCustomActionByInnerElementId(XElement root, string innerElementId)
+        {
+            var customActions = root?.Element("CustomActions");
+            if (customActions == null) return;
+            customActions.Elements("CustomAction")
+                .Where(ca => ca.Descendants()
+                    .Any(d => string.Equals(d.Attribute("Id")?.Value, innerElementId, StringComparison.OrdinalIgnoreCase)))
                 .ToList()
                 .ForEach(e => e.Remove());
         }

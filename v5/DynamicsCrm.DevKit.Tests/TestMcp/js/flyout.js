@@ -18,6 +18,14 @@ MCP.isPdfEnabledForm = function (primaryControl, primaryEntityTypeName, primaryI
     return true;
 };
 
+MCP.exportCsvForm = function (primaryControl, primaryEntityTypeName, primaryItemIds) {
+    alert("Form - Export to CSV\nEntity: " + primaryEntityTypeName + "\nIds: " + primaryItemIds);
+};
+
+MCP.isCsvEnabledForm = function (primaryControl, primaryEntityTypeName, primaryItemIds) {
+    return true;
+};
+
 // ── Homepage Grid (SelectedControl, SelectedEntityTypeName, FirstSelectedItemId, SelectedControlSelectedItemIds) ──
 
 MCP.exportExcelGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
@@ -36,6 +44,14 @@ MCP.isPdfEnabledGrid = function (selectedControl, selectedEntityTypeName, firstS
     return true;
 };
 
+MCP.exportCsvGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
+    alert("Grid - Export to CSV\nEntity: " + selectedEntityTypeName + "\nFirst: " + firstSelectedItemId + "\nIds: " + selectedControlSelectedItemIds);
+};
+
+MCP.isCsvEnabledGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
+    return true;
+};
+
 // ── Sub Grid (SelectedControl, SelectedEntityTypeName, FirstSelectedItemId, SelectedControlSelectedItemIds) ──
 
 MCP.exportExcelSubGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
@@ -51,5 +67,13 @@ MCP.exportPdfSubGrid = function (selectedControl, selectedEntityTypeName, firstS
 };
 
 MCP.isPdfEnabledSubGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
+    return true;
+};
+
+MCP.exportCsvSubGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
+    alert("SubGrid - Export to CSV\nEntity: " + selectedEntityTypeName + "\nFirst: " + firstSelectedItemId + "\nIds: " + selectedControlSelectedItemIds);
+};
+
+MCP.isCsvEnabledSubGrid = function (selectedControl, selectedEntityTypeName, firstSelectedItemId, selectedControlSelectedItemIds) {
     return true;
 };
