@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(BuildRibbonXmlResult)),
         Description(
             "Build modified RibbonDiffXml for a Dataverse entity. READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
-            "8 OPERATIONS: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n\n" +
+            "10 OPERATIONS: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
             "Surface types: form, main_grid, sub_grid. Validates webresources before referencing.")]
         public CallToolResult build_ribbon_xml(
@@ -54,12 +54,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence. NOTE: only works on custom buttons (in RibbonDiffXml); OOB buttons cannot be updated — use hide_button/show_button instead\n" +
                 "hide_button REQUIRED: button_id. Supports both OOB and custom buttons\n" +
                 "show_button REQUIRED: button_id. Supports both OOB and custom buttons\n" +
+                "add_split_button REQUIRED: surface, label, library, function, enable_library, enable_function (main button action), items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85). Per item OPTIONAL: modern_image, tooltip_title, sequence (auto: 10,20,30...). NOTE: click main button runs function directly; dropdown arrow opens item list\n" +
+                "update_split_button REQUIRED: split_button_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence, library, function, enable_library, enable_function. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function. NOTE: SplitButton uses inline text (not $LocLabels), so label/tooltip update attributes directly\n" +
                 "add_flyout_static REQUIRED: surface, label, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85). Per item OPTIONAL: modern_image, tooltip_title, sequence (auto: 10,20,30...)\n" +
                 "update_flyout_static REQUIRED: flyout_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
                 "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
                 "show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
                 "Example add: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run\",\"library\":\"new_/s.js\",\"function\":\"F.run\",\"enable_library\":\"new_/s.js\",\"enable_function\":\"F.isEnabled\"}]\n" +
-                "Example flyout: [{\"action\":\"add_flyout_static\",\"surface\":\"form\",\"label\":\"Export\",\"items\":[{\"label\":\"Excel\",\"library\":\"v4_/s.js\",\"function\":\"F.excel\",\"enable_library\":\"v4_/s.js\",\"enable_function\":\"F.enabled\"}]}]")] string operations)
+                "Example flyout: [{\"action\":\"add_flyout_static\",\"surface\":\"form\",\"label\":\"Export\",\"items\":[{\"label\":\"Excel\",\"library\":\"v4_/s.js\",\"function\":\"F.excel\",\"enable_library\":\"v4_/s.js\",\"enable_function\":\"F.enabled\"}]}]\n" +
+                "Example split: [{\"action\":\"add_split_button\",\"surface\":\"form\",\"label\":\"Save\",\"library\":\"v4_/s.js\",\"function\":\"F.save\",\"enable_library\":\"v4_/s.js\",\"enable_function\":\"F.enabled\",\"items\":[{\"label\":\"Save & Send\",\"library\":\"v4_/s.js\",\"function\":\"F.saveAndSend\",\"enable_library\":\"v4_/s.js\",\"enable_function\":\"F.enabled\"}]}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -143,6 +146,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         summaries.Add(showResult.summary);
                         break;
 
+                    case "add_split_button":
+                        var splitResult = ExecuteAddSplitButton(ribbonDoc, entity_name, op);
+                        if (splitResult.error != null)
+                            return ErrorResult(splitResult.error);
+                        summaries.Add(splitResult.summary);
+                        break;
+
+                    case "update_split_button":
+                        var updSplitResult = ExecuteUpdateSplitButton(ribbonDoc, entity_name, op);
+                        if (updSplitResult.error != null)
+                            return ErrorResult(updSplitResult.error);
+                        summaries.Add(updSplitResult.summary);
+                        break;
+
                     case "add_flyout_static":
                         var flyoutResult = ExecuteAddFlyoutStatic(ribbonDoc, entity_name, op);
                         if (flyoutResult.error != null)
@@ -174,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     default:
                         return ErrorResult(
                             $"Error: Unknown action '{action}'.\n" +
-                            "Valid actions: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
+                            "Valid actions: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
                             "Future: add_flyout_dynamic");
                 }
             }
@@ -616,7 +633,612 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return (null, $"add_button: '{label}' [{surface}] click={function} enable={enableFunction}");
         }
 
+        // ── add_split_button ─────────────────────────────────────────────
+
+        private (string error, string summary) ExecuteAddSplitButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            // ── Required fields ──
+            var surface = GetJsonString(op, "surface");
+            var label = GetJsonString(op, "label");
+            var library = GetJsonString(op, "library");
+            var function = GetJsonString(op, "function");
+            var enableLibrary = GetJsonString(op, "enable_library");
+            var enableFunction = GetJsonString(op, "enable_function");
+
+            if (string.IsNullOrWhiteSpace(surface))
+                return ("Error: add_split_button requires 'surface' (form, main_grid, or sub_grid).", null);
+            if (string.IsNullOrWhiteSpace(label))
+                return ("Error: add_split_button requires 'label' (button display text).", null);
+            if (string.IsNullOrWhiteSpace(library))
+                return ("Error: add_split_button requires 'library' (main button JS web resource).", null);
+            if (string.IsNullOrWhiteSpace(function))
+                return ("Error: add_split_button requires 'function' (main button JS function name).", null);
+            if (string.IsNullOrWhiteSpace(enableLibrary))
+                return ("Error: add_split_button requires 'enable_library' (main button enable JS web resource).", null);
+            if (string.IsNullOrWhiteSpace(enableFunction))
+                return ("Error: add_split_button requires 'enable_function' (main button enable JS function name).", null);
+
+            surface = surface.Trim().ToLowerInvariant();
+            if (!SurfaceLocationMap.ContainsKey(surface))
+                return ($"Error: Invalid surface '{surface}'. Valid: form, main_grid, sub_grid.", null);
+
+            // ── Items array ──
+            if (!op.TryGetProperty("items", out var itemsProp) || itemsProp.ValueKind != JsonValueKind.Array)
+                return ("Error: add_split_button requires 'items' array with at least 1 item.", null);
+
+            var items = itemsProp.EnumerateArray().ToList();
+            if (items.Count == 0)
+                return ("Error: add_split_button requires 'items' array with at least 1 item.", null);
+
+            // ── Validate main button web resources ──
+            var libErr = ValidateWebResourceExists(library);
+            if (libErr != null) return (libErr, null);
+            var enLibErr = ValidateWebResourceExists(enableLibrary);
+            if (enLibErr != null) return (enLibErr, null);
+
+            // ── Validate each item + check duplicate slugs ──
+            var slugSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemLib = GetJsonString(item, "library");
+                var itemFunc = GetJsonString(item, "function");
+                var itemEnLib = GetJsonString(item, "enable_library");
+                var itemEnFunc = GetJsonString(item, "enable_function");
+
+                if (string.IsNullOrWhiteSpace(itemLabel))
+                    return ("Error: Each item requires 'label'.", null);
+                if (string.IsNullOrWhiteSpace(itemLib))
+                    return ($"Error: Item '{itemLabel}' requires 'library'.", null);
+                if (string.IsNullOrWhiteSpace(itemFunc))
+                    return ($"Error: Item '{itemLabel}' requires 'function'.", null);
+                if (string.IsNullOrWhiteSpace(itemEnLib))
+                    return ($"Error: Item '{itemLabel}' requires 'enable_library'.", null);
+                if (string.IsNullOrWhiteSpace(itemEnFunc))
+                    return ($"Error: Item '{itemLabel}' requires 'enable_function'.", null);
+
+                var itemLibErr2 = ValidateWebResourceExists(itemLib);
+                if (itemLibErr2 != null) return (itemLibErr2, null);
+                var itemEnLibErr2 = ValidateWebResourceExists(itemEnLib);
+                if (itemEnLibErr2 != null) return (itemEnLibErr2, null);
+
+                var itemImage = GetJsonString(item, "modern_image");
+                if (!string.IsNullOrWhiteSpace(itemImage))
+                {
+                    var imgErr = ValidateWebResourceExists(itemImage);
+                    if (imgErr != null) return (imgErr, null);
+                }
+
+                var itemSlug = GenerateSlug(itemLabel);
+                if (!slugSet.Add(itemSlug))
+                    return ($"Error: Duplicate item slug '{itemSlug}' — two items resolve to the same ID. Use different labels.", null);
+            }
+
+            // ── Optional fields ──
+            var modernImage = GetJsonString(op, "modern_image");
+            var tooltipTitle = GetJsonString(op, "tooltip_title") ?? label;
+            var tooltipDesc = GetJsonString(op, "tooltip_description");
+            var sequence = GetJsonInt(op, "sequence", 85);
+
+            if (!string.IsNullOrWhiteSpace(modernImage))
+            {
+                var imgErr = ValidateWebResourceExists(modernImage);
+                if (imgErr != null) return (imgErr, null);
+            }
+
+            // ── Generate IDs ──
+            var slug = GenerateSlug(label);
+            var surfaceSuffix = surface == "form" ? "Form" : surface == "main_grid" ? "HomepageGrid" : "SubGrid";
+            var customActionId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.CustomAction";
+            var splitButtonId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.SplitButton";
+            var mainCommandId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Command";
+            var mainEnRuleId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.EnableRule";
+            var menuId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Menu";
+            var menuSectionId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.MenuSection";
+            var controlsId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.Controls";
+            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.{surfaceSuffix}.DisplayRule" : null;
+            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.{surfaceSuffix}.SelectionEnableRule" : null;
+
+            var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
+
+            // ── Idempotent cleanup ──
+            RemoveCustomActionByInnerElementId(ribbonDoc.Root, splitButtonId);
+            RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", mainCommandId);
+            var ruleDefsClean = ribbonDoc.Root.Element("RuleDefinitions");
+            if (ruleDefsClean != null)
+            {
+                RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", mainEnRuleId);
+                if (displayRuleId != null)
+                    RemoveByIdInChild(ruleDefsClean, "DisplayRules", "DisplayRule", displayRuleId);
+                if (selectionEnableRuleId != null)
+                    RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", selectionEnableRuleId);
+            }
+
+            foreach (var item in items)
+            {
+                var itemSlug = GenerateSlug(GetJsonString(item, "label"));
+                var itemCommandId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.Command";
+                var itemEnRuleId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.EnableRule";
+                RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", itemCommandId);
+                if (ruleDefsClean != null)
+                    RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", itemEnRuleId);
+            }
+
+            // ── CrmParameters per surface ──
+            XElement[] MakeCrmParams() => surface == "form"
+                ? [
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryEntityTypeName")),
+                    new XElement("CrmParameter", new XAttribute("Value", "PrimaryItemIds"))
+                  ]
+                : [
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedControl")),
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedEntityTypeName")),
+                    new XElement("CrmParameter", new XAttribute("Value", "FirstSelectedItemId")),
+                    new XElement("CrmParameter", new XAttribute("Value", "SelectedControlSelectedItemIds"))
+                  ];
+
+            // ── Build dropdown item Controls ──
+            var customActionsEl = GetOrCreateElement(ribbonDoc.Root, "CustomActions");
+
+            var controlsEl = new XElement("Controls", new XAttribute("Id", controlsId));
+            var autoSeq = 10;
+
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemBtnId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.Button";
+                var itemCmdId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.Command";
+                var itemSeq = GetJsonInt(item, "sequence", autoSeq);
+                var itemImage = GetJsonString(item, "modern_image");
+
+                var itemTTInline = GetJsonString(item, "tooltip_title") ?? itemLabel;
+                var btnEl = new XElement("Button",
+                    new XAttribute("Id", itemBtnId),
+                    new XAttribute("Command", itemCmdId),
+                    new XAttribute("LabelText", itemLabel),
+                    new XAttribute("Alt", itemLabel),
+                    new XAttribute("ToolTipTitle", itemTTInline),
+                    new XAttribute("Sequence", itemSeq));
+
+                if (!string.IsNullOrWhiteSpace(itemImage))
+                    btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
+
+                controlsEl.Add(btnEl);
+                autoSeq += 10;
+            }
+
+            var menuSectionEl = new XElement("MenuSection",
+                new XAttribute("Id", menuSectionId),
+                new XAttribute("Sequence", "10"),
+                new XAttribute("DisplayMode", "Menu16"),
+                controlsEl);
+
+            var menuEl = new XElement("Menu",
+                new XAttribute("Id", menuId),
+                menuSectionEl);
+
+            // ── Build SplitButton element — SplitButton does not resolve $LocLabels in UCI, use inline text ──
+            var splitButtonEl = new XElement("SplitButton",
+                new XAttribute("Id", splitButtonId),
+                new XAttribute("Command", mainCommandId),
+                new XAttribute("LabelText", label),
+                new XAttribute("Alt", label),
+                new XAttribute("ToolTipTitle", tooltipTitle),
+                new XAttribute("TemplateAlias", "isv"),
+                new XAttribute("Sequence", sequence),
+                new XAttribute("PopulateOnlyOnce", "true"));
+
+            if (!string.IsNullOrWhiteSpace(tooltipDesc))
+                splitButtonEl.Add(new XAttribute("ToolTipDescription", tooltipDesc));
+
+            if (!string.IsNullOrWhiteSpace(modernImage))
+                splitButtonEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+
+            splitButtonEl.Add(menuEl);
+
+            customActionsEl.Add(new XElement("CustomAction",
+                new XAttribute("Id", customActionId),
+                new XAttribute("Location", location),
+                new XAttribute("Sequence", sequence),
+                new XElement("CommandUIDefinition", splitButtonEl)));
+
+            // ── Main button CommandDefinition (has JS action) ──
+            var commandDefsEl = GetOrCreateElement(ribbonDoc.Root, "CommandDefinitions");
+
+            var mainEnableRulesEl = new XElement("EnableRules",
+                new XElement("EnableRule", new XAttribute("Id", mainEnRuleId)));
+            if (selectionEnableRuleId != null)
+                mainEnableRulesEl.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
+
+            var mainDisplayRulesEl = displayRuleId != null
+                ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
+                : new XElement("DisplayRules");
+
+            var mainJsFuncEl = new XElement("JavaScriptFunction",
+                new XAttribute("Library", $"$webresource:{library}"),
+                new XAttribute("FunctionName", function));
+            foreach (var p in MakeCrmParams()) mainJsFuncEl.Add(p);
+
+            commandDefsEl.Add(new XElement("CommandDefinition",
+                new XAttribute("Id", mainCommandId),
+                mainEnableRulesEl,
+                mainDisplayRulesEl,
+                new XElement("Actions", mainJsFuncEl)));
+
+            // ── Per-item CommandDefinitions ──
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemCmdId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.Command";
+                var itemEnRuleId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.EnableRule";
+                var itemLib = GetJsonString(item, "library");
+                var itemFunc = GetJsonString(item, "function");
+
+                var jsFuncEl = new XElement("JavaScriptFunction",
+                    new XAttribute("Library", $"$webresource:{itemLib}"),
+                    new XAttribute("FunctionName", itemFunc));
+                foreach (var p in MakeCrmParams()) jsFuncEl.Add(p);
+
+                commandDefsEl.Add(new XElement("CommandDefinition",
+                    new XAttribute("Id", itemCmdId),
+                    new XElement("EnableRules",
+                        new XElement("EnableRule", new XAttribute("Id", itemEnRuleId))),
+                    new XElement("DisplayRules"),
+                    new XElement("Actions", jsFuncEl)));
+            }
+
+            // ── RuleDefinitions ──
+            var ruleDefsEl = GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
+            var enableRulesEl = GetOrCreateElement(ruleDefsEl, "EnableRules");
+
+            // Main button enable rule
+            var mainCustomRuleEl = new XElement("CustomRule",
+                new XAttribute("FunctionName", enableFunction),
+                new XAttribute("Library", $"$webresource:{enableLibrary}"));
+            foreach (var p in MakeCrmParams()) mainCustomRuleEl.Add(new XElement(p));
+
+            enableRulesEl.Add(new XElement("EnableRule",
+                new XAttribute("Id", mainEnRuleId),
+                mainCustomRuleEl));
+
+            // Per-item enable rules
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemEnRuleId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.EnableRule";
+                var itemEnLib = GetJsonString(item, "enable_library");
+                var itemEnFunc = GetJsonString(item, "enable_function");
+
+                RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", itemEnRuleId);
+
+                var customRuleEl = new XElement("CustomRule",
+                    new XAttribute("FunctionName", itemEnFunc),
+                    new XAttribute("Library", $"$webresource:{itemEnLib}"));
+                foreach (var p in MakeCrmParams()) customRuleEl.Add(new XElement(p));
+
+                enableRulesEl.Add(new XElement("EnableRule",
+                    new XAttribute("Id", itemEnRuleId),
+                    customRuleEl));
+            }
+
+            // DisplayRule (form only)
+            if (displayRuleId != null)
+            {
+                RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
+                var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
+                displayRulesEl.Add(new XElement("DisplayRule",
+                    new XAttribute("Id", displayRuleId),
+                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
+            }
+
+            // sub_grid: SelectionCountRule
+            if (selectionEnableRuleId != null)
+            {
+                enableRulesEl.Add(new XElement("EnableRule",
+                    new XAttribute("Id", selectionEnableRuleId),
+                    new XElement("SelectionCountRule", new XAttribute("Minimum", "1"))));
+            }
+
+            // ── LocLabels ──
+            UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.LabelText", label);
+            UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.Alt", label);
+            UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.ToolTipTitle", tooltipTitle);
+            if (!string.IsNullOrWhiteSpace(tooltipDesc))
+                UpsertLocLabel(ribbonDoc.Root, $"{splitButtonId}.ToolTipDescription", tooltipDesc);
+
+            foreach (var item in items)
+            {
+                var itemLabel = GetJsonString(item, "label");
+                var itemSlug = GenerateSlug(itemLabel);
+                var itemBtnId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.Button";
+                var itemTT = GetJsonString(item, "tooltip_title") ?? itemLabel;
+
+                UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.LabelText", itemLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.Alt", itemLabel);
+                UpsertLocLabel(ribbonDoc.Root, $"{itemBtnId}.ToolTipTitle", itemTT);
+            }
+
+            var itemLabels = string.Join(", ", items.Select(i => GetJsonString(i, "label")));
+            return (null, $"add_split_button: '{label}' [{surface}] main_fn={function} items=[{itemLabels}]");
+        }
+
         // ── add_flyout_static ────────────────────────────────────────────
+
+        // ── update_split_button ──────────────────────────────────────────
+
+        private (string error, string summary) ExecuteUpdateSplitButton(XDocument ribbonDoc, string entityName, JsonElement op)
+        {
+            // Identify SplitButton: by split_button_id or by label
+            var splitButtonId = GetJsonString(op, "split_button_id");
+            var labelHint = GetJsonString(op, "label");
+
+            XElement splitButtonEl = null;
+            if (!string.IsNullOrWhiteSpace(splitButtonId))
+            {
+                splitButtonEl = ribbonDoc.Root
+                    ?.Element("CustomActions")
+                    ?.Descendants("SplitButton")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, splitButtonId, StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(labelHint))
+                    return ("Error: update_split_button requires 'split_button_id' or 'label' to identify the split button.", null);
+                var slug = GenerateSlug(labelHint);
+                splitButtonEl = ribbonDoc.Root
+                    ?.Element("CustomActions")
+                    ?.Descendants("SplitButton")
+                    .FirstOrDefault(e =>
+                        string.Equals(e.Attribute("LabelText")?.Value, labelHint, StringComparison.OrdinalIgnoreCase) ||
+                        (e.Attribute("Id")?.Value?.Contains($".{slug}.", StringComparison.OrdinalIgnoreCase) == true &&
+                         e.Attribute("Id")?.Value?.EndsWith(".SplitButton", StringComparison.OrdinalIgnoreCase) == true));
+                if (splitButtonEl != null)
+                    splitButtonId = splitButtonEl.Attribute("Id")?.Value;
+            }
+
+            if (splitButtonEl == null)
+                return ($"Error: SplitButton '{splitButtonId ?? labelHint}' not found in existing RibbonDiffXml.\n" +
+                        "Tip: Use add_split_button to create it first.", null);
+
+            // Derive prefix: "devkit.{entity}.{slug}.{suffix}.SplitButton" → strip prefix+suffix
+            var splitPrefix = splitButtonId;
+            var prefixStrip = $"devkit.{entityName}.";
+            if (splitPrefix.StartsWith(prefixStrip, StringComparison.OrdinalIgnoreCase))
+                splitPrefix = splitPrefix.Substring(prefixStrip.Length);
+            if (splitPrefix.EndsWith(".SplitButton", StringComparison.OrdinalIgnoreCase))
+                splitPrefix = splitPrefix.Substring(0, splitPrefix.Length - ".SplitButton".Length);
+            // splitPrefix is now e.g. "Send.Form"
+
+            var mainCommandId = $"devkit.{entityName}.{splitPrefix}.Command";
+            var mainEnRuleId = $"devkit.{entityName}.{splitPrefix}.EnableRule";
+
+            var updatedFields = new List<string>();
+
+            // ── label — inline text, set attribute directly ──
+            var newLabel = GetJsonString(op, "label");
+            if (!string.IsNullOrWhiteSpace(newLabel) && !string.IsNullOrWhiteSpace(GetJsonString(op, "split_button_id")))
+            {
+                splitButtonEl.SetAttributeValue("LabelText", newLabel);
+                splitButtonEl.SetAttributeValue("Alt", newLabel);
+                updatedFields.Add("label");
+            }
+            else if (!string.IsNullOrWhiteSpace(GetJsonString(op, "new_label")))
+            {
+                var newLbl = GetJsonString(op, "new_label");
+                splitButtonEl.SetAttributeValue("LabelText", newLbl);
+                splitButtonEl.SetAttributeValue("Alt", newLbl);
+                updatedFields.Add("label");
+            }
+
+            // ── tooltip_title — inline text ──
+            var newTT = GetJsonString(op, "tooltip_title");
+            if (!string.IsNullOrWhiteSpace(newTT))
+            {
+                splitButtonEl.SetAttributeValue("ToolTipTitle", newTT);
+                updatedFields.Add("tooltip_title");
+            }
+
+            // ── tooltip_description — inline text ──
+            var newTD = GetJsonString(op, "tooltip_description");
+            if (!string.IsNullOrWhiteSpace(newTD))
+            {
+                splitButtonEl.SetAttributeValue("ToolTipDescription", newTD);
+                updatedFields.Add("tooltip_description");
+            }
+
+            // ── modern_image ──
+            var newImage = GetJsonString(op, "modern_image");
+            if (!string.IsNullOrWhiteSpace(newImage))
+            {
+                var imgErr = ValidateWebResourceExists(newImage);
+                if (imgErr != null) return (imgErr, null);
+                splitButtonEl.SetAttributeValue("ModernImage", $"$webresource:{newImage}");
+                // Also update parent CustomAction sequence attribute if sequence is also changing
+                updatedFields.Add("modern_image");
+            }
+
+            // ── sequence ──
+            if (op.TryGetProperty("sequence", out _))
+            {
+                var newSeq = GetJsonInt(op, "sequence", 85);
+                splitButtonEl.SetAttributeValue("Sequence", newSeq);
+                splitButtonEl.Parent?.Parent?.SetAttributeValue("Sequence", newSeq);
+                updatedFields.Add($"sequence={newSeq}");
+            }
+
+            // ── library (main click) ──
+            var newLibrary = GetJsonString(op, "library");
+            if (!string.IsNullOrWhiteSpace(newLibrary))
+            {
+                var libErr = ValidateWebResourceExists(newLibrary);
+                if (libErr != null) return (libErr, null);
+                var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
+                    ?.Elements("CommandDefinition")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainCommandId, StringComparison.OrdinalIgnoreCase));
+                cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
+                    ?.SetAttributeValue("Library", $"$webresource:{newLibrary}");
+                updatedFields.Add("library");
+            }
+
+            // ── function (main click) ──
+            var newFunction = GetJsonString(op, "function");
+            if (!string.IsNullOrWhiteSpace(newFunction))
+            {
+                var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
+                    ?.Elements("CommandDefinition")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainCommandId, StringComparison.OrdinalIgnoreCase));
+                cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
+                    ?.SetAttributeValue("FunctionName", newFunction);
+                updatedFields.Add("function");
+            }
+
+            // ── enable_library (main enable rule) ──
+            var newEnLib = GetJsonString(op, "enable_library");
+            if (!string.IsNullOrWhiteSpace(newEnLib))
+            {
+                var libErr = ValidateWebResourceExists(newEnLib);
+                if (libErr != null) return (libErr, null);
+                var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
+                    ?.Elements("EnableRule")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainEnRuleId, StringComparison.OrdinalIgnoreCase));
+                enRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newEnLib}");
+                updatedFields.Add("enable_library");
+            }
+
+            // ── enable_function (main enable rule) ──
+            var newEnFunc = GetJsonString(op, "enable_function");
+            if (!string.IsNullOrWhiteSpace(newEnFunc))
+            {
+                var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
+                    ?.Elements("EnableRule")
+                    .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, mainEnRuleId, StringComparison.OrdinalIgnoreCase));
+                enRuleEl?.Element("CustomRule")?.SetAttributeValue("FunctionName", newEnFunc);
+                updatedFields.Add("enable_function");
+            }
+
+            // ── Item-level updates ──
+            if (op.TryGetProperty("items", out var itemsProp) && itemsProp.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in itemsProp.EnumerateArray())
+                {
+                    var itemLabel = GetJsonString(item, "item_label");
+                    if (string.IsNullOrWhiteSpace(itemLabel))
+                        return ("Error: Each item in update_split_button requires 'item_label' to identify which button to update.", null);
+
+                    var itemSlug = GenerateSlug(itemLabel);
+                    var itemBtnId = $"devkit.{entityName}.{splitPrefix}.{itemSlug}.Button";
+                    var itemCmdId = $"devkit.{entityName}.{splitPrefix}.{itemSlug}.Command";
+                    var itemEnRuleId = $"devkit.{entityName}.{splitPrefix}.{itemSlug}.EnableRule";
+
+                    // Find item button — also inline text, not $LocLabels
+                    var btnEl = splitButtonEl.Descendants("Button")
+                        .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemBtnId, StringComparison.OrdinalIgnoreCase));
+                    if (btnEl == null)
+                    {
+                        var existing = string.Join(", ", splitButtonEl.Descendants("Button").Select(b => b.Attribute("Id")?.Value ?? "?"));
+                        return ($"Error: Item button '{itemBtnId}' not found in split button.\nExisting items: {existing}", null);
+                    }
+
+                    var itemUpdated = new List<string>();
+
+                    // label — inline text
+                    var newItemLabel = GetJsonString(item, "label");
+                    if (!string.IsNullOrWhiteSpace(newItemLabel))
+                    {
+                        btnEl.SetAttributeValue("LabelText", newItemLabel);
+                        btnEl.SetAttributeValue("Alt", newItemLabel);
+                        itemUpdated.Add("label");
+                    }
+
+                    // tooltip_title — inline text
+                    var newItemTT = GetJsonString(item, "tooltip_title");
+                    if (!string.IsNullOrWhiteSpace(newItemTT))
+                    {
+                        btnEl.SetAttributeValue("ToolTipTitle", newItemTT);
+                        itemUpdated.Add("tooltip_title");
+                    }
+
+                    // modern_image
+                    var newItemImage = GetJsonString(item, "modern_image");
+                    if (!string.IsNullOrWhiteSpace(newItemImage))
+                    {
+                        var imgErr = ValidateWebResourceExists(newItemImage);
+                        if (imgErr != null) return (imgErr, null);
+                        btnEl.SetAttributeValue("ModernImage", $"$webresource:{newItemImage}");
+                        itemUpdated.Add("modern_image");
+                    }
+
+                    // sequence
+                    if (item.TryGetProperty("sequence", out _))
+                    {
+                        btnEl.SetAttributeValue("Sequence", GetJsonInt(item, "sequence", 10));
+                        itemUpdated.Add("sequence");
+                    }
+
+                    // library (click)
+                    var newItemLib = GetJsonString(item, "library");
+                    if (!string.IsNullOrWhiteSpace(newItemLib))
+                    {
+                        var libErr = ValidateWebResourceExists(newItemLib);
+                        if (libErr != null) return (libErr, null);
+                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
+                            ?.Elements("CommandDefinition")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
+                        cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
+                            ?.SetAttributeValue("Library", $"$webresource:{newItemLib}");
+                        itemUpdated.Add("library");
+                    }
+
+                    // function (click)
+                    var newItemFunc = GetJsonString(item, "function");
+                    if (!string.IsNullOrWhiteSpace(newItemFunc))
+                    {
+                        var cmdDefEl = ribbonDoc.Root?.Element("CommandDefinitions")
+                            ?.Elements("CommandDefinition")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemCmdId, StringComparison.OrdinalIgnoreCase));
+                        cmdDefEl?.Element("Actions")?.Element("JavaScriptFunction")
+                            ?.SetAttributeValue("FunctionName", newItemFunc);
+                        itemUpdated.Add("function");
+                    }
+
+                    // enable_library
+                    var newItemEnLib = GetJsonString(item, "enable_library");
+                    if (!string.IsNullOrWhiteSpace(newItemEnLib))
+                    {
+                        var libErr = ValidateWebResourceExists(newItemEnLib);
+                        if (libErr != null) return (libErr, null);
+                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
+                            ?.Elements("EnableRule")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
+                        enRuleEl?.Element("CustomRule")?.SetAttributeValue("Library", $"$webresource:{newItemEnLib}");
+                        itemUpdated.Add("enable_library");
+                    }
+
+                    // enable_function
+                    var newItemEnFunc = GetJsonString(item, "enable_function");
+                    if (!string.IsNullOrWhiteSpace(newItemEnFunc))
+                    {
+                        var enRuleEl = ribbonDoc.Root?.Element("RuleDefinitions")?.Element("EnableRules")
+                            ?.Elements("EnableRule")
+                            .FirstOrDefault(e => string.Equals(e.Attribute("Id")?.Value, itemEnRuleId, StringComparison.OrdinalIgnoreCase));
+                        enRuleEl?.Element("CustomRule")?.SetAttributeValue("FunctionName", newItemEnFunc);
+                        itemUpdated.Add("enable_function");
+                    }
+
+                    if (itemUpdated.Count > 0)
+                        updatedFields.Add($"item[{itemLabel}]: {string.Join(", ", itemUpdated)}");
+                }
+            }
+
+            if (updatedFields.Count == 0)
+                return ("Error: No fields to update. Provide at least one field to change.", null);
+
+            return (null, $"update_split_button: '{splitButtonId}' updated [{string.Join(", ", updatedFields)}]");
+        }
 
         private (string error, string summary) ExecuteAddFlyoutStatic(XDocument ribbonDoc, string entityName, JsonElement op)
         {
