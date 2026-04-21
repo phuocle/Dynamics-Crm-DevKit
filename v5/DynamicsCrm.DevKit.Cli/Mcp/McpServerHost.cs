@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetPluginTraceLogsTool)] = "standard",
             [nameof(GetSystemJobsTool)] = "standard",
             [nameof(GetPluginsTool)] = "standard",
-            [nameof(GetDataverseCommandsTool)] = "standard",
+            [nameof(ManageCommandTool)] = "advanced",
             [nameof(BuildFormXMLTool)] = "standard",
             [nameof(BuildSiteMapXmlTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",

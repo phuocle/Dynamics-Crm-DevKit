@@ -7,9 +7,9 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class GetDataverseCommandsToolTests
+public class ManageCommandToolTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageCommandTool);
 
     private static readonly FieldInfo LocationMapField = ToolType
         .GetField("LocationMap", BindingFlags.NonPublic | BindingFlags.Static)!;
@@ -43,6 +43,12 @@ public class GetDataverseCommandsToolTests
 
     private static readonly MethodInfo NullIfEmptyMethod = ToolType
         .GetMethod("NullIfEmpty", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageCommandTool CreateTool() =>
+        new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions { DryRun = false });
+
+    private static DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageCommandTool CreateDryRunTool() =>
+        new(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions { DryRun = true });
 
     // ──────────────────────────────────────────────
     // LocationFilterMap covers all LocationMap values
@@ -122,76 +128,198 @@ public class GetDataverseCommandsToolTests
     }
 
     // ──────────────────────────────────────────────
-    // Validation: invalid inputs
+    // Action routing validation
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void Validation_InvalidLocation_ReturnsError()
+    public void Validation_EmptyAction_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
-        var result = tool.get_dataverse_commands(location: "INVALID_LOCATION");
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("action is required"));
+    }
+
+    [TestMethod]
+    public void Validation_InvalidAction_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "delete");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("Invalid action"));
+    }
+
+    // ──────────────────────────────────────────────
+    // List validation
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Validation_ListInvalidLocation_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "list", location: "INVALID_LOCATION");
         Assert.IsTrue(result.IsError == true);
         Assert.IsTrue(GetText(result).Contains("Invalid location"));
     }
 
     [TestMethod]
-    public void Validation_InvalidOrigin_ReturnsError()
+    public void Validation_ListInvalidOrigin_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
-        var result = tool.get_dataverse_commands(origin: "INVALID_ORIGIN");
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "list", origin: "INVALID_ORIGIN");
         Assert.IsTrue(result.IsError == true);
         Assert.IsTrue(GetText(result).Contains("Invalid origin"));
     }
 
     [TestMethod]
-    public void Validation_InvalidActionType_ReturnsError()
+    public void Validation_ListInvalidActionType_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
-        var result = tool.get_dataverse_commands(action_type: "INVALID_TYPE");
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "list", action_type: "INVALID_TYPE");
         Assert.IsTrue(result.IsError == true);
         Assert.IsTrue(GetText(result).Contains("Invalid action_type"));
     }
 
     [TestMethod]
-    public void Validation_MaxRecordsZero_ReturnsError()
+    public void Validation_ListMaxRecordsZero_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
-        var result = tool.get_dataverse_commands(max_records: 0);
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "list", max_records: 0);
         Assert.IsTrue(result.IsError == true);
         Assert.IsTrue(GetText(result).Contains("max_records must be between 1 and 500"));
     }
 
     [TestMethod]
-    public void Validation_MaxRecordsNegative_ReturnsError()
+    public void Validation_ListMaxRecordsNegative_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
-        var result = tool.get_dataverse_commands(max_records: -1);
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "list", max_records: -1);
         Assert.IsTrue(result.IsError == true);
     }
 
     [TestMethod]
-    public void Validation_InvalidGuid_ReturnsError()
+    public void Validation_ListOriginAll_IsAccepted()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
-        var result = tool.get_dataverse_commands(command_id: "not-a-guid");
-        Assert.IsTrue(result.IsError == true);
-        Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
-    }
-
-    [TestMethod]
-    public void Validation_OriginAll_IsAccepted()
-    {
-        // origin="all" should NOT return error (it bypasses filter)
-        // It will fail at Dataverse call (null ServiceClient), but should pass validation
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.GetDataverseCommandsTool(null!);
+        var tool = CreateTool();
         try
         {
-            tool.get_dataverse_commands(origin: "all");
+            tool.manage_command(action: "list", origin: "all");
         }
         catch (NullReferenceException)
         {
             // Expected — ServiceClient is null, but validation passed
         }
+    }
+
+    // ──────────────────────────────────────────────
+    // Detail validation
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Validation_DetailMissingCommandId_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "detail");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("command_id is required"));
+    }
+
+    [TestMethod]
+    public void Validation_DetailInvalidGuid_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "detail", command_id: "not-a-guid");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Create validation
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Validation_CreateMissingEntityName_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "create", location: "form", label: "Test", app_id: "00000000-0000-0000-0000-000000000001");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("entity_name is required"));
+    }
+
+    [TestMethod]
+    public void Validation_CreateMissingLocation_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", label: "Test", app_id: "00000000-0000-0000-0000-000000000001");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("location is required"));
+    }
+
+    [TestMethod]
+    public void Validation_CreateMissingLabel_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", location: "form", app_id: "00000000-0000-0000-0000-000000000001");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("label is required"));
+    }
+
+    [TestMethod]
+    public void Validation_CreateInvalidLocation_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", location: "INVALID", label: "Test", app_id: "00000000-0000-0000-0000-000000000001");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("Invalid location"));
+    }
+
+    [TestMethod]
+    public void Validation_CreateMissingApp_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", location: "form", label: "Test");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("app_id or app_name is required"));
+    }
+
+    [TestMethod]
+    public void Validation_CreateDryRun_ReturnsBlocked()
+    {
+        var tool = CreateDryRunTool();
+        var result = tool.manage_command(action: "create", entity_name: "account", location: "form", label: "Test", app_id: "00000000-0000-0000-0000-000000000001");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("DRY-RUN"));
+    }
+
+    // ──────────────────────────────────────────────
+    // Update validation
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void Validation_UpdateMissingCommandId_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "update", label: "New Label");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("command_id is required"));
+    }
+
+    [TestMethod]
+    public void Validation_UpdateInvalidGuid_ReturnsError()
+    {
+        var tool = CreateTool();
+        var result = tool.manage_command(action: "update", command_id: "not-a-guid", label: "New Label");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("not a valid GUID"));
+    }
+
+    [TestMethod]
+    public void Validation_UpdateDryRun_ReturnsBlocked()
+    {
+        var tool = CreateDryRunTool();
+        var result = tool.manage_command(action: "update", command_id: "00000000-0000-0000-0000-000000000001", label: "New Label");
+        Assert.IsTrue(result.IsError == true);
+        Assert.IsTrue(GetText(result).Contains("DRY-RUN"));
     }
 
     // ──────────────────────────────────────────────

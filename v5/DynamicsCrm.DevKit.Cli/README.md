@@ -244,7 +244,7 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 
 **Server-Side Logic**: `get_plugins`, `get_plugin_trace_logs`, `get_workflows`, `get_flows`, `get_business_rules`, `get_business_process_flows`, `get_custom_apis`, `get_system_jobs`
 
-**Security & Utilities**: `manage_role`, `manage_webresource`, `get_dataverse_commands`, `get_audit_history`, `parse_record_url`, `publish_customizations`
+**Security & Utilities**: `manage_role`, `manage_webresource`, `manage_command`, `get_audit_history`, `parse_record_url`, `publish_customizations`
 
 ### Available MCP Resources (9)
 

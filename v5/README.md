@@ -144,7 +144,7 @@ The `devkit mcp` command starts a Model Context Protocol server, enabling AI age
 |------|-------------|
 | `manage_role` | Manage security roles |
 | `manage_webresource` | Manage web resources |
-| `get_dataverse_commands` | List command bar buttons in model-driven apps |
+| `manage_command` | Manage modern command bar buttons in model-driven apps |
 | `get_audit_history` | Get record audit history |
 | `parse_record_url` | Parse a Dynamics 365 URL to entity and record ID |
 | `publish_customizations` | Publish customizations to make changes visible |
