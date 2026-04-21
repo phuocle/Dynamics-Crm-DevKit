@@ -908,8 +908,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!autoPublish) return false;
             try
             {
-                var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+                _serviceClient.Execute(new PublishAllXmlRequest());
                 return true;
             }
             catch
