@@ -42,78 +42,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = true, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(BuildRibbonXmlResult)),
         Description(
-            "Build modified RibbonDiffXml for a Dataverse entity. " +
-            "READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
-            "OPERATIONS: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n" +
-            "[Future: add_flyout_dynamic]\n\n" +
+            "Build modified RibbonDiffXml for a Dataverse entity. READ-ONLY — saves to temp file; use manage_ribbon(action='update') to apply.\n\n" +
+            "8 OPERATIONS: add_button, update_button, hide_button, show_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item\n\n" +
             "Auto-fetches existing RibbonDiffXml from solution 'devkit-ribbon' to preserve existing buttons.\n" +
-            "Surface types: form (main form), main_grid (home page grid), sub_grid (associated/sub grid).\n" +
-            "Validates webresource existence before referencing.\n" +
-            "Validates output XML against Ribbon XSD schema.\n\n" +
-            "REQUIRED for add_button — all 6 must be provided:\n" +
-            "1. entity_name (top-level param)\n" +
-            "2. surface — form | main_grid | sub_grid\n" +
-            "3. label — button display name shown in ribbon\n" +
-            "4. library — web resource JS file for button click\n" +
-            "5. function — JavaScript function name for button click\n" +
-            "6. enable_library — web resource JS file for enable rule\n" +
-            "7. enable_function — JavaScript function name for enable rule\n" +
-            "Missing any one of these will cause the operation to fail.\n\n" +
-            "REQUIRED for update_button — button_id or label must identify the button:\n" +
-            "  Updatable fields: label, library, function, enable_library, enable_function,\n" +
-            "  modern_image, tooltip_title, tooltip_description, sequence.\n" +
-            "  Omit a field to keep its current value.\n\n" +
-            "REQUIRED for add_flyout_static — static flyout menu with fixed child buttons:\n" +
-            "  surface, label, items[] (each item needs: label, library, function, enable_library, enable_function)\n" +
-            "  OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
-            "  OPTIONAL per item: modern_image, tooltip_title, sequence (auto: 10, 20, 30...)\n" +
-            "  Supports all 3 surfaces: form, main_grid, sub_grid.\n\n" +
-            "REQUIRED for update_flyout_static — modify existing static flyout:\n" +
-            "  flyout_id OR label (to identify the flyout)\n" +
-            "  Updatable flyout-level: label, tooltip_title, tooltip_description, modern_image, sequence.\n" +
-            "  Updatable per item (via items[]): item_label (REQUIRED), then: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function.\n" +
-            "  Omit a field to keep its current value.\n\n" +
-            "REQUIRED for hide_flyout_item — disable a child button inside a static flyout:\n" +
-            "  flyout_label OR flyout_id (to identify the flyout)\n" +
-            "  item_label (to identify which child button to hide)\n\n" +
-            "REQUIRED for show_flyout_item — re-enable a previously hidden child button:\n" +
-            "  flyout_label OR flyout_id (to identify the flyout)\n" +
-            "  item_label (to identify which child button to show)")]
+            "Surface types: form, main_grid, sub_grid. Validates webresources before referencing.")]
         public CallToolResult build_ribbon_xml(
-            [Description("Entity logical name (e.g., 'account'). Used to resolve ribbon customization.")] string entity_name,
-            [Description("JSON array of operations. Each requires 'action' field.\n" +
-                "Actions: add_button, update_button\n" +
-                "add_button REQUIRED fields:\n" +
-                "  - surface: 'form' | 'main_grid' | 'sub_grid'\n" +
-                "  - label: button display text\n" +
-                "  - library: web resource JS for button click (must exist in Dataverse)\n" +
-                "  - function: JS function name for button click\n" +
-                "  - enable_library: web resource JS for enable rule (must exist in Dataverse)\n" +
-                "  - enable_function: JS function name for enable rule\n" +
-                "add_button OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
-                "update_button REQUIRED: button_id OR label (to identify the button)\n" +
-                "update_button OPTIONAL (all updatable): label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence\n" +
-                "hide_button REQUIRED: button_id (the OOB or custom button's Id, e.g. 'Mscrm.Form.v4_mcp.Deactivate')\n" +
-                "show_button REQUIRED: button_id (removes the HideCustomAction to restore the button)\n" +
-                "Example add: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run Report\",\"library\":\"new_/scripts/account.js\",\"function\":\"Account.runReport\",\"enable_library\":\"new_/scripts/account.js\",\"enable_function\":\"Account.isEnabled\"}]\n" +
-                "Example update: [{\"action\":\"update_button\",\"button_id\":\"devkit.account.RunReport.Button\",\"label\":\"New Label\",\"sequence\":90}]\n" +
-                "Example hide: [{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
-                "Example show: [{\"action\":\"show_button\",\"button_id\":\"Mscrm.Form.v4_mcp.Deactivate\"}]\n" +
-                "add_flyout_static REQUIRED fields:\n" +
-                "  - surface: 'form' | 'main_grid' | 'sub_grid'\n" +
-                "  - label: flyout display text\n" +
-                "  - items: array of child buttons, each with: label, library, function, enable_library, enable_function\n" +
-                "add_flyout_static OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
-                "add_flyout_static OPTIONAL per item: modern_image, tooltip_title, sequence (auto: 10, 20, 30...)\n" +
-                "Example add_flyout_static: [{\"action\":\"add_flyout_static\",\"surface\":\"form\",\"label\":\"Export Data\",\"modern_image\":\"v4_/images/export.svg\",\"items\":[{\"label\":\"Export Excel\",\"library\":\"v4_/scripts/mcp.js\",\"function\":\"MCP.exportExcel\",\"enable_library\":\"v4_/scripts/mcp.js\",\"enable_function\":\"MCP.isEnabled\"},{\"label\":\"Export PDF\",\"library\":\"v4_/scripts/mcp.js\",\"function\":\"MCP.exportPdf\",\"enable_library\":\"v4_/scripts/mcp.js\",\"enable_function\":\"MCP.isEnabled\"}]}]\n" +
-                "update_flyout_static REQUIRED: flyout_id OR label (to identify the flyout)\n" +
-                "update_flyout_static OPTIONAL (flyout-level): label, tooltip_title, tooltip_description, modern_image, sequence\n" +
-                "update_flyout_static OPTIONAL items[]: item_label (REQUIRED to identify button), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
-                "Example update_flyout_static: [{\"action\":\"update_flyout_static\",\"label\":\"Export Data\",\"items\":[{\"item_label\":\"Export to Excel\",\"modern_image\":\"v4_/images/excel.svg\"}]}]\n" +
+            [Description("Entity logical name (e.g., 'account').")] string entity_name,
+            [Description(
+                "JSON array of operations. Each requires 'action' field.\n" +
+                "add_button REQUIRED: surface, label, library, function, enable_library, enable_function. OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+                "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence\n" +
+                "hide_button REQUIRED: button_id\n" +
+                "show_button REQUIRED: button_id\n" +
+                "add_flyout_static REQUIRED: surface, label, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85). Per item OPTIONAL: modern_image, tooltip_title, sequence (auto: 10,20,30...)\n" +
+                "update_flyout_static REQUIRED: flyout_id OR label. OPTIONAL: label, tooltip_title, tooltip_description, modern_image, sequence. items[]: item_label (REQUIRED), then any of: label, tooltip_title, modern_image, sequence, library, function, enable_library, enable_function\n" +
                 "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
                 "show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
-                "Example hide_flyout_item: [{\"action\":\"hide_flyout_item\",\"flyout_label\":\"Export Data\",\"item_label\":\"Export to Excel\"}]\n" +
-                "Example show_flyout_item: [{\"action\":\"show_flyout_item\",\"flyout_label\":\"Export Data\",\"item_label\":\"Export to Excel\"}]")] string operations)
+                "Example add: [{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Run\",\"library\":\"new_/s.js\",\"function\":\"F.run\",\"enable_library\":\"new_/s.js\",\"enable_function\":\"F.isEnabled\"}]\n" +
+                "Example flyout: [{\"action\":\"add_flyout_static\",\"surface\":\"form\",\"label\":\"Export\",\"items\":[{\"label\":\"Excel\",\"library\":\"v4_/s.js\",\"function\":\"F.excel\",\"enable_library\":\"v4_/s.js\",\"enable_function\":\"F.enabled\"}]}]")] string operations)
         {
             // Step 1: Validate inputs
             if (string.IsNullOrWhiteSpace(entity_name))

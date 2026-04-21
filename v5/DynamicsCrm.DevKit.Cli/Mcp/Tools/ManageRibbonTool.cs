@@ -41,19 +41,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRibbonResult)),
         Description(
             "Retrieve and modify RibbonDiffXml for Dataverse entities via solution import.\n\n" +
-            "ACTIONS:\n" +
-            "- 'list': List entities with ribbon customizations in solution 'devkit-ribbon'\n" +
-            "- 'buttons': List ALL ribbon buttons (OOB + custom) for an entity across 3 surfaces (form, main_grid, sub_grid). Shows sequence, label, IsOOB, IsCustom.\n" +
-            "- 'detail': Show current RibbonDiffXml for an entity\n" +
-            "- 'update': Apply modified RibbonDiffXml (from build_ribbon_xml). Backup → Import → Publish\n" +
-            "- 'undo': Restore from backup file\n\n" +
+            "ACTIONS: list, buttons, detail, update, undo\n" +
+            "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
+            "- buttons: all ribbon buttons (OOB+custom) across form/main_grid/sub_grid. Required: entity_name\n" +
+            "- detail: show current RibbonDiffXml. Required: entity_name\n" +
+            "- update: apply ribbonxml from build_ribbon_xml. Required: entity_name + ribbonxml. Backup→Import→PublishAll\n" +
+            "- undo: restore from backup file. Required: entity_name + ribbonxml (backup path)\n\n" +
             "WORKFLOW: build_ribbon_xml → manage_ribbon(action='update')\n" +
-            "SAFETY: auto-backup before update, backup failure blocks update.\n\n" +
-            "TIPS:\n" +
-            "- Uses solution 'devkit-ribbon' for all ribbon customizations\n" +
-            "- Solution is auto-created on first update if it doesn't exist\n" +
-            "- Existing buttons are preserved (build_ribbon_xml merges automatically)\n" +
-            "- action='buttons' uses RetrieveEntityRibbon to get the full merged ribbon (OOB + custom)")]
+            "Auto-backup before update; backup failure blocks update.")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity logical name (e.g., 'account'). Required for detail/update/undo.")] string entity_name = "",
