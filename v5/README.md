@@ -91,7 +91,7 @@ Static code analysis for Dataverse development best practices:
 
 The `devkit mcp` command starts a Model Context Protocol server, enabling AI agents (GitHub Copilot, Cursor, Claude, etc.) to interact with Dataverse directly.
 
-#### MCP Tools (32)
+#### MCP Tools (34)
 
 **Schema & Metadata**
 | Tool | Description |
@@ -119,6 +119,7 @@ The `devkit mcp` command starts a Model Context Protocol server, enabling AI age
 | `manage_view` | Manage entity views |
 | `manage_sitemap` | Manage app site map |
 | `build_sitemap_xml` | Build SiteMap XML with areas, groups, and subareas |
+| `build_ribbon_xml` | Build RibbonDiffXml for entity ribbon customizations |
 
 **Schema Management**
 | Tool | Description |
@@ -145,6 +146,7 @@ The `devkit mcp` command starts a Model Context Protocol server, enabling AI age
 | `manage_role` | Manage security roles |
 | `manage_webresource` | Manage web resources |
 | `manage_command` | Manage modern command bar buttons in model-driven apps |
+| `manage_ribbon` | Manage classic ribbon (RibbonDiffXml) for entities |
 | `get_audit_history` | Get record audit history |
 | `parse_record_url` | Parse a Dynamics 365 URL to entity and record ID |
 | `publish_customizations` | Publish customizations to make changes visible |
