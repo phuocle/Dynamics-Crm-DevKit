@@ -145,7 +145,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("OnClick event type: 'none', 'javascript', 'formula'. Default: 'none'.")] string onclick_type = "",
             [Description("JavaScript web resource name or GUID for onclick handler.")] string javascript_webresource = "",
             [Description("JavaScript function name for onclick handler (e.g., 'Namespace.functionName').")] string javascript_function = "",
-            [Description("Font icon name (e.g., 'SalesPlaybook').")] string font_icon = "",
+            [Description("Font icon name (e.g., 'SalesPlaybook'). Use 'none' to clear.")] string font_icon = "",
+            [Description("Icon web resource name or GUID (e.g., 'devkit_/images/icon.svg'). Sets iconwebresourceid. Use 'none' to clear.")] string icon_webresource = "",
+            [Description("Tooltip title text (buttontooltiptitle).")] string tooltip_title = "",
+            [Description("Tooltip description text (buttontooltipdescription).")] string tooltip_description = "",
             [Description("Button sequence/order. Default: 100 for create.")] int sequence = 0,
             [Description("Hide the button. Default: false.")] bool hidden = false,
             [Description("Filter by Model-Driven App name (contains match). Also used to resolve app for create.")] string app_name = "",
@@ -179,10 +182,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return GetDetailByLabel(label.Trim(), entity_name.Trim(), location.Trim(), include_rules, include_children);
 
                     case "create":
-                        return HandleCreate(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, sequence, hidden);
+                        return HandleCreate(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
 
                     case "update":
-                        return HandleUpdate(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, sequence);
+                        return HandleUpdate(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
 
                     case "hide":
                         return HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: true);
@@ -311,6 +314,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             VisibilityType = info?.VisibilityType,
                             FontIcon = info?.FontIcon,
                             JavaScriptFunction = info?.JavaScriptFunction,
+                            IconWebResource = info?.IconWebResource,
                         });
                     }
                     sb.AppendLine();
@@ -354,6 +358,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='onclickeventjavascriptwebresourceid'/>
     <attribute name='visibilitytype'/>
     <attribute name='fonticon'/>
+    <attribute name='iconwebresourceid'/>
+    <attribute name='buttontooltiptitle'/>
+    <attribute name='buttontooltipdescription'/>
     <attribute name='isdisabled'/>
     <filter>
       <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>
@@ -371,6 +378,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var onClickValue = e.GetAttributeValue<OptionSetValue>("onclickeventtype")?.Value ?? 0;
                     var visValue = e.GetAttributeValue<OptionSetValue>("visibilitytype")?.Value ?? 0;
                     var originValue = e.GetAttributeValue<OptionSetValue>("origin")?.Value ?? 0;
+                    var iconRef = e.GetAttributeValue<EntityReference>("iconwebresourceid");
 
                     result[lbl] = new AppActionInfo
                     {
@@ -383,6 +391,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         VisibilityType = VisibilityTypeMap.TryGetValue(visValue, out var vis) ? vis : visValue.ToString(),
                         FontIcon = NullIfEmpty(e.GetAttributeValue<string>("fonticon")),
                         JavaScriptFunction = NullIfEmpty(e.GetAttributeValue<string>("onclickeventjavascriptfunctionname")),
+                        IconWebResource = iconRef != null ? (iconRef.Name ?? iconRef.Id.ToString()) : null,
+                        TooltipTitle = NullIfEmpty(e.GetAttributeValue<string>("buttontooltiptitle")),
+                        TooltipDescription = NullIfEmpty(e.GetAttributeValue<string>("buttontooltipdescription")),
                     };
                 }
             }
@@ -401,6 +412,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string VisibilityType { get; set; }
             public string FontIcon { get; set; }
             public string JavaScriptFunction { get; set; }
+            public string IconWebResource { get; set; }
+            public string TooltipTitle { get; set; }
+            public string TooltipDescription { get; set; }
         }
 
         private static List<(string Id, int Sequence, string Label, bool IsOob, bool IsCustom)> ParseButtonsFromRibbon(
@@ -811,7 +825,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Create ──────────────────────────────────────────────
 
-        private CallToolResult HandleCreate(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, int sequence, bool hidden)
+        private CallToolResult HandleCreate(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
         {
             if (_options.DryRun)
                 return ErrorResult("DRY-RUN: create blocked. Would create appaction command.");
@@ -839,8 +853,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var createEntityLogical = entityName.Trim().ToLowerInvariant();
             var createEntityId = ResolveEntityId(createEntityLogical);
+            var createAppUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
+            var createPublisherPrefix = ResolvePublisherPrefix(createEntityLogical);
+            var createSafeLabel = label.Trim().Replace(" ", "");
+            var createLocationPrefix = LocationOobNamePrefix(locationValue);
+            var createName = $"{createPublisherPrefix}.{createEntityLogical}.{createSafeLabel}.{createLocationPrefix}.Button";
+            var createUniqueName = $"{createPublisherPrefix}__{createName}!{createAppUniqueName}!{createEntityLogical}!{locationValue}";
 
             var entity = new Entity("appaction");
+            entity["name"] = createName;
+            entity["uniquename"] = createUniqueName;
             entity["context"] = new OptionSetValue(1); // Entity
             entity["contextvalue"] = createEntityLogical;
             if (createEntityId.HasValue)
@@ -858,6 +880,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(fontIcon))
                 entity["fonticon"] = fontIcon.Trim();
 
+            if (!string.IsNullOrWhiteSpace(iconWebResource))
+            {
+                var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
+                if (iconWrId == null)
+                    return ErrorResult($"Error: Icon web resource '{iconWebResource.Trim()}' not found.");
+                entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                entity["buttontooltiptitle"] = tooltipTitle.Trim();
+
+            if (!string.IsNullOrWhiteSpace(tooltipDescription))
+                entity["buttontooltipdescription"] = tooltipDescription.Trim();
+
             if (onclickTypeValue == 2) // JavaScript
             {
                 if (!string.IsNullOrWhiteSpace(jsWebResource))
@@ -869,6 +905,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 if (!string.IsNullOrWhiteSpace(jsFunction))
                     entity["onclickeventjavascriptfunctionname"] = jsFunction.Trim();
+
+                // Auto-set CrmParameters by location (mirrors build_ribbon_xml convention)
+                var defaultParams = locationValue switch
+                {
+                    0 => "[{\"type\":5},{\"type\":2},{\"type\":3}]",                             // form: PrimaryControl, PrimaryEntityTypeName, PrimaryItemIds
+                    1 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",              // main_grid: SelectedControl, SelectedEntityTypeName, FirstSelectedItemId, SelectedControlSelectedItemIds
+                    2 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",              // sub_grid
+                    3 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",              // associated_grid
+                    _ => null
+                };
+                if (defaultParams != null)
+                    entity["onclickeventjavascriptparameters"] = defaultParams;
             }
 
             var newId = _serviceClient.Create(entity);
@@ -890,7 +938,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Update ──────────────────────────────────────────────
 
-        private CallToolResult HandleUpdate(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, int sequence)
+        private CallToolResult HandleUpdate(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
         {
             if (_options.DryRun)
                 return ErrorResult("DRY-RUN: update blocked. Would update appaction command.");
@@ -944,12 +992,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(fontIcon))
             {
-                entity["fonticon"] = fontIcon.Trim();
-                changes.Add($"fontIcon='{fontIcon.Trim()}'");
+                if (fontIcon.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                {
+                    entity["fonticon"] = null;
+                    changes.Add("fontIcon=cleared");
+                }
+                else
+                {
+                    entity["fonticon"] = fontIcon.Trim();
+                    changes.Add($"fontIcon='{fontIcon.Trim()}'");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(iconWebResource))
+            {
+                if (iconWebResource.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                {
+                    entity["iconwebresourceid"] = null;
+                    changes.Add("iconWebResource=cleared");
+                }
+                else
+                {
+                    var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
+                    if (iconWrId == null)
+                        return ErrorResult($"Error: Icon web resource '{iconWebResource.Trim()}' not found.");
+                    entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
+                    changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+            {
+                entity["buttontooltiptitle"] = tooltipTitle.Trim();
+                changes.Add($"tooltipTitle='{tooltipTitle.Trim()}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipDescription))
+            {
+                entity["buttontooltipdescription"] = tooltipDescription.Trim();
+                changes.Add($"tooltipDescription='{tooltipDescription.Trim()}'");
             }
 
             if (changes.Count == 0)
-                return ErrorResult("Error: No fields to update. Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon). Use action='hide'/'show' to change visibility.");
+                return ErrorResult("Error: No fields to update. Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
 
             _serviceClient.Update(entity);
 
