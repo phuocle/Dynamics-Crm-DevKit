@@ -106,43 +106,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageCommandResult)),
         Description(
-            "Manage modern command bar buttons (appaction) in Model-Driven Apps. " +
-            "Includes visibility/enable rules (appactionrule).\n\n" +
+            "Manage modern command bar buttons (appaction) in Model-Driven Apps. Includes visibility/enable rules (appactionrule).\n\n" +
 
             "TOOL SELECTION — READ BEFORE CHOOSING:\n" +
-            "MODERN command bar (appaction entity, Power Fx/JavaScript, app-scoped).\n" +
-            "Do NOT use for generic button requests. DEFAULT for ambiguous requests: use manage_ribbon.\n" +
-            "Use ONLY when user explicitly says: 'modern', 'Power Fx', 'formula', 'appaction', " +
-            "'new UI', 'new command bar', 'Model-Driven App command bar', 'command designer'.\n" +
-            "Do NOT use for: 'button', 'ribbon button', 'custom button', 'action button', 'UI button', " +
-            "'legacy', 'classic', 'JavaScript button' (ambiguous), 'nút', or any generic button phrase.\n" +
+            "Use ONLY when user says: 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'.\n" +
+            "Do NOT use for: 'button', 'ribbon button', 'custom button', 'nút', or any generic button phrase.\n" +
             "When in doubt → use manage_ribbon instead.\n\n" +
 
-            "ACTIONS: list, detail, create, update, hide, show, add_flyout, update_flyout, add_flyout_item, remove_flyout_item\n" +
-            "- list: Filter commands by entity, location, app, origin, action type\n" +
-            "- detail: Full details including rules, children, component library info. Required: command_id\n" +
-            "- create: Create a new Standard Button. Required: entity_name + location + label + (app_id or app_name)\n" +
-            "- update: Update an existing command. Required: command_id + at least one field to change\n" +
-            "- hide: Hide a command button (OOB or custom). Required: (command_id) OR (label + entity_name + location + app_name). Creates appaction override if OOB button has no record yet.\n" +
-            "- show: Show a previously hidden command button. Required: command_id OR (label + entity_name + location). No-op if button is already visible.\n" +
-            "- add_flyout: Create a Dropdown Button with items. Required: entity_name + location + label + (app_id or app_name) + items (JSON array). Each item: {\"label\":\"...\",\"onclick_type\":\"javascript\",\"javascript_webresource\":\"...\",\"javascript_function\":\"...\"}. OPTIONAL per item: sequence.\n" +
-            "- update_flyout: Update flyout container label/icon/tooltip/sequence. Required: command_id (flyout's Dropdown Button id).\n" +
-            "- add_flyout_item: Add a new item to an existing flyout. Required: flyout_command_id + label. Optional: onclick_type, javascript_webresource, javascript_function, sequence.\n" +
-            "- remove_flyout_item: Permanently delete a flyout item. Required: command_id (item's appaction id).\n\n" +
-
-            "WORKFLOW: list/detail to inspect → create/update to modify\n" +
-            "Auto-resolves app by name for create. Validates entity + location before write.\n\n" +
+            "ACTIONS: list, detail, create, update, hide, show, add_flyout, update_flyout, add_flyout_item, remove_flyout_item, add_split_button, update_split_button\n" +
+            "- list: Filter by entity, location, app, origin, action_type\n" +
+            "- detail: Required: command_id (or label). Full details + rules + children\n" +
+            "- create: Required: entity_name + location + label + (app_id or app_name)\n" +
+            "- update: Required: command_id + at least one field\n" +
+            "- hide: Required: command_id OR (label + entity_name + location + app_name). Auto-creates override for OOB buttons\n" +
+            "- show: Required: command_id OR (label + entity_name + location). No-op if already visible\n" +
+            "- add_flyout: Create Dropdown Button. Required: entity_name + location + label + (app_id or app_name) + items [{label, onclick_type, javascript_webresource, javascript_function}]\n" +
+            "- update_flyout: Required: command_id (Dropdown Button id)\n" +
+            "- add_flyout_item: Required: flyout_command_id + label. Works on Dropdown and Split Buttons\n" +
+            "- remove_flyout_item: Required: command_id (item's appaction id)\n" +
+            "- add_split_button: Create Split Button (left-click = direct action, arrow = dropdown). Required: entity_name + location + label + (app_id or app_name) + items\n" +
+            "- update_split_button: Required: command_id (Split Button id)\n\n" +
 
             "TIPS:\n" +
-            "- Use origin='default' to exclude hundreds of auto-migrated system commands\n" +
+            "- Use origin='default' to exclude auto-migrated system commands\n" +
             "- Commands are app-scoped — same entity can differ across apps\n" +
-            "- hide/show support OOB buttons by label (e.g. 'Activate', 'Deactivate') — auto-creates appaction override when needed\n" +
-            "- Flyout structure: Dropdown Button → Group(s) → Standard Button items. Groups are internal containers managed automatically.\n" +
-            "- Use detail with include_children=true to inspect flyout items.\n" +
-            "- CRITICAL: If this tool returns an error containing 'classic ribbon button', STOP IMMEDIATELY. Do NOT call manage_ribbon or any other tool. Report the error to the user and wait for instructions.\n" +
-            "- Related: manage_ribbon (classic ribbon XML — default fallback), manage_form (form layout)")]
+            "- Use detail + include_children=true to inspect flyout/split items\n" +
+            "- CRITICAL: If error contains 'classic ribbon button', STOP IMMEDIATELY — report to user, do not call any other tool\n" +
+            "- Related: manage_ribbon (classic ribbon — default fallback), manage_form (form layout)")]
         public CallToolResult manage_command(
-            [Description("Action: 'list', 'detail', 'create', 'update', 'hide', or 'show'.")] string action,
+            [Description("Action: 'list', 'detail', 'create', 'update', 'hide', 'show', 'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item', 'add_split_button', 'update_split_button'.")] string action,
             [Description("GUID of a specific appaction record. Required for detail/update.")] string command_id = "",
             [Description("Filter by entity logical name (e.g., 'account'). Required for create.")] string entity_name = "",
             [Description("Filter by location: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'. Required for create.")] string location = "",
@@ -164,12 +156,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Include associated appactionrule records with JSON definitions. Default: false.")] bool include_rules = false,
             [Description("Include child commands (dropdown/split button items). Default: false.")] bool include_children = false,
             [Description("Max commands (1-500). Default: 50.")] int max_records = 50,
-            [Description("JSON array of flyout items for add_flyout. Each item: {\"label\":\"...\",\"onclick_type\":\"javascript\",\"javascript_webresource\":\"...\",\"javascript_function\":\"...\",\"sequence\":10}.")] string items = "",
-            [Description("GUID of the flyout Dropdown Button. Required for add_flyout_item.")] string flyout_command_id = "")
+            [Description("JSON array of items for add_flyout or add_split_button. Each item: {label, onclick_type, javascript_webresource, javascript_function, sequence}.")] string items = "",
+            [Description("GUID of the flyout Dropdown Button or Split Button. Required for add_flyout_item.")] string flyout_command_id = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(actionName))
-                return ErrorResult("Error: action is required. Valid actions: 'list', 'detail', 'create', 'update', 'hide', 'show'.");
+                return ErrorResult(
+                    "Error: action is required.\n" +
+                    "Valid values: 'list', 'detail', 'create', 'update', 'hide', 'show', " +
+                    "'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item', " +
+                    "'add_split_button', 'update_split_button'.");
 
             try
             {
@@ -213,8 +209,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "remove_flyout_item":
                         return HandleRemoveFlyoutItem(command_id);
 
+                    case "add_split_button":
+                        return HandleAddSplitButton(entity_name, location, app_id, app_name, label, onclick_type, javascript_webresource, javascript_function, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
+
+                    case "update_split_button":
+                        return HandleUpdateSplitButton(command_id, label, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
+
                     default:
-                        return ErrorResult($"Error: Invalid action '{actionName}'. Valid actions: 'list', 'detail', 'create', 'update', 'hide', 'show', 'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item'.");
+                        return ErrorResult(
+                        $"Error: Invalid action '{actionName}'.\n" +
+                        "Valid values: 'list', 'detail', 'create', 'update', 'hide', 'show', " +
+                        "'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item', " +
+                        "'add_split_button', 'update_split_button'.");
                 }
             }
             catch (Exception ex)
@@ -1663,6 +1669,311 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
+        // ── Add Split Button ────────────────────────────────────
+
+        private CallToolResult HandleAddSplitButton(string entityName, string location, string appId, string appName, string label, string onclickType, string jsWebResource, string jsFunction, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
+        {
+            if (_options.DryRun)
+                return ErrorResult("DRY-RUN: add_split_button blocked. Would create Split Button + Group + items.");
+
+            if (string.IsNullOrWhiteSpace(entityName))
+                return ErrorResult("Error: entity_name is required for action='add_split_button'.");
+            if (string.IsNullOrWhiteSpace(location))
+                return ErrorResult("Error: location is required for action='add_split_button'.");
+            if (string.IsNullOrWhiteSpace(label))
+                return ErrorResult("Error: label is required for action='add_split_button'.");
+            if (string.IsNullOrWhiteSpace(itemsJson))
+                return ErrorResult("Error: items is required for action='add_split_button'. Provide a JSON array of item objects.");
+
+            if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
+                return ErrorResult($"Error: Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+
+            // Main button onclick type
+            var onclickTypeValue = 0;
+            if (!string.IsNullOrWhiteSpace(onclickType))
+            {
+                if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out onclickTypeValue))
+                    return ErrorResult($"Error: Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+            }
+
+            List<JsonElement> itemList;
+            try
+            {
+                var doc = JsonDocument.Parse(itemsJson);
+                if (doc.RootElement.ValueKind != JsonValueKind.Array)
+                    return ErrorResult("Error: items must be a JSON array.");
+                itemList = doc.RootElement.EnumerateArray().ToList();
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Invalid items JSON — {ex.Message}");
+            }
+
+            if (itemList.Count == 0)
+                return ErrorResult("Error: items array must have at least 1 item.");
+
+            var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
+            if (resolvedAppId == null)
+                return ErrorResult(appResolveError ?? "Error: Could not resolve app.");
+
+            var entityLogical = entityName.Trim().ToLowerInvariant();
+            var publisherPrefix = ResolvePublisherPrefix(entityLogical);
+            var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
+            var entityId = ResolveEntityId(entityLogical);
+            var safeLabel = label.Trim().Replace(" ", "");
+            var locPrefix = LocationOobNamePrefix(locationValue);
+
+            // Create Split Button (the container — carries the main onclick action)
+            var splitName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Split";
+            var splitUniqueName = $"{publisherPrefix}__{splitName}!{appUniqueName}!{entityLogical}!{locationValue}";
+
+            var split = new Entity("appaction");
+            split["name"] = splitName;
+            split["uniquename"] = splitUniqueName;
+            split["context"] = new OptionSetValue(1);
+            split["contextvalue"] = entityLogical;
+            if (entityId.HasValue)
+                split["contextentity"] = new EntityReference("entity", entityId.Value);
+            split["location"] = new OptionSetValue(locationValue);
+            split["buttonlabeltext"] = label.Trim();
+            split["type"] = new OptionSetValue(2); // Split Button
+            split["onclickeventtype"] = new OptionSetValue(onclickTypeValue);
+            split["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
+            split["sequence"] = sequence > 0 ? (decimal)sequence : (decimal)85;
+            split["hidden"] = hidden;
+            split["isdisabled"] = false;
+            split["origin"] = new OptionSetValue(0);
+
+            if (onclickTypeValue == 2) // JavaScript main action
+            {
+                if (!string.IsNullOrWhiteSpace(jsWebResource))
+                {
+                    var wrId = ResolveWebResourceId(jsWebResource.Trim());
+                    if (wrId == null)
+                        return ErrorResult($"Error: Web resource '{jsWebResource.Trim()}' not found.");
+                    split["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
+                }
+                if (!string.IsNullOrWhiteSpace(jsFunction))
+                    split["onclickeventjavascriptfunctionname"] = jsFunction.Trim();
+
+                var defaultParams = locationValue switch
+                {
+                    0 => "[{\"type\":5},{\"type\":2},{\"type\":3}]",
+                    1 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",
+                    2 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",
+                    3 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",
+                    _ => null
+                };
+                if (defaultParams != null)
+                    split["onclickeventjavascriptparameters"] = defaultParams;
+            }
+
+            if (!string.IsNullOrWhiteSpace(fontIcon))
+                split["fonticon"] = NormalizeFontIcon(fontIcon.Trim());
+
+            if (!string.IsNullOrWhiteSpace(iconWebResource))
+            {
+                var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
+                if (iconWrId == null)
+                    return ErrorResult($"Error: Icon web resource '{iconWebResource.Trim()}' not found.");
+                split["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                split["buttontooltiptitle"] = tooltipTitle.Trim();
+            if (!string.IsNullOrWhiteSpace(tooltipDescription))
+                split["buttontooltipdescription"] = tooltipDescription.Trim();
+
+            var splitId = _serviceClient.Create(split);
+
+            // Create Group (internal container under the Split Button)
+            var groupName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Group";
+            var groupUniqueName = $"{publisherPrefix}__{groupName}!{appUniqueName}!{entityLogical}!{locationValue}";
+
+            var group = new Entity("appaction");
+            group["name"] = groupName;
+            group["uniquename"] = groupUniqueName;
+            group["context"] = new OptionSetValue(1);
+            group["contextvalue"] = entityLogical;
+            if (entityId.HasValue)
+                group["contextentity"] = new EntityReference("entity", entityId.Value);
+            group["location"] = new OptionSetValue(locationValue);
+            group["type"] = new OptionSetValue(3); // Group
+            group["onclickeventtype"] = new OptionSetValue(0);
+            group["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
+            group["sequence"] = (decimal)10000;
+            group["hidden"] = false;
+            group["isdisabled"] = false;
+            group["origin"] = new OptionSetValue(0);
+            group["parentappactionid"] = new EntityReference("appaction", splitId);
+
+            var groupId = _serviceClient.Create(group);
+
+            // Create dropdown items as Standard Buttons under the Group
+            var createdItems = new List<string>();
+            for (var i = 0; i < itemList.Count; i++)
+            {
+                var item = itemList[i];
+                var itemLabel = GetJsonString(item, "label");
+                if (string.IsNullOrWhiteSpace(itemLabel))
+                    return ErrorResult($"Error: Item [{i}] is missing 'label'.");
+
+                var itemOnclickType = GetJsonString(item, "onclick_type");
+                var itemJsWebResource = GetJsonString(item, "javascript_webresource");
+                var itemJsFunction = GetJsonString(item, "javascript_function");
+                var itemSeqStr = GetJsonString(item, "sequence");
+                var itemSeq = int.TryParse(itemSeqStr, out var parsedSeq) ? parsedSeq : (i + 1) * 10000;
+
+                var createResult = CreateFlyoutItem(entityLogical, locationValue, resolvedAppId.Value, appUniqueName,
+                    publisherPrefix, entityId, groupId, safeLabel, locPrefix,
+                    itemLabel, itemOnclickType, itemJsWebResource, itemJsFunction, itemSeq);
+
+                if (createResult.error != null)
+                    return ErrorResult($"Error creating item '{itemLabel}': {createResult.error}. Split button '{label}' was partially created (split + group already exist with id {splitId}).");
+
+                createdItems.Add(itemLabel);
+            }
+
+            var message = $"Split Button '{label.Trim()}' created on {entityLogical} ({LocationMap[locationValue]}) with {createdItems.Count} item(s): {string.Join(", ", createdItems.Select(x => $"'{x}'"))}. SplitCommandId: {splitId}.";
+            var structured = new ManageCommandResult
+            {
+                Action = "add_split_button",
+                Status = "success",
+                CommandId = splitId.ToString(),
+                Message = message
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = message }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Update Split Button ─────────────────────────────────
+
+        private CallToolResult HandleUpdateSplitButton(string commandId, string label, string onclickType, string jsWebResource, string jsFunction, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
+        {
+            if (_options.DryRun)
+                return ErrorResult("DRY-RUN: update_split_button blocked.");
+
+            if (string.IsNullOrWhiteSpace(commandId))
+                return ErrorResult("Error: command_id is required for action='update_split_button'.");
+            if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
+                return ErrorResult($"Error: '{commandId.Trim()}' is not a valid GUID.");
+
+            var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "type"));
+            if (existing == null)
+                return ErrorResult($"Error: Command '{commandId.Trim()}' not found.");
+
+            var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
+            if (typeValue != 2) // must be Split Button
+                return ErrorResult($"Error: Command '{commandId.Trim()}' is not a Split Button (type={TypeMap.GetValueOrDefault(typeValue, typeValue.ToString())}). Use action='update' for Standard Buttons or action='update_flyout' for Dropdown Buttons.");
+
+            var entity = new Entity("appaction", cmdGuid);
+            var changes = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(label))
+            {
+                entity["buttonlabeltext"] = label.Trim();
+                changes.Add($"label='{label.Trim()}'");
+            }
+
+            if (sequence > 0)
+            {
+                entity["sequence"] = (decimal)sequence;
+                changes.Add($"sequence={sequence}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(onclickType))
+            {
+                if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out var onclickValue))
+                    return ErrorResult($"Error: Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+                entity["onclickeventtype"] = new OptionSetValue(onclickValue);
+                changes.Add($"onclickType='{onclickType.Trim()}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(jsWebResource))
+            {
+                var wrId = ResolveWebResourceId(jsWebResource.Trim());
+                if (wrId == null)
+                    return ErrorResult($"Error: Web resource '{jsWebResource.Trim()}' not found.");
+                entity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
+                changes.Add($"jsWebResource='{jsWebResource.Trim()}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(jsFunction))
+            {
+                entity["onclickeventjavascriptfunctionname"] = jsFunction.Trim();
+                changes.Add($"jsFunction='{jsFunction.Trim()}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(fontIcon))
+            {
+                if (fontIcon.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                {
+                    entity["fonticon"] = null;
+                    changes.Add("fontIcon=cleared");
+                }
+                else
+                {
+                    entity["fonticon"] = NormalizeFontIcon(fontIcon.Trim());
+                    changes.Add($"fontIcon='{fontIcon.Trim()}'");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(iconWebResource))
+            {
+                if (iconWebResource.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                {
+                    entity["iconwebresourceid"] = null;
+                    changes.Add("iconWebResource=cleared");
+                }
+                else
+                {
+                    var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
+                    if (iconWrId == null)
+                        return ErrorResult($"Error: Icon web resource '{iconWebResource.Trim()}' not found.");
+                    entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
+                    changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+            {
+                entity["buttontooltiptitle"] = tooltipTitle.Trim();
+                changes.Add($"tooltipTitle='{tooltipTitle.Trim()}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipDescription))
+            {
+                entity["buttontooltipdescription"] = tooltipDescription.Trim();
+                changes.Add($"tooltipDescription='{tooltipDescription.Trim()}'");
+            }
+
+            if (changes.Count == 0)
+                return ErrorResult("Error: No fields to update. Provide at least one: label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description.");
+
+            _serviceClient.Update(entity);
+
+            var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
+            var message = $"Split Button '{commandName}' updated: {string.Join(", ", changes)}.";
+
+            var structured = new ManageCommandResult
+            {
+                Action = "update_split_button",
+                Status = "success",
+                CommandId = commandId.Trim(),
+                Message = message
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = message }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
         // ── Add Flyout Item ─────────────────────────────────────
 
         private CallToolResult HandleAddFlyoutItem(string flyoutCommandId, string label, string onclickType, string jsWebResource, string jsFunction, int sequence, bool hidden)
@@ -1684,8 +1995,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult($"Error: Flyout command '{flyoutCommandId.Trim()}' not found.");
 
             var flyoutType = flyout.GetAttributeValue<OptionSetValue>("type")?.Value ?? -1;
-            if (flyoutType != 1)
-                return ErrorResult($"Error: '{flyoutCommandId.Trim()}' is not a Dropdown Button (type={TypeMap.GetValueOrDefault(flyoutType, flyoutType.ToString())}). Provide the flyout container's id.");
+            if (flyoutType != 1 && flyoutType != 2)
+                return ErrorResult($"Error: '{flyoutCommandId.Trim()}' is not a Dropdown or Split Button (type={TypeMap.GetValueOrDefault(flyoutType, flyoutType.ToString())}). Provide the flyout container's id.");
 
             var entityLogical = flyout.GetAttributeValue<string>("contextvalue") ?? "";
             var locationValue = flyout.GetAttributeValue<OptionSetValue>("location")?.Value ?? 0;
@@ -1792,6 +2103,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
             if (typeValue == 1)
                 return ErrorResult("Error: Cannot remove a Dropdown Button using remove_flyout_item. To delete the entire flyout, use the Dataverse UI or manage_record(action='delete').");
+            if (typeValue == 2)
+                return ErrorResult("Error: Cannot remove a Split Button using remove_flyout_item. To delete the entire split button, use the Dataverse UI or manage_record(action='delete').");
             if (typeValue == 3)
                 return ErrorResult("Error: Cannot directly remove a Group. Remove individual items or delete the entire flyout.");
 
