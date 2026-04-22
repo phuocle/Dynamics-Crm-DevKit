@@ -287,8 +287,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var btn in buttons)
                     {
                         var normalizedLabel = btn.Label?.Trim() ?? "";
-                        var inAppAction = appActionLabels.ContainsKey(normalizedLabel) ? "✓" : "";
-                        var isHiddenInAppAction = appActionLabels.TryGetValue(normalizedLabel, out var aId) && aId.hidden ? "✓" : "";
+                        appActionLabels.TryGetValue(normalizedLabel, out var info);
+                        var inAppAction = info != null ? "✓" : "";
+                        var isHiddenInAppAction = info?.Hidden == true ? "✓" : "";
                         var oob = btn.IsOob ? "✓" : "";
                         var custom = btn.IsCustom ? "✓" : "";
 
@@ -300,7 +301,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             ButtonLabel = btn.Label,
                             Location = LocationMap.TryGetValue(locationValue, out var lname) ? lname : surface,
                             Entity = entityName,
-                            Sequence = btn.Sequence
+                            Sequence = btn.Sequence,
+                            CommandId = info?.Id,
+                            Hidden = info?.Hidden ?? false,
+                            IsDisabled = info?.IsDisabled ?? false,
+                            Type = info?.Type,
+                            Origin = info?.Origin,
+                            OnClickEventType = info?.OnClickEventType,
+                            VisibilityType = info?.VisibilityType,
+                            FontIcon = info?.FontIcon,
+                            JavaScriptFunction = info?.JavaScriptFunction,
                         });
                     }
                     sb.AppendLine();
@@ -327,9 +337,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private Dictionary<string, (bool hidden, string id)> GetAppActionLabelsForEntity(string entityName)
+        private Dictionary<string, AppActionInfo> GetAppActionLabelsForEntity(string entityName)
         {
-            var result = new Dictionary<string, (bool hidden, string id)>(StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<string, AppActionInfo>(StringComparer.OrdinalIgnoreCase);
             try
             {
                 var fetchXml = $@"<fetch>
@@ -337,6 +347,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='appactionid'/>
     <attribute name='buttonlabeltext'/>
     <attribute name='hidden'/>
+    <attribute name='type'/>
+    <attribute name='origin'/>
+    <attribute name='onclickeventtype'/>
+    <attribute name='onclickeventjavascriptfunctionname'/>
+    <attribute name='onclickeventjavascriptwebresourceid'/>
+    <attribute name='visibilitytype'/>
+    <attribute name='fonticon'/>
+    <attribute name='isdisabled'/>
     <filter>
       <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>
       <condition attribute='statecode' operator='eq' value='0'/>
@@ -347,12 +365,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var e in entities.Entities)
                 {
                     var lbl = e.GetAttributeValue<string>("buttonlabeltext") ?? "";
-                    if (!string.IsNullOrWhiteSpace(lbl))
-                        result[lbl] = (e.GetAttributeValue<bool?>("hidden") ?? false, e.Id.ToString());
+                    if (string.IsNullOrWhiteSpace(lbl)) continue;
+
+                    var typeValue = e.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
+                    var onClickValue = e.GetAttributeValue<OptionSetValue>("onclickeventtype")?.Value ?? 0;
+                    var visValue = e.GetAttributeValue<OptionSetValue>("visibilitytype")?.Value ?? 0;
+                    var originValue = e.GetAttributeValue<OptionSetValue>("origin")?.Value ?? 0;
+
+                    result[lbl] = new AppActionInfo
+                    {
+                        Id = e.Id.ToString(),
+                        Hidden = e.GetAttributeValue<bool?>("hidden") ?? false,
+                        IsDisabled = e.GetAttributeValue<bool?>("isdisabled") ?? false,
+                        Type = TypeMap.TryGetValue(typeValue, out var t) ? t : typeValue.ToString(),
+                        Origin = OriginMap.TryGetValue(originValue, out var orig) ? orig : originValue.ToString(),
+                        OnClickEventType = OnClickEventTypeMap.TryGetValue(onClickValue, out var oc) ? oc : onClickValue.ToString(),
+                        VisibilityType = VisibilityTypeMap.TryGetValue(visValue, out var vis) ? vis : visValue.ToString(),
+                        FontIcon = NullIfEmpty(e.GetAttributeValue<string>("fonticon")),
+                        JavaScriptFunction = NullIfEmpty(e.GetAttributeValue<string>("onclickeventjavascriptfunctionname")),
+                    };
                 }
             }
             catch { }
             return result;
+        }
+
+        private sealed class AppActionInfo
+        {
+            public string Id { get; set; }
+            public bool Hidden { get; set; }
+            public bool IsDisabled { get; set; }
+            public string Type { get; set; }
+            public string Origin { get; set; }
+            public string OnClickEventType { get; set; }
+            public string VisibilityType { get; set; }
+            public string FontIcon { get; set; }
+            public string JavaScriptFunction { get; set; }
         }
 
         private static List<(string Id, int Sequence, string Label, bool IsOob, bool IsCustom)> ParseButtonsFromRibbon(
@@ -1045,6 +1093,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var contextEntityId = ResolveEntityId(entityLogical);
 
+            // Look up OOB template to copy fonticon, sequence, onclickeventtype, etc.
+            var oobTemplate = FindOobTemplate(overrideName, locationValue);
+
             var newEntity = new Entity("appaction");
             newEntity["name"] = overrideName;
             newEntity["uniquename"] = uniqueName;
@@ -1058,7 +1109,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             newEntity["hidden"] = true;
             newEntity["origin"] = new OptionSetValue(2); // Enhanced Migrated — required for designer to show Hide option
             newEntity["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
-            newEntity["sequence"] = (decimal)100;
+
+            if (oobTemplate != null)
+            {
+                // Copy sequence from OOB template
+                newEntity["sequence"] = oobTemplate.GetAttributeValue<decimal?>("sequence") ?? (decimal)100;
+
+                // Copy fonticon (may be null — that is correct)
+                var fontIconVal = oobTemplate.GetAttributeValue<string>("fonticon");
+                if (!string.IsNullOrEmpty(fontIconVal))
+                    newEntity["fonticon"] = fontIconVal;
+
+                // Copy onclickeventtype
+                var onClickType = oobTemplate.GetAttributeValue<OptionSetValue>("onclickeventtype");
+                if (onClickType != null)
+                    newEntity["onclickeventtype"] = new OptionSetValue(onClickType.Value);
+
+                // Copy JS function name if present
+                var jsFuncName = oobTemplate.GetAttributeValue<string>("onclickeventjavascriptfunctionname");
+                if (!string.IsNullOrEmpty(jsFuncName))
+                    newEntity["onclickeventjavascriptfunctionname"] = jsFuncName;
+
+                // Copy JS webresource if present
+                var jsWrRef = oobTemplate.GetAttributeValue<EntityReference>("onclickeventjavascriptwebresourceid");
+                if (jsWrRef != null)
+                    newEntity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", jsWrRef.Id);
+
+                // Copy visibilitytype
+                var visType = oobTemplate.GetAttributeValue<OptionSetValue>("visibilitytype");
+                if (visType != null)
+                    newEntity["visibilitytype"] = new OptionSetValue(visType.Value);
+            }
+            else
+            {
+                newEntity["sequence"] = (decimal)100;
+            }
 
             var newId = _serviceClient.Create(newEntity);
 
@@ -1089,6 +1174,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0] : null;
+        }
+
+        private Entity FindOobTemplate(string buttonName, int locationValue)
+        {
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='appaction'>
+    <attribute name='appactionid'/>
+    <attribute name='sequence'/>
+    <attribute name='fonticon'/>
+    <attribute name='onclickeventtype'/>
+    <attribute name='onclickeventjavascriptfunctionname'/>
+    <attribute name='onclickeventjavascriptwebresourceid'/>
+    <attribute name='visibilitytype'/>
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{EscapeXml(buttonName)}'/>
+      <condition attribute='location' operator='eq' value='{locationValue}'/>
+      <condition attribute='statecode' operator='eq' value='0'/>
+    </filter>
+  </entity>
+</fetch>";
+
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                return result.Entities.Count > 0 ? result.Entities[0] : null;
+            }
+            catch { return null; }
         }
 
         private bool IsClassicRibbonButton(string label, string entityName)
