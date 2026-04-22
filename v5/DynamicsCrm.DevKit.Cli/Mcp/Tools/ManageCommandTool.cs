@@ -118,13 +118,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "'legacy', 'classic', 'JavaScript button' (ambiguous), 'nút', or any generic button phrase.\n" +
             "When in doubt → use manage_ribbon instead.\n\n" +
 
-            "ACTIONS: list, detail, create, update, hide, show\n" +
+            "ACTIONS: list, detail, create, update, hide, show, add_flyout, update_flyout, add_flyout_item, remove_flyout_item\n" +
             "- list: Filter commands by entity, location, app, origin, action type\n" +
             "- detail: Full details including rules, children, component library info. Required: command_id\n" +
-            "- create: Create a new command button. Required: entity_name + location + label + (app_id or app_name)\n" +
+            "- create: Create a new Standard Button. Required: entity_name + location + label + (app_id or app_name)\n" +
             "- update: Update an existing command. Required: command_id + at least one field to change\n" +
             "- hide: Hide a command button (OOB or custom). Required: (command_id) OR (label + entity_name + location + app_name). Creates appaction override if OOB button has no record yet.\n" +
-            "- show: Show a previously hidden command button. Required: command_id OR (label + entity_name + location). No-op if button is already visible.\n\n" +
+            "- show: Show a previously hidden command button. Required: command_id OR (label + entity_name + location). No-op if button is already visible.\n" +
+            "- add_flyout: Create a Dropdown Button with items. Required: entity_name + location + label + (app_id or app_name) + items (JSON array). Each item: {\"label\":\"...\",\"onclick_type\":\"javascript\",\"javascript_webresource\":\"...\",\"javascript_function\":\"...\"}. OPTIONAL per item: sequence.\n" +
+            "- update_flyout: Update flyout container label/icon/tooltip/sequence. Required: command_id (flyout's Dropdown Button id).\n" +
+            "- add_flyout_item: Add a new item to an existing flyout. Required: flyout_command_id + label. Optional: onclick_type, javascript_webresource, javascript_function, sequence.\n" +
+            "- remove_flyout_item: Permanently delete a flyout item. Required: command_id (item's appaction id).\n\n" +
 
             "WORKFLOW: list/detail to inspect → create/update to modify\n" +
             "Auto-resolves app by name for create. Validates entity + location before write.\n\n" +
@@ -133,6 +137,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use origin='default' to exclude hundreds of auto-migrated system commands\n" +
             "- Commands are app-scoped — same entity can differ across apps\n" +
             "- hide/show support OOB buttons by label (e.g. 'Activate', 'Deactivate') — auto-creates appaction override when needed\n" +
+            "- Flyout structure: Dropdown Button → Group(s) → Standard Button items. Groups are internal containers managed automatically.\n" +
+            "- Use detail with include_children=true to inspect flyout items.\n" +
             "- CRITICAL: If this tool returns an error containing 'classic ribbon button', STOP IMMEDIATELY. Do NOT call manage_ribbon or any other tool. Report the error to the user and wait for instructions.\n" +
             "- Related: manage_ribbon (classic ribbon XML — default fallback), manage_form (form layout)")]
         public CallToolResult manage_command(
@@ -157,7 +163,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Filter by command name (contains match).")] string name_filter = "",
             [Description("Include associated appactionrule records with JSON definitions. Default: false.")] bool include_rules = false,
             [Description("Include child commands (dropdown/split button items). Default: false.")] bool include_children = false,
-            [Description("Max commands (1-500). Default: 50.")] int max_records = 50)
+            [Description("Max commands (1-500). Default: 50.")] int max_records = 50,
+            [Description("JSON array of flyout items for add_flyout. Each item: {\"label\":\"...\",\"onclick_type\":\"javascript\",\"javascript_webresource\":\"...\",\"javascript_function\":\"...\",\"sequence\":10}.")] string items = "",
+            [Description("GUID of the flyout Dropdown Button. Required for add_flyout_item.")] string flyout_command_id = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(actionName))
@@ -193,8 +201,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "show":
                         return HandleHideShow(command_id, entity_name, location, app_id, app_name, label, wantHidden: false);
 
+                    case "add_flyout":
+                        return HandleAddFlyout(entity_name, location, app_id, app_name, label, items, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence, hidden);
+
+                    case "update_flyout":
+                        return HandleUpdateFlyout(command_id, label, font_icon, icon_webresource, tooltip_title, tooltip_description, sequence);
+
+                    case "add_flyout_item":
+                        return HandleAddFlyoutItem(flyout_command_id, label, onclick_type, javascript_webresource, javascript_function, sequence, hidden);
+
+                    case "remove_flyout_item":
+                        return HandleRemoveFlyoutItem(command_id);
+
                     default:
-                        return ErrorResult($"Error: Invalid action '{actionName}'. Valid actions: 'list', 'detail', 'create', 'update', 'hide', 'show'.");
+                        return ErrorResult($"Error: Invalid action '{actionName}'. Valid actions: 'list', 'detail', 'create', 'update', 'hide', 'show', 'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item'.");
                 }
             }
             catch (Exception ex)
@@ -878,7 +898,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             entity["origin"] = new OptionSetValue(0); // Default (custom)
 
             if (!string.IsNullOrWhiteSpace(fontIcon))
-                entity["fonticon"] = fontIcon.Trim();
+                entity["fonticon"] = NormalizeFontIcon(fontIcon.Trim());
 
             if (!string.IsNullOrWhiteSpace(iconWebResource))
             {
@@ -999,7 +1019,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 else
                 {
-                    entity["fonticon"] = fontIcon.Trim();
+                    entity["fonticon"] = NormalizeFontIcon(fontIcon.Trim());
                     changes.Add($"fontIcon='{fontIcon.Trim()}'");
                 }
             }
@@ -1391,6 +1411,557 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch { return entityLogicalName; }
         }
 
+        // ── Add Flyout ──────────────────────────────────────────
+
+        private CallToolResult HandleAddFlyout(string entityName, string location, string appId, string appName, string label, string itemsJson, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence, bool hidden)
+        {
+            if (_options.DryRun)
+                return ErrorResult("DRY-RUN: add_flyout blocked. Would create Dropdown Button + Group + items.");
+
+            if (string.IsNullOrWhiteSpace(entityName))
+                return ErrorResult("Error: entity_name is required for action='add_flyout'.");
+            if (string.IsNullOrWhiteSpace(location))
+                return ErrorResult("Error: location is required for action='add_flyout'.");
+            if (string.IsNullOrWhiteSpace(label))
+                return ErrorResult("Error: label is required for action='add_flyout'.");
+            if (string.IsNullOrWhiteSpace(itemsJson))
+                return ErrorResult("Error: items is required for action='add_flyout'. Provide a JSON array of item objects.");
+
+            if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
+                return ErrorResult($"Error: Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
+
+            List<JsonElement> itemList;
+            try
+            {
+                var doc = JsonDocument.Parse(itemsJson);
+                if (doc.RootElement.ValueKind != JsonValueKind.Array)
+                    return ErrorResult("Error: items must be a JSON array.");
+                itemList = doc.RootElement.EnumerateArray().ToList();
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Invalid items JSON — {ex.Message}");
+            }
+
+            if (itemList.Count == 0)
+                return ErrorResult("Error: items array must have at least 1 item.");
+
+            var resolvedAppId = ResolveAppId(appId, appName, out var appResolveError);
+            if (resolvedAppId == null)
+                return ErrorResult(appResolveError ?? "Error: Could not resolve app.");
+
+            var entityLogical = entityName.Trim().ToLowerInvariant();
+            var publisherPrefix = ResolvePublisherPrefix(entityLogical);
+            var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
+            var entityId = ResolveEntityId(entityLogical);
+            var safeLabel = label.Trim().Replace(" ", "");
+            var locPrefix = LocationOobNamePrefix(locationValue);
+
+            // Create Dropdown Button (the flyout container)
+            var dropdownName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Dropdown";
+            var dropdownUniqueName = $"{publisherPrefix}__{dropdownName}!{appUniqueName}!{entityLogical}!{locationValue}";
+
+            var dropdown = new Entity("appaction");
+            dropdown["name"] = dropdownName;
+            dropdown["uniquename"] = dropdownUniqueName;
+            dropdown["context"] = new OptionSetValue(1);
+            dropdown["contextvalue"] = entityLogical;
+            if (entityId.HasValue)
+                dropdown["contextentity"] = new EntityReference("entity", entityId.Value);
+            dropdown["location"] = new OptionSetValue(locationValue);
+            dropdown["buttonlabeltext"] = label.Trim();
+            dropdown["type"] = new OptionSetValue(1); // Dropdown Button
+            dropdown["onclickeventtype"] = new OptionSetValue(0); // None
+            dropdown["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
+            dropdown["sequence"] = sequence > 0 ? (decimal)sequence : (decimal)85;
+            dropdown["hidden"] = hidden;
+            dropdown["isdisabled"] = false;
+            dropdown["origin"] = new OptionSetValue(0);
+
+            if (!string.IsNullOrWhiteSpace(fontIcon))
+                dropdown["fonticon"] = fontIcon.Trim();
+
+            if (!string.IsNullOrWhiteSpace(iconWebResource))
+            {
+                var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
+                if (iconWrId == null)
+                    return ErrorResult($"Error: Icon web resource '{iconWebResource.Trim()}' not found.");
+                dropdown["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                dropdown["buttontooltiptitle"] = tooltipTitle.Trim();
+            if (!string.IsNullOrWhiteSpace(tooltipDescription))
+                dropdown["buttontooltipdescription"] = tooltipDescription.Trim();
+
+            var dropdownId = _serviceClient.Create(dropdown);
+
+            // Create Group (invisible container, no label)
+            var groupName = $"{publisherPrefix}.{entityLogical}.{safeLabel}.{locPrefix}.Group";
+            var groupUniqueName = $"{publisherPrefix}__{groupName}!{appUniqueName}!{entityLogical}!{locationValue}";
+
+            var group = new Entity("appaction");
+            group["name"] = groupName;
+            group["uniquename"] = groupUniqueName;
+            group["context"] = new OptionSetValue(1);
+            group["contextvalue"] = entityLogical;
+            if (entityId.HasValue)
+                group["contextentity"] = new EntityReference("entity", entityId.Value);
+            group["location"] = new OptionSetValue(locationValue);
+            group["type"] = new OptionSetValue(3); // Group
+            group["onclickeventtype"] = new OptionSetValue(0);
+            group["appmoduleid"] = new EntityReference("appmodule", resolvedAppId.Value);
+            group["sequence"] = (decimal)10000;
+            group["hidden"] = false;
+            group["isdisabled"] = false;
+            group["origin"] = new OptionSetValue(0);
+            group["parentappactionid"] = new EntityReference("appaction", dropdownId);
+
+            var groupId = _serviceClient.Create(group);
+
+            // Create items as Standard Buttons under the Group
+            var createdItems = new List<string>();
+            for (var i = 0; i < itemList.Count; i++)
+            {
+                var item = itemList[i];
+                var itemLabel = GetJsonString(item, "label");
+                if (string.IsNullOrWhiteSpace(itemLabel))
+                    return ErrorResult($"Error: Item [{i}] is missing 'label'.");
+
+                var itemOnclickType = GetJsonString(item, "onclick_type");
+                var itemJsWebResource = GetJsonString(item, "javascript_webresource");
+                var itemJsFunction = GetJsonString(item, "javascript_function");
+                var itemSeqStr = GetJsonString(item, "sequence");
+                var itemSeq = int.TryParse(itemSeqStr, out var parsedSeq) ? parsedSeq : (i + 1) * 10000;
+
+                var createResult = CreateFlyoutItem(entityLogical, locationValue, resolvedAppId.Value, appUniqueName,
+                    publisherPrefix, entityId, groupId, safeLabel, locPrefix,
+                    itemLabel, itemOnclickType, itemJsWebResource, itemJsFunction, itemSeq);
+
+                if (createResult.error != null)
+                {
+                    // Rollback not trivial — report error with partial success note
+                    return ErrorResult($"Error creating item '{itemLabel}': {createResult.error}. Flyout '{label}' was partially created (dropdown + group already exist with id {dropdownId}).");
+                }
+                createdItems.Add(itemLabel);
+            }
+
+            var message = $"Flyout '{label.Trim()}' created on {entityLogical} ({LocationMap[locationValue]}) with {createdItems.Count} item(s): {string.Join(", ", createdItems.Select(x => $"'{x}'"))}. FlyoutCommandId: {dropdownId}.";
+            var structured = new ManageCommandResult
+            {
+                Action = "add_flyout",
+                Status = "success",
+                CommandId = dropdownId.ToString(),
+                Message = message
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = message }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Update Flyout ──────────────────────────────────────
+
+        private CallToolResult HandleUpdateFlyout(string commandId, string label, string fontIcon, string iconWebResource, string tooltipTitle, string tooltipDescription, int sequence)
+        {
+            if (_options.DryRun)
+                return ErrorResult("DRY-RUN: update_flyout blocked.");
+
+            if (string.IsNullOrWhiteSpace(commandId))
+                return ErrorResult("Error: command_id is required for action='update_flyout'.");
+            if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
+                return ErrorResult($"Error: '{commandId.Trim()}' is not a valid GUID.");
+
+            var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "type"));
+            if (existing == null)
+                return ErrorResult($"Error: Command '{commandId.Trim()}' not found.");
+
+            var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
+            if (typeValue != 1) // must be Dropdown Button
+                return ErrorResult($"Error: Command '{commandId.Trim()}' is not a Dropdown Button (type={TypeMap.GetValueOrDefault(typeValue, typeValue.ToString())}). Use action='update' for Standard Buttons.");
+
+            var entity = new Entity("appaction", cmdGuid);
+            var changes = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(label))
+            {
+                entity["buttonlabeltext"] = label.Trim();
+                changes.Add($"label='{label.Trim()}'");
+            }
+
+            if (sequence > 0)
+            {
+                entity["sequence"] = (decimal)sequence;
+                changes.Add($"sequence={sequence}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(fontIcon))
+            {
+                if (fontIcon.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                {
+                    entity["fonticon"] = null;
+                    changes.Add("fontIcon=cleared");
+                }
+                else
+                {
+                    entity["fonticon"] = NormalizeFontIcon(fontIcon.Trim());
+                    changes.Add($"fontIcon='{fontIcon.Trim()}'");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(iconWebResource))
+            {
+                if (iconWebResource.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                {
+                    entity["iconwebresourceid"] = null;
+                    changes.Add("iconWebResource=cleared");
+                }
+                else
+                {
+                    var iconWrId = ResolveWebResourceId(iconWebResource.Trim());
+                    if (iconWrId == null)
+                        return ErrorResult($"Error: Icon web resource '{iconWebResource.Trim()}' not found.");
+                    entity["iconwebresourceid"] = new EntityReference("webresource", iconWrId.Value);
+                    changes.Add($"iconWebResource='{iconWebResource.Trim()}'");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+            {
+                entity["buttontooltiptitle"] = tooltipTitle.Trim();
+                changes.Add($"tooltipTitle='{tooltipTitle.Trim()}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(tooltipDescription))
+            {
+                entity["buttontooltipdescription"] = tooltipDescription.Trim();
+                changes.Add($"tooltipDescription='{tooltipDescription.Trim()}'");
+            }
+
+            if (changes.Count == 0)
+                return ErrorResult("Error: No fields to update. Provide at least one: label, sequence, font_icon, icon_webresource, tooltip_title, tooltip_description.");
+
+            _serviceClient.Update(entity);
+
+            var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
+            var message = $"Flyout '{commandName}' updated: {string.Join(", ", changes)}.";
+
+            var structured = new ManageCommandResult
+            {
+                Action = "update_flyout",
+                Status = "success",
+                CommandId = commandId.Trim(),
+                Message = message
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = message }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Add Flyout Item ─────────────────────────────────────
+
+        private CallToolResult HandleAddFlyoutItem(string flyoutCommandId, string label, string onclickType, string jsWebResource, string jsFunction, int sequence, bool hidden)
+        {
+            if (_options.DryRun)
+                return ErrorResult("DRY-RUN: add_flyout_item blocked.");
+
+            if (string.IsNullOrWhiteSpace(flyoutCommandId))
+                return ErrorResult("Error: flyout_command_id is required for action='add_flyout_item'.");
+            if (!Guid.TryParse(flyoutCommandId.Trim(), out var flyoutGuid))
+                return ErrorResult($"Error: '{flyoutCommandId.Trim()}' is not a valid GUID.");
+            if (string.IsNullOrWhiteSpace(label))
+                return ErrorResult("Error: label is required for action='add_flyout_item'.");
+
+            // Load flyout dropdown record
+            var flyout = _serviceClient.Retrieve("appaction", flyoutGuid,
+                new ColumnSet("name", "type", "contextvalue", "location", "appmoduleid"));
+            if (flyout == null)
+                return ErrorResult($"Error: Flyout command '{flyoutCommandId.Trim()}' not found.");
+
+            var flyoutType = flyout.GetAttributeValue<OptionSetValue>("type")?.Value ?? -1;
+            if (flyoutType != 1)
+                return ErrorResult($"Error: '{flyoutCommandId.Trim()}' is not a Dropdown Button (type={TypeMap.GetValueOrDefault(flyoutType, flyoutType.ToString())}). Provide the flyout container's id.");
+
+            var entityLogical = flyout.GetAttributeValue<string>("contextvalue") ?? "";
+            var locationValue = flyout.GetAttributeValue<OptionSetValue>("location")?.Value ?? 0;
+            var appModuleRef = flyout.GetAttributeValue<EntityReference>("appmoduleid");
+
+            if (appModuleRef == null)
+                return ErrorResult("Error: Flyout has no associated app module.");
+
+            // Find the Group child of the flyout
+            var groupId = FindFlyoutGroup(flyoutGuid);
+            if (groupId == null)
+            {
+                // Auto-create a Group if it doesn't exist (defensive)
+                var publisherPfx = ResolvePublisherPrefix(entityLogical);
+                var appUniqueNameVal = ResolveAppUniqueName(appModuleRef.Id);
+                var entityIdVal = ResolveEntityId(entityLogical);
+                var flyoutName = flyout.GetAttributeValue<string>("name") ?? "";
+                var safeLbl = flyoutName.Contains('.') ? flyoutName.Split('.').Skip(2).First() : flyoutName.Replace(" ", "");
+                var locPfx = LocationOobNamePrefix(locationValue);
+                var groupName = $"{publisherPfx}.{entityLogical}.{safeLbl}.{locPfx}.Group";
+                var groupUniqueName = $"{publisherPfx}__{groupName}!{appUniqueNameVal}!{entityLogical}!{locationValue}";
+
+                var groupEntity = new Entity("appaction");
+                groupEntity["name"] = groupName;
+                groupEntity["uniquename"] = groupUniqueName;
+                groupEntity["context"] = new OptionSetValue(1);
+                groupEntity["contextvalue"] = entityLogical;
+                if (entityIdVal.HasValue)
+                    groupEntity["contextentity"] = new EntityReference("entity", entityIdVal.Value);
+                groupEntity["location"] = new OptionSetValue(locationValue);
+                groupEntity["type"] = new OptionSetValue(3);
+                groupEntity["onclickeventtype"] = new OptionSetValue(0);
+                groupEntity["appmoduleid"] = new EntityReference("appmodule", appModuleRef.Id);
+                groupEntity["sequence"] = (decimal)10000;
+                groupEntity["hidden"] = false;
+                groupEntity["isdisabled"] = false;
+                groupEntity["origin"] = new OptionSetValue(0);
+                groupEntity["parentappactionid"] = new EntityReference("appaction", flyoutGuid);
+
+                groupId = _serviceClient.Create(groupEntity);
+            }
+
+            // Count existing items to auto-assign sequence
+            var existingItemCount = CountFlyoutItems(flyoutGuid);
+            var itemSeq = sequence > 0 ? sequence : (existingItemCount + 1) * 10000;
+
+            var onclickValue = 0;
+            if (!string.IsNullOrWhiteSpace(onclickType))
+            {
+                if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out onclickValue))
+                    return ErrorResult($"Error: Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
+            }
+
+            var publisherPrefix = ResolvePublisherPrefix(entityLogical);
+            var appUniqueName = ResolveAppUniqueName(appModuleRef.Id);
+            var entityId = ResolveEntityId(entityLogical);
+
+            // Derive flyout safe label from existing flyout name
+            var flyoutNameStr = flyout.GetAttributeValue<string>("name") ?? "";
+            var locPrefix = LocationOobNamePrefix(locationValue);
+            // Name pattern: {prefix}.{entity}.{safeLabel}.{locPrefix}.Dropdown
+            var flyoutSafeLabel = DeriveFlyoutSafeLabel(flyoutNameStr, publisherPrefix, entityLogical, locPrefix);
+
+            var result = CreateFlyoutItem(entityLogical, locationValue, appModuleRef.Id, appUniqueName,
+                publisherPrefix, entityId, groupId.Value, flyoutSafeLabel, locPrefix,
+                label, onclickType, jsWebResource, jsFunction, itemSeq);
+
+            if (result.error != null)
+                return ErrorResult(result.error);
+
+            var message = $"Item '{label.Trim()}' added to flyout '{flyoutNameStr}'. ItemCommandId: {result.itemId}.";
+            var structured = new ManageCommandResult
+            {
+                Action = "add_flyout_item",
+                Status = "success",
+                CommandId = result.itemId,
+                Message = message
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = message }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Remove Flyout Item ──────────────────────────────────
+
+        private CallToolResult HandleRemoveFlyoutItem(string commandId)
+        {
+            if (_options.DryRun)
+                return ErrorResult("DRY-RUN: remove_flyout_item blocked. Would delete appaction record.");
+
+            if (string.IsNullOrWhiteSpace(commandId))
+                return ErrorResult("Error: command_id is required for action='remove_flyout_item'.");
+            if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
+                return ErrorResult($"Error: '{commandId.Trim()}' is not a valid GUID.");
+
+            var existing = _serviceClient.Retrieve("appaction", cmdGuid,
+                new ColumnSet("name", "type", "parentappactionid", "buttonlabeltext"));
+            if (existing == null)
+                return ErrorResult($"Error: Command '{commandId.Trim()}' not found.");
+
+            var typeValue = existing.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
+            if (typeValue == 1)
+                return ErrorResult("Error: Cannot remove a Dropdown Button using remove_flyout_item. To delete the entire flyout, use the Dataverse UI or manage_record(action='delete').");
+            if (typeValue == 3)
+                return ErrorResult("Error: Cannot directly remove a Group. Remove individual items or delete the entire flyout.");
+
+            var parentRef = existing.GetAttributeValue<EntityReference>("parentappactionid");
+            if (parentRef == null)
+                return ErrorResult("Error: This command has no parent — it is not a flyout item. Use action='hide' to hide a top-level button.");
+
+            var itemName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
+            var itemLabel = existing.GetAttributeValue<string>("buttonlabeltext") ?? itemName;
+
+            _serviceClient.Delete("appaction", cmdGuid);
+
+            var message = $"Flyout item '{itemLabel}' ({itemName}) deleted successfully.";
+            var structured = new ManageCommandResult
+            {
+                Action = "remove_flyout_item",
+                Status = "success",
+                CommandId = commandId.Trim(),
+                Message = message
+            };
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = message }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Flyout helpers ──────────────────────────────────────
+
+        private (string error, string itemId) CreateFlyoutItem(
+            string entityLogical, int locationValue, Guid appModuleId, string appUniqueName,
+            string publisherPrefix, Guid? entityId, Guid groupId,
+            string flyoutSafeLabel, string locPrefix,
+            string itemLabel, string onclickType, string jsWebResource, string jsFunction, int itemSeq)
+        {
+            var onclickValue = 0;
+            if (!string.IsNullOrWhiteSpace(onclickType))
+            {
+                if (!ActionTypeFilterMap.TryGetValue(onclickType.Trim(), out onclickValue))
+                    return ($"Error: Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.", null);
+            }
+
+            var safeItemLabel = itemLabel.Trim().Replace(" ", "");
+            var itemName = $"{publisherPrefix}.{entityLogical}.{flyoutSafeLabel}.{locPrefix}.{safeItemLabel}.Button";
+            var itemUniqueName = $"{publisherPrefix}__{itemName}!{appUniqueName}!{entityLogical}!{locationValue}";
+
+            var itemEntity = new Entity("appaction");
+            itemEntity["name"] = itemName;
+            itemEntity["uniquename"] = itemUniqueName;
+            itemEntity["context"] = new OptionSetValue(1);
+            itemEntity["contextvalue"] = entityLogical;
+            if (entityId.HasValue)
+                itemEntity["contextentity"] = new EntityReference("entity", entityId.Value);
+            itemEntity["location"] = new OptionSetValue(locationValue);
+            itemEntity["buttonlabeltext"] = itemLabel.Trim();
+            itemEntity["type"] = new OptionSetValue(0); // Standard Button
+            itemEntity["onclickeventtype"] = new OptionSetValue(onclickValue);
+            itemEntity["appmoduleid"] = new EntityReference("appmodule", appModuleId);
+            itemEntity["sequence"] = (decimal)itemSeq;
+            itemEntity["hidden"] = false;
+            itemEntity["isdisabled"] = false;
+            itemEntity["origin"] = new OptionSetValue(0);
+            itemEntity["parentappactionid"] = new EntityReference("appaction", groupId);
+
+            if (onclickValue == 2) // JavaScript
+            {
+                if (!string.IsNullOrWhiteSpace(jsWebResource))
+                {
+                    var wrId = ResolveWebResourceId(jsWebResource.Trim());
+                    if (wrId == null)
+                        return ($"Error: Web resource '{jsWebResource.Trim()}' not found.", null);
+                    itemEntity["onclickeventjavascriptwebresourceid"] = new EntityReference("webresource", wrId.Value);
+                }
+                if (!string.IsNullOrWhiteSpace(jsFunction))
+                    itemEntity["onclickeventjavascriptfunctionname"] = jsFunction.Trim();
+
+                var defaultParams = locationValue switch
+                {
+                    0 => "[{\"type\":5},{\"type\":2},{\"type\":3}]",
+                    1 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",
+                    2 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",
+                    3 => "[{\"type\":12},{\"type\":24},{\"type\":7},{\"type\":8}]",
+                    _ => null
+                };
+                if (defaultParams != null)
+                    itemEntity["onclickeventjavascriptparameters"] = defaultParams;
+            }
+
+            try
+            {
+                var newId = _serviceClient.Create(itemEntity);
+                return (null, newId.ToString());
+            }
+            catch (Exception ex)
+            {
+                return ($"Error: {ex.Message}", null);
+            }
+        }
+
+        private Guid? FindFlyoutGroup(Guid flyoutDropdownId)
+        {
+            var fetchXml = $@"<fetch top='1'>
+  <entity name='appaction'>
+    <attribute name='appactionid'/>
+    <filter>
+      <condition attribute='parentappactionid' operator='eq' value='{flyoutDropdownId}'/>
+      <condition attribute='type' operator='eq' value='3'/>
+      <condition attribute='statecode' operator='eq' value='0'/>
+    </filter>
+    <order attribute='sequence'/>
+  </entity>
+</fetch>";
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return result.Entities.Count > 0 ? result.Entities[0].Id : (Guid?)null;
+        }
+
+        private int CountFlyoutItems(Guid flyoutDropdownId)
+        {
+            // Count Standard Button descendants (children of the Group which is child of Dropdown)
+            var fetchXml = $@"<fetch aggregate='true'>
+  <entity name='appaction'>
+    <attribute name='appactionid' alias='cnt' aggregate='count'/>
+    <filter>
+      <condition attribute='type' operator='eq' value='0'/>
+      <condition attribute='statecode' operator='eq' value='0'/>
+    </filter>
+    <link-entity name='appaction' from='appactionid' to='parentappactionid' alias='grp'>
+      <filter>
+        <condition attribute='parentappactionid' operator='eq' value='{flyoutDropdownId}'/>
+        <condition attribute='type' operator='eq' value='3'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            try
+            {
+                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (result.Entities.Count > 0)
+                {
+                    var val = result.Entities[0].GetAttributeValue<AliasedValue>("cnt");
+                    return val != null ? Convert.ToInt32(val.Value) : 0;
+                }
+            }
+            catch { }
+            return 0;
+        }
+
+        private static string DeriveFlyoutSafeLabel(string flyoutName, string publisherPrefix, string entityLogical, string locPrefix)
+        {
+            // Pattern: {prefix}.{entity}.{safeLabel}.{locPrefix}.Dropdown
+            var strip = $"{publisherPrefix}.{entityLogical}.";
+            var suffix = $".{locPrefix}.Dropdown";
+            if (flyoutName.StartsWith(strip, StringComparison.OrdinalIgnoreCase) &&
+                flyoutName.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+            {
+                return flyoutName.Substring(strip.Length, flyoutName.Length - strip.Length - suffix.Length);
+            }
+            // Fallback: use everything after last dot before .Dropdown
+            var parts = flyoutName.Split('.');
+            return parts.Length >= 2 ? parts[parts.Length - 2] : flyoutName.Replace(" ", "");
+        }
+
+        private static string GetJsonString(JsonElement el, string key)
+        {
+            if (el.TryGetProperty(key, out var prop) && prop.ValueKind == JsonValueKind.String)
+                return prop.GetString() ?? "";
+            return "";
+        }
+
         // ── Resolution helpers ──────────────────────────────────
 
         private Guid? ResolveAppId(string appId, string appName, out string errorMessage)
@@ -1502,7 +2073,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
-                var fetchXml = $@"<fetch>
+                var directFetch = $@"<fetch>
   <entity name='appaction'>
     <attribute name='appactionid'/>
     <attribute name='name'/>
@@ -1522,13 +2093,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
   </entity>
 </fetch>";
 
-                var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                return result.Entities.Select(e =>
+                var directResult = _serviceClient.RetrieveMultiple(new FetchExpression(directFetch));
+                var items = new List<CommandChildEntry>();
+
+                foreach (var e in directResult.Entities)
                 {
                     var typeValue = e.GetAttributeValue<OptionSetValue>("type")?.Value ?? 0;
-                    var onClickValue = e.GetAttributeValue<OptionSetValue>("onclickeventtype")?.Value ?? 0;
 
-                    return new CommandChildEntry
+                    if (typeValue == 3) // Group — transparent container, recurse into it
+                    {
+                        items.AddRange(GetChildCommands(e.Id.ToString()));
+                        continue;
+                    }
+
+                    var onClickValue = e.GetAttributeValue<OptionSetValue>("onclickeventtype")?.Value ?? 0;
+                    items.Add(new CommandChildEntry
                     {
                         CommandId = e.Id.ToString(),
                         Name = e.GetAttributeValue<string>("name") ?? "",
@@ -1540,8 +2119,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Sequence = Convert.ToInt32(e["sequence"] ?? 0),
                         Hidden = e.GetAttributeValue<bool?>("hidden") ?? false,
                         IsDisabled = e.GetAttributeValue<bool?>("isdisabled") ?? false
-                    };
-                }).ToList();
+                    });
+                }
+
+                return items;
             }
             catch (Exception ex)
             {
@@ -1611,6 +2192,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             var aliased = e.GetAttributeValue<AliasedValue>(alias);
             return aliased?.Value?.ToString() ?? "";
+        }
+
+        // Normalize fonticon: "Accept" → "$clientsvg:Accept", "$clientsvg:Accept" → unchanged
+        private static string NormalizeFontIcon(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return value;
+            var v = value.Trim();
+            if (v.StartsWith("$clientsvg:", StringComparison.OrdinalIgnoreCase) ||
+                v.StartsWith("$webresource:", StringComparison.OrdinalIgnoreCase))
+                return v;
+            return $"$clientsvg:{v}";
         }
 
         private static string NullIfEmpty(string value) =>
