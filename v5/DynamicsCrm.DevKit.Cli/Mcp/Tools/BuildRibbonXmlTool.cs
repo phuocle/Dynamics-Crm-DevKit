@@ -575,16 +575,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 new XAttribute("Library", $"$webresource:{library}"));
             foreach (var p in crmParams) jsFunctionEl.Add(p);
 
-            // DisplayRule reference inside CommandDefinition (form only)
-            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.DisplayRule" : null;
-
             // sub_grid: extra EnableRule for SelectionCountRule(Min=1) — button disabled when no row selected
             // SelectionCountRule is only valid inside EnableRule (not DisplayRule per XSD)
             var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.SelectionEnableRule" : null;
 
-            XElement displayRulesInCommand = displayRuleId != null
-                ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
-                : new XElement("DisplayRules");
+            var displayRulesInCommand = new XElement("DisplayRules");
 
             var enableRulesInCommand = new XElement("EnableRules",
                 new XElement("EnableRule", new XAttribute("Id", enableRuleId)));
@@ -618,16 +613,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 enableRulesEl.Add(new XElement("EnableRule",
                     new XAttribute("Id", selectionEnableRuleId),
                     new XElement("SelectionCountRule", new XAttribute("Minimum", "1"))));
-            }
-
-            // DisplayRule (form only): FormStateRule State="Existing"
-            if (displayRuleId != null)
-            {
-                RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
-                var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
-                displayRulesEl.Add(new XElement("DisplayRule",
-                    new XAttribute("Id", displayRuleId),
-                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
             }
 
             // ── LocLabels ──
@@ -742,7 +727,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var menuId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.SplitButton.Menu";
             var menuSectionId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.MenuSection";
             var controlsId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.MenuSection.Controls";
-            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{slug}.{surfaceSuffix}.DisplayRule" : null;
             string selectionEnableRuleId = null; // flyout/split use no SelectionCountRule — items must always be visible
 
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
@@ -754,8 +738,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (ruleDefsClean != null)
             {
                 RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", mainEnRuleId);
-                if (displayRuleId != null)
-                    RemoveByIdInChild(ruleDefsClean, "DisplayRules", "DisplayRule", displayRuleId);
                 if (selectionEnableRuleId != null)
                     RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", selectionEnableRuleId);
             }
@@ -808,7 +790,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
 
                 if (!string.IsNullOrWhiteSpace(itemImage))
+                {
+                    btnEl.Add(new XAttribute("Image16by16", $"$webresource:{itemImage}"));
+                    btnEl.Add(new XAttribute("Image32by32", $"$webresource:{itemImage}"));
                     btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
+                }
 
                 controlsEl.Add(btnEl);
                 autoSeq += 10;
@@ -839,7 +825,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 splitButtonEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{splitButtonId}.ToolTipDescription"));
 
             if (!string.IsNullOrWhiteSpace(modernImage))
+            {
+                splitButtonEl.Add(new XAttribute("Image16by16", $"$webresource:{modernImage}"));
+                splitButtonEl.Add(new XAttribute("Image32by32", $"$webresource:{modernImage}"));
                 splitButtonEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+            }
 
             splitButtonEl.Add(menuEl);
 
@@ -857,9 +847,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (selectionEnableRuleId != null)
                 mainEnableRulesEl.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
 
-            var mainDisplayRulesEl = displayRuleId != null
-                ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
-                : new XElement("DisplayRules");
+            var mainDisplayRulesEl = new XElement("DisplayRules");
 
             var mainJsFuncEl = new XElement("JavaScriptFunction",
                 new XAttribute("FunctionName", function),
@@ -932,16 +920,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 enableRulesEl.Add(new XElement("EnableRule",
                     new XAttribute("Id", itemEnRuleId),
                     customRuleEl));
-            }
-
-            // DisplayRule (form only)
-            if (displayRuleId != null)
-            {
-                RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
-                var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
-                displayRulesEl.Add(new XElement("DisplayRule",
-                    new XAttribute("Id", displayRuleId),
-                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
             }
 
             // sub_grid: SelectionCountRule
@@ -1065,6 +1043,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var imgErr = ValidateWebResourceExists(newImage);
                 if (imgErr != null) return (imgErr, null);
+                splitButtonEl.SetAttributeValue("Image16by16", $"$webresource:{newImage}");
+                splitButtonEl.SetAttributeValue("Image32by32", $"$webresource:{newImage}");
                 splitButtonEl.SetAttributeValue("ModernImage", $"$webresource:{newImage}");
                 // Also update parent CustomAction sequence attribute if sequence is also changing
                 updatedFields.Add("modern_image");
@@ -1177,6 +1157,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         var imgErr = ValidateWebResourceExists(newItemImage);
                         if (imgErr != null) return (imgErr, null);
+                        btnEl.SetAttributeValue("Image16by16", $"$webresource:{newItemImage}");
+                        btnEl.SetAttributeValue("Image32by32", $"$webresource:{newItemImage}");
                         btnEl.SetAttributeValue("ModernImage", $"$webresource:{newItemImage}");
                         itemUpdated.Add("modern_image");
                     }
@@ -1331,7 +1313,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var menuId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.FlyoutAnchor.Menu";
             var menuSectionId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.MenuSection";
             var controlsId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.MenuSection.Controls";
-            var displayRuleId = surface == "form" ? $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.DisplayRule" : null;
             string selectionEnableRuleId = null; // flyout/split use no SelectionCountRule — items must always be visible
 
             var location = SurfaceLocationMap[surface].Replace("{entity}", entityName);
@@ -1340,8 +1321,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             RemoveCustomActionByInnerElementId(ribbonDoc.Root, flyoutAnchorId);
             RemoveById(ribbonDoc.Root, "CommandDefinitions", "CommandDefinition", flyoutCommandId);
             var ruleDefsClean = ribbonDoc.Root.Element("RuleDefinitions");
-            if (ruleDefsClean != null && displayRuleId != null)
-                RemoveByIdInChild(ruleDefsClean, "DisplayRules", "DisplayRule", displayRuleId);
             if (ruleDefsClean != null && selectionEnableRuleId != null)
                 RemoveByIdInChild(ruleDefsClean, "EnableRules", "EnableRule", selectionEnableRuleId);
 
@@ -1395,7 +1374,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
 
                 if (!string.IsNullOrWhiteSpace(itemImage))
+                {
+                    btnEl.Add(new XAttribute("Image16by16", $"$webresource:{itemImage}"));
+                    btnEl.Add(new XAttribute("Image32by32", $"$webresource:{itemImage}"));
                     btnEl.Add(new XAttribute("ModernImage", $"$webresource:{itemImage}"));
+                }
 
                 controlsEl.Add(btnEl);
                 autoSeq += 10;
@@ -1425,7 +1408,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 flyoutEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{flyoutAnchorId}.ToolTipDescription"));
 
             if (!string.IsNullOrWhiteSpace(modernImage))
+            {
+                flyoutEl.Add(new XAttribute("Image16by16", $"$webresource:{modernImage}"));
+                flyoutEl.Add(new XAttribute("Image32by32", $"$webresource:{modernImage}"));
                 flyoutEl.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+            }
 
             flyoutEl.Add(menuEl);
 
@@ -1442,14 +1429,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (selectionEnableRuleId != null)
                 flyoutEnableRulesEl.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
 
-            var flyoutDisplayRulesEl = displayRuleId != null
-                ? new XElement("DisplayRules", new XElement("DisplayRule", new XAttribute("Id", displayRuleId)))
-                : new XElement("DisplayRules");
-
             commandDefsEl.Add(new XElement("CommandDefinition",
                 new XAttribute("Id", flyoutCommandId),
                 flyoutEnableRulesEl,
-                flyoutDisplayRulesEl,
+                new XElement("DisplayRules"),
                 new XElement("Actions")));
 
             // ── Per-item CommandDefinitions (click action + enable rule ref) ──
@@ -1502,16 +1485,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 enableRulesEl.Add(new XElement("EnableRule",
                     new XAttribute("Id", itemEnRuleId),
                     customRuleEl));
-            }
-
-            // DisplayRule (form only)
-            if (displayRuleId != null)
-            {
-                RemoveByIdInChild(ruleDefsEl, "DisplayRules", "DisplayRule", displayRuleId);
-                var displayRulesEl = GetOrCreateElement(ruleDefsEl, "DisplayRules");
-                displayRulesEl.Add(new XElement("DisplayRule",
-                    new XAttribute("Id", displayRuleId),
-                    new XElement("FormStateRule", new XAttribute("State", "Existing"))));
             }
 
             // sub_grid: SelectionCountRule on flyout anchor command
@@ -1635,6 +1608,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var imgErr = ValidateWebResourceExists(newImage);
                 if (imgErr != null) return (imgErr, null);
+                flyoutEl.SetAttributeValue("Image16by16", $"$webresource:{newImage}");
+                flyoutEl.SetAttributeValue("Image32by32", $"$webresource:{newImage}");
                 flyoutEl.SetAttributeValue("ModernImage", $"$webresource:{newImage}");
                 updatedFields.Add("modern_image");
             }
@@ -1697,6 +1672,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         var imgErr = ValidateWebResourceExists(newItemImage);
                         if (imgErr != null) return (imgErr, null);
+                        btnEl.SetAttributeValue("Image16by16", $"$webresource:{newItemImage}");
+                        btnEl.SetAttributeValue("Image32by32", $"$webresource:{newItemImage}");
                         btnEl.SetAttributeValue("ModernImage", $"$webresource:{newItemImage}");
                         itemUpdated.Add("modern_image");
                     }
@@ -2005,6 +1982,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var imgError = ValidateWebResourceExists(newModernImage);
                 if (imgError != null) return (imgError, null);
+                buttonEl.SetAttributeValue("Image16by16", $"$webresource:{newModernImage}");
+                buttonEl.SetAttributeValue("Image32by32", $"$webresource:{newModernImage}");
                 buttonEl.SetAttributeValue("ModernImage", $"$webresource:{newModernImage}");
                 updatedFields.Add("modern_image");
             }
@@ -2294,7 +2273,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 el.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{buttonId}.ToolTipDescription"));
 
             if (!string.IsNullOrWhiteSpace(modernImage))
+            {
+                el.Add(new XAttribute("Image16by16", $"$webresource:{modernImage}"));
+                el.Add(new XAttribute("Image32by32", $"$webresource:{modernImage}"));
                 el.Add(new XAttribute("ModernImage", $"$webresource:{modernImage}"));
+            }
 
             return el;
         }

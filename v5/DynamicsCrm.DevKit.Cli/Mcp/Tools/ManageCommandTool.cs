@@ -133,6 +133,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use origin='default' to exclude hundreds of auto-migrated system commands\n" +
             "- Commands are app-scoped — same entity can differ across apps\n" +
             "- hide/show support OOB buttons by label (e.g. 'Activate', 'Deactivate') — auto-creates appaction override when needed\n" +
+            "- CRITICAL: If this tool returns an error containing 'classic ribbon button', STOP IMMEDIATELY. Do NOT call manage_ribbon or any other tool. Report the error to the user and wait for instructions.\n" +
             "- Related: manage_ribbon (classic ribbon XML — default fallback), manage_form (form layout)")]
         public CallToolResult manage_command(
             [Description("Action: 'list', 'detail', 'create', 'update', 'hide', or 'show'.")] string action,
