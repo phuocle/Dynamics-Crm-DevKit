@@ -14,14 +14,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             var sb = new StringBuilder(list.Count * 80 + 128);
             sb.AppendLine($"[Entities] {list.Count} total");
             sb.AppendLine();
-            sb.AppendLine("LogicalName\tDisplayName\tOwnershipType\tIsCustom\tIsActivity");
+            sb.AppendLine("LogicalName\tDisplayName\tOwnershipType\tIsCustom\tIsActivity\tIsAuditEnabled");
             foreach (var e in list)
             {
                 var display = e.DisplayName?.UserLocalizedLabel?.Label ?? "";
                 var ownership = e.OwnershipType?.ToString() ?? "";
                 var isCustom = e.IsCustomEntity == true ? "Yes" : "No";
                 var isActivity = e.IsActivity == true ? "Yes" : "No";
-                sb.AppendLine($"{e.LogicalName}\t{display}\t{ownership}\t{isCustom}\t{isActivity}");
+                var isAudit = e.IsAuditEnabled?.Value == true ? "Yes" : "No";
+                sb.AppendLine($"{e.LogicalName}\t{display}\t{ownership}\t{isCustom}\t{isActivity}\t{isAudit}");
             }
             return sb.ToString();
         }
