@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- action='list': List views with name, type, status. Optional: query_type, include_fetchxml, include_personal\n" +
             "- action='detail': Full FetchXML + LayoutXML + metadata for one view. Requires: view_id\n" +
             "- action='create': New Public view. Requires: view_name + layoutxml\n" +
-            "- action='update': Modify LayoutXML/FetchXML. Requires: view_id + layoutxml\n" +
+            "- action='update': Modify LayoutXML/FetchXML. Requires: view_id + (layoutxml and/or cell_updates_json)\n" +
             "- action='rename': Change display name. Requires: view_id + view_name\n" +
             "- action='undo': Restore from backup. Requires: view_id + layoutxml (= backup file path)\n\n" +
 
@@ -78,7 +78,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Backup current XMLs before overwriting (default: true). Backup failure blocks update."
             )] bool backup = true,
             [Description("Publish after changes (default: true). Set false when batching."
-            )] bool auto_publish = true)
+            )] bool auto_publish = true,
+            [Description("JSON array of cell attribute updates. Each item: {cell_name, set_attributes, remove_attributes}. " +
+                "Patch cell attributes (e.g., imageproviderwebresource, imageproviderfunctionname, ishidden) " +
+                "without rebuilding full LayoutXML. Can be used alone or with layoutxml."
+            )] string cell_updates_json = "")
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'undo'.");
@@ -96,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "list" => HandleList(entityName, view_name, query_type, include_fetchxml, include_personal),
                     "detail" => HandleDetail(entityName, view_id, view_name),
                     "create" => HandleCreate(entityName, view_name, layoutxml, fetchxml, validate, auto_publish),
-                    "update" => HandleUpdate(entityName, view_id, layoutxml, fetchxml, validate, backup, auto_publish),
+                    "update" => HandleUpdate(entityName, view_id, layoutxml, fetchxml, validate, backup, auto_publish, cell_updates_json),
                     "rename" => HandleRename(entityName, view_id, view_name, backup, auto_publish),
                     "undo" => HandleUndo(entityName, view_id, layoutxml, fetchxml, validate, auto_publish),
                     _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, undo.")
@@ -358,17 +362,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ─────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string viewId,
-            string layoutxml, string fetchxml, bool validate, bool backup, bool auto_publish)
+            string layoutxml, string fetchxml, bool validate, bool backup, bool auto_publish,
+            string cellUpdatesJson = "")
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return ErrorResult("Error: view_id is required for 'update' action.");
             if (!Guid.TryParse(viewId.Trim(), out var updateId))
                 return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
-            if (string.IsNullOrWhiteSpace(layoutxml))
-                return ErrorResult("Error: layoutxml is required for 'update' action.");
 
-            var newLayoutXml = ViewXmlHelper.StripXmlDeclaration(layoutxml.Trim());
-            newLayoutXml = EnsureObjectTypeCode(newLayoutXml, entityName);
+            var hasLayoutXml = !string.IsNullOrWhiteSpace(layoutxml);
+            var hasCellUpdates = !string.IsNullOrWhiteSpace(cellUpdatesJson);
+
+            if (!hasLayoutXml && !hasCellUpdates)
+                return ErrorResult("Error: at least one of layoutxml or cell_updates_json is required for 'update' action.");
+
             var newFetchXml = string.IsNullOrWhiteSpace(fetchxml) ? null : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
             var currentView = RetrieveView(updateId);
@@ -383,6 +390,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var viewName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
             var effectiveFetchXml = newFetchXml ?? currentFetchXml;
+
+            var baseLayoutXml = hasLayoutXml
+                ? ViewXmlHelper.StripXmlDeclaration(layoutxml.Trim())
+                : currentLayoutXml;
+
+            List<string> cellPatchWarnings = null;
+            var usedCellPatch = false;
+
+            if (hasCellUpdates)
+            {
+                var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
+                if (parseError != null)
+                    return ErrorResult(parseError);
+
+                var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
+                if (patchErrors.Count > 0)
+                {
+                    var sb = new StringBuilder(256);
+                    sb.AppendLine($"[ViewUpdate] BLOCKED — Cell patch failed");
+                    sb.AppendLine($"ViewId: {updateId}");
+                    sb.AppendLine($"Errors: {patchErrors.Count}");
+                    foreach (var error in patchErrors)
+                        sb.AppendLine($"- {error}");
+                    sb.AppendLine($"Tip: Use manage_view action='detail' to see current LayoutXML cells.");
+                    return ErrorResult(sb.ToString());
+                }
+
+                baseLayoutXml = patchedXml;
+                usedCellPatch = true;
+                if (patchWarnings.Count > 0)
+                    cellPatchWarnings = patchWarnings;
+            }
+
+            var newLayoutXml = EnsureObjectTypeCode(baseLayoutXml, entityName);
 
             string fetchBackupPath = null;
             string layoutBackupPath = null;
@@ -432,6 +473,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         serverError, fetchBackupPath, layoutBackupPath, "updated");
             }
 
+            var updatedParts = DetermineUpdatedParts(hasLayoutXml, usedCellPatch, newFetchXml != null);
+
             var isPersonalView = currentView.LogicalName == "userquery";
             var update = new Entity(currentView.LogicalName, updateId);
             update["layoutxml"] = newLayoutXml;
@@ -449,6 +492,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var sb = ViewBackupHelper.BuildSuccessText(entityName, updateId, viewName, fetchBackupPath, layoutBackupPath,
                     validate, newFetchXml != null, false);
+                if (cellPatchWarnings?.Count > 0)
+                {
+                    sb.AppendLine($"CellPatchWarnings: {cellPatchWarnings.Count}");
+                    foreach (var w in cellPatchWarnings)
+                        sb.AppendLine($"  - {w}");
+                }
                 sb.AppendLine($"Tip: Call publish with entities='{returnedTypeCode}' to retry");
                 sb.AppendLine();
                 ViewBackupHelper.AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, updateId);
@@ -460,7 +509,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = viewName,
                         Status = "updated_publish_failed", Validated = validate,
-                        UpdatedParts = newFetchXml != null ? "LayoutXML + FetchXML" : "LayoutXML only",
+                        UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
                         FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
                     })
                 };
@@ -469,6 +518,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var sb = ViewBackupHelper.BuildSuccessText(entityName, updateId, viewName, fetchBackupPath, layoutBackupPath,
                     validate, newFetchXml != null, published);
+                if (cellPatchWarnings?.Count > 0)
+                {
+                    sb.AppendLine($"CellPatchWarnings: {cellPatchWarnings.Count}");
+                    foreach (var w in cellPatchWarnings)
+                        sb.AppendLine($"  - {w}");
+                }
                 sb.AppendLine();
                 ViewBackupHelper.AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, updateId);
 
@@ -479,11 +534,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = viewName,
                         Status = "updated", Validated = validate,
-                        UpdatedParts = newFetchXml != null ? "LayoutXML + FetchXML" : "LayoutXML only",
+                        UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
                         FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published
                     })
                 };
             }
+        }
+
+        private static string DetermineUpdatedParts(bool hasExplicitLayout, bool usedCellPatch, bool hasFetchXml)
+        {
+            string layoutPart;
+            if (usedCellPatch && hasExplicitLayout)
+                layoutPart = "LayoutXML (cell patch applied)";
+            else if (usedCellPatch)
+                layoutPart = "LayoutXML (cell patch)";
+            else
+                layoutPart = "LayoutXML only";
+
+            return hasFetchXml
+                ? layoutPart.Replace(" only", "") + " + FetchXML"
+                : layoutPart;
         }
 
         // ── Action: rename ─────────────────────────────────────────────────
@@ -886,6 +956,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var cells = layoutDoc.Descendants("cell").ToList();
                     var visibleCount = 0;
                     var hiddenCount = 0;
+                    var iconCount = 0;
                     var columnLines = new List<string>();
 
                     foreach (var cell in cells)
@@ -893,20 +964,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         var cellName = cell.Attribute("name")?.Value ?? "";
                         var width = cell.Attribute("width")?.Value;
                         var isHidden = cell.Attribute("ishidden")?.Value == "1";
+                        var iconWr = cell.Attribute("imageproviderwebresource")?.Value;
+                        var iconFn = cell.Attribute("imageproviderfunctionname")?.Value;
 
                         if (isHidden) hiddenCount++; else visibleCount++;
+                        if (iconWr != null || iconFn != null) iconCount++;
 
                         var parts = new List<string>();
                         if (width != null) parts.Add($"{width}px");
                         if (isHidden) parts.Add("hidden");
                         if (string.Equals(cellName, rowId, StringComparison.OrdinalIgnoreCase)) parts.Add("row key");
+                        if (iconWr != null || iconFn != null)
+                        {
+                            var iconParts = new List<string>();
+                            if (iconWr != null) iconParts.Add(iconWr);
+                            if (iconFn != null) iconParts.Add(iconFn);
+                            parts.Add($"icon: {string.Join(" → ", iconParts)}");
+                        }
 
                         var suffix = parts.Count > 0 ? $" ({string.Join(", ", parts)})" : "";
                         columnLines.Add($"  {cellName}{suffix}");
                     }
 
-                    var hiddenNote = hiddenCount > 0 ? $" ({hiddenCount} hidden)" : "";
-                    sb.AppendLine($"[Columns] {cells.Count} columns{hiddenNote}");
+                    var notes = new List<string>();
+                    if (hiddenCount > 0) notes.Add($"{hiddenCount} hidden");
+                    if (iconCount > 0) notes.Add($"{iconCount} with custom icon");
+                    var notesSuffix = notes.Count > 0 ? $" ({string.Join(", ", notes)})" : "";
+                    sb.AppendLine($"[Columns] {cells.Count} columns{notesSuffix}");
                     foreach (var line in columnLines)
                         sb.AppendLine(line);
                     sb.AppendLine();
@@ -1442,6 +1526,71 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     dist++;
             dist += Math.Abs(a.Length - b.Length);
             return dist <= 2;
+        }
+
+        // ── Cell Updates Parsing ──────────────────────────────────────────
+
+        private static readonly HashSet<string> ProtectedCellAttributes = new(StringComparer.OrdinalIgnoreCase) { "name" };
+        private static readonly HashSet<string> NoRemoveCellAttributes = new(StringComparer.OrdinalIgnoreCase) { "name", "width" };
+
+        private static (List<CellUpdateInstruction> Instructions, string Error) ParseCellUpdates(string cellUpdatesJson)
+        {
+            List<CellUpdateInstruction> instructions;
+            try
+            {
+                instructions = JsonSerializer.Deserialize<List<CellUpdateInstruction>>(cellUpdatesJson,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (JsonException ex)
+            {
+                return (null, $"Error: cell_updates_json is not valid JSON — {ex.Message}");
+            }
+
+            if (instructions == null || instructions.Count == 0)
+                return (null, "Error: cell_updates_json is empty or not a JSON array.");
+
+            var seenNames = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            for (var i = 0; i < instructions.Count; i++)
+            {
+                var item = instructions[i];
+
+                if (string.IsNullOrWhiteSpace(item.CellName))
+                    return (null, $"Error: cell_updates_json item at index {i} is missing required 'cell_name'.");
+
+                var cellName = item.CellName.Trim();
+                item.CellName = cellName;
+
+                if (seenNames.TryGetValue(cellName, out var prevIndex))
+                    return (null, $"Error: cell_updates_json has duplicate cell_name '{cellName}' at indices {prevIndex} and {i}.");
+                seenNames[cellName] = i;
+
+                var hasSet = item.SetAttributes != null && item.SetAttributes.Count > 0;
+                var hasRemove = item.RemoveAttributes != null && item.RemoveAttributes.Count > 0;
+                if (!hasSet && !hasRemove)
+                    return (null, $"Error: cell_updates_json item '{cellName}' must have at least one of 'set_attributes' or 'remove_attributes'.");
+
+                if (hasSet)
+                {
+                    foreach (var key in item.SetAttributes.Keys)
+                    {
+                        if (ProtectedCellAttributes.Contains(key))
+                            return (null, $"Error: cell_updates_json cannot set protected attribute '{key}' on cell '{cellName}'.");
+                    }
+                }
+
+                if (hasRemove)
+                {
+                    foreach (var key in item.RemoveAttributes)
+                    {
+                        if (NoRemoveCellAttributes.Contains(key))
+                            return (null, $"Error: cell_updates_json cannot remove protected attribute '{key}' from cell '{cellName}'" +
+                                (string.Equals(key, "width", StringComparison.OrdinalIgnoreCase) ? " (use set_attributes to resize)." : "."));
+                    }
+                }
+            }
+
+            return (instructions, null);
         }
 
         private string EnsureObjectTypeCode(string layoutXml, string entityName)

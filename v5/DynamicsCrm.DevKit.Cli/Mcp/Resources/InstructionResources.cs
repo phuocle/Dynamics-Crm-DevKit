@@ -247,6 +247,76 @@ Source: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/qui
 ```
 In this example, `statuscode` is fetched but not displayed in the grid.
 
+## Custom Icons in Views (imageproviderwebresource / imageproviderfunctionname)
+
+Dataverse supports custom icon graphics alongside cell values in list views.
+
+### LayoutXML Attributes
+- `imageproviderwebresource` — JS web resource name (e.g., `new_/js/ratingicons.js`)
+- `imageproviderfunctionname` — JS function name (e.g., `MyNamespace.displayIconTooltip`)
+
+### LayoutXML Example
+```xml
+<grid name=""resultset"" object=""3"" jump=""name"" select=""1"" icon=""1"" preview=""1"">
+  <row name=""result"" id=""opportunityid"">
+    <cell name=""name"" width=""300"" />
+    <cell name=""opportunityratingcode"" width=""100""
+          imageproviderwebresource=""new_/js/ratingicons.js""
+          imageproviderfunctionname=""displayIconTooltip"" />
+    <cell name=""estimatedvalue"" width=""150"" />
+  </row>
+</grid>
+```
+
+### JavaScript Function Signature
+```javascript
+function displayIconTooltip(rowData, userLCID) {
+    var str = JSON.parse(rowData);
+    var coldata = str.opportunityratingcode_Value;
+    // Return: [imageWebResourceName, tooltipText]
+    return [""new_Hot"", ""Opportunity is Hot""];
+}
+```
+
+### Rules
+- The JS function receives the entire row as JSON + user locale (LCID)
+- Access column values via `{columnname}_Value` (integer for option sets)
+- Return an array: `[imageWebResourceName, tooltipText]`
+- Image web resources should be 16x16 PNG/JPG/GIF
+- `imageproviderwebresource` is the JS logic file, NOT the icon image file
+- Icon images are separate web resources referenced by name in the JS return value
+- Both attributes must be set on the same `<cell>` element
+- Works on primary column (replaces default icon) and non-primary columns (adds secondary icon)
+- To use data from another column for icon logic, add that column as hidden: `<cell name=""statuscode"" ishidden=""1"" />`
+- Returning a JS Promise is supported in Unified Interface (for async data retrieval)
+- Do NOT use synchronous XMLHttpRequest in the icon function
+
+### Cell Attribute Patching (cell_updates_json)
+Use `cell_updates_json` parameter with `action='update'` to patch cell attributes without rebuilding full LayoutXML:
+```json
+[{""cell_name"":""statuscode"",""set_attributes"":{""imageproviderwebresource"":""new_/js/viewIcons.js"",""imageproviderfunctionname"":""displayIconTooltip""}}]
+```
+
+Usage modes:
+1. **Patch only**: pass `cell_updates_json` without `layoutxml` — patches current view in Dataverse
+2. **Combined**: pass both `layoutxml` + `cell_updates_json` — patch applied on supplied layout
+3. **Full replace**: pass only `layoutxml` (existing behavior, unchanged)
+
+Rules:
+- `cell_name` must match an existing `<cell name=""..."">` in the LayoutXML (case-insensitive)
+- Protected attributes (`name`) cannot be set or removed
+- `width` cannot be removed but can be set (to resize)
+- Unknown/custom attributes are allowed
+- Backup + validation still enforced
+
+### Workflow
+1. Create icon image web resources (16x16 PNG) — use `manage_webresource` action='create'
+2. Create JS web resource with the icon logic function — use `manage_webresource` action='create'
+3. Use `cell_updates_json` to add icon attributes to target cell, or include them in full LayoutXML
+4. Update the view via `manage_view` action='update'
+
+Source: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/display-custom-icons-instead
+
 ## After Making Changes
 - Use the dedicated manage_view tool to apply changes
 - manage_view auto-handles: backup > validate > sync-check > update > publish

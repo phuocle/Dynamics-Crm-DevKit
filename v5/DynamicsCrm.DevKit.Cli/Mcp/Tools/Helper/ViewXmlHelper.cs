@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -255,6 +256,70 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 errors.Add($"QuickFind: Failed to check isquickfindfields preservation — {ex.Message}");
             }
             return errors;
+        }
+
+        // ── Cell Attribute Patching ───────────────────────────────────────
+
+        public static (string PatchedXml, List<string> Errors, List<string> Warnings) ApplyCellAttributeUpdates(
+            string layoutXml, IReadOnlyList<CellUpdateInstruction> updates)
+        {
+            var errors = new List<string>();
+            var warnings = new List<string>();
+
+            XDocument doc;
+            try
+            {
+                doc = XDocument.Parse(layoutXml);
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"Failed to parse LayoutXML: {ex.Message}");
+                return (null, errors, warnings);
+            }
+
+            var cells = doc.Descendants("cell").ToList();
+
+            foreach (var update in updates)
+            {
+                var cell = cells.FirstOrDefault(c =>
+                    string.Equals(c.Attribute("name")?.Value, update.CellName, StringComparison.OrdinalIgnoreCase));
+
+                if (cell == null)
+                {
+                    errors.Add($"Cell '{update.CellName}' not found in LayoutXML");
+                    continue;
+                }
+
+                if (update.SetAttributes != null)
+                {
+                    foreach (var kvp in update.SetAttributes)
+                        cell.SetAttributeValue(kvp.Key, kvp.Value);
+                }
+
+                if (update.RemoveAttributes != null)
+                {
+                    foreach (var attrName in update.RemoveAttributes)
+                        cell.Attribute(attrName)?.Remove();
+                }
+            }
+
+            if (errors.Count > 0)
+                return (null, errors, warnings);
+
+            foreach (var cell in cells)
+            {
+                var hasIconWr = cell.Attribute("imageproviderwebresource") != null;
+                var hasIconFn = cell.Attribute("imageproviderfunctionname") != null;
+                var cellName = cell.Attribute("name")?.Value ?? "";
+
+                if (hasIconWr && !hasIconFn)
+                    warnings.Add($"Warning: cell '{cellName}' has imageproviderwebresource without imageproviderfunctionname");
+                else if (hasIconFn && !hasIconWr)
+                    warnings.Add($"Warning: cell '{cellName}' has imageproviderfunctionname without imageproviderwebresource");
+            }
+
+            var patchedXml = doc.Root.ToString(SaveOptions.DisableFormatting);
+            return (patchedXml, errors, warnings);
         }
 
         // ── Schema Loading ────────────────────────────────────────────────
