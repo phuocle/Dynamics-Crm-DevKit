@@ -36,11 +36,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _options = options;
         }
 
-        [McpServerTool(Name = "manage_ribbon", Title = "Manage entity ribbon customizations",
+        [McpServerTool(Name = "manage_ribbon", Title = "Manage entity ribbon customizations (classic/legacy — DEFAULT for generic button requests)",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRibbonResult)),
         Description(
             "Retrieve and modify RibbonDiffXml for Dataverse entities via solution import.\n\n" +
+
+            "TOOL SELECTION — READ BEFORE CHOOSING:\n" +
+            "CLASSIC/LEGACY ribbon (RibbonDiffXml). DEFAULT FALLBACK for all button requests.\n" +
+            "Use when: 'ribbon', 'legacy', 'classic', 'button', 'nút', 'custom button', 'action button', " +
+            "'UI button', 'JavaScript button', 'sub_grid button', 'homepage grid button', or any generic button request.\n" +
+            "Use manage_command ONLY for: 'modern', 'Power Fx', 'appaction', 'new UI', " +
+            "'Model-Driven App command bar', 'command designer'.\n" +
+            "When in doubt → always use manage_ribbon, never manage_command.\n\n" +
+
             "ACTIONS: list, buttons, detail, update, undo\n" +
             "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
             "- buttons: all ribbon buttons (OOB+custom) across form/main_grid/sub_grid. Required: entity_name\n" +
