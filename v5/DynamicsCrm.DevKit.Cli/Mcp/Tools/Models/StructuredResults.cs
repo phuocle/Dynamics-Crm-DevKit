@@ -2074,4 +2074,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public bool IsDisabled { get; set; }
     }
 
+    // ── create_records models ─────────────────────────────────────────
+
+    internal sealed class BatchCreateResult
+    {
+        [JsonPropertyName("entity")]
+        public string Entity { get; set; }
+
+        [JsonPropertyName("total")]
+        public int Total { get; set; }
+
+        [JsonPropertyName("succeeded")]
+        public int Succeeded { get; set; }
+
+        [JsonPropertyName("failed")]
+        public int Failed { get; set; }
+
+        [JsonPropertyName("durationSeconds")]
+        public double DurationSeconds { get; set; }
+
+        [JsonPropertyName("parallelism")]
+        public int Parallelism { get; set; }
+
+        [JsonPropertyName("usedDefaultParallelism")]
+        public bool UsedDefaultParallelism { get; set; }
+
+        [JsonPropertyName("items")]
+        public List<BatchCreateItem> Items { get; set; } = [];
+    }
+
+    internal sealed class BatchCreateItem
+    {
+        [JsonPropertyName("index")]
+        public int Index { get; set; }
+
+        [JsonPropertyName("id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("error")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Error { get; set; }
+    }
+
 }

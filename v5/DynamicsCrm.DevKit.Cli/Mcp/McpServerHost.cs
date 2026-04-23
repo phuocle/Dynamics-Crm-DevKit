@@ -30,6 +30,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetTablesTool)] = "basic",
             [nameof(ManageChoiceTool)] = "basic",
             [nameof(ManageRecordTool)] = "basic",
+            [nameof(CreateRecordsTool)] = "basic",
             [nameof(ExecuteFetchXmlTool)] = "basic",
             [nameof(SearchRecordsTool)] = "basic",
             [nameof(ParseRecordUrlTool)] = "basic",
