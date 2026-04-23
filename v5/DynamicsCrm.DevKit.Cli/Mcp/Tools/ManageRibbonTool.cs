@@ -54,11 +54,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
             "- buttons: all ribbon buttons (OOB+custom) across form/main_grid/sub_grid. Required: entity_name\n" +
             "- detail: show current RibbonDiffXml. Required: entity_name\n" +
-            "- update: apply ribbonxml from build_ribbon_xml. Required: entity_name + ribbonxml. Backup→Import (no auto-publish)\n" +
+            "- update: apply ribbonxml from build_ribbon_xml. Required: entity_name + ribbonxml. Backup→Import→PublishAll\n" +
             "- undo: restore from backup file. Required: entity_name + ribbonxml (backup path)\n\n" +
-            "WORKFLOW: build_ribbon_xml → manage_ribbon(action='update') → publish_customizations\n" +
+            "WORKFLOW: build_ribbon_xml → manage_ribbon(action='update') [auto-publishes all by default]\n" +
             "Auto-backup before update; backup failure blocks update.\n" +
-            "NOTE: PublishAll is NOT called automatically (too slow). Run publish_customizations manually after update/undo.")]
+            "NOTE: Ribbon requires PublishAll (not entity-scoped publish). auto_publish=true (default) runs PublishAll synchronously. Set false when batching, then call publish_customizations once.")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity logical name (e.g., 'account'). Required for detail/update/undo.")] string entity_name = "",
@@ -585,7 +585,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Solution: {SOLUTION_NAME}");
             sb.AppendLine($"Status: Updated successfully");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            sb.AppendLine($"Published: no — PublishAll is skipped (too slow). You must run PublishAll manually in Power Apps or via publish_customizations tool.");
+            sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
             sb.AppendLine();
             if (backupPath != null)
                 sb.AppendLine($"To rollback: manage_ribbon(action='undo', entity_name='{entityName}', ribbonxml='{backupPath}')");
@@ -648,7 +648,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"[ManageRibbon] undo — {entityName}");
             sb.AppendLine($"Restored from: {backupFilePath}");
             sb.AppendLine($"Status: Restored successfully");
-            sb.AppendLine($"Published: no — PublishAll is skipped (too slow). You must run PublishAll manually in Power Apps or via publish_customizations tool.");
+            sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
 
             return new CallToolResult
             {
@@ -910,18 +910,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private bool TryPublish(bool autoPublish, string entityName)
         {
-            // PublishAll is too slow — skipped. User must run PublishAll manually.
-            // if (!autoPublish) return false;
-            // try
-            // {
-            //     _serviceClient.Execute(new PublishAllXmlRequest());
-            //     return true;
-            // }
-            // catch
-            // {
-            //     return false;
-            // }
-            return false;
+            if (!autoPublish) return false;
+            try
+            {
+                _serviceClient.Execute(new PublishAllXmlRequest());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static CallToolResult ErrorResult(string message) => new()
