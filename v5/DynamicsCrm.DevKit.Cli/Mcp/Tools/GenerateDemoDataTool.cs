@@ -1,0 +1,505 @@
+using Bogus;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
+using ModelContextProtocol.Server;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
+{
+    [McpServerToolType]
+    public class GenerateDemoDataTool
+    {
+        private readonly ServiceClient _serviceClient;
+
+        public GenerateDemoDataTool(ServiceClient serviceClient)
+        {
+            _serviceClient = serviceClient;
+        }
+
+        private static readonly ConcurrentDictionary<string, EntityMetadata> MetadataCache = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly ConcurrentDictionary<string, List<Guid>> LookupPoolCache = new(StringComparer.OrdinalIgnoreCase);
+
+        private const int MaxCount = 500;
+        private const int LookupPoolSize = 100;
+
+        [McpServerTool(Name = "generate_demo_data", Title = "Generate demo data for an entity",
+            Destructive = false, ReadOnly = true, Idempotent = true,
+            UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
+        Description(
+            "Generate demo data for a Dataverse entity using Bogus fake data library.\n" +
+            "Reads entity metadata to auto-detect field types and generate appropriate fake values.\n" +
+            "Lookups populated with real GUIDs from target entities. Max 500 records. Default 10.\n" +
+            "Output saved to .devkit/demo_data/ as JSON file — pass file path to create_records.\n\n" +
+
+            "WORKFLOW:\n" +
+            "  Step 1: generate_demo_data(entity_name=\"account\", count=50, from_date=\"2026-01-01\", to_date=\"2026-04-30\") → file path\n" +
+            "  Step 2: create_records(entity_name=\"account\", records_json=<file path>)\n\n" +
+
+            "TIPS:\n" +
+            "- count > 500 → error\n" +
+            "- from_date and to_date are REQUIRED (ISO 8601, e.g. \"2026-01-01\")\n" +
+            "- Empty fields = auto-select all creatable fields\n" +
+            "- Smart mapping: emailaddress→Email, telephone→Phone, city→City, etc.\n" +
+            "- Lookups auto-fetch real GUIDs. Empty targets → skipped with warning\n" +
+            "- Polymorphic lookups: uses \"field@entity\" syntax automatically\n" +
+            "- Use seed for reproducible data (0 = random)\n" +
+            "- overriddencreatedon auto-included to backdate createdon")]
+        public CallToolResult generate_demo_data(
+            [Description("Entity logical name (e.g., 'account'). Required.")] string entity_name,
+            [Description("from_date and to_date are REQUIRED. ISO 8601 date for date range. Example: '2026-01-01'.")] string from_date,
+            [Description("from_date and to_date are REQUIRED. ISO 8601 date for date range. Example: '2026-04-30'. Must be >= from_date.")] string to_date,
+            [Description("Number of records to generate. Default: 10. Max: 500.")] int count = 10,
+            [Description("Comma-separated field logical names. Empty = auto-select all creatable fields.")] string fields = "",
+            [Description("Random seed for reproducible data. 0 = random.")] int seed = 0)
+        {
+            if (string.IsNullOrWhiteSpace(entity_name))
+                return ErrorResult("Error: entity_name is required.");
+
+            if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
+                return ErrorResult("Error: from_date and to_date are required. Example: from_date='2026-02-01', to_date='2026-02-28'");
+
+            if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
+                return ErrorResult($"Error: from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
+
+            if (!DateTime.TryParse(to_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var toDt))
+                return ErrorResult($"Error: to_date '{to_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-04-30'.");
+
+            if (toDt < fromDt)
+                return ErrorResult($"Error: to_date '{to_date}' must be >= from_date '{from_date}'.");
+
+            if (count > MaxCount)
+                return ErrorResult($"Error: count {count} exceeds maximum {MaxCount}.");
+
+            count = Math.Max(1, count);
+
+            var entityName = entity_name.Trim().ToLowerInvariant();
+
+            // Load metadata
+            var metadata = LoadEntityMetadata(entityName);
+            if (metadata == null)
+                return ErrorResult($"Error: Entity '{entityName}' not found or metadata could not be loaded.");
+
+            var warnings = new List<string>();
+
+            // Select fields
+            var selectedAttrs = SelectFields(metadata, fields, entityName, warnings);
+            if (selectedAttrs.Count == 0)
+                return ErrorResult($"Error: No valid fields found for entity '{entityName}'. Check entity name or specify fields explicitly.");
+
+            // Pre-fetch lookup pools
+            var lookupPools = new Dictionary<string, List<Guid>>(StringComparer.OrdinalIgnoreCase);
+            var lookupsSampled = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var attr in selectedAttrs.OfType<LookupAttributeMetadata>())
+            {
+                var targets = attr.Targets ?? Array.Empty<string>();
+                foreach (var target in targets)
+                {
+                    if (lookupPools.ContainsKey(target)) continue;
+                    var guids = FetchLookupPool(target);
+                    if (guids.Count == 0)
+                    {
+                        warnings.Add($"Lookup target '{target}' has no active records — fields targeting it will be skipped.");
+                        lookupPools[target] = [];
+                    }
+                    else
+                    {
+                        lookupPools[target] = guids;
+                        lookupsSampled[target] = guids.Count;
+                    }
+                }
+            }
+
+            // Build faker
+            var actualSeed = seed == 0 ? Environment.TickCount : seed;
+            var faker = new Faker { Random = new Randomizer(actualSeed) };
+
+            // Generate records
+            var records = new List<Dictionary<string, object>>(count);
+            for (var i = 0; i < count; i++)
+            {
+                var record = GenerateRecord(faker, entityName, selectedAttrs, lookupPools, fromDt, toDt, warnings);
+                records.Add(record);
+            }
+
+            // Save to .devkit/demo_data/
+            var outputDir = Path.Combine(".devkit", "demo_data");
+            Directory.CreateDirectory(outputDir);
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
+
+            var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(records, jsonOptions);
+            File.WriteAllText(filePath, json, Encoding.UTF8);
+
+            var fieldNames = selectedAttrs.Select(a => a.LogicalName).ToList();
+            // Always include overriddencreatedon in field list display
+            if (!fieldNames.Contains("overriddencreatedon"))
+                fieldNames.Insert(0, "overriddencreatedon");
+
+            var structured = new GenerateDemoDataResult
+            {
+                Entity = entityName,
+                Count = count,
+                FieldsGenerated = fieldNames.Count,
+                FieldList = fieldNames,
+                FilePath = filePath,
+                LookupsSampled = lookupsSampled.Count > 0 ? lookupsSampled : null,
+                Warnings = warnings.Count > 0 ? warnings : null
+            };
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Generated {count} '{entityName}' records (seed: {actualSeed})");
+            sb.AppendLine($"Fields: {string.Join(", ", fieldNames)}");
+
+            if (lookupsSampled.Count > 0)
+            {
+                var lookupSummary = string.Join(", ", lookupsSampled.Select(kv => $"{kv.Key} ({kv.Value} records)"));
+                sb.AppendLine($"Lookups sampled: {lookupSummary}");
+            }
+
+            sb.AppendLine($"File: {filePath}");
+            sb.AppendLine();
+            sb.AppendLine($"Next: create_records(entity_name=\"{entityName}\", records_json=\"{filePath}\")");
+
+            if (warnings.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("Warnings:");
+                foreach (var w in warnings)
+                    sb.AppendLine($"  {w}");
+            }
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(structured)
+            };
+        }
+
+        // ── Field selection ──────────────────────────────────────────────
+
+        private static List<AttributeMetadata> SelectFields(EntityMetadata metadata, string fields, string entityName, List<string> warnings)
+        {
+            var requestedFields = string.IsNullOrWhiteSpace(fields)
+                ? null
+                : fields.Split(',').Select(f => f.Trim().ToLowerInvariant()).Where(f => f.Length > 0).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var result = new List<AttributeMetadata>();
+
+            foreach (var attr in metadata.Attributes)
+            {
+                if (requestedFields != null)
+                {
+                    if (!requestedFields.Contains(attr.LogicalName))
+                        continue;
+
+                    if (IsSkippedType(attr))
+                    {
+                        warnings.Add($"Field '{attr.LogicalName}' type '{attr.GetType().Name}' is not supported — skipped.");
+                        continue;
+                    }
+
+                    result.Add(attr);
+                    continue;
+                }
+
+                // Auto-select: must be valid for create, skip system/unsupported
+                if (attr.IsValidForCreate != true) continue;
+                if (attr.IsPrimaryId == true) continue;
+                if (attr.IsLogical == true) continue;
+                if (!string.IsNullOrEmpty(attr.AttributeOf)) continue;
+                if (attr.LogicalName == "owningbusinessunit") continue;
+                if (IsSkippedType(attr)) continue;
+
+                result.Add(attr);
+            }
+
+            // Always ensure ownerid is included for user-owned entities (if available and not already included)
+            if (requestedFields == null)
+            {
+                var ownerAttr = metadata.Attributes.FirstOrDefault(a =>
+                    a.LogicalName == "ownerid" && a.IsValidForCreate == true);
+                if (ownerAttr != null && !result.Any(a => a.LogicalName == "ownerid"))
+                    result.Add(ownerAttr);
+            }
+
+            return result;
+        }
+
+        private static bool IsSkippedType(AttributeMetadata attr) =>
+            attr is UniqueIdentifierAttributeMetadata ||
+            attr is ImageAttributeMetadata ||
+            attr is FileAttributeMetadata ||
+            attr is EntityNameAttributeMetadata ||
+            attr is StateAttributeMetadata ||
+            attr is StatusAttributeMetadata;
+
+        // ── Record generation ────────────────────────────────────────────
+
+        private Dictionary<string, object> GenerateRecord(
+            Faker faker,
+            string entityName,
+            List<AttributeMetadata> attrs,
+            Dictionary<string, List<Guid>> lookupPools,
+            DateTime fromDt, DateTime toDt,
+            List<string> warnings)
+        {
+            var record = new Dictionary<string, object>(attrs.Count + 1);
+
+            // Always add overriddencreatedon to backdate createdon
+            record["overriddencreatedon"] = faker.Date.Between(fromDt, toDt).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+            foreach (var attr in attrs)
+            {
+                var logicalName = attr.LogicalName;
+
+                // Skip overriddencreatedon if it somehow appears in attrs (auto-select handles it above)
+                if (logicalName == "overriddencreatedon") continue;
+
+                var value = GenerateValue(faker, entityName, attr, lookupPools, fromDt, toDt, warnings);
+                if (value != null)
+                    record[logicalName] = value;
+            }
+
+            return record;
+        }
+
+        private object GenerateValue(
+            Faker faker,
+            string entityName,
+            AttributeMetadata attr,
+            Dictionary<string, List<Guid>> lookupPools,
+            DateTime fromDt, DateTime toDt,
+            List<string> warnings)
+        {
+            switch (attr)
+            {
+                case StringAttributeMetadata strAttr:
+                    return GenerateStringValue(faker, entityName, strAttr.LogicalName, strAttr.MaxLength ?? 100);
+
+                case MemoAttributeMetadata memoAttr:
+                {
+                    var text = faker.Lorem.Paragraph();
+                    var maxLen = memoAttr.MaxLength ?? 2000;
+                    return text.Length > maxLen ? text[..maxLen] : text;
+                }
+
+                case IntegerAttributeMetadata intAttr:
+                {
+                    var min = intAttr.MinValue ?? 0;
+                    var max = intAttr.MaxValue ?? 2147483647;
+                    if (min > max) max = min;
+                    return faker.Random.Int(min, max);
+                }
+
+                case BigIntAttributeMetadata bigAttr:
+                {
+                    var min = bigAttr.MinValue ?? 0L;
+                    var max = bigAttr.MaxValue ?? long.MaxValue;
+                    if (min > max) max = min;
+                    return faker.Random.Long(min, max);
+                }
+
+                case DecimalAttributeMetadata decAttr:
+                {
+                    var min = (double)(decAttr.MinValue ?? 0m);
+                    var max = (double)(decAttr.MaxValue ?? 1000000m);
+                    if (min > max) max = min;
+                    return Math.Round((decimal)faker.Random.Double(min, max), decAttr.Precision ?? 2);
+                }
+
+                case DoubleAttributeMetadata dblAttr:
+                {
+                    var min = dblAttr.MinValue ?? 0.0;
+                    var max = dblAttr.MaxValue ?? 1000000.0;
+                    if (min > max) max = min;
+                    return faker.Random.Double(min, max);
+                }
+
+                case MoneyAttributeMetadata moneyAttr:
+                {
+                    var min = moneyAttr.MinValue ?? 0.0;
+                    var max = moneyAttr.MaxValue ?? 1000000.0;
+                    if (min > max) max = min;
+                    return Math.Round((decimal)faker.Random.Double(min, max), moneyAttr.Precision ?? 2);
+                }
+
+                case BooleanAttributeMetadata:
+                    return faker.Random.Bool();
+
+                case DateTimeAttributeMetadata:
+                    return faker.Date.Between(fromDt, toDt).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+                case PicklistAttributeMetadata picklist:
+                {
+                    var options = picklist.OptionSet?.Options?.Where(o => o.Value.HasValue).ToArray();
+                    if (options == null || options.Length == 0)
+                    {
+                        warnings.Add($"Picklist '{attr.LogicalName}' has no options — skipped.");
+                        return null;
+                    }
+                    return faker.PickRandom(options).Value.Value;
+                }
+
+                case MultiSelectPicklistAttributeMetadata multi:
+                {
+                    var options = multi.OptionSet?.Options?.Where(o => o.Value.HasValue).ToArray();
+                    if (options == null || options.Length == 0)
+                    {
+                        warnings.Add($"MultiSelect '{attr.LogicalName}' has no options — skipped.");
+                        return null;
+                    }
+                    var pickCount = Math.Min(faker.Random.Int(1, 3), options.Length);
+                    return faker.PickRandom(options, pickCount).Select(o => o.Value.Value).ToList();
+                }
+
+                case LookupAttributeMetadata lookup:
+                    return GenerateLookupValue(faker, lookup, lookupPools, warnings);
+
+                default:
+                    warnings.Add($"Skipped field '{attr.LogicalName}': unsupported type {attr.GetType().Name}");
+                    return null;
+            }
+        }
+
+        private static object GenerateLookupValue(
+            Faker faker,
+            LookupAttributeMetadata lookup,
+            Dictionary<string, List<Guid>> lookupPools,
+            List<string> warnings)
+        {
+            var targets = lookup.Targets ?? Array.Empty<string>();
+            var availableTargets = targets.Where(t => lookupPools.TryGetValue(t, out var pool) && pool.Count > 0).ToList();
+
+            if (availableTargets.Count == 0)
+                return null;
+
+            var target = faker.PickRandom(availableTargets);
+            var pool = lookupPools[target];
+            var guid = faker.PickRandom(pool);
+
+            if (targets.Length > 1)
+                return new Dictionary<string, object> { [$"{lookup.LogicalName}@{target}"] = guid.ToString() };
+
+            return guid.ToString();
+        }
+
+        // ── Smart string mapping ─────────────────────────────────────────
+
+        private static string GenerateStringValue(Faker faker, string entityName, string logicalName, int maxLength)
+        {
+            string value;
+
+            if (logicalName.Contains("emailaddress") || logicalName.Contains("email"))
+                value = faker.Internet.Email();
+            else if (logicalName.Contains("telephone") || logicalName.Contains("phone") || logicalName.Contains("fax"))
+                value = faker.Phone.PhoneNumber();
+            else if (logicalName.Contains("websiteurl") || logicalName.Contains("website"))
+                value = faker.Internet.Url();
+            else if (logicalName.Contains("firstname"))
+                value = faker.Name.FirstName();
+            else if (logicalName.Contains("lastname"))
+                value = faker.Name.LastName();
+            else if (logicalName.Contains("fullname"))
+                value = faker.Name.FullName();
+            else if (logicalName == "name" && entityName == "account")
+                value = faker.Company.CompanyName();
+            else if (logicalName.Contains("companyname") || (logicalName == "name" && entityName != "contact"))
+                value = faker.Company.CompanyName();
+            else if (logicalName.Contains("city"))
+                value = faker.Address.City();
+            else if (logicalName.Contains("stateorprovince") || logicalName.Contains("stateprovince"))
+                value = faker.Address.State();
+            else if (logicalName.Contains("country"))
+                value = faker.Address.Country();
+            else if (logicalName.Contains("postalcode") || logicalName.Contains("zip"))
+                value = faker.Address.ZipCode();
+            else if (logicalName.Contains("line1") || logicalName.Contains("street"))
+                value = faker.Address.StreetAddress();
+            else if (logicalName.Contains("line2"))
+                value = faker.Address.SecondaryAddress();
+            else if (logicalName.Contains("jobtitle"))
+                value = faker.Name.JobTitle();
+            else if (logicalName.Contains("department"))
+                value = faker.Commerce.Department();
+            else if (logicalName.Contains("description"))
+                value = faker.Lorem.Sentence(10);
+            else if (logicalName.Contains("subject"))
+                value = faker.Lorem.Sentence(5);
+            else if (logicalName.Contains("accountnumber") || logicalName.Contains("code") || logicalName.Contains("number"))
+                value = faker.Random.AlphaNumeric(8).ToUpper();
+            else
+                value = faker.Lorem.Word();
+
+            return value.Length > maxLength ? value[..maxLength] : value;
+        }
+
+        // ── Metadata and lookup pool ─────────────────────────────────────
+
+        private EntityMetadata LoadEntityMetadata(string entityName)
+        {
+            return MetadataCache.GetOrAdd(entityName, name =>
+            {
+                try
+                {
+                    var request = new RetrieveEntityRequest
+                    {
+                        LogicalName = name,
+                        EntityFilters = EntityFilters.Attributes
+                    };
+                    var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                    return response.EntityMetadata;
+                }
+                catch
+                {
+                    return null;
+                }
+            });
+        }
+
+        private List<Guid> FetchLookupPool(string targetEntity)
+        {
+            return LookupPoolCache.GetOrAdd(targetEntity, target =>
+            {
+                try
+                {
+                    var fetchXml = $@"<fetch top='{LookupPoolSize}'>
+  <entity name='{target}'>
+    <attribute name='{target}id'/>
+    <filter><condition attribute='statecode' operator='eq' value='0'/></filter>
+    <order attribute='modifiedon' descending='true'/>
+  </entity>
+</fetch>";
+                    var results = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                    return results.Entities.Select(e => e.Id).ToList();
+                }
+                catch
+                {
+                    return [];
+                }
+            });
+        }
+
+        // ── Helpers ──────────────────────────────────────────────────────
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
+    }
+}

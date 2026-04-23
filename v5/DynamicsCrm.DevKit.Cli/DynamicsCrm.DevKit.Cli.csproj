@@ -72,6 +72,8 @@
 	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.3" />
 	  <!-- Phase 3: Azure production authentication -->
 	  <PackageReference Include="Azure.Identity" Version="1.18.0" />
+	  <!-- Fake data generation for generate_demo_data tool -->
+	  <PackageReference Include="Bogus" Version="35.6.1" />
 	  <!-- MCP Server Support -->
 	  <PackageReference Include="ModelContextProtocol" Version="1.2.0" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
