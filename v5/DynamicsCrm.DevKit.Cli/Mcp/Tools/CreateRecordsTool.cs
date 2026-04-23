@@ -40,20 +40,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Create multiple Dataverse records in parallel — optimized for data migration.\n" +
-            "Uses Parallel.ForEachAsync + CreateAsync (MS recommended pattern for max throughput).\n" +
-            "ServiceClient handles Retry-After automatically. Supports partial failure.\n\n" +
+            "Create multiple Dataverse records in parallel — optimized for data migration. Partial failures reported per-item; successful records still created.\n\n" +
 
-            "DEFAULT (notice in output when not provided):\n" +
+            "DEFAULT (shown in output when not provided):\n" +
             "  max_parallelism: from server x-ms-dop-hint (typically 4–8 for cloud). Hard limit: 52.\n\n" +
 
             "TIPS:\n" +
-            "- records_json: JSON array (inline) OR file path from generate_demo_data (.json) OR CSV file (.csv)\n" +
-            "- CSV: headers = Display Name, lookups resolved by Name (1 match = GUID, 0 or 2+ = skipped)\n" +
-            "- Partial failure: failed records reported per-item, others still created\n" +
-            "- Lookup fields: use \"fieldname@targetentity\" syntax for polymorphic lookups\n" +
-            "- For on-prem or throttled envs: use max_parallelism=1 or 2\n" +
-            "- Max 5000 records per call")]
+            "- records_json: inline JSON array, .json file path (from generate_demo_data), or .csv (headers=Display Name; lookups by Name: 1 match=GUID, 0 or 2+=skipped)\n" +
+            "- Polymorphic lookups: use \"fieldname@targetentity\" syntax\n" +
+            "- max_parallelism=1–2 for on-prem/throttled envs; max 5000 records per call")]
         public async Task<CallToolResult> create_records(
             [Description(
                 "Entity logical name (e.g., 'account'). Required."
@@ -80,7 +75,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var trimmed = records_json.Trim();
                 if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
                     return ErrorResult($"Error: File not found: {trimmed}");
-                return ErrorResult("Error: Failed to resolve records_json input.");
+                return ErrorResult(
+                    "Error: Failed to resolve records_json input.\n" +
+                    "Valid formats: inline JSON array, .json file path, or .csv file path.");
             }
 
             JsonElement[] elements;
@@ -94,7 +91,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (JsonException ex)
             {
-                return ErrorResult($"Error: Invalid JSON in records_json: {ex.Message}");
+                return ErrorResult(
+                    $"Error: Invalid JSON in records_json: {ex.Message}\n" +
+                    "Read docs://data_operations_guide for field type format examples.");
             }
 
             if (elements.Length == 0)

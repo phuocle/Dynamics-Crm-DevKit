@@ -40,23 +40,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
             "Generate demo data for a Dataverse entity using Bogus fake data library.\n" +
-            "Reads entity metadata to auto-detect field types and generate appropriate fake values.\n" +
-            "Lookups populated with real GUIDs from target entities. Max 500 records. Default 10.\n" +
-            "Output saved to .devkit/demo_data/ as JSON file — pass file path to create_records.\n\n" +
+            "Output saved to .devkit/demo_data/ as JSON — pass file path to create_records.\n\n" +
 
             "WORKFLOW:\n" +
             "  Step 1: generate_demo_data(entity_name=\"account\", count=50, from_date=\"2026-01-01\", to_date=\"2026-04-30\") → file path\n" +
             "  Step 2: create_records(entity_name=\"account\", records_json=<file path>)\n\n" +
 
             "TIPS:\n" +
-            "- count > 500 → error\n" +
-            "- from_date and to_date are REQUIRED (ISO 8601, e.g. \"2026-01-01\")\n" +
-            "- Empty fields = auto-select all creatable fields\n" +
-            "- Smart mapping: emailaddress→Email, telephone→Phone, city→City, etc.\n" +
-            "- Lookups auto-fetch real GUIDs. Empty targets → skipped with warning\n" +
-            "- Polymorphic lookups: uses \"field@entity\" syntax automatically\n" +
-            "- Use seed for reproducible data (0 = random)\n" +
-            "- overriddencreatedon auto-included to backdate createdon")]
+            "- from_date + to_date REQUIRED (ISO 8601, e.g. \"2026-01-01\"); count default=10, max=500; seed=0 = random\n" +
+            "- fields empty = auto-select all creatable fields; smart mapping: emailaddress→Email, telephone→Phone, city→City etc.; overriddencreatedon always included\n" +
+            "- Lookups: auto-fetch real GUIDs; empty targets skipped with warning; polymorphic → \"field@entity\" syntax auto-applied")]
         public CallToolResult generate_demo_data(
             [Description("Entity logical name (e.g., 'account'). Required.")] string entity_name,
             [Description("from_date and to_date are REQUIRED. ISO 8601 date for date range. Example: '2026-01-01'.")] string from_date,
@@ -90,7 +83,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Load metadata
             var metadata = LoadEntityMetadata(entityName);
             if (metadata == null)
-                return ErrorResult($"Error: Entity '{entityName}' not found or metadata could not be loaded.");
+                return ErrorResult(
+                    $"Error: Entity '{entityName}' not found or metadata could not be loaded.\n" +
+                    "Use get_tables to verify the entity logical name.");
 
             var warnings = new List<string>();
 
