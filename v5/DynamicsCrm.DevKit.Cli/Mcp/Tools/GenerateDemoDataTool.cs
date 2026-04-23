@@ -47,13 +47,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "  Step 2: create_records(entity_name=\"account\", records_json=<file path>)\n\n" +
 
             "TIPS:\n" +
-            "- from_date + to_date REQUIRED (ISO 8601, e.g. \"2026-01-01\"); count default=10, max=500; seed=0 = random\n" +
+            "- from_date + to_date REQUIRED — NEVER infer or guess these from context or current date; always ask the user explicitly if not provided\n" +
+            "- from_date + to_date format: ISO 8601 (e.g. \"2026-01-01\"); count default=10, max=500; seed=0 = random\n" +
             "- fields empty = auto-select all creatable fields; smart mapping: emailaddress→Email, telephone→Phone, city→City etc.; overriddencreatedon always included\n" +
             "- Lookups: auto-fetch real GUIDs; empty targets skipped with warning; polymorphic → \"field@entity\" syntax auto-applied")]
         public CallToolResult generate_demo_data(
             [Description("Entity logical name (e.g., 'account'). Required.")] string entity_name,
-            [Description("from_date and to_date are REQUIRED. ISO 8601 date for date range. Example: '2026-01-01'.")] string from_date,
-            [Description("from_date and to_date are REQUIRED. ISO 8601 date for date range. Example: '2026-04-30'. Must be >= from_date.")] string to_date,
+            [Description("from_date and to_date are REQUIRED. NEVER infer or assume — ask the user if not provided. ISO 8601 format. Example: '2026-01-01'.")] string from_date,
+            [Description("from_date and to_date are REQUIRED. NEVER infer or assume — ask the user if not provided. ISO 8601 format. Example: '2026-04-30'. Must be >= from_date.")] string to_date,
             [Description("Number of records to generate. Default: 10. Max: 500.")] int count = 10,
             [Description("Comma-separated field logical names. Empty = auto-select all creatable fields.")] string fields = "",
             [Description("Random seed for reproducible data. 0 = random.")] int seed = 0)
@@ -62,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.");
 
             if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
-                return ErrorResult("Error: from_date and to_date are required. Example: from_date='2026-02-01', to_date='2026-02-28'");
+                return ErrorResult("Error: from_date and to_date are required. DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
 
             if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
                 return ErrorResult($"Error: from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
@@ -133,7 +134,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Save to .devkit/demo_data/
             var outputDir = Path.Combine(".devkit", "demo_data");
             Directory.CreateDirectory(outputDir);
-            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             var filePath = Path.Combine(outputDir, $"{entityName}_{timestamp}.json");
 
             var jsonOptions = new JsonSerializerOptions { WriteIndented = true };
@@ -218,6 +219,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (attr.IsLogical == true) continue;
                 if (!string.IsNullOrEmpty(attr.AttributeOf)) continue;
                 if (attr.LogicalName == "owningbusinessunit") continue;
+                if (AutoSelectSkipFields.Contains(attr.LogicalName)) continue;
+                if (IsAutoSelectSkipPattern(attr.LogicalName)) continue;
                 if (IsSkippedType(attr)) continue;
 
                 result.Add(attr);
@@ -234,6 +237,82 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return result;
         }
+
+        // System/constrained fields that Bogus cannot generate valid values for.
+        // Skipped during auto-select (fields= empty). Users can still request them explicitly.
+        private static readonly HashSet<string> AutoSelectSkipFields = new(StringComparer.OrdinalIgnoreCase)
+        {
+            // Timezone — must match TimeZoneDefinition table
+            "utcconversiontimezonecode",
+            "timezoneruleversionnumber",
+            "address1_utcoffset",
+            "address2_utcoffset",
+
+            // Import / migration
+            "importsequencenumber",
+
+            // BPF / workflow system
+            "traversedpath",
+            "processid",
+            "stageid",
+
+            // Social / external format constraints
+            "primarysatoriid",
+            "primarytwitterid",
+
+            // Japanese phonetic — only valid when base name field has a value
+            "yominame",
+            "yomifirstname",
+            "yomilastname",
+            "yomimiddlename",
+            "yomifullname",
+
+            // Activity system fields — set by platform logic
+            "activitytypecode",
+            "isbilled",
+            "isregularactivity",
+            "isworkflowcreated",
+            "crmtaskassigneduniqueid",
+
+            // Exchange / email sync
+            "exchangeitemid",
+            "exchangerate",
+            "lastonholdtime",
+            "onholdtime",
+            "slainvokedid",
+            "correlatedactivityid",
+            "parentactivityid",
+            "messageiddupcheck",
+
+            // Computed / rollup (read-only, calculated by system)
+            "aging30",
+            "aging60",
+            "aging90",
+            "slaid",
+
+            // System ownership (read-only, set by platform)
+            "owninguser",
+            "owningteam",
+            "createdby",
+            "modifiedby",
+            "createdonbehalfby",
+            "modifiedonbehalfby",
+
+            // Auth / directory
+            "activedirectoryguid",
+            "azureactivedirectoryobjectid",
+
+            // Misc system-managed
+            "versionnumber",
+            "subscriptionid",
+            "participatesinworkflow",
+            "marketingonly",
+        };
+
+        // Field name patterns skipped during auto-select
+        private static bool IsAutoSelectSkipPattern(string logicalName) =>
+            logicalName.StartsWith("adx_", StringComparison.OrdinalIgnoreCase) ||
+            logicalName.EndsWith("_base", StringComparison.OrdinalIgnoreCase);
 
         private static bool IsSkippedType(AttributeMetadata attr) =>
             attr is UniqueIdentifierAttributeMetadata ||
@@ -266,8 +345,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (logicalName == "overriddencreatedon") continue;
 
                 var value = GenerateValue(faker, entityName, attr, lookupPools, fromDt, toDt, warnings);
-                if (value != null)
+                if (value == null) continue;
+                // Polymorphic lookups return a flat {key@entity: guid} dict — merge into top-level record
+                if (value is Dictionary<string, object> polymorphic)
+                {
+                    foreach (var kv in polymorphic)
+                        record[kv.Key] = kv.Value;
+                }
+                else
+                {
                     record[logicalName] = value;
+                }
             }
 
             return record;
