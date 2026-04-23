@@ -177,7 +177,9 @@ namespace DynamicsCrm.DevKit.Cli.CodeSigning
         {
             try
             {
+#pragma warning disable SYSLIB0057
                 using var cert = new X509Certificate2(pfxPath, password, X509KeyStorageFlags.EphemeralKeySet);
+#pragma warning restore SYSLIB0057
                 // Compute SHA-256 fingerprint (sign tool doesn't accept SHA-1 thumbprint)
                 using var sha256 = System.Security.Cryptography.SHA256.Create();
                 var certBytes = cert.RawData;
