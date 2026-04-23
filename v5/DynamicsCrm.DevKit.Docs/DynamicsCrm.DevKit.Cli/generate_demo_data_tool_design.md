@@ -36,7 +36,7 @@ Max 500 rows. Default 10.
 
 ---
 
-## Phần 1: Cập nhật `create_records` — Hỗ trợ file path
+## Phần 1: Cập nhật `create_records` — Hỗ trợ file path ✅ DONE
 
 ### 3 input modes cho `records_json`
 
@@ -223,13 +223,22 @@ Auto-select (`fields` rỗng): `IsValidForCreate == true`, loại bỏ:
 - `owningbusinessunit`
 - `UniqueIdentifierAttributeMetadata`, `ImageAttributeMetadata`, `FileAttributeMetadata`
 
-**Auto-include cho migration-like data** (không loại bỏ):
-- `createdon` → `faker.Date.Between(from_date, to_date)` — random trong khoảng user chỉ định, format ISO 8601 UTC
-- `modifiedon` → `faker.Date.Between(createdon, to_date)` — luôn SAU `createdon` của cùng record, format ISO 8601 UTC
-- `createdby` → `PickRandom(userPool)` — lấy từ `systemuser` (cùng pool với `ownerid`)
-- `modifiedby` → `PickRandom(userPool)` — có thể khác `createdby`
+**Auto-include cho migration-like data** — Verified từ Dataverse metadata (`IsValidForCreate`):
 
-Lưu ý: Dataverse cho phép set `createdon`/`modifiedon`/`createdby`/`modifiedby` khi create nếu user có privilege `prvOverriddenCreatedOn`. Tool gen giá trị, nếu Dataverse reject → field bị ignore (không fail cả record).
+| Field | `IsValidForCreate` | `IsValidForUpdate` | Kết luận |
+|---|---|---|---|
+| `createdon` | **false** | **false** | Không set được qua API |
+| `modifiedon` | **false** | **false** | Không set được qua API |
+| `createdby` | **false** | **false** | Không set được qua API |
+| `modifiedby` | **false** | **false** | Không set được qua API |
+| **`overriddencreatedon`** | **true** | **false** | **Duy nhất field set được** khi Create |
+
+Tool chỉ gen **1 field**: **`overriddencreatedon`**
+- Gen: `faker.Date.Between(from_date, to_date)` → format ISO 8601 UTC (`"2026-02-15T10:30:00Z"`)
+- Khi Dataverse nhận `overriddencreatedon` → set `createdon` = giá trị này
+- `modifiedon` = thời điểm create thật (không override được)
+- `createdby`/`modifiedby` = current user (chỉ thay đổi được qua `CallerId` impersonation, ngoài scope tool này)
+- Cần privilege `prvOverriddenCreatedOn` (System Admin có sẵn). Không có → Dataverse ignore field, record vẫn tạo với `createdon` = now
 
 #### Bước 4: Pre-fetch lookup data
 
