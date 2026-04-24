@@ -15,10 +15,24 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
+    internal sealed class FieldOverride
+    {
+        [JsonPropertyName("logicalname")]
+        public string LogicalName { get; set; }
+
+        // Supported: eq, in, startswith, endswith, contains, regex
+        [JsonPropertyName("operator")]
+        public string Operator { get; set; }
+
+        [JsonPropertyName("values")]
+        public List<string> Values { get; set; }
+    }
+
     [McpServerToolType]
     public class GenerateDemoDataTool
     {
@@ -50,14 +64,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- from_date + to_date REQUIRED — NEVER infer or guess these from context or current date; always ask the user explicitly if not provided\n" +
             "- from_date + to_date format: ISO 8601 (e.g. \"2026-01-01\"); count default=10, max=500; seed=0 = random\n" +
             "- fields empty = auto-select all creatable fields; smart mapping: emailaddress→Email, telephone→Phone, city→City etc.; overriddencreatedon always included\n" +
-            "- Lookups: auto-fetch real GUIDs; empty targets skipped with warning; polymorphic → \"field@entity\" syntax auto-applied")]
+            "- Lookups: auto-fetch real GUIDs; empty targets skipped with warning; polymorphic → \"field@entity\" syntax auto-applied\n" +
+            "- field_overrides: JSON array to control specific field values after Bogus generation. Operators: eq, in, startswith, endswith, contains, regex\n" +
+            "  eq        → all records get values[0]  (use for fixed lookup GUIDs, fixed strings)\n" +
+            "  in        → each record picks randomly from values[]  (use for rotating lookups or enums)\n" +
+            "  startswith→ Bogus suffix appended after values[0]  e.g. 'ABC' → 'ABC_x7k2'\n" +
+            "  endswith  → Bogus prefix prepended before values[0]  e.g. '@acme.com' → 'john.doe@acme.com'\n" +
+            "  contains  → values[0] injected in middle  e.g. 'Manager' → 'Senior Manager II'\n" +
+            "  regex     → simple pattern mapped to Bogus format  e.g. '\\+84[0-9]{9}' → '+84912345678'")]
         public CallToolResult generate_demo_data(
             [Description("Entity logical name (e.g., 'account'). Required.")] string entity_name,
             [Description("from_date and to_date are REQUIRED. NEVER infer or assume — ask the user if not provided. ISO 8601 format. Example: '2026-01-01'.")] string from_date,
             [Description("from_date and to_date are REQUIRED. NEVER infer or assume — ask the user if not provided. ISO 8601 format. Example: '2026-04-30'. Must be >= from_date.")] string to_date,
             [Description("Number of records to generate. Default: 10. Max: 500.")] int count = 10,
             [Description("Comma-separated field logical names. Empty = auto-select all creatable fields.")] string fields = "",
-            [Description("Random seed for reproducible data. 0 = random.")] int seed = 0)
+            [Description("Random seed for reproducible data. 0 = random.")] int seed = 0,
+            [Description("JSON array of field override rules applied after Bogus generation. Each item: {logicalname, operator, values[]}. Operators: eq, in, startswith, endswith, contains, regex. Example: [{\"logicalname\":\"parentcustomerid\",\"operator\":\"eq\",\"values\":[\"<guid>\"]},{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}]")] string field_overrides = "")
         {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
@@ -123,11 +145,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var actualSeed = seed == 0 ? Environment.TickCount : seed;
             var faker = new Faker { Random = new Randomizer(actualSeed) };
 
+            // Parse field_overrides
+            var overrides = new List<FieldOverride>();
+            if (!string.IsNullOrWhiteSpace(field_overrides))
+            {
+                try
+                {
+                    overrides = JsonSerializer.Deserialize<List<FieldOverride>>(field_overrides,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult($"Error: field_overrides is not valid JSON. {ex.Message}");
+                }
+
+                foreach (var ov in overrides)
+                {
+                    if (string.IsNullOrWhiteSpace(ov.LogicalName))
+                        return ErrorResult("Error: each field_override must have a non-empty 'logicalname'.");
+                    var op = ov.Operator?.ToLowerInvariant();
+                    if (op is not ("eq" or "in" or "startswith" or "endswith" or "contains" or "regex"))
+                        return ErrorResult($"Error: unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'. Supported: eq, in, startswith, endswith, contains, regex.");
+                    if (ov.Values == null || ov.Values.Count == 0)
+                        return ErrorResult($"Error: field_override for '{ov.LogicalName}' must have at least one value.");
+                }
+            }
+
             // Generate records
             var records = new List<Dictionary<string, object>>(count);
             for (var i = 0; i < count; i++)
             {
                 var record = GenerateRecord(faker, entityName, selectedAttrs, lookupPools, fromDt, toDt, warnings);
+                if (overrides.Count > 0)
+                    ApplyOverrides(faker, record, overrides, warnings);
                 records.Add(record);
             }
 
@@ -159,6 +209,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = new StringBuilder();
             sb.AppendLine($"Generated {count} '{entityName}' records (seed: {actualSeed})");
+            if (overrides.Count > 0)
+                sb.AppendLine($"Field overrides applied: {string.Join(", ", overrides.Select(o => $"{o.LogicalName} ({o.Operator})"))}");
             sb.AppendLine($"Fields: {string.Join(", ", fieldNames)}");
 
             if (lookupsSampled.Count > 0)
@@ -359,6 +411,82 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return record;
+        }
+
+        private static void ApplyOverrides(
+            Faker faker,
+            Dictionary<string, object> record,
+            List<FieldOverride> overrides,
+            List<string> warnings)
+        {
+            foreach (var ov in overrides)
+            {
+                var field = ov.LogicalName.Trim().ToLowerInvariant();
+                var op = ov.Operator.ToLowerInvariant();
+                var values = ov.Values;
+
+                switch (op)
+                {
+                    case "eq":
+                        record[field] = values[0];
+                        break;
+
+                    case "in":
+                        record[field] = faker.PickRandom(values);
+                        break;
+
+                    case "startswith":
+                    {
+                        var suffix = faker.Random.AlphaNumeric(6);
+                        record[field] = $"{values[0]}{suffix}";
+                        break;
+                    }
+
+                    case "endswith":
+                    {
+                        // If field looks like an email (endswith @domain.com), generate realistic prefix
+                        var ending = values[0];
+                        string prefix;
+                        if (ending.StartsWith("@"))
+                            prefix = faker.Internet.UserName();
+                        else
+                            prefix = faker.Random.AlphaNumeric(6);
+                        record[field] = $"{prefix}{ending}";
+                        break;
+                    }
+
+                    case "contains":
+                    {
+                        var prefix = faker.PickRandom(new[] { "Senior", "Junior", "Lead", "Principal", "Associate" });
+                        var suffix = faker.PickRandom(new[] { "I", "II", "III", "" });
+                        var result = $"{prefix} {values[0]}{(suffix.Length > 0 ? " " + suffix : "")}".Trim();
+                        record[field] = result;
+                        break;
+                    }
+
+                    case "regex":
+                    {
+                        // Map simple regex patterns to Bogus format strings
+                        var pattern = values[0];
+                        var bogusFormat = Regex.Replace(pattern, @"\[0-9\]\{(\d+)\}", m =>
+                        {
+                            var len = int.Parse(m.Groups[1].Value);
+                            return new string('#', len);
+                        });
+                        // Strip leading/trailing anchors
+                        bogusFormat = bogusFormat.TrimStart('^').TrimEnd('$');
+                        try
+                        {
+                            record[field] = faker.Phone.PhoneNumber(bogusFormat);
+                        }
+                        catch
+                        {
+                            warnings.Add($"field_override regex for '{field}': pattern '{pattern}' could not be applied — skipped.");
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         private object GenerateValue(
