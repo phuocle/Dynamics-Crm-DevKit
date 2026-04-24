@@ -65,9 +65,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //}
 #endif
             if (context == null) throw new ArgumentNullException(nameof(context));
-            
-            context.EnableConcurrentExecution();
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             base.Initialize(context);
             
             context.RegisterSyntaxNodeAction(AnalyzeAttribute, SyntaxKind.Attribute);

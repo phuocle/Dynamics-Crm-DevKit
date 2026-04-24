@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 #if DEBUG
@@ -50,9 +50,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             //}
 #endif
             if (context == null) throw new ArgumentNullException(nameof(context));
-            
-            context.EnableConcurrentExecution();
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             base.Initialize(context);
             
             // Register for += and -= assignment expressions (event subscription)

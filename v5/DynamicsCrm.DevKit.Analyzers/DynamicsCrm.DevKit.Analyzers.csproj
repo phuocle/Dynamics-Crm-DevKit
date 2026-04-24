@@ -8,6 +8,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	  <BaseOutputPath>bin</BaseOutputPath>
     <LangVersion>latest</LangVersion>
+    <!-- RS1025/RS1026: suppressed because BaseDiagnosticAnalyzer centralizes
+         ConfigureGeneratedCodeAnalysis and EnableConcurrentExecution.
+         Roslyn's static checker does not trace through base class calls. -->
+    <NoWarn>RS1025;RS1026</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
