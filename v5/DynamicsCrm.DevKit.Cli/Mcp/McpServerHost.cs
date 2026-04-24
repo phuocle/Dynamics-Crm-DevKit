@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         // Uses nameof() for compile-time safety
         internal static readonly Dictionary<string, string> ToolCategoryMap = new()
         {
-            // basic (7 tools)
+            // basic (9 tools)
             [nameof(WhoAmITool)] = "basic",
             [nameof(GetTablesTool)] = "basic",
             [nameof(ManageChoiceTool)] = "basic",

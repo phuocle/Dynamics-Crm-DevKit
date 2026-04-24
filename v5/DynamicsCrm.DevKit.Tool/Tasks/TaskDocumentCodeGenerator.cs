@@ -246,7 +246,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                         });
                     }
                 }
-                catch { }
+                catch { /* skip types/methods that fail Cecil attribute inspection (e.g. missing dependencies) */ }
             }
         }
 
@@ -351,7 +351,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     dir = dir.Parent;
                 }
             }
-            catch { }
+            catch { /* best-effort sibling project directory search — falls back to parent path */ }
             var parent = Directory.GetParent(startingDir);
             return parent == null ? projectFolderName : Path.Combine(parent.FullName, projectFolderName);
         }

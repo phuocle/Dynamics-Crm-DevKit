@@ -916,10 +916,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             SolutionUniqueName = SOLUTION_NAME
                         });
                     }
-                    catch { }
+                    catch { /* best-effort add-to-solution; individual component failure does not abort the loop */ }
                 }
             }
-            catch { }
+            catch { /* best-effort solution component registration — non-critical */ }
         }
 
         private Guid? GetSolutionId()

@@ -63,9 +63,9 @@
 	<ItemGroup>
 	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
 	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
-	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="*" />
-	  <PackageReference Include="Mono.Cecil" Version="*" />
-	  <PackageReference Include="Newtonsoft.Json" Version="*" />
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+	  <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="NUglify" Version="1.21.17" />
 	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
 	</ItemGroup>

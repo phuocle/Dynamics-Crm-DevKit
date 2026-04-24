@@ -1089,7 +1089,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     });
                 }
             }
-            catch { }
+            catch { /* best-effort form metadata fetch — returns partial dict on failure */ }
             return dict;
         }
 
@@ -1131,7 +1131,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     });
                 }
             }
-            catch { }
+            catch { /* best-effort view metadata fetch — returns partial dict on failure */ }
             return dict;
         }
 
@@ -1173,7 +1173,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     });
                 }
             }
-            catch { }
+            catch { /* best-effort business rules metadata fetch — returns partial dict on failure */ }
             return dict;
         }
     }

@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool ListTools { get; set; }
 
         [CommandOption("--category")]
-        [Description("Tool category: basic (9), standard (29), advanced (35). Default: all (loads everything).")]
+        [Description("Tool category: basic (9), standard (29), advanced (36). Default: all (loads everything).")]
         [DefaultValue("all")]
         public string Category { get; set; } = "all";
 

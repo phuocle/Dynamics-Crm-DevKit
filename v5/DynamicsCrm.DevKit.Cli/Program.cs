@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Cli
                         var updateResult = await updateTask;
                         UpdateChecker.ShowNotification(updateResult);
                     }
-                    catch { }
+                    catch { /* best-effort update notification — failure is non-critical */ }
                     SpectreLog.WaitForKeyPress();
                     return 0;
                 }

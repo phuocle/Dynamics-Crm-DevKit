@@ -113,7 +113,7 @@ namespace DynamicsCrm.DevKit.Shared
                     Directory.Delete(_cacheLocation, true);
                 }
             }
-            catch { }
+            catch { /* best-effort cache directory cleanup — may be locked or already deleted */ }
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace DynamicsCrm.DevKit.Shared
                     File.Delete(cacheFile);
                 }
             }
-            catch { }
+            catch { /* best-effort token cache file cleanup — may be locked or already deleted */ }
         }
 
         /// <summary>

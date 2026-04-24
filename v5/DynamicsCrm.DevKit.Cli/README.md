@@ -363,7 +363,7 @@ Create `DynamicsCrm.DevKit.Cli.json` in your project:
 
 ### MCP Server
 - Stdio transport for seamless IDE integration
-- 32 tools for full Dataverse operations (CRUD, schema, forms, views, sitemaps, security, plugins, workflows, flows)
+- 36 tools for full Dataverse operations (CRUD, schema, forms, views, sitemaps, security, plugins, workflows, flows)
 - 9 resources (XSD schemas + instruction guides for error-guided AI usage)
 - FetchXML query execution with auto-paging
 - Compatible with any MCP-enabled AI agent (Cursor, VS Code Copilot, Claude Desktop)

@@ -423,7 +423,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                 }
             }
-            catch { }
+            catch { /* best-effort metadata enrichment — returns partial map on failure */ }
             return result;
         }
 
@@ -526,7 +526,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         locLabels[id] = desc;
                 }
             }
-            catch { }
+            catch { /* best-effort localized label extraction — returns partial map on failure */ }
             return locLabels;
         }
 
@@ -2249,7 +2249,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return val != null ? Convert.ToInt32(val.Value) : 0;
                 }
             }
-            catch { }
+            catch { /* best-effort child count query — returns 0 on failure */ }
             return 0;
         }
 

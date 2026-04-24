@@ -942,7 +942,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         }
                     }
                 }
-                catch { }
+                catch { /* best-effort FetchXML display enrichment — skip on malformed XML */ }
             }
 
             if (!string.IsNullOrEmpty(layoutXml))
@@ -995,7 +995,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         sb.AppendLine(line);
                     sb.AppendLine();
                 }
-                catch { }
+                catch { /* best-effort LayoutXML display enrichment — skip on malformed XML */ }
             }
 
             if (!string.IsNullOrEmpty(fetchXml))

@@ -629,7 +629,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (File.Exists(file)) File.Delete(file);
             }
-            catch { }
+            catch { /* best-effort cleanup — file may be locked or already deleted */ }
         }
 
         // Return content starting from line 6 (skip the first 7 lines) from a given string content

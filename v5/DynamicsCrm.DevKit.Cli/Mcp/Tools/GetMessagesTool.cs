@@ -425,7 +425,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (alias?.Value is int count) return count;
                 }
             }
-            catch { }
+            catch { /* best-effort count query — returns 0 on failure */ }
             return 0;
         }
 
@@ -476,7 +476,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 inputs = GetActionParametersFromProcess(workflowId, true);
                 outputs = GetActionParametersFromProcess(workflowId, false);
             }
-            catch { }
+            catch { /* best-effort parameter extraction — returns empty lists on failure */ }
 
             return (inputs, outputs);
         }
@@ -552,7 +552,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     });
                 }
             }
-            catch { }
+            catch { /* skip malformed parameter XAML — returns partial list */ }
 
             return parameters;
         }

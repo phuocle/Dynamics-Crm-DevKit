@@ -105,7 +105,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                         var builder = ConnectionBuilderFactory.GetBuilder(crmConn.Type);
                         connLog = builder.BuildConnectionString(crmConn, true);
                     }
-                    catch {}
+                    catch {} /* best-effort connection log — failure does not block execution */
                 }
             }
 

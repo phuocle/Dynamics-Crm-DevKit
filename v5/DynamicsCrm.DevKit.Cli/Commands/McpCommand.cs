@@ -188,7 +188,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             Console.WriteLine();
             Console.WriteLine($"3. AVAILABLE TOOLS ({tools.Count} Tools)");
             Console.WriteLine("-------------------------------------------------------------------------");
-            Console.WriteLine("   Filter tools with --category: basic (9), standard (29), advanced (35)");
+            Console.WriteLine("   Filter tools with --category: basic (9), standard (29), advanced (36)");
             Console.WriteLine("   Default: all (loads everything)");
             Console.WriteLine();
             foreach (var tool in tools)

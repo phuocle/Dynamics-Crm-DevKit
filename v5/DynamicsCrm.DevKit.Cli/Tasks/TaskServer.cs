@@ -1976,7 +1976,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (attributes.Any(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name))
                             types.Add(type);
                     }
-                    catch { }
+                    catch { /* skip types that fail attribute inspection (e.g. missing dependencies) */ }
                 }
             }
             catch (ReflectionTypeLoadException ex)

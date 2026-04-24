@@ -164,18 +164,18 @@
   </ItemGroup>
   <ItemGroup>
     <!-- NuGet Package References -->
-    <PackageReference Include="Community.VisualStudio.Toolkit" Version="*" />
+    <PackageReference Include="Community.VisualStudio.Toolkit" Version="17.0.76.309" />
     <PackageReference Include="Community.VisualStudio.Toolkit.17">
-      <Version>17.0.549</Version>
+      <Version>17.0.76.309</Version>
     </PackageReference>
     <PackageReference Include="Community.VisualStudio.VSCT">
       <Version>16.0.29.6</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="*" />
-    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="*" />
-    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="*" />
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" />
+    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.60" />
+    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.1.65" />
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client">
       <Version>1.2.10</Version>
     </PackageReference>
