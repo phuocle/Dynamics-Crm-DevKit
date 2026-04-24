@@ -55,6 +55,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [Description("Domain for AD authentication (on-premises)")]
         public string Domain { get; set; } = string.Empty;
 
+        [CommandOption("--sdk-login")]
+        [Description("Use SDK OOB login dialog (legacy)")]
+        public bool SdkLogin { get; set; }
+
         public string CurrentDirectory => Directory.GetCurrentDirectory();
 
         public string JsonFile

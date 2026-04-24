@@ -85,9 +85,9 @@ namespace DynamicsCrm.DevKit.Cli
                 "  --auth TYPE            Modern auth type (see below)\n" +
                 "  --url URL              Dynamics 365 environment URL\n" +
                 "  --clientid GUID        Azure AD application (client) ID\n" +
-                "  --secret SECRET        Client secret (plain or encrypted)\n" +
+                "  --clientsecret SECRET  Client secret (plain or encrypted)\n" +
                 "  --pacprofile NAME      PAC CLI profile name\n" +
-                "  --sdk-login            Use SDK OOB login dialog\n\n" +
+                "  --sdk-login            Use SDK OOB login dialog (legacy)\n\n" +
                 "Auth Types (--auth):\n" +
                 "  Interactive            Browser-based login (MFA supported)\n" +
                 "  DeviceCode             Device code flow for headless/SSH\n" +
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "Examples:\n" +
                 "  devkit server --auth Interactive --url https://org.crm.dynamics.com --json cli.json --profile PROD\n" +
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
-                "  devkit server --auth ClientSecret --url URL --clientid ID --secret SEC --json cli.json --profile CI\n" +
+                "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
                 "Environment Variables (DEVKIT_*):\n" +
                 "  All connection args support env var fallback. Priority: CLI args > env vars > empty.\n" +
@@ -114,7 +114,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  DEVKIT_PAC_PROFILE   PAC CLI profile name\n" +
                 "  NO_COLOR             Set to any value to enable plain text output\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
-                "  devkit mcp                   32 tools + 9 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, form builder, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, commands, web resources, relationships\n" +
+                "  devkit mcp                   36 tools + 9 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, form builder, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, commands, web resources, relationships\n" +
                 "  devkit mcp --setup-guide     Setup instructions for all IDEs\n";
 
             if (IsPlain)
@@ -151,9 +151,9 @@ namespace DynamicsCrm.DevKit.Cli
                     "  --auth [yellow]TYPE[/]            Modern auth type (see below)\n" +
                     "  --url [yellow]URL[/]              Dynamics 365 environment URL\n" +
                     "  --clientid [yellow]GUID[/]        Azure AD application (client) ID\n" +
-                    "  --secret [yellow]SECRET[/]        Client secret (plain or encrypted)\n" +
+                    "  --clientsecret [yellow]SECRET[/]  Client secret (plain or encrypted)\n" +
                     "  --pacprofile [yellow]NAME[/]      PAC CLI profile name\n" +
-                    "  --sdk-login            Use SDK OOB login dialog\n\n" +
+                    "  --sdk-login            Use SDK OOB login dialog (legacy)\n\n" +
                     "[green]Auth Types (--auth):[/]\n" +
                     "  [cyan]Interactive[/]            Browser-based login (MFA supported)\n" +
                     "  [cyan]DeviceCode[/]             Device code flow for headless/SSH\n" +
@@ -169,7 +169,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "[green]Examples:[/]\n" +
                     "  devkit server --auth [cyan]Interactive[/] --url [cyan]https://org.crm.dynamics.com[/] --json [cyan]cli.json[/] --profile [cyan]PROD[/]\n" +
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
-                    "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --secret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
+                    "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
                     "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
                     "[green]Environment Variables (DEVKIT_*):[/]\n" +
                     "  All connection args support env var fallback. Priority: CLI args > env vars > empty.\n" +
@@ -180,7 +180,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]DEVKIT_PAC_PROFILE[/]   PAC CLI profile name\n" +
                     "  [cyan]NO_COLOR[/]             Set to any value to enable plain text output\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
-                    "  devkit [cyan]mcp[/]                  32 tools + 9 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, form builder, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, commands, web resources, relationships\n" +
+                    "  devkit [cyan]mcp[/]                  36 tools + 9 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, form builder, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, commands, web resources, relationships\n" +
                     "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n"
 
                 ))

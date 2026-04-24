@@ -155,12 +155,12 @@
     },
     "31-DEVKITV4.OAuth": {
       "commandName": "Project",
-      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth OAuth --user \"user@domain.onmicrosoft.com\" --pass \"PASSWORD_HERE\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth OAuth --username \"user@domain.onmicrosoft.com\" --password \"PASSWORD_HERE\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
     },
     "32-DEVKITV4.AD": {
       "commandName": "Project",
-      "commandLineArgs": "server --url \"https://your-onpremise-crm.domain.com\" --auth AD --user \"DOMAIN\\\\username\" --pass \"PASSWORD_HERE\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "server --url \"https://your-onpremise-crm.domain.com\" --auth AD --username \"DOMAIN\\\\username\" --password \"PASSWORD_HERE\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
     },
     "33-DEVKITV4.FromPac": {
