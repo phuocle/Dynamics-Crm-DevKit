@@ -1,6 +1,9 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
@@ -576,6 +579,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             _serviceClient.Execute(importReq);
 
+            // Step 4b: Remove stale entities from solution (keep only current entity)
+            CleanupOtherEntities(entityName);
+
             // Step 5: Publish
             var published = TryPublish(autoPublish, entityName);
 
@@ -641,6 +647,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 OverwriteUnmanagedCustomizations = true,
                 PublishWorkflows = true
             });
+
+            // Remove stale entities from solution (keep only current entity)
+            CleanupOtherEntities(entityName);
 
             var published = TryPublish(autoPublish, entityName);
 
@@ -867,21 +876,89 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return backupPath;
         }
 
+        // ── Cleanup stale entities from solution ─────────────────────
+
+        private void CleanupOtherEntities(string keepEntityName)
+        {
+            try
+            {
+                var solutionId = GetSolutionId();
+                if (solutionId == null) return;
+
+                var keepMetadataId = GetEntityMetadataId(keepEntityName);
+
+                var components = _serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
+                {
+                    NoLock = true,
+                    ColumnSet = new ColumnSet("objectid", "componenttype"),
+                    Criteria = new FilterExpression
+                    {
+                        Conditions =
+                        {
+                            new ConditionExpression("solutionid", ConditionOperator.Equal, solutionId.Value),
+                            new ConditionExpression("componenttype", ConditionOperator.Equal, 1)
+                        }
+                    }
+                }).Entities;
+
+                foreach (var comp in components)
+                {
+                    var objectId = comp.GetAttributeValue<Guid>("objectid");
+                    if (keepMetadataId.HasValue && objectId == keepMetadataId.Value)
+                        continue;
+
+                    try
+                    {
+                        _serviceClient.Execute(new RemoveSolutionComponentRequest
+                        {
+                            ComponentId = objectId,
+                            ComponentType = 1,
+                            SolutionUniqueName = SOLUTION_NAME
+                        });
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+        }
+
+        private Guid? GetSolutionId()
+        {
+            var fetch = $@"<fetch top='1'>
+                <entity name='solution'>
+                    <attribute name='solutionid'/>
+                    <filter>
+                        <condition attribute='uniquename' operator='eq' value='{SOLUTION_NAME}'/>
+                    </filter>
+                </entity>
+            </fetch>";
+            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
+            return result.Entities.Count > 0 ? result.Entities[0].Id : null;
+        }
+
+        private Guid? GetEntityMetadataId(string entityName)
+        {
+            try
+            {
+                var request = new RetrieveEntityRequest
+                {
+                    LogicalName = entityName,
+                    EntityFilters = EntityFilters.Entity
+                };
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                return response.EntityMetadata.MetadataId;
+            }
+            catch { return null; }
+        }
+
         // ── Helpers ──────────────────────────────────────────────────────
 
         private bool SolutionExists()
         {
             try
             {
-                var fetch = $@"<fetch top='1'>
-                    <entity name='solution'>
-                        <attribute name='solutionid'/>
-                        <filter>
-                            <condition attribute='uniquename' operator='eq' value='{SOLUTION_NAME}'/>
-                        </filter>
-                    </entity>
-                </fetch>";
-                return _serviceClient.RetrieveMultiple(new FetchExpression(fetch)).Entities.Count > 0;
+                var solutionId = GetSolutionId();
+                return solutionId.HasValue;
             }
             catch { return false; }
         }
