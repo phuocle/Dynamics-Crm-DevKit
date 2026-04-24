@@ -2,6 +2,8 @@
 
 Priority: P1
 
+Status: **DONE** — 2026-04-24
+
 Parallelization: should coordinate with Step 2. This step is narrow and can be handled by one agent.
 
 ## Goal
@@ -101,4 +103,55 @@ Manual expected output check:
 ```text
 You own Step 3 FromPac Generated Arguments. Add focused tests around CliArgsBuilder, then fix FromPac output to include --auth FromPac with --pacprofile. Keep changes narrow. Do not run dotnet build/test directly; use repo workflows only. Report files changed and tests/workflows run.
 ```
+
+## Changes Made
+
+### `DynamicsCrm.DevKit.Shared/CliArgsBuilder.cs`
+
+Fixed `BuildFromPacArgs()` — was missing `--auth FromPac`:
+
+```csharp
+// Before
+return $"--pacprofile \"{profile}\"";
+
+// After
+return $"--auth FromPac --pacprofile \"{profile}\"";
+```
+
+### `DynamicsCrm.DevKit.UnitTests/Cli/CliArgsBuilderTests.cs` (new file)
+
+11 tests covering all builder methods:
+
+- `FromPac_WithPacProfile_IncludesAuthFromPac`
+- `FromPac_WithPacProfile_IncludesPacProfileArg`
+- `FromPac_WithPacProfile_OutputMatchesFullContract`
+- `FromPac_ProfileNameWithSpaces_IsQuoted`
+- `FromPac_FallsBackToUserName_WhenPacProfileEmpty`
+- `FromPac_NullProfile_ThrowsArgumentException`
+- `ClientSecret_OutputContainsAuthClientSecret`
+- `Interactive_OutputContainsAuthInteractive`
+- `DeviceCode_OutputContainsAuthDeviceCode`
+- `NullConnection_ReturnsEmptyString`
+- `UnsupportedType_ThrowsNotSupportedException`
+
+### Templates (`ProjectTemplates`, `ItemTemplates`)
+
+No changes needed. Templates use `$CliConnectionArgs$` replacement from `CliArgsBuilder` — fixed string flows through automatically.
+
+## Verification
+
+```
+Build: /claude-build-cli — succeeded, 0 errors, 0 warnings
+Tests: /claude-unit-test
+  net48:   594 passed, 0 failed (analyzer tests unaffected)
+  net10.0: 1487 passed, 10 failed (10 pre-existing failures, unchanged)
+  CliArgsBuilderTests: 11/11 passed
+git diff --stat: 2 files changed (CliArgsBuilder.cs fixed, CliArgsBuilderTests.cs new)
+```
+
+## Done Criteria ✅
+
+- FromPac builder output includes auth type ✅
+- Unit tests cover FromPac generated args ✅
+- Existing auth arg generation still passes tests ✅
 

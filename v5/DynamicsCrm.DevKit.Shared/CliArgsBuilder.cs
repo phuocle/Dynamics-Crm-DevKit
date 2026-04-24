@@ -21,7 +21,7 @@ namespace DynamicsCrm.DevKit.Shared
         /// ClientSecret: --auth ClientSecret --url "https://org.crm.dynamics.com" --clientid "..." --clientsecret "..."
         /// OAuth/AD: --conn "AuthType=OAuth;Url=...;..."
         /// Interactive: --auth Interactive --url "https://org.crm.dynamics.com" --clientid "..."
-        /// FromPac: --pacprofile "my-profile"
+        /// FromPac: --auth FromPac --pacprofile "my-profile"
         /// </example>
         public static string Build(CrmConnection connection, bool encryptSecrets = false)
         {
@@ -171,7 +171,7 @@ namespace DynamicsCrm.DevKit.Shared
                 throw new ArgumentException("PAC profile name is required for FromPac authentication");
             }
 
-            return $"--pacprofile \"{profile}\"";
+            return $"--auth FromPac --pacprofile \"{profile}\"";
         }
 
         /// <summary>
