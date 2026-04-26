@@ -3,7 +3,7 @@
 ## Mục tiêu
 
 Xóa hoàn toàn tool `build_sitemap_xml` (MCP-exposed), tích hợp toàn bộ logic vào `manage_sitemap`.
-Tool count: **35 → 34** (sau khi đã merge `build_form_xml`).
+Tool count: **36 → 35** (build_form_xml chưa merge, sẽ xử lý riêng).
 
 > **Lưu ý:** Plan này độc lập với `plan_merge_build_form_xml_into_manage_form.md` — có thể làm song song hoặc tuần tự đều OK.
 
@@ -98,7 +98,7 @@ Có 2 chế độ (mutually exclusive):
 - Naming: `Sanitize`, `AutoAreaId`, `AutoGroupId`, `AutoSubAreaId`
 - JSON helpers: `GetStringProp`, `GetBoolProp`, etc.
 
-> **Đề xuất:** Tách thành **helper class riêng** `SiteMapXmlOperationsHelper.cs` (đặt trong `Mcp/Tools/Helper/`) để giữ `ManageSiteMapTool.cs` không phình to (~1125 + ~817 = ~1900 LOC nếu gộp thẳng).
+> **Đề xuất:** Tách thành **helper class riêng** `SiteMapXmlOperationsHelper.cs` (đặt trong `Mcp/Tools/SiteMap/`, namespace `Mcp.Tools.SiteMap`) để giữ `ManageSiteMapTool.cs` không phình to (~1125 + ~817 = ~1900 LOC nếu gộp thẳng).
 >
 > Class này expose đúng 1 method:
 >
@@ -210,7 +210,7 @@ Tìm dòng MCP Tools list:
 | 2 tool calls + 1 file tạm | 1 tool call |
 | ~3000+ tokens cho mỗi update | ~1500 tokens |
 | AI agent đôi khi quên gọi `manage_sitemap` sau `build_sitemap_xml` | Không thể quên |
-| Tool count: 35 (sau merge form) | Tool count: 34 |
+| Tool count: 36 | Tool count: 35 |
 | Tool surface phức tạp (sub-tool ẩn) | Tool surface đơn giản |
 
 **Backward-compat:** giữ nguyên flow `sitemapxml=<path>` cho `undo` và trường hợp user tự build XML thủ công.
@@ -228,7 +228,7 @@ Tìm dòng MCP Tools list:
 ## Tasks
 
 - [ ] Đọc lại 1 lần `ManageSiteMapTool.cs` + `BuildSiteMapXmlTool.cs` để nắm đủ logic
-- [ ] Tạo `SiteMapXmlOperationsHelper.cs` trong `Mcp/Tools/Helper/`, copy 12 operation executors + helpers từ `BuildSiteMapXmlTool` qua, expose 1 method `ApplyOperations(...)`
+- [ ] Tạo `SiteMapXmlOperationsHelper.cs` trong `Mcp/Tools/SiteMap/` (namespace `Mcp.Tools.SiteMap`), copy 12 operation executors + helpers từ `BuildSiteMapXmlTool` qua, expose 1 method `ApplyOperations(...)`
 - [ ] Cập nhật `ManageSiteMapTool.cs`:
   - Thêm param `operations`
   - Branching: operations vs sitemapxml vs both-empty/both-set (cho `update` và `create`)
@@ -263,7 +263,7 @@ Tìm dòng MCP Tools list:
 ## Acceptance Criteria
 
 - [ ] Tool `build_sitemap_xml` không còn xuất hiện trong tool list khi connect MCP
-- [ ] Tool count khi `category=all` giảm 1 (35 → 34, hoặc 33 nếu đã merge cả form trước đó)
+- [ ] Tool count khi `category=all` giảm 1 (36 → 35)
 - [ ] `manage_sitemap(action='update', operations=[...])` hoạt động end-to-end: build + backup + validate + import + publish
 - [ ] `manage_sitemap(action='create', operations=[...])` hoạt động cho app chưa có SiteMap
 - [ ] `manage_sitemap(action='update', sitemapxml=<path>)` vẫn hoạt động (backward-compat)
