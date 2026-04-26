@@ -21,6 +21,7 @@ using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -57,15 +58,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
             "- buttons: all ribbon buttons (OOB+custom) across form/main_grid/sub_grid. Required: entity_name\n" +
             "- detail: show current RibbonDiffXml. Required: entity_name\n" +
-            "- update: apply ribbonxml from build_ribbon_xml. Required: entity_name + ribbonxml. Backup→Import→PublishAll\n" +
+            "- update: build + apply ribbon changes. Required: entity_name + operations. " +
+            "Auto: validate → fetch existing → apply operations → validate XSD → backup → import → publish\n" +
             "- undo: restore from backup file. Required: entity_name + ribbonxml (backup path)\n\n" +
-            "WORKFLOW: build_ribbon_xml → manage_ribbon(action='update') [auto-publishes all by default]\n" +
+
+            "SUPPORTED OPERATIONS (10): add_button, update_button, hide_button, show_button, " +
+            "add_split_button, update_split_button, add_flyout_static, update_flyout_static, " +
+            "hide_flyout_item, show_flyout_item\n\n" +
+
+            "add_button REQUIRED: surface, label, library, function, enable_library, enable_function. OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+            "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence. NOTE: only works on custom buttons\n" +
+            "hide_button REQUIRED: button_id. Supports OOB and custom\n" +
+            "show_button REQUIRED: button_id. Supports OOB and custom\n" +
+            "add_split_button REQUIRED: surface, label, library, function, enable_library, enable_function, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+            "update_split_button REQUIRED: split_button_id OR label. items[]: item_label REQUIRED\n" +
+            "add_flyout_static REQUIRED: surface, label, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+            "update_flyout_static REQUIRED: flyout_id OR label. items[]: item_label REQUIRED\n" +
+            "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
+            "show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n\n" +
+
+            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]) [auto-publishes all by default]\n" +
             "Auto-backup before update; backup failure blocks update.\n" +
             "NOTE: Ribbon requires PublishAll (not entity-scoped publish). auto_publish=true (default) runs PublishAll synchronously. Set false when batching, then call publish_customizations once.")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity logical name (e.g., 'account'). Required for detail/update/undo.")] string entity_name = "",
-            [Description("For 'update': RibbonDiffXml file path from build_ribbon_xml. For 'undo': backup file path.")] string ribbonxml = "",
+            [Description(
+                "JSON array of ribbon operations for action='update'. " +
+                "10 operations: add_button, update_button, hide_button, show_button, " +
+                "add_split_button, update_split_button, add_flyout_static, update_flyout_static, " +
+                "hide_flyout_item, show_flyout_item. " +
+                "See tool description for required/optional fields per operation.")] string operations = "",
+            [Description("For 'undo': backup file path from .devkit/backups/ribbons/.")] string ribbonxml = "",
             [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true,
             [Description("Backup current ribbon before overwriting (default: true). Backup failure blocks update.")] bool backup = true)
         {
@@ -94,11 +118,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "update":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return ErrorResult("Error: entity_name is required for action='update'.");
-                        if (string.IsNullOrWhiteSpace(ribbonxml))
-                            return ErrorResult(
-                                "Error: ribbonxml is required for action='update'.\n" +
-                                "Provide file path from build_ribbon_xml or inline RibbonDiffXml.");
-                        return UpdateRibbon(entity_name.Trim().ToLowerInvariant(), ribbonxml.Trim(), backup, auto_publish);
+
+                        if (!string.IsNullOrWhiteSpace(operations))
+                            return UpdateRibbonFromOperations(
+                                entity_name.Trim().ToLowerInvariant(),
+                                operations.Trim(),
+                                backup,
+                                auto_publish);
+
+                        if (!string.IsNullOrWhiteSpace(ribbonxml))
+                            return UpdateRibbon(entity_name.Trim().ToLowerInvariant(), ribbonxml.Trim(), backup, auto_publish);
+
+                        return ErrorResult(
+                            "Error: 'operations' is required for action='update'.\n" +
+                            "Provide a JSON array of ribbon operations, e.g. " +
+                            "[{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"My Button\",...}]");
 
                     case "undo":
                         if (string.IsNullOrWhiteSpace(entity_name))
@@ -156,7 +190,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Text = $"[ManageRibbon] list\n" +
                             $"Solution '{SOLUTION_NAME}' does not exist yet.\n" +
                             $"No ribbon customizations found.\n" +
-                            $"Tip: Use build_ribbon_xml + manage_ribbon(action='update') to add your first ribbon button."
+                            $"Tip: Use manage_ribbon(action='update', entity_name=..., operations=[...]) to add your first ribbon button."
                     }],
                     StructuredContent = JsonSerializer.SerializeToElement(new ManageRibbonResult
                     {
@@ -489,7 +523,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         Text = $"[ManageRibbon] detail — {entityName}\n" +
                             $"No ribbon customizations found for '{entityName}' in solution '{SOLUTION_NAME}'.\n" +
-                            $"Tip: Use build_ribbon_xml to create ribbon buttons."
+                            $"Tip: Use manage_ribbon(action='update', entity_name='{entityName}', operations=[...]) to create ribbon buttons."
                     }],
                     StructuredContent = JsonSerializer.SerializeToElement(new ManageRibbonResult
                     {
@@ -589,6 +623,164 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = new StringBuilder();
             sb.AppendLine($"[ManageRibbon] update — {entityName}");
             sb.AppendLine($"Solution: {SOLUTION_NAME}");
+            sb.AppendLine($"Status: Updated successfully");
+            sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
+            sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            sb.AppendLine();
+            if (backupPath != null)
+                sb.AppendLine($"To rollback: manage_ribbon(action='undo', entity_name='{entityName}', ribbonxml='{backupPath}')");
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new ManageRibbonResult
+                {
+                    Action = "update",
+                    EntityName = entityName,
+                    Status = published || !autoPublish ? "updated" : "updated_publish_failed",
+                    BackupPath = backupPath,
+                    Published = published
+                })
+            };
+        }
+
+        // ── Action: update (from operations) ────────────────────────────
+
+        private CallToolResult UpdateRibbonFromOperations(string entityName, string operationsJson, bool doBackup, bool autoPublish)
+        {
+            // Step 1: Validate entity
+            var validation = new RibbonValidation(_serviceClient);
+            var entityError = validation.ValidateEntityExists(entityName);
+            if (entityError != null)
+                return ErrorResult(entityError);
+
+            // Step 2: Parse operations JSON
+            List<JsonElement> ops;
+            try
+            {
+                ops = JsonSerializer.Deserialize<List<JsonElement>>(operationsJson);
+                if (ops == null || ops.Count == 0)
+                    return ErrorResult("Error: operations must be a non-empty JSON array.");
+            }
+            catch (JsonException ex)
+            {
+                return ErrorResult($"Error: Invalid operations JSON: {ex.Message}");
+            }
+
+            // Step 3: Fetch existing RibbonDiffXml from devkit-ribbon solution
+            var fetcher = new RibbonSolutionFetcher(_serviceClient);
+            var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
+
+            // Step 4: Parse existing XML
+            XDocument ribbonDoc;
+            try
+            {
+                ribbonDoc = XDocument.Parse(existingXml);
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to parse existing RibbonDiffXml: {ex.Message}");
+            }
+
+            // Step 5: Execute operations via helper classes
+            var lcid = McpHelper.GetBaseLanguageCode(_serviceClient);
+            var btnOps = new RibbonButtonOperations(validation, lcid);
+            var flyoutOps = new RibbonFlyoutOperations(validation, lcid);
+
+            var summaries = new List<string>();
+            var existingButtonCount = RibbonXmlHelpers.CountExistingButtons(ribbonDoc);
+
+            foreach (var op in ops)
+            {
+                if (!op.TryGetProperty("action", out var actionProp))
+                    return ErrorResult("Error: Each operation must have an 'action' field.");
+
+                var opAction = actionProp.GetString()?.Trim().ToLowerInvariant();
+                (string error, string summary) result = opAction switch
+                {
+                    "add_button"           => btnOps.ExecuteAddButton(ribbonDoc, entityName, op),
+                    "update_button"        => btnOps.ExecuteUpdateButton(ribbonDoc, entityName, op),
+                    "hide_button"          => btnOps.ExecuteHideButton(ribbonDoc, entityName, op),
+                    "show_button"          => btnOps.ExecuteShowButton(ribbonDoc, entityName, op),
+                    "add_split_button"     => flyoutOps.ExecuteAddSplitButton(ribbonDoc, entityName, op),
+                    "update_split_button"  => flyoutOps.ExecuteUpdateSplitButton(ribbonDoc, entityName, op),
+                    "add_flyout_static"    => flyoutOps.ExecuteAddFlyoutStatic(ribbonDoc, entityName, op),
+                    "update_flyout_static" => flyoutOps.ExecuteUpdateFlyoutStatic(ribbonDoc, entityName, op),
+                    "hide_flyout_item"     => flyoutOps.ExecuteHideFlyoutItem(ribbonDoc, entityName, op),
+                    "show_flyout_item"     => flyoutOps.ExecuteShowFlyoutItem(ribbonDoc, entityName, op),
+                    _ => ($"Error: Unknown action '{opAction}'.\n" +
+                          "Valid: add_button, update_button, hide_button, show_button, " +
+                          "add_split_button, update_split_button, add_flyout_static, " +
+                          "update_flyout_static, hide_flyout_item, show_flyout_item", null)
+                };
+
+                if (result.error != null) return ErrorResult(result.error);
+                summaries.Add(result.summary);
+            }
+
+            // Step 6: Sort CommandDefinitions, DisplayRules, EnableRules by Id
+            RibbonXmlHelpers.SortChildrenById(ribbonDoc.Root?.Element("CommandDefinitions"), "CommandDefinition");
+            var ruleDefsSortEl = ribbonDoc.Root?.Element("RuleDefinitions");
+            RibbonXmlHelpers.SortChildrenById(ruleDefsSortEl?.Element("DisplayRules"), "DisplayRule");
+            RibbonXmlHelpers.SortChildrenById(ruleDefsSortEl?.Element("EnableRules"), "EnableRule");
+
+            // Step 7: Validate output XML against Ribbon XSD
+            var xmlString = ribbonDoc.ToString(SaveOptions.None);
+            var (xsdErrors, xsdWarnings) = RibbonValidation.ValidateRibbonXml(xmlString);
+            if (xsdErrors.Count > 0)
+                return ErrorResult($"Error: Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}");
+
+            // Step 8: Backup current ribbon (before applying changes)
+            string backupPath = null;
+            if (doBackup)
+            {
+                try
+                {
+                    backupPath = BackupCurrentRibbon(entityName);
+                }
+                catch (Exception ex)
+                {
+                    if (SolutionExists())
+                        return ErrorResult(
+                            $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
+                            $"Entity: {entityName}\n" +
+                            $"Message: {ex.Message}\n" +
+                            "Tip: Fix the issue or set backup=false (not recommended).");
+                }
+            }
+
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.");
+
+            // Step 9: Build solution ZIP + import
+            var solutionZip = BuildSolutionZip(entityName, xmlString);
+            _serviceClient.Execute(new ImportSolutionRequest
+            {
+                CustomizationFile = solutionZip,
+                OverwriteUnmanagedCustomizations = true,
+                PublishWorkflows = true
+            });
+            CleanupOtherEntities(entityName);
+
+            // Step 10: Publish
+            var published = TryPublish(autoPublish, entityName);
+
+            // Step 11: Build result
+            var newButtonCount = RibbonXmlHelpers.CountExistingButtons(ribbonDoc);
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ManageRibbon] update — {entityName}");
+            sb.AppendLine($"Solution: {SOLUTION_NAME}");
+            sb.AppendLine($"Operations: {ops.Count}");
+            foreach (var s in summaries)
+                sb.AppendLine($"  ✓ {s}");
+            if (xsdWarnings.Count > 0)
+            {
+                sb.AppendLine($"XSD Warnings ({xsdWarnings.Count}):");
+                foreach (var w in xsdWarnings)
+                    sb.AppendLine($"  ⚠ {w}");
+            }
+            sb.AppendLine($"Existing buttons preserved: {existingButtonCount}");
+            sb.AppendLine($"Total buttons after: {newButtonCount}");
             sb.AppendLine($"Status: Updated successfully");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
             sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");

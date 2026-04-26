@@ -315,32 +315,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public List<string> OperationSummaries { get; set; }
     }
 
-    internal sealed class BuildRibbonXmlResult
-    {
-        [JsonPropertyName("entityName")]
-        public string EntityName { get; set; }
-
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
-
-        [JsonPropertyName("operationsCount")]
-        public int OperationsCount { get; set; }
-
-        [JsonPropertyName("operationSummaries")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<string> OperationSummaries { get; set; }
-
-        [JsonPropertyName("existingButtonsPreserved")]
-        public int ExistingButtonsPreserved { get; set; }
-
-        [JsonPropertyName("totalButtons")]
-        public int TotalButtons { get; set; }
-
-        [JsonPropertyName("ribbonXmlPath")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string RibbonXmlPath { get; set; }
-    }
-
     internal sealed class ManageRibbonResult
     {
         [JsonPropertyName("action")]
