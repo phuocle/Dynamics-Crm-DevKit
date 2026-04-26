@@ -9,7 +9,14 @@
 > [!CAUTION]
 > **NEVER** do any of the following — no exceptions, ever:
 > - `git add` / `git commit` / `git push` — only via `/claude-commit`
-> - `/claude-build-debug` or `/claude-build-release` — forbidden
+
+## ⚠️ DO NOT AUTO-EXECUTE
+
+> [!WARNING]
+> The following commands are **dangerous** and must NOT be auto-executed by Claude.
+> They may ONLY run when the user **explicitly invokes them** in chat:
+> - `/claude-build-debug`
+> - `/claude-build-release`
 
 ---
 
