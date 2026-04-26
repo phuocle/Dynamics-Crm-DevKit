@@ -15,8 +15,11 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -44,20 +47,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "ACTIONS:\n" +
             "- 'list': List all Model-Driven Apps with SiteMap info. Optional: app_name filter\n" +
             "- 'detail': Show current SiteMap XML. Required: app\n" +
-            "- 'update' (default): Modify SiteMap XML. Required: app + sitemapxml\n" +
-            "- 'create': Create SiteMap for app with no existing SiteMap. Required: app + sitemapxml\n" +
+            "- 'update' (recommended): Build + import in one call. Required: app + operations\n" +
+            "- 'update' (advanced): Provide raw SiteMap XML directly. Required: app + sitemapxml\n" +
+            "- 'create' (recommended): Create new SiteMap with operations. Required: app + operations\n" +
+            "- 'create' (advanced): Create with raw XML. Required: app + sitemapxml\n" +
             "- 'undo': Restore from backup. Required: app + sitemapxml (= backup file path)\n\n" +
 
             "SAFETY: Auto-backup before changes, XSD validates XML, backup failure blocks update.\n\n" +
 
-            "TIPS:\n" +
+            "WORKFLOW (recommended):\n" +
+            "  manage_sitemap(action='update', app=..., operations=[...])\n" +
+            "  → auto-builds SiteMap XML + backup + validate + import + publish\n\n" +
+
+            "OPERATIONS (12 actions):\n" +
+            "- add_area | add_group | add_subarea\n" +
+            "- remove_area | remove_group | remove_subarea\n" +
+            "- update_area | update_group | update_subarea\n" +
+            "- move_area | move_group | move_subarea\n\n" +
+
             "- app accepts display name OR GUID (fuzzy match)\n" +
-            "- Use build_sitemap_xml to build XML, pass result to sitemapxml for update/create\n" +
-            "- Read schema://sitemapxml for SiteMap XML structure and rules")]
+            "- Read schema://sitemapxml for SiteMap XML structure and operation format")]
         public CallToolResult manage_sitemap(
             [Description("'list', 'detail', 'update' (default), 'create', or 'undo'.")] string action = "update",
             [Description("App display name or GUID (fuzzy match). Required for detail/update/create/undo; for list use app_name.")] string app = "",
-            [Description("For 'update'/'create': SiteMap XML string or file path from build_sitemap_xml. For 'undo': backup file path. Ignored for list/detail.")] string sitemapxml = "",
+            [Description("For 'update'/'create' (recommended): JSON array of SiteMap operations (auto-builds + imports). " +
+                "Read schema://sitemapxml for format. Example: [{\"action\":\"add_area\",\"label\":\"Sales\"}]")] string operations = "",
+            [Description("For 'update'/'create' (advanced): raw SiteMap XML string. For 'undo': backup file path. " +
+                "Mutually exclusive with 'operations'. Ignored for list/detail.")] string sitemapxml = "",
             [Description("Filter apps by name (contains match). Only used with action='list'.")] string app_name = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
             [Description("Backup current SiteMap before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
@@ -89,21 +105,130 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (resolveError != null)
                 return ErrorResult(resolveError);
 
-            if (string.IsNullOrWhiteSpace(sitemapxml))
-                return ErrorResult(
-                    $"Error: sitemapxml is required for action='{actionName}'.\n" +
-                    $"For update/create: SiteMap XML string or file path from build_sitemap_xml. For undo: backup file path from .devkit/backups/sitemaps/.\n" +
-                    $"Read schema://sitemapxml for SiteMap XML structure.");
+            // ── undo: requires sitemapxml only ────────────────────────────
+            if (actionName == "undo")
+            {
+                if (!string.IsNullOrWhiteSpace(operations))
+                    return ErrorResult(
+                        "Error: 'operations' is not applicable for action='undo'.\n" +
+                        "For undo, provide sitemapxml=<backup_file_path> from .devkit/backups/sitemaps/.");
+                if (string.IsNullOrWhiteSpace(sitemapxml))
+                    return ErrorResult(
+                        "Error: sitemapxml is required for action='undo'.\n" +
+                        "Provide the backup file path from .devkit/backups/sitemaps/.");
+                try { return UndoSiteMap(appModuleId, sitemapxml.Trim(), validate, auto_publish); }
+                catch (Exception ex) { return ErrorResult($"[Error] SiteMap undo failed\nAppModuleId: {appModuleId}\nMessage: {ex.Message}"); }
+            }
 
-            // Resolve temp file path (from build_sitemap_xml) or keep inline XML
-            var resolvedSiteMapXml = (actionName == "undo")
-                ? sitemapxml.Trim()  // undo expects backup file path, not sitemap temp file
-                : ResolveSiteMapXmlInput(sitemapxml.Trim());
+            // ── update / create: operations XOR sitemapxml ────────────────
+            var hasOps = !string.IsNullOrWhiteSpace(operations);
+            var hasXml = !string.IsNullOrWhiteSpace(sitemapxml);
+
+            if (hasOps && hasXml)
+                return ErrorResult(
+                    $"Error: Provide either 'operations' (recommended) or 'sitemapxml', not both.\n" +
+                    $"- operations: JSON array for auto-build (recommended)\n" +
+                    $"- sitemapxml: raw XML string (advanced)");
+
+            if (!hasOps && !hasXml)
+                return ErrorResult(
+                    $"Error: Provide 'operations' (recommended) or 'sitemapxml' for action='{actionName}'.\n" +
+                    $"- operations: JSON array, e.g. [{{\"action\":\"add_area\",\"label\":\"Sales\"}}]\n" +
+                    $"- sitemapxml: raw SiteMap XML string\n" +
+                    $"Read schema://sitemapxml for SiteMap XML structure and operation format.");
+
+            // ── operations path: build XML inline ─────────────────────────
+            if (hasOps)
+            {
+                List<JsonElement> ops;
+                try
+                {
+                    ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
+                    if (ops == null || ops.Count == 0)
+                        return ErrorResult(
+                            "Error: operations must be a non-empty JSON array.\n" +
+                            "Example: [{\"action\":\"add_area\",\"label\":\"Sales\"}].\n" +
+                            "Read schema://sitemapxml for SiteMap XML structure and operation format.");
+                }
+                catch (JsonException ex)
+                {
+                    return ErrorResult(
+                        $"Error: Invalid operations JSON: {ex.Message}\n" +
+                        "Expected a JSON array of operation objects, each with an 'action' field.\n" +
+                        "Read schema://sitemapxml for SiteMap XML structure and operation format.");
+                }
+
+                string currentSiteMapXml;
+                if (actionName == "update")
+                {
+                    var (_, _, xml, retrieveError) = RetrieveAppSiteMap(appModuleId);
+                    if (retrieveError != null) return ErrorResult(retrieveError);
+                    currentSiteMapXml = xml;
+                }
+                else // create
+                {
+                    currentSiteMapXml = "<SiteMap></SiteMap>";
+                }
+
+                XDocument siteMapDoc;
+                try { siteMapDoc = XDocument.Parse(currentSiteMapXml); }
+                catch (Exception ex) { return ErrorResult($"Error: Failed to parse current SiteMap XML: {ex.Message}"); }
+
+                var lcid = McpHelper.GetBaseLanguageCode(_serviceClient);
+
+                string modifiedXml;
+                List<string> opSummaries;
+                try
+                {
+                    (modifiedXml, opSummaries) = SiteMapXmlOperationsHelper.ApplyOperations(siteMapDoc, ops, lcid);
+                }
+                catch (SiteMapOperationException ex)
+                {
+                    return ErrorResult($"Error in operation '{ex.Action}': {ex.InnerMessage}");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return ErrorResult($"Error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult($"Error: Failed to apply operations: {ex.Message}");
+                }
+
+                try
+                {
+                    return actionName == "update"
+                        ? UpdateSiteMapXml(appModuleId, modifiedXml, validate, backup, auto_publish, opSummaries)
+                        : CreateSiteMap(appModuleId, modifiedXml, validate, auto_publish, opSummaries);
+                }
+                catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
+                {
+                    var fault = fex.Detail;
+                    var errorDetail = fault != null
+                        ? $"{fault.Message} (ErrorCode: 0x{fault.ErrorCode:X8})"
+                        : fex.Message;
+                    if (fault?.InnerFault != null)
+                        errorDetail += $" → InnerFault: {fault.InnerFault.Message}";
+                    return ErrorResult(
+                        $"[Error] SiteMap {actionName} failed\nAppModuleId: {appModuleId}\nMessage: {errorDetail}");
+                }
+                catch (Exception ex)
+                {
+                    var errorDetail = ex.InnerException != null
+                        ? $"{ex.Message} → {ex.InnerException.Message}"
+                        : ex.Message;
+                    return ErrorResult(
+                        $"[Error] SiteMap {actionName} failed\nAppModuleId: {appModuleId}\nMessage: {errorDetail}");
+                }
+            }
+
+            // ── sitemapxml path: existing flow ────────────────────────────
+            var resolvedSiteMapXml = ResolveSiteMapXmlInput(sitemapxml.Trim());
             if (resolvedSiteMapXml == null)
                 return ErrorResult(
                     $"[Error] SiteMapXml file not found\n" +
                     $"Path: {sitemapxml.Trim()}\n" +
-                    $"Tip: The file path from build_sitemap_xml may have been deleted. Re-run build_sitemap_xml to regenerate.");
+                    $"Tip: The provided file path does not exist.");
 
             try
             {
@@ -114,9 +239,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                     case "create":
                         return CreateSiteMap(appModuleId, resolvedSiteMapXml.Trim(), validate, auto_publish);
-
-                    case "undo":
-                        return UndoSiteMap(appModuleId, resolvedSiteMapXml.Trim(), validate, auto_publish);
 
                     default:
                         return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'list', 'detail', 'update', 'create', 'undo'.");
@@ -305,7 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: create ────────────────────────────────────────────────
 
         private CallToolResult CreateSiteMap(Guid appModuleId,
-            string sitemapxml, bool validate, bool auto_publish)
+            string sitemapxml, bool validate, bool auto_publish, List<string> opSummaries = null)
         {
             // Step 1: Retrieve app module and check it does NOT already have a SiteMap
             Entity appModule;
@@ -440,6 +562,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Status: Created and associated successfully");
                 sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+                if (opSummaries?.Count > 0)
+                {
+                    sb.AppendLine($"Operations: {opSummaries.Count}");
+                    foreach (var s in opSummaries)
+                        sb.AppendLine($"  - {s}");
+                }
                 if (validationWarnings?.Count > 0)
                 {
                     sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
@@ -456,7 +584,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = published || !auto_publish ? "created" : "created_publish_failed",
                     Validated = validate,
                     ValidationWarnings = validationWarnings,
-                    Published = published
+                    Published = published,
+                    OperationsCount = opSummaries?.Count,
+                    OperationSummaries = opSummaries?.Count > 0 ? opSummaries : null
                 };
                 return new CallToolResult
                 {
@@ -469,7 +599,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ─────────────────────────────────────────────────
 
         private CallToolResult UpdateSiteMapXml(Guid appModuleId,
-            string sitemapxml, bool validate, bool backup, bool auto_publish)
+            string sitemapxml, bool validate, bool backup, bool auto_publish, List<string> opSummaries = null)
         {
             // Step 1: Retrieve app module and its SiteMap
             var (appName, siteMapId, currentSiteMapXml, error) = RetrieveAppSiteMap(appModuleId);
@@ -562,6 +692,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Step 6: Return success
             {
                 var sb = BuildSuccessText(appName, appModuleId, siteMapId, backupPath, validate, published);
+                if (opSummaries?.Count > 0)
+                {
+                    sb.AppendLine($"Operations: {opSummaries.Count}");
+                    foreach (var s in opSummaries)
+                        sb.AppendLine($"  - {s}");
+                }
                 if (validationWarnings?.Count > 0)
                 {
                     sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
@@ -581,7 +717,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Validated = validate,
                     ValidationWarnings = validationWarnings,
                     BackupPath = backupPath,
-                    Published = published
+                    Published = published,
+                    OperationsCount = opSummaries?.Count,
+                    OperationSummaries = opSummaries?.Count > 0 ? opSummaries : null
                 };
                 return new CallToolResult
                 {
@@ -1032,7 +1170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         /// <summary>
-        /// Resolves the sitemapxml input: if it's a file path (from build_sitemap_xml), reads the file content.
+        /// Resolves the sitemapxml input: if it's a file path ending in .sitemap, reads the file content.
         /// If it's inline XML, returns as-is. Returns null if the file path doesn't exist.
         /// </summary>
         private static string ResolveSiteMapXmlInput(string sitemapxml)

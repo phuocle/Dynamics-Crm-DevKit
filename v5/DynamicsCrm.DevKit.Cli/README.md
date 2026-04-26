@@ -232,13 +232,13 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 }
 ```
 
-### Available MCP Tools (34)
+### Available MCP Tools (33)
 
 **Schema & Metadata**: `whoami`, `get_tables`, `get_messages`, `get_solution_components`
 
 **Data Operations**: `manage_record`, `execute_fetchxml`, `search_records`, `execute_webapi`, `manage_choice`, `manage_environment_variable`
 
-**Forms, Views & SiteMaps**: `manage_form`, `build_form_xml`, `manage_view`, `manage_sitemap`, `build_sitemap_xml`, `build_ribbon_xml`
+**Forms, Views & SiteMaps**: `manage_form`, `build_form_xml`, `manage_view`, `manage_sitemap`, `build_ribbon_xml`
 
 **Schema Management**: `upsert_table`, `upsert_column`, `upsert_relationship`
 
