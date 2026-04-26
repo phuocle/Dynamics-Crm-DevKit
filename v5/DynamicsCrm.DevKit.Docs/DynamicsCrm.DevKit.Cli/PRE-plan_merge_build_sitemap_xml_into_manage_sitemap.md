@@ -1,9 +1,10 @@
 # PRE-TASK: Refactor `BuildSiteMapXmlTool.cs` trước khi merge vào `manage_sitemap`
 
 > **Phạm vi của file này:** CHƯA MERGE gì cả. Chỉ:
-> 1. Move 2 tool files vào subfolder `SiteMap/`
-> 2. Tạo helper class `SiteMapXmlOperationsHelper.cs` trong cùng subfolder
-> 3. Refactor `BuildSiteMapXmlTool` để gọi helper thay vì tự xử lý
+> 1. Tạo helper class `SiteMapXmlOperationsHelper.cs` trong folder mới `Mcp/Tools/SiteMap/`
+> 2. Refactor `BuildSiteMapXmlTool` để gọi helper thay vì tự xử lý
+>
+> **Không move tool files** (`BuildSiteMapXmlTool.cs`, `ManageSiteMapTool.cs` giữ nguyên tại `Mcp/Tools/`) — nhất quán với Form PRE và Ribbon PRE.
 >
 > Sau PRE này: build pass, behavior identical, lần merge chính chỉ cần gọi helper từ `ManageSiteMapTool`.
 
@@ -25,15 +26,15 @@
 
 | Chỉ tiêu | Trước | Sau PRE |
 |---|---|---|
-| Vị trí tool files | `Mcp/Tools/*.cs` (flat) | `Mcp/Tools/SiteMap/*.cs` (subfolder) |
+| Vị trí tool files | `Mcp/Tools/*.cs` (flat) | **Giữ nguyên** `Mcp/Tools/*.cs` — không move |
 | `BuildSiteMapXmlTool.cs` LOC | ~817 | **≤ 200 LOC** (chỉ MCP shell + Dataverse calls) |
-| `SiteMapXmlOperationsHelper.cs` | không có | **~650 LOC**, pure XML logic, không có MCP attribute |
-| `ManageSiteMapTool.cs` | `Mcp/Tools/` | `Mcp/Tools/SiteMap/` (move nguyên, không sửa logic) |
+| `SiteMapXmlOperationsHelper.cs` | không có | **~650 LOC** tại `Mcp/Tools/SiteMap/`, pure XML logic, không có MCP attribute |
+| `ManageSiteMapTool.cs` | `Mcp/Tools/` | **Giữ nguyên** `Mcp/Tools/` — không move |
 | Namespace tool files | `Mcp.Tools` | **`Mcp.Tools`** — giữ nguyên (McpServerHost.cs không đổi) |
 | Namespace helper | (chưa có) | **`Mcp.Tools.SiteMap`** — nhất quán với `Tools.Form` / `Tools.Ribbon` |
 | Số tool MCP | 36 | **36** (không xóa tool) |
 | Build `/claude-build-cli` | pass | **pass** |
-| Behavior `build_sitemap_xml` | — | **Identical** (input → output giống hệt) |
+| Behavior `build_sitemap_xml` | — | **Identical** (input → output giống hệt, kể cả exact error text) |
 
 ---
 
@@ -41,9 +42,9 @@
 
 ```
 Mcp/Tools/
+├── BuildSiteMapXmlTool.cs            ← giữ nguyên vị trí, refactor nội bộ (gọi helper)
+├── ManageSiteMapTool.cs              ← không đụng
 ├── SiteMap/
-│   ├── BuildSiteMapXmlTool.cs        ← move + refactor (gọi helper)
-│   ├── ManageSiteMapTool.cs          ← move nguyên, không sửa logic
 │   └── SiteMapXmlOperationsHelper.cs ← tạo mới
 ├── Helper/
 │   ├── McpHelper.cs                  ← không đụng
@@ -63,11 +64,11 @@ Mcp/Tools/
 
 | File | Thao tác |
 |------|----------|
-| `Mcp/Tools/SiteMap/ManageSiteMapTool.cs` | **Move** từ `Mcp/Tools/ManageSiteMapTool.cs` — không sửa 1 dòng code |
-| `Mcp/Tools/SiteMap/BuildSiteMapXmlTool.cs` | **Move** từ `Mcp/Tools/BuildSiteMapXmlTool.cs` + **refactor** (xóa XML private methods, thêm LCID resolve + gọi helper) |
+| `Mcp/Tools/BuildSiteMapXmlTool.cs` | **Refactor** tại chỗ — xóa XML private methods, thêm LCID resolve + gọi helper. Giữ nguyên vị trí. |
 | `Mcp/Tools/SiteMap/SiteMapXmlOperationsHelper.cs` | **Tạo mới** — chứa 12 executors + XML helpers, expose 1 method `ApplyOperations` |
 
 **Không đụng:**
+- `Mcp/Tools/ManageSiteMapTool.cs` — giữ nguyên vị trí, không sửa gì
 - `Mcp/Tools/Models/StructuredResults.cs`
 - `Mcp/McpServerHost.cs`
 - `Mcp/Tools/Helper/McpHelper.cs`
@@ -102,6 +103,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
     {
         // ...
     }
+
+    // Used to carry action name back to shell for exact error text: "Error in operation '{action}': ..."
+    internal sealed class SiteMapOperationException : Exception
+    {
+        public string Action { get; }
+        public string InnerMessage { get; }
+        public SiteMapOperationException(string action, string message)
+            : base($"Error in operation '{action}': {message}")
+        {
+            Action = action;
+            InnerMessage = message;
+        }
+    }
 }
 ```
 
@@ -109,20 +123,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
 
 ```csharp
 /// <summary>
-/// Parse currentSiteMapXml, apply all operations, return modified XML + per-op summaries.
-/// Throws InvalidOperationException on any operation error.
+/// Apply all operations to currentSiteMapXml. Returns modified XML + per-op summaries.
+/// Throws InvalidOperationException on parse error or per-operation error.
+/// IMPORTANT: Caller is responsible for wrapping errors with exact original error text.
 /// </summary>
+/// <param name="doc">Pre-parsed XDocument (caller parses to preserve exact error text).</param>
 /// <param name="lcid">Base language code (e.g. 1033). Caller resolves via McpHelper.GetBaseLanguageCode.</param>
 internal static (string ModifiedSiteMapXml, List<string> OperationSummaries)
-    ApplyOperations(string currentSiteMapXml, List<JsonElement> operations, int lcid)
+    ApplyOperations(XDocument doc, List<JsonElement> operations, int lcid)
 {
-    XDocument doc;
-    try { doc = XDocument.Parse(currentSiteMapXml); }
-    catch (Exception ex)
-    {
-        throw new InvalidOperationException($"Failed to parse current SiteMap XML: {ex.Message}");
-    }
-
     var summaries = new List<string>();
     foreach (var op in operations)
     {
@@ -133,7 +142,15 @@ internal static (string ModifiedSiteMapXml, List<string> OperationSummaries)
                 "remove_subarea, update_area, update_group, update_subarea, " +
                 "move_area, move_group, move_subarea.");
         var action = actionProp.GetString()?.ToLowerInvariant();
-        summaries.Add(DispatchOperation(doc, action, op, lcid));
+        try
+        {
+            summaries.Add(DispatchOperation(doc, action, op, lcid));
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Wrap with action name so caller can emit: "Error in operation '{action}': ..."
+            throw new SiteMapOperationException(action, ex.Message);
+        }
     }
     return (doc.ToString(SaveOptions.None), summaries);
 }
@@ -280,20 +297,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools   // ← giữ nguyên — McpServerH
             // Step 3: Retrieve current SiteMap XML (giữ nguyên)
             // Step 4: Parse operations JSON (giữ nguyên)
 
-            // Step 5: Resolve LCID — 1 lần, pass xuống helper
+            // Step 5: Parse XML in shell — preserves exact original error text
+            XDocument siteMapDoc;
+            try { siteMapDoc = XDocument.Parse(siteMapXml); }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to parse current SiteMap XML: {ex.Message}");
+            }
+
+            // Step 6: Resolve LCID — 1 lần, pass xuống helper
             var lcid = McpHelper.GetBaseLanguageCode(_serviceClient);
 
-            // Step 6: Apply operations via helper
+            // Step 7: Apply operations via helper — per-op error wraps action name exactly like original
             string modifiedXml;
             List<string> opSummaries;
             try
             {
                 (modifiedXml, opSummaries) =
-                    SiteMapXmlOperationsHelper.ApplyOperations(siteMapXml, ops, lcid);
+                    SiteMapXmlOperationsHelper.ApplyOperations(siteMapDoc, ops, lcid);
             }
-            catch (InvalidOperationException ex)
+            catch (SiteMapOperationException ex)   // action name already embedded by helper
             {
-                return ErrorResult($"Error in operation: {ex.Message}");
+                return ErrorResult($"Error in operation '{ex.Action}': {ex.InnerMessage}");
             }
             catch (Exception ex)
             {
@@ -357,11 +382,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools   // ← giữ nguyên — McpServerH
 
 ---
 
-## 6. `ManageSiteMapTool.cs` — move nguyên
+## 6. `ManageSiteMapTool.cs` — không đụng
 
-**Không sửa 1 dòng code nào.** Chỉ move file từ `Mcp/Tools/ManageSiteMapTool.cs` sang `Mcp/Tools/SiteMap/ManageSiteMapTool.cs`.
+**Không sửa, không move.** File giữ nguyên tại `Mcp/Tools/ManageSiteMapTool.cs`.
 
-Namespace trong file vẫn là `DynamicsCrm.DevKit.Cli.Mcp.Tools` — không cần đổi, không cần sửa `McpServerHost.cs`.
+Namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools` giữ nguyên — `McpServerHost.cs` không cần sửa.
 
 ---
 
@@ -371,30 +396,29 @@ Namespace trong file vẫn là `DynamicsCrm.DevKit.Cli.Mcp.Tools` — không c�
 - [ ] **T2.** Đọc toàn bộ `Mcp/Tools/BuildSiteMapXmlTool.cs` (~817 LOC) để nắm đủ logic trước khi copy
 - [ ] **T3.** Tạo `Mcp/Tools/SiteMap/SiteMapXmlOperationsHelper.cs`:
   - Namespace: `DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap`
-  - `internal static class SiteMapXmlOperationsHelper`
-  - Method `ApplyOperations(currentSiteMapXml, operations, lcid)` public entry (với XML parse trong `try/catch`)
+  - `internal static class SiteMapXmlOperationsHelper` + `internal sealed class SiteMapOperationException`
+  - Method `ApplyOperations(XDocument doc, List<JsonElement> operations, int lcid)` — nhận `XDocument` (shell đã parse); wrap per-op errors thành `SiteMapOperationException`
   - 12 operation executors + 10 XML helpers (xem §4.4) — đổi thành `private static`
   - `BuildTitlesElement(label, lcid)` và `BuildSubAreaElement(sa, lcid)` với `int lcid` param
   - Verify: không có `[McpServerToolType]`, không có `ServiceClient`
 - [ ] **T4.** Build sớm: `/claude-build-cli` sau T3 để verify namespace + using trước khi đi tiếp
-- [ ] **T5.** Move `Mcp/Tools/ManageSiteMapTool.cs` → `Mcp/Tools/SiteMap/ManageSiteMapTool.cs` (không sửa gì)
-- [ ] **T6.** Move + refactor `Mcp/Tools/BuildSiteMapXmlTool.cs` → `Mcp/Tools/SiteMap/BuildSiteMapXmlTool.cs`:
+- [ ] **T5.** Refactor `Mcp/Tools/BuildSiteMapXmlTool.cs` tại chỗ (KHÔNG move):
   - Thêm `using DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap;`
-  - Xóa 25 private XML methods (xem bảng §5)
-  - Thêm resolve LCID + gọi `SiteMapXmlOperationsHelper.ApplyOperations`
+  - Parse XML trong shell (try/catch với exact error text gốc: `"Error: Failed to parse current SiteMap XML: ..."`)
+  - Resolve LCID + gọi `SiteMapXmlOperationsHelper.ApplyOperations(siteMapDoc, ops, lcid)`
+  - Catch `SiteMapOperationException` → `ErrorResult($"Error in operation '{ex.Action}': {ex.InnerMessage}")`
   - Dùng `modifiedXml` từ helper thay vì `siteMapDoc.ToString(...)`
-  - Xóa usings không còn cần (`System.Xml.Linq`, `System.Text.RegularExpressions`)
-  - Giữ nguyên: `[McpServerTool]` attributes, `[Description]` strings, error text, response format
-- [ ] **T7.** Xóa file gốc tại `Mcp/Tools/BuildSiteMapXmlTool.cs` và `Mcp/Tools/ManageSiteMapTool.cs` (đã move sang `SiteMap/`)
-- [ ] **T8.** Run `/claude-build-cli` — phải pass không có lỗi
-- [ ] **T9.** Restart MCP + smoke test (xem §8)
+  - Xóa 25 private XML methods (xem bảng §5), xóa usings không còn cần
+  - Giữ nguyên: `[McpServerTool]` attributes, `[Description]` strings, response format
+- [ ] **T6.** Run `/claude-build-cli` — phải pass không có lỗi
+- [ ] **T7.** Restart MCP + smoke test (xem §8)
 
 ---
 
 ## 8. Acceptance Criteria
 
-- [ ] `Mcp/Tools/SiteMap/` chứa đúng 3 files: `BuildSiteMapXmlTool.cs`, `ManageSiteMapTool.cs`, `SiteMapXmlOperationsHelper.cs`
-- [ ] Files gốc `Mcp/Tools/BuildSiteMapXmlTool.cs` và `Mcp/Tools/ManageSiteMapTool.cs` **đã bị xóa**
+- [ ] `Mcp/Tools/SiteMap/` chứa đúng **1 file**: `SiteMapXmlOperationsHelper.cs`
+- [ ] `Mcp/Tools/BuildSiteMapXmlTool.cs` và `Mcp/Tools/ManageSiteMapTool.cs` **vẫn tồn tại tại vị trí cũ** (không move)
 - [ ] `SiteMapXmlOperationsHelper.cs` namespace là `DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap`, **không** có `[McpServerToolType]`
 - [ ] Tool files namespace vẫn là `DynamicsCrm.DevKit.Cli.Mcp.Tools` — `McpServerHost.cs` **không thay đổi**
 - [ ] Tool count khi list MCP vẫn là **36**
@@ -408,7 +432,8 @@ Namespace trong file vẫn là `DynamicsCrm.DevKit.Cli.Mcp.Tools` — không c�
   2. `build_sitemap_xml(app='<app name>', operations='[{"action":"add_area","label":"DevKit Test Area"}]')`
   3. Kiểm tra: response text chứa `[BuildSiteMapXml]`, có `Operations performed:`, có đường dẫn file `.sitemap` trên đĩa
   4. **KHÔNG** gọi `manage_sitemap(action='update', …)` — chỉ test build, không apply
-- [ ] `git diff --stat`: chỉ thấy thay đổi ở `Mcp/Tools/SiteMap/` (3 files) + xóa 2 files gốc. Không thay đổi ở `McpServerHost.cs`, `StructuredResults.cs`, hay bất kỳ file `.md` nào
+- [ ] Error text regression check: gọi với XML hỏng → response phải chứa `"Error: Failed to parse current SiteMap XML:"`, gọi với operation lỗi → response phải chứa `"Error in operation '<action>':"`
+- [ ] `git diff --stat`: chỉ thấy **2 file** — `Mcp/Tools/BuildSiteMapXmlTool.cs` (shrink) + `Mcp/Tools/SiteMap/SiteMapXmlOperationsHelper.cs` (mới). Không thay đổi ở `ManageSiteMapTool.cs`, `McpServerHost.cs`, `StructuredResults.cs`, hay bất kỳ file `.md` nào
 
 ---
 
@@ -417,7 +442,8 @@ Namespace trong file vẫn là `DynamicsCrm.DevKit.Cli.Mcp.Tools` — không c�
 | Risk | Mitigation |
 |------|------------|
 | Folder casing sai (`Sitemap` thay vì `SiteMap`) → class name không khớp convention | Tạo folder với đúng casing `SiteMap` ngay T1; grep `SiteMap` để confirm |
-| Move file mà không xóa file gốc → build có 2 class trùng tên | Xóa file gốc ngay trong T7, trước khi build T8 |
+| Error text regression: shell không còn emit `"Error in operation '{action}': ..."` với action name | Shell bắt `SiteMapOperationException` và dùng `ex.Action`/`ex.InnerMessage`; verify bằng acceptance test error text |
+| Helper parse XML thay vì shell → `"Failed to parse..."` text bị đổi | Shell phải parse XML và catch trước khi gọi helper; helper nhận `XDocument`, không nhận `string` |
 | Namespace helper sai → `BuildSiteMapXmlTool` không gọi được helper | Namespace `Tools.SiteMap` trong helper + `using DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap;` trong tool file; build T4 sớm để phát hiện |
 | Quên truyền `lcid` xuống 1 method nào đó | Sau T3, grep `BuildTitlesElement\|BuildSubAreaElement` trong helper — phải có `lcid` ở tất cả call sites |
 | `using` thiếu trong helper → build fail | Build sớm sau T3 (bước T4) để fail nhanh, sửa nhanh |

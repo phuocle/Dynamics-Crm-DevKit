@@ -235,6 +235,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 | `ExecuteRemoveLibrary(XDocument, JsonElement)` | 1076 |
 | `ExecuteAddEvent(XDocument, JsonElement)` | 719 |
 | `ExecuteRemoveEvent(XDocument, JsonElement)` | 1134 |
+| `EnsureLibrary(XDocument, string)` (private helper) | 1537 |
+| `ValidEventNames` (private static readonly HashSet) | 714 |
 
 **Khai báo class:**
 ```csharp
@@ -272,6 +274,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         // Event
         public static string ExecuteAddEvent(XDocument formDoc, JsonElement op);
         public static string ExecuteRemoveEvent(XDocument formDoc, JsonElement op);
+
+        // Internal helpers (used by ExecuteAddLibrary + ExecuteAddEvent)
+        private static readonly HashSet<string> ValidEventNames;
+        private static (bool added, string libraryUniqueId) EnsureLibrary(XDocument formDoc, string libraryName);
+        // EnsureLibrary calls FormXmlHelpers.NewGuid() internally
     }
 }
 ```
@@ -546,6 +553,7 @@ Bước 7: /claude-build-cli + restart MCP + smoke test
   3. Kiểm tra: response text bắt đầu `[BuildFormXML] account -- …`, có `Operations performed:`, có `FormXML saved to: …\.devkit\modified_forms\account_<guid>.formxml`, file tồn tại trên đĩa.
   4. **KHÔNG** gọi `manage_form(action='update', …)` — chỉ test build, không apply.
 - [ ] `git diff --stat`: chỉ thấy 6 file thay đổi — `BuildFormXMLTool.cs` shrink + 5 file mới trong `Form/`. **Không** thay đổi ở `ManageFormTool.cs`, `McpServerHost.cs`, `StructuredResults.cs`, hay file `.md` nào.
+- [ ] Không còn dangling reference: grep `EnsureLibrary` và `ValidEventNames` trong `BuildFormXMLTool.cs` sau khi tách phải ra 0 kết quả; trong `FormFieldEventOperations.cs` phải có cả 2.
 
 ---
 
@@ -580,4 +588,5 @@ Chạy tiếp `plan_merge_build_form_xml_into_manage_form.md`. Khi đó:
 - [ ] `/claude-build-cli` pass, 0 error, không phát sinh warning mới
 - [ ] `build_form_xml` smoke test trả output cùng cấu trúc text + đúng đường dẫn temp file
 - [ ] Tool count vẫn = 36
+- [ ] `EnsureLibrary` và `ValidEventNames` có mặt trong `FormFieldEventOperations.cs`, không còn trong `BuildFormXMLTool.cs`
 - [ ] `git diff --stat` chỉ thấy 6 file (`BuildFormXMLTool.cs` shrink + 5 file mới); KHÔNG đụng `ManageFormTool.cs` hay file `.md` nào

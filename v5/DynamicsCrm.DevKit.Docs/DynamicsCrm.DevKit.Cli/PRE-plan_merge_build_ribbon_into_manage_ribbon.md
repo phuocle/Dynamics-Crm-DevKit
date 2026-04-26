@@ -18,7 +18,7 @@ gọi các helper này thay vì inline toàn bộ code.
 
 | File | Trước | Sau |
 |------|-------|-----|
-| `BuildRibbonXmlTool.cs` | 2409 dòng | **~120 dòng** |
+| `BuildRibbonXmlTool.cs` | 2409 dòng | **≤ 120 dòng** |
 | `ManageRibbonTool.cs` | 1028 dòng | 1028 dòng (chưa thay đổi) |
 | `Ribbon/RibbonXmlHelpers.cs` | (mới) | ~150 dòng |
 | `Ribbon/RibbonValidation.cs` | (mới) | ~150 dòng |
@@ -26,7 +26,7 @@ gọi các helper này thay vì inline toàn bộ code.
 | `Ribbon/RibbonButtonOperations.cs` | (mới) | ~550 dòng |
 | `Ribbon/RibbonFlyoutOperations.cs` | (mới) | ~700 dòng |
 
-Tổng: **~1750 dòng** phân bố vào **7 file nhỏ** thay vì **1 file 2409 dòng**.
+Tổng: **~1750 dòng** phân bố vào **6 file** (shell thu gọn + 5 helper) thay vì **1 file 2409 dòng**.
 
 ---
 
@@ -103,12 +103,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
         public static (List<string> Errors, List<string> Warnings) ValidateRibbonXml(string ribbonXml) { ... }
         private static XmlSchemaSet GetRibbonSchemaSet() { ... }
         public bool IsOobButton(string entityName, string buttonId) { ... }
-        public static RibbonLocationFilters DetectRibbonFilter(string buttonId) { ... }
+        // Return type là SDK enum Microsoft.Crm.Sdk.Messages.RibbonLocationFilters — KHÔNG tạo enum local cùng tên
+        public static Microsoft.Crm.Sdk.Messages.RibbonLocationFilters DetectRibbonFilter(string buttonId) { ... }
     }
 }
 ```
 
-> **`RibbonLocationFilters` enum:** Đặt trong file riêng `Ribbon/RibbonLocationFilters.cs` (~20 dòng), cùng namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon`. Không nhét vào `RibbonValidation.cs` để tránh phình file.
+> **`RibbonLocationFilters`:** Đây là SDK enum trong `Microsoft.Crm.Sdk.Messages` — **KHÔNG tạo file local `RibbonLocationFilters.cs`** vì sẽ shadow SDK type và gây lỗi type-incompatibility khi gán vào `RetrieveEntityRibbonRequest.RibbonLocationFilter`. Giữ `using Microsoft.Crm.Sdk.Messages;` trong `RibbonValidation.cs`.
 
 ---
 
@@ -160,12 +161,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
     internal sealed class RibbonButtonOperations
     {
         private readonly RibbonValidation _validation;
+        private readonly int _lcid;
 
-        public RibbonButtonOperations(RibbonValidation validation) { ... }
+        // lcid resolved once in tool shell via McpHelper.GetBaseLanguageCode(_serviceClient)
+        public RibbonButtonOperations(RibbonValidation validation, int lcid)
+        {
+            _validation = validation;
+            _lcid = lcid;
+        }
+
         public (string error, string summary) ExecuteAddButton(...) { ... }
         public (string error, string summary) ExecuteUpdateButton(...) { ... }
         public (string error, string summary) ExecuteHideButton(...) { ... }
         public (string error, string summary) ExecuteShowButton(...) { ... }
+        // All methods call RibbonXmlHelpers.UpsertLocLabel(root, _lcid, locLabelId, description)
     }
 }
 ```
@@ -196,8 +205,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
     internal sealed class RibbonFlyoutOperations
     {
         private readonly RibbonValidation _validation;
+        private readonly int _lcid;
 
-        public RibbonFlyoutOperations(RibbonValidation validation) { ... }
+        // lcid resolved once in tool shell via McpHelper.GetBaseLanguageCode(_serviceClient)
+        public RibbonFlyoutOperations(RibbonValidation validation, int lcid)
+        {
+            _validation = validation;
+            _lcid = lcid;
+        }
+
         public (string error, string summary) ExecuteAddSplitButton(...) { ... }
         public (string error, string summary) ExecuteUpdateSplitButton(...) { ... }
         public (string error, string summary) ExecuteAddFlyoutStatic(...) { ... }
@@ -205,6 +221,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
         public (string error, string summary) ExecuteHideFlyoutItem(...) { ... }
         public (string error, string summary) ExecuteShowFlyoutItem(...) { ... }
         private (...) ResolveFlyoutItemIds(...) { ... }
+        // All label-writing calls use RibbonXmlHelpers.UpsertLocLabel(root, _lcid, locLabelId, description)
     }
 }
 ```
@@ -220,8 +237,9 @@ DynamicsCrm.DevKit.Cli/Mcp/Tools/Ribbon/
     RibbonSolutionFetcher.cs
     RibbonButtonOperations.cs
     RibbonFlyoutOperations.cs
-    RibbonLocationFilters.cs   ← enum riêng (~20 dòng)
 ```
+
+> **Không tạo `RibbonLocationFilters.cs`** — `RibbonLocationFilters` là SDK enum từ `Microsoft.Crm.Sdk.Messages`, không phải type nội bộ. Tạo enum local cùng tên sẽ shadow SDK type và gây lỗi compile/runtime.
 
 ---
 
@@ -240,8 +258,10 @@ public CallToolResult build_ribbon_xml(string entity_name, string operations)
     // Validate inputs
     var validation = new RibbonValidation(_serviceClient);
     var fetcher = new RibbonSolutionFetcher(_serviceClient);
-    var btnOps = new RibbonButtonOperations(validation);
-    var flyoutOps = new RibbonFlyoutOperations(validation);
+    // Resolve LCID once here — passed to operation classes so helpers stay ServiceClient-free
+    var lcid = McpHelper.GetBaseLanguageCode(_serviceClient);
+    var btnOps = new RibbonButtonOperations(validation, lcid);
+    var flyoutOps = new RibbonFlyoutOperations(validation, lcid);
 
     // ... validate entity, parse ops, call helpers, build result ...
 }
@@ -273,7 +293,7 @@ chỉ thay đổi trong bước MERGE chính (xem `plan_merge_build_ribbon_into_
 
 1. **Không thay đổi logic** — chỉ di chuyển, không refactor behavior
 2. **Giữ nguyên `SurfaceLocationMap`** trong `RibbonXmlHelpers.cs` (static readonly dict); grep confirm sau khi tách
-3. **`UpsertLocLabel`** → đưa vào `RibbonXmlHelpers.cs`, đổi signature nhận `int lcid` thay vì `ServiceClient`; caller (tool shell) resolve lcid 1 lần qua `McpHelper.GetBaseLanguageCode` rồi truyền xuống
+3. **`UpsertLocLabel`** → đưa vào `RibbonXmlHelpers.cs`, signature: `internal static void UpsertLocLabel(XElement root, int lcid, string locLabelId, string description)`. Tool shell resolve `lcid` 1 lần rồi truyền vào constructor `RibbonButtonOperations(validation, lcid)` và `RibbonFlyoutOperations(validation, lcid)`; operation classes gọi `RibbonXmlHelpers.UpsertLocLabel(root, _lcid, ...)` thay vì gọi `_serviceClient` trực tiếp.
 4. **`_cachedSchemaSet` và `_schemaLock`** → static fields trong `RibbonValidation.cs` — KHÔNG move sang class khác
 5. **Namespace:** `DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon` cho tất cả file mới
 6. **Không thêm `[McpServerToolType]`** vào bất kỳ file nào trong folder `Ribbon/`
@@ -300,11 +320,13 @@ Bước 8: Restart MCP + smoke test
 ## Kiểm tra sau khi tách
 
 - [ ] `BuildRibbonXmlTool.cs` còn ≤ 120 dòng
-- [ ] Tất cả 5 file helper (+ `RibbonLocationFilters.cs`) trong `Mcp/Tools/Ribbon/` đã có đủ nội dung, đúng namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon`
+- [ ] Đúng 5 file helper trong `Mcp/Tools/Ribbon/` đã có đủ nội dung, đúng namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon` (không có `RibbonLocationFilters.cs` — đây là SDK type)
 - [ ] Không có file nào trong `Ribbon/` mang `[McpServerToolType]`
 - [ ] Không có circular dependency giữa các helper
-- [ ] `UpsertLocLabel` nhận `int lcid` (không còn nhận `ServiceClient`)
+- [ ] `UpsertLocLabel` signature là `(XElement root, int lcid, string locLabelId, string description)` — không còn nhận `ServiceClient`
+- [ ] `RibbonButtonOperations` và `RibbonFlyoutOperations` nhận `int lcid` qua constructor
 - [ ] `_cachedSchemaSet` / `_schemaLock` vẫn là `private static` trong `RibbonValidation`
+- [ ] Grep `RibbonLocationFilters` trong `Ribbon/` — chỉ có `using Microsoft.Crm.Sdk.Messages;`, không có local enum definition
 - [ ] Build pass: `/claude-build-cli` (0 error, không phát sinh warning mới)
 - [ ] Restart MCP process:
   ```powershell
@@ -326,9 +348,10 @@ Bước 8: Restart MCP + smoke test
 |------|------------|
 | Đổi behavior do quên copy 1 đoạn | Diff từng executor side-by-side; không thêm/sửa logic, chỉ di dời |
 | `_cachedSchemaSet` / `_schemaLock` static state mất khi tách class | Giữ cả 2 là `private static` field trong `RibbonValidation` — không di chuyển sang class khác |
-| `UpsertLocLabel` mất `ServiceClient` khi trở thành static trong `RibbonXmlHelpers` | Đổi signature nhận `int lcid`; caller (tool shell) resolve lcid 1 lần qua `McpHelper.GetBaseLanguageCode` rồi truyền xuống toàn bộ chain |
+| `UpsertLocLabel` mất `ServiceClient` khi trở thành static trong `RibbonXmlHelpers` | Đổi signature thành `(XElement root, int lcid, string locLabelId, string description)`; tool shell resolve lcid 1 lần, truyền vào constructor `RibbonButtonOperations(validation, lcid)` và `RibbonFlyoutOperations(validation, lcid)` |
+| LCID không được thread xuống operation class → `UpsertLocLabel` thiếu lcid | Kiểm tra: constructor của cả 2 operation classes đều nhận `int lcid`; grep `UpsertLocLabel` trong `RibbonButtonOperations` và `RibbonFlyoutOperations` — phải gọi `_lcid`, không gọi `_serviceClient` |
 | `SurfaceLocationMap` placement sai → compile error | Đặt trong `RibbonXmlHelpers.cs`; sau khi tách grep `SurfaceLocationMap` để confirm không còn reference thừa |
-| `RibbonLocationFilters` enum không tìm thấy → compile error | Đặt trong file riêng `Ribbon/RibbonLocationFilters.cs`; chọn 1 nơi nhất quán, không split |
+| Tạo nhầm enum local `RibbonLocationFilters` → shadow SDK type, build hoặc runtime fail | `RibbonLocationFilters` là SDK enum trong `Microsoft.Crm.Sdk.Messages` — **KHÔNG tạo file local cùng tên**; giữ `using Microsoft.Crm.Sdk.Messages;` trong `RibbonValidation.cs` |
 | Quên copy `using` → build fail | Khi tạo file mới, dán nguyên block `using` của `BuildRibbonXmlTool.cs` rồi mới trim — build sớm để fail nhanh |
 | Circular dependency giữa các helper | Đồ thị: `Helpers`/`LocationFilters` (lá) ← `Validation` ← `ButtonOps`/`FlyoutOps` ← shell; `Fetcher` ← shell. Không có chu trình. |
 | Encoding/line-ending khác giữa file mới và file gốc | Save UTF-8 (no BOM), CRLF (Windows) — khớp `.editorconfig` |
@@ -352,9 +375,9 @@ Chạy tiếp `plan_merge_build_ribbon_into_manage_ribbon.md`:
 
 ## Acceptance Criteria
 
-- [ ] Folder `Mcp/Tools/Ribbon/` tồn tại, chứa đủ 6 file helper với đúng namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon`
+- [ ] Folder `Mcp/Tools/Ribbon/` tồn tại, chứa đúng **5 file** helper với đúng namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon` (không có `RibbonLocationFilters.cs`)
 - [ ] `BuildRibbonXmlTool.cs` ≤ 120 LOC (gốc 2409)
 - [ ] `/claude-build-cli` pass, 0 error, không phát sinh warning mới
 - [ ] `build_ribbon_xml` smoke test trả output cùng cấu trúc text + đúng đường dẫn temp file
 - [ ] Tool count vẫn = 36
-- [ ] `git diff --stat` chỉ thấy 6 file (`BuildRibbonXmlTool.cs` shrink + 5 file mới + `RibbonLocationFilters.cs`); KHÔNG đụng `ManageRibbonTool.cs` hay file `.md` nào
+- [ ] `git diff --stat` chỉ thấy **6 file** (`BuildRibbonXmlTool.cs` shrink + 5 file mới trong `Ribbon/`); KHÔNG đụng `ManageRibbonTool.cs` hay file `.md` nào
