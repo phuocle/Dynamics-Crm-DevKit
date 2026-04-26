@@ -5,6 +5,15 @@
 Xóa hoàn toàn tool `build_form_xml` (MCP-exposed), tích hợp toàn bộ logic vào `manage_form`.
 Tool count: **36 → 35**.
 
+> **Điều kiện tiên quyết:** PRE-plan (`PRE-plan_merge_build_form_xml_into_manage_form.md`) phải đã chạy xong thành công.
+> Sau PRE-plan, các helper class nằm trong `Mcp/Tools/Form/` (namespace `DynamicsCrm.DevKit.Cli.Mcp.Tools.Form`):
+> - `FormXmlHelpers` (static helpers)
+> - `FormFieldMetadata` (metadata + validation)
+> - `FormXmlBuilder` (build section/cell XML)
+> - `FormTabSectionOperations` (tab + section executors)
+> - `FormFieldEventOperations` (field + library + event executors)
+> - `FormXmlOperationsRunner` (optional runner — wrap dispatch loop, xem bên dưới)
+
 ---
 
 ## Vấn đề hiện tại
@@ -31,7 +40,7 @@ manage_form(action='update', entity_name='account', form_id='<guid>', operations
 Tool `manage_form` sẽ:
 1. Retrieve current FormXML từ Dataverse
 2. Validate field names
-3. Apply operations (inline, dưới dạng private methods)
+3. Apply operations (gọi các helper class trong `Mcp/Tools/Form/`)
 4. Backup → Validate XSD → Update → Publish
 
 **Không** cần file tạm, **không** cần tool call trung gian.
@@ -40,77 +49,160 @@ Tool `manage_form` sẽ:
 
 ## Thay đổi cần thực hiện
 
-### 1. `ManageFormTool.cs`
+### 1. `Mcp/Tools/Form/FormXmlOperationsRunner.cs` (tạo mới ~100 dòng)
+
+**Path:** `DynamicsCrm.DevKit.Cli/Mcp/Tools/Form/FormXmlOperationsRunner.cs`
+
+Lớp này đóng gói toàn bộ dispatch loop + load metadata + validate fields vào 1 method `Run()`.
+Cả `BuildFormXMLTool` (còn lại sau PRE) và `ManageFormTool` đều gọi qua đây — tránh duplicate dispatch loop.
+
+```csharp
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
+{
+    internal sealed class FormXmlOperationsRunner
+    {
+        private readonly ServiceClient _serviceClient;
+
+        public FormXmlOperationsRunner(ServiceClient serviceClient)
+        {
+            _serviceClient = serviceClient;
+        }
+
+        /// <summary>
+        /// Applies a list of JSON operations to the given FormXML string.
+        /// Returns modified FormXML + per-operation summaries + classId map.
+        /// Throws FormXmlOperationsException for field validation errors.
+        /// Throws InvalidOperationException for unknown actions.
+        /// </summary>
+        public (string ModifiedFormXml, List<string> OperationSummaries, Dictionary<string, string> ClassIdMap)
+            Run(string currentFormXml, string entityName, List<JsonElement> ops)
+        {
+            // 1. Collect field names + load metadata + validate (steps 4–5 của build_form_xml)
+            var referencedFields = FormFieldMetadata.CollectFieldNames(ops);
+
+            var fieldMeta = new FormFieldMetadata(_serviceClient);
+            var attrMap = fieldMeta.LoadEntityAttributeMap(entityName);
+            FormFieldMetadata.ValidateFieldsExist(entityName, referencedFields, attrMap);
+
+            // 2. Parse FormXML
+            XDocument formDoc;
+            try { formDoc = XDocument.Parse(currentFormXml); }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to parse current FormXML: {ex.Message}", ex);
+            }
+
+            // 3. Init operation helpers
+            var builder  = new FormXmlBuilder(_serviceClient);
+            var tabSec   = new FormTabSectionOperations(_serviceClient, builder);
+            var fieldEvt = new FormFieldEventOperations(_serviceClient, builder);
+            var classIdMap  = new Dictionary<string, string>();
+            var opSummaries = new List<string>();
+
+            // 4. Dispatch loop
+            foreach (var op in ops)
+            {
+                if (!op.TryGetProperty("action", out var actionProp))
+                    throw new InvalidOperationException(
+                        "Each operation must have an 'action' field.\n" +
+                        "Valid actions: manage_tab, manage_section, manage_fields, manage_library, manage_event.\n" +
+                        "Read docs://instructions_for_formxml for operation format and examples.");
+
+                var action       = actionProp.GetString()?.ToLowerInvariant();
+                var manageAction = FormXmlHelpers.GetStringProp(op, "manage_action")?.ToLowerInvariant() ?? "";
+
+                switch (action)
+                {
+                    case "manage_tab":
+                        opSummaries.Add(manageAction switch {
+                            "add"    => tabSec.ExecuteAddTab(formDoc, op, attrMap, classIdMap),
+                            "update" => tabSec.ExecuteUpdateTab(formDoc, op),
+                            "move"   => FormTabSectionOperations.ExecuteMoveTab(formDoc, op),
+                            "remove" => FormTabSectionOperations.ExecuteRemoveTab(formDoc, op),
+                            _ => throw new InvalidOperationException(
+                                $"Unknown manage_action '{manageAction}' for manage_tab. Valid: add, remove, move, update")
+                        });
+                        break;
+                    case "manage_section":
+                        opSummaries.Add(manageAction switch {
+                            "add"    => tabSec.ExecuteAddSection(formDoc, op, attrMap, classIdMap),
+                            "update" => tabSec.ExecuteUpdateSection(formDoc, op),
+                            "move"   => FormTabSectionOperations.ExecuteMoveSection(formDoc, op),
+                            "remove" => FormTabSectionOperations.ExecuteRemoveSection(formDoc, op),
+                            _ => throw new InvalidOperationException(
+                                $"Unknown manage_action '{manageAction}' for manage_section. Valid: add, remove, move, update")
+                        });
+                        break;
+                    case "manage_fields":
+                        opSummaries.Add(manageAction switch {
+                            "add"           => fieldEvt.ExecuteAddFields(formDoc, op, attrMap, classIdMap),
+                            "update"        => fieldEvt.ExecuteUpdateFields(formDoc, op, attrMap, classIdMap),
+                            "remove"        => FormFieldEventOperations.ExecuteRemoveFields(formDoc, op),
+                            "add_header"    => fieldEvt.ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap),
+                            "update_header" => fieldEvt.ExecuteUpdateHeaderFields(formDoc, op, attrMap, classIdMap),
+                            "remove_header" => FormFieldEventOperations.ExecuteRemoveHeaderFields(formDoc, op),
+                            _ => throw new InvalidOperationException(
+                                $"Unknown manage_action '{manageAction}' for manage_fields. Valid: add, remove, update, add_header, remove_header, update_header")
+                        });
+                        break;
+                    case "manage_library":
+                        opSummaries.Add(manageAction switch {
+                            "add"    => FormFieldEventOperations.ExecuteAddLibrary(formDoc, op),
+                            "remove" => FormFieldEventOperations.ExecuteRemoveLibrary(formDoc, op),
+                            _ => throw new InvalidOperationException(
+                                $"Unknown manage_action '{manageAction}' for manage_library. Valid: add, remove")
+                        });
+                        break;
+                    case "manage_event":
+                        opSummaries.Add(manageAction switch {
+                            "add"    => FormFieldEventOperations.ExecuteAddEvent(formDoc, op),
+                            "remove" => FormFieldEventOperations.ExecuteRemoveEvent(formDoc, op),
+                            _ => throw new InvalidOperationException(
+                                $"Unknown manage_action '{manageAction}' for manage_event. Valid: add, remove")
+                        });
+                        break;
+                    default:
+                        throw new InvalidOperationException(
+                            $"Unknown action '{action}'.\n" +
+                            $"Valid: manage_tab | manage_section | manage_fields | manage_library | manage_event (each requires 'manage_action').\n" +
+                            $"Read docs://instructions_for_formxml for operation format and examples.");
+                }
+            }
+
+            var modifiedFormXml = formDoc.ToString(SaveOptions.None);
+            return (modifiedFormXml, opSummaries, classIdMap);
+        }
+    }
+}
+```
+
+> **Không** có `[McpServerToolType]` trên class này.
+
+---
+
+### 2. `ManageFormTool.cs`
 
 **Thêm parameter `operations`** vào tool signature:
 
 ```csharp
 [Description(
-    "For 'update' (recommended): JSON array of operations from build-form-xml schema (auto-builds + imports). " +
+    "For 'update' with operations (recommended): JSON array of form operations (auto-builds + imports). " +
     "Read docs://instructions_for_formxml for format.")]
 string operations = "",
 ```
 
-**Cập nhật logic `action='update'`:**
-
-Có 2 chế độ (mutually exclusive):
-
-| Input | Hành động |
-|-------|-----------|
-| `operations` (JSON array) | Build FormXML inline từ operations → backup → validate → update → publish |
-| `formxml` (raw XML string hoặc backup file path .formxml.json) | Giữ nguyên flow cũ — chỉ dùng cho `undo` hoặc khi user có sẵn XML |
-| Cả hai empty | Báo lỗi: "Provide 'operations' (recommended) or 'formxml'." |
-| Cả hai có giá trị | Báo lỗi: "Provide either 'operations' or 'formxml', not both." |
-
-**Logic mới khi `operations` được cung cấp:**
-
-```
-1. Parse operations JSON → List<JsonElement>
-2. Retrieve current systemform (formxml, name, objecttypecode, type)
-3. Verify entity_name khớp objecttypecode
-4. Collect all field names referenced trong operations
-5. RetrieveEntityRequest → lấy attribute metadata cho entity
-6. Validate fields tồn tại; auto-correct image backing fields
-7. Parse current FormXML thành XDocument
-8. Apply mỗi op → switch theo (action, manage_action)
-9. Serialize lại modifiedFormXml
-10. → tiếp tục flow cũ: backup → validate XSD → update → publish
-```
-
-**Chuyển toàn bộ private methods từ `BuildFormXMLTool` sang `ManageFormTool`** (hoặc tách ra một helper class):
-
-- Operation executors (manage_tab/section/fields/library/event với add/update/move/remove):
-  - `ExecuteAddTab`, `ExecuteUpdateTab`, `ExecuteMoveTab`, `ExecuteRemoveTab`
-  - `ExecuteAddSection`, `ExecuteUpdateSection`, `ExecuteMoveSection`, `ExecuteRemoveSection`
-  - `ExecuteAddFields`, `ExecuteUpdateFields`, `ExecuteRemoveFields`
-  - `ExecuteAddHeaderFields`, `ExecuteUpdateHeaderFields`, `ExecuteRemoveHeaderFields`
-  - `ExecuteAddLibrary`, `ExecuteRemoveLibrary`
-  - `ExecuteAddEvent`, `ExecuteRemoveEvent`
-- XML building helpers: `BuildSectionElement`, `BuildCellElement`, `CreateSpacerCell`, `BuildRows`, `EnsureLibrary`, `FindEvent`
-- Resolution helpers: `ResolveClassId`, `CorrectFieldName`, `CollectFieldNames`, `CollectFieldsFromArray`
-- Navigation helpers: `FindTab`, `FindSection`, `GetTabNames`, `GetSectionNames`, `FindRowByFieldName`, `InsertElement`, `InsertFieldRows`, `CollectExistingControlIds`, `DeduplicateControlId`
-- Naming helpers: `AutoTabName`, `AutoSectionName`, `Sanitize`, `NewGuid`, `GetTabColumnWidths`
-- JSON helpers: `GetStringProp`, `GetIntProp`, `GetBoolProp`, `LevenshteinClose`, `ParseFieldSpec`
-
-> **Đề xuất:** Tách thành **helper class riêng** `FormXmlOperationsHelper.cs` (đặt trong `Mcp/Tools/Helper/`) để giữ `ManageFormTool.cs` không quá dài (~2000 LOC). Class này chỉ cần một method public:
->
-> ```csharp
-> public static (string ModifiedFormXml, List<string> OperationSummaries, Dictionary<string, string> ClassIdMap, int FieldsResolved)
->     ApplyOperations(string currentFormXml, string entityName, ServiceClient serviceClient, List<JsonElement> operations);
-> ```
->
-> Tất cả helpers còn lại để private/internal.
+**Thêm `using DynamicsCrm.DevKit.Cli.Mcp.Tools.Form;`** ở đầu file.
 
 **Cập nhật `[Description]` của tool** để phản ánh flow mới:
 
 ```
 ACTIONS:
-- action='list': List active forms.
-- action='detail': Full FormXML + metadata.
+- action='list': List active forms. Optional: form_type, include_formxml
+- action='detail': Full FormXML + metadata. Required: form_id (or form_name for auto-resolve)
 - action='update' (recommended): Build + import in one call. Required: form_id + operations.
 - action='update' (advanced): Provide raw FormXML directly. Required: form_id + formxml.
-- action='rename': Change display name.
-- action='undo': Restore from backup.
+- action='rename': Change display name. Required: form_id + form_name
+- action='undo': Restore from backup. Required: form_id + formxml (= backup file path)
 
 WORKFLOW (recommended):
 manage_form(action='update', entity_name=..., form_id=..., operations=[...])
@@ -123,12 +215,195 @@ OPERATIONS (5 action groups, each with manage_action):
 - manage_library: add | remove
 - manage_event: add | remove
 
-Read docs://instructions_for_formxml for full format and examples.
+SAFETY: auto-backup before update/rename, XSD validates before write, backup failure blocks update.
+TIPS:
+- form_type=2 for main forms only
+- form_name with 1 match auto-returns detail
+- Read schema://formxml for XSD. Read docs://instructions_for_formxml for rules
+- Set auto_publish=false when batching, then call publish_customizations once
 ```
 
-**Bỏ "WORKFLOW: build_form_xml → manage_form(action='update')"** — không còn đúng.
+**Bỏ dòng:** `"WORKFLOW: build_form_xml → manage_form(action='update', formxml=<result>)\n"` và `"ALWAYS use build_form_xml to construct FormXML — never write it manually.\n\n"`.
 
-**Result type:** Dùng thẳng `UpsertFormResult`. Bổ sung 2 fields optional:
+**Cập nhật `HandleUpdate`** — thêm nhánh `operations`:
+
+Có 2 chế độ (mutually exclusive):
+
+| Input | Hành động |
+|-------|-----------|
+| `operations` (JSON array) | Build FormXML inline → backup → validate → update → publish |
+| `formxml` (raw XML hoặc backup file path `.formxml`) | Giữ nguyên flow cũ — dùng cho `undo` hoặc advanced |
+| Cả hai empty | Báo lỗi: `"Provide 'operations' (recommended) or 'formxml'."` |
+| Cả hai có giá trị | Báo lỗi: `"Provide either 'operations' or 'formxml', not both."` |
+
+**Logic mới khi `operations` có giá trị:**
+
+```csharp
+private CallToolResult HandleUpdate(string entityName, string formId,
+    string formxml, string operations, bool validate, bool backup, bool auto_publish)
+{
+    if (string.IsNullOrWhiteSpace(formId))
+        return ErrorResult("Error: form_id is required for 'update' action.");
+    if (!Guid.TryParse(formId.Trim(), out var id))
+        return ErrorResult($"Error: '{formId}' is not a valid GUID.");
+
+    var hasOperations = !string.IsNullOrWhiteSpace(operations);
+    var hasFormxml    = !string.IsNullOrWhiteSpace(formxml);
+
+    if (!hasOperations && !hasFormxml)
+        return ErrorResult(
+            "Error: Provide 'operations' (recommended) or 'formxml' for 'update' action.\n" +
+            "- operations: JSON array of form operations (auto-builds + imports)\n" +
+            "- formxml: raw FormXML string or file path from a previous export\n" +
+            "Read docs://instructions_for_formxml for format and examples.");
+
+    if (hasOperations && hasFormxml)
+        return ErrorResult(
+            "Error: Provide either 'operations' or 'formxml', not both.\n" +
+            "- Use 'operations' for recommended inline build+import flow.\n" +
+            "- Use 'formxml' for advanced/undo scenarios only.");
+
+    if (hasOperations)
+        return HandleUpdateWithOperations(entityName, id, operations, validate, backup, auto_publish);
+
+    // existing formxml path (unchanged)
+    return HandleUpdateWithFormXml(entityName, id, formxml, validate, backup, auto_publish);
+}
+
+private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
+    string operations, bool validate, bool backup, bool auto_publish)
+{
+    // 1. Parse operations JSON
+    List<JsonElement> ops;
+    try
+    {
+        ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
+        if (ops == null || ops.Count == 0)
+            return ErrorResult(
+                "Error: operations must be a non-empty JSON array.\n" +
+                "Read docs://instructions_for_formxml for format and examples.");
+    }
+    catch (JsonException ex)
+    {
+        return ErrorResult(
+            $"Error: Invalid operations JSON: {ex.Message}\n" +
+            $"Read docs://instructions_for_formxml for format and examples.");
+    }
+
+    // 2. Retrieve current form
+    var currentForm = RetrieveForm(id);
+    if (currentForm == null)
+        return ErrorResult(
+            $"[Error] Form not found\n" +
+            $"FormId: {id}\n" +
+            $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+
+    var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
+    var formName       = currentForm.GetAttributeValue<string>("name") ?? "";
+    var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
+
+    // 3. Verify entity match
+    if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+        return ErrorResult(
+            $"[Error] Entity mismatch\n" +
+            $"FormId: {id}\nFormEntity: {objectTypeCode}\nProvidedEntity: {entityName}\n" +
+            $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+
+    if (string.IsNullOrWhiteSpace(currentFormXml))
+        return ErrorResult($"Error: Form '{id}' has empty FormXML.");
+
+    // 4. Apply operations via runner
+    string modifiedFormXml;
+    List<string> opSummaries;
+    Dictionary<string, string> classIdMap;
+    try
+    {
+        var runner = new FormXmlOperationsRunner(_serviceClient);
+        (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
+    }
+    catch (FormXmlOperationsException fex)
+    {
+        return ErrorResult(fex.Message);
+    }
+    catch (InvalidOperationException iex)
+    {
+        return ErrorResult($"Error: {iex.Message}");
+    }
+    catch (Exception ex)
+    {
+        return ErrorResult($"Error: Failed to apply operations: {ex.Message}");
+    }
+
+    // 5. Backup
+    string backupPath = null;
+    if (backup)
+    {
+        try { backupPath = SaveBackup(entityName, id, formName, currentFormXml); }
+        catch (Exception ex)
+        {
+            return ErrorResult(
+                $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
+                $"FormId: {id}\nMessage: {ex.Message}\n" +
+                $"Tip: Fix backup directory permissions or set backup=false (not recommended)");
+        }
+    }
+
+    // 6. Validate XSD
+    List<string> validationWarnings = null;
+    if (validate)
+    {
+        var (errors, warnings) = ValidateFormXml(modifiedFormXml);
+        validationWarnings = warnings.Count > 0 ? warnings : null;
+        if (errors.Count > 0)
+        {
+            // (same error block as existing HandleUpdate — copy nguyên xi)
+            // ...return blocked result with UpsertFormResult{Status="blocked_validation"}
+        }
+    }
+
+    // 7. Update + Publish
+    // ... (giống HandleUpdateWithFormXml từ đây — copy flow cũ)
+
+    // 8. Build success response — thêm ops summary + classIdMap vào text
+    var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, published);
+    sb.AppendLine($"OperationsCount: {ops.Count}");
+    sb.AppendLine("Operations performed:");
+    for (var i = 0; i < opSummaries.Count; i++)
+        sb.AppendLine($"  {i + 1}. {opSummaries[i]}");
+    if (classIdMap.Count > 0)
+    {
+        sb.AppendLine("ClassIds resolved:");
+        var maxNameLen = classIdMap.Keys.Max(k => k.Length);
+        foreach (var kv in classIdMap.OrderBy(k => k.Key))
+            sb.AppendLine($"  {kv.Key.PadRight(maxNameLen)} -> {kv.Value}");
+    }
+    sb.AppendLine();
+    AppendRollbackInfo(sb, backupPath, id);
+
+    var structured = new UpsertFormResult
+    {
+        Action = "updated", Entity = entityName, FormId = id.ToString(), FormName = formName,
+        Status = "updated", Validated = validate, ValidationWarnings = validationWarnings,
+        BackupPath = backupPath, Published = published,
+        OperationsCount = ops.Count, FieldsResolved = classIdMap.Count   // ← new fields
+    };
+    return new CallToolResult
+    {
+        Content = [new TextContentBlock { Text = sb.ToString() }],
+        StructuredContent = JsonSerializer.SerializeToElement(structured)
+    };
+}
+```
+
+> **Refactor tip:** Đổi tên `HandleUpdate` cũ thành `HandleUpdateWithFormXml` để tách rõ 2 nhánh. Không thay đổi logic của nhánh `formxml`.
+
+---
+
+### 3. `StructuredResults.cs`
+
+**Xóa class `BuildFormXMLResult`** — không còn dùng.
+
+**Bổ sung 2 fields vào `UpsertFormResult`:**
 
 ```csharp
 [JsonPropertyName("operationsCount")]
@@ -142,43 +417,44 @@ public int? FieldsResolved { get; set; }
 
 ---
 
-### 2. `BuildFormXMLTool.cs`
+### 4. `BuildFormXMLTool.cs`
 
-**Xóa hoàn toàn** file này (không còn `[McpServerToolType]`, không còn expose `build_form_xml`).
+**Cập nhật** (sau khi PRE-plan đã shrink xuống ~250 dòng) để gọi `FormXmlOperationsRunner`:
 
-Logic được chuyển sang `FormXmlOperationsHelper.cs` (helper class) — không còn là MCP tool.
+```csharp
+// Trong build_form_xml, thay dispatch loop cũ bằng:
+var runner = new FormXmlOperationsRunner(_serviceClient);
+(var modifiedFormXml, var opSummaries, var classIdMap) =
+    runner.Run(currentFormXml, entityName, ops);
+```
+
+Xóa block load metadata + validate fields + dispatch loop cũ khỏi `BuildFormXMLTool.cs` (chúng đã chuyển vào `FormXmlOperationsRunner.Run`).
+
+Sau đó **xóa hoàn toàn** file `BuildFormXMLTool.cs` khi merge xong và đã verify `ManageFormTool` hoạt động.
 
 ---
 
-### 3. `StructuredResults.cs`
+### 5. `McpServerHost.cs`
 
-**Xóa class `BuildFormXMLResult`** (lines 189–213) — không còn dùng.
-
-Bổ sung 2 fields vào `UpsertFormResult` như mô tả ở trên.
-
----
-
-### 4. `McpServerHost.cs`
-
-**Xóa entry** `[nameof(BuildFormXMLTool)] = "standard"` (line 56).
+**Xóa entry** `[nameof(BuildFormXMLTool)] = "standard"`.
 
 Tool count tự động giảm: 36 → 35.
 
 ---
 
-### 5. `InstructionResources.cs` (FormXML instructions)
+### 6. `InstructionResources.cs` (FormXML instructions)
 
 Cập nhật `docs://instructions_for_formxml`:
 
 - Thay `build_form_xml + manage_form` → `manage_form(action='update', operations=[...])`
-- Cập nhật phần "Post-Create Workflow" tại line 370:
+- Cập nhật phần "Post-Create Workflow":
   - **Cũ:** `3. build_form_xml + manage_form -- customize the form`
   - **Mới:** `3. manage_form(action='update', operations=[...]) -- customize the form`
 - Cập nhật examples để dùng `operations` thay vì 2 bước riêng
 
 ---
 
-### 6. `README.md` (CLI)
+### 7. `README.md` (CLI)
 
 Tìm và update tất cả mention của `build_form_xml`:
 - Tools count: 36 → 35
@@ -187,14 +463,9 @@ Tìm và update tất cả mention của `build_form_xml`:
 
 ---
 
-### 7. `AGENTS.md` / `CLAUDE.md` (root)
+### 8. `AGENTS.md` / `CLAUDE.md` (root)
 
-Tìm dòng:
-```
-`whoami`, ..., `manage_form`, `manage_view`, ..., `build_form_xml`, `build_sitemap_xml`, `build_ribbon_xml`, ...
-```
-
-→ Bỏ `build_form_xml` khỏi danh sách. Tools count 36 → 35.
+Bỏ `build_form_xml` khỏi danh sách MCP tools. Tools count 36 → 35.
 
 ---
 
@@ -208,7 +479,7 @@ Tìm dòng:
 | Tool count: 36 | Tool count: 35 |
 | Tool surface phức tạp (sub-tool ẩn) | Tool surface đơn giản, mỗi tool đứng độc lập |
 
-**Backward-compat:** giữ nguyên flow `formxml=<path>` cho `undo` và trường hợp user tự build XML thủ công.
+**Backward-compat:** giữ nguyên flow `formxml=<path>` cho `undo` và advanced scenarios.
 
 ---
 
@@ -222,18 +493,21 @@ Tìm dòng:
 
 ## Tasks
 
-- [ ] Đọc lại 1 lần `ManageFormTool.cs` + `BuildFormXMLTool.cs` để đảm bảo nắm đủ
-- [ ] Tạo `FormXmlOperationsHelper.cs` trong `Mcp/Tools/Helper/`, copy toàn bộ private methods + executors từ `BuildFormXMLTool` qua, expose đúng 1 method `ApplyOperations(...)`
+- [ ] **[Điều kiện]** PRE-plan đã chạy xong: `Mcp/Tools/Form/` có đủ 5 file, `BuildFormXMLTool.cs` ≤ 250 LOC, build pass
+- [ ] Tạo `Mcp/Tools/Form/FormXmlOperationsRunner.cs` (~100 dòng) với method `Run()`
+- [ ] Cập nhật `BuildFormXMLTool.cs` để gọi `FormXmlOperationsRunner.Run()` thay vì dispatch loop inline
 - [ ] Cập nhật `ManageFormTool.cs`:
+  - Thêm `using DynamicsCrm.DevKit.Cli.Mcp.Tools.Form;`
   - Thêm param `operations`
+  - Đổi tên `HandleUpdate` → `HandleUpdateWithFormXml`; thêm `HandleUpdateWithOperations`
   - Branching: operations vs formxml vs both-empty/both-set
-  - Khi `operations` có giá trị → gọi `FormXmlOperationsHelper.ApplyOperations(...)` → tiếp tục flow update cũ
+  - Khi `operations` có giá trị → gọi `FormXmlOperationsRunner(_serviceClient).Run(...)` → tiếp tục flow update
   - Cập nhật `[Description]` của tool và params
 - [ ] Cập nhật `StructuredResults.cs`:
   - Xóa `BuildFormXMLResult`
   - Thêm `OperationsCount`, `FieldsResolved` (nullable) vào `UpsertFormResult`
 - [ ] Xóa file `BuildFormXMLTool.cs`
-- [ ] Xóa entry trong `McpServerHost.cs` line 56
+- [ ] Xóa entry trong `McpServerHost.cs`
 - [ ] Cập nhật `InstructionResources.cs` (`docs://instructions_for_formxml`)
 - [ ] Cập nhật `README.md` (CLI)
 - [ ] Cập nhật `AGENTS.md` / `CLAUDE.md` (tool list 36 → 35, bỏ `build_form_xml`)
@@ -247,11 +521,12 @@ Tìm dòng:
 
 | Risk | Mức | Mitigation |
 |------|-----|------------|
-| `ManageFormTool.cs` quá dài sau khi merge | Trung bình | Tách helper class `FormXmlOperationsHelper.cs` ra riêng |
+| `ManageFormTool.cs` quá dài sau khi merge | Thấp | `FormXmlOperationsRunner` giữ dispatch loop; `HandleUpdateWithOperations` chỉ ~60 dòng |
 | Breaking AI agents đang dùng `build_form_xml` | Thấp | MCP tool list refresh tự động sau restart; AI sẽ thấy schema mới |
 | Backup không tương thích sau merge | Thấp | Flow `undo` vẫn dùng `formxml=<backup_path>`, không thay đổi |
-| Validation field names không hoạt động sau merge | Trung bình | Đảm bảo bước 4–6 (collect → fetch metadata → validate) chạy TRƯỚC khi backup, để fail-fast và không tạo backup vô ích |
-| Performance: 1 thêm RetrieveEntityRequest cho metadata | Rất thấp | Trước đây đã có 1 call này trong `build_form_xml` rồi — không tệ hơn |
+| Validation field names không hoạt động sau merge | Trung bình | `FormXmlOperationsRunner.Run()` gọi `ValidateFieldsExist` TRƯỚC khi backup, fail-fast không tạo backup vô ích |
+| Performance: 1 thêm `RetrieveEntityRequest` cho metadata | Rất thấp | Trước đây đã có 1 call này trong `build_form_xml` rồi — không tệ hơn |
+| `FormXmlOperationsRunner` duplicate code với `BuildFormXMLTool` | Không còn | Sau khi Runner tạo xong, `BuildFormXMLTool` cũng gọi Runner — không có duplicate |
 
 ---
 
