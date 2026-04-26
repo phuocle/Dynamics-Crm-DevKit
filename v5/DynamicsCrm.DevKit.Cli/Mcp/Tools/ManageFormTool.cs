@@ -17,6 +17,7 @@ using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Form;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
@@ -46,13 +47,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "ACTIONS:\n" +
             "- action='list': List active forms. Optional: form_type, include_formxml\n" +
             "- action='detail': Full FormXML + metadata. Required: form_id (or form_name for auto-resolve)\n" +
-            "- action='update': Replace FormXML. Required: form_id + formxml\n" +
+            "- action='update' (recommended): Build + import in one call. Required: form_id + operations.\n" +
+            "- action='update' (advanced): Provide raw FormXML directly. Required: form_id + formxml.\n" +
             "- action='rename': Change display name. Required: form_id + form_name\n" +
             "- action='undo': Restore from backup. Required: form_id + formxml (= backup file path)\n\n" +
 
-            "WORKFLOW: build_form_xml → manage_form(action='update', formxml=<result>)\n" +
-            "SAFETY: auto-backup before update/rename, XSD validates before write, backup failure blocks update.\n" +
-            "ALWAYS use build_form_xml to construct FormXML — never write it manually.\n\n" +
+            "WORKFLOW (recommended):\n" +
+            "manage_form(action='update', entity_name=..., form_id=..., operations=[...])\n" +
+            "→ auto-builds FormXML + backup + validate + import + publish\n\n" +
+
+            "OPERATIONS (5 action groups, each with manage_action):\n" +
+            "- manage_tab: add | update | move | remove\n" +
+            "- manage_section: add | update | move | remove\n" +
+            "- manage_fields: add | update | remove | add_header | update_header | remove_header\n" +
+            "- manage_library: add | remove\n" +
+            "- manage_event: add | remove\n\n" +
+
+            "SAFETY: auto-backup before update/rename, XSD validates before write, backup failure blocks update.\n\n" +
 
             "TIPS:\n" +
             "- form_type=2 for main forms only\n" +
@@ -72,8 +83,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] int form_type = 0,
             [Description("Include FormXML in list mode (default: false). Detail mode always includes it."
             )] bool include_formxml = false,
-            [Description("For 'update': FormXML string or file path from build_form_xml (.formxml). For 'undo': backup file path. Auto-detects file vs inline XML."
+            [Description("For 'update' (advanced/undo): raw FormXML string or backup file path (.formxml). Auto-detects file vs inline XML. Use 'operations' instead for recommended flow."
             )] string formxml = "",
+            [Description(
+                "For 'update' (recommended): JSON array of form operations (auto-builds + imports). " +
+                "Read docs://instructions_for_formxml for format."
+            )] string operations = "",
             [Description("Validate against XSD before writing (default: true). Blocks if invalid."
             )] bool validate = true,
             [Description("Backup current FormXML before overwriting (default: true). Backup failure blocks update."
@@ -98,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
                     "detail" => HandleDetail(entityName, form_id, form_name),
-                    "update" => HandleUpdate(entityName, form_id, formxml, validate, backup, auto_publish),
+                    "update" => HandleUpdate(entityName, form_id, formxml, operations, validate, backup, auto_publish),
                     "rename" => HandleRename(entityName, form_id, form_name, backup, auto_publish),
                     "undo" => HandleUndo(entityName, form_id, formxml, validate, auto_publish),
                     _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, update, rename, undo.")
@@ -319,7 +334,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string formId,
-            string formxml, bool validate, bool backup, bool auto_publish)
+            string formxml, string operations, bool validate, bool backup, bool auto_publish)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return ErrorResult("Error: form_id is required for 'update' action.");
@@ -327,16 +342,242 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!Guid.TryParse(formId.Trim(), out var id))
                 return ErrorResult($"Error: '{formId}' is not a valid GUID.");
 
-            if (string.IsNullOrWhiteSpace(formxml))
-                return ErrorResult("Error: formxml is required for 'update' action.");
+            var hasOperations = !string.IsNullOrWhiteSpace(operations);
+            var hasFormxml    = !string.IsNullOrWhiteSpace(formxml);
 
+            if (!hasOperations && !hasFormxml)
+                return ErrorResult(
+                    "Error: Provide 'operations' (recommended) or 'formxml' for 'update' action.\n" +
+                    "- operations: JSON array of form operations (auto-builds + imports)\n" +
+                    "- formxml: raw FormXML string or file path from a previous export\n" +
+                    "Read docs://instructions_for_formxml for format and examples.");
+
+            if (hasOperations && hasFormxml)
+                return ErrorResult(
+                    "Error: Provide either 'operations' or 'formxml', not both.\n" +
+                    "- Use 'operations' for recommended inline build+import flow.\n" +
+                    "- Use 'formxml' for advanced/undo scenarios only.");
+
+            if (hasOperations)
+                return HandleUpdateWithOperations(entityName, id, operations, validate, backup, auto_publish);
+
+            return HandleUpdateWithFormXml(entityName, id, formxml, validate, backup, auto_publish);
+        }
+
+        private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
+            string operations, bool validate, bool backup, bool auto_publish)
+        {
+            // 1. Parse operations JSON
+            List<JsonElement> ops;
+            try
+            {
+                ops = JsonSerializer.Deserialize<List<JsonElement>>(operations);
+                if (ops == null || ops.Count == 0)
+                    return ErrorResult(
+                        "Error: operations must be a non-empty JSON array.\n" +
+                        "Read docs://instructions_for_formxml for format and examples.");
+            }
+            catch (JsonException ex)
+            {
+                return ErrorResult(
+                    $"Error: Invalid operations JSON: {ex.Message}\n" +
+                    $"Read docs://instructions_for_formxml for format and examples.");
+            }
+
+            // 2. Retrieve current form
+            var currentForm = RetrieveForm(id);
+            if (currentForm == null)
+                return ErrorResult(
+                    $"[Error] Form not found\n" +
+                    $"FormId: {id}\n" +
+                    $"Tip: Use manage_form with action='list' and entity_name='{entityName}' to find valid form IDs");
+
+            var currentFormXml = currentForm.GetAttributeValue<string>("formxml") ?? "";
+            var formName       = currentForm.GetAttributeValue<string>("name") ?? "";
+            var objectTypeCode = currentForm.GetAttributeValue<string>("objecttypecode") ?? entityName;
+
+            if (!string.Equals(entityName, objectTypeCode, StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] Entity mismatch\n" +
+                    $"FormId: {id}\nFormEntity: {objectTypeCode}\nProvidedEntity: {entityName}\n" +
+                    $"Tip: This form belongs to '{objectTypeCode}', not '{entityName}'");
+
+            if (string.IsNullOrWhiteSpace(currentFormXml))
+                return ErrorResult($"Error: Form '{id}' has empty FormXML.");
+
+            // 3. Apply operations via runner
+            string modifiedFormXml;
+            List<string> opSummaries;
+            Dictionary<string, string> classIdMap;
+            try
+            {
+                var runner = new FormXmlOperationsRunner(_serviceClient);
+                (modifiedFormXml, opSummaries, classIdMap) = runner.Run(currentFormXml, entityName, ops);
+            }
+            catch (FormXmlOperationsException fex)
+            {
+                return ErrorResult(fex.Message);
+            }
+            catch (InvalidOperationException iex)
+            {
+                return ErrorResult($"Error: {iex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to apply operations: {ex.Message}");
+            }
+
+            // 4. Backup
+            string backupPath = null;
+            if (backup)
+            {
+                try { backupPath = SaveBackup(entityName, id, formName, currentFormXml); }
+                catch (Exception ex)
+                {
+                    return ErrorResult(
+                        $"[Error] Backup failed — update BLOCKED (fail-safe)\n" +
+                        $"FormId: {id}\nMessage: {ex.Message}\n" +
+                        $"Tip: Fix backup directory permissions or set backup=false (not recommended)");
+                }
+            }
+
+            // 5. Validate XSD
+            List<string> validationWarnings = null;
+            if (validate)
+            {
+                var (errors, warnings) = ValidateFormXml(modifiedFormXml);
+                validationWarnings = warnings.Count > 0 ? warnings : null;
+                if (errors.Count > 0)
+                {
+                    var sb = new StringBuilder(512);
+                    sb.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
+                    sb.AppendLine($"FormId: {id}");
+                    sb.AppendLine($"Errors: {errors.Count}");
+                    foreach (var error in errors)
+                        sb.AppendLine($"- {error}");
+                    if (warnings.Count > 0)
+                    {
+                        sb.AppendLine($"Warnings: {warnings.Count}");
+                        foreach (var warning in warnings)
+                            sb.AppendLine($"- {warning}");
+                    }
+                    if (backupPath != null)
+                        sb.AppendLine($"Backup: saved (no changes made) — {backupPath}");
+                    else
+                        sb.AppendLine($"Backup: not needed (no changes made)");
+                    sb.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
+
+                    var allIssues = new List<string>(errors);
+                    if (warnings.Count > 0) allIssues.AddRange(warnings);
+
+                    var blockedResult = new UpsertFormResult
+                    {
+                        Action = "updated",
+                        Entity = entityName,
+                        FormId = id.ToString(),
+                        FormName = formName,
+                        Status = "blocked_validation",
+                        Validated = true,
+                        ValidationErrors = allIssues,
+                        BackupPath = backupPath,
+                        Published = false
+                    };
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(blockedResult)
+                    };
+                }
+            }
+
+            // 6. Update + Publish
+            var updateEntity = new Entity("systemform", id);
+            updateEntity["formxml"] = modifiedFormXml;
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE FormXML (operations) for form '{formName}' ({id}) on entity '{entityName}'.");
+            _serviceClient.Update(updateEntity);
+
+            var published = false;
+            if (auto_publish)
+            {
+                try
+                {
+                    _serviceClient.Execute(new PublishXmlRequest
+                    {
+                        ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
+                    });
+                    published = true;
+                }
+                catch (Exception ex)
+                {
+                    var sb2 = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
+                    sb2.AppendLine($"PublishError: {ex.Message}");
+                    sb2.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
+                    sb2.AppendLine();
+                    AppendRollbackInfo(sb2, backupPath, id);
+
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = sb2.ToString() }],
+                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+                        {
+                            Action = "updated", Entity = entityName, FormId = id.ToString(),
+                            FormName = formName, Status = "updated_publish_failed",
+                            Validated = validate, BackupPath = backupPath, Published = false,
+                            OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
+                        })
+                    };
+                }
+            }
+
+            // 7. Build success response
+            {
+                var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, published);
+                sb.AppendLine($"OperationsCount: {ops.Count}");
+                sb.AppendLine("Operations performed:");
+                for (var i = 0; i < opSummaries.Count; i++)
+                    sb.AppendLine($"  {i + 1}. {opSummaries[i]}");
+                if (classIdMap.Count > 0)
+                {
+                    sb.AppendLine("ClassIds resolved:");
+                    var maxNameLen = classIdMap.Keys.Max(k => k.Length);
+                    foreach (var kv in classIdMap.OrderBy(k => k.Key))
+                        sb.AppendLine($"  {kv.Key.PadRight(maxNameLen)} -> {{{kv.Value}}}");
+                }
+                if (validationWarnings?.Count > 0)
+                {
+                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
+                    foreach (var w in validationWarnings)
+                        sb.AppendLine($"  - {w}");
+                }
+                sb.AppendLine();
+                AppendRollbackInfo(sb, backupPath, id);
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+                    {
+                        Action = "updated", Entity = entityName, FormId = id.ToString(),
+                        FormName = formName, Status = "updated",
+                        Validated = validate, ValidationWarnings = validationWarnings,
+                        BackupPath = backupPath, Published = published,
+                        OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
+                    })
+                };
+            }
+        }
+
+        private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
+            string formxml, bool validate, bool backup, bool auto_publish)
+        {
             // Resolve formxml: if it's a file path, read content from file
             var resolvedFormXml = ResolveFormXmlInput(formxml.Trim());
             if (resolvedFormXml == null)
                 return ErrorResult(
                     $"[Error] FormXML file not found\n" +
                     $"Path: {formxml.Trim()}\n" +
-                    $"Tip: The file path from build_form_xml may have been deleted. Re-run build_form_xml to regenerate.");
+                    $"Tip: The file path may have been deleted. Re-run the export or use 'operations' for inline build+import.");
 
             // Step 1: Retrieve current form
             var currentForm = RetrieveForm(id);

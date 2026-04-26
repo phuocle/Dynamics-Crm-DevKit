@@ -367,7 +367,7 @@ These CANNOT be turned off once enabled.
 ### Post-Create Workflow
 1. `upsert_table` -- create entity
 2. `upsert_column` -- add columns
-3. `build_form_xml` + `manage_form` -- customize the form
+3. `manage_form(action='update', operations=[...])` -- customize the form
 4. `publish_customizations` -- publish (if auto_publish=false)
 
 ---

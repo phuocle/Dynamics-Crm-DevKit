@@ -194,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedEndpoints =
         [
             // ── UI / Forms / Views / SiteMaps ──
-            ("systemforms(", "manage_form or build_form_xml",
+            ("systemforms(", "manage_form or manage_form(operations)",
                 "FormXML defines the UI layout for ALL users. A malformed FormXML breaks the entire entity form with no undo."),
             ("savedqueries(", "manage_view",
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),

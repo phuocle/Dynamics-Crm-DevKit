@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "TIPS:\n" +
             "- attribute_name must include publisher prefix (e.g., 'new_priority'); or provide solution_name to auto-resolve prefix.\n" +
-            "- After create, use build_form_xml to add the column to a form")]
+            "- After create, use manage_form(action='update', operations=[...]) to add the column to a form")]
         public CallToolResult upsert_column(
             [Description("Entity logical name (e.g., 'account').")] string entity_name,
             [Description("Logical name with publisher prefix (e.g., 'new_priority'). Or just the name (e.g., 'priority') — prefix is auto-resolved from solution_name's publisher.")] string attribute_name,

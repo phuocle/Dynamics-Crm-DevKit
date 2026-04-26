@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Create or update a Dataverse table (auto-detects create vs update by entity lookup).\n\n" +
             "CREATE (entity absent): display_name + display_collection_name + solution_name required. " +
-            "Auto-creates primary name attribute. Next: upsert_column → build_form_xml + manage_form.\n" +
+            "Auto-creates primary name attribute. Next: upsert_column → manage_form(action='update', operations=[...]).\n" +
             "UPDATE (entity exists): only entity_name required. Updatable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled. All other props are immutable after creation.\n\n" +
             "CREATE PREFIX CONFIRMATION FLOW:\n" +
             "1. First call (confirmed_prefix empty): tool resolves prefix and returns [PrefixConfirmationRequired] with preview of SchemaName/LogicalName — NOT an error.\n" +

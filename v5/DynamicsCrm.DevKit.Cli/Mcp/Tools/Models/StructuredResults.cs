@@ -184,32 +184,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RestoredFromBackup { get; set; }
-    }
-
-    internal sealed class BuildFormXMLResult
-    {
-        [JsonPropertyName("entity")]
-        public string Entity { get; set; }
-
-        [JsonPropertyName("formId")]
-        public string FormId { get; set; }
-
-        [JsonPropertyName("formName")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string FormName { get; set; }
-
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
 
         [JsonPropertyName("operationsCount")]
-        public int OperationsCount { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? OperationsCount { get; set; }
 
         [JsonPropertyName("fieldsResolved")]
-        public int FieldsResolved { get; set; }
-
-        [JsonPropertyName("formXmlPath")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string FormXmlPath { get; set; }
+        public int? FieldsResolved { get; set; }
     }
 
     internal sealed class UpsertTableResult

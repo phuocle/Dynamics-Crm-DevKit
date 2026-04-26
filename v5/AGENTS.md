@@ -1,4 +1,4 @@
-# DynamicsCrm.DevKit - AI Agent Instructions
+﻿# DynamicsCrm.DevKit - AI Agent Instructions
 
 ## ⛔ ABSOLUTE FORBIDDEN
 
@@ -112,7 +112,7 @@ Entry: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
 Commands/ â†’ DevKitCommand<T> base (connection, validation)
 Models/   â†’ DevKitCommandArgs â†’ specific args
 Tasks/    â†’ ITask â†’ TaskXxx implementations
-Mcp/      â†’ MCP server (36 Dataverse tools)
+Mcp/      â†’ MCP server (35 Dataverse tools)
 ```
 
 ### Commands
@@ -154,9 +154,9 @@ Add `--plain` for clean AI/CI output (no ANSI, colors, spinners). Priority: `--p
 
 Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` â†’ `cd` to `workingDirectory` â†’ run with `commandLineArgs`.
 
-### MCP Tools (36)
+### MCP Tools (35)
 
-`whoami`, `get_tables`, `get_messages`, `manage_choice`, `manage_record`, `create_records`, `generate_demo_data`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `get_system_jobs`, `parse_record_url`, `manage_form`, `manage_view`, `manage_role`, `build_form_xml`, `build_sitemap_xml`, `build_ribbon_xml`, `get_audit_history`, `upsert_table`, `upsert_relationship`, `manage_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `manage_command`, `manage_ribbon`, `manage_webresource`
+`whoami`, `get_tables`, `get_messages`, `manage_choice`, `manage_record`, `create_records`, `generate_demo_data`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `get_system_jobs`, `parse_record_url`, `manage_form`, `manage_view`, `manage_role`, `build_sitemap_xml`, `build_ribbon_xml`, `get_audit_history`, `upsert_table`, `upsert_relationship`, `manage_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `manage_command`, `manage_ribbon`, `manage_webresource`
 
 ### MCP Resources (9)
 

@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- action='add_target': Add target to polymorphic lookup. Required: entity_name + attribute_name + referenced_entity + solution_name\n" +
             "- action='remove_target': Remove target from polymorphic lookup. Required: entity_name + attribute_name + referenced_entity\n\n" +
             "TIPS:\n" +
-            "- Use get_tables to find relationship_name; use build_form_xml to add lookup to a form\n" +
+            "- Use get_tables to find relationship_name; use manage_form(action='update', operations=[...]) to add lookup to a form\n" +
             "- WARNING: remove_target permanently deletes data in that lookup target\n" +
             "- is_hierarchical=true: marks this self-referential 1:N as the OOB hierarchy relationship (only one per entity; only valid when referenced_entity == referencing_entity)\n" +
             "- Cascade presets: Parental (all Cascade), Referential (NoCascade + RemoveLink on delete), ReferentialRestrictDelete (NoCascade + Restrict on delete)\n" +
@@ -587,7 +587,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {metadataId}");
                 sb.AppendLine();
-                sb.AppendLine("[IMPORTANT] The new target entity was added to the polymorphic lookup metadata, but any existing form controls for this field still display the OLD list of entity types. To make the new target appear in the lookup dialog on the form, you MUST remove the field from the form and re-add it. Use build_form_xml(manage_fields, remove) then build_form_xml(manage_fields, add) followed by manage_form(update) to refresh the form control.");
+                sb.AppendLine("[IMPORTANT] The new target entity was added to the polymorphic lookup metadata, but any existing form controls for this field still display the OLD list of entity types. To make the new target appear in the lookup dialog on the form, you MUST remove the field from the form and re-add it. Use manage_form(action='update', operations=[{manage_fields, remove}, {manage_fields, add}]) to refresh the form control.");
 
                 return BuildResult(sb.ToString(), new UpsertRelationshipResult
                 {
