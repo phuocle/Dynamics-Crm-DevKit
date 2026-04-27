@@ -24,34 +24,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "search_records", Title = "Search records by keyword",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Dataverse Relevance Search (full-text) across one or more entities. Returns records ranked by relevance with highlights.\n\n" +
-
-            "ACTIONS:\n" +
-            "- action='search' (default): Full-text search. Required: search_term\n" +
-            "- action='status': Relevance Search config — enabled status, indexed entities/fields, sync status, storage size, document count\n\n" +
+            "Dataverse Relevance Search (full-text, ranked, with highlights) across entities. action='search' (needs search_term) or 'status' (config: enabled state, indexed entities/fields, sync status, storage). Requires Relevance Search enabled. Max 100 results — use execute_fetchxml for larger / precise filtering.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Find records by keyword across multiple entities\n" +
-            "- Quick text search without knowing the exact field to filter on\n" +
-            "- Check if Relevance Search is enabled and which entities are indexed (action='status')\n\n" +
-
-            "IMPORTANT: Relevance Search must be enabled. Max 100 results. For larger datasets or precise filtering, use execute_fetchxml.")]
+            "- Quick text search when the exact field is unknown\n" +
+            "- Check Relevance Search config / indexed entities (action='status')")]
         public string search_records(
             [Description(
-                "'search' (default): full-text search, requires search_term. 'status': show configuration, indexed entities/fields, sync status, storage statistics."
+                "'search' or 'status'."
             )] string action = "search",
             [Description(
-                "Text to search (1-100 chars). Required for action='search'. Syntax: + (AND), | (OR), - (NOT), * (wildcard), \"quoted\" (phrase), () (grouping)."
+                "Required for search. 1–100 chars. Syntax: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group)."
             )] string search_term = "",
             [Description(
-                "Comma-separated entity logical names to scope the search (e.g., 'account,contact'). Empty = all searchable entities."
+                "Comma-separated logical names (e.g. 'account,contact'). Empty = all searchable."
             )] string entities = "",
             [Description(
-                "Maximum number of results to return. Default: 50. Max: 100. " +
-                "Use a smaller value (e.g. 10) for quick lookups."
+                "1–100."
             )] int top = 50,
             [Description(
-                "OData-style filter (eq, ne, gt, ge, lt, le, and, or, not). E.g., 'statecode eq 0'. Empty = no filter."
+                "OData filter (eq, ne, gt, ge, lt, le, and, or, not). E.g. 'statecode eq 0'."
             )] string filter = "")
         {
             if (string.IsNullOrWhiteSpace(action))

@@ -106,58 +106,58 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageCommandResult)),
         Description(
-            "Manage modern command bar buttons (appaction) in Model-Driven Apps. Includes visibility/enable rules (appactionrule).\n\n" +
+            "Modern command bar buttons (appaction) for MDA + visibility/enable rules (appactionrule).\n\n" +
 
-            "TOOL SELECTION — READ BEFORE CHOOSING:\n" +
-            "Use ONLY when user says: 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'.\n" +
-            "Do NOT use for: 'button', 'ribbon button', 'custom button', 'nút', or any generic button phrase.\n" +
-            "When in doubt → use manage_ribbon instead.\n\n" +
+            "TOOL SELECTION: ONLY for 'modern', 'Power Fx', 'formula', 'appaction', 'new command bar', 'command designer'. NOT for 'button'/'ribbon'/'custom button'/'nút'/generic button → use manage_ribbon. When in doubt → manage_ribbon.\n\n" +
 
-            "ACTIONS: list, detail, create, update, hide, show, add_flyout, update_flyout, add_flyout_item, remove_flyout_item, add_split_button, update_split_button\n" +
-            "- list: Filter by entity, location, app, origin, action_type\n" +
-            "- detail: Required: command_id (or label). Full details + rules + children\n" +
-            "- create: Required: entity_name + location + label + (app_id or app_name)\n" +
-            "- update: Required: command_id + at least one field\n" +
-            "- hide: Required: command_id OR (label + entity_name + location + app_name). Auto-creates override for OOB buttons\n" +
-            "- show: Required: command_id OR (label + entity_name + location). No-op if already visible\n" +
-            "- add_flyout: Create Dropdown Button. Required: entity_name + location + label + (app_id or app_name) + items [{label, onclick_type, javascript_webresource, javascript_function}]\n" +
-            "- update_flyout: Required: command_id (Dropdown Button id)\n" +
-            "- add_flyout_item: Required: flyout_command_id + label. Works on Dropdown and Split Buttons\n" +
-            "- remove_flyout_item: Required: command_id (item's appaction id)\n" +
-            "- add_split_button: Create Split Button (left-click = direct action, arrow = dropdown). Required: entity_name + location + label + (app_id or app_name) + items\n" +
-            "- update_split_button: Required: command_id (Split Button id)\n\n" +
+            "Actions:\n" +
+            "- list: filter by entity/location/app/origin/action_type\n" +
+            "- detail: command_id OR label → full + rules + children\n" +
+            "- create: entity_name + location + label + (app_id OR app_name)\n" +
+            "- update: command_id + ≥1 field\n" +
+            "- hide: command_id OR (label+entity_name+location+app_name) — auto-overrides OOB\n" +
+            "- show: command_id OR (label+entity_name+location) — no-op if visible\n" +
+            "- add_flyout (Dropdown Button): entity_name+location+label+(app_id|app_name)+items\n" +
+            "- update_flyout: command_id\n" +
+            "- add_flyout_item: flyout_command_id+label (works on Dropdown + Split)\n" +
+            "- remove_flyout_item: command_id\n" +
+            "- add_split_button (left=direct, arrow=dropdown): entity_name+location+label+(app_id|app_name)+items\n" +
+            "- update_split_button: command_id\n\n" +
 
-            "TIPS:\n" +
-            "- Use origin='default' to exclude auto-migrated system commands\n" +
-            "- Commands are app-scoped — same entity can differ across apps\n" +
-            "- Use detail + include_children=true to inspect flyout/split items\n" +
-            "- CRITICAL: If error contains 'classic ribbon button', STOP IMMEDIATELY — report to user, do not call any other tool\n" +
-            "- Related: manage_ribbon (classic ribbon — default fallback), manage_form (form layout)")]
+            "origin='default' excludes auto-migrated. Commands are app-scoped (same entity differs per app). CRITICAL: if error mentions 'classic ribbon button', STOP and report — don't call other tools.\n\n" +
+
+            "WHEN TO USE:\n" +
+            "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +
+            "- Hide/show OOB or custom commands in a specific app\n" +
+            "- Inspect appactionrule visibility/enable rules (include_rules=true)\n\n" +
+
+            "Fuzzy on label (within entity_name + location + app): 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with command_id). 1 → auto-resolve.\n" +
+            "Fuzzy on app_name (contains): 0/multi → ask user. 1 → auto.")]
         public CallToolResult manage_command(
-            [Description("Action: 'list', 'detail', 'create', 'update', 'hide', 'show', 'add_flyout', 'update_flyout', 'add_flyout_item', 'remove_flyout_item', 'add_split_button', 'update_split_button'.")] string action,
-            [Description("GUID of a specific appaction record. Required for detail/update.")] string command_id = "",
-            [Description("Filter by entity logical name (e.g., 'account'). Required for create.")] string entity_name = "",
-            [Description("Filter by location: 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', 'dashboard'. Required for create.")] string location = "",
-            [Description("App module GUID. Required for create (or use app_name).")] string app_id = "",
-            [Description("Button label text. Required for create; optional for update.")] string label = "",
-            [Description("OnClick event type: 'none', 'javascript', 'formula'. Default: 'none'.")] string onclick_type = "",
-            [Description("JavaScript web resource name or GUID for onclick handler.")] string javascript_webresource = "",
-            [Description("JavaScript function name for onclick handler (e.g., 'Namespace.functionName').")] string javascript_function = "",
-            [Description("Font icon name (e.g., 'SalesPlaybook'). Use 'none' to clear.")] string font_icon = "",
-            [Description("Icon web resource name or GUID (e.g., 'devkit_/images/icon.svg'). Sets iconwebresourceid. Use 'none' to clear.")] string icon_webresource = "",
-            [Description("Tooltip title text (buttontooltiptitle).")] string tooltip_title = "",
-            [Description("Tooltip description text (buttontooltipdescription).")] string tooltip_description = "",
-            [Description("Button sequence/order. Default: 100 for create.")] int sequence = 0,
-            [Description("Hide the button. Default: false.")] bool hidden = false,
-            [Description("Filter by Model-Driven App name (contains match). Also used to resolve app for create.")] string app_name = "",
-            [Description("'default' (custom), 'migrated' (from ribbon), 'enhanced_migrated', or 'all'. Empty = all.")] string origin = "",
-            [Description("Filter by onclick event type: 'javascript', 'formula' (Power Fx), 'none'. Empty = all.")] string action_type = "",
-            [Description("Filter by command name (contains match).")] string name_filter = "",
-            [Description("Include associated appactionrule records with JSON definitions. Default: false.")] bool include_rules = false,
-            [Description("Include child commands (dropdown/split button items). Default: false.")] bool include_children = false,
-            [Description("Max commands (1-500). Default: 50.")] int max_records = 50,
-            [Description("JSON array of items for add_flyout or add_split_button. Each item: {label, onclick_type, javascript_webresource, javascript_function, sequence}.")] string items = "",
-            [Description("GUID of the flyout Dropdown Button or Split Button. Required for add_flyout_item.")] string flyout_command_id = "")
+            [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action,
+            [Description("appaction GUID. Required: detail/update.")] string command_id = "",
+            [Description("Logical name. Required: create.")] string entity_name = "",
+            [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required: create.")] string location = "",
+            [Description("App module GUID. Required: create (or app_name).")] string app_id = "",
+            [Description("Button label. Required: create.")] string label = "",
+            [Description("none/javascript/formula. Default 'none'.")] string onclick_type = "",
+            [Description("WR name or GUID for onclick.")] string javascript_webresource = "",
+            [Description("Handler (e.g. 'Namespace.fn').")] string javascript_function = "",
+            [Description("Icon name (e.g. 'SalesPlaybook'). 'none' = clear.")] string font_icon = "",
+            [Description("Icon WR name/GUID. 'none' = clear.")] string icon_webresource = "",
+            [Description("")] string tooltip_title = "",
+            [Description("")] string tooltip_description = "",
+            [Description("Order. Default 100 on create.")] int sequence = 0,
+            [Description("")] bool hidden = false,
+            [Description("MDA name contains.")] string app_name = "",
+            [Description("default/migrated/enhanced_migrated/all.")] string origin = "",
+            [Description("javascript/formula/none filter.")] string action_type = "",
+            [Description("Command name contains.")] string name_filter = "",
+            [Description("Add appactionrule records.")] bool include_rules = false,
+            [Description("Dropdown/split items.")] bool include_children = false,
+            [Description("1–500.")] int max_records = 50,
+            [Description("JSON array of items for add_flyout/add_split_button: {label, onclick_type, javascript_webresource, javascript_function, sequence}.")] string items = "",
+            [Description("GUID of Dropdown or Split Button. Required: add_flyout_item.")] string flyout_command_id = "")
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(actionName))

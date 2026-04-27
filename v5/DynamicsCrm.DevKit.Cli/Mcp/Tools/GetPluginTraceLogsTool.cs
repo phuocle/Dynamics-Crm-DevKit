@@ -27,41 +27,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginTraceLogsResult)),
         Description(
-            "List and inspect plugin trace logs for debugging plugin/custom action execution.\n\n" +
-
-            "MODES:\n" +
-            "- record_id EMPTY: list recent logs with filters (default: last 60 min)\n" +
-            "- record_id PROVIDED: full detail with complete messageblock + exceptiondetails\n\n" +
+            "Plugin trace logs for debugging plugin/custom action. record_id empty = list (filtered, default last 60 min). Set = detail (full messageblock + exceptiondetails). Requires Plugin Trace Log enabled (System Settings > Customization).\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug failing plugin: list first, then detail with record_id for full trace\n" +
-            "- Trace specific request: use correlation_id for all traces of one operation\n\n" +
-
-            "TIPS:\n" +
-            "- Plugin Trace Log must be enabled in Dataverse (System Settings > Customization)\n" +
-            "- Async failures: combine with get_system_jobs for error + trace output")]
+            "- Debug failing plugin (list first → detail with record_id for full trace)\n" +
+            "- Trace one request across logs (correlation_id)\n" +
+            "- Async plugin failures: combine with get_system_jobs")]
         public CallToolResult get_plugin_trace_logs(
             [Description(
-                "Record GUID for detail mode. Empty = list mode. " +
-                "Use parse_record_url to extract from a URL."
+                "GUID → detail mode. Empty = list. Use parse_record_url."
             )] string record_id = "",
             [Description(
-                "Filter by plugin type name (contains). E.g., 'AccountPlugin'."
+                "Plugin type name (contains). E.g. 'AccountPlugin'."
             )] string type_name = "",
             [Description(
-                "Filter by SDK message: 'Create', 'Update', 'Delete', etc."
+                "SDK message: Create, Update, Delete, etc."
             )] string message_name = "",
             [Description(
-                "'sync' or 'async'. Empty = both."
+                "'sync' / 'async'. Empty = both."
             )] string mode = "",
             [Description(
-                "Filter by correlation ID (exact GUID). Trace a single request across logs."
+                "GUID. Trace one request across logs."
             )] string correlation_id = "",
             [Description(
-                "Time range in minutes. Default: 60. Max: 1440."
+                "0 = 60 min default. Max 1440."
             )] int minutes_ago = 0,
             [Description(
-                "Max results. Default: 50. Max: 200."
+                "Max 200."
             )] int max_records = 50)
         {
             try

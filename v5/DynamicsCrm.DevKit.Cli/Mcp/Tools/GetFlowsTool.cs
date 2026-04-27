@@ -40,24 +40,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetFlowsResult)),
         Description(
-            "List and inspect Power Automate cloud flows and their run history.\n\n" +
+            "Power Automate cloud flows + run history. Modes: no flow_id = list (filtered); flow_id + action='list' = detail + last 5 runs; flow_id + action='runs' = extended run history. For classic (category=0) workflows use get_workflows.\n\n" +
 
-            "THREE MODES:\n" +
-            "- No flow_id: list all flows matching filters\n" +
-            "- flow_id + action='list': single flow detail + last 5 runs\n" +
-            "- flow_id + action='runs': extended run history with filtering\n\n" +
+            "WHEN TO USE:\n" +
+            "- List flows by name/owner/status\n" +
+            "- Inspect a specific flow + recent runs\n" +
+            "- Drill into run history with status_filter (debug failures)\n\n" +
 
-            "TIPS:\n" +
-            "- Use get_workflows for classic (category=0) workflows")]
+            "Fuzzy on name_filter / owner_filter: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto.")]
         public CallToolResult get_flows(
-            [Description("Flow GUID. Empty = list mode. With action='list': detail + runs. With action='runs': run history.")] string flow_id = "",
-            [Description("'list' (default) or 'runs'. 'runs' requires flow_id.")] string action = "list",
-            [Description("Filter by name (contains). List mode only.")] string name_filter = "",
-            [Description("Filter by owner name (contains). List mode only.")] string owner_filter = "",
-            [Description("'active' (default), 'draft', 'suspended', or 'all'.")] string status = "active",
-            [Description("For runs: filter by status ('succeeded','failed','running','cancelled','waiting','paused','skipped','suspended'). Empty = all.")] string status_filter = "",
-            [Description("For runs: last N minutes. Default: 1440 (24h). Max: 43200.")] int minutes_ago = 1440,
-            [Description("Max results (1-250). Default: 50.")] int max_records = 50)
+            [Description("GUID. Empty = list. Set: action determines detail vs runs.")] string flow_id = "",
+            [Description("'list' or 'runs'. 'runs' needs flow_id.")] string action = "list",
+            [Description("list only. Name contains.")] string name_filter = "",
+            [Description("list only. Owner contains.")] string owner_filter = "",
+            [Description("'active' / 'draft' / 'suspended' / 'all'.")] string status = "active",
+            [Description("runs only: succeeded/failed/running/cancelled/waiting/paused/skipped/suspended.")] string status_filter = "",
+            [Description("runs only. Max 43200.")] int minutes_ago = 1440,
+            [Description("1–250.")] int max_records = 50)
         {
             var normalizedAction = (action ?? "list").Trim().ToLowerInvariant();
             if (normalizedAction != "list" && normalizedAction != "runs")

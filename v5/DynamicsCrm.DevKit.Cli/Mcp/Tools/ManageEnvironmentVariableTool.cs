@@ -33,52 +33,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageEnvironmentVariableResult)),
         Description(
-            "List, get, create, update, delete, or clear Dataverse environment variables.\n\n" +
+            "Dataverse environment variables — list/detail/create/update/delete/clear.\n" +
+            "- list: optional solution_name, max_records\n" +
+            "- detail: variable_name\n" +
+            "- create: variable_name + display_name + type. Optional: default_value, value, description, solution_name\n" +
+            "- update: variable_name. Optional: display_name, default_value, value, description\n" +
+            "- delete: variable_name (definition + value, irreversible)\n" +
+            "- clear: variable_name (current value only → reverts to default)\n\n" +
 
-            "ACTIONS:\n" +
-            "- action='list': List all variables (name, type, default/current value). Optional: solution_name, max_records\n" +
-            "- action='detail': Get details for one variable. Requires variable_name\n" +
-            "- action='create': Create variable definition. Requires variable_name + display_name + type. Optional: default_value, value, description, solution_name\n" +
-            "- action='update': Update existing variable. Requires variable_name. Optional: display_name, default_value, value, description\n" +
-            "- action='delete': Permanently delete definition + current value. Requires variable_name. WARNING: irreversible\n" +
-            "- action='clear': Delete current value only (reverts to default). Requires variable_name\n\n" +
+            "Current value overrides default. Type immutable after creation. Usually no publish needed.\n\n" +
 
-            "TIPS:\n" +
-            "- Current value overrides default value\n" +
-            "- Type cannot be changed after creation\n" +
-            "- Does not require publishing in most cases")]
+            "WHEN TO USE:\n" +
+            "- Inspect / list env vars in a solution (config secrets, feature flags, etc.)\n" +
+            "- Create or update a definition + current value\n" +
+            "- Clear current value to revert to default; delete to remove definition entirely\n\n" +
+
+            "SAFETY:\n" +
+            "- delete removes definition + current value (irreversible); clear removes current value only")]
         public CallToolResult manage_environment_variable(
-            [Description(
-                "The action to perform: 'list', 'detail', 'create', 'update', 'delete', or 'clear'."
+            [Description("list, detail, create, update, delete, clear."
             )] string action,
-            [Description(
-                "Schema name with publisher prefix (e.g., 'new_ApiEndpoint'). " +
-                "Required for detail, create, update, delete, and clear. Leave empty for list."
+            [Description("Schema name with prefix (e.g. 'new_ApiEndpoint'). Required: all except list."
             )] string variable_name = "",
-            [Description(
-                "Solution unique name. Filters results (list only) or adds definition to solution (create only). Leave empty for all."
+            [Description("list: filter. create: add to solution."
             )] string solution_name = "",
-            [Description(
-                "Maximum number of variables to return in list mode. Default is 50."
+            [Description("list only."
             )] int max_records = 50,
-            [Description(
-                "Display name. Required on create."
+            [Description("Required: create."
             )] string display_name = "",
-            [Description(
-                "Type: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'. Required on create, ignored on update."
+            [Description("string/number/boolean/json/datasource/secret. Required: create. Ignored: update."
             )] string type = "",
-            [Description(
-                "Default value for the definition."
-            )] string default_value = "",
-            [Description(
-                "Current value override. Creates/updates the value record."
+            [Description("")
+            ] string default_value = "",
+            [Description("Current value (creates/updates value record)."
             )] string value = "",
-            [Description(
-                "Variable description."
-            )] string description = "",
-            [Description(
-                "Publish after changes. Default: false."
-            )] bool auto_publish = false)
+            [Description("")
+            ] string description = "",
+            [Description("")
+            ] bool auto_publish = false)
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.");

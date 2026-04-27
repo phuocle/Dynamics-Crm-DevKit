@@ -65,55 +65,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageWebResourceResult)),
         Description(
-            "List, inspect, create, update, or delete web resources in Dataverse.\n\n" +
+            "Web resources Dataverse — list/detail/create/update/delete. Required:\n" +
+            "- list: optional name, type_filter, solution_name, max_records\n" +
+            "- detail: web_resource_id\n" +
+            "- create: name + content (base64) + type. Optional: display_name, description, solution_name\n" +
+            "- update: web_resource_id. Optional: content, display_name, description\n" +
+            "- delete: web_resource_id (irreversible)\n\n" +
 
-            "FIVE ACTIONS:\n" +
-            "- action='list': List web resources filtered by name, type, solution. Optional: name, type_filter, solution_name, max_records\n" +
-            "- action='detail': Full metadata for one web resource. Requires web_resource_id\n" +
-            "- action='create': Create a new web resource. Requires name + content (base64) + type. Optional: display_name, description, solution_name\n" +
-            "- action='update': Update content and/or metadata. Requires web_resource_id. Optional: content, display_name, description\n" +
-            "- action='delete': Permanently delete a web resource. Requires web_resource_id. WARNING: cannot be undone\n\n" +
+            "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.\n" +
+            "Naming convention: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
 
-            "TIPS:\n" +
-            "- Call this tool first to find library_name needed for build_form_xml add_event/add_library\n" +
-            "- Names follow convention: {prefix}_/path/filename.ext (e.g., v4_/entities/Account.form.js)\n" +
-            "- Related: build_form_xml (add events/libraries), manage_form (inspect form structure)")]
+            "WHEN TO USE:\n" +
+            "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
+            "- Inspect, upload, update, or delete a single web resource\n" +
+            "- Combine with build_form_xml + manage_form to wire JS into a form\n\n" +
+
+            "SAFETY: delete is irreversible; content must be base64 for create/update.")]
         public CallToolResult manage_webresource(
-            [Description(
-                "The action to perform: 'list', 'detail', 'create', 'update', or 'delete'."
+            [Description("list / detail / create / update / delete."
             )] string action,
-            [Description(
-                "GUID of the web resource. Required for detail, update, and delete. Empty for list and create."
+            [Description("GUID. Required: detail/update/delete."
             )] string web_resource_id = "",
-            [Description(
-                "Web resource unique name (e.g., 'v4_/entities/Account.form.js'). " +
-                "Required for create. For list: contains filter on name."
+            [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter."
             )] string name = "",
-            [Description(
-                "Display name. Optional for create/update."
-            )] string display_name = "",
-            [Description(
-                "Description text. Optional for create/update."
-            )] string description = "",
-            [Description(
-                "Base64 encoded file content. Required for create. Optional for update."
+            [Description("")
+            ] string display_name = "",
+            [Description("")
+            ] string description = "",
+            [Description("Base64. Required: create."
             )] string content = "",
-            [Description(
-                "Web resource type for create: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'. " +
-                "Required for create, ignored for other actions. For list: use type_filter instead."
+            [Description("Required: create. See description for values. Ignored on other actions."
             )] string type = "",
-            [Description(
-                "Filter by solution unique name (list mode). Solution to add to (create mode)."
+            [Description("list: filter. create: add to solution."
             )] string solution_name = "",
-            [Description(
-                "Filter by type in list mode: 'js', 'html', 'css', 'xml', 'png', 'jpg', 'gif', 'svg', 'ico', 'resx', 'xsl', 'xap'. Empty = all."
+            [Description("list only. See type values."
             )] string type_filter = "",
-            [Description(
-                "Max results for list mode (1-500). Default: 50."
+            [Description("1–500."
             )] int max_records = 50,
-            [Description(
-                "Publish after changes. Default: true."
-            )] bool auto_publish = true)
+            [Description("")
+            ] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete'.");

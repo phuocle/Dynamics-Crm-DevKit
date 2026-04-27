@@ -31,33 +31,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetAuditHistoryResult)),
         Description(
-            "Retrieve audit history for Dataverse records — who changed what, when, old/new values.\n\n" +
+            "Audit history for Dataverse records (who/what/when/old/new). record_id set = detail (field-level, entity_name required). Empty = browse list (entity_name optional). Audit must be enabled at org AND entity. from_date/to_date overrides minutes_ago.\n\n" +
 
-            "MODES:\n" +
-            "- record_id set: field-level old/new for one record (entity_name required)\n" +
-            "- record_id empty: summary list across records/entities (entity_name optional)\n\n" +
+            "WHEN TO USE:\n" +
+            "- Debug unexpected field changes\n" +
+            "- Compliance / regulatory auditing\n" +
+            "- Track user or integration activity\n\n" +
 
-            "WHEN TO USE: debug unexpected changes, compliance auditing, track user/integration activity.\n\n" +
-
-            "TIPS: Audit must be enabled at org AND entity level. Use from_date/to_date for ranges (overrides minutes_ago).")]
+            "FUZZY/AMBIGUITY:\n" +
+            "- user_filter by email/name may resolve multiple users; tool returns candidates and requires exact display name.")]
         public CallToolResult get_audit_history(
-            [Description("Entity logical name. Required with record_id. Optional in browse mode."
+            [Description("Logical name. Required with record_id."
             )] string entity_name = "",
-            [Description("Record GUID for detail mode. Empty = browse mode."
+            [Description("GUID → detail. Empty = browse."
             )] string record_id = "",
-            [Description("Entries from last N minutes. Default: 1440 (24h). Max: 43200. Ignored with from_date."
+            [Description("Last N min. Max 43200. Ignored if from_date set."
             )] int minutes_ago = 1440,
-            [Description("Filter by user name (contains) or email (auto-resolved)."
+            [Description("User name (contains) or email (auto-resolved)."
             )] string user_filter = "",
-            [Description("Filter by operation: Create, Update, Delete, Activate, Deactivate, Assign, Merge, SetState."
+            [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, SetState."
             )] string operation = "",
-            [Description("Detail mode only: filter to one field's changes."
+            [Description("Detail only. Filter one field."
             )] string attribute_name = "",
-            [Description("Max entries. Default: 50, max: 500."
+            [Description("Max 500."
             )] int max_records = 50,
-            [Description("ISO 8601 start date (e.g., '2026-03-01'). Overrides minutes_ago."
+            [Description("ISO 8601 (e.g. '2026-03-01'). Overrides minutes_ago."
             )] string from_date = "",
-            [Description("ISO 8601 end date. Used with from_date. Default: now."
+            [Description("ISO 8601. With from_date. Default = now."
             )] string to_date = "")
         {
             if (!string.IsNullOrWhiteSpace(record_id) && string.IsNullOrWhiteSpace(entity_name))

@@ -39,22 +39,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetBpfsResult)),
         Description(
-            "List and inspect Business Process Flows (BPFs) and their stages. Each BPF auto-creates its own Dataverse entity.\n\n" +
+            "Business Process Flows (BPFs) + stages. Each BPF auto-creates its own Dataverse entity (uniqueName = logical name). bpf_id empty = list. Set = detail with stages. BPFs can span multiple entities (Lead → Opportunity); each stage has its own primaryEntity.\n\n" +
 
-            "TWO MODES:\n" +
-            "- bpf_id empty (and bpf_name matches 0 or 2+): list all matching BPFs\n" +
-            "- bpf_id provided (or bpf_name matches exactly 1): detail with all stages\n\n" +
+            "WHEN TO USE:\n" +
+            "- Inspect stage sequence + primary entities for a BPF\n" +
+            "- Find BPFs bound to an entity (entity_name filter)\n" +
+            "- Resolve BPF unique/logical name for the auto-created entity\n\n" +
 
-            "TIPS:\n" +
-            "- BPFs can span multiple entities (e.g., Lead → Opportunity); each stage has its own primaryEntity\n" +
-            "- uniqueName is also the logical name of the BPF's auto-created entity")]
+            "Fuzzy on bpf_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult get_business_process_flows(
-            [Description("BPF GUID for full detail. Empty = list mode.")] string bpf_id = "",
-            [Description("Filter by name (contains). If exactly 1 match, returns detail.")] string bpf_name = "",
-            [Description("Filter by primary entity (e.g., 'lead', 'opportunity').")] string entity_name = "",
-            [Description("'active' (default), 'draft', or 'all'.")] string status = "active",
-            [Description("Include stages in list mode (default: false). Always included in detail.")] bool include_stages = false,
-            [Description("Max BPFs (1-250). Default: 50.")] int max_records = 50)
+            [Description("GUID → detail. Empty = list.")] string bpf_id = "",
+            [Description("Name contains. 1 match → auto-detail.")] string bpf_name = "",
+            [Description("Primary entity filter (e.g. 'lead').")] string entity_name = "",
+            [Description("'active' / 'draft' / 'all'.")] string status = "active",
+            [Description("List only. Detail always includes.")] bool include_stages = false,
+            [Description("1–250.")] int max_records = 50)
         {
             if (string.IsNullOrWhiteSpace(status))
                 status = "active";

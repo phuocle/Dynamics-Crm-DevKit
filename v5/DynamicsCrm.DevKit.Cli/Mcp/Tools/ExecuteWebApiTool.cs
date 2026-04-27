@@ -29,37 +29,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Execute raw Dataverse Web API requests.\n\n" +
+            "Raw Dataverse Web API call. Allowed: GET (any), POST/PATCH/PUT/DELETE on data records + custom actions. Blocked at runtime (use specialized tool): schema/metadata→upsert_table/upsert_column/upsert_relationship; choice→manage_choice; form/view/sitemap→manage_form/manage_view/manage_sitemap; env vars→manage_environment_variable; webresource→manage_webresource; roles→manage_role; publish→publish_customizations; solutions/plugins/workflows/apps→DevKit CLI or Power Apps UI. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
 
-            "ALLOWED:\n" +
-            "- GET any endpoint (always safe)\n" +
-            "- POST/PATCH/PUT/DELETE on data records and custom actions (e.g. accounts, WhoAmI)\n\n" +
-
-            "BLOCKED (runtime-enforced — use specialized tools):\n" +
-            "- Schema/metadata → upsert_table, upsert_column, upsert_relationship\n" +
-            "- Choice/OptionSet → manage_choice\n" +
-            "- Forms/Views/SiteMaps → manage_form, manage_view, manage_sitemap\n" +
-            "- Environment variables → manage_environment_variable\n" +
-            "- Web resources → manage_webresource\n" +
-            "- Security roles → manage_role\n" +
-            "- Publish → publish_customizations\n" +
-            "- Solutions/Plugins/Workflows/Apps → Power Apps UI or DevKit CLI\n\n" +
-
-            "url is a relative path; SDK handles base URL. PUT/PATCH/DELETE are destructive — confirm with user first.")]
+            "WHEN TO USE:\n" +
+            "- Endpoints not covered by specialized tools (e.g. WhoAmI, $metadata, custom actions)\n" +
+            "- Inspect raw JSON responses + headers\n" +
+            "- Always check whether a specialized tool exists first (see Blocked list)")]
         public CallToolResult execute_webapi(
-            [Description("HTTP method: GET, POST, PUT, PATCH, or DELETE."
+            [Description("GET, POST, PUT, PATCH, DELETE."
             )] string method,
-            [Description("Relative URL path (SDK handles base URL). E.g., 'accounts', 'contacts(guid)', '$metadata'."
+            [Description("Relative path, e.g. 'accounts', 'contacts(guid)', '$metadata'."
             )] string url,
-            [Description("JSON body for POST/PUT/PATCH. Not needed for GET/DELETE."
+            [Description("JSON body for POST/PUT/PATCH."
             )] string body = "",
-            [Description("Extra headers as JSON. Standard headers handled by SDK."
+            [Description("Extra headers as JSON."
             )] string headers = "",
-            [Description("Include response headers in output. Default: false."
+            [Description("Include response headers."
             )] bool include_headers = false,
-            [Description(
-                "Maximum response body lines to return. Default: 200. " +
-                "Use smaller values (e.g. 50) for large responses like $metadata."
+            [Description("Truncate response. Use 50 for large outputs ($metadata)."
             )] int max_response_lines = 200)
         {
             if (string.IsNullOrWhiteSpace(method))

@@ -36,52 +36,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Manage Dataverse views (savedquery/userquery) — list, read, create, update, rename, restore.\n\n" +
+            "Dataverse views (savedquery/userquery) — list/detail/create/update/rename/undo. Required: list (none); detail (view_id); create (view_name+layoutxml); update (view_id + layoutxml and/or cell_updates_json); rename (view_id+view_name); undo (view_id+backup path). Auto: backup→XSD+sync validate→update→publish. SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
 
-            "ACTIONS:\n" +
-            "- action='list': List views with name, type, status. Optional: query_type, include_fetchxml, include_personal\n" +
-            "- action='detail': Full FetchXML + LayoutXML + metadata for one view. Requires: view_id\n" +
-            "- action='create': New Public view. Requires: view_name + layoutxml\n" +
-            "- action='update': Modify LayoutXML/FetchXML. Requires: view_id + (layoutxml and/or cell_updates_json)\n" +
-            "- action='rename': Change display name. Requires: view_id + view_name\n" +
-            "- action='undo': Restore from backup. Requires: view_id + layoutxml (= backup file path)\n\n" +
+            "WHEN TO USE:\n" +
+            "- Inspect existing views (list, detail) before editing\n" +
+            "- Apply layout/fetch changes (action=update)\n" +
+            "- Patch cell attributes only via cell_updates_json (no full LayoutXML rebuild)\n\n" +
 
-            "WORKFLOW: list → modify XMLs → update. Auto: backup → XSD+sync validate → update → publish.\n" +
-            "SYNC RULE: Every FetchXML <attribute> MUST match a LayoutXML <cell>. Tool blocks if out of sync.\n\n" +
+            "FUZZY/AMBIGUITY:\n" +
+            "- view_name is contains match. Exactly 1 → auto-detail; multiple → tool returns candidates, use view_id to disambiguate.\n\n" +
 
-            "TIPS:\n" +
-            "- querytype: 0=Public, 4=QuickFind (search bar), 64=SubGrid\n" +
-            "- view_name: 1 exact match = auto-returns detail\n" +
-            "- Read docs://instructions_for_views for sync rules; schema://layoutxml + schema://fetchxml for XSD\n" +
-            "- Set auto_publish=false when batching; call publish_customizations once after")]
+            "SAFETY:\n" +
+            "- Validation blocks FetchXML/LayoutXML mismatch by default (validate=true).")]
         public CallToolResult manage_view(
-            [Description("The action to perform: 'list', 'detail', 'create', 'update', 'rename', or 'undo'."
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'undo'."
             )] string action,
-            [Description("Entity logical name (e.g., 'account'). Use get_tables if unsure."
+            [Description("Entity logical name (e.g. 'account')."
             )] string entity_name,
-            [Description("GUID of a view. Required for detail/update/rename/undo. Empty for list/create."
+            [Description("GUID. Required: detail/update/rename/undo."
             )] string view_id = "",
-            [Description("Filter by name (contains match). 1 match = auto-detail. Ignored if view_id set."
+            [Description("Name contains. 1 match → auto-detail."
             )] string view_name = "",
-            [Description("Filter by type: 0=Public, 1=Lookup, 4=QuickFind, 64=SubGrid. -1 = all."
+            [Description("0=Public, 1=Lookup, 4=QuickFind, 64=SubGrid. -1=all."
             )] int query_type = -1,
-            [Description("Include FetchXML/LayoutXML in list mode (default: false). Detail mode always includes."
+            [Description("List only. Detail always includes XMLs."
             )] bool include_fetchxml = false,
-            [Description("Include personal views (userquery) owned by current user. Default: false."
+            [Description("Include userquery (personal views)."
             )] bool include_personal = false,
-            [Description("For 'update'/'create': LayoutXML. For 'undo': layout backup path. Ignored for list/detail/rename."
+            [Description("update/create: LayoutXML. undo: backup path."
             )] string layoutxml = "",
-            [Description("FetchXML. Empty = keep existing (update) or auto-generate (create). For 'undo': fetch backup path."
+            [Description("Empty = keep (update) / auto-generate (create). undo: backup path."
             )] string fetchxml = "",
-            [Description("Validate XMLs and check FetchXML<>LayoutXML sync (default: true). Blocks if invalid."
+            [Description("XSD + sync check before write."
             )] bool validate = true,
-            [Description("Backup current XMLs before overwriting (default: true). Backup failure blocks update."
+            [Description("Backup before overwrite."
             )] bool backup = true,
-            [Description("Publish after changes (default: true). Set false when batching."
+            [Description("Publish after. false when batching."
             )] bool auto_publish = true,
-            [Description("JSON array of cell attribute updates. Each item: {cell_name, set_attributes, remove_attributes}. " +
-                "Patch cell attributes (e.g., imageproviderwebresource, imageproviderfunctionname, ishidden) " +
-                "without rebuilding full LayoutXML. Can be used alone or with layoutxml."
+            [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, imageproviderfunctionname, ishidden, …) without rebuilding LayoutXML."
             )] string cell_updates_json = "")
         {
             if (string.IsNullOrWhiteSpace(action))

@@ -40,24 +40,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(BatchCreateResult)),
         Description(
-            "Create multiple Dataverse records in parallel — optimized for data migration. Partial failures reported per-item; successful records still created.\n\n" +
+            "Bulk create Dataverse records in parallel (data migration). Partial failures reported per-item; successes still committed. Input: inline JSON array, .json (from generate_demo_data), or .csv with Display Name headers (lookups resolved by Name: 1 match=GUID, 0/2+=skipped). Polymorphic lookup: 'field@targetentity'. Max 5000 records/call.\n\n" +
 
-            "DEFAULT (shown in output when not provided):\n" +
-            "  max_parallelism: from server x-ms-dop-hint (typically 4–8 for cloud). Hard limit: 52.\n\n" +
+            "WHEN TO USE:\n" +
+            "- Bulk insert > 1 records of the same entity (data migration, demo seeding)\n" +
+            "- Pipe demo data: generate_demo_data → create_records\n" +
+            "- For single-record CRUD use manage_record instead\n\n" +
 
-            "TIPS:\n" +
-            "- records_json: inline JSON array, .json file path (from generate_demo_data), or .csv (headers=Display Name; lookups by Name: 1 match=GUID, 0 or 2+=skipped)\n" +
-            "- Polymorphic lookups: use \"fieldname@targetentity\" syntax\n" +
-            "- max_parallelism=1–2 for on-prem/throttled envs; max 5000 records per call")]
+            "FUZZY/AMBIGUITY:\n" +
+            "- CSV lookup-by-name: exactly 1 match becomes GUID; 0 or 2+ is skipped with warning.")]
         public async Task<CallToolResult> create_records(
             [Description(
-                "Entity logical name (e.g., 'account'). Required."
+                "Entity logical name (e.g., 'account')."
             )] string entity_name,
             [Description(
-                "JSON array of field objects (inline), OR file path (.json from generate_demo_data), OR CSV file path (.csv with Display Name headers). Max 5000 records."
+                "JSON array, .json path, or .csv path. Max 5000."
             )] string records_json,
             [Description(
-                "Max concurrent requests. 0 (default) = use server hint (x-ms-dop-hint). Clamped to 1–52."
+                "Concurrent requests. 0 = server hint (x-ms-dop-hint, typically 4–8). Clamp 1–52. Use 1–2 for on-prem/throttled."
             )] int max_parallelism = 0)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

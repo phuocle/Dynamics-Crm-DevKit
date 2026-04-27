@@ -27,32 +27,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_business_rules", Title = "List business rules for an entity",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "List business rules (client-side logic) for a Dataverse entity.\n\n" +
-
-            "TWO MODES:\n" +
-            "- rule_id EMPTY: list rules with name, scope, status\n" +
-            "- rule_id PROVIDED: full detail with conditions and actions parsed from XAML\n\n" +
+            "Business rules (client-side logic) for a Dataverse entity. rule_id empty = list (name, scope, status). Set = detail (conditions + actions parsed from XAML). Rules run BEFORE JavaScript form events. Scope 'Entity' = runs on ALL forms.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug form behavior (fields hiding/showing unexpectedly)\n" +
-            "- Audit client-side logic before adding JavaScript\n\n" +
-
-            "TIPS:\n" +
-            "- Business rules run client-side BEFORE JavaScript form events\n" +
-            "- Scope 'Entity' means the rule runs on ALL forms")]
+            "- Debug form behavior (fields hide/show unexpectedly)\n" +
+            "- Audit client-side logic before adding JavaScript")]
         public string get_business_rules(
             [Description(
-                "Entity logical name (lowercase). Use get_tables to discover names."
+                "Entity logical name (lowercase)."
             )] string entity_name,
             [Description(
-                "GUID of a specific business rule for full detail. Leave empty to list all."
+                "GUID → detail. Empty = list."
             )] string rule_id = "",
             [Description(
-                "Filter by status: 'active' (activated rules), 'draft' (deactivated/not yet activated). " +
-                "Leave empty to return all statuses."
+                "'active' or 'draft'. Empty = all."
             )] string status = "",
             [Description(
-                "Maximum number of rules to return. Default: 50. Max: 200."
+                "Max 200."
             )] int max_records = 50)
         {
             if (string.IsNullOrWhiteSpace(entity_name))

@@ -53,33 +53,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = false, ReadOnly = true, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GenerateDemoDataResult)),
         Description(
-            "Generate demo data for a Dataverse entity using Bogus fake data library.\n" +
-            "Output saved to .devkit/demo_data/ as JSON — pass file path to create_records.\n\n" +
+            "Bogus-generated demo data for an entity → JSON file at .devkit/demo_data/ → pipe to create_records. from_date/to_date REQUIRED (ISO 8601, ask user, never infer). Auto-selects creatable fields with smart mapping (email→Email, telephone→Phone…) and overriddencreatedon. Lookups: real GUIDs auto-fetched; polymorphic uses 'field@entity'.\n\n" +
 
-            "WORKFLOW:\n" +
-            "  Step 1: generate_demo_data(entity_name=\"account\", count=50, from_date=\"2026-01-01\", to_date=\"2026-04-30\") → file path\n" +
-            "  Step 2: create_records(entity_name=\"account\", records_json=<file path>)\n\n" +
+            "field_overrides (JSON array of {logicalname, operator, values[]}):\n" +
+            "- eq: all records = values[0] (fixed GUID/string)\n" +
+            "- in: random pick from values[] (rotating lookups/enums)\n" +
+            "- startswith: 'ABC' → 'ABC_x7k2' (Bogus suffix)\n" +
+            "- endswith: '@acme.com' → 'john.doe@acme.com' (Bogus prefix)\n" +
+            "- contains: 'Manager' → 'Senior Manager II' (injected middle)\n" +
+            "- regex: '\\+84[0-9]{9}' → '+84912345678'\n\n" +
 
-            "TIPS:\n" +
-            "- from_date + to_date REQUIRED — NEVER infer or guess these from context or current date; always ask the user explicitly if not provided\n" +
-            "- from_date + to_date format: ISO 8601 (e.g. \"2026-01-01\"); count default=10, max=500; seed=0 = random\n" +
-            "- fields empty = auto-select all creatable fields; smart mapping: emailaddress→Email, telephone→Phone, city→City etc.; overriddencreatedon always included\n" +
-            "- Lookups: auto-fetch real GUIDs; empty targets skipped with warning; polymorphic → \"field@entity\" syntax auto-applied\n" +
-            "- field_overrides: JSON array to control specific field values after Bogus generation. Operators: eq, in, startswith, endswith, contains, regex\n" +
-            "  eq        → all records get values[0]  (use for fixed lookup GUIDs, fixed strings)\n" +
-            "  in        → each record picks randomly from values[]  (use for rotating lookups or enums)\n" +
-            "  startswith→ Bogus suffix appended after values[0]  e.g. 'ABC' → 'ABC_x7k2'\n" +
-            "  endswith  → Bogus prefix prepended before values[0]  e.g. '@acme.com' → 'john.doe@acme.com'\n" +
-            "  contains  → values[0] injected in middle  e.g. 'Manager' → 'Senior Manager II'\n" +
-            "  regex     → simple pattern mapped to Bogus format  e.g. '\\+84[0-9]{9}' → '+84912345678'")]
+            "WHEN TO USE:\n" +
+            "- Generate demo/test data for an entity → pipe to create_records\n" +
+            "- Reproducible runs (fix seed); rotate lookups/enums via field_overrides 'in'\n" +
+            "- Pin specific FK values across all rows via field_overrides 'eq'")]
         public CallToolResult generate_demo_data(
-            [Description("Entity logical name (e.g., 'account'). Required.")] string entity_name,
-            [Description("from_date and to_date are REQUIRED. NEVER infer or assume — ask the user if not provided. ISO 8601 format. Example: '2026-01-01'.")] string from_date,
-            [Description("from_date and to_date are REQUIRED. NEVER infer or assume — ask the user if not provided. ISO 8601 format. Example: '2026-04-30'. Must be >= from_date.")] string to_date,
-            [Description("Number of records to generate. Default: 10. Max: 500.")] int count = 10,
-            [Description("Comma-separated field logical names. Empty = auto-select all creatable fields.")] string fields = "",
-            [Description("Random seed for reproducible data. 0 = random.")] int seed = 0,
-            [Description("JSON array of field override rules applied after Bogus generation. Each item: {logicalname, operator, values[]}. Operators: eq, in, startswith, endswith, contains, regex. Example: [{\"logicalname\":\"parentcustomerid\",\"operator\":\"eq\",\"values\":[\"<guid>\"]},{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}]")] string field_overrides = "")
+            [Description("Entity logical name (e.g., 'account').")] string entity_name,
+            [Description("ISO 8601, e.g. '2026-01-01'. NEVER infer — ask user.")] string from_date,
+            [Description("ISO 8601, e.g. '2026-04-30'. Must be >= from_date.")] string to_date,
+            [Description("1–500.")] int count = 10,
+            [Description("Comma-separated logical names. Empty = auto-select creatable.")] string fields = "",
+            [Description("0 = random; non-zero = reproducible.")] int seed = 0,
+            [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
         {
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");

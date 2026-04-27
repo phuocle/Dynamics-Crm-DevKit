@@ -31,49 +31,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRoleResult)),
         Description(
-            "Manage security roles: list, inspect, CRUD, copy, assign/unassign users.\n\n" +
+            "Security roles — list/detail/user/assign/unassign/create/update/delete/copy.\n" +
+            "- list: optional role_name, business_unit_id, max_records\n" +
+            "- detail: role_id (+optional entity_name) → privileges grouped by entity\n" +
+            "- user: user_id (+optional entity_name) → user's roles + effective privileges\n" +
+            "- assign / unassign: role_id + user_id\n" +
+            "- create: role_name (+optional business_unit_id)\n" +
+            "- update: role_id + role_name (rename)\n" +
+            "- delete: role_id (irreversible; managed roles can't delete — use copy)\n" +
+            "- copy: role_id + role_name (clone with all privileges)\n\n" +
 
-            "ACTIONS:\n" +
-            "- action='list': List root roles. Optional: role_name, business_unit_id, max_records\n" +
-            "- action='detail': Role privileges grouped by entity. Required: role_id. Optional: entity_name\n" +
-            "- action='user': User's roles + effective privileges. Required: user_id. Optional: entity_name\n" +
-            "- action='assign': Assign role to user. Required: role_id + user_id\n" +
-            "- action='unassign': Remove role from user. Required: role_id + user_id\n" +
-            "- action='create': Create custom role. Required: role_name. Optional: business_unit_id\n" +
-            "- action='update': Rename role. Required: role_id + role_name\n" +
-            "- action='delete': Delete custom role (irreversible). Required: role_id\n" +
-            "- action='copy': Clone role with all privileges. Required: role_id + role_name\n\n" +
+            "Depth: User < BU < Parent:ChildBU < Org. Only root roles listed (not BU-inherited copies). Fuzzy on role_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug 'access denied': action='user' + entity_name\n" +
-            "- Audit role grants: action='detail'\n" +
-            "- Provision access: action='assign'/'unassign', or action='create'/'copy'\n\n" +
-
-            "TIPS:\n" +
-            "- Depth levels: User < BU < Parent:ChildBU < Org\n" +
-            "- Only root roles listed (not inherited BU copies)\n" +
-            "- Managed roles cannot be deleted; use action='copy' to clone then customize")]
+            "- Debug 'access denied' (action='user' + entity_name)\n" +
+            "- Audit role privileges (action='detail')\n" +
+            "- Provision access (assign/unassign or create/copy)")]
         public CallToolResult manage_role(
-            [Description(
-                "Action: list, detail, user, assign, unassign, create, update, delete, copy."
+            [Description("list, detail, user, assign, unassign, create, update, delete, copy."
             )] string action,
-            [Description(
-                "Email or GUID. Required for: user, assign, unassign."
+            [Description("Email or GUID. Required: user/assign/unassign."
             )] string user_id = "",
-            [Description(
-                "Role GUID. Required for: detail, assign, unassign, update, delete, copy."
+            [Description("GUID. Required: detail/assign/unassign/update/delete/copy."
             )] string role_id = "",
-            [Description(
-                "Filter (contains) in list. New name for create/update/copy."
+            [Description("list: filter (contains). create/update/copy: new name."
             )] string role_name = "",
-            [Description(
-                "BU GUID. Filter in list. Target BU for create (empty = root BU)."
+            [Description("BU GUID. list: filter. create: target BU (empty = root)."
             )] string business_unit_id = "",
-            [Description(
-                "Filter privileges by entity (e.g. 'account'). For detail and user only."
+            [Description("detail/user: filter privileges by entity."
             )] string entity_name = "",
-            [Description(
-                "Max roles in list mode. Default: 50, max: 250."
+            [Description("list only. Max 250."
             )] int max_records = 50)
         {
             if (string.IsNullOrWhiteSpace(action))

@@ -24,21 +24,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "execute_fetchxml", Title = "Run a FetchXML query",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Execute a FetchXML query against Dataverse. Returns markdown table. Max 5000 records. Supports auto-paging.\n\n" +
+            "Run FetchXML query → markdown table. Max 5000 records, auto-paging supported. Lowercase logical names (use get_tables to verify). Don't use top/count/page in <fetch>; use max_records. See schema://fetchxml for syntax.\n\n" +
 
-            "RULES:\n" +
-            "- Use lowercase logical names; call get_tables if unsure\n" +
-            "- DO NOT use top/count/page in <fetch> — use max_records instead\n" +
-            "- Read schema://fetchxml for structure, operators, joins, and aggregation syntax")]
+            "WHEN TO USE:\n" +
+            "- Precise filtering / joins / aggregation across entities\n" +
+            "- When search_records (Relevance Search) is too coarse or not enabled\n" +
+            "- get_all=true to fetch full datasets up to max_records")]
         public string execute_fetchxml(
-            [Description("FetchXML query starting with <fetch>. Must use lowercase logical names."
+            [Description("FetchXML starting with <fetch>. Lowercase logical names."
             )] string fetchxml,
             [Description(
-                "Max records to return (1–5000, default 5000). Use a smaller value (e.g. 10–100) for samples."
+                "1–5000. Smaller (10–100) for samples."
             )] int max_records = 5000,
             [Description(
-                "true: auto-page until max_records or no more rows. false: first page only (default). " +
-                "Use true for complete datasets."
+                "true = auto-page till max_records. false = first page only."
             )] bool get_all = false)
         {
             if (string.IsNullOrWhiteSpace(fetchxml))

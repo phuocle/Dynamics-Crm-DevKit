@@ -24,19 +24,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to entity and record ID",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Parse a Dynamics 365/Power Platform URL or string to extract entity logical name and record ID.\n\n" +
+            "Extract entity logical name + record ID from a D365/Power Platform URL/GUID. Supports main.aspx (etn/etc), Web API, maker portal, rundialog, workflow/report/solution editor URLs, raw GUIDs. Returns EntityName, RecordId, Source, EnvironmentId (maker only). Auto-resolves etc → entitySetName via Dataverse.\n\n" +
 
-            "Supports: main.aspx (etn/etc), Web API, Power Apps/Automate maker portal, " +
-            "rundialog, workflow/report/solution editor URLs, and raw GUIDs.\n\n" +
-
-            "Returns: EntityName, RecordId, Source, EnvironmentId (maker URLs only).\n\n" +
-
-            "TIPS:\n" +
-            "- If EntityName is '(unknown)', ask user for entity name or a full record URL\n" +
-            "- Auto-resolves entity type codes (etc) and entitySetNames via Dataverse")]
+            "WHEN TO USE:\n" +
+            "- User pastes a record URL — extract entity + GUID before calling other tools\n" +
+            "- Convert raw GUID to typed reference when context is unknown\n" +
+            "- If EntityName='(unknown)', ask user for entity name or fuller URL")]
         public string parse_record_url(
             [Description(
-                "URL, GUID, or text to parse (Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID)."
+                "URL, GUID, or text (record URL, Web API URL, maker portal URL, raw GUID)."
             )] string input)
         {
             if (string.IsNullOrWhiteSpace(input))

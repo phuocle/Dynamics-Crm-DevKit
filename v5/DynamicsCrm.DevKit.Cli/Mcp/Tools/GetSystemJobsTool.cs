@@ -70,44 +70,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetSystemJobsResult)),
         Description(
-            "List/inspect system jobs (asyncoperation): async failures, workflow errors, bulk ops, imports, solutions.\n\n" +
-
-            "MODES:\n" +
-            "- record_id empty: list jobs with filters (default: failed, last 24h)\n" +
-            "- record_id provided: full detail with error message + stack trace\n\n" +
+            "System jobs (asyncoperation) for async failures, workflow errors, bulk ops, imports, solutions. record_id empty = list (default: failed jobs last 24h). Set = detail (error + stack trace).\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Debug async failures: list failed jobs, then detail for full stack trace\n" +
-            "- Monitor bulk ops: filter by operation_type ('bulk_delete', 'import', 'solution')\n" +
-            "- Trace a request: use correlation_id to find all jobs for one operation\n\n" +
-
-            "TIPS:\n" +
-            "- Async plugin failures: combine with get_plugin_trace_logs for trace output\n" +
-            "- Use entity_name to filter jobs for a specific entity")]
+            "- Debug async failures (list failed → detail for stack trace)\n" +
+            "- Monitor bulk ops (operation_type='bulk_delete'/'import'/'solution')\n" +
+            "- Trace one request (correlation_id across jobs)\n" +
+            "- Async plugin failures: combine with get_plugin_trace_logs")]
         public CallToolResult get_system_jobs(
             [Description(
-                "GUID for detail mode. Empty = list. Use parse_record_url to extract from URL."
+                "GUID → detail. Empty = list."
             )] string record_id = "",
             [Description(
-                "Filter by entity (e.g., 'account'). Empty = all."
+                "Filter by entity (e.g. 'account')."
             )] string entity_name = "",
             [Description(
-                "'failed' (default), 'succeeded', 'waiting', 'in_progress', 'canceled', 'all'."
+                "failed/succeeded/waiting/in_progress/canceled/all."
             )] string status = "failed",
             [Description(
-                "'plugin', 'workflow', 'bulk_delete', 'import', 'goal_rollup', 'solution', 'all'. Empty = all."
+                "plugin/workflow/bulk_delete/import/goal_rollup/solution/all."
             )] string operation_type = "",
             [Description(
-                "Filter by name (contains)."
+                "Name contains."
             )] string name_filter = "",
             [Description(
-                "Exact GUID. Traces a single request across jobs."
+                "GUID. Trace one request across jobs."
             )] string correlation_id = "",
             [Description(
-                "Time range in minutes. Default: 1440 (24h). Max: 43200."
+                "0 = 1440 (24h) default. Max 43200."
             )] int minutes_ago = 0,
             [Description(
-                "Max results. Default: 50. Max: 500."
+                "Max 500."
             )] int max_records = 50)
         {
             try

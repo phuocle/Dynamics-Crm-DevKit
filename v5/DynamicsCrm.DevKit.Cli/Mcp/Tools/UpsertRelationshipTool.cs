@@ -34,45 +34,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertRelationshipResult)),
         Description(
-            "Create, update, or delete Dataverse relationships (1:N, N:N) and manage polymorphic lookup targets.\n\n" +
-            "ACTIONS:\n" +
-            "- action='create_1n': Create 1:N + lookup column. Required: referenced_entity + referencing_entity + solution_name\n" +
-            "- action='create_nn': Create N:N + intersect entity. Required: entity1 + entity2 + solution_name\n" +
-            "- action='update': Update cascade/menu/hierarchy on existing relationship. Required: relationship_name\n" +
-            "- action='delete': Delete relationship by schema name. Required: relationship_name\n" +
-            "- action='add_target': Add target to polymorphic lookup. Required: entity_name + attribute_name + referenced_entity + solution_name\n" +
-            "- action='remove_target': Remove target from polymorphic lookup. Required: entity_name + attribute_name + referenced_entity\n\n" +
-            "TIPS:\n" +
-            "- Use get_tables to find relationship_name; use manage_form(action='update', operations=[...]) to add lookup to a form\n" +
-            "- WARNING: remove_target permanently deletes data in that lookup target\n" +
-            "- is_hierarchical=true: marks this self-referential 1:N as the OOB hierarchy relationship (only one per entity; only valid when referenced_entity == referencing_entity)\n" +
-            "- Cascade presets: Parental (all Cascade), Referential (NoCascade + RemoveLink on delete), ReferentialRestrictDelete (NoCascade + Restrict on delete)\n" +
-            "- Cascade types: Cascade, NoCascade, RemoveLink, Restrict, Active, UserOwned\n" +
-            "- Read docs://schema_tools_guide for cascade preset values and cascade type options")]
+            "Dataverse relationships (1:N, N:N) + polymorphic lookup targets. Required:\n" +
+            "- create_1n: referenced_entity + referencing_entity + solution_name (auto-creates lookup column)\n" +
+            "- create_nn: entity1 + entity2 + solution_name (auto-creates intersect entity)\n" +
+            "- update: relationship_name (cascade/menu/hierarchy)\n" +
+            "- delete: relationship_name\n" +
+            "- add_target: entity_name + attribute_name + referenced_entity + solution_name\n" +
+            "- remove_target: entity_name + attribute_name + referenced_entity (deletes data permanently)\n\n" +
+
+            "is_hierarchical: only for self-referential 1:N (referenced=referencing), max 1/entity.\n" +
+            "Cascade presets: Parental (all Cascade) | Referential (NoCascade + RemoveLink on delete) | ReferentialRestrictDelete (NoCascade + Restrict on delete).\n" +
+            "Cascade types: Cascade | NoCascade | RemoveLink | Restrict | Active | UserOwned.\n" +
+            "See docs://schema_tools_guide.\n\n" +
+
+            "WHEN TO USE:\n" +
+            "- Create 1:N (with auto lookup column) or N:N (with intersect entity)\n" +
+            "- Update cascade behavior, associated menu, or hierarchy flag\n" +
+            "- Add / remove a target on a polymorphic lookup (e.g. customer → account, contact, custom)\n" +
+            "- Inspect relationship_name first via get_tables before update/delete\n\n" +
+
+            "FUZZY/AMBIGUITY:\n" +
+            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name.")]
         public CallToolResult upsert_relationship(
-            [Description("The action to perform: 'create_1n', 'create_nn', 'update', 'delete', 'add_target', 'remove_target'.")] string action = "",
-            [Description("Relationship schema name. Required for update/delete. Auto-generated for create.")] string relationship_name = "",
-            [Description("Parent entity logical name (1:N create, add/remove target).")] string referenced_entity = "",
-            [Description("Child entity logical name (1:N create).")] string referencing_entity = "",
-            [Description("First entity for N:N relationship.")] string entity1 = "",
-            [Description("Second entity for N:N relationship.")] string entity2 = "",
-            [Description("Intersect entity name for N:N. Auto-generated if empty.")] string intersect_entity_name = "",
-            [Description("Entity with the polymorphic lookup (add/remove target).")] string entity_name = "",
-            [Description("Polymorphic lookup logical name (add/remove target).")] string attribute_name = "",
-            [Description("Cascade preset: 'Parental', 'Referential' (default), 'ReferentialRestrictDelete'. Read docs://schema_tools_guide for values.")] string cascade_preset = "",
+            [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
+            [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
+            [Description("Parent (1:N create, add/remove target).")] string referenced_entity = "",
+            [Description("Child (1:N create).")] string referencing_entity = "",
+            [Description("First entity for N:N.")] string entity1 = "",
+            [Description("Second entity for N:N.")] string entity2 = "",
+            [Description("N:N intersect entity. Auto if empty.")] string intersect_entity_name = "",
+            [Description("Entity with polymorphic lookup (add/remove target).")] string entity_name = "",
+            [Description("Polymorphic lookup logical name.")] string attribute_name = "",
+            [Description("Parental / Referential / ReferentialRestrictDelete.")] string cascade_preset = "",
             [Description("Override cascade Assign behavior.")] string cascade_assign = "",
             [Description("Override cascade Delete behavior.")] string cascade_delete = "",
             [Description("Override cascade Merge behavior.")] string cascade_merge = "",
             [Description("Override cascade Reparent behavior.")] string cascade_reparent = "",
             [Description("Override cascade Share behavior.")] string cascade_share = "",
             [Description("Override cascade Unshare behavior.")] string cascade_unshare = "",
-            [Description("Associated menu behavior: 'UseCollectionName' (default), 'UseLabel', 'DoNotDisplay'.")] string menu_behavior = "",
-            [Description("Associated menu group: 'Details' (default), 'Sales', 'Service', 'Marketing'.")] string menu_group = "",
-            [Description("Associated menu order. Default: 10000.")] int menu_order = 10000,
-            [Description("Display name for the lookup column (1:N create).")] string lookup_display_name = "",
-            [Description("Solution unique name. Required for create_1n, create_nn, and add_target to resolve the publisher prefix.")] string solution_name = "",
-            [Description("Mark this self-referential 1:N as the OOB hierarchy relationship (create_1n and update only). Only one hierarchy relationship per entity is allowed. Only valid when referenced_entity == referencing_entity.")] bool is_hierarchical = false,
-            [Description("Publish after changes. Default: true.")] bool auto_publish = true)
+            [Description("UseCollectionName / UseLabel / DoNotDisplay.")] string menu_behavior = "",
+            [Description("Details / Sales / Service / Marketing.")] string menu_group = "",
+            [Description("")] int menu_order = 10000,
+            [Description("1:N create only.")] string lookup_display_name = "",
+            [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
+            [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false,
+            [Description("")] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target");

@@ -42,58 +42,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
-            "Retrieve and modify form definitions for a Dataverse entity.\n\n" +
+            "Form definitions for a Dataverse entity. Actions: list (optional form_type/include_formxml); detail (form_id or form_name); update (form_id+operations or form_id+formxml); rename (form_id+form_name); undo (form_id+backup path). Update flow: manage_form(update, operations=[...]) → auto-builds FormXML+backup+validate+import+publish. Safety: auto-backup, XSD validate, backup failure blocks update. See schema://formxml + docs://instructions_for_formxml.\n\n" +
 
-            "ACTIONS:\n" +
-            "- action='list': List active forms. Optional: form_type, include_formxml\n" +
-            "- action='detail': Full FormXML + metadata. Required: form_id (or form_name for auto-resolve)\n" +
-            "- action='update' (recommended): Build + import in one call. Required: form_id + operations.\n" +
-            "- action='update' (advanced): Provide raw FormXML directly. Required: form_id + formxml.\n" +
-            "- action='rename': Change display name. Required: form_id + form_name\n" +
-            "- action='undo': Restore from backup. Required: form_id + formxml (= backup file path)\n\n" +
+            "WHEN TO USE:\n" +
+            "- Inspect existing forms (list, detail) before editing\n" +
+            "- Apply operations via action=update (recommended) or provide raw formxml (advanced)\n" +
+            "- Rename a form, restore from backup (undo)\n\n" +
 
-            "WORKFLOW (recommended):\n" +
-            "manage_form(action='update', entity_name=..., form_id=..., operations=[...])\n" +
-            "→ auto-builds FormXML + backup + validate + import + publish\n\n" +
-
-            "OPERATIONS (5 action groups, each with manage_action):\n" +
-            "- manage_tab: add | update | move | remove\n" +
-            "- manage_section: add | update | move | remove\n" +
-            "- manage_fields: add | update | remove | add_header | update_header | remove_header\n" +
-            "- manage_library: add | remove\n" +
-            "- manage_event: add | remove\n\n" +
-
-            "SAFETY: auto-backup before update/rename, XSD validates before write, backup failure blocks update.\n\n" +
-
-            "TIPS:\n" +
-            "- form_type=2 for main forms only\n" +
-            "- form_name with 1 match auto-returns detail\n" +
-            "- Read schema://formxml for XSD. Read docs://instructions_for_formxml for rules\n" +
-            "- Set auto_publish=false when batching, then call publish_customizations once")]
+            "Fuzzy on form_name (contains): 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult manage_form(
-            [Description("The action to perform: 'list', 'detail', 'update', 'rename', or 'undo'."
+            [Description("'list', 'detail', 'update', 'rename', 'undo'."
             )] string action,
-            [Description("Entity logical name (e.g., 'account'). Use get_tables if unsure."
+            [Description("Entity logical name (e.g. 'account')."
             )] string entity_name,
-            [Description("GUID of a form. Required for detail/update/rename/undo. Empty for list."
+            [Description("GUID. Required: detail/update/rename/undo."
             )] string form_id = "",
-            [Description("Filter by name (contains match). 1 match = auto-detail. Ignored if form_id set."
+            [Description("Name contains. 1 match → auto-detail. Ignored if form_id set."
             )] string form_name = "",
-            [Description("Filter by type: 2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 = all."
+            [Description("2=Main, 5=Mobile, 6=QuickView, 7=QuickCreate. 0 = all."
             )] int form_type = 0,
-            [Description("Include FormXML in list mode (default: false). Detail mode always includes it."
+            [Description("List mode only. Detail always includes."
             )] bool include_formxml = false,
-            [Description("For 'update' (advanced/undo): raw FormXML string or backup file path (.formxml). Auto-detects file vs inline XML. Use 'operations' instead for recommended flow."
+            [Description("update (advanced/undo): raw FormXML or backup file path (.formxml). Auto-detects. Use 'operations' for recommended flow."
             )] string formxml = "",
-            [Description(
-                "For 'update' (recommended): JSON array of form operations (auto-builds + imports). " +
-                "Read docs://instructions_for_formxml for format."
+            [Description("update (recommended): JSON array of form operations. Read docs://instructions_for_formxml."
             )] string operations = "",
-            [Description("Validate against XSD before writing (default: true). Blocks if invalid."
+            [Description("XSD validate before write."
             )] bool validate = true,
-            [Description("Backup current FormXML before overwriting (default: true). Backup failure blocks update."
+            [Description("Backup before overwrite. Failure blocks update."
             )] bool backup = true,
-            [Description("Publish after changes (default: true). Set false when batching."
+            [Description("Publish after. Set false when batching."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(action))

@@ -64,33 +64,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetMessagesResult)),
         Description(
-            "Discover SDK messages and Custom Actions for a Dataverse entity.\n\n" +
-
-            "TWO MODES (controlled by message_name):\n" +
-            "- List (message_name empty): all SDK messages + Custom Action names for entity or globally\n" +
-            "- Detail (message_name set): parameters, supported entities, plugin steps for a specific message\n\n" +
-
-            "SCOPING: entity_name for entity-bound; 'none'/empty for global/unbound messages (WhoAmI, etc.).\n\n" +
+            "SDK messages + Custom Actions for an entity (or global with entity_name='none'). message_name empty = list. Set = detail (params, supported entities, plugin steps). Covers legacy Custom Actions (workflow-based, category=3); for modern Custom APIs use get_custom_apis.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Find SDK messages available for plugin registration\n" +
-            "- Discover Custom Actions registered on an entity\n" +
-            "- Get input/output parameters of a legacy Custom Action (workflow category=3)\n\n" +
-
-            "TIPS:\n" +
-            "- For modern Custom APIs use get_custom_apis instead\n" +
-            "- This covers legacy Custom Actions (workflow-based) that get_custom_apis does NOT")]
+            "- Discover Custom Actions on an entity\n" +
+            "- Inspect input/output parameters of a legacy Custom Action")]
         public async Task<CallToolResult> get_messages(
             [Description(
-                "Entity logical name (lowercase). Use 'none'/empty for global/unbound messages. " +
-                "Use get_tables to discover names. Ignored in detail mode when message_name is set."
+                "Entity logical name. 'none'/empty = global messages (WhoAmI, etc.). Ignored if message_name set."
             )] string entity_name = "none",
             [Description(
-                "Message or Custom Action name for detail mode. Empty = list mode."
+                "Message/Action name → detail mode. Empty = list mode."
             )] string message_name = "",
             [Description(
-                "true: include Custom Actions in list results. false: SDK messages only. " +
-                "Ignored when message_name is set."
+                "List: include Custom Actions. false = SDK messages only. Ignored in detail mode."
             )] bool include_custom_actions = true)
         {
             try

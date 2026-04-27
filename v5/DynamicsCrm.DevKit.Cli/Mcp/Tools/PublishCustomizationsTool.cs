@@ -29,28 +29,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
-            "Publish Dataverse customizations to make metadata changes visible. " +
-            "Required after changes to entities, attributes, forms, views, option sets, or relationships.\n\n" +
+            "Publish Dataverse metadata changes (entities, attributes, forms, views, option sets, relationships). Specific-entity publish is faster than PublishAll. Idempotent.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- After upsert_*/execute_webapi metadata changes (if auto_publish was false)\n" +
-            "- When user reports changes not showing up\n\n" +
-
-            "TIPS:\n" +
-            "- Publish specific entities for faster execution than PublishAll\n" +
-            "- PublishAll can take 30+ seconds on large environments\n" +
-            "- Idempotent — safe to republish already-published changes")]
+            "- After upsert_* / execute_webapi metadata changes when auto_publish=false\n" +
+            "- When user reports changes not showing up\n" +
+            "- Batch many changes then publish once at the end")]
         public CallToolResult publish_customizations(
-            [Description(
-                "Comma-separated entity logical names (e.g., 'account,contact'). Empty = publish ALL customizations."
+            [Description("Comma-separated logical names (e.g. 'account,contact'). Empty = PublishAll."
             )] string entities = "",
-            [Description(
-                "Also publish global option sets. Only applies when entities is specified. " +
-                "Default: false."
+            [Description("Also publish global option sets. Requires entities set."
             )] bool include_global_optionset = false,
-            [Description(
-                "Also publish the sitemap. Only applies when entities is specified. " +
-                "Default: false."
+            [Description("Also publish sitemap. Requires entities set."
             )] bool include_sitemap = false)
         {
             var sw = Stopwatch.StartNew();

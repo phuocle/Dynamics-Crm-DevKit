@@ -44,23 +44,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRibbonResult)),
         Description(
-            "Retrieve and modify RibbonDiffXml for Dataverse entities via solution import.\n\n" +
+            "Classic/legacy RibbonDiffXml for Dataverse entities (via solution import).\n\n" +
 
-            "TOOL SELECTION — READ BEFORE CHOOSING:\n" +
-            "CLASSIC/LEGACY ribbon (RibbonDiffXml). DEFAULT FALLBACK for all button requests.\n" +
-            "Use when: 'ribbon', 'legacy', 'classic', 'button', 'nút', 'custom button', 'action button', " +
-            "'UI button', 'JavaScript button', 'sub_grid button', 'homepage grid button', or any generic button request.\n" +
-            "Use manage_command ONLY for: 'modern', 'Power Fx', 'appaction', 'new UI', " +
-            "'Model-Driven App command bar', 'command designer'.\n" +
-            "When in doubt → always use manage_ribbon, never manage_command.\n\n" +
+            "TOOL SELECTION: DEFAULT FALLBACK for all button requests. Use when: 'ribbon', 'legacy', 'classic', 'button', 'nút', 'custom button', 'action button', 'UI button', 'JavaScript button', 'sub_grid button', 'homepage grid button', generic button. Use manage_command ONLY for 'modern', 'Power Fx', 'appaction', 'new UI', 'command designer'. When in doubt → manage_ribbon.\n\n" +
 
-            "ACTIONS: list, buttons, detail, update, undo\n" +
+            "Actions:\n" +
             "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
-            "- buttons: all ribbon buttons (OOB+custom) across form/main_grid/sub_grid. Required: entity_name\n" +
-            "- detail: show current RibbonDiffXml. Required: entity_name\n" +
-            "- update: build + apply ribbon changes. Required: entity_name + operations. " +
-            "Auto: validate → fetch existing → apply operations → validate XSD → backup → import → publish\n" +
-            "- undo: restore from backup file. Required: entity_name + ribbonxml (backup path)\n\n" +
+            "- buttons: all OOB+custom buttons across form/main_grid/sub_grid (entity_name)\n" +
+            "- detail: current RibbonDiffXml (entity_name)\n" +
+            "- update: apply operations. Required: entity_name + operations. Auto: validate → fetch existing → apply → validate XSD → backup → import → publish\n" +
+            "- undo: restore (entity_name + ribbonxml backup path)\n\n" +
 
             "SUPPORTED OPERATIONS (10): add_button, update_button, hide_button, show_button, " +
             "add_split_button, update_split_button, add_flyout_static, update_flyout_static, " +
@@ -68,30 +61,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "add_button REQUIRED: surface, label, library, function, enable_library, enable_function. OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
             "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence. NOTE: only works on custom buttons\n" +
-            "hide_button REQUIRED: button_id. Supports OOB and custom\n" +
-            "show_button REQUIRED: button_id. Supports OOB and custom\n" +
+            "hide_button / show_button REQUIRED: button_id. Supports OOB and custom\n" +
             "add_split_button REQUIRED: surface, label, library, function, enable_library, enable_function, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
             "update_split_button REQUIRED: split_button_id OR label. items[]: item_label REQUIRED\n" +
             "add_flyout_static REQUIRED: surface, label, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
             "update_flyout_static REQUIRED: flyout_id OR label. items[]: item_label REQUIRED\n" +
-            "hide_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n" +
-            "show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n\n" +
+            "hide_flyout_item / show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n\n" +
 
-            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]) [auto-publishes all by default]\n" +
-            "Auto-backup before update; backup failure blocks update.\n" +
-            "NOTE: Ribbon requires PublishAll (not entity-scoped publish). auto_publish=true (default) runs PublishAll synchronously. Set false when batching, then call publish_customizations once.")]
+            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). auto_publish=true runs PublishAll sync; set false to batch then call publish_customizations.\n\n" +
+
+            "WHEN TO USE:\n" +
+            "- Inspect existing ribbon (list/buttons/detail) before editing\n" +
+            "- Add/update/hide/show ribbon buttons via operations array (action=update)\n" +
+            "- Restore from backup (action=undo)\n" +
+            "- For modern Power Fx command bar use manage_command instead")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
-            [Description("Entity logical name (e.g., 'account'). Required for detail/update/undo.")] string entity_name = "",
-            [Description(
-                "JSON array of ribbon operations for action='update'. " +
-                "10 operations: add_button, update_button, hide_button, show_button, " +
-                "add_split_button, update_split_button, add_flyout_static, update_flyout_static, " +
-                "hide_flyout_item, show_flyout_item. " +
-                "See tool description for required/optional fields per operation.")] string operations = "",
-            [Description("For 'undo': backup file path from .devkit/backups/ribbons/.")] string ribbonxml = "",
-            [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true,
-            [Description("Backup current ribbon before overwriting (default: true). Backup failure blocks update.")] bool backup = true)
+            [Description("Logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
+            [Description("JSON array of ribbon operations for action='update'. 10 operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item.")] string operations = "",
+            [Description("For 'undo': backup file path.")] string ribbonxml = "",
+            [Description("Runs PublishAll. false to batch.")] bool auto_publish = true,
+            [Description("Backup before overwrite.")] bool backup = true)
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
 

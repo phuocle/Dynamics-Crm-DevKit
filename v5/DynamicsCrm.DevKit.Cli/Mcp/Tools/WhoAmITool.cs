@@ -27,19 +27,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(WhoAmIResult)),
         Description(
-            "Get current user identity and environment info.\n\n" +
-
-            "Returns: user (ID, name, email, roles), org (ID, URL, version), " +
-            "tenant/environment IDs, language, currency, fiscal/audit settings.\n\n" +
+            "Current user + environment: user (ID, name, email, roles), org (URL, version, friendly/unique name), tenant/env IDs, language, currency, fiscal/audit settings.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Confirm connected user and environment\n" +
-            "- Check security roles for permission troubleshooting\n" +
-            "- Get user ID for FetchXML owner filters")]
+            "- Confirm connected user/environment.\n" +
+            "- Troubleshoot security roles.\n" +
+            "- Get user ID for FetchXML owner filters.")]
         public CallToolResult whoami(
             [Description(
-                "true: include OAuth access token (~400 extra tokens). " +
-                "Default: false. Use only for direct Web API calls."
+                "Include OAuth access token (~400 tokens extra). For direct Web API calls only."
             )] bool include_token = false)
         {
             try

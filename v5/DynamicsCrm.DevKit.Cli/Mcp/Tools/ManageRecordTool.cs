@@ -32,33 +32,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(CrudResult)),
         Description(
-            "Perform CRUD on a single Dataverse record.\n\n" +
+            "CRUD single Dataverse record. Required: entity_name. create: +fields_json (returns GUID). read: +record_id, optional columns. update: +record_id+fields_json (partial supported). delete: +record_id (irreversible, may fail on FK or cascade-delete children). Use get_tables for field names; execute_fetchxml to find lookup GUIDs.\n\n" +
 
-            "ACTIONS:\n" +
-            "- action='create': Requires entity_name + fields_json. Returns new GUID.\n" +
-            "- action='read': Requires entity_name + record_id. Optional: columns.\n" +
-            "- action='update': Requires entity_name + record_id + fields_json.\n" +
-            "- action='delete': Requires entity_name + record_id. WARNING: irreversible.\n\n" +
-
-            "TIPS:\n" +
-            "- Use get_tables for field names/types; use execute_fetchxml to find lookup GUIDs.\n" +
-            "- Partial update: include only fields to change.\n" +
-            "- Delete may fail on dependencies; may cascade-delete children per relationship config.")]
+            "WHEN TO USE:\n" +
+            "- Create / read / update / delete a single record by GUID\n" +
+            "- Partial-update specific fields without rewriting whole record\n" +
+            "- Verify a record before destructive changes\n" +
+            "- Use create_records instead for bulk (multiple records)")]
         public CallToolResult manage_record(
             [Description(
-                "The CRUD action to perform: 'create', 'read', 'update', or 'delete'."
+                "'create', 'read', 'update', 'delete'."
             )] string action,
             [Description(
-                "Entity logical name (e.g., 'account'). Required for all actions."
+                "Entity logical name (e.g., 'account')."
             )] string entity_name,
             [Description(
-                "Record GUID. Required for read, update, and delete. Must be empty for create."
+                "GUID. Required: read/update/delete. Empty: create."
             )] string record_id = "",
             [Description(
-                "JSON object of field values for create/update. Required for create and update; ignored for read and delete."
+                "JSON object of field values. Required: create/update."
             )] string fields_json = "",
             [Description(
-                "Comma-separated column logical names for 'read' only. Empty = all columns."
+                "Read only. Comma-separated columns. Empty = all."
             )] string columns = "")
         {
             if (string.IsNullOrWhiteSpace(action))

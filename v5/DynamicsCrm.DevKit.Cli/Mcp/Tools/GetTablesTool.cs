@@ -22,26 +22,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_tables", Title = "Inspect table metadata, columns, and relationships",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "Retrieve Dataverse entity/table metadata.\n\n" +
-
-            "TWO MODES:\n" +
-            "- entity_name EMPTY: summary table of all entities (filter by keyword, custom_only, or names list). Includes IsAuditEnabled.\n" +
-            "- entity_name PROVIDED: full detail — attributes (type, options, required), relationships (1:N, N:1, N:N), alternate keys\n\n" +
-
-            "COMMON NAMES: account, contact, lead, opportunity, incident (Case), systemuser (User), team, annotation (Note)\n\n" +
+            "Dataverse entity metadata. entity_name empty = list (filter by keyword/custom_only/names; includes IsAuditEnabled). Set = detail (attributes, relationships, alternate keys).\n\n" +
 
             "WHEN TO USE:\n" +
             "- Discover entity/attribute names before building FetchXML\n" +
-            "- Find join columns, picklist options, required fields, or primary key\n" +
-            "- Check audit settings for a set of entities (use names= with solution entity list)")]
+            "- Find join columns, picklist options, required fields, primary key\n" +
+            "- Audit settings on a set of entities (use names= with solution entity list)\n\n" +
+
+            "MODE/CONVENTION:\n" +
+            "- names= filters by exact logical-name list; filter= uses contains (list) or prefix (detail).")]
         public async Task<string> get_tables(
-            [Description("Entity logical name for full detail. Empty = list all entities."
+            [Description("Logical name → detail mode. Empty = list mode."
             )] string entity_name = "",
-            [Description("LIST: keyword filter. DETAIL: prefix filter for attributes/relationships."
+            [Description("LIST: keyword filter on entity. DETAIL: prefix filter on attributes/relationships."
             )] string filter = "",
-            [Description("LIST only: show only custom entities.")] bool custom_only = false,
-            [Description("LIST only: include intersect (N:N) entities.")] bool include_intersect = false,
-            [Description("LIST only: comma-separated logical names to filter (e.g. 'account,contact,lead'). Overrides filter/custom_only when provided."
+            [Description("LIST: only custom entities.")] bool custom_only = false,
+            [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
+            [Description("LIST: comma-separated logical names. Overrides filter/custom_only."
             )] string names = "")
         {
             try

@@ -42,42 +42,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageSiteMapResult)),
         Description(
-            "List, create, update, or restore a Model-Driven App's SiteMap XML with auto-backup, XSD validation, and publish.\n\n" +
+            "SiteMap XML for Model-Driven Apps. Actions:\n" +
+            "- list: optional app_name filter\n" +
+            "- detail: app required\n" +
+            "- update (recommended): app + operations (auto-builds + imports)\n" +
+            "- update (advanced): app + sitemapxml (raw XML)\n" +
+            "- create (recommended): app + operations\n" +
+            "- create (advanced): app + sitemapxml (when no existing SiteMap)\n" +
+            "- undo: app + sitemapxml (= backup path)\n\n" +
 
-            "ACTIONS:\n" +
-            "- 'list': List all Model-Driven Apps with SiteMap info. Optional: app_name filter\n" +
-            "- 'detail': Show current SiteMap XML. Required: app\n" +
-            "- 'update' (recommended): Build + import in one call. Required: app + operations\n" +
-            "- 'update' (advanced): Provide raw SiteMap XML directly. Required: app + sitemapxml\n" +
-            "- 'create' (recommended): Create new SiteMap with operations. Required: app + operations\n" +
-            "- 'create' (advanced): Create with raw XML. Required: app + sitemapxml\n" +
-            "- 'undo': Restore from backup. Required: app + sitemapxml (= backup file path)\n\n" +
+            "Operations (12): add_area|add_group|add_subarea; remove_area|remove_group|remove_subarea; update_area|update_group|update_subarea; move_area|move_group|move_subarea.\n\n" +
 
-            "SAFETY: Auto-backup before changes, XSD validates XML, backup failure blocks update.\n\n" +
+            "Auto: backup → XSD validate → publish. Backup failure blocks update. See schema://sitemapxml.\n\n" +
 
-            "WORKFLOW (recommended):\n" +
-            "  manage_sitemap(action='update', app=..., operations=[...])\n" +
-            "  → auto-builds SiteMap XML + backup + validate + import + publish\n\n" +
+            "WHEN TO USE:\n" +
+            "- Inspect current SiteMap (list/detail)\n" +
+            "- Apply operations via action=update (recommended)\n" +
+            "- Restore from backup (action=undo)\n\n" +
 
-            "OPERATIONS (12 actions):\n" +
-            "- add_area | add_group | add_subarea\n" +
-            "- remove_area | remove_group | remove_subarea\n" +
-            "- update_area | update_group | update_subarea\n" +
-            "- move_area | move_group | move_subarea\n\n" +
-
-            "- app accepts display name OR GUID (fuzzy match)\n" +
-            "- Read schema://sitemapxml for SiteMap XML structure and operation format")]
+            "Fuzzy on app (display name + GUID): 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-resolve.")]
         public CallToolResult manage_sitemap(
             [Description("'list', 'detail', 'update' (default), 'create', or 'undo'.")] string action = "update",
-            [Description("App display name or GUID (fuzzy match). Required for detail/update/create/undo; for list use app_name.")] string app = "",
-            [Description("For 'update'/'create' (recommended): JSON array of SiteMap operations (auto-builds + imports). " +
-                "Read schema://sitemapxml for format. Example: [{\"action\":\"add_area\",\"label\":\"Sales\"}]")] string operations = "",
-            [Description("For 'update'/'create' (advanced): raw SiteMap XML string. For 'undo': backup file path. " +
-                "Mutually exclusive with 'operations'. Ignored for list/detail.")] string sitemapxml = "",
-            [Description("Filter apps by name (contains match). Only used with action='list'.")] string app_name = "",
-            [Description("Validate against XSD before writing (default: true). Blocks if invalid.")] bool validate = true,
-            [Description("Backup current SiteMap before overwriting (default: true). Backup failure blocks update.")] bool backup = true,
-            [Description("Publish after changes (default: true). Set false when batching.")] bool auto_publish = true)
+            [Description("Display name or GUID (fuzzy). Required: detail/update/create/undo.")] string app = "",
+            [Description("JSON array of SiteMap operations for update/create (recommended). See schema://sitemapxml for format.")] string operations = "",
+            [Description("update/create (advanced): raw SiteMap XML. undo: backup path. Mutually exclusive with operations.")] string sitemapxml = "",
+            [Description("list only. Name contains.")] string app_name = "",
+            [Description("XSD validate before write.")] bool validate = true,
+            [Description("Backup before overwrite.")] bool backup = true,
+            [Description("Publish after. false when batching.")] bool auto_publish = true)
         {
             var actionName = (action ?? "update").Trim().ToLowerInvariant();
 

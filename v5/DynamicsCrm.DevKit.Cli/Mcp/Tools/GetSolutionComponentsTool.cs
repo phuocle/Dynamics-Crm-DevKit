@@ -122,32 +122,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         [McpServerTool(Name = "get_solution_components", Title = "List all components inside a solution",
             Idempotent = true, Destructive = false, ReadOnly = true),
         Description(
-            "List all components inside a Dataverse solution by uniqueName or displayName (fuzzy/contains matching).\n\n" +
-
-            "Returns: solution info + component summary (count per type) + full detail table (componentType, objectId, name).\n\n" +
-
-            "BEHAVIORS:\n" +
-            "- 1 match → components; multiple → disambiguation list; 0 → error\n" +
-            "- Full Entity (rootComponentBehavior=0): listed as-is; use get_tables for sub-components\n" +
-            "- include_active_layers=true: adds ActiveLayer (Yes/No) via msdyn_componentlayer\n" +
-            "- active_layers_only=true: implies include_active_layers=true; shows only components with active layers\n\n" +
+            "List components in a Dataverse solution. Returns: solution info + count-per-type summary + detail (componentType, objectId, name). Full Entity components (rootComponentBehavior=0) listed as-is — use get_tables for sub-components.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Audit solution contents before packaging/deploying\n" +
-            "- Find objectIds of components (plugins, web resources, workflows)\n" +
-            "- Identify unmanaged customizations before deploying managed solutions")]
+            "- Find objectIds for plugins, web resources, workflows\n" +
+            "- Identify unmanaged customizations before importing managed solutions\n\n" +
+
+            "FUZZY/AMBIGUITY:\n" +
+            "- solution_name matches uniqueName + displayName (contains); 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with exact uniqueName). 1 → auto.")]
         public string get_solution_components(
             [Description(
-                "Solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core'). " +
-                "Fuzzy (contains) matching on both fields. " +
-                "If multiple match, the tool returns the list — re-call with exact uniqueName."
+                "Solution unique/display name; multiple matches return choices."
             )] string solution_name,
             [Description(
-                "When true, queries msdyn_componentlayer and adds an ActiveLayer (Yes/No) column. " +
-                "Active layer = unmanaged customization exists. Batched in groups of 200. Default: false."
+                "Add ActiveLayer (Yes/No) via msdyn_componentlayer. Active = unmanaged customization exists."
             )] bool include_active_layers = false,
             [Description(
-                "When true, implies include_active_layers=true and filters to only components with an active layer. Default: false."
+                "Show only active-layer components; implies include_active_layers."
             )] bool active_layers_only = false)
         {
             if (string.IsNullOrWhiteSpace(solution_name))

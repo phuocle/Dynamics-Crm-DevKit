@@ -33,36 +33,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertTableResult)),
         Description(
-            "Create or update a Dataverse table (auto-detects create vs update by entity lookup).\n\n" +
-            "CREATE (entity absent): display_name + display_collection_name + solution_name required. " +
-            "Auto-creates primary name attribute. Next: upsert_column → manage_form(action='update', operations=[...]).\n" +
-            "UPDATE (entity exists): only entity_name required. Updatable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled. All other props are immutable after creation.\n\n" +
-            "CREATE PREFIX CONFIRMATION FLOW:\n" +
-            "1. First call (confirmed_prefix empty): tool resolves prefix and returns [PrefixConfirmationRequired] with preview of SchemaName/LogicalName — NOT an error.\n" +
-            "2. Ask user to confirm the prefix shown.\n" +
-            "3. Re-call with confirmed_prefix set to the agreed prefix to proceed with creation.\n\n" +
-            "TIPS:\n" +
-            "- entity_name must include publisher prefix (e.g., 'new_project'); " +
-            "or provide solution_name to auto-resolve prefix.\n" +
-            "- is_activity=true: forces User ownership, enables notes, sets Subject as primary attr.\n" +
-            "- Use get_tables to inspect existing table metadata before updating.")]
+            "Create or update a Dataverse table (auto-detect by entity lookup).\n" +
+            "- CREATE (no entity): need display_name + display_collection_name + solution_name. Auto-creates primary name. Next: upsert_column → manage_form(action='update', operations=[...]).\n" +
+            "- UPDATE (entity exists): need entity_name only. Mutable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled. Others immutable.\n\n" +
+
+            "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm with user, re-call with confirmed_prefix.\n\n" +
+
+            "is_activity=true forces User ownership + notes + Subject primary attr.\n\n" +
+
+            "WHEN TO USE:\n" +
+            "- Create a new custom entity (table) with primary name attribute\n" +
+            "- Update mutable metadata (display names, description, audit, quick create)\n" +
+            "- Inspect existing table first via get_tables before update\n\n" +
+
+            "FUZZY/AMBIGUITY:\n" +
+            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name; confirmed_prefix still gates create.")]
         public CallToolResult upsert_table(
-            [Description("Logical name with publisher prefix (e.g., 'new_project'). Or just the name (e.g., 'project') — prefix is auto-resolved from solution_name's publisher.")] string entity_name,
-            [Description("Singular display name (e.g., 'Project'). Required for create.")] string display_name = "",
-            [Description("Plural display name (e.g., 'Projects'). Required for create.")] string display_collection_name = "",
-            [Description("Solution unique name. Required for create. Optional for update.")] string solution_name = "",
-            [Description("Confirmed publisher prefix for create. Leave empty on first call — tool returns [PrefixConfirmationRequired] with preview. Re-call with this set to the agreed prefix to proceed.")] string confirmed_prefix = "",
-            [Description("Entity description.")] string description = "",
-            [Description("Primary name attribute logical name. Auto-derived if omitted. Create only.")] string primary_attribute_name = "",
-            [Description("Display name for primary attribute. Default: 'Name'. Create only.")] string primary_attribute_display_name = "Name",
-            [Description("'User' (default) or 'Organization'. Create only — immutable.")] string ownership_type = "User",
-            [Description("'Standard' (default) or 'Elastic' (Azure Cosmos DB; no chart support). Create only — immutable.")] string table_type = "Standard",
-            [Description("Activity entity flag. When true: forces User ownership, enables notes, sets Subject primary attr. Create only — immutable.")] bool is_activity = false,
-            [Description("Enable notes. Default: false. Create only — cannot be changed after creation.")] bool has_notes = false,
-            [Description("Enable quick create form. Default: false (create, update). Omit to keep current value (update).")] bool? is_quick_create_enabled = null,
-            [Description("Enable/disable auditing. Default: true (create). Omit to keep current value (update).")] bool? is_audit_enabled = null,
-            [Description("Max length for the primary name attribute (1-850, default 850). Create only.")] int primary_attribute_max_length = 850,
-            [Description("Publish after operation. Default: true.")] bool auto_publish = true)
+            [Description("Logical name with prefix ('new_project') OR just name with solution_name to auto-resolve.")] string entity_name,
+            [Description("Singular (e.g. 'Project'). Required: create.")] string display_name = "",
+            [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
+            [Description("Required: create.")] string solution_name = "",
+            [Description("Confirmed prefix for create (after [PrefixConfirmationRequired] preview).")] string confirmed_prefix = "",
+            [Description("")] string description = "",
+            [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
+            [Description("[create-only]")] string primary_attribute_display_name = "Name",
+            [Description("'User' or 'Organization'. [create-only, immutable]")] string ownership_type = "User",
+            [Description("'Standard' or 'Elastic' (Cosmos DB, no charts). [create-only, immutable]")] string table_type = "Standard",
+            [Description("Activity entity. [create-only, immutable]")] bool is_activity = false,
+            [Description("Enable notes. [create-only]")] bool has_notes = false,
+            [Description("null = keep current (update).")] bool? is_quick_create_enabled = null,
+            [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
+            [Description("1–850. [create-only]")] int primary_attribute_max_length = 850,
+            [Description("")] bool auto_publish = true)
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(entity_name))

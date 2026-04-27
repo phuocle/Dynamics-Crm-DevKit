@@ -81,27 +81,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetPluginsResult)),
         Description(
-            "List and inspect Dataverse plugin assemblies, types, and processing steps.\n\n" +
+            "Plugin assemblies, types, processing steps. Modes: no filters = assembly list with type counts. assembly_name (1 match) = assembly detail (types+steps+images). entity_name = all steps on entity across assemblies. Stages: PreValidation/PreOperation/PostOperation/MainOperation (Custom API/DataProvider). Set include_config=true only for secure config inspection.\n\n" +
 
-            "THREE MODES:\n" +
-            "- No filters: list all assemblies with type counts\n" +
-            "- assembly_name (single match): assembly detail with types + steps + images\n" +
-            "- entity_name: all steps on that entity across all assemblies\n\n" +
+            "WHEN TO USE:\n" +
+            "- Audit plugin registrations across assemblies\n" +
+            "- Find which plugin handles a message/entity (filter by entity_name + message_name)\n" +
+            "- Inspect step images / mode (sync/async) before changes\n\n" +
 
-            "TIPS:\n" +
-            "- Stages: PreValidation, PreOperation, PostOperation, MainOperation (Custom API/DataProvider)\n" +
-            "- include_config defaults to false — set true only when secure config inspection is needed")]
+            "Fuzzy on assembly_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult get_plugins(
-            [Description("Filter by assembly name (contains). Empty = list all.")] string assembly_name = "",
-            [Description("Filter steps by entity (e.g., 'account'). Shows all steps on this entity.")] string entity_name = "",
-            [Description("Filter by SDK message (e.g., 'Create', 'Update', 'Delete').")] string message_name = "",
-            [Description("Filter by plugin type name (contains).")] string type_name = "",
-            [Description("Include pre/post images. Default: true.")] bool include_images = true,
-            [Description("Include config values. Default: false (security).")] bool include_config = false,
-            [Description("'prevalidation', 'preoperation', 'postoperation', 'mainoperation'. Empty = all.")] string stage = "",
-            [Description("'sync' or 'async'. Empty = both.")] string mode = "",
-            [Description("Only activated steps. Default: true.")] bool active_only = true,
-            [Description("Max steps (1-500). Default: 100.")] int max_records = 100)
+            [Description("Assembly name contains.")] string assembly_name = "",
+            [Description("Steps for entity (e.g. 'account').")] string entity_name = "",
+            [Description("SDK message (Create, Update, Delete, …).")] string message_name = "",
+            [Description("Plugin type name contains.")] string type_name = "",
+            [Description("Pre/post images.")] bool include_images = true,
+            [Description("Config values (security-sensitive).")] bool include_config = false,
+            [Description("prevalidation / preoperation / postoperation / mainoperation.")] string stage = "",
+            [Description("'sync' / 'async'.")] string mode = "",
+            [Description("Only activated steps.")] bool active_only = true,
+            [Description("Steps limit, 1–500.")] int max_records = 100)
         {
             if (!string.IsNullOrWhiteSpace(stage))
             {

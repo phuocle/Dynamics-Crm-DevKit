@@ -34,53 +34,53 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertColumnResult)),
         Description(
-            "Create or update a Dataverse column (attribute). Auto-detects create vs update. " +
-            "Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
+            "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
-            "CREATE (attribute does not exist): attribute_type + display_name required.\n" +
-            "- lookup: auto-creates 1:N relationship. Required: lookup_target\n" +
-            "- customer: polymorphic lookup (account+contact), no lookup_target needed\n" +
-            "- picklist/multipicklist: provide options JSON or global_optionset_name\n\n" +
+            "CREATE (no attribute): need attribute_type + display_name.\n" +
+            "- lookup: needs lookup_target (auto-creates 1:N)\n" +
+            "- customer: polymorphic (account+contact), no lookup_target\n" +
+            "- picklist/multipicklist: options JSON or global_optionset_name\n\n" +
 
-            "UPDATE (attribute already exists): attribute_type ignored (immutable). Omit params to keep values.\n" +
-            "- picklist/multipicklist: use add_options, update_options, delete_options\n\n" +
+            "UPDATE (exists): attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current.\n\n" +
 
-            "CREATE PREFIX CONFIRMATION FLOW:\n" +
-            "1. First call (confirmed_prefix empty): tool resolves prefix from solution_name or attribute_name and returns [PrefixConfirmationRequired] — NOT an error.\n" +
-            "2. Ask user to confirm the prefix shown.\n" +
-            "3. Re-call with confirmed_prefix set to the agreed prefix to proceed.\n\n" +
+            "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm, re-call with confirmed_prefix.\n" +
+            "attribute_name needs publisher prefix or solution_name to auto-resolve.\n\n" +
 
-            "TIPS:\n" +
-            "- attribute_name must include publisher prefix (e.g., 'new_priority'); or provide solution_name to auto-resolve prefix.\n" +
-            "- After create, use manage_form(action='update', operations=[...]) to add the column to a form")]
+            "WHEN TO USE:\n" +
+            "- Create new attribute on an existing table (need attribute_type + display_name)\n" +
+            "- Update mutable metadata, format, required_level, picklist options\n" +
+            "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
+
+            "FUZZY/AMBIGUITY:\n" +
+            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name; confirmed_prefix still gates create.")]
         public CallToolResult upsert_column(
-            [Description("Entity logical name (e.g., 'account').")] string entity_name,
-            [Description("Logical name with publisher prefix (e.g., 'new_priority'). Or just the name (e.g., 'priority') — prefix is auto-resolved from solution_name's publisher.")] string attribute_name,
-            [Description("Column type: 'string', 'memo', 'integer', 'bigint', 'decimal', 'money', 'float' (or 'double'), 'boolean', 'datetime', 'lookup', 'customer', 'picklist', 'multipicklist', 'image', 'file'.")] string attribute_type,
-            [Description("Display name (e.g., 'Priority Level'). Required for create.")] string display_name,
-            [Description("Solution unique name. Used to auto-resolve publisher prefix when attribute_name has no prefix.")] string solution_name = "",
-            [Description("Confirmed publisher prefix for create. Leave empty on first call — tool returns [PrefixConfirmationRequired] with preview. Re-call with this set to the agreed prefix to proceed.")] string confirmed_prefix = "",
-            [Description("Column description.")] string description = "",
-            [Description("'None', 'Recommended', or 'Required'. Omit to keep current value on update.")] string required_level = "",
-            [Description("For string (1-4000, default 100), memo (1-1048576, default 2000), file (KB, default 32768).")] int max_length = 0,
-            [Description("For numeric types: minimum value.")] double? min_value = null,
-            [Description("For numeric types: maximum value.")] double? max_value = null,
-            [Description("For decimal/money/float: decimal places (0-10, default 2; money max is 4). Omit to keep current value on update.")] int precision = -1,
-            [Description("For string: 'Text','Email','Url','Phone','TextArea','TickerSymbol','RichText'. For datetime: 'DateOnly','DateAndTime'. For integer: 'None','Duration','TimeZone','Language','Locale'.")] string format = "",
-            [Description("For datetime: 'UserLocal' (default),'DateOnly','TimeZoneIndependent'. DateOnly behavior forces DateOnly format.")] string behavior = "",
-            [Description("For money: 0 (Attribute, default), 1 (Organization), 2 (Currency).")] int precision_source = -1,
-            [Description("For picklist (create): JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
-            [Description("For picklist (create): existing global option set name.")] string global_optionset_name = "",
-            [Description("For lookup (create): target entity. Comma-separated for polymorphic.")] string lookup_target = "",
-            [Description("For lookup: relationship schema name. Auto-generated if omitted.")] string lookup_relationship_name = "",
-            [Description("For boolean: true label. Default: 'Yes'. Omit to keep current value on update.")] string true_label = "",
-            [Description("For boolean: false label. Default: 'No'. Omit to keep current value on update.")] string false_label = "",
-            [Description("For picklist (update): JSON array of options to add.")] string add_options = "",
-            [Description("For picklist (update): JSON array of options to rename.")] string update_options = "",
-            [Description("For picklist (update): JSON array of integer values to remove.")] string delete_options = "",
-            [Description("Enable/disable auditing (update only).")] bool? is_audit_enabled = null,
-            [Description("Show/hide in Advanced Find (update only).")] bool? is_valid_for_advanced_find = null,
-            [Description("Publish after operation. Default: true.")] bool auto_publish = true)
+            [Description("Logical name (e.g. 'account').")] string entity_name,
+            [Description("With prefix ('new_priority') or just name + solution_name to auto-resolve.")] string attribute_name,
+            [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. (immutable on update)")] string attribute_type,
+            [Description("Required: create.")] string display_name,
+            [Description("Auto-resolve prefix when attribute_name has no prefix.")] string solution_name = "",
+            [Description("Confirmed prefix after [PrefixConfirmationRequired] preview.")] string confirmed_prefix = "",
+            [Description("")] string description = "",
+            [Description("None/Recommended/Required. [update: omit=keep]")] string required_level = "",
+            [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
+            [Description("Numeric types: minimum value.")] double? min_value = null,
+            [Description("Numeric types: maximum value.")] double? max_value = null,
+            [Description("decimal/money/float 0-10 (def 2; money max 4). [update: omit=keep]")] int precision = -1,
+            [Description("string: Text/Email/Url/Phone/TextArea/TickerSymbol/RichText. datetime: DateOnly/DateAndTime. integer: None/Duration/TimeZone/Language/Locale.")] string format = "",
+            [Description("datetime: UserLocal (def)/DateOnly/TimeZoneIndependent. DateOnly forces DateOnly format.")] string behavior = "",
+            [Description("money: 0=Attribute (def), 1=Organization, 2=Currency.")] int precision_source = -1,
+            [Description("picklist create: JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
+            [Description("picklist create: existing global option set.")] string global_optionset_name = "",
+            [Description("lookup create: target entity. Comma-separated = polymorphic.")] string lookup_target = "",
+            [Description("lookup: schema name. Auto if empty.")] string lookup_relationship_name = "",
+            [Description("boolean true label (def 'Yes'). [update: omit=keep]")] string true_label = "",
+            [Description("boolean false label (def 'No'). [update: omit=keep]")] string false_label = "",
+            [Description("picklist update: JSON array — options to add.")] string add_options = "",
+            [Description("picklist update: JSON array — options to rename.")] string update_options = "",
+            [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
+            [Description("[update only]")] bool? is_audit_enabled = null,
+            [Description("[update only]")] bool? is_valid_for_advanced_find = null,
+            [Description("")] bool auto_publish = true)
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))

@@ -60,22 +60,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetApisResult)),
         Description(
-            "Retrieve Custom API definitions from Dataverse — modern replacement for Custom Actions " +
-            "(binding, visibility, plugin attachment, typed params).\n\n" +
+            "Custom API definitions — modern replacement for Custom Actions (binding, visibility, plugin attachment, typed params). api_name empty = list (filter by entity_name, status, include_microsoft). Set = detail (request params, response properties, plugin binding). Managed APIs excluded by default. isFunction=true → GET (no side effects); false → POST Action.\n\n" +
 
-            "MODES:\n" +
-            "- api_name empty: list matching APIs (filter by entity_name, status, include_microsoft)\n" +
-            "- api_name set: full detail — request parameters, response properties, plugin binding\n\n" +
-
-            "TIPS:\n" +
-            "- Managed APIs excluded by default; set include_microsoft=true to include them\n" +
-            "- isFunction=true → GET (no side effects); isFunction=false → POST Action")]
+            "WHEN TO USE:\n" +
+            "- Discover Custom APIs registered on an entity (or globally)\n" +
+            "- Inspect input/output params + plugin binding before invoking\n" +
+            "- For legacy Custom Actions (workflow-based) use get_messages")]
         public CallToolResult get_custom_apis(
-            [Description("Unique name for full detail. Empty = list all.")] string api_name = "",
-            [Description("Filter by bound entity logical name (e.g., 'account'). Empty = all.")] string entity_name = "",
-            [Description("Include managed APIs (Microsoft and third-party). Default: false.")] bool include_microsoft = false,
-            [Description("'active' (default), 'inactive', or 'all'.")] string status = "active",
-            [Description("Max results in list mode (1-500). Default: 100.")] int max_records = 100)
+            [Description("Unique name → detail. Empty = list.")] string api_name = "",
+            [Description("Bound entity (e.g. 'account'). Empty = all.")] string entity_name = "",
+            [Description("Include managed APIs.")] bool include_microsoft = false,
+            [Description("'active' / 'inactive' / 'all'.")] string status = "active",
+            [Description("1–500.")] int max_records = 100)
         {
             if (!string.IsNullOrWhiteSpace(status))
             {

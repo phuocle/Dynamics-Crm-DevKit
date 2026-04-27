@@ -29,57 +29,42 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Title = "Manage global option sets (choices)",
             Destructive = true, ReadOnly = false, Idempotent = false),
         Description(
-            "List, inspect, create, or update global option sets (choices/picklists) in Dataverse.\n\n" +
-
-            "ACTIONS:\n" +
-            "- action='list': List all global option sets (name, displayName, type). No extra params needed.\n" +
-            "- action='detail': Show value/label pairs. Requires optionset_name.\n" +
-            "- action='create': Create a new global option set. Requires optionset_name + display_name + options.\n" +
-            "- action='update': Modify options/metadata on an existing global option set. Requires optionset_name + at least one of: display_name, description, add_options, update_options, remove_option_values.\n\n" +
+            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=optionset_name+display_name+options; update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_option_values). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Resolve integer values \u2194 labels for option set fields in FetchXML or query results.\n" +
-            "- Create a global choice for use in picklist columns via upsert_column.\n" +
-            "- Add, rename, or remove option values from an existing global choice.\n\n" +
+            "- Resolve integer \u2194 label for picklist fields in FetchXML / query results\n" +
+            "- Create a global choice for upsert_column to reference\n" +
+            "- Add, rename, or remove option values on an existing global choice\n\n" +
 
-            "TIPS:\n" +
-            "- GLOBAL option sets only. For entity-specific (local) picklists, use get_tables.\n" +
-            "- After create/update, changes are auto-published unless auto_publish=false.\n" +
-            "- Related: upsert_column (create picklist column referencing this choice).")]
+            "SAFETY:\n" +
+            "- remove_option_values is destructive and cannot be undone")]
         public CallToolResult manage_choice(
             [Description(
-                "The action to perform: 'list', 'detail', 'create', or 'update'."
+                "'list', 'detail', 'create', 'update'."
             )] string action,
             [Description(
-                "Logical name of the global option set. " +
-                "Required for detail, create, update; omit for list. " +
-                "Tip: if get_tables shows empty options for a PicklistType column, it references a global option set."
+                "Logical name. Required except list."
             )] string optionset_name = "",
             [Description(
-                "Display name for the option set. Required for create. Optional for update."
+                "Required for create. Optional for update."
             )] string display_name = "",
             [Description(
-                "Description of the option set. Optional for create and update."
+                "Optional for create/update."
             )] string description = "",
             [Description(
-                "Options as 'value:label' pairs separated by semicolons. " +
-                "Required for create. Example: '100000000:Active;100000001:Inactive'. " +
-                "Values must be integers ≥ 0."
+                "Create only. 'value:label;...' pairs (e.g. '100000000:Active;100000001:Inactive'). Values: integer ≥ 0."
             )] string options = "",
             [Description(
-                "Options to add as 'value:label' pairs separated by semicolons. " +
-                "For update action only. Example: '100000002:Pending;100000003:Archived'."
+                "Update only. 'value:label;...' pairs to add."
             )] string add_options = "",
             [Description(
-                "Options to update (rename labels) as 'value:newLabel' pairs separated by semicolons. " +
-                "For update action only. Example: '100000000:Active Account;100000001:Closed'."
+                "Update only. 'value:newLabel;...' pairs to rename."
             )] string update_options = "",
             [Description(
-                "Option values to remove, comma-separated. " +
-                "For update action only. Example: '100000002,100000003'. WARNING: cannot be undone."
+                "Update only. Comma-separated values to remove. Irreversible."
             )] string remove_option_values = "",
             [Description(
-                "Publish after changes. Default: true."
+                "Publish after changes."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(action))

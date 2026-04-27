@@ -29,40 +29,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetWorkflowsResult)),
         Description(
-            "List and inspect classic workflows (background and real-time) for a Dataverse entity.\n\n" +
+            "Classic workflows (background async + realtime sync) for a Dataverse entity. workflow_id empty = list. Set = detail. Classic only — use get_business_rules / get_custom_apis / get_business_process_flows / get_flows for others.\n\n" +
 
-            "TWO MODES:\n" +
-            "- workflow_id EMPTY: list workflows matching filters\n" +
-            "- workflow_id PROVIDED: full detail for a single workflow\n\n" +
-
-            "SCOPE: Classic workflows only. Use get_business_rules, get_custom_apis, get_business_process_flows, get_flows for others.\n\n" +
-
-            "KEY OUTPUT FIELDS:\n" +
-            "- triggeronupdateattributelist: update-trigger fields ('statecode'=status change, 'ownerid'=assignment)\n" +
-            "- mode: Background (async, always Post) or Realtime (sync, Pre/Post stages)\n" +
+            "Key fields:\n" +
+            "- triggeronupdateattributelist: trigger fields ('statecode'=status, 'ownerid'=assignment)\n" +
+            "- mode: Background (async, Post) | Realtime (sync, Pre/Post; Pre can cancel/rollback)\n" +
             "- scope: User/BU/Parent:ChildBU/Org. runas: Owner/Caller\n\n" +
 
-            "WHEN TO USE:\n" +
-            "- Check if a field triggers any workflow: trigger_field + entity_name\n" +
-            "- Find synchronous workflows: mode='realtime'\n\n" +
+            "Fuzzy on name_filter: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.\n\n" +
 
-            "TIPS:\n" +
-            "- Realtime Pre-operation can cancel/rollback the operation\n" +
-            "- If name_filter matches exactly 1 workflow, auto-switches to detail mode")]
+            "WHEN TO USE:\n" +
+            "- Check if a field triggers any workflow (trigger_field + entity_name)\n" +
+            "- Find synchronous workflows (mode='realtime'; Pre-op can cancel/rollback)\n" +
+            "- Inspect workflow steps before refactoring/disabling")]
         public CallToolResult get_workflows(
-            [Description("Workflow GUID for detail mode. Empty = list mode."
+            [Description("GUID → detail. Empty = list."
             )] string workflow_id = "",
-            [Description("Entity logical name (e.g., 'account'). Empty = all entities."
+            [Description("Logical name (e.g. 'account'). Empty = all."
             )] string entity_name = "",
-            [Description("'background' (async) or 'realtime' (sync). Empty = both."
+            [Description("'background' / 'realtime'. Empty = both."
             )] string mode = "",
-            [Description("Only activated workflows. Default: true."
+            [Description("Only activated workflows."
             )] bool active_only = true,
-            [Description("Filter by update trigger field (contains match, e.g., 'revenue', 'statecode')."
+            [Description("Update trigger field contains (e.g. 'revenue', 'statecode')."
             )] string trigger_field = "",
-            [Description("Filter by name (contains match). If exactly 1 match, returns detail."
+            [Description("Name contains. 1 match → auto-detail."
             )] string name_filter = "",
-            [Description("Max records. Default: 50, max: 250."
+            [Description("Max 250."
             )] int max_records = 50)
         {
             // Detail mode by ID
