@@ -1,302 +1,182 @@
-﻿# DynamicsCrm.DevKit - AI Agent Instructions
+﻿# DynamicsCrm.DevKit — Claude Code Instructions
 
-## ⛔ ABSOLUTE FORBIDDEN
+## 1. Think Before Coding
 
-> [!CAUTION]
-> **NEVER** do any of the following — no exceptions, ever:
-> - `git add` / `git commit` / `git push` — only via the IDE's commit workflow
-> - `dotnet build` or `dotnet test` directly — always use the build workflows below
-> - Running workflows that belong to other IDEs — use only the prefix for your current IDE (`/claude-*`, `/copilot-*`, or `/anti-*`)
-> - `/build-debug` or `/build-release` — dangerous, must NOT be auto-executed; only run when explicitly requested
+> *"Don't assume. Don't hide confusion. Surface tradeoffs."*
+
+Before implementing anything non-trivial:
+
+- State assumptions explicitly — read the actual code first, do not infer from filenames
+- If multiple valid approaches exist, present the tradeoffs — do not silently pick one
+- If a simpler path exists, say so before starting
+- Stop and ask when the task is ambiguous and getting it wrong would be costly
+
+**This project:** If it is unclear whether a change belongs in `Cli`, `Shared`, or `DynamicsCrm.DevKit` (VSIX) — ask. These are separate components with different frameworks (.NET 10, .shproj, .NET Framework 4.8). Getting the wrong one means code in the wrong binary.
 
 ---
 
-## Project Overview
+## 2. Simplicity First
 
-**DynamicsCrm.DevKit** â€” Development toolkit for Dynamics 365 / Power Platform / Dataverse. Includes VS 2026 VSIX, .NET CLI (`devkit`), 21 Roslyn analyzers, and MCP server.
+> *"Minimum code that solves the problem. Nothing speculative."*
 
-### Solutions
+- No features beyond what was asked
+- No abstractions for single-use code
+- No docstrings, type annotations, or comments added to code you did not change
+- No error handling for scenarios that cannot actually happen
+- Prefer editing existing files over creating new ones
 
-| Solution | Purpose |
+**Self-test:** Would a senior engineer call this overengineered? If yes, simplify.
+
+**This project:** `Helper.cs` and `XrmHelper.cs` are large by design — do not refactor them unless explicitly asked. `McpServerHost.ToolCategoryMap` uses `nameof()` for compile-time safety — preserve that pattern when adding tools.
+
+---
+
+## 3. Surgical Changes
+
+> *"Touch only what you must. Clean up only your own mess."*
+
+- Do not improve adjacent code, comments, or formatting you were not asked to touch
+- Do not refactor things that are not broken
+- Match existing style even if you would do it differently
+- If you notice unrelated dead code, mention it — do not delete it
+- Only remove imports/variables/functions that *your current change* made unused
+
+**Self-test:** Every changed line should trace directly back to the user's request.
+
+**This project:**
+- Editing `Cli\Mcp\Tools\*` — preserve existing error text, output shape, structured result fields, and temp-file paths unless the task explicitly changes them
+- Editing a single component → run only that component's build, not the full solution
+- `Const.cs` contains build-time placeholders (`x.xx.xx.xx`, `xxxx.yy.zz HH.mm.ss`) — never commit this file while placeholders are replaced
+
+---
+
+## 4. Goal-Driven Execution
+
+> *"Define success criteria. Loop until verified."*
+
+Transform imperative tasks into verifiable goals:
+
+| Vague request | Verifiable goal |
 |---|---|
-| `DynamicsCrm.DevKit.AllInOne.slnx` | **Main** â€” all components |
-| `DynamicsCrm.DevKit.slnx` | VSIX only |
-| `DynamicsCrm.DevKit.Cli.slnx` | CLI only |
-| `DynamicsCrm.DevKit.Analyzers.slnx` | Analyzers only |
+| "fix bug" | write a test that reproduces it → make it pass |
+| "add validation" | write tests for invalid inputs → make them pass |
+| "refactor X" | ensure tests pass before and after |
 
-### Components
+For multi-step tasks, state a brief plan first:
+```
+1. [step] → verify: [how to confirm]
+2. [step] → verify: [how to confirm]
+```
 
-| Component | Path | Framework |
-|---|---|---|
-| **VSIX** | `DynamicsCrm.DevKit/` | .NET Framework 4.8 |
-| **CLI** | `DynamicsCrm.DevKit.Cli/` | .NET 10.0 |
-| **Analyzers** | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 |
-| **Shared** | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) |
-| **Tool** | `DynamicsCrm.DevKit.Tool/` | .NET Framework 4.8 |
-| **UnitTests** | `DynamicsCrm.DevKit.UnitTests/` | net48 (xUnit) + net10.0 (MSTest) |
-| **Tests** | `DynamicsCrm.DevKit.Tests/` | Integration tests (live Dataverse) |
-| **Templates** | `ProjectTemplates/` + `ItemTemplates/` | .NET Framework 4.6.2 |
+**This project:** After editing code, run the corresponding build workflow to verify. Do not declare done before the build passes.
+
+---
+
+## ⛔ Never Do
+
+```
+git add / git commit / git push       — only via /claude-commit when explicitly asked
+dotnet build / dotnet test            — only via /claude-build-* workflows
+/claude-build-debug or build-release  — only when user explicitly invokes them
+bash syntax / Unix pipes / &&         — PowerShell only; use ; instead of &&
+credentials in code                   — use env vars or Azure Key Vault
+```
 
 ---
 
 ## Build Workflows
 
-> Always use these instead of `dotnet build` / `dotnet test` directly.
+| Edited area | Run this |
+|---|---|
+| `DynamicsCrm.DevKit.Cli\**` | `/claude-build-cli` |
+| `DynamicsCrm.DevKit\**` | `/claude-build-vsix` |
+| `DynamicsCrm.DevKit.Analyzers\**` | `/claude-build-analyzer` |
+| `DynamicsCrm.DevKit.Tool\**` | `/claude-build-tool` |
+| Unit tests | `/claude-unit-test` |
 
-| Workflow | Builds | Replaces |
+After editing any file under `DynamicsCrm.DevKit.Cli\Mcp\`:
+1. Run `/claude-build-cli`
+2. Kill the MCP process so it auto-restarts:
+```powershell
+Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force
+```
+
+---
+
+## Project Map
+
+| Component | Path | Framework |
 |---|---|---|
-| `/build-cli` | CLI | ~~`dotnet build DynamicsCrm.DevKit.Cli`~~ |
-| `/build-vsix` | VSIX | ~~`MSBuild DynamicsCrm.DevKit`~~ |
-| `/build-analyzer` | Analyzers + tests | ~~`dotnet build DynamicsCrm.DevKit.Analyzers`~~ |
-| `/build-tool` | Tool | ~~`dotnet build DynamicsCrm.DevKit.Tool`~~ |
-| `/build-debug` | All (DEBUG) + install CLI | ~~`dotnet build`~~ |
-| `/build-release` | All (RELEASE) | ~~`dotnet build --configuration Release`~~ |
-| `/unit-test` | Run all unit tests + coverage | ~~`dotnet test`~~ |
-| `/clean-all` | Clean all artifacts | - |
-| `/create-new-analyzer` | Create new Roslyn analyzer | - |
+| VSIX (VS 2026 extension) | `DynamicsCrm.DevKit/` | .NET Framework 4.8 |
+| CLI (`devkit` tool) | `DynamicsCrm.DevKit.Cli/` | .NET 10.0 |
+| Analyzers (DEVKIT1001–1021) | `DynamicsCrm.DevKit.Analyzers/` | .NET Standard 2.0 |
+| Shared (code gen + Dataverse) | `DynamicsCrm.DevKit.Shared/` | Shared Project (.shproj) |
+| MCP server (33 tools) | `DynamicsCrm.DevKit.Cli/Mcp/` | inside CLI |
 
-| Rule | Detail |
+Key entry points:
+- CLI: `DynamicsCrm.DevKit.Cli/Program.cs` → `CommandApp` (Spectre.Console.Cli)
+- CLI base command: `Commands/DevKitCommand<T>` → handles connection, validation, output
+- MCP: `Mcp/McpServerHost.cs` → `ToolCategoryMap` controls which tools load per tier
+- Code gen: `Shared/Helper.cs`, `Shared/XrmHelper.cs`
+- VSIX: `DynamicsCrm.DevKit/DevKitPackage.cs` → 13 ProjectTemplates, 17 ItemTemplates
+
+---
+
+## CLI Architecture
+
+```
+Commands/  → DevKitCommand<T> (base: connection, validation, header, exit codes)
+Models/    → DevKitCommandArgs (base) → specific args per command
+Tasks/     → ITask → TaskXxx implementations
+Mcp/       → McpServerHost + Tools/ + Resources/ + Services/
+```
+
+Command → Task mapping:
+
+| Command | Task |
 |---|---|
-| **No Git** | Never commit/push unless explicitly requested |
-| **Default DEBUG** | Use RELEASE only when explicitly requested |
-| **MSBuild for VSIX** | `"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"` |
-| **Naming** | `ServiceClient` â†’ `serviceClient`, `IOrganizationService` â†’ `crmService` |
-| **Docs location** | `DynamicsCrm.DevKit.Docs/{ComponentName}/` |
-| **Security** | Never commit credentials. Use env vars or Azure Key Vault |
+| `generator` | `TaskGenerator` |
+| `server` | `TaskServer` |
+| `webresource` | `TaskWebResource` |
+| `modelbuilder` | `TaskModelBuilder` |
+| `solution` | `TaskPacSolutionPackager` |
+| `mcp` | `McpServerHost` |
 
-### Build After Editing
+Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`
 
-After editing files in these projects, run the corresponding build command:
+Auth priority: `--conn` > `--auth/--url/...` > env vars (`DEVKIT_*`) > empty
+Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem)
 
-| Project Folder | Build Command |
-|---|---|
-| `DynamicsCrm.DevKit.Analyzers\**` | `/build-analyzer` |
-| `DynamicsCrm.DevKit.Cli\**` | `/build-cli` |
-| `DynamicsCrm.DevKit.Tool\**` | `/build-tool` |
-| `DynamicsCrm.DevKit\**` | `/build-vsix` |
+---
 
-### Git â€” Only via `/commit` workflow
+## MCP Tools
 
-> [!CAUTION]
-> **NEVER** `git add` / `git commit` / `git push` directly â€” only via the IDE's commit workflow.
+33 tools across 3 tiers (`basic` / `standard` / `advanced`). Do not add `[McpServerToolType]` to helper classes — only tool classes get that attribute. When splitting a large tool, keep the entry class in `DynamicsCrm.DevKit.Cli.Mcp.Tools`, put domain helpers in subnamespaces (`Tools.Form`, `Tools.Ribbon`, `Tools.SiteMap`). Keep `ToolCategoryMap` in sync.
+
+---
+
+## Analyzers
+
+21 analyzers, IDs `DEVKIT1001`–`DEVKIT1021`. All inherit `BaseDiagnosticAnalyzer`. Core is in `Analyzers/Core/`: `DiagnosticIdentifiers.cs`, `DiagnosticDescriptors.cs`, `AnalyzerHelper.cs`. Unit tests use xUnit targeting net48.
+
+---
+
+## Naming & Conventions
+
+- `ServiceClient` variable → `serviceClient`
+- `IOrganizationService` variable → `crmService`
+- Preserve existing public command names, tool names, and JSON keys
+- Prefer existing helpers in `DynamicsCrm.DevKit.Shared` and `Mcp/Tools/Helper/` before creating new ones
+- All docs → `DynamicsCrm.DevKit.Docs/{ComponentName}/` as `.md` files
+
+---
+
+## PowerShell (Windows only)
 
 ```powershell
-git add "file1" 2>$null   # 2>$null suppresses CRLF warning
-git commit -m "title" -m "body"   # separate commands, no &&
+cmd1 ; cmd2                                      # not &&
+Get-ChildItem -Recurse -Filter "*.cs"            # not find
+Select-String -Pattern "text" -Path .\file.cs    # not grep
+Remove-Item -Recurse -Force .\folder             # not rm -rf
+$env:VAR = "value"                               # not export
 ```
-
----
-
-## PowerShell (Windows Only)
-
-> [!CAUTION]
-> Unix/Bash commands do NOT work. Use PowerShell equivalents.
-
-| Unix/Bash | PowerShell |
-|---|---|
-| `grep "p" file` | `Select-String -Pattern "p" -Path file` |
-| `grep -r "p" .` | `Get-ChildItem -Recurse \| Select-String "p"` |
-| `ls` / `cat` / `which` | `Get-ChildItem` / `Get-Content` / `Get-Command` |
-| `find . -name "*.cs"` | `Get-ChildItem -Recurse -Filter "*.cs"` |
-| `rm -rf` / `touch` / `mkdir -p` | `Remove-Item -Recurse -Force` / `New-Item -ItemType File/Directory -Force` |
-| `cmd1 && cmd2` / `<<'EOF'` | `cmd1 ; cmd2` / `@" ... "@` here-string |
-| `export VAR=value` | `$env:VAR = "value"` |
-
----
-
-## CLI (`devkit`)
-
-Entry: `DynamicsCrm.DevKit.Cli/Program.cs` (Spectre.Console.Cli)
-
-```
-Commands/ â†’ DevKitCommand<T> base (connection, validation)
-Models/   â†’ DevKitCommandArgs â†’ specific args
-Tasks/    â†’ ITask â†’ TaskXxx implementations
-Mcp/      â†’ MCP server (33 Dataverse tools)
-```
-
-### Commands
-
-| Command | Task | JSON Key |
-|---|---|---|
-| `generator` | `TaskGenerator` | `generators` |
-| `server` | `TaskServer` | `servers` |
-| `webresource` | `TaskWebResource` | `webresources` |
-| `modelbuilder` | `TaskModelBuilder` | `modelbuilders` |
-| `solution` | `TaskPacSolutionPackager` | `solutionpackagers` |
-| `downloadreport` | `TaskDownloadReport` | `downloadreports` |
-| `uploadreport` | `TaskUploadReport` | `uploadreports` |
-| `downloadwebresource` | `TaskDownloadWebResource` | `downloadwebresources` |
-| `datasource` | `TaskDataSource` | `datasources` |
-| `mcp` | `McpServerHost` | â€” |
-
-Deprecated: `plugin`, `workflow`, `dataprovider` â†’ use `server`; `proxytype` â†’ use `modelbuilder`; `legacy-solution` â†’ use `solution`
-
-### Auth (priority: CLI args > env vars > empty)
-
-| CLI Arg | Env Var |
-|---|---|
-| `--conn` | `DEVKIT_CONNECTION` |
-| `--auth` | `DEVKIT_AUTH_TYPE` |
-| `--url` | `DEVKIT_URL` |
-| `--clientid` / `--clientsecret` | `DEVKIT_CLIENT_ID` / `DEVKIT_CLIENT_SECRET` |
-| `--pacprofile` | `DEVKIT_PAC_PROFILE` |
-| `--username` / `--password` / `--domain` | `DEVKIT_USERNAME` / `DEVKIT_PASSWORD` / `DEVKIT_DOMAIN` |
-| `--plain` | `NO_COLOR` |
-
-Types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem).
-
-### Plain Mode
-
-Add `--plain` for clean AI/CI output (no ANSI, colors, spinners). Priority: `--plain` > `NO_COLOR` env var > rich output.
-
-### CLI Run Profile
-
-Read `DynamicsCrm.DevKit.Cli\Properties\launchSettings.json` â†’ `cd` to `workingDirectory` â†’ run with `commandLineArgs`.
-
-### MCP Tools (33)
-
-`whoami`, `get_tables`, `get_messages`, `manage_choice`, `manage_record`, `create_records`, `generate_demo_data`, `get_solution_components`, `execute_fetchxml`, `search_records`, `execute_webapi`, `publish_customizations`, `get_plugin_trace_logs`, `get_system_jobs`, `parse_record_url`, `manage_form`, `manage_view`, `manage_role`, `get_audit_history`, `upsert_table`, `upsert_relationship`, `manage_sitemap`, `upsert_column`, `manage_environment_variable`, `get_business_rules`, `get_workflows`, `get_custom_apis`, `get_flows`, `get_business_process_flows`, `get_plugins`, `manage_command`, `manage_ribbon`, `manage_webresource`
-
-### MCP Resources (9)
-
-| URI | Description |
-|-----|-------------|
-| `schema://formxml` | FormXml.xsd |
-| `schema://layoutxml` | LayoutXml.xsd |
-| `schema://fetchxml` | Fetch.xsd |
-| `schema://sitemapxml` | SiteMap.xsd + rules |
-| `docs://instructions_for_formxml` | FormXML manipulation rules |
-| `docs://instructions_for_views` | View/LayoutXML manipulation rules |
-| `docs://schema_tools_guide` | Schema tools: type matrices, immutable properties, cascade |
-| `docs://data_operations_guide` | Data ops: field type formats, FetchXML joins, search syntax |
-| `docs://server_logic_guide` | Server logic: list/detail modes, filtering, entity scoping |
-
-### MCP Server Restart
-
-> [!IMPORTANT]
-> After editing any file in `DynamicsCrm.DevKit.Cli\Mcp\*.*`:
-> 1. Run `/build-cli` to rebuild
-> 2. Kill the current MCP process so the system auto-restarts it:
-> ```powershell
-> Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force
-> ```
-
----
-
-## VSIX
-
-Entry: `DynamicsCrm.DevKit/DevKitPackage.cs` (inherits `ToolkitPackage`). Contains `Commands/`, `Lib/`, `Wizard/ProjectTemplates/` (13), `Wizard/ItemTemplates/` (17).
-
----
-
-## Shared Project (`DynamicsCrm.DevKit.Shared/`)
-
-| Key File | Purpose |
-|---|---|
-| `Const.cs` | Version constants (replaced at release) |
-| `Helper.cs` | Code generation (~926 lines) |
-| `XrmHelper.cs` | Dataverse operations (metadata, forms, plugins) |
-| `ConnectionBuilder/` | 7 builders + Factory |
-| `Logic/` | `CSharpLateBound`, `CSharpEarlyBound`, `JsForm`, `JsWebApi`, `JsDialog`, `JsTypeScriptDeclaration`, `TsForm`, `TsWebApi`, `TsDialog`, `TsOptionSet` |
-| `Models/` | 42 model classes |
-
----
-
-## Analyzers (21: DEVKIT1001-DEVKIT1021)
-
-Target: .NET Standard 2.0. All inherit `BaseDiagnosticAnalyzer`. Core: `DiagnosticIdentifiers.cs`, `DiagnosticDescriptors.cs`, `AnalyzerHelper.cs`.
-
----
-
-## Tests
-
-Use `/unit-test` workflow (never `dotnet test`).
-
-| Type | Framework | Target |
-|---|---|---|
-| Analyzer | xUnit | net48 |
-| CLI | MSTest | net10.0 |
-
-Integration: `DynamicsCrm.DevKit.Tests/` (TestNewCli, TestServerCode, TestClientCode, TestWebResource, TestSolutionPackager, TestReports, TestProxyTypes, etc.)
-
----
-
-## Documentation Rules
-
-> [!IMPORTANT]
-> All docs must be saved as `.md` files inside `DynamicsCrm.DevKit.Docs\`. Auto-resolve the subfolder by keyword:
-
-| Keyword / Context | Save To |
-|---|---|
-| `cli`, `command`, `mcp`, `task`, `devkit mcp` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Cli\` |
-| `vsix`, `extension`, `wizard`, `package` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit\` |
-| `analyzer`, `diagnostic`, `roslyn` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` |
-| `tool` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tool\` |
-| `script`, `ps1`, `powershell` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Scripts\` |
-| `test`, `unittest`, `integration` | `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Tests\` |
-| anything else / unclear | `DynamicsCrm.DevKit.Docs\Others\` |
-
----
-
-## Scripts (`DynamicsCrm.DevKit.Scripts/`)
-
-| Script | Purpose |
-|---|---|
-| `Release-DynamicsCrm-DevKit-CurrentDate.ps1` | Release with current date |
-| `Release-DynamicsCrm-DevKit.ps1` | Full release |
-| `Clean-Repository.ps1` | Clean all artifacts |
-
----
-
-## Config Files
-
-| File | Purpose |
-|---|---|
-| `DynamicsCrm.DevKit.Cli.json` | CLI profiles |
-| `DynamicsCrm.DevKit.Config.json` | VSIX config |
-| `DevKit.ReleaseConfig.json` | Release version config |
-| `Const.cs` | Version (injected at build) |
-
----
-
-## Key Files Quick Reference
-
-| What | Where |
-|---|---|
-| CLI entry / commands / tasks / models | `Cli/Program.cs`, `Cli/Commands/`, `Cli/Tasks/`, `Cli/Models/` |
-| CLI MCP server | `Cli/Mcp/` |
-| VSIX entry / wizards | `DevKitPackage.cs`, `Wizard/` |
-| Dataverse ops / Code gen | `Shared/XrmHelper.cs`, `Shared/Helper.cs` + `Logic/` |
-| Connections / Models / Resources | `Shared/ConnectionBuilder/`, `Shared/Models/`, `Shared/Resources/` |
-| Analyzers / Core / Tests | `Analyzers/CrmAnalyzers/`, `Analyzers/Core/`, `UnitTests/Analyzers/Tests/` |
-
----
-
-## AI Agent Configuration
-
-Each IDE reads this file (`AGENTS.md`) as source of truth. IDE-specific overrides (command prefixes, forbidden commands) go in the rules folder:
-
-| IDE | Entry Point | Rules (IDE-specific only) | Commands/Workflows |
-|---|---|---|---|
-| **Claude Code** | `CLAUDE.md` â†’ `@AGENTS.md` | `.claude/rules/core-rule.md` | `.claude/commands/claude-*.md` |
-| **Copilot** | `AGENTS.md` (direct) | `.github/copilot-instructions.md` | `.github/prompts/copilot-*.prompt.md` |
-| **Antigravity** | `AGENTS.md` (direct) | `.agent/rules/core-rule.md` | `.agent/workflows/anti-*.md` |
-
-### What goes WHERE
-
-| Content | Location | Reason |
-|---|---|---|
-| Project knowledge, architecture, constraints | **This file** (`AGENTS.md`) | Shared across all IDEs |
-| Command prefix (`/claude-*` vs `/anti-*`) | `{ide}/rules/core-rule.md` | IDE-specific |
-| Forbidden commands list | `{ide}/rules/core-rule.md` | IDE-specific |
-| PowerShell, docs, git, MCP | **This file** | Shared â€” no IDE dependency |
-
----
-
-## Checklist
-
-- [ ] Build succeeded (`devkit --version` shows today's date)
-- [ ] All 4 packages in `Published/` (if full build)
-- [ ] Docs saved to `DynamicsCrm.DevKit.Docs/`
-- [ ] No git changes committed (unless requested)
