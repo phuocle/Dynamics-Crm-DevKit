@@ -1,7 +1,9 @@
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -29,15 +31,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Title = "Manage global option sets (choices)",
             Destructive = true, ReadOnly = false, Idempotent = false),
         Description(
-            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=optionset_name+display_name+options; update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_option_values). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
+            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=optionset_name+display_name+options; update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
+
+            "OPTION VALUES: solution_name is REQUIRED for create and for label-only add_options — if not provided by the user, ask; never search or guess. Pass options/add_options as label-only ('Draft;Confirmed'). For update_options use 'OldLabel:NewLabel;...' pairs. For remove_options use label names ('Draft,Cancelled') — labels are resolved to values automatically.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Resolve integer \u2194 label for picklist fields in FetchXML / query results\n" +
+            "- Resolve label for picklist fields in FetchXML / query results\n" +
             "- Create a global choice for upsert_column to reference\n" +
             "- Add, rename, or remove option values on an existing global choice\n\n" +
 
             "SAFETY:\n" +
-            "- remove_option_values is destructive and cannot be undone")]
+            "- remove_options is destructive and cannot be undone")]
         public CallToolResult manage_choice(
             [Description(
                 "'list', 'detail', 'create', 'update'."
@@ -52,17 +56,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Optional for create/update."
             )] string description = "",
             [Description(
-                "Create only. 'value:label;...' pairs (e.g. '100000000:Active;100000001:Inactive'). Values: integer ≥ 0."
+                "Create only. Label-only 'Draft;Confirmed'. Values are auto-assigned from the solution publisher's customizationoptionvalueprefix. solution_name is required."
             )] string options = "",
             [Description(
-                "Update only. 'value:label;...' pairs to add."
+                "Update only. Label-only 'NewLabel' (value auto-assigned from solution publisher prefix, next sequential) or 'value:label;...' pairs to add."
             )] string add_options = "",
             [Description(
-                "Update only. 'value:newLabel;...' pairs to rename."
+                "Update only. 'OldLabel:NewLabel;...' pairs to rename. Labels are resolved to values automatically."
             )] string update_options = "",
             [Description(
-                "Update only. Comma-separated values to remove. Irreversible."
-            )] string remove_option_values = "",
+                "Update only. Comma-separated label names to remove (e.g. 'Draft,Cancelled'). Irreversible."
+            )] string remove_options = "",
+            [Description(
+                "Required for create. Required for label-only add_options. Used to resolve the publisher prefix for auto-generating option values."
+            )] string solution_name = "",
             [Description(
                 "Publish after changes."
             )] bool auto_publish = true)
@@ -78,8 +85,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(),
                     "detail" => HandleDetail(optionset_name),
-                    "create" => HandleCreate(optionset_name, display_name, description, options, auto_publish),
-                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_option_values, auto_publish),
+                    "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, auto_publish),
+                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, auto_publish),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update'.")
                 };
             }
@@ -123,7 +130,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(string optionsetName, string displayName, string description,
-            string options, bool autoPublish)
+            string options, string solutionName, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'create'.");
@@ -133,14 +140,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(options))
                 return ErrorResult("Error: options is required for 'create'. " +
-                    "Format: 'value:label;value:label' (e.g., '100000000:Active;100000001:Inactive').");
+                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'). solution_name is also required.");
 
             var name = optionsetName.Trim().ToLowerInvariant();
-            var parsedOptions = ParseOptions(options);
+
+            // solution_name is required for create — code-level enforcement, not just AI description
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult(
+                    "Error: solution_name is required for 'create'. " +
+                    "Provide the solution unique name or display name so the publisher's customizationoptionvalueprefix can be resolved and option integer values can be assigned correctly.");
+
+            var (prefix, _, prefixErr) = ResolveSolutionOptionValuePrefix(solutionName);
+            if (prefixErr != null)
+                return ErrorResult($"Error: {prefixErr}");
+
+            var parsedOptions = ParseOptionsWithAutoValue(options, prefix * 10000);
+
             if (parsedOptions == null)
                 return ErrorResult("Error: Invalid options format. " +
-                    "Expected 'value:label;value:label' (e.g., '100000000:Active;100000001:Inactive'). " +
-                    "Values must be integers ≥ 0.");
+                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid').");
 
             if (parsedOptions.Count == 0)
                 return ErrorResult("Error: At least one option is required for 'create'.");
@@ -169,7 +187,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 optionSetMetadata.Options.Add(new OptionMetadata(new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient)), value));
             }
 
-            _serviceClient.Execute(new CreateOptionSetRequest { OptionSet = optionSetMetadata });
+            var createResp = (CreateOptionSetResponse)_serviceClient.Execute(
+                new CreateOptionSetRequest { OptionSet = optionSetMetadata });
+
+            string solWarning = null;
+            if (!string.IsNullOrWhiteSpace(solutionName))
+            {
+                try
+                {
+                    var (_, solUniqueName, solErr) = ResolveSolutionOptionValuePrefix(solutionName);
+                    var solName = solErr == null ? solUniqueName : solutionName.Trim();
+                    _serviceClient.Execute(new AddSolutionComponentRequest
+                    {
+                        AddRequiredComponents = false,
+                        ComponentType = 9, // OptionSet
+                        ComponentId = createResp.OptionSetId,
+                        SolutionUniqueName = solName
+                    });
+                }
+                catch (Exception ex)
+                {
+                    solWarning = $"Warning: Created but failed to add to solution '{solutionName}': {ex.Message}";
+                }
+            }
 
             var published = autoPublish && Publish();
 
@@ -182,12 +222,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var (value, label) in parsedOptions)
                 sb.AppendLine($"  {value}: {label}");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (solWarning != null)
+                sb.AppendLine(solWarning);
 
             return SuccessResult(sb.ToString());
         }
 
         private CallToolResult HandleUpdate(string optionsetName, string displayName, string description,
-            string addOptions, string updateOptions, string removeOptionValues, bool autoPublish)
+            string addOptions, string updateOptions, string removeOptionValues, string solutionName, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'update'.");
@@ -197,42 +239,103 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Validate parameters BEFORE hitting Dataverse
             var hasDisplayName = !string.IsNullOrWhiteSpace(displayName);
             var hasDescription = !string.IsNullOrWhiteSpace(description);
-            var parsedAdd = ParseOptions(addOptions);
-            var parsedUpdate = ParseOptions(updateOptions);
-            var parsedRemove = ParseRemoveValues(removeOptionValues);
+
+            // For add_options, resolve publisher prefix when solution_name provided so labels-only are accepted
+            int? addOptionValueBase = null;
+            if (!string.IsNullOrWhiteSpace(addOptions) && !string.IsNullOrWhiteSpace(solutionName))
+            {
+                var (prefix, _, prefixErr) = ResolveSolutionOptionValuePrefix(solutionName);
+                if (prefixErr != null)
+                    return ErrorResult($"Error: {prefixErr}");
+                // Use max existing value + 1 as starting point so new options don't collide
+                try
+                {
+                    var existingResp = (RetrieveOptionSetResponse)_serviceClient.Execute(
+                        new RetrieveOptionSetRequest { Name = name });
+                    var existingOpts = (existingResp.OptionSetMetadata as OptionSetMetadata)?.Options;
+                    var maxExisting = existingOpts != null && existingOpts.Count > 0
+                        ? existingOpts.Max(o => o.Value ?? 0)
+                        : prefix * 10000 - 1;
+                    addOptionValueBase = maxExisting + 1;
+                }
+                catch
+                {
+                    addOptionValueBase = prefix * 10000;
+                }
+            }
+
+            var parsedAdd = addOptionValueBase.HasValue
+                ? ParseOptionsWithAutoValue(addOptions, addOptionValueBase.Value)
+                : ParseOptions(addOptions);
+            var parsedUpdateLabels = ParseLabelPairs(updateOptions);
+            var parsedRemoveLabels = ParseLabelList(removeOptionValues);
 
             // Validate add_options format
             if (!string.IsNullOrWhiteSpace(addOptions) && parsedAdd == null)
                 return ErrorResult("Error: Invalid add_options format. " +
-                    "Expected 'value:label;value:label' (e.g., '100000002:Pending;100000003:Archived').");
+                    "Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived'.");
 
             // Validate update_options format
-            if (!string.IsNullOrWhiteSpace(updateOptions) && parsedUpdate == null)
+            if (!string.IsNullOrWhiteSpace(updateOptions) && parsedUpdateLabels == null)
                 return ErrorResult("Error: Invalid update_options format. " +
-                    "Expected 'value:newLabel;value:newLabel' (e.g., '100000000:Active Account').");
+                    "Expected 'OldLabel:NewLabel;...' (e.g., 'Draft:Open;Paid:Completed').");
 
-            // Validate remove_option_values format
-            if (!string.IsNullOrWhiteSpace(removeOptionValues) && parsedRemove == null)
-                return ErrorResult("Error: Invalid remove_option_values format. " +
-                    "Expected comma-separated integer values (e.g., '100000002,100000003').");
+            // Validate remove_options format
+            if (!string.IsNullOrWhiteSpace(removeOptionValues) && parsedRemoveLabels == null)
+                return ErrorResult("Error: Invalid remove_options format. " +
+                    "Expected comma-separated label names (e.g., 'Draft,Cancelled').");
 
             var hasAdd = parsedAdd != null && parsedAdd.Count > 0;
-            var hasUpdate = parsedUpdate != null && parsedUpdate.Count > 0;
-            var hasRemove = parsedRemove != null && parsedRemove.Count > 0;
+            var hasUpdate = parsedUpdateLabels != null && parsedUpdateLabels.Count > 0;
+            var hasRemove = parsedRemoveLabels != null && parsedRemoveLabels.Count > 0;
 
             if (!hasDisplayName && !hasDescription && !hasAdd && !hasUpdate && !hasRemove)
                 return ErrorResult("Error: No changes specified. Provide at least one of: " +
-                    "display_name, description, add_options, update_options, remove_option_values.");
+                    "display_name, description, add_options, update_options, remove_options.");
 
-            // Verify it exists (only after all parameter validation passes)
+            // Verify it exists and fetch options for label→value resolution
+            OptionSetMetadata existingMeta;
             try
             {
-                _serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
+                var resp = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
+                existingMeta = resp.OptionSetMetadata as OptionSetMetadata;
             }
             catch (Exception)
             {
                 return ErrorResult($"Error: Global option set '{name}' not found. " +
                     "Use action='create' to create it, or action='list' to see all available option sets.");
+            }
+
+            // Resolve update labels → values
+            List<(int value, string newLabel)> parsedUpdate = null;
+            if (hasUpdate)
+            {
+                parsedUpdate = [];
+                foreach (var (oldLabel, newLabel) in parsedUpdateLabels)
+                {
+                    var match = existingMeta?.Options.FirstOrDefault(o =>
+                        o.Label?.UserLocalizedLabel?.Label?.Equals(oldLabel, StringComparison.OrdinalIgnoreCase) == true);
+                    if (match == null || match.Value == null)
+                        return ErrorResult($"Error: Option label '{oldLabel}' not found in '{name}'. " +
+                            "Use action='detail' to see existing option labels.");
+                    parsedUpdate.Add((match.Value.Value, newLabel));
+                }
+            }
+
+            // Resolve remove labels → values
+            List<int> parsedRemove = null;
+            if (hasRemove)
+            {
+                parsedRemove = [];
+                foreach (var label in parsedRemoveLabels)
+                {
+                    var match = existingMeta?.Options.FirstOrDefault(o =>
+                        o.Label?.UserLocalizedLabel?.Label?.Equals(label, StringComparison.OrdinalIgnoreCase) == true);
+                    if (match == null || match.Value == null)
+                        return ErrorResult($"Error: Option label '{label}' not found in '{name}'. " +
+                            "Use action='detail' to see existing option labels.");
+                    parsedRemove.Add(match.Value.Value);
+                }
             }
 
             if (_options.DryRun)
@@ -273,14 +376,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Remove options first (before add, to avoid value conflicts)
             if (hasRemove)
             {
-                foreach (var value in parsedRemove)
+                for (var i = 0; i < parsedRemove.Count; i++)
                 {
                     _serviceClient.Execute(new DeleteOptionValueRequest
                     {
                         OptionSetName = name,
-                        Value = value
+                        Value = parsedRemove[i]
                     });
-                    sb.AppendLine($"Removed: {value}");
+                    sb.AppendLine($"Removed: {parsedRemoveLabels[i]}");
                 }
             }
 
@@ -295,22 +398,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Value = value,
                         Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient))
                     });
-                    sb.AppendLine($"Added: {value}: {label}");
+                    sb.AppendLine($"Added: {label}");
                 }
             }
 
             // Update existing option labels
             if (hasUpdate)
             {
-                foreach (var (value, label) in parsedUpdate)
+                foreach (var (oldLabel, newLabel) in parsedUpdateLabels)
                 {
+                    var (value, _) = parsedUpdate.First(t => t.newLabel == newLabel);
                     _serviceClient.Execute(new UpdateOptionValueRequest
                     {
                         OptionSetName = name,
                         Value = value,
-                        Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient))
+                        Label = new Label(newLabel, McpHelper.GetBaseLanguageCode(_serviceClient))
                     });
-                    sb.AppendLine($"Updated: {value}: {label}");
+                    sb.AppendLine($"Updated: {oldLabel} -> {newLabel}");
                 }
             }
 
@@ -323,6 +427,110 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         #endregion
 
         #region Helpers
+
+        /// <summary>
+        /// Resolves the publisher's customizationoptionvalueprefix (integer) from a solution name.
+        /// Returns (prefix, uniqueName, errorMessage).
+        /// </summary>
+        private (int Prefix, string UniqueName, string Error) ResolveSolutionOptionValuePrefix(string solutionInput)
+        {
+            try
+            {
+                QueryExpression BuildQuery(string field, ConditionOperator op, string val) =>
+                    new QueryExpression("solution")
+                    {
+                        ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions = { new ConditionExpression(field, op, val) }
+                        }
+                    };
+
+                Entity sol = null;
+
+                var byUnique = _serviceClient.RetrieveMultiple(BuildQuery("uniquename", ConditionOperator.Equal, solutionInput)).Entities;
+                if (byUnique.Count == 1) sol = byUnique[0];
+
+                if (sol == null)
+                {
+                    var byDisplay = _serviceClient.RetrieveMultiple(BuildQuery("friendlyname", ConditionOperator.Equal, solutionInput)).Entities;
+                    if (byDisplay.Count == 1) sol = byDisplay[0];
+                    else if (byDisplay.Count == 0)
+                    {
+                        var byContains = _serviceClient.RetrieveMultiple(BuildQuery("friendlyname", ConditionOperator.Like, $"%{solutionInput}%")).Entities;
+                        if (byContains.Count == 1) sol = byContains[0];
+                        else if (byContains.Count > 1)
+                            return (0, null, $"Multiple solutions match '{solutionInput}'. Provide the exact unique name.");
+                        else
+                            return (0, null, $"Solution '{solutionInput}' not found.");
+                    }
+                    else
+                    {
+                        return (0, null, $"Multiple solutions match '{solutionInput}'. Provide the exact unique name.");
+                    }
+                }
+
+                var publisherRef = sol.GetAttributeValue<EntityReference>("publisherid");
+                if (publisherRef == null)
+                    return (0, null, $"Solution '{solutionInput}' has no publisher.");
+
+                var publisher = _serviceClient.Retrieve("publisher", publisherRef.Id,
+                    new ColumnSet("customizationoptionvalueprefix"));
+                var prefix = publisher.GetAttributeValue<int>("customizationoptionvalueprefix");
+                return (prefix, sol.GetAttributeValue<string>("uniquename"), null);
+            }
+            catch (Exception ex)
+            {
+                return (0, null, $"Failed to resolve solution publisher prefix: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Parses options that may be label-only ('Draft;Confirmed') or 'value:label' pairs.
+        /// For label-only entries, values are assigned starting from startValue and incrementing by 1.
+        /// Returns null if a 'value:label' entry has an invalid format.
+        /// </summary>
+        public static List<(int value, string label)> ParseOptionsWithAutoValue(string input, int startValue)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return [];
+
+            var result = new List<(int value, string label)>();
+            var parts = input.Split(';');
+            var nextValue = startValue;
+
+            foreach (var part in parts)
+            {
+                var trimmed = part.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+
+                var colonIndex = trimmed.IndexOf(':');
+                if (colonIndex > 0 && colonIndex < trimmed.Length - 1)
+                {
+                    // Explicit 'value:label' pair
+                    var valuePart = trimmed.Substring(0, colonIndex).Trim();
+                    var labelPart = trimmed.Substring(colonIndex + 1).Trim();
+                    if (!int.TryParse(valuePart, out var explicitValue) || explicitValue < 0)
+                        return null;
+                    if (string.IsNullOrEmpty(labelPart))
+                        return null;
+                    result.Add((explicitValue, labelPart));
+                    if (explicitValue >= nextValue) nextValue = explicitValue + 1;
+                }
+                else if (colonIndex < 0)
+                {
+                    // Label-only — auto-assign next value
+                    result.Add((nextValue, trimmed));
+                    nextValue++;
+                }
+                else
+                {
+                    return null; // malformed
+                }
+            }
+
+            return result;
+        }
 
         private bool OptionSetExists(string name)
         {
@@ -380,9 +588,46 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         /// <summary>
-        /// Parse comma-separated integer values for remove_option_values.
+        /// Parse comma-separated integer values for remove_options.
         /// Returns null if format is invalid. Returns empty list if input is empty/whitespace.
         /// </summary>
+        public static List<(string oldLabel, string newLabel)> ParseLabelPairs(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return [];
+
+            var result = new List<(string, string)>();
+            foreach (var part in input.Split(';'))
+            {
+                var trimmed = part.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+                var colonIndex = trimmed.IndexOf(':');
+                if (colonIndex <= 0 || colonIndex >= trimmed.Length - 1)
+                    return null;
+                var oldLabel = trimmed[..colonIndex].Trim();
+                var newLabel = trimmed[(colonIndex + 1)..].Trim();
+                if (string.IsNullOrEmpty(oldLabel) || string.IsNullOrEmpty(newLabel))
+                    return null;
+                result.Add((oldLabel, newLabel));
+            }
+            return result;
+        }
+
+        public static List<string> ParseLabelList(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return [];
+
+            var result = new List<string>();
+            foreach (var part in input.Split(','))
+            {
+                var trimmed = part.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+                result.Add(trimmed);
+            }
+            return result.Count > 0 ? result : null;
+        }
+
         public static List<int> ParseRemoveValues(string input)
         {
             if (string.IsNullOrWhiteSpace(input))

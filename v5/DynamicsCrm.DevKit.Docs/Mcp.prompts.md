@@ -8,21 +8,29 @@ Solution target: display name **TEST-MCP**
 ## A. Xác nhận kết nối & môi trường
 
 1. Tôi đang kết nối vào môi trường Dataverse nào? Cho tôi biết tên tổ chức, URL, phiên bản, user hiện tại là ai và có những role nào.
+   > ✅ Tools: whoami
+   > Result: Org 🟢DEVKITV4 (unq82131d861aa7f011870600224806e), URL https://dynamics-crm-devkit-v4.crm.dynamics.com, version 9.2.26043.140, user "# DEVKIT", role System Administrator.
 2. Solution tên "TEST-MCP" trong môi trường này đang chứa những component gì?
+   > ✅ Tools: get_solution_components(TEST-MCP)
+   > Result: Solution TEST-MCP (publisher DEVKITV4, unmanaged, v1.0.0.0) hiện rỗng — 0 component.
 
 ---
 
 ## B. Global Choice
 
-3. Trong solution "TEST-MCP", tạo một danh sách lựa chọn toàn cục tên devkit_invoicestatus, display name "Invoice Status", gồm các giá trị: Draft, Confirmed, Shipped, Paid, Cancelled.
-4. Đọc lại danh sách lựa chọn devkit_invoicestatus và liệt kê đầy đủ tất cả giá trị kèm số nguyên tương ứng.
+3. Trong solution "TEST-MCP", tạo một danh sách lựa chọn toàn cục có display name "Invoice Status", gồm các giá trị: Draft, Confirmed, Shipped, Paid, Cancelled.
+   > ✅ Tools: manage_choice(list) → manage_choice(create, v4_invoicestatus, solution=TEST-MCP)
+   > Result: Global choice v4_invoicestatus tạo thành công với 5 options (Draft=111110000, Confirmed=111110001, Shipped=111110002, Paid=111110003, Cancelled=111110004), đã publish.
+4. Đọc lại danh sách lựa chọn v4_invoicestatus và liệt kê đầy đủ tất cả giá trị kèm số nguyên tương ứng.
+   > ✅ Tools: manage_choice(detail, v4_invoicestatus)
+   > Result: 5 options — Draft=111110000, Confirmed=111110001, Shipped=111110002, Paid=111110003, Cancelled=111110004.
 
 ---
 
 ## C. Environment Variable
 
-5. Trong solution "TEST-MCP", tạo một biến môi trường tên devkit_InvoiceTestMode, display name "Invoice Test Mode", kiểu chuỗi, giá trị mặc định là dev, giá trị hiện tại là test.
-6. Đổi giá trị hiện tại của biến devkit_InvoiceTestMode thành staging, rồi đọc lại để xác nhận.
+5. Trong solution "TEST-MCP", tạo một biến môi trường tên display name "Invoice Test Mode", kiểu chuỗi, giá trị mặc định là dev, giá trị hiện tại là test.
+6. Đổi giá trị hiện tại của biến môi trường "Invoice Test Mode" thành staging, rồi đọc lại để xác nhận.
 
 ---
 
