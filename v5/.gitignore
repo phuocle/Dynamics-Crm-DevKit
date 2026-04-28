@@ -48,6 +48,7 @@ Thumbs.db
 Published/
 
 # MCP config (contains credentials)
+.codex/config.toml
 .vscode/mcp.json
 .agent/mcp.json
 .cursor/mcp.json
