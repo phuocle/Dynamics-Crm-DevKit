@@ -52,6 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
+            "- entity_name: exact logical name first; if not found, fuzzy match on logical name contains OR display name contains. 0 matches = error. 2+ matches = disambiguation list, stop.\n" +
             "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name; confirmed_prefix still gates create.")]
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
@@ -90,6 +91,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entity_name = entity_name.Trim().ToLowerInvariant();
             attribute_name = attribute_name.Trim().ToLowerInvariant();
+
+            // --- Resolve entity_name: exact logical → fuzzy (logical/display contains) → disambiguate ---
+            var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
+            if (entityError != null)
+                return ErrorResult(entityError);
+            entity_name = resolvedEntity;
 
             // --- Early validation: attribute_type, required_level, format, behavior ---
             // Validate these before touching Dataverse so errors return fast even in DryRun mode.
@@ -1716,6 +1723,60 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(json)) return (null, null);
             try { return (JsonSerializer.Deserialize<List<int>>(json), null); }
             catch (JsonException ex) { return (null, $"Invalid JSON: {ex.Message}"); }
+        }
+
+        private static (string ResolvedName, string Error) ResolveEntityName(ServiceClient serviceClient, string entityName)
+        {
+            // 1. Try exact logical name
+            try
+            {
+                var req = new RetrieveEntityRequest { LogicalName = entityName, EntityFilters = EntityFilters.Entity, RetrieveAsIfPublished = true };
+                serviceClient.Execute(req);
+                return (entityName, null);
+            }
+            catch { }
+
+            // 2. Fuzzy: load all entities, match logical name contains OR display name contains
+            List<EntityMetadata> all;
+            try
+            {
+                var req = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity, RetrieveAsIfPublished = true };
+                var resp = (RetrieveAllEntitiesResponse)serviceClient.Execute(req);
+                all = [.. resp.EntityMetadata];
+            }
+            catch (Exception ex)
+            {
+                return (null, $"Error: Failed to search for entity '{entityName}': {ex.Message}");
+            }
+
+            var keyword = entityName.ToLowerInvariant();
+            var matches = all
+                .Where(e =>
+                    (!string.IsNullOrWhiteSpace(e.LogicalName) && e.LogicalName.Contains(keyword)) ||
+                    (!string.IsNullOrWhiteSpace(e.DisplayName?.UserLocalizedLabel?.Label) &&
+                     e.DisplayName.UserLocalizedLabel.Label.ToLowerInvariant().Contains(keyword)))
+                .OrderBy(e => e.LogicalName)
+                .ToList();
+
+            if (matches.Count == 0)
+                return (null,
+                    $"Error: Entity '{entityName}' not found.\n" +
+                    $"No entity matches logical name or display name containing '{entityName}'.\n" +
+                    $"Tip: Use get_tables to find the correct entity logical name.");
+
+            if (matches.Count == 1)
+                return (matches[0].LogicalName, null);
+
+            // 3. Ambiguous — return disambiguation list
+            var sb = new StringBuilder();
+            sb.AppendLine($"[AmbiguousEntity] '{entityName}' matches {matches.Count} entities. Specify the exact logical name:");
+            foreach (var m in matches)
+            {
+                var displayName = m.DisplayName?.UserLocalizedLabel?.Label ?? "";
+                sb.AppendLine($"  - {m.LogicalName} ({displayName})");
+            }
+            sb.AppendLine("Re-call upsert_column with the exact logical name.");
+            return (null, sb.ToString().TrimEnd());
         }
 
         private static CallToolResult ErrorResult(string message) => new()

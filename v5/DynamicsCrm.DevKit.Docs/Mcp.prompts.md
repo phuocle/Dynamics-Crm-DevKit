@@ -41,24 +41,52 @@ Solution target: display name **TEST-MCP**
 ## D. Tạo Table
 
 7. Trong solution "TEST-MCP", tạo bảng "Invoice", tên số nhiều "Invoices", tên trường chính là "Invoice Name", bật ghi chú, bật audit, bật quick create, dùng user ownership.
+   > ✅ Tools: upsert_table(Invoice, solution=TEST-MCP) → upsert_table(Invoice, confirmed_prefix=v4)
+   > Result: Tạo thành công bảng v4_invoice (schema v4_Invoice) trong solution TEST-MCP, primary attribute v4_name (Invoice Name), hasNotes=yes, audit=true, quickCreate=true, published=true.
 8. Trong solution "TEST-MCP", tạo bảng "Invoice Line", tên số nhiều "Invoice Lines", tên trường chính là "Line Name", bật ghi chú, bật audit, bật quick create, dùng user ownership.
+   > ✅ Tools: upsert_table(Invoice Line, solution=TEST-MCP) → upsert_table(Invoice Line, confirmed_prefix=v4)
+   > Result: Tạo thành công bảng v4_invoiceline (schema v4_InvoiceLine) trong solution TEST-MCP, primary attribute v4_name (Line Name), hasNotes=yes, audit=true, quickCreate=true, ownership=UserOwned, published=true.
 9. Kiểm tra metadata bảng Invoice vừa tạo: logical name thật, trường id chính, trường tên chính, trường owner, trạng thái audit.
+   > ✅ Tools: get_tables(filter=invoice) → get_tables(v4_invoice)
+   > Result: Logical name v4_invoice, PrimaryId=v4_invoiceid, PrimaryName=v4_name (Invoice Name), owner=ownerid (systemuser/team), IsAuditEnabled=Yes.
 10. Kiểm tra metadata bảng Invoice Line vừa tạo: logical name thật, trường id chính, trường tên chính, trường owner, trạng thái audit.
+   > ✅ Tools: get_tables(filter=invoice line) → get_tables(v4_invoiceline)
+   > Result: Logical name v4_invoiceline, PrimaryId=v4_invoicelineid, PrimaryName=v4_name (Line Name), owner=ownerid (systemuser/team, UserOwned), IsAuditEnabled=Yes.
 
 ---
 
 ## E. Tạo Column cho Invoice
 
 11. Trong solution "TEST-MCP", thêm cột "Invoice Number" vào bảng Invoice, kiểu văn bản, bắt buộc, độ dài tối đa 100.
+   > ✅ Tools: upsert_column(entity=invoice) → error "entity not found" → get_tables(filter=invoice) → upsert_column(entity=v4_invoice) → upsert_column(confirmed_prefix=v4)
+   > Result: Cột v4_invoicenumber (Invoice Number) tạo thành công trên v4_invoice, kiểu Text, required, maxLength=100, đã publish vào solution TEST-MCP.
 12. Trong solution "TEST-MCP", thêm cột "Invoice Date" vào bảng Invoice, kiểu ngày tháng (date only), bắt buộc.
+   > ✅ Tools: upsert_column(entity=invoice) → error "entity not found" → get_tables(filter=invoice) → upsert_column(entity=v4_invoice) → upsert_column(confirmed_prefix=v4)
+   > Result: Cột v4_invoicedate (Invoice Date) tạo thành công trên v4_invoice, kiểu DateTime/DateOnly, required, đã publish vào solution TEST-MCP.
 13. Trong solution "TEST-MCP", thêm cột "Due Date" vào bảng Invoice, kiểu ngày tháng (date only).
+   > ✅ Tools: upsert_column(entity=invoice) → error "entity not found" → get_tables(filter=invoice) → upsert_column(entity=v4_invoice) → upsert_column(confirmed_prefix=v4)
+   > Result: Cột v4_duedate (Due Date) tạo thành công trên v4_invoice, kiểu DateTime/DateOnly, optional, đã publish vào solution TEST-MCP.
 14. Trong solution "TEST-MCP", thêm cột "Bill To" vào bảng Invoice, kiểu customer lookup trỏ tới Account hoặc Contact, bắt buộc.
-15. Trong solution "TEST-MCP", thêm cột "Invoice Status" vào bảng Invoice, kiểu picklist và dùng global choice devkit_invoicestatus.
+   > ✅ Tools: get_tables(entity_name=invoice) → error → get_tables(filter=invoice) → upsert_column(customer, v4_invoice) → upsert_column(confirmed_prefix=v4)
+   > Result: Cột v4_billto (Bill To) tạo thành công trên v4_invoice, kiểu Customer (polymorphic: account+contact), required, targets=account,contact, đã publish vào solution TEST-MCP.
+15. Trong solution "TEST-MCP", thêm cột "Invoice Status" vào bảng Invoice, kiểu picklist và dùng global choice v4_invoicestatus.
+   > ✅ Tools: upsert_column(entity=invoice) → AmbiguousEntity error → upsert_column(entity=v4_invoice) → PrefixConfirmationRequired → upsert_column(entity=v4_invoice, confirmed_prefix=v4)
+   > Result: Cột v4_invoicestatus (Invoice Status) tạo thành công trên v4_invoice, kiểu Picklist dùng GlobalOptionSet v4_invoicestatus, đã publish vào solution TEST-MCP.
 16. Trong solution "TEST-MCP", thêm cột "Total Amount" vào bảng Invoice, kiểu tiền tệ, precision 2.
+   > ✅ Tools: upsert_column(entity=invoice) → AmbiguousEntity error → upsert_column(entity=v4_invoice) → PrefixConfirmationRequired → upsert_column(entity=v4_invoice, confirmed_prefix=v4)
+   > Result: Cột v4_totalamount (Total Amount) tạo thành công trên v4_invoice, kiểu Money, precision=2, precisionSource=0, đã publish vào solution TEST-MCP.
 17. Trong solution "TEST-MCP", thêm cột "Tax Amount" vào bảng Invoice, kiểu tiền tệ, precision 2.
+   > ✅ Tools: upsert_column(entity=invoice) → AmbiguousEntity error → upsert_column(entity=v4_invoice) → PrefixConfirmationRequired → upsert_column(entity=v4_invoice, confirmed_prefix=v4)
+   > Result: Cột v4_taxamount (Tax Amount) tạo thành công trên v4_invoice, kiểu Money, precision=2, precisionSource=0, đã publish vào solution TEST-MCP.
 18. Trong solution "TEST-MCP", thêm cột "Grand Total" vào bảng Invoice, kiểu tiền tệ, precision 2.
+   > ✅ Tools: upsert_column(entity=invoice) → AmbiguousEntity error → upsert_column(entity=v4_invoice) → PrefixConfirmationRequired → upsert_column(entity=v4_invoice, confirmed_prefix=v4)
+   > Result: Cột v4_grandtotal (Grand Total) tạo thành công trên v4_invoice, kiểu Money, precision=2, precisionSource=0, đã publish vào solution TEST-MCP.
 19. Trong solution "TEST-MCP", thêm cột "PO Number" vào bảng Invoice, kiểu văn bản, độ dài tối đa 100.
+   > ✅ Tools: upsert_column(entity=invoice) → AmbiguousEntity error → upsert_column(entity=v4_invoice) → PrefixConfirmationRequired → upsert_column(entity=v4_invoice, confirmed_prefix=v4)
+   > Result: Cột v4_ponumber (PO Number) tạo thành công trên v4_invoice, kiểu Text, maxLength=100, đã publish vào solution TEST-MCP.
 20. Trong solution "TEST-MCP", thêm cột "Remarks" vào bảng Invoice, kiểu văn bản nhiều dòng, độ dài tối đa 4000.
+   > ✅ Tools: upsert_column(entity=invoice) → AmbiguousEntity error → upsert_column(entity=v4_invoice) → PrefixConfirmationRequired → upsert_column(entity=v4_invoice, confirmed_prefix=v4)
+   > Result: Cột v4_remarks (Remarks) tạo thành công trên v4_invoice, kiểu Memo, maxLength=4000, đã publish vào solution TEST-MCP.
 
 ---
 
@@ -71,7 +99,7 @@ Solution target: display name **TEST-MCP**
 25. Trong solution "TEST-MCP", thêm cột "Unit Price" vào bảng Invoice Line, kiểu tiền tệ, bắt buộc, precision 2.
 26. Trong solution "TEST-MCP", thêm cột "Discount Percent" vào bảng Invoice Line, kiểu số thập phân, min 0, max 100, precision 2.
 27. Trong solution "TEST-MCP", thêm cột "Line Total" vào bảng Invoice Line, kiểu tiền tệ, precision 2.
-28. Trong solution "TEST-MCP", thêm cột "Line Status" vào bảng Invoice Line, kiểu picklist và dùng global choice devkit_invoicestatus.
+28. Trong solution "TEST-MCP", thêm cột "Line Status" vào bảng Invoice Line, kiểu picklist và dùng global choice v4_invoicestatus.
 
 ---
 
@@ -84,7 +112,7 @@ Solution target: display name **TEST-MCP**
 
 ## H. Publish
 
-31. Publish customization cho bảng Invoice, bảng Invoice Line và global choice devkit_invoicestatus.
+31. Publish customization cho bảng Invoice, bảng Invoice Line và global choice v4_invoicestatus.
 
 ---
 
@@ -208,12 +236,12 @@ Solution target: display name **TEST-MCP**
 
 ## V. Cập Nhật Metadata & Publish
 
-85. Thêm option "Archived" vào global choice devkit_invoicestatus, rồi đọc lại để xác nhận option mới đã có.
+85. Thêm option "Archived" vào global choice v4_invoicestatus, rồi đọc lại để xác nhận option mới đã có.
 86. Bật audit và advanced find cho cột Invoice Status trên bảng Invoice nếu đang tắt.
 87. Cập nhật view "TEST-MCP Active Invoices" để thêm cột PO Number; đọc lại xác nhận layout và query còn đồng bộ.
 88. Cập nhật main form Invoice để PO Number nằm trong section "Invoice Information"; đọc lại xác nhận đúng vị trí.
 89. Cập nhật web resource devkit_/testmcp/invoice.form.js: thêm comment ngắn "// TEST-MCP v1" ở dòng đầu file; đọc lại xác nhận.
-90. Publish lại toàn bộ customization: bảng Invoice, Invoice Line, global choice devkit_invoicestatus và sitemap app.
+90. Publish lại toàn bộ customization: bảng Invoice, Invoice Line, global choice v4_invoicestatus và sitemap app.
 
 ---
 
