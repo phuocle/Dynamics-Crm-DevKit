@@ -18,6 +18,9 @@ Execute a single prompt from `DynamicsCrm.DevKit.Docs/Mcp.prompts.md`, record wh
 
 ## Step 1 — Execute the prompt
 
+> [!CAUTION]
+> **DO NOT read `Mcp.prompts.md` before executing.** Execute `$ARGUMENTS` exactly as the user typed it — no extra context, no peeking at the file. If the prompt is ambiguous or missing parameters (e.g. no solution name), execute it as-is and let the tools return what they return.
+
 Run the prompt `$ARGUMENTS` using whatever MCP tools are appropriate. Do not guess — actually call the tools and observe real results.
 
 ---
@@ -33,7 +36,7 @@ As you execute, note every MCP tool call in order:
 
 ## Step 3 — Update Mcp.prompts.md
 
-Read `DynamicsCrm.DevKit.Docs/Mcp.prompts.md`, find the exact line matching the prompt (by its number and text), and insert a result block **immediately after** that line using this format:
+**Only now**, read `DynamicsCrm.DevKit.Docs/Mcp.prompts.md`, find the exact line matching the prompt (by its number and text), and insert a result block **immediately after** that line using this format:
 
 ```
    > ✅ Tools: [tool A] → [tool B] → [tool C]

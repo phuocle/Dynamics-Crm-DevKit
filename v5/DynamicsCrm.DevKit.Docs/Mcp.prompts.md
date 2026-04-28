@@ -30,7 +30,11 @@ Solution target: display name **TEST-MCP**
 ## C. Environment Variable
 
 5. Trong solution "TEST-MCP", tạo một biến môi trường tên display name "Invoice Test Mode", kiểu chuỗi, giá trị mặc định là dev, giá trị hiện tại là test.
+   > ✅ Tools: manage_environment_variable(create) → manage_environment_variable(create, confirmed_prefix=v4)
+   > Result: Tạo thành công biến môi trường v4_InvoiceTestMode (Invoice Test Mode), kiểu String, defaultValue=dev, currentValue=test trong solution TEST-MCP.
 6. Đổi giá trị hiện tại của biến môi trường "Invoice Test Mode" thành staging, rồi đọc lại để xác nhận.
+   > ✅ Tools: manage_environment_variable(update, v4_InvoiceTestMode, value=staging) → manage_environment_variable(detail, v4_InvoiceTestMode)
+   > Result: Cập nhật thành công currentValue=staging; đọc lại xác nhận defaultValue=dev, currentValue=staging.
 
 ---
 

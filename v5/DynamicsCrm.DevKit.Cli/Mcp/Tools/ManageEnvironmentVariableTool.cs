@@ -13,6 +13,7 @@ using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -36,10 +37,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Dataverse environment variables — list/detail/create/update/delete/clear.\n" +
             "- list: optional solution_name, max_records\n" +
             "- detail: variable_name\n" +
-            "- create: variable_name + display_name + type. Optional: default_value, value, description, solution_name\n" +
+            "- create: solution_name (REQUIRED) + display_name + type. Optional: default_value, value, description\n" +
             "- update: variable_name. Optional: display_name, default_value, value, description\n" +
             "- delete: variable_name (definition + value, irreversible)\n" +
             "- clear: variable_name (current value only → reverts to default)\n\n" +
+
+            "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm, re-call with confirmed_prefix.\n" +
+            "solution_name is REQUIRED for create — if not provided by the user, ask; never search or guess.\n\n" +
 
             "Current value overrides default. Type immutable after creation. Usually no publish needed.\n\n" +
 
@@ -53,9 +57,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_environment_variable(
             [Description("list, detail, create, update, delete, clear."
             )] string action,
-            [Description("Schema name with prefix (e.g. 'new_ApiEndpoint'). Required: all except list."
+            [Description("Schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. For create: omit — derived from solution_name publisher prefix."
             )] string variable_name = "",
-            [Description("list: filter. create: add to solution."
+            [Description("list: filter. create: REQUIRED — used to resolve publisher prefix."
             )] string solution_name = "",
             [Description("list only."
             )] int max_records = 50,
@@ -70,7 +74,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("")
             ] string description = "",
             [Description("")
-            ] bool auto_publish = false)
+            ] bool auto_publish = false,
+            [Description("Confirmed prefix after [PrefixConfirmationRequired] preview."
+            )] string confirmed_prefix = "")
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.");
@@ -83,7 +89,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(solution_name, max_records),
                     "detail" => HandleDetail(variable_name),
-                    "create" => HandleCreateAction(variable_name, display_name, type, default_value, value, description, solution_name, auto_publish),
+                    "create" => HandleCreateAction(display_name, type, default_value, value, description, solution_name, confirmed_prefix, auto_publish),
                     "update" => HandleUpdateAction(variable_name, display_name, default_value, value, description, auto_publish),
                     "delete" => HandleDelete(variable_name),
                     "clear" => HandleClear(variable_name, auto_publish),
@@ -96,19 +102,66 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult HandleCreateAction(string variableName, string displayName, string type,
-            string defaultValue, string currentValue, string description, string solutionName, bool autoPublish)
+        private CallToolResult HandleCreateAction(string displayName, string type,
+            string defaultValue, string currentValue, string description, string solutionName,
+            string confirmedPrefix, bool autoPublish)
         {
-            if (string.IsNullOrWhiteSpace(variableName))
-                return ErrorResult("Error: variable_name is required for 'create'.");
+            if (string.IsNullOrWhiteSpace(displayName))
+                return ErrorResult("Error: display_name is required for 'create'.");
 
-            variableName = variableName.Trim();
+            if (string.IsNullOrWhiteSpace(type))
+                return ErrorResult("Error: type is required for 'create'. Valid values: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'.");
+
+            // Layer 1 (AI gate): solution_name is mandatory — prefix can only come from the solution's publisher
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult(
+                    "Error: solution_name is required for action='create'.\n" +
+                    "The schema name prefix is derived from the solution's publisher — do not invent it.\n" +
+                    "Ask the user which solution this environment variable belongs to.");
+
+            // Resolve solution → publisher prefix
+            var (solPrefix, uniqueName, solError) = DataverseSolutionResolver.ResolveSolution(_serviceClient, solutionName.Trim());
+            if (solError != null)
+                return ErrorResult($"Error: {solError}");
+
+            // Layer 2 (code gate): block 'new' prefix — it means the solution's publisher is misconfigured
+            // or the AI bypassed the layer-1 gate by guessing a default prefix
+            if (solPrefix.Equals("new", StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"Error: The publisher for solution '{uniqueName}' uses the reserved prefix 'new'.\n" +
+                    "This prefix is Dataverse's default for unconfigured publishers and must not be used.\n" +
+                    "Set a proper customization prefix on the publisher in Power Apps, then retry.");
+
+            // First call without confirmed_prefix → show preview and ask AI/user to confirm
+            if (string.IsNullOrWhiteSpace(confirmedPrefix))
+            {
+                var previewName = $"{solPrefix}_{displayName.Trim().Replace(" ", "")}";
+                var sb = new StringBuilder(256);
+                sb.AppendLine("[PrefixConfirmationRequired]");
+                sb.AppendLine($"ResolvedPrefix: {solPrefix}");
+                sb.AppendLine($"Solution: {uniqueName}");
+                sb.AppendLine($"VariableName (preview): {previewName}");
+                sb.AppendLine();
+                sb.AppendLine($"→ Prefix is correct: re-call manage_environment_variable with confirmed_prefix=\"{solPrefix}\"");
+                sb.AppendLine($"→ Wrong prefix: re-call manage_environment_variable with confirmed_prefix=\"<correct_prefix>\"");
+                return new CallToolResult { Content = [new TextContentBlock { Text = sb.ToString() }] };
+            }
+
+            var prefix = confirmedPrefix.Trim().ToLowerInvariant();
+
+            // Layer 2 also applies to the confirmed prefix supplied by AI/user
+            if (prefix.Equals("new", StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    "Error: confirmed_prefix 'new' is the reserved Dataverse default prefix and cannot be used.\n" +
+                    "Provide the actual publisher prefix for this solution.");
+
+            var variableName = $"{prefix}_{displayName.Trim().Replace(" ", "")}";
 
             var existing = RetrieveDefinition(variableName);
             if (existing != null)
                 return ErrorResult($"Error: Environment variable '{variableName}' already exists. Use action='update' to modify it.");
 
-            return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solutionName, autoPublish);
+            return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, uniqueName, autoPublish);
         }
 
         private CallToolResult HandleUpdateAction(string variableName, string displayName,
