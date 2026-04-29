@@ -8,7 +8,6 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -141,24 +140,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Auto-generate relationship name if not provided
             if (string.IsNullOrWhiteSpace(relationshipName))
-                relationshipName = $"{prefix}_{referencedEntity}_{referencingEntity}";
+                relationshipName = BuildRelationshipName(prefix, referencedEntity, referencingEntity);
             if (relationshipName.Length > 100)
                 relationshipName = relationshipName[..100];
 
-            // Auto-generate lookup attribute name and SchemaName via DataverseNamer for correct PascalCase
-            var lookupLogicalName = $"{prefix}_{referencedEntity}id";
-            string lookupSchemaName;
-            try
-            {
-                (lookupSchemaName, _) = DataverseNamer.Resolve($"{referencedEntity}id", prefix);
-            }
-            catch
-            {
-                // Fallback: capitalize first char after prefix
-                lookupSchemaName = $"{prefix}_{CultureInfo.InvariantCulture.TextInfo.ToTitleCase(referencedEntity)}id";
-            }
             if (string.IsNullOrWhiteSpace(lookupDisplayName))
-                lookupDisplayName = referencedEntity;
+                lookupDisplayName = StripPublisherPrefix(referencedEntity, prefix);
+
+            var (lookupSchemaName, lookupLogicalName) = BuildLookupAttributeNames(lookupDisplayName, prefix);
 
             var cascade = BuildCascadeConfiguration(cascadePreset, cascadeAssign, cascadeDelete, cascadeMerge, cascadeReparent, cascadeShare, cascadeUnshare);
 
@@ -772,6 +761,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "marketing" => AssociatedMenuGroup.Marketing,
                 _ => throw new ArgumentException($"Error: Invalid menu_group '{value}'.\nValid values: Details, Sales, Service, Marketing.")
             };
+        }
+
+        internal static (string SchemaName, string LogicalName) BuildLookupAttributeNames(string lookupDisplayName, string prefix)
+        {
+            return DataverseNamer.Resolve(lookupDisplayName, prefix);
+        }
+
+        internal static string BuildRelationshipName(string prefix, string referencedEntity, string referencingEntity)
+        {
+            var referencedBaseName = StripPublisherPrefix(referencedEntity, prefix);
+            var referencingBaseName = StripPublisherPrefix(referencingEntity, prefix);
+            return $"{prefix}_{referencedBaseName}_{referencingBaseName}";
+        }
+
+        internal static string StripPublisherPrefix(string logicalName, string prefix)
+        {
+            if (string.IsNullOrWhiteSpace(logicalName) || string.IsNullOrWhiteSpace(prefix))
+                return logicalName;
+
+            var prefixWithSeparator = $"{prefix.Trim().ToLowerInvariant()}_";
+            var trimmed = logicalName.Trim().ToLowerInvariant();
+            return trimmed.StartsWith(prefixWithSeparator, StringComparison.Ordinal)
+                ? trimmed[prefixWithSeparator.Length..]
+                : trimmed;
         }
 
         private (string Prefix, string UniqueName, string Error) ResolveSolution(string solutionInput)

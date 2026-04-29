@@ -108,32 +108,65 @@ Solution target: display name **TEST-MCP**
    > ✅ Tools: get_tables(filter=invoice line) → upsert_column(v4_invoiceline, unitprice, money, required, precision=2, solution=TEST-MCP)
    > Result: Cột v4_unitprice (Unit Price) tạo thành công trên v4_invoiceline, kiểu Money, required, precision=2, precisionSource=0, đã publish vào solution TEST-MCP.
 26. Trong solution "TEST-MCP", thêm cột "Discount Percent" vào bảng Invoice Line, kiểu số thập phân, min 0, max 100, precision 2.
+   > ✅ Tools: get_tables(filter=invoice) → upsert_column(v4_invoiceline, discountpercent, decimal, solution=TEST-MCP)
+   > Result: Cột v4_discountpercent (Discount Percent) tạo thành công trên v4_invoiceline, kiểu Decimal, min=0, max=100, precision=2, đã publish vào solution TEST-MCP.
 27. Trong solution "TEST-MCP", thêm cột "Line Total" vào bảng Invoice Line, kiểu tiền tệ, precision 2.
+   > ✅ Tools: whoami() → get_tables(filter=Invoice Line) → upsert_column(v4_invoiceline, linetotal, money, precision=2, solution=TEST-MCP)
+   > Result: Column v4_linetotal (Line Total) was created on v4_invoiceline as Money with precision=2 and published into solution TEST-MCP.
 28. Trong solution "TEST-MCP", thêm cột "Line Status" vào bảng Invoice Line, kiểu picklist và dùng global choice v4_invoicestatus.
+   > ✅ Tools: get_tables(filter=Invoice Line) → manage_choice(detail, v4_invoicestatus) → upsert_column(v4_invoiceline, linestatus, picklist, global_optionset=v4_invoicestatus, solution=TEST-MCP) → get_tables(v4_invoiceline, filter=v4_linestatus)
+   > Result: Column v4_linestatus (Line Status) was created on v4_invoiceline as a Picklist using global choice v4_invoicestatus and published into solution TEST-MCP.
 
 ---
 
 ## G. Quan hệ giữa Invoice và Invoice Line
 
 29. Trong solution "TEST-MCP", tạo quan hệ một-nhiều từ bảng Invoice sang bảng Invoice Line, lookup trên Invoice Line có display name "Invoice", cascade kiểu referential.
+   > ✅ Tools: get_tables(filter=invoice) → upsert_relationship(create_1n, v4_invoice→v4_invoiceline, lookup_display_name=Invoice, cascade_preset=Referential, solution=TEST-MCP)
+   > Result: Tạo thành công quan hệ v4_invoice_invoiceline (1:N), lookup field v4_invoice (display "Invoice") trên v4_invoiceline, cascade Referential (Delete=RemoveLink, các cascade còn lại=NoCascade), đã publish.
 30. Kiểm tra lại metadata bảng Invoice Line và cho biết tên thật của lookup field đang trỏ về Invoice.
+   > ✅ Tools: get_tables(filter=invoice) → get_tables(entity_name=v4_invoiceline)
+   > Result: Lookup field trỏ về v4_invoice có logical name **v4_invoice** (DisplayName: "Invoice"), quan hệ N:1 `v4_invoice_invoiceline`.
 
 ---
 
 ## H. Publish
 
 31. Publish customization cho bảng Invoice, bảng Invoice Line và global choice v4_invoicestatus.
+   > ✅ Tools: publish_customizations(invoice,invoiceline+global_optionset) → error entity not found → get_tables(filter=invoice) → publish_customizations(v4_invoice,v4_invoiceline+global_optionset)
+   > Result: Published v4_invoice, v4_invoiceline và global option sets thành công trong 4.9 giây (cần dùng logical name có prefix v4_ thay vì invoice/invoiceline).
 
 ---
 
 ## I. Thiết kế Form
 
 32. Xem danh sách form của bảng Invoice và cho biết main form nào nên dùng để chỉnh layout.
+   > ✅ Tools: manage_form(list invoice) → get_tables(filter Invoice) → manage_form(list v4_invoice)
+   > Result: Bảng Invoice có logical name `v4_invoice`; chỉ có 1 Main form active tên `Information` (`88c99640-0fdc-43f9-b36f-e7da759ccc86`), nên dùng form này để chỉnh layout.
 33. Thiết kế main form của Invoice: tab "Summary" gồm section "Invoice Information" chứa Invoice Number, Invoice Date, Due Date, Bill To, Invoice Status, PO Number và section "Amounts" chứa Total Amount, Tax Amount, Grand Total và section "Notes" chứa Remarks; tab "Lines" chứa subgrid các Invoice Line con.
+   > ✅ Tools: get_tables(v4_invoice) → get_tables(v4_invoiceline) → manage_form(detail) → manage_view(list v4_invoiceline) → manage_form(update formxml) → manage_form(detail)
+   > Result: Main form `Information` của `v4_invoice` đã được publish với tab Summary gồm 3 section yêu cầu và tab Lines có subgrid Invoice Lines dùng relationship `v4_invoice_invoiceline`.
+33a. Cũng form đang làm việc, thêm header các field theo thứ tự primary name, owner, state, status
+   > ✅ Tools: manage_form(update add_header v4_name,ownerid,statecode,statuscode) → manage_form(detail)
+   > Result: Header của main form `Information` trên `v4_invoice` đã được publish với các field theo đúng thứ tự `v4_name`, `ownerid`, `statecode`, `statuscode`.
+33b. Cũng form đang làm việc, thêm 1 tab Administrator (đặt ở cuối), tab có 2 section (emtpty label), section bên trái có các field: createdon, createdby, modifiedon, modifiedby, section bên phải có field: primary name, owner, status, status. Lưu ý, tất cả các fields phải readonly.
+   > ✅ Tools: get_tables(v4_invoice) → manage_form(detail) → manage_form(update add_tab Administrator) → manage_form(detail)
+   > Result: Tab `Administrator` đã được publish ở cuối main form `Information`, gồm 2 section không hiện label; các field `createdon`, `createdby`, `modifiedon`, `modifiedby`, `v4_name`, `ownerid`, `statecode`, `statuscode` đều readonly.
 34. Đọc lại main form Invoice và xác nhận các field cùng subgrid Invoice Lines đã ở đúng vị trí.
+   > ✅ Tools: manage_form(detail v4_invoice Information)
+   > Result: Xác nhận main form `Information` có tab Summary với các section/field đúng yêu cầu, tab Lines có subgrid `Invoice Lines` dùng relationship `v4_invoice_invoiceline`, tab Administrator ở cuối và header đúng thứ tự.
 35. Xem danh sách form của bảng Invoice Line và cho biết main form nào nên dùng.
+   > ✅ Tools: manage_form(list invoice line) → get_tables(filter Invoice Line) → manage_form(list v4_invoiceline)
+   > Result: Bảng Invoice Line có logical name `v4_invoiceline`; chỉ có 1 Main form active tên `Information` (`9e4eccea-f8dd-4dc6-9102-7ec0bc38d1df`), nên dùng form này để chỉnh layout.
 36. Thiết kế main form của Invoice Line: section "Line Information" chứa Line Number, Product Name, Quantity, Unit Price, Discount Percent, Line Total, Line Status và lookup Invoice; section "Notes" chứa Description.
+   > ✅ Tools: get_tables(v4_invoiceline) → manage_form(detail) → manage_form(update formxml) → manage_form(detail)
+   > Result: Main form `Information` của `v4_invoiceline` đã được publish với section `Line Information` chứa 8 field yêu cầu và section `Notes` chứa `Description`.
+36a. Hãy thêm header và tab Administrator của form Invoice Line giống form Invoice
+   > ✅ Tools: get_tables(v4_invoiceline) → manage_form(detail) → manage_form(update add_header + add_tab Administrator) → manage_form(detail)
+   > Result: Main form `Information` của `v4_invoiceline` đã được publish với header `v4_name`, `ownerid`, `statecode`, `statuscode` và tab `Administrator` readonly giống form Invoice.
 37. Đọc lại main form Invoice Line và xác nhận các field đã ở đúng vị trí.
+   > ✅ Tools: manage_form(detail v4_invoiceline Information)
+   > Result: Xác nhận main form `Information` của `v4_invoiceline` có section `Line Information` và `Notes` đúng field, header đúng thứ tự, tab `Administrator` ở cuối với các field readonly.
 
 ---
 

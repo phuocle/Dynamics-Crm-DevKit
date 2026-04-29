@@ -213,6 +213,34 @@ public class UpsertRelationshipToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
+    public void StripPublisherPrefix_WhenLogicalNameAlreadyHasPrefix_RemovesIt()
+    {
+        var method = ToolType.GetMethod("StripPublisherPrefix", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public)!;
+        var result = (string)method.Invoke(null, new object[] { "v4_invoice", "v4" })!;
+
+        Assert.AreEqual("invoice", result);
+    }
+
+    [TestMethod]
+    public void BuildLookupAttributeNames_FromDisplayName_ReturnsSchemaAndLogicalNames()
+    {
+        var method = ToolType.GetMethod("BuildLookupAttributeNames", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public)!;
+        var result = ((string SchemaName, string LogicalName))method.Invoke(null, new object[] { "Invoice", "v4" })!;
+
+        Assert.AreEqual("v4_Invoice", result.SchemaName);
+        Assert.AreEqual("v4_invoice", result.LogicalName);
+    }
+
+    [TestMethod]
+    public void BuildRelationshipName_WhenEntitiesAlreadyHavePrefix_DoesNotDuplicatePrefix()
+    {
+        var method = ToolType.GetMethod("BuildRelationshipName", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public)!;
+        var result = (string)method.Invoke(null, new object[] { "v4", "v4_invoice", "v4_invoiceline" })!;
+
+        Assert.AreEqual("v4_invoice_invoiceline", result);
+    }
+
+    [TestMethod]
     public void UpsertRelationship_EmptyAction_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertRelationshipTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
