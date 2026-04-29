@@ -43,7 +43,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "UPDATE (exists): attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current.\n\n" +
 
-            "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm, re-call with confirmed_prefix.\n" +
             "attribute_name needs publisher prefix or solution_name to auto-resolve.\n\n" +
 
             "WHEN TO USE:\n" +
@@ -52,15 +51,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- entity_name: exact logical name first; if not found, fuzzy match on logical name contains OR display name contains. 0 matches = error. 2+ matches = disambiguation list, stop.\n" +
-            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name; confirmed_prefix still gates create.")]
+            "- entity_name: exact logical name first; if matched exactly, proceed without confirmation. If not an exact logical name, fuzzy search by logical/display name contains → ALWAYS return a [ConfirmEntityName] list and stop, even for 1 match. User MUST re-call with the exact logical name. Never guess.\n" +
+            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name.")]
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
             [Description("With prefix ('new_priority') or just name + solution_name to auto-resolve.")] string attribute_name,
             [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. (immutable on update)")] string attribute_type,
             [Description("Required: create.")] string display_name,
             [Description("Auto-resolve prefix when attribute_name has no prefix.")] string solution_name = "",
-            [Description("Confirmed prefix after [PrefixConfirmationRequired] preview.")] string confirmed_prefix = "",
             [Description("")] string description = "",
             [Description("None/Recommended/Required. [update: omit=keep]")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
@@ -223,40 +221,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var prefix = resolvedPrefix ?? attribute_name.Substring(0, underscoreIndex);
-
-            // --- PREFIX CONFIRMATION FLOW ---
-            if (string.IsNullOrWhiteSpace(confirmed_prefix))
-            {
-                string previewSchema, previewLogical;
-                try
-                {
-                    (previewSchema, previewLogical) = DataverseNamer.Resolve(display_name, prefix);
-                }
-                catch
-                {
-                    previewSchema = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
-                    previewLogical = previewSchema.ToLowerInvariant();
-                }
-                var confirmSb = new StringBuilder(256);
-                confirmSb.AppendLine("[PrefixConfirmationRequired]");
-                confirmSb.AppendLine($"ResolvedPrefix: {prefix}");
-                confirmSb.AppendLine($"AttributeName (preview): {previewLogical}");
-                confirmSb.AppendLine($"SchemaName (preview): {previewSchema}");
-                confirmSb.AppendLine($"Entity: {entity_name}");
-                confirmSb.AppendLine();
-                confirmSb.AppendLine($"→ Prefix is correct: re-call upsert_column with confirmed_prefix=\"{prefix}\"");
-                confirmSb.AppendLine($"→ Wrong prefix: re-call upsert_column with confirmed_prefix=\"<correct_prefix>\"");
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = confirmSb.ToString() }],
-                    IsError = false
-                };
-            }
-
-            // Use confirmed_prefix (may differ from resolved if user corrected it)
-            prefix = confirmed_prefix.Trim().ToLowerInvariant();
-            var confirmedNamePart = hasPrefix ? attribute_name.Substring(underscoreIndex + 1) : attribute_name;
-            attribute_name = $"{prefix}_{confirmedNamePart}";
 
             // Derive SchemaName via DataverseNamer (PascalCase from display_name)
             string schemaName;
@@ -1764,18 +1728,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"No entity matches logical name or display name containing '{entityName}'.\n" +
                     $"Tip: Use get_tables to find the correct entity logical name.");
 
-            if (matches.Count == 1)
-                return (matches[0].LogicalName, null);
-
-            // 3. Ambiguous — return disambiguation list
+            // Fuzzy matched (1 or more) — always require user to confirm the exact logical name.
+            // Never auto-select, even for a single match, because the user may have typed a display
+            // name that matches multiple schemas (e.g. "Invoice Line" → invoiceline vs devkit_invoiceline).
             var sb = new StringBuilder();
-            sb.AppendLine($"[AmbiguousEntity] '{entityName}' matches {matches.Count} entities. Specify the exact logical name:");
+            sb.AppendLine($"[ConfirmEntityName] '{entityName}' is not an exact logical name. {matches.Count} candidate(s) found — confirm which table you mean:");
             foreach (var m in matches)
             {
-                var displayName = m.DisplayName?.UserLocalizedLabel?.Label ?? "";
-                sb.AppendLine($"  - {m.LogicalName} ({displayName})");
+                var dn = m.DisplayName?.UserLocalizedLabel?.Label ?? "";
+                sb.AppendLine($"  - {m.LogicalName} ({dn})");
             }
-            sb.AppendLine("Re-call upsert_column with the exact logical name.");
+            sb.AppendLine("Re-call upsert_column with the exact logical name from the list above.");
             return (null, sb.ToString().TrimEnd());
         }
 

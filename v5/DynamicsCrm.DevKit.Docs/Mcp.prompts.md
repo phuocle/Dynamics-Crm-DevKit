@@ -93,10 +93,20 @@ Solution target: display name **TEST-MCP**
 ## F. Tạo Column cho Invoice Line
 
 21. Trong solution "TEST-MCP", thêm cột "Line Number" vào bảng Invoice Line, kiểu số nguyên, bắt buộc, min 1, max 999999.
+   > ✅ Tools: get_tables(filter=invoice line) → get_tables(entity=v4_invoiceline, filter=line) → upsert_column(v4_invoiceline, linenumber, integer) → upsert_column(confirmed_prefix=v4)
+   > Result: Cột v4_linenumber (Line Number) tạo thành công trên v4_invoiceline, kiểu Integer, required, min=1, max=999999, đã publish vào solution TEST-MCP.
 22. Trong solution "TEST-MCP", thêm cột "Product Name" vào bảng Invoice Line, kiểu văn bản, bắt buộc, độ dài tối đa 200.
+   > ✅ Tools: upsert_column(entity=invoicedetail) → error "entity not found" → get_tables(filter=invoice) → upsert_column(entity=v4_invoiceline) → PrefixConfirmationRequired → upsert_column(entity=v4_invoiceline, confirmed_prefix=v4)
+   > Result: Cột v4_productname (Product Name) tạo thành công trên v4_invoiceline, kiểu Text, required, maxLength=200, đã publish vào solution TEST-MCP.
 23. Trong solution "TEST-MCP", thêm cột "Description" vào bảng Invoice Line, kiểu văn bản nhiều dòng, độ dài tối đa 2000.
+   > ✅ Tools: get_tables(filter=invoice) → upsert_column(v4_invoiceline, description, memo) → upsert_column(confirmed_prefix=v4)
+   > Result: Cột v4_description (Description) tạo thành công trên v4_invoiceline, kiểu Memo, maxLength=2000, đã publish vào solution TEST-MCP.
 24. Trong solution "TEST-MCP", thêm cột "Quantity" vào bảng Invoice Line, kiểu số thập phân, bắt buộc, min 0, max 1000000, precision 2.
+   > ✅ Tools: upsert_column(entity=invoicedetail) → error "entity not found" → get_tables(filter=invoice) → upsert_column(entity=v4_invoiceline, quantity, decimal, solution=TEST-MCP)
+   > Result: Cột v4_quantity (Quantity) tạo thành công trên v4_invoiceline, kiểu Decimal, required, min=0, max=1000000, precision=2, đã publish vào solution TEST-MCP.
 25. Trong solution "TEST-MCP", thêm cột "Unit Price" vào bảng Invoice Line, kiểu tiền tệ, bắt buộc, precision 2.
+   > ✅ Tools: get_tables(filter=invoice line) → upsert_column(v4_invoiceline, unitprice, money, required, precision=2, solution=TEST-MCP)
+   > Result: Cột v4_unitprice (Unit Price) tạo thành công trên v4_invoiceline, kiểu Money, required, precision=2, precisionSource=0, đã publish vào solution TEST-MCP.
 26. Trong solution "TEST-MCP", thêm cột "Discount Percent" vào bảng Invoice Line, kiểu số thập phân, min 0, max 100, precision 2.
 27. Trong solution "TEST-MCP", thêm cột "Line Total" vào bảng Invoice Line, kiểu tiền tệ, precision 2.
 28. Trong solution "TEST-MCP", thêm cột "Line Status" vào bảng Invoice Line, kiểu picklist và dùng global choice v4_invoicestatus.
