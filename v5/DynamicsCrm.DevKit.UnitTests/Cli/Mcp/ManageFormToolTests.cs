@@ -1,6 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
@@ -23,6 +26,26 @@ public class ManageFormToolTests
 
     private static readonly FieldInfo ValidFormTypesField = ToolType
         .GetField("ValidFormTypes", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private const string SubgridFormXml = """
+<form>
+  <tabs>
+    <tab name="tab_lines">
+      <labels><label description="Lines" languagecode="1033" /></labels>
+      <columns>
+        <column width="100%">
+          <sections>
+            <section name="lines_sec_invoice_lines">
+              <labels><label description="Invoice Lines" languagecode="1033" /></labels>
+              <rows />
+            </section>
+          </sections>
+        </column>
+      </columns>
+    </tab>
+  </tabs>
+</form>
+""";
 
     // ──────────────────────────────────────────────
     // MapFormType
@@ -160,5 +183,117 @@ public class ManageFormToolTests
         var method = ToolType.GetMethod("FormatFormDetail", BindingFlags.NonPublic | BindingFlags.Static);
         Assert.IsNotNull(method, "FormatFormDetail static helper must exist (refactored from GetFormDetail)");
         Assert.AreEqual(typeof(string), method.ReturnType, "FormatFormDetail should return string (formatting only, no error handling)");
+    }
+
+    // ──────────────────────────────────────────────
+    // manage_subgrid operations
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void FormXmlOperationsRunner_ManageSubgridAdd_AddsSubgridControl()
+    {
+        var result = RunFormXmlOperations(SubgridFormXml, """
+[
+  {
+    "action": "manage_subgrid",
+    "manage_action": "add",
+    "tab": "tab_lines",
+    "section": "lines_sec_invoice_lines",
+    "label": "Invoice Lines",
+    "control_id": "v4_invoice_invoiceline",
+    "relationship_name": "v4_invoice_invoiceline",
+    "target_entity": "v4_invoiceline",
+    "view_id": "{15b9a1e7-9c8c-475d-a775-2318d7a5e275}",
+    "rows_per_page": 10,
+    "rowspan": 10
+  }
+]
+""");
+
+        StringAssert.Contains(result, "control id=\"v4_invoice_invoiceline\"");
+        StringAssert.Contains(result, "classid=\"{E7A81278-8635-4D9E-8D4D-59480B391C5B}\"");
+        StringAssert.Contains(result, "<TargetEntityType>v4_invoiceline</TargetEntityType>");
+        StringAssert.Contains(result, "<RelationshipName>v4_invoice_invoiceline</RelationshipName>");
+        StringAssert.Contains(result, "<ViewId>{15b9a1e7-9c8c-475d-a775-2318d7a5e275}</ViewId>");
+    }
+
+    [TestMethod]
+    public void FormXmlOperationsRunner_ManageSubgridUpdate_UpdatesParameters()
+    {
+        var formXml = RunFormXmlOperations(SubgridFormXml, """
+[
+  {
+    "action": "manage_subgrid",
+    "manage_action": "add",
+    "tab": "tab_lines",
+    "section": "lines_sec_invoice_lines",
+    "label": "Invoice Lines",
+    "control_id": "v4_invoice_invoiceline",
+    "relationship_name": "v4_invoice_invoiceline",
+    "target_entity": "v4_invoiceline",
+    "view_id": "{15b9a1e7-9c8c-475d-a775-2318d7a5e275}"
+  },
+  {
+    "action": "manage_subgrid",
+    "manage_action": "update",
+    "control_id": "v4_invoice_invoiceline",
+    "rows_per_page": 25,
+    "enable_quick_find": true
+  }
+]
+""");
+
+        StringAssert.Contains(formXml, "<RecordsPerPage>25</RecordsPerPage>");
+        StringAssert.Contains(formXml, "<EnableQuickFind>true</EnableQuickFind>");
+    }
+
+    [TestMethod]
+    public void FormXmlOperationsRunner_ManageSubgridRemove_RemovesSubgridCell()
+    {
+        var formXml = RunFormXmlOperations(SubgridFormXml, """
+[
+  {
+    "action": "manage_subgrid",
+    "manage_action": "add",
+    "tab": "tab_lines",
+    "section": "lines_sec_invoice_lines",
+    "label": "Invoice Lines",
+    "control_id": "v4_invoice_invoiceline",
+    "relationship_name": "v4_invoice_invoiceline",
+    "target_entity": "v4_invoiceline",
+    "view_id": "{15b9a1e7-9c8c-475d-a775-2318d7a5e275}"
+  },
+  {
+    "action": "manage_subgrid",
+    "manage_action": "remove",
+    "control_id": "v4_invoice_invoiceline"
+  }
+]
+""");
+
+        Assert.IsFalse(formXml.Contains("control id=\"v4_invoice_invoiceline\"", StringComparison.Ordinal));
+        Assert.IsFalse(formXml.Contains("RelationshipName", StringComparison.Ordinal));
+    }
+
+    private static string RunFormXmlOperations(string formXml, string operationsJson)
+    {
+        var runnerType = ToolType.Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperationsRunner")!;
+        var ctor = runnerType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null, new[] { typeof(ServiceClient) }, null)!;
+        var runner = ctor.Invoke(new object[] { null! });
+        var run = runnerType.GetMethod("Run", BindingFlags.Instance | BindingFlags.Public)!;
+        var ops = ParseOperations(operationsJson);
+        var result = run.Invoke(runner, new object[] { formXml, "v4_invoice", ops })!;
+
+        return (string)result.GetType().GetField("Item1")!.GetValue(result)!;
+    }
+
+    private static List<JsonElement> ParseOperations(string operationsJson)
+    {
+        using var doc = JsonDocument.Parse(operationsJson);
+        var ops = new List<JsonElement>();
+        foreach (var op in doc.RootElement.EnumerateArray())
+            ops.Add(op.Clone());
+        return ops;
     }
 }

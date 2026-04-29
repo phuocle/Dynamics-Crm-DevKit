@@ -29,19 +29,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             // 1. Collect field names referenced by ops + load metadata + validate
             var referencedFields = FormFieldMetadata.CollectFieldNames(ops);
 
-            var fieldMeta = new FormFieldMetadata(_serviceClient);
-            Dictionary<string, AttributeMetadata> attrMap;
-            try
+            var attrMap = new Dictionary<string, AttributeMetadata>(StringComparer.OrdinalIgnoreCase);
+            if (referencedFields.Count > 0)
             {
-                attrMap = fieldMeta.LoadEntityAttributeMap(entityName);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(
-                    $"Failed to retrieve metadata for entity '{entityName}': {ex.Message}", ex);
-            }
+                var fieldMeta = new FormFieldMetadata(_serviceClient);
+                try
+                {
+                    attrMap = fieldMeta.LoadEntityAttributeMap(entityName);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(
+                        $"Failed to retrieve metadata for entity '{entityName}': {ex.Message}", ex);
+                }
 
-            FormFieldMetadata.ValidateFieldsExist(entityName, referencedFields, attrMap);
+                FormFieldMetadata.ValidateFieldsExist(entityName, referencedFields, attrMap);
+            }
 
             // 2. Parse FormXML
             XDocument formDoc;
@@ -58,6 +61,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var builder  = new FormXmlBuilder(_serviceClient);
             var tabSec   = new FormTabSectionOperations(_serviceClient, builder);
             var fieldEvt = new FormFieldEventOperations(_serviceClient, builder);
+            var subgridOps = new FormSubgridOperations(_serviceClient);
             var classIdMap  = new Dictionary<string, string>();
             var opSummaries = new List<string>();
 
@@ -67,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 if (!op.TryGetProperty("action", out var actionProp))
                     throw new InvalidOperationException(
                         "Each operation must have an 'action' field.\n" +
-                        "Valid actions: manage_tab, manage_section, manage_fields, manage_library, manage_event.\n" +
+                        "Valid actions: manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event.\n" +
                         "Read docs://instructions_for_formxml for operation format and examples.");
 
                 var action       = actionProp.GetString()?.ToLowerInvariant();
@@ -110,6 +114,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                                 $"Unknown manage_action '{manageAction}' for manage_fields. Valid: add, remove, update, add_header, remove_header, update_header")
                         });
                         break;
+                    case "manage_subgrid":
+                        opSummaries.Add(manageAction switch
+                        {
+                            "add"    => subgridOps.ExecuteAddSubgrid(formDoc, op),
+                            "update" => FormSubgridOperations.ExecuteUpdateSubgrid(formDoc, op),
+                            "remove" => FormSubgridOperations.ExecuteRemoveSubgrid(formDoc, op),
+                            _ => throw new InvalidOperationException(
+                                $"Unknown manage_action '{manageAction}' for manage_subgrid. Valid: add, update, remove")
+                        });
+                        break;
                     case "manage_library":
                         opSummaries.Add(manageAction switch
                         {
@@ -131,7 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     default:
                         throw new InvalidOperationException(
                             $"Unknown action '{action}'.\n" +
-                            $"Valid: manage_tab | manage_section | manage_fields | manage_library | manage_event (each requires 'manage_action').\n" +
+                            $"Valid: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event (each requires 'manage_action').\n" +
                             $"Read docs://instructions_for_formxml for operation format and examples.");
                 }
             }

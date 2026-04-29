@@ -4,6 +4,12 @@
 **Target component:** `DynamicsCrm.DevKit.Cli`  
 **Build workflow:** `/claude-build-cli`
 
+**Confirmed gap:** yes. Current `FormXmlOperationsRunner` only dispatches
+`manage_tab | manage_section | manage_fields | manage_library | manage_event`.
+There is no operation that creates a Dataverse subgrid control. During the Invoice
+form prompt run, the agent had to replace raw FormXML to add the Invoice Lines
+subgrid, which is the risky workaround this plan is meant to remove.
+
 ---
 
 ## Context
@@ -68,8 +74,8 @@ The existing subgrid control in `tab_lines` looks like this:
 |---|---|---|---|---|
 | `action` | string | yes | — | `"manage_subgrid"` |
 | `manage_action` | string | yes | — | `"add"` |
-| `tab_name` | string | yes | — | Tab name or label (same fuzzy match as `manage_fields`) |
-| `section_name` | string | yes | — | Section name or label |
+| `tab` | string | yes | — | Tab name or label, resolved with existing `FormXmlHelpers.FindTab()` |
+| `section` | string | yes | — | Section name or label, resolved with existing `FormXmlHelpers.FindSection()` |
 | `label` | string | yes | — | Label shown on the cell |
 | `control_id` | string | yes | — | Unique control id, e.g. `"v4_invoice_invoiceline"`. Must be unique in the form. |
 | `relationship_name` | string | yes | — | 1:N or N:N relationship schema name, e.g. `"v4_invoice_invoiceline"` |
@@ -79,15 +85,15 @@ The existing subgrid control in `tab_lines` looks like this:
 | `rowspan` | int | no | `10` | Cell rowspan (visual height) |
 | `enable_view_picker` | bool | no | `false` | EnableViewPicker parameter |
 | `enable_quick_find` | bool | no | `false` | EnableQuickFind parameter |
-| `position` | string | no | `"last"` | `"first"`, `"last"`, `"after:<section_name>"`, `"before:<section_name>"` — within the section's rows |
+| `position` | string | no | `"last"` | `"first"`, `"last"`, `"after:<control_id_or_field>"`, `"before:<control_id_or_field>"` — within the section's rows |
 
 **Example:**
 ```json
 {
   "action": "manage_subgrid",
   "manage_action": "add",
-  "tab_name": "tab_lines",
-  "section_name": "lines_sec_invoice_lines",
+  "tab": "tab_lines",
+  "section": "lines_sec_invoice_lines",
   "label": "Invoice Lines",
   "control_id": "v4_invoice_invoiceline",
   "relationship_name": "v4_invoice_invoiceline",
@@ -153,8 +159,8 @@ The existing subgrid control in `tab_lines` looks like this:
 | File | Change |
 |---|---|
 | `Cli/Mcp/Tools/Form/FormXmlOperationsRunner.cs` | Add `case "manage_subgrid":` in `Run()` switch (lines 76–137) |
-| `Cli/Mcp/Tools/Form/FormFieldMetadata.cs` | `CollectFieldNames()` must skip `manage_subgrid` ops (no `datafieldname`) — currently line 53 loop would find no fields in a subgrid op, which is correct; but verify `ValidateFieldsExist` is not called with subgrid op fields |
-| `Cli/Mcp/Tools/Helper/ControlClassId.cs` | Verify `SUBGRID` classId constant exists; add if missing: `E7A81278-8635-4d9e-8D4D-59480B391C5B` |
+| `Cli/Mcp/Tools/Form/FormFieldMetadata.cs` | No change expected. `CollectFieldNames()` only collects `"fields"` arrays; `manage_subgrid` should not use `"fields"`, so no false field validation should occur. |
+| `DynamicsCrm.DevKit.Shared/Models/ControlClassId.cs` | `SUB_GRID` already exists. Use `ControlClassId.SUB_GRID` instead of introducing a duplicate constant. |
 | `Cli/Mcp/Tools/ManageFormTool.cs` | Update tool description string to mention `manage_subgrid` |
 | `DynamicsCrm.DevKit.Docs/` | Update `instructions_for_formxml` MCP resource if it exists (search for it) |
 
@@ -178,15 +184,12 @@ internal sealed class FormSubgridOperations
         _serviceClient = serviceClient;
     }
 
-    // Subgrid classId — constant, same for all subgrids in Dataverse FormXML
-    private const string SubGridClassId = "{E7A81278-8635-4d9e-8D4D-59480B391C5B}";
-
     public string ExecuteAddSubgrid(XDocument formDoc, JsonElement op)
     {
         // 1. Read params from op
         // 2. Find tab → section → rows element
         // 3. If view_id omitted → call Dataverse to get first active public view of target_entity
-        // 4. Build <cell> + <control classid=SubGridClassId> + <parameters>
+        // 4. Build <cell> + <control classid={ControlClassId.SUB_GRID}> + <parameters>
         // 5. Insert into rows per position param
         // 6. Return summary string
     }
@@ -209,15 +212,20 @@ internal sealed class FormSubgridOperations
 
 ### View auto-resolution (when `view_id` is omitted)
 
-Use `savedquery` entity via FetchXML or Web API:
+Use `savedquery` entity via FetchXML or Web API.
+
+Important: `savedquery.returnedtypecode` can be queried with the target entity
+logical name in the Dataverse Web API (for example `v4_invoiceline`). Do not assume
+it must be the numeric ObjectTypeCode unless the SDK path being used proves otherwise.
+
 ```
-/savedqueries?$filter=returnedtypecode eq '<target_entity_typeCode>' 
+/savedqueries?$filter=returnedtypecode eq '<target_entity_logical_name>' 
               and querytype eq 0 
               and statecode eq 0
 &$select=savedqueryid,name&$top=1
 ```
 
-Or equivalently via `RetrieveMultiple` with FetchXML on `savedquery` where `returnedtypecode = <objecttypecode>` and `querytype = 0` (Public) and `statecode = 0` (Active), order by `isdefault desc` then `name asc`.
+Or equivalently via `RetrieveMultiple` with FetchXML on `savedquery` where `returnedtypecode = <target_entity_logical_name>` and `querytype = 0` (Public) and `statecode = 0` (Active), order by `isdefault desc` then `name asc`.
 
 ---
 
@@ -225,8 +233,9 @@ Or equivalently via `RetrieveMultiple` with FetchXML on `savedquery` where `retu
 
 - `control_id` must be **unique** within the form — check existing control ids before adding (same pattern as `FormXmlHelpers.CollectExistingControlIds`)
 - `relationship_name` is not validated against Dataverse metadata in the initial implementation (keep it simple)
-- `target_entity` is not validated (same reason)
+- `target_entity` should be validated only when `view_id` is omitted, because auto-resolving a view requires querying `savedquery`
 - `view_id` braces: normalize to `{GUID}` format before writing to XML
+- `position` should locate rows by control id first, then by field `datafieldname`; existing `InsertFieldRows()` only handles field names, so subgrid code needs its own row insertion helper or a small generalized helper.
 
 ---
 
@@ -288,7 +297,7 @@ Search for this resource in `Cli/Mcp/Resources/`. If it is a static `.md` file, 
 | 2 | `Form/FormXmlOperationsRunner.cs` | **Edit** | Add `manage_subgrid` case + update error message |
 | 3 | `Form/FormXmlBuilder.cs` | **No change** | Does not need modification |
 | 4 | `Form/FormFieldMetadata.cs` | **No change** | Already skips ops with no `"fields"` array |
-| 5 | `Helper/ControlClassId.cs` | **Verify** | Check `SUBGRID` constant; add if missing |
+| 5 | `DynamicsCrm.DevKit.Shared/Models/ControlClassId.cs` | **No change** | `SUB_GRID` constant already exists |
 | 6 | `ManageFormTool.cs` | **Edit** | Update tool description |
 | 7 | `Resources/instructions_for_formxml` | **Edit** | Add `manage_subgrid` docs |
 | 8 | Unit tests | **Edit** | Add 3 test cases |

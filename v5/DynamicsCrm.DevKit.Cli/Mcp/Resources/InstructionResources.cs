@@ -90,6 +90,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - Money: {533B9E00-756B-4312-95A0-DC888637AC78}
 - SubGrid: {E7A81278-8635-4d9e-8D4D-59480B391C5B}
 
+## manage_subgrid Operation
+Use `manage_subgrid` instead of raw FormXML when adding, updating, or removing a subgrid.
+
+### Add Subgrid
+```json
+{
+  ""action"": ""manage_subgrid"",
+  ""manage_action"": ""add"",
+  ""tab"": ""tab_lines"",
+  ""section"": ""lines_sec_invoice_lines"",
+  ""label"": ""Invoice Lines"",
+  ""control_id"": ""v4_invoice_invoiceline"",
+  ""relationship_name"": ""v4_invoice_invoiceline"",
+  ""target_entity"": ""v4_invoiceline"",
+  ""view_id"": ""{15b9a1e7-9c8c-475d-a775-2318d7a5e275}"",
+  ""rows_per_page"": 10,
+  ""rowspan"": 10
+}
+```
+
+Required: `tab`, `section`, `label`, `control_id`, `relationship_name`, `target_entity`.
+Optional: `view_id` (auto-resolves the default active public view), `rows_per_page`, `rowspan`,
+`enable_view_picker`, `enable_quick_find`, `position`.
+
+### Update Subgrid
+```json
+{
+  ""action"": ""manage_subgrid"",
+  ""manage_action"": ""update"",
+  ""control_id"": ""v4_invoice_invoiceline"",
+  ""rows_per_page"": 25,
+  ""enable_quick_find"": true
+}
+```
+
+### Remove Subgrid
+```json
+{
+  ""action"": ""manage_subgrid"",
+  ""manage_action"": ""remove"",
+  ""control_id"": ""v4_invoice_invoiceline""
+}
+```
+
 ## After Making Changes
 - Use the dedicated manage_form tool to apply changes
 - manage_form auto-handles: backup > validate > update > publish
