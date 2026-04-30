@@ -13,6 +13,7 @@ using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -68,12 +69,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Web resources Dataverse — list/detail/create/update/delete. Required:\n" +
             "- list: optional name, type_filter, solution_name, max_records\n" +
             "- detail: web_resource_id\n" +
-            "- create: name + content (base64) + type. Optional: display_name, description, solution_name\n" +
+            "- create: name + content (base64) + type + solution_name (REQUIRED). Optional: display_name, description\n" +
             "- update: web_resource_id. Optional: content, display_name, description\n" +
             "- delete: web_resource_id (irreversible)\n\n" +
 
             "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.\n" +
             "Naming convention: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
+
+            "PREFIX VALIDATION on CREATE: solution_name is required and used to resolve the publisher prefix. " +
+            "The prefix in name must match the solution's publisher prefix (case-insensitive). " +
+            "If they differ, the tool returns [PrefixMismatch] and stops — re-call with the correct prefix.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Find library_name for build_form_xml add_event/add_library (run list first)\n" +
@@ -96,7 +101,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string content = "",
             [Description("Required: create. See description for values. Ignored on other actions."
             )] string type = "",
-            [Description("list: filter. create: add to solution."
+            [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution."
             )] string solution_name = "",
             [Description("list only. See type values."
             )] string type_filter = "",
@@ -316,11 +321,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(type))
                 return ErrorResult("Error: type is required for 'create'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult("Error: solution_name is required for 'create'.\n" +
+                                   "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
+
             var typeTrimmed = type.Trim().ToLowerInvariant();
             if (!TypeFilterMap.TryGetValue(typeTrimmed, out var typeCode))
                 return ErrorResult($"Error: Invalid type '{type}'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
+            // Resolve publisher prefix from solution
+            var (resolvedPrefix, resolvedSolutionUniqueName, solError) =
+                DataverseSolutionResolver.ResolveSolution(_serviceClient, solutionName.Trim());
+            if (solError != null)
+                return ErrorResult($"[Error] {solError}\nTip: Use get_solution_components to find valid solution names.");
+
             name = name.Trim();
+
+            // Validate prefix in name matches the solution's publisher prefix
+            var underscoreIndex = name.IndexOf('_');
+            if (underscoreIndex < 1)
+                return ErrorResult(
+                    $"Error: name '{name}' has no prefix.\n" +
+                    $"Rename it to '{resolvedPrefix}_{name}' to match solution '{resolvedSolutionUniqueName}' (publisher prefix: {resolvedPrefix}).");
+
+            var prefixInName = name.Substring(0, underscoreIndex).ToLowerInvariant();
+            if (!string.Equals(prefixInName, resolvedPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                var suggestedName = $"{resolvedPrefix}_{name.Substring(underscoreIndex + 1)}";
+                var mismatchSb = new StringBuilder(256);
+                mismatchSb.AppendLine("[PrefixMismatch]");
+                mismatchSb.AppendLine($"NameProvided: {name}");
+                mismatchSb.AppendLine($"PrefixInName: {prefixInName}");
+                mismatchSb.AppendLine($"PrefixFromSolution: {resolvedPrefix} (solution: {resolvedSolutionUniqueName})");
+                mismatchSb.AppendLine();
+                mismatchSb.AppendLine($"→ Re-call with name=\"{suggestedName}\" to use the correct solution prefix.");
+                mismatchSb.AppendLine($"→ Or confirm your intended prefix is correct and check the solution_name.");
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = mismatchSb.ToString() }],
+                    IsError = true
+                };
+            }
 
             // Check if already exists
             var existing = RetrieveByName(name);
@@ -343,27 +384,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 webResource["description"] = description.Trim();
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE web resource '{name}' (type: {typeTrimmed}).");
+                return DryRunResult($"Would CREATE web resource '{name}' (type: {typeTrimmed}) in solution '{resolvedSolutionUniqueName}'.");
 
             var webResourceId = _serviceClient.Create(webResource);
 
             string solWarning = null;
-            if (!string.IsNullOrWhiteSpace(solutionName))
+            try
             {
-                try
+                _serviceClient.Execute(new AddSolutionComponentRequest
                 {
-                    _serviceClient.Execute(new AddSolutionComponentRequest
-                    {
-                        AddRequiredComponents = true,
-                        ComponentType = 61,
-                        ComponentId = webResourceId,
-                        SolutionUniqueName = solutionName.Trim()
-                    });
-                }
-                catch (Exception ex)
-                {
-                    solWarning = $"Failed to add to solution '{solutionName}': {ex.Message}";
-                }
+                    AddRequiredComponents = true,
+                    ComponentType = 61,
+                    ComponentId = webResourceId,
+                    SolutionUniqueName = resolvedSolutionUniqueName
+                });
+            }
+            catch (Exception ex)
+            {
+                solWarning = $"Failed to add to solution '{resolvedSolutionUniqueName}': {ex.Message}";
             }
 
             var published = autoPublish && PublishWebResource(webResourceId);
@@ -374,6 +412,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"[WebResource] Created: {name}");
             sb.AppendLine($"webResourceId: {webResourceId}");
             sb.AppendLine($"type: {typeLabel}");
+            sb.AppendLine($"solution: {resolvedSolutionUniqueName}");
             if (!string.IsNullOrWhiteSpace(displayName))
                 sb.AppendLine($"displayName: {displayName.Trim()}");
             if (!string.IsNullOrEmpty(solWarning))
@@ -397,7 +436,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Description = NullIfEmpty(description)
                     }
                 ],
-                SolutionName = NullIfEmpty(solutionName),
+                SolutionName = resolvedSolutionUniqueName,
                 Published = published
             };
 

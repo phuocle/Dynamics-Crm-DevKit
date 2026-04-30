@@ -216,8 +216,12 @@ Solution target: display name **TEST-MCP**
 ## L. Web Resource
 
 48. Kiểm tra các JavaScript web resource có tên chứa "testmcp" hoặc "invoice" để tránh tạo trùng.
-49. Trong solution "TEST-MCP", tạo JavaScript web resource tên devkit_/testmcp/invoice.form.js; file có namespace TestMcp.Invoice, hàm syncLineStatus(primaryControl) đọc Invoice Status từ bản ghi Invoice cha rồi cập nhật Line Status của tất cả Invoice Line con tương ứng, và hàm canSyncLineStatus(primaryControl) trả về true chỉ khi form đã được lưu (record đã có id).
-50. Đọc lại web resource devkit_/testmcp/invoice.form.js và xác nhận đủ namespace, hàm đồng bộ và hàm enable.
+   > ✅ Tools: manage_webresource(list, name=testmcp, type=js) → manage_webresource(list, name=invoice, type=js)
+   > Result: Tìm thấy 4 JavaScript web resources chứa testmcp (button.js, flyout.js, ieff.js, split.js) và không có JavaScript web resource nào chứa invoice.
+49. Tạo file ở local D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestMcp\js\invoice.form.js. Trong solution "TEST-MCP", tạo JavaScript web resource tên v4_/testmcp/invoice.form.js; file có namespace TestMcp.Invoice, hàm syncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) đọc Invoice Status từ bản ghi Invoice cha rồi cập nhật Line Status của tất cả Invoice Line con tương ứng, và hàm canSyncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) trả về true chỉ khi form đã được lưu (record đã có id).
+   > ✅ Tools: manage_webresource(list, name=v4_/testmcp/invoice.form.js) → get_tables(v4_invoice) → get_tables(v4_invoiceline) → manage_webresource(create, v4_/testmcp/invoice.form.js, solution=TEST-MCP) → execute_webapi(GET webresourceset)
+   > Result: Đã tạo file local invoice.form.js và tạo/publish JavaScript web resource `v4_/testmcp/invoice.form.js` với namespace `TestMcp.Invoice`, hàm `syncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds)` và `canSyncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds)`.
+50. Đọc lại web resource v4_/testmcp/invoice.form.js và xác nhận đủ namespace, hàm đồng bộ và hàm enable.
 
 ---
 
