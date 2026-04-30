@@ -2,11 +2,14 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using ModelContextProtocol.Server;
+using ModelContextProtocol.Protocol;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -22,7 +25,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "execute_fetchxml", Title = "Run a FetchXML query",
-            Idempotent = true, Destructive = false, ReadOnly = true),
+            Idempotent = true, Destructive = false, ReadOnly = true,
+            UseStructuredContent = true, OutputSchemaType = typeof(FetchXmlResult)),
         Description(
             "Run FetchXML query → markdown table. Max 5000 records, auto-paging supported. Lowercase logical names (use get_tables to verify). Don't use top/count/page in <fetch>; use max_records. See schema://fetchxml for syntax.\n\n" +
 
@@ -30,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Precise filtering / joins / aggregation across entities\n" +
             "- When search_records (Relevance Search) is too coarse or not enabled\n" +
             "- get_all=true to fetch full datasets up to max_records")]
-        public string execute_fetchxml(
+        public CallToolResult execute_fetchxml(
             [Description("FetchXML starting with <fetch>. Lowercase logical names."
             )] string fetchxml,
             [Description(
@@ -41,38 +45,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool get_all = false)
         {
             if (string.IsNullOrWhiteSpace(fetchxml))
-                return "Error: fetchxml is required.\n" +
-                       "Read schema://fetchxml for FetchXML query structure and examples.";
+                return ErrorResult("Error: fetchxml is required.\n" +
+                       "Read schema://fetchxml for FetchXML query structure and examples.");
 
             if (max_records <= 0)
-                return "Error: max_records must be a positive integer (1-5000).";
+                return ErrorResult("Error: max_records must be a positive integer (1-5000).");
             if (max_records > DataversePageLimit)
                 max_records = DataversePageLimit;
 
             try
             {
-                return get_all
+                var structured = get_all
                     ? ExecuteAllPages(fetchxml, max_records)
                     : ExecuteSinglePage(fetchxml, max_records);
+                structured.GetAll = get_all;
+                structured.MaxRecords = max_records;
+                return StructuredResult(structured);
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to execute FetchXML: {ex.Message}\n" +
+                return ErrorResult($"Error: Failed to execute FetchXML: {ex.Message}\n" +
                        "Hint: Use get_tables to verify logical names and available columns.\n" +
-                       "Read schema://fetchxml for valid FetchXML syntax.";
+                       "Read schema://fetchxml for valid FetchXML syntax.");
             }
         }
 
-        private string ExecuteSinglePage(string fetchxml, int maxRecords)
+        private FetchXmlResult ExecuteSinglePage(string fetchxml, int maxRecords)
         {
             var effectiveFetchXml = FetchXmlPagingHelper.ApplyPaging(fetchxml, 1, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(effectiveFetchXml));
             var records = ConvertEntities(result.Entities.Take(maxRecords));
 
-            return CompactFormatter.FormatFetchXmlResults(records, records.Count, result.MoreRecords);
+            return new FetchXmlResult
+            {
+                Records = records,
+                TotalReturned = records.Count,
+                HasMore = result.MoreRecords,
+                SingleEntity = GetSingleEntity(records)
+            };
         }
 
-        private string ExecuteAllPages(string fetchxml, int maxRecords)
+        private FetchXmlResult ExecuteAllPages(string fetchxml, int maxRecords)
         {
             var allRecords = new List<Dictionary<string, string>>();
             var page = 1;
@@ -96,7 +109,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 page++;
             }
 
-            return CompactFormatter.FormatFetchXmlResults(allRecords, allRecords.Count, hasMore);
+            return new FetchXmlResult
+            {
+                Records = allRecords,
+                TotalReturned = allRecords.Count,
+                HasMore = hasMore,
+                SingleEntity = GetSingleEntity(allRecords)
+            };
         }
 
         private static List<Dictionary<string, string>> ConvertEntities(IEnumerable<Entity> entities)
@@ -117,5 +136,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 })
                 .ToList();
         }
+
+        private static string GetSingleEntity(List<Dictionary<string, string>> records)
+        {
+            var entities = records
+                .Select(r => r.TryGetValue("_entity", out var entity) ? entity : null)
+                .Where(entity => entity != null)
+                .Distinct()
+                .ToList();
+            return entities.Count == 1 ? entities[0] : null;
+        }
+
+        private static CallToolResult StructuredResult(FetchXmlResult structured) => new()
+        {
+            Content = [new TextContentBlock
+            {
+                Text = CompactFormatter.FormatFetchXmlResults(structured.Records, structured.TotalReturned, structured.HasMore)
+            }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured)
+        };
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
     }
 }

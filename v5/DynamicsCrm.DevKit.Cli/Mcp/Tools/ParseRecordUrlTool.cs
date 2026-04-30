@@ -1,13 +1,16 @@
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -22,7 +25,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "parse_record_url", Title = "Parse a Dynamics 365 URL to entity and record ID",
-            Idempotent = true, Destructive = false, ReadOnly = true),
+            Idempotent = true, Destructive = false, ReadOnly = true,
+            UseStructuredContent = true, OutputSchemaType = typeof(ParsedRecordUrlResult)),
         Description(
             "Extract entity logical name + record ID from a D365/Power Platform URL/GUID. Supports main.aspx (etn/etc), Web API, maker portal, rundialog, workflow/report/solution editor URLs, raw GUIDs. Returns EntityName, RecordId, Source, EnvironmentId (maker only). Auto-resolves etc → entitySetName via Dataverse.\n\n" +
 
@@ -30,14 +34,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- User pastes a record URL — extract entity + GUID before calling other tools\n" +
             "- Convert raw GUID to typed reference when context is unknown\n" +
             "- If EntityName='(unknown)', ask user for entity name or fuller URL")]
-        public string parse_record_url(
+        public CallToolResult parse_record_url(
             [Description(
                 "URL, GUID, or text (record URL, Web API URL, maker portal URL, raw GUID)."
             )] string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                return "Error: input is required.\n" +
-                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.";
+                return ErrorResult("Error: input is required.\n" +
+                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
 
             var decoded = Uri.UnescapeDataString(input.Trim());
 
@@ -49,15 +53,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                       ?? TryParseRawGuid(decoded);
 
             if (result == null)
-                return "[ParsedUrl] Error: No GUID found in input.\n" +
-                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.";
+                return ErrorResult("[ParsedUrl] Error: No GUID found in input.\n" +
+                       "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
 
-            return result;
+            return StructuredResult(result);
         }
 
         // ── Priority 1: Model-Driven App URLs (main.aspx) ─────────────────────────
 
-        private string TryParseMainAspx(string input)
+        private ParsedRecordUrlResult TryParseMainAspx(string input)
         {
             if (input.IndexOf("main.aspx", StringComparison.OrdinalIgnoreCase) < 0)
                 return null;
@@ -106,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             @"api/data/v[\d.]+/(\w+)\(([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\)",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private string TryParseWebApi(string input)
+        private ParsedRecordUrlResult TryParseWebApi(string input)
         {
             var match = WebApiRegex.Match(input);
             if (!match.Success) return null;
@@ -140,7 +144,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             @"admin\.powerplatform\.microsoft\.com/environments/([0-9a-fA-F-]+)",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static string TryParseMakerPortal(string input)
+        private static ParsedRecordUrlResult TryParseMakerPortal(string input)
         {
             // Flow run (most specific first)
             var match = MakerFlowRunRegex.Match(input);
@@ -150,7 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var flowId = match.Groups[2].Value.ToLowerInvariant();
                 var runId = match.Groups[3].Value.ToLowerInvariant();
                 return FormatMakerResult("flowsession", runId, envId,
-                    $"make.powerautomate.com (flow run)\nFlowId: {flowId}");
+                    "make.powerautomate.com (flow run)", flowId);
             }
 
             // Flow
@@ -187,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Priority 4: Legacy / Specialized URLs ─────────────────────────────────
 
-        private static string TryParseLegacyUrls(string input)
+        private static ParsedRecordUrlResult TryParseLegacyUrls(string input)
         {
             // Dialog: rundialog.aspx?DialogId={guid}&EntityName={entity}&ObjectId={guid}
             if (input.IndexOf("rundialog.aspx", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -248,20 +252,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             @"\{?([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\}?",
             RegexOptions.Compiled);
 
-        private static string TryParseRawGuid(string input)
+        private static ParsedRecordUrlResult TryParseRawGuid(string input)
         {
             var match = GuidRegex.Match(input);
             if (!match.Success) return null;
 
             var guid = match.Groups[1].Value.ToLowerInvariant();
 
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[ParsedUrl]");
-            sb.AppendLine("EntityName: (unknown)");
-            sb.AppendLine($"RecordId: {guid}");
-            sb.AppendLine("Source: raw GUID");
-            sb.Append("Tip: Provide entity name or use a Dynamics 365 URL for automatic detection");
-            return sb.ToString();
+            return new ParsedRecordUrlResult
+            {
+                EntityName = "(unknown)",
+                RecordId = guid,
+                Source = "raw GUID",
+                Tip = "Provide entity name or use a Dynamics 365 URL for automatic detection"
+            };
         }
 
         // ── Dataverse resolution helpers ──────────────────────────────────────────
@@ -308,24 +312,59 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Formatting helpers ────────────────────────────────────────────────────
 
-        private static string FormatResult(string entityName, string recordId, string source)
+        private static ParsedRecordUrlResult FormatResult(string entityName, string recordId, string source)
         {
-            var sb = new StringBuilder(256);
-            sb.AppendLine("[ParsedUrl]");
-            sb.AppendLine($"EntityName: {entityName}");
-            sb.AppendLine($"RecordId: {recordId}");
-            sb.Append($"Source: {source}");
-            return sb.ToString();
+            return new ParsedRecordUrlResult
+            {
+                EntityName = entityName,
+                RecordId = recordId,
+                Source = source
+            };
         }
 
-        private static string FormatMakerResult(string entityName, string recordId, string environmentId, string source)
+        private static ParsedRecordUrlResult FormatMakerResult(string entityName, string recordId, string environmentId, string source, string flowId = null)
+        {
+            return new ParsedRecordUrlResult
+            {
+                EntityName = entityName,
+                RecordId = recordId,
+                EnvironmentId = environmentId,
+                Source = source,
+                FlowId = flowId
+            };
+        }
+
+        private static CallToolResult StructuredResult(ParsedRecordUrlResult result) => new()
+        {
+            Content = [new TextContentBlock { Text = FormatText(result) }],
+            StructuredContent = JsonSerializer.SerializeToElement(result)
+        };
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
+
+        private static string FormatText(ParsedRecordUrlResult result)
         {
             var sb = new StringBuilder(256);
             sb.AppendLine("[ParsedUrl]");
-            sb.AppendLine($"EntityName: {entityName}");
-            sb.AppendLine($"RecordId: {recordId}");
-            sb.AppendLine($"EnvironmentId: {environmentId}");
-            sb.Append($"Source: {source}");
+            sb.AppendLine($"EntityName: {result.EntityName}");
+            sb.AppendLine($"RecordId: {result.RecordId}");
+            if (!string.IsNullOrWhiteSpace(result.EnvironmentId))
+                sb.AppendLine($"EnvironmentId: {result.EnvironmentId}");
+            sb.Append($"Source: {result.Source}");
+            if (!string.IsNullOrWhiteSpace(result.FlowId))
+            {
+                sb.AppendLine();
+                sb.Append($"FlowId: {result.FlowId}");
+            }
+            if (!string.IsNullOrWhiteSpace(result.Tip))
+            {
+                sb.AppendLine();
+                sb.Append($"Tip: {result.Tip}");
+            }
             return sb.ToString();
         }
 

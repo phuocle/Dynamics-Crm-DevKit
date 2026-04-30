@@ -2016,6 +2016,544 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
     // ── generate_demo_data models ─────────────────────────────────────
 
+    internal sealed class ParsedRecordUrlResult
+    {
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("recordId")]
+        public string RecordId { get; set; }
+
+        [JsonPropertyName("source")]
+        public string Source { get; set; }
+
+        [JsonPropertyName("environmentId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EnvironmentId { get; set; }
+
+        [JsonPropertyName("flowId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FlowId { get; set; }
+
+        [JsonPropertyName("tip")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Tip { get; set; }
+    }
+
+    internal sealed class FetchXmlResult
+    {
+        [JsonPropertyName("totalReturned")]
+        public int TotalReturned { get; set; }
+
+        [JsonPropertyName("hasMore")]
+        public bool HasMore { get; set; }
+
+        [JsonPropertyName("getAll")]
+        public bool GetAll { get; set; }
+
+        [JsonPropertyName("maxRecords")]
+        public int MaxRecords { get; set; }
+
+        [JsonPropertyName("singleEntity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SingleEntity { get; set; }
+
+        [JsonPropertyName("records")]
+        public List<Dictionary<string, string>> Records { get; set; } = [];
+    }
+
+    internal sealed class SearchRecordsResult
+    {
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [JsonPropertyName("searchTerm")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SearchTerm { get; set; }
+
+        [JsonPropertyName("returnedCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ReturnedCount { get; set; }
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public long? TotalCount { get; set; }
+
+        [JsonPropertyName("records")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SearchRecordEntry> Records { get; set; }
+
+        [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public SearchStatusEntry Status { get; set; }
+
+        [JsonPropertyName("statistics")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public SearchStatisticsEntry Statistics { get; set; }
+
+        [JsonPropertyName("rawResponse")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RawResponse { get; set; }
+
+        [JsonPropertyName("errorCode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ErrorCode { get; set; }
+
+        [JsonPropertyName("errorMessage")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ErrorMessage { get; set; }
+    }
+
+    internal sealed class SearchRecordEntry
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("objectTypeCode")]
+        public int ObjectTypeCode { get; set; }
+
+        [JsonPropertyName("score")]
+        public double Score { get; set; }
+
+        [JsonPropertyName("attributes")]
+        public Dictionary<string, object> Attributes { get; set; } = [];
+
+        [JsonPropertyName("highlights")]
+        public Dictionary<string, string[]> Highlights { get; set; } = [];
+    }
+
+    internal sealed class SearchStatusEntry
+    {
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("lockboxStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LockboxStatus { get; set; }
+
+        [JsonPropertyName("cmkStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CmkStatus { get; set; }
+
+        [JsonPropertyName("entityStatusResults")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SearchEntityStatusEntry> EntityStatusResults { get; set; }
+
+        [JsonPropertyName("manyToManyRelationshipSyncStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SearchManyToManyRelationshipEntry> ManyToManyRelationshipSyncStatus { get; set; }
+    }
+
+    internal sealed class SearchEntityStatusEntry
+    {
+        [JsonPropertyName("entityLogicalName")]
+        public string EntityLogicalName { get; set; }
+
+        [JsonPropertyName("objectTypeCode")]
+        public int ObjectTypeCode { get; set; }
+
+        [JsonPropertyName("primaryNameField")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PrimaryNameField { get; set; }
+
+        [JsonPropertyName("entityStatus")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityStatus { get; set; }
+
+        [JsonPropertyName("indexedFields")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> IndexedFields { get; set; }
+    }
+
+    internal sealed class SearchManyToManyRelationshipEntry
+    {
+        [JsonPropertyName("relationshipName")]
+        public string RelationshipName { get; set; }
+
+        [JsonPropertyName("searchEntity")]
+        public string SearchEntity { get; set; }
+
+        [JsonPropertyName("relatedEntity")]
+        public string RelatedEntity { get; set; }
+
+        [JsonPropertyName("intersectEntity")]
+        public string IntersectEntity { get; set; }
+    }
+
+    internal sealed class SearchStatisticsEntry
+    {
+        [JsonPropertyName("storageSizeInBytes")]
+        public long StorageSizeInBytes { get; set; }
+
+        [JsonPropertyName("storageSizeInMb")]
+        public long StorageSizeInMb { get; set; }
+
+        [JsonPropertyName("documentCount")]
+        public long DocumentCount { get; set; }
+    }
+
+    internal sealed class GetTablesResult
+    {
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        [JsonPropertyName("entityName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("filter")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Filter { get; set; }
+
+        [JsonPropertyName("tables")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<TableSummaryEntry> Tables { get; set; }
+
+        [JsonPropertyName("table")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public TableDetailEntry Table { get; set; }
+    }
+
+    internal sealed class TableSummaryEntry
+    {
+        [JsonPropertyName("logicalName")]
+        public string LogicalName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("ownershipType")]
+        public string OwnershipType { get; set; }
+
+        [JsonPropertyName("isCustom")]
+        public bool IsCustom { get; set; }
+
+        [JsonPropertyName("isActivity")]
+        public bool IsActivity { get; set; }
+
+        [JsonPropertyName("isAuditEnabled")]
+        public bool IsAuditEnabled { get; set; }
+    }
+
+    internal sealed class TableDetailEntry
+    {
+        [JsonPropertyName("logicalName")]
+        public string LogicalName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("ownershipType")]
+        public string OwnershipType { get; set; }
+
+        [JsonPropertyName("isCustom")]
+        public bool IsCustom { get; set; }
+
+        [JsonPropertyName("isActivity")]
+        public bool IsActivity { get; set; }
+
+        [JsonPropertyName("isAuditEnabled")]
+        public bool IsAuditEnabled { get; set; }
+
+        [JsonPropertyName("primaryIdAttribute")]
+        public string PrimaryIdAttribute { get; set; }
+
+        [JsonPropertyName("primaryNameAttribute")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PrimaryNameAttribute { get; set; }
+
+        [JsonPropertyName("entitySetName")]
+        public string EntitySetName { get; set; }
+
+        [JsonPropertyName("logicalCollectionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LogicalCollectionName { get; set; }
+
+        [JsonPropertyName("objectTypeCode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ObjectTypeCode { get; set; }
+
+        [JsonPropertyName("attributes")]
+        public List<TableAttributeEntry> Attributes { get; set; } = [];
+
+        [JsonPropertyName("oneToManyRelationships")]
+        public List<TableRelationshipEntry> OneToManyRelationships { get; set; } = [];
+
+        [JsonPropertyName("manyToOneRelationships")]
+        public List<TableRelationshipEntry> ManyToOneRelationships { get; set; } = [];
+
+        [JsonPropertyName("manyToManyRelationships")]
+        public List<TableManyToManyRelationshipEntry> ManyToManyRelationships { get; set; } = [];
+
+        [JsonPropertyName("alternateKeys")]
+        public List<TableKeyEntry> AlternateKeys { get; set; } = [];
+    }
+
+    internal sealed class TableAttributeEntry
+    {
+        [JsonPropertyName("logicalName")]
+        public string LogicalName { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("requiredLevel")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RequiredLevel { get; set; }
+
+        [JsonPropertyName("isValidForCreate")]
+        public bool IsValidForCreate { get; set; }
+
+        [JsonPropertyName("isValidForUpdate")]
+        public bool IsValidForUpdate { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+    }
+
+    internal sealed class TableRelationshipEntry
+    {
+        [JsonPropertyName("schemaName")]
+        public string SchemaName { get; set; }
+
+        [JsonPropertyName("referencedEntity")]
+        public string ReferencedEntity { get; set; }
+
+        [JsonPropertyName("referencingEntity")]
+        public string ReferencingEntity { get; set; }
+
+        [JsonPropertyName("referencingAttribute")]
+        public string ReferencingAttribute { get; set; }
+    }
+
+    internal sealed class TableManyToManyRelationshipEntry
+    {
+        [JsonPropertyName("schemaName")]
+        public string SchemaName { get; set; }
+
+        [JsonPropertyName("entity1")]
+        public string Entity1 { get; set; }
+
+        [JsonPropertyName("entity2")]
+        public string Entity2 { get; set; }
+
+        [JsonPropertyName("intersectEntityName")]
+        public string IntersectEntityName { get; set; }
+    }
+
+    internal sealed class TableKeyEntry
+    {
+        [JsonPropertyName("schemaName")]
+        public string SchemaName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("keyAttributes")]
+        public List<string> KeyAttributes { get; set; } = [];
+    }
+
+    internal sealed class GetBusinessRulesResult
+    {
+        [JsonPropertyName("mode")]
+        public string Mode { get; set; }
+
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        [JsonPropertyName("rules")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<BusinessRuleSummaryEntry> Rules { get; set; }
+
+        [JsonPropertyName("rule")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public BusinessRuleDetailEntry Rule { get; set; }
+    }
+
+    internal sealed class BusinessRuleSummaryEntry
+    {
+        [JsonPropertyName("ruleId")]
+        public string RuleId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("scope")]
+        public string Scope { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        public string ModifiedOn { get; set; }
+    }
+
+    internal sealed class BusinessRuleDetailEntry
+    {
+        [JsonPropertyName("ruleId")]
+        public string RuleId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("entityName")]
+        public string EntityName { get; set; }
+
+        [JsonPropertyName("scope")]
+        public string Scope { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("createdOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreatedOn { get; set; }
+
+        [JsonPropertyName("createdBy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreatedBy { get; set; }
+
+        [JsonPropertyName("modifiedOn")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedOn { get; set; }
+
+        [JsonPropertyName("modifiedBy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string ModifiedBy { get; set; }
+
+        [JsonPropertyName("conditions")]
+        public List<string> Conditions { get; set; } = [];
+
+        [JsonPropertyName("actions")]
+        public List<string> Actions { get; set; } = [];
+
+        [JsonPropertyName("xamlParseStatus")]
+        public string XamlParseStatus { get; set; }
+    }
+
+    internal sealed class GetSolutionComponentsResult
+    {
+        [JsonPropertyName("solution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public SolutionInfoEntry Solution { get; set; }
+
+        [JsonPropertyName("totalComponents")]
+        public int TotalComponents { get; set; }
+
+        [JsonPropertyName("includeActiveLayers")]
+        public bool IncludeActiveLayers { get; set; }
+
+        [JsonPropertyName("activeLayersOnly")]
+        public bool ActiveLayersOnly { get; set; }
+
+        [JsonPropertyName("activeLayerCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ActiveLayerCount { get; set; }
+
+        [JsonPropertyName("fullEntities")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> FullEntities { get; set; }
+
+        [JsonPropertyName("summary")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SolutionComponentSummaryEntry> Summary { get; set; }
+
+        [JsonPropertyName("components")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SolutionComponentEntry> Components { get; set; }
+
+        [JsonPropertyName("solutionMatches")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<SolutionMatchEntry> SolutionMatches { get; set; }
+    }
+
+    internal sealed class SolutionInfoEntry
+    {
+        [JsonPropertyName("solutionId")]
+        public string SolutionId { get; set; }
+
+        [JsonPropertyName("uniqueName")]
+        public string UniqueName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+
+        [JsonPropertyName("publisherName")]
+        public string PublisherName { get; set; }
+    }
+
+    internal sealed class SolutionComponentSummaryEntry
+    {
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("typeId")]
+        public int TypeId { get; set; }
+
+        [JsonPropertyName("count")]
+        public int Count { get; set; }
+
+        [JsonPropertyName("activeLayerCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ActiveLayerCount { get; set; }
+    }
+
+    internal sealed class SolutionComponentEntry
+    {
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("typeId")]
+        public int TypeId { get; set; }
+
+        [JsonPropertyName("objectId")]
+        public string ObjectId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("hasActiveLayer")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? HasActiveLayer { get; set; }
+
+        [JsonPropertyName("isFullEntity")]
+        public bool IsFullEntity { get; set; }
+    }
+
+    internal sealed class SolutionMatchEntry
+    {
+        [JsonPropertyName("uniqueName")]
+        public string UniqueName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
+
+        [JsonPropertyName("isManaged")]
+        public bool IsManaged { get; set; }
+    }
+
     internal sealed class GenerateDemoDataResult
     {
         [JsonPropertyName("entity")]

@@ -4,12 +4,15 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -120,7 +123,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         [McpServerTool(Name = "get_solution_components", Title = "List all components inside a solution",
-            Idempotent = true, Destructive = false, ReadOnly = true),
+            Idempotent = true, Destructive = false, ReadOnly = true,
+            UseStructuredContent = true, OutputSchemaType = typeof(GetSolutionComponentsResult)),
         Description(
             "List components in a Dataverse solution. Returns: solution info + count-per-type summary + detail (componentType, objectId, name). Full Entity components (rootComponentBehavior=0) listed as-is — use get_tables for sub-components.\n\n" +
 
@@ -131,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "FUZZY/AMBIGUITY:\n" +
             "- solution_name matches uniqueName + displayName (contains); 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with exact uniqueName). 1 → auto.")]
-        public string get_solution_components(
+        public CallToolResult get_solution_components(
             [Description(
                 "Solution unique/display name; multiple matches return choices."
             )] string solution_name,
@@ -143,8 +147,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool active_layers_only = false)
         {
             if (string.IsNullOrWhiteSpace(solution_name))
-                return "Error: solution_name is required.\n" +
-                       "Provide the solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core').";
+                return ErrorResult("Error: solution_name is required.\n" +
+                       "Provide the solution uniqueName (e.g. 'DevKit_Core') or displayName (e.g. 'DevKit Core').");
 
             // active_layers_only implies include_active_layers
             if (active_layers_only)
@@ -155,11 +159,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var solutions = FindSolutions(solution_name.Trim());
 
                 if (solutions.Count == 0)
-                    return $"Error: No solution found matching '{solution_name}'. " +
-                           "Verify the solution unique name or display name in your Dataverse environment.";
+                    return ErrorResult($"Error: No solution found matching '{solution_name}'. " +
+                           "Verify the solution unique name or display name in your Dataverse environment.");
 
                 if (solutions.Count > 1)
-                    return FormatMultipleSolutions(solution_name, solutions);
+                    return StructuredResult(
+                        FormatMultipleSolutions(solution_name, solutions),
+                        BuildMultipleSolutionsResult(solutions));
 
                 var solution = solutions[0];
                 var (components, fullEntityNames) = LoadComponents(solution.Id);
@@ -169,11 +175,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (include_active_layers)
                     activeLayers = CheckActiveLayers(components);
 
-                return FormatResult(solution, components, fullEntityNames, activeLayers, active_layers_only);
+                var structured = BuildStructuredResult(solution, components, fullEntityNames, activeLayers, active_layers_only);
+                return StructuredResult(
+                    FormatResult(solution, components, fullEntityNames, activeLayers, active_layers_only),
+                    structured);
             }
             catch (Exception ex)
             {
-                return $"Error: Failed to get solution components: {ex.Message}";
+                return ErrorResult($"Error: Failed to get solution components: {ex.Message}");
             }
         }
 
@@ -416,6 +425,103 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         // ── Name resolution ──────────────────────────────────────────────────────
+
+        private static GetSolutionComponentsResult BuildMultipleSolutionsResult(List<Entity> solutions)
+        {
+            return new GetSolutionComponentsResult
+            {
+                TotalComponents = 0,
+                SolutionMatches = solutions
+                    .OrderBy(s => s.GetAttributeValue<string>("uniquename"))
+                    .Select(s => new SolutionMatchEntry
+                    {
+                        UniqueName = s.GetAttributeValue<string>("uniquename") ?? "",
+                        DisplayName = s.GetAttributeValue<string>("friendlyname") ?? "",
+                        Version = s.GetAttributeValue<string>("version") ?? "",
+                        IsManaged = s.GetAttributeValue<bool>("ismanaged")
+                    })
+                    .ToList()
+            };
+        }
+
+        private GetSolutionComponentsResult BuildStructuredResult(Entity solution, List<Entity> components,
+            Dictionary<Guid, string> fullEntityNames, Dictionary<Guid, bool> activeLayers, bool activeLayersOnly)
+        {
+            var nameMap = BuildNameMap(components, fullEntityNames);
+            var showActiveLayers = activeLayers != null;
+            var displayComponents = activeLayersOnly
+                ? components.Where(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a).ToList()
+                : components;
+
+            var summary = components
+                .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
+                .OrderBy(g => g.Key)
+                .Select(g => new SolutionComponentSummaryEntry
+                {
+                    Type = GetTypeName(g.Key),
+                    TypeId = g.Key,
+                    Count = g.Count(),
+                    ActiveLayerCount = showActiveLayers
+                        ? g.Count(c => activeLayers.TryGetValue(c.GetAttributeValue<Guid>("objectid"), out var a) && a)
+                        : null
+                })
+                .ToList();
+
+            var componentEntries = displayComponents
+                .GroupBy(c => c.GetAttributeValue<OptionSetValue>("componenttype")?.Value ?? 0)
+                .OrderBy(g => g.Key)
+                .SelectMany(g => g.Select(c =>
+                {
+                    var objectId = c.GetAttributeValue<Guid>("objectid");
+                    nameMap.TryGetValue(objectId, out var name);
+                    var isFullEntity = g.Key == 1 && fullEntityNames.ContainsKey(objectId);
+
+                    return new SolutionComponentEntry
+                    {
+                        Type = GetTypeName(g.Key),
+                        TypeId = g.Key,
+                        ObjectId = objectId.ToString(),
+                        Name = name ?? "(unresolved)",
+                        HasActiveLayer = showActiveLayers
+                            ? activeLayers.TryGetValue(objectId, out var active) && active
+                            : null,
+                        IsFullEntity = isFullEntity
+                    };
+                }))
+                .ToList();
+
+            return new GetSolutionComponentsResult
+            {
+                Solution = new SolutionInfoEntry
+                {
+                    SolutionId = solution.Id.ToString(),
+                    UniqueName = solution.GetAttributeValue<string>("uniquename") ?? "",
+                    DisplayName = solution.GetAttributeValue<string>("friendlyname") ?? "",
+                    Version = solution.GetAttributeValue<string>("version") ?? "",
+                    IsManaged = solution.GetAttributeValue<bool>("ismanaged"),
+                    PublisherName = solution.GetAttributeValue<AliasedValue>("pub.friendlyname")?.Value as string ?? ""
+                },
+                TotalComponents = components.Count,
+                IncludeActiveLayers = showActiveLayers,
+                ActiveLayersOnly = activeLayersOnly,
+                ActiveLayerCount = showActiveLayers ? activeLayers.Count(kv => kv.Value) : null,
+                FullEntities = fullEntityNames.Count > 0 ? fullEntityNames.Values.OrderBy(v => v).ToList() : null,
+                Summary = summary,
+                Components = componentEntries
+            };
+        }
+
+        private static CallToolResult StructuredResult(string text, GetSolutionComponentsResult structured) => new()
+        {
+            Content = [new TextContentBlock { Text = text }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured)
+        };
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
 
         private Dictionary<Guid, string> BuildNameMap(List<Entity> components, Dictionary<Guid, string> fullEntityNames)
         {
