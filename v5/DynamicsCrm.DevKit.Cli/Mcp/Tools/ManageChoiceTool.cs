@@ -3,7 +3,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
+
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -150,11 +150,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Error: solution_name is required for 'create'. " +
                     "Provide the solution unique name or display name so the publisher's customizationoptionvalueprefix can be resolved and option integer values can be assigned correctly.");
 
-            var (prefix, _, prefixErr) = ResolveSolutionOptionValuePrefix(solutionName);
-            if (prefixErr != null)
-                return ErrorResult($"Error: {prefixErr}");
+            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            if (!solResult.IsSuccess)
+                return ErrorResult($"Error: {solResult.Error}");
 
-            var parsedOptions = ParseOptionsWithAutoValue(options, prefix * 10000);
+            var parsedOptions = ParseOptionsWithAutoValue(options, solResult.OptionValuePrefix * 10000);
 
             if (parsedOptions == null)
                 return ErrorResult("Error: Invalid options format. " +
@@ -195,8 +195,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 try
                 {
-                    var (_, solUniqueName, solErr) = ResolveSolutionOptionValuePrefix(solutionName);
-                    var solName = solErr == null ? solUniqueName : solutionName.Trim();
+                    var solName = solResult.IsSuccess ? solResult.UniqueName : solutionName.Trim();
                     _serviceClient.Execute(new AddSolutionComponentRequest
                     {
                         AddRequiredComponents = false,
@@ -244,9 +243,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int? addOptionValueBase = null;
             if (!string.IsNullOrWhiteSpace(addOptions) && !string.IsNullOrWhiteSpace(solutionName))
             {
-                var (prefix, _, prefixErr) = ResolveSolutionOptionValuePrefix(solutionName);
-                if (prefixErr != null)
-                    return ErrorResult($"Error: {prefixErr}");
+                var solResult2 = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+                if (!solResult2.IsSuccess)
+                    return ErrorResult($"Error: {solResult2.Error}");
                 // Use max existing value + 1 as starting point so new options don't collide
                 try
                 {
@@ -255,12 +254,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     var existingOpts = (existingResp.OptionSetMetadata as OptionSetMetadata)?.Options;
                     var maxExisting = existingOpts != null && existingOpts.Count > 0
                         ? existingOpts.Max(o => o.Value ?? 0)
-                        : prefix * 10000 - 1;
+                        : solResult2.OptionValuePrefix * 10000 - 1;
                     addOptionValueBase = maxExisting + 1;
                 }
                 catch
                 {
-                    addOptionValueBase = prefix * 10000;
+                    addOptionValueBase = solResult2.OptionValuePrefix * 10000;
                 }
             }
 
@@ -428,62 +427,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         #region Helpers
 
-        /// <summary>
-        /// Resolves the publisher's customizationoptionvalueprefix (integer) from a solution name.
-        /// Returns (prefix, uniqueName, errorMessage).
-        /// </summary>
-        private (int Prefix, string UniqueName, string Error) ResolveSolutionOptionValuePrefix(string solutionInput)
-        {
-            try
-            {
-                QueryExpression BuildQuery(string field, ConditionOperator op, string val) =>
-                    new QueryExpression("solution")
-                    {
-                        ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                        Criteria = new FilterExpression
-                        {
-                            Conditions = { new ConditionExpression(field, op, val) }
-                        }
-                    };
 
-                Entity sol = null;
-
-                var byUnique = _serviceClient.RetrieveMultiple(BuildQuery("uniquename", ConditionOperator.Equal, solutionInput)).Entities;
-                if (byUnique.Count == 1) sol = byUnique[0];
-
-                if (sol == null)
-                {
-                    var byDisplay = _serviceClient.RetrieveMultiple(BuildQuery("friendlyname", ConditionOperator.Equal, solutionInput)).Entities;
-                    if (byDisplay.Count == 1) sol = byDisplay[0];
-                    else if (byDisplay.Count == 0)
-                    {
-                        var byContains = _serviceClient.RetrieveMultiple(BuildQuery("friendlyname", ConditionOperator.Like, $"%{solutionInput}%")).Entities;
-                        if (byContains.Count == 1) sol = byContains[0];
-                        else if (byContains.Count > 1)
-                            return (0, null, $"Multiple solutions match '{solutionInput}'. Provide the exact unique name.");
-                        else
-                            return (0, null, $"Solution '{solutionInput}' not found.");
-                    }
-                    else
-                    {
-                        return (0, null, $"Multiple solutions match '{solutionInput}'. Provide the exact unique name.");
-                    }
-                }
-
-                var publisherRef = sol.GetAttributeValue<EntityReference>("publisherid");
-                if (publisherRef == null)
-                    return (0, null, $"Solution '{solutionInput}' has no publisher.");
-
-                var publisher = _serviceClient.Retrieve("publisher", publisherRef.Id,
-                    new ColumnSet("customizationoptionvalueprefix"));
-                var prefix = publisher.GetAttributeValue<int>("customizationoptionvalueprefix");
-                return (prefix, sol.GetAttributeValue<string>("uniquename"), null);
-            }
-            catch (Exception ex)
-            {
-                return (0, null, $"Failed to resolve solution publisher prefix: {ex.Message}");
-            }
-        }
 
         /// <summary>
         /// Parses options that may be label-only ('Draft;Confirmed') or 'value:label' pairs.

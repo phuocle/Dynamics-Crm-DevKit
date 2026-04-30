@@ -82,13 +82,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string resolvedSolutionUniqueName = null;
             if (!string.IsNullOrWhiteSpace(solution_name))
             {
-                var (solPrefix, uniqueName, error) = DataverseSolutionResolver.ResolveSolution(_serviceClient, solution_name.Trim());
-                if (error != null)
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name.Trim());
+                if (!solResult.IsSuccess)
                     return ErrorResult(
-                        $"[Error] {error}\n" +
+                        $"[Error] {solResult.Error}\n" +
                         $"Tip: Use get_solution_components to find valid solution names.");
-                resolvedPrefix = solPrefix;
-                resolvedSolutionUniqueName = uniqueName;
+                resolvedPrefix = solResult.Prefix;
+                resolvedSolutionUniqueName = solResult.UniqueName;
 
                 // If entity_name does NOT already start with the publisher prefix, prepend it
                 // e.g., "sale_order" + prefix "abc" → "abc_sale_order"

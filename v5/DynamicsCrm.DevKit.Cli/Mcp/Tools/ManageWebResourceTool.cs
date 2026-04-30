@@ -13,7 +13,7 @@ using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
-using DynamicsCrm.DevKit.Shared;
+
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -330,10 +330,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult($"Error: Invalid type '{type}'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
             // Resolve publisher prefix from solution
-            var (resolvedPrefix, resolvedSolutionUniqueName, solError) =
-                DataverseSolutionResolver.ResolveSolution(_serviceClient, solutionName.Trim());
-            if (solError != null)
-                return ErrorResult($"[Error] {solError}\nTip: Use get_solution_components to find valid solution names.");
+            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+            if (!solResult.IsSuccess)
+                return ErrorResult($"[Error] {solResult.Error}\nTip: Use get_solution_components to find valid solution names.");
 
             name = name.Trim();
 
@@ -342,17 +341,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (underscoreIndex < 1)
                 return ErrorResult(
                     $"Error: name '{name}' has no prefix.\n" +
-                    $"Rename it to '{resolvedPrefix}_{name}' to match solution '{resolvedSolutionUniqueName}' (publisher prefix: {resolvedPrefix}).");
+                    $"Rename it to '{solResult.Prefix}_{name}' to match solution '{solResult.UniqueName}' (publisher prefix: {solResult.Prefix}).");
 
             var prefixInName = name.Substring(0, underscoreIndex).ToLowerInvariant();
-            if (!string.Equals(prefixInName, resolvedPrefix, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(prefixInName, solResult.Prefix, StringComparison.OrdinalIgnoreCase))
             {
-                var suggestedName = $"{resolvedPrefix}_{name.Substring(underscoreIndex + 1)}";
+                var suggestedName = $"{solResult.Prefix}_{name.Substring(underscoreIndex + 1)}";
                 var mismatchSb = new StringBuilder(256);
                 mismatchSb.AppendLine("[PrefixMismatch]");
                 mismatchSb.AppendLine($"NameProvided: {name}");
                 mismatchSb.AppendLine($"PrefixInName: {prefixInName}");
-                mismatchSb.AppendLine($"PrefixFromSolution: {resolvedPrefix} (solution: {resolvedSolutionUniqueName})");
+                mismatchSb.AppendLine($"PrefixFromSolution: {solResult.Prefix} (solution: {solResult.UniqueName})");
                 mismatchSb.AppendLine();
                 mismatchSb.AppendLine($"→ Re-call with name=\"{suggestedName}\" to use the correct solution prefix.");
                 mismatchSb.AppendLine($"→ Or confirm your intended prefix is correct and check the solution_name.");
@@ -384,7 +383,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 webResource["description"] = description.Trim();
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE web resource '{name}' (type: {typeTrimmed}) in solution '{resolvedSolutionUniqueName}'.");
+                return DryRunResult($"Would CREATE web resource '{name}' (type: {typeTrimmed}) in solution '{solResult.UniqueName}'.");
 
             var webResourceId = _serviceClient.Create(webResource);
 
@@ -396,12 +395,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     AddRequiredComponents = true,
                     ComponentType = 61,
                     ComponentId = webResourceId,
-                    SolutionUniqueName = resolvedSolutionUniqueName
+                    SolutionUniqueName = solResult.UniqueName
                 });
             }
             catch (Exception ex)
             {
-                solWarning = $"Failed to add to solution '{resolvedSolutionUniqueName}': {ex.Message}";
+                solWarning = $"Failed to add to solution '{solResult.UniqueName}': {ex.Message}";
             }
 
             var published = autoPublish && PublishWebResource(webResourceId);
@@ -412,7 +411,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"[WebResource] Created: {name}");
             sb.AppendLine($"webResourceId: {webResourceId}");
             sb.AppendLine($"type: {typeLabel}");
-            sb.AppendLine($"solution: {resolvedSolutionUniqueName}");
+            sb.AppendLine($"solution: {solResult.UniqueName}");
             if (!string.IsNullOrWhiteSpace(displayName))
                 sb.AppendLine($"displayName: {displayName.Trim()}");
             if (!string.IsNullOrEmpty(solWarning))
@@ -436,7 +435,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Description = NullIfEmpty(description)
                     }
                 ],
-                SolutionName = resolvedSolutionUniqueName,
+                SolutionName = solResult.UniqueName,
                 Published = published
             };
 

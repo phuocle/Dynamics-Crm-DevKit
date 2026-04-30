@@ -13,7 +13,7 @@ using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
-using DynamicsCrm.DevKit.Shared;
+
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -120,29 +120,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Ask the user which solution this environment variable belongs to.");
 
             // Resolve solution → publisher prefix
-            var (solPrefix, uniqueName, solError) = DataverseSolutionResolver.ResolveSolution(_serviceClient, solutionName.Trim());
-            if (solError != null)
-                return ErrorResult($"Error: {solError}");
+            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+            if (!solResult.IsSuccess)
+                return ErrorResult($"Error: {solResult.Error}");
 
             // Layer 2 (code gate): block 'new' prefix — it means the solution's publisher is misconfigured
             // or the AI bypassed the layer-1 gate by guessing a default prefix
-            if (solPrefix.Equals("new", StringComparison.OrdinalIgnoreCase))
+            if (solResult.Prefix.Equals("new", StringComparison.OrdinalIgnoreCase))
                 return ErrorResult(
-                    $"Error: The publisher for solution '{uniqueName}' uses the reserved prefix 'new'.\n" +
+                    $"Error: The publisher for solution '{solResult.UniqueName}' uses the reserved prefix 'new'.\n" +
                     "This prefix is Dataverse's default for unconfigured publishers and must not be used.\n" +
                     "Set a proper customization prefix on the publisher in Power Apps, then retry.");
 
             // First call without confirmed_prefix → show preview and ask AI/user to confirm
             if (string.IsNullOrWhiteSpace(confirmedPrefix))
             {
-                var previewName = $"{solPrefix}_{displayName.Trim().Replace(" ", "")}";
+                var previewName = $"{solResult.Prefix}_{displayName.Trim().Replace(" ", "")}";
                 var sb = new StringBuilder(256);
                 sb.AppendLine("[PrefixConfirmationRequired]");
-                sb.AppendLine($"ResolvedPrefix: {solPrefix}");
-                sb.AppendLine($"Solution: {uniqueName}");
+                sb.AppendLine($"ResolvedPrefix: {solResult.Prefix}");
+                sb.AppendLine($"Solution: {solResult.UniqueName}");
                 sb.AppendLine($"VariableName (preview): {previewName}");
                 sb.AppendLine();
-                sb.AppendLine($"→ Prefix is correct: re-call manage_environment_variable with confirmed_prefix=\"{solPrefix}\"");
+                sb.AppendLine($"→ Prefix is correct: re-call manage_environment_variable with confirmed_prefix=\"{solResult.Prefix}\"");;
                 sb.AppendLine($"→ Wrong prefix: re-call manage_environment_variable with confirmed_prefix=\"<correct_prefix>\"");
                 return new CallToolResult { Content = [new TextContentBlock { Text = sb.ToString() }] };
             }
@@ -161,7 +161,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existing != null)
                 return ErrorResult($"Error: Environment variable '{variableName}' already exists. Use action='update' to modify it.");
 
-            return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, uniqueName, autoPublish);
+            return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solResult.UniqueName, autoPublish);
         }
 
         private CallToolResult HandleUpdateAction(string variableName, string displayName,

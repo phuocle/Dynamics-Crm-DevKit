@@ -2,7 +2,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
+
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -135,19 +135,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
                     "Tip: Use get_solution_components to find valid solution names.");
 
-            var (prefix, resolvedSolution, resolveErr) = ResolveSolution(solutionName);
-            if (resolveErr != null) return ErrorResult($"Error: {resolveErr}");
+            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            if (!solResult.IsSuccess) return ErrorResult($"Error: {solResult.Error}");
 
             // Auto-generate relationship name if not provided
             if (string.IsNullOrWhiteSpace(relationshipName))
-                relationshipName = BuildRelationshipName(prefix, referencedEntity, referencingEntity);
+                relationshipName = BuildRelationshipName(solResult.Prefix, referencedEntity, referencingEntity);
             if (relationshipName.Length > 100)
                 relationshipName = relationshipName[..100];
 
             if (string.IsNullOrWhiteSpace(lookupDisplayName))
-                lookupDisplayName = StripPublisherPrefix(referencedEntity, prefix);
+                lookupDisplayName = StripPublisherPrefix(referencedEntity, solResult.Prefix);
 
-            var (lookupSchemaName, lookupLogicalName) = BuildLookupAttributeNames(lookupDisplayName, prefix);
+            var (lookupSchemaName, lookupLogicalName) = BuildLookupAttributeNames(lookupDisplayName, solResult.Prefix);
 
             var cascade = BuildCascadeConfiguration(cascadePreset, cascadeAssign, cascadeDelete, cascadeMerge, cascadeReparent, cascadeShare, cascadeUnshare);
 
@@ -176,8 +176,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             };
 
-            if (!string.IsNullOrWhiteSpace(resolvedSolution))
-                request.SolutionUniqueName = resolvedSolution;
+            if (!string.IsNullOrWhiteSpace(solResult.UniqueName))
+                request.SolutionUniqueName = solResult.UniqueName;
 
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "")}.");
@@ -212,7 +212,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CascadeShare = cascade.Share?.ToString(),
                 CascadeUnshare = cascade.Unshare?.ToString(),
                 MetadataId = metadataId.ToString(),
-                SolutionName = string.IsNullOrWhiteSpace(resolvedSolution) ? null : resolvedSolution,
+                SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
                 Published = published,
                 Status = "Created"
             });
@@ -240,16 +240,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
                     "Tip: Use get_solution_components to find valid solution names.");
 
-            var (prefix, resolvedSolution, resolveErrNN) = ResolveSolution(solutionName);
-            if (resolveErrNN != null) return ErrorResult($"Error: {resolveErrNN}");
+            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            if (!solResult.IsSuccess) return ErrorResult($"Error: {solResult.Error}");
 
             if (string.IsNullOrWhiteSpace(relationshipName))
-                relationshipName = $"{prefix}_{entity1}_{entity2}";
+                relationshipName = $"{solResult.Prefix}_{entity1}_{entity2}";
             if (relationshipName.Length > 100)
                 relationshipName = relationshipName[..100];
 
             if (string.IsNullOrWhiteSpace(intersectEntityName))
-                intersectEntityName = $"{prefix}_{entity1}_{entity2}";
+                intersectEntityName = $"{solResult.Prefix}_{entity1}_{entity2}";
             if (intersectEntityName.Length > 100)
                 intersectEntityName = intersectEntityName[..100];
 
@@ -276,8 +276,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             };
 
-            if (!string.IsNullOrWhiteSpace(resolvedSolution))
-                request.SolutionUniqueName = resolvedSolution;
+            if (!string.IsNullOrWhiteSpace(solResult.UniqueName))
+                request.SolutionUniqueName = solResult.UniqueName;
 
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}').");
@@ -303,7 +303,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Entity2 = entity2,
                 IntersectEntityName = intersectEntityName,
                 MetadataId = metadataId.ToString(),
-                SolutionName = string.IsNullOrWhiteSpace(resolvedSolution) ? null : resolvedSolution,
+                SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
                 Published = published,
                 Status = "Created"
             });
@@ -538,10 +538,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide solution_name (e.g., 'MyCustomSolution') to auto-resolve the prefix.\n" +
                     "Tip: Use get_solution_components to find valid solution names.");
 
-            var (prefix, resolvedSolution, resolveErrAT) = ResolveSolution(solutionName);
-            if (resolveErrAT != null) return ErrorResult($"Error: {resolveErrAT}");
+            var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+            if (!solResult.IsSuccess) return ErrorResult($"Error: {solResult.Error}");
 
-            var relName = $"{prefix}_{referencedEntity}_{entityName}_{attributeName}";
+            var relName = $"{solResult.Prefix}_{referencedEntity}_{entityName}_{attributeName}";
             if (relName.Length > 100) relName = relName[..100];
 
             var cascade = BuildCascadeConfiguration(cascadePreset, cascadeAssign, cascadeDelete, cascadeMerge, cascadeReparent, cascadeShare, cascadeUnshare);
@@ -564,8 +564,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Lookup = lookupAttr  // Pass existing lookup — SDK adds new target
             };
 
-            if (!string.IsNullOrWhiteSpace(resolvedSolution))
-                request.SolutionUniqueName = resolvedSolution;
+            if (!string.IsNullOrWhiteSpace(solResult.UniqueName))
+                request.SolutionUniqueName = solResult.UniqueName;
 
             if (_options.DryRun)
                 return DryRunResult($"Would ADD target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}'.");
@@ -593,7 +593,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ReferencingEntity = entityName,
                     LookupAttributeName = attributeName,
                     MetadataId = metadataId.ToString(),
-                    SolutionName = string.IsNullOrWhiteSpace(resolvedSolution) ? null : resolvedSolution,
+                    SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
                     Published = published,
                     Status = "TargetAdded"
                 });
@@ -787,84 +787,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : trimmed;
         }
 
-        private (string Prefix, string UniqueName, string Error) ResolveSolution(string solutionInput)
-        {
-            try
-            {
-                var byUniqueName = new QueryExpression("solution")
-                {
-                    ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                    Criteria = new FilterExpression
-                    {
-                        Conditions = { new ConditionExpression("uniquename", ConditionOperator.Equal, solutionInput) }
-                    }
-                };
-                var uniqueResults = _serviceClient.RetrieveMultiple(byUniqueName).Entities;
-                if (uniqueResults.Count == 1)
-                {
-                    var prefix = GetPrefixFromSolution(uniqueResults[0]);
-                    if (prefix == null) return (null, null, $"Solution '{solutionInput}' found but has no publisher.");
-                    return (prefix, uniqueResults[0].GetAttributeValue<string>("uniquename"), null);
-                }
 
-                var byDisplayName = new QueryExpression("solution")
-                {
-                    ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                    Criteria = new FilterExpression
-                    {
-                        Conditions = { new ConditionExpression("friendlyname", ConditionOperator.Equal, solutionInput) }
-                    }
-                };
-                var displayResults = _serviceClient.RetrieveMultiple(byDisplayName).Entities;
-
-                if (displayResults.Count == 0)
-                {
-                    var byContains = new QueryExpression("solution")
-                    {
-                        ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                        Criteria = new FilterExpression
-                        {
-                            Conditions = { new ConditionExpression("friendlyname", ConditionOperator.Like, $"%{solutionInput}%") }
-                        }
-                    };
-                    displayResults = _serviceClient.RetrieveMultiple(byContains).Entities;
-                }
-
-                if (displayResults.Count == 0)
-                    return (null, null, $"Solution '{solutionInput}' not found (searched by unique name and display name).");
-
-                if (displayResults.Count > 1)
-                {
-                    var names = string.Join(", ", displayResults.Select(e =>
-                        $"'{e.GetAttributeValue<string>("uniquename")}' ({e.GetAttributeValue<string>("friendlyname")})"));
-                    return (null, null, $"Multiple solutions match '{solutionInput}': {names}. Please provide the exact unique name.");
-                }
-
-                var sol = displayResults[0];
-                var resolvedPrefix = GetPrefixFromSolution(sol);
-                if (resolvedPrefix == null) return (null, null, $"Solution '{solutionInput}' found but has no publisher.");
-                return (resolvedPrefix, sol.GetAttributeValue<string>("uniquename"), null);
-            }
-            catch (Exception ex)
-            {
-                return (null, null, $"Failed to resolve solution '{solutionInput}': {ex.Message}");
-            }
-        }
-
-        private string GetPrefixFromSolution(Entity solutionEntity)
-        {
-            var publisherReference = solutionEntity.GetAttributeValue<EntityReference>("publisherid");
-            if (publisherReference == null) return null;
-            try
-            {
-                var publisher = _serviceClient.Retrieve("publisher", publisherReference.Id, new ColumnSet("customizationprefix"));
-                return publisher.GetAttributeValue<string>("customizationprefix");
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
         private bool PublishIfNeeded(bool autoPublish, string entityName)
         {

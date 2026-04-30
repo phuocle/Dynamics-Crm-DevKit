@@ -194,13 +194,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(solution_name))
             {
-                var (solPrefix, uniqueName, solError) = DataverseSolutionResolver.ResolveSolution(_serviceClient, solution_name.Trim());
-                if (solError != null)
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name.Trim());
+                if (!solResult.IsSuccess)
                     return ErrorResult(
-                        $"[Error] {solError}\n" +
+                        $"[Error] {solResult.Error}\n" +
                         $"Tip: Use get_solution_components to find valid solution names.");
-                resolvedPrefix = solPrefix;
-                resolvedSolutionUniqueName = uniqueName;
+                resolvedPrefix = solResult.Prefix;
+                resolvedSolutionUniqueName = solResult.UniqueName;
 
                 // Prepend prefix to attribute_name if not already prefixed
                 var prefixWithUnderscore = resolvedPrefix + "_";
