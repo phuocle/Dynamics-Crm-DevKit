@@ -73,7 +73,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             ["all"] = 3,
         };
 
-        public async Task RunAsync(string category = "all", bool dryRun = false)
+        public async Task RunAsync(string category = "all", bool dryRun = false, string instanceName = null)
         {
             var normalizedCategory = category.Trim().ToLowerInvariant();
             var requestedLevel = CategoryLevel.TryGetValue(normalizedCategory, out var lvl) ? lvl : 3;
@@ -92,13 +92,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             builder.Services.AddSingleton(new McpDryRunOptions { DryRun = dryRun });
 
             var displayCategory = normalizedCategory == "all" ? "all" : normalizedCategory;
+            var serverName = string.IsNullOrWhiteSpace(instanceName)
+                ? $"DynamicsCrm.DevKit ({displayCategory})"
+                : instanceName;
 
             builder.Services
                 .AddMcpServer(options =>
                 {
                     options.ServerInfo = new()
                     {
-                        Name = $"DynamicsCrm.DevKit ({displayCategory})",
+                        Name = serverName,
                         Version = DynamicsCrm.DevKit.Shared.Const.Version
                     };
                     options.ServerInstructions =

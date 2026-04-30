@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertViewResult)),
         Description(
-            "Dataverse views (savedquery/userquery) — list/detail/create/update/rename/undo. Required: list (none); detail (view_id); create (view_name+layoutxml); update (view_id + layoutxml and/or cell_updates_json); rename (view_id+view_name); undo (view_id+backup path). Auto: backup→XSD+sync validate→update→publish. SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
+            "Dataverse views (savedquery/userquery) — list/detail/create/update/rename/set_default/undo. Required: list (none); detail (view_id); create (view_name+layoutxml); update (view_id + layoutxml and/or cell_updates_json); rename (view_id+view_name); set_default (view_id OR view_name); undo (view_id+backup path). Auto: backup→XSD+sync validate→update→publish. SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Inspect existing views (list, detail) before editing\n" +
@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "SAFETY:\n" +
             "- Validation blocks FetchXML/LayoutXML mismatch by default (validate=true).")]
         public CallToolResult manage_view(
-            [Description("'list', 'detail', 'create', 'update', 'rename', 'undo'."
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
             )] string action,
             [Description("Entity logical name (e.g. 'account')."
             )] string entity_name,
@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string cell_updates_json = "")
         {
             if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'undo'.");
+                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
@@ -94,8 +94,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "create" => HandleCreate(entityName, view_name, layoutxml, fetchxml, validate, auto_publish),
                     "update" => HandleUpdate(entityName, view_id, layoutxml, fetchxml, validate, backup, auto_publish, cell_updates_json),
                     "rename" => HandleRename(entityName, view_id, view_name, backup, auto_publish),
+                    "set_default" => HandleSetDefault(entityName, view_id, view_name, auto_publish),
                     "undo" => HandleUndo(entityName, view_id, layoutxml, fetchxml, validate, auto_publish),
-                    _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, undo.")
+                    _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, set_default, undo.")
                 };
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
@@ -634,6 +635,82 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Action = "renamed", Entity = entityName, ViewId = renameId.ToString(), ViewName = viewName,
                     Status = status, Validated = false,
                     FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published
+                })
+            };
+        }
+
+        // ── Action: set_default ───────────────────────────────────────────
+
+        private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName, bool auto_publish)
+        {
+            if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
+                return ErrorResult("Error: view_id or view_name is required for 'set_default' action.");
+
+            Guid targetId;
+
+            if (!string.IsNullOrWhiteSpace(viewId))
+            {
+                if (!Guid.TryParse(viewId.Trim(), out targetId))
+                    return ErrorResult($"Error: '{viewId}' is not a valid GUID.");
+
+                var check = TryGetSystemView(targetId);
+                if (check == null)
+                    return ErrorResult(
+                        $"[Error] View not found\n" +
+                        $"ViewId: {targetId}\n" +
+                        $"Tip: Use manage_view with action='list' and entity_name='{entityName}' to find valid view IDs");
+
+                viewName = check.GetAttributeValue<string>("name") ?? targetId.ToString();
+                var qt = check.GetAttributeValue<int>("querytype");
+                if (qt != 0)
+                    return ErrorResult(
+                        $"[Error] Only Public views (querytype=0) can be set as default\n" +
+                        $"ViewId: {targetId}\n" +
+                        $"ViewType: {MapQueryType(qt)} ({qt})");
+            }
+            else
+            {
+                var nameFilter = viewName.Trim();
+                var matches = FindViewsByNameContains(entityName, nameFilter, 0);
+                if (matches.Count == 0)
+                    return ErrorResult($"Error: No public view found matching name '{nameFilter}' for entity '{entityName}'.");
+                if (matches.Count > 1)
+                {
+                    var sb2 = new StringBuilder(256);
+                    sb2.AppendLine($"[Views] Multiple public views match '{nameFilter}' — provide view_id to disambiguate");
+                    sb2.AppendLine();
+                    sb2.AppendLine("viewid\tname");
+                    foreach (var v in matches)
+                        sb2.AppendLine($"{v.GetAttributeValue<Guid>("savedqueryid")}\t{EscapeTab(v.GetAttributeValue<string>("name") ?? "")}");
+                    return ErrorResult(sb2.ToString());
+                }
+                targetId = matches[0].GetAttributeValue<Guid>("savedqueryid");
+                viewName = matches[0].GetAttributeValue<string>("name") ?? targetId.ToString();
+            }
+
+            if (_options.DryRun)
+                return DryRunResult($"Would SET DEFAULT view '{viewName}' ({targetId}) on entity '{entityName}'.");
+
+            var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
+            _serviceClient.Update(update);
+
+            var published = TryPublish(entityName, auto_publish);
+
+            var sb = new StringBuilder(256);
+            sb.AppendLine($"[ViewSetDefault] {entityName} — {viewName}");
+            sb.AppendLine($"ViewId: {targetId}");
+            sb.AppendLine($"Status: Set as default successfully");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            var status = published || !auto_publish ? "set_default" : "set_default_publish_failed";
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
+                {
+                    Action = "set_default", Entity = entityName, ViewId = targetId.ToString(), ViewName = viewName,
+                    Status = status, Validated = false, Published = published
                 })
             };
         }

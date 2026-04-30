@@ -173,11 +173,26 @@ Solution target: display name **TEST-MCP**
 ## J. Thiết kế View
 
 38. Xem các public view hiện có của bảng Invoice.
+   > ✅ Tools: manage_view(list invoice) → error entity not found → get_tables(filter=invoice) → manage_view(list v4_invoice)
+   > Result: Bảng v4_invoice có 2 public view: `Active Invoices` (default, active, unmanaged) và `Inactive Invoices` (active, unmanaged).
 39. Tạo public view "TEST-MCP Active Invoices" cho bảng Invoice: chỉ record active, cột Invoice Number, Bill To, Invoice Date, Due Date, Invoice Status, Grand Total, Owner, Modified On, sort Modified On giảm dần.
+   > ✅ Tools: get_tables(filter=invoice) → get_tables(entity=v4_invoice) → manage_view(list, TEST-MCP Active Invoices) → manage_view(create, v4_invoice)
+   > Result: View "TEST-MCP Active Invoices" tạo thành công trên v4_invoice với 8 cột, filter statecode=0 (active), sort modifiedon descending, đã publish.
 40. Tạo public view "TEST-MCP Invoices By Status" cho bảng Invoice: cột Invoice Number, Invoice Status, Bill To, Grand Total, Created On, sort Invoice Status tăng dần rồi Created On giảm dần.
+   > ✅ Tools: manage_view(list, TEST-MCP Invoices By Status) → manage_view(create, v4_invoice)
+   > Result: View "TEST-MCP Invoices By Status" tạo thành công trên v4_invoice với 5 cột, sort v4_invoicestatus tăng dần rồi createdon giảm dần, đã publish.
 41. Xem các public view hiện có của bảng Invoice Line.
+   > ✅ Tools: manage_view(list, v4_invoiceline, query_type=0)
+   > Result: Bảng v4_invoiceline có 2 public view: `Active Invoice Lines` (default, active, unmanaged) và `Inactive Invoice Lines` (active, unmanaged).
 42. Tạo public view "TEST-MCP Invoice Lines" cho bảng Invoice Line: chỉ record active, cột Line Number, Product Name, Quantity, Unit Price, Line Total, Line Status, Invoice, sort Line Number tăng dần.
-43. Đọc lại 3 view vừa tạo và xác nhận cột hiển thị cùng điều kiện lọc đúng yêu cầu.
+   > ✅ Tools: manage_view(list, TEST-MCP Invoice Lines) → get_tables(v4_invoiceline) → manage_view(create, v4_invoiceline)
+   > Result: View "TEST-MCP Invoice Lines" tạo thành công trên v4_invoiceline với 7 cột, filter statecode=0 (active), sort v4_linenumber tăng dần, đã publish.
+42a. Tạo public view "Subgrid Invoice Lines" cho bảng Invoice Lines. Bạn AI, đủ hiểu các columns cần thiết để tạo ra subgrid này nên hãy đề xuất.
+   > ✅ Tools: manage_view(list, Subgrid Invoice Lines) → manage_view(create, v4_invoiceline)
+   > Result: View "Subgrid Invoice Lines" tạo thành công trên v4_invoiceline với 6 cột (Line Number, Product Name, Quantity, Unit Price, Line Total, Line Status), filter active, sort Line Number tăng dần, đã publish.
+43. Đọc lại 4 view vừa tạo và xác nhận cột hiển thị cùng điều kiện lọc đúng yêu cầu.
+   > ✅ Tools: manage_view(detail, TEST-MCP Active Invoices) → manage_view(detail, TEST-MCP Invoices By Status) → manage_view(detail, TEST-MCP Invoice Lines) → manage_view(detail, Subgrid Invoice Lines)
+   > Result: Cả 4 view đều đúng — Active Invoices (8 cột, filter active, sort modifiedon↓), Invoices By Status (5 cột, sort status↑ createdon↓), Invoice Lines (7 cột, filter active, sort linenumber↑), Subgrid Invoice Lines (6 cột, filter active, sort linenumber↑).
 
 ---
 

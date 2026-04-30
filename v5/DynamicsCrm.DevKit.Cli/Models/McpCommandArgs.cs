@@ -5,6 +5,9 @@ namespace DynamicsCrm.DevKit.Shared.Models
 {
     public class McpCommandArgs : DevKitCommandArgs
     {
+        [CommandArgument(0, "[name]")]
+        [Description("Optional display name for this MCP server instance (e.g. 'devkit-anti'). Shown in Task Manager and reported to MCP clients.")]
+        public string Name { get; set; }
         [CommandOption("--transport")]
         [Description("MCP transport type: stdio (default)")]
         [DefaultValue("stdio")]
