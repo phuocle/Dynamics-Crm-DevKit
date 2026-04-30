@@ -2042,6 +2042,93 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public List<string> Warnings { get; set; }
     }
 
+    // ── manage_choice models ──────────────────────────────────────────
+
+    internal sealed class ManageChoiceResult
+    {
+        [JsonPropertyName("action")]
+        public string Action { get; set; }
+
+        [JsonPropertyName("optionSetName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string OptionSetName { get; set; }
+
+        [JsonPropertyName("displayName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
+        [JsonPropertyName("optionCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? OptionCount { get; set; }
+
+        [JsonPropertyName("options")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ChoiceOptionItem> Options { get; set; }
+
+        [JsonPropertyName("totalCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? TotalCount { get; set; }
+
+        [JsonPropertyName("items")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ChoiceListItem> Items { get; set; }
+
+        [JsonPropertyName("solutionName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionName { get; set; }
+
+        [JsonPropertyName("solutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionWarning { get; set; }
+
+        [JsonPropertyName("published")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
+        [JsonPropertyName("optionsAdded")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsAdded { get; set; }
+
+        [JsonPropertyName("optionsRenamed")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsRenamed { get; set; }
+
+        [JsonPropertyName("optionsRemoved")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsRemoved { get; set; }
+    }
+
+    internal sealed class ChoiceOptionItem
+    {
+        [JsonPropertyName("value")]
+        public int Value { get; set; }
+
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+    }
+
+    internal sealed class ChoiceListItem
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("isGlobal")]
+        public bool IsGlobal { get; set; }
+    }
+
     // ── create_records models ─────────────────────────────────────────
 
     internal sealed class BatchCreateResult

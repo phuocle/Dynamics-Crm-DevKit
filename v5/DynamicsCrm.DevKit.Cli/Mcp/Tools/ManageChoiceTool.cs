@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
@@ -29,7 +31,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         [McpServerTool(Name = "manage_choice",
             Title = "Manage global option sets (choices)",
-            Destructive = true, ReadOnly = false, Idempotent = false),
+            Destructive = true, ReadOnly = false, Idempotent = false,
+            UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
             "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=optionset_name+display_name+options; update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
 
@@ -101,8 +104,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleList()
         {
             var response = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
-            var sorted = response.OptionSetMetadata.OrderBy(x => x.Name);
-            return SuccessResult(CompactFormatter.FormatOptionSetList(sorted));
+            var sorted = response.OptionSetMetadata.OrderBy(x => x.Name).ToList();
+            var items = sorted.Select(os => new ChoiceListItem
+            {
+                Name = os.Name,
+                DisplayName = os.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                Type = os.OptionSetType?.ToString() ?? "",
+                IsGlobal = os.IsGlobal == true
+            }).ToList();
+            return StructuredResult(CompactFormatter.FormatOptionSetList(sorted), new ManageChoiceResult
+            {
+                Action = "list",
+                TotalCount = items.Count,
+                Items = items,
+                Status = "ok"
+            });
         }
 
         private CallToolResult HandleDetail(string optionsetName)
@@ -115,11 +131,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var response = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest
+                var response = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
+                var meta = response.OptionSetMetadata;
+                var options = (meta as OptionSetMetadata)?.Options
+                    .OrderBy(o => o.Value)
+                    .Select(o => new ChoiceOptionItem
+                    {
+                        Value = o.Value ?? 0,
+                        Label = o.Label?.UserLocalizedLabel?.Label ?? ""
+                    }).ToList();
+                return StructuredResult(CompactFormatter.FormatOptionSetDetail(meta), new ManageChoiceResult
                 {
-                    Name = name
+                    Action = "detail",
+                    OptionSetName = meta.Name,
+                    DisplayName = meta.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                    Description = meta.Description?.UserLocalizedLabel?.Label,
+                    OptionCount = options?.Count,
+                    Options = options,
+                    Status = "ok"
                 });
-                return SuccessResult(CompactFormatter.FormatOptionSetDetail(response.OptionSetMetadata));
             }
             catch (Exception)
             {
@@ -224,7 +254,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (solWarning != null)
                 sb.AppendLine(solWarning);
 
-            return SuccessResult(sb.ToString());
+            return StructuredResult(sb.ToString(), new ManageChoiceResult
+            {
+                Action = "create",
+                OptionSetName = name,
+                DisplayName = displayName.Trim(),
+                Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
+                OptionCount = parsedOptions.Count,
+                Options = parsedOptions.Select(p => new ChoiceOptionItem { Value = p.value, Label = p.label }).ToList(),
+                SolutionName = solWarning == null ? solResult.UniqueName : null,
+                SolutionWarning = solWarning,
+                Published = published,
+                Status = "created"
+            });
         }
 
         private CallToolResult HandleUpdate(string optionsetName, string displayName, string description,
@@ -420,7 +462,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var published = autoPublish && Publish();
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
-            return SuccessResult(sb.ToString());
+            return StructuredResult(sb.ToString(), new ManageChoiceResult
+            {
+                Action = "update",
+                OptionSetName = name,
+                DisplayName = hasDisplayName ? displayName.Trim() : null,
+                OptionsAdded = hasAdd ? parsedAdd.Select(p => $"{p.value}:{p.label}").ToList() : null,
+                OptionsRenamed = hasUpdate ? parsedUpdateLabels.Select(p => $"{p.oldLabel}:{p.newLabel}").ToList() : null,
+                OptionsRemoved = hasRemove ? parsedRemoveLabels : null,
+                Published = published,
+                Status = "updated"
+            });
         }
 
         #endregion
@@ -594,9 +646,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result;
         }
 
-        private static CallToolResult SuccessResult(string text) => new()
+        private static CallToolResult StructuredResult(string text, ManageChoiceResult structured) => new()
         {
-            Content = [new TextContentBlock { Text = text }]
+            Content = [new TextContentBlock { Text = text }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured)
         };
 
         private static CallToolResult ErrorResult(string message) => new()
