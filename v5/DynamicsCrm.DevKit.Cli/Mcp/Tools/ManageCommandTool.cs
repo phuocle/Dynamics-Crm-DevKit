@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -952,7 +953,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "create",
                 Status = "success",
                 CommandId = newId.ToString(),
-                Message = $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]})."
+                Message = $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}).",
+                CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
             return new CallToolResult
@@ -1259,7 +1261,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var newId = _serviceClient.Create(newEntity);
 
             var createdMsg = $"Created appaction override: command '{label.Trim()}' on {entityName} ({LocationMap[locationValue]}) is now hidden.";
-            var createdResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = newId.ToString(), Message = createdMsg };
+            var createdResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = newId.ToString(), Message = createdMsg, CreateMode = SolutionComponentCreateMode.None.ToString() };
             return new CallToolResult
             {
                 Content = [new TextContentBlock { Text = createdMsg }],
@@ -1558,7 +1560,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "add_flyout",
                 Status = "success",
                 CommandId = dropdownId.ToString(),
-                Message = message
+                Message = message,
+                CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
             return new CallToolResult
@@ -1840,7 +1843,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "add_split_button",
                 Status = "success",
                 CommandId = splitId.ToString(),
-                Message = message
+                Message = message,
+                CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
             return new CallToolResult
@@ -2073,7 +2077,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "add_flyout_item",
                 Status = "success",
                 CommandId = result.itemId,
-                Message = message
+                Message = message,
+                CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
             return new CallToolResult

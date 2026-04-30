@@ -176,8 +176,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             };
 
-            if (!string.IsNullOrWhiteSpace(solResult.UniqueName))
-                request.SolutionUniqueName = solResult.UniqueName;
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "")}.");
@@ -213,6 +212,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 CascadeUnshare = cascade.Unshare?.ToString(),
                 MetadataId = metadataId.ToString(),
                 SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
+                CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
+                IsAddToSolution = !string.IsNullOrWhiteSpace(solResult.UniqueName),
+                AddToSolutionMethod = string.IsNullOrWhiteSpace(solResult.UniqueName) ? "none" : "SolutionUniqueName",
                 Published = published,
                 Status = "Created"
             });
@@ -276,8 +278,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             };
 
-            if (!string.IsNullOrWhiteSpace(solResult.UniqueName))
-                request.SolutionUniqueName = solResult.UniqueName;
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE N:N relationship '{relationshipName}' between '{entity1}' and '{entity2}' (intersect: '{intersectEntityName}').");
@@ -304,6 +305,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IntersectEntityName = intersectEntityName,
                 MetadataId = metadataId.ToString(),
                 SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
+                CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
+                IsAddToSolution = !string.IsNullOrWhiteSpace(solResult.UniqueName),
+                AddToSolutionMethod = string.IsNullOrWhiteSpace(solResult.UniqueName) ? "none" : "SolutionUniqueName",
                 Published = published,
                 Status = "Created"
             });
@@ -564,8 +568,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Lookup = lookupAttr  // Pass existing lookup — SDK adds new target
             };
 
-            if (!string.IsNullOrWhiteSpace(solResult.UniqueName))
-                request.SolutionUniqueName = solResult.UniqueName;
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solResult.UniqueName);
 
             if (_options.DryRun)
                 return DryRunResult($"Would ADD target '{referencedEntity}' to polymorphic lookup '{entityName}.{attributeName}'.");
@@ -594,6 +597,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     LookupAttributeName = attributeName,
                     MetadataId = metadataId.ToString(),
                     SolutionName = string.IsNullOrWhiteSpace(solResult.UniqueName) ? null : solResult.UniqueName,
+                    CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
+                    IsAddToSolution = !string.IsNullOrWhiteSpace(solResult.UniqueName),
+                    AddToSolutionMethod = string.IsNullOrWhiteSpace(solResult.UniqueName) ? "none" : "SolutionUniqueName",
                     Published = published,
                     Status = "TargetAdded"
                 });

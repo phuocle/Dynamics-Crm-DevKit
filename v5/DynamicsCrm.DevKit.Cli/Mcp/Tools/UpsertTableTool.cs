@@ -345,10 +345,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Entity = entityMetadata,
                     PrimaryAttribute = primaryAttribute,
-                    SolutionUniqueName = resolvedSolutionUniqueName ?? solution_name.Trim(),
                     HasNotes = has_notes,
                     HasActivities = false
                 };
+                SolutionComponentCreateHelper.ApplySolutionUniqueName(request, resolvedSolutionUniqueName ?? solution_name.Trim());
 
                 if (_options.DryRun)
                     return DryRunResult($"Would CREATE entity '{entity_name}' (display: '{display_name}').");
@@ -421,6 +421,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     MetadataId = entityId.ToString(),
                     EntitySetName = string.IsNullOrEmpty(entitySetName) ? null : entitySetName,
                     SolutionName = resolvedSolutionUniqueName ?? solution_name.Trim(),
+                    CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
+                    IsAddToSolution = true,
+                    AddToSolutionMethod = "SolutionUniqueName",
                     Published = published,
                     IsAuditEnabled = is_audit_enabled ?? true,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
@@ -563,8 +566,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Entity = existingMetadata,
                     MergeLabels = true
                 };
-                if (!string.IsNullOrWhiteSpace(solutionName))
-                    updateRequest.SolutionUniqueName = solutionName.Trim();
+                SolutionComponentCreateHelper.ApplySolutionUniqueName(updateRequest, solutionName);
 
                 if (_options.DryRun)
                 {

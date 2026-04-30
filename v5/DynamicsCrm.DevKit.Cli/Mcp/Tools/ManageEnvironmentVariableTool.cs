@@ -324,24 +324,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var defId = _serviceClient.Create(newDef);
 
-            string solWarning = null;
-            if (!string.IsNullOrWhiteSpace(solutionName))
-            {
-                try
-                {
-                    _serviceClient.Execute(new AddSolutionComponentRequest
-                    {
-                        AddRequiredComponents = false,
-                        ComponentType = 380,
-                        ComponentId = defId,
-                        SolutionUniqueName = solutionName.Trim()
-                    });
-                }
-                catch (Exception ex)
-                {
-                    solWarning = $"Failed to add to solution '{solutionName}': {ex.Message}";
-                }
-            }
+            var addResult = SolutionComponentCreateHelper.AddExistingComponent(
+                _serviceClient,
+                defId,
+                380,
+                solutionName);
+            var solWarning = string.IsNullOrWhiteSpace(addResult.AddToSolutionWarning)
+                ? null
+                : $"Failed to add to solution '{solutionName}': {addResult.AddToSolutionWarning}";
 
             var curVal = "";
             if (!string.IsNullOrWhiteSpace(currentValue))
@@ -366,6 +356,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DefaultValue = string.IsNullOrEmpty(defaultValue) ? null : defaultValue,
                 CurrentValue = string.IsNullOrEmpty(curVal) ? null : curVal,
                 SolutionName = string.IsNullOrEmpty(sol) ? null : sol,
+                CreateMode = SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString(),
+                IsAddToSolution = addResult.IsAddToSolution,
+                AddToSolutionMethod = addResult.AddToSolutionMethod,
+                AddToSolutionWarning = addResult.AddToSolutionWarning,
                 SolutionWarning = solWarning,
                 Published = published
             };

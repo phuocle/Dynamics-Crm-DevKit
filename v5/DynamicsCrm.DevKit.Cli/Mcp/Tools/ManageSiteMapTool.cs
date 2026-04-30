@@ -577,6 +577,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Validated = validate,
                     ValidationWarnings = validationWarnings,
                     Published = published,
+                    CreateMode = SolutionComponentCreateMode.AppComponentAssociation.ToString(),
+                    IsAddToSolution = false,
+                    AddToSolutionMethod = "AddAppComponentsRequest",
                     OperationsCount = opSummaries?.Count,
                     OperationSummaries = opSummaries?.Count > 0 ? opSummaries : null
                 };

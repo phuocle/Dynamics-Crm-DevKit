@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -484,7 +485,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RoleId = newId.ToString(),
                 RoleName = roleName,
                 BusinessUnitId = buId.ToString(),
-                Status = "created"
+                Status = "created",
+                CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
             return StructuredResult(sb.ToString(), structured);

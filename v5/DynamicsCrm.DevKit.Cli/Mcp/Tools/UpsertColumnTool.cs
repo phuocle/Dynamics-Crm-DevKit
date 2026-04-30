@@ -675,8 +675,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description))
                 request.Lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
-            if (!string.IsNullOrWhiteSpace(solutionName))
-                request.SolutionUniqueName = solutionName.Trim();
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
             if (_options.DryRun) return DryRunResult($"Would CREATE lookup column '{logicalName}' on entity '{entityName}'.");
 
@@ -748,8 +747,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["Lookup"] = lookup,
                 ["OneToManyRelationships"] = relationships
             };
-            if (!string.IsNullOrWhiteSpace(solutionName))
-                request["SolutionUniqueName"] = solutionName.Trim();
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
             if (_options.DryRun) return DryRunResult($"Would CREATE polymorphic lookup column '{logicalName}' on entity '{entityName}'.");
 
@@ -841,8 +839,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
             };
-            if (!string.IsNullOrWhiteSpace(solutionName))
-                request.SolutionUniqueName = solutionName.Trim();
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
             if (_options.DryRun) return DryRunResult($"Would CREATE customer column '{logicalName}' on entity '{entityName}'.");
 
@@ -1060,8 +1057,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 EntityName = entityName,
                 Attribute = attribute
             };
-            if (!string.IsNullOrWhiteSpace(solutionName))
-                request.SolutionUniqueName = solutionName.Trim();
+            SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
             if (_options.DryRun) return Guid.Empty;
 
@@ -1121,6 +1117,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 RequiredLevel = reqLevel.ToString(),
                 MetadataId = metadataId.ToString(),
                 SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
+                CreateMode = SolutionComponentCreateMode.MetadataCreateRequest.ToString(),
+                IsAddToSolution = !string.IsNullOrWhiteSpace(solutionName),
+                AddToSolutionMethod = string.IsNullOrWhiteSpace(solutionName) ? "none" : "SolutionUniqueName",
                 Published = published,
                 Status = "created",
                 Extra = extra?.Count > 0 ? extra : null

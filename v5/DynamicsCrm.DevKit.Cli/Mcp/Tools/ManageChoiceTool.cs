@@ -220,25 +220,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var createResp = (CreateOptionSetResponse)_serviceClient.Execute(
                 new CreateOptionSetRequest { OptionSet = optionSetMetadata });
 
+            var addResult = SolutionComponentCreateHelper.AddExistingComponent(
+                _serviceClient,
+                createResp.OptionSetId,
+                9,
+                solResult.IsSuccess ? solResult.UniqueName : solutionName.Trim());
             string solWarning = null;
-            if (!string.IsNullOrWhiteSpace(solutionName))
-            {
-                try
-                {
-                    var solName = solResult.IsSuccess ? solResult.UniqueName : solutionName.Trim();
-                    _serviceClient.Execute(new AddSolutionComponentRequest
-                    {
-                        AddRequiredComponents = false,
-                        ComponentType = 9, // OptionSet
-                        ComponentId = createResp.OptionSetId,
-                        SolutionUniqueName = solName
-                    });
-                }
-                catch (Exception ex)
-                {
-                    solWarning = $"Warning: Created but failed to add to solution '{solutionName}': {ex.Message}";
-                }
-            }
+            if (!string.IsNullOrWhiteSpace(addResult.AddToSolutionWarning))
+                solWarning = $"Warning: Created but failed to add to solution '{solutionName}': {addResult.AddToSolutionWarning}";
 
             var published = autoPublish && Publish();
 
@@ -262,7 +251,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                 OptionCount = parsedOptions.Count,
                 Options = parsedOptions.Select(p => new ChoiceOptionItem { Value = p.value, Label = p.label }).ToList(),
-                SolutionName = solWarning == null ? solResult.UniqueName : null,
+                SolutionName = addResult.SolutionUniqueName,
+                CreateMode = SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString(),
+                IsAddToSolution = addResult.IsAddToSolution,
+                AddToSolutionMethod = addResult.AddToSolutionMethod,
+                AddToSolutionWarning = addResult.AddToSolutionWarning,
                 SolutionWarning = solWarning,
                 Published = published,
                 Status = "created"

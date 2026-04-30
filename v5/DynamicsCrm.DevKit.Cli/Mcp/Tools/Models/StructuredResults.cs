@@ -238,6 +238,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
 
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionMethod { get; set; }
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
+
         [JsonPropertyName("published")]
         public bool Published { get; set; }
 
@@ -301,6 +317,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        public bool IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        public string AddToSolutionMethod { get; set; } = "AddAppComponentsRequest";
 
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -409,6 +435,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
 
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionMethod { get; set; }
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
+
         [JsonPropertyName("changes")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, UpdateAttributeChange> Changes { get; set; }
@@ -488,6 +530,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        public bool IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        public string AddToSolutionMethod { get; set; } = "none";
     }
 
     internal sealed class CellUpdateInstruction
@@ -564,6 +616,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("solutionName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionMethod { get; set; }
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
 
         [JsonPropertyName("solutionWarning")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -1515,6 +1583,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("commands")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<CommandEntry> Commands { get; set; }
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        public bool IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        public string AddToSolutionMethod { get; set; } = "none";
     }
 
     internal sealed class CommandEntry
@@ -1784,6 +1862,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
 
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionMethod { get; set; }
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
+
         [JsonPropertyName("published")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Published { get; set; }
@@ -1888,6 +1982,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("status")]
         public string Status { get; set; } = "";
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        public bool IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        public string AddToSolutionMethod { get; set; } = "none";
     }
 
     // ── upsert_relationship models ──────────────────────────────────────
@@ -1963,6 +2067,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("solutionName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionMethod { get; set; }
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
@@ -2618,6 +2738,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("solutionName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionName { get; set; }
+
+        [JsonPropertyName("createMode")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string CreateMode { get; set; }
+
+        [JsonPropertyName("isAddToSolution")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsAddToSolution { get; set; }
+
+        [JsonPropertyName("addToSolutionMethod")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionMethod { get; set; }
+
+        [JsonPropertyName("addToSolutionWarning")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AddToSolutionWarning { get; set; }
 
         [JsonPropertyName("solutionWarning")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

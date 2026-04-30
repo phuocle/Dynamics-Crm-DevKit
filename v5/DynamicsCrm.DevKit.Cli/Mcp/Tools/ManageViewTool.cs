@@ -347,7 +347,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 StructuredContent = JsonSerializer.SerializeToElement(new UpsertViewResult
                 {
                     Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
-                    Status = status, Validated = validate, Published = published
+                    Status = status, Validated = validate, Published = published,
+                    CreateMode = SolutionComponentCreateMode.None.ToString()
                 })
             };
         }

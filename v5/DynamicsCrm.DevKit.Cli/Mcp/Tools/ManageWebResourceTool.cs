@@ -387,21 +387,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var webResourceId = _serviceClient.Create(webResource);
 
-            string solWarning = null;
-            try
-            {
-                _serviceClient.Execute(new AddSolutionComponentRequest
-                {
-                    AddRequiredComponents = true,
-                    ComponentType = 61,
-                    ComponentId = webResourceId,
-                    SolutionUniqueName = solResult.UniqueName
-                });
-            }
-            catch (Exception ex)
-            {
-                solWarning = $"Failed to add to solution '{solResult.UniqueName}': {ex.Message}";
-            }
+            var addResult = SolutionComponentCreateHelper.AddExistingComponent(
+                _serviceClient,
+                webResourceId,
+                61,
+                solResult.UniqueName,
+                addRequiredComponents: true);
+            var solWarning = string.IsNullOrWhiteSpace(addResult.AddToSolutionWarning)
+                ? null
+                : $"Failed to add to solution '{solResult.UniqueName}': {addResult.AddToSolutionWarning}";
 
             var published = autoPublish && PublishWebResource(webResourceId);
 
@@ -436,6 +430,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 ],
                 SolutionName = solResult.UniqueName,
+                CreateMode = SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString(),
+                IsAddToSolution = addResult.IsAddToSolution,
+                AddToSolutionMethod = addResult.AddToSolutionMethod,
+                AddToSolutionWarning = addResult.AddToSolutionWarning,
                 Published = published
             };
 
