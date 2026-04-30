@@ -53,6 +53,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - New sections: add as the LAST section in the first tab (unless user specifies)
 - New fields: add to the last row in the target section
 
+## Tab & Section Positioning
+
+The `position` field controls where a tab or section is inserted/moved.
+Accepted values:
+- `""last""` (default) — append after all existing siblings
+- `""first""` — insert before all existing siblings
+- `""before:<name>""` — insert immediately before the sibling whose `name` attribute or label matches `<name>`
+- `""after:<name>""` — insert immediately after the matching sibling
+
+You may also split `position` and the reference into two fields:
+
+| Field | Value |
+|-------|-------|
+| `position` | `""before""` or `""after""` |
+| `reference_tab` | name or label of the target tab (for manage_tab) |
+| `reference_section` | name or label of the target section (for manage_section) |
+
+Both forms are equivalent. Use whichever is clearer in context.
+
+If the reference name is not found, the operation throws an error listing all available names — it never silently falls back to appending at the end.
+
+### Examples
+```json
+{ ""action"": ""manage_tab"", ""manage_action"": ""add"", ""label"": ""Lines"",
+  ""position"": ""before:tab_administrator"" }
+
+{ ""action"": ""manage_tab"", ""manage_action"": ""add"", ""label"": ""Lines"",
+  ""position"": ""before"", ""reference_tab"": ""tab_administrator"" }
+
+{ ""action"": ""manage_tab"", ""manage_action"": ""move"",
+  ""tab"": ""tab_lines"", ""position"": ""before:tab_administrator"" }
+```
+
 ## Structure Reference
 ```
 <form>

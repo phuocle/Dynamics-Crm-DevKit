@@ -199,9 +199,17 @@ Solution target: display name **TEST-MCP**
 ## K. App & Sitemap
 
 44. Kiểm tra trong môi trường có model-driven app tên "TEST-MCP App" chưa; nếu chưa có thì báo rõ cần tạo app đó tại Power Apps trước rồi dừng các bước liên quan app.
+   > ⚠️ Tools: execute_webapi(GET appmodules, filter name='TEST-MCP App')
+   > Result: Không tìm thấy model-driven app "TEST-MCP App"; cần tạo app đó tại Power Apps trước rồi dừng các bước liên quan app.
 45. Xem sitemap hiện tại của app "TEST-MCP App" và cho biết đã có area hoặc group phù hợp để thêm Invoice chưa.
+   > ✅ Tools: manage_sitemap(detail, app=TEST-MCP App) → execute_webapi(GET sitemaps)
+   > Result: Sitemap hiện có Area1 với group MCP và subarea account; có thể dùng group MCP để thêm Invoice, nhưng chưa có area/group Invoicing riêng.
 46. Cập nhật sitemap của app "TEST-MCP App": thêm khu vực tên "Invoicing", bên trong có menu mở bảng Invoice và menu mở bảng Invoice Line.
+   > ✅ Tools: get_tables(v4_invoice,v4_invoiceline) → manage_sitemap(update, app=TEST-MCP App)
+   > Result: Đã thêm area Invoicing với group Invoicing gồm 2 menu entity v4_invoice và v4_invoiceline; sitemap validated, backup created, published.
 47. Đọc lại sitemap app "TEST-MCP App" và xác nhận Invoice cùng Invoice Line đã xuất hiện đúng vị trí.
+   > ✅ Tools: manage_sitemap(detail, app=TEST-MCP App) → execute_webapi(GET appmodules) → execute_webapi(GET sitemaps)
+   > Result: Confirmed sitemap contains Area Invoicing with Group Invoicing and SubAreas Invoice (v4_invoice) and Invoice Line (v4_invoiceline) in the expected position.
 
 ---
 

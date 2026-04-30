@@ -167,9 +167,61 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 .ToList();
         }
 
+        /// <summary>
+        /// Builds a normalised position string from a bare keyword + optional reference name.
+        /// Accepts patterns like:
+        ///   position="before", reference_tab="tab_admin"  →  "before:tab_admin"
+        ///   position="before:tab_admin"                   →  "before:tab_admin"  (pass-through)
+        ///   position="after",  reference_section="foo"    →  "after:foo"
+        ///   position="first" | "last" | null              →  unchanged / "last"
+        /// </summary>
+        internal static string ResolvePosition(JsonElement op, string positionKey = "position",
+            string referenceKey = null)
+        {
+            var pos = GetStringProp(op, positionKey)?.Trim() ?? "last";
+
+            // Already in combined form — pass through
+            if (pos.StartsWith("before:", StringComparison.OrdinalIgnoreCase) ||
+                pos.StartsWith("after:", StringComparison.OrdinalIgnoreCase))
+                return pos;
+
+            // Bare "before" or "after" — look for a companion reference field
+            if (string.Equals(pos, "before", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(pos, "after", StringComparison.OrdinalIgnoreCase))
+            {
+                string refName = null;
+
+                // Try explicit reference key first
+                if (!string.IsNullOrEmpty(referenceKey))
+                    refName = GetStringProp(op, referenceKey)?.Trim();
+
+                // Fall back: scan common reference field names
+                if (string.IsNullOrEmpty(refName))
+                {
+                    foreach (var key in new[] { "reference_tab", "reference_section", "reference", "before_tab", "after_tab", "before_section", "after_section" })
+                    {
+                        refName = GetStringProp(op, key)?.Trim();
+                        if (!string.IsNullOrEmpty(refName)) break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(refName))
+                    return $"{pos.ToLowerInvariant()}:{refName}";
+
+                // Bare "before"/"after" with no reference is ambiguous — treat as "last" so caller can warn
+                return "last";
+            }
+
+            return pos;
+        }
+
         internal static void InsertElement(XElement parent, XElement newElement, string position,
             string childElementName, string nameAttribute)
         {
+            var availableNames = parent.Elements(childElementName)
+                .Select(e => e.Attribute(nameAttribute)?.Value ?? "(unnamed)")
+                .ToList();
+
             if (position == "first")
             {
                 var first = parent.Elements(childElementName).FirstOrDefault();
@@ -191,7 +243,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 if (target != null)
                     target.AddAfterSelf(newElement);
                 else
-                    parent.Add(newElement);
+                    throw new InvalidOperationException(
+                        $"Position 'after:{afterName}' — '{afterName}' not found. Available: {string.Join(", ", availableNames)}");
             }
             else if (position.StartsWith("before:", StringComparison.OrdinalIgnoreCase))
             {
@@ -206,7 +259,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 if (target != null)
                     target.AddBeforeSelf(newElement);
                 else
-                    parent.Add(newElement);
+                    throw new InvalidOperationException(
+                        $"Position 'before:{beforeName}' — '{beforeName}' not found. Available: {string.Join(", ", availableNames)}");
             }
             else
             {

@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var tabName = FormXmlHelpers.GetStringProp(op, "name") ?? FormXmlHelpers.AutoTabName(label);
             var tabColumns = FormXmlHelpers.GetIntProp(op, "tab_columns", 1);
             var expanded = FormXmlHelpers.GetBoolProp(op, "expanded", true);
-            var position = FormXmlHelpers.GetStringProp(op, "position") ?? "last";
+            var position = FormXmlHelpers.ResolvePosition(op, "position", "reference_tab");
             var visible = FormXmlHelpers.GetBoolProp(op, "visible", true);
             var showLabel = FormXmlHelpers.GetBoolProp(op, "show_label", true);
             var hideOnPhone = FormXmlHelpers.GetBoolProp(op, "hide_on_phone", false);
@@ -170,8 +170,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         {
             var tabName = FormXmlHelpers.GetStringProp(op, "tab")
                 ?? throw new InvalidOperationException("move_tab requires 'tab'.");
-            var position = FormXmlHelpers.GetStringProp(op, "position")
-                ?? throw new InvalidOperationException("move_tab requires 'position'. Valid values: 'first', 'last', 'before:<tab_name>', 'after:<tab_name>'.");
+            var position = FormXmlHelpers.ResolvePosition(op, "position", "reference_tab");
+            if (position == "last" && !op.TryGetProperty("position", out _))
+                throw new InvalidOperationException("move_tab requires 'position'. Valid values: 'first', 'last', 'before:<tab_name>', 'after:<tab_name>'.");
 
             var tabElement = FormXmlHelpers.FindTab(formDoc, tabName);
             if (tabElement == null)
@@ -215,7 +216,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var showLabel = FormXmlHelpers.GetBoolProp(op, "show_label", true);
             var visible = FormXmlHelpers.GetBoolProp(op, "visible", true);
             var hideOnPhone = FormXmlHelpers.GetBoolProp(op, "hide_on_phone", false);
-            var position = FormXmlHelpers.GetStringProp(op, "position") ?? "last";
+            var position = FormXmlHelpers.ResolvePosition(op, "position", "reference_section");
 
             var fields = new List<JsonElement>();
             if (op.TryGetProperty("fields", out var fieldsArray) && fieldsArray.ValueKind == JsonValueKind.Array)
@@ -304,8 +305,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 ?? throw new InvalidOperationException("move_section requires 'tab'.");
             var sectionName = FormXmlHelpers.GetStringProp(op, "section")
                 ?? throw new InvalidOperationException("move_section requires 'section'.");
-            var position = FormXmlHelpers.GetStringProp(op, "position")
-                ?? throw new InvalidOperationException("move_section requires 'position'. Valid values: 'first', 'last', 'before:<section_name>', 'after:<section_name>'.");
+            var position = FormXmlHelpers.ResolvePosition(op, "position", "reference_section");
+            if (position == "last" && !op.TryGetProperty("position", out _))
+                throw new InvalidOperationException("move_section requires 'position'. Valid values: 'first', 'last', 'before:<section_name>', 'after:<section_name>'.");
             var targetTabName = FormXmlHelpers.GetStringProp(op, "target_tab");
             var targetTabColumn = FormXmlHelpers.GetIntProp(op, "tab_column", 0);
 
