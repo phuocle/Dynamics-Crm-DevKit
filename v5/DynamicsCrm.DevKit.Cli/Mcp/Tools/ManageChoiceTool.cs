@@ -38,6 +38,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "OPTION VALUES: solution_name is REQUIRED for create and for label-only add_options — if not provided by the user, ask; never search or guess. Pass options/add_options as label-only ('Draft;Confirmed'). For update_options use 'OldLabel:NewLabel;...' pairs. For remove_options use label names ('Draft,Cancelled') — labels are resolved to values automatically.\n\n" +
 
+            "OPTION COLORS: Use option_colors='Label:#RRGGBB;...' or 'value:#RRGGBB;...' to assign hex colors to option items. Applies to create and update. Labels are resolved case-insensitively. Example: 'Draft:#808080;Paid:#008000'. Color keys must resolve to existing options; duplicates are rejected.\n\n" +
+
             "WHEN TO USE:\n" +
             "- Resolve label for picklist fields in FetchXML / query results\n" +
             "- Create a global choice for upsert_column to reference\n" +
@@ -74,6 +76,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Required for create. Required for label-only add_options. Used to resolve the publisher prefix for auto-generating option values."
             )] string solution_name = "",
             [Description(
+                "Optional for create/update. Semicolon-separated color mappings. Use 'Label:#RRGGBB' or 'value:#RRGGBB'. Labels are resolved case-insensitively. Example: 'Draft:#808080;Paid:#008000'."
+            )] string option_colors = "",
+            [Description(
                 "Publish after changes."
             )] bool auto_publish = true)
         {
@@ -88,8 +93,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(),
                     "detail" => HandleDetail(optionset_name),
-                    "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, auto_publish),
-                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, auto_publish),
+                    "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, option_colors, auto_publish),
+                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors, auto_publish),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update'.")
                 };
             }
@@ -138,7 +143,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     .Select(o => new ChoiceOptionItem
                     {
                         Value = o.Value ?? 0,
-                        Label = o.Label?.UserLocalizedLabel?.Label ?? ""
+                        Label = o.Label?.UserLocalizedLabel?.Label ?? "",
+                        Color = string.IsNullOrWhiteSpace(o.Color) ? null : o.Color
                     }).ToList();
                 return StructuredResult(CompactFormatter.FormatOptionSetDetail(meta), new ManageChoiceResult
                 {
@@ -160,7 +166,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(string optionsetName, string displayName, string description,
-            string options, string solutionName, bool autoPublish)
+            string options, string solutionName, string optionColors, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'create'.");
@@ -193,6 +199,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (parsedOptions.Count == 0)
                 return ErrorResult("Error: At least one option is required for 'create'.");
 
+            // Parse and validate option_colors
+            Dictionary<string, string> colorMap = null;
+            if (!string.IsNullOrWhiteSpace(optionColors))
+            {
+                var (parsed, colorError) = ParseOptionColors(optionColors);
+                if (colorError != null)
+                    return ErrorResult(colorError);
+                var (resolved, resolveError) = ResolveOptionColors(parsedOptions, parsed, name);
+                if (resolveError != null)
+                    return ErrorResult(resolveError);
+                colorMap = resolved;
+            }
+
             // Check if already exists
             if (OptionSetExists(name))
                 return ErrorResult($"Error: Global option set '{name}' already exists. " +
@@ -201,20 +220,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE global option set '{name}' with {parsedOptions.Count} option(s).");
 
+            var langCode = McpHelper.GetBaseLanguageCode(_serviceClient);
             var optionSetMetadata = new OptionSetMetadata
             {
                 Name = name,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
+                DisplayName = new Label(displayName.Trim(), langCode),
                 IsGlobal = true,
                 OptionSetType = OptionSetType.Picklist
             };
 
             if (!string.IsNullOrWhiteSpace(description))
-                optionSetMetadata.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                optionSetMetadata.Description = new Label(description.Trim(), langCode);
 
             foreach (var (value, label) in parsedOptions)
             {
-                optionSetMetadata.Options.Add(new OptionMetadata(new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient)), value));
+                var optMeta = new OptionMetadata(new Label(label, langCode), value);
+                if (colorMap != null && colorMap.TryGetValue(value.ToString(), out var hex))
+                    optMeta.Color = hex;
+                optionSetMetadata.Options.Add(optMeta);
             }
 
             var createResp = (CreateOptionSetResponse)_serviceClient.Execute(
@@ -238,7 +261,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Description: {description.Trim()}");
             sb.AppendLine($"Options: {parsedOptions.Count}");
             foreach (var (value, label) in parsedOptions)
-                sb.AppendLine($"  {value}: {label}");
+            {
+                var colorSuffix = colorMap != null && colorMap.TryGetValue(value.ToString(), out var c) ? $" ({c})" : "";
+                sb.AppendLine($"  {value}: {label}{colorSuffix}");
+            }
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
             if (solWarning != null)
                 sb.AppendLine(solWarning);
@@ -250,7 +276,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = displayName.Trim(),
                 Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                 OptionCount = parsedOptions.Count,
-                Options = parsedOptions.Select(p => new ChoiceOptionItem { Value = p.value, Label = p.label }).ToList(),
+                Options = parsedOptions.Select(p =>
+                {
+                    string c = null;
+                    colorMap?.TryGetValue(p.value.ToString(), out c);
+                    return new ChoiceOptionItem { Value = p.value, Label = p.label, Color = c };
+                }).ToList(),
                 SolutionName = addResult.SolutionUniqueName,
                 CreateMode = SolutionComponentCreateMode.RecordCreateThenAddSolutionComponent.ToString(),
                 IsAddToSolution = addResult.IsAddToSolution,
@@ -263,7 +294,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(string optionsetName, string displayName, string description,
-            string addOptions, string updateOptions, string removeOptionValues, string solutionName, bool autoPublish)
+            string addOptions, string updateOptions, string removeOptionValues, string solutionName, string optionColors, bool autoPublish)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'update'.");
@@ -322,10 +353,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var hasAdd = parsedAdd != null && parsedAdd.Count > 0;
             var hasUpdate = parsedUpdateLabels != null && parsedUpdateLabels.Count > 0;
             var hasRemove = parsedRemoveLabels != null && parsedRemoveLabels.Count > 0;
+            var hasColors = !string.IsNullOrWhiteSpace(optionColors);
 
-            if (!hasDisplayName && !hasDescription && !hasAdd && !hasUpdate && !hasRemove)
+            if (!hasDisplayName && !hasDescription && !hasAdd && !hasUpdate && !hasRemove && !hasColors)
                 return ErrorResult("Error: No changes specified. Provide at least one of: " +
-                    "display_name, description, add_options, update_options, remove_options.");
+                    "display_name, description, add_options, update_options, remove_options, option_colors.");
 
             // Verify it exists and fetch options for label→value resolution
             OptionSetMetadata existingMeta;
@@ -380,6 +412,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (hasAdd) parts.Add($"add {parsedAdd.Count} option(s)");
                 if (hasUpdate) parts.Add($"update {parsedUpdate.Count} label(s)");
                 if (hasRemove) parts.Add($"remove {parsedRemove.Count} option(s)");
+                if (hasColors) parts.Add("colors");
                 return DryRunResult($"Would UPDATE global option set '{name}': {string.Join(", ", parts)}.");
             }
 
@@ -452,6 +485,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
+            // Update colors — resolve against projected option state after add/rename
+            List<string> coloredSummary = null;
+            if (hasColors)
+            {
+                // Build projected option list: existing - removed + added, with labels after rename
+                var projected = existingMeta.Options
+                    .Where(o => o.Value.HasValue && (parsedRemove == null || !parsedRemove.Contains(o.Value.Value)))
+                    .Select(o =>
+                    {
+                        var val = o.Value.Value;
+                        // apply rename if any
+                        var renamed = parsedUpdate?.FirstOrDefault(t => t.value == val);
+                        var lbl = renamed.HasValue ? renamed.Value.newLabel : (o.Label?.UserLocalizedLabel?.Label ?? "");
+                        return (value: val, label: lbl);
+                    }).ToList();
+                if (hasAdd)
+                    projected.AddRange(parsedAdd);
+
+                var (colorRaw, colorParseError) = ParseOptionColors(optionColors);
+                if (colorParseError != null)
+                    return ErrorResult(colorParseError);
+                var (colorMap, resolveError) = ResolveOptionColors(projected, colorRaw, name);
+                if (resolveError != null)
+                    return ErrorResult(resolveError);
+
+                coloredSummary = [];
+                foreach (var kv in colorMap)
+                {
+                    var val = int.Parse(kv.Key);
+                    var lbl = projected.FirstOrDefault(p => p.value == val).label ?? kv.Key;
+                    var colorReq = new UpdateOptionValueRequest
+                    {
+                        OptionSetName = name,
+                        Value = val,
+                        MergeLabels = true
+                    };
+                    colorReq.Parameters["Color"] = kv.Value;
+                    _serviceClient.Execute(colorReq);
+                    sb.AppendLine($"Colored: {lbl} -> {kv.Value}");
+                    coloredSummary.Add($"{val}:{lbl}:{kv.Value}");
+                }
+            }
+
             var published = autoPublish && Publish();
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
@@ -463,6 +539,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 OptionsAdded = hasAdd ? parsedAdd.Select(p => $"{p.value}:{p.label}").ToList() : null,
                 OptionsRenamed = hasUpdate ? parsedUpdateLabels.Select(p => $"{p.oldLabel}:{p.newLabel}").ToList() : null,
                 OptionsRemoved = hasRemove ? parsedRemoveLabels : null,
+                OptionsColored = coloredSummary,
                 Published = published,
                 Status = "updated"
             });
@@ -472,7 +549,78 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         #region Helpers
 
+        internal static bool TryNormalizeHexColor(string input, out string color)
+        {
+            color = null;
+            if (string.IsNullOrWhiteSpace(input)) return false;
+            var s = input.Trim();
+            if (s.StartsWith("#")) s = s[1..];
+            if (s.Length != 6) return false;
+            foreach (var c in s)
+                if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')))
+                    return false;
+            color = "#" + s.ToUpperInvariant();
+            return true;
+        }
 
+        private static (Dictionary<string, string> Result, string Error) ParseOptionColors(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return (new Dictionary<string, string>(), null);
+
+            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var part in input.Split(';'))
+            {
+                var trimmed = part.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+                var colonIndex = trimmed.LastIndexOf(':');
+                if (colonIndex <= 0 || colonIndex >= trimmed.Length - 1)
+                    return (null, $"Error: Invalid option_colors format. Expected 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.");
+                var key = trimmed[..colonIndex].Trim();
+                var colorPart = trimmed[(colonIndex + 1)..].Trim();
+                if (string.IsNullOrEmpty(key))
+                    return (null, $"Error: Invalid option_colors format. Expected 'Label:#RRGGBB;...' or 'value:#RRGGBB;...'.");
+                if (!TryNormalizeHexColor(colorPart, out var hex))
+                    return (null, $"Error: Invalid color '{colorPart}'. Expected hex color '#RRGGBB'.");
+                if (result.ContainsKey(key))
+                    return (null, $"Error: Duplicate option color key '{key}'.");
+                result[key] = hex;
+            }
+            return (result, null);
+        }
+
+        // Returns a value-keyed dictionary (value.ToString() -> hex) or error.
+        private static (Dictionary<string, string> Result, string Error) ResolveOptionColors(
+            IEnumerable<(int value, string label)> options,
+            Dictionary<string, string> colorsByKey,
+            string optionSetName)
+        {
+            if (colorsByKey == null || colorsByKey.Count == 0)
+                return (new Dictionary<string, string>(), null);
+
+            var optList = options.ToList();
+            var result = new Dictionary<string, string>();
+            foreach (var (key, hex) in colorsByKey)
+            {
+                if (int.TryParse(key, out var intKey))
+                {
+                    // resolve by integer value
+                    var match = optList.FirstOrDefault(o => o.value == intKey);
+                    if (match.label == null && !optList.Any(o => o.value == intKey))
+                        return (null, $"Error: Option color key '{key}' not found in '{optionSetName}'. Use action='detail' to see existing option labels and values.");
+                    result[intKey.ToString()] = hex;
+                }
+                else
+                {
+                    // resolve by label (case-insensitive)
+                    var match = optList.FirstOrDefault(o => o.label.Equals(key, StringComparison.OrdinalIgnoreCase));
+                    if (match.label == null)
+                        return (null, $"Error: Option color key '{key}' not found in '{optionSetName}'. Use action='detail' to see existing option labels and values.");
+                    result[match.value.ToString()] = hex;
+                }
+            }
+            return (result, null);
+        }
 
         /// <summary>
         /// Parses options that may be label-only ('Draft;Confirmed') or 'value:label' pairs.

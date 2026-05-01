@@ -92,12 +92,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 {
                     sb.AppendLine($"[Options] {osm.Options.Count} total");
                     sb.AppendLine();
-                    sb.AppendLine("Value\tLabel\tDescription");
+                    sb.AppendLine("Value\tLabel\tDescription\tColor");
                     foreach (var o in osm.Options.OrderBy(x => x.Value))
                     {
                         var label = o.Label?.UserLocalizedLabel?.Label ?? "";
                         var desc = o.Description?.UserLocalizedLabel?.Label ?? "";
-                        sb.AppendLine($"{o.Value}\t{label}\t{desc}");
+                        var color = o.Color ?? "";
+                        sb.AppendLine($"{o.Value}\t{label}\t{desc}\t{color}");
                     }
                 }
                 else

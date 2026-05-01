@@ -68,14 +68,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("string: Text/Email/Url/Phone/TextArea/TickerSymbol/RichText. datetime: DateOnly/DateAndTime. integer: None/Duration/TimeZone/Language/Locale.")] string format = "",
             [Description("datetime: UserLocal (def)/DateOnly/TimeZoneIndependent. DateOnly forces DateOnly format.")] string behavior = "",
             [Description("money: 0=Attribute (def), 1=Organization, 2=Currency.")] int precision_source = -1,
-            [Description("picklist create: JSON array [{\"label\":\"Low\",\"value\":100000000}].")] string options = "",
+            [Description("picklist create: JSON array [{\"label\":\"Low\",\"value\":100000000}]. Optional 'color' field: {\"label\":\"Low\",\"value\":100000000,\"color\":\"#808080\"}.")] string options = "",
             [Description("picklist create: existing global option set.")] string global_optionset_name = "",
             [Description("lookup create: target entity. Comma-separated = polymorphic.")] string lookup_target = "",
             [Description("lookup: schema name. Auto if empty.")] string lookup_relationship_name = "",
             [Description("boolean true label (def 'Yes'). [update: omit=keep]")] string true_label = "",
             [Description("boolean false label (def 'No'). [update: omit=keep]")] string false_label = "",
-            [Description("picklist update: JSON array — options to add.")] string add_options = "",
-            [Description("picklist update: JSON array — options to rename.")] string update_options = "",
+            [Description("picklist update: JSON array — options to add. Optional 'color' field: {\"label\":\"New\",\"value\":100000003,\"color\":\"#FF0000\"}.")] string add_options = "",
+            [Description("picklist update: JSON array — options to rename. Optional 'color' field: {\"label\":\"NewLabel\",\"value\":100000000,\"color\":\"#FF0000\"}.")] string update_options = "",
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
             [Description("[update only]")] bool? is_audit_enabled = null,
             [Description("[update only]")] bool? is_valid_for_advanced_find = null,
@@ -920,8 +920,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var optionSet = new OptionSetMetadata { IsGlobal = false, OptionSetType = OptionSetType.Picklist };
                 foreach (var opt in parsedOptions)
                 {
-                    optionSet.Options.Add(new OptionMetadata(new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)), opt.Value));
-                    optionLabels.Add($"{opt.Label} ({opt.Value})");
+                    var optMeta = new OptionMetadata(new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)), opt.Value);
+                    if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hex))
+                        optMeta.Color = hex;
+                    optionSet.Options.Add(optMeta);
+                    optionLabels.Add(string.IsNullOrWhiteSpace(opt.Color) ? $"{opt.Label} ({opt.Value})" : $"{opt.Label} ({opt.Value}) [{opt.Color}]");
                 }
 
                 if (isMultiSelect)
@@ -1205,6 +1208,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             public string Label { get; set; }
             public int? Value { get; set; }
+            public string Color { get; set; }
         }
 
         private static (List<OptionItem> Items, string Error) ParseOptions(string optionsJson)
@@ -1611,8 +1615,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             req.AttributeLogicalName = attributeName;
                         }
                         if (opt.Value.HasValue) req.Value = opt.Value.Value;
+                        if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexAdd))
+                            req.Parameters["Color"] = hexAdd;
                         var resp = (InsertOptionValueResponse)_serviceClient.Execute(req);
-                        results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue})");
+                        results.Add(string.IsNullOrWhiteSpace(opt.Color)
+                            ? $"OptionsAdded: {opt.Label} ({resp.NewOptionValue})"
+                            : $"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [{opt.Color}]");
                     }
             }
 
@@ -1633,8 +1641,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             req.EntityLogicalName = entityName;
                             req.AttributeLogicalName = attributeName;
                         }
+                        if (!string.IsNullOrWhiteSpace(opt.Color) && ManageChoiceTool.TryNormalizeHexColor(opt.Color, out var hexUpd))
+                            req.Parameters["Color"] = hexUpd;
                         _serviceClient.Execute(req);
-                        results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
+                        results.Add(string.IsNullOrWhiteSpace(opt.Color)
+                            ? $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\""
+                            : $"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\" [{opt.Color}]");
                     }
             }
 

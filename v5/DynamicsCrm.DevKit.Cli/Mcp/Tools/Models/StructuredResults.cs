@@ -2777,6 +2777,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("optionsRemoved")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OptionsRemoved { get; set; }
+
+        [JsonPropertyName("optionsColored")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsColored { get; set; }
     }
 
     internal sealed class ChoiceOptionItem
@@ -2786,6 +2790,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("label")]
         public string Label { get; set; }
+
+        [JsonPropertyName("color")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Color { get; set; }
     }
 
     internal sealed class ChoiceListItem
