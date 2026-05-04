@@ -275,6 +275,40 @@ public class ManageFormToolTests
         Assert.IsFalse(formXml.Contains("RelationshipName", StringComparison.Ordinal));
     }
 
+    [TestMethod]
+    public void FormXmlOperationsRunner_MissingAction_ErrorExplainsOperationContract()
+    {
+        var message = RunFormXmlOperationsError(SubgridFormXml, """
+[
+  {
+    "manage_action": "add",
+    "label": "Invoice Lines"
+  }
+]
+""");
+
+        StringAssert.Contains(message, "Each operation must have an 'action' field.");
+        StringAssert.Contains(message, "operation.action is the operation family, not the verb");
+        StringAssert.Contains(message, "{\"action\":\"manage_subgrid\",\"manage_action\":\"add\"");
+    }
+
+    [TestMethod]
+    public void FormXmlOperationsRunner_VerbInAction_ErrorExplainsManageAction()
+    {
+        var message = RunFormXmlOperationsError(SubgridFormXml, """
+[
+  {
+    "action": "add",
+    "label": "Invoice Lines"
+  }
+]
+""");
+
+        StringAssert.Contains(message, "Unknown action 'add'.");
+        StringAssert.Contains(message, "operation.action must be the operation family, not the verb");
+        StringAssert.Contains(message, "{\"action\":\"manage_subgrid\",\"manage_action\":\"add\"");
+    }
+
     private static string RunFormXmlOperations(string formXml, string operationsJson)
     {
         var runnerType = ToolType.Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperationsRunner")!;
@@ -286,6 +320,28 @@ public class ManageFormToolTests
         var result = run.Invoke(runner, new object[] { formXml, "v4_invoice", ops })!;
 
         return (string)result.GetType().GetField("Item1")!.GetValue(result)!;
+    }
+
+    private static string RunFormXmlOperationsError(string formXml, string operationsJson)
+    {
+        var runnerType = ToolType.Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperationsRunner")!;
+        var ctor = runnerType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null, new[] { typeof(ServiceClient) }, null)!;
+        var runner = ctor.Invoke(new object[] { null! });
+        var run = runnerType.GetMethod("Run", BindingFlags.Instance | BindingFlags.Public)!;
+        var ops = ParseOperations(operationsJson);
+
+        try
+        {
+            run.Invoke(runner, new object[] { formXml, "v4_invoice", ops });
+        }
+        catch (TargetInvocationException ex) when (ex.InnerException != null)
+        {
+            return ex.InnerException.Message;
+        }
+
+        Assert.Fail("Expected FormXmlOperationsRunner.Run to throw.");
+        return "";
     }
 
     private static List<JsonElement> ParseOperations(string operationsJson)

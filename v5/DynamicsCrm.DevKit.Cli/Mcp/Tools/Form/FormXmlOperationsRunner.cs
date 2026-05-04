@@ -71,6 +71,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 if (!op.TryGetProperty("action", out var actionProp))
                     throw new InvalidOperationException(
                         "Each operation must have an 'action' field.\n" +
+                        "Important: operation.action is the operation family, not the verb. Use 'manage_action' for add/update/remove/move.\n" +
+                        "Example: {\"action\":\"manage_subgrid\",\"manage_action\":\"add\",...}\n" +
                         "Valid actions: manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event.\n" +
                         "Read docs://instructions_for_formxml for operation format and examples.");
 
@@ -145,7 +147,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     default:
                         throw new InvalidOperationException(
                             $"Unknown action '{action}'.\n" +
-                            $"Valid: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event (each requires 'manage_action').\n" +
+                            $"operation.action must be the operation family, not the verb. Use manage_action='{action}' only if the operation action is one of the valid families.\n" +
+                            $"Example: {{\"action\":\"manage_subgrid\",\"manage_action\":\"{action}\",...}}\n" +
+                            $"Valid action families: manage_tab | manage_section | manage_fields | manage_subgrid | manage_library | manage_event.\n" +
                             $"Read docs://instructions_for_formxml for operation format and examples.");
                 }
             }

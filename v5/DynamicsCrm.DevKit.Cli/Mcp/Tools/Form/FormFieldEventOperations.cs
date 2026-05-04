@@ -31,7 +31,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             Dictionary<string, AttributeMetadata> attrMap, Dictionary<string, string> classIdMap)
         {
             var tabName = FormXmlHelpers.GetStringProp(op, "tab")
-                ?? throw new InvalidOperationException("add_fields requires 'tab'.");
+                ?? throw new InvalidOperationException("add_fields requires 'tab'. To add fields to the form header, use manage_action: \"add_header\" instead.");
+            if (string.Equals(tabName, "header", StringComparison.OrdinalIgnoreCase))
+                return ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap);
             var sectionName = FormXmlHelpers.GetStringProp(op, "section")
                 ?? throw new InvalidOperationException("add_fields requires 'section'.");
             var position = FormXmlHelpers.GetStringProp(op, "position") ?? "last";

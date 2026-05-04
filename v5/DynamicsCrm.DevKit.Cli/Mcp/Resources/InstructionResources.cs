@@ -42,6 +42,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Resources
 - Understand the existing structure before modifying
 - Validate changes against schema://formxml XSD before writing
 
+## Operation JSON Contract
+Call `manage_form` with tool-level `action='update'`. Inside the `operations` JSON array, each operation object uses:
+
+| Field | Meaning | Example |
+|-------|---------|---------|
+| `action` | Operation family | `""manage_subgrid""`, `""manage_fields""`, `""manage_tab""` |
+| `manage_action` | Verb within that family | `""add""`, `""update""`, `""remove""`, `""move""` |
+
+Do not put verbs like `""add""` or `""remove""` in operation `action`.
+
+```json
+[
+  { ""action"": ""manage_subgrid"", ""manage_action"": ""add"", ""label"": ""Invoice Lines"" }
+]
+```
+
 ## Naming Conventions
 - Tab names: `tab_$label` (lowercase, no spaces/special chars)
   Example: tab_general, tab_details, tab_address
@@ -122,6 +138,54 @@ If the reference name is not found, the operation throws an error listing all av
 - Boolean: {B0C6723A-8503-4fd7-BB28-C8A06AC933C2}
 - Money: {533B9E00-756B-4312-95A0-DC888637AC78}
 - SubGrid: {E7A81278-8635-4d9e-8D4D-59480B391C5B}
+
+## manage_fields — Header Operations
+
+To add, update, or remove fields in the **form header** (the strip at the top of the form), use
+`manage_action: ""add_header""`, `""update_header""`, or `""remove_header""`.
+
+**Do NOT use `""tab"": ""header""`** — the tool auto-routes `tab=""header""` to `add_header`, but using
+`manage_action: ""add_header""` directly is clearer and always works.
+
+### Add Header Fields
+```json
+{
+  ""action"": ""manage_fields"",
+  ""manage_action"": ""add_header"",
+  ""fields"": [
+    { ""field"": ""v5_name"" },
+    { ""field"": ""ownerid"" },
+    { ""field"": ""statecode"" },
+    { ""field"": ""statuscode"" }
+  ]
+}
+```
+
+No `tab` or `section` required for header operations.
+
+### Update Header Fields
+```json
+{
+  ""action"": ""manage_fields"",
+  ""manage_action"": ""update_header"",
+  ""fields"": [{ ""field"": ""ownerid"", ""visible"": false }]
+}
+```
+
+### Remove Header Fields
+```json
+{
+  ""action"": ""manage_fields"",
+  ""manage_action"": ""remove_header"",
+  ""fields"": [""statecode"", ""statuscode""]
+}
+```
+
+### Valid manage_action values for manage_fields
+`add`, `update`, `remove` (body fields — require `tab` + `section`)
+`add_header`, `update_header`, `remove_header` (header fields — no `tab`/`section` needed)
+
+---
 
 ## manage_subgrid Operation
 Use `manage_subgrid` instead of raw FormXML when adding, updating, or removing a subgrid.

@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=optionset_name+display_name+options; update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
+            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
 
             "OPTION VALUES: solution_name is REQUIRED for create and for label-only add_options — if not provided by the user, ask; never search or guess. Pass options/add_options as label-only ('Draft;Confirmed'). For update_options use 'OldLabel:NewLabel;...' pairs. For remove_options use label names ('Draft,Cancelled') — labels are resolved to values automatically.\n\n" +
 
@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "'list', 'detail', 'create', 'update'."
             )] string action,
             [Description(
-                "Logical name. Required except list."
+                "Logical name. Required except list and create. For create: if omitted, auto-derived as '{publisher_prefix}_{sanitized_display_name}'; if provided, must start with the solution publisher prefix (e.g. 'v5_invoicestatus') — error returned otherwise."
             )] string optionset_name = "",
             [Description(
                 "Required for create. Optional for update."
@@ -168,9 +168,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleCreate(string optionsetName, string displayName, string description,
             string options, string solutionName, string optionColors, bool autoPublish)
         {
-            if (string.IsNullOrWhiteSpace(optionsetName))
-                return ErrorResult("Error: optionset_name is required for 'create'.");
-
             if (string.IsNullOrWhiteSpace(displayName))
                 return ErrorResult("Error: display_name is required for 'create'.");
 
@@ -189,6 +186,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
             if (!solResult.IsSuccess)
                 return ErrorResult($"Error: {solResult.Error}");
+
+            var publisherPrefix = solResult.Prefix.ToLowerInvariant();
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                // Auto-derive from publisher prefix + sanitized display name
+                var sanitized = System.Text.RegularExpressions.Regex
+                    .Replace(displayName.Trim().ToLowerInvariant(), @"[^a-z0-9]+", "_")
+                    .Trim('_');
+                name = $"{publisherPrefix}_{sanitized}";
+            }
+            else if (!name.StartsWith(publisherPrefix + "_", StringComparison.OrdinalIgnoreCase))
+            {
+                var sanitized = System.Text.RegularExpressions.Regex
+                    .Replace(displayName.Trim().ToLowerInvariant(), @"[^a-z0-9]+", "_")
+                    .Trim('_');
+                var suggested = $"{publisherPrefix}_{sanitized}";
+                return ErrorResult(
+                    $"Error: optionset_name '{name}' does not start with the solution publisher prefix '{publisherPrefix}_'. " +
+                    $"Use '{suggested}' or omit optionset_name to auto-derive it.");
+            }
 
             var parsedOptions = ParseOptionsWithAutoValue(options, solResult.OptionValuePrefix * 10000);
 
