@@ -37,6 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
             "CREATE (no attribute): need attribute_type + display_name.\n" +
+            "- schema_name: if provided, used as-is as SchemaName (skip auto-derive from display_name)\n" +
             "- lookup: needs lookup_target (auto-creates 1:N)\n" +
             "- customer: polymorphic (account+contact), no lookup_target\n" +
             "- picklist/multipicklist: options JSON or global_optionset_name\n\n" +
@@ -79,6 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
             [Description("[update only]")] bool? is_audit_enabled = null,
             [Description("[update only]")] bool? is_valid_for_advanced_find = null,
+            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used as-is. Create only — ignored on update.")] string schema_name = "",
             [Description("")] bool auto_publish = true)
         {
             // --- Validate required parameters ---
@@ -222,15 +224,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var prefix = resolvedPrefix ?? attribute_name.Substring(0, underscoreIndex);
 
-            // Derive SchemaName via DataverseNamer (PascalCase from display_name)
+            // Determine SchemaName:
+            // - schema_name provided → use as-is (user takes responsibility for correctness)
+            // - otherwise derive via DataverseNamer (PascalCase from display_name)
             string schemaName;
-            try
+            if (!string.IsNullOrWhiteSpace(schema_name))
             {
-                (schemaName, _) = DataverseNamer.Resolve(display_name, prefix);
+                schemaName = schema_name.Trim();
             }
-            catch
+            else
             {
-                schemaName = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
+                try
+                {
+                    (schemaName, _) = DataverseNamer.Resolve(display_name, prefix);
+                }
+                catch
+                {
+                    schemaName = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
+                }
             }
 
             // Parse required level
