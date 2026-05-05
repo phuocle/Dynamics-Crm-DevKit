@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         "Read docs://instructions_for_formxml for operation format and examples.");
 
                 var action       = actionProp.GetString()?.ToLowerInvariant();
-                var manageAction = FormXmlHelpers.GetStringProp(op, "manage_action")?.ToLowerInvariant() ?? "";
+                var manageAction = NormalizeManageAction(FormXmlHelpers.GetStringProp(op, "manage_action"));
 
                 switch (action)
                 {
@@ -89,7 +89,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                             "move"   => FormTabSectionOperations.ExecuteMoveTab(formDoc, op),
                             "remove" => FormTabSectionOperations.ExecuteRemoveTab(formDoc, op),
                             _ => throw new InvalidOperationException(
-                                $"Unknown manage_action '{manageAction}' for manage_tab. Valid: add, remove, move, update")
+                                $"Unknown manage_action '{manageAction}' for manage_tab. Valid: add, rename, update, move, remove, delete")
                         });
                         break;
                     case "manage_section":
@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                             "move"   => FormTabSectionOperations.ExecuteMoveSection(formDoc, op),
                             "remove" => FormTabSectionOperations.ExecuteRemoveSection(formDoc, op),
                             _ => throw new InvalidOperationException(
-                                $"Unknown manage_action '{manageAction}' for manage_section. Valid: add, remove, move, update")
+                                $"Unknown manage_action '{manageAction}' for manage_section. Valid: add, rename, update, move, remove, delete")
                         });
                         break;
                     case "manage_fields":
@@ -108,12 +108,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         {
                             "add"           => fieldEvt.ExecuteAddFields(formDoc, op, attrMap, classIdMap),
                             "update"        => fieldEvt.ExecuteUpdateFields(formDoc, op, attrMap, classIdMap),
+                            "move"          => FormFieldEventOperations.ExecuteMoveFields(formDoc, op),
                             "remove"        => FormFieldEventOperations.ExecuteRemoveFields(formDoc, op),
                             "add_header"    => fieldEvt.ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap),
                             "update_header" => fieldEvt.ExecuteUpdateHeaderFields(formDoc, op, attrMap, classIdMap),
                             "remove_header" => FormFieldEventOperations.ExecuteRemoveHeaderFields(formDoc, op),
                             _ => throw new InvalidOperationException(
-                                $"Unknown manage_action '{manageAction}' for manage_fields. Valid: add, remove, update, add_header, remove_header, update_header")
+                                $"Unknown manage_action '{manageAction}' for manage_fields. Valid: add, update, move, remove, delete, add_header, update_header, remove_header, delete_header")
                         });
                         break;
                     case "manage_subgrid":
@@ -156,6 +157,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             var modifiedFormXml = formDoc.ToString(SaveOptions.None);
             return (modifiedFormXml, opSummaries, classIdMap);
+        }
+
+        private static string NormalizeManageAction(string manageAction)
+        {
+            var normalized = manageAction?.Trim().ToLowerInvariant() ?? "";
+            return normalized switch
+            {
+                "rename" => "update",
+                "delete" => "remove",
+                "delete_header" => "remove_header",
+                _ => normalized
+            };
         }
     }
 }

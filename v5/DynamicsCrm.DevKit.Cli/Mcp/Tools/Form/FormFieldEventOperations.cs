@@ -277,6 +277,134 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             return summary.ToString();
         }
 
+        public static string ExecuteMoveFields(XDocument formDoc, JsonElement op)
+        {
+            var tabName = FormXmlHelpers.GetStringProp(op, "tab")
+                ?? throw new InvalidOperationException("move_fields requires 'tab'.");
+            var sectionName = FormXmlHelpers.GetStringProp(op, "section")
+                ?? throw new InvalidOperationException("move_fields requires 'section'.");
+            var targetTabName = FormXmlHelpers.GetStringProp(op, "target_tab") ?? tabName;
+            var targetSectionName = FormXmlHelpers.GetStringProp(op, "target_section") ?? sectionName;
+            var position = FormXmlHelpers.GetStringProp(op, "position") ?? "last";
+
+            if (!op.TryGetProperty("fields", out var fieldsArray) || fieldsArray.ValueKind != JsonValueKind.Array)
+                throw new InvalidOperationException("move_fields requires 'fields' array.");
+
+            var fieldNames = fieldsArray.EnumerateArray()
+                .Select(GetFieldNameFromSpec)
+                .Where(f => !string.IsNullOrWhiteSpace(f))
+                .ToList();
+
+            if (fieldNames.Count == 0)
+                throw new InvalidOperationException("move_fields requires at least one field name.");
+
+            var sourceTab = FormXmlHelpers.FindTab(formDoc, tabName);
+            if (sourceTab == null)
+                throw new InvalidOperationException(
+                    $"Tab '{tabName}' not found. Available tabs: {string.Join(", ", FormXmlHelpers.GetTabNames(formDoc))}");
+
+            var sourceSection = FormXmlHelpers.FindSection(sourceTab, sectionName);
+            if (sourceSection == null)
+                throw new InvalidOperationException(
+                    $"Section '{sectionName}' not found in tab '{tabName}'. Available sections: {string.Join(", ", FormXmlHelpers.GetSectionNames(sourceTab))}");
+
+            var targetTab = FormXmlHelpers.FindTab(formDoc, targetTabName);
+            if (targetTab == null)
+                throw new InvalidOperationException(
+                    $"Target tab '{targetTabName}' not found. Available tabs: {string.Join(", ", FormXmlHelpers.GetTabNames(formDoc))}");
+
+            var targetSection = FormXmlHelpers.FindSection(targetTab, targetSectionName);
+            if (targetSection == null)
+                throw new InvalidOperationException(
+                    $"Target section '{targetSectionName}' not found in tab '{targetTabName}'. Available sections: {string.Join(", ", FormXmlHelpers.GetSectionNames(targetTab))}");
+
+            var sourceRows = sourceSection.Element("rows");
+            if (sourceRows == null)
+                return $"move_fields: section \"{sectionName}\" has no rows -- nothing to move";
+
+            var toMove = new HashSet<string>(fieldNames, StringComparer.OrdinalIgnoreCase);
+            var movedCells = new List<XElement>();
+            var movedFields = new List<string>();
+            var rowsToDelete = new List<XElement>();
+
+            foreach (var row in sourceRows.Elements("row").ToList())
+            {
+                var cells = row.Elements("cell").ToList();
+                var cellsToMove = new List<XElement>();
+
+                foreach (var cell in cells)
+                {
+                    var control = cell.Element("control");
+                    var dataFieldName = control?.Attribute("datafieldname")?.Value;
+                    if (dataFieldName != null && toMove.Contains(dataFieldName))
+                    {
+                        cellsToMove.Add(cell);
+                        movedCells.Add(cell);
+                        if (!movedFields.Any(f => string.Equals(f, dataFieldName, StringComparison.OrdinalIgnoreCase)))
+                            movedFields.Add(dataFieldName);
+                    }
+                }
+
+                if (cellsToMove.Count == 0) continue;
+
+                var nonSpacerCells = cells.Where(c => c.Element("control") != null).ToList();
+                if (cellsToMove.Count >= nonSpacerCells.Count)
+                {
+                    foreach (var cell in cellsToMove)
+                        cell.Remove();
+                    rowsToDelete.Add(row);
+                }
+                else
+                {
+                    foreach (var cell in cellsToMove)
+                    {
+                        cell.AddAfterSelf(FormXmlHelpers.CreateSpacerCell());
+                        cell.Remove();
+                    }
+                }
+            }
+
+            foreach (var row in rowsToDelete)
+                row.Remove();
+
+            if (movedCells.Count == 0)
+                return $"move_fields: 0 field(s) moved from \"{sectionName}\" in \"{tabName}\" | not found: [{string.Join(", ", fieldNames)}]";
+
+            var targetRows = targetSection.Element("rows");
+            if (targetRows == null)
+            {
+                targetRows = new XElement("rows");
+                targetSection.Add(targetRows);
+            }
+
+            var secColumns = 1;
+            var secColumnsAttr = targetSection.Attribute("columns");
+            if (secColumnsAttr != null && int.TryParse(secColumnsAttr.Value, out var parsedColumns))
+                secColumns = Math.Max(1, parsedColumns);
+
+            var newRows = FormXmlHelpers.BuildRows(movedCells, secColumns);
+            FormXmlHelpers.InsertFieldRows(targetRows, newRows, position);
+
+            var notFound = fieldNames
+                .Where(f => !movedFields.Any(m => string.Equals(m, f, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            var summary = new StringBuilder();
+            summary.Append($"move_fields: {movedFields.Count} field(s) moved from \"{sectionName}\" in \"{tabName}\" to \"{targetSectionName}\" in \"{targetTabName}\" (position: {position})");
+            summary.Append($" [{string.Join(", ", movedFields)}]");
+            if (notFound.Count > 0)
+                summary.Append($" | not found: [{string.Join(", ", notFound)}]");
+
+            return summary.ToString();
+        }
+
+        private static string GetFieldNameFromSpec(JsonElement fieldEl)
+        {
+            if (fieldEl.ValueKind == JsonValueKind.String)
+                return fieldEl.GetString();
+            return FormXmlHelpers.GetStringProp(fieldEl, "field");
+        }
+
         // ── Header ───────────────────────────────────────────────────────────────
 
         public string ExecuteAddHeaderFields(XDocument formDoc, JsonElement op,

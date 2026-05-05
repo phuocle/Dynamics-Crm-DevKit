@@ -48,7 +48,7 @@ Call `manage_form` with tool-level `action='update'`. Inside the `operations` JS
 | Field | Meaning | Example |
 |-------|---------|---------|
 | `action` | Operation family | `""manage_subgrid""`, `""manage_fields""`, `""manage_tab""` |
-| `manage_action` | Verb within that family | `""add""`, `""update""`, `""remove""`, `""move""` |
+| `manage_action` | Verb within that family | `""add""`, `""update""`, `""rename""`, `""move""`, `""remove""`, `""delete""` |
 
 Do not put verbs like `""add""` or `""remove""` in operation `action`.
 
@@ -68,6 +68,15 @@ Do not put verbs like `""add""` or `""remove""` in operation `action`.
 - New tabs: add as the LAST tab (unless user specifies otherwise)
 - New sections: add as the LAST section in the first tab (unless user specifies)
 - New fields: add to the last row in the target section
+
+## Tab & Section Operations
+
+Valid tab actions: `add`, `update`, `rename`, `move`, `remove`, `delete`.
+Valid section actions: `add`, `update`, `rename`, `move`, `remove`, `delete`.
+
+`rename` is an alias of `update`. Use `tab` to identify a tab and `section` to identify a section; `name` is also accepted for compatibility. Set `label` to rename the display label, or set `new_name` to rename the FormXML logical name.
+
+`delete` is an alias of `remove`.
 
 ## Tab & Section Positioning
 
@@ -182,8 +191,10 @@ No `tab` or `section` required for header operations.
 ```
 
 ### Valid manage_action values for manage_fields
-`add`, `update`, `remove` (body fields — require `tab` + `section`)
+`add`, `update`, `move`, `remove`, `delete` (body fields — require `tab` + `section`)
 `add_header`, `update_header`, `remove_header` (header fields — no `tab`/`section` needed)
+
+`delete` is an alias of `remove`. For body field moves, use `target_tab` and/or `target_section` when moving to another location; omit them to move within the same section.
 
 ---
 

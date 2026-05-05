@@ -116,12 +116,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         public string ExecuteUpdateTab(XDocument formDoc, JsonElement op)
         {
-            var tabName = FormXmlHelpers.GetStringProp(op, "name")
-                ?? throw new InvalidOperationException("update_tab requires 'name'.");
+            var tabName = FormXmlHelpers.GetStringProp(op, "tab")
+                ?? FormXmlHelpers.GetStringProp(op, "name")
+                ?? throw new InvalidOperationException("update_tab requires 'tab' or 'name'.");
 
             var tabElement = FormXmlHelpers.FindTab(formDoc, tabName);
             if (tabElement == null)
                 throw new InvalidOperationException($"Tab '{tabName}' not found.");
+
+            if (op.TryGetProperty("new_name", out var newNameProp) && newNameProp.ValueKind == JsonValueKind.String)
+            {
+                var newName = newNameProp.GetString();
+                if (string.IsNullOrWhiteSpace(newName))
+                    throw new InvalidOperationException("update_tab 'new_name' cannot be empty.");
+
+                var existingTab = FormXmlHelpers.FindTab(formDoc, newName);
+                if (existingTab != null && existingTab != tabElement)
+                    throw new InvalidOperationException($"Tab '{newName}' already exists.");
+
+                tabElement.SetAttributeValue("name", newName);
+            }
 
             if (op.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
             {
@@ -163,7 +177,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     tabElement.SetAttributeValue("expanded", "false");
             }
 
-            return $"update_tab: \"{tabName}\" updated";
+            var finalName = tabElement.Attribute("name")?.Value ?? tabName;
+            return string.Equals(finalName, tabName, StringComparison.OrdinalIgnoreCase)
+                ? $"update_tab: \"{tabName}\" updated"
+                : $"update_tab: \"{tabName}\" renamed to \"{finalName}\"";
         }
 
         public static string ExecuteMoveTab(XDocument formDoc, JsonElement op)
@@ -253,8 +270,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         {
             var tabName = FormXmlHelpers.GetStringProp(op, "tab")
                 ?? throw new InvalidOperationException("update_section requires 'tab'.");
-            var secName = FormXmlHelpers.GetStringProp(op, "name")
-                ?? throw new InvalidOperationException("update_section requires 'name'.");
+            var secName = FormXmlHelpers.GetStringProp(op, "section")
+                ?? FormXmlHelpers.GetStringProp(op, "name")
+                ?? throw new InvalidOperationException("update_section requires 'section' or 'name'.");
 
             var tabElement = FormXmlHelpers.FindTab(formDoc, tabName);
             if (tabElement == null)
@@ -263,6 +281,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             var sectionElement = FormXmlHelpers.FindSection(tabElement, secName);
             if (sectionElement == null)
                 throw new InvalidOperationException($"Section '{secName}' not found in tab '{tabName}'.");
+
+            if (op.TryGetProperty("new_name", out var newNameProp) && newNameProp.ValueKind == JsonValueKind.String)
+            {
+                var newName = newNameProp.GetString();
+                if (string.IsNullOrWhiteSpace(newName))
+                    throw new InvalidOperationException("update_section 'new_name' cannot be empty.");
+
+                var existingSection = FormXmlHelpers.FindSection(tabElement, newName);
+                if (existingSection != null && existingSection != sectionElement)
+                    throw new InvalidOperationException($"Section '{newName}' already exists in tab '{tabName}'.");
+
+                sectionElement.SetAttributeValue("name", newName);
+            }
 
             if (op.TryGetProperty("label", out var labelProp) && labelProp.ValueKind == JsonValueKind.String)
             {
@@ -296,7 +327,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     sectionElement.SetAttributeValue("availableforphone", "false");
             }
 
-            return $"update_section: \"{secName}\" in tab \"{tabName}\" updated";
+            var finalName = sectionElement.Attribute("name")?.Value ?? secName;
+            return string.Equals(finalName, secName, StringComparison.OrdinalIgnoreCase)
+                ? $"update_section: \"{secName}\" in tab \"{tabName}\" updated"
+                : $"update_section: \"{secName}\" in tab \"{tabName}\" renamed to \"{finalName}\"";
         }
 
         public static string ExecuteMoveSection(XDocument formDoc, JsonElement op)

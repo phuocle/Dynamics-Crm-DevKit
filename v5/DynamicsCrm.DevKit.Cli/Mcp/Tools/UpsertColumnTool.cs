@@ -1122,10 +1122,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string displayName, AttributeRequiredLevel reqLevel, Guid metadataId, string solutionName, bool published,
             Dictionary<string, string> extra = null)
         {
+            var actualLogicalName = ResolveCreatedAttributeLogicalName(entityName, metadataId, logicalName);
+            if (!string.Equals(actualLogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
+                sb.Replace($"{entityName}.{logicalName}", $"{entityName}.{actualLogicalName}");
+
             var structured = new UpsertColumnResult
             {
                 EntityName = entityName,
-                AttributeName = logicalName,
+                AttributeName = actualLogicalName,
                 AttributeType = typeName,
                 DisplayName = displayName.Trim(),
                 RequiredLevel = reqLevel.ToString(),
@@ -1144,6 +1148,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Content = [new TextContentBlock { Text = sb.ToString() }],
                 StructuredContent = JsonSerializer.SerializeToElement(structured)
             };
+        }
+
+        private string ResolveCreatedAttributeLogicalName(string entityName, Guid metadataId, string fallbackLogicalName)
+        {
+            if (metadataId == Guid.Empty || _options.DryRun)
+                return fallbackLogicalName;
+
+            try
+            {
+                var response = (RetrieveAttributeResponse)_serviceClient.Execute(new RetrieveAttributeRequest
+                {
+                    EntityLogicalName = entityName,
+                    MetadataId = metadataId,
+                    RetrieveAsIfPublished = true
+                });
+
+                return response.AttributeMetadata?.LogicalName ?? fallbackLogicalName;
+            }
+            catch
+            {
+                return fallbackLogicalName;
+            }
         }
 
         private static AttributeRequiredLevel? ParseRequiredLevel(string value)

@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- CREATE (no entity): need display_name + display_collection_name + solution_name. Auto-creates primary name. Next: upsert_column → manage_form(action='update', operations=[...]).\n" +
             "- UPDATE (entity exists): need entity_name only. Mutable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled. Others immutable.\n\n" +
 
-            "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm with user, re-call with confirmed_prefix.\n\n" +
+            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix when supplied.\n\n" +
 
             "is_activity=true forces User ownership + notes + Subject primary attr.\n\n" +
 
@@ -47,13 +47,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect existing table first via get_tables before update\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name; confirmed_prefix still gates create.")]
+            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name.")]
         public CallToolResult upsert_table(
             [Description("Logical name with prefix ('new_project') OR just name with solution_name to auto-resolve.")] string entity_name,
             [Description("Singular (e.g. 'Project'). Required: create.")] string display_name = "",
             [Description("Plural (e.g. 'Projects'). Required: create.")] string display_collection_name = "",
             [Description("Required: create.")] string solution_name = "",
-            [Description("Confirmed prefix for create (after [PrefixConfirmationRequired] preview).")] string confirmed_prefix = "",
+            [Description("Optional prefix validation for create. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
             [Description("")] string description = "",
             [Description("Auto-derived if omitted. [create-only]")] string primary_attribute_name = "",
             [Description("[create-only]")] string primary_attribute_display_name = "Name",
@@ -182,40 +182,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var prefix = resolvedPrefix ?? entity_name.Substring(0, underscoreIndex);
 
-            // --- PREFIX CONFIRMATION FLOW ---
-            // If confirmed_prefix is not set, show preview and ask user to confirm before creating.
-            if (string.IsNullOrWhiteSpace(confirmed_prefix))
+            if (!string.IsNullOrWhiteSpace(confirmed_prefix) &&
+                !confirmed_prefix.Trim().Equals(prefix, StringComparison.OrdinalIgnoreCase))
             {
-                string previewSchema, previewLogical;
-                try
-                {
-                    (previewSchema, previewLogical) = DataverseNamer.Resolve(display_name, prefix);
-                }
-                catch
-                {
-                    previewSchema = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
-                    previewLogical = previewSchema.ToLowerInvariant();
-                }
-                var confirmSb = new StringBuilder(256);
-                confirmSb.AppendLine("[PrefixConfirmationRequired]");
-                confirmSb.AppendLine($"ResolvedPrefix: {prefix}");
-                confirmSb.AppendLine($"EntityName (preview): {previewLogical}");
-                confirmSb.AppendLine($"SchemaName (preview): {previewSchema}");
-                confirmSb.AppendLine($"LogicalName (preview): {previewLogical}");
-                confirmSb.AppendLine();
-                confirmSb.AppendLine($"→ Prefix is correct: re-call upsert_table with confirmed_prefix=\"{prefix}\"");
-                confirmSb.AppendLine($"→ Wrong prefix: re-call upsert_table with confirmed_prefix=\"<correct_prefix>\"");
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = confirmSb.ToString() }],
-                    IsError = false
-                };
+                return ErrorResult(
+                    $"[Error] confirmed_prefix '{confirmed_prefix.Trim()}' does not match solution '{resolvedSolutionUniqueName ?? solution_name.Trim()}' publisher prefix '{prefix}'.\n" +
+                    "Use the solution publisher prefix or omit confirmed_prefix.");
             }
 
-            // Use confirmed_prefix (user may have corrected it)
-            prefix = confirmed_prefix.Trim().ToLowerInvariant();
-
-            // Rebuild entity_name with confirmed prefix if needed
+            // Rebuild entity_name with the resolved solution prefix if needed
             var prefixWithUnderscore2 = prefix + "_";
             if (!entity_name.StartsWith(prefixWithUnderscore2, StringComparison.OrdinalIgnoreCase))
                 entity_name = $"{prefix}_{entity_name.Substring(underscoreIndex + 1)}";
