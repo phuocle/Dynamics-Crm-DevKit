@@ -68,9 +68,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
             var showGroups = GetStringProp(op, "show_groups");
             var icon = GetStringProp(op, "icon");
 
-            var area = new XElement("Area", new XAttribute("Id", id));
+            var area = new XElement("Area",
+                new XAttribute("Id", id),
+                new XAttribute("ResourceId", "SitemapDesigner.NewArea"));
             area.Add(BuildTitlesElement(label, lcid));
-            if (showGroups != null) area.Add(new XAttribute("ShowGroups", showGroups));
+            area.Add(new XAttribute("ShowGroups", showGroups ?? "false"));
             if (icon != null) area.Add(new XAttribute("Icon", icon));
 
             if (op.TryGetProperty("groups", out var groupsArr) && groupsArr.ValueKind == JsonValueKind.Array)
@@ -79,7 +81,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
                 {
                     var groupLabel = GetStringProp(g, "label") ?? "Default";
                     var groupId = GetStringProp(g, "id") ?? $"group_{Sanitize(groupLabel)}";
-                    var group = new XElement("Group", new XAttribute("Id", groupId));
+                    var group = new XElement("Group",
+                        new XAttribute("Id", groupId),
+                        new XAttribute("ResourceId", "SitemapDesigner.NewGroup"),
+                        new XAttribute("IsProfile", "false"),
+                        new XAttribute("ToolTipResourseId", "SitemapDesigner.Unknown"));
                     group.Add(BuildTitlesElement(groupLabel, lcid));
 
                     if (g.TryGetProperty("subareas", out var subAreasArr) && subAreasArr.ValueKind == JsonValueKind.Array)
@@ -112,11 +118,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
 
             var id = GetStringProp(op, "id") ?? $"group_{Sanitize(label)}";
             var position = GetStringProp(op, "position");
-            var isProfile = GetStringProp(op, "is_profile");
+            var isProfile = GetStringProp(op, "is_profile") ?? "false";
 
-            var group = new XElement("Group", new XAttribute("Id", id));
+            var group = new XElement("Group",
+                new XAttribute("Id", id),
+                new XAttribute("ResourceId", "SitemapDesigner.NewGroup"),
+                new XAttribute("IsProfile", isProfile),
+                new XAttribute("ToolTipResourseId", "SitemapDesigner.Unknown"));
             group.Add(BuildTitlesElement(label, lcid));
-            if (isProfile != null) group.Add(new XAttribute("IsProfile", isProfile));
 
             if (op.TryGetProperty("subareas", out var subAreasArr) && subAreasArr.ValueKind == JsonValueKind.Array)
             {
@@ -504,17 +513,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
             var subArea = new XElement("SubArea", new XAttribute("Id", saId));
             if (entity != null) subArea.Add(new XAttribute("Entity", entity));
             if (url != null) subArea.Add(new XAttribute("Url", url));
-            if (saLabel != null) subArea.Add(BuildTitlesElement(saLabel, lcid));
 
-            var client = GetStringProp(sa, "client");
-            if (client != null) subArea.Add(new XAttribute("Client", client));
-            var passParams = NormalizeBoolProp(sa, "pass_params");
-            if (passParams != null) subArea.Add(new XAttribute("PassParams", passParams));
+            var saIcon = GetStringProp(sa, "icon") ?? "/_imgs/imagestrips/transparent_spacer.gif";
+            subArea.Add(new XAttribute("Icon", saIcon));
+
+            var client = GetStringProp(sa, "client") ?? "All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web";
+            subArea.Add(new XAttribute("Client", client));
+
+            subArea.Add(new XAttribute("AvailableOffline", "true"));
+
+            var passParams = NormalizeBoolProp(sa, "pass_params") ?? "false";
+            subArea.Add(new XAttribute("PassParams", passParams));
+
+            subArea.Add(new XAttribute("Sku", "All,OnPremise,Live,SPLA"));
+
             if (defaultDashboard != null) subArea.Add(new XAttribute("DefaultDashboard", defaultDashboard));
-            var saIcon = GetStringProp(sa, "icon");
-            if (saIcon != null) subArea.Add(new XAttribute("Icon", saIcon));
             var vectorIcon = GetStringProp(sa, "vector_icon");
             if (vectorIcon != null) subArea.Add(new XAttribute("VectorIcon", vectorIcon));
+
+            if (saLabel != null) subArea.Add(BuildTitlesElement(saLabel, lcid));
 
             return subArea;
         }

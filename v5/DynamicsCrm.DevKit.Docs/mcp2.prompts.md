@@ -244,34 +244,62 @@ Solution target: display name **TEST-MCP**
 ## K. App & Sitemap
 
 49. Check if a model-driven app named "TEST-MCP App" exists in the environment; if not, clearly state that the app must be created in Power Apps first and stop all app-related steps.
+   > ✅ Tools: manage_sitemap (action=list, app_name=TEST-MCP)
+   > Result: App "TEST-MCP" (id=e229095f-9e47-f111-bec6-7ced8d6e68ce) exists with a SiteMap — proceeding with app-related steps.
 50. View the current sitemap of app "TEST-MCP App" and determine whether there is already a suitable area or group to add Invoice.
+   > ✅ Tools: manage_sitemap (action=detail, app=TEST-MCP)
+   > Result: SiteMap exists but is empty (no existing areas/groups) — a new "Invoicing" area must be created.
 51. Update the sitemap of app "TEST-MCP App": add an area named "Invoicing" with menu items for Invoice and Invoice Line tables.
+   > ⚠️ Tools: manage_sitemap (action=update, app=TEST-MCP)
+   > Result: Area "Invoicing" with group "Invoicing" and 2 subareas (v5_invoice, v5_invoiceline) added successfully, but publish failed — DB request limit (800) reached. XML is saved; publish pending.
 52. Read back the sitemap of app "TEST-MCP App" and confirm Invoice and Invoice Line appear in the correct positions.
+   > ✅ Tools: execute_fetchxml (sitemap, sitemapid=de29095f)
+   > Result: SiteMap XML confirmed — Area "Invoicing" (Id=Invoicing) → Group "Invoicing" (Id=InvoicingGroup) → SubArea v5_invoice "Invoices" + SubArea v5_invoiceline "Invoice Lines". Data is in Dataverse; publish pending.
 
 ---
 
 ## L. Web Resource
 
 53. Check for any JavaScript web resources with names containing "testmcp" or "invoice" to avoid duplicates.
+   > ✅ Tools: manage_webresource (action=list, name=testmcp, type=js) → manage_webresource (action=list, name=invoice, type=js)
+   > Result: Found 5 existing JS resources with "testmcp" (devkit_ prefix, unrelated) and 1 with "invoice" (v4_/testmcp/invoice.form.js, old session) — no v5 prefix conflict, safe to create.
 54. Create a local file at D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\TestMcp\js\invoice.form.js. In solution "TEST-MCP", create a JavaScript web resource for this file using the solution's publisher prefix, path /testmcp/invoice.form.js; the file should have namespace TestMcp.Invoice, function syncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that reads Invoice Status from the parent Invoice record and updates the Line Status of all child Invoice Lines accordingly, and function canSyncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that returns true only when the form has been saved (record already has an id).
+   > ✅ Tools: PowerShell (write file) → manage_webresource (action=create, name=v5_/testmcp/invoice.form.js, solution=TESTMCP)
+   > Result: Created local file and web resource `v5_/testmcp/invoice.form.js` (id=5fa1efba-ba47-f111-bec6-7ced8d6e68ce) with namespace TestMcp.Invoice, syncLineStatus and canSyncLineStatus functions, added to TESTMCP, published.
 55. Read back the web resource just created (testmcp/invoice.form.js) and confirm it has the correct namespace, sync function, and enable function.
+   > ✅ Tools: manage_webresource (action=detail) → execute_webapi (GET content field)
+   > Result: Confirmed — web resource `v5_/testmcp/invoice.form.js` contains namespace TestMcp.Invoice, function syncLineStatus (reads v5_invoicestatus, updates all child v5_invoiceline records), function canSyncLineStatus (returns true only when record id is non-empty).
 
 ---
 
 ## M. Ribbon (Classic Button)
 
 56. View all existing buttons on the form ribbon of the Invoice table before adding a new button.
+   > ✅ Tools: manage_ribbon (action=buttons, entity=v5_invoice)
+   > Result: Existing form ribbon buttons are OOB only (Save, SaveAsComplete, SaveAndClose, SaveAndNew, New, Activate, Deactivate, Delete, OpenActiveStage); no custom "Sync Line Status" button was present.
 57. Add a button to the ribbon on the main form of Invoice, label "Sync Line Status", calling function TestMcp.Invoice.syncLineStatus from the web resource created in prompt 54, using TestMcp.Invoice.canSyncLineStatus as the enable rule.
+   > ⚠️ Tools: manage_ribbon (action=update, add_button) → manage_ribbon (action=detail) → manage_ribbon (action=update, ribbonxml) → publish_customizations
+   > Result: Button configuration was added to `devkit_ribbon` with the correct JS action and enable rule, but PublishAll timed out after 120s so publish remains unconfirmed/pending.
 58. Read back the ribbon of the Invoice table and confirm the "Sync Line Status" button was added with the correct configuration.
+   > ✅ Tools: manage_ribbon (action=detail, entity=v5_invoice)
+   > Result: Confirmed `Sync Line Status` in RibbonDiffXml at form location, calling `TestMcp.Invoice.syncLineStatus` from `v5_/testmcp/invoice.form.js` with enable rule `TestMcp.Invoice.canSyncLineStatus`.
 
 ---
 
 ## N. Modern Command Bar (Hide/Show)
 
 59. In app "TEST-MCP App", view the modern command bar on the Invoice form and locate the Activate and Deactivate commands.
+   > ✅ Tools: manage_command (action=list, app_name=TEST-MCP App) → manage_command (action=list, app_id=e229095f-9e47-f111-bec6-7ced8d6e68ce)
+   > Result: Located modern form commands `Activate` (7672a2c0-1948-f111-bec6-7ced8d6e68ce) and `Deactivate` (3cb826ba-1948-f111-bec6-7ced8d6e68ce) for `v5_invoice` in app `TEST-MCP`.
 60. In app "TEST-MCP App", hide the Deactivate command on the Invoice form command bar; if it is not a modern command, clearly explain why and do not substitute with a classic ribbon approach.
+   > ✅ Tools: manage_command (action=hide, app_id=e229095f-9e47-f111-bec6-7ced8d6e68ce, label=Deactivate)
+   > Result: Created modern appaction override for `Deactivate` on `v5_invoice` form command bar; command is now hidden.
 61. In app "TEST-MCP App", hide the Activate command on the Invoice form command bar; if it is not a modern command, clearly explain why and do not substitute with a classic ribbon approach.
+   > ✅ Tools: manage_command (action=hide, app_id=e229095f-9e47-f111-bec6-7ced8d6e68ce, label=Activate)
+   > Result: Created modern appaction override for `Activate` on `v5_invoice` form command bar; command is now hidden.
 62. In app "TEST-MCP App", check the Invoice form command bar and report whether Activate and Deactivate are currently hidden or visible.
+   > ✅ Tools: manage_command (action=detail, command_id=3cb826ba-1948-f111-bec6-7ced8d6e68ce) → manage_command (action=detail, command_id=7672a2c0-1948-f111-bec6-7ced8d6e68ce) → manage_command (action=list, app_id=e229095f-9e47-f111-bec6-7ced8d6e68ce)
+   > Result: Confirmed both commands are hidden: `Activate` hidden=true and `Deactivate` hidden=true.
 63. In app "TEST-MCP App", show the Deactivate command on the Invoice form command bar to confirm the show branch works correctly.
 64. In app "TEST-MCP App", show the Activate command on the Invoice form command bar to confirm the show branch works correctly.
 

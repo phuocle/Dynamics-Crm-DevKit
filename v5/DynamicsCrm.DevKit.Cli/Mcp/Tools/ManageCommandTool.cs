@@ -947,13 +947,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newId = _serviceClient.Create(entity);
+            PublishEntity(createEntityLogical);
 
             var structured = new ManageCommandResult
             {
                 Action = "create",
                 Status = "success",
                 CommandId = newId.ToString(),
-                Message = $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}).",
+                Message = $"Command '{label.Trim()}' created successfully on {entityName.Trim()} ({LocationMap[locationValue]}) and entity published.",
                 CreateMode = SolutionComponentCreateMode.None.ToString()
             };
 
@@ -976,7 +977,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                 return ErrorResult($"Error: '{commandId.Trim()}' is not a valid GUID.");
 
-            var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "buttonlabeltext"));
+            var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "buttonlabeltext", "contextvalue"));
             if (existing == null)
                 return ErrorResult($"Error: Command '{commandId.Trim()}' not found.");
 
@@ -1065,9 +1066,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: No fields to update. Provide at least one field to change (label, sequence, onclick_type, javascript_webresource, javascript_function, font_icon, icon_webresource, tooltip_title, tooltip_description). Use action='hide'/'show' to change visibility.");
 
             _serviceClient.Update(entity);
+            var updateEntityLogical = existing.GetAttributeValue<string>("contextvalue");
+            PublishEntity(updateEntityLogical);
 
             var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
-            var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}.";
+            var message = $"Command '{commandName}' updated: {string.Join(", ", changes)}. Entity published.";
 
             var structured = new ManageCommandResult
             {
@@ -1099,7 +1102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                     return ErrorResult($"Error: '{commandId.Trim()}' is not a valid GUID.");
 
-                var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "hidden"));
+                var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "hidden", "contextvalue"));
                 if (existing == null)
                     return ErrorResult($"Error: Command '{commandId.Trim()}' not found.");
 
@@ -1119,8 +1122,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var update = new Entity("appaction", cmdGuid);
                 update["hidden"] = wantHidden;
                 _serviceClient.Update(update);
+                PublishEntity(existing.GetAttributeValue<string>("contextvalue"));
 
-                var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}.";
+                var doneMsg = $"Command '{existing.GetAttributeValue<string>("name") ?? commandId.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
                 var doneResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = doneMsg };
                 return new CallToolResult
                 {
@@ -1163,8 +1167,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var update2 = new Entity("appaction", found.Id);
                 update2["hidden"] = wantHidden;
                 _serviceClient.Update(update2);
+                PublishEntity(found.GetAttributeValue<string>("contextvalue"));
 
-                var doneMsg2 = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}.";
+                var doneMsg2 = $"Command '{label.Trim()}' is now {(wantHidden ? "hidden" : "visible")}. Entity published.";
                 var doneResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = doneMsg2 };
                 return new CallToolResult
                 {
@@ -1259,8 +1264,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newId = _serviceClient.Create(newEntity);
+            PublishEntity(entityLogical);
 
-            var createdMsg = $"Created appaction override: command '{label.Trim()}' on {entityName} ({LocationMap[locationValue]}) is now hidden.";
+            var createdMsg = $"Created appaction override: command '{label.Trim()}' on {entityName} ({LocationMap[locationValue]}) is now hidden. Entity published.";
             var createdResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = newId.ToString(), Message = createdMsg, CreateMode = SolutionComponentCreateMode.None.ToString() };
             return new CallToolResult
             {
@@ -1276,6 +1282,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='appactionid'/>
     <attribute name='name'/>
     <attribute name='hidden'/>
+    <attribute name='contextvalue'/>
     <filter type='and'>
       <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>
       <condition attribute='location' operator='eq' value='{locationValue}'/>
@@ -2537,6 +2544,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+
+        private void PublishEntity(string entityLogicalName)
+        {
+            if (string.IsNullOrWhiteSpace(entityLogicalName)) return;
+
+            var publishXml = $"<importexportxml><entities><entity>{EscapeXml(entityLogicalName.Trim().ToLowerInvariant())}</entity></entities></importexportxml>";
+            _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+        }
 
         private static CallToolResult ErrorResult(string message) => new()
         {

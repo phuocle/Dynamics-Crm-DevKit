@@ -543,7 +543,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Step 5: Publish
-            var published = TryPublish(auto_publish, appModuleId);
+            var published = TryPublish(auto_publish);
 
             // Step 6: Return success
             {
@@ -682,7 +682,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient.Update(update);
 
             // Step 5: Publish
-            var published = TryPublish(auto_publish, appModuleId);
+            var published = TryPublish(auto_publish);
 
             // Step 6: Return success
             {
@@ -818,7 +818,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient.Update(update);
 
             // Step 5: Publish
-            var published = TryPublish(auto_publish, appModuleId);
+            var published = TryPublish(auto_publish);
 
             if (auto_publish && !published)
             {
@@ -958,23 +958,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return (appName, siteMapId, siteMapXml, null);
         }
 
-        private bool TryPublish(bool autoPublish, Guid appModuleId)
+        private bool TryPublish(bool autoPublish)
         {
             if (!autoPublish) return false;
             try
             {
-                // Step 1: Publish sitemap customizations
                 _serviceClient.Execute(new PublishXmlRequest
                 {
                     ParameterXml = "<importexportxml><sitemaps><sitemap></sitemap></sitemaps></importexportxml>"
                 });
-
-                // Step 2: Publish the App Module itself (required for changes to appear in the app)
-                _serviceClient.Execute(new PublishXmlRequest
-                {
-                    ParameterXml = $"<importexportxml><appmodules><appmodule>{appModuleId}</appmodule></appmodules></importexportxml>"
-                });
-
                 return true;
             }
             catch
