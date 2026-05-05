@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- create: entity_name + location + label + (app_id OR app_name)\n" +
             "- update: command_id + ≥1 field\n" +
             "- hide: command_id OR (label+entity_name+location+app_name) — auto-overrides OOB\n" +
-            "- show: command_id OR (label+entity_name+location) — no-op if visible\n" +
+            "- show: command_id OR (label+entity_name+location) — deletes OOB hide override, or unhides custom command\n" +
             "- add_flyout (Dropdown Button): entity_name+location+label+(app_id|app_name)+items\n" +
             "- update_flyout: command_id\n" +
             "- add_flyout_item: flyout_command_id+label (works on Dropdown + Split)\n" +
@@ -1096,15 +1096,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var verb = wantHidden ? "hide" : "show";
 
-            // Path 1: command_id provided → direct update
+            // Path 1: command_id provided
             if (!string.IsNullOrWhiteSpace(commandId))
             {
                 if (!Guid.TryParse(commandId.Trim(), out var cmdGuid))
                     return ErrorResult($"Error: '{commandId.Trim()}' is not a valid GUID.");
 
-                var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "hidden", "contextvalue"));
+                var existing = _serviceClient.Retrieve("appaction", cmdGuid, new ColumnSet("name", "hidden", "contextvalue", "origin"));
                 if (existing == null)
                     return ErrorResult($"Error: Command '{commandId.Trim()}' not found.");
+
+                if (!wantHidden && IsOobOverrideCommand(existing))
+                {
+                    var commandName = existing.GetAttributeValue<string>("name") ?? commandId.Trim();
+                    var contextValue = existing.GetAttributeValue<string>("contextvalue");
+                    _serviceClient.Delete("appaction", cmdGuid);
+                    PublishEntity(contextValue);
+
+                    var deletedMsg = $"OOB command override '{commandName}' deleted. Entity published.";
+                    var deletedResult = new ManageCommandResult { Action = verb, Status = "success", CommandId = commandId.Trim(), Message = deletedMsg };
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = deletedMsg }],
+                        StructuredContent = JsonSerializer.SerializeToElement(deletedResult)
+                    };
+                }
 
                 var alreadyHidden = existing.GetAttributeValue<bool?>("hidden") ?? false;
                 if (alreadyHidden == wantHidden)
@@ -1151,6 +1167,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (found != null)
             {
+                if (!wantHidden && IsOobOverrideCommand(found))
+                {
+                    var commandName = found.GetAttributeValue<string>("name") ?? label.Trim();
+                    var contextValue = found.GetAttributeValue<string>("contextvalue");
+                    _serviceClient.Delete("appaction", found.Id);
+                    PublishEntity(contextValue);
+
+                    var deletedMsg2 = $"OOB command override '{commandName}' deleted. Entity published.";
+                    var deletedResult2 = new ManageCommandResult { Action = verb, Status = "success", CommandId = found.Id.ToString(), Message = deletedMsg2 };
+                    return new CallToolResult
+                    {
+                        Content = [new TextContentBlock { Text = deletedMsg2 }],
+                        StructuredContent = JsonSerializer.SerializeToElement(deletedResult2)
+                    };
+                }
+
                 var alreadyHidden = found.GetAttributeValue<bool?>("hidden") ?? false;
                 if (alreadyHidden == wantHidden)
                 {
@@ -1283,6 +1315,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     <attribute name='name'/>
     <attribute name='hidden'/>
     <attribute name='contextvalue'/>
+    <attribute name='origin'/>
     <filter type='and'>
       <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>
       <condition attribute='location' operator='eq' value='{locationValue}'/>
@@ -1294,6 +1327,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             return result.Entities.Count > 0 ? result.Entities[0] : null;
+        }
+
+        private static bool IsOobOverrideCommand(Entity command)
+        {
+            var origin = command.GetAttributeValue<OptionSetValue>("origin")?.Value;
+            var name = command.GetAttributeValue<string>("name") ?? "";
+
+            return origin == 2
+                && name.StartsWith("Mscrm.", StringComparison.OrdinalIgnoreCase)
+                && name.Contains("{!EntityLogicalName}", StringComparison.OrdinalIgnoreCase);
         }
 
         private Entity FindOobTemplate(string buttonName, int locationValue)
