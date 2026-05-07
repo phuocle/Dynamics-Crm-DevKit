@@ -34,6 +34,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "CRUD single Dataverse record. Required: entity_name. create: +fields_json (returns GUID). read: +record_id, optional columns. update: +record_id+fields_json (partial supported). delete: +record_id (irreversible, may fail on FK or cascade-delete children). Use get_tables for field names; execute_fetchxml to find lookup GUIDs.\n\n" +
 
+            "LOOKUP / POLYMORPHIC LOOKUP SYNTAX in fields_json:\n" +
+            "- Regular lookup (single target): {\"fieldname\": \"guid\"} — target entity resolved from metadata automatically\n" +
+            "- Polymorphic lookup (multiple targets, e.g. Customer, Owner, or any custom poly lookup): use 'fieldname@targetentity' key to specify which target entity the GUID belongs to\n" +
+            "  Syntax: {\"fieldname@targetentity\": \"guid\"}\n" +
+            "  Examples: {\"v5_billto@account\": \"<guid>\"}, {\"v5_billto@contact\": \"<guid>\"}, {\"ownerid@systemuser\": \"<guid>\"}, {\"v5_ref@devkit_custom1\": \"<guid>\"}\n" +
+            "- Never use @odata.bind format — use the fieldname@targetentity syntax above\n\n" +
+
             "WHEN TO USE:\n" +
             "- Create / read / update / delete a single record by GUID\n" +
             "- Partial-update specific fields without rewriting whole record\n" +
@@ -50,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "GUID. Required: read/update/delete. Empty: create."
             )] string record_id = "",
             [Description(
-                "JSON object of field values. Required: create/update."
+                "JSON object of field values. Required: create/update. Polymorphic lookup (multiple targets): 'fieldname@targetentity' key to specify target. Examples: {\"v5_billto@account\": \"<guid>\"}, {\"ownerid@systemuser\": \"<guid>\"}, {\"v5_ref@devkit_custom1\": \"<guid>\"}. Regular lookup (single target): {\"fieldname\": \"guid\"}."
             )] string fields_json = "",
             [Description(
                 "Read only. Comma-separated columns. Empty = all."
