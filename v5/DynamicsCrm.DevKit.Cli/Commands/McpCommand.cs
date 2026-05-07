@@ -277,7 +277,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             var results = new List<McpToolInfo>();
             var assembly = Assembly.GetExecutingAssembly();
             var toolTypes = assembly.GetTypes()
-                .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null);
+                .Where(t => t.GetCustomAttribute<McpServerToolTypeAttribute>() != null
+                         && !Mcp.McpServerHost.DisabledToolSet.Contains(t.Name));
 
             foreach (var type in toolTypes)
             {

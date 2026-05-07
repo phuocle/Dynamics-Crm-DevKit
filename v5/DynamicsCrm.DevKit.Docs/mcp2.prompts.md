@@ -254,10 +254,16 @@ Solution target: display name **TEST-MCP**
 
 ## K. App & Sitemap
 
-49. Check if a model-driven app named "TEST-MCP" app exists in the environment; if not, clearly state that the app must be created in Power Apps first and stop all app-related steps.
-50. View the current sitemap of app "TEST-MCP" app and determine whether there is already a suitable area or group to add Invoice.
-51. Update the sitemap of app "TEST-MCP" app: add an area named "Invoicing" with menu items for Invoice and Invoice Line tables.
-52. Read back the sitemap of app "TEST-MCP" app and confirm Invoice and Invoice Line appear in the correct positions.
+49. Check if a model-driven app named "DEBUG-TEST-MCP" app exists in the environment; if not, clearly state that the app must be created in Power Apps first and stop all app-related steps.
+   > ✅ Tools: manage_sitemap
+   > Result: Found model-driven app DEBUG-TEST-MCP (a8325fe3-1549-f111-bec6-7ced8d6e68ce) and confirmed it has a sitemap, so app-related steps can continue.
+50. View the current sitemap of app "DEBUG-TEST-MCP" app and determine whether there is already a suitable area or group to add Invoice.
+   > ✅ Tools: manage_sitemap → execute_webapi
+   > Result: Current sitemap has Area1 with Account and Area2 with Contact; no suitable Invoicing area/group exists, so a new Invoicing area should be added.
+51. Update the sitemap of app "DEBUG-TEST-MCP" app: add an area named "Invoicing" with menu items for Invoice and Invoice Line tables.
+   > ✅ Tools: manage_sitemap → execute_webapi → execute_webapi → execute_webapi
+   > Result: Retest after MCP fix succeeded: sitemap XML, app descriptor, and appmodulecomponents now include Invoicing with v5_invoice and v5_invoiceline; two stale logical "entity" components remain from earlier failed patch attempts.
+52. Read back the sitemap of app "DEBUG-TEST-MCP" app and confirm Invoice and Invoice Line appear in the correct positions.
 
 ---
 
