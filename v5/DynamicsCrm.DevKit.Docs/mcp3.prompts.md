@@ -86,7 +86,7 @@ Solution target: display name **PRODUCTION-MCP**
 > 4. Re-run the original prompt and record the corrected result
 >
 > **Step 6 - App/navigation tool rule**
-> For model-driven app, sitemap, or app navigation work, use `manage_app`. Do not use `manage_sitemap`, even if an older local server still exposes it. Do not use `execute_webapi` to create or update `appmodule`, `sitemap`, or `appmodulecomponent` records. `manage_app` does not publish, so publish separately only when a prompt explicitly asks for publishing.
+> For model-driven app, sitemap, or app navigation work, use `manage_app`. Do not use `execute_webapi` to create or update `appmodule`, `sitemap`, or `appmodulecomponent` records. `manage_app` does not publish, so publish separately only when a prompt explicitly asks for publishing.
 
 ---
 
@@ -228,13 +228,13 @@ Solution target: display name **PRODUCTION-MCP**
 
 ## K. Model-Driven App & Navigation
 
-49. Using manage_app only, check whether a model-driven app named "PRODUCTION-MCP" exists; if it does not exist, create it in solution "PRODUCTION-MCP" with display name "PRODUCTION-MCP" and description "Production MCP model-driven app". Do not use execute_webapi or manage_sitemap, and do not publish.
+49. Check whether a model-driven app named "PRODUCTION-MCP" exists; if it does not exist, create it in solution "PRODUCTION-MCP" with display name "PRODUCTION-MCP" and description "Production MCP model-driven app".
 
-50. Using manage_app, read the details and current navigation of app "PRODUCTION-MCP"; confirm the app has a sitemap, identify the starter Account item if present, and determine whether an Invoicing area/group already exists.
+50. Read the details and current navigation of app "PRODUCTION-MCP"; confirm the app has navigation configured, identify the starter Account item if present, and determine whether an Invoicing area/group already exists.
 
-51. Using manage_app update_navigation only, configure app "PRODUCTION-MCP" navigation so it has an area named "Invoicing" at the first position, a group named "Transactions" inside it, and entity items for Invoice and Invoice Line in that order. Use 1-based positioning where numeric positions are needed. Do not use raw sitemap XML, execute_webapi, or manage_sitemap, and do not publish.
+51. Configure app "PRODUCTION-MCP" navigation so it has an area named "Invoicing" at the first position, a group named "Transactions" inside it, and menu items for Invoice and Invoice Line in that order.
 
-52. Using manage_app, read back app "PRODUCTION-MCP" navigation and confirm the Invoicing area is first, the Transactions group exists, and Invoice then Invoice Line appear in the correct order; also report that the change is not published yet.
+52. Read back app "PRODUCTION-MCP" navigation and confirm the Invoicing area is first, the Transactions group exists, and Invoice then Invoice Line appear in the correct order; also report whether the navigation.
 
 ---
 
@@ -364,7 +364,7 @@ Solution target: display name **PRODUCTION-MCP**
 
 94. Update the web resource created in prompt 54 (productionmcp/invoice.form.js): add a short comment "// PRODUCTION-MCP v1" at the top of the file; read it back to confirm.
 
-95. Publish all customizations for the Invoice table, Invoice Line table, the "Invoice Status" global choice, and the model-driven app navigation/sitemap for app "PRODUCTION-MCP"; use publish_customizations with sitemap publishing enabled.
+95. Publish all customizations for the Invoice table, Invoice Line table, the "Invoice Status" global choice, and the model-driven app navigation for app "PRODUCTION-MCP".
 
 ---
 

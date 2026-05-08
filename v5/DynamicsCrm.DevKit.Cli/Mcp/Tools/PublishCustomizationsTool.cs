@@ -3,6 +3,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -29,19 +30,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(PublishResult)),
         Description(
-            "Publish Dataverse metadata changes (entities, attributes, forms, views, option sets, relationships). Specific-entity publish is faster than PublishAll. Idempotent.\n\n" +
+            "Publish Dataverse metadata changes (entities, attributes, forms, views, option sets, relationships, model-driven apps). Specific publish is faster than PublishAll. Idempotent.\n\n" +
 
             "WHEN TO USE:\n" +
             "- After upsert_* / execute_webapi metadata changes when auto_publish=false\n" +
+            "- After manage_app changes when the user is ready to publish the appmodule\n" +
             "- When user reports changes not showing up\n" +
             "- Batch many changes then publish once at the end")]
         public CallToolResult publish_customizations(
-            [Description("Comma-separated logical names (e.g. 'account,contact'). Empty = PublishAll."
+            [Description("Comma-separated logical names (e.g. 'account,contact'). Empty with no other targets = PublishAll."
             )] string entities = "",
-            [Description("Also publish global option sets. Requires entities set."
+            [Description("Also publish global option sets."
             )] bool include_global_optionset = false,
-            [Description("Also publish sitemap. Requires entities set."
-            )] bool include_sitemap = false)
+            [Description("Also publish sitemap."
+            )] bool include_sitemap = false,
+            [Description("Comma-separated appmodule GUIDs for model-driven apps."
+            )] string appmodules = "")
         {
             var sw = Stopwatch.StartNew();
 
@@ -63,15 +67,48 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Valid format: comma-separated logical names (e.g., 'account,contact,lead') or leave empty to publish all customizations.");
                 }
 
+                var appModulesProvided = !string.IsNullOrWhiteSpace(appmodules);
+                var appModuleList = appModulesProvided
+                    ? appmodules.Split(',')
+                        .Select(a => a.Trim())
+                        .Where(a => !string.IsNullOrEmpty(a))
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .ToList()
+                    : [];
+
+                if (appModulesProvided && appModuleList.Count == 0)
+                {
+                    return ErrorResult(
+                        "Error: No valid appmodule IDs found after parsing the 'appmodules' parameter.\n" +
+                        "Valid format: comma-separated appmodule GUIDs (e.g., '00001111-aaaa-2222-bbbb-3333cccc4444').");
+                }
+
+                var invalidAppModuleIds = appModuleList
+                    .Where(id => !Guid.TryParse(id, out _))
+                    .ToList();
+                if (invalidAppModuleIds.Count > 0)
+                {
+                    return ErrorResult(
+                        $"Error: Invalid appmodule GUID(s): {string.Join(", ", invalidAppModuleIds)}\n" +
+                        "Use manage_app(action='detail', app='...') to get AppModuleId, then pass it to publish_customizations(appmodules='...').");
+                }
+
+                appModuleList = appModuleList
+                    .Select(id => Guid.Parse(id).ToString("D"))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                var hasSpecificTargets = entityList.Count > 0 || appModuleList.Count > 0 || include_global_optionset || include_sitemap;
+
                 if (_options.DryRun)
                 {
-                    var target = entityList.Count == 0
+                    var target = !hasSpecificTargets
                         ? "ALL customizations"
-                        : $"{entityList.Count} entities: {string.Join(", ", entityList)}";
+                        : BuildTargetSummary(entityList, appModuleList, include_global_optionset, include_sitemap);
                     return DryRunResult($"Would PUBLISH {target}.");
                 }
 
-                if (entityList.Count == 0)
+                if (!hasSpecificTargets)
                 {
                     _serviceClient.Execute(new PublishAllXmlRequest());
                     sw.Stop();
@@ -89,45 +126,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         StructuredContent = JsonSerializer.SerializeToElement(structured)
                     };
                 }
-                else
+
+                var parameterXml = BuildParameterXml(entityList, appModuleList, include_global_optionset, include_sitemap);
+                var request = new PublishXmlRequest { ParameterXml = parameterXml };
+                _serviceClient.Execute(request);
+                sw.Stop();
+
+                var sb = new StringBuilder();
+                sb.AppendLine("[Publish] Specific customizations");
+                sb.AppendLine($"Entities: {(entityList.Count == 0 ? "(none)" : string.Join(", ", entityList))}");
+                sb.AppendLine($"AppModules: {(appModuleList.Count == 0 ? "(none)" : string.Join(", ", appModuleList))}");
+                sb.AppendLine($"GlobalOptionSets: {(include_global_optionset ? "yes" : "no")}");
+                sb.AppendLine($"SiteMap: {(include_sitemap ? "yes" : "no")}");
+                sb.AppendLine("Status: Published successfully");
+                sb.Append($"Duration: {sw.Elapsed.TotalSeconds:F1}s");
+
+                var specificStructured = new PublishResult
                 {
-                    var parameterXml = BuildParameterXml(entityList, include_global_optionset, include_sitemap);
-                    var request = new PublishXmlRequest { ParameterXml = parameterXml };
-                    _serviceClient.Execute(request);
-                    sw.Stop();
-
-                    var sb = new StringBuilder();
-                    sb.AppendLine($"[Publish] {entityList.Count} {(entityList.Count == 1 ? "entity" : "entities")}");
-                    sb.AppendLine($"Entities: {string.Join(", ", entityList)}");
-                    sb.AppendLine($"GlobalOptionSets: {(include_global_optionset ? "yes" : "no")}");
-                    sb.AppendLine($"SiteMap: {(include_sitemap ? "yes" : "no")}");
-                    sb.AppendLine($"Status: Published successfully");
-                    sb.Append($"Duration: {sw.Elapsed.TotalSeconds:F1}s");
-
-                    var structured = new PublishResult
-                    {
-                        Mode = "specific",
-                        Entities = entityList,
-                        EntityCount = entityList.Count,
-                        IncludeGlobalOptionSets = include_global_optionset,
-                        IncludeSiteMap = include_sitemap,
-                        Status = "published",
-                        DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(structured)
-                    };
-                }
+                    Mode = "specific",
+                    Entities = entityList,
+                    EntityCount = entityList.Count,
+                    AppModules = appModuleList,
+                    AppModuleCount = appModuleList.Count,
+                    IncludeGlobalOptionSets = include_global_optionset,
+                    IncludeSiteMap = include_sitemap,
+                    Status = "published",
+                    DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(specificStructured)
+                };
             }
             catch (Exception ex)
             {
                 sw.Stop();
-                var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
-                var errorMsg = entitiesProvided
-                    ? $"Error: Publish failed for entities '{entities.Trim()}'.\n" +
-                      $"Note: Dataverse rejects the entire batch if any entity name is invalid — verify logical names via get_tables.\n" +
+                var hasSpecificTargets = !string.IsNullOrWhiteSpace(entities) ||
+                    !string.IsNullOrWhiteSpace(appmodules) ||
+                    include_global_optionset ||
+                    include_sitemap;
+                var errorMsg = hasSpecificTargets
+                    ? $"Error: Publish failed for {BuildErrorTarget(entities, appmodules, include_global_optionset, include_sitemap)}.\n" +
+                      $"Note: Dataverse rejects the entire batch if any entity name is invalid - verify logical names via get_tables.\n" +
                       $"Details: {ex.Message}"
                     : $"Error: PublishAll failed.\n" +
                       $"Details: {ex.Message}";
@@ -136,7 +177,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private static string BuildParameterXml(
-            System.Collections.Generic.List<string> entityList,
+            List<string> entityList,
+            List<string> appModuleList,
             bool includeGlobalOptionSets,
             bool includeSiteMap)
         {
@@ -148,10 +190,51 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.Append($"<entity>{entity}</entity>");
             }
             sb.Append("</entities>");
+            if (appModuleList.Count > 0)
+            {
+                sb.Append("<appmodules>");
+                foreach (var appModuleId in appModuleList)
+                {
+                    sb.Append($"<appmodule>{appModuleId}</appmodule>");
+                }
+                sb.Append("</appmodules>");
+            }
             sb.Append(includeGlobalOptionSets ? "<optionsets><optionset>all</optionset></optionsets>" : "<optionsets />");
             sb.Append(includeSiteMap ? "<sitemaps><sitemap></sitemap></sitemaps>" : "<sitemaps />");
             sb.Append("</importexportxml>");
             return sb.ToString();
+        }
+
+        private static string BuildTargetSummary(
+            List<string> entityList,
+            List<string> appModuleList,
+            bool includeGlobalOptionSets,
+            bool includeSiteMap)
+        {
+            var parts = new List<string>();
+            if (entityList.Count > 0)
+                parts.Add($"{entityList.Count} {(entityList.Count == 1 ? "entity" : "entities")}: {string.Join(", ", entityList)}");
+            if (appModuleList.Count > 0)
+                parts.Add($"{appModuleList.Count} {(appModuleList.Count == 1 ? "appmodule" : "appmodules")}: {string.Join(", ", appModuleList)}");
+            if (includeGlobalOptionSets)
+                parts.Add("global option sets");
+            if (includeSiteMap)
+                parts.Add("sitemap");
+            return string.Join("; ", parts);
+        }
+
+        private static string BuildErrorTarget(string entities, string appModules, bool includeGlobalOptionSets, bool includeSiteMap)
+        {
+            var parts = new List<string>();
+            if (!string.IsNullOrWhiteSpace(entities))
+                parts.Add($"entities '{entities.Trim()}'");
+            if (!string.IsNullOrWhiteSpace(appModules))
+                parts.Add($"appmodules '{appModules.Trim()}'");
+            if (includeGlobalOptionSets)
+                parts.Add("global option sets");
+            if (includeSiteMap)
+                parts.Add("sitemap");
+            return parts.Count == 0 ? "specific customizations" : string.Join(", ", parts);
         }
 
         private static CallToolResult ErrorResult(string message) => new()

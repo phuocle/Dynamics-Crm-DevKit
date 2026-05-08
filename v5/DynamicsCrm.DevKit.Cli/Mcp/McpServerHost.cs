@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
 
             // advanced (7 additional tools)
             [nameof(ManageCommandTool)] = "advanced",
-            [nameof(ManageSiteMapTool)] = "advanced",
+            [nameof(ManageAppTool)] = "advanced",
             [nameof(UpsertTableTool)] = "advanced",
             [nameof(UpsertColumnTool)] = "advanced",
             [nameof(UpsertRelationshipTool)] = "advanced",
@@ -68,13 +68,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
         // Tools permanently disabled (set = type names using nameof() for compile-time safety)
         internal static readonly HashSet<string> DisabledToolSet = new()
         {
-            nameof(ManageSiteMapTool),
         };
 
         // Maps disabled tool type name → associated resource names (Name from [McpServerResource(Name=...)])
         internal static readonly Dictionary<string, string[]> ToolResourceMap = new()
         {
-            [nameof(ManageSiteMapTool)] = new[] { "sitemapxml_schema" },
         };
 
         internal static readonly Dictionary<string, int> CategoryLevel = new()

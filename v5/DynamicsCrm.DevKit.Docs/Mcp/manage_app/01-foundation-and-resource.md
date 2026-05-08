@@ -2,7 +2,7 @@
 
 ## Scope
 
-Implement the tool skeleton, registration, structured result, disabled sitemap migration handling, Web API blocking, and AI-facing instructions resource. This task should not implement full app create/update/navigation logic yet.
+Implement the tool skeleton, registration, structured result, Web API blocking, and AI-facing instructions resource. This task should not implement full app create/update/navigation logic yet.
 
 ## Tool Skeleton
 
@@ -17,7 +17,7 @@ Register `ManageAppTool` in `McpServerHost.ToolCategoryMap`:
 [nameof(ManageAppTool)] = "advanced",
 ```
 
-Keep `ManageSiteMapTool` disabled while it still exists. AI agents must not call `manage_sitemap`.
+Do not register a standalone sitemap management tool. App navigation belongs to `manage_app`.
 
 ## Actions for Skeleton
 
@@ -46,7 +46,7 @@ Suggested body:
 ```markdown
 # Instructions for manage_app
 
-Use `manage_app` for model-driven app metadata and app navigation. Never call `manage_sitemap`, even if an older local server still exposes it. Never use `execute_webapi` to create or update model-driven apps, sitemaps, or app module components.
+Use `manage_app` for model-driven app metadata and app navigation. Never use `execute_webapi` to create or update model-driven apps, sitemaps, or app module components.
 
 ## Golden Rules
 
@@ -182,6 +182,5 @@ Error text should say:
 - Tool is registered and appears in the advanced tool tier.
 - `docs://instructions_for_manage_app` returns actionable instructions.
 - `execute_webapi` blocks app/sitemap raw CRUD and points to `manage_app`.
-- `manage_sitemap` remains disabled if it still exists.
+- No standalone sitemap management tool is registered.
 - No publish path exists in `manage_app`.
-

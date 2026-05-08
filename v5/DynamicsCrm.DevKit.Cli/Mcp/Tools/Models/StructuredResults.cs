@@ -107,6 +107,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? EntityCount { get; set; }
 
+        [JsonPropertyName("appModules")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> AppModules { get; set; }
+
+        [JsonPropertyName("appModuleCount")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? AppModuleCount { get; set; }
+
         [JsonPropertyName("includeGlobalOptionSets")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IncludeGlobalOptionSets { get; set; }
@@ -280,28 +288,54 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string Status { get; set; }
     }
 
-    internal sealed class ManageSiteMapResult
+    internal sealed class ManageAppResult
     {
         [JsonPropertyName("action")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Action { get; set; }
 
+        [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Status { get; set; }
+
         [JsonPropertyName("appModuleId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string AppModuleId { get; set; }
+
+        [JsonPropertyName("appModuleIdUnique")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AppModuleIdUnique { get; set; }
 
         [JsonPropertyName("appName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string AppName { get; set; }
 
+        [JsonPropertyName("uniqueName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string UniqueName { get; set; }
+
         [JsonPropertyName("siteMapId")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SiteMapId { get; set; }
 
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
+        [JsonPropertyName("solutionUniqueName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SolutionUniqueName { get; set; }
 
         [JsonPropertyName("validated")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Validated { get; set; }
+
+        [JsonPropertyName("published")]
+        public bool Published { get; set; }
+
+        [JsonPropertyName("backupPath")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string BackupPath { get; set; }
+
+        [JsonPropertyName("restoredFromBackup")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string RestoredFromBackup { get; set; }
 
         [JsonPropertyName("validationErrors")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -311,27 +345,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> ValidationWarnings { get; set; }
 
-        [JsonPropertyName("backupPath")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string BackupPath { get; set; }
-
-        [JsonPropertyName("published")]
-        public bool Published { get; set; }
-
-        [JsonPropertyName("createMode")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string CreateMode { get; set; }
-
-        [JsonPropertyName("isAddToSolution")]
-        public bool IsAddToSolution { get; set; }
-
-        [JsonPropertyName("addToSolutionMethod")]
-        public string AddToSolutionMethod { get; set; } = "AddAppComponentsRequest";
-
-        [JsonPropertyName("restoredFromBackup")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string RestoredFromBackup { get; set; }
-
         [JsonPropertyName("operationsCount")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? OperationsCount { get; set; }
@@ -339,6 +352,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("operationSummaries")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OperationSummaries { get; set; }
+
+        [JsonPropertyName("addedAppComponents")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> AddedAppComponents { get; set; }
+
+        [JsonPropertyName("addedSolutionComponents")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> AddedSolutionComponents { get; set; }
+
+        [JsonPropertyName("nextStep")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string NextStep { get; set; }
     }
 
     internal sealed class ManageRibbonResult

@@ -2,7 +2,7 @@
 
 ## Scope
 
-Implement snapshot backup, undo, XSD validation wiring, old sitemap tool deletion, and final cleanup.
+Implement snapshot backup, undo, XSD validation wiring, standalone sitemap tool deletion, and final cleanup.
 
 ## Helper Classes
 
@@ -17,8 +17,8 @@ Reuse from existing code where possible:
 
 - `DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.McpHelper.GetBaseLanguageCode(ServiceClient serviceClient)` for sitemap title LCID values.
 - `SolutionComponentCreateHelper.AddExistingComponent`.
-- Sitemap XSD validation logic copied or extracted from legacy `ManageSiteMapTool` before deleting it.
-- XML operation patterns copied or extracted from legacy `SiteMapXmlOperationsHelper` before deleting it.
+- Sitemap XSD validation logic should live in the app management implementation.
+- XML operation patterns should live in app-scoped navigation helpers.
 
 Only `ManageAppTool` gets `[McpServerToolType]`. Helper classes must not.
 
@@ -104,9 +104,9 @@ Flow:
 ## Cleanup
 
 - Update `ExecuteWebApiTool.BlockedEndpoints` for `appmodules(`, `sitemaps(`, and `appmodulecomponents(` to redirect to `manage_app`.
-- Delete `ManageSiteMapTool` and related private sitemap tool files after `manage_app` owns the needed logic.
-- Remove all `ToolCategoryMap`, `DisabledToolSet`, and `ToolResourceMap` references to `ManageSiteMapTool` after deletion.
-- Existing prompt docs that mention `manage_sitemap` should be updated after implementation to use `manage_app`.
+- Delete the standalone sitemap tool and related private sitemap tool files after `manage_app` owns the needed logic.
+- Remove all stale tool registration, disabled-tool, and resource-map references after deletion.
+- Existing prompt docs that mention standalone sitemap management should be updated after implementation to use `manage_app`.
 - Do not run full solution build after editing only MCP files. Follow the component-specific CLI build workflow from `.claude/rules/core-rule.md`.
 
 ## Acceptance Criteria
@@ -115,6 +115,5 @@ Flow:
 - Mutating paths create `.app.json` backups when `backup=true`.
 - XSD validation runs for starter XML, navigation update XML, and undo restore XML.
 - No action deletes appmodule or sitemap records.
-- Old `manage_sitemap` files and references are removed after `manage_app` is complete.
+- Old standalone sitemap tool files and references are removed after `manage_app` is complete.
 - CLI build passes.
-

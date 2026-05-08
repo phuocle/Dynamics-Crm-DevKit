@@ -238,7 +238,7 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 
 **Data Operations**: `manage_record`, `execute_fetchxml`, `search_records`, `execute_webapi`, `manage_choice`, `manage_environment_variable`
 
-**Forms, Views & SiteMaps**: `manage_form`, `build_form_xml`, `manage_view`, `manage_sitemap`, `build_ribbon_xml`
+**Forms, Views & Apps**: `manage_form`, `build_form_xml`, `manage_view`, `manage_app`, `build_ribbon_xml`
 
 **Schema Management**: `upsert_table`, `upsert_column`, `upsert_relationship`
 
@@ -246,7 +246,7 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 
 **Security & Utilities**: `manage_role`, `manage_webresource`, `manage_command`, `manage_ribbon`, `get_audit_history`, `parse_record_url`, `publish_customizations`
 
-### Available MCP Resources (9)
+### Available MCP Resources (10)
 
 | URI | Description |
 |-----|-------------|
@@ -255,6 +255,7 @@ If you prefer not to set system-wide environment variables, use the `env` proper
 | `schema://fetchxml` | Fetch.xsd |
 | `schema://sitemapxml` | SiteMap.xsd + rules |
 | `docs://instructions_for_formxml` | FormXML manipulation rules |
+| `docs://instructions_for_manage_app` | Model-driven app and app navigation rules |
 | `docs://instructions_for_views` | View/LayoutXML manipulation rules |
 | `docs://schema_tools_guide` | Schema tools guide |
 | `docs://data_operations_guide` | Data operations guide |

@@ -104,6 +104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 return SolutionResolveResult.Ok(
                     prefix,
                     optionValuePrefix,
+                    publisherRef.Id,
                     sol.GetAttributeValue<string>("uniquename"),
                     sol.GetAttributeValue<string>("friendlyname"));
             }
@@ -131,6 +132,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <summary>Publisher option value prefix (e.g. 10000). Used for auto-assigning picklist values.</summary>
         public int OptionValuePrefix { get; private set; }
 
+        /// <summary>Publisher record id for components that require publisherid.</summary>
+        public Guid PublisherId { get; private set; }
+
         /// <summary>Solution unique name (logical name).</summary>
         public string UniqueName { get; private set; }
 
@@ -143,11 +147,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <summary>True if resolution succeeded.</summary>
         public bool IsSuccess => Error == null;
 
-        internal static SolutionResolveResult Ok(string prefix, int optionValuePrefix, string uniqueName, string friendlyName) =>
+        internal static SolutionResolveResult Ok(string prefix, int optionValuePrefix, Guid publisherId, string uniqueName, string friendlyName) =>
             new()
             {
                 Prefix = prefix,
                 OptionValuePrefix = optionValuePrefix,
+                PublisherId = publisherId,
                 UniqueName = uniqueName,
                 FriendlyName = friendlyName
             };

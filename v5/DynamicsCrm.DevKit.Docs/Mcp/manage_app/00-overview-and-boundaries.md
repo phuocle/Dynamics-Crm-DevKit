@@ -2,7 +2,7 @@
 
 ## Context
 
-`manage_sitemap` is a legacy/disabled tool and is planned for removal. Editing sitemap XML as a standalone artifact is the wrong user-facing context for a model-driven app. The replacement is `manage_app`, where app metadata, app components, and app navigation are handled together.
+Model-driven app metadata and app navigation are owned by `manage_app`. Editing sitemap XML as a standalone artifact is the wrong user-facing context for a model-driven app; app metadata, app components, and app navigation must be handled together.
 
 Microsoft's model-driven app API flow is:
 
@@ -57,15 +57,7 @@ Register:
 [nameof(ManageAppTool)] = "advanced",
 ```
 
-Keep `ManageSiteMapTool` disabled while it still exists; later delete it and its private helper files. AI agents must not call `manage_sitemap`, even if an older local server still exposes it.
-
-Temporary migration bridge while the old tool exists:
-
-```csharp
-[nameof(ManageSiteMapTool)] = new[] { "sitemapxml_schema", "instructions_for_manage_app" },
-```
-
-After deleting `ManageSiteMapTool`, remove this `ToolResourceMap` entry too.
+No standalone sitemap management tool should be registered. `ManageAppTool` is the app and app-navigation entry point.
 
 ## Proposed Signature
 
@@ -159,6 +151,7 @@ internal sealed class ManageAppResult
     public bool Validated { get; set; }
     public bool Published { get; set; }
     public string BackupPath { get; set; }
+    public string RestoredFromBackup { get; set; }
     public List<string> ValidationErrors { get; set; }
     public List<string> ValidationWarnings { get; set; }
     public int? OperationsCount { get; set; }
@@ -172,4 +165,3 @@ internal sealed class ManageAppResult
 Invariant:
 
 For `create`, `update`, `update_navigation`, and `undo`, `Published=false` and `NextStep` is not null.
-

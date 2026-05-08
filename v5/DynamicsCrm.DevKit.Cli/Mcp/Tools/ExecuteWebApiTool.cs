@@ -29,7 +29,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(WebApiResult)),
         Description(
-            "Raw Dataverse Web API call. Allowed: GET (any), POST/PATCH/PUT/DELETE on data records + custom actions. Blocked at runtime (use specialized tool): schema/metadata→upsert_table/upsert_column/upsert_relationship; choice→manage_choice; form/view/sitemap→manage_form/manage_view/manage_sitemap; env vars→manage_environment_variable; webresource→manage_webresource; roles→manage_role; publish→publish_customizations; solutions/plugins/workflows/apps→DevKit CLI or Power Apps UI. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
+            "Raw Dataverse Web API call. Allowed: GET (any), POST/PATCH/PUT/DELETE on data records + custom actions. Blocked at runtime (use specialized tool): schema/metadata→upsert_table/upsert_column/upsert_relationship; choice→manage_choice; form/view→manage_form/manage_view; app/sitemap→manage_app; env vars→manage_environment_variable; webresource→manage_webresource; roles→manage_role; publish→publish_customizations; solutions/plugins/workflows/apps→DevKit CLI or Power Apps UI. url is relative; SDK adds base URL. PUT/PATCH/DELETE destructive — confirm.\n\n" +
+            "NOTE: For model-driven app, sitemap, and appmodulecomponent create/update, use manage_app. Do not use raw Web API for those writes.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Endpoints not covered by specialized tools (e.g. WhoAmI, $metadata, custom actions)\n" +
@@ -187,8 +188,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
             ("userqueries(", "manage_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
-            ("sitemaps(", "manage_sitemap",
-                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app."),
+            ("sitemaps(", "manage_app",
+                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
 
             // ── Environment Variables ──
             ("environmentvariabledefinitions(", "manage_environment_variable",
@@ -245,8 +246,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Apps ──
             ("canvasapps(", null,
                 "Canvas apps have complex internal structure. Manage via Power Apps Studio."),
-            ("appmodules(", null,
-                "Model-driven app definitions control app structure and navigation. Manage via Power Apps UI."),
+            ("appmodules(", "manage_app",
+                "Model-driven app definitions control app structure and navigation. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
+            ("appmodulecomponents(", "manage_app",
+                "App module components link model-driven apps to sitemaps, entities, forms, views, and commands. Do not use execute_webapi for app component creation/update. Use manage_app."),
 
             // ── Connections ──
             ("connectionreferences(", null,
@@ -277,7 +280,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ("webresources", "manage_webresource",
                 "Creating web resources requires base64 encoding and type codes. Use manage_webresource for safe creation with solution assignment."),
             ("roles", "manage_role",
-                "Creating security roles requires proper business unit assignment. Use manage_role for safe role management.")
+                "Creating security roles requires proper business unit assignment. Use manage_role for safe role management."),
+
+            ("appmodules", "manage_app",
+                "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
+            ("sitemaps", "manage_app",
+                "Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
+            ("appmodulecomponents", "manage_app",
+                "Do not use execute_webapi for appmodulecomponent creation/update. Use manage_app.")
         ];
 
         private static string GetBlockedReason(HttpMethod method, string url)
