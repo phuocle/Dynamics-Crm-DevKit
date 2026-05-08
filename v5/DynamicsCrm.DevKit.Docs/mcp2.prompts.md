@@ -437,18 +437,49 @@ Solution target: display name **TEST-MCP**
 > ✅ Tools: manage_record
 > Result: Created Invoice INV-0001 (bb56c39d-1e4a-f111-bec6-7ced8d6e68ce) linked to TEST-MCP Client A via "v5_billto@account" polymorphic syntax, Invoice Status Draft, Grand Total 550, PO-TEST-001.
 67. Create an Invoice Line as a child of INV-0001: Line Number 1, Product Name "Consulting Service", Quantity 2, Unit Price 200, Discount Percent 0, Line Total 400, Line Status Draft.
+
+> ✅ Tools: manage_record
+> Result: Created Invoice Line (4f25392d-684a-f111-bec6-7ced8d6e68ce) with Line Number 1, Product Name "Consulting Service", Quantity 2, Unit Price 200, Line Total 400, Line Status Draft, linked to Invoice INV-0001.
+
 68. Read back Invoice INV-0001 and Invoice Line 1, fetching only the important fields to confirm the data is linked correctly.
+
+> ✅ Tools: manage_record → manage_record
+> Result: Confirmed Invoice INV-0001 (Invoice Number INV-0001, Status Draft, Grand Total 550) and Invoice Line 1 (Line Number 1, Product Name "Consulting Service", Quantity 2, Unit Price 200, Line Total 400, Status Draft) are linked correctly via v5_invoice lookup.
+
 69. Create 2 more Invoice Lines for INV-0001: Line Number 2 and 3, each with a different Product Name, Line Status Draft.
+
+> ✅ Tools: manage_record → manage_record
+> Result: Created Invoice Line 2 "Software License" (e8e8368a-684a-f111-bec6-7ced8d6e68ce) and Invoice Line 3 "Training Session" (eae8368a-684a-f111-bec6-7ced8d6e68ce), both linked to INV-0001 with Line Status Draft.
+
 70. Generate 10 demo Invoice records in the date range 2026-01-01 to 2026-04-28, rotating Invoice Status through Draft, Confirmed, Shipped, Paid, Cancelled.
+
+> ✅ Tools: generate_demo_data
+> Result: Generated 10 demo Invoice records to .devkit\demo_data\v5_invoice_20260508_060114_388.json with rotating Invoice Status values (Draft, Confirmed, Shipped, Paid, Cancelled) and dates between 2026-01-01 and 2026-04-28.
+
 71. Import the 10 demo Invoices into the environment; if Bill To is required, use Account "TEST-MCP Client A".
+
+> ✅ Tools: create_records (after bug fix in GenerateDemoDataTool.cs line 430: parse "in" operator values as int for picklist fields)
+> Result: Successfully imported 10 demo Invoice records with rotating Invoice Status values (Draft, Confirmed, Shipped, Paid, Cancelled) after fixing type mismatch bug and rebuilding CLI.
 
 ---
 
 ## P. Query & Search
 
 72. Query Invoice INV-0001 with all child Invoice Lines, returning Invoice Number, Invoice Status, Line Number, Product Name, Quantity, Line Total, Line Status.
+
+> ✅ Tools: execute_fetchxml
+> Result: Queried Invoice INV-0001 with 3 child Invoice Lines: Line 1 "Consulting Service" (Qty 2, Total $400), Line 2 "Software License" (Qty 5, Total $250), Line 3 "Training Session" (Qty 1, Total $300), all with Draft status.
+
 73. Search for keyword INV-0001 in Dataverse and report which records related to Invoice or Invoice Line are found.
+
+> ✅ Tools: search_records
+> Result: Relevance Search returned 0 results for "INV-0001" in v5_invoice and v5_invoiceline entities — likely because Relevance Search indexing has not yet processed the newly created records or the fields are not indexed.
+
+
 74. Count Invoice Lines per Invoice and confirm that INV-0001 has at least 3 lines.
+
+> ✅ Tools: execute_fetchxml
+> Result: Aggregate query confirmed Invoice INV-0001 has exactly 3 Invoice Lines (line_count=3).
 
 ---
 

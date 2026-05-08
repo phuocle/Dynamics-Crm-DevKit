@@ -427,8 +427,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         break;
 
                     case "in":
-                        record[field] = faker.PickRandom(values);
+                    {
+                        var picked = faker.PickRandom(values);
+                        // Try parse as int for picklist fields
+                        if (int.TryParse(picked, out var intVal))
+                            record[field] = intVal;
+                        else
+                            record[field] = picked;
                         break;
+                    }
 
                     case "startswith":
                     {
