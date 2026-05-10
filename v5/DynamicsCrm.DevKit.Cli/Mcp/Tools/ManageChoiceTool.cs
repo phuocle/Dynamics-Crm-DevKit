@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name; create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. Auto-published unless auto_publish=false.\n\n" +
+            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name (logical name OR display name — display name resolved automatically); create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. list/detail never publish. create and delete-only update do not issue a publish request because Dataverse auto-publishes newly created/deleted customizations. Other updates publish only the affected option set when auto_publish=true. list supports optional filter= to search by name or display name (contains, case-insensitive).\n\n" +
 
             "OPTION VALUES: solution_name is REQUIRED for create and for label-only add_options — if not provided by the user, ask; never search or guess. Pass options/add_options as label-only ('Draft;Confirmed'). For update_options use 'OldLabel:NewLabel;...' pairs. For remove_options use label names ('Draft,Cancelled') — labels are resolved to values automatically.\n\n" +
 
@@ -52,11 +52,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "'list', 'detail', 'create', 'update'."
             )] string action,
             [Description(
-                "Logical name. Required except list and create. For create: if omitted, auto-derived as '{publisher_prefix}_{sanitized_display_name}'; if provided, must start with the solution publisher prefix (e.g. 'v5_invoicestatus') — error returned otherwise."
+                "Logical name OR display name. Required except list and create. For detail: if exact logical name not found, resolved automatically by display name (contains, case-insensitive). For create: if omitted, auto-derived as '{publisher_prefix}_{sanitized_display_name}'; if provided, must start with the solution publisher prefix (e.g. 'devkit_invoicestatus') — error returned otherwise."
             )] string optionset_name = "",
             [Description(
-                "Required for create. Optional for update."
+                "Required for create. Optional for update. For list: used as a filter (contains match on name and display name, case-insensitive)."
             )] string display_name = "",
+            [Description(
+                "list only. Optional keyword filter applied to both logical name and display name (contains, case-insensitive). Shorthand alternative to display_name for filtering."
+            )] string filter = "",
             [Description(
                 "Optional for create/update."
             )] string description = "",
@@ -79,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Optional for create/update. Semicolon-separated color mappings. Use 'Label:#RRGGBB' or 'value:#RRGGBB'. Labels are resolved case-insensitively. Example: 'Draft:#808080;Paid:#008000'."
             )] string option_colors = "",
             [Description(
-                "Publish after changes."
+                "Update only: publish only this option set after changes that need publishing. Create and delete-only update do not issue a publish request because new/deleted customizations are automatically published by Dataverse."
             )] bool auto_publish = true)
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -91,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return normalizedAction switch
                 {
-                    "list" => HandleList(),
+                    "list" => HandleList(!string.IsNullOrWhiteSpace(filter) ? filter : display_name),
                     "detail" => HandleDetail(optionset_name),
                     "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, option_colors, auto_publish),
                     "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors, auto_publish),
@@ -106,10 +109,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         #region Action Handlers
 
-        private CallToolResult HandleList()
+        private CallToolResult HandleList(string filter = "")
         {
             var response = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
-            var sorted = response.OptionSetMetadata.OrderBy(x => x.Name).ToList();
+            var all = response.OptionSetMetadata.OrderBy(x => x.Name).ToList();
+            var sorted = string.IsNullOrWhiteSpace(filter)
+                ? all
+                : all.Where(os =>
+                    (os.Name?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true) ||
+                    (os.DisplayName?.UserLocalizedLabel?.Label?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true))
+                  .ToList();
             var items = sorted.Select(os => new ChoiceListItem
             {
                 Name = os.Name,
@@ -134,35 +143,62 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var name = optionsetName.Trim().ToLowerInvariant();
 
+            // First try exact logical name lookup
             try
             {
                 var response = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
-                var meta = response.OptionSetMetadata;
-                var options = (meta as OptionSetMetadata)?.Options
-                    .OrderBy(o => o.Value)
-                    .Select(o => new ChoiceOptionItem
-                    {
-                        Value = o.Value ?? 0,
-                        Label = o.Label?.UserLocalizedLabel?.Label ?? "",
-                        Color = string.IsNullOrWhiteSpace(o.Color) ? null : o.Color
-                    }).ToList();
-                return StructuredResult(CompactFormatter.FormatOptionSetDetail(meta), new ManageChoiceResult
-                {
-                    Action = "detail",
-                    OptionSetName = meta.Name,
-                    DisplayName = meta.DisplayName?.UserLocalizedLabel?.Label ?? "",
-                    Description = meta.Description?.UserLocalizedLabel?.Label,
-                    OptionCount = options?.Count,
-                    Options = options,
-                    Status = "ok"
-                });
+                return BuildDetailResult(response.OptionSetMetadata);
             }
             catch (Exception)
             {
-                return ErrorResult($"Error: Could not find global option set '{name}'. " +
-                       "Make sure you use the logical name (Name column), not the display name. " +
-                       "Call manage_choice with action='list' to see all available option sets.");
+                // Fallback: try to resolve by display name (contains, case-insensitive)
             }
+
+            try
+            {
+                var allResp = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
+                var matches = allResp.OptionSetMetadata
+                    .Where(os => os.DisplayName?.UserLocalizedLabel?.Label
+                        ?.Contains(optionsetName.Trim(), StringComparison.OrdinalIgnoreCase) == true)
+                    .ToList();
+
+                if (matches.Count == 1)
+                    return BuildDetailResult(matches[0]);
+
+                if (matches.Count > 1)
+                    return ErrorResult($"Error: Multiple global option sets match display name '{optionsetName.Trim()}': " +
+                        string.Join(", ", matches.Select(m => m.Name)) +
+                        ". Provide the exact logical name (optionset_name) to disambiguate.");
+
+                return ErrorResult($"Error: Could not find global option set '{optionsetName.Trim()}' by logical name or display name. " +
+                    "Call manage_choice with action='list' to see all available option sets.");
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to resolve global option set '{optionsetName.Trim()}': {ex.Message}");
+            }
+        }
+
+        private CallToolResult BuildDetailResult(OptionSetMetadataBase meta)
+        {
+            var options = (meta as OptionSetMetadata)?.Options
+                .OrderBy(o => o.Value)
+                .Select(o => new ChoiceOptionItem
+                {
+                    Value = o.Value ?? 0,
+                    Label = o.Label?.UserLocalizedLabel?.Label ?? "",
+                    Color = string.IsNullOrWhiteSpace(o.Color) ? null : o.Color
+                }).ToList();
+            return StructuredResult(CompactFormatter.FormatOptionSetDetail(meta), new ManageChoiceResult
+            {
+                Action = "detail",
+                OptionSetName = meta.Name,
+                DisplayName = meta.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                Description = meta.Description?.UserLocalizedLabel?.Label,
+                OptionCount = options?.Count,
+                Options = options,
+                Status = "ok"
+            });
         }
 
         private CallToolResult HandleCreate(string optionsetName, string displayName, string description,
@@ -270,7 +306,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(addResult.AddToSolutionWarning))
                 solWarning = $"Warning: Created but failed to add to solution '{solutionName}': {addResult.AddToSolutionWarning}";
 
-            var published = autoPublish && Publish();
+            var published = false;
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[Choice] Created: {name}");
@@ -283,7 +319,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var colorSuffix = colorMap != null && colorMap.TryGetValue(value.ToString(), out var c) ? $" ({c})" : "";
                 sb.AppendLine($"  {value}: {label}{colorSuffix}");
             }
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            sb.AppendLine("Published: no");
+            sb.AppendLine("PublishScope: skipped (new choice metadata is automatically published by Dataverse)");
             if (solWarning != null)
                 sb.AppendLine(solWarning);
 
@@ -317,7 +354,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'update'.");
 
-            var name = optionsetName.Trim().ToLowerInvariant();
+            // Resolve logical name (accepts logical name OR display name)
+            if (!TryResolveToLogicalName(optionsetName, out var name, out var resolveErr))
+                return ErrorResult(resolveErr);
 
             // Validate parameters BEFORE hitting Dataverse
             var hasDisplayName = !string.IsNullOrWhiteSpace(displayName);
@@ -377,7 +416,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: No changes specified. Provide at least one of: " +
                     "display_name, description, add_options, update_options, remove_options, option_colors.");
 
-            // Verify it exists and fetch options for label→value resolution
+            // Fetch current metadata for label→value resolution (name is already resolved above)
             OptionSetMetadata existingMeta;
             try
             {
@@ -546,8 +585,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            var published = autoPublish && Publish();
+            var requiresPublish = hasDisplayName || hasDescription || hasAdd || hasUpdate || hasColors;
+            var published = autoPublish && requiresPublish && PublishOptionSet(name);
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (!requiresPublish && hasRemove)
+                sb.AppendLine("PublishScope: skipped (removed choices are automatically published by Dataverse)");
 
             return StructuredResult(sb.ToString(), new ManageChoiceResult
             {
@@ -566,6 +608,50 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         #endregion
 
         #region Helpers
+
+        private bool TryResolveToLogicalName(string nameOrDisplay, out string resolvedName, out string error)
+        {
+            resolvedName = null;
+            error = null;
+            var lower = nameOrDisplay.Trim().ToLowerInvariant();
+
+            // Try exact logical name first
+            try
+            {
+                _serviceClient.Execute(new RetrieveOptionSetRequest { Name = lower });
+                resolvedName = lower;
+                return true;
+            }
+            catch { }
+
+            // Fallback: search by display name (contains, case-insensitive)
+            try
+            {
+                var allResp = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
+                var matches = allResp.OptionSetMetadata
+                    .Where(os => os.DisplayName?.UserLocalizedLabel?.Label
+                        ?.Contains(nameOrDisplay.Trim(), StringComparison.OrdinalIgnoreCase) == true)
+                    .ToList();
+
+                if (matches.Count == 1)
+                {
+                    resolvedName = matches[0].Name;
+                    return true;
+                }
+                if (matches.Count > 1)
+                {
+                    error = $"Error: Multiple global option sets match '{nameOrDisplay.Trim()}': " +
+                        string.Join(", ", matches.Select(m => m.Name)) +
+                        ". Provide the exact logical name to disambiguate.";
+                    return false;
+                }
+            }
+            catch { }
+
+            error = $"Error: Global option set '{nameOrDisplay.Trim()}' not found. " +
+                "Use action='list' to see all available option sets.";
+            return false;
+        }
 
         internal static bool TryNormalizeHexColor(string input, out string color)
         {
@@ -700,10 +786,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private bool Publish()
+        private bool PublishOptionSet(string optionSetName)
         {
-            McpHelper.FireAndForgetPublishAll(_serviceClient);
-            return true; // publishing is running in background
+            var safeName = System.Security.SecurityElement.Escape(optionSetName);
+            var publishXml = $"<importexportxml><optionsets><optionset>{safeName}</optionset></optionsets></importexportxml>";
+            _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+            return true;
         }
 
         /// <summary>

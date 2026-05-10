@@ -94,7 +94,13 @@ Solution target: display name **PRODUCTION-MCP**
 
 1. Which Dataverse environment am I connected to? Tell me the organization name, URL, version, current user, and assigned roles.
 
+   > ✅ `whoami()`
+   > 🎯 Result: Connected to org 🟢DEVKITV4 at https://dynamics-crm-devkit-v4.crm.dynamics.com, version 9.2.26044.135, current user is # DEVKIT, assigned role System Administrator.
+
 2. What components does the solution "PRODUCTION-MCP (PRODUCTIONMCP)" currently contain?
+
+   > ✅ `get_solution_components(solution_name="PRODUCTIONMCP")`
+   > 🎯 Result: Solution PRODUCTION-MCP currently contains zero components — it is completely empty.
 
 ---
 
@@ -102,9 +108,19 @@ Solution target: display name **PRODUCTION-MCP**
 
 3. In solution PRODUCTION-MCP, create a global choice with display name "Invoice Status" containing the following values: Draft, Confirmed, Shipped, Paid, Cancelled.
 
+   > ✅ `manage_choice(action="create", display_name="Invoice Status", options="Draft;Confirmed;Shipped;Paid;Cancelled", solution_name="PRODUCTIONMCP")`
+   > 🎯 Result: Global choice "Invoice Status" created successfully in PRODUCTION-MCP with 5 options: Draft, Confirmed, Shipped, Paid, Cancelled.
+
 4. Read back the global choice "Invoice Status" just created and list all values with their corresponding integer codes.
 
+   > ✅ `manage_choice(action="detail", optionset_name="Invoice Status")`
+   > 🎯 Result: Global choice "Invoice Status" (logical name devkit_invoice_status) has 5 options: Draft, Confirmed, Shipped, Paid, Cancelled — each with an integer code assigned by the devkit publisher prefix.
+
 5. Update the colors of the "Invoice Status" global choice: Draft=gray (#808080), Confirmed=blue (#0070C0), Shipped=orange (#FF7C00), Paid=green (#00B050), Cancelled=red (#FF0000); read it back to confirm the colors were applied correctly.
+
+   > ✅ `manage_choice(action="update", optionset_name="Invoice Status", option_colors="Draft:#808080;Confirmed:#0070C0;Shipped:#FF7C00;Paid:#00B050;Cancelled:#FF0000", auto_publish=true)`
+   >    `manage_choice(action="detail", optionset_name="Invoice Status")`
+   > 🎯 Result: Colors updated and confirmed — Draft=gray, Confirmed=blue, Shipped=orange, Paid=green, Cancelled=red; all 5 options match the requirements.
 
 ---
 
