@@ -131,13 +131,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/update modern command bar buttons in MDA (Power Fx / appaction only)\n" +
             "- Hide/show OOB or custom commands in a specific app\n" +
             "- Inspect appactionrule visibility/enable rules (include_rules=true)\n\n" +
+            "NAME RESOLUTION: entity_name, app_name, javascript_webresource, and icon_webresource resolve Display Name contains first, then logical/unique/schema contains.\n\n" +
 
             "Fuzzy on label (within entity_name + location + app): 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with command_id). 1 → auto-resolve.\n" +
             "Fuzzy on app_name (contains): 0/multi → ask user. 1 → auto.")]
         public CallToolResult manage_command(
             [Description("list/detail/create/update/hide/show/add_flyout/update_flyout/add_flyout_item/remove_flyout_item/add_split_button/update_split_button.")] string action,
             [Description("appaction GUID. Required: detail/update.")] string command_id = "",
-            [Description("Logical name. Required: create.")] string entity_name = "",
+            [Description("Entity Display Name or logical name. Required: create.")] string entity_name = "",
             [Description("form/main_grid/sub_grid/associated_grid/quick_form/global_header/dashboard. Required: create.")] string location = "",
             [Description("App module GUID. Required: create (or app_name).")] string app_id = "",
             [Description("Button label. Required: create.")] string label = "",
@@ -256,12 +257,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: max_records must be between 1 and 500.");
             if (maxRecords > 500) maxRecords = 500;
 
+            if (!string.IsNullOrWhiteSpace(entityName))
+            {
+                var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
+                if (entityError != null)
+                    return ErrorResult(entityError);
+                entityName = resolvedEntityName;
+            }
+
             // Ribbon-style list when entity is specified and no extra filters narrow it down
             if (!string.IsNullOrWhiteSpace(entityName) && string.IsNullOrWhiteSpace(appName)
                 && string.IsNullOrWhiteSpace(origin) && string.IsNullOrWhiteSpace(actionType) && string.IsNullOrWhiteSpace(nameFilter))
             {
                 var loc = string.IsNullOrWhiteSpace(location) ? null : location.Trim();
-                return GetListRibbonStyle(entityName.Trim().ToLowerInvariant(), loc);
+                return GetListRibbonStyle(entityName, loc);
             }
 
             return GetList(entityName, location, appName, origin, actionType, nameFilter, includeRules, includeChildren, maxRecords);
@@ -547,7 +556,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             filters.AppendLine("      <condition attribute='statecode' operator='eq' value='0'/>");
 
             if (!string.IsNullOrWhiteSpace(entityName))
-                filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName.Trim().ToLowerInvariant())}'/>");
+                filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName.Trim())}'/>");
 
             if (!string.IsNullOrWhiteSpace(location) && LocationFilterMap.TryGetValue(location.Trim(), out var locValue))
                 filters.AppendLine($"      <condition attribute='location' operator='eq' value='{locValue}'/>");
@@ -561,11 +570,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(nameFilter))
                 filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
 
-            var appFilter = "";
             if (!string.IsNullOrWhiteSpace(appName))
-                appFilter = $"\n    <link-entity name='appmodule' from='appmoduleid' to='appmoduleid' alias='app'>\n      <attribute name='name'/>\n      <filter>\n        <condition attribute='name' operator='like' value='%{EscapeXml(appName.Trim())}%'/>\n      </filter>\n    </link-entity>";
-            else
-                appFilter = "\n    <link-entity name='appmodule' from='appmoduleid' to='appmoduleid' link-type='outer' alias='app'>\n      <attribute name='name'/>\n    </link-entity>";
+            {
+                var resolvedAppId = ResolveAppId("", appName, out var appResolveError);
+                if (resolvedAppId == null)
+                    return ErrorResult(appResolveError ?? "Error: Could not resolve app_name.");
+                filters.AppendLine($"      <condition attribute='appmoduleid' operator='eq' value='{resolvedAppId.Value}'/>");
+            }
+
+            var appFilter = "";
+            appFilter = "\n    <link-entity name='appmodule' from='appmoduleid' to='appmoduleid' link-type='outer' alias='app'>\n      <attribute name='name'/>\n    </link-entity>";
 
             var fetchXml = $@"<fetch top='{maxRecords}'>
   <entity name='appaction'>
@@ -804,7 +818,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             filters.AppendLine($"      <condition attribute='buttonlabeltext' operator='like' value='%{EscapeXml(label)}%'/>");
 
             if (!string.IsNullOrWhiteSpace(entityName))
-                filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName.ToLowerInvariant())}'/>");
+            {
+                var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
+                if (entityError != null)
+                    return ErrorResult(entityError);
+                entityName = resolvedEntityName;
+                filters.AppendLine($"      <condition attribute='contextvalue' operator='eq' value='{EscapeXml(entityName)}'/>");
+            }
 
             if (!string.IsNullOrWhiteSpace(location) && LocationFilterMap.TryGetValue(location, out var locVal))
                 filters.AppendLine($"      <condition attribute='location' operator='eq' value='{locVal}'/>");
@@ -878,7 +898,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult($"Error: Invalid onclick_type '{onclickType.Trim()}'. Use 'none', 'javascript', or 'formula'.");
             }
 
-            var createEntityLogical = entityName.Trim().ToLowerInvariant();
+            var (createEntityLogical, createEntityError) = ResolveEntityLogicalName(entityName);
+            if (createEntityError != null)
+                return ErrorResult(createEntityError);
             var createEntityId = ResolveEntityId(createEntityLogical);
             var createAppUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var createPublisherPrefix = ResolvePublisherPrefix(createEntityLogical);
@@ -1163,7 +1185,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!LocationFilterMap.TryGetValue(location.Trim(), out var locationValue))
                 return ErrorResult($"Error: Invalid location '{location.Trim()}'. Use 'form', 'main_grid', 'sub_grid', 'associated_grid', 'quick_form', 'global_header', or 'dashboard'.");
 
-            var found = FindCommandByLabel(label.Trim(), entityName.Trim().ToLowerInvariant(), locationValue);
+            var (resolvedEntityName, entityError) = ResolveEntityLogicalName(entityName);
+            if (entityError != null)
+                return ErrorResult(entityError);
+            entityName = resolvedEntityName;
+
+            var found = FindCommandByLabel(label.Trim(), entityName, locationValue);
 
             if (found != null)
             {
@@ -1224,7 +1251,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             // Block if this label belongs to a custom classic ribbon button
-            if (IsClassicRibbonButton(label.Trim(), entityName.Trim().ToLowerInvariant()))
+            if (IsClassicRibbonButton(label.Trim(), entityName))
                 return ErrorResult($"Error: '{label.Trim()}' is a classic ribbon button defined via manage_ribbon and cannot be hidden using manage_command. Use manage_ribbon to hide it instead.");
 
             // hide: must create an appaction override record
@@ -1232,7 +1259,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (resolvedAppId == null)
                 return ErrorResult(appResolveError2 ?? "Error: Could not resolve app. Provide a valid app_id or app_name.");
 
-            var entityLogical = entityName.Trim().ToLowerInvariant();
+            var entityLogical = entityName;
             var oobNamePrefix = LocationOobNamePrefix(locationValue);
             var safeLabel = label.Trim().Replace(" ", "");
             var overrideName = $"Mscrm.{oobNamePrefix}.{{!EntityLogicalName}}.{safeLabel}";
@@ -1436,6 +1463,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return idx > 0 ? entityLogicalName.Substring(0, idx) : entityLogicalName;
         }
 
+        private (string LogicalName, string Error) ResolveEntityLogicalName(string entityName)
+        {
+            if (string.IsNullOrWhiteSpace(entityName))
+                return (null, "Error: entity_name is required.");
+
+            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_command");
+            return result.IsSuccess
+                ? (result.Value.LogicalName, null)
+                : (null, $"Error: entity_name '{entityName.Trim()}': {result.Error}");
+        }
+
         private Guid? ResolveEntityId(string entityLogicalName)
         {
             try
@@ -1508,7 +1546,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (resolvedAppId == null)
                 return ErrorResult(appResolveError ?? "Error: Could not resolve app.");
 
-            var entityLogical = entityName.Trim().ToLowerInvariant();
+            var (entityLogical, entityError) = ResolveEntityLogicalName(entityName);
+            if (entityError != null)
+                return ErrorResult(entityError);
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
             var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var entityId = ResolveEntityId(entityLogical);
@@ -1769,7 +1809,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (resolvedAppId == null)
                 return ErrorResult(appResolveError ?? "Error: Could not resolve app.");
 
-            var entityLogical = entityName.Trim().ToLowerInvariant();
+            var (entityLogical, entityError) = ResolveEntityLogicalName(entityName);
+            if (entityError != null)
+                return ErrorResult(entityError);
             var publisherPrefix = ResolvePublisherPrefix(entityLogical);
             var appUniqueName = ResolveAppUniqueName(resolvedAppId.Value);
             var entityId = ResolveEntityId(entityLogical);
@@ -2350,30 +2392,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return null;
             }
 
-            var fetchXml = $@"<fetch top='10'>
-  <entity name='appmodule'>
-    <attribute name='appmoduleid'/>
-    <attribute name='name'/>
-    <filter>
-      <condition attribute='name' operator='like' value='%{EscapeXml(appName.Trim())}%'/>
-    </filter>
-    <order attribute='name'/>
-  </entity>
-</fetch>";
+            var result = DisplayNameFirstResolver.ResolveApp(_serviceClient, appName.Trim(), "manage_command");
+            if (result.IsSuccess)
+                return result.Value.Id;
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (result.Entities.Count == 0)
-            {
-                errorMessage = $"Error: No app found matching '{appName.Trim()}'. Check the app name and try again.";
-                return null;
-            }
-            if (result.Entities.Count > 1)
-            {
-                var names = string.Join(", ", result.Entities.Select(e => $"'{e.GetAttributeValue<string>("name")}'"));
-                errorMessage = $"Error: Multiple apps match '{appName.Trim()}': {names}. Provide a more specific app_name or use app_id.";
-                return null;
-            }
-            return result.Entities[0].Id;
+            errorMessage = $"Error: app_name '{appName.Trim()}': {result.Error}";
+            return null;
         }
 
         private Guid? ResolveWebResourceId(string nameOrGuid)
@@ -2381,17 +2405,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Guid.TryParse(nameOrGuid, out var parsed))
                 return parsed;
 
-            var fetchXml = $@"<fetch top='1'>
-  <entity name='webresource'>
-    <attribute name='webresourceid'/>
-    <filter>
-      <condition attribute='name' operator='eq' value='{EscapeXml(nameOrGuid)}'/>
-    </filter>
-  </entity>
-</fetch>";
+            var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, nameOrGuid, "manage_command");
+            if (!result.IsSuccess)
+                throw new InvalidOperationException($"web_resource '{nameOrGuid}': {result.Error}");
 
-            var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            return result.Entities.Count > 0 ? result.Entities[0].Id : null;
+            return result.Value.Id;
         }
 
         // ── Shared helpers ──────────────────────────────────────────────

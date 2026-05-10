@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -41,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "FUZZY/AMBIGUITY:\n" +
             "- user_filter by email/name may resolve multiple users; tool returns candidates and requires exact display name.")]
         public CallToolResult get_audit_history(
-            [Description("Logical name. Required with record_id."
+            [Description("Entity Display Name or logical name. Required with record_id."
             )] string entity_name = "",
             [Description("GUID → detail. Empty = browse."
             )] string record_id = "",
@@ -51,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string user_filter = "",
             [Description("Create, Update, Delete, Activate, Deactivate, Assign, Merge, SetState."
             )] string operation = "",
-            [Description("Detail only. Filter one field."
+            [Description("Detail only. Filter one field by Display Name or logical name."
             )] string attribute_name = "",
             [Description("Max 500."
             )] int max_records = 50,
@@ -76,7 +77,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (max_records < 1) max_records = 50;
             if (max_records > 500) max_records = 500;
 
-            entity_name = entity_name?.Trim().ToLowerInvariant() ?? "";
+            entity_name = entity_name?.Trim() ?? "";
+            if (!string.IsNullOrWhiteSpace(entity_name))
+            {
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name, "get_audit_history");
+                if (!entityResult.IsSuccess)
+                    return ErrorResult($"Error: entity_name '{entity_name}': {entityResult.Error}");
+                entity_name = entityResult.Value.LogicalName;
+            }
+
+            attribute_name = attribute_name?.Trim() ?? "";
+            if (!string.IsNullOrWhiteSpace(record_id) && !string.IsNullOrWhiteSpace(attribute_name))
+            {
+                var attributeResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attribute_name, "get_audit_history");
+                if (!attributeResult.IsSuccess)
+                    return ErrorResult($"Error: attribute_name '{attribute_name}': {attributeResult.Error}");
+                attribute_name = attributeResult.Value.LogicalName;
+            }
 
             operation = operation?.Trim() ?? "";
             if (!string.IsNullOrWhiteSpace(operation) && !ParseActionName(operation).HasValue)

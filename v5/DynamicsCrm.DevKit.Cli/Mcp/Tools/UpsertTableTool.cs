@@ -47,7 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect existing table first via get_tables before update\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name.")]
+            "- entity_name resolves Display Name contains first, then logical/schema name contains. solution_name uses the shared Display Name first solution resolver. Ambiguity returns IsError=true.")]
         public CallToolResult upsert_table(
             [Description("Logical name with prefix ('new_project') OR just name with solution_name to auto-resolve.")] string entity_name,
             [Description("Singular (e.g. 'Project'). Required: create.")] string display_name = "",
@@ -73,9 +73,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Provide the logical name with publisher prefix (e.g., 'new_project'), " +
                     "or just the name (e.g., 'project') with solution_name to auto-resolve the prefix.");
 
-            // Sanitize entity_name: remove spaces (keep original casing for schema name derivation)
-            var originalEntityName = entity_name.Trim().Replace(" ", "");
-            entity_name = originalEntityName.ToLowerInvariant();
+            var entityIdentityInput = entity_name.Trim();
+            var originalEntityName = entityIdentityInput;
+            entity_name = originalEntityName;
 
             // Resolve publisher prefix from solution if provided
             string resolvedPrefix = null;
@@ -94,16 +94,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // e.g., "sale_order" + prefix "abc" → "abc_sale_order"
                 // e.g., "abc_sale_order" + prefix "abc" → keep as-is
                 var prefixWithUnderscore = resolvedPrefix + "_";
-                if (!entity_name.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                if (entity_name.IndexOf('_') < 1 || entity_name.IndexOf('_') >= entity_name.Length - 1)
                 {
-                    originalEntityName = $"{resolvedPrefix}_{originalEntityName}";
+                    originalEntityName = $"{resolvedPrefix}_{originalEntityName.Replace(" ", "")}";
                     entity_name = $"{resolvedPrefix}_{entity_name}";
                 }
             }
 
+            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityIdentityInput, "upsert_table");
+            if (entityResolve.IsSuccess)
+            {
+                entity_name = entityResolve.Value.LogicalName;
+                return UpdateExistingEntity(entity_name, entityResolve.Value,
+                    display_name, display_collection_name, description,
+                    is_quick_create_enabled, is_audit_enabled,
+                    ownership_type, table_type, is_activity, has_notes,
+                    primary_attribute_name, primary_attribute_display_name,
+                    resolvedSolutionUniqueName ?? solution_name, auto_publish);
+            }
+            if (entityResolve.Status == ResolveStatus.Ambiguous || entityResolve.Status == ResolveStatus.Error)
+                return ErrorResult($"Error: {entityResolve.Error}");
+
             // Validate publisher prefix exists in entity_name
             var underscoreIndex = entity_name.IndexOf('_');
-            if (underscoreIndex < 1 || underscoreIndex >= entity_name.Length - 1)
+            if ((underscoreIndex < 1 || underscoreIndex >= entity_name.Length - 1) && string.IsNullOrWhiteSpace(solution_name))
             {
                 // No prefix — could be a system entity (e.g., "account", "contact") for update mode
                 // Try to retrieve the entity first before rejecting
@@ -180,7 +194,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Required for create: display_name, display_collection_name, solution_name.\n" +
                     "Read docs://schema_tools_guide for prefix resolution and solution requirements.");
 
-            var prefix = resolvedPrefix ?? entity_name.Substring(0, underscoreIndex);
+            var prefix = entity_name.Substring(0, underscoreIndex);
 
             if (!string.IsNullOrWhiteSpace(confirmed_prefix) &&
                 !confirmed_prefix.Trim().Equals(prefix, StringComparison.OrdinalIgnoreCase))

@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var trimmedFilter = string.IsNullOrWhiteSpace(filter) ? "" : filter.Trim();
                 if (!string.IsNullOrWhiteSpace(entity_name))
-                    return await GetEntityDetail(entity_name.Trim().ToLowerInvariant(), trimmedFilter);
+                    return await GetEntityDetail(entity_name.Trim(), trimmedFilter);
 
                 return await ListAllEntities(trimmedFilter, custom_only, include_intersect, names);
             }
@@ -62,11 +62,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private async Task<CallToolResult> GetEntityDetail(string entityName, string attributePrefix)
         {
-            var metadata = await _metadataService.FetchEntityMetadataAsync(entityName);
+            var entities = await _metadataService.GetEntitiesMetadataAsync(EntityFilters.Entity);
+            var candidates = entities.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
+            {
+                Value = e,
+                DisplayName = e.DisplayName?.UserLocalizedLabel?.Label,
+                LogicalName = e.LogicalName,
+                SchemaName = e.SchemaName,
+                Id = e.MetadataId,
+                Kind = "entity",
+                CanonicalName = e.LogicalName
+            });
+            var resolved = DisplayNameFirstResolver.Resolve(
+                entityName,
+                candidates,
+                "[AmbiguousEntity]",
+                "[NotFoundEntity]",
+                "Tip: Use get_tables with no entity_name to list available tables.",
+                "entity_name");
+
+            if (!resolved.IsSuccess)
+                return ErrorResult($"Error: {resolved.Error}");
+
+            var logicalName = resolved.Value.LogicalName;
+            var metadata = await _metadataService.FetchEntityMetadataAsync(logicalName);
             var structured = new GetTablesResult
             {
                 Mode = "detail",
-                EntityName = entityName,
+                EntityName = logicalName,
                 Filter = string.IsNullOrWhiteSpace(attributePrefix) ? null : attributePrefix,
                 Count = 1,
                 Table = BuildTableDetail(metadata, attributePrefix)

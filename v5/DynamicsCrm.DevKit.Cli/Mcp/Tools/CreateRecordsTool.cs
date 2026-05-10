@@ -66,7 +66,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(records_json))
                 return ErrorResult("Error: records_json is required. Provide a JSON array, .json file path, or .csv file path.");
 
-            var entityName = entity_name.Trim().ToLowerInvariant();
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: {entityResult.Error}");
+            var entityName = entityResult.Value.LogicalName;
 
             var csvWarnings = new List<string>();
             var resolved = ResolveRecordsInput(records_json, entityName, csvWarnings);
@@ -266,33 +269,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return "[]";
             }
 
-            var displayToAttr = metadata.Attributes
-                .Where(a => a.DisplayName?.UserLocalizedLabel?.Label != null)
-                .GroupBy(a => a.DisplayName.UserLocalizedLabel.Label, StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
-
             var headers = ParseCsvLine(lines[0]);
             var columnMap = new (int colIndex, string logicalName, AttributeMetadata attr)[headers.Length];
             var validColumns = 0;
+            var candidates = metadata.Attributes
+                .Where(a => a?.LogicalName != null)
+                .Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
+                {
+                    Value = a,
+                    DisplayName = a.DisplayName?.UserLocalizedLabel?.Label,
+                    LogicalName = a.LogicalName,
+                    SchemaName = a.SchemaName,
+                    Id = a.MetadataId,
+                    Kind = "attribute",
+                    CanonicalName = a.LogicalName
+                })
+                .ToList();
 
             for (var i = 0; i < headers.Length; i++)
             {
                 var header = headers[i].Trim();
-                if (displayToAttr.TryGetValue(header, out var attr))
+                var resolved = DisplayNameFirstResolver.Resolve(
+                    header,
+                    candidates,
+                    "[AmbiguousField]",
+                    "[NotFoundField]",
+                    $"Tip: Use get_tables(entity_name='{entityName}') to discover valid CSV headers.",
+                    "CSV header");
+                if (resolved.IsSuccess)
                 {
+                    var attr = resolved.Value;
                     columnMap[i] = (i, attr.LogicalName, attr);
                     validColumns++;
                 }
                 else
                 {
                     columnMap[i] = (i, null, null);
-                    warnings.Add($"Header '{header}' not found in entity metadata — column skipped.");
+                    warnings.Add($"Header '{header}' could not be resolved: {resolved.Error} Column skipped.");
                 }
             }
 
             if (validColumns == 0)
             {
-                warnings.Add("No CSV headers matched entity Display Names.");
+                warnings.Add("No CSV headers matched entity Display Names or logical/schema names.");
                 return "[]";
             }
 

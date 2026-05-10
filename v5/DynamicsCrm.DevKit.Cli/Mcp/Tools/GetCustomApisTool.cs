@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -67,8 +68,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect input/output params + plugin binding before invoking\n" +
             "- For legacy Custom Actions (workflow-based) use get_messages")]
         public CallToolResult get_custom_apis(
-            [Description("Unique name → detail. Empty = list.")] string api_name = "",
-            [Description("Bound entity (e.g. 'account'). Empty = all.")] string entity_name = "",
+            [Description("Display Name or unique name → detail. Empty = list.")] string api_name = "",
+            [Description("Bound entity Display Name or logical name. Empty = all.")] string entity_name = "",
             [Description("Include managed APIs.")] bool include_microsoft = false,
             [Description("'active' / 'inactive' / 'all'.")] string status = "active",
             [Description("1–500.")] int max_records = 100)
@@ -86,10 +87,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 if (!string.IsNullOrWhiteSpace(api_name))
-                    return GetDetail(api_name.Trim());
+                {
+                    var apiResult = ResolveCustomApi(api_name.Trim());
+                    if (!apiResult.IsSuccess)
+                        return ErrorResult($"Error: api_name '{api_name.Trim()}': {apiResult.Error}");
+                    return GetDetail(apiResult.CanonicalName);
+                }
 
-                if (!string.IsNullOrWhiteSpace(entity_name) && !EntityExists(entity_name.Trim().ToLowerInvariant()))
-                    return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
+                if (!string.IsNullOrWhiteSpace(entity_name))
+                {
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_custom_apis");
+                    if (!entityResult.IsSuccess)
+                        return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                    entity_name = entityResult.Value.LogicalName;
+                }
 
                 return GetList(entity_name, include_microsoft, status, max_records);
             }
@@ -429,22 +440,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private bool EntityExists(string entityName)
+        private ResolveResult<Entity> ResolveCustomApi(string apiName)
         {
-            try
-            {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                _serviceClient.Execute(request);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return DisplayNameFirstResolver.ResolveDataverseRecord(
+                _serviceClient,
+                apiName,
+                entityName: "customapi",
+                idColumn: "customapiid",
+                columns: new ColumnSet("customapiid", "uniquename", "displayname", "name"),
+                displayColumn: "displayname",
+                logicalColumn: null,
+                uniqueColumn: "uniquename",
+                schemaColumn: null,
+                kind: "customapi",
+                ambiguousTag: "[AmbiguousCustomApi]",
+                notFoundTag: "[NotFoundCustomApi]",
+                notFoundTip: "Tip: Use get_custom_apis with api_name empty to list available Custom APIs.",
+                retryParameterName: "api_name");
         }
 
         private static CustomApiParameter MapRequestParameter(Entity e)

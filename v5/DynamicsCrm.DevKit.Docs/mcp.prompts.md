@@ -3,6 +3,8 @@
 Run sequentially from top to bottom. Each prompt is one line, numbered.
 Solution target: display name **PRODUCTION-MCP**
 
+Name-resolution intent: these prompts intentionally use Display Names such as **PRODUCTION-MCP**, **Invoice**, **Invoice Line**, and **Invoice Status**. MCP tools must resolve Display Name contains first, then Logical/Unique/Schema Name contains. If a Display Name or logical-name lookup is ambiguous, stop and ask the user to disambiguate; do not invent GUIDs, logical names, or hidden IDs.
+
 ---
 
 > [!IMPORTANT]
@@ -65,9 +67,9 @@ Solution target: display name **PRODUCTION-MCP**
 > **Step 4 — Handle conflicts (already exists)**
 > If a prompt tries to create something that already exists and cannot proceed:
 >
-> - Resolve the target solution publisher prefix first and determine the expected logical name before declaring a conflict
-> - For table/column creation, only treat it as a conflict when the expected logical name already exists (for example, PRODUCTIONMCP uses prefix `v5`, so `v4_invoice` is not a conflict for target table `v5_invoice`)
-> - Do NOT treat same display names from other publisher prefixes or other solutions as conflicts
+> - Resolve names with the normal MCP rule first: Display Name contains, then Logical/Unique/Schema Name contains
+> - If name resolution returns multiple candidates, stop and ask the user to choose a specific candidate
+> - If a create/upsert prompt resolves to an existing table, column, choice, web resource, app, or environment variable, do not force a duplicate; follow the tool's error/update guidance and ask the user how to proceed when needed
 > - Do NOT silently skip or work around it
 > - Stop and ask the user to manually delete the existing record/table/field so the production run can proceed cleanly
 > - Mark the result block as:
@@ -94,13 +96,7 @@ Solution target: display name **PRODUCTION-MCP**
 
 1. Which Dataverse environment am I connected to? Tell me the organization name, URL, version, current user, and assigned roles.
 
-   > ✅ `whoami()`
-   > 🎯 Result: Connected to org 🟢DEVKITV4 at https://dynamics-crm-devkit-v4.crm.dynamics.com, version 9.2.26044.135, current user is # DEVKIT, assigned role System Administrator.
-
 2. What components does the solution "PRODUCTION-MCP (PRODUCTIONMCP)" currently contain?
-
-   > ✅ `get_solution_components(solution_name="PRODUCTIONMCP")`
-   > 🎯 Result: Solution PRODUCTION-MCP currently contains zero components — it is completely empty.
 
 ---
 
@@ -108,19 +104,9 @@ Solution target: display name **PRODUCTION-MCP**
 
 3. In solution PRODUCTION-MCP, create a global choice with display name "Invoice Status" containing the following values: Draft, Confirmed, Shipped, Paid, Cancelled.
 
-   > ✅ `manage_choice(action="create", display_name="Invoice Status", options="Draft;Confirmed;Shipped;Paid;Cancelled", solution_name="PRODUCTIONMCP")`
-   > 🎯 Result: Global choice "Invoice Status" created successfully in PRODUCTION-MCP with 5 options: Draft, Confirmed, Shipped, Paid, Cancelled.
-
-4. Read back the global choice "Invoice Status" just created and list all values with their corresponding integer codes.
-
-   > ✅ `manage_choice(action="detail", optionset_name="Invoice Status")`
-   > 🎯 Result: Global choice "Invoice Status" (logical name devkit_invoice_status) has 5 options: Draft, Confirmed, Shipped, Paid, Cancelled — each with an integer code assigned by the devkit publisher prefix.
+4. Read back the global choice "Invoice Status" just created and list all values as human-readable labels only; do not include integer codes, logical names, GUIDs, or any machine-readable identifiers in the result.
 
 5. Update the colors of the "Invoice Status" global choice: Draft=gray (#808080), Confirmed=blue (#0070C0), Shipped=orange (#FF7C00), Paid=green (#00B050), Cancelled=red (#FF0000); read it back to confirm the colors were applied correctly.
-
-   > ✅ `manage_choice(action="update", optionset_name="Invoice Status", option_colors="Draft:#808080;Confirmed:#0070C0;Shipped:#FF7C00;Paid:#00B050;Cancelled:#FF0000", auto_publish=true)`
-   >    `manage_choice(action="detail", optionset_name="Invoice Status")`
-   > 🎯 Result: Colors updated and confirmed — Draft=gray, Confirmed=blue, Shipped=orange, Paid=green, Cancelled=red; all 5 options match the requirements.
 
 ---
 
@@ -214,7 +200,7 @@ Solution target: display name **PRODUCTION-MCP**
 
 37. Create public view "PRODUCTION-MCP Invoice Lines" for Invoice Line: active records only, columns Line Number, Product Name, Quantity, Unit Price, Line Total, Line Status, Invoice, sort by Line Number ascending.
 
-38. Create public view "Subgrid Invoice Lines" for Invoice Line. As an AI you should know what columns are needed for a subgrid view — please propose them.
+38. Create public view "Subgrid Invoice Lines" for Invoice Line: active records only, columns Line Number, Product Name, Quantity, Unit Price, Line Total, Line Status, Invoice, sort by Line Number ascending.
 
 39. Read back all 4 views just created and confirm the columns and filter conditions match the requirements.
 
@@ -250,7 +236,7 @@ Solution target: display name **PRODUCTION-MCP**
 
 51. Configure app "PRODUCTION-MCP" navigation so it has an area named "Invoicing" at the first position, a group named "Transactions" inside it, and menu items for Invoice and Invoice Line in that order.
 
-52. Read back app "PRODUCTION-MCP" navigation and confirm the Invoicing area is first, the Transactions group exists, and Invoice then Invoice Line appear in the correct order; also report whether the navigation.
+52. Read back app "PRODUCTION-MCP" navigation and confirm the Invoicing area is first, the Transactions group exists, Invoice then Invoice Line appear in the correct order, and whether the navigation is ready to publish.
 
 ---
 

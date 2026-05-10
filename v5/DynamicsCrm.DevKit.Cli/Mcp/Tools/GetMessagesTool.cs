@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect input/output parameters of a legacy Custom Action")]
         public async Task<CallToolResult> get_messages(
             [Description(
-                "Entity logical name. 'none'/empty = global messages (WhoAmI, etc.). Ignored if message_name set."
+                "Entity Display Name or logical name. 'none'/empty = global messages (WhoAmI, etc.). Ignored if message_name set."
             )] string entity_name = "none",
             [Description(
                 "Message/Action name → detail mode. Empty = list mode."
@@ -88,6 +88,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return await GetMessageDetailAsync(message_name.Trim(), entity_name);
 
                 // List mode
+                var scopeResult = ResolveEntityScope(entity_name);
+                if (!string.IsNullOrEmpty(scopeResult.Error))
+                    return ErrorResult(scopeResult.Error);
+                entity_name = scopeResult.Scope;
                 return await GetMessageListAsync(entity_name, include_custom_actions);
             }
             catch (Exception ex)
@@ -124,6 +128,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Content = [new TextContentBlock { Text = text }],
                 StructuredContent = JsonSerializer.SerializeToElement(structured)
             };
+        }
+
+        private (string Scope, string Error) ResolveEntityScope(string entityName)
+        {
+            if (string.IsNullOrWhiteSpace(entityName) ||
+                entityName.Trim().Equals("none", StringComparison.OrdinalIgnoreCase))
+                return ("none", null);
+
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_messages");
+            if (!entityResult.IsSuccess)
+                return (null, $"Error: entity_name '{entityName.Trim()}': {entityResult.Error}");
+
+            return (entityResult.Value.LogicalName, null);
         }
 
         private async Task<CallToolResult> GetMessageDetailAsync(string messageName, string entityName)

@@ -19,6 +19,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -53,6 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use this tool for model-driven app metadata and navigation tasks.\n" +
             "- Never use execute_webapi to create or update appmodule, sitemap, or appmodulecomponent records.\n" +
             "- manage_app never publishes. Mutating actions must return a next step to publish separately.\n\n" +
+            "NAME RESOLUTION: app, icon_webresource, solution_name, and add_item entity values resolve Display Name contains first, then unique/logical/schema contains.\n\n" +
             "See docs://instructions_for_manage_app for the operation workflow and examples.")]
         public CallToolResult manage_app(
             [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
@@ -518,6 +520,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult($"Error: Invalid operations JSON: {ex.Message}");
             }
 
+            var (normalizedOps, operationNameErrors) = NormalizeNavigationEntityReferences(ops);
+            if (operationNameErrors.Count > 0)
+                return ErrorResult(FormatNavigationNameResolutionErrors(operationNameErrors));
+            ops = normalizedOps;
+
             string backupPath = null;
             if (backup)
             {
@@ -890,24 +897,92 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (matches.Count == 0)
                 return (null, $"[Error] No model-driven app found matching '{app}'. Use manage_app(action='list') to discover apps.");
 
-            var exact = matches
-                .Where(e => string.Equals(e.GetAttributeValue<string>("name"), app, StringComparison.OrdinalIgnoreCase)
-                         || string.Equals(e.GetAttributeValue<string>("uniquename"), app, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            var result = DisplayNameFirstResolver.Resolve(
+                app,
+                matches.Select(match => new DisplayNameFirstCandidate<Entity>
+                {
+                    Value = match,
+                    DisplayName = match.GetAttributeValue<string>("name"),
+                    UniqueName = match.GetAttributeValue<string>("uniquename"),
+                    Id = match.Id,
+                    Kind = "app",
+                    CanonicalName = match.GetAttributeValue<string>("uniquename")
+                }),
+                "[AmbiguousApp]",
+                "[NotFoundApp]",
+                "Tip: Use manage_app(action='list') to discover apps.",
+                "app");
 
-            if (exact.Count == 1)
-                return (exact[0], null);
+            return result.IsSuccess
+                ? (result.Value, null)
+                : (null, result.Error);
+        }
 
-            if (matches.Count > 1)
+        private (List<JsonElement> Operations, List<string> Errors) NormalizeNavigationEntityReferences(List<JsonElement> ops)
+        {
+            var errors = new List<string>();
+            var normalizedOps = new List<JsonElement>(ops.Count);
+
+            for (var i = 0; i < ops.Count; i++)
             {
-                var sb = new StringBuilder();
-                sb.AppendLine($"[Error] Multiple model-driven apps match '{app}'. Please specify exact name, unique name, or GUID:");
-                foreach (var match in matches)
-                    sb.AppendLine($"  - {match.GetAttributeValue<string>("name")} ({match.GetAttributeValue<string>("uniquename")}) {match.Id}");
-                return (null, sb.ToString().TrimEnd());
+                var op = ops[i];
+                var node = JsonNode.Parse(op.GetRawText());
+                if (node is not JsonObject obj)
+                {
+                    normalizedOps.Add(op.Clone());
+                    continue;
+                }
+
+                var action = GetJsonString(obj, "action");
+                if (string.Equals(action, "add_item", StringComparison.OrdinalIgnoreCase))
+                {
+                    var entity = GetJsonString(obj, "entity");
+                    if (!string.IsNullOrWhiteSpace(entity))
+                    {
+                        var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity, "manage_app");
+                        if (result.IsSuccess)
+                        {
+                            obj["entity"] = result.Value.LogicalName;
+                        }
+                        else
+                        {
+                            errors.Add($"operations[{i}].entity '{entity}': {result.Error}");
+                        }
+                    }
+                }
+
+                normalizedOps.Add(ToJsonElement(obj));
             }
 
-            return (matches[0], null);
+            return (normalizedOps, errors);
+        }
+
+        private static string FormatNavigationNameResolutionErrors(List<string> errors)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("[ManageAppNavigation] BLOCKED - name resolution failed");
+            sb.AppendLine($"Errors: {errors.Count}");
+            foreach (var error in errors)
+                sb.AppendLine($"- {error}");
+            sb.AppendLine("Tip: Display Name contains is resolved first, then logical/schema contains. Use a more specific entity value when matches are ambiguous.");
+            return sb.ToString();
+        }
+
+        private static string GetJsonString(JsonObject obj, string propertyName)
+        {
+            if (obj.TryGetPropertyValue(propertyName, out var node) &&
+                node is JsonValue value &&
+                value.TryGetValue<string>(out var text))
+            {
+                return text;
+            }
+            return null;
+        }
+
+        private static JsonElement ToJsonElement(JsonNode node)
+        {
+            using var doc = JsonDocument.Parse(node.ToJsonString());
+            return doc.RootElement.Clone();
         }
 
         private List<Entity> RetrieveAppModules(QueryExpression query)
@@ -1091,26 +1166,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             else
             {
-                var query = new QueryExpression("webresource")
+                var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_app");
+                if (!result.IsSuccess)
                 {
-                    ColumnSet = new ColumnSet("name", "displayname", "webresourcetype"),
-                    TopCount = 10,
-                    Criteria = new FilterExpression(LogicalOperator.Or)
-                };
-                query.Criteria.AddCondition("name", ConditionOperator.Equal, trimmed);
-                query.Criteria.AddCondition("displayname", ConditionOperator.Equal, trimmed);
-                var results = _serviceClient.RetrieveMultiple(query).Entities;
-                if (results.Count == 0)
-                {
-                    error = $"Error: icon_webresource '{trimmed}' was not found.";
+                    error = $"Error: icon_webresource '{trimmed}': {result.Error}";
                     return Guid.Empty;
                 }
-                if (results.Count > 1)
-                {
-                    error = $"Error: Multiple web resources match icon_webresource '{trimmed}'. Provide the web resource GUID.";
-                    return Guid.Empty;
-                }
-                icon = results[0];
+                icon = result.Value;
             }
 
             var typeCode = icon.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? -1;

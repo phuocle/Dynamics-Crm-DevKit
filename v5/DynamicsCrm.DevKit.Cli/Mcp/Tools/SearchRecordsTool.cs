@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -41,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Required for search. 1–100 chars. Syntax: + (AND), | (OR), - (NOT), * (wildcard), \"phrase\", () (group)."
             )] string search_term = "",
             [Description(
-                "Comma-separated logical names (e.g. 'account,contact'). Empty = all searchable."
+                "Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty = all searchable."
             )] string entities = "",
             [Description(
                 "1–100."
@@ -77,7 +78,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var requestBody = BuildSearchRequestBody(searchTerm.Trim(), entities, top, filter);
+                var entityList = ResolveEntityList(entities);
+                var requestBody = BuildSearchRequestBody(searchTerm.Trim(), entityList, top, filter);
                 var response = _serviceClient.ExecuteWebRequest(
                     HttpMethod.Post, "searchquery", requestBody, null, "application/json");
 
@@ -177,7 +179,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return messages.ToString();
         }
 
-        private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
+        private List<string> ResolveEntityList(string entities)
+        {
+            if (string.IsNullOrWhiteSpace(entities))
+                return [];
+
+            var inputs = entities
+                .Split(',')
+                .Select(e => e.Trim())
+                .Where(e => !string.IsNullOrEmpty(e))
+                .ToList();
+
+            var resolvedNames = new List<string>();
+            foreach (var input in inputs)
+            {
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "search_records");
+                if (!resolved.IsSuccess)
+                    throw new InvalidOperationException($"entities '{input}': {resolved.Error}");
+
+                resolvedNames.Add(resolved.Value.LogicalName);
+            }
+
+            return resolvedNames
+                .Where(e => !string.IsNullOrWhiteSpace(e))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private static string BuildSearchRequestBody(string searchTerm, List<string> entities, int top, string filter)
         {
             var body = new Dictionary<string, object>
             {
@@ -186,17 +215,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ["top"] = top
             };
 
-            if (!string.IsNullOrWhiteSpace(entities))
+            if (entities != null && entities.Count > 0)
             {
                 var entityList = entities
-                    .Split(',')
-                    .Select(e => e.Trim().ToLowerInvariant())
-                    .Where(e => !string.IsNullOrEmpty(e))
                     .Select(e => new SearchEntity { Name = e })
                     .ToList();
 
-                if (entityList.Count > 0)
-                    body["entities"] = JsonSerializer.Serialize(entityList, _jsonOptions);
+                body["entities"] = JsonSerializer.Serialize(entityList, _jsonOptions);
             }
 
             if (!string.IsNullOrWhiteSpace(filter))

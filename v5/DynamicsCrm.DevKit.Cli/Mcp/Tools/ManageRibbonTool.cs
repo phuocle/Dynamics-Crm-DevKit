@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
@@ -74,10 +75,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect existing ribbon (list/buttons/detail) before editing\n" +
             "- Add/update/hide/show ribbon buttons via operations array (action=update)\n" +
             "- Restore from backup (action=undo)\n" +
+            "NAME RESOLUTION: entity_name and operation web resource fields (library, enable_library, modern_image) resolve Display Name contains first, then logical/unique/schema contains.\n" +
             "- For modern Power Fx command bar use manage_command instead")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
-            [Description("Logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
+            [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
             [Description("JSON array of ribbon operations for action='update'. 10 operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item.")] string operations = "",
             [Description("For 'undo': backup file path.")] string ribbonxml = "",
             [Description("Runs PublishAll. false to batch.")] bool auto_publish = true,
@@ -98,26 +100,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     case "buttons":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return ErrorResult("Error: entity_name is required for action='buttons'.");
-                        return ListRibbonButtons(entity_name.Trim().ToLowerInvariant());
+                        {
+                            var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
+                            return entityError != null ? ErrorResult(entityError) : ListRibbonButtons(entityName);
+                        }
 
                     case "detail":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return ErrorResult("Error: entity_name is required for action='detail'.");
-                        return DetailRibbon(entity_name.Trim().ToLowerInvariant());
+                        {
+                            var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
+                            return entityError != null ? ErrorResult(entityError) : DetailRibbon(entityName);
+                        }
 
                     case "update":
                         if (string.IsNullOrWhiteSpace(entity_name))
                             return ErrorResult("Error: entity_name is required for action='update'.");
+                        var (updateEntityName, updateEntityError) = ResolveEntityLogicalName(entity_name);
+                        if (updateEntityError != null)
+                            return ErrorResult(updateEntityError);
 
                         if (!string.IsNullOrWhiteSpace(operations))
                             return UpdateRibbonFromOperations(
-                                entity_name.Trim().ToLowerInvariant(),
+                                updateEntityName,
                                 operations.Trim(),
                                 backup,
                                 auto_publish);
 
                         if (!string.IsNullOrWhiteSpace(ribbonxml))
-                            return UpdateRibbon(entity_name.Trim().ToLowerInvariant(), ribbonxml.Trim(), backup, auto_publish);
+                            return UpdateRibbon(updateEntityName, ribbonxml.Trim(), backup, auto_publish);
 
                         return ErrorResult(
                             "Error: 'operations' is required for action='update'.\n" +
@@ -131,7 +142,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return ErrorResult(
                                 "Error: ribbonxml is required for action='undo'.\n" +
                                 "Provide backup file path from .devkit/backups/ribbons/.");
-                        return UndoRibbon(entity_name.Trim().ToLowerInvariant(), ribbonxml.Trim(), auto_publish);
+                        {
+                            var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
+                            return entityError != null ? ErrorResult(entityError) : UndoRibbon(entityName, ribbonxml.Trim(), auto_publish);
+                        }
 
                     default:
                         return ErrorResult($"Error: Invalid action '{action}'. Valid actions: 'list', 'buttons', 'detail', 'update', 'undo'.");
@@ -157,6 +171,99 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         // ── Action: list ─────────────────────────────────────────────────
+
+        private (string LogicalName, string Error) ResolveEntityLogicalName(string entityName)
+        {
+            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "manage_ribbon");
+            return result.IsSuccess
+                ? (result.Value.LogicalName, null)
+                : (null, $"Error: entity_name '{entityName.Trim()}': {result.Error}");
+        }
+
+        private (List<JsonElement> Operations, List<string> Errors) NormalizeOperationWebResources(List<JsonElement> ops)
+        {
+            var errors = new List<string>();
+            var normalized = new List<JsonElement>(ops.Count);
+
+            for (var i = 0; i < ops.Count; i++)
+            {
+                var node = JsonNode.Parse(ops[i].GetRawText());
+                if (node == null)
+                {
+                    normalized.Add(ops[i].Clone());
+                    continue;
+                }
+
+                NormalizeWebResourceProperties(node, null, errors, $"operations[{i}]");
+                normalized.Add(ToJsonElement(node));
+            }
+
+            return (normalized, errors);
+        }
+
+        private void NormalizeWebResourceProperties(JsonNode node, string propertyName, List<string> errors, string path)
+        {
+            if (node == null) return;
+
+            if (node is JsonValue value &&
+                IsWebResourceOperationProperty(propertyName) &&
+                value.TryGetValue<string>(out var text) &&
+                !string.IsNullOrWhiteSpace(text))
+            {
+                var resolved = ResolveWebResourceName(text, errors, path);
+                node.ReplaceWith(JsonValue.Create(resolved));
+                return;
+            }
+
+            if (node is JsonArray array)
+            {
+                for (var i = 0; i < array.Count; i++)
+                    NormalizeWebResourceProperties(array[i], propertyName, errors, $"{path}[{i}]");
+                return;
+            }
+
+            if (node is JsonObject obj)
+            {
+                foreach (var key in obj.Select(kv => kv.Key).ToList())
+                    NormalizeWebResourceProperties(obj[key], key, errors, $"{path}.{key}");
+            }
+        }
+
+        private string ResolveWebResourceName(string input, List<string> errors, string path)
+        {
+            var name = input.Trim();
+            if (name.StartsWith("$webresource:", StringComparison.OrdinalIgnoreCase))
+                name = name.Substring("$webresource:".Length);
+
+            var result = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, name, "manage_ribbon");
+            if (result.IsSuccess)
+                return result.Value.GetAttributeValue<string>("name") ?? result.CanonicalName;
+
+            errors.Add($"{path} '{input}': {result.Error}");
+            return input;
+        }
+
+        private static bool IsWebResourceOperationProperty(string propertyName) =>
+            string.Equals(propertyName, "library", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(propertyName, "enable_library", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(propertyName, "modern_image", StringComparison.OrdinalIgnoreCase);
+
+        private static string FormatOperationNameResolutionErrors(List<string> errors)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("[ManageRibbon] BLOCKED - operation name resolution failed");
+            sb.AppendLine($"Errors: {errors.Count}");
+            foreach (var error in errors)
+                sb.AppendLine($"- {error}");
+            sb.AppendLine("Tip: Display Name contains is resolved first, then logical/unique/schema contains. Use a more specific web resource name when matches are ambiguous.");
+            return sb.ToString();
+        }
+
+        private static JsonElement ToJsonElement(JsonNode node)
+        {
+            using var doc = JsonDocument.Parse(node.ToJsonString());
+            return doc.RootElement.Clone();
+        }
 
         private CallToolResult ListEntitiesWithRibbon()
         {
@@ -656,6 +763,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return ErrorResult($"Error: Invalid operations JSON: {ex.Message}");
             }
+
+            var (normalizedOps, nameResolutionErrors) = NormalizeOperationWebResources(ops);
+            if (nameResolutionErrors.Count > 0)
+                return ErrorResult(FormatOperationNameResolutionErrors(nameResolutionErrors));
+            ops = normalizedOps;
 
             // Step 3: Fetch existing RibbonDiffXml from devkit-ribbon solution
             var fetcher = new RibbonSolutionFetcher(_serviceClient);

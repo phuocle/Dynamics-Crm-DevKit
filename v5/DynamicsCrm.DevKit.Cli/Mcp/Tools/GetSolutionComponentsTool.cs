@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -134,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Identify unmanaged customizations before importing managed solutions\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- solution_name matches uniqueName + displayName (contains); 0/multi → tool returns disambiguation list and stops; AI must ask user (re-call with exact uniqueName). 1 → auto.")]
+            "- solution_name resolves Display Name contains first, then unique name contains. Ambiguity returns IsError=true with candidates.")]
         public CallToolResult get_solution_components(
             [Description(
                 "Solution unique/display name; multiple matches return choices."
@@ -156,18 +157,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var solutions = FindSolutions(solution_name.Trim());
+                var solutionResult = ResolveSolution(solution_name.Trim());
+                if (!solutionResult.IsSuccess)
+                    return ErrorResult($"Error: {solutionResult.Error}");
 
-                if (solutions.Count == 0)
-                    return ErrorResult($"Error: No solution found matching '{solution_name}'. " +
-                           "Verify the solution unique name or display name in your Dataverse environment.");
-
-                if (solutions.Count > 1)
-                    return StructuredResult(
-                        FormatMultipleSolutions(solution_name, solutions),
-                        BuildMultipleSolutionsResult(solutions));
-
-                var solution = solutions[0];
+                var solution = solutionResult.Value;
                 var (components, fullEntityNames) = LoadComponents(solution.Id);
 
                 // Active layer checking (only when requested)
@@ -188,7 +182,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Query helpers ────────────────────────────────────────────────────────
 
-        private List<Entity> FindSolutions(string keyword)
+        private ResolveResult<Entity> ResolveSolution(string keyword)
         {
             var query = new QueryExpression("solution")
             {
@@ -215,18 +209,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             pubLink.Columns = new ColumnSet("friendlyname");
             pubLink.EntityAlias = "pub";
 
-            var results = _serviceClient.RetrieveMultiple(query).Entities.ToList();
-
-            // Exact-match priority: if multiple fuzzy matches but one has exact uniquename, prefer it
-            if (results.Count > 1)
+            var results = _serviceClient.RetrieveMultiple(query).Entities;
+            var candidates = results.Select(s => new DisplayNameFirstCandidate<Entity>
             {
-                var exact = results.FirstOrDefault(s =>
-                    string.Equals(s.GetAttributeValue<string>("uniquename"), keyword, StringComparison.OrdinalIgnoreCase));
-                if (exact != null)
-                    return new List<Entity> { exact };
-            }
+                Value = s,
+                DisplayName = s.GetAttributeValue<string>("friendlyname"),
+                UniqueName = s.GetAttributeValue<string>("uniquename"),
+                Id = s.Id,
+                Kind = "solution",
+                CanonicalName = s.GetAttributeValue<string>("uniquename")
+            });
 
-            return results;
+            return DisplayNameFirstResolver.Resolve(
+                keyword,
+                candidates,
+                "[AmbiguousSolution]",
+                "[NotFoundSolution]",
+                "Tip: Use get_solution_components with a more specific solution_name.",
+                "solution_name");
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
@@ -38,13 +40,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- When user reports changes not showing up\n" +
             "- Batch many changes then publish once at the end")]
         public CallToolResult publish_customizations(
-            [Description("Comma-separated logical names (e.g. 'account,contact'). Empty with no other targets = PublishAll."
+            [Description("Comma-separated entity Display Names or logical names (e.g. 'Account,contact'). Empty with no other targets = PublishAll."
             )] string entities = "",
             [Description("Also publish global option sets."
             )] bool include_global_optionset = false,
             [Description("Also publish sitemap."
             )] bool include_sitemap = false,
-            [Description("Comma-separated appmodule GUIDs for model-driven apps."
+            [Description("Comma-separated appmodule GUIDs, Display Names, or unique names for model-driven apps."
             )] string appmodules = "")
         {
             var sw = Stopwatch.StartNew();
@@ -52,13 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var entitiesProvided = !string.IsNullOrWhiteSpace(entities);
-                var entityList = entitiesProvided
-                    ? entities.Split(',')
-                        .Select(e => e.Trim().ToLowerInvariant())
-                        .Where(e => !string.IsNullOrEmpty(e))
-                        .Distinct()
-                        .ToList()
-                    : [];
+                var entityList = entitiesProvided ? ResolveEntityList(entities) : [];
 
                 if (entitiesProvided && entityList.Count == 0)
                 {
@@ -68,35 +64,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 var appModulesProvided = !string.IsNullOrWhiteSpace(appmodules);
-                var appModuleList = appModulesProvided
-                    ? appmodules.Split(',')
-                        .Select(a => a.Trim())
-                        .Where(a => !string.IsNullOrEmpty(a))
-                        .Distinct(StringComparer.OrdinalIgnoreCase)
-                        .ToList()
-                    : [];
+                var appModuleList = appModulesProvided ? ResolveAppModuleList(appmodules) : [];
 
                 if (appModulesProvided && appModuleList.Count == 0)
                 {
                     return ErrorResult(
-                        "Error: No valid appmodule IDs found after parsing the 'appmodules' parameter.\n" +
-                        "Valid format: comma-separated appmodule GUIDs (e.g., '00001111-aaaa-2222-bbbb-3333cccc4444').");
+                        "Error: No valid appmodule values found after parsing the 'appmodules' parameter.\n" +
+                        "Valid format: comma-separated appmodule GUIDs, Display Names, or unique names.");
                 }
-
-                var invalidAppModuleIds = appModuleList
-                    .Where(id => !Guid.TryParse(id, out _))
-                    .ToList();
-                if (invalidAppModuleIds.Count > 0)
-                {
-                    return ErrorResult(
-                        $"Error: Invalid appmodule GUID(s): {string.Join(", ", invalidAppModuleIds)}\n" +
-                        "Use manage_app(action='detail', app='...') to get AppModuleId, then pass it to publish_customizations(appmodules='...').");
-                }
-
-                appModuleList = appModuleList
-                    .Select(id => Guid.Parse(id).ToString("D"))
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList();
 
                 var hasSpecificTargets = entityList.Count > 0 || appModuleList.Count > 0 || include_global_optionset || include_sitemap;
 
@@ -174,6 +149,63 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                       $"Details: {ex.Message}";
                 return ErrorResult(errorMsg);
             }
+        }
+
+        private List<string> ResolveEntityList(string entities)
+        {
+            var inputs = entities.Split(',')
+                .Select(e => e.Trim())
+                .Where(e => !string.IsNullOrEmpty(e))
+                .ToList();
+
+            var resolvedNames = new List<string>();
+            foreach (var input in inputs)
+            {
+                var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "publish_customizations");
+                if (!resolved.IsSuccess)
+                    throw new InvalidOperationException($"entities '{input}': {resolved.Error}");
+
+                resolvedNames.Add(resolved.Value.LogicalName);
+            }
+
+            return resolvedNames
+                .Where(e => !string.IsNullOrWhiteSpace(e))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private List<string> ResolveAppModuleList(string appModules)
+        {
+            var inputs = appModules.Split(',')
+                .Select(a => a.Trim())
+                .Where(a => !string.IsNullOrEmpty(a))
+                .ToList();
+
+            var resolvedIds = new List<string>();
+            foreach (var input in inputs)
+            {
+                if (Guid.TryParse(input, out var guid))
+                {
+                    resolvedIds.Add(guid.ToString("D"));
+                    continue;
+                }
+
+                var resolved = DisplayNameFirstResolver.ResolveApp(_serviceClient, input, "publish_customizations");
+                if (!resolved.IsSuccess)
+                    throw new InvalidOperationException($"appmodules '{input}': {resolved.Error}");
+
+                var appId = resolved.Value.GetAttributeValue<Guid>("appmoduleid");
+                if (appId == Guid.Empty)
+                    appId = resolved.Value.Id;
+                if (appId == Guid.Empty)
+                    throw new InvalidOperationException($"appmodules '{input}' resolved without an appmoduleid.");
+
+                resolvedIds.Add(appId.ToString("D"));
+            }
+
+            return resolvedIds
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         private static string BuildParameterXml(

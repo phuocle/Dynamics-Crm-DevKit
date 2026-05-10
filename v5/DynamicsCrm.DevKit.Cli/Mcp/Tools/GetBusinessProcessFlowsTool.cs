@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -50,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult get_business_process_flows(
             [Description("GUID → detail. Empty = list.")] string bpf_id = "",
             [Description("Name contains. 1 match → auto-detail.")] string bpf_name = "",
-            [Description("Primary entity filter (e.g. 'lead').")] string entity_name = "",
+            [Description("Primary entity filter, Display Name or logical name (e.g. 'Lead' or 'lead').")] string entity_name = "",
             [Description("'active' / 'draft' / 'all'.")] string status = "active",
             [Description("List only. Detail always includes.")] bool include_stages = false,
             [Description("1–250.")] int max_records = 50)
@@ -74,6 +75,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         return ErrorResult($"Error: '{bpf_id.Trim()}' is not a valid GUID.");
 
                     return GetDetail(bpf_id.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(entity_name))
+                {
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_process_flows");
+                    if (!entityResult.IsSuccess)
+                        return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+                    entity_name = entityResult.Value.LogicalName;
                 }
 
                 var bpfs = QueryBpfs(bpf_name, entity_name, status, max_records);

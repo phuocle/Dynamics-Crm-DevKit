@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -82,7 +83,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "GUID → detail. Empty = list."
             )] string record_id = "",
             [Description(
-                "Filter by entity (e.g. 'account')."
+                "Filter by entity Display Name or logical name (e.g. 'Account' or 'account')."
             )] string entity_name = "",
             [Description(
                 "failed/succeeded/waiting/in_progress/canceled/all."
@@ -153,7 +154,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(entityName))
             {
-                var entityTypeCode = ResolveEntityTypeCode(entityName.Trim().ToLowerInvariant());
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_system_jobs");
+                if (!entityResult.IsSuccess)
+                    return ErrorResult($"Error: entity_name '{entityName.Trim()}': {entityResult.Error}");
+
+                entityName = entityResult.Value.LogicalName;
+                var entityTypeCode = ResolveEntityTypeCode(entityName);
                 if (entityTypeCode == null)
                     return ErrorResult($"Error: Entity '{entityName.Trim()}' not found. Use get_tables to find valid entity names.");
                 filters.AppendLine($"      <condition attribute='primaryentitytype' operator='eq' value='{entityTypeCode}'/>");

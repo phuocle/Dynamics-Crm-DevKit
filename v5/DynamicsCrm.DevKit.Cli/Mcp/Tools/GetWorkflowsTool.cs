@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -45,13 +46,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult get_workflows(
             [Description("GUID → detail. Empty = list."
             )] string workflow_id = "",
-            [Description("Logical name (e.g. 'account'). Empty = all."
+            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Empty = all."
             )] string entity_name = "",
             [Description("'background' / 'realtime'. Empty = both."
             )] string mode = "",
             [Description("Only activated workflows."
             )] bool active_only = true,
-            [Description("Update trigger field contains (e.g. 'revenue', 'statecode')."
+            [Description("Update trigger field Display Name or logical name when entity_name is set; otherwise contains filter."
             )] string trigger_field = "",
             [Description("Name contains. 1 match → auto-detail."
             )] string name_filter = "",
@@ -86,12 +87,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int? objectTypeCode = null;
             if (!string.IsNullOrWhiteSpace(entity_name))
             {
-                objectTypeCode = GetObjectTypeCode(entity_name.Trim().ToLowerInvariant());
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_workflows");
+                if (!entityResult.IsSuccess)
+                    return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+
+                entity_name = entityResult.Value.LogicalName;
+                objectTypeCode = GetObjectTypeCode(entity_name);
                 if (objectTypeCode == null)
                     return ErrorResult(
-                        $"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found.\n" +
+                        $"Error: Entity '{entity_name}' not found.\n" +
                         $"Use get_tables to discover valid entity logical names.\n" +
                         $"Read docs://server_logic_guide for entity scoping and filtering.");
+
+                if (!string.IsNullOrWhiteSpace(trigger_field))
+                {
+                    var fieldResult = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, trigger_field.Trim(), "get_workflows");
+                    if (!fieldResult.IsSuccess)
+                        return ErrorResult($"Error: trigger_field '{trigger_field.Trim()}': {fieldResult.Error}");
+                    trigger_field = fieldResult.Value.LogicalName;
+                }
             }
 
             try

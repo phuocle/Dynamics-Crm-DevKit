@@ -59,7 +59,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string role_name = "",
             [Description("BU GUID. list: filter. create: target BU (empty = root)."
             )] string business_unit_id = "",
-            [Description("detail/user: filter privileges by entity."
+            [Description("detail/user: filter privileges by entity Display Name or logical name."
             )] string entity_name = "",
             [Description("list only. Max 250."
             )] int max_records = 50)
@@ -74,8 +74,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return normalizedAction switch
                 {
                     "list" => HandleList(role_name?.Trim(), business_unit_id?.Trim(), max_records),
-                    "detail" => HandleDetail(role_id?.Trim(), entity_name?.Trim().ToLowerInvariant()),
-                    "user" => HandleUser(user_id?.Trim(), entity_name?.Trim().ToLowerInvariant()),
+                    "detail" => HandleDetail(role_id?.Trim(), entity_name?.Trim()),
+                    "user" => HandleUser(user_id?.Trim(), entity_name?.Trim()),
                     "assign" => HandleAssign(user_id?.Trim(), role_id?.Trim()),
                     "unassign" => HandleUnassign(user_id?.Trim(), role_id?.Trim()),
                     "create" => HandleCreate(role_name?.Trim(), business_unit_id?.Trim()),
@@ -194,6 +194,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return TextResult(sb.ToString());
             }
 
+            var resolvedEntityFilter = ResolveEntityFilter(entityFilter, "detail");
+            if (!string.IsNullOrEmpty(resolvedEntityFilter.Error))
+                return ErrorResult(resolvedEntityFilter.Error);
+            entityFilter = resolvedEntityFilter.EntityName;
+
             var grouped = GroupPrivilegesByEntity(privileges, entityFilter);
 
             sb.AppendLine();
@@ -281,6 +286,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(entityFilter))
             {
+                var resolvedEntityFilter = ResolveEntityFilter(entityFilter, "user");
+                if (!string.IsNullOrEmpty(resolvedEntityFilter.Error))
+                    return ErrorResult(resolvedEntityFilter.Error);
+                entityFilter = resolvedEntityFilter.EntityName;
+
                 sb.AppendLine();
                 var allPrivileges = new List<PrivilegeInfo>();
                 foreach (var roleId in roleIds)
@@ -764,6 +774,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return query
                 .GroupBy(p => p.EntityName)
                 .ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        private (string EntityName, string Error) ResolveEntityFilter(string entityFilter, string action)
+        {
+            if (string.IsNullOrWhiteSpace(entityFilter))
+                return (null, null);
+
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityFilter.Trim(), "manage_role");
+            if (!resolved.IsSuccess)
+                return (null, $"Error: entity_name '{entityFilter.Trim()}' for action='{action}': {resolved.Error}");
+
+            return (resolved.Value.LogicalName, null);
         }
 
         private static (string right, string entity) ParsePrivilegeName(string privilegeName)

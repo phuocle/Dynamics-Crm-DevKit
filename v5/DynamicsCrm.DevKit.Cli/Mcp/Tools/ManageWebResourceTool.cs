@@ -68,10 +68,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Web resources Dataverse — list/detail/create/update/delete. Required:\n" +
             "- list: optional name, type_filter, solution_name, max_records\n" +
-            "- detail: web_resource_id\n" +
+            "- detail: web_resource_id (GUID, Display Name, or unique name)\n" +
             "- create: name + content (base64) + type + solution_name (REQUIRED). Optional: display_name, description\n" +
-            "- update: web_resource_id. Optional: content, display_name, description\n" +
-            "- delete: web_resource_id (irreversible)\n\n" +
+            "- update: web_resource_id (GUID, Display Name, or unique name). Optional: content, display_name, description\n" +
+            "- delete: web_resource_id (GUID, Display Name, or unique name; irreversible)\n\n" +
 
             "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.\n" +
             "Naming convention: {prefix}_/path/filename.ext (e.g. 'v4_/entities/Account.form.js').\n\n" +
@@ -89,9 +89,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_webresource(
             [Description("list / detail / create / update / delete."
             )] string action,
-            [Description("GUID. Required: detail/update/delete."
+            [Description("GUID, Display Name, or unique name. Required: detail/update/delete."
             )] string web_resource_id = "",
-            [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter."
+            [Description("Unique name (e.g. 'v4_/entities/Account.form.js'). Required: create. list: contains filter across Display Name and unique name."
             )] string name = "",
             [Description("")
             ] string display_name = "",
@@ -148,7 +148,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             filters.AppendLine("      <condition attribute='ismanaged' operator='eq' value='0'/>");
 
             if (!string.IsNullOrWhiteSpace(nameFilter))
-                filters.AppendLine($"      <condition attribute='name' operator='like' value='%{EscapeXml(nameFilter.Trim())}%'/>");
+            {
+                var escapedNameFilter = EscapeXml(nameFilter.Trim());
+                filters.AppendLine("      <filter type='or'>");
+                filters.AppendLine($"        <condition attribute='displayname' operator='like' value='%{escapedNameFilter}%'/>");
+                filters.AppendLine($"        <condition attribute='name' operator='like' value='%{escapedNameFilter}%'/>");
+                filters.AppendLine("      </filter>");
+            }
 
             if (!string.IsNullOrWhiteSpace(typeFilter) && TypeFilterMap.TryGetValue(typeFilter.Trim(), out var typeCode))
                 filters.AppendLine($"      <condition attribute='webresourcetype' operator='eq' value='{typeCode}'/>");
@@ -156,6 +162,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var solutionJoin = "";
             if (!string.IsNullOrWhiteSpace(solutionName))
             {
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                if (!solResult.IsSuccess)
+                    return ErrorResult($"[Error] {solResult.Error}\nTip: Use get_solution_components to find valid solution names.");
+
+                solutionName = solResult.UniqueName;
                 solutionJoin = $@"
     <link-entity name='solutioncomponent' from='objectid' to='webresourceid' link-type='inner'>
       <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner'>
@@ -225,9 +236,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: web_resource_id is required for 'detail'.\n" +
                                    "Use action='list' to find web resource IDs.");
 
-            webResourceId = webResourceId.Trim();
-            if (!Guid.TryParse(webResourceId, out _))
-                return ErrorResult($"Error: '{webResourceId}' is not a valid GUID.");
+            var resolved = ResolveWebResourceIdInput(webResourceId);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
 
             var query = new QueryExpression("webresource")
             {
@@ -238,7 +249,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "createdby", "createdon", "modifiedby", "modifiedon",
                     "solutionid", "introducedversion", "dependencyxml")
             };
-            query.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, new Guid(webResourceId));
+            query.Criteria.AddCondition("webresourceid", ConditionOperator.Equal, resolved.Id.Value);
 
             var result = _serviceClient.RetrieveMultiple(query);
             if (result.Entities.Count == 0)
@@ -336,6 +347,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             name = name.Trim();
 
+            var existingByInput = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, name, "manage_webresource");
+            if (existingByInput.IsSuccess)
+            {
+                var existingName = existingByInput.Value.GetAttributeValue<string>("name") ?? existingByInput.CanonicalName ?? existingByInput.Value.Id.ToString();
+                return ErrorResult($"Error: Web resource input '{name}' resolves to existing web resource '{existingName}' (ID: {existingByInput.Value.Id}). Use action='update' to modify it.");
+            }
+            if (existingByInput.Status == ResolveStatus.Ambiguous || existingByInput.Status == ResolveStatus.Error)
+                return ErrorResult(existingByInput.Error);
+
+            if (!string.IsNullOrWhiteSpace(displayName))
+            {
+                var existingByDisplayName = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, displayName.Trim(), "manage_webresource");
+                if (existingByDisplayName.IsSuccess)
+                {
+                    var existingName = existingByDisplayName.Value.GetAttributeValue<string>("name") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
+                    return ErrorResult($"Error: Display Name '{displayName.Trim()}' resolves to existing web resource '{existingName}' (ID: {existingByDisplayName.Value.Id}). Use action='update' to modify it.");
+                }
+                if (existingByDisplayName.Status == ResolveStatus.Ambiguous || existingByDisplayName.Status == ResolveStatus.Error)
+                    return ErrorResult(existingByDisplayName.Error);
+            }
+
             // Validate prefix in name matches the solution's publisher prefix
             var underscoreIndex = name.IndexOf('_');
             if (underscoreIndex < 1)
@@ -361,11 +393,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     IsError = true
                 };
             }
-
-            // Check if already exists
-            var existing = RetrieveByName(name);
-            if (existing != null)
-                return ErrorResult($"Error: Web resource '{name}' already exists (ID: {existing.Id}). Use action='update' to modify it.");
 
             var webResource = new Entity("webresource")
             {
@@ -451,9 +478,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: web_resource_id is required for 'update'.\n" +
                                    "Use action='list' to find web resource IDs.");
 
-            webResourceId = webResourceId.Trim();
-            if (!Guid.TryParse(webResourceId, out var id))
-                return ErrorResult($"Error: '{webResourceId}' is not a valid GUID.");
+            var resolved = ResolveWebResourceIdInput(webResourceId);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
+            var id = resolved.Id.Value;
 
             var existing = RetrieveById(id);
             if (existing == null)
@@ -491,7 +519,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
             {
                 var existingNameDry = existing.GetAttributeValue<string>("name") ?? "";
-                return DryRunResult($"Would UPDATE web resource '{existingNameDry}' ({webResourceId}), {fieldsUpdated} field(s).");
+                return DryRunResult($"Would UPDATE web resource '{existingNameDry}' ({id}), {fieldsUpdated} field(s).");
             }
 
             _serviceClient.Update(update);
@@ -501,7 +529,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[WebResource] Updated: {existingName}");
-            sb.AppendLine($"webResourceId: {webResourceId}");
+            sb.AppendLine($"webResourceId: {id}");
             sb.AppendLine($"fieldsUpdated: {fieldsUpdated}");
             sb.AppendLine($"published: {(published ? "yes" : "no")}");
 
@@ -513,7 +541,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 [
                     new WebResourceEntry
                     {
-                        WebResourceId = webResourceId,
+                        WebResourceId = id.ToString(),
                         Name = existingName,
                         DisplayName = !string.IsNullOrWhiteSpace(displayName) ? displayName.Trim() : NullIfEmpty(existing.GetAttributeValue<string>("displayname")),
                         Type = TypeCodeMap.TryGetValue(existing.GetAttributeValue<OptionSetValue>("webresourcetype")?.Value ?? 0, out var t2) ? t2 : "Unknown",
@@ -537,9 +565,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: web_resource_id is required for 'delete'.\n" +
                                    "Use action='list' to find web resource IDs.");
 
-            webResourceId = webResourceId.Trim();
-            if (!Guid.TryParse(webResourceId, out var id))
-                return ErrorResult($"Error: '{webResourceId}' is not a valid GUID.");
+            var resolved = ResolveWebResourceIdInput(webResourceId);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
+            var id = resolved.Id.Value;
 
             var existing = RetrieveById(id);
             if (existing == null)
@@ -569,7 +598,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 [
                     new WebResourceEntry
                     {
-                        WebResourceId = webResourceId,
+                        WebResourceId = id.ToString(),
                         Name = existingName,
                         Type = TypeCodeMap.TryGetValue(typeValue, out var t3) ? t3 : "Unknown",
                         TypeCode = typeValue
@@ -580,7 +609,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return new CallToolResult
             {
-                Content = [new TextContentBlock { Text = $"Deleted web resource '{existingName}' ({webResourceId})" }],
+                Content = [new TextContentBlock { Text = $"Deleted web resource '{existingName}' ({id})" }],
                 StructuredContent = JsonSerializer.SerializeToElement(structured)
             };
         }
@@ -588,21 +617,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         #endregion
 
         #region Dataverse Operations
-
-        private Entity RetrieveByName(string name)
-        {
-            var query = new QueryExpression("webresource")
-            {
-                ColumnSet = new ColumnSet("webresourceid", "name"),
-                Criteria = new FilterExpression
-                {
-                    Conditions = { new ConditionExpression("name", ConditionOperator.Equal, name) }
-                },
-                TopCount = 1
-            };
-            var result = _serviceClient.RetrieveMultiple(query);
-            return result.Entities.FirstOrDefault();
-        }
 
         private Entity RetrieveById(Guid id)
         {
@@ -677,6 +691,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+
+        private (Guid? Id, string Error) ResolveWebResourceIdInput(string webResourceInput)
+        {
+            var trimmed = webResourceInput?.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
+                return (null, "Error: web_resource_id is required.");
+
+            if (Guid.TryParse(trimmed, out var guid))
+                return (guid, null);
+
+            var resolve = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_webresource");
+            if (!resolve.IsSuccess)
+                return (null, $"Error: web_resource_id '{trimmed}': {resolve.Error}");
+
+            var id = resolve.Value.Id;
+            if (id == Guid.Empty)
+                id = resolve.Value.GetAttributeValue<Guid>("webresourceid");
+            return id == Guid.Empty
+                ? (null, $"Error: web_resource_id '{trimmed}' resolved without a webresourceid.")
+                : (id, null);
+        }
 
         private static CallToolResult ErrorResult(string message) => new()
         {

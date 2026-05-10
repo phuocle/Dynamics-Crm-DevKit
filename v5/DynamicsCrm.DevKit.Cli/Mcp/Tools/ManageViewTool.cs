@@ -42,6 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect existing views (list, detail) before editing\n" +
             "- Apply layout/fetch changes (action=update)\n" +
             "- Patch cell attributes only via cell_updates_json (no full LayoutXML rebuild)\n\n" +
+            "NAME RESOLUTION: entity_name, FetchXML field/entity references, LayoutXML cell names, and cell_updates_json cell_name values accept Display Name or logical/schema name. Display Name contains is resolved first, then logical/schema contains.\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
             "- view_name is contains match. Exactly 1 → auto-detail; multiple → tool returns candidates, use view_id to disambiguate.\n\n" +
@@ -51,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_view(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
             )] string action,
-            [Description("Entity logical name (e.g. 'account')."
+            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account')."
             )] string entity_name,
             [Description("GUID. Required: detail/update/rename/undo."
             )] string view_id = "",
@@ -83,7 +84,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
-            var entityName = entity_name.Trim().ToLowerInvariant();
+            var entityName = entity_name.Trim();
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: {entityResult.Error}");
+            entityName = entityResult.Value.LogicalName;
 
             try
             {
@@ -248,6 +253,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? $"<fetch><entity name='{entityName}'><attribute name='{entityName}id'/></entity></fetch>"
                 : ViewXmlHelper.StripXmlDeclaration(fetchxml.Trim());
 
+            var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
+            if (fetchNormalization.Errors.Count > 0)
+                return ErrorResult(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, fetchNormalization.Errors));
+            newFetchXml = fetchNormalization.Xml;
+
+            var layoutNormalization = NormalizeLayoutXmlNames(newLayoutXml, newFetchXml, entityName);
+            if (layoutNormalization.Errors.Count > 0)
+                return ErrorResult(FormatNameResolutionErrors("ViewCreate", entityName, viewName, null, layoutNormalization.Errors));
+            newLayoutXml = layoutNormalization.Xml;
+
             var duplicate = FindViewByName(entityName, viewName);
             if (duplicate != null)
             {
@@ -383,6 +398,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
             var viewName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
+
+            if (newFetchXml != null)
+            {
+                var fetchNormalization = NormalizeFetchXmlNames(newFetchXml, entityName);
+                if (fetchNormalization.Errors.Count > 0)
+                    return ErrorResult(FormatNameResolutionErrors("ViewUpdate", entityName, viewName, updateId, fetchNormalization.Errors));
+                newFetchXml = fetchNormalization.Xml;
+            }
+
             var effectiveFetchXml = newFetchXml ?? currentFetchXml;
 
             var baseLayoutXml = hasLayoutXml
@@ -397,6 +421,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var (instructions, parseError) = ParseCellUpdates(cellUpdatesJson);
                 if (parseError != null)
                     return ErrorResult(parseError);
+
+                var cellNameErrors = NormalizeCellUpdateNames(instructions, effectiveFetchXml, entityName);
+                if (cellNameErrors.Count > 0)
+                    return ErrorResult(FormatNameResolutionErrors("ViewUpdate", entityName, viewName, updateId, cellNameErrors));
 
                 var (patchedXml, patchErrors, patchWarnings) = ViewXmlHelper.ApplyCellAttributeUpdates(baseLayoutXml, instructions);
                 if (patchErrors.Count > 0)
@@ -418,6 +446,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var newLayoutXml = EnsureObjectTypeCode(baseLayoutXml, entityName);
+            if (hasLayoutXml)
+            {
+                var layoutNormalization = NormalizeLayoutXmlNames(newLayoutXml, effectiveFetchXml, entityName);
+                if (layoutNormalization.Errors.Count > 0)
+                    return ErrorResult(FormatNameResolutionErrors("ViewUpdate", entityName, viewName, updateId, layoutNormalization.Errors));
+                newLayoutXml = layoutNormalization.Xml;
+            }
 
             string fetchBackupPath = null;
             string layoutBackupPath = null;
@@ -1460,6 +1495,338 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         // ── Field Name Validation ─────────────────────────────────────
+
+        // Display/logical name normalization for view XML and cell patches.
+
+        private (string Xml, List<string> Errors) NormalizeFetchXmlNames(string fetchXml, string entityName)
+        {
+            var errors = new List<string>();
+            if (string.IsNullOrWhiteSpace(fetchXml)) return (fetchXml, errors);
+
+            XDocument doc;
+            try
+            {
+                doc = XDocument.Parse(fetchXml);
+            }
+            catch
+            {
+                return (fetchXml, errors);
+            }
+
+            var mainEntity = ElementsByLocalName(doc.Root, "entity").FirstOrDefault();
+            if (mainEntity == null) return (fetchXml, errors);
+
+            var declaredEntityName = mainEntity.Attribute("name")?.Value;
+            if (!string.IsNullOrWhiteSpace(declaredEntityName))
+            {
+                var resolvedEntityName = ResolveEntityInput(declaredEntityName, errors, "FetchXML root entity");
+                if (errors.Count > 0)
+                    return (fetchXml, errors);
+
+                if (!string.Equals(resolvedEntityName, entityName, StringComparison.OrdinalIgnoreCase))
+                {
+                    errors.Add($"FetchXML root entity '{declaredEntityName}' resolves to '{resolvedEntityName}', but manage_view entity_name resolves to '{entityName}'.");
+                    return (fetchXml, errors);
+                }
+            }
+
+            mainEntity.SetAttributeValue("name", entityName);
+            var aliasEntityMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var attributeCache = new Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>>(StringComparer.OrdinalIgnoreCase);
+
+            NormalizeFetchEntity(mainEntity, entityName, aliasEntityMap, attributeCache, errors);
+
+            return errors.Count > 0
+                ? (fetchXml, errors)
+                : (doc.Root.ToString(SaveOptions.DisableFormatting), errors);
+        }
+
+        private (string Xml, List<string> Errors) NormalizeLayoutXmlNames(string layoutXml, string effectiveFetchXml, string entityName)
+        {
+            var errors = new List<string>();
+            if (string.IsNullOrWhiteSpace(layoutXml)) return (layoutXml, errors);
+
+            XDocument doc;
+            try
+            {
+                doc = XDocument.Parse(layoutXml);
+            }
+            catch
+            {
+                return (layoutXml, errors);
+            }
+
+            var aliasEntityMap = BuildFetchAliasEntityMap(effectiveFetchXml);
+            var attributeCache = new Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var row in DescendantsByLocalName(doc.Root, "row"))
+            {
+                var id = row.Attribute("id")?.Value;
+                if (!string.IsNullOrWhiteSpace(id))
+                    row.SetAttributeValue("id", ResolveLayoutFieldReference(id, entityName, aliasEntityMap, attributeCache, errors, "LayoutXML row id"));
+            }
+
+            foreach (var cell in DescendantsByLocalName(doc.Root, "cell"))
+            {
+                var name = cell.Attribute("name")?.Value;
+                if (!string.IsNullOrWhiteSpace(name))
+                    cell.SetAttributeValue("name", ResolveLayoutFieldReference(name, entityName, aliasEntityMap, attributeCache, errors, "LayoutXML cell"));
+            }
+
+            return errors.Count > 0
+                ? (layoutXml, errors)
+                : (doc.Root.ToString(SaveOptions.DisableFormatting), errors);
+        }
+
+        private List<string> NormalizeCellUpdateNames(
+            List<CellUpdateInstruction> instructions, string effectiveFetchXml, string entityName)
+        {
+            var errors = new List<string>();
+            var aliasEntityMap = BuildFetchAliasEntityMap(effectiveFetchXml);
+            var attributeCache = new Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var instruction in instructions)
+            {
+                instruction.CellName = ResolveLayoutFieldReference(
+                    instruction.CellName, entityName, aliasEntityMap, attributeCache, errors, "cell_updates_json cell_name");
+            }
+
+            return errors;
+        }
+
+        private void NormalizeFetchEntity(XElement entityElement, string entityName,
+            Dictionary<string, string> aliasEntityMap,
+            Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>> attributeCache,
+            List<string> errors)
+        {
+            foreach (var link in ElementsByLocalName(entityElement, "link-entity").ToList())
+            {
+                var rawLinkEntityName = link.Attribute("name")?.Value;
+                if (string.IsNullOrWhiteSpace(rawLinkEntityName))
+                {
+                    errors.Add("FetchXML link-entity is missing required 'name' attribute.");
+                    continue;
+                }
+
+                var linkEntityName = ResolveEntityInput(rawLinkEntityName, errors, "FetchXML link-entity name");
+                link.SetAttributeValue("name", linkEntityName);
+
+                var alias = link.Attribute("alias")?.Value;
+                if (!string.IsNullOrWhiteSpace(alias))
+                    aliasEntityMap[alias] = linkEntityName;
+
+                NormalizeXmlAttribute(link, "from", linkEntityName, aliasEntityMap, attributeCache, errors, "FetchXML link-entity from");
+                NormalizeXmlAttribute(link, "to", entityName, aliasEntityMap, attributeCache, errors, "FetchXML link-entity to");
+                NormalizeFetchEntity(link, linkEntityName, aliasEntityMap, attributeCache, errors);
+            }
+
+            foreach (var attr in ElementsByLocalName(entityElement, "attribute"))
+                NormalizeXmlAttribute(attr, "name", entityName, aliasEntityMap, attributeCache, errors, "FetchXML attribute");
+
+            foreach (var order in ElementsByLocalName(entityElement, "order"))
+                NormalizeXmlAttribute(order, "attribute", entityName, aliasEntityMap, attributeCache, errors, "FetchXML order");
+
+            foreach (var condition in ConditionsOwnedBy(entityElement))
+            {
+                var targetEntityName = entityName;
+                var alias = condition.Attribute("entityname")?.Value;
+                if (!string.IsNullOrWhiteSpace(alias) && aliasEntityMap.TryGetValue(alias, out var aliasEntityName))
+                    targetEntityName = aliasEntityName;
+
+                NormalizeXmlAttribute(condition, "attribute", targetEntityName, aliasEntityMap, attributeCache, errors, "FetchXML condition");
+            }
+        }
+
+        private void NormalizeXmlAttribute(XElement element, string attributeName, string entityName,
+            Dictionary<string, string> aliasEntityMap,
+            Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>> attributeCache,
+            List<string> errors,
+            string context)
+        {
+            var value = element.Attribute(attributeName)?.Value;
+            if (string.IsNullOrWhiteSpace(value)) return;
+
+            if (TrySplitAliasedField(value, out var alias, out var aliasedFieldName))
+            {
+                if (!aliasEntityMap.TryGetValue(alias, out var aliasEntityName))
+                {
+                    errors.Add($"{context}: alias '{alias}' was not found in FetchXML.");
+                    return;
+                }
+
+                var resolvedAliasedFieldName = ResolveAttributeInput(aliasEntityName, aliasedFieldName, attributeCache, errors, context);
+                element.SetAttributeValue(attributeName, $"{alias}.{resolvedAliasedFieldName}");
+                return;
+            }
+
+            element.SetAttributeValue(attributeName, ResolveAttributeInput(entityName, value, attributeCache, errors, context));
+        }
+
+        private string ResolveLayoutFieldReference(string cellName, string entityName,
+            Dictionary<string, string> aliasEntityMap,
+            Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>> attributeCache,
+            List<string> errors,
+            string context)
+        {
+            if (string.IsNullOrWhiteSpace(cellName)) return cellName;
+            var trimmed = cellName.Trim();
+
+            if (TrySplitAliasedField(trimmed, out var alias, out var fieldName))
+            {
+                if (!aliasEntityMap.TryGetValue(alias, out var aliasEntityName))
+                {
+                    errors.Add($"{context}: alias '{alias}' was not found in FetchXML for '{trimmed}'.");
+                    return trimmed;
+                }
+
+                var resolvedFieldName = ResolveAttributeInput(aliasEntityName, fieldName, attributeCache, errors, context);
+                return $"{alias}.{resolvedFieldName}";
+            }
+
+            return ResolveAttributeInput(entityName, trimmed, attributeCache, errors, context);
+        }
+
+        private string ResolveEntityInput(string input, List<string> errors, string context)
+        {
+            var result = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "manage_view");
+            if (result.IsSuccess) return result.Value.LogicalName;
+
+            errors.Add($"{context}: {result.Error}");
+            return input.Trim();
+        }
+
+        private string ResolveAttributeInput(string entityName, string input,
+            Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>> attributeCache,
+            List<string> errors,
+            string context)
+        {
+            var candidates = GetAttributeCandidates(entityName, attributeCache, errors, context);
+            if (candidates == null || candidates.Count == 0)
+                return input.Trim();
+
+            var result = DisplayNameFirstResolver.Resolve(
+                input,
+                candidates,
+                "[AmbiguousField]",
+                "[NotFoundField]",
+                $"Tip: Use get_tables(entity_name='{entityName}') to list fields before calling manage_view.",
+                "field name");
+
+            if (result.IsSuccess) return result.Value.LogicalName;
+
+            errors.Add($"{context} '{input}' on entity '{entityName}': {result.Error}");
+            return input.Trim();
+        }
+
+        private List<DisplayNameFirstCandidate<AttributeMetadata>> GetAttributeCandidates(string entityName,
+            Dictionary<string, List<DisplayNameFirstCandidate<AttributeMetadata>>> attributeCache,
+            List<string> errors,
+            string context)
+        {
+            if (attributeCache.TryGetValue(entityName, out var cached))
+                return cached;
+
+            try
+            {
+                var request = new RetrieveEntityRequest
+                {
+                    LogicalName = entityName,
+                    EntityFilters = EntityFilters.Attributes,
+                    RetrieveAsIfPublished = true
+                };
+                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
+                var candidates = response.EntityMetadata.Attributes.Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
+                {
+                    Value = a,
+                    DisplayName = a.DisplayName?.UserLocalizedLabel?.Label,
+                    LogicalName = a.LogicalName,
+                    SchemaName = a.SchemaName,
+                    Id = a.MetadataId,
+                    Kind = "attribute",
+                    CanonicalName = a.LogicalName
+                }).ToList();
+
+                attributeCache[entityName] = candidates;
+                return candidates;
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"{context}: failed to retrieve metadata for entity '{entityName}': {ex.Message}");
+                attributeCache[entityName] = [];
+                return null;
+            }
+        }
+
+        private static Dictionary<string, string> BuildFetchAliasEntityMap(string fetchXml)
+        {
+            var aliasEntityMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (string.IsNullOrWhiteSpace(fetchXml)) return aliasEntityMap;
+
+            try
+            {
+                var doc = XDocument.Parse(fetchXml);
+                foreach (var link in DescendantsByLocalName(doc.Root, "link-entity"))
+                {
+                    var alias = link.Attribute("alias")?.Value;
+                    var entityName = link.Attribute("name")?.Value;
+                    if (!string.IsNullOrWhiteSpace(alias) && !string.IsNullOrWhiteSpace(entityName))
+                        aliasEntityMap[alias] = entityName;
+                }
+            }
+            catch { }
+
+            return aliasEntityMap;
+        }
+
+        private static bool TrySplitAliasedField(string value, out string alias, out string fieldName)
+        {
+            alias = null;
+            fieldName = null;
+            if (string.IsNullOrWhiteSpace(value)) return false;
+
+            var dotIndex = value.IndexOf('.');
+            if (dotIndex <= 0 || dotIndex >= value.Length - 1)
+                return false;
+
+            alias = value.Substring(0, dotIndex).Trim();
+            fieldName = value.Substring(dotIndex + 1).Trim();
+            return !string.IsNullOrWhiteSpace(alias) && !string.IsNullOrWhiteSpace(fieldName);
+        }
+
+        private static IEnumerable<XElement> ConditionsOwnedBy(XElement owner)
+        {
+            var ownerIsLink = IsLocalName(owner, "link-entity");
+            return DescendantsByLocalName(owner, "condition").Where(condition =>
+            {
+                var nearestLink = condition.Ancestors().FirstOrDefault(a => IsLocalName(a, "link-entity"));
+                return ownerIsLink ? nearestLink == owner : nearestLink == null;
+            });
+        }
+
+        private static IEnumerable<XElement> ElementsByLocalName(XElement element, string localName) =>
+            element?.Elements().Where(e => IsLocalName(e, localName)) ?? Enumerable.Empty<XElement>();
+
+        private static IEnumerable<XElement> DescendantsByLocalName(XElement element, string localName) =>
+            element?.Descendants().Where(e => IsLocalName(e, localName)) ?? Enumerable.Empty<XElement>();
+
+        private static bool IsLocalName(XElement element, string localName) =>
+            string.Equals(element?.Name.LocalName, localName, StringComparison.OrdinalIgnoreCase);
+
+        private static string FormatNameResolutionErrors(string prefix, string entityName, string viewName, Guid? viewId, List<string> errors)
+        {
+            var sb = new StringBuilder(512);
+            sb.AppendLine($"[{prefix}] BLOCKED -- Name resolution failed");
+            sb.AppendLine($"Entity: {entityName}");
+            if (!string.IsNullOrWhiteSpace(viewName))
+                sb.AppendLine($"ViewName: {viewName}");
+            if (viewId.HasValue)
+                sb.AppendLine($"ViewId: {viewId.Value}");
+            sb.AppendLine($"Errors: {errors.Count}");
+            foreach (var error in errors)
+                sb.AppendLine($"- {error}");
+            sb.AppendLine("Tip: Display Name contains is resolved first, then logical/schema contains. Use a more specific name when matches are ambiguous.");
+            return sb.ToString();
+        }
 
         private List<string> ValidateFieldNames(string entityName, string fetchXml)
         {

@@ -2,13 +2,12 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
-using System.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     /// <summary>
     /// Centralized helper for resolving a Dataverse solution's publisher prefix from a solution name input.
-    /// Search order: exact uniquename → exact friendlyname → contains friendlyname → contains uniquename.
+    /// Search order: contains friendlyname (display name) -> contains uniquename (logical/unique name).
     /// Returns both string prefix (customizationprefix) and integer prefix (customizationoptionvalueprefix).
     /// </summary>
     internal static class SolutionResolverHelper
@@ -24,66 +23,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             try
             {
-                // Step 1: Exact match by uniquename (logical name)
-                var sol = QuerySingle(serviceClient, "uniquename", ConditionOperator.Equal, solutionInput);
-                if (sol != null)
-                    return BuildResult(serviceClient, sol, solutionInput);
+                var resolved = DisplayNameFirstResolver.ResolveDataverseRecord(
+                    serviceClient,
+                    solutionInput,
+                    entityName: "solution",
+                    idColumn: "solutionid",
+                    columns: new ColumnSet("solutionid", "publisherid", "uniquename", "friendlyname"),
+                    displayColumn: "friendlyname",
+                    logicalColumn: null,
+                    uniqueColumn: "uniquename",
+                    schemaColumn: null,
+                    kind: "solution",
+                    ambiguousTag: "[AmbiguousSolution]",
+                    notFoundTag: "[NotFoundSolution]",
+                    notFoundTip: "Tip: Use get_solution_components to list available solutions.",
+                    retryParameterName: "solution_name");
 
-                // Step 2: Exact match by friendlyname (display name)
-                sol = QuerySingle(serviceClient, "friendlyname", ConditionOperator.Equal, solutionInput);
-                if (sol != null)
-                    return BuildResult(serviceClient, sol, solutionInput);
+                if (!resolved.IsSuccess)
+                    return SolutionResolveResult.Fail(resolved.Error);
 
-                // Step 3: Contains match by friendlyname (display name)
-                var results = QueryMultiple(serviceClient, "friendlyname", ConditionOperator.Like, $"%{solutionInput}%");
-                if (results.Length == 1)
-                    return BuildResult(serviceClient, results[0], solutionInput);
-                if (results.Length > 1)
-                    return AmbiguousResult(solutionInput, results);
-
-                // Step 4: Contains match by uniquename (logical name)
-                results = QueryMultiple(serviceClient, "uniquename", ConditionOperator.Like, $"%{solutionInput}%");
-                if (results.Length == 1)
-                    return BuildResult(serviceClient, results[0], solutionInput);
-                if (results.Length > 1)
-                    return AmbiguousResult(solutionInput, results);
-
-                // Not found
-                return SolutionResolveResult.Fail(
-                    $"Solution '{solutionInput}' not found (searched by unique name and display name).\n" +
-                    "Tip: Use get_solution_components to list available solutions.");
+                return BuildResult(serviceClient, resolved.Value, solutionInput);
             }
             catch (Exception ex)
             {
                 return SolutionResolveResult.Fail($"Failed to resolve solution '{solutionInput}': {ex.Message}");
             }
-        }
-
-        private static Entity QuerySingle(ServiceClient serviceClient, string field, ConditionOperator op, string value)
-        {
-            var query = new QueryExpression("solution")
-            {
-                ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                Criteria = new FilterExpression
-                {
-                    Conditions = { new ConditionExpression(field, op, value) }
-                }
-            };
-            var entities = serviceClient.RetrieveMultiple(query).Entities;
-            return entities.Count == 1 ? entities[0] : null;
-        }
-
-        private static Entity[] QueryMultiple(ServiceClient serviceClient, string field, ConditionOperator op, string value)
-        {
-            var query = new QueryExpression("solution")
-            {
-                ColumnSet = new ColumnSet("publisherid", "uniquename", "friendlyname"),
-                Criteria = new FilterExpression
-                {
-                    Conditions = { new ConditionExpression(field, op, value) }
-                }
-            };
-            return serviceClient.RetrieveMultiple(query).Entities.ToArray();
         }
 
         private static SolutionResolveResult BuildResult(ServiceClient serviceClient, Entity sol, string solutionInput)
@@ -112,15 +76,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 return SolutionResolveResult.Fail($"Solution '{solutionInput}' found but failed to retrieve publisher: {ex.Message}");
             }
-        }
-
-        private static SolutionResolveResult AmbiguousResult(string solutionInput, Entity[] matches)
-        {
-            var names = string.Join(", ", matches.Select(e =>
-                $"'{e.GetAttributeValue<string>("uniquename")}' ({e.GetAttributeValue<string>("friendlyname")})"));
-            return SolutionResolveResult.Fail(
-                $"Multiple solutions match '{solutionInput}': {names}.\n" +
-                "Tip: Provide the exact unique name to disambiguate.");
         }
     }
 

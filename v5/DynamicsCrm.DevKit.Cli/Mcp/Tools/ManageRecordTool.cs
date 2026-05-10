@@ -70,7 +70,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
-            var entityName = entity_name.Trim().ToLowerInvariant();
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: {entityResult.Error}");
+            var entityName = entityResult.Value.LogicalName;
 
             return normalizedAction switch
             {
@@ -133,7 +136,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var columnSet = BuildColumnSet(columns);
+                var columnSet = BuildColumnSet(_serviceClient, entityName, columns);
                 var entity = _serviceClient.Retrieve(entityName, id, columnSet);
                 var text = FormatRecord(entity);
 
@@ -232,18 +235,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static ColumnSet BuildColumnSet(string columns)
+        private static ColumnSet BuildColumnSet(ServiceClient serviceClient, string entityName, string columns)
         {
             if (string.IsNullOrWhiteSpace(columns))
                 return new ColumnSet(true);
 
-            var cols = columns
-                .Split(',')
-                .Select(c => c.Trim().ToLowerInvariant())
-                .Where(c => !string.IsNullOrEmpty(c))
-                .ToArray();
+            var cols = new List<string>();
+            foreach (var column in columns.Split(',').Select(c => c.Trim()).Where(c => !string.IsNullOrEmpty(c)))
+            {
+                var resolved = DisplayNameFirstResolver.ResolveAttribute(serviceClient, entityName, column, "manage_record");
+                if (!resolved.IsSuccess)
+                    throw new ArgumentException($"Column '{column}': {resolved.Error}");
+                cols.Add(resolved.Value.LogicalName);
+            }
 
-            return cols.Length > 0 ? new ColumnSet(cols) : new ColumnSet(true);
+            return cols.Count > 0 ? new ColumnSet([.. cols]) : new ColumnSet(true);
         }
 
         private static string FormatRecord(Entity entity)

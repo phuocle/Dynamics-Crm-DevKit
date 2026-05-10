@@ -18,6 +18,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Form;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using DynamicsCrm.DevKit.Cli.Mcp;
 
@@ -48,12 +49,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect existing forms (list, detail) before editing\n" +
             "- Apply operations via action=update (recommended) or provide raw formxml (advanced)\n" +
             "- Rename a form, restore from backup (undo)\n\n" +
+            "NAME RESOLUTION: entity_name and operation field references accept Display Name or logical/schema name. Display Name contains is resolved first, then logical/schema contains.\n\n" +
 
             "Fuzzy on form_name (contains): 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult manage_form(
             [Description("'list', 'detail', 'update', 'rename', 'undo'."
             )] string action,
-            [Description("Entity logical name (e.g. 'account')."
+            [Description("Entity Display Name or logical name (Display Name is resolved first; e.g. 'Account' or 'account')."
             )] string entity_name,
             [Description("GUID. Required: detail/update/rename/undo."
             )] string form_id = "",
@@ -83,7 +85,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "Use get_tables to find the entity logical name.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
-            var entityName = entity_name.Trim().ToLowerInvariant();
+            var entityName = entity_name.Trim();
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_form");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: {entityResult.Error}");
+            entityName = entityResult.Value.LogicalName;
 
             try
             {

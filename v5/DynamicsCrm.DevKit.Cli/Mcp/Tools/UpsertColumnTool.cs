@@ -52,8 +52,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- entity_name: exact logical name first; if matched exactly, proceed without confirmation. If not an exact logical name, fuzzy search by logical/display name contains → ALWAYS return a [ConfirmEntityName] list and stop, even for 1 match. User MUST re-call with the exact logical name. Never guess.\n" +
-            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name.")]
+            "- entity_name resolves Display Name contains first, then logical/schema name contains. Ambiguity returns IsError=true with candidates.\n" +
+            "- attribute_name, lookup_target, global_optionset_name, and solution_name follow the same Display Name first rule where applicable.")]
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
             [Description("With prefix ('new_priority') or just name + solution_name to auto-resolve.")] string attribute_name,
@@ -89,10 +89,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(attribute_name))
                 return ErrorResult("Error: attribute_name is required.");
 
-            entity_name = entity_name.Trim().ToLowerInvariant();
-            attribute_name = attribute_name.Trim().ToLowerInvariant();
+            entity_name = entity_name.Trim();
+            attribute_name = attribute_name.Trim();
 
-            // --- Resolve entity_name: exact logical → fuzzy (logical/display contains) → disambiguate ---
+            // --- Resolve entity_name: Display Name first, then logical/schema contains ---
             var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
             if (entityError != null)
                 return ErrorResult(entityError);
@@ -152,22 +152,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // --- Try to retrieve existing attribute to decide create vs update ---
             AttributeMetadata existingMetadata = null;
-            try
+            var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attribute_name, "upsert_column");
+            if (attributeResolve.IsSuccess)
             {
-                var retrieveRequest = new RetrieveAttributeRequest
+                existingMetadata = attributeResolve.Value;
+                attribute_name = existingMetadata.LogicalName;
+            }
+            else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
+            {
+                return ErrorResult($"Error: {attributeResolve.Error}");
+            }
+            else if (!string.IsNullOrWhiteSpace(display_name) &&
+                     !display_name.Trim().Equals(attribute_name, StringComparison.OrdinalIgnoreCase))
+            {
+                var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, display_name, "upsert_column");
+                if (displayNameResolve.IsSuccess)
                 {
-                    EntityLogicalName = entity_name,
-                    LogicalName = attribute_name,
-                    RetrieveAsIfPublished = true
-                };
-                var retrieveResponse = (RetrieveAttributeResponse)_serviceClient.Execute(retrieveRequest);
-                existingMetadata = retrieveResponse.AttributeMetadata;
+                    var label = displayNameResolve.Value.DisplayName?.UserLocalizedLabel?.Label ?? "";
+                    return ErrorResult(
+                        $"[ConflictField] attribute_name '{attribute_name}' did not resolve, but display_name '{display_name.Trim()}' resolves existing field '{displayNameResolve.Value.LogicalName}' ({label}).\n" +
+                        $"Re-call upsert_column with attribute_name='{displayNameResolve.Value.LogicalName}' to update it, or choose a different display_name to create a new field.");
+                }
+                if (displayNameResolve.Status == ResolveStatus.Ambiguous || displayNameResolve.Status == ResolveStatus.Error)
+                    return ErrorResult($"Error: {displayNameResolve.Error}");
             }
-            catch
-            {
-                // Attribute does not exist → create mode
-            }
-
             if (existingMetadata != null)
             {
                 // --- UPDATE MODE ---
@@ -204,12 +212,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 resolvedPrefix = solResult.Prefix;
                 resolvedSolutionUniqueName = solResult.UniqueName;
 
-                // Prepend prefix to attribute_name if not already prefixed
-                var prefixWithUnderscore = resolvedPrefix + "_";
-                if (!attribute_name.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                // Add the solution prefix only when the user did not provide an explicit prefix.
+                // If the user typed a different prefix, keep it and let Dataverse validation decide.
+                if (!hasPrefix)
                 {
-                    var namePart = hasPrefix ? attribute_name.Substring(underscoreIndex + 1) : attribute_name;
-                    attribute_name = $"{resolvedPrefix}_{namePart}";
+                    attribute_name = $"{resolvedPrefix}_{attribute_name}";
                     underscoreIndex = attribute_name.IndexOf('_');
                     hasPrefix = true;
                 }
@@ -222,7 +229,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Tip: Either include the prefix in attribute_name (e.g., 'new_priority') or provide solution_name to auto-resolve the prefix.");
             }
 
-            var prefix = resolvedPrefix ?? attribute_name.Substring(0, underscoreIndex);
+            var prefix = attribute_name.Substring(0, underscoreIndex);
 
             // Determine SchemaName:
             // - schema_name provided → use as-is (user takes responsibility for correctness)
@@ -243,6 +250,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     schemaName = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
                 }
             }
+            attribute_name = schemaName.ToLowerInvariant();
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
@@ -632,17 +640,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"Provide a target entity logical name (e.g., 'contact'). For polymorphic, comma-separate: 'account,contact,lead'.\n" +
                     $"Use get_tables to find valid entity logical names.");
 
-            var targets = lookupTarget.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(t => t.Trim().ToLowerInvariant())
+            var targetInputs = lookupTarget.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(t => t.Trim())
                 .Where(t => !string.IsNullOrEmpty(t))
                 .ToArray();
+            var targets = new List<string>();
+            foreach (var targetInput in targetInputs)
+            {
+                var targetResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, targetInput, "upsert_column");
+                if (!targetResolve.IsSuccess)
+                    return ErrorResult($"Error: lookup_target '{targetInput}': {targetResolve.Error}");
+                targets.Add(targetResolve.Value.LogicalName);
+            }
+            targets = targets.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
-            if (targets.Length == 0)
+            if (targets.Count == 0)
                 return ErrorResult($"[Error] No valid target entities found in lookup_target: '{lookupTarget}'");
 
             // Multiple targets → Polymorphic Lookup
-            if (targets.Length > 1)
-                return CreatePolymorphicLookupAttribute(entityName, logicalName, schemaName, displayName, description, reqLevel, targets, prefix, solutionName, autoPublish);
+            if (targets.Count > 1)
+                return CreatePolymorphicLookupAttribute(entityName, logicalName, schemaName, displayName, description, reqLevel, targets.ToArray(), prefix, solutionName, autoPublish);
 
             // Single target → Regular Lookup
             var singleTarget = targets[0];
@@ -888,6 +905,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(globalOptionSetName))
             {
+                var choiceResolve = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, globalOptionSetName, "upsert_column");
+                if (!choiceResolve.IsSuccess)
+                    return ErrorResult($"Error: global_optionset_name '{globalOptionSetName.Trim()}': {choiceResolve.Error}");
+                globalOptionSetName = choiceResolve.Value.Name;
+
                 // Use existing global option set
                 if (isMultiSelect)
                 {
@@ -1739,55 +1761,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static (string ResolvedName, string Error) ResolveEntityName(ServiceClient serviceClient, string entityName)
         {
-            // 1. Try exact logical name
-            try
-            {
-                var req = new RetrieveEntityRequest { LogicalName = entityName, EntityFilters = EntityFilters.Entity, RetrieveAsIfPublished = true };
-                serviceClient.Execute(req);
-                return (entityName, null);
-            }
-            catch { }
+            var resolved = DisplayNameFirstResolver.ResolveEntity(serviceClient, entityName, "upsert_column");
+            if (resolved.IsSuccess)
+                return (resolved.Value.LogicalName, null);
 
-            // 2. Fuzzy: load all entities, match logical name contains OR display name contains
-            List<EntityMetadata> all;
-            try
-            {
-                var req = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity, RetrieveAsIfPublished = true };
-                var resp = (RetrieveAllEntitiesResponse)serviceClient.Execute(req);
-                all = [.. resp.EntityMetadata];
-            }
-            catch (Exception ex)
-            {
-                return (null, $"Error: Failed to search for entity '{entityName}': {ex.Message}");
-            }
+            return (null, $"Error: {resolved.Error}");
 
-            var keyword = entityName.ToLowerInvariant();
-            var matches = all
-                .Where(e =>
-                    (!string.IsNullOrWhiteSpace(e.LogicalName) && e.LogicalName.Contains(keyword)) ||
-                    (!string.IsNullOrWhiteSpace(e.DisplayName?.UserLocalizedLabel?.Label) &&
-                     e.DisplayName.UserLocalizedLabel.Label.ToLowerInvariant().Contains(keyword)))
-                .OrderBy(e => e.LogicalName)
-                .ToList();
-
-            if (matches.Count == 0)
-                return (null,
-                    $"Error: Entity '{entityName}' not found.\n" +
-                    $"No entity matches logical name or display name containing '{entityName}'.\n" +
-                    $"Tip: Use get_tables to find the correct entity logical name.");
-
-            // Fuzzy matched (1 or more) — always require user to confirm the exact logical name.
-            // Never auto-select, even for a single match, because the user may have typed a display
-            // name that matches multiple schemas (e.g. "Invoice Line" → invoiceline vs devkit_invoiceline).
-            var sb = new StringBuilder();
-            sb.AppendLine($"[ConfirmEntityName] '{entityName}' is not an exact logical name. {matches.Count} candidate(s) found — confirm which table you mean:");
-            foreach (var m in matches)
-            {
-                var dn = m.DisplayName?.UserLocalizedLabel?.Label ?? "";
-                sb.AppendLine($"  - {m.LogicalName} ({dn})");
-            }
-            sb.AppendLine("Re-call upsert_column with the exact logical name from the list above.");
-            return (null, sb.ToString().TrimEnd());
         }
 
         private static CallToolResult ErrorResult(string message) => new()

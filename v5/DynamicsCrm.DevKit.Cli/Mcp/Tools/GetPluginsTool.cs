@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -91,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Fuzzy on assembly_name: 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult get_plugins(
             [Description("Assembly name contains.")] string assembly_name = "",
-            [Description("Steps for entity (e.g. 'account').")] string entity_name = "",
+            [Description("Steps for entity Display Name or logical name (e.g. 'Account' or 'account').")] string entity_name = "",
             [Description("SDK message (Create, Update, Delete, …).")] string message_name = "",
             [Description("Plugin type name contains.")] string type_name = "",
             [Description("Pre/post images.")] bool include_images = true,
@@ -123,11 +124,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // If entity_name is provided, show steps for that entity
                 if (!string.IsNullOrWhiteSpace(entity_name))
                 {
-                    var otc = GetObjectTypeCode(entity_name.Trim().ToLowerInvariant());
-                    if (otc == null)
-                        return ErrorResult($"Error: Entity '{entity_name.Trim().ToLowerInvariant()}' not found. Use get_tables to discover valid entity names.");
+                    var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_plugins");
+                    if (!entityResult.IsSuccess)
+                        return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
 
-                    return GetStepsByEntity(entity_name.Trim().ToLowerInvariant(), otc.Value, message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
+                    var resolvedEntityName = entityResult.Value.LogicalName;
+                    var otc = GetObjectTypeCode(resolvedEntityName);
+                    if (otc == null)
+                        return ErrorResult($"Error: Entity '{resolvedEntityName}' not found. Use get_tables to discover valid entity names.");
+
+                    return GetStepsByEntity(resolvedEntityName, otc.Value, message_name, type_name, stage, mode, active_only, include_images, include_config, max_records);
                 }
 
                 // If assembly_name is provided, show detail for matching assemblies

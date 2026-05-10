@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class EntityParserHelper
     {
-        private static readonly ConcurrentDictionary<string, Dictionary<string, AttributeMetadata>> MetadataCache = new();
+        private static readonly ConcurrentDictionary<string, AttributeMetadataIndex> MetadataCache = new();
 
         public static Entity ParseFieldsToEntity(
             ServiceClient serviceClient,
@@ -29,23 +29,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (fields == null || fields.Count == 0)
                 throw new ArgumentException("fields_json must be a non-empty JSON object.");
 
-            var attrMap = GetAttributeMap(serviceClient, entityLogicalName);
+            var attrIndex = GetAttributeIndex(serviceClient, entityLogicalName);
 
             foreach (var (key, jsonVal) in fields)
             {
+                var (fieldInput, targetEntityInput) = ParseFieldKey(key);
+                var attrMeta = ResolveAttribute(attrIndex, entityLogicalName, fieldInput);
+                var resolvedField = attrMeta.LogicalName;
+                var targetEntity = ResolveTargetEntity(serviceClient, targetEntityInput);
+
                 if (jsonVal.ValueKind == JsonValueKind.Null || jsonVal.ValueKind == JsonValueKind.Undefined)
                 {
-                    var fieldName = ParseFieldName(key);
-                    entity[fieldName] = null;
+                    entity[resolvedField] = null;
                     continue;
                 }
-
-                var (resolvedField, targetEntity) = ParseFieldKey(key);
-
-                if (!attrMap.TryGetValue(resolvedField, out var attrMeta))
-                    throw new ArgumentException(
-                        $"Field '{resolvedField}' does not exist on entity '{entityLogicalName}'. " +
-                        "Use get_tables to discover valid field names.");
 
                 entity[resolvedField] = ConvertValue(attrMeta, jsonVal, resolvedField, targetEntity);
             }
@@ -58,18 +55,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             MetadataCache.Clear();
         }
 
-        private static Dictionary<string, AttributeMetadata> GetAttributeMap(ServiceClient serviceClient, string entityLogicalName)
+        private static AttributeMetadataIndex GetAttributeIndex(ServiceClient serviceClient, string entityLogicalName)
         {
             return MetadataCache.GetOrAdd(entityLogicalName, _ =>
             {
                 var request = new RetrieveEntityRequest
                 {
                     LogicalName = entityLogicalName,
-                    EntityFilters = EntityFilters.Attributes
+                    EntityFilters = EntityFilters.Attributes,
+                    RetrieveAsIfPublished = true
                 };
                 var response = (RetrieveEntityResponse)serviceClient.Execute(request);
-                return response.EntityMetadata.Attributes.ToDictionary(a => a.LogicalName, a => a);
+                return AttributeMetadataIndex.From(response.EntityMetadata.Attributes);
             });
+        }
+
+        private static AttributeMetadata ResolveAttribute(AttributeMetadataIndex attrIndex, string entityLogicalName, string fieldInput)
+        {
+            var resolved = DisplayNameFirstResolver.Resolve(
+                fieldInput,
+                attrIndex.Candidates,
+                "[AmbiguousField]",
+                "[NotFoundField]",
+                $"Tip: Use get_tables(entity_name='{entityLogicalName}') to discover valid field names.",
+                "fields_json key");
+
+            if (resolved.IsSuccess)
+                return resolved.Value;
+
+            throw new ArgumentException(resolved.Error);
+        }
+
+        private static string ResolveTargetEntity(ServiceClient serviceClient, string targetEntityInput)
+        {
+            if (string.IsNullOrWhiteSpace(targetEntityInput))
+                return null;
+
+            var resolved = DisplayNameFirstResolver.ResolveEntity(serviceClient, targetEntityInput, "manage_record/create_records");
+            if (resolved.IsSuccess)
+                return resolved.Value.LogicalName;
+
+            throw new ArgumentException($"Target entity '{targetEntityInput}': {resolved.Error}");
         }
 
         /// <summary>
@@ -80,14 +106,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             var atIndex = key.IndexOf('@');
             if (atIndex > 0 && atIndex < key.Length - 1)
-                return (key.Substring(0, atIndex).ToLowerInvariant(), key.Substring(atIndex + 1).ToLowerInvariant());
-            return (key.ToLowerInvariant(), null);
-        }
-
-        private static string ParseFieldName(string key)
-        {
-            var atIndex = key.IndexOf('@');
-            return (atIndex > 0 ? key.Substring(0, atIndex) : key).ToLowerInvariant();
+                return (key.Substring(0, atIndex).Trim(), key.Substring(atIndex + 1).Trim());
+            return (key.Trim(), null);
         }
 
         private static object ConvertValue(AttributeMetadata attrMeta, JsonElement jsonVal, string fieldName, string targetEntityOverride)
@@ -144,6 +164,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 JsonValueKind.False => false,
                 _ => jsonVal.GetString() ?? ""
             };
+        }
+
+        private sealed class AttributeMetadataIndex
+        {
+            public List<DisplayNameFirstCandidate<AttributeMetadata>> Candidates { get; init; } = [];
+
+            public static AttributeMetadataIndex From(IEnumerable<AttributeMetadata> attributes)
+            {
+                return new AttributeMetadataIndex
+                {
+                    Candidates = attributes
+                        .Where(a => a?.LogicalName != null)
+                        .Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
+                        {
+                            Value = a,
+                            DisplayName = a.DisplayName?.UserLocalizedLabel?.Label,
+                            LogicalName = a.LogicalName,
+                            SchemaName = a.SchemaName,
+                            Id = a.MetadataId,
+                            Kind = "attribute",
+                            CanonicalName = a.LogicalName
+                        })
+                        .ToList()
+                };
+            }
         }
     }
 }

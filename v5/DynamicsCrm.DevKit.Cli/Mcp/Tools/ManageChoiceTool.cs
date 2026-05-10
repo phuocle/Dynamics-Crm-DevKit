@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "'list', 'detail', 'create', 'update'."
             )] string action,
             [Description(
-                "Logical name OR display name. Required except list and create. For detail: if exact logical name not found, resolved automatically by display name (contains, case-insensitive). For create: if omitted, auto-derived as '{publisher_prefix}_{sanitized_display_name}'; if provided, must start with the solution publisher prefix (e.g. 'devkit_invoicestatus') — error returned otherwise."
+                "Logical name OR display name. Required except list and create. For detail/update: Display Name contains is resolved first, then logical name contains; ambiguity returns an error. For create: if omitted, auto-derived as '{publisher_prefix}_{sanitized_display_name}'; if provided, must start with the solution publisher prefix (e.g. 'devkit_invoicestatus') — error returned otherwise."
             )] string optionset_name = "",
             [Description(
                 "Required for create. Optional for update. For list: used as a filter (contains match on name and display name, case-insensitive)."
@@ -141,42 +141,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: optionset_name is required for 'detail'. " +
                     "Use action='list' to see all available global option sets.");
 
-            var name = optionsetName.Trim().ToLowerInvariant();
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, optionsetName, "manage_choice");
+            if (!resolved.IsSuccess)
+                return ErrorResult($"Error: {resolved.Error}");
 
-            // First try exact logical name lookup
-            try
-            {
-                var response = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
-                return BuildDetailResult(response.OptionSetMetadata);
-            }
-            catch (Exception)
-            {
-                // Fallback: try to resolve by display name (contains, case-insensitive)
-            }
-
-            try
-            {
-                var allResp = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
-                var matches = allResp.OptionSetMetadata
-                    .Where(os => os.DisplayName?.UserLocalizedLabel?.Label
-                        ?.Contains(optionsetName.Trim(), StringComparison.OrdinalIgnoreCase) == true)
-                    .ToList();
-
-                if (matches.Count == 1)
-                    return BuildDetailResult(matches[0]);
-
-                if (matches.Count > 1)
-                    return ErrorResult($"Error: Multiple global option sets match display name '{optionsetName.Trim()}': " +
-                        string.Join(", ", matches.Select(m => m.Name)) +
-                        ". Provide the exact logical name (optionset_name) to disambiguate.");
-
-                return ErrorResult($"Error: Could not find global option set '{optionsetName.Trim()}' by logical name or display name. " +
-                    "Call manage_choice with action='list' to see all available option sets.");
-            }
-            catch (Exception ex)
-            {
-                return ErrorResult($"Error: Failed to resolve global option set '{optionsetName.Trim()}': {ex.Message}");
-            }
+            return BuildDetailResult(resolved.Value);
         }
 
         private CallToolResult BuildDetailResult(OptionSetMetadataBase meta)
@@ -210,6 +179,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(options))
                 return ErrorResult("Error: options is required for 'create'. " +
                     "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'). solution_name is also required.");
+
+            var identityInput = string.IsNullOrWhiteSpace(optionsetName) ? displayName : optionsetName;
+            var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, identityInput, "manage_choice");
+            if (existingChoice.IsSuccess)
+                return ErrorResult(
+                    $"Error: Global option set '{identityInput.Trim()}' already exists as '{existingChoice.Value.Name}' ({existingChoice.Value.DisplayName?.UserLocalizedLabel?.Label ?? ""}). " +
+                    "Use action='update' to modify it.");
+            if (existingChoice.Status == ResolveStatus.Ambiguous || existingChoice.Status == ResolveStatus.Error)
+                return ErrorResult($"Error: {existingChoice.Error}");
 
             var name = optionsetName.Trim().ToLowerInvariant();
 
@@ -613,43 +591,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             resolvedName = null;
             error = null;
-            var lower = nameOrDisplay.Trim().ToLowerInvariant();
-
-            // Try exact logical name first
-            try
+            var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, nameOrDisplay, "manage_choice");
+            if (resolved.IsSuccess)
             {
-                _serviceClient.Execute(new RetrieveOptionSetRequest { Name = lower });
-                resolvedName = lower;
+                resolvedName = resolved.CanonicalName ?? resolved.Value.Name;
                 return true;
             }
-            catch { }
 
-            // Fallback: search by display name (contains, case-insensitive)
-            try
-            {
-                var allResp = (RetrieveAllOptionSetsResponse)_serviceClient.Execute(new RetrieveAllOptionSetsRequest());
-                var matches = allResp.OptionSetMetadata
-                    .Where(os => os.DisplayName?.UserLocalizedLabel?.Label
-                        ?.Contains(nameOrDisplay.Trim(), StringComparison.OrdinalIgnoreCase) == true)
-                    .ToList();
-
-                if (matches.Count == 1)
-                {
-                    resolvedName = matches[0].Name;
-                    return true;
-                }
-                if (matches.Count > 1)
-                {
-                    error = $"Error: Multiple global option sets match '{nameOrDisplay.Trim()}': " +
-                        string.Join(", ", matches.Select(m => m.Name)) +
-                        ". Provide the exact logical name to disambiguate.";
-                    return false;
-                }
-            }
-            catch { }
-
-            error = $"Error: Global option set '{nameOrDisplay.Trim()}' not found. " +
-                "Use action='list' to see all available option sets.";
+            error = $"Error: {resolved.Error}";
             return false;
         }
 

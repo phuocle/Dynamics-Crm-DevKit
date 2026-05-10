@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -96,7 +97,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             count = Math.Max(1, count);
 
-            var entityName = entity_name.Trim().ToLowerInvariant();
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "generate_demo_data");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: {entityResult.Error}");
+            var entityName = entityResult.Value.LogicalName;
 
             // Load metadata
             var metadata = LoadEntityMetadata(entityName);
@@ -164,6 +168,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (ov.Values == null || ov.Values.Count == 0)
                         return ErrorResult($"Error: field_override for '{ov.LogicalName}' must have at least one value.");
                 }
+
+                var overrideError = NormalizeOverrides(metadata, overrides, entityName);
+                if (overrideError != null)
+                    return ErrorResult(overrideError);
             }
 
             // Generate records
@@ -237,9 +245,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static List<AttributeMetadata> SelectFields(EntityMetadata metadata, string fields, string entityName, List<string> warnings)
         {
-            var requestedFields = string.IsNullOrWhiteSpace(fields)
-                ? null
-                : fields.Split(',').Select(f => f.Trim().ToLowerInvariant()).Where(f => f.Length > 0).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var requestedFields = ResolveRequestedFields(metadata, fields, entityName, warnings);
 
             var result = new List<AttributeMetadata>();
 
@@ -284,6 +290,70 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return result;
         }
+
+        private static HashSet<string> ResolveRequestedFields(EntityMetadata metadata, string fields, string entityName, List<string> warnings)
+        {
+            if (string.IsNullOrWhiteSpace(fields))
+                return null;
+
+            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var candidates = BuildAttributeCandidates(metadata);
+            foreach (var fieldInput in fields.Split(',').Select(f => f.Trim()).Where(f => f.Length > 0))
+            {
+                var resolved = DisplayNameFirstResolver.Resolve(
+                    fieldInput,
+                    candidates,
+                    "[AmbiguousField]",
+                    "[NotFoundField]",
+                    $"Tip: Use get_tables(entity_name='{entityName}') to discover valid fields.",
+                    "fields");
+
+                if (resolved.IsSuccess)
+                    result.Add(resolved.Value.LogicalName);
+                else
+                    warnings.Add($"Field '{fieldInput}' could not be resolved: {resolved.Error}");
+            }
+
+            return result;
+        }
+
+        private static string NormalizeOverrides(EntityMetadata metadata, List<FieldOverride> overrides, string entityName)
+        {
+            var candidates = BuildAttributeCandidates(metadata);
+            foreach (var ov in overrides)
+            {
+                var fieldInput = ov.LogicalName.Trim();
+                var resolved = DisplayNameFirstResolver.Resolve(
+                    fieldInput,
+                    candidates,
+                    "[AmbiguousField]",
+                    "[NotFoundField]",
+                    $"Tip: Use get_tables(entity_name='{entityName}') to discover valid fields.",
+                    "field_overrides[].logicalname");
+
+                if (!resolved.IsSuccess)
+                    return $"Error: field_override '{fieldInput}' could not be resolved: {resolved.Error}";
+
+                ov.LogicalName = resolved.Value.LogicalName;
+            }
+
+            return null;
+        }
+
+        private static List<DisplayNameFirstCandidate<AttributeMetadata>> BuildAttributeCandidates(EntityMetadata metadata) =>
+            metadata.Attributes
+                .Where(a => a?.LogicalName != null)
+                .Select(a => new DisplayNameFirstCandidate<AttributeMetadata>
+                {
+                    Value = a,
+                    DisplayName = a.DisplayName?.UserLocalizedLabel?.Label,
+                    LogicalName = a.LogicalName,
+                    SchemaName = a.SchemaName,
+                    Id = a.MetadataId,
+                    Kind = "attribute",
+                    CanonicalName = a.LogicalName
+                })
+                .ToList();
 
         // System/constrained fields that Bogus cannot generate valid values for.
         // Skipped during auto-select (fields= empty). Users can still request them explicitly.

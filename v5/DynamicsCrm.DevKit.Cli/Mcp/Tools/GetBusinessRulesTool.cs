@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -37,7 +38,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Audit client-side logic before adding JavaScript")]
         public CallToolResult get_business_rules(
             [Description(
-                "Entity logical name (lowercase)."
+                "Entity Display Name or logical name."
             )] string entity_name,
             [Description(
                 "GUID → detail. Empty = list."
@@ -53,7 +54,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.\n" +
                        "Provide the entity logical name (e.g., 'account', 'contact'). Use get_tables to discover names.");
 
-            entity_name = entity_name.Trim().ToLowerInvariant();
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+            entity_name = entityResult.Value.LogicalName;
 
             if (!string.IsNullOrWhiteSpace(status))
             {

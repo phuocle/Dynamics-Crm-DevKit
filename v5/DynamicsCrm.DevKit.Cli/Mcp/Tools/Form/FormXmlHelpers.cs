@@ -328,9 +328,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         }
 
         internal static string CorrectFieldName(string fieldName, AttributeMetadata attr)
-            => attr is ImageAttributeMetadata && !string.Equals(fieldName, attr.LogicalName, StringComparison.OrdinalIgnoreCase)
-                ? attr.LogicalName
-                : fieldName;
+            => attr?.LogicalName ?? fieldName;
 
         internal static string AutoTabName(string label)
             => $"tab_{Sanitize(label)}";

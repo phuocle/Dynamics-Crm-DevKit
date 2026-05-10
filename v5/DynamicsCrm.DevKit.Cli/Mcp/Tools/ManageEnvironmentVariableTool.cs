@@ -36,11 +36,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse environment variables — list/detail/create/update/delete/clear.\n" +
             "- list: optional solution_name, max_records\n" +
-            "- detail: variable_name\n" +
+            "- detail: variable_name (Display Name or schema name)\n" +
             "- create: solution_name (REQUIRED) + display_name + type. Optional: default_value, value, description\n" +
-            "- update: variable_name. Optional: display_name, default_value, value, description\n" +
-            "- delete: variable_name (definition + value, irreversible)\n" +
-            "- clear: variable_name (current value only → reverts to default)\n\n" +
+            "- update: variable_name (Display Name or schema name). Optional: display_name, default_value, value, description\n" +
+            "- delete: variable_name (Display Name or schema name; definition + value, irreversible)\n" +
+            "- clear: variable_name (Display Name or schema name; current value only → reverts to default)\n\n" +
 
             "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm, re-call with confirmed_prefix.\n" +
             "solution_name is REQUIRED for create — if not provided by the user, ask; never search or guess.\n\n" +
@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_environment_variable(
             [Description("list, detail, create, update, delete, clear."
             )] string action,
-            [Description("Schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. For create: omit — derived from solution_name publisher prefix."
+            [Description("Display Name or schema name with prefix (e.g. 'v4_ApiEndpoint'). Required: detail/update/delete/clear. For create: omit — derived from solution_name publisher prefix."
             )] string variable_name = "",
             [Description("list: filter. create: REQUIRED — used to resolve publisher prefix."
             )] string solution_name = "",
@@ -112,6 +112,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(type))
                 return ErrorResult("Error: type is required for 'create'. Valid values: 'string', 'number', 'boolean', 'json', 'datasource', 'secret'.");
 
+            var existingByDisplayName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_serviceClient, displayName.Trim(), "manage_environment_variable");
+            if (existingByDisplayName.IsSuccess)
+            {
+                var existingSchemaName = existingByDisplayName.Value.GetAttributeValue<string>("schemaname") ?? existingByDisplayName.CanonicalName ?? existingByDisplayName.Value.Id.ToString();
+                return ErrorResult($"Error: Display Name '{displayName.Trim()}' resolves to existing environment variable '{existingSchemaName}'. Use action='update' to modify it.");
+            }
+            if (existingByDisplayName.Status == ResolveStatus.Ambiguous || existingByDisplayName.Status == ResolveStatus.Error)
+                return ErrorResult(existingByDisplayName.Error);
+
             // Layer 1 (AI gate): solution_name is mandatory — prefix can only come from the solution's publisher
             if (string.IsNullOrWhiteSpace(solutionName))
                 return ErrorResult(
@@ -157,9 +166,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var variableName = $"{prefix}_{displayName.Trim().Replace(" ", "")}";
 
-            var existing = RetrieveDefinition(variableName);
-            if (existing != null)
-                return ErrorResult($"Error: Environment variable '{variableName}' already exists. Use action='update' to modify it.");
+            var existingByVariableName = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_serviceClient, variableName, "manage_environment_variable");
+            if (existingByVariableName.IsSuccess)
+            {
+                var existingSchemaName = existingByVariableName.Value.GetAttributeValue<string>("schemaname") ?? existingByVariableName.CanonicalName ?? existingByVariableName.Value.Id.ToString();
+                return ErrorResult($"Error: Environment variable '{variableName}' resolves to existing environment variable '{existingSchemaName}'. Use action='update' to modify it.");
+            }
+            if (existingByVariableName.Status == ResolveStatus.Ambiguous || existingByVariableName.Status == ResolveStatus.Error)
+                return ErrorResult(existingByVariableName.Error);
 
             return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solResult.UniqueName, autoPublish);
         }
@@ -170,19 +184,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(variableName))
                 return ErrorResult("Error: variable_name is required for 'update'.");
 
-            variableName = variableName.Trim();
+            var resolved = ResolveDefinitionInput(variableName);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
 
-            var existing = RetrieveDefinition(variableName);
-            if (existing == null)
-                return ErrorResult($"Error: Environment variable '{variableName}' not found. Use action='create' to create it.");
-
-            return HandleUpdate(existing, variableName, displayName, defaultValue, currentValue, description, autoPublish);
+            return HandleUpdate(resolved.Definition, resolved.SchemaName, displayName, defaultValue, currentValue, description, autoPublish);
         }
 
         private CallToolResult HandleList(string solutionName, int maxRecords)
         {
             if (maxRecords <= 0) maxRecords = 50;
             if (maxRecords > 5000) maxRecords = 5000;
+
+            if (!string.IsNullOrWhiteSpace(solutionName))
+            {
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                if (!solResult.IsSuccess)
+                    return ErrorResult($"Error: {solResult.Error}");
+                solutionName = solResult.UniqueName;
+            }
 
             var fetchXml = BuildListFetchXml(solutionName, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
@@ -248,9 +268,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(variableName))
                 return ErrorResult("Error: variable_name is required for 'detail'.");
 
-            var def = RetrieveDefinition(variableName.Trim());
-            if (def == null)
-                return ErrorResult($"Error: Environment variable '{variableName}' not found.");
+            var resolved = ResolveDefinitionInput(variableName);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
+            var def = resolved.Definition;
 
             var currentValues = GetCurrentValues([def.Id]);
             currentValues.TryGetValue(def.Id, out var currentVal);
@@ -446,11 +467,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(variableName))
                 return ErrorResult("Error: variable_name is required for 'clear'.");
 
-            variableName = variableName.Trim();
-
-            var def = RetrieveDefinition(variableName);
-            if (def == null)
-                return ErrorResult($"Error: Environment variable '{variableName}' not found.");
+            var resolved = ResolveDefinitionInput(variableName);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
+            var def = resolved.Definition;
+            variableName = resolved.SchemaName;
 
             var defId = def.Id;
             var existingDisplayName = def.GetAttributeValue<string>("displayname") ?? "";
@@ -490,11 +511,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(variableName))
                 return ErrorResult("Error: variable_name is required for 'delete'.");
 
-            variableName = variableName.Trim();
-
-            var def = RetrieveDefinition(variableName);
-            if (def == null)
-                return ErrorResult($"Error: Environment variable '{variableName}' not found.");
+            var resolved = ResolveDefinitionInput(variableName);
+            if (!string.IsNullOrEmpty(resolved.Error))
+                return ErrorResult(resolved.Error);
+            var def = resolved.Definition;
+            variableName = resolved.SchemaName;
 
             var defId = def.Id;
             var existingDisplayName = def.GetAttributeValue<string>("displayname") ?? "";
@@ -752,6 +773,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "secret" => 100000005,
             _ => -1
         };
+
+        private (Entity Definition, string SchemaName, string Error) ResolveDefinitionInput(string variableName)
+        {
+            var trimmed = variableName?.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
+                return (null, null, "Error: variable_name is required.");
+
+            var resolved = DisplayNameFirstResolver.ResolveEnvironmentVariableDefinition(_serviceClient, trimmed, "manage_environment_variable");
+            if (!resolved.IsSuccess)
+                return (null, null, $"Error: variable_name '{trimmed}': {resolved.Error}");
+
+            var schemaName = resolved.Value.GetAttributeValue<string>("schemaname") ?? resolved.CanonicalName ?? trimmed;
+            return (resolved.Value, schemaName, null);
+        }
 
         private static string EscapeXml(string input)
         {

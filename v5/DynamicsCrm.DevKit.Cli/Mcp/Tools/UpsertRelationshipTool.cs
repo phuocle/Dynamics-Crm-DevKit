@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect relationship_name first via get_tables before update/delete\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
-            "- solution_name resolves exact uniquename → exact display name → display-name contains. Multiple matches require exact unique name.")]
+            "- entity and field inputs resolve Display Name contains first, then logical/schema name contains. solution_name uses the shared Display Name first solution resolver. Ambiguity returns IsError=true.")]
         public CallToolResult upsert_relationship(
             [Description("create_1n / create_nn / update / delete / add_target / remove_target.")] string action = "",
             [Description("Schema name. Required: update/delete. Auto-generated on create.")] string relationship_name = "",
@@ -122,8 +122,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(referencingEntity))
                 return ErrorResult("Error: referencing_entity is required for create_1n (the child/referencing entity).\nRead docs://schema_tools_guide for relationship creation examples.");
 
-            referencedEntity = referencedEntity.Trim().ToLowerInvariant();
-            referencingEntity = referencingEntity.Trim().ToLowerInvariant();
+            if (!TryResolveEntityInput(referencedEntity, "referenced_entity", out referencedEntity, out var resolveError))
+                return resolveError;
+            if (!TryResolveEntityInput(referencingEntity, "referencing_entity", out referencingEntity, out resolveError))
+                return resolveError;
 
             if (isHierarchical && referencedEntity != referencingEntity)
                 return ErrorResult($"Error: is_hierarchical=true is only valid for self-referential relationships (referenced_entity must equal referencing_entity). Got: referenced='{referencedEntity}', referencing='{referencingEntity}'.");
@@ -232,8 +234,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(entity2))
                 return ErrorResult("Error: entity2 is required for create_nn.\nRead docs://schema_tools_guide for relationship creation examples.");
 
-            entity1 = entity1.Trim().ToLowerInvariant();
-            entity2 = entity2.Trim().ToLowerInvariant();
+            if (!TryResolveEntityInput(entity1, "entity1", out entity1, out var resolveError))
+                return resolveError;
+            if (!TryResolveEntityInput(entity2, "entity2", out entity2, out resolveError))
+                return resolveError;
 
             // Resolve prefix from solution — solution_name is required for N:N to get the correct publisher prefix
             if (string.IsNullOrWhiteSpace(solutionName))
@@ -517,23 +521,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(referencedEntity))
                 return ErrorResult("Error: referenced_entity is required for add_target (the new target entity to add).");
 
-            entityName = entityName.Trim().ToLowerInvariant();
-            attributeName = attributeName.Trim().ToLowerInvariant();
-            referencedEntity = referencedEntity.Trim().ToLowerInvariant();
+            if (!TryResolveEntityInput(entityName, "entity_name", out entityName, out var resolveError))
+                return resolveError;
+            if (!TryResolveEntityInput(referencedEntity, "referenced_entity", out referencedEntity, out resolveError))
+                return resolveError;
+            if (!TryResolveAttributeInput(entityName, attributeName, "attribute_name", out var attributeMetadata, out resolveError))
+                return resolveError;
 
-            // Retrieve existing lookup attribute metadata
-            var entityMetadataRequest = new RetrieveEntityRequest
-            {
-                LogicalName = entityName,
-                EntityFilters = EntityFilters.Attributes
-            };
-            var entityMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(entityMetadataRequest)).EntityMetadata;
-            var lookupAttr = entityMetadata.Attributes
-                .OfType<LookupAttributeMetadata>()
-                .FirstOrDefault(a => a.LogicalName == attributeName);
+            var lookupAttr = attributeMetadata as LookupAttributeMetadata;
 
             if (lookupAttr == null)
                 return ErrorResult($"Error: Lookup attribute '{attributeName}' not found on entity '{entityName}'.\nTip: Use get_tables with entity_name='{entityName}' to inspect lookup columns.");
+            attributeName = lookupAttr.LogicalName;
 
             // Resolve prefix for relationship name — solution_name is required
             if (string.IsNullOrWhiteSpace(solutionName))
@@ -625,9 +624,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(referencedEntity))
                 return ErrorResult("Error: referenced_entity is required for remove_target (the target entity to remove).");
 
-            entityName = entityName.Trim().ToLowerInvariant();
-            attributeName = attributeName.Trim().ToLowerInvariant();
-            referencedEntity = referencedEntity.Trim().ToLowerInvariant();
+            if (!TryResolveEntityInput(entityName, "entity_name", out entityName, out var resolveError))
+                return resolveError;
+            if (!TryResolveEntityInput(referencedEntity, "referenced_entity", out referencedEntity, out resolveError))
+                return resolveError;
+            if (!TryResolveAttributeInput(entityName, attributeName, "attribute_name", out var attributeMetadata, out resolveError))
+                return resolveError;
+            attributeName = attributeMetadata.LogicalName;
 
             // Retrieve entity metadata with relationships to find the specific relationship
             var entityMetadataRequest = new RetrieveEntityRequest
@@ -672,6 +675,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ══════════════════════════════════════════════
         // Helper methods
         // ══════════════════════════════════════════════
+
+        private bool TryResolveEntityInput(string input, string parameterName, out string logicalName, out CallToolResult errorResult)
+        {
+            logicalName = null;
+            errorResult = null;
+
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, input, "upsert_relationship");
+            if (resolved.IsSuccess)
+            {
+                logicalName = resolved.Value.LogicalName;
+                return true;
+            }
+
+            errorResult = ErrorResult($"Error: {parameterName} '{input?.Trim()}': {resolved.Error}");
+            return false;
+        }
+
+        private bool TryResolveAttributeInput(string entityLogicalName, string input, string parameterName, out AttributeMetadata attribute, out CallToolResult errorResult)
+        {
+            attribute = null;
+            errorResult = null;
+
+            var resolved = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entityLogicalName, input, "upsert_relationship");
+            if (resolved.IsSuccess)
+            {
+                attribute = resolved.Value;
+                return true;
+            }
+
+            errorResult = ErrorResult($"Error: {parameterName} '{input?.Trim()}' on entity '{entityLogicalName}': {resolved.Error}");
+            return false;
+        }
 
         internal static CascadeType? ParseCascadeType(string value)
         {

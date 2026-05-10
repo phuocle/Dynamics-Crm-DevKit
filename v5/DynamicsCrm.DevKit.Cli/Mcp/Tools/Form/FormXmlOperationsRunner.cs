@@ -43,6 +43,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                         $"Failed to retrieve metadata for entity '{entityName}': {ex.Message}", ex);
                 }
 
+                var fieldNameMap = FormFieldMetadata.ResolveFieldReferences(entityName, referencedFields, attrMap);
+                ops = FormFieldMetadata.NormalizeFieldReferences(ops, fieldNameMap);
+                referencedFields = FormFieldMetadata.CollectFieldNames(ops);
                 FormFieldMetadata.ValidateFieldsExist(entityName, referencedFields, attrMap);
             }
 
