@@ -16,6 +16,12 @@ Depends on:
 - helper `EntityParserHelper`
 - helper `FormFieldMetadata`
 
+## SchemaName / LogicalName Impact
+
+These tools do not create table or column metadata names. They should not derive new `SchemaName` values.
+
+For existing Dataverse fields, resolve user-entered Display Names / Schema Names / Logical Names to the canonical field `LogicalName`, then use that logical name in records, FormXML, FetchXML, and LayoutXML.
+
 ## `manage_record`
 
 File:
@@ -179,4 +185,3 @@ Do not resolve raw `execute_fetchxml`; this applies only to `manage_view` becaus
 - `manage_view` with `Invoice Date` in FetchXML is normalized before validation.
 - `manage_record` create with JSON key `Invoice Date` writes canonical logical field.
 - CSV import can use Display Name headers and logical-name headers.
-

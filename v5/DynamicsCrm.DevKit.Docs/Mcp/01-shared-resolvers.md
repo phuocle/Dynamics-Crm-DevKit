@@ -32,6 +32,30 @@ Implement these first, even if not all tools are migrated in the same PR:
 - Web resource: `displayname` -> `name`
 - Environment variable: `displayname` -> `schemaname`
 
+## Portal-Default Create Naming
+
+Resolvers decide whether an existing object already exists. Create tools still need deterministic name derivation after the resolver returns not found.
+
+Use Dataverse portal-default naming by metadata family:
+
+| Tool / Metadata | Display Input | Default Derived Name | LogicalName Rule |
+|---|---|---|---|
+| `upsert_table` table | `Invoice` | `SchemaName = devkit_Invoice` | `LogicalName = devkit_invoice` |
+| `upsert_column` column | `Invoice Date` | `SchemaName = devkit_InvoiceDate` | `LogicalName = devkit_invoicedate` |
+| `upsert_relationship` lookup column | `Invoice` | `SchemaName = devkit_Invoice` | `LogicalName = devkit_invoice` |
+| `manage_environment_variable` definition | `Invoice Production Mode` | `schemaname = devkit_InvoiceProductionMode` | n/a |
+| `manage_choice` global choice | `Invoice Status` | `Name = devkit_invoicestatus` | n/a |
+
+Rules:
+
+- `SchemaName` is case-sensitive for docs and result interpretation. Do not lowercase it.
+- `LogicalName` is lowercase when Dataverse exposes one for the metadata type.
+- Environment variable definitions expose `schemaname`; they do not expose a separate logical name.
+- Global choices expose metadata `Name`; they do not expose a `SchemaName` / `LogicalName` pair.
+- Keep explicit user-supplied names unchanged except for validation required by the specific tool contract.
+- Use `DataverseNamer.Resolve(...)` for PascalCase schema/logical pairs where applicable.
+- Use a compact-lowercase sanitizer for global choice auto names; do not insert underscores between display words.
+
 ## Solution Resolver
 
 Current problem:
@@ -222,4 +246,3 @@ Candidate table should include:
 - No display match then one logical contains resolves.
 - No display match then multiple logical contains returns `IsError = true`.
 - No matches returns not found.
-

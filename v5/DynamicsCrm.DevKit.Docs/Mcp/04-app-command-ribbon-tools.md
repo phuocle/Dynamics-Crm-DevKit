@@ -13,6 +13,12 @@ Depends on:
 - `manage_ribbon`
 - app navigation helper
 
+## SchemaName / LogicalName Impact
+
+These tools do not derive new table or column `SchemaName` values.
+
+Entity references in app navigation, command bars, and ribbon operations must resolve Display Name first and then write the canonical entity `LogicalName` into Dataverse metadata or XML.
+
 ## `manage_app`
 
 File:
@@ -107,4 +113,3 @@ Target:
 - `manage_app` navigation item with entity `Account` writes `Entity="account"`.
 - `manage_command(entity_name: "Account", app_name: "Sales Hub")` resolves both before creating command.
 - `manage_ribbon(entity_name: "Account")` retrieves account ribbon.
-

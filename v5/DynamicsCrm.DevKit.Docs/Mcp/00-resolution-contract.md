@@ -27,6 +27,7 @@ Examples: solution, entity/table, field/column, choice, app, web resource, envir
    - `execute_webapi`
 7. For create/upsert actions, resolve existing metadata first. Only derive a new name after no existing object resolves and the action is truly create.
 8. If user supplied an explicit prefix like `ab_Invoice Date`, use that prefix. Do not auto-correct it to the solution publisher prefix.
+9. When deriving new metadata names, follow Dataverse portal defaults for that metadata family. Preserve `SchemaName` casing separately from `LogicalName`.
 
 ## Canonical Algorithm
 
@@ -75,7 +76,7 @@ if resolved:
   perform update/detail/delete/etc. against existing object
 
 if not resolved and action is create:
-  derive new logical/schema name
+  derive the new metadata name using the portal-default rule for that metadata type
 
 if not resolved and action is not create:
   return not found
@@ -83,13 +84,28 @@ if not resolved and action is not create:
 
 For create derivation:
 
-- If input has no prefix, use solution publisher prefix plus sanitized display text.
-  - Example: `Invoice Date` + prefix `abc` -> schema name like `abc_InvoiceDate`.
-  - Use the existing naming helper when available, such as `DataverseNamer.Resolve(...)`.
+- If input has no prefix, use the solution publisher prefix plus sanitized display text.
 - If input has a prefix, trust it.
-  - Example: `ab_Invoice Date` -> prefix `ab_`, sanitized name body `InvoiceDate`.
-  - If solution publisher prefix is actually `abc_`, do not silently rewrite `ab_` to `abc_`.
-  - Let existing validation/Dataverse return any mismatch error.
+- If the tool exposes both `SchemaName` and `LogicalName`, keep them distinct:
+  - `SchemaName`: publisher prefix + `_` + PascalCase body.
+  - `LogicalName`: lowercase form of `SchemaName`.
+- If the metadata type exposes only a schema/name field, do not invent a logical name in docs or results.
+- Use the existing naming helper when available, such as `DataverseNamer.Resolve(...)`.
+
+Portal-default derivation examples:
+
+| Metadata Type | Input | Prefix | Derived SchemaName / Name | Derived LogicalName |
+|---|---|---|---|---|
+| Table | `Invoice` | `abc` | `abc_Invoice` | `abc_invoice` |
+| Column / lookup attribute | `Invoice Date` | `abc` | `abc_InvoiceDate` | `abc_invoicedate` |
+| Environment variable definition | `Invoice Production Mode` | `abc` | `abc_InvoiceProductionMode` | n/a |
+| Global choice | `Invoice Status` | `abc` | `abc_invoicestatus` | n/a |
+
+Explicit-prefix examples:
+
+- Table/column input `ab_Invoice Date` derives `SchemaName = ab_InvoiceDate` and `LogicalName = ab_invoicedate`.
+- If solution publisher prefix is actually `abc_`, do not silently rewrite `ab_` to `abc_`.
+- Let tool-specific validation or Dataverse return any mismatch error.
 
 ## Ambiguity Is Error
 
@@ -161,4 +177,3 @@ internal sealed class ResolveResult<T>
 ```
 
 Keep this helper inside the CLI MCP area, not `Shared`, unless a later task explicitly decides to reuse it outside MCP.
-

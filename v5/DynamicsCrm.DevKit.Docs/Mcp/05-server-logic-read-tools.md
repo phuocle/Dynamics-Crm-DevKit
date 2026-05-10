@@ -18,6 +18,12 @@ Depends on:
 
 Most tools here are read-only. The main goal is to make discovery natural without silently choosing wrong objects.
 
+## SchemaName / LogicalName Impact
+
+These tools do not create metadata names. They should resolve user-entered entity or field Display Names to existing canonical `LogicalName` values for filtering and lookup only.
+
+Workflow, Custom API, BPF, plugin assembly, flow, and message names are not Dataverse table/column `SchemaName` values; keep each tool's documented display/unique-name resolver behavior for those objects.
+
 ## `get_custom_apis`
 
 File:
@@ -149,4 +155,3 @@ Target:
 - Custom API detail by Display Name resolves before `uniquename`.
 - Ambiguous detail requests return `IsError = true`.
 - List/filter requests still return multiple rows normally.
-

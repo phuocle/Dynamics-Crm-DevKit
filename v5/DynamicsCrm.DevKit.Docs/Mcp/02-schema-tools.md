@@ -40,6 +40,7 @@ Current issue:
 - Detail tries exact logical option set name first.
 - It does not try logical-name contains after display-name miss.
 - `solution_name` uses the shared resolver that is currently wrong.
+- Create auto-derivation currently uses snake_case word separators, but Dataverse portal default global choice names are compact lowercase after the prefix.
 
 Target:
 
@@ -50,9 +51,19 @@ Target:
   - If `optionset_name` is supplied, first resolve existing choice.
   - If not found and create is intended, derive from input/display name.
   - If explicit prefix exists in `optionset_name`, trust it.
-  - If no prefix, derive from resolved solution publisher prefix.
+  - If no prefix, derive from resolved solution publisher prefix using portal-style compact lowercase.
+  - Global choices expose metadata `Name`, not a separate `SchemaName` / `LogicalName`.
 - For list:
   - Keep list/filter behavior as non-error multiple rows.
+
+Create naming examples:
+
+| Display Name | Publisher Prefix | Derived Global Choice Name |
+|---|---|---|
+| `Invoice Status` | `devkit` | `devkit_invoicestatus` |
+| `This Is A Global Choice` | `devkit` | `devkit_thisisaglobalchoice` |
+
+Do not auto-derive `devkit_invoice_status` or `devkit_this_is_a_global_choice`; those do not match portal default UI behavior.
 
 Implementation hint:
 
@@ -105,19 +116,23 @@ Target:
 - Resolve existing table Display Name first, then logical contains.
 - If resolved, update existing table.
 - If not resolved and create path is valid:
-  - derive new logical/schema name.
+  - derive new `SchemaName` and `LogicalName`.
   - no prefix in input: use solution prefix.
   - prefix in input: trust user prefix.
+  - `SchemaName` uses PascalCase display text after the prefix.
+  - `LogicalName` is the lowercase form of `SchemaName`.
 - Do not auto-prepend solution prefix when user already supplied a different prefix.
 
 Create examples:
 
 ```text
-Input: "Invoice Date", solution prefix "abc"
-New schema/logical should be based on "abc_InvoiceDate"
+Input: "Invoice", solution prefix "abc"
+New SchemaName should be "abc_Invoice"
+New LogicalName should be "abc_invoice"
 
 Input: "ab_Invoice Date", solution prefix "abc"
-New schema/logical should use prefix "ab_" and sanitized body "InvoiceDate"
+New SchemaName should be "ab_InvoiceDate"
+New LogicalName should be "ab_invoicedate"
 Do not rewrite to "abc_InvoiceDate"
 ```
 
@@ -154,11 +169,20 @@ Target:
   - then logical/schema contains.
 - If attribute resolves, update existing attribute.
 - If not found and create is intended:
-  - derive logical/schema from user input.
+  - derive `SchemaName` and `LogicalName` from user input.
   - no prefix: use solution prefix.
   - explicit prefix: trust it.
+  - `SchemaName` uses PascalCase display text after the prefix.
+  - `LogicalName` is the lowercase form of `SchemaName`.
 - Resolve `lookup_target` entity names Display Name first.
 - Resolve `global_optionset_name` choice Display Name first.
+
+Create naming examples:
+
+| Display Name | Publisher Prefix | Derived SchemaName | Derived LogicalName |
+|---|---|---|---|
+| `Invoice Date` | `devkit` | `devkit_InvoiceDate` | `devkit_invoicedate` |
+| `PO Number` | `devkit` | `devkit_PONumber` | `devkit_ponumber` |
 
 Implementation caution:
 
@@ -188,6 +212,8 @@ Target:
 - Resolve `attribute_name` on the resolved `entity_name` Display Name first.
 - Relationship schema name itself can remain strict for update/delete unless a display label concept exists for the relationship.
 - For create relationship names, keep existing generated-name behavior after entity resolution.
+- For 1:N create, the lookup column created on the referencing table must use portal-style attribute naming:
+  - `lookup_display_name = "Invoice"` with prefix `devkit` -> `SchemaName = devkit_Invoice`, `LogicalName = devkit_invoice`.
 
 ## `get_solution_components`
 
@@ -219,4 +245,3 @@ Per AGENTS.md, this is CLI/MCP work:
 - Build only CLI-related target, not full solution.
 - Add focused tests if MCP tool tests exist for the touched tool.
 - If test infra is unclear, run compile/build for `DynamicsCrm.DevKit.Cli` and document gaps.
-

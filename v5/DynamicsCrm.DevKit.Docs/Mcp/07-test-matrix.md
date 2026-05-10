@@ -19,8 +19,12 @@ Use this matrix for every resolver and every migrated tool.
 
 | Case | Input | Existing metadata | Expected |
 |---|---|---|---|
-| Create from label | `Invoice Date` | No display/logical match | Derive from solution prefix + sanitized display text |
-| Create with explicit prefix | `ab_Invoice Date` | No display/logical match | Use prefix `ab_`, sanitize body |
+| Create table from label | `Invoice` | No display/logical match | Derive `SchemaName = abc_Invoice`, `LogicalName = abc_invoice` |
+| Create column from label | `Invoice Date` | No display/logical match | Derive `SchemaName = abc_InvoiceDate`, `LogicalName = abc_invoicedate` |
+| Create lookup column from label | `Invoice` | No display/logical match | Derive `SchemaName = abc_Invoice`, `LogicalName = abc_invoice` |
+| Create environment variable from label | `Invoice Production Mode` | No display/schema match | Derive `schemaname = abc_InvoiceProductionMode`; no logical name |
+| Create global choice from label | `Invoice Status` | No display/name match | Derive `Name = abc_invoicestatus`; no SchemaName/LogicalName pair |
+| Create with explicit prefix | `ab_Invoice Date` | No display/logical match | Use prefix `ab_`, derive `SchemaName = ab_InvoiceDate`, `LogicalName = ab_invoicedate` |
 | Update by display | `Invoice Date` | Existing field Display Name `Invoice Date` | Update existing field |
 | Update by logical fallback | `abc_invoicedate` | No display match, one logical match | Update existing field |
 | Ambiguous before create | `Invoice` | Multiple display matches | Stop, no create |
@@ -88,10 +92,16 @@ Choices:
 - Name `abc_status`
 - Name `abc_invoicestatus`
 
+Portal-default create naming:
+
+- Table `Invoice` -> `SchemaName = abc_Invoice`, `LogicalName = abc_invoice`.
+- Column `Invoice Date` -> `SchemaName = abc_InvoiceDate`, `LogicalName = abc_invoicedate`.
+- Environment variable `Invoice Production Mode` -> `schemaname = abc_InvoiceProductionMode`.
+- Global choice `Invoice Status` -> `Name = abc_invoicestatus`.
+
 Smoke expectations:
 
 - Input `Invoice Date` with exact Display Name resolves the exact display field even if another display contains it.
 - Input `Invoice` when multiple display names contain it and no exact display winner returns ambiguity.
 - Input `abc_invoice` resolves only if display phase has zero matches or exact display rule does not intercept.
 - Raw FetchXML with `<entity name="Invoice">` is not rewritten.
-

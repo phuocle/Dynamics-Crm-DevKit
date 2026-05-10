@@ -135,8 +135,17 @@ Target:
 - For create:
   - Resolve existing variable first from user-entered identity where available.
   - If not found, derive new schema name.
-  - no prefix: solution prefix + sanitized display text.
+  - no prefix: solution prefix + PascalCase sanitized display text.
   - explicit prefix: trust user prefix.
+  - do not require a second `confirmed_prefix` call when `solution_name` resolves a publisher prefix.
+  - environment variable definitions expose `schemaname`; do not document or emit a separate logical name.
+
+Create naming examples:
+
+| Display Name | Publisher Prefix | Derived schemaname |
+|---|---|---|
+| `Invoice Production Mode` | `devkit` | `devkit_InvoiceProductionMode` |
+| `New Environment Variable` | `devkit` | `devkit_NewEnvironmentVariable` |
 
 ## Documentation Updates
 
@@ -153,12 +162,16 @@ Replace older guidance like:
 - "Use lowercase logical names for everything"
 - "entity_name must be logical name"
 - "solution_name resolves exact unique name first"
+- "SchemaName should be lowercase"
+- "Environment variables have both schema and logical names"
 
 With:
 
 - "User-entered names are resolved Display Name first, then Logical Name."
 - "Ambiguous names return candidates and require re-call with a clearer value."
 - "Raw tools stay strict."
+- "`SchemaName` preserves portal/default casing; `LogicalName` is lowercase only when Dataverse exposes a logical name."
+- "Environment variable definitions expose `schemaname`; global choices expose metadata `Name`."
 
 ## Acceptance Checks
 
@@ -166,4 +179,3 @@ With:
 - `publish_customizations(entities: "Account")` publishes `account`.
 - `manage_environment_variable(detail, variable_name: "API Endpoint")` resolves display name before schema name.
 - `manage_webresource(list, solution_name: "Core")` resolves solution display name first.
-
