@@ -195,13 +195,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Exclude hidden/system solutions
             query.Criteria.AddCondition("isvisible", ConditionOperator.Equal, true);
 
-            // Escape SQL LIKE wildcards (%, _, [) in user input before wrapping
-            var escaped = keyword.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
-
-            // Fuzzy match on either uniquename OR friendlyname
             var nameFilter = new FilterExpression(LogicalOperator.Or);
-            nameFilter.AddCondition("uniquename", ConditionOperator.Like, $"%{escaped}%");
-            nameFilter.AddCondition("friendlyname", ConditionOperator.Like, $"%{escaped}%");
+            foreach (var term in DisplayNameFirstResolver.GetSearchInputs(keyword))
+            {
+                // Escape SQL LIKE wildcards (%, _, [) in user input before wrapping
+                var escaped = term.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+                nameFilter.AddCondition("uniquename", ConditionOperator.Like, $"%{escaped}%");
+                nameFilter.AddCondition("friendlyname", ConditionOperator.Like, $"%{escaped}%");
+            }
             query.Criteria.AddFilter(nameFilter);
 
             // Bring publisher display name along

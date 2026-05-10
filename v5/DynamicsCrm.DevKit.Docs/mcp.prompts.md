@@ -129,32 +129,50 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
 ## A. Connection & Environment Check
 
 1. Which Dataverse environment am I connected to? Tell me the organization name, URL, version, current user, and assigned roles.
+   > ✅ `whoami(include_token=false)`
+   > 🎯 Result: Connected to DEVKITV4 at the Dynamics CRM DevKit environment URL, version 9.2.26044.135, as # DEVKIT with the System Administrator role.
 
 2. What components does the solution "PRODUCTION-MCP (PRODUCTIONMCP)" currently contain?
+   > ✅ `get_solution_components(solution_name="PRODUCTION-MCP")`
+   > 🎯 Result: Solution PRODUCTION-MCP currently contains no components.
 
 ---
 
 ## B. Global Choice
 
 3. In solution PRODUCTION-MCP, create a global choice with display name "Invoice Status" containing the following values: Draft, Confirmed, Shipped, Paid, Cancelled.
+   > ✅ `manage_choice(action="create", display_name="Invoice Status", options="Draft;Confirmed;Shipped;Paid;Cancelled", solution_name="PRODUCTION-MCP")`
+   > 🎯 Result: Global choice Invoice Status created in solution PRODUCTION-MCP with options Draft, Confirmed, Shipped, Paid, and Cancelled.
 
 4. Read back the global choice "Invoice Status" just created and list all values as human-readable labels only; do not include integer codes, logical names, GUIDs, or any machine-readable identifiers in the result.
+   > ✅ `manage_choice(action="detail", optionset_name="Invoice Status")`
+   > 🎯 Result: Invoice Status contains Draft, Confirmed, Shipped, Paid, and Cancelled.
 
 5. Update the colors of the "Invoice Status" global choice: Draft=gray (#808080), Confirmed=blue (#0070C0), Shipped=orange (#FF7C00), Paid=green (#00B050), Cancelled=red (#FF0000); read it back to confirm the colors were applied correctly.
+   > ✅ `manage_choice(action="update", optionset_name="Invoice Status", option_colors="Draft:#808080;Confirmed:#0070C0;Shipped:#FF7C00;Paid:#00B050;Cancelled:#FF0000", auto_publish=true)`
+   >    `manage_choice(action="detail", optionset_name="Invoice Status")`
+   > 🎯 Result: Invoice Status colors confirmed as Draft gray, Confirmed blue, Shipped orange, Paid green, and Cancelled red.
 
 ---
 
 ## C. Environment Variable
 
 6. In solution "PRODUCTION-MCP", create an environment variable with display name "Invoice Production Mode", type string, default value dev, current value production.
+   > ✅ `manage_environment_variable(action="create", solution_name="PRODUCTION-MCP", display_name="Invoice Production Mode", type="string", default_value="dev", value="production")`
+   > 🎯 Result: Environment variable Invoice Production Mode created in solution PRODUCTION-MCP with default value dev and current value production.
 
 7. Update the current value of environment variable "Invoice Production Mode" to staging, then read it back to confirm.
+   > ✅ `manage_environment_variable(action="update", variable_name="Invoice Production Mode", value="staging")`
+   >    `manage_environment_variable(action="detail", variable_name="Invoice Production Mode")`
+   > 🎯 Result: Environment variable Invoice Production Mode current value confirmed as staging.
 
 ---
 
 ## D. Create Tables
 
 8. In solution "PRODUCTION-MCP", create a table "Invoice", plural name "Invoices", primary field name "Invoice Name", enable notes, enable audit, enable quick create, user ownership.
+   > ✅ `upsert_table(entity_name="Invoice", display_name="Invoice", display_collection_name="Invoices", solution_name="PRODUCTION-MCP", primary_attribute_display_name="Invoice Name", has_notes=true, is_audit_enabled=true, is_quick_create_enabled=true, ownership_type="User", auto_publish=true)`
+   > 🎯 Result: Table Invoice exists with plural name Invoices, primary field Invoice Name, notes enabled, audit enabled, quick create enabled, and user ownership.
 
 9. In solution "PRODUCTION-MCP", create a table "Invoice Line", plural name "Invoice Lines", primary field name "Line Name", enable notes, enable audit, enable quick create, user ownership.
 

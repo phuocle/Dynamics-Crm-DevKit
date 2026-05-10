@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
@@ -8,6 +10,11 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 public class GetSolutionComponentsToolTests
 {
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.GetSolutionComponentsTool);
+    private static readonly Type ResolverType = ToolType.Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.DisplayNameFirstResolver")!;
+    private static readonly Type StringCandidateType = ToolType.Assembly
+        .GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper.DisplayNameFirstCandidate`1")!
+        .MakeGenericType(typeof(string));
 
     private static readonly MethodInfo GetTypeNameMethod = ToolType
         .GetMethod("GetTypeName", BindingFlags.NonPublic | BindingFlags.Static)!;
@@ -20,6 +27,46 @@ public class GetSolutionComponentsToolTests
 
     private static string GetComponentApiName(int typeId) =>
         (string)GetComponentApiNameMethod.Invoke(null, new object[] { typeId })!;
+
+    private static object NewStringCandidate(string value, string displayName, string? uniqueName = null, string? logicalName = null, string? schemaName = null)
+    {
+        var candidate = Activator.CreateInstance(StringCandidateType)!;
+        StringCandidateType.GetProperty("Value")!.SetValue(candidate, value);
+        StringCandidateType.GetProperty("DisplayName")!.SetValue(candidate, displayName);
+        StringCandidateType.GetProperty("UniqueName")!.SetValue(candidate, uniqueName);
+        StringCandidateType.GetProperty("LogicalName")!.SetValue(candidate, logicalName);
+        StringCandidateType.GetProperty("SchemaName")!.SetValue(candidate, schemaName);
+        StringCandidateType.GetProperty("Kind")!.SetValue(candidate, "solution");
+        StringCandidateType.GetProperty("CanonicalName")!.SetValue(candidate, uniqueName ?? logicalName ?? schemaName ?? displayName);
+        return candidate;
+    }
+
+    private static object ResolveString(string input, params object[] candidates)
+    {
+        var listType = typeof(List<>).MakeGenericType(StringCandidateType);
+        var list = (IList)Activator.CreateInstance(listType)!;
+        foreach (var candidate in candidates)
+            list.Add(candidate);
+
+        var method = ResolverType.GetMethod("Resolve", BindingFlags.NonPublic | BindingFlags.Static)!
+            .MakeGenericMethod(typeof(string));
+
+        return method.Invoke(null, new object[]
+        {
+            input,
+            list,
+            "[AmbiguousSolution]",
+            "[NotFoundSolution]",
+            "Tip",
+            "solution_name"
+        })!;
+    }
+
+    private static bool IsResolveSuccess(object result) =>
+        (bool)result.GetType().GetProperty("IsSuccess")!.GetValue(result)!;
+
+    private static string GetResolveValue(object result) =>
+        (string)result.GetType().GetProperty("Value")!.GetValue(result)!;
 
     // ──────────────────────────────────────────────
     // GetTypeName — classic component types
@@ -136,6 +183,29 @@ public class GetSolutionComponentsToolTests
         // Test a type that is ONLY in ComponentTypeNames (not ComponentApiNames) — none exist now
         // So test that a completely unknown type returns the typeId as string
         Assert.AreEqual("99999", GetComponentApiName(99999));
+    }
+
+    [TestMethod]
+    public void DisplayNameFirstResolver_DisplayUniqueInput_ResolvesExactCompositeBeforeAmbiguousDisplayContains()
+    {
+        var result = ResolveString(
+            "PRODUCTION-MCP (PRODUCTIONMCP)",
+            NewStringCandidate("target", "PRODUCTION-MCP", uniqueName: "PRODUCTIONMCP"),
+            NewStringCandidate("other", "PRODUCTION-MCP Sandbox", uniqueName: "PRODUCTIONMCPSANDBOX"));
+
+        Assert.IsTrue(IsResolveSuccess(result), "Composite display/unique input should resolve one exact candidate.");
+        Assert.AreEqual("target", GetResolveValue(result));
+    }
+
+    [TestMethod]
+    public void DisplayNameFirstResolver_GetSearchInputs_SplitsDisplayUniqueInput()
+    {
+        var method = ResolverType.GetMethod("GetSearchInputs", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var result = (IReadOnlyList<string>)method.Invoke(null, new object[] { "PRODUCTION-MCP (PRODUCTIONMCP)" })!;
+
+        CollectionAssert.AreEqual(
+            new[] { "PRODUCTION-MCP (PRODUCTIONMCP)", "PRODUCTION-MCP", "PRODUCTIONMCP" },
+            new List<string>(result));
     }
 
     // ──────────────────────────────────────────────

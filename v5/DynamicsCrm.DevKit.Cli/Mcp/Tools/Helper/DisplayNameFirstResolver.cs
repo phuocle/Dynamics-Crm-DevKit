@@ -85,8 +85,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 .Where(c => c != null)
                 .ToList();
 
+            var composite = ParseDisplayAndIdentifier(trimmed);
+            if (composite.HasValue)
+            {
+                var (displayName, identifier) = composite.Value;
+                var compositeMatches = candidateList
+                    .Where(c =>
+                        EqualsIgnoreCase(c.DisplayName, displayName) &&
+                        (EqualsIgnoreCase(c.LogicalName, identifier) ||
+                         EqualsIgnoreCase(c.UniqueName, identifier) ||
+                         EqualsIgnoreCase(c.SchemaName, identifier)))
+                    .ToList();
+
+                if (compositeMatches.Count == 1)
+                    return Ok(compositeMatches[0]);
+
+                if (compositeMatches.Count > 1)
+                    return Ambiguous<T>(ambiguousTag, trimmed, "display+identifier", compositeMatches, retryParameterName);
+            }
+
+            IReadOnlyList<string> displayInputs = composite.HasValue ? new[] { trimmed } : GetDisplaySearchInputs(trimmed);
             var displayMatches = candidateList
-                .Where(c => Contains(c.DisplayName, trimmed))
+                .Where(c => displayInputs.Any(term => Contains(c.DisplayName, term)))
                 .ToList();
 
             if (displayMatches.Count == 1)
@@ -95,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             if (displayMatches.Count > 1)
             {
                 var exactDisplayMatches = displayMatches
-                    .Where(c => EqualsIgnoreCase(c.DisplayName, trimmed))
+                    .Where(c => displayInputs.Any(term => EqualsIgnoreCase(c.DisplayName, term)))
                     .ToList();
 
                 if (exactDisplayMatches.Count == 1)
@@ -104,11 +124,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 return Ambiguous<T>(ambiguousTag, trimmed, "display", displayMatches, retryParameterName);
             }
 
+            IReadOnlyList<string> logicalInputs = composite.HasValue ? new[] { trimmed } : GetLogicalSearchInputs(trimmed);
             var logicalMatches = candidateList
                 .Where(c =>
-                    Contains(c.LogicalName, trimmed) ||
-                    Contains(c.UniqueName, trimmed) ||
-                    Contains(c.SchemaName, trimmed))
+                    logicalInputs.Any(term =>
+                        Contains(c.LogicalName, term) ||
+                        Contains(c.UniqueName, term) ||
+                        Contains(c.SchemaName, term)))
                 .ToList();
 
             if (logicalMatches.Count == 1)
@@ -330,10 +352,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 };
 
                 var filter = new FilterExpression(LogicalOperator.Or);
-                AddLikeCondition(filter, displayColumn, trimmed);
-                AddLikeCondition(filter, logicalColumn, trimmed);
-                AddLikeCondition(filter, uniqueColumn, trimmed);
-                AddLikeCondition(filter, schemaColumn, trimmed);
+                foreach (var term in GetSearchInputs(trimmed))
+                {
+                    AddLikeCondition(filter, displayColumn, term);
+                    AddLikeCondition(filter, logicalColumn, term);
+                    AddLikeCondition(filter, uniqueColumn, term);
+                    AddLikeCondition(filter, schemaColumn, term);
+                }
 
                 if (filter.Conditions.Count == 0)
                     return Error<Entity>("At least one display/logical column is required for Dataverse record resolution.");
@@ -441,6 +466,80 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         {
             if (!string.IsNullOrWhiteSpace(column))
                 filter.AddCondition(column, ConditionOperator.Like, $"%{input}%");
+        }
+
+        internal static IReadOnlyList<string> GetSearchInputs(string input)
+        {
+            var terms = new List<string>();
+            if (string.IsNullOrWhiteSpace(input))
+                return terms;
+
+            var trimmed = input.Trim();
+            AddSearchInput(terms, trimmed);
+
+            var composite = ParseDisplayAndIdentifier(trimmed);
+            if (composite.HasValue)
+            {
+                AddSearchInput(terms, composite.Value.DisplayName);
+                AddSearchInput(terms, composite.Value.Identifier);
+            }
+
+            return terms;
+        }
+
+        private static IReadOnlyList<string> GetDisplaySearchInputs(string input)
+        {
+            var terms = new List<string>();
+            AddSearchInput(terms, input);
+
+            var composite = ParseDisplayAndIdentifier(input);
+            if (composite.HasValue)
+                AddSearchInput(terms, composite.Value.DisplayName);
+
+            return terms;
+        }
+
+        private static IReadOnlyList<string> GetLogicalSearchInputs(string input)
+        {
+            var terms = new List<string>();
+            AddSearchInput(terms, input);
+
+            var composite = ParseDisplayAndIdentifier(input);
+            if (composite.HasValue)
+                AddSearchInput(terms, composite.Value.Identifier);
+
+            return terms;
+        }
+
+        private static (string DisplayName, string Identifier)? ParseDisplayAndIdentifier(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return null;
+
+            var trimmed = input.Trim();
+            if (!trimmed.EndsWith(")", StringComparison.Ordinal))
+                return null;
+
+            var openParen = trimmed.LastIndexOf('(');
+            if (openParen <= 0 || openParen >= trimmed.Length - 2)
+                return null;
+
+            var displayName = trimmed[..openParen].Trim();
+            var identifier = trimmed[(openParen + 1)..^1].Trim();
+            if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(identifier))
+                return null;
+
+            return (displayName, identifier);
+        }
+
+        private static void AddSearchInput(List<string> terms, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return;
+
+            var trimmed = value.Trim();
+            if (!terms.Any(term => EqualsIgnoreCase(term, trimmed)))
+                terms.Add(trimmed);
         }
 
         private static bool Contains(string value, string input) =>

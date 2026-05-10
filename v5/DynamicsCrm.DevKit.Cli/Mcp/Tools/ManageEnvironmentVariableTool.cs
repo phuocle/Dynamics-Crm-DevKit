@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- delete: variable_name (Display Name or schema name; definition + value, irreversible)\n" +
             "- clear: variable_name (Display Name or schema name; current value only → reverts to default)\n\n" +
 
-            "PREFIX CONFIRMATION on CREATE: first call (confirmed_prefix empty) returns [PrefixConfirmationRequired] preview — confirm, re-call with confirmed_prefix.\n" +
+            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix when supplied.\n" +
             "solution_name is REQUIRED for create — if not provided by the user, ask; never search or guess.\n\n" +
 
             "Current value overrides default. Type immutable after creation. Usually no publish needed.\n\n" +
@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ] string description = "",
             [Description("")
             ] bool auto_publish = false,
-            [Description("Confirmed prefix after [PrefixConfirmationRequired] preview."
+            [Description("Optional prefix validation for create. If supplied, it must match the solution publisher prefix."
             )] string confirmed_prefix = "")
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -141,28 +141,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "This prefix is Dataverse's default for unconfigured publishers and must not be used.\n" +
                     "Set a proper customization prefix on the publisher in Power Apps, then retry.");
 
-            // First call without confirmed_prefix → show preview and ask AI/user to confirm
-            if (string.IsNullOrWhiteSpace(confirmedPrefix))
+            var prefix = solResult.Prefix.Trim().ToLowerInvariant();
+
+            if (!string.IsNullOrWhiteSpace(confirmedPrefix) &&
+                !confirmedPrefix.Trim().Equals(prefix, StringComparison.OrdinalIgnoreCase))
             {
-                var previewName = $"{solResult.Prefix}_{displayName.Trim().Replace(" ", "")}";
-                var sb = new StringBuilder(256);
-                sb.AppendLine("[PrefixConfirmationRequired]");
-                sb.AppendLine($"ResolvedPrefix: {solResult.Prefix}");
-                sb.AppendLine($"Solution: {solResult.UniqueName}");
-                sb.AppendLine($"VariableName (preview): {previewName}");
-                sb.AppendLine();
-                sb.AppendLine($"→ Prefix is correct: re-call manage_environment_variable with confirmed_prefix=\"{solResult.Prefix}\"");;
-                sb.AppendLine($"→ Wrong prefix: re-call manage_environment_variable with confirmed_prefix=\"<correct_prefix>\"");
-                return new CallToolResult { Content = [new TextContentBlock { Text = sb.ToString() }] };
-            }
-
-            var prefix = confirmedPrefix.Trim().ToLowerInvariant();
-
-            // Layer 2 also applies to the confirmed prefix supplied by AI/user
-            if (prefix.Equals("new", StringComparison.OrdinalIgnoreCase))
                 return ErrorResult(
-                    "Error: confirmed_prefix 'new' is the reserved Dataverse default prefix and cannot be used.\n" +
-                    "Provide the actual publisher prefix for this solution.");
+                    $"Error: confirmed_prefix '{confirmedPrefix.Trim()}' does not match solution '{solResult.UniqueName}' publisher prefix '{prefix}'.\n" +
+                    "Use the solution publisher prefix or omit confirmed_prefix.");
+            }
 
             var variableName = $"{prefix}_{displayName.Trim().Replace(" ", "")}";
 

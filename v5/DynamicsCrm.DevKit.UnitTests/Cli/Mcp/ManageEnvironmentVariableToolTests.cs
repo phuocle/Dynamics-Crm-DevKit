@@ -42,6 +42,10 @@ public class ManageEnvironmentVariableToolTests
         Assert.IsTrue(desc.Contains("update"), "Description must mention 'update' action");
         Assert.IsTrue(desc.Contains("delete"), "Description must mention 'delete' action");
         Assert.IsTrue(desc.Contains("clear"), "Description must mention 'clear' action");
+        Assert.IsTrue(desc.Contains("CREATE uses the publisher prefix from solution_name directly"),
+            "Create should use the solution publisher prefix directly");
+        Assert.IsFalse(desc.Contains("PrefixConfirmationRequired"),
+            "Create should not require a second prefix-confirmation tool call");
         Assert.IsFalse(desc.StartsWith("List or get Dataverse"),
             "Description should not say 'List or get' — tool does full CRUD");
     }
