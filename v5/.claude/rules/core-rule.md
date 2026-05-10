@@ -34,8 +34,8 @@
 ## MCP Restart (Claude prefix)
 
 > After editing any file in `DynamicsCrm.DevKit.Cli\Mcp\*.*`:
-> 1. Run `/claude-build-cli` to rebuild
-> 2. Kill the current MCP process:
-> ```powershell
-> Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force
-> ```
+> 1. Run `/claude-build-cli` to rebuild, pack, install, and kill stale MCP processes.
+> 2. Call MCP `whoami` once so Codex starts the newly installed MCP server.
+> 3. Compare `structuredContent.devkit.assemblySha256` with `Published\<version>\DynamicsCrm.DevKit.Cli.<version>.build-manifest.json` field `installedAssemblySha256`.
+> 4. Also verify `structuredContent.devkit.version`, `structuredContent.devkit.build`, and `structuredContent.devkit.processStartTime`.
+> 5. If Codex reports `Transport closed`, run `.\DynamicsCrm.DevKit.Scripts\Test-DynamicsCrm.DevKit.Cli.McpRuntime.ps1 -Version "<version>"` to verify a fresh MCP process through stdio, then reconnect the MCP connector before interactive tool testing.

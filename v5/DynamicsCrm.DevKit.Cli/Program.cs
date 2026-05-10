@@ -59,8 +59,7 @@ namespace DynamicsCrm.DevKit.Cli
                 app.Configure(config =>
                 {
                     config.SetApplicationName("devkit");
-                    var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                    config.SetApplicationVersion($"{version} Build: {DynamicsCrm.DevKit.Shared.Const.Build}");
+                    config.SetApplicationVersion($"{DynamicsCrm.DevKit.Shared.Const.Version} Build: {DynamicsCrm.DevKit.Shared.Const.Build}");
 
                     // Generator command
                     config.AddCommand<GeneratorCommand>("generator")

@@ -7,6 +7,10 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -52,7 +56,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     OrgFriendlyName = _serviceClient.ConnectedOrgFriendlyName,
                     OrgUniqueName = _serviceClient.ConnectedOrgUniqueName,
                     TenantId = _serviceClient.TenantId.ToString(),
-                    EnvironmentId = _serviceClient.EnvironmentId.ToString()
+                    EnvironmentId = _serviceClient.EnvironmentId.ToString(),
+                    DevKit = BuildDevKitRuntimeInfo()
                 };
 
                 // User details
@@ -209,6 +214,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (r.AuditEnabled.HasValue) sb.AppendLine($"AuditEnabled: {(r.AuditEnabled.Value ? "Yes" : "No")}");
             sb.AppendLine();
 
+            if (r.DevKit != null)
+            {
+                sb.AppendLine("[DevKit Runtime]");
+                if (!string.IsNullOrEmpty(r.DevKit.Version)) sb.AppendLine($"Version: {r.DevKit.Version}");
+                if (!string.IsNullOrEmpty(r.DevKit.Build)) sb.AppendLine($"Build: {r.DevKit.Build}");
+                if (!string.IsNullOrEmpty(r.DevKit.AssemblyVersion)) sb.AppendLine($"AssemblyVersion: {r.DevKit.AssemblyVersion}");
+                if (!string.IsNullOrEmpty(r.DevKit.FileVersion)) sb.AppendLine($"FileVersion: {r.DevKit.FileVersion}");
+                if (!string.IsNullOrEmpty(r.DevKit.InformationalVersion)) sb.AppendLine($"InformationalVersion: {r.DevKit.InformationalVersion}");
+                sb.AppendLine($"ProcessId: {r.DevKit.ProcessId}");
+                if (!string.IsNullOrEmpty(r.DevKit.ProcessStartTime)) sb.AppendLine($"ProcessStartTime: {r.DevKit.ProcessStartTime}");
+                if (!string.IsNullOrEmpty(r.DevKit.AssemblyPath)) sb.AppendLine($"AssemblyPath: {r.DevKit.AssemblyPath}");
+                if (!string.IsNullOrEmpty(r.DevKit.AssemblySha256)) sb.AppendLine($"AssemblySha256: {r.DevKit.AssemblySha256}");
+                sb.AppendLine();
+            }
+
             if (r.Roles.Count > 0)
             {
                 sb.AppendLine($"[Roles] {r.Roles.Count} total");
@@ -225,6 +245,39 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return sb.ToString();
+        }
+
+        private static DevKitRuntimeInfo BuildDevKitRuntimeInfo()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var assemblyPath = assembly.Location;
+            FileVersionInfo fileVersionInfo = null;
+            if (!string.IsNullOrEmpty(assemblyPath) && File.Exists(assemblyPath))
+                fileVersionInfo = FileVersionInfo.GetVersionInfo(assemblyPath);
+
+            using var process = Process.GetCurrentProcess();
+
+            return new DevKitRuntimeInfo
+            {
+                Version = DynamicsCrm.DevKit.Shared.Const.Version,
+                Build = DynamicsCrm.DevKit.Shared.Const.Build,
+                AssemblyVersion = assembly.GetName().Version?.ToString(),
+                FileVersion = fileVersionInfo?.FileVersion,
+                InformationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion,
+                ProcessId = process.Id,
+                ProcessStartTime = new DateTimeOffset(process.StartTime).ToString("o"),
+                AssemblyPath = assemblyPath,
+                AssemblySha256 = ComputeSha256(assemblyPath)
+            };
+        }
+
+        private static string ComputeSha256(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return null;
+
+            using var stream = File.OpenRead(path);
+            using var sha256 = SHA256.Create();
+            return Convert.ToHexString(sha256.ComputeHash(stream));
         }
 
         private static string GetBaseUrl(Uri uri)
