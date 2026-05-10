@@ -11,6 +11,8 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 public class ManageChoiceToolTests
 {
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool);
+    private static readonly MethodInfo DerivePortalOptionSetNameMethod = ToolType
+        .GetMethod("DerivePortalOptionSetName", BindingFlags.NonPublic | BindingFlags.Static)!;
 
     // ──────────────────────────────────────────────
     // Return type — CallToolResult with IsError
@@ -293,6 +295,16 @@ public class ManageChoiceToolTests
         var result = DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageChoiceTool.ParseOptions("100000000:Active;");
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count);
+    }
+
+    [TestMethod]
+    [DataRow("Invoice Status", "devkit", "devkit_invoicestatus")]
+    [DataRow("This Is A Global Choice", "devkit", "devkit_thisisaglobalchoice")]
+    [DataRow("PO Number", "DevKit", "devkit_ponumber")]
+    public void DerivePortalOptionSetName_UsesCompactLowercasePortalDefault(string displayName, string prefix, string expected)
+    {
+        var result = (string)DerivePortalOptionSetNameMethod.Invoke(null, new object[] { displayName, prefix })!;
+        Assert.AreEqual(expected, result);
     }
 
     // ──────────────────────────────────────────────

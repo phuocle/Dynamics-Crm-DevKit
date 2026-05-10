@@ -40,7 +40,7 @@ Current issue:
 - Detail tries exact logical option set name first.
 - It does not try logical-name contains after display-name miss.
 - `solution_name` uses the shared resolver that is currently wrong.
-- Create auto-derivation currently uses snake_case word separators, but Dataverse portal default global choice names are compact lowercase after the prefix.
+- Create auto-derivation must use compact lowercase after the prefix, matching Dataverse portal default global choice names.
 
 Target:
 

@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name (logical name OR display name — display name resolved automatically); create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. list/detail never publish. create and delete-only update do not issue a publish request because Dataverse auto-publishes newly created/deleted customizations. Other updates publish only the affected option set when auto_publish=true. list supports optional filter= to search by name or display name (contains, case-insensitive).\n\n" +
+            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name (logical name OR display name — display name resolved automatically); create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + compact lowercase display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. list/detail never publish. create and delete-only update do not issue a publish request because Dataverse auto-publishes newly created/deleted customizations. Other updates publish only the affected option set when auto_publish=true. list supports optional filter= to search by name or display name (contains, case-insensitive).\n\n" +
 
             "OPTION VALUES: solution_name is REQUIRED for create and for label-only add_options — if not provided by the user, ask; never search or guess. Pass options/add_options as label-only ('Draft;Confirmed'). For update_options use 'OldLabel:NewLabel;...' pairs. For remove_options use label names ('Draft,Cancelled') — labels are resolved to values automatically.\n\n" +
 
@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "'list', 'detail', 'create', 'update'."
             )] string action,
             [Description(
-                "Logical name OR display name. Required except list and create. For detail/update: Display Name contains is resolved first, then logical name contains; ambiguity returns an error. For create: if omitted, auto-derived as '{publisher_prefix}_{sanitized_display_name}'; if provided, must start with the solution publisher prefix (e.g. 'devkit_invoicestatus') — error returned otherwise."
+                "Logical name OR display name. Required except list and create. For detail/update: Display Name contains is resolved first, then logical name contains; ambiguity returns an error. For create: if omitted, auto-derived as '{publisher_prefix}_{compact_lowercase_display_name}' (portal default, e.g. 'devkit_invoicestatus'); if provided, must start with the solution publisher prefix (e.g. 'devkit_invoicestatus') — error returned otherwise."
             )] string optionset_name = "",
             [Description(
                 "Required for create. Optional for update. For list: used as a filter (contains match on name and display name, case-insensitive)."
@@ -205,18 +205,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                // Auto-derive from publisher prefix + sanitized display name
-                var sanitized = System.Text.RegularExpressions.Regex
-                    .Replace(displayName.Trim().ToLowerInvariant(), @"[^a-z0-9]+", "_")
-                    .Trim('_');
-                name = $"{publisherPrefix}_{sanitized}";
+                name = DerivePortalOptionSetName(displayName, publisherPrefix);
             }
             else if (!name.StartsWith(publisherPrefix + "_", StringComparison.OrdinalIgnoreCase))
             {
-                var sanitized = System.Text.RegularExpressions.Regex
-                    .Replace(displayName.Trim().ToLowerInvariant(), @"[^a-z0-9]+", "_")
-                    .Trim('_');
-                var suggested = $"{publisherPrefix}_{sanitized}";
+                var suggested = DerivePortalOptionSetName(displayName, publisherPrefix);
                 return ErrorResult(
                     $"Error: optionset_name '{name}' does not start with the solution publisher prefix '{publisherPrefix}_'. " +
                     $"Use '{suggested}' or omit optionset_name to auto-derive it.");
@@ -720,6 +713,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             return result;
+        }
+
+        private static string DerivePortalOptionSetName(string displayName, string publisherPrefix)
+        {
+            if (string.IsNullOrWhiteSpace(displayName))
+                throw new ArgumentException("displayName is required.", nameof(displayName));
+            if (string.IsNullOrWhiteSpace(publisherPrefix))
+                throw new ArgumentException("publisherPrefix is required.", nameof(publisherPrefix));
+
+            var compactName = System.Text.RegularExpressions.Regex
+                .Replace(displayName.Trim().ToLowerInvariant(), @"[^a-z0-9]+", "");
+            if (string.IsNullOrWhiteSpace(compactName))
+                throw new ArgumentException($"Display name '{displayName}' contains no valid characters for a global choice name.", nameof(displayName));
+
+            return $"{publisherPrefix.Trim().ToLowerInvariant()}_{compactName}";
         }
 
         private bool OptionSetExists(string name)
