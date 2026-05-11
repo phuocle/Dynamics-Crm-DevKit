@@ -85,14 +85,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (!hasSpecificTargets)
                 {
-                    _serviceClient.Execute(new PublishAllXmlRequest());
+                    // Use async version to avoid timeout
+                    var asyncRequest = new PublishAllXmlAsyncRequest();
+                    var asyncResponse = (PublishAllXmlAsyncResponse)_serviceClient.Execute(asyncRequest);
                     sw.Stop();
 
-                    var text = $"[Publish] All customizations\nStatus: Published successfully\nDuration: {sw.Elapsed.TotalSeconds:F1}s";
+                    var jobId = asyncResponse.AsyncOperationId;
+                    var text = $"[Publish] All customizations (async)\n" +
+                               $"Status: Started asynchronously\n" +
+                               $"AsyncOperationId: {jobId}\n" +
+                               $"Duration: {sw.Elapsed.TotalSeconds:F1}s\n" +
+                               $"Note: Use get_system_jobs(record_id=\"{jobId}\") to check publish status.";
+
                     var structured = new PublishResult
                     {
-                        Mode = "all",
-                        Status = "published",
+                        Mode = "all_async",
+                        Status = "in_progress",
+                        AsyncOperationId = jobId.ToString(),
                         DurationSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1)
                     };
                     return new CallToolResult

@@ -714,7 +714,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             CleanupOtherEntities(entityName);
 
             // Step 5: Publish
-            var published = TryPublish(autoPublish, entityName);
+            var (published, asyncJobId) = TryPublish(autoPublish, entityName);
 
             // Step 6: Return result
             var sb = new StringBuilder();
@@ -722,7 +722,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Solution: {SOLUTION_NAME}");
             sb.AppendLine($"Status: Updated successfully");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            if (published && asyncJobId.HasValue)
+            {
+                sb.AppendLine($"Published: started asynchronously");
+                sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
+                sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
+            }
+            else
+            {
+                sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            }
             sb.AppendLine();
             if (backupPath != null)
                 sb.AppendLine($"To rollback: manage_ribbon(action='undo', entity_name='{entityName}', ribbonxml='{backupPath}')");
@@ -736,7 +745,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntityName = entityName,
                     Status = published || !autoPublish ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
-                    Published = published
+                    Published = published,
+                    AsyncOperationId = asyncJobId?.ToString()
                 })
             };
         }
@@ -865,7 +875,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             CleanupOtherEntities(entityName);
 
             // Step 10: Publish
-            var published = TryPublish(autoPublish, entityName);
+            var (published, asyncJobId) = TryPublish(autoPublish, entityName);
 
             // Step 11: Build result
             var newButtonCount = RibbonXmlHelpers.CountExistingButtons(ribbonDoc);
@@ -885,7 +895,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Total buttons after: {newButtonCount}");
             sb.AppendLine($"Status: Updated successfully");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
-            sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            if (published && asyncJobId.HasValue)
+            {
+                sb.AppendLine($"Published: started asynchronously");
+                sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
+                sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
+            }
+            else
+            {
+                sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            }
             sb.AppendLine();
             if (backupPath != null)
                 sb.AppendLine($"To rollback: manage_ribbon(action='undo', entity_name='{entityName}', ribbonxml='{backupPath}')");
@@ -899,7 +918,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntityName = entityName,
                     Status = published || !autoPublish ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
-                    Published = published
+                    Published = published,
+                    AsyncOperationId = asyncJobId?.ToString()
                 })
             };
         }
@@ -945,13 +965,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Remove stale entities from solution (keep only current entity)
             CleanupOtherEntities(entityName);
 
-            var published = TryPublish(autoPublish, entityName);
+            var (published, asyncJobId) = TryPublish(autoPublish, entityName);
 
             var sb = new StringBuilder();
             sb.AppendLine($"[ManageRibbon] undo — {entityName}");
             sb.AppendLine($"Restored from: {backupFilePath}");
             sb.AppendLine($"Status: Restored successfully");
-            sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            if (published && asyncJobId.HasValue)
+            {
+                sb.AppendLine($"Published: started asynchronously");
+                sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
+                sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
+            }
+            else
+            {
+                sb.AppendLine($"Published: {(published ? "yes" : "no — run publish_customizations manually")}");
+            }
 
             return new CallToolResult
             {
@@ -962,7 +991,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     EntityName = entityName,
                     Status = "restored",
                     RestoredFromBackup = backupFilePath,
-                    Published = published
+                    Published = published,
+                    AsyncOperationId = asyncJobId?.ToString()
                 })
             };
         }
@@ -1279,17 +1309,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return null;
         }
 
-        private bool TryPublish(bool autoPublish, string entityName)
+        private (bool Success, Guid? AsyncOperationId) TryPublish(bool autoPublish, string entityName)
         {
-            if (!autoPublish) return false;
+            if (!autoPublish) return (false, null);
             try
             {
-                _serviceClient.Execute(new PublishAllXmlRequest());
-                return true;
+                // Use async version to avoid timeout
+                var asyncRequest = new PublishAllXmlAsyncRequest();
+                var asyncResponse = (PublishAllXmlAsyncResponse)_serviceClient.Execute(asyncRequest);
+                return (true, asyncResponse.AsyncOperationId);
             }
             catch
             {
-                return false;
+                return (false, null);
             }
         }
 

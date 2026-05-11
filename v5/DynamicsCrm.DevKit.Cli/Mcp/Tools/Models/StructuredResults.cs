@@ -159,6 +159,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
+        [JsonPropertyName("asyncOperationId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AsyncOperationId { get; set; }
+
         [JsonPropertyName("durationSeconds")]
         public double DurationSeconds { get; set; }
     }
@@ -483,6 +487,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }
+
+        [JsonPropertyName("asyncOperationId")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string AsyncOperationId { get; set; }
 
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
