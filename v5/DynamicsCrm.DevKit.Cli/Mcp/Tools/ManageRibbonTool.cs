@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "update_flyout_static REQUIRED: flyout_id OR label. items[]: item_label REQUIRED\n" +
             "hide_flyout_item / show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n\n" +
 
-            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). auto_publish=true runs PublishAll sync; set false to batch then call publish_customizations.\n\n" +
+            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). Always runs PublishAll sync after update.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Inspect existing ribbon (list/buttons/detail) before editing\n" +
@@ -82,7 +82,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
             [Description("JSON array of ribbon operations for action='update'. 10 operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item.")] string operations = "",
             [Description("For 'undo': backup file path.")] string ribbonxml = "",
-            [Description("Runs PublishAll. false to batch.")] bool auto_publish = true,
             [Description("Backup before overwrite.")] bool backup = true)
         {
             var actionName = (action ?? "").Trim().ToLowerInvariant();
@@ -124,11 +123,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return UpdateRibbonFromOperations(
                                 updateEntityName,
                                 operations.Trim(),
-                                backup,
-                                auto_publish);
+                                backup);
 
                         if (!string.IsNullOrWhiteSpace(ribbonxml))
-                            return UpdateRibbon(updateEntityName, ribbonxml.Trim(), backup, auto_publish);
+                            return UpdateRibbon(updateEntityName, ribbonxml.Trim(), backup);
 
                         return ErrorResult(
                             "Error: 'operations' is required for action='update'.\n" +
@@ -144,7 +142,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                 "Provide backup file path from .devkit/backups/ribbons/.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
-                            return entityError != null ? ErrorResult(entityError) : UndoRibbon(entityName, ribbonxml.Trim(), auto_publish);
+                            return entityError != null ? ErrorResult(entityError) : UndoRibbon(entityName, ribbonxml.Trim());
                         }
 
                     default:
@@ -665,7 +663,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: update ───────────────────────────────────────────────
 
-        private CallToolResult UpdateRibbon(string entityName, string ribbonxml, bool doBackup, bool autoPublish)
+        private CallToolResult UpdateRibbon(string entityName, string ribbonxml, bool doBackup)
         {
             // Step 1: Resolve ribbonxml input (file path or inline)
             var resolvedXml = ResolveRibbonXmlInput(ribbonxml);
@@ -714,7 +712,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             CleanupOtherEntities(entityName);
 
             // Step 5: Publish
-            var (published, asyncJobId) = TryPublish(autoPublish, entityName);
+            var (published, asyncJobId) = TryPublish(entityName);
 
             // Step 6: Return result
             var sb = new StringBuilder();
@@ -743,7 +741,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "update",
                     EntityName = entityName,
-                    Status = published || !autoPublish ? "updated" : "updated_publish_failed",
+                    Status = published ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
                     Published = published,
                     AsyncOperationId = asyncJobId?.ToString()
@@ -753,7 +751,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: update (from operations) ────────────────────────────
 
-        private CallToolResult UpdateRibbonFromOperations(string entityName, string operationsJson, bool doBackup, bool autoPublish)
+        private CallToolResult UpdateRibbonFromOperations(string entityName, string operationsJson, bool doBackup)
         {
             // Step 1: Validate entity
             var validation = new RibbonValidation(_serviceClient);
@@ -875,7 +873,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             CleanupOtherEntities(entityName);
 
             // Step 10: Publish
-            var (published, asyncJobId) = TryPublish(autoPublish, entityName);
+            var (published, asyncJobId) = TryPublish(entityName);
 
             // Step 11: Build result
             var newButtonCount = RibbonXmlHelpers.CountExistingButtons(ribbonDoc);
@@ -916,7 +914,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "update",
                     EntityName = entityName,
-                    Status = published || !autoPublish ? "updated" : "updated_publish_failed",
+                    Status = published ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
                     Published = published,
                     AsyncOperationId = asyncJobId?.ToString()
@@ -926,7 +924,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: undo ─────────────────────────────────────────────────
 
-        private CallToolResult UndoRibbon(string entityName, string backupFilePath, bool autoPublish)
+        private CallToolResult UndoRibbon(string entityName, string backupFilePath)
         {
             if (!File.Exists(backupFilePath))
                 return ErrorResult(
@@ -965,7 +963,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Remove stale entities from solution (keep only current entity)
             CleanupOtherEntities(entityName);
 
-            var (published, asyncJobId) = TryPublish(autoPublish, entityName);
+            var (published, asyncJobId) = TryPublish(entityName);
 
             var sb = new StringBuilder();
             sb.AppendLine($"[ManageRibbon] undo — {entityName}");
@@ -1309,9 +1307,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return null;
         }
 
-        private (bool Success, Guid? AsyncOperationId) TryPublish(bool autoPublish, string entityName)
+        private (bool Success, Guid? AsyncOperationId) TryPublish(string entityName)
         {
-            if (!autoPublish) return (false, null);
             try
             {
                 // Use async version to avoid timeout

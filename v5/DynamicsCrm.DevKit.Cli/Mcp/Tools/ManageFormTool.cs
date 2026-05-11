@@ -72,9 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("XSD validate before write."
             )] bool validate = true,
             [Description("Backup before overwrite. Failure blocks update."
-            )] bool backup = true,
-            [Description("Publish after. Set false when batching."
-            )] bool auto_publish = true)
+            )] bool backup = true)
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'update', 'rename', 'undo'.");
@@ -97,9 +95,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
                     "detail" => HandleDetail(entityName, form_id, form_name),
-                    "update" => HandleUpdate(entityName, form_id, formxml, operations, validate, backup, auto_publish),
-                    "rename" => HandleRename(entityName, form_id, form_name, backup, auto_publish),
-                    "undo" => HandleUndo(entityName, form_id, formxml, validate, auto_publish),
+                    "update" => HandleUpdate(entityName, form_id, formxml, operations, validate, backup),
+                    "rename" => HandleRename(entityName, form_id, form_name, backup),
+                    "undo" => HandleUndo(entityName, form_id, formxml, validate),
                     _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, update, rename, undo.")
                 };
             }
@@ -318,7 +316,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string formId,
-            string formxml, string operations, bool validate, bool backup, bool auto_publish)
+            string formxml, string operations, bool validate, bool backup)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return ErrorResult("Error: form_id is required for 'update' action.");
@@ -343,13 +341,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "- Use 'formxml' for advanced/undo scenarios only.");
 
             if (hasOperations)
-                return HandleUpdateWithOperations(entityName, id, operations, validate, backup, auto_publish);
+                return HandleUpdateWithOperations(entityName, id, operations, validate, backup);
 
-            return HandleUpdateWithFormXml(entityName, id, formxml, validate, backup, auto_publish);
+            return HandleUpdateWithFormXml(entityName, id, formxml, validate, backup);
         }
 
         private CallToolResult HandleUpdateWithOperations(string entityName, Guid id,
-            string operations, bool validate, bool backup, bool auto_publish)
+            string operations, bool validate, bool backup)
         {
             // 1. Parse operations JSON
             List<JsonElement> ops;
@@ -433,23 +431,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 validationWarnings = warnings.Count > 0 ? warnings : null;
                 if (errors.Count > 0)
                 {
-                    var sb = new StringBuilder(512);
-                    sb.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
-                    sb.AppendLine($"FormId: {id}");
-                    sb.AppendLine($"Errors: {errors.Count}");
+                    var sbError = new StringBuilder(512);
+                    sbError.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
+                    sbError.AppendLine($"FormId: {id}");
+                    sbError.AppendLine($"Errors: {errors.Count}");
                     foreach (var error in errors)
-                        sb.AppendLine($"- {error}");
+                        sbError.AppendLine($"- {error}");
                     if (warnings.Count > 0)
                     {
-                        sb.AppendLine($"Warnings: {warnings.Count}");
+                        sbError.AppendLine($"Warnings: {warnings.Count}");
                         foreach (var warning in warnings)
-                            sb.AppendLine($"- {warning}");
+                            sbError.AppendLine($"- {warning}");
                     }
                     if (backupPath != null)
-                        sb.AppendLine($"Backup: saved (no changes made) — {backupPath}");
+                        sbError.AppendLine($"Backup: saved (no changes made) — {backupPath}");
                     else
-                        sb.AppendLine($"Backup: not needed (no changes made)");
-                    sb.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
+                        sbError.AppendLine($"Backup: not needed (no changes made)");
+                    sbError.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
 
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
@@ -468,7 +466,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                     return new CallToolResult
                     {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        Content = [new TextContentBlock { Text = sbError.ToString() }],
                         StructuredContent = JsonSerializer.SerializeToElement(blockedResult)
                     };
                 }
@@ -482,78 +480,73 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _serviceClient.Update(updateEntity);
 
             var published = false;
-            if (auto_publish)
+            try
             {
-                try
+                _serviceClient.Execute(new PublishXmlRequest
                 {
-                    _serviceClient.Execute(new PublishXmlRequest
-                    {
-                        ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                    });
-                    published = true;
-                }
-                catch (Exception ex)
-                {
-                    var sb2 = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
-                    sb2.AppendLine($"PublishError: {ex.Message}");
-                    sb2.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
-                    sb2.AppendLine();
-                    AppendRollbackInfo(sb2, backupPath, id);
-
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb2.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
-                        {
-                            Action = "updated", Entity = entityName, FormId = id.ToString(),
-                            FormName = formName, Status = "updated_publish_failed",
-                            Validated = validate, BackupPath = backupPath, Published = false,
-                            OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
-                        })
-                    };
-                }
+                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
+                });
+                published = true;
             }
-
-            // 7. Build success response
+            catch (Exception ex)
             {
-                var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, published);
-                sb.AppendLine($"OperationsCount: {ops.Count}");
-                sb.AppendLine("Operations performed:");
-                for (var i = 0; i < opSummaries.Count; i++)
-                    sb.AppendLine($"  {i + 1}. {opSummaries[i]}");
-                if (classIdMap.Count > 0)
-                {
-                    sb.AppendLine("ClassIds resolved:");
-                    var maxNameLen = classIdMap.Keys.Max(k => k.Length);
-                    foreach (var kv in classIdMap.OrderBy(k => k.Key))
-                        sb.AppendLine($"  {kv.Key.PadRight(maxNameLen)} -> {{{kv.Value}}}");
-                }
-                if (validationWarnings?.Count > 0)
-                {
-                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
-                    foreach (var w in validationWarnings)
-                        sb.AppendLine($"  - {w}");
-                }
-                sb.AppendLine();
-                AppendRollbackInfo(sb, backupPath, id);
+                var sb2 = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
+                sb2.AppendLine($"PublishError: {ex.Message}");
+                sb2.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
+                sb2.AppendLine();
+                AppendRollbackInfo(sb2, backupPath, id);
 
                 return new CallToolResult
                 {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    Content = [new TextContentBlock { Text = sb2.ToString() }],
                     StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
                     {
                         Action = "updated", Entity = entityName, FormId = id.ToString(),
-                        FormName = formName, Status = "updated",
-                        Validated = validate, ValidationWarnings = validationWarnings,
-                        BackupPath = backupPath, Published = published,
+                        FormName = formName, Status = "updated_publish_failed",
+                        Validated = validate, BackupPath = backupPath, Published = false,
                         OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
-                    })
-                };
+                        })
+                    };
             }
+
+            // 7. Build success response
+            var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, published);
+            sb.AppendLine($"OperationsCount: {ops.Count}");
+            sb.AppendLine("Operations performed:");
+            for (var i = 0; i < opSummaries.Count; i++)
+                sb.AppendLine($"  {i + 1}. {opSummaries[i]}");
+            if (classIdMap.Count > 0)
+            {
+                sb.AppendLine("ClassIds resolved:");
+                var maxNameLen = classIdMap.Keys.Max(k => k.Length);
+                foreach (var kv in classIdMap.OrderBy(k => k.Key))
+                    sb.AppendLine($"  {kv.Key.PadRight(maxNameLen)} -> {{{kv.Value}}}");
+            }
+            if (validationWarnings?.Count > 0)
+            {
+                sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
+                foreach (var w in validationWarnings)
+                    sb.AppendLine($"  - {w}");
+            }
+            sb.AppendLine();
+            AppendRollbackInfo(sb, backupPath, id);
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+                {
+                    Action = "updated", Entity = entityName, FormId = id.ToString(),
+                    FormName = formName, Status = "updated",
+                    Validated = validate, ValidationWarnings = validationWarnings,
+                    BackupPath = backupPath, Published = published,
+                    OperationsCount = ops.Count, FieldsResolved = classIdMap.Count
+                })
+            };
         }
 
         private CallToolResult HandleUpdateWithFormXml(string entityName, Guid id,
-            string formxml, bool validate, bool backup, bool auto_publish)
+            string formxml, bool validate, bool backup)
         {
             // Resolve formxml: if it's a file path, read content from file
             var resolvedFormXml = ResolveFormXmlInput(formxml.Trim());
@@ -614,23 +607,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 if (errors.Count > 0)
                 {
-                    var sb = new StringBuilder(512);
-                    sb.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
-                    sb.AppendLine($"FormId: {id}");
-                    sb.AppendLine($"Errors: {errors.Count}");
+                    var sbError = new StringBuilder(512);
+                    sbError.AppendLine($"[FormUpdate] BLOCKED — Validation failed");
+                    sbError.AppendLine($"FormId: {id}");
+                    sbError.AppendLine($"Errors: {errors.Count}");
                     foreach (var error in errors)
-                        sb.AppendLine($"- {error}");
+                        sbError.AppendLine($"- {error}");
                     if (warnings.Count > 0)
                     {
-                        sb.AppendLine($"Warnings: {warnings.Count}");
+                        sbError.AppendLine($"Warnings: {warnings.Count}");
                         foreach (var warning in warnings)
-                            sb.AppendLine($"- {warning}");
+                            sbError.AppendLine($"- {warning}");
                     }
                     if (backupPath != null)
-                        sb.AppendLine($"Backup: saved (no changes made) — {backupPath}");
+                        sbError.AppendLine($"Backup: saved (no changes made) — {backupPath}");
                     else
-                        sb.AppendLine($"Backup: not needed (no changes made)");
-                    sb.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
+                        sbError.AppendLine($"Backup: not needed (no changes made)");
+                    sbError.AppendLine($"Tip: Fix the FormXML errors above and retry. Read schema://formxml for valid structure. Read docs://instructions_for_formxml for FormXML operation format examples.");
 
                     var allIssues = new List<string>(errors);
                     if (warnings.Count > 0) allIssues.AddRange(warnings);
@@ -649,7 +642,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                     return new CallToolResult
                     {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
+                        Content = [new TextContentBlock { Text = sbError.ToString() }],
                         StructuredContent = JsonSerializer.SerializeToElement(blockedResult)
                     };
                 }
@@ -664,43 +657,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 5: Publish entity
             var published = false;
-            if (auto_publish)
+            try
             {
-                try
+                var publishRequest = new PublishXmlRequest
                 {
-                    var publishRequest = new PublishXmlRequest
-                    {
-                        ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                    };
-                    _serviceClient.Execute(publishRequest);
-                    published = true;
-                }
-                catch (Exception ex)
-                {
-                    // Update succeeded but publish failed — don't error, report it
-                    var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
-                    sb.AppendLine($"PublishError: {ex.Message}");
-                    sb.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
-                    sb.AppendLine();
-                    AppendRollbackInfo(sb, backupPath, id);
+                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
+                };
+                _serviceClient.Execute(publishRequest);
+                published = true;
+            }
+            catch (Exception ex)
+            {
+                // Update succeeded but publish failed — don't error, report it
+                var sb = BuildSuccessText(entityName, id, formName, backupPath, validate, false);
+                sb.AppendLine($"PublishError: {ex.Message}");
+                sb.AppendLine($"Tip: Call publish with entities='{objectTypeCode}' to retry");
+                sb.AppendLine();
+                AppendRollbackInfo(sb, backupPath, id);
 
-                    var partialResult = new UpsertFormResult
-                    {
-                        Action = "updated",
-                        Entity = entityName,
-                        FormId = id.ToString(),
-                        FormName = formName,
-                        Status = "updated_publish_failed",
-                        Validated = validate,
-                        BackupPath = backupPath,
-                        Published = false
-                    };
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(partialResult)
-                    };
-                }
+                var partialResult = new UpsertFormResult
+                {
+                    Action = "updated",
+                    Entity = entityName,
+                    FormId = id.ToString(),
+                    FormName = formName,
+                    Status = "updated_publish_failed",
+                    Validated = validate,
+                    BackupPath = backupPath,
+                    Published = false
+                };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(partialResult)
+                };
             }
 
             // Step 6: Return success
@@ -738,7 +728,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: rename ────────────────────────────────────────────────
 
         private CallToolResult HandleRename(string entityName, string formId, string formName,
-            bool backup, bool auto_publish)
+            bool backup)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return ErrorResult("Error: form_id is required for 'rename' action.");
@@ -815,20 +805,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Step 5: Publish
             var published = false;
             string publishError = null;
-            if (auto_publish)
+            try
             {
-                try
+                _serviceClient.Execute(new PublishXmlRequest
                 {
-                    _serviceClient.Execute(new PublishXmlRequest
-                    {
-                        ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                    });
-                    published = true;
-                }
-                catch (Exception ex)
-                {
-                    publishError = ex.Message;
-                }
+                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
+                });
+                published = true;
+            }
+            catch (Exception ex)
+            {
+                publishError = ex.Message;
             }
 
             // Step 6: Return success
@@ -849,7 +836,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine();
             AppendRollbackInfo(sb, backupPath, id);
 
-            var status = published || !auto_publish ? "renamed" : "renamed_publish_failed";
+            var status = published ? "renamed" : "renamed_publish_failed";
 
             return new CallToolResult
             {
@@ -871,7 +858,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: undo ──────────────────────────────────────────────────
 
         private CallToolResult HandleUndo(string entityName, string formId,
-            string backupFilePath, bool validate, bool auto_publish)
+            string backupFilePath, bool validate)
         {
             if (string.IsNullOrWhiteSpace(formId))
                 return ErrorResult("Error: form_id is required for 'undo' action.");
@@ -988,58 +975,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 5: Publish
             var published = false;
-            if (auto_publish)
+            try
             {
-                try
+                _serviceClient.Execute(new PublishXmlRequest
                 {
-                    _serviceClient.Execute(new PublishXmlRequest
-                    {
-                        ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
-                    });
-                    published = true;
-                }
-                catch (Exception ex)
-                {
-                    var sb = new StringBuilder(256);
-                    sb.AppendLine($"[FormUndo] Restored but publish failed");
-                    sb.AppendLine($"FormId: {id}");
-                    sb.AppendLine($"RestoredFrom: {backupFilePath}");
-                    sb.AppendLine($"PublishError: {ex.Message}");
-                    sb.AppendLine($"Tip: Call publish with entities='{entityName}' to retry");
-
-                    return new CallToolResult
-                    {
-                        Content = [new TextContentBlock { Text = sb.ToString() }],
-                        StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
-                        {
-                            Action = "undo",
-                            Entity = entityName,
-                            FormId = id.ToString(),
-                            FormName = formName,
-                            Status = "restored_publish_failed",
-                            Validated = validate,
-                            RestoredFromBackup = backupFilePath,
-                            Published = false
-                        })
-                    };
-                }
+                    ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
+                });
+                published = true;
             }
-
-            // Step 6: Return success
+            catch (Exception ex)
             {
                 var sb = new StringBuilder(256);
-                sb.AppendLine($"[FormUndo] {entityName} — {formName}");
+                sb.AppendLine($"[FormUndo] Restored but publish failed");
                 sb.AppendLine($"FormId: {id}");
-                sb.AppendLine($"Status: Restored successfully");
                 sb.AppendLine($"RestoredFrom: {backupFilePath}");
-                sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
-                sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-                if (validationWarnings?.Count > 0)
-                {
-                    sb.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
-                    foreach (var w in validationWarnings)
-                        sb.AppendLine($"  - {w}");
-                }
+                sb.AppendLine($"PublishError: {ex.Message}");
+                sb.AppendLine($"Tip: Call publish with entities='{entityName}' to retry");
 
                 return new CallToolResult
                 {
@@ -1050,14 +1001,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Entity = entityName,
                         FormId = id.ToString(),
                         FormName = formName,
-                        Status = "restored",
+                        Status = "restored_publish_failed",
                         Validated = validate,
-                        ValidationWarnings = validationWarnings,
                         RestoredFromBackup = backupFilePath,
-                        Published = published
+                        Published = false
                     })
                 };
             }
+
+            // Step 6: Return success
+            var sb2 = new StringBuilder(256);
+            sb2.AppendLine($"[FormUndo] {entityName} — {formName}");
+            sb2.AppendLine($"FormId: {id}");
+            sb2.AppendLine($"Status: Restored successfully");
+            sb2.AppendLine($"RestoredFrom: {backupFilePath}");
+            sb2.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
+            sb2.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (validationWarnings?.Count > 0)
+            {
+                sb2.AppendLine($"ValidationWarnings: {validationWarnings.Count}");
+                foreach (var w in validationWarnings)
+                    sb2.AppendLine($"  - {w}");
+            }
+
+            return new CallToolResult
+            {
+                Content = [new TextContentBlock { Text = sb2.ToString() }],
+                StructuredContent = JsonSerializer.SerializeToElement(new UpsertFormResult
+                {
+                    Action = "undo",
+                    Entity = entityName,
+                    FormId = id.ToString(),
+                    FormName = formName,
+                    Status = "restored",
+                    Validated = validate,
+                    ValidationWarnings = validationWarnings,
+                    RestoredFromBackup = backupFilePath,
+                    Published = published
+                })
+            };
         }
 
         // ── List/Detail Helpers ───────────────────────────────────────────

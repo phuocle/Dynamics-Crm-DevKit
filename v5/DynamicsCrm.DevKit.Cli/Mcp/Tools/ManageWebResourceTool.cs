@@ -106,9 +106,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("list only. See type values."
             )] string type_filter = "",
             [Description("1–500."
-            )] int max_records = 50,
-            [Description("")
-            ] bool auto_publish = true)
+            )] int max_records = 50)
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'delete'.");
@@ -121,9 +119,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(name, type_filter, solution_name, max_records),
                     "detail" => HandleDetail(web_resource_id),
-                    "create" => HandleCreate(name, display_name, description, content, type, solution_name, auto_publish),
-                    "update" => HandleUpdate(web_resource_id, display_name, description, content, auto_publish),
-                    "delete" => HandleDelete(web_resource_id, auto_publish),
+                    "create" => HandleCreate(name, display_name, description, content, type, solution_name),
+                    "update" => HandleUpdate(web_resource_id, display_name, description, content),
+                    "delete" => HandleDelete(web_resource_id),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete'.")
                 };
             }
@@ -320,7 +318,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(string name, string displayName, string description,
-            string content, string type, string solutionName, bool autoPublish)
+            string content, string type, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return ErrorResult("Error: name is required for 'create'.\n" +
@@ -424,7 +422,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? null
                 : $"Failed to add to solution '{solResult.UniqueName}': {addResult.AddToSolutionWarning}";
 
-            var published = autoPublish && PublishWebResource(webResourceId);
+            var published = PublishWebResource(webResourceId);
 
             var typeLabel = TypeCodeMap.TryGetValue(typeCode, out var t) ? t : typeCode.ToString();
 
@@ -472,7 +470,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(string webResourceId, string displayName,
-            string description, string content, bool autoPublish)
+            string description, string content)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
                 return ErrorResult("Error: web_resource_id is required for 'update'.\n" +
@@ -524,7 +522,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             _serviceClient.Update(update);
 
-            var published = autoPublish && PublishWebResource(id);
+            var published = PublishWebResource(id);
             var existingName = existing.GetAttributeValue<string>("name") ?? "";
 
             var sb = new StringBuilder(256);
@@ -559,7 +557,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private CallToolResult HandleDelete(string webResourceId, bool autoPublish)
+        private CallToolResult HandleDelete(string webResourceId)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
                 return ErrorResult("Error: web_resource_id is required for 'delete'.\n" +
@@ -588,7 +586,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             _serviceClient.Delete("webresource", id);
 
-            var published = autoPublish && PublishWebResource(id);
+            var published = PublishWebResource(id);
 
             var structured = new ManageWebResourceResult
             {

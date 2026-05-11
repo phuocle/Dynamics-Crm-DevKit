@@ -76,8 +76,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("")] int menu_order = 10000,
             [Description("1:N create only.")] string lookup_display_name = "",
             [Description("Required: create_1n, create_nn, add_target.")] string solution_name = "",
-            [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false,
-            [Description("")] bool auto_publish = true)
+            [Description("Self-referential 1:N (create_1n/update). 1 per entity, referenced=referencing.")] bool is_hierarchical = false)
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target");
@@ -90,15 +89,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "create_1n" => HandleCreate1N(referenced_entity, referencing_entity, relationship_name,
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
-                        menu_behavior, menu_group, menu_order, lookup_display_name, solution_name, is_hierarchical, auto_publish),
-                    "create_nn" => HandleCreateNN(entity1, entity2, relationship_name, intersect_entity_name, solution_name, auto_publish),
+                        menu_behavior, menu_group, menu_order, lookup_display_name, solution_name, is_hierarchical),
+                    "create_nn" => HandleCreateNN(entity1, entity2, relationship_name, intersect_entity_name, solution_name),
                     "update" => HandleUpdate(relationship_name,
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
-                        menu_behavior, menu_group, menu_order, is_hierarchical, auto_publish),
+                        menu_behavior, menu_group, menu_order, is_hierarchical),
                     "delete" => HandleDelete(relationship_name),
                     "add_target" => HandleAddTarget(entity_name, attribute_name, referenced_entity,
                         cascade_preset, cascade_assign, cascade_delete, cascade_merge, cascade_reparent, cascade_share, cascade_unshare,
-                        menu_behavior, menu_group, menu_order, solution_name, auto_publish),
+                        menu_behavior, menu_group, menu_order, solution_name),
                     "remove_target" => HandleRemoveTarget(entity_name, attribute_name, referenced_entity),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid actions: create_1n, create_nn, update, delete, add_target, remove_target")
                 };
@@ -115,7 +114,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleCreate1N(string referencedEntity, string referencingEntity, string relationshipName,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
-            string menuBehavior, string menuGroup, int menuOrder, string lookupDisplayName, string solutionName, bool isHierarchical, bool autoPublish)
+            string menuBehavior, string menuGroup, int menuOrder, string lookupDisplayName, string solutionName, bool isHierarchical)
         {
             if (string.IsNullOrWhiteSpace(referencedEntity))
                 return ErrorResult("Error: referenced_entity is required for create_1n (the parent/referenced entity).\nRead docs://schema_tools_guide for relationship creation examples.");
@@ -185,7 +184,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
             var metadataId = response.RelationshipId;
-            var published = PublishIfNeeded(autoPublish, referencingEntity);
+            var published = PublishIfNeeded(referencingEntity);
 
             var sb = new StringBuilder(512);
             sb.AppendLine($"[RelationshipCreated] 1:N {relationshipName}");
@@ -227,7 +226,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ══════════════════════════════════════════════
 
         private CallToolResult HandleCreateNN(string entity1, string entity2, string relationshipName, string intersectEntityName,
-            string solutionName, bool autoPublish)
+            string solutionName)
         {
             if (string.IsNullOrWhiteSpace(entity1))
                 return ErrorResult("Error: entity1 is required for create_nn.\nRead docs://schema_tools_guide for relationship creation examples.");
@@ -289,7 +288,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var response = (CreateManyToManyResponse)_serviceClient.Execute(request);
             var metadataId = response.ManyToManyRelationshipId;
-            var published = PublishIfNeeded(autoPublish, entity1);
+            var published = PublishIfNeeded(entity1);
 
             var sb = new StringBuilder(512);
             sb.AppendLine($"[RelationshipCreated] N:N {relationshipName}");
@@ -323,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleUpdate(string relationshipName,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
-            string menuBehavior, string menuGroup, int menuOrder, bool isHierarchical, bool autoPublish)
+            string menuBehavior, string menuGroup, int menuOrder, bool isHierarchical)
         {
             if (string.IsNullOrWhiteSpace(relationshipName))
                 return ErrorResult("Error: relationship_name is required for update.\nTip: Use get_tables with entity_name to find relationship_name.\nRead docs://schema_tools_guide for cascade preset and type values.");
@@ -431,7 +430,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _serviceClient.Execute(updateRequest);
             }
 
-            var published = (changes.Count > 0 && entityToPublish != null) ? PublishIfNeeded(autoPublish, entityToPublish) : false;
+            var published = (changes.Count > 0 && entityToPublish != null) ? PublishIfNeeded(entityToPublish) : false;
 
             var sb = new StringBuilder(512);
             sb.AppendLine($"[RelationshipUpdated] {relationshipName}");
@@ -512,7 +511,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleAddTarget(string entityName, string attributeName, string referencedEntity,
             string cascadePreset, string cascadeAssign, string cascadeDelete, string cascadeMerge, string cascadeReparent, string cascadeShare, string cascadeUnshare,
-            string menuBehavior, string menuGroup, int menuOrder, string solutionName, bool autoPublish)
+            string menuBehavior, string menuGroup, int menuOrder, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(entityName))
                 return ErrorResult("Error: entity_name is required for add_target (entity with the polymorphic lookup).");
@@ -576,7 +575,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
                 var metadataId = response.RelationshipId;
-                var published = PublishIfNeeded(autoPublish, entityName);
+                var published = PublishIfNeeded(entityName);
 
                 var sb = new StringBuilder(512);
                 sb.AppendLine($"[TargetAdded] {referencedEntity} -> {entityName}.{attributeName}");
@@ -830,9 +829,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
 
 
-        private bool PublishIfNeeded(bool autoPublish, string entityName)
+        private bool PublishIfNeeded(string entityName)
         {
-            if (!autoPublish) return false;
             try
             {
                 var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";

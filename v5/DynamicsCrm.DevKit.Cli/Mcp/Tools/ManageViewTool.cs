@@ -72,8 +72,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool validate = true,
             [Description("Backup before overwrite."
             )] bool backup = true,
-            [Description("Publish after. false when batching."
-            )] bool auto_publish = true,
             [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, imageproviderfunctionname, ishidden, …) without rebuilding LayoutXML."
             )] string cell_updates_json = "")
         {
@@ -101,11 +99,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(entityName, view_name, query_type, include_fetchxml, include_personal),
                     "detail" => HandleDetail(entityName, view_id, view_name),
-                    "create" => HandleCreate(entityName, view_name, layoutxml, fetchxml, validate, auto_publish),
-                    "update" => HandleUpdate(entityName, view_id, layoutxml, fetchxml, validate, backup, auto_publish, cell_updates_json),
-                    "rename" => HandleRename(entityName, view_id, view_name, backup, auto_publish),
-                    "set_default" => HandleSetDefault(entityName, view_id, view_name, auto_publish),
-                    "undo" => HandleUndo(entityName, view_id, layoutxml, fetchxml, validate, auto_publish),
+                    "create" => HandleCreate(entityName, view_name, layoutxml, fetchxml, validate),
+                    "update" => HandleUpdate(entityName, view_id, layoutxml, fetchxml, validate, backup, cell_updates_json),
+                    "rename" => HandleRename(entityName, view_id, view_name, backup),
+                    "set_default" => HandleSetDefault(entityName, view_id, view_name),
+                    "undo" => HandleUndo(entityName, view_id, layoutxml, fetchxml, validate),
                     _ => ErrorResult($"Error: '{action}' is not a valid action. Valid actions: list, detail, create, update, rename, set_default, undo.")
                 };
             }
@@ -243,7 +241,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: create ─────────────────────────────────────────────────
 
         private CallToolResult HandleCreate(string entityName, string viewName,
-            string layoutxml, string fetchxml, bool validate, bool auto_publish)
+            string layoutxml, string fetchxml, bool validate)
         {
             if (string.IsNullOrWhiteSpace(viewName))
                 return ErrorResult("Error: view_name is required for 'create' action.");
@@ -350,7 +348,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newViewId = _serviceClient.Create(newView);
 
-            var published = TryPublish(entityName, auto_publish);
+            var published = TryPublish(entityName);
 
             var resultSb = new StringBuilder(256);
             resultSb.AppendLine($"[ViewCreate] {entityName} — {viewName}");
@@ -359,7 +357,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             resultSb.AppendLine($"Validated: {(validate ? "yes (sync OK)" : "skipped")}");
             resultSb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
-            var status = published || !auto_publish ? "created" : "created_publish_failed";
+            var status = published ? "created" : "created_publish_failed";
 
             return new CallToolResult
             {
@@ -376,7 +374,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: update ─────────────────────────────────────────────────
 
         private CallToolResult HandleUpdate(string entityName, string viewId,
-            string layoutxml, string fetchxml, bool validate, bool backup, bool auto_publish,
+            string layoutxml, string fetchxml, bool validate, bool backup,
             string cellUpdatesJson = "")
         {
             if (string.IsNullOrWhiteSpace(viewId))
@@ -520,9 +518,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRunResult($"Would UPDATE view '{viewName}' ({updateId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
-            var published = TryPublish(returnedTypeCode, auto_publish);
+            var published = TryPublish(returnedTypeCode);
 
-            if (auto_publish && !published)
+            if (!published)
             {
                 var sb = ViewBackupHelper.BuildSuccessText(entityName, updateId, viewName, fetchBackupPath, layoutBackupPath,
                     validate, newFetchXml != null, false);
@@ -593,7 +591,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: rename ─────────────────────────────────────────────────
 
         private CallToolResult HandleRename(string entityName, string viewId, string viewName,
-            bool backup, bool auto_publish)
+            bool backup)
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return ErrorResult("Error: view_id is required for 'rename' action.");
@@ -650,7 +648,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRunResult($"Would RENAME view '{oldName}' to '{viewName}' ({renameId}) on entity '{entityName}'.");
             _serviceClient.Update(update);
 
-            var published = TryPublish(returnedTypeCode, auto_publish);
+            var published = TryPublish(returnedTypeCode);
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[ViewRename] {entityName}");
@@ -666,7 +664,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"  {layoutBackupPath}");
             }
 
-            var status = published || !auto_publish ? "renamed" : "renamed_publish_failed";
+            var status = published ? "renamed" : "renamed_publish_failed";
 
             return new CallToolResult
             {
@@ -682,7 +680,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: set_default ───────────────────────────────────────────
 
-        private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName, bool auto_publish)
+        private CallToolResult HandleSetDefault(string entityName, string viewId, string viewName)
         {
             if (string.IsNullOrWhiteSpace(viewId) && string.IsNullOrWhiteSpace(viewName))
                 return ErrorResult("Error: view_id or view_name is required for 'set_default' action.");
@@ -735,7 +733,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("savedquery", targetId) { ["isdefault"] = true };
             _serviceClient.Update(update);
 
-            var published = TryPublish(entityName, auto_publish);
+            var published = TryPublish(entityName);
 
             var sb = new StringBuilder(256);
             sb.AppendLine($"[ViewSetDefault] {entityName} — {viewName}");
@@ -743,7 +741,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Status: Set as default successfully");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
-            var status = published || !auto_publish ? "set_default" : "set_default_publish_failed";
+            var status = published ? "set_default" : "set_default_publish_failed";
 
             return new CallToolResult
             {
@@ -759,7 +757,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Action: undo ───────────────────────────────────────────────────
 
         private CallToolResult HandleUndo(string entityName, string viewId,
-            string layoutBackupPathArg, string fetchBackupPathArg, bool validate, bool auto_publish)
+            string layoutBackupPathArg, string fetchBackupPathArg, bool validate)
         {
             if (string.IsNullOrWhiteSpace(viewId))
                 return ErrorResult("Error: view_id is required for 'undo' action.");
@@ -919,9 +917,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRunResult($"Would RESTORE view '{viewName}' ({undoId}) from backup.");
             _serviceClient.Update(update);
 
-            var published = TryPublish(returnedTypeCode, auto_publish);
+            var published = TryPublish(returnedTypeCode);
 
-            if (auto_publish && !published)
+            if (!published)
             {
                 var sb = new StringBuilder(256);
                 sb.AppendLine($"[ViewUndo] Restored but publish failed");
@@ -1468,9 +1466,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private bool TryPublish(string entityName, bool autoPublish)
+        private bool TryPublish(string entityName)
         {
-            if (!autoPublish) return false;
             try
             {
                 _serviceClient.Execute(new PublishXmlRequest

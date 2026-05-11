@@ -63,8 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Enable notes. [create-only]")] bool has_notes = false,
             [Description("null = keep current (update).")] bool? is_quick_create_enabled = null,
             [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
-            [Description("1–850. [create-only]")] int primary_attribute_max_length = 100,
-            [Description("")] bool auto_publish = true)
+            [Description("1–850. [create-only]")] int primary_attribute_max_length = 100)
         {
             // Validate required fields
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -110,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     is_quick_create_enabled, is_audit_enabled,
                     ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name,
-                    resolvedSolutionUniqueName ?? solution_name, auto_publish);
+                    resolvedSolutionUniqueName ?? solution_name);
             }
             if (entityResolve.Status == ResolveStatus.Ambiguous || entityResolve.Status == ResolveStatus.Error)
                 return ErrorResult($"Error: {entityResolve.Error}");
@@ -136,7 +135,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         is_quick_create_enabled, is_audit_enabled,
                         ownership_type, table_type, is_activity, has_notes,
                         primary_attribute_name, primary_attribute_display_name,
-                        resolvedSolutionUniqueName ?? solution_name, auto_publish);
+                        resolvedSolutionUniqueName ?? solution_name);
                 }
                 catch
                 {
@@ -175,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     is_quick_create_enabled, is_audit_enabled,
                     ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name,
-                    resolvedSolutionUniqueName ?? solution_name, auto_publish);
+                    resolvedSolutionUniqueName ?? solution_name);
             }
 
             // --- CREATE MODE ---
@@ -364,18 +363,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // Auto-publish
                 var published = false;
-                if (auto_publish)
+                try
                 {
-                    try
-                    {
-                        var publishXml = $"<importexportxml><entities><entity>{entity_name}</entity></entities></importexportxml>";
-                        _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
-                        published = true;
-                    }
-                    catch
-                    {
-                        // Non-critical — entity was created, publish failed
-                    }
+                    var publishXml = $"<importexportxml><entities><entity>{entity_name}</entity></entities></importexportxml>";
+                    _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                    published = true;
+                }
+                catch
+                {
+                    // Non-critical — entity was created, publish failed
                 }
 
                 // Format compact output
@@ -453,7 +449,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             bool? isQuickCreateEnabled, bool? isAuditEnabled,
             string ownershipType, string tableType, bool isActivity, bool hasNotes,
             string primaryAttributeName, string primaryAttributeDisplayName,
-            string solutionName, bool autoPublish)
+            string solutionName)
         {
             try
             {
@@ -567,18 +563,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 // --- Publish ---
                 var published = false;
-                if (autoPublish)
+                try
                 {
-                    try
-                    {
-                        var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
-                        _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
-                        published = true;
-                    }
-                    catch
-                    {
-                        // Non-critical
-                    }
+                    var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
+                    _serviceClient.Execute(new Microsoft.Crm.Sdk.Messages.PublishXmlRequest { ParameterXml = publishXml });
+                    published = true;
+                }
+                catch
+                {
+                    // Non-critical
                 }
 
                 // --- Format output ---

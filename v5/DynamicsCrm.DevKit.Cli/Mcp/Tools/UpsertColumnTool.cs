@@ -80,8 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
             [Description("[update only]")] bool? is_audit_enabled = null,
             [Description("[update only]")] bool? is_valid_for_advanced_find = null,
-            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used as-is. Create only — ignored on update.")] string schema_name = "",
-            [Description("")] bool auto_publish = true)
+            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used as-is. Create only — ignored on update.")] string schema_name = "")
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -194,7 +193,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     display_name, description, required_level, max_length, min_value, max_value,
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
-                    is_audit_enabled, is_valid_for_advanced_find, behavior, precision_source, auto_publish);
+                    is_audit_enabled, is_valid_for_advanced_find, behavior, precision_source);
             }
 
             // --- CREATE MODE ---
@@ -277,36 +276,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, auto_publish);
+                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName);
                     case "memo":
-                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, auto_publish);
+                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName);
                     case "integer":
-                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName, auto_publish);
+                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName);
                     case "bigint":
-                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName, auto_publish);
+                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
                     case "decimal":
-                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, auto_publish);
+                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName, auto_publish);
+                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName);
                     case "float":
                     case "double":
-                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, auto_publish);
+                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName);
                     case "boolean":
-                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName, auto_publish);
+                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName, auto_publish);
+                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName);
                     case "lookup":
-                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName, auto_publish);
+                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName);
                     case "customer":
-                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, prefix, effectiveSolutionName, auto_publish);
+                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, prefix, effectiveSolutionName);
                     case "picklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, effectiveSolutionName, auto_publish);
+                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, effectiveSolutionName);
                     case "multipicklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, effectiveSolutionName, auto_publish);
+                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, effectiveSolutionName);
                     case "image":
-                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName, auto_publish);
+                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
                     case "file":
-                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, effectiveSolutionName, auto_publish);
+                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, effectiveSolutionName);
                     default:
                         return ErrorResult(
                             $"Error: Unknown attribute_type '{attribute_type}'.\n" +
@@ -323,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- String ---
         private CallToolResult CreateStringAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxLength, string format, string solutionName, bool autoPublish)
+            int maxLength, string format, string solutionName)
         {
             if (maxLength < 1) maxLength = 100;
             if (maxLength > 4000) maxLength = 4000;
@@ -351,16 +350,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "String", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
             sb.AppendLine($"Format: {attr.FormatName?.Value ?? "Text"}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "String", displayName, reqLevel, metadataId, solutionName, autoPublish,
+            return BuildResult(sb, entityName, logicalName, "String", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() }, { "format", attr.FormatName?.Value ?? "Text" } });
         }
 
         // --- Memo ---
         private CallToolResult CreateMemoAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxLength, string format, string solutionName, bool autoPublish)
+            int maxLength, string format, string solutionName)
         {
             if (maxLength < 1) maxLength = 2000;
             if (maxLength > 1048576) maxLength = 1048576;
@@ -386,16 +386,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = FormatHeader(entityName, logicalName, "Memo", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Memo", displayName, reqLevel, metadataId, solutionName, autoPublish,
+            return BuildResult(sb, entityName, logicalName, "Memo", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() } });
         }
 
         // --- Integer ---
         private CallToolResult CreateIntegerAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, string format, string solutionName, bool autoPublish)
+            double? minValue, double? maxValue, string format, string solutionName)
         {
             var resolvedFormat = ResolveIntegerFormat(format, out var formatError);
             if (formatError != null) return ErrorResult(formatError);
@@ -421,18 +422,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "Integer", displayName, reqLevel);
             if (minValue.HasValue) sb.AppendLine($"MinValue: {(int)minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {(int)maxValue.Value}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string>();
             if (minValue.HasValue) extra["minValue"] = ((int)minValue.Value).ToString();
             if (maxValue.HasValue) extra["maxValue"] = ((int)maxValue.Value).ToString();
-            return BuildResult(sb, entityName, logicalName, "Integer", displayName, reqLevel, metadataId, solutionName, autoPublish, extra);
+            return BuildResult(sb, entityName, logicalName, "Integer", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Decimal ---
         private CallToolResult CreateDecimalAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName, bool autoPublish)
+            double? minValue, double? maxValue, int precision, string solutionName)
         {
             if (precision < 0) precision = 2;
             if (precision > 10) precision = 10;
@@ -459,18 +461,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Precision: {precision}");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, "Decimal", displayName, reqLevel, metadataId, solutionName, autoPublish, extra);
+            return BuildResult(sb, entityName, logicalName, "Decimal", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Money ---
         private CallToolResult CreateMoneyAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName, bool autoPublish)
+            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName)
         {
             if (precision < 0) precision = 2;
             if (precision > 4) precision = 4;
@@ -501,18 +504,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"PrecisionSource: {precisionSource} ({precisionSourceLabel})");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() }, { "precisionSource", precisionSource.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, "Money", displayName, reqLevel, metadataId, solutionName, autoPublish, extra);
+            return BuildResult(sb, entityName, logicalName, "Money", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Float/Double ---
         private CallToolResult CreateFloatAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName, bool autoPublish)
+            double? minValue, double? maxValue, int precision, string solutionName)
         {
             if (precision < 0) precision = 2;
             if (precision > 10) precision = 10;
@@ -539,18 +543,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Precision: {precision}");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, "Float", displayName, reqLevel, metadataId, solutionName, autoPublish, extra);
+            return BuildResult(sb, entityName, logicalName, "Float", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Boolean ---
         private CallToolResult CreateBooleanAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string trueLabel, string falseLabel, string solutionName, bool autoPublish)
+            string trueLabel, string falseLabel, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(trueLabel)) trueLabel = "Yes";
             if (string.IsNullOrWhiteSpace(falseLabel)) falseLabel = "No";
@@ -576,16 +581,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "Boolean", displayName, reqLevel);
             sb.AppendLine($"TrueLabel: {trueLabel.Trim()}");
             sb.AppendLine($"FalseLabel: {falseLabel.Trim()}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Boolean", displayName, reqLevel, metadataId, solutionName, autoPublish,
+            return BuildResult(sb, entityName, logicalName, "Boolean", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "trueLabel", trueLabel.Trim() }, { "falseLabel", falseLabel.Trim() } });
         }
 
         // --- DateTime ---
         private CallToolResult CreateDateTimeAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string format, string behavior, string solutionName, bool autoPublish)
+            string format, string behavior, string solutionName)
         {
             var dtBehavior = ResolveDateTimeBehavior(behavior, out var behaviorError);
             if (behaviorError != null) return ErrorResult(behaviorError);
@@ -617,9 +623,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "DateTime", displayName, reqLevel);
             sb.AppendLine($"Format: {dateFormat}");
             sb.AppendLine($"Behavior: {behaviorName}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "DateTime", displayName, reqLevel, metadataId, solutionName, autoPublish,
+            return BuildResult(sb, entityName, logicalName, "DateTime", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", behaviorName } });
         }
 
@@ -643,7 +650,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- Lookup (single target) or Polymorphic Lookup (multiple targets) ---
         private CallToolResult CreateLookupAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string lookupTarget, string relationshipName, string prefix, string solutionName, bool autoPublish)
+            string lookupTarget, string relationshipName, string prefix, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(lookupTarget))
                 return ErrorResult(
@@ -670,7 +677,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Multiple targets → Polymorphic Lookup
             if (targets.Count > 1)
-                return CreatePolymorphicLookupAttribute(entityName, logicalName, schemaName, displayName, description, reqLevel, targets.ToArray(), prefix, solutionName, autoPublish);
+                return CreatePolymorphicLookupAttribute(entityName, logicalName, schemaName, displayName, description, reqLevel, targets.ToArray(), prefix, solutionName);
 
             // Single target → Regular Lookup
             var singleTarget = targets[0];
@@ -721,7 +728,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
             var metadataId = response.AttributeId;
 
-            var published = PublishIfNeeded(autoPublish, entityName);
+            var published = PublishIfNeeded(entityName);
 
             var sb = FormatHeader(entityName, logicalName, "Lookup", displayName, reqLevel);
             sb.AppendLine($"Target: {singleTarget}");
@@ -735,7 +742,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- Polymorphic Lookup (multiple targets) ---
         private CallToolResult CreatePolymorphicLookupAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string[] targets, string prefix, string solutionName, bool autoPublish)
+            string[] targets, string prefix, string solutionName)
         {
             var relationships = new OneToManyRelationshipMetadata[targets.Length];
             var relNames = new string[targets.Length];
@@ -793,7 +800,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var response = _serviceClient.Execute(request);
             var metadataId = (Guid)response.Results["AttributeId"];
 
-            var published = PublishIfNeeded(autoPublish, entityName);
+            var published = PublishIfNeeded(entityName);
 
             var sb = FormatHeader(entityName, logicalName, "PolymorphicLookup", displayName, reqLevel);
             sb.AppendLine($"Targets: {string.Join(", ", targets)}");
@@ -811,7 +818,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- Customer (polymorphic lookup: account + contact) ---
         private CallToolResult CreateCustomerAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string prefix, string solutionName, bool autoPublish)
+            string prefix, string solutionName)
         {
             var accountRelName = $"{prefix}_account_{entityName}_{logicalName}";
             var contactRelName = $"{prefix}_contact_{entityName}_{logicalName}";
@@ -885,7 +892,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var response = (CreateCustomerRelationshipsResponse)_serviceClient.Execute(request);
             var metadataId = response.AttributeId;
 
-            var published = PublishIfNeeded(autoPublish, entityName);
+            var published = PublishIfNeeded(entityName);
 
             var sb = FormatHeader(entityName, logicalName, "Customer", displayName, reqLevel);
             sb.AppendLine($"Targets: account, contact");
@@ -906,7 +913,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult CreatePicklistAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
             string optionsJson, string globalOptionSetName, bool isMultiSelect,
-            string solutionName, bool autoPublish)
+            string solutionName)
         {
             var typeName = isMultiSelect ? "MultiSelectPicklist" : "Picklist";
 
@@ -1004,16 +1011,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = FormatHeader(entityName, logicalName, typeName, displayName, reqLevel);
             sb.AppendLine($"Options: {string.Join(", ", optionLabels)}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, typeName, displayName, reqLevel, metadataId, solutionName, autoPublish,
+            return BuildResult(sb, entityName, logicalName, typeName, displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "options", string.Join(", ", optionLabels) } });
         }
 
         // --- BigInt ---
         private CallToolResult CreateBigIntAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string solutionName, bool autoPublish)
+            string solutionName)
         {
             var attr = new BigIntAttributeMetadata
             {
@@ -1031,15 +1039,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "BigInt", displayName, reqLevel);
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "BigInt", displayName, reqLevel, metadataId, solutionName, autoPublish);
+            return BuildResult(sb, entityName, logicalName, "BigInt", displayName, reqLevel, metadataId, solutionName, published);
         }
 
         // --- Image ---
         private CallToolResult CreateImageAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string solutionName, bool autoPublish)
+            string solutionName)
         {
             var attr = new ImageAttributeMetadata
             {
@@ -1058,15 +1067,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Image", displayName, reqLevel);
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Image", displayName, reqLevel, metadataId, solutionName, autoPublish);
+            return BuildResult(sb, entityName, logicalName, "Image", displayName, reqLevel, metadataId, solutionName, published);
         }
 
         // --- File ---
         private CallToolResult CreateFileAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxSizeInKB, string solutionName, bool autoPublish)
+            int maxSizeInKB, string solutionName)
         {
             if (maxSizeInKB < 1) maxSizeInKB = 32768;
             if (maxSizeInKB > 10485760) maxSizeInKB = 10485760; // 10 GB max
@@ -1089,9 +1099,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = FormatHeader(entityName, logicalName, "File", displayName, reqLevel);
             sb.AppendLine($"MaxSizeInKB: {maxSizeInKB}");
-            AppendFooter(sb, solutionName, autoPublish, entityName, metadataId);
+            var published = PublishIfNeeded(entityName);
+            AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "File", displayName, reqLevel, metadataId, solutionName, autoPublish,
+            return BuildResult(sb, entityName, logicalName, "File", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "maxSizeInKB", maxSizeInKB.ToString() } });
         }
 
@@ -1112,9 +1123,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return response.AttributeId;
         }
 
-        private bool PublishIfNeeded(bool autoPublish, string entityName)
+        private bool PublishIfNeeded(string entityName)
         {
-            if (!autoPublish) return false;
             try
             {
                 var publishXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>";
@@ -1137,9 +1147,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb;
         }
 
-        private void AppendFooter(StringBuilder sb, string solutionName, bool autoPublish, string entityName, Guid metadataId)
+        private void AppendFooter(StringBuilder sb, string solutionName, string entityName, Guid metadataId)
         {
-            var published = PublishIfNeeded(autoPublish, entityName);
+            var published = PublishIfNeeded(entityName);
             AppendFooter(sb, solutionName, published, metadataId);
         }
 
@@ -1342,7 +1352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel,
             string addOptions, string updateOptions, string deleteOptions,
-            bool? isAuditEnabled, bool? isValidForAdvancedFind, string behavior, int precisionSource, bool autoPublish)
+            bool? isAuditEnabled, bool? isValidForAdvancedFind, string behavior, int precisionSource)
         {
             try
             {
@@ -1435,7 +1445,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find.");
 
                 // --- Publish ---
-                var published = PublishIfNeeded(autoPublish, entityName);
+                var published = PublishIfNeeded(entityName);
 
                 // --- Format output ---
                 var typeName = GetAttributeTypeName(metadata);

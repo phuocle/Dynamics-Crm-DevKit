@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Destructive = true, ReadOnly = false, Idempotent = false,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageChoiceResult)),
         Description(
-            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name (logical name OR display name — display name resolved automatically); create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + compact lowercase display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. list/detail never publish. create and delete-only update do not issue a publish request because Dataverse auto-publishes newly created/deleted customizations. Other updates publish only the affected option set when auto_publish=true. list supports optional filter= to search by name or display name (contains, case-insensitive).\n\n" +
+            "Global option sets (choices/picklists) — list/detail/create/update. Required: list=(none); detail=optionset_name (logical name OR display name — display name resolved automatically); create=display_name+options+solution_name (optionset_name optional — auto-derived from publisher prefix + compact lowercase display_name if omitted; if provided it MUST start with the solution publisher prefix or an error is returned); update=optionset_name+at least one of (display_name, description, add_options, update_options, remove_options). For local picklists use get_tables. list/detail never publish. create and delete-only update do not issue a publish request because Dataverse auto-publishes newly created/deleted customizations. Other updates always publish only the affected option set. list supports optional filter= to search by name or display name (contains, case-insensitive).\n\n" +
 
             "OPTION VALUES: solution_name is REQUIRED for create and for label-only add_options — if not provided by the user, ask; never search or guess. Pass options/add_options as label-only ('Draft;Confirmed'). For update_options use 'OldLabel:NewLabel;...' pairs. For remove_options use label names ('Draft,Cancelled') — labels are resolved to values automatically.\n\n" +
 
@@ -80,10 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string solution_name = "",
             [Description(
                 "Optional for create/update. Semicolon-separated color mappings. Use 'Label:#RRGGBB' or 'value:#RRGGBB'. Labels are resolved case-insensitively. Example: 'Draft:#808080;Paid:#008000'."
-            )] string option_colors = "",
-            [Description(
-                "Update only: publish only this option set after changes that need publishing. Create and delete-only update do not issue a publish request because new/deleted customizations are automatically published by Dataverse."
-            )] bool auto_publish = true)
+            )] string option_colors = "")
         {
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update'.");
@@ -96,8 +93,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(!string.IsNullOrWhiteSpace(filter) ? filter : display_name),
                     "detail" => HandleDetail(optionset_name),
-                    "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, option_colors, auto_publish),
-                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors, auto_publish),
+                    "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, option_colors),
+                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update'.")
                 };
             }
@@ -173,7 +170,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(string optionsetName, string displayName, string description,
-            string options, string solutionName, string optionColors, bool autoPublish)
+            string options, string solutionName, string optionColors)
         {
             if (string.IsNullOrWhiteSpace(displayName))
                 return ErrorResult("Error: display_name is required for 'create'.");
@@ -327,7 +324,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(string optionsetName, string displayName, string description,
-            string addOptions, string updateOptions, string removeOptionValues, string solutionName, string optionColors, bool autoPublish)
+            string addOptions, string updateOptions, string removeOptionValues, string solutionName, string optionColors)
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'update'.");
@@ -581,7 +578,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             var requiresPublish = hasDisplayName || hasDescription || hasAdd || hasUpdate || hasColors;
-            var published = autoPublish && requiresPublish && PublishOptionSet(name);
+            var published = requiresPublish && PublishOptionSet(name);
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
             if (!requiresPublish && hasRemove)
                 sb.AppendLine("PublishScope: skipped (removed choices are automatically published by Dataverse)");
