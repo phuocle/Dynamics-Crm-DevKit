@@ -1,21 +1,10 @@
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
-using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 {
     internal static class McpHelper
     {
-        internal static void FireAndForgetPublishAll(ServiceClient serviceClient)
-        {
-            Task.Run(() =>
-            {
-                try { serviceClient.Execute(new PublishAllXmlRequest()); }
-                catch { /* intentionally ignored */ }
-            });
-        }
-
         internal static int GetBaseLanguageCode(ServiceClient serviceClient)
         {
             try

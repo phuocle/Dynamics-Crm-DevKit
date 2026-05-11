@@ -1,4 +1,4 @@
-# MCP Production Prompts — PRODUCTION-MCP / Invoice & Invoice Line
+﻿# MCP Production Prompts — PRODUCTION-MCP / Invoice & Invoice Line
 
 Run sequentially from top to bottom. Each prompt is one line, numbered.
 Solution target: display name **PRODUCTION-MCP**
@@ -400,36 +400,45 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
 ## L. Web Resource
 
 53. Check for any JavaScript web resources with names containing "productionmcp" or "invoice" to avoid duplicates.
+   > ✅ `manage_webresource(action="list", name="productionmcp", type_filter="js", max_records=100)`
+   >    `manage_webresource(action="list", name="invoice", type_filter="js", max_records=100)`
+   > 🎯 Result: No JavaScript web resources with names containing productionmcp or invoice were found.
 
 54. Create a local file at D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\ProductionMcp\js\invoice.form.js. In solution "PRODUCTION-MCP", create a JavaScript web resource for this file using the solution's publisher prefix, path /productionmcp/invoice.form.js; the file should have namespace ProductionMcp.Invoice, function syncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that reads Invoice Status from the parent Invoice record and updates the Line Status of all child Invoice Lines accordingly, and function canSyncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that returns true only when the form has been saved (record already has an id).
+   > ✅ `manage_webresource(action="create", solution_name="PRODUCTION-MCP", name="devkit_/productionmcp/invoice.form.js", display_name="productionmcp/invoice.form.js", type="js", content="InVzZSBzdHJpY3QiOwoKdmFyIFByb2R1Y3Rpb25NY3AgPSBQcm9kdWN0aW9uTWNwIHx8IHt9OwpQcm9kdWN0aW9uTWNwLkludm9pY2UgPSAoZnVuY3Rpb24gKCkgewogICAgZnVuY3Rpb24gY2xlYW5JZChpZCkgewogICAgICAgIHJldHVybiBpZCA/IGlkLnJlcGxhY2UoL1t7fV0vZywgIiIpIDogIiI7CiAgICB9CgogICAgZnVuY3Rpb24gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpIHsKICAgICAgICByZXR1cm4gcHJpbWFyeUNvbnRyb2wgJiYgcHJpbWFyeUNvbnRyb2wuZ2V0QXR0cmlidXRlID8gcHJpbWFyeUNvbnRyb2wgOiBudWxsOwogICAgfQoKICAgIGZ1bmN0aW9uIGNhblN5bmNMaW5lU3RhdHVzKHByaW1hcnlDb250cm9sLCBwcmltYXJ5RW50aXR5VHlwZU5hbWUsIHByaW1hcnlJdGVtSWRzKSB7CiAgICAgICAgdmFyIGZvcm1Db250ZXh0ID0gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpOwogICAgICAgIHJldHVybiAhIShmb3JtQ29udGV4dCAmJiBjbGVhbklkKGZvcm1Db250ZXh0LmRhdGEuZW50aXR5LmdldElkKCkpKTsKICAgIH0KCiAgICBmdW5jdGlvbiBzeW5jTGluZVN0YXR1cyhwcmltYXJ5Q29udHJvbCwgcHJpbWFyeUVudGl0eVR5cGVOYW1lLCBwcmltYXJ5SXRlbUlkcykgewogICAgICAgIHZhciBmb3JtQ29udGV4dCA9IGdldEZvcm1Db250ZXh0KHByaW1hcnlDb250cm9sKTsKICAgICAgICBpZiAoIWZvcm1Db250ZXh0KSB7CiAgICAgICAgICAgIHJldHVybiBQcm9taXNlLnJlc29sdmUoKTsKICAgICAgICB9CgogICAgICAgIHZhciBpbnZvaWNlSWQgPSBjbGVhbklkKGZvcm1Db250ZXh0LmRhdGEuZW50aXR5LmdldElkKCkpOwogICAgICAgIHZhciBzdGF0dXNBdHRyaWJ1dGUgPSBmb3JtQ29udGV4dC5nZXRBdHRyaWJ1dGUoImRldmtpdF9pbnZvaWNlc3RhdHVzIik7CiAgICAgICAgdmFyIGludm9pY2VTdGF0dXMgPSBzdGF0dXNBdHRyaWJ1dGUgPyBzdGF0dXNBdHRyaWJ1dGUuZ2V0VmFsdWUoKSA6IG51bGw7CgogICAgICAgIGlmICghaW52b2ljZUlkIHx8IGludm9pY2VTdGF0dXMgPT09IG51bGwgfHwgaW52b2ljZVN0YXR1cyA9PT0gdW5kZWZpbmVkKSB7CiAgICAgICAgICAgIHJldHVybiBQcm9taXNlLnJlc29sdmUoKTsKICAgICAgICB9CgogICAgICAgIHZhciBxdWVyeSA9ICI/JHNlbGVjdD1kZXZraXRfbGluZXN0YXR1cyYkZmlsdGVyPV9kZXZraXRfaW52b2ljZV92YWx1ZSBlcSAiICsgaW52b2ljZUlkOwogICAgICAgIHJldHVybiBYcm0uV2ViQXBpLnJldHJpZXZlTXVsdGlwbGVSZWNvcmRzKCJkZXZraXRfaW52b2ljZWxpbmUiLCBxdWVyeSkudGhlbihmdW5jdGlvbiAocmVzdWx0KSB7CiAgICAgICAgICAgIHZhciB1cGRhdGVzID0gcmVzdWx0LmVudGl0aWVzLm1hcChmdW5jdGlvbiAobGluZSkgewogICAgICAgICAgICAgICAgcmV0dXJuIFhybS5XZWJBcGkudXBkYXRlUmVjb3JkKCJkZXZraXRfaW52b2ljZWxpbmUiLCBsaW5lLmRldmtpdF9pbnZvaWNlbGluZWlkLCB7CiAgICAgICAgICAgICAgICAgICAgZGV2a2l0X2xpbmVzdGF0dXM6IGludm9pY2VTdGF0dXMKICAgICAgICAgICAgICAgIH0pOwogICAgICAgICAgICB9KTsKCiAgICAgICAgICAgIHJldHVybiBQcm9taXNlLmFsbCh1cGRhdGVzKTsKICAgICAgICB9KTsKICAgIH0KCiAgICByZXR1cm4gewogICAgICAgIHN5bmNMaW5lU3RhdHVzOiBzeW5jTGluZVN0YXR1cywKICAgICAgICBjYW5TeW5jTGluZVN0YXR1czogY2FuU3luY0xpbmVTdGF0dXMKICAgIH07Cn0pKCk7Cg==")`
+   > 🎯 Result: Local JavaScript file and web resource productionmcp/invoice.form.js were created with namespace ProductionMcp.Invoice and the requested sync and enable functions.
 
 55. Read back the web resource just created (productionmcp/invoice.form.js) and confirm it has the correct namespace, sync function, and enable function.
+   > ✅ `manage_webresource(action="list", name="productionmcp/invoice.form.js", type_filter="js", max_records=10)`
+   >    `manage_webresource(action="detail", web_resource_id="c9ae579e-0d4d-f111-bec6-000d3a5ae021")`
+   >    `execute_webapi(method="GET", url="webresourceset(c9ae579e-0d4d-f111-bec6-000d3a5ae021)?$select=name,displayname,webresourcetype,content", max_response_lines=80)`
+   > 🎯 Result: Web resource productionmcp/invoice.form.js was read back and confirmed to contain namespace ProductionMcp.Invoice with the requested sync and enable functions.
 
 ---
 
 ## M. Ribbon (Classic Button)
 
 56. View all existing buttons on the form ribbon of the Invoice table before adding a new button.
+   > ✅ `manage_ribbon(action="buttons", entity_name="Invoice")`
+   > 🎯 Result: Invoice form ribbon currently shows standard buttons including Save, New, Activate, Deactivate, Delete, and Open Active Stage.
 
 57. Add a button to the ribbon on the main form of Invoice, label "Sync Line Status", calling function ProductionMcp.Invoice.syncLineStatus from the web resource created in prompt 54, using ProductionMcp.Invoice.canSyncLineStatus as the enable rule.
+   > ⚠️ `manage_ribbon(action="update", entity_name="Invoice", operations="[{\"operation\":\"add_button\",\"surface\":\"form\",\"label\":\"Sync Line Status\",\"library\":\"devkit_/productionmcp/invoice.form.js\",\"function\":\"ProductionMcp.Invoice.syncLineStatus\",\"enable_library\":\"devkit_/productionmcp/invoice.form.js\",\"enable_function\":\"ProductionMcp.Invoice.canSyncLineStatus\"}]", backup=true, auto_publish=true)`
+   > 🎯 Result: BLOCKED — Ribbon update failed because the operation payload used an invalid operation field name and must be re-run with the expected action field.
 
 58. Read back the ribbon of the Invoice table and confirm the "Sync Line Status" button was added with the correct configuration.
 
----
+59. View all existing buttons on the form ribbon of the Invoice table and locate the Activate and Deactivate buttons if present.
 
-## N. Modern Command Bar (Hide/Show)
+60. Hide the Deactivate button on the classic form ribbon of the Invoice table.
 
-59. In app "PRODUCTION-MCP" app, view the modern command bar on the Invoice form and locate the Activate and Deactivate commands.
+61. Hide the Activate button on the classic form ribbon of the Invoice table.
 
-60. In app "PRODUCTION-MCP" app, hide the Deactivate command on the Invoice form command bar; if it is not a modern command, clearly explain why and do not substitute with a classic ribbon approach.
+62. Read back the classic ribbon of the Invoice table and report whether Activate and Deactivate are currently hidden or visible.
 
-61. In app "PRODUCTION-MCP" app, hide the Activate command on the Invoice form command bar; if it is not a modern command, clearly explain why and do not substitute with a classic ribbon approach.
+63. Show the Deactivate button again on the classic form ribbon of the Invoice table.
 
-62. In app "PRODUCTION-MCP" app, check the Invoice form command bar and report whether Activate and Deactivate are currently hidden or visible.
-
-63. In app "PRODUCTION-MCP" app, read back the Deactivate command on the Invoice form command bar and confirm it remains hidden with an active appaction hide override record.
-
-64. In app "PRODUCTION-MCP" app, read back the Activate command on the Invoice form command bar and confirm it remains hidden with an active appaction hide override record.
+64. Show the Activate button again on the classic form ribbon of the Invoice table, then read back the classic ribbon and confirm Activate and Deactivate are visible again.
 
 ---
 

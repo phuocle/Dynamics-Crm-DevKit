@@ -588,7 +588,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             _serviceClient.Delete("webresource", id);
 
-            var published = autoPublish && PublishAll();
+            var published = autoPublish && PublishWebResource(id);
 
             var structured = new ManageWebResourceResult
             {
@@ -638,26 +638,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             try
             {
-                var publish = new PublishXmlRequest
-                {
-                    ParameterXml =
-                        "<importexportxml><webresources>" +
-                        "<webresource>" + webResourceId.ToString() + "</webresource>" +
-                        "</webresources></importexportxml>"
-                };
-                _serviceClient.Execute(publish);
+                var publishXml = $"<importexportxml><webresources><webresource>{webResourceId:D}</webresource></webresources></importexportxml>";
+                _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
                 return true;
             }
             catch
             {
                 return false;
             }
-        }
-
-        private bool PublishAll()
-        {
-            McpHelper.FireAndForgetPublishAll(_serviceClient);
-            return true; // publishing is running in background
         }
 
         #endregion

@@ -73,8 +73,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string value = "",
             [Description("")
             ] string description = "",
-            [Description("")
-            ] bool auto_publish = false,
             [Description("Optional prefix validation for create. If supplied, it must match the solution publisher prefix."
             )] string confirmed_prefix = "")
         {
@@ -89,10 +87,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(solution_name, max_records),
                     "detail" => HandleDetail(variable_name),
-                    "create" => HandleCreateAction(display_name, type, default_value, value, description, solution_name, confirmed_prefix, auto_publish),
-                    "update" => HandleUpdateAction(variable_name, display_name, default_value, value, description, auto_publish),
+                    "create" => HandleCreateAction(display_name, type, default_value, value, description, solution_name, confirmed_prefix),
+                    "update" => HandleUpdateAction(variable_name, display_name, default_value, value, description),
                     "delete" => HandleDelete(variable_name),
-                    "clear" => HandleClear(variable_name, auto_publish),
+                    "clear" => HandleClear(variable_name),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete', 'clear'.")
                 };
             }
@@ -104,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult HandleCreateAction(string displayName, string type,
             string defaultValue, string currentValue, string description, string solutionName,
-            string confirmedPrefix, bool autoPublish)
+            string confirmedPrefix)
         {
             if (string.IsNullOrWhiteSpace(displayName))
                 return ErrorResult("Error: display_name is required for 'create'.");
@@ -162,11 +160,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingByVariableName.Status == ResolveStatus.Ambiguous || existingByVariableName.Status == ResolveStatus.Error)
                 return ErrorResult(existingByVariableName.Error);
 
-            return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solResult.UniqueName, autoPublish);
+            return HandleCreate(variableName, displayName, type, defaultValue, currentValue, description, solResult.UniqueName);
         }
 
         private CallToolResult HandleUpdateAction(string variableName, string displayName,
-            string defaultValue, string currentValue, string description, bool autoPublish)
+            string defaultValue, string currentValue, string description)
         {
             if (string.IsNullOrWhiteSpace(variableName))
                 return ErrorResult("Error: variable_name is required for 'update'.");
@@ -175,7 +173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrEmpty(resolved.Error))
                 return ErrorResult(resolved.Error);
 
-            return HandleUpdate(resolved.Definition, resolved.SchemaName, displayName, defaultValue, currentValue, description, autoPublish);
+            return HandleUpdate(resolved.Definition, resolved.SchemaName, displayName, defaultValue, currentValue, description);
         }
 
         private CallToolResult HandleList(string solutionName, int maxRecords)
@@ -298,7 +296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(string variableName, string displayName, string type,
-            string defaultValue, string currentValue, string description, string solutionName, bool autoPublish)
+            string defaultValue, string currentValue, string description, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(displayName))
                 return ErrorResult(
@@ -348,12 +346,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 curVal = currentValue;
             }
 
-            var published = autoPublish && Publish();
             var typeLbl = GetTypeLabel(typeValue);
             var sol = string.IsNullOrWhiteSpace(solutionName) ? "" : solutionName.Trim();
 
             var text = BuildCompactText("created", variableName, displayName.Trim(),
-                typeLbl, defaultValue, curVal, false, sol, published, solWarning);
+                typeLbl, defaultValue, curVal, false, sol, solWarning);
 
             var structured = new ManageEnvironmentVariableResult
             {
@@ -368,8 +365,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsAddToSolution = addResult.IsAddToSolution,
                 AddToSolutionMethod = addResult.AddToSolutionMethod,
                 AddToSolutionWarning = addResult.AddToSolutionWarning,
-                SolutionWarning = solWarning,
-                Published = published
+                SolutionWarning = solWarning
             };
 
             return new CallToolResult
@@ -380,7 +376,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(Entity existingDef, string variableName, string displayName,
-            string defaultValue, string currentValue, string description, bool autoPublish)
+            string defaultValue, string currentValue, string description)
         {
             var defId = existingDef.Id;
             var existingDisplayName = existingDef.GetAttributeValue<string>("displayname") ?? "";
@@ -426,10 +422,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 curVal = GetSingleCurrentValue(defId) ?? "";
             }
 
-            var published = autoPublish && Publish();
-
             var text = BuildCompactText("updated", variableName, existingDisplayName,
-                existingType, existingDefault, curVal, false, "", published, null);
+                existingType, existingDefault, curVal, false, "", null);
 
             var structured = new ManageEnvironmentVariableResult
             {
@@ -438,8 +432,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = string.IsNullOrEmpty(existingDisplayName) ? null : existingDisplayName,
                 Type = existingType,
                 DefaultValue = string.IsNullOrEmpty(existingDefault) ? null : existingDefault,
-                CurrentValue = string.IsNullOrEmpty(curVal) ? null : curVal,
-                Published = published
+                CurrentValue = string.IsNullOrEmpty(curVal) ? null : curVal
             };
 
             return new CallToolResult
@@ -449,7 +442,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private CallToolResult HandleClear(string variableName, bool autoPublish)
+        private CallToolResult HandleClear(string variableName)
         {
             if (string.IsNullOrWhiteSpace(variableName))
                 return ErrorResult("Error: variable_name is required for 'clear'.");
@@ -470,10 +463,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             DeleteCurrentValue(defId);
 
-            var published = autoPublish && Publish();
-
             var text = BuildCompactText("cleared", variableName, existingDisplayName,
-                existingType, existingDefault, "", true, "", published, null);
+                existingType, existingDefault, "", true, "", null);
 
             var structured = new ManageEnvironmentVariableResult
             {
@@ -482,8 +473,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 DisplayName = string.IsNullOrEmpty(existingDisplayName) ? null : existingDisplayName,
                 Type = existingType,
                 DefaultValue = string.IsNullOrEmpty(existingDefault) ? null : existingDefault,
-                ValueCleared = true,
-                Published = published
+                ValueCleared = true
             };
 
             return new CallToolResult
@@ -656,12 +646,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private bool Publish()
-        {
-            McpHelper.FireAndForgetPublishAll(_serviceClient);
-            return true; // publishing is running in background
-        }
-
         #endregion
 
         #region Helpers
@@ -702,7 +686,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static StringBuilder BuildCompactText(
             string action, string variableName, string displayName,
             string typeLbl, string defaultValue, string currentValue,
-            bool valueCleared, string solutionName, bool published, string solWarning)
+            bool valueCleared, string solutionName, string solWarning)
         {
             var sb = new StringBuilder(256);
             var label = action switch
@@ -727,8 +711,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrEmpty(solWarning))
                 sb.AppendLine($"SolutionWarning: {solWarning}");
-
-            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
             return sb;
         }
