@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
         private static string AddArea(XDocument doc, JsonElement op, int lcid)
         {
-            var label = Required(op, "label", "add_area");
+            var label = RequiredLabel(op, "add_area");
             var id = GetStringProp(op, "id") ?? $"area_{Sanitize(label)}";
             if (FindArea(doc, id) != null)
                 return $"Area '{label}' already exists (Id={id}); no changes made";
@@ -111,7 +111,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         private static string AddGroup(XDocument doc, JsonElement op, int lcid)
         {
             var areaRef = Required(op, "area", "add_group");
-            var label = Required(op, "label", "add_group");
+            var label = RequiredLabel(op, "add_group");
             var area = FindArea(doc, areaRef)
                 ?? throw new InvalidOperationException($"Area '{areaRef}' not found.");
             var id = GetStringProp(op, "id") ?? $"group_{Sanitize(label)}";
@@ -176,7 +176,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             var subArea = new XElement("SubArea",
                 new XAttribute("Id", id),
                 new XAttribute("Entity", entity));
-            var label = GetStringProp(op, "label");
+            var label = GetLabel(op);
             if (!string.IsNullOrWhiteSpace(label))
                 subArea.Add(BuildTitles(label, lcid));
 
@@ -343,6 +343,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
                 throw new InvalidOperationException($"{action} requires '{name}'.");
             return value;
         }
+
+        private static string RequiredLabel(JsonElement op, string action)
+        {
+            var label = GetLabel(op);
+            if (string.IsNullOrWhiteSpace(label))
+                throw new InvalidOperationException($"{action} requires 'label' (alias: 'title' or 'name').");
+            return label;
+        }
+
+        private static string GetLabel(JsonElement op)
+            => GetStringProp(op, "label")
+                ?? GetStringProp(op, "title")
+                ?? GetStringProp(op, "name");
 
         private static string GetStringProp(JsonElement op, string name)
         {

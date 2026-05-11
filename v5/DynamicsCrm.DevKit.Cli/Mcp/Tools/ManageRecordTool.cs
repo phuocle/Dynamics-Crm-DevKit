@@ -70,10 +70,40 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record");
-            if (!entityResult.IsSuccess)
-                return ErrorResult($"Error: {entityResult.Error}");
-            var entityName = entityResult.Value.LogicalName;
+            if (normalizedAction is not ("create" or "read" or "update" or "delete"))
+                return ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete'.");
+
+            // Validate record_id early before entity resolution (which requires network)
+            if (normalizedAction is "read" or "update" or "delete")
+            {
+                if (string.IsNullOrWhiteSpace(record_id))
+                    return ErrorResult($"Error: record_id is required for '{normalizedAction}'.");
+                if (!Guid.TryParse(record_id.Trim(), out _))
+                    return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
+            }
+            if (normalizedAction is "create" or "update")
+            {
+                if (string.IsNullOrWhiteSpace(fields_json))
+                    return ErrorResult(
+                        $"Error: fields_json is required for '{normalizedAction}'.\n" +
+                        "Required: JSON object with field logical names as keys.\n" +
+                        "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
+            }
+            if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
+                return ErrorResult("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
+
+            string entityName;
+            try
+            {
+                var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record");
+                if (!entityResult.IsSuccess)
+                    return ErrorResult($"Error: {entityResult.Error}");
+                entityName = entityResult.Value.LogicalName;
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to resolve entity '{entity_name}': {ex.Message}");
+            }
 
             return normalizedAction switch
             {
@@ -233,6 +263,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return ErrorResult($"Error: Delete failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
             }
+        }
+
+        private static ColumnSet BuildColumnSet(string columns)
+        {
+            if (string.IsNullOrWhiteSpace(columns))
+                return new ColumnSet(true);
+
+            var cols = columns.Split(',')
+                .Select(c => c.Trim().ToLowerInvariant())
+                .Where(c => !string.IsNullOrEmpty(c))
+                .ToArray();
+            return cols.Length > 0 ? new ColumnSet(cols) : new ColumnSet(true);
         }
 
         private static ColumnSet BuildColumnSet(ServiceClient serviceClient, string entityName, string columns)

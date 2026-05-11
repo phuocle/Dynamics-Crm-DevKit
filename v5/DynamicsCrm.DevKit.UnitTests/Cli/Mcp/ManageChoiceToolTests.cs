@@ -126,7 +126,7 @@ public class ManageChoiceToolTests
         var result = tool.manage_choice(action: "create", optionset_name: "");
         Assert.IsTrue(result.IsError);
         var text = GetText(result);
-        Assert.IsTrue(text.Contains("optionset_name is required"), "Error should mention optionset_name is required");
+        Assert.IsTrue(text.Contains("display_name is required"), "Error should mention display_name is required");
     }
 
     [TestMethod]
@@ -155,7 +155,7 @@ public class ManageChoiceToolTests
     {
         var tool = CreateTool();
         var result = tool.manage_choice(action: "create", optionset_name: "test_os",
-            display_name: "Test", options: "not_valid_format");
+            display_name: "Test", options: ":invalid_format");
         Assert.IsTrue(result.IsError);
         var text = GetText(result);
         Assert.IsTrue(text.Contains("Invalid options format"), "Error should mention invalid format");
@@ -212,10 +212,10 @@ public class ManageChoiceToolTests
     {
         var tool = CreateTool();
         var result = tool.manage_choice(action: "update", optionset_name: "test_os",
-            remove_option_values: "abc,def");
+            remove_options: ",");
         Assert.IsTrue(result.IsError);
         var text = GetText(result);
-        Assert.IsTrue(text.Contains("Invalid remove_option_values format"), "Error should mention invalid remove format");
+        Assert.IsTrue(text.Contains("Invalid remove_options format"), "Error should mention invalid remove format");
     }
 
     // ──────────────────────────────────────────────

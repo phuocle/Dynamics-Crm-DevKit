@@ -1,9 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
@@ -276,6 +279,36 @@ public class ManageFormToolTests
     }
 
     [TestMethod]
+    public void FormFieldEventOperations_AddFields_TargetHeader_AddsHeaderField()
+    {
+        var formDoc = XDocument.Parse("<form><tabs /></form>");
+        using var json = JsonDocument.Parse("""
+{
+  "action": "manage_fields",
+  "manage_action": "add",
+  "target": "header",
+  "fields": [
+    { "field": "devkit_name" }
+  ]
+}
+""");
+
+        var result = ExecuteAddFields(formDoc, json.RootElement, new Dictionary<string, AttributeMetadata>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["devkit_name"] = new StringAttributeMetadata
+            {
+                LogicalName = "devkit_name",
+                SchemaName = "devkit_Name",
+                DisplayName = new Label("Invoice Name", 1033)
+            }
+        });
+
+        StringAssert.Contains(result, "add_header_fields: 1 field(s) added to header");
+        StringAssert.Contains(formDoc.ToString(), "<header");
+        StringAssert.Contains(formDoc.ToString(), "datafieldname=\"devkit_name\"");
+    }
+
+    [TestMethod]
     public void FormXmlOperationsRunner_MissingAction_ErrorExplainsOperationContract()
     {
         var message = RunFormXmlOperationsError(SubgridFormXml, """
@@ -342,6 +375,30 @@ public class ManageFormToolTests
 
         Assert.Fail("Expected FormXmlOperationsRunner.Run to throw.");
         return "";
+    }
+
+    private static string ExecuteAddFields(XDocument formDoc, JsonElement op, Dictionary<string, AttributeMetadata> attrMap)
+    {
+        var assembly = ToolType.Assembly;
+        var builderType = assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlBuilder")!;
+        var fieldOpsType = assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormFieldEventOperations")!;
+
+        var builderCtor = builderType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null, new[] { typeof(ServiceClient) }, null)!;
+        var builder = builderCtor.Invoke(new object[] { null! });
+
+        var fieldOpsCtor = fieldOpsType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null, new[] { typeof(ServiceClient), builderType }, null)!;
+        var fieldOps = fieldOpsCtor.Invoke(new[] { null!, builder });
+
+        var execute = fieldOpsType.GetMethod("ExecuteAddFields", BindingFlags.Instance | BindingFlags.Public)!;
+        return (string)execute.Invoke(fieldOps, new object[]
+        {
+            formDoc,
+            op,
+            attrMap,
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        })!;
     }
 
     private static List<JsonElement> ParseOperations(string operationsJson)

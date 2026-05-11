@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ModelContextProtocol.Protocol;
 using System;
 using System.Reflection;
 
@@ -28,8 +29,10 @@ public class MetadataToolValidationTests
     private static string InvokeGetTables(object tool, string entityName)
     {
         var method = GetTablesToolType.GetMethod("get_tables")!;
-        var task = (System.Threading.Tasks.Task<string>)method.Invoke(tool, new object[] { entityName, "", false, false })!;
-        return task.GetAwaiter().GetResult();
+        var task = (System.Threading.Tasks.Task<CallToolResult>)method.Invoke(tool, new object[] { entityName, "", false, false, "" })!;
+        var result = task.GetAwaiter().GetResult();
+        var text = result.Content.Count > 0 && result.Content[0] is ModelContextProtocol.Protocol.TextContentBlock tb ? tb.Text : "";
+        return text;
     }
 
     [TestMethod]

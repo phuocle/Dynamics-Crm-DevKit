@@ -198,6 +198,18 @@ public class GetSolutionComponentsToolTests
     }
 
     [TestMethod]
+    public void DisplayNameFirstResolver_LogicalExactInput_ResolvesBeforeAmbiguousLogicalContains()
+    {
+        var result = ResolveString(
+            "devkit_invoice",
+            NewStringCandidate("target", "Invoice", logicalName: "devkit_invoice", schemaName: "devkit_Invoice"),
+            NewStringCandidate("other", "Invoice Line", logicalName: "devkit_invoiceline", schemaName: "devkit_InvoiceLine"));
+
+        Assert.IsTrue(IsResolveSuccess(result), "Exact logical name should resolve before broader logical contains matches.");
+        Assert.AreEqual("target", GetResolveValue(result));
+    }
+
+    [TestMethod]
     public void DisplayNameFirstResolver_GetSearchInputs_SplitsDisplayUniqueInput()
     {
         var method = ResolverType.GetMethod("GetSearchInputs", BindingFlags.NonPublic | BindingFlags.Static)!;

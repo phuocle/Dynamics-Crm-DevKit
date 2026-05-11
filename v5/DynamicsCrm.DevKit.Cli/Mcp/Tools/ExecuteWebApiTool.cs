@@ -188,8 +188,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "SavedQuery defines view columns and query for ALL users. A FetchXML/LayoutXML mismatch hides all data or crashes the grid."),
             ("userqueries(", "manage_view",
                 "UserQuery defines personal views. A malformed FetchXML/LayoutXML breaks the view with no undo."),
-            ("sitemaps(", "manage_app",
-                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_app."),
+            ("sitemaps(", "manage_sitemap",
+                "SiteMap defines app navigation for ALL users. A malformed SiteMap breaks navigation for the entire app. Do not use execute_webapi for model-driven app or sitemap creation/update. Use manage_sitemap."),
 
             // ── Environment Variables ──
             ("environmentvariabledefinitions(", "manage_environment_variable",

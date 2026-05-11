@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -16,13 +15,13 @@ namespace DynamicsCrm.DevKit.Shared
         /// </summary>
         /// <param name="input">
         /// Human-readable name, e.g. "Hello Xin Chao", "sale order", "My-Table #1".
-        /// Special characters are removed; words are PascalCased and joined.
+        /// Special characters and whitespace are removed while preserving the user-entered casing.
         /// </param>
         /// <param name="prefix">Publisher prefix without underscore, e.g. "v4", "cr123", "myorg". Must NOT be "new" (Dataverse default publisher).</param>
         /// <returns>
         /// A tuple of (SchemaName, LogicalName):
-        ///   SchemaName = prefix + "_" + PascalCasedJoinedWords  (e.g. "v4_HelloXinChao")
-        ///   LogicalName = SchemaName.ToLowerInvariant()          (e.g. "v4_helloxinchao")
+        ///   SchemaName = prefix + "_" + JoinedWordsPreservingCase (e.g. "v4_PONumber")
+        ///   LogicalName = SchemaName.ToLowerInvariant()          (e.g. "v4_ponumber")
         /// </returns>
         /// <exception cref="ArgumentException">Thrown when input or prefix is null or empty.</exception>
         /// <exception cref="InvalidOperationException">Thrown when prefix is "new" (Dataverse default publisher — layer-2 guard).</exception>
@@ -46,35 +45,22 @@ namespace DynamicsCrm.DevKit.Shared
             // Step 1: Trim
             var trimmed = input.Trim();
 
-            // Step 2: Remove special characters — keep letters, digits, and spaces
+            // Step 2: Remove special characters — keep letters, digits, and whitespace
             var cleaned = Regex.Replace(trimmed, @"[^a-zA-Z0-9\s]", "");
 
-            // Step 3: Split by whitespace
-            var words = cleaned.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            // Step 3-5: Remove whitespace while preserving the user's casing.
+            var joined = Regex.Replace(cleaned, @"\s+", "");
 
-            if (words.Length == 0)
+            if (joined.Length == 0)
                 throw new ArgumentException($"Input '{input}' contains no valid characters after cleaning.", nameof(input));
 
-            // Step 4 & 5: PascalCase each word and join (no separator)
-            var joined = string.Join("", words.Select(PascalCaseWord));
-
-            // Step 6: SchemaName = prefix_JoinedPascalCase
+            // Step 6: SchemaName = prefix_JoinedWordsPreservingCase
             var schemaName = $"{prefix.Trim()}_{joined}";
 
             // Step 7: LogicalName = lowercase of SchemaName
             var logicalName = schemaName.ToLowerInvariant();
 
             return (schemaName, logicalName);
-        }
-
-        /// <summary>
-        /// Converts a single word to PascalCase: upper-cases the first character, lower-cases the rest.
-        /// </summary>
-        private static string PascalCaseWord(string word)
-        {
-            if (word.Length == 0) return word;
-            if (word.Length == 1) return word.ToUpperInvariant();
-            return char.ToUpperInvariant(word[0]) + word.Substring(1).ToLowerInvariant();
         }
     }
 }

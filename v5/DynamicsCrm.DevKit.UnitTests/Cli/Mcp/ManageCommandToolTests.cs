@@ -221,7 +221,7 @@ public class ManageCommandToolTests
         var tool = CreateTool();
         var result = tool.manage_command(action: "detail");
         Assert.IsTrue(result.IsError == true);
-        Assert.IsTrue(GetText(result).Contains("command_id is required"));
+        Assert.IsTrue(GetText(result).Contains("command_id or label is required"));
     }
 
     [TestMethod]

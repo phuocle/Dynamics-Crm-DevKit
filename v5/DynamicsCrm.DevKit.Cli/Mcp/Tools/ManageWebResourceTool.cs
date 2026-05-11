@@ -332,13 +332,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(type))
                 return ErrorResult("Error: type is required for 'create'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
 
-            if (string.IsNullOrWhiteSpace(solutionName))
-                return ErrorResult("Error: solution_name is required for 'create'.\n" +
-                                   "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
-
             var typeTrimmed = type.Trim().ToLowerInvariant();
             if (!TypeFilterMap.TryGetValue(typeTrimmed, out var typeCode))
                 return ErrorResult($"Error: Invalid type '{type}'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
+
+            if (string.IsNullOrWhiteSpace(solutionName))
+                return ErrorResult("Error: solution_name is required for 'create'.\n" +
+                                   "Provide the solution unique name or display name. Use get_solution_components to find available solutions.");
 
             // Resolve publisher prefix from solution
             var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
@@ -701,16 +701,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Guid.TryParse(trimmed, out var guid))
                 return (guid, null);
 
-            var resolve = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_webresource");
-            if (!resolve.IsSuccess)
-                return (null, $"Error: web_resource_id '{trimmed}': {resolve.Error}");
-
-            var id = resolve.Value.Id;
-            if (id == Guid.Empty)
-                id = resolve.Value.GetAttributeValue<Guid>("webresourceid");
-            return id == Guid.Empty
-                ? (null, $"Error: web_resource_id '{trimmed}' resolved without a webresourceid.")
-                : (id, null);
+            return (null, $"Error: '{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
         }
 
         private static CallToolResult ErrorResult(string message) => new()

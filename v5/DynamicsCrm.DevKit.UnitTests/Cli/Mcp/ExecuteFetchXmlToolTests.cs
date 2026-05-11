@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using ModelContextProtocol.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,12 @@ public class ExecuteFetchXmlToolTests
     private static object CreateTool() =>
         Activator.CreateInstance(ToolType, new object?[] { null })!;
 
+    private static string InvokeExecute(object tool, string fetchxml, int maxRecords, bool getAll)
+    {
+        var callResult = (CallToolResult)ExecuteMethod.Invoke(tool, new object?[] { fetchxml, maxRecords, getAll })!;
+        return callResult.GetText();
+    }
+
     // ──────────────────────────────────────────────
     // Validation — empty / whitespace fetchxml
     // ──────────────────────────────────────────────
@@ -33,7 +40,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_EmptyFetchXml_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "", 10, false })!;
+        var result = InvokeExecute(tool, "", 10, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
         Assert.IsTrue(result.Contains("required"));
     }
@@ -42,7 +49,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_WhitespaceOnlyFetchXml_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "   ", 10, false })!;
+        var result = InvokeExecute(tool, "   ", 10, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
     }
 
@@ -50,7 +57,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_NullFetchXml_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { null, 10, false })!;
+        var result = InvokeExecute(tool, null!, 10, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
         Assert.IsTrue(result.Contains("required"));
     }
@@ -63,7 +70,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_ZeroMaxRecords_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch/>", 0, false })!;
+        var result = InvokeExecute(tool, "<fetch/>", 0, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
         Assert.IsTrue(result.Contains("positive"));
     }
@@ -72,7 +79,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_NegativeMaxRecords_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch/>", -1, false })!;
+        var result = InvokeExecute(tool, "<fetch/>", -1, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
     }
 
@@ -80,7 +87,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_LargeNegativeMaxRecords_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch/>", -999, false })!;
+        var result = InvokeExecute(tool, "<fetch/>", -999, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
         Assert.IsTrue(result.Contains("positive"));
     }
@@ -91,7 +98,7 @@ public class ExecuteFetchXmlToolTests
         // max_records > 5000 should be capped to 5000, then proceed to execution
         // which will fail because _serviceClient is null, but the capping branch (line 58) is exercised
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 9999, false })!;
+        var result = InvokeExecute(tool, "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 9999, false);
         // It should proceed past capping and fail in ExecuteSinglePage
         Assert.IsTrue(result.StartsWith("Error: Failed to execute FetchXML:"),
             "Should cap max_records and then fail on null service client");
@@ -101,7 +108,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_MaxRecordsExceedsLimit_GetAllMode_IsCappedAndProceeds()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 10000, true })!;
+        var result = InvokeExecute(tool, "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 10000, true);
         Assert.IsTrue(result.StartsWith("Error: Failed to execute FetchXML:"),
             "Should cap max_records and then fail on null service client in get_all mode");
     }
@@ -110,7 +117,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_MaxRecordsExactlyAtLimit_Proceeds()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 5000, false })!;
+        var result = InvokeExecute(tool, "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 5000, false);
         Assert.IsTrue(result.StartsWith("Error: Failed to execute FetchXML:"),
             "max_records=5000 should not be capped, just proceed and fail on null client");
     }
@@ -119,7 +126,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_MaxRecordsOne_Proceeds()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 1, false })!;
+        var result = InvokeExecute(tool, "<fetch><entity name='account'><attribute name='name'/></entity></fetch>", 1, false);
         Assert.IsTrue(result.StartsWith("Error: Failed to execute FetchXML:"),
             "max_records=1 should proceed and fail on null client");
     }
@@ -132,7 +139,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_InvalidXml_ReturnsError()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "not xml", 10, false })!;
+        var result = InvokeExecute(tool, "not xml", 10, false);
         Assert.IsTrue(result.StartsWith("Error:"), $"Expected error, got: {result}");
     }
 
@@ -140,7 +147,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_GetSinglePage_ThrowsServiceClientError_CaughtAndReturned()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch/>", 10, false })!;
+        var result = InvokeExecute(tool, "<fetch/>", 10, false);
 
         Assert.IsTrue(result.StartsWith("Error: Failed to execute FetchXML:"), "Should gracefully catch NullReferenceException from _serviceClient");
     }
@@ -149,7 +156,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_GetAllPages_ThrowsServiceClientError_CaughtAndReturned()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch/>", 10, true })!;
+        var result = InvokeExecute(tool, "<fetch/>", 10, true);
 
         Assert.IsTrue(result.StartsWith("Error: Failed to execute FetchXML:"), "Should gracefully catch NullReferenceException from _serviceClient");
     }
@@ -158,7 +165,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_ValidFetchXml_SinglePageMode_NullClient()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch><entity name='contact'/></fetch>", 50, false })!;
+        var result = InvokeExecute(tool, "<fetch><entity name='contact'/></fetch>", 50, false);
         Assert.IsTrue(result.Contains("Error"), "Should error due to null service client");
     }
 
@@ -166,7 +173,7 @@ public class ExecuteFetchXmlToolTests
     public void ExecuteFetchXml_ValidFetchXml_AllPagesMode_NullClient()
     {
         var tool = CreateTool();
-        var result = (string)ExecuteMethod.Invoke(tool, new object?[] { "<fetch><entity name='contact'/></fetch>", 50, true })!;
+        var result = InvokeExecute(tool, "<fetch><entity name='contact'/></fetch>", 50, true);
         Assert.IsTrue(result.Contains("Error"), "Should error due to null service client");
     }
 

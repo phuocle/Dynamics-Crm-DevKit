@@ -110,6 +110,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             return (key.Trim(), null);
         }
 
+        private static string ParseFieldName(string key)
+        {
+            var (fieldName, _) = ParseFieldKey(key);
+            return fieldName;
+        }
+
         private static object ConvertValue(AttributeMetadata attrMeta, JsonElement jsonVal, string fieldName, string targetEntityOverride)
         {
             return attrMeta switch

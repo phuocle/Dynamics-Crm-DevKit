@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
             [Description("Numeric types: minimum value.")] double? min_value = null,
             [Description("Numeric types: maximum value.")] double? max_value = null,
-            [Description("decimal/money/float 0-10 (def 2; money max 4). [update: omit=keep]")] int precision = -1,
+            [Description("decimal/money/float 0-10 (def 2; money max is 4). [update: omit=keep]")] int precision = -1,
             [Description("string: Text/Email/Url/Phone/TextArea/TickerSymbol/RichText. datetime: DateOnly/DateAndTime. integer: None/Duration/TimeZone/Language/Locale.")] string format = "",
             [Description("datetime: UserLocal (def)/DateOnly/TimeZoneIndependent. DateOnly forces DateOnly format.")] string behavior = "",
             [Description("money: 0=Attribute (def), 1=Organization, 2=Currency.")] int precision_source = -1,
@@ -91,12 +91,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             entity_name = entity_name.Trim();
             attribute_name = attribute_name.Trim();
-
-            // --- Resolve entity_name: Display Name first, then logical/schema contains ---
-            var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
-            if (entityError != null)
-                return ErrorResult(entityError);
-            entity_name = resolvedEntity;
 
             // --- Early validation: attribute_type, required_level, format, behavior ---
             // Validate these before touching Dataverse so errors return fast even in DryRun mode.
@@ -149,6 +143,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     if (behaviorErr != null) return ErrorResult($"[Error] Invalid behavior for datetime: {behaviorErr}");
                 }
             }
+
+            // Early check: if no underscore and no solution_name, flag error for create mode (update would have a prefix already)
+            {
+                var earlyUscIdx = attribute_name.IndexOf('_');
+                var earlyHasPrefix = earlyUscIdx >= 1 && earlyUscIdx < attribute_name.Length - 1;
+                if (!earlyHasPrefix && string.IsNullOrWhiteSpace(solution_name) && !string.IsNullOrWhiteSpace(attribute_type))
+                    return ErrorResult(
+                        $"Error: attribute_name must include a publisher prefix (e.g., 'new_priority').\n" +
+                        $"Received: '{attribute_name}' on entity '{entity_name}'.\n" +
+                        $"Tip: Either include the prefix in attribute_name (e.g., 'new_priority') or provide solution_name to auto-resolve the prefix.");
+            }
+
+            // --- Resolve entity_name: Display Name first, then logical/schema contains ---
+            var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
+            if (entityError != null)
+                return ErrorResult(entityError);
+            entity_name = resolvedEntity;
 
             // --- Try to retrieve existing attribute to decide create vs update ---
             AttributeMetadata existingMetadata = null;
@@ -233,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Determine SchemaName:
             // - schema_name provided → use as-is (user takes responsibility for correctness)
-            // - otherwise derive via DataverseNamer (PascalCase from display_name)
+            // - otherwise derive via DataverseNamer (portal-style, preserving display_name casing)
             string schemaName;
             if (!string.IsNullOrWhiteSpace(schema_name))
             {

@@ -206,6 +206,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .ToList();
         }
 
+        private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
+        {
+            var entityList = string.IsNullOrWhiteSpace(entities)
+                ? new List<string>()
+                : entities.Split(',').Select(e => e.Trim()).Where(e => !string.IsNullOrEmpty(e)).ToList();
+            return BuildSearchRequestBody(searchTerm, entityList, top, filter);
+        }
+
         private static string BuildSearchRequestBody(string searchTerm, List<string> entities, int top, string filter)
         {
             var body = new Dictionary<string, object>
@@ -280,6 +288,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }).ToList()
             };
         }
+
+        private static string FormatSearchResults(string jsonResponse, string searchTerm)
+            => FormatSearchResults(BuildSearchResult(jsonResponse, searchTerm));
 
         private static string FormatSearchResults(SearchRecordsResult structured)
         {
@@ -429,6 +440,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Statistics = statistics
             };
         }
+
+        private static string FormatStatusResults(string statusJson, string? statisticsJson) =>
+            FormatStatusResults(BuildStatusResult(statusJson, statisticsJson));
 
         private static string FormatStatusResults(SearchRecordsResult structured)
         {

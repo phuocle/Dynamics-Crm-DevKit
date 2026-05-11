@@ -142,7 +142,7 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
 
 3. In solution PRODUCTION-MCP, create a global choice with display name "Invoice Status" containing the following values: Draft, Confirmed, Shipped, Paid, Cancelled.
    > ✅ `manage_choice(action="create", display_name="Invoice Status", options="Draft;Confirmed;Shipped;Paid;Cancelled", solution_name="PRODUCTION-MCP")`
-   > 🎯 Result: Global choice Invoice Status created in solution PRODUCTION-MCP with options Draft, Confirmed, Shipped, Paid, and Cancelled.
+   > 🎯 Result: Global choice Invoice Status created in solution PRODUCTION-MCP with portal-default naming and options Draft, Confirmed, Shipped, Paid, and Cancelled.
 
 4. Read back the global choice "Invoice Status" just created and list all values as human-readable labels only; do not include integer codes, logical names, GUIDs, or any machine-readable identifiers in the result.
    > ✅ `manage_choice(action="detail", optionset_name="Invoice Status")`
@@ -175,120 +175,225 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
    > 🎯 Result: Table Invoice exists with plural name Invoices, primary field Invoice Name, notes enabled, audit enabled, quick create enabled, and user ownership.
 
 9. In solution "PRODUCTION-MCP", create a table "Invoice Line", plural name "Invoice Lines", primary field name "Line Name", enable notes, enable audit, enable quick create, user ownership.
+   > ✅ `upsert_table(entity_name="Invoice Line", display_name="Invoice Line", display_collection_name="Invoice Lines", solution_name="PRODUCTION-MCP", primary_attribute_display_name="Line Name", has_notes=true, is_audit_enabled=true, is_quick_create_enabled=true, ownership_type="User", auto_publish=true)`
+   > 🎯 Result: Table Invoice Line exists with plural name Invoice Lines, primary field Line Name, notes enabled, audit enabled, quick create enabled, and user ownership.
 
 10. Check the metadata of the Invoice table just created: actual logical name, primary id field, primary name field, owner field, audit status.
+   > ✅ `get_tables(entity_name="Invoice")`
+   > 🎯 Result: Invoice metadata confirms logical name devkit_invoice, primary id field devkit_invoiceid, primary name field devkit_name, owner field ownerid, and audit enabled.
 
 11. Check the metadata of the Invoice Line table just created: actual logical name, primary id field, primary name field, owner field, audit status.
+   > ✅ `get_tables(entity_name="Invoice Line")`
+   > 🎯 Result: Invoice Line metadata confirms logical name devkit_invoiceline, primary id field devkit_invoicelineid, primary name field devkit_name, owner field ownerid, and audit enabled.
 
 ---
 
 ## E. Create Columns for Invoice
 
 12. In solution "PRODUCTION-MCP", add column "Invoice Number" to the Invoice table, type text, required, max length 100.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Invoice Number", attribute_type="string", display_name="Invoice Number", solution_name="PRODUCTION-MCP", required_level="Required", max_length=100, auto_publish=true)`
+   > 🎯 Result: Column Invoice Number created on Invoice as required text with max length 100.
 
 13. In solution "PRODUCTION-MCP", add column "Invoice Date" to the Invoice table, type date only, required.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Invoice Date", attribute_type="datetime", display_name="Invoice Date", solution_name="PRODUCTION-MCP", format="DateOnly", behavior="DateOnly", required_level="Required", auto_publish=true)`
+   > 🎯 Result: Column Invoice Date created on Invoice as required date-only.
 
 14. In solution "PRODUCTION-MCP", add column "Due Date" to the Invoice table, type date only.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Due Date", attribute_type="datetime", display_name="Due Date", solution_name="PRODUCTION-MCP", format="DateOnly", behavior="DateOnly", auto_publish=true)`
+   > 🎯 Result: Column Due Date created on Invoice as date-only.
 
 15. In solution "PRODUCTION-MCP", add column "Bill To" to the Invoice table, type customer lookup targeting Account or Contact, required.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Bill To", attribute_type="customer", display_name="Bill To", solution_name="PRODUCTION-MCP", required_level="Required", auto_publish=true)`
+   > 🎯 Result: Column Bill To created on Invoice as a required customer lookup targeting Account or Contact.
 
 16. In solution "PRODUCTION-MCP", add column "Invoice Status" to the Invoice table, type picklist using the global choice "Invoice Status" created earlier.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Invoice Status", attribute_type="picklist", display_name="Invoice Status", solution_name="PRODUCTION-MCP", global_optionset_name="Invoice Status", auto_publish=true)`
+   > 🎯 Result: Column Invoice Status created on Invoice as a picklist using the Invoice Status global choice.
 
 17. In solution "PRODUCTION-MCP", add column "Total Amount" to the Invoice table, type currency, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Total Amount", attribute_type="money", display_name="Total Amount", solution_name="PRODUCTION-MCP", precision=2, auto_publish=true)`
+   > 🎯 Result: Column Total Amount created on Invoice as currency with precision 2.
 
 18. In solution "PRODUCTION-MCP", add column "Tax Amount" to the Invoice table, type currency, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Tax Amount", attribute_type="money", display_name="Tax Amount", solution_name="PRODUCTION-MCP", precision=2, auto_publish=true)`
+   > 🎯 Result: Column Tax Amount created on Invoice as currency with precision 2.
 
 19. In solution "PRODUCTION-MCP", add column "Grand Total" to the Invoice table, type currency, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Grand Total", attribute_type="money", display_name="Grand Total", solution_name="PRODUCTION-MCP", precision=2, auto_publish=true)`
+   > 🎯 Result: Column Grand Total created on Invoice as currency with precision 2.
 
 20. In solution "PRODUCTION-MCP", add column "PO Number" to the Invoice table, type text, max length 100.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="PO Number", attribute_type="string", display_name="PO Number", solution_name="PRODUCTION-MCP", max_length=100, auto_publish=true)`
+   > 🎯 Result: Column PO Number created on Invoice as text with max length 100.
 
 21. In solution "PRODUCTION-MCP", add column "Remarks" to the Invoice table, type multiline text, max length 4000.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Remarks", attribute_type="memo", display_name="Remarks", solution_name="PRODUCTION-MCP", max_length=4000, auto_publish=true)`
+   > 🎯 Result: Column Remarks created on Invoice as multiline text with max length 4000.
 
 ---
 
 ## F. Create Columns for Invoice Line
 
 22. In solution "PRODUCTION-MCP", add column "Line Number" to the Invoice Line table, type integer, required, min 1, max 999999.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Line Number", attribute_type="integer", display_name="Line Number", solution_name="PRODUCTION-MCP", required_level="Required", min_value=1, max_value=999999, auto_publish=true)`
+   > 🎯 Result: Column Line Number created on Invoice Line as required integer with range 1 to 999999.
 
 23. In solution "PRODUCTION-MCP", add column "Product Name" to the Invoice Line table, type text, required, max length 200.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Product Name", attribute_type="string", display_name="Product Name", solution_name="PRODUCTION-MCP", required_level="Required", max_length=200, auto_publish=true)`
+   > 🎯 Result: Column Product Name created on Invoice Line as required text with max length 200.
 
 24. In solution "PRODUCTION-MCP", add column "Description" to the Invoice Line table, type multiline text, max length 2000.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Description", attribute_type="memo", display_name="Description", solution_name="PRODUCTION-MCP", max_length=2000, auto_publish=true)`
+   > 🎯 Result: Column Description created on Invoice Line as multiline text with max length 2000.
 
 25. In solution "PRODUCTION-MCP", add column "Quantity" to the Invoice Line table, type decimal, required, min 0, max 1000000, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Quantity", attribute_type="decimal", display_name="Quantity", solution_name="PRODUCTION-MCP", required_level="Required", min_value=0, max_value=1000000, precision=2, auto_publish=true)`
+   > 🎯 Result: Column Quantity created on Invoice Line as required decimal with range 0 to 1000000 and precision 2.
 
 26. In solution "PRODUCTION-MCP", add column "Unit Price" to the Invoice Line table, type currency, required, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Unit Price", attribute_type="money", display_name="Unit Price", solution_name="PRODUCTION-MCP", required_level="Required", precision=2, auto_publish=true)`
+   > 🎯 Result: Column Unit Price created on Invoice Line as required currency with precision 2.
 
 27. In solution "PRODUCTION-MCP", add column "Discount Percent" to the Invoice Line table, type decimal, min 0, max 100, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Discount Percent", attribute_type="decimal", display_name="Discount Percent", solution_name="PRODUCTION-MCP", min_value=0, max_value=100, precision=2, auto_publish=true)`
+   > 🎯 Result: Column Discount Percent created on Invoice Line as decimal with range 0 to 100 and precision 2.
 
 28. In solution "PRODUCTION-MCP", add column "Line Total" to the Invoice Line table, type currency, precision 2.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Line Total", attribute_type="money", display_name="Line Total", solution_name="PRODUCTION-MCP", precision=2, auto_publish=true)`
+   > 🎯 Result: Column Line Total created on Invoice Line as currency with precision 2.
 
 29. In solution "PRODUCTION-MCP", add column "Line Status" to the Invoice Line table, type picklist using the global choice "Invoice Status" created earlier.
+   > ✅ `upsert_column(entity_name="Invoice Line", attribute_name="Line Status", attribute_type="picklist", display_name="Line Status", solution_name="PRODUCTION-MCP", global_optionset_name="Invoice Status", auto_publish=true)`
+   > 🎯 Result: Column Line Status created on Invoice Line as a picklist using the Invoice Status global choice.
 
 ---
 
 ## G. Relationship Between Invoice and Invoice Line
 
 30. In solution "PRODUCTION-MCP", create a one-to-many relationship from Invoice to Invoice Line, the lookup on Invoice Line has display name "Invoice", cascade type referential.
+   > ✅ `upsert_relationship(action="create_1n", referenced_entity="Invoice", referencing_entity="Invoice Line", lookup_display_name="Invoice", cascade_preset="Referential", solution_name="PRODUCTION-MCP", auto_publish=true)`
+   > 🎯 Result: Relationship from Invoice to Invoice Line created with lookup Invoice on Invoice Line and referential cascade behavior.
 
 31. Check the metadata of the Invoice Line table and identify the actual logical name of the lookup field pointing to Invoice.
+   > ✅ `get_tables(entity_name="Invoice Line")`
+   > 🎯 Result: Invoice Line metadata confirms the lookup field pointing to Invoice is devkit_invoice.
 
 ---
 
 ## H. Publish
 
 32. Publish customizations for the Invoice table, Invoice Line table, and the "Invoice Status" global choice.
+   > ✅ `publish_customizations(entities="Invoice,Invoice Line", include_global_optionset=true)`
+   > 🎯 Result: Customizations published for Invoice, Invoice Line, and global choices including Invoice Status.
 
 ---
 
 ## I. View Design
 
 33. List the existing public views of the Invoice table.
+   > ✅ `manage_view(action="list", entity_name="Invoice", query_type=0, include_fetchxml=false)`
+   > 🎯 Result: Invoice has public views Active Invoices and Inactive Invoices.
 
 34. Create public view "PRODUCTION-MCP Active Invoices" for Invoice: active records only, columns Invoice Number, Bill To, Invoice Date, Due Date, Invoice Status, Grand Total, Owner, Modified On, sort by Modified On descending.
+   > ✅ `manage_view(action="create", entity_name="Invoice", view_name="PRODUCTION-MCP Active Invoices", query_type=0, fetchxml="<fetch version='1.0' mapping='logical'><entity name='devkit_invoice'><attribute name='devkit_invoicenumber'/><attribute name='devkit_billto'/><attribute name='devkit_invoicedate'/><attribute name='devkit_duedate'/><attribute name='devkit_invoicestatus'/><attribute name='devkit_grandtotal'/><attribute name='ownerid'/><attribute name='modifiedon'/><order attribute='modifiedon' descending='true'/><filter type='and'><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>", layoutxml="<grid name='resultset' object='10992' jump='devkit_invoicenumber' select='1' icon='1' preview='1'><row name='result' id='devkit_invoiceid'><cell name='devkit_invoicenumber' width='150'/><cell name='devkit_billto' width='150'/><cell name='devkit_invoicedate' width='120'/><cell name='devkit_duedate' width='120'/><cell name='devkit_invoicestatus' width='120'/><cell name='devkit_grandtotal' width='120'/><cell name='ownerid' width='120'/><cell name='modifiedon' width='150'/></row></grid>", validate=true, auto_publish=true)`
+   > 🎯 Result: Public view PRODUCTION-MCP Active Invoices created for Invoice with active-record filtering and Modified On descending sort.
 
 35. Create public view "PRODUCTION-MCP Invoices By Status" for Invoice: columns Invoice Number, Invoice Status, Bill To, Grand Total, Created On, sort by Invoice Status ascending then Created On descending.
+   > ✅ `manage_view(action="create", entity_name="Invoice", view_name="PRODUCTION-MCP Invoices By Status", query_type=0, fetchxml="<fetch version='1.0' mapping='logical'><entity name='devkit_invoice'><attribute name='devkit_invoicenumber'/><attribute name='devkit_invoicestatus'/><attribute name='devkit_billto'/><attribute name='devkit_grandtotal'/><attribute name='createdon'/><order attribute='devkit_invoicestatus' descending='false'/><order attribute='createdon' descending='true'/></entity></fetch>", layoutxml="<grid name='resultset' object='10992' jump='devkit_invoicenumber' select='1' icon='1' preview='1'><row name='result' id='devkit_invoiceid'><cell name='devkit_invoicenumber' width='150'/><cell name='devkit_invoicestatus' width='120'/><cell name='devkit_billto' width='150'/><cell name='devkit_grandtotal' width='120'/><cell name='createdon' width='150'/></row></grid>", validate=true, auto_publish=true)`
+   > 🎯 Result: Public view PRODUCTION-MCP Invoices By Status created for Invoice with Invoice Status ascending and Created On descending sort.
 
 36. List the existing public views of the Invoice Line table.
+   > ✅ `manage_view(action="list", entity_name="Invoice Line", query_type=0, include_fetchxml=false)`
+   > 🎯 Result: Invoice Line has public views Active Invoice Lines and Inactive Invoice Lines.
 
 37. Create public view "PRODUCTION-MCP Invoice Lines" for Invoice Line: active records only, columns Line Number, Product Name, Quantity, Unit Price, Line Total, Line Status, Invoice, sort by Line Number ascending.
+   > ✅ `manage_view(action="create", entity_name="Invoice Line", view_name="PRODUCTION-MCP Invoice Lines", query_type=0, fetchxml="<fetch version='1.0' mapping='logical'><entity name='devkit_invoiceline'><attribute name='devkit_linenumber'/><attribute name='devkit_productname'/><attribute name='devkit_quantity'/><attribute name='devkit_unitprice'/><attribute name='devkit_linetotal'/><attribute name='devkit_linestatus'/><attribute name='devkit_invoice'/><order attribute='devkit_linenumber' descending='false'/><filter type='and'><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>", layoutxml="<grid name='resultset' object='10993' jump='devkit_linenumber' select='1' icon='1' preview='1'><row name='result' id='devkit_invoicelineid'><cell name='devkit_linenumber' width='100'/><cell name='devkit_productname' width='180'/><cell name='devkit_quantity' width='100'/><cell name='devkit_unitprice' width='120'/><cell name='devkit_linetotal' width='120'/><cell name='devkit_linestatus' width='120'/><cell name='devkit_invoice' width='150'/></row></grid>", validate=true, auto_publish=true)`
+   > 🎯 Result: Public view PRODUCTION-MCP Invoice Lines created for Invoice Line with active-record filtering and Line Number ascending sort.
 
 38. Create public view "Subgrid Invoice Lines" for Invoice Line: active records only, columns Line Number, Product Name, Quantity, Unit Price, Line Total, Line Status, Invoice, sort by Line Number ascending.
+   > ✅ `manage_view(action="create", entity_name="Invoice Line", view_name="Subgrid Invoice Lines", query_type=64, fetchxml="<fetch version='1.0' mapping='logical'><entity name='devkit_invoiceline'><attribute name='devkit_linenumber'/><attribute name='devkit_productname'/><attribute name='devkit_quantity'/><attribute name='devkit_unitprice'/><attribute name='devkit_linetotal'/><attribute name='devkit_linestatus'/><attribute name='devkit_invoice'/><order attribute='devkit_linenumber' descending='false'/><filter type='and'><condition attribute='statecode' operator='eq' value='0'/></filter></entity></fetch>", layoutxml="<grid name='resultset' object='10993' jump='devkit_linenumber' select='1' icon='1' preview='1'><row name='result' id='devkit_invoicelineid'><cell name='devkit_linenumber' width='100'/><cell name='devkit_productname' width='180'/><cell name='devkit_quantity' width='100'/><cell name='devkit_unitprice' width='120'/><cell name='devkit_linetotal' width='120'/><cell name='devkit_linestatus' width='120'/><cell name='devkit_invoice' width='150'/></row></grid>", validate=true, auto_publish=true)`
+   > 🎯 Result: Subgrid view Subgrid Invoice Lines created for Invoice Line with active-record filtering and Line Number ascending sort.
 
 39. Read back all 4 views just created and confirm the columns and filter conditions match the requirements.
+   > ✅ `manage_view(action="detail", entity_name="Invoice", view_name="PRODUCTION-MCP Active Invoices", include_fetchxml=true)`
+   >    `manage_view(action="detail", entity_name="Invoice", view_name="PRODUCTION-MCP Invoices By Status", include_fetchxml=true)`
+   >    `manage_view(action="detail", entity_name="Invoice Line", view_name="PRODUCTION-MCP Invoice Lines", include_fetchxml=true)`
+   >    `manage_view(action="detail", entity_name="Invoice Line", view_name="Subgrid Invoice Lines", include_fetchxml=true)`
+   > 🎯 Result: The four views were read back and their columns, active-record filters where required, and sort orders match the requirements.
 
 ---
 
 ## J. Form Design
 
 40. List the forms of the Invoice table and identify which main form should be used for layout editing.
+   > ✅ `manage_form(action="list", entity_name="Invoice", form_type=0, include_formxml=false)`
+   > 🎯 Result: Invoice has an active Main form named Information that should be used for layout editing.
 
 41. Design the main form of Invoice: tab "Summary" with section "Invoice Information" containing Invoice Number, Invoice Date, Due Date, Bill To, Invoice Status, PO Number; section "Amounts" containing Total Amount, Tax Amount, Grand Total; section "Notes" containing Remarks; tab "Lines" containing a subgrid of child Invoice Lines using the "Subgrid Invoice Lines" view.
+   > ✅ `get_tables(entity_name="Invoice")`
+   >    `manage_form(action="detail", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2")`
+   >    `manage_form(action="update", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2", operations="[{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"name\":\"tab_summary\",\"label\":\"Summary\",\"tab_columns\":2,\"position\":\"first\",\"sections\":[{\"name\":\"summary_sec_invoice_information\",\"label\":\"Invoice Information\",\"section_columns\":2,\"tab_column\":1,\"fields\":[{\"field\":\"devkit_invoicenumber\"},{\"field\":\"devkit_invoicedate\"},{\"field\":\"devkit_duedate\"},{\"field\":\"devkit_billto\"},{\"field\":\"devkit_invoicestatus\"},{\"field\":\"devkit_ponumber\"}]},{\"name\":\"summary_sec_amounts\",\"label\":\"Amounts\",\"section_columns\":1,\"tab_column\":2,\"fields\":[{\"field\":\"devkit_totalamount\"},{\"field\":\"devkit_taxamount\"},{\"field\":\"devkit_grandtotal\"}]},{\"name\":\"summary_sec_notes\",\"label\":\"Notes\",\"section_columns\":1,\"tab_column\":2,\"fields\":[{\"field\":\"devkit_remarks\"}]}]},{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"name\":\"tab_lines\",\"label\":\"Lines\",\"tab_columns\":1,\"position\":\"after:tab_summary\",\"sections\":[{\"name\":\"lines_sec_invoice_lines\",\"label\":\"Invoice Lines\",\"section_columns\":1,\"tab_column\":1,\"fields\":[]}]},{\"action\":\"manage_subgrid\",\"manage_action\":\"add\",\"tab\":\"tab_lines\",\"section\":\"lines_sec_invoice_lines\",\"label\":\"Invoice Lines\",\"control_id\":\"devkit_invoice_invoiceline\",\"relationship_name\":\"devkit_invoice_invoiceline\",\"target_entity\":\"devkit_invoiceline\",\"view_id\":\"0d72e70a-e54c-f111-bec6-000d3a5ae021\",\"rows_per_page\":10,\"rowspan\":10}]", backup=true, validate=true, auto_publish=true)`
+   > 🎯 Result: Invoice main form updated with Summary and Lines tabs, requested sections and fields, and an Invoice Lines subgrid.
 
-42. On the same form, add header fields in this order: primary name, owner, state, status.
+42. On the same form, add header fields in this order: primary name, owner, state, status. And change form display name to "Invoice".
+   > ✅ `manage_form(action="update", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2", operations="[{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"target\":\"header\",\"fields\":[{\"field\":\"devkit_name\"},{\"field\":\"ownerid\"},{\"field\":\"statecode\"},{\"field\":\"statuscode\"}]}]", backup=true, validate=true, auto_publish=true)`
+   >    `manage_form(action="rename", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2", form_name="Invoice", auto_publish=true)`
+   >    `manage_form(action="detail", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2")`
+   > 🎯 Result: Invoice main form was renamed to Invoice, and the header contains primary name, owner, state, and status in the requested order.
 
 43. On the same form, add an Administrator tab (placed at the end) with 2 sections (empty labels); left section contains: createdon, createdby, modifiedon, modifiedby; right section contains: primary name, owner, state, status. All fields must be read-only.
+   > ✅ `manage_form(action="update", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2", operations="[{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"name\":\"tab_administrator\",\"label\":\"Administrator\",\"tab_columns\":2,\"position\":\"last\",\"sections\":[{\"name\":\"administrator_sec_audit\",\"label\":\"\",\"show_label\":false,\"section_columns\":1,\"tab_column\":1,\"fields\":[{\"field\":\"createdon\",\"disabled\":true},{\"field\":\"createdby\",\"disabled\":true},{\"field\":\"modifiedon\",\"disabled\":true},{\"field\":\"modifiedby\",\"disabled\":true}]},{\"name\":\"administrator_sec_status\",\"label\":\"\",\"show_label\":false,\"section_columns\":1,\"tab_column\":2,\"fields\":[{\"field\":\"devkit_name\",\"disabled\":true},{\"field\":\"ownerid\",\"disabled\":true},{\"field\":\"statecode\",\"disabled\":true},{\"field\":\"statuscode\",\"disabled\":true}]}]}]", backup=true, validate=true, auto_publish=true)`
+   > 🎯 Result: Invoice main form updated with an Administrator tab at the end, two empty-label sections, and all requested fields read-only.
 
 44. Read back the Invoice main form and confirm all fields and the Invoice Lines subgrid are in the correct positions.
+   > ✅ `manage_form(action="detail", entity_name="Invoice", form_id="2ad33585-dd66-44df-907a-2f5566d1a1a2")`
+   > 🎯 Result: Invoice main form readback confirms Summary, Lines, Administrator, header fields, and the Invoice Lines subgrid are in the requested positions.
 
 45. List the forms of the Invoice Line table and identify which main form should be used.
+   > ✅ `manage_form(action="list", entity_name="Invoice Line", form_type=0, include_formxml=false)`
+   > 🎯 Result: Invoice Line has an active Main form named Information that should be used for layout editing.
 
 46. Design the main form of Invoice Line: section "Line Information" containing Line Number, Product Name, Quantity, Unit Price, Discount Percent, Line Total, Line Status, and the Invoice lookup; section "Notes" containing Description.
+   > ✅ `get_tables(entity_name="Invoice Line")`
+   >    `manage_form(action="update", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3", operations="[{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"name\":\"tab_summary\",\"label\":\"Summary\",\"tab_columns\":1,\"position\":\"first\",\"sections\":[{\"name\":\"summary_sec_line_information\",\"label\":\"Line Information\",\"section_columns\":2,\"tab_column\":1,\"fields\":[{\"field\":\"devkit_linenumber\"},{\"field\":\"devkit_productname\"},{\"field\":\"devkit_quantity\"},{\"field\":\"devkit_unitprice\"},{\"field\":\"devkit_discountpercent\"},{\"field\":\"devkit_linetotal\"},{\"field\":\"devkit_linestatus\"},{\"field\":\"devkit_invoice\"}]},{\"name\":\"summary_sec_notes\",\"label\":\"Notes\",\"section_columns\":1,\"tab_column\":1,\"fields\":[{\"field\":\"devkit_description\"}]}]}]", backup=true, validate=true, auto_publish=true)`
+   >    `manage_form(action="detail", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3")`
+   > 🎯 Result: Invoice Line main form readback confirms Line Information and Notes sections were created with all requested fields in the requested order.
 
 47. Add a header and Administrator tab to the Invoice Line form identical to the Invoice form.
+   > ✅ `manage_form(action="update", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3", operations="[{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"target\":\"header\",\"fields\":[{\"field\":\"devkit_name\"},{\"field\":\"ownerid\"},{\"field\":\"statecode\"},{\"field\":\"statuscode\"}]}]", backup=true, validate=true, auto_publish=true)`
+   >    `manage_form(action="detail", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3")`
+   >    `manage_form(action="update", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3", operations="[{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"target\":\"header\",\"fields\":[{\"field\":\"devkit_name\"},{\"field\":\"ownerid\"},{\"field\":\"statecode\"},{\"field\":\"statuscode\"}]}]", backup=true, validate=true, auto_publish=false)`
+   >    `manage_form(action="update", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3", operations="[{\"action\":\"manage_tab\",\"manage_action\":\"add\",\"name\":\"tab_administrator\",\"label\":\"Administrator\",\"tab_columns\":2,\"position\":\"last\",\"sections\":[{\"name\":\"administrator_sec_audit\",\"label\":\"\",\"show_label\":false,\"section_columns\":1,\"tab_column\":1,\"fields\":[{\"field\":\"createdon\",\"disabled\":true},{\"field\":\"createdby\",\"disabled\":true},{\"field\":\"modifiedon\",\"disabled\":true},{\"field\":\"modifiedby\",\"disabled\":true}]},{\"name\":\"administrator_sec_status\",\"label\":\"\",\"show_label\":false,\"section_columns\":1,\"tab_column\":2,\"fields\":[{\"field\":\"devkit_name\",\"disabled\":true},{\"field\":\"ownerid\",\"disabled\":true},{\"field\":\"statecode\",\"disabled\":true},{\"field\":\"statuscode\",\"disabled\":true}]}]}]", backup=true, validate=true, auto_publish=false)`
+   >    `publish_customizations(entities="Invoice Line")`
+   >    `manage_form(action="update", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3", operations="[{\"action\":\"manage_fields\",\"manage_action\":\"add\",\"target\":\"header\",\"fields\":[{\"field\":\"devkit_name\"},{\"field\":\"ownerid\"},{\"field\":\"statecode\"},{\"field\":\"statuscode\"}]}]", backup=true, validate=true, auto_publish=false)`
+   >    `publish_customizations(entities="Invoice Line")`
+   > 🎯 Result: Invoice Line main form updated with the requested header and Administrator tab; publishing completed successfully after reapplying the header as the final form draft update.
 
 48. Read back the Invoice Line main form and confirm all fields are in the correct positions.
+   > ✅ `manage_form(action="detail", entity_name="Invoice Line", form_id="154eca45-c4a7-4658-b0b3-1d2702637be3")`
+   > 🎯 Result: Invoice Line main form readback confirms Line Information, Notes, Administrator, and header fields are in the requested positions.
 
 ---
 
 ## K. Model-Driven App & Navigation
 
 49. Check whether a model-driven app named "PRODUCTION-MCP" exists; if it does not exist, create it in solution "PRODUCTION-MCP" with display name "PRODUCTION-MCP" and description "Production MCP model-driven app".
+   > ✅ `manage_app(action="list", app_name="PRODUCTION-MCP", max_records=100)`
+   >    `manage_app(action="create", solution_name="PRODUCTION-MCP", display_name="PRODUCTION-MCP", description="Production MCP model-driven app")`
+   > 🎯 Result: PRODUCTION-MCP model-driven app did not exist and was created in solution PRODUCTION-MCP.
 
 50. Read the details and current navigation of app "PRODUCTION-MCP"; confirm the app has navigation configured, identify the starter Account item if present, and determine whether an Invoicing area/group already exists.
+   > ✅ `manage_app(action="detail", app="PRODUCTION-MCP")`
+   >    `manage_app(action="validate", app="PRODUCTION-MCP")`
+   > 🎯 Result: PRODUCTION-MCP has a sitemap/navigation component with starter Account present; Invoicing area/group is not reported as existing.
 
 51. Configure app "PRODUCTION-MCP" navigation so it has an area named "Invoicing" at the first position, a group named "Transactions" inside it, and menu items for Invoice and Invoice Line in that order.
+   > ✅ `manage_app(action="update_navigation", app="PRODUCTION-MCP", backup=true, operations="[{\"action\":\"add_area\",\"id\":\"area_invoicing\",\"title\":\"Invoicing\",\"position\":\"first\"},{\"action\":\"add_group\",\"area\":\"area_invoicing\",\"id\":\"group_transactions\",\"title\":\"Transactions\",\"position\":\"first\"},{\"action\":\"add_item\",\"area\":\"area_invoicing\",\"group\":\"group_transactions\",\"entity\":\"Invoice\",\"position\":\"first\"},{\"action\":\"add_item\",\"area\":\"area_invoicing\",\"group\":\"group_transactions\",\"entity\":\"Invoice Line\",\"position\":\"after:Invoice\"}]")`
+   > 🎯 Result: PRODUCTION-MCP navigation was updated with Invoicing first, Transactions inside it, and Invoice then Invoice Line in order; the app is ready to publish.
 
 52. Read back app "PRODUCTION-MCP" navigation and confirm the Invoicing area is first, the Transactions group exists, Invoice then Invoice Line appear in the correct order, and whether the navigation is ready to publish.
+   > ✅ `manage_app(action="detail", app="PRODUCTION-MCP")`
+   > 🎯 Result: MCP runtime readback now exposes the app navigation directly from `manage_app(detail)`: Invoicing is the first area, Transactions is the group inside it, Invoice appears before Invoice Line, and the navigation is configured correctly for publish/readback.
 
 ---
 

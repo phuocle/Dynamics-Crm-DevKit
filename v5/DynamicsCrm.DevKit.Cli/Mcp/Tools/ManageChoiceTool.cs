@@ -141,9 +141,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: optionset_name is required for 'detail'. " +
                     "Use action='list' to see all available global option sets.");
 
+            optionsetName = optionsetName.Trim().ToLowerInvariant();
+
             var resolved = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, optionsetName, "manage_choice");
             if (!resolved.IsSuccess)
-                return ErrorResult($"Error: {resolved.Error}");
+                return ErrorResult($"Error: {resolved.Error}\nUse manage_choice(action='list') to see all available global option sets.");
 
             return BuildDetailResult(resolved.Value);
         }
@@ -179,6 +181,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(options))
                 return ErrorResult("Error: options is required for 'create'. " +
                     "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid'). solution_name is also required.");
+
+            // Early format validation (no Dataverse needed)
+            if (ParseOptionsWithAutoValue(options, 0) == null)
+                return ErrorResult("Error: Invalid options format. " +
+                    "Provide label-only values separated by semicolons (e.g. 'Draft;Confirmed;Paid').");
 
             var identityInput = string.IsNullOrWhiteSpace(optionsetName) ? displayName : optionsetName;
             var existingChoice = DisplayNameFirstResolver.ResolveGlobalOptionSet(_serviceClient, identityInput, "manage_choice");
@@ -324,6 +331,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (string.IsNullOrWhiteSpace(optionsetName))
                 return ErrorResult("Error: optionset_name is required for 'update'.");
+
+            // Early format validation for remove_options (pure, no Dataverse call needed)
+            if (!string.IsNullOrWhiteSpace(removeOptionValues) && ParseLabelList(removeOptionValues) == null)
+                return ErrorResult("Error: Invalid remove_options format. " +
+                    "Expected comma-separated label names (e.g., 'Draft,Cancelled').");
+
+            // Early format validation for add_options when no solution_name (pure, no Dataverse call needed)
+            if (!string.IsNullOrWhiteSpace(addOptions) && string.IsNullOrWhiteSpace(solutionName) && ParseOptions(addOptions) == null)
+                return ErrorResult("Error: Invalid add_options format. " +
+                    "Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived'.");
+
+            // Early no-changes check (pure, no Dataverse call needed)
+            if (string.IsNullOrWhiteSpace(displayName) && string.IsNullOrWhiteSpace(description) &&
+                string.IsNullOrWhiteSpace(addOptions) && string.IsNullOrWhiteSpace(updateOptions) &&
+                string.IsNullOrWhiteSpace(removeOptionValues) && string.IsNullOrWhiteSpace(optionColors))
+                return ErrorResult("Error: No changes specified. Provide at least one of: " +
+                    "display_name, description, add_options, update_options, remove_options, option_colors.");
 
             // Resolve logical name (accepts logical name OR display name)
             if (!TryResolveToLogicalName(optionsetName, out var name, out var resolveErr))
@@ -854,6 +878,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = text }],
             StructuredContent = JsonSerializer.SerializeToElement(structured)
+        };
+
+        private static CallToolResult SuccessResult(string text) => new()
+        {
+            Content = [new TextContentBlock { Text = text }]
         };
 
         private static CallToolResult ErrorResult(string message) => new()

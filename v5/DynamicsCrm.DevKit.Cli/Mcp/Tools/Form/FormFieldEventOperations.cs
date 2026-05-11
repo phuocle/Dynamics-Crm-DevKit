@@ -30,10 +30,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
         public string ExecuteAddFields(XDocument formDoc, JsonElement op,
             Dictionary<string, AttributeMetadata> attrMap, Dictionary<string, string> classIdMap)
         {
-            var tabName = FormXmlHelpers.GetStringProp(op, "tab")
-                ?? throw new InvalidOperationException("add_fields requires 'tab'. To add fields to the form header, use manage_action: \"add_header\" instead.");
-            if (string.Equals(tabName, "header", StringComparison.OrdinalIgnoreCase))
+            var tabName = FormXmlHelpers.GetStringProp(op, "tab");
+            var target = FormXmlHelpers.GetStringProp(op, "target");
+            if (IsHeaderTarget(tabName) || IsHeaderTarget(target))
                 return ExecuteAddHeaderFields(formDoc, op, attrMap, classIdMap);
+            if (string.IsNullOrWhiteSpace(tabName))
+                throw new InvalidOperationException("add_fields requires 'tab'. To add fields to the form header, use manage_action: \"add_header\" instead.");
             var sectionName = FormXmlHelpers.GetStringProp(op, "section")
                 ?? throw new InvalidOperationException("add_fields requires 'section'.");
             var position = FormXmlHelpers.GetStringProp(op, "position") ?? "last";
@@ -404,6 +406,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 return fieldEl.GetString();
             return FormXmlHelpers.GetStringProp(fieldEl, "field");
         }
+
+        private static bool IsHeaderTarget(string value)
+            => string.Equals(value?.Trim(), "header", StringComparison.OrdinalIgnoreCase);
 
         // ── Header ───────────────────────────────────────────────────────────────
 

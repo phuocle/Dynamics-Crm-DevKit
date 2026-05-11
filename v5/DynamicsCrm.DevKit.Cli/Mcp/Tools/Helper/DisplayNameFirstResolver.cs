@@ -137,7 +137,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 return Ok(logicalMatches[0]);
 
             if (logicalMatches.Count > 1)
+            {
+                var exactLogicalMatches = logicalMatches
+                    .Where(c =>
+                        logicalInputs.Any(term =>
+                            EqualsIgnoreCase(c.LogicalName, term) ||
+                            EqualsIgnoreCase(c.UniqueName, term) ||
+                            EqualsIgnoreCase(c.SchemaName, term)))
+                    .ToList();
+
+                if (exactLogicalMatches.Count == 1)
+                    return Ok(exactLogicalMatches[0]);
+
                 return Ambiguous<T>(ambiguousTag, trimmed, "logical", logicalMatches, retryParameterName);
+            }
 
             return new ResolveResult<T>
             {

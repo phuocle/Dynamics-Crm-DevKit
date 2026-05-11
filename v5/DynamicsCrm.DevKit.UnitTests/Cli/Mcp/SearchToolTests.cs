@@ -22,7 +22,8 @@ public class SearchToolTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo FormatSearchResultsMethod = ToolType
-        .GetMethod("FormatSearchResults", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("FormatSearchResults", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { typeof(string), typeof(string) }, null)!;
 
     private static string FormatSearchResults(string jsonResponse, string searchTerm)
     {
@@ -256,7 +257,8 @@ public class SearchToolTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo BuildSearchRequestBodyMethod = ToolType
-        .GetMethod("BuildSearchRequestBody", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("BuildSearchRequestBody", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { typeof(string), typeof(string), typeof(int), typeof(string) }, null)!;
 
     private static string BuildSearchRequestBody(string searchTerm, string entities, int top, string filter)
     {
@@ -359,7 +361,8 @@ public class SearchToolTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo FormatStatusResultsMethod = ToolType
-        .GetMethod("FormatStatusResults", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("FormatStatusResults", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { typeof(string), typeof(string) }, null)!;
 
     private static string FormatStatusResults(string statusJson, string? statisticsJson)
     {

@@ -351,6 +351,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SiteMapId { get; set; }
 
+        [JsonPropertyName("navigationTree")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string NavigationTree { get; set; }
+
+        [JsonPropertyName("navigationAreas")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ManageAppNavigationAreaResult> NavigationAreas { get; set; }
+
         [JsonPropertyName("solutionUniqueName")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SolutionUniqueName { get; set; }
@@ -397,6 +405,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("nextStep")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string NextStep { get; set; }
+    }
+
+    internal sealed class ManageAppNavigationAreaResult
+    {
+        [JsonPropertyName("id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
+
+        [JsonPropertyName("title")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Title { get; set; }
+
+        [JsonPropertyName("groups")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ManageAppNavigationGroupResult> Groups { get; set; }
+    }
+
+    internal sealed class ManageAppNavigationGroupResult
+    {
+        [JsonPropertyName("id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
+
+        [JsonPropertyName("title")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Title { get; set; }
+
+        [JsonPropertyName("items")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<ManageAppNavigationItemResult> Items { get; set; }
+    }
+
+    internal sealed class ManageAppNavigationItemResult
+    {
+        [JsonPropertyName("id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
+
+        [JsonPropertyName("title")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Title { get; set; }
+
+        [JsonPropertyName("entity")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Entity { get; set; }
+
+        [JsonPropertyName("url")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Url { get; set; }
     }
 
     internal sealed class ManageRibbonResult

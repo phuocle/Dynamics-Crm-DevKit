@@ -156,6 +156,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : null;
             var siteMapXml = siteMapId.HasValue ? RetrieveSiteMapXml(siteMapId.Value) : null;
             var navigationTree = FormatNavigationTree(siteMapXml);
+            var navigationAreas = ParseNavigationAreas(siteMapXml);
             var appComponents = appModuleIdUnique.HasValue
                 ? GetAppComponents(appModuleIdUnique.Value)
                 : [];
@@ -196,6 +197,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 AppName = appModule.GetAttributeValue<string>("name"),
                 UniqueName = appModule.GetAttributeValue<string>("uniquename"),
                 SiteMapId = siteMapId?.ToString(),
+                NavigationTree = string.IsNullOrWhiteSpace(navigationTree) ? null : navigationTree,
+                NavigationAreas = navigationAreas.Count > 0 ? navigationAreas : null,
                 Published = false
             });
         }
@@ -943,6 +946,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         if (result.IsSuccess)
                         {
                             obj["entity"] = result.Value.LogicalName;
+                            if (!HasNavigationLabel(obj))
+                            {
+                                var displayName = result.Value.DisplayName?.UserLocalizedLabel?.Label;
+                                if (!string.IsNullOrWhiteSpace(displayName))
+                                    obj["label"] = displayName;
+                            }
                         }
                         else
                         {
@@ -956,6 +965,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             return (normalizedOps, errors);
         }
+
+        private static bool HasNavigationLabel(JsonObject obj)
+            => !string.IsNullOrWhiteSpace(GetJsonString(obj, "label"))
+                || !string.IsNullOrWhiteSpace(GetJsonString(obj, "title"))
+                || !string.IsNullOrWhiteSpace(GetJsonString(obj, "name"));
 
         private static string FormatNavigationNameResolutionErrors(List<string> errors)
         {
@@ -1257,6 +1271,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 return $"- failed to parse sitemap XML: {ex.Message}";
+            }
+        }
+
+        private static List<ManageAppNavigationAreaResult> ParseNavigationAreas(string siteMapXml)
+        {
+            if (string.IsNullOrWhiteSpace(siteMapXml))
+                return [];
+
+            try
+            {
+                var doc = XDocument.Parse(siteMapXml);
+                return (doc.Root?.Elements("Area") ?? [])
+                    .Select(area => new ManageAppNavigationAreaResult
+                    {
+                        Id = area.Attribute("Id")?.Value,
+                        Title = GetTitle(area),
+                        Groups = area.Elements("Group")
+                            .Select(group => new ManageAppNavigationGroupResult
+                            {
+                                Id = group.Attribute("Id")?.Value,
+                                Title = GetTitle(group),
+                                Items = group.Elements("SubArea")
+                                    .Select(subArea => new ManageAppNavigationItemResult
+                                    {
+                                        Id = subArea.Attribute("Id")?.Value,
+                                        Title = GetTitle(subArea),
+                                        Entity = subArea.Attribute("Entity")?.Value,
+                                        Url = subArea.Attribute("Url")?.Value
+                                    })
+                                    .ToList()
+                            })
+                            .ToList()
+                    })
+                    .ToList();
+            }
+            catch
+            {
+                return [];
             }
         }
 

@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Enable notes. [create-only]")] bool has_notes = false,
             [Description("null = keep current (update).")] bool? is_quick_create_enabled = null,
             [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
-            [Description("1–850. [create-only]")] int primary_attribute_max_length = 850,
+            [Description("1–850. [create-only]")] int primary_attribute_max_length = 100,
             [Description("")] bool auto_publish = true)
         {
             // Validate required fields
@@ -215,7 +215,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (primary_attribute_max_length < 1) primary_attribute_max_length = 100;
             if (primary_attribute_max_length > 850) primary_attribute_max_length = 850;
 
-            // Derive SchemaName and LogicalName via DataverseNamer (uses display_name for proper PascalCase)
+            // Derive SchemaName and LogicalName via DataverseNamer (portal-style, preserving display_name casing)
             string schemaName;
             try
             {

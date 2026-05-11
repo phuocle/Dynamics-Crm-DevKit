@@ -85,6 +85,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var normalizedAction = action.Trim().ToLowerInvariant();
             var entityName = entity_name.Trim();
+
+            // Early view_id GUID validation for actions that require it
+            if (!string.IsNullOrWhiteSpace(view_id) && !Guid.TryParse(view_id.Trim(), out _))
+                return ErrorResult($"Error: '{view_id}' is not a valid GUID.");
+
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName, "manage_view");
             if (!entityResult.IsSuccess)
                 return ErrorResult($"Error: {entityResult.Error}");

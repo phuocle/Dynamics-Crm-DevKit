@@ -252,7 +252,8 @@ public class CrudToolValidationTests
     // ──────────────────────────────────────────────
 
     private static readonly MethodInfo BuildColumnSetMethod = typeof(ManageRecordTool)
-        .GetMethod("BuildColumnSet", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("BuildColumnSet", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { typeof(string) }, null)!;
 
     private static Microsoft.Xrm.Sdk.Query.ColumnSet BuildColumnSet(string columns)
     {

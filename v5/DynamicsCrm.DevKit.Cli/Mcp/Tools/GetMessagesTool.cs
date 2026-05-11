@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect input/output parameters of a legacy Custom Action")]
         public async Task<CallToolResult> get_messages(
             [Description(
-                "Entity Display Name or logical name. 'none'/empty = global messages (WhoAmI, etc.). Ignored if message_name set."
+                "Entity Display Name or logical name. 'none'/empty = global messages (WhoAmI, etc.). Ignored in detail mode (when message_name is set)."
             )] string entity_name = "none",
             [Description(
                 "Message/Action name → detail mode. Empty = list mode."

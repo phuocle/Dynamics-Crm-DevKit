@@ -15,7 +15,8 @@ public class PublishToolTests
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.PublishCustomizationsTool);
 
     private static readonly MethodInfo BuildParameterXmlMethod = ToolType
-        .GetMethod("BuildParameterXml", BindingFlags.NonPublic | BindingFlags.Static)!;
+        .GetMethod("BuildParameterXml", BindingFlags.NonPublic | BindingFlags.Static, null,
+            new[] { typeof(List<string>), typeof(bool), typeof(bool) }, null)!;
 
     private static string BuildParameterXml(List<string> entities, bool includeGlobalOptionSets, bool includeSiteMap)
     {

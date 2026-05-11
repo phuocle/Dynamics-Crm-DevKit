@@ -54,11 +54,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult("Error: entity_name is required.\n" +
                        "Provide the entity logical name (e.g., 'account', 'contact'). Use get_tables to discover names.");
 
-            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
-            if (!entityResult.IsSuccess)
-                return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
-            entity_name = entityResult.Value.LogicalName;
-
             if (!string.IsNullOrWhiteSpace(status))
             {
                 var s = status.Trim().ToLowerInvariant();
@@ -66,15 +61,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     return ErrorResult($"Error: Invalid status value '{status.Trim()}'. Use 'active' or 'draft'.");
             }
 
+            if (!string.IsNullOrWhiteSpace(rule_id))
+            {
+                if (!Guid.TryParse(rule_id.Trim(), out _))
+                    return ErrorResult($"Error: '{rule_id}' is not a valid GUID.");
+            }
+
+            var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "get_business_rules");
+            if (!entityResult.IsSuccess)
+                return ErrorResult($"Error: entity_name '{entity_name.Trim()}': {entityResult.Error}");
+            entity_name = entityResult.Value.LogicalName;
+
             if (max_records <= 0) max_records = 50;
             if (max_records > 200) max_records = 200;
 
             // Detail mode
             if (!string.IsNullOrWhiteSpace(rule_id))
             {
-                if (!Guid.TryParse(rule_id.Trim(), out var id))
-                    return ErrorResult($"Error: '{rule_id}' is not a valid GUID.");
-
+                Guid.TryParse(rule_id.Trim(), out var id);
                 return GetRuleDetail(entity_name, id);
             }
 

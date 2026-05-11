@@ -28,9 +28,13 @@ public class GetBusinessRulesToolTests
 
     private static string ParseXaml(string xaml)
     {
-        var sb = new StringBuilder();
-        ParseXamlMethod.Invoke(null, [sb, xaml]);
-        return sb.ToString();
+        var result = ParseXamlMethod.Invoke(null, [xaml])!;
+        var resultType = result.GetType();
+        var conditions = resultType.GetProperty("Conditions")?.GetValue(result) as System.Collections.IList;
+        var actions = resultType.GetProperty("Actions")?.GetValue(result) as System.Collections.IList;
+        bool isEmpty = (conditions == null || conditions.Count == 0) && (actions == null || actions.Count == 0);
+        // Fallback message matches production FormatRuleDetail text
+        return isEmpty ? "[XAML] (no conditions or actions extracted - use manage_record(action='read') with columns 'xaml' to inspect raw)" : (string)(resultType.GetProperty("ParseStatus")?.GetValue(result) ?? "");
     }
 
     [TestMethod]

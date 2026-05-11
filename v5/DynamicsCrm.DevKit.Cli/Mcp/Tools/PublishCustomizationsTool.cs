@@ -210,6 +210,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildParameterXml(
             List<string> entityList,
+            bool includeGlobalOptionSets,
+            bool includeSiteMap)
+            => BuildParameterXml(entityList, new List<string>(), includeGlobalOptionSets, includeSiteMap);
+
+        private static string BuildParameterXml(
+            List<string> entityList,
             List<string> appModuleList,
             bool includeGlobalOptionSets,
             bool includeSiteMap)
