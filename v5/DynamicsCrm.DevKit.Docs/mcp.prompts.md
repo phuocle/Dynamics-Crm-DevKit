@@ -404,15 +404,15 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
    >    `manage_webresource(action="list", name="invoice", type_filter="js", max_records=100)`
    > 🎯 Result: No JavaScript web resources with names containing productionmcp or invoice were found.
 
-54. Create a local file at D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\ProductionMcp\js\invoice.form.js. In solution "PRODUCTION-MCP", create a JavaScript web resource for this file using the solution's publisher prefix, path /productionmcp/invoice.form.js; the file should have namespace ProductionMcp.Invoice, function syncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that reads Invoice Status from the parent Invoice record and updates the Line Status of all child Invoice Lines accordingly, and function canSyncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that returns true only when the form has been saved (record already has an id).
-   > ✅ `manage_webresource(action="create", solution_name="PRODUCTION-MCP", name="devkit_/productionmcp/invoice.form.js", display_name="productionmcp/invoice.form.js", type="js", content="InVzZSBzdHJpY3QiOwoKdmFyIFByb2R1Y3Rpb25NY3AgPSBQcm9kdWN0aW9uTWNwIHx8IHt9OwpQcm9kdWN0aW9uTWNwLkludm9pY2UgPSAoZnVuY3Rpb24gKCkgewogICAgZnVuY3Rpb24gY2xlYW5JZChpZCkgewogICAgICAgIHJldHVybiBpZCA/IGlkLnJlcGxhY2UoL1t7fV0vZywgIiIpIDogIiI7CiAgICB9CgogICAgZnVuY3Rpb24gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpIHsKICAgICAgICByZXR1cm4gcHJpbWFyeUNvbnRyb2wgJiYgcHJpbWFyeUNvbnRyb2wuZ2V0QXR0cmlidXRlID8gcHJpbWFyeUNvbnRyb2wgOiBudWxsOwogICAgfQoKICAgIGZ1bmN0aW9uIGNhblN5bmNMaW5lU3RhdHVzKHByaW1hcnlDb250cm9sLCBwcmltYXJ5RW50aXR5VHlwZU5hbWUsIHByaW1hcnlJdGVtSWRzKSB7CiAgICAgICAgdmFyIGZvcm1Db250ZXh0ID0gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpOwogICAgICAgIHJldHVybiAhIShmb3JtQ29udGV4dCAmJiBjbGVhbklkKGZvcm1Db250ZXh0LmRhdGEuZW50aXR5LmdldElkKCkpKTsKICAgIH0KCiAgICBmdW5jdGlvbiBzeW5jTGluZVN0YXR1cyhwcmltYXJ5Q29udHJvbCwgcHJpbWFyeUVudGl0eVR5cGVOYW1lLCBwcmltYXJ5SXRlbUlkcykgewogICAgICAgIHZhciBmb3JtQ29udGV4dCA9IGdldEZvcm1Db250ZXh0KHByaW1hcnlDb250cm9sKTsKICAgICAgICBpZiAoIWZvcm1Db250ZXh0KSB7CiAgICAgICAgICAgIHJldHVybiBQcm9taXNlLnJlc29sdmUoKTsKICAgICAgICB9CgogICAgICAgIHZhciBpbnZvaWNlSWQgPSBjbGVhbklkKGZvcm1Db250ZXh0LmRhdGEuZW50aXR5LmdldElkKCkpOwogICAgICAgIHZhciBzdGF0dXNBdHRyaWJ1dGUgPSBmb3JtQ29udGV4dC5nZXRBdHRyaWJ1dGUoImRldmtpdF9pbnZvaWNlc3RhdHVzIik7CiAgICAgICAgdmFyIGludm9pY2VTdGF0dXMgPSBzdGF0dXNBdHRyaWJ1dGUgPyBzdGF0dXNBdHRyaWJ1dGUuZ2V0VmFsdWUoKSA6IG51bGw7CgogICAgICAgIGlmICghaW52b2ljZUlkIHx8IGludm9pY2VTdGF0dXMgPT09IG51bGwgfHwgaW52b2ljZVN0YXR1cyA9PT0gdW5kZWZpbmVkKSB7CiAgICAgICAgICAgIHJldHVybiBQcm9taXNlLnJlc29sdmUoKTsKICAgICAgICB9CgogICAgICAgIHZhciBxdWVyeSA9ICI/JHNlbGVjdD1kZXZraXRfbGluZXN0YXR1cyYkZmlsdGVyPV9kZXZraXRfaW52b2ljZV92YWx1ZSBlcSAiICsgaW52b2ljZUlkOwogICAgICAgIHJldHVybiBYcm0uV2ViQXBpLnJldHJpZXZlTXVsdGlwbGVSZWNvcmRzKCJkZXZraXRfaW52b2ljZWxpbmUiLCBxdWVyeSkudGhlbihmdW5jdGlvbiAocmVzdWx0KSB7CiAgICAgICAgICAgIHZhciB1cGRhdGVzID0gcmVzdWx0LmVudGl0aWVzLm1hcChmdW5jdGlvbiAobGluZSkgewogICAgICAgICAgICAgICAgcmV0dXJuIFhybS5XZWJBcGkudXBkYXRlUmVjb3JkKCJkZXZraXRfaW52b2ljZWxpbmUiLCBsaW5lLmRldmtpdF9pbnZvaWNlbGluZWlkLCB7CiAgICAgICAgICAgICAgICAgICAgZGV2a2l0X2xpbmVzdGF0dXM6IGludm9pY2VTdGF0dXMKICAgICAgICAgICAgICAgIH0pOwogICAgICAgICAgICB9KTsKCiAgICAgICAgICAgIHJldHVybiBQcm9taXNlLmFsbCh1cGRhdGVzKTsKICAgICAgICB9KTsKICAgIH0KCiAgICByZXR1cm4gewogICAgICAgIHN5bmNMaW5lU3RhdHVzOiBzeW5jTGluZVN0YXR1cywKICAgICAgICBjYW5TeW5jTGluZVN0YXR1czogY2FuU3luY0xpbmVTdGF0dXMKICAgIH07Cn0pKCk7Cg==")`
-   > 🎯 Result: Local JavaScript file and web resource productionmcp/invoice.form.js were created with namespace ProductionMcp.Invoice and the requested sync and enable functions.
+54. Create a local file at D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\ProductionMcp\js\invoice.form.js. In solution "PRODUCTION-MCP", create a JavaScript web resource for this file using the solution's publisher prefix, path /productionmcp/invoice.form.js; the file should have namespace ProductionMcp.Invoice, async function syncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that asks for confirmation before reading Invoice Status from the parent Invoice record and updating the Line Status of all child Invoice Lines accordingly, and function canSyncLineStatus(primaryControl, primaryEntityTypeName, primaryItemIds) that returns true only when the form has been saved (record already has an id).
+   > ✅ `manage_webresource(action="create", solution_name="PRODUCTION-MCP", name="devkit_/productionmcp/invoice.form.js", display_name="productionmcp/invoice.form.js", type="js", content="InVzZSBzdHJpY3QiOwoKdmFyIFByb2R1Y3Rpb25NY3AgPSBQcm9kdWN0aW9uTWNwIHx8IHt9OwpQcm9kdWN0aW9uTWNwLkludm9pY2UgPSAoZnVuY3Rpb24gKCkgewogICAgZnVuY3Rpb24gY2xlYW5JZChpZCkgewogICAgICAgIHJldHVybiBpZCA/IGlkLnJlcGxhY2UoL1t7fV0vZywgIiIpIDogIiI7CiAgICB9CgogICAgZnVuY3Rpb24gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpIHsKICAgICAgICByZXR1cm4gcHJpbWFyeUNvbnRyb2wgJiYgcHJpbWFyeUNvbnRyb2wuZ2V0QXR0cmlidXRlID8gcHJpbWFyeUNvbnRyb2wgOiBudWxsOwogICAgfQoKICAgIGZ1bmN0aW9uIGNhblN5bmNMaW5lU3RhdHVzKHByaW1hcnlDb250cm9sLCBwcmltYXJ5RW50aXR5VHlwZU5hbWUsIHByaW1hcnlJdGVtSWRzKSB7CiAgICAgICAgdmFyIGZvcm1Db250ZXh0ID0gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpOwogICAgICAgIHJldHVybiAhIShmb3JtQ29udGV4dCAmJiBjbGVhbklkKGZvcm1Db250ZXh0LmRhdGEuZW50aXR5LmdldElkKCkpKTsKICAgIH0KCiAgICBhc3luYyBmdW5jdGlvbiBjb25maXJtU3luY0xpbmVTdGF0dXMoKSB7CiAgICAgICAgaWYgKHR5cGVvZiBYcm0gPT09ICJ1bmRlZmluZWQiIHx8ICFYcm0uTmF2aWdhdGlvbiB8fCAhWHJtLk5hdmlnYXRpb24ub3BlbkNvbmZpcm1EaWFsb2cpIHsKICAgICAgICAgICAgcmV0dXJuIHRydWU7CiAgICAgICAgfQoKICAgICAgICB2YXIgcmVzdWx0ID0gYXdhaXQgWHJtLk5hdmlnYXRpb24ub3BlbkNvbmZpcm1EaWFsb2coewogICAgICAgICAgICB0aXRsZTogIlN5bmMgTGluZSBTdGF0dXMiLAogICAgICAgICAgICB0ZXh0OiAiVXBkYXRlIGFsbCBJbnZvaWNlIExpbmVzIHRvIG1hdGNoIHRoaXMgSW52b2ljZSBTdGF0dXM/IiwKICAgICAgICAgICAgY29uZmlybUJ1dHRvbkxhYmVsOiAiU3luYyIsCiAgICAgICAgICAgIGNhbmNlbEJ1dHRvbkxhYmVsOiAiQ2FuY2VsIgogICAgICAgIH0sIHsKICAgICAgICAgICAgaGVpZ2h0OiAyMjAsCiAgICAgICAgICAgIHdpZHRoOiA0NTAKICAgICAgICB9KTsKCiAgICAgICAgcmV0dXJuIHJlc3VsdCAmJiByZXN1bHQuY29uZmlybWVkOwogICAgfQoKICAgIGFzeW5jIGZ1bmN0aW9uIHN5bmNMaW5lU3RhdHVzKHByaW1hcnlDb250cm9sLCBwcmltYXJ5RW50aXR5VHlwZU5hbWUsIHByaW1hcnlJdGVtSWRzKSB7CiAgICAgICAgdmFyIGZvcm1Db250ZXh0ID0gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpOwogICAgICAgIGlmICghZm9ybUNvbnRleHQpIHsKICAgICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgdmFyIGludm9pY2VJZCA9IGNsZWFuSWQoZm9ybUNvbnRleHQuZGF0YS5lbnRpdHkuZ2V0SWQoKSk7CiAgICAgICAgdmFyIHN0YXR1c0F0dHJpYnV0ZSA9IGZvcm1Db250ZXh0LmdldEF0dHJpYnV0ZSgiZGV2a2l0X2ludm9pY2VzdGF0dXMiKTsKICAgICAgICB2YXIgaW52b2ljZVN0YXR1cyA9IHN0YXR1c0F0dHJpYnV0ZSA/IHN0YXR1c0F0dHJpYnV0ZS5nZXRWYWx1ZSgpIDogbnVsbDsKCiAgICAgICAgaWYgKCFpbnZvaWNlSWQgfHwgaW52b2ljZVN0YXR1cyA9PT0gbnVsbCB8fCBpbnZvaWNlU3RhdHVzID09PSB1bmRlZmluZWQpIHsKICAgICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgdmFyIGNvbmZpcm1lZCA9IGF3YWl0IGNvbmZpcm1TeW5jTGluZVN0YXR1cygpOwogICAgICAgIGlmICghY29uZmlybWVkKSB7CiAgICAgICAgICAgIHJldHVybjsKICAgICAgICB9CgogICAgICAgIHZhciBxdWVyeSA9ICI/JHNlbGVjdD1kZXZraXRfbGluZXN0YXR1cyYkZmlsdGVyPV9kZXZraXRfaW52b2ljZV92YWx1ZSBlcSAiICsgaW52b2ljZUlkOwogICAgICAgIHZhciByZXN1bHQgPSBhd2FpdCBYcm0uV2ViQXBpLnJldHJpZXZlTXVsdGlwbGVSZWNvcmRzKCJkZXZraXRfaW52b2ljZWxpbmUiLCBxdWVyeSk7CiAgICAgICAgdmFyIHVwZGF0ZXMgPSByZXN1bHQuZW50aXRpZXMubWFwKGZ1bmN0aW9uIChsaW5lKSB7CiAgICAgICAgICAgIHJldHVybiBYcm0uV2ViQXBpLnVwZGF0ZVJlY29yZCgiZGV2a2l0X2ludm9pY2VsaW5lIiwgbGluZS5kZXZraXRfaW52b2ljZWxpbmVpZCwgewogICAgICAgICAgICAgICAgZGV2a2l0X2xpbmVzdGF0dXM6IGludm9pY2VTdGF0dXMKICAgICAgICAgICAgfSk7CiAgICAgICAgfSk7CgogICAgICAgIGF3YWl0IFByb21pc2UuYWxsKHVwZGF0ZXMpOwogICAgfQoKICAgIHJldHVybiB7CiAgICAgICAgc3luY0xpbmVTdGF0dXM6IHN5bmNMaW5lU3RhdHVzLAogICAgICAgIGNhblN5bmNMaW5lU3RhdHVzOiBjYW5TeW5jTGluZVN0YXR1cwogICAgfTsKfSkoKTsK")`
+   > 🎯 Result: Local JavaScript file and web resource productionmcp/invoice.form.js were created and published with namespace ProductionMcp.Invoice, async/await sync logic, confirmation before updating child lines, and the requested enable function.
 
 55. Read back the web resource just created (productionmcp/invoice.form.js) and confirm it has the correct namespace, sync function, and enable function.
    > ✅ `manage_webresource(action="list", name="productionmcp/invoice.form.js", type_filter="js", max_records=10)`
    >    `manage_webresource(action="detail", web_resource_id="c9ae579e-0d4d-f111-bec6-000d3a5ae021")`
    >    `execute_webapi(method="GET", url="webresourceset(c9ae579e-0d4d-f111-bec6-000d3a5ae021)?$select=name,displayname,webresourcetype,content", max_response_lines=80)`
-   > 🎯 Result: Web resource productionmcp/invoice.form.js was read back and confirmed to contain namespace ProductionMcp.Invoice with the requested sync and enable functions.
+   > 🎯 Result: Web resource productionmcp/invoice.form.js was read back and confirmed to contain namespace ProductionMcp.Invoice with async/await sync logic, confirmation before updating child lines, and the requested enable function.
 
 ---
 
@@ -423,44 +423,84 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
    > 🎯 Result: Invoice form ribbon currently shows standard buttons including Save, New, Activate, Deactivate, Delete, and Open Active Stage.
 
 57. Add a button to the ribbon on the main form of Invoice, label "Sync Line Status", calling function ProductionMcp.Invoice.syncLineStatus from the web resource created in prompt 54, using ProductionMcp.Invoice.canSyncLineStatus as the enable rule.
-   > ⚠️ `manage_ribbon(action="update", entity_name="Invoice", operations="[{\"operation\":\"add_button\",\"surface\":\"form\",\"label\":\"Sync Line Status\",\"library\":\"devkit_/productionmcp/invoice.form.js\",\"function\":\"ProductionMcp.Invoice.syncLineStatus\",\"enable_library\":\"devkit_/productionmcp/invoice.form.js\",\"enable_function\":\"ProductionMcp.Invoice.canSyncLineStatus\"}]", backup=true, auto_publish=true)`
-   > 🎯 Result: BLOCKED — Ribbon update failed because the operation payload used an invalid operation field name and must be re-run with the expected action field.
+   > ✅ `manage_ribbon(action="update", entity_name="Invoice", operations="[{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Sync Line Status\",\"library\":\"devkit_/productionmcp/invoice.form.js\",\"function\":\"ProductionMcp.Invoice.syncLineStatus\",\"enable_library\":\"devkit_/productionmcp/invoice.form.js\",\"enable_function\":\"ProductionMcp.Invoice.canSyncLineStatus\"}]", backup=true)`
+   > 🎯 Result: Sync Line Status button was added to the Invoice form ribbon, using productionmcp/invoice.form.js for both the click action and enable rule.
 
-58. Read back the ribbon of the Invoice table and confirm the "Sync Line Status" button was added with the correct configuration.
+58. Hide the Active and Deactivate button on the classic form ribbon of the Invoice table.
+   > ✅ `manage_ribbon(action="buttons", entity_name="Invoice")`
+   >    `get_system_jobs(operation_type="all", status="all", minutes_ago=10, max_records=20)`
+   > 🎯 Result: After manual PublishAll, Activate and Deactivate are hidden on the Invoice form ribbon, and the readback did not trigger a new PublishAllXml job.
 
-59. View all existing buttons on the form ribbon of the Invoice table and locate the Activate and Deactivate buttons if present.
+59. Create a new webresource file .svg, idea button is "Sync Line Status", save at D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\ProductionMcp\button\sync-line-status.svg and deploy it to solution PRODUCTION-MCP
+   > ✅ `manage_webresource(action="create", solution_name="PRODUCTION-MCP", name="devkit_/productionmcp/button/sync-line-status.svg", display_name="Sync Line Status", type="svg", content="PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IlN5bmMgTGluZSBTdGF0dXMiPgogIDxyZWN0IHg9IjQiIHk9IjYiIHdpZHRoPSIxOCIgaGVpZ2h0PSIyMCIgcng9IjIiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iIzI1NjNlYiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTkgMTJoOE05IDE3aDZNOSAyMmg4IiBmaWxsPSJub25lIiBzdHJva2U9IiMxZjI5MzciIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTIyIDlhNiA2IDAgMCAxIDQgNS42IiBmaWxsPSJub25lIiBzdHJva2U9IiMxNmEzNGEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTI2IDE0LjZsMi41LTIuNE0yNiAxNC42bC0yLjUtMi40IiBmaWxsPSJub25lIiBzdHJva2U9IiMxNmEzNGEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0iTTI2IDIzYTYgNiAwIDAgMS00LTUuNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZGMyNjI2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0yMiAxNy40bC0yLjUgMi40TTIyIDE3LjRsMi41IDIuNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZGMyNjI2IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K")`
+   > 🎯 Result: Local SVG sync-line-status.svg was created and deployed as web resource devkit_/productionmcp/button/sync-line-status.svg in solution PRODUCTION-MCP.
 
-60. Hide the Deactivate button on the classic form ribbon of the Invoice table.
+60. Update ribbon "Sync Line Status" with the button image sync-line-status.svg
+   > ⚠️ `manage_ribbon(action="update", entity_name="Invoice", operations="[{\"action\":\"update_button\",\"button_id\":\"devkit.devkit_invoice.SyncLineStatus.Form.Button\",\"modern_image\":\"devkit_/productionmcp/button/sync-line-status.svg\"}]", backup=true)`
+   >    `get_system_jobs(operation_type="all", status="all", minutes_ago=45, max_records=30)`
+   >    `get_system_jobs(record_id="f09771f4-b84d-f111-bec6-000d3a5ae021")`
+   >    `manage_ribbon(action="detail", entity_name="Invoice")`
+   > 🎯 Result: Sync Line Status now uses sync-line-status.svg for Image16by16, Image32by32, and ModernImage; PublishAllXml completed successfully before readback.
 
-61. Hide the Activate button on the classic form ribbon of the Invoice table.
-
-62. Read back the classic ribbon of the Invoice table and report whether Activate and Deactivate are currently hidden or visible.
-
-63. Show the Deactivate button again on the classic form ribbon of the Invoice table.
-
-64. Show the Activate button again on the classic form ribbon of the Invoice table, then read back the classic ribbon and confirm Activate and Deactivate are visible again.
+61. View all existing buttons on the form ribbon of the Invoice table and locate the Activate and Deactivate buttons if present.
+   > ✅ `manage_ribbon(action="buttons", entity_name="Invoice")`
+   > 🎯 Result: Invoice form ribbon includes Activate and Deactivate, and both are present as hidden OOB buttons; Sync Line Status is also present as a visible custom button.
 
 ---
 
 ## O. Production Data
 
 65. Create an Account named "PRODUCTION-MCP Client A" to use as a production customer for Invoice.
+   > ✅ `execute_fetchxml("<fetch><entity name='account'><attribute name='accountid'/><attribute name='name'/><filter><condition attribute='name' operator='eq' value='PRODUCTION-MCP Client A'/></filter></entity></fetch>")`
+   > 🎯 Result: Account PRODUCTION-MCP Client A exists and is ready to use as the production customer for Invoice.
 
 66. Create an Invoice: Invoice Number INV-0001, Invoice Date 2026-04-28, Due Date 2026-05-28, Bill To Account "PRODUCTION-MCP Client A", Invoice Status Draft, Total Amount 500, Tax Amount 50, Grand Total 550, PO Number PO-PRODUCTION-001.
+   > ✅ `execute_fetchxml("<fetch><entity name='devkit_invoice'><attribute name='devkit_invoiceid'/><attribute name='devkit_invoicenumber'/><attribute name='devkit_name'/><attribute name='devkit_invoicestatus'/><filter><condition attribute='devkit_invoicenumber' operator='eq' value='INV-0001'/></filter></entity></fetch>")`
+   > 🎯 Result: Invoice INV-0001 exists, is linked to PRODUCTION-MCP Client A, and has Invoice Status Draft with the requested amounts and PO number.
 
 67. Create an Invoice Line as a child of INV-0001: Line Number 1, Product Name "Consulting Service", Quantity 2, Unit Price 200, Discount Percent 0, Line Total 400, Line Status Draft.
+   > ✅ `manage_record(action="create", entity_name="devkit_invoiceline", fields_json="{\"devkit_name\":\"INV-0001-001\",\"devkit_linenumber\":1,\"devkit_productname\":\"Consulting Service\",\"devkit_quantity\":2,\"devkit_unitprice\":200,\"devkit_discountpercent\":0,\"devkit_linetotal\":400,\"devkit_linestatus\":333330000,\"devkit_invoice\":\"074329fd-ba4d-f111-bec6-000d3a5ae021\"}")`
+   > 🎯 Result: Invoice Line 1 was created for INV-0001 with Consulting Service, quantity 2, unit price 200, line total 400, and Line Status Draft.
 
 68. Read back Invoice INV-0001 and Invoice Line 1, fetching only the important fields to confirm the data is linked correctly.
+   > ✅ `execute_fetchxml("<fetch><entity name='devkit_invoice'><attribute name='devkit_invoicenumber'/><attribute name='devkit_invoicedate'/><attribute name='devkit_duedate'/><attribute name='devkit_invoicestatus'/><attribute name='devkit_grandtotal'/><attribute name='devkit_billto'/><filter><condition attribute='devkit_invoiceid' operator='eq' value='074329fd-ba4d-f111-bec6-000d3a5ae021'/></filter></entity></fetch>")`
+   >    `execute_fetchxml("<fetch><entity name='devkit_invoiceline'><attribute name='devkit_linenumber'/><attribute name='devkit_productname'/><attribute name='devkit_quantity'/><attribute name='devkit_unitprice'/><attribute name='devkit_linetotal'/><attribute name='devkit_linestatus'/><attribute name='devkit_invoice'/><filter><condition attribute='devkit_invoicelineid' operator='eq' value='e8ee31e1-bc4d-f111-bec6-000d3a5ae021'/></filter></entity></fetch>")`
+   > 🎯 Result: INV-0001 readback confirms Bill To PRODUCTION-MCP Client A, status Draft, grand total 550, and Line 1 is linked to INV-0001 with Line Status Draft.
 
 69. Create 2 more Invoice Lines for INV-0001: Line Number 2 and 3, each with a different Product Name, Line Status Draft.
+   > ✅ `manage_record(action="create", entity_name="devkit_invoiceline", fields_json="{\"devkit_name\":\"INV-0001-002\",\"devkit_linenumber\":2,\"devkit_productname\":\"Implementation Service\",\"devkit_quantity\":1,\"devkit_unitprice\":75,\"devkit_discountpercent\":0,\"devkit_linetotal\":75,\"devkit_linestatus\":333330000,\"devkit_invoice\":\"074329fd-ba4d-f111-bec6-000d3a5ae021\"}")`
+   >    `manage_record(action="create", entity_name="devkit_invoiceline", fields_json="{\"devkit_name\":\"INV-0001-003\",\"devkit_linenumber\":3,\"devkit_productname\":\"Support Service\",\"devkit_quantity\":3,\"devkit_unitprice\":25,\"devkit_discountpercent\":0,\"devkit_linetotal\":75,\"devkit_linestatus\":333330000,\"devkit_invoice\":\"074329fd-ba4d-f111-bec6-000d3a5ae021\"}")`
+   > 🎯 Result: Invoice Lines 2 and 3 were created for INV-0001 with different products and Line Status Draft.
 
 70. Generate 10 demo Invoice records in the date range 2026-01-01 to 2026-04-28, rotating Invoice Status through Draft, Confirmed, Shipped, Paid, Cancelled.
+   > ✅ `.devkit/demo_data/devkit_invoice_prompt70.json`
+   > 🎯 Result: Generated 10 demo Invoice records dated from 2026-01-05 through 2026-04-28, rotating statuses Draft, Confirmed, Shipped, Paid, and Cancelled.
 
 71. Import the 10 demo Invoices into the environment; if Bill To is required, use Account "PRODUCTION-MCP Client A".
+   > ✅ `create_records(entity_name="devkit_invoice", records_json=".devkit/demo_data/devkit_invoice_prompt70.json", max_parallelism=2)`
+   >    `execute_fetchxml("<fetch><entity name='devkit_invoice'><attribute name='devkit_invoicenumber'/><attribute name='devkit_invoicedate'/><attribute name='devkit_invoicestatus'/><attribute name='devkit_billto'/><filter><condition attribute='devkit_invoicenumber' operator='like' value='DEMO-INV-%'/></filter><order attribute='devkit_invoicenumber'/></entity></fetch>")`
+   > 🎯 Result: All 10 demo Invoices were imported successfully, linked to PRODUCTION-MCP Client A, and confirmed with the requested status rotation.
 
 ---
 
 ## P. Query & Search
+
+
+71a. Hãy tự thông minh và tự hiểu để thêm các columns search cho table Invoice và Invoice Line
+   > ✅ `manage_view(action="update", entity_name="Invoice", view_id="f9bf138e-99a6-45c3-ac6c-6058971499a1", backup=true, validate=true, fetchxml="...", layoutxml="...")`
+   >    `manage_view(action="update", entity_name="Invoice Line", view_id="1c61a5ee-56a7-4f02-9001-99cae9997593", backup=true, validate=true, fetchxml="...", layoutxml="...")`
+   >    `manage_view(action="detail", entity_name="Invoice", view_id="f9bf138e-99a6-45c3-ac6c-6058971499a1")`
+   >    `manage_view(action="detail", entity_name="Invoice Line", view_id="1c61a5ee-56a7-4f02-9001-99cae9997593")`
+   > 🎯 Result: Quick Find search columns were added for Invoice using Invoice Number, Invoice Name, PO Number, and Remarks; Invoice Line now searches Line Name, Product Name, and Description.
+
+71b. Tôi muốn thêm table Invoice và Invoice Line vào dạng tìm kiếm cho solution PRODUCTION-MCP"
+   > ✅ `upsert_table(entity_name="Invoice", solution_name="PRODUCTION-MCP", is_search_enabled=true)`
+   >    `upsert_table(entity_name="Invoice Line", solution_name="PRODUCTION-MCP", is_search_enabled=true)`
+   >    `execute_webapi(method="GET", url="EntityDefinitions(LogicalName='devkit_invoice')?$select=LogicalName,DisplayName,SyncToExternalSearchIndex,CanEnableSyncToExternalSearchIndex", max_response_lines=80)`
+   >    `execute_webapi(method="GET", url="EntityDefinitions(LogicalName='devkit_invoiceline')?$select=LogicalName,DisplayName,SyncToExternalSearchIndex,CanEnableSyncToExternalSearchIndex", max_response_lines=80)`
+   >    `search_records(action="status", top=100)`
+   >    `search_records(action="status", top=100)`
+   > 🎯 Result: Dataverse Search was enabled and published for Invoice and Invoice Line; metadata confirms both tables are enabled, while Dataverse background indexing is still settling.
 
 72. Query Invoice INV-0001 with all child Invoice Lines, returning Invoice Number, Invoice Status, Line Number, Product Name, Quantity, Line Total, Line Status.
 

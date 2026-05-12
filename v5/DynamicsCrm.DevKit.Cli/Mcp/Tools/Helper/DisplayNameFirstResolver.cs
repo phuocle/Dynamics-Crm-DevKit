@@ -104,6 +104,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     return Ambiguous<T>(ambiguousTag, trimmed, "display+identifier", compositeMatches, retryParameterName);
             }
 
+            IReadOnlyList<string> logicalInputs = composite.HasValue ? new[] { trimmed } : GetLogicalSearchInputs(trimmed);
+            var exactLogicalMatches = candidateList
+                .Where(c =>
+                    logicalInputs.Any(term =>
+                        EqualsIgnoreCase(c.LogicalName, term) ||
+                        EqualsIgnoreCase(c.UniqueName, term) ||
+                        EqualsIgnoreCase(c.SchemaName, term)))
+                .ToList();
+
+            if (exactLogicalMatches.Count == 1)
+                return Ok(exactLogicalMatches[0]);
+
+            if (exactLogicalMatches.Count > 1)
+                return Ambiguous<T>(ambiguousTag, trimmed, "logical", exactLogicalMatches, retryParameterName);
+
             IReadOnlyList<string> displayInputs = composite.HasValue ? new[] { trimmed } : GetDisplaySearchInputs(trimmed);
             var displayMatches = candidateList
                 .Where(c => displayInputs.Any(term => Contains(c.DisplayName, term)))
@@ -124,7 +139,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 return Ambiguous<T>(ambiguousTag, trimmed, "display", displayMatches, retryParameterName);
             }
 
-            IReadOnlyList<string> logicalInputs = composite.HasValue ? new[] { trimmed } : GetLogicalSearchInputs(trimmed);
             var logicalMatches = candidateList
                 .Where(c =>
                     logicalInputs.Any(term =>
@@ -138,17 +152,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
             if (logicalMatches.Count > 1)
             {
-                var exactLogicalMatches = logicalMatches
-                    .Where(c =>
-                        logicalInputs.Any(term =>
-                            EqualsIgnoreCase(c.LogicalName, term) ||
-                            EqualsIgnoreCase(c.UniqueName, term) ||
-                            EqualsIgnoreCase(c.SchemaName, term)))
-                    .ToList();
-
-                if (exactLogicalMatches.Count == 1)
-                    return Ok(exactLogicalMatches[0]);
-
                 return Ambiguous<T>(ambiguousTag, trimmed, "logical", logicalMatches, retryParameterName);
             }
 

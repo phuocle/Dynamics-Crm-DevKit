@@ -309,6 +309,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("isQuickCreateEnabled")]
         public bool IsQuickCreateEnabled { get; set; }
 
+        [JsonPropertyName("isSearchEnabled")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsSearchEnabled { get; set; }
+
         [JsonPropertyName("description")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Description { get; set; }
@@ -491,6 +495,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("asyncOperationId")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string AsyncOperationId { get; set; }
+
+        [JsonPropertyName("needsWait")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? NeedsWait { get; set; }
+
+        [JsonPropertyName("waitTool")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitTool { get; set; }
+
+        [JsonPropertyName("pollAfterSeconds")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? PollAfterSeconds { get; set; }
+
+        [JsonPropertyName("readbackAllowed")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? ReadbackAllowed { get; set; }
+
+        [JsonPropertyName("nextAllowedActions")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> NextAllowedActions { get; set; }
+
+        [JsonPropertyName("waitReason")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitReason { get; set; }
 
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

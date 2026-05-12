@@ -212,22 +212,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             try
             {
                 var entity = EntityParserHelper.ParseFieldsToEntity(_serviceClient, entityName, fieldsJson, id);
-                var response = (UpsertResponse)_serviceClient.Execute(new UpsertRequest { Target = entity });
-                var wasCreated = response.RecordCreated;
-                var status = wasCreated ? "created" : "updated";
-                var verb = wasCreated ? "Created (upsert)" : "Updated";
+                _serviceClient.Update(entity);
 
                 var structured = new CrudResult
                 {
-                    Action = wasCreated ? "upsert" : "update",
+                    Action = "update",
                     Entity = entityName,
                     Id = id.ToString(),
-                    Status = status,
+                    Status = "updated",
                     FieldsUpdated = fieldCount
                 };
                 return new CallToolResult
                 {
-                    Content = [new TextContentBlock { Text = $"{verb} {entityName} {id} ({fieldCount} fields)" }],
+                    Content = [new TextContentBlock { Text = $"Updated {entityName} {id} ({fieldCount} fields)" }],
                     StructuredContent = JsonSerializer.SerializeToElement(structured)
                 };
             }

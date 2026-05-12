@@ -210,6 +210,19 @@ public class GetSolutionComponentsToolTests
     }
 
     [TestMethod]
+    public void DisplayNameFirstResolver_LogicalExactInput_ResolvesBeforeAmbiguousDisplayContains()
+    {
+        var result = ResolveString(
+            "name",
+            NewStringCandidate("address1", "Address 1: Name", logicalName: "address1_name", schemaName: "Address1_Name"),
+            NewStringCandidate("address2", "Address 2: Name", logicalName: "address2_name", schemaName: "Address2_Name"),
+            NewStringCandidate("target", "Account Name", logicalName: "name", schemaName: "Name"));
+
+        Assert.IsTrue(IsResolveSuccess(result), "Exact logical name should resolve before ambiguous display-name contains matches.");
+        Assert.AreEqual("target", GetResolveValue(result));
+    }
+
+    [TestMethod]
     public void DisplayNameFirstResolver_GetSearchInputs_SplitsDisplayUniqueInput()
     {
         var method = ResolverType.GetMethod("GetSearchInputs", BindingFlags.NonPublic | BindingFlags.Static)!;

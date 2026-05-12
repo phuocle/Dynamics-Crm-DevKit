@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
             "- buttons: all OOB+custom buttons across form/main_grid/sub_grid (entity_name)\n" +
             "- detail: current RibbonDiffXml (entity_name)\n" +
-            "- update: apply operations. Required: entity_name + operations. Auto: validate → fetch existing → apply → validate XSD → backup → import → publish\n" +
+            "- update: apply operations. Required: entity_name + operations. Auto: validate → fetch existing → apply → validate XSD → backup → import → start PublishAll async\n" +
             "- undo: restore (entity_name + ribbonxml backup path)\n\n" +
 
             "SUPPORTED OPERATIONS (10): add_button, update_button, hide_button, show_button, " +
@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "update_flyout_static REQUIRED: flyout_id OR label. items[]: item_label REQUIRED\n" +
             "hide_flyout_item / show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n\n" +
 
-            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). Always runs PublishAll sync after update.\n\n" +
+            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). Starts PublishAll async after update and returns needsWait=true with asyncOperationId; wait with get_system_jobs before readback or next prompt.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Inspect existing ribbon (list/buttons/detail) before editing\n" +
@@ -101,7 +101,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return ErrorResult("Error: entity_name is required for action='buttons'.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
-                            return entityError != null ? ErrorResult(entityError) : ListRibbonButtons(entityName);
+                            if (entityError != null) return ErrorResult(entityError);
+                            var busy = TryBlockRibbonReadbackWhenBusy("buttons", entityName);
+                            return busy ?? ListRibbonButtons(entityName);
                         }
 
                     case "detail":
@@ -109,7 +111,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             return ErrorResult("Error: entity_name is required for action='detail'.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
-                            return entityError != null ? ErrorResult(entityError) : DetailRibbon(entityName);
+                            if (entityError != null) return ErrorResult(entityError);
+                            var busy = TryBlockRibbonReadbackWhenBusy("detail", entityName);
+                            return busy ?? DetailRibbon(entityName);
                         }
 
                     case "update":
@@ -118,6 +122,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         var (updateEntityName, updateEntityError) = ResolveEntityLogicalName(entity_name);
                         if (updateEntityError != null)
                             return ErrorResult(updateEntityError);
+                        var updateBusy = TryBlockRibbonActionWhenBusy("update", updateEntityName, isReadback: false);
+                        if (updateBusy != null) return updateBusy;
 
                         if (!string.IsNullOrWhiteSpace(operations))
                             return UpdateRibbonFromOperations(
@@ -142,7 +148,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                                 "Provide backup file path from .devkit/backups/ribbons/.");
                         {
                             var (entityName, entityError) = ResolveEntityLogicalName(entity_name);
-                            return entityError != null ? ErrorResult(entityError) : UndoRibbon(entityName, ribbonxml.Trim());
+                            if (entityError != null) return ErrorResult(entityError);
+                            var undoBusy = TryBlockRibbonActionWhenBusy("undo", entityName, isReadback: false);
+                            return undoBusy ?? UndoRibbon(entityName, ribbonxml.Trim());
                         }
 
                     default:
@@ -177,6 +185,129 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ? (result.Value.LogicalName, null)
                 : (null, $"Error: entity_name '{entityName.Trim()}': {result.Error}");
         }
+
+        private CallToolResult TryBlockRibbonReadbackWhenBusy(string action, string entityName)
+            => TryBlockRibbonActionWhenBusy(action, entityName, isReadback: true);
+
+        private CallToolResult TryBlockRibbonActionWhenBusy(string action, string entityName, bool isReadback)
+        {
+            try
+            {
+                var activeJob = FindActiveSolutionJob();
+                if (activeJob == null)
+                    return null;
+
+                var jobId = activeJob.Id.ToString();
+                var operationType = GetRibbonJobOperationType(activeJob);
+                var status = MapAsyncStatus(activeJob.GetAttributeValue<OptionSetValue>("statuscode")?.Value ?? 0);
+                var name = activeJob.GetAttributeValue<string>("name") ?? operationType;
+                var startedOn = activeJob.GetAttributeValue<DateTime?>("startedon")?.ToString("yyyy-MM-dd HH:mm:ss") ?? "";
+
+                var sb = new StringBuilder();
+                sb.AppendLine($"[ManageRibbon] {action} — {entityName}");
+                sb.AppendLine("Status: environment_busy");
+                sb.AppendLine($"ActiveJob: {name}");
+                sb.AppendLine($"OperationType: {operationType}");
+                sb.AppendLine($"JobStatus: {status}");
+                if (!string.IsNullOrWhiteSpace(startedOn))
+                    sb.AppendLine($"StartedOn: {startedOn}");
+                sb.AppendLine($"AsyncOperationId: {jobId}");
+                sb.AppendLine(isReadback
+                    ? "Ribbon readback is blocked because a solution import/export or PublishAll job is still active."
+                    : "Ribbon update/undo is blocked because a solution import/export or PublishAll job is still active.");
+                sb.AppendLine($"Wait first: get_system_jobs(record_id=\"{jobId}\")");
+
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = sb.ToString() }],
+                    StructuredContent = JsonSerializer.SerializeToElement(new ManageRibbonResult
+                    {
+                        Action = action,
+                        EntityName = entityName,
+                        Status = "environment_busy",
+                        Published = false,
+                        AsyncOperationId = jobId,
+                        NeedsWait = true,
+                        WaitTool = "get_system_jobs",
+                        PollAfterSeconds = 60,
+                        ReadbackAllowed = false,
+                        NextAllowedActions = new List<string> { "get_system_jobs" },
+                        WaitReason = isReadback
+                            ? $"Active {operationType} system job is {status}; wait before ribbon readback."
+                            : $"Active {operationType} system job is {status}; wait before another ribbon update or undo."
+                    })
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private Entity FindActiveSolutionJob()
+        {
+            var query = new QueryExpression("asyncoperation")
+            {
+                ColumnSet = new ColumnSet("asyncoperationid", "name", "operationtype", "statuscode", "startedon", "messagename"),
+                TopCount = 1,
+                Criteria = new FilterExpression(LogicalOperator.And)
+            };
+
+            var solutionJobFilter = new FilterExpression(LogicalOperator.Or);
+            solutionJobFilter.AddCondition("operationtype", ConditionOperator.In, 202, 203, 204);
+
+            var publishAllAsyncFilter = new FilterExpression(LogicalOperator.And);
+            publishAllAsyncFilter.AddCondition("operationtype", ConditionOperator.Equal, 54);
+            var publishAllNameFilter = new FilterExpression(LogicalOperator.Or);
+            publishAllNameFilter.AddCondition("messagename", ConditionOperator.Equal, "PublishAllAsync");
+            publishAllNameFilter.AddCondition("name", ConditionOperator.Like, "%PublishAll%");
+            publishAllAsyncFilter.Filters.Add(publishAllNameFilter);
+            solutionJobFilter.Filters.Add(publishAllAsyncFilter);
+
+            query.Criteria.Filters.Add(solutionJobFilter);
+            query.Criteria.AddCondition("statuscode", ConditionOperator.In, 0, 10, 20, 21, 22);
+            query.Criteria.AddCondition("startedon", ConditionOperator.OnOrAfter, DateTime.UtcNow.AddMinutes(-60));
+            query.AddOrder("startedon", OrderType.Descending);
+
+            return _serviceClient.RetrieveMultiple(query).Entities.FirstOrDefault();
+        }
+
+        private static string GetRibbonJobOperationType(Entity job)
+        {
+            var operationType = job.GetAttributeValue<OptionSetValue>("operationtype")?.Value ?? 0;
+            var messageName = job.GetAttributeValue<string>("messagename") ?? "";
+            var name = job.GetAttributeValue<string>("name") ?? "";
+            if (operationType == 54 &&
+                (messageName.Equals("PublishAllAsync", StringComparison.OrdinalIgnoreCase) ||
+                 name.IndexOf("PublishAll", StringComparison.OrdinalIgnoreCase) >= 0))
+            {
+                return "PublishAll";
+            }
+
+            return MapAsyncOperationType(operationType);
+        }
+
+        private static string MapAsyncOperationType(int value) => value switch
+        {
+            202 => "ExportSolution",
+            203 => "ImportSolution",
+            204 => "PublishAll",
+            54 => "CustomAction",
+            _ => $"System({value})"
+        };
+
+        private static string MapAsyncStatus(int value) => value switch
+        {
+            0 => "WaitingForResources",
+            10 => "Waiting",
+            20 => "InProgress",
+            21 => "Pausing",
+            22 => "Canceling",
+            30 => "Succeeded",
+            31 => "Failed",
+            32 => "Canceled",
+            _ => value.ToString()
+        };
 
         private (List<JsonElement> Operations, List<string> Errors) NormalizeOperationWebResources(List<JsonElement> ops)
         {
@@ -697,24 +828,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
                 return DryRunResult($"Would UPDATE ribbon for entity '{entityName}'.");
 
+            // Step 4: Remove stale solution components before import so import -> publish stays contiguous.
+            CleanupSolutionComponents();
+
+            // Step 5: Import solution. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, resolvedXml);
+            ImportRibbonSolution(solutionZip);
 
-            // Step 4: Import solution
-            var importReq = new ImportSolutionRequest
-            {
-                CustomizationFile = solutionZip,
-                OverwriteUnmanagedCustomizations = true,
-                PublishWorkflows = true
-            };
-            _serviceClient.Execute(importReq);
-
-            // Step 4b: Remove stale entities from solution (keep only current entity)
-            CleanupOtherEntities(entityName);
-
-            // Step 5: Publish
+            // Step 6: Publish immediately after import completes.
             var (published, asyncJobId) = TryPublish(entityName);
 
-            // Step 6: Return result
+            // Step 7: Return result
             var sb = new StringBuilder();
             sb.AppendLine($"[ManageRibbon] update — {entityName}");
             sb.AppendLine($"Solution: {SOLUTION_NAME}");
@@ -725,6 +849,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Published: started asynchronously");
                 sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
                 sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
+                sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
             }
             else
             {
@@ -741,10 +866,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "update",
                     EntityName = entityName,
-                    Status = published ? "updated" : "updated_publish_failed",
+                    Status = published && asyncJobId.HasValue ? "publish_in_progress" : published ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
                     Published = published,
-                    AsyncOperationId = asyncJobId?.ToString()
+                    AsyncOperationId = asyncJobId?.ToString(),
+                    NeedsWait = asyncJobId.HasValue ? true : null,
+                    WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
+                    PollAfterSeconds = asyncJobId.HasValue ? 30 : null,
+                    ReadbackAllowed = asyncJobId.HasValue ? false : null,
+                    NextAllowedActions = asyncJobId.HasValue ? new List<string> { "get_system_jobs" } : null,
+                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null
                 })
             };
         }
@@ -862,20 +993,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
                 return DryRunResult($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.");
 
-            // Step 9: Build solution ZIP + import
-            var solutionZip = BuildSolutionZip(entityName, xmlString);
-            _serviceClient.Execute(new ImportSolutionRequest
-            {
-                CustomizationFile = solutionZip,
-                OverwriteUnmanagedCustomizations = true,
-                PublishWorkflows = true
-            });
-            CleanupOtherEntities(entityName);
+            // Step 9: Remove stale solution components before import so import -> publish stays contiguous.
+            CleanupSolutionComponents();
 
-            // Step 10: Publish
+            // Step 10: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
+            var solutionZip = BuildSolutionZip(entityName, xmlString);
+            ImportRibbonSolution(solutionZip);
+
+            // Step 11: Publish immediately after import completes.
             var (published, asyncJobId) = TryPublish(entityName);
 
-            // Step 11: Build result
+            // Step 12: Build result
             var newButtonCount = RibbonXmlHelpers.CountExistingButtons(ribbonDoc);
             var sb = new StringBuilder();
             sb.AppendLine($"[ManageRibbon] update — {entityName}");
@@ -898,6 +1026,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Published: started asynchronously");
                 sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
                 sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
+                sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
             }
             else
             {
@@ -914,10 +1043,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "update",
                     EntityName = entityName,
-                    Status = published ? "updated" : "updated_publish_failed",
+                    Status = published && asyncJobId.HasValue ? "publish_in_progress" : published ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
                     Published = published,
-                    AsyncOperationId = asyncJobId?.ToString()
+                    AsyncOperationId = asyncJobId?.ToString(),
+                    NeedsWait = asyncJobId.HasValue ? true : null,
+                    WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
+                    PollAfterSeconds = asyncJobId.HasValue ? 30 : null,
+                    ReadbackAllowed = asyncJobId.HasValue ? false : null,
+                    NextAllowedActions = asyncJobId.HasValue ? new List<string> { "get_system_jobs" } : null,
+                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null
                 })
             };
         }
@@ -951,17 +1086,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
                 return DryRunResult($"Would RESTORE ribbon for entity '{entityName}' from backup.");
 
-            // Build and import
-            var solutionZip = BuildSolutionZip(entityName, restoredXml);
-            _serviceClient.Execute(new ImportSolutionRequest
-            {
-                CustomizationFile = solutionZip,
-                OverwriteUnmanagedCustomizations = true,
-                PublishWorkflows = true
-            });
+            // Remove stale solution components before import so import -> publish stays contiguous.
+            CleanupSolutionComponents();
 
-            // Remove stale entities from solution (keep only current entity)
-            CleanupOtherEntities(entityName);
+            // Build and import. Execute returns only after Dataverse finishes the import request.
+            var solutionZip = BuildSolutionZip(entityName, restoredXml);
+            ImportRibbonSolution(solutionZip);
 
             var (published, asyncJobId) = TryPublish(entityName);
 
@@ -974,6 +1104,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"Published: started asynchronously");
                 sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
                 sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
+                sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
             }
             else
             {
@@ -987,10 +1118,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "undo",
                     EntityName = entityName,
-                    Status = "restored",
+                    Status = published && asyncJobId.HasValue ? "publish_in_progress" : published ? "restored" : "restored_publish_failed",
                     RestoredFromBackup = backupFilePath,
                     Published = published,
-                    AsyncOperationId = asyncJobId?.ToString()
+                    AsyncOperationId = asyncJobId?.ToString(),
+                    NeedsWait = asyncJobId.HasValue ? true : null,
+                    WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
+                    PollAfterSeconds = asyncJobId.HasValue ? 30 : null,
+                    ReadbackAllowed = asyncJobId.HasValue ? false : null,
+                    NextAllowedActions = asyncJobId.HasValue ? new List<string> { "get_system_jobs" } : null,
+                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null
                 })
             };
         }
@@ -1198,16 +1335,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return backupPath;
         }
 
-        // ── Cleanup stale entities from solution ─────────────────────
+        // ── Cleanup stale components from solution ───────────────────
 
-        private void CleanupOtherEntities(string keepEntityName)
+        private void CleanupSolutionComponents()
         {
             try
             {
                 var solutionId = GetSolutionId();
                 if (solutionId == null) return;
-
-                var keepMetadataId = GetEntityMetadataId(keepEntityName);
 
                 var components = _serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
                 {
@@ -1217,8 +1352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         Conditions =
                         {
-                            new ConditionExpression("solutionid", ConditionOperator.Equal, solutionId.Value),
-                            new ConditionExpression("componenttype", ConditionOperator.Equal, 1)
+                            new ConditionExpression("solutionid", ConditionOperator.Equal, solutionId.Value)
                         }
                     }
                 }).Entities;
@@ -1226,7 +1360,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var comp in components)
                 {
                     var objectId = comp.GetAttributeValue<Guid>("objectid");
-                    if (keepMetadataId.HasValue && objectId == keepMetadataId.Value)
+                    if (objectId == Guid.Empty)
+                        continue;
+
+                    var componentType = comp.GetAttributeValue<OptionSetValue>("componenttype")?.Value;
+                    if (!componentType.HasValue)
                         continue;
 
                     try
@@ -1234,14 +1372,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         _serviceClient.Execute(new RemoveSolutionComponentRequest
                         {
                             ComponentId = objectId,
-                            ComponentType = 1,
+                            ComponentType = componentType.Value,
                             SolutionUniqueName = SOLUTION_NAME
                         });
                     }
-                    catch { /* best-effort add-to-solution; individual component failure does not abort the loop */ }
+                    catch { /* best-effort cleanup; individual component failure does not abort the loop */ }
                 }
             }
-            catch { /* best-effort solution component registration — non-critical */ }
+            catch { /* best-effort solution component cleanup — non-critical */ }
         }
 
         private Guid? GetSolutionId()
@@ -1256,21 +1394,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             </fetch>";
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetch));
             return result.Entities.Count > 0 ? result.Entities[0].Id : null;
-        }
-
-        private Guid? GetEntityMetadataId(string entityName)
-        {
-            try
-            {
-                var request = new RetrieveEntityRequest
-                {
-                    LogicalName = entityName,
-                    EntityFilters = EntityFilters.Entity
-                };
-                var response = (RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata.MetadataId;
-            }
-            catch { return null; }
         }
 
         // ── Helpers ──────────────────────────────────────────────────────
@@ -1320,6 +1443,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return (false, null);
             }
+        }
+
+        private void ImportRibbonSolution(byte[] solutionZip)
+        {
+            var importReq = new ImportSolutionRequest
+            {
+                CustomizationFile = solutionZip,
+                OverwriteUnmanagedCustomizations = true,
+                PublishWorkflows = true
+            };
+            _serviceClient.Execute(importReq);
         }
 
         private static CallToolResult ErrorResult(string message) => new()

@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Create or update a Dataverse table (auto-detect by entity lookup).\n" +
             "- CREATE (no entity): need display_name + display_collection_name + solution_name. Auto-creates primary name. Next: upsert_column → manage_form(action='update', operations=[...]).\n" +
-            "- UPDATE (entity exists): need entity_name only. Mutable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled. Others immutable.\n\n" +
+            "- UPDATE (entity exists): need entity_name only. Mutable: display_name, display_collection_name, description, is_audit_enabled, is_quick_create_enabled, is_search_enabled. Others immutable.\n\n" +
 
             "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix when supplied.\n\n" +
 
@@ -44,6 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "WHEN TO USE:\n" +
             "- Create a new custom entity (table) with primary name attribute\n" +
             "- Update mutable metadata (display names, description, audit, quick create)\n" +
+            "- Enable or disable Dataverse Search indexing for an existing table (is_search_enabled)\n" +
             "- Inspect existing table first via get_tables before update\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
@@ -63,6 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Enable notes. [create-only]")] bool has_notes = false,
             [Description("null = keep current (update).")] bool? is_quick_create_enabled = null,
             [Description("null = keep current (update). Default true on create.")] bool? is_audit_enabled = null,
+            [Description("Enable this table for Dataverse Search/Relevance Search (SyncToExternalSearchIndex). null = keep current on update; false by default on create unless specified.")] bool? is_search_enabled = null,
             [Description("1–850. [create-only]")] int primary_attribute_max_length = 100)
         {
             // Validate required fields
@@ -106,7 +108,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 entity_name = entityResolve.Value.LogicalName;
                 return UpdateExistingEntity(entity_name, entityResolve.Value,
                     display_name, display_collection_name, description,
-                    is_quick_create_enabled, is_audit_enabled,
+                    is_quick_create_enabled, is_audit_enabled, is_search_enabled,
                     ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name,
                     resolvedSolutionUniqueName ?? solution_name);
@@ -132,7 +134,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     // Entity exists — go to update mode directly
                 return UpdateExistingEntity(entity_name, checkResponse.EntityMetadata,
                         display_name, display_collection_name, description,
-                        is_quick_create_enabled, is_audit_enabled,
+                        is_quick_create_enabled, is_audit_enabled, is_search_enabled,
                         ownership_type, table_type, is_activity, has_notes,
                         primary_attribute_name, primary_attribute_display_name,
                         resolvedSolutionUniqueName ?? solution_name);
@@ -171,7 +173,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- UPDATE MODE ---
                 return UpdateExistingEntity(entity_name, existingEntity,
                     display_name, display_collection_name, description,
-                    is_quick_create_enabled, is_audit_enabled,
+                    is_quick_create_enabled, is_audit_enabled, is_search_enabled,
                     ownership_type, table_type, is_activity, has_notes,
                     primary_attribute_name, primary_attribute_display_name,
                     resolvedSolutionUniqueName ?? solution_name);
@@ -302,7 +304,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     OwnershipType = ownershipTypeValue,
                     IsActivity = is_activity,
                     IsAuditEnabled = new BooleanManagedProperty(is_audit_enabled ?? true),
-                    IsQuickCreateEnabled = effectiveIsQuickCreateEnabled
+                    IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
+                    SyncToExternalSearchIndex = is_search_enabled ?? false
                 };
 
                 if (!string.IsNullOrWhiteSpace(description))
@@ -386,6 +389,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"PrimaryAttrMaxLength: {primary_attribute_max_length}");
                 sb.AppendLine($"HasNotes: {(has_notes ? "yes" : "no")}");
                 sb.AppendLine($"IsActivity: {(is_activity ? "yes" : "no")}");
+                sb.AppendLine($"IsSearchEnabled: {((is_search_enabled ?? false) ? "yes" : "no")}");
                 sb.AppendLine($"Solution: {resolvedSolutionUniqueName ?? solution_name.Trim()}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {entityId}");
@@ -412,6 +416,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = published,
                     IsAuditEnabled = is_audit_enabled ?? true,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
+                    IsSearchEnabled = is_search_enabled ?? false,
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                     Status = "created"
                 };
@@ -446,7 +451,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult UpdateExistingEntity(
             string entityName, EntityMetadata existingMetadata,
             string displayName, string displayCollectionName, string description,
-            bool? isQuickCreateEnabled, bool? isAuditEnabled,
+            bool? isQuickCreateEnabled, bool? isAuditEnabled, bool? isSearchEnabled,
             string ownershipType, string tableType, bool isActivity, bool hasNotes,
             string primaryAttributeName, string primaryAttributeDisplayName,
             string solutionName)
@@ -509,6 +514,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     structuredChanges["isAuditEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isAuditEnabled.Value.ToString().ToLowerInvariant() };
                 }
 
+                if (isSearchEnabled.HasValue)
+                {
+                    var currentSearchEnabled = existingMetadata.SyncToExternalSearchIndex == true;
+                    var oldVal = currentSearchEnabled ? "true" : "false";
+                    var newVal = isSearchEnabled.Value.ToString().ToLowerInvariant();
+                    if (!currentSearchEnabled &&
+                        isSearchEnabled.Value &&
+                        existingMetadata.CanEnableSyncToExternalSearchIndex?.Value == false)
+                    {
+                        return ErrorResult(
+                            $"[Error] Cannot enable Dataverse Search for entity '{entityName}'.\n" +
+                            "Reason: CanEnableSyncToExternalSearchIndex is false for this table.\n" +
+                            "Tip: Use get_tables or EntityDefinitions metadata to inspect table capabilities.");
+                    }
+                    if (currentSearchEnabled != isSearchEnabled.Value)
+                    {
+                        existingMetadata.SyncToExternalSearchIndex = isSearchEnabled.Value;
+                        changes.Add($"SyncToExternalSearchIndex: {oldVal} -> {newVal}");
+                        structuredChanges["isSearchEnabled"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = newVal };
+                    }
+                }
+
                 // --- Warn for immutable properties passed with non-default values ---
                 if (!string.IsNullOrWhiteSpace(ownershipType) &&
                     !ownershipType.Trim().Equals("User", StringComparison.OrdinalIgnoreCase))
@@ -541,7 +568,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         foreach (var w in warnings)
                             sb2.AppendLine($"  {w}");
                     }
-                    sb2.AppendLine("Tip: Provide at least one updatable parameter (display_name, description, entity_color, is_quick_create_enabled, is_audit_enabled, etc.)");
+                    sb2.AppendLine("Tip: Provide at least one updatable parameter (display_name, description, entity_color, is_quick_create_enabled, is_audit_enabled, is_search_enabled, etc.)");
                     sb2.AppendLine("Note: Irreversible options (activities, feedback, change tracking, business process flows, connections, queues) must be managed via the Power Apps portal.");
                     return ErrorResult(sb2.ToString());
                 }
@@ -601,6 +628,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Published = published,
                     IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
                     IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
+                    IsSearchEnabled = existingMetadata.SyncToExternalSearchIndex == true,
                     Changes = structuredChanges.Count > 0 ? structuredChanges : null,
                     Warnings = warnings.Count > 0 ? warnings : null,
                     Status = "updated"
