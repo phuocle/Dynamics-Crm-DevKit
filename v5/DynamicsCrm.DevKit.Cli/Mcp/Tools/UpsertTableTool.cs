@@ -347,8 +347,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var response = (CreateEntityResponse)_serviceClient.Execute(request);
                 var entityId = response.EntityId;
 
-                // Retrieve the created entity to get EntitySetName
+                // Retrieve the created entity to get EntitySetName and managed properties.
                 var entitySetName = "";
+                EntityMetadata createdMetadata = null;
                 try
                 {
                     var retrieveRequest = new RetrieveEntityRequest
@@ -357,7 +358,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         EntityFilters = EntityFilters.Entity
                     };
                     var retrieveResponse = (RetrieveEntityResponse)_serviceClient.Execute(retrieveRequest);
-                    entitySetName = retrieveResponse.EntityMetadata.EntitySetName ?? "";
+                    createdMetadata = retrieveResponse.EntityMetadata;
+                    entitySetName = createdMetadata.EntitySetName ?? "";
                 }
                 catch
                 {
@@ -390,6 +392,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"HasNotes: {(has_notes ? "yes" : "no")}");
                 sb.AppendLine($"IsActivity: {(is_activity ? "yes" : "no")}");
                 sb.AppendLine($"IsSearchEnabled: {((is_search_enabled ?? false) ? "yes" : "no")}");
+                AppendSearchMetadata(sb, createdMetadata, is_search_enabled ?? false);
                 sb.AppendLine($"Solution: {resolvedSolutionUniqueName ?? solution_name.Trim()}");
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {entityId}");
@@ -417,6 +420,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     IsAuditEnabled = is_audit_enabled ?? true,
                     IsQuickCreateEnabled = effectiveIsQuickCreateEnabled,
                     IsSearchEnabled = is_search_enabled ?? false,
+                    SyncToExternalSearchIndex = createdMetadata?.SyncToExternalSearchIndex ?? is_search_enabled ?? false,
+                    CanEnableSyncToExternalSearchIndex = createdMetadata?.CanEnableSyncToExternalSearchIndex?.Value,
+                    CanEnableSyncToExternalSearchIndexCanBeChanged = createdMetadata?.CanEnableSyncToExternalSearchIndex?.CanBeChanged,
                     Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                     Status = "created"
                 };
@@ -560,6 +566,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // --- Execute update ---
                 if (changes.Count == 0)
                 {
+                    var hasUpdateInput =
+                        !string.IsNullOrWhiteSpace(displayName) ||
+                        !string.IsNullOrWhiteSpace(displayCollectionName) ||
+                        !string.IsNullOrWhiteSpace(description) ||
+                        isQuickCreateEnabled.HasValue ||
+                        isAuditEnabled.HasValue ||
+                        isSearchEnabled.HasValue;
+
+                    if (hasUpdateInput)
+                    {
+                        var unchangedText = new StringBuilder(512);
+                        unchangedText.AppendLine($"[EntityUnchanged] {entityName}");
+                        if (warnings.Count > 0)
+                        {
+                            unchangedText.AppendLine("Warnings:");
+                            foreach (var w in warnings)
+                                unchangedText.AppendLine($"  {w}");
+                        }
+                        unchangedText.AppendLine("Published: no");
+                        unchangedText.AppendLine($"MetadataId: {existingMetadata.MetadataId}");
+                        AppendSearchMetadata(unchangedText, existingMetadata);
+
+                        var unchanged = new UpsertTableResult
+                        {
+                            EntityName = entityName,
+                            DisplayName = existingMetadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                            DisplayCollectionName = existingMetadata.DisplayCollectionName?.UserLocalizedLabel?.Label ?? "",
+                            SchemaName = existingMetadata.SchemaName,
+                            OwnershipType = existingMetadata.OwnershipType?.ToString() ?? "",
+                            MetadataId = existingMetadata.MetadataId?.ToString() ?? "",
+                            EntitySetName = existingMetadata.EntitySetName,
+                            Published = false,
+                            IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
+                            IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
+                            IsSearchEnabled = existingMetadata.SyncToExternalSearchIndex == true,
+                            SyncToExternalSearchIndex = existingMetadata.SyncToExternalSearchIndex,
+                            CanEnableSyncToExternalSearchIndex = existingMetadata.CanEnableSyncToExternalSearchIndex?.Value,
+                            CanEnableSyncToExternalSearchIndexCanBeChanged = existingMetadata.CanEnableSyncToExternalSearchIndex?.CanBeChanged,
+                            Warnings = warnings.Count > 0 ? warnings : null,
+                            Status = "unchanged"
+                        };
+
+                        return new CallToolResult
+                        {
+                            Content = [new TextContentBlock { Text = unchangedText.ToString() }],
+                            StructuredContent = JsonSerializer.SerializeToElement(unchanged)
+                        };
+                    }
+
                     var sb2 = new StringBuilder(256);
                     sb2.AppendLine($"[Error] No changes specified for entity '{entityName}'");
                     if (warnings.Count > 0)
@@ -615,6 +670,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 sb.AppendLine($"Published: {(published ? "yes" : "no")}");
                 sb.AppendLine($"MetadataId: {existingMetadata.MetadataId}");
+                AppendSearchMetadata(sb, existingMetadata);
 
                 var structured = new UpsertTableResult
                 {
@@ -629,6 +685,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     IsAuditEnabled = existingMetadata.IsAuditEnabled?.Value,
                     IsQuickCreateEnabled = existingMetadata.IsQuickCreateEnabled == true,
                     IsSearchEnabled = existingMetadata.SyncToExternalSearchIndex == true,
+                    SyncToExternalSearchIndex = existingMetadata.SyncToExternalSearchIndex,
+                    CanEnableSyncToExternalSearchIndex = existingMetadata.CanEnableSyncToExternalSearchIndex?.Value,
+                    CanEnableSyncToExternalSearchIndexCanBeChanged = existingMetadata.CanEnableSyncToExternalSearchIndex?.CanBeChanged,
                     Changes = structuredChanges.Count > 0 ? structuredChanges : null,
                     Warnings = warnings.Count > 0 ? warnings : null,
                     Status = "updated"
@@ -652,6 +711,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         "Tip: Use get_tables to find the correct entity logical name");
                 }
                 return ErrorResult($"Error: Failed to update entity '{entityName}'\nMessage: {msg}");
+            }
+        }
+
+        private static void AppendSearchMetadata(StringBuilder sb, EntityMetadata metadata, bool? fallbackSyncToExternalSearchIndex = null)
+        {
+            var syncToExternalSearchIndex = metadata?.SyncToExternalSearchIndex ?? fallbackSyncToExternalSearchIndex;
+            if (syncToExternalSearchIndex.HasValue)
+                sb.AppendLine($"SyncToExternalSearchIndex: {syncToExternalSearchIndex.Value.ToString().ToLowerInvariant()}");
+
+            if (metadata?.CanEnableSyncToExternalSearchIndex != null)
+            {
+                sb.AppendLine($"CanEnableSyncToExternalSearchIndex: {metadata.CanEnableSyncToExternalSearchIndex.Value.ToString().ToLowerInvariant()}");
+                sb.AppendLine($"CanEnableSyncToExternalSearchIndexCanBeChanged: {metadata.CanEnableSyncToExternalSearchIndex.CanBeChanged.ToString().ToLowerInvariant()}");
             }
         }
 

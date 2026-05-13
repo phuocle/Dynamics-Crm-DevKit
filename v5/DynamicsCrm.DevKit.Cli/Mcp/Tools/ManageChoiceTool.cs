@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "list" => HandleList(!string.IsNullOrWhiteSpace(filter) ? filter : display_name),
                     "detail" => HandleDetail(optionset_name),
                     "create" => HandleCreate(optionset_name, display_name, description, options, solution_name, option_colors),
-                    "update" => HandleUpdate(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors),
+                    "update" => HandleUpdateSafe(optionset_name, display_name, description, add_options, update_options, remove_options, solution_name, option_colors),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update'.")
                 };
             }
@@ -130,6 +130,281 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Items = items,
                 Status = "ok"
             });
+        }
+
+        private CallToolResult HandleUpdateSafe(string optionsetName, string displayName, string description,
+            string addOptions, string updateOptions, string removeOptionValues, string solutionName, string optionColors)
+        {
+            if (string.IsNullOrWhiteSpace(optionsetName))
+                return ErrorResult("Error: optionset_name is required for 'update'.");
+
+            if (!string.IsNullOrWhiteSpace(removeOptionValues) && ParseLabelList(removeOptionValues) == null)
+                return ErrorResult("Error: Invalid remove_options format. Expected comma-separated label names (e.g., 'Draft,Cancelled').");
+
+            if (!string.IsNullOrWhiteSpace(addOptions) && string.IsNullOrWhiteSpace(solutionName) && ParseOptions(addOptions) == null)
+                return ErrorResult("Error: Invalid add_options format. Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived'.");
+
+            if (string.IsNullOrWhiteSpace(displayName) && string.IsNullOrWhiteSpace(description) &&
+                string.IsNullOrWhiteSpace(addOptions) && string.IsNullOrWhiteSpace(updateOptions) &&
+                string.IsNullOrWhiteSpace(removeOptionValues) && string.IsNullOrWhiteSpace(optionColors))
+                return ErrorResult("Error: No changes specified. Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
+
+            if (!TryResolveToLogicalName(optionsetName, out var name, out var resolveErr))
+                return ErrorResult(resolveErr);
+
+            var existingMeta = RetrieveOptionSetMetadata(name);
+            if (existingMeta == null)
+                return ErrorResult($"Error: Global option set '{name}' not found. Use action='create' to create it, or action='list' to see all available option sets.");
+
+            var hasDisplayName = !string.IsNullOrWhiteSpace(displayName);
+            var hasDescription = !string.IsNullOrWhiteSpace(description);
+            var hasColors = !string.IsNullOrWhiteSpace(optionColors);
+
+            var addStartValue = 0;
+            if (!string.IsNullOrWhiteSpace(addOptions) && !string.IsNullOrWhiteSpace(solutionName))
+            {
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName);
+                if (!solResult.IsSuccess)
+                    return ErrorResult($"Error: {solResult.Error}");
+                var maxExisting = existingMeta.Options != null && existingMeta.Options.Count > 0
+                    ? existingMeta.Options.Max(o => o.Value ?? 0)
+                    : solResult.OptionValuePrefix * 10000 - 1;
+                addStartValue = maxExisting + 1;
+            }
+
+            var parsedAddRequest = !string.IsNullOrWhiteSpace(addOptions) && !string.IsNullOrWhiteSpace(solutionName)
+                ? ParseOptionsWithAutoValue(addOptions, addStartValue)
+                : ParseOptions(addOptions);
+            var parsedUpdateLabels = ParseLabelPairs(updateOptions);
+            var parsedRemoveLabels = ParseLabelList(removeOptionValues);
+
+            if (!string.IsNullOrWhiteSpace(addOptions) && parsedAddRequest == null)
+                return ErrorResult("Error: Invalid add_options format. Use label-only 'NewLabel' (requires solution_name) e.g. 'Pending;Archived'.");
+            if (!string.IsNullOrWhiteSpace(updateOptions) && parsedUpdateLabels == null)
+                return ErrorResult("Error: Invalid update_options format. Expected 'OldLabel:NewLabel;...' (e.g., 'Draft:Open;Paid:Completed').");
+            if (!string.IsNullOrWhiteSpace(removeOptionValues) && parsedRemoveLabels == null)
+                return ErrorResult("Error: Invalid remove_options format. Expected comma-separated label names (e.g., 'Draft,Cancelled').");
+
+            var hasAddRequest = parsedAddRequest != null && parsedAddRequest.Count > 0;
+            var hasUpdate = parsedUpdateLabels != null && parsedUpdateLabels.Count > 0;
+            var hasRemove = parsedRemoveLabels != null && parsedRemoveLabels.Count > 0;
+            if (!hasDisplayName && !hasDescription && !hasAddRequest && !hasUpdate && !hasRemove && !hasColors)
+                return ErrorResult("Error: No changes specified. Provide at least one of: display_name, description, add_options, update_options, remove_options, option_colors.");
+
+            var optionsToInsert = new List<(int value, string label)>();
+            var optionsAlreadyExisted = new List<(int value, string label)>();
+            if (hasAddRequest)
+            {
+                foreach (var opt in parsedAddRequest)
+                {
+                    var existingByLabel = FindOptionByLabel(existingMeta, opt.label);
+                    if (existingByLabel?.Value != null)
+                    {
+                        optionsAlreadyExisted.Add((existingByLabel.Value.Value, opt.label));
+                        continue;
+                    }
+                    if (existingMeta.Options.Any(o => o.Value == opt.value))
+                        return ErrorResult($"Error: Option value '{opt.value}' already exists in '{name}'. Use a different explicit value or omit the value so it can be auto-assigned.");
+                    optionsToInsert.Add(opt);
+                }
+            }
+
+            var parsedUpdate = new List<(int value, string newLabel)>();
+            if (hasUpdate)
+            {
+                foreach (var (oldLabel, newLabel) in parsedUpdateLabels)
+                {
+                    var match = FindOptionByLabel(existingMeta, oldLabel);
+                    if (match?.Value == null)
+                        return ErrorResult($"Error: Option label '{oldLabel}' not found in '{name}'. Use action='detail' to see existing option labels.");
+                    parsedUpdate.Add((match.Value.Value, newLabel));
+                }
+            }
+
+            var parsedRemove = new List<int>();
+            if (hasRemove)
+            {
+                foreach (var label in parsedRemoveLabels)
+                {
+                    var match = FindOptionByLabel(existingMeta, label);
+                    if (match?.Value == null)
+                        return ErrorResult($"Error: Option label '{label}' not found in '{name}'. Use action='detail' to see existing option labels.");
+                    parsedRemove.Add(match.Value.Value);
+                }
+            }
+
+            var projected = BuildProjectedOptions(existingMeta, parsedRemove, parsedUpdate, optionsToInsert);
+            Dictionary<string, string> colorMap;
+            if (hasColors)
+            {
+                var (colorRaw, colorParseError) = ParseOptionColors(optionColors);
+                if (colorParseError != null)
+                    return ErrorResult(colorParseError);
+                var (resolvedColors, resolveError) = ResolveOptionColors(projected, colorRaw, name);
+                if (resolveError != null)
+                    return ErrorResult(resolveError);
+                colorMap = resolvedColors;
+            }
+            else
+            {
+                colorMap = new Dictionary<string, string>();
+            }
+
+            if (_options.DryRun)
+            {
+                var parts = new List<string>();
+                if (hasDisplayName) parts.Add("displayName");
+                if (hasDescription) parts.Add("description");
+                if (optionsToInsert.Count > 0) parts.Add($"add {optionsToInsert.Count} option(s)");
+                if (optionsAlreadyExisted.Count > 0) parts.Add($"{optionsAlreadyExisted.Count} option(s) already exist");
+                if (hasUpdate) parts.Add($"update {parsedUpdate.Count} label(s)");
+                if (hasRemove) parts.Add($"remove {parsedRemove.Count} option(s)");
+                if (hasColors) parts.Add("colors");
+                return DryRunResult($"Would UPDATE global option set '{name}': {string.Join(", ", parts)}.");
+            }
+
+            var sb = new StringBuilder(512);
+            sb.AppendLine($"[Choice] Updated: {name}");
+            var metadataMutated = false;
+            var coloredSummary = new List<string>();
+            var colorAppliedValues = new HashSet<int>();
+
+            if (hasDisplayName || hasDescription)
+            {
+                var updateMeta = new OptionSetMetadata { Name = name, IsGlobal = true };
+                if (hasDisplayName)
+                {
+                    updateMeta.DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                    sb.AppendLine($"DisplayName: {displayName.Trim()}");
+                }
+                if (hasDescription)
+                {
+                    updateMeta.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+                    sb.AppendLine($"Description: {description.Trim()}");
+                }
+                _serviceClient.Execute(new UpdateOptionSetRequest { OptionSet = updateMeta });
+                metadataMutated = true;
+            }
+
+            for (var i = 0; i < parsedRemove.Count; i++)
+            {
+                var deleteReq = InitializeRequest(new DeleteOptionValueRequest());
+                deleteReq.OptionSetName = name;
+                deleteReq.Value = parsedRemove[i];
+                _serviceClient.Execute(deleteReq);
+                sb.AppendLine($"Removed: {parsedRemoveLabels[i]}");
+                metadataMutated = true;
+            }
+
+            foreach (var (value, label) in optionsToInsert)
+            {
+                var insertReq = InitializeRequest(new InsertOptionValueRequest());
+                insertReq.OptionSetName = name;
+                insertReq.Value = value;
+                insertReq.Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient));
+                if (colorMap.TryGetValue(value.ToString(), out var insertColor))
+                {
+                    SetRequestParameter(insertReq, "Color", insertColor);
+                    colorAppliedValues.Add(value);
+                    coloredSummary.Add($"{value}:{label}:{insertColor}");
+                    sb.AppendLine($"Added: {label} ({insertColor})");
+                }
+                else
+                {
+                    sb.AppendLine($"Added: {label}");
+                }
+                _serviceClient.Execute(insertReq);
+                metadataMutated = true;
+            }
+
+            foreach (var (_, label) in optionsAlreadyExisted)
+                sb.AppendLine($"AlreadyExists: {label}");
+
+            foreach (var (oldLabel, newLabel) in parsedUpdateLabels ?? [])
+            {
+                var (value, _) = parsedUpdate.First(t => t.newLabel == newLabel);
+                var updateReq = InitializeRequest(new UpdateOptionValueRequest());
+                updateReq.OptionSetName = name;
+                updateReq.Value = value;
+                updateReq.Label = new Label(newLabel, McpHelper.GetBaseLanguageCode(_serviceClient));
+                updateReq.MergeLabels = true;
+                if (colorMap.TryGetValue(value.ToString(), out var updateColor) && !ColorEquals(GetOptionColor(existingMeta, value), updateColor))
+                {
+                    SetRequestParameter(updateReq, "Color", updateColor);
+                    colorAppliedValues.Add(value);
+                    coloredSummary.Add($"{value}:{newLabel}:{updateColor}");
+                    sb.AppendLine($"Updated: {oldLabel} -> {newLabel} ({updateColor})");
+                }
+                else
+                {
+                    sb.AppendLine($"Updated: {oldLabel} -> {newLabel}");
+                }
+                _serviceClient.Execute(updateReq);
+                metadataMutated = true;
+            }
+
+            foreach (var kv in colorMap)
+            {
+                var val = int.Parse(kv.Key);
+                if (colorAppliedValues.Contains(val) || ColorEquals(GetOptionColor(existingMeta, val), kv.Value))
+                    continue;
+
+                var lbl = projected.FirstOrDefault(p => p.value == val).label ?? kv.Key;
+                var colorReq = InitializeRequest(new UpdateOptionValueRequest());
+                colorReq.OptionSetName = name;
+                colorReq.Value = val;
+                colorReq.MergeLabels = true;
+                SetRequestParameter(colorReq, "Color", kv.Value);
+                _serviceClient.Execute(colorReq);
+                sb.AppendLine($"Colored: {lbl} -> {kv.Value}");
+                coloredSummary.Add($"{val}:{lbl}:{kv.Value}");
+                metadataMutated = true;
+            }
+
+            var metadataVerified = true;
+            if (metadataMutated)
+            {
+                MetadataOperationWaitHelper.WaitAfterMutation();
+                var verifiedMeta = RetrieveOptionSetMetadata(name);
+                var verifyErrors = VerifyChoiceUpdate(verifiedMeta, displayName, description, parsedAddRequest,
+                    parsedUpdateLabels, parsedRemoveLabels, colorMap);
+                if (verifyErrors.Count > 0)
+                    return ErrorResult("Error: Choice metadata update could not be verified after waiting. " + string.Join(" ", verifyErrors));
+                sb.AppendLine("MetadataVerified: yes");
+            }
+            else
+            {
+                sb.AppendLine("MetadataVerified: yes (no metadata changes required)");
+            }
+
+            var requiresPublish = metadataMutated && (hasDisplayName || hasDescription || optionsToInsert.Count > 0 || hasUpdate || hasColors);
+            var published = false;
+            if (requiresPublish)
+            {
+                try
+                {
+                    published = PublishOptionSet(name);
+                }
+                catch (Exception ex)
+                {
+                    sb.AppendLine("Published: no");
+                    sb.AppendLine($"PublishError: {ex.Message}");
+                    sb.AppendLine($"NextStep: wait {MetadataOperationWaitHelper.DefaultWaitSeconds}s, then publish only or read back with manage_choice(action='detail').");
+                    return StructuredResult(sb.ToString(), BuildChoiceUpdateResult(name, displayName, hasDisplayName,
+                        optionsToInsert, optionsAlreadyExisted, parsedUpdateLabels, parsedRemoveLabels, coloredSummary,
+                        false, metadataVerified, "publish_failed", ex.Message, needsWait: true));
+                }
+            }
+
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (!requiresPublish && hasRemove)
+                sb.AppendLine("PublishScope: skipped (removed choices are automatically published by Dataverse)");
+            if (published)
+                sb.AppendLine($"NextStep: wait {MetadataOperationWaitHelper.DefaultWaitSeconds}s before readback.");
+
+            return StructuredResult(sb.ToString(), BuildChoiceUpdateResult(name, displayName, hasDisplayName,
+                optionsToInsert, optionsAlreadyExisted, parsedUpdateLabels, parsedRemoveLabels, coloredSummary,
+                published, metadataVerified, metadataMutated ? "updated" : "unchanged", null, needsWait: published));
         }
 
         private CallToolResult HandleDetail(string optionsetName)
@@ -494,11 +769,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 for (var i = 0; i < parsedRemove.Count; i++)
                 {
-                    _serviceClient.Execute(new DeleteOptionValueRequest
-                    {
-                        OptionSetName = name,
-                        Value = parsedRemove[i]
-                    });
+                    var deleteReq = InitializeRequest(new DeleteOptionValueRequest());
+                    deleteReq.OptionSetName = name;
+                    deleteReq.Value = parsedRemove[i];
+                    _serviceClient.Execute(deleteReq);
                     sb.AppendLine($"Removed: {parsedRemoveLabels[i]}");
                 }
             }
@@ -508,12 +782,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 foreach (var (value, label) in parsedAdd)
                 {
-                    _serviceClient.Execute(new InsertOptionValueRequest
-                    {
-                        OptionSetName = name,
-                        Value = value,
-                        Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient))
-                    });
+                    var insertReq = InitializeRequest(new InsertOptionValueRequest());
+                    insertReq.OptionSetName = name;
+                    insertReq.Value = value;
+                    insertReq.Label = new Label(label, McpHelper.GetBaseLanguageCode(_serviceClient));
+                    _serviceClient.Execute(insertReq);
                     sb.AppendLine($"Added: {label}");
                 }
             }
@@ -524,12 +797,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 foreach (var (oldLabel, newLabel) in parsedUpdateLabels)
                 {
                     var (value, _) = parsedUpdate.First(t => t.newLabel == newLabel);
-                    _serviceClient.Execute(new UpdateOptionValueRequest
-                    {
-                        OptionSetName = name,
-                        Value = value,
-                        Label = new Label(newLabel, McpHelper.GetBaseLanguageCode(_serviceClient))
-                    });
+                    var updateReq = InitializeRequest(new UpdateOptionValueRequest());
+                    updateReq.OptionSetName = name;
+                    updateReq.Value = value;
+                    updateReq.Label = new Label(newLabel, McpHelper.GetBaseLanguageCode(_serviceClient));
+                    _serviceClient.Execute(updateReq);
                     sb.AppendLine($"Updated: {oldLabel} -> {newLabel}");
                 }
             }
@@ -564,13 +836,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var val = int.Parse(kv.Key);
                     var lbl = projected.FirstOrDefault(p => p.value == val).label ?? kv.Key;
-                    var colorReq = new UpdateOptionValueRequest
-                    {
-                        OptionSetName = name,
-                        Value = val,
-                        MergeLabels = true
-                    };
-                    colorReq.Parameters["Color"] = kv.Value;
+                    var colorReq = InitializeRequest(new UpdateOptionValueRequest());
+                    colorReq.OptionSetName = name;
+                    colorReq.Value = val;
+                    colorReq.MergeLabels = true;
+                    SetRequestParameter(colorReq, "Color", kv.Value);
                     _serviceClient.Execute(colorReq);
                     sb.AppendLine($"Colored: {lbl} -> {kv.Value}");
                     coloredSummary.Add($"{val}:{lbl}:{kv.Value}");
@@ -600,6 +870,169 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         #endregion
 
         #region Helpers
+
+        private OptionSetMetadata RetrieveOptionSetMetadata(string name)
+        {
+            var resp = (RetrieveOptionSetResponse)_serviceClient.Execute(new RetrieveOptionSetRequest { Name = name });
+            return resp.OptionSetMetadata as OptionSetMetadata;
+        }
+
+        private static OptionMetadata FindOptionByLabel(OptionSetMetadata meta, string label)
+        {
+            if (meta?.Options == null || string.IsNullOrWhiteSpace(label))
+                return null;
+
+            return meta.Options.FirstOrDefault(o =>
+                o.Label?.UserLocalizedLabel?.Label?.Equals(label, StringComparison.OrdinalIgnoreCase) == true);
+        }
+
+        private static List<(int value, string label)> BuildProjectedOptions(
+            OptionSetMetadata existingMeta,
+            List<int> removedValues,
+            List<(int value, string newLabel)> renamedOptions,
+            List<(int value, string label)> insertedOptions)
+        {
+            var result = existingMeta.Options
+                .Where(o => o.Value.HasValue && (removedValues == null || !removedValues.Contains(o.Value.Value)))
+                .Select(o =>
+                {
+                    var val = o.Value.Value;
+                    var renamed = renamedOptions?.FirstOrDefault(t => t.value == val);
+                    var lbl = renamed.HasValue ? renamed.Value.newLabel : (o.Label?.UserLocalizedLabel?.Label ?? "");
+                    return (value: val, label: lbl);
+                }).ToList();
+
+            if (insertedOptions != null && insertedOptions.Count > 0)
+                result.AddRange(insertedOptions);
+
+            return result;
+        }
+
+        private static string GetOptionColor(OptionSetMetadata meta, int value)
+            => meta?.Options?.FirstOrDefault(o => o.Value == value)?.Color;
+
+        private static bool ColorEquals(string left, string right)
+            => string.Equals(NormalizeColor(left), NormalizeColor(right), StringComparison.OrdinalIgnoreCase);
+
+        private static string NormalizeColor(string color)
+            => string.IsNullOrWhiteSpace(color) ? "" : color.Trim();
+
+        private static T InitializeRequest<T>(T request) where T : OrganizationRequest
+        {
+            if (request.Parameters == null)
+                request.Parameters = new ParameterCollection();
+            return request;
+        }
+
+        private static void SetRequestParameter(OrganizationRequest request, string key, object value)
+        {
+            InitializeRequest(request);
+            request.Parameters[key] = value;
+        }
+
+        private static List<string> VerifyChoiceUpdate(
+            OptionSetMetadata meta,
+            string displayName,
+            string description,
+            List<(int value, string label)> requestedAdds,
+            List<(string oldLabel, string newLabel)> requestedRenames,
+            List<string> requestedRemoves,
+            Dictionary<string, string> colorsByValue)
+        {
+            var errors = new List<string>();
+            if (meta == null)
+            {
+                errors.Add("Option set metadata could not be read back.");
+                return errors;
+            }
+
+            if (!string.IsNullOrWhiteSpace(displayName) &&
+                !string.Equals(meta.DisplayName?.UserLocalizedLabel?.Label, displayName.Trim(), StringComparison.Ordinal))
+                errors.Add($"Display name was not updated to '{displayName.Trim()}'.");
+
+            if (!string.IsNullOrWhiteSpace(description) &&
+                !string.Equals(meta.Description?.UserLocalizedLabel?.Label, description.Trim(), StringComparison.Ordinal))
+                errors.Add("Description was not updated.");
+
+            if (requestedAdds != null)
+            {
+                foreach (var (_, label) in requestedAdds)
+                {
+                    if (FindOptionByLabel(meta, label) == null)
+                        errors.Add($"Option '{label}' was not found after update.");
+                }
+            }
+
+            if (requestedRenames != null)
+            {
+                foreach (var (_, newLabel) in requestedRenames)
+                {
+                    if (FindOptionByLabel(meta, newLabel) == null)
+                        errors.Add($"Renamed option '{newLabel}' was not found after update.");
+                }
+            }
+
+            if (requestedRemoves != null)
+            {
+                foreach (var label in requestedRemoves)
+                {
+                    if (FindOptionByLabel(meta, label) != null)
+                        errors.Add($"Removed option '{label}' still exists after update.");
+                }
+            }
+
+            if (colorsByValue != null)
+            {
+                foreach (var kv in colorsByValue)
+                {
+                    if (!int.TryParse(kv.Key, out var value))
+                        continue;
+                    var actual = GetOptionColor(meta, value);
+                    if (!ColorEquals(actual, kv.Value))
+                        errors.Add($"Color for option value '{value}' was not updated to '{kv.Value}'.");
+                }
+            }
+
+            return errors;
+        }
+
+        private static ManageChoiceResult BuildChoiceUpdateResult(
+            string name,
+            string displayName,
+            bool hasDisplayName,
+            List<(int value, string label)> optionsAdded,
+            List<(int value, string label)> optionsAlreadyExisted,
+            List<(string oldLabel, string newLabel)> optionsRenamed,
+            List<string> optionsRemoved,
+            List<string> optionsColored,
+            bool published,
+            bool metadataVerified,
+            string status,
+            string publishError,
+            bool needsWait)
+        {
+            return new ManageChoiceResult
+            {
+                Action = "update",
+                OptionSetName = name,
+                DisplayName = hasDisplayName ? displayName.Trim() : null,
+                OptionsAdded = optionsAdded != null && optionsAdded.Count > 0 ? optionsAdded.Select(p => $"{p.value}:{p.label}").ToList() : null,
+                OptionsAlreadyExisted = optionsAlreadyExisted != null && optionsAlreadyExisted.Count > 0 ? optionsAlreadyExisted.Select(p => $"{p.value}:{p.label}").ToList() : null,
+                OptionsRenamed = optionsRenamed != null && optionsRenamed.Count > 0 ? optionsRenamed.Select(p => $"{p.oldLabel}:{p.newLabel}").ToList() : null,
+                OptionsRemoved = optionsRemoved != null && optionsRemoved.Count > 0 ? optionsRemoved : null,
+                OptionsColored = optionsColored != null && optionsColored.Count > 0 ? optionsColored : null,
+                Published = published,
+                MetadataVerified = metadataVerified,
+                NeedsWait = needsWait,
+                WaitTool = needsWait ? "manage_choice" : null,
+                PollAfterSeconds = needsWait ? MetadataOperationWaitHelper.DefaultWaitSeconds : null,
+                ReadbackAllowed = needsWait ? false : null,
+                NextAllowedActions = needsWait ? new List<string> { "manage_choice detail" } : null,
+                WaitReason = needsWait ? "Wait for Dataverse metadata or publish propagation before readback." : null,
+                PublishError = publishError,
+                Status = status
+            };
+        }
 
         private bool TryResolveToLogicalName(string nameOrDisplay, out string resolvedName, out string error)
         {
@@ -680,8 +1113,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else
                 {
                     // resolve by label (case-insensitive)
-                    var match = optList.FirstOrDefault(o => o.label.Equals(key, StringComparison.OrdinalIgnoreCase));
-                    if (match.label == null)
+                    var match = optList.FirstOrDefault(o =>
+                        !string.IsNullOrWhiteSpace(o.label) &&
+                        o.label.Equals(key, StringComparison.OrdinalIgnoreCase));
+                    if (string.IsNullOrWhiteSpace(match.label))
                         return (null, $"Error: Option color key '{key}' not found in '{optionSetName}'. Use action='detail' to see existing option labels and values.");
                     result[match.value.ToString()] = hex;
                 }

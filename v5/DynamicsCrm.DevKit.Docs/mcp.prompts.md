@@ -496,73 +496,114 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
 71b. Tôi muốn thêm table Invoice và Invoice Line vào dạng tìm kiếm cho solution PRODUCTION-MCP"
    > ✅ `upsert_table(entity_name="Invoice", solution_name="PRODUCTION-MCP", is_search_enabled=true)`
    >    `upsert_table(entity_name="Invoice Line", solution_name="PRODUCTION-MCP", is_search_enabled=true)`
-   >    `execute_webapi(method="GET", url="EntityDefinitions(LogicalName='devkit_invoice')?$select=LogicalName,DisplayName,SyncToExternalSearchIndex,CanEnableSyncToExternalSearchIndex", max_response_lines=80)`
-   >    `execute_webapi(method="GET", url="EntityDefinitions(LogicalName='devkit_invoiceline')?$select=LogicalName,DisplayName,SyncToExternalSearchIndex,CanEnableSyncToExternalSearchIndex", max_response_lines=80)`
    >    `search_records(action="status", top=100)`
-   >    `search_records(action="status", top=100)`
-   > 🎯 Result: Dataverse Search was enabled and published for Invoice and Invoice Line; metadata confirms both tables are enabled, while Dataverse background indexing is still settling.
+   > 🎯 Result: Dataverse Search was enabled and published for Invoice and Invoice Line; upsert_table confirms both tables are search-enabled and exposes the search capability metadata, while search status is used only to observe background indexing.
 
 72. Query Invoice INV-0001 with all child Invoice Lines, returning Invoice Number, Invoice Status, Line Number, Product Name, Quantity, Line Total, Line Status.
+   > ✅ `execute_fetchxml(fetchxml="<fetch><entity name='devkit_invoiceline'><attribute name='devkit_linenumber'/><attribute name='devkit_productname'/><attribute name='devkit_quantity'/><attribute name='devkit_linetotal'/><attribute name='devkit_linestatus'/><link-entity name='devkit_invoice' from='devkit_invoiceid' to='devkit_invoice' alias='inv'><attribute name='devkit_invoicenumber'/><attribute name='devkit_invoicestatus'/><filter><condition attribute='devkit_invoicenumber' operator='eq' value='INV-0001'/></filter></link-entity><order attribute='devkit_linenumber'/></entity></fetch>", get_all=true, max_records=50)`
+   > 🎯 Result: INV-0001 was returned with Invoice Status Draft and three child Invoice Lines for Consulting Service, Implementation Service, and Support Service, all with Line Status Draft.
 
 73. Search for keyword INV-0001 in Dataverse and report which records related to Invoice or Invoice Line are found.
+   > ✅ `search_records(action="search", search_term="INV-0001", entities="Invoice,Invoice Line", top=20)`
+   > 🎯 Result: Dataverse Search found INV-0001 plus the three related Invoice Lines named for line 001, line 002, and line 003.
 
 74. Count Invoice Lines per Invoice and confirm that INV-0001 has at least 3 lines.
+   > ✅ `execute_fetchxml(fetchxml="<fetch aggregate='true'><entity name='devkit_invoiceline'><attribute name='devkit_invoicelineid' alias='line_count' aggregate='count'/><link-entity name='devkit_invoice' from='devkit_invoiceid' to='devkit_invoice' alias='inv'><attribute name='devkit_invoicenumber' alias='invoice_number' groupby='true'/><filter><condition attribute='devkit_invoicenumber' operator='eq' value='INV-0001'/></filter></link-entity></entity></fetch>", get_all=true, max_records=10)`
+   > 🎯 Result: INV-0001 has three Invoice Lines, satisfying the requirement of at least three lines.
 
 ---
 
 ## Q. Parse URL & Direct Web API
 
-75. Paste the URL of Invoice INV-0001 from the browser here to confirm the entity logical name and record GUID.
+75. The URL of Invoice INV-0001 is: https://dynamics-crm-devkit-v4.crm.dynamics.com/main.aspx?appid=34f058b9-ef4c-f111-bec6-000d3a5ae021&ribbondebug=true&pagetype=entityrecord&etn=devkit_invoice&id=074329fd-ba4d-f111-bec6-000d3a5ae021, pls confirm the entity logical name and record GUID.
+   > ✅ `parse_record_url(input="https://dynamics-crm-devkit-v4.crm.dynamics.com/main.aspx?appid=34f058b9-ef4c-f111-bec6-000d3a5ae021&ribbondebug=true&pagetype=entityrecord&etn=devkit_invoice&id=074329fd-ba4d-f111-bec6-000d3a5ae021")`
+   > 🎯 Result: The URL resolves to the Invoice table and the INV-0001 record.
 
 76. Read Invoice INV-0001 directly via Dataverse Web API, fetching only Invoice Number, Invoice Status, Grand Total, Modified On; compare the result with the standard record read approach.
+   > ✅ `execute_webapi(method="GET", url="devkit_invoices(074329fd-ba4d-f111-bec6-000d3a5ae021)?$select=devkit_invoicenumber,devkit_invoicestatus,devkit_grandtotal,modifiedon", headers="{\"Prefer\":\"odata.include-annotations=\\\"OData.Community.Display.V1.FormattedValue\\\"\"}", max_response_lines=120)`
+   >    `manage_record(action="read", entity_name="devkit_invoice", record_id="074329fd-ba4d-f111-bec6-000d3a5ae021", columns="devkit_invoicenumber,devkit_invoicestatus,devkit_grandtotal,modifiedon")`
+   >    `execute_fetchxml(fetchxml="<fetch><entity name='devkit_invoice'><attribute name='devkit_invoicenumber'/><attribute name='devkit_invoicestatus'/><attribute name='devkit_grandtotal'/><attribute name='modifiedon'/><filter><condition attribute='devkit_invoiceid' operator='eq' value='074329fd-ba4d-f111-bec6-000d3a5ae021'/></filter></entity></fetch>", get_all=true, max_records=1)`
+   > 🎯 Result: Direct Web API and the standard read path agree that INV-0001 is Draft with grand total 550 and the same modified-on timestamp.
 
 ---
 
 ## R. Update Record & Audit
 
 77. Update Invoice INV-0001: change Invoice Status from Draft to Confirmed and set Grand Total to 660.
+   > ✅ `manage_choice(action="detail", optionset_name="Invoice Status")`
+   >    `manage_record(action="update", entity_name="devkit_invoice", record_id="074329fd-ba4d-f111-bec6-000d3a5ae021", fields_json="{\"devkit_invoicestatus\":333330001,\"devkit_grandtotal\":660}")`
+   >    `execute_fetchxml(fetchxml="<fetch><entity name='devkit_invoice'><attribute name='devkit_invoicenumber'/><attribute name='devkit_invoicestatus'/><attribute name='devkit_grandtotal'/><filter><condition attribute='devkit_invoiceid' operator='eq' value='074329fd-ba4d-f111-bec6-000d3a5ae021'/></filter></entity></fetch>", get_all=true, max_records=1)`
+   > 🎯 Result: INV-0001 was updated from Draft to Confirmed and Grand Total is now 660.
 
 78. View the audit history of Invoice INV-0001 in the last 24 hours, focusing on changes to Invoice Status and Grand Total.
+   > ✅ `get_audit_history(entity_name="Invoice", record_id="074329fd-ba4d-f111-bec6-000d3a5ae021", minutes_ago=1440, operation="Update", max_records=20)`
+   > 🎯 Result: Audit history confirms Invoice Status changed from Draft to Confirmed and Grand Total changed from 550 to 660 by # DEVKIT.
 
 ---
 
 ## S. Messages, Plugins, Custom API
 
 79. List all Dataverse messages available for the Invoice table, especially Create, Update, SetState, and any custom actions.
+   > ✅ `get_messages(entity_name="Invoice", include_custom_actions=true)`
+   > 🎯 Result: Invoice supports standard SDK messages including Create, Update, SetState, Delete, Retrieve, RetrieveMultiple, Assign, and access-sharing messages; no custom actions are registered.
 
 80. Check whether any custom API is bound to the Invoice table; if so, describe its input, output, and the handling plugin.
+   > ✅ `get_custom_apis(entity_name="Invoice", status="all", include_microsoft=false, max_records=100)`
+   > 🎯 Result: No custom APIs are bound to the Invoice table.
 
 81. Check active plugin steps on the Invoice table for the Update message: assembly, type, stage, mode, and image if any.
+   > ✅ `get_plugins(entity_name="Invoice", message_name="Update", active_only=true, include_images=true, max_records=100)`
+   > 🎯 Result: No active plugin steps are registered on Invoice for the Update message.
 
 82. View plugin trace logs in the last 60 minutes related to the Invoice table; if none exist, state that clearly.
+   > ✅ `get_plugin_trace_logs(minutes_ago=60, max_records=100, type_name="Invoice")`
+   > 🎯 Result: No plugin trace logs related to Invoice were found in the last 60 minutes.
 
 ---
 
 ## T. System Jobs, Workflows, BPF, Flows
 
 83. View failed system jobs in the last 24 hours related to Invoice; if any, summarize the error and key stack trace.
+   > ✅ `get_system_jobs(entity_name="Invoice", status="failed", minutes_ago=1440, operation_type="all", max_records=100)`
+   > 🎯 Result: No failed system jobs related to Invoice were found in the last 24 hours.
 
 84. Check active classic workflows on the Invoice table, both background and realtime; summarize trigger fields and mode if any.
+   > ✅ `get_workflows(entity_name="Invoice", active_only=true, max_records=100)`
+   > 🎯 Result: No active classic workflows, background workflows, realtime workflows, on-demand workflows, or subprocesses are associated with Invoice.
 
 85. Check which business process flows are associated with the Invoice table, listing stages and primary entities.
+   > ✅ `get_business_process_flows(entity_name="Invoice", status="all", include_stages=true, max_records=100)`
+   > 🎯 Result: No business process flows are associated with the Invoice table.
 
 86. Check for cloud flows with names containing "PRODUCTION-MCP"; if found, open detail and view the latest few runs and their status.
+   > ✅ `get_flows(name_filter="PRODUCTION-MCP", status="all", max_records=100)`
+   > 🎯 Result: No cloud flows with names containing PRODUCTION-MCP were found.
 
 ---
 
 ## U. Business Rules & Security
 
 87. Check business rules on the Invoice table (both active and draft); if any exist, open the first rule and summarize its conditions and actions.
+   > ✅ `get_business_rules(entity_name="Invoice", max_records=100)`
+   > 🎯 Result: No active or draft business rules were found on the Invoice table.
 
 88. Check what permissions the "System Administrator" role has on the Invoice table.
+   > ✅ `manage_role(action="list", role_name="System Administrator", max_records=10)`
+   >    `manage_role(action="detail", role_id="9876ab54-d4a4-f011-bbd3-000d3a311238", entity_name="Invoice")`
+   > 🎯 Result: System Administrator has organization-level Create, Read, Write, Delete, Append, Append To, Assign, and Share permissions on Invoice.
 
 89. Check the current user's effective permissions on the Invoice table: Create, Read, Write, Delete, Append, Append To.
+   > ✅ `manage_role(action="user", user_id="DEVKIT_1a60a5c2-d04c-4b26-8f86-9d6ce0616799@82131d86-1aa7-f011-8706-00224806e819.com", entity_name="Invoice")`
+   > 🎯 Result: The current user has organization-level Create, Read, Write, Delete, Append, Append To, Assign, and Share permissions on Invoice through System Administrator.
 
 ---
 
 ## V. Metadata Updates & Publish
 
 90. Add option "Archived" to the "Invoice Status" global choice with color purple (#7030A0), then read it back to confirm the new option and color are present.
+   > ✅ `manage_choice(action="update", optionset_name="Invoice Status", add_options="Archived", option_colors="Archived:#7030A0", solution_name="PRODUCTION-MCP")`
+   >    `manage_choice(action="detail", optionset_name="Invoice Status")`
+   > 🎯 Result: Invoice Status now includes Archived with purple color.
 
 91. Enable audit and advanced find for the Invoice Status column on the Invoice table if currently disabled.
 

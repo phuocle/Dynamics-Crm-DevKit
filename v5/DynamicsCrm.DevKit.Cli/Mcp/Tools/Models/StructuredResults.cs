@@ -313,6 +313,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IsSearchEnabled { get; set; }
 
+        [JsonPropertyName("syncToExternalSearchIndex")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? SyncToExternalSearchIndex { get; set; }
+
+        [JsonPropertyName("canEnableSyncToExternalSearchIndex")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? CanEnableSyncToExternalSearchIndex { get; set; }
+
+        [JsonPropertyName("canEnableSyncToExternalSearchIndexCanBeChanged")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? CanEnableSyncToExternalSearchIndexCanBeChanged { get; set; }
+
         [JsonPropertyName("description")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Description { get; set; }
@@ -609,6 +621,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("optionsAdded")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OptionsAdded { get; set; }
+
+        [JsonPropertyName("optionsAlreadyExisted")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsAlreadyExisted { get; set; }
 
         [JsonPropertyName("optionsRenamed")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -2921,6 +2937,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OptionsAdded { get; set; }
 
+        [JsonPropertyName("optionsAlreadyExisted")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> OptionsAlreadyExisted { get; set; }
+
         [JsonPropertyName("optionsRenamed")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OptionsRenamed { get; set; }
@@ -2932,6 +2952,38 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("optionsColored")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OptionsColored { get; set; }
+
+        [JsonPropertyName("metadataVerified")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? MetadataVerified { get; set; }
+
+        [JsonPropertyName("needsWait")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? NeedsWait { get; set; }
+
+        [JsonPropertyName("waitTool")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitTool { get; set; }
+
+        [JsonPropertyName("pollAfterSeconds")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? PollAfterSeconds { get; set; }
+
+        [JsonPropertyName("readbackAllowed")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? ReadbackAllowed { get; set; }
+
+        [JsonPropertyName("nextAllowedActions")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> NextAllowedActions { get; set; }
+
+        [JsonPropertyName("waitReason")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitReason { get; set; }
+
+        [JsonPropertyName("publishError")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string PublishError { get; set; }
     }
 
     internal sealed class ChoiceOptionItem
