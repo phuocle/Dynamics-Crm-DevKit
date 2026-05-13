@@ -182,9 +182,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity}) with lookup '{lookupLogicalName}'{(isHierarchical ? " [IsHierarchical=true]" : "")}.");
 
-            var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
-            var metadataId = response.RelationshipId;
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
+                metadataId = response.RelationshipId;
+            }, $"create 1:N relationship '{relationshipName}' ({referencedEntity} -> {referencingEntity})");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create relationship '{relationshipName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple relationships, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns\n" +
+                    $"  4. Wait 15-20 seconds\n" +
+                    $"  5. Create all relationships");
+            }
+
             var published = PublishIfNeeded(referencingEntity);
+
+            // Wait for relationship metadata to propagate (extended wait)
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitForPropagation();
+            }
 
             var sb = new StringBuilder(512);
             sb.AppendLine($"[RelationshipCreated] 1:N {relationshipName}");

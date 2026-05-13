@@ -384,6 +384,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 try
                 {
                     published = PublishOptionSet(name);
+
+                    // Wait for choice metadata to propagate after publish
+                    if (published)
+                    {
+                        MetadataOperationWaitHelper.WaitAfterChoiceOperation();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -544,8 +550,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 optionSetMetadata.Options.Add(optMeta);
             }
 
-            var createResp = (CreateOptionSetResponse)_serviceClient.Execute(
-                new CreateOptionSetRequest { OptionSet = optionSetMetadata });
+            // Wrap create in retry to handle lock contention
+            CreateOptionSetResponse createResp = null;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                createResp = (CreateOptionSetResponse)_serviceClient.Execute(
+                    new CreateOptionSetRequest { OptionSet = optionSetMetadata });
+            }, $"create global option set '{name}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create global option set '{name}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or metadata cache not ready.\n" +
+                    $"Action: Wait 30 seconds and retry manually.");
+            }
 
             var addResult = SolutionComponentCreateHelper.AddExistingComponent(
                 _serviceClient,
@@ -817,8 +836,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         var val = o.Value.Value;
                         // apply rename if any
-                        var renamed = parsedUpdate?.FirstOrDefault(t => t.value == val);
-                        var lbl = renamed.HasValue ? renamed.Value.newLabel : (o.Label?.UserLocalizedLabel?.Label ?? "");
+                        var lbl = o.Label?.UserLocalizedLabel?.Label ?? "";
+                        if (parsedUpdate != null)
+                        {
+                            var renamed = parsedUpdate.FirstOrDefault(t => t.value == val);
+                            if (!string.IsNullOrWhiteSpace(renamed.newLabel))
+                                lbl = renamed.newLabel;
+                        }
                         return (value: val, label: lbl);
                     }).ToList();
                 if (hasAdd)
@@ -897,8 +921,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 .Select(o =>
                 {
                     var val = o.Value.Value;
-                    var renamed = renamedOptions?.FirstOrDefault(t => t.value == val);
-                    var lbl = renamed.HasValue ? renamed.Value.newLabel : (o.Label?.UserLocalizedLabel?.Label ?? "");
+                    var lbl = o.Label?.UserLocalizedLabel?.Label ?? "";
+                    if (renamedOptions != null)
+                    {
+                        var renamed = renamedOptions.FirstOrDefault(t => t.value == val);
+                        if (!string.IsNullOrWhiteSpace(renamed.newLabel))
+                            lbl = renamed.newLabel;
+                    }
                     return (value: val, label: lbl);
                 }).ToList();
 

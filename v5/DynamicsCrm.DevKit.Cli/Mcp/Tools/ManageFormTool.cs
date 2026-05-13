@@ -487,6 +487,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 });
                 published = true;
+
+                // Wait for form metadata to propagate after publish
+                if (published)
+                {
+                    MetadataOperationWaitHelper.WaitAfterFormView();
+                }
             }
             catch (Exception ex)
             {
@@ -665,6 +671,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 };
                 _serviceClient.Execute(publishRequest);
                 published = true;
+
+                // Wait for form metadata to propagate after publish
+                if (published)
+                {
+                    MetadataOperationWaitHelper.WaitAfterFormView();
+                }
             }
             catch (Exception ex)
             {
@@ -812,6 +824,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 });
                 published = true;
+
+                // Wait for form metadata to propagate after publish
+                if (published)
+                {
+                    MetadataOperationWaitHelper.WaitAfterFormView();
+                }
             }
             catch (Exception ex)
             {
@@ -982,6 +1000,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ParameterXml = $"<importexportxml><entities><entity>{objectTypeCode}</entity></entities></importexportxml>"
                 });
                 published = true;
+
+                // Wait for form metadata to propagate after publish
+                if (published)
+                {
+                    MetadataOperationWaitHelper.WaitAfterFormView();
+                }
             }
             catch (Exception ex)
             {

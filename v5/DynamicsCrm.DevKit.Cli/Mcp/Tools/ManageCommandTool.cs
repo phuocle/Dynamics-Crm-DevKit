@@ -2612,6 +2612,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var publishXml = $"<importexportxml><entities><entity>{EscapeXml(entityLogicalName.Trim().ToLowerInvariant())}</entity></entities></importexportxml>";
             _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+
+            // Wait for command metadata to propagate after publish
+            MetadataOperationWaitHelper.WaitAfterFormView();
         }
 
         private static CallToolResult ErrorResult(string message) => new()

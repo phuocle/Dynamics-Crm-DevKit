@@ -149,7 +149,7 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
    > 🎯 Result: Invoice Status contains Draft, Confirmed, Shipped, Paid, and Cancelled.
 
 5. Update the colors of the "Invoice Status" global choice: Draft=gray (#808080), Confirmed=blue (#0070C0), Shipped=orange (#FF7C00), Paid=green (#00B050), Cancelled=red (#FF0000); read it back to confirm the colors were applied correctly.
-   > ✅ `manage_choice(action="update", optionset_name="Invoice Status", option_colors="Draft:#808080;Confirmed:#0070C0;Shipped:#FF7C00;Paid:#00B050;Cancelled:#FF0000", auto_publish=true)`
+   > ✅ `manage_choice(action="update", optionset_name="Invoice Status", option_colors="Draft:#808080;Confirmed:#0070C0;Shipped:#FF7C00;Paid:#00B050;Cancelled:#FF0000")`
    >    `manage_choice(action="detail", optionset_name="Invoice Status")`
    > 🎯 Result: Invoice Status colors confirmed as Draft gray, Confirmed blue, Shipped orange, Paid green, and Cancelled red.
 
@@ -606,38 +606,83 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
    > 🎯 Result: Invoice Status now includes Archived with purple color.
 
 91. Enable audit and advanced find for the Invoice Status column on the Invoice table if currently disabled.
+   > ✅ `upsert_column(entity_name="Invoice", attribute_name="Invoice Status", attribute_type="picklist", display_name="Invoice Status", is_audit_enabled=true, is_valid_for_advanced_find=true)`
+   >    `upsert_column(entity_name="Invoice", attribute_name="Invoice Status", attribute_type="picklist", display_name="Invoice Status", solution_name="PRODUCTION-MCP", is_audit_enabled=true, is_valid_for_advanced_find=true)`
+   > 🎯 Result: Invoice Status on Invoice has audit and Advanced Find enabled, and the metadata was published.
 
 92. Update view "PRODUCTION-MCP Active Invoices" to add the PO Number column; read it back to confirm the layout and query are still in sync.
+   > ✅ `manage_view(action="detail", entity_name="Invoice", view_name="PRODUCTION-MCP Active Invoices")`
+   >    `manage_view(action="update", entity_name="Invoice", view_id="6f973fd2-e24c-f111-bec6-000d3a5ae021", fetchxml="<fetch version=\"1.0\" mapping=\"logical\" savedqueryid=\"6f973fd2-e24c-f111-bec6-000d3a5ae021\"><entity name=\"devkit_invoice\"><attribute name=\"devkit_invoicenumber\" /><attribute name=\"devkit_ponumber\" /><attribute name=\"devkit_billto\" /><attribute name=\"devkit_invoicedate\" /><attribute name=\"devkit_duedate\" /><attribute name=\"devkit_invoicestatus\" /><attribute name=\"devkit_grandtotal\" /><attribute name=\"ownerid\" /><attribute name=\"modifiedon\" /><order attribute=\"modifiedon\" descending=\"true\" /><filter type=\"and\"><condition attribute=\"statecode\" operator=\"eq\" value=\"0\" /></filter></entity></fetch>", layoutxml="<grid name=\"resultset\" object=\"10992\" jump=\"devkit_invoicenumber\" select=\"1\" icon=\"1\" preview=\"1\"><row name=\"result\" id=\"devkit_invoiceid\"><cell name=\"devkit_invoicenumber\" width=\"150\" /><cell name=\"devkit_ponumber\" width=\"120\" /><cell name=\"devkit_billto\" width=\"150\" /><cell name=\"devkit_invoicedate\" width=\"120\" /><cell name=\"devkit_duedate\" width=\"120\" /><cell name=\"devkit_invoicestatus\" width=\"120\" /><cell name=\"devkit_grandtotal\" width=\"120\" /><cell name=\"ownerid\" width=\"120\" /><cell name=\"modifiedon\" width=\"150\" /></row></grid>", validate=true, backup=true)`
+   >    `manage_view(action="detail", entity_name="Invoice", view_name="PRODUCTION-MCP Active Invoices")`
+   > 🎯 Result: PRODUCTION-MCP Active Invoices now includes PO Number, and the view layout and query remain in sync.
 
 93. Update the Invoice main form so that PO Number is inside the "Invoice Information" section; read it back to confirm the correct position.
+   > ✅ `manage_form(action="list", entity_name="Invoice", form_type=2)`
+   >    `manage_form(action="detail", entity_name="Invoice", form_name="Invoice", form_type=2)`
+   > 🎯 Result: Invoice main form already has PO Number inside the Invoice Information section, so no form import was needed.
 
 94. Update the web resource created in prompt 54 (productionmcp/invoice.form.js): add a short comment "// PRODUCTION-MCP v1" at the top of the file; read it back to confirm.
+   > ✅ `manage_webresource(action="list", name="productionmcp/invoice.form.js", max_records=50)`
+   >    `manage_webresource(action="detail", web_resource_id="devkit_/productionmcp/invoice.form.js")`
+   >    `manage_webresource(action="detail", web_resource_id="c9ae579e-0d4d-f111-bec6-000d3a5ae021")`
+   >    `execute_webapi(method="GET", url="webresourceset(c9ae579e-0d4d-f111-bec6-000d3a5ae021)?$select=name,displayname,content", max_response_lines=200)`
+   >    `manage_webresource(action="update", web_resource_id="c9ae579e-0d4d-f111-bec6-000d3a5ae021", content="Ly8gUFJPRFVDVElPTi1NQ1AgdjEKInVzZSBzdHJpY3QiOwoKdmFyIFByb2R1Y3Rpb25NY3AgPSBQcm9kdWN0aW9uTWNwIHx8IHt9OwpQcm9kdWN0aW9uTWNwLkludm9pY2UgPSAoZnVuY3Rpb24gKCkgewogICAgZnVuY3Rpb24gY2xlYW5JZChpZCkgewogICAgICAgIHJldHVybiBpZCA/IGlkLnJlcGxhY2UoL1t7fV0vZywgIiIpIDogIiI7CiAgICB9CgogICAgZnVuY3Rpb24gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpIHsKICAgICAgICByZXR1cm4gcHJpbWFyeUNvbnRyb2wgJiYgcHJpbWFyeUNvbnRyb2wuZ2V0QXR0cmlidXRlID8gcHJpbWFyeUNvbnRyb2wgOiBudWxsOwogICAgfQoKICAgIGZ1bmN0aW9uIGNhblN5bmNMaW5lU3RhdHVzKHByaW1hcnlDb250cm9sLCBwcmltYXJ5RW50aXR5VHlwZU5hbWUsIHByaW1hcnlJdGVtSWRzKSB7CiAgICAgICAgdmFyIGZvcm1Db250ZXh0ID0gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpOwogICAgICAgIHJldHVybiAhIShmb3JtQ29udGV4dCAmJiBjbGVhbklkKGZvcm1Db250ZXh0LmRhdGEuZW50aXR5LmdldElkKCkpKTsKICAgIH0KCiAgICBhc3luYyBmdW5jdGlvbiBjb25maXJtU3luY0xpbmVTdGF0dXMoKSB7CiAgICAgICAgaWYgKHR5cGVvZiBYcm0gPT09ICJ1bmRlZmluZWQiIHx8ICFYcm0uTmF2aWdhdGlvbiB8fCAhWHJtLk5hdmlnYXRpb24ub3BlbkNvbmZpcm1EaWFsb2cpIHsKICAgICAgICAgICAgcmV0dXJuIHRydWU7CiAgICAgICAgfQoKICAgICAgICB2YXIgcmVzdWx0ID0gYXdhaXQgWHJtLk5hdmlnYXRpb24ub3BlbkNvbmZpcm1EaWFsb2coewogICAgICAgICAgICB0aXRsZTogIlN5bmMgTGluZSBTdGF0dXMiLAogICAgICAgICAgICB0ZXh0OiAiVXBkYXRlIGFsbCBJbnZvaWNlIExpbmVzIHRvIG1hdGNoIHRoaXMgSW52b2ljZSBTdGF0dXM/IiwKICAgICAgICAgICAgY29uZmlybUJ1dHRvbkxhYmVsOiAiU3luYyIsCiAgICAgICAgICAgIGNhbmNlbEJ1dHRvbkxhYmVsOiAiQ2FuY2VsIgogICAgICAgIH0sIHsKICAgICAgICAgICAgaGVpZ2h0OiAyMjAsCiAgICAgICAgICAgIHdpZHRoOiA0NTAKICAgICAgICB9KTsKCiAgICAgICAgcmV0dXJuIHJlc3VsdCAmJiByZXN1bHQuY29uZmlybWVkOwogICAgfQoKICAgIGFzeW5jIGZ1bmN0aW9uIHN5bmNMaW5lU3RhdHVzKHByaW1hcnlDb250cm9sLCBwcmltYXJ5RW50aXR5VHlwZU5hbWUsIHByaW1hcnlJdGVtSWRzKSB7CiAgICAgICAgdmFyIGZvcm1Db250ZXh0ID0gZ2V0Rm9ybUNvbnRleHQocHJpbWFyeUNvbnRyb2wpOwogICAgICAgIGlmICghZm9ybUNvbnRleHQpIHsKICAgICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgdmFyIGludm9pY2VJZCA9IGNsZWFuSWQoZm9ybUNvbnRleHQuZGF0YS5lbnRpdHkuZ2V0SWQoKSk7CiAgICAgICAgdmFyIHN0YXR1c0F0dHJpYnV0ZSA9IGZvcm1Db250ZXh0LmdldEF0dHJpYnV0ZSgiZGV2a2l0X2ludm9pY2VzdGF0dXMiKTsKICAgICAgICB2YXIgaW52b2ljZVN0YXR1cyA9IHN0YXR1c0F0dHJpYnV0ZSA/IHN0YXR1c0F0dHJpYnV0ZS5nZXRWYWx1ZSgpIDogbnVsbDsKCiAgICAgICAgaWYgKCFpbnZvaWNlSWQgfHwgaW52b2ljZVN0YXR1cyA9PT0gbnVsbCB8fCBpbnZvaWNlU3RhdHVzID09PSB1bmRlZmluZWQpIHsKICAgICAgICAgICAgcmV0dXJuOwogICAgICAgIH0KCiAgICAgICAgdmFyIGNvbmZpcm1lZCA9IGF3YWl0IGNvbmZpcm1TeW5jTGluZVN0YXR1cygpOwogICAgICAgIGlmICghY29uZmlybWVkKSB7CiAgICAgICAgICAgIHJldHVybjsKICAgICAgICB9CgogICAgICAgIHZhciBxdWVyeSA9ICI/JHNlbGVjdD1kZXZraXRfbGluZXN0YXR1cyYkZmlsdGVyPV9kZXZraXRfaW52b2ljZV92YWx1ZSBlcSAiICsgaW52b2ljZUlkOwogICAgICAgIHZhciByZXN1bHQgPSBhd2FpdCBYcm0uV2ViQXBpLnJldHJpZXZlTXVsdGlwbGVSZWNvcmRzKCJkZXZraXRfaW52b2ljZWxpbmUiLCBxdWVyeSk7CiAgICAgICAgdmFyIHVwZGF0ZXMgPSByZXN1bHQuZW50aXRpZXMubWFwKGZ1bmN0aW9uIChsaW5lKSB7CiAgICAgICAgICAgIHJldHVybiBYcm0uV2ViQXBpLnVwZGF0ZVJlY29yZCgiZGV2a2l0X2ludm9pY2VsaW5lIiwgbGluZS5kZXZraXRfaW52b2ljZWxpbmVpZCwgewogICAgICAgICAgICAgICAgZGV2a2l0X2xpbmVzdGF0dXM6IGludm9pY2VTdGF0dXMKICAgICAgICAgICAgfSk7CiAgICAgICAgfSk7CgogICAgICAgIGF3YWl0IFByb21pc2UuYWxsKHVwZGF0ZXMpOwogICAgfQoKICAgIHJldHVybiB7CiAgICAgICAgc3luY0xpbmVTdGF0dXM6IHN5bmNMaW5lU3RhdHVzLAogICAgICAgIGNhblN5bmNMaW5lU3RhdHVzOiBjYW5TeW5jTGluZVN0YXR1cwogICAgfTsKfSkoKTsK")`
+   >    `execute_webapi(method="GET", url="webresourceset(c9ae579e-0d4d-f111-bec6-000d3a5ae021)?$select=name,displayname,content", max_response_lines=30)`
+   > 🎯 Result: Web resource productionmcp/invoice.form.js now starts with the PRODUCTION-MCP v1 comment and was published.
 
 95. Publish all customizations for the Invoice table, Invoice Line table, the "Invoice Status" global choice, and the model-driven app navigation for app "PRODUCTION-MCP".
+   > ✅ `publish_customizations(entities="Invoice,Invoice Line", include_global_optionset=true, include_sitemap=true, appmodules="PRODUCTION-MCP")`
+   > 🎯 Result: Invoice, Invoice Line, global choices, sitemap/navigation, and the PRODUCTION-MCP app module were published successfully.
 
 ---
 
 ## W. End-of-Session Audit & System Jobs Check
 
 96. View the last 24 hours of audit history for the current user, up to 20 rows, confirming that MCP production operations have been recorded.
+   > ✅ `get_audit_history(minutes_ago=1440, max_records=20, user_filter="DEVKIT_1a60a5c2-d04c-4b26-8f86-9d6ce0616799@82131d86-1aa7-f011-8706-00224806e819.com")`
+   > 🎯 Result: Audit history confirms # DEVKIT production operations were recorded, including Invoice updates and Invoice, Invoice Line, Account, and demo Invoice creates.
 
 97. View publish or customization system jobs in the last 60 minutes, both succeeded and failed, to verify results after metadata creation steps.
+   > ✅ `get_system_jobs(minutes_ago=60, status="all", operation_type="solution", max_records=100)`
+   >    `get_system_jobs(minutes_ago=60, status="all", operation_type="all", name_filter="Publish", max_records=100)`
+   > 🎯 Result: No solution operation system jobs were found, and the publish-related app module job succeeded without failures.
 
 ---
 
 ## X. Summary
 
 98. Check solution "PRODUCTION-MCP (PRODUCTIONMCP)" and list all components now inside it: tables, columns, choices, forms, views, web resources, ribbon, commands, model-driven app, sitemap, and environment variables.
+   > ✅ `get_solution_components(solution_name="PRODUCTION-MCP")`
+   >    `get_tables(entity_name="Invoice")`
+   >    `get_tables(entity_name="Invoice Line")`
+   >    `manage_choice(action="detail", optionset_name="Invoice Status")`
+   >    `manage_webresource(action="list", solution_name="PRODUCTION-MCP", max_records=100)`
+   >    `manage_form(action="list", entity_name="Invoice", form_type=0)`
+   >    `manage_form(action="list", entity_name="Invoice Line", form_type=0)`
+   >    `manage_view(action="list", entity_name="Invoice", query_type=-1, include_personal=false)`
+   >    `manage_view(action="list", entity_name="Invoice Line", query_type=-1, include_personal=false)`
+   >    `manage_app(action="detail", app="PRODUCTION-MCP")`
+   >    `manage_environment_variable(action="list", solution_name="PRODUCTION-MCP", max_records=100)`
+   >    `manage_ribbon(action="buttons", entity_name="Invoice")`
+   >    `manage_command(action="list", app_name="PRODUCTION-MCP", entity_name="Invoice", origin="all", max_records=100, include_children=true)`
+   > 🎯 Result: PRODUCTION-MCP contains Invoice and Invoice Line with their production columns, Invoice Status global choice, Invoice and Invoice Line forms and views, two web resources, the Sync Line Status classic ribbon button, no modern commands, the PRODUCTION-MCP app and sitemap navigation, and the Invoice Production Mode environment variable.
 
 99. Summarize the "PRODUCTION-MCP" production session: what was created successfully, what was skipped due to environment limitations, and which prompts should be re-run to clean up or start over from scratch.
+   > ✅ `get_solution_components(solution_name="PRODUCTION-MCP")`
+   > 🎯 Result: PRODUCTION-MCP successfully created the Invoice and Invoice Line production schema, Invoice Status choice, environment variable, forms, views, web resources, classic Sync Line Status ribbon button, app navigation, sample records, and final publish; non-applicable items were custom actions, custom APIs, plugin steps, workflows, business process flows, cloud flows, business rules, and modern commands because none were present; rerun the publish and summary prompts after manual changes, or delete the production artifacts and rerun from the beginning to start clean.
 
 ---
 
 ## Y. Ambiguous Name Resolution Tests — Polymorphic Lookup & N:N Relationship
 
 100. In solution "PRODUCTION-MCP", create a table "Product" with plural name "Products", primary field name "Product Name", user ownership; then create another table also named "Product" but with plural name "Product Catalog", primary field name "Catalog Name", user ownership — this should trigger an ambiguity error because both tables have the same display name "Product".
+   > ✅ `upsert_table(entity_name="Product", display_name="Product", display_collection_name="Products", solution_name="PRODUCTION-MCP", primary_attribute_display_name="Product Name", ownership_type="User")`
+   >    `upsert_table(entity_name="Product Catalog", display_name="Product", display_collection_name="Product Catalog", solution_name="PRODUCTION-MCP", primary_attribute_display_name="Catalog Name", ownership_type="User")`
+   > 🎯 Result: Two custom Product tables were created in PRODUCTION-MCP with the same display name and different plural names, setting up the expected ambiguity test.
 
 101. In solution "PRODUCTION-MCP", add column "Related Product" to the Invoice Line table, type lookup targeting the "Product" table created in prompt 100 — this should trigger an ambiguity error because there are two tables with display name "Product"; AI must stop and ask user to disambiguate by providing the exact logical name.
+   > ⚠️ `upsert_column(entity_name="Invoice Line", attribute_name="Related Product", attribute_type="lookup", display_name="Related Product", solution_name="PRODUCTION-MCP", lookup_target="Product")`
+   > 🎯 Result: BLOCKED — Product is ambiguous because multiple matching tables exist, including Object Detection Product and two custom Product tables. Ask user to provide the exact logical name before re-running this prompt.
 
 102. In solution "PRODUCTION-MCP", create a many-to-many relationship between Invoice and Account with relationship name "invoice_account_association" — then attempt to create another N:N relationship between Invoice and Contact also named "invoice_account_association" — this should trigger a conflict error.
 

@@ -114,6 +114,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var parameterXml = BuildParameterXml(entityList, appModuleList, include_global_optionset, include_sitemap);
                 var request = new PublishXmlRequest { ParameterXml = parameterXml };
                 _serviceClient.Execute(request);
+
+                // Wait for metadata to propagate after publish
+                MetadataOperationWaitHelper.WaitForPropagation();
+
                 sw.Stop();
 
                 var sb = new StringBuilder();

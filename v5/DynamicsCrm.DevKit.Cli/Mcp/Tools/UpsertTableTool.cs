@@ -77,6 +77,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var entityIdentityInput = entity_name.Trim();
             var originalEntityName = entityIdentityInput;
             entity_name = originalEntityName;
+            var inputHasPublisherPrefix = entityIdentityInput.IndexOf('_') > 0 &&
+                entityIdentityInput.IndexOf('_') < entityIdentityInput.Length - 1;
+            var hasCreateMetadataInput =
+                !string.IsNullOrWhiteSpace(display_name) ||
+                !string.IsNullOrWhiteSpace(display_collection_name) ||
+                !string.IsNullOrWhiteSpace(primary_attribute_name) ||
+                !primary_attribute_display_name.Trim().Equals("Name", StringComparison.OrdinalIgnoreCase) ||
+                has_notes ||
+                is_activity ||
+                !ownership_type.Trim().Equals("User", StringComparison.OrdinalIgnoreCase) ||
+                !table_type.Trim().Equals("Standard", StringComparison.OrdinalIgnoreCase);
+            var isCreateIntent = !inputHasPublisherPrefix &&
+                !string.IsNullOrWhiteSpace(solution_name) &&
+                hasCreateMetadataInput;
 
             // Resolve publisher prefix from solution if provided
             string resolvedPrefix = null;
@@ -102,19 +116,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityIdentityInput, "upsert_table");
-            if (entityResolve.IsSuccess)
+            if (!isCreateIntent)
             {
-                entity_name = entityResolve.Value.LogicalName;
-                return UpdateExistingEntity(entity_name, entityResolve.Value,
-                    display_name, display_collection_name, description,
-                    is_quick_create_enabled, is_audit_enabled, is_search_enabled,
-                    ownership_type, table_type, is_activity, has_notes,
-                    primary_attribute_name, primary_attribute_display_name,
-                    resolvedSolutionUniqueName ?? solution_name);
+                var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityIdentityInput, "upsert_table");
+                if (entityResolve.IsSuccess)
+                {
+                    entity_name = entityResolve.Value.LogicalName;
+                    return UpdateExistingEntity(entity_name, entityResolve.Value,
+                        display_name, display_collection_name, description,
+                        is_quick_create_enabled, is_audit_enabled, is_search_enabled,
+                        ownership_type, table_type, is_activity, has_notes,
+                        primary_attribute_name, primary_attribute_display_name,
+                        resolvedSolutionUniqueName ?? solution_name);
+                }
+                if (entityResolve.Status == ResolveStatus.Ambiguous || entityResolve.Status == ResolveStatus.Error)
+                    return ErrorResult($"Error: {entityResolve.Error}");
             }
-            if (entityResolve.Status == ResolveStatus.Ambiguous || entityResolve.Status == ResolveStatus.Error)
-                return ErrorResult($"Error: {entityResolve.Error}");
 
             // Validate publisher prefix exists in entity_name
             var underscoreIndex = entity_name.IndexOf('_');
@@ -170,6 +187,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (existingEntity != null)
             {
+                if (isCreateIntent)
+                {
+                    return ErrorResult(
+                        $"[Error] Cannot create table '{display_name.Trim()}' because logical name '{entity_name}' already exists.\n" +
+                        "Use update-style parameters for an existing table, or choose a different entity_name for the new table.");
+                }
+
                 // --- UPDATE MODE ---
                 return UpdateExistingEntity(entity_name, existingEntity,
                     display_name, display_collection_name, description,
@@ -220,7 +244,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string schemaName;
             try
             {
-                (schemaName, _) = DataverseNamer.Resolve(display_name, prefix);
+                (schemaName, _) = DataverseNamer.Resolve(namePart, prefix);
             }
             catch
             {
@@ -377,6 +401,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 catch
                 {
                     // Non-critical — entity was created, publish failed
+                }
+
+                // Wait for table metadata to propagate before subsequent operations
+                if (published)
+                {
+                    MetadataOperationWaitHelper.WaitAfterTableCreation();
                 }
 
                 // Format compact output

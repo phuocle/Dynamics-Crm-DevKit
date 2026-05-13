@@ -1474,6 +1474,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     ParameterXml = $"<importexportxml><entities><entity>{entityName}</entity></entities></importexportxml>"
                 });
+
+                // Wait for view metadata to propagate after publish
+                MetadataOperationWaitHelper.WaitAfterFormView();
+
                 return true;
             }
             catch { return false; }

@@ -343,7 +343,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create String column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -351,6 +368,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"MaxLength: {maxLength}");
             sb.AppendLine($"Format: {attr.FormatName?.Value ?? "Text"}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "String", displayName, reqLevel, metadataId, solutionName, published,
@@ -380,13 +404,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Memo column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Memo", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "Memo", displayName, reqLevel, metadataId, solutionName, published,
@@ -415,7 +463,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Integer column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -423,6 +488,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) sb.AppendLine($"MinValue: {(int)minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {(int)maxValue.Value}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string>();
@@ -453,7 +525,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Decimal column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -462,6 +551,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
@@ -494,7 +590,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Money column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -505,6 +618,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() }, { "precisionSource", precisionSource.ToString() } };
@@ -535,7 +655,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Float column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -544,6 +681,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
@@ -574,7 +718,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Boolean column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -582,6 +743,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"TrueLabel: {trueLabel.Trim()}");
             sb.AppendLine($"FalseLabel: {falseLabel.Trim()}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "Boolean", displayName, reqLevel, metadataId, solutionName, published,
@@ -615,7 +783,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create DateTime column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
@@ -624,6 +809,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Format: {dateFormat}");
             sb.AppendLine($"Behavior: {behaviorName}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "DateTime", displayName, reqLevel, metadataId, solutionName, published,
@@ -725,10 +917,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun) return DryRunResult($"Would CREATE lookup column '{logicalName}' on entity '{entityName}'.");
 
-            var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
-            var metadataId = response.AttributeId;
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                var response = (CreateOneToManyResponse)_serviceClient.Execute(request);
+                metadataId = response.AttributeId;
+            }, $"create Lookup column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
 
             var published = PublishIfNeeded(entityName);
+
+            // Wait for lookup column metadata to propagate (extended wait for relationships)
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitForPropagation();
+            }
 
             var sb = FormatHeader(entityName, logicalName, "Lookup", displayName, reqLevel);
             sb.AppendLine($"Target: {singleTarget}");
@@ -797,10 +1011,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun) return DryRunResult($"Would CREATE polymorphic lookup column '{logicalName}' on entity '{entityName}'.");
 
-            var response = _serviceClient.Execute(request);
-            var metadataId = (Guid)response.Results["AttributeId"];
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                var response = _serviceClient.Execute(request);
+                metadataId = (Guid)response.Results["AttributeId"];
+            }, $"create PolymorphicLookup column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
 
             var published = PublishIfNeeded(entityName);
+
+            // Wait for polymorphic lookup column metadata to propagate (extended wait for relationships)
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitForPropagation();
+            }
 
             var sb = FormatHeader(entityName, logicalName, "PolymorphicLookup", displayName, reqLevel);
             sb.AppendLine($"Targets: {string.Join(", ", targets)}");
@@ -889,10 +1125,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun) return DryRunResult($"Would CREATE customer column '{logicalName}' on entity '{entityName}'.");
 
-            var response = (CreateCustomerRelationshipsResponse)_serviceClient.Execute(request);
-            var metadataId = response.AttributeId;
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                var response = (CreateCustomerRelationshipsResponse)_serviceClient.Execute(request);
+                metadataId = response.AttributeId;
+            }, $"create Customer column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
 
             var published = PublishIfNeeded(entityName);
+
+            // Wait for customer column metadata to propagate (extended wait for relationships)
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitForPropagation();
+            }
 
             var sb = FormatHeader(entityName, logicalName, "Customer", displayName, reqLevel);
             sb.AppendLine($"Targets: account, contact");
@@ -1005,13 +1263,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create {typeName} column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, typeName, displayName, reqLevel);
             sb.AppendLine($"Options: {string.Join(", ", optionLabels)}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, typeName, displayName, reqLevel, metadataId, solutionName, published,
@@ -1034,12 +1316,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create BigInt column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "BigInt", displayName, reqLevel);
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "BigInt", displayName, reqLevel, metadataId, solutionName, published);
@@ -1062,12 +1368,36 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create Image column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "Image", displayName, reqLevel);
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "Image", displayName, reqLevel, metadataId, solutionName, published);
@@ -1093,13 +1423,37 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
 
-            var metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            // Wrap create in retry to handle lock contention
+            Guid metadataId = Guid.Empty;
+            var createSuccess = MetadataRetryHelper.RetryOnLockContention(() =>
+            {
+                metadataId = ExecuteCreateAttribute(entityName, attr, solutionName);
+            }, $"create File column '{logicalName}' on entity '{entityName}'");
+
+            if (!createSuccess)
+            {
+                return ErrorResult(
+                    $"Error: Failed to create column '{logicalName}' on entity '{entityName}' after multiple retry attempts.\n" +
+                    $"Reason: Lock contention or table metadata has not propagated.\n" +
+                    $"Action: Wait 30 seconds and retry manually. If creating multiple columns, use phased approach:\n" +
+                    $"  1. Create all tables first\n" +
+                    $"  2. Wait 15-20 seconds\n" +
+                    $"  3. Create all columns");
+            }
+
             if (_options.DryRun)
                 return DryRunResult($"Would CREATE {attr.GetType().Name.Replace("AttributeMetadata", "")} column '{attr.LogicalName}' on entity '{entityName}'.");
 
             var sb = FormatHeader(entityName, logicalName, "File", displayName, reqLevel);
             sb.AppendLine($"MaxSizeInKB: {maxSizeInKB}");
             var published = PublishIfNeeded(entityName);
+
+            // Wait for column metadata to propagate
+            if (published)
+            {
+                MetadataOperationWaitHelper.WaitAfterColumnCreation();
+            }
+
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, "File", displayName, reqLevel, metadataId, solutionName, published,

@@ -638,6 +638,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var publishXml = $"<importexportxml><webresources><webresource>{webResourceId:D}</webresource></webresources></importexportxml>";
                 _serviceClient.Execute(new PublishXmlRequest { ParameterXml = publishXml });
+
+                // Wait for web resource metadata to propagate after publish
+                MetadataOperationWaitHelper.WaitAfterWebResource();
+
                 return true;
             }
             catch
