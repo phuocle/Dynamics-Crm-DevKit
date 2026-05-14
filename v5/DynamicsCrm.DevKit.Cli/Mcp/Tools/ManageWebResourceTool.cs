@@ -7,6 +7,7 @@ using ModelContextProtocol.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -69,8 +70,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Web resources Dataverse — list/detail/create/update/delete. Required:\n" +
             "- list: optional name, type_filter, solution_name, max_records\n" +
             "- detail: web_resource_id (GUID, Display Name, or unique name)\n" +
-            "- create: name + content (base64) + type + solution_name (REQUIRED). Optional: display_name, description\n" +
-            "- update: web_resource_id (GUID, Display Name, or unique name). Optional: content, display_name, description\n" +
+            "- create: name + file_path + type + solution_name (REQUIRED). Optional: display_name, description\n" +
+            "- update: web_resource_id (GUID, Display Name, or unique name). Optional: file_path, display_name, description\n" +
             "- delete: web_resource_id (GUID, Display Name, or unique name; irreversible)\n\n" +
 
             "Types: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.\n" +
@@ -85,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Inspect, upload, update, or delete a single web resource\n" +
             "- Combine with build_form_xml + manage_form to wire JS into a form\n\n" +
 
-            "SAFETY: delete is irreversible; content must be base64 for create/update.")]
+            "SAFETY: delete is irreversible; file_path is converted to base64 internally for create/update.")]
         public CallToolResult manage_webresource(
             [Description("list / detail / create / update / delete."
             )] string action,
@@ -97,8 +98,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             ] string display_name = "",
             [Description("")
             ] string description = "",
-            [Description("Base64. Required: create."
-            )] string content = "",
+            [Description("Absolute or relative file path. Required: create. Tool reads file and converts to base64 internally."
+            )] string file_path = "",
             [Description("Required: create. See description for values. Ignored on other actions."
             )] string type = "",
             [Description("list: filter. create: REQUIRED — used to resolve publisher prefix and add WR to solution."
@@ -119,8 +120,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     "list" => HandleList(name, type_filter, solution_name, max_records),
                     "detail" => HandleDetail(web_resource_id),
-                    "create" => HandleCreate(name, display_name, description, content, type, solution_name),
-                    "update" => HandleUpdate(web_resource_id, display_name, description, content),
+                    "create" => HandleCreate(name, display_name, description, file_path, type, solution_name),
+                    "update" => HandleUpdate(web_resource_id, display_name, description, file_path),
                     "delete" => HandleDelete(web_resource_id),
                     _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'list', 'detail', 'create', 'update', 'delete'.")
                 };
@@ -318,17 +319,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(string name, string displayName, string description,
-            string content, string type, string solutionName)
+            string filePath, string type, string solutionName)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return ErrorResult("Error: name is required for 'create'.\n" +
                                    "Provide a unique name, e.g. 'prefix_/entities/Account.form.js'.");
 
-            if (string.IsNullOrWhiteSpace(content))
-                return ErrorResult("Error: content (base64 encoded) is required for 'create'.");
+            if (string.IsNullOrWhiteSpace(filePath))
+                return ErrorResult("Error: file_path is required for 'create'.\n" +
+                                   "Provide an absolute or relative path to the file.");
 
             if (string.IsNullOrWhiteSpace(type))
                 return ErrorResult("Error: type is required for 'create'. Valid values: js, html, css, xml, png, jpg, gif, svg, ico, resx, xsl, xap.");
+
+            // Read file and convert to base64
+            string content;
+            try
+            {
+                if (!File.Exists(filePath))
+                    return ErrorResult($"Error: File not found at path '{filePath}'.\n" +
+                                       "Provide a valid absolute or relative file path.");
+
+                var fileBytes = File.ReadAllBytes(filePath);
+                content = Convert.ToBase64String(fileBytes);
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to read file '{filePath}': {ex.Message}");
+            }
 
             var typeTrimmed = type.Trim().ToLowerInvariant();
             if (!TypeFilterMap.TryGetValue(typeTrimmed, out var typeCode))
@@ -470,7 +488,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(string webResourceId, string displayName,
-            string description, string content)
+            string description, string filePath)
         {
             if (string.IsNullOrWhiteSpace(webResourceId))
                 return ErrorResult("Error: web_resource_id is required for 'update'.\n" +
@@ -495,10 +513,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var update = new Entity("webresource", id);
             var fieldsUpdated = 0;
 
-            if (!string.IsNullOrWhiteSpace(content))
+            if (!string.IsNullOrWhiteSpace(filePath))
             {
-                update["content"] = content.Trim();
-                fieldsUpdated++;
+                // Read file and convert to base64
+                try
+                {
+                    if (!File.Exists(filePath))
+                        return ErrorResult($"Error: File not found at path '{filePath}'.\n" +
+                                           "Provide a valid absolute or relative file path.");
+
+                    var fileBytes = File.ReadAllBytes(filePath);
+                    var content = Convert.ToBase64String(fileBytes);
+                    update["content"] = content;
+                    fieldsUpdated++;
+                }
+                catch (Exception ex)
+                {
+                    return ErrorResult($"Error: Failed to read file '{filePath}': {ex.Message}");
+                }
             }
             if (!string.IsNullOrWhiteSpace(displayName))
             {
@@ -512,7 +544,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
 
             if (fieldsUpdated == 0)
-                return ErrorResult("Error: No fields to update. Provide at least one of: content, display_name, description.");
+                return ErrorResult("Error: No fields to update. Provide at least one of: file_path, display_name, description.");
 
             if (_options.DryRun)
             {
@@ -691,7 +723,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (Guid.TryParse(trimmed, out var guid))
                 return (guid, null);
 
-            return (null, $"Error: '{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
+            if (_serviceClient == null)
+                return (null, $"Error: '{trimmed}' is not a valid GUID. Use action='list' to find valid web resource IDs.");
+
+            var resolved = DisplayNameFirstResolver.ResolveWebResource(_serviceClient, trimmed, "manage_webresource");
+            if (!resolved.IsSuccess)
+                return (null, resolved.Error);
+
+            var resolvedId = resolved.Value.Id;
+            if (resolvedId == Guid.Empty && resolved.Value.Contains("webresourceid"))
+                resolvedId = resolved.Value.GetAttributeValue<Guid>("webresourceid");
+
+            if (resolvedId == Guid.Empty)
+                return (null, $"Error: Web resource '{trimmed}' resolved without a valid ID. Use action='list' to find valid web resource IDs.");
+
+            return (resolvedId, null);
         }
 
         private static CallToolResult ErrorResult(string message) => new()

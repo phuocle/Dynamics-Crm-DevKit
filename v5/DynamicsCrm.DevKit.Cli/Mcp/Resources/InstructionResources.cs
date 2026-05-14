@@ -24,7 +24,8 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 - Always read the app first with `manage_app(action='detail', app='...')` before changing metadata or navigation.
 - Create requires `solution_name` and `display_name`.
 - Create automatically creates a starter sitemap with an Account item so Dataverse app validation can pass.
-- `manage_app` never publishes. After successful create/update/navigation/undo, ask the user to publish or propose `publish_customizations(appmodules='<AppModuleId>')`.
+- `manage_app(action='update_navigation')` publishes the app after updating navigation so immediate readback can verify the sitemap.
+- Other manage_app mutating actions do not publish. After successful create/update/undo, ask the user to publish or propose `publish_customizations(appmodules='<AppModuleId>')`.
 - Do not delete appmodule records.
 - Do not delete sitemap records.
 - `remove_area`, `remove_group`, and `remove_item` only remove navigation nodes from sitemap XML.
@@ -44,7 +45,7 @@ Use `manage_app` for model-driven app metadata and app navigation. Never use `ex
 
 2. Apply metadata update or navigation operations.
 3. Check validation warnings or errors.
-4. Publish separately only after the user agrees:
+4. For metadata create/update/undo, publish separately only after the user agrees. Navigation updates are published automatically:
 
 ```json
 {

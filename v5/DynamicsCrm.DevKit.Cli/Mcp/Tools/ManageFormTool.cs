@@ -94,7 +94,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return normalizedAction switch
                 {
                     "list" => HandleList(entityName, form_name, form_type, include_formxml),
-                    "detail" => HandleDetail(entityName, form_id, form_name),
+                    "detail" => HandleDetail(entityName, form_id, form_name, form_type),
                     "update" => HandleUpdate(entityName, form_id, formxml, operations, validate, backup),
                     "rename" => HandleRename(entityName, form_id, form_name, backup),
                     "undo" => HandleUndo(entityName, form_id, formxml, validate),
@@ -201,10 +201,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Action: detail ────────────────────────────────────────────────
 
-        private CallToolResult HandleDetail(string entityName, string formId, string formName)
+        private CallToolResult HandleDetail(string entityName, string formId, string formName, int formType = 0)
         {
             if (string.IsNullOrWhiteSpace(formId) && string.IsNullOrWhiteSpace(formName))
                 return ErrorResult("Error: form_id or form_name is required for 'detail' action.");
+
+            if (formType != 0 && !ValidFormTypes.Contains(formType))
+                return ErrorResult($"Error: form_type={formType} is not valid. Valid values: 2=Main, 4=Preview, 5=Mobile, 6=QuickView, 7=QuickCreate, 8=Dialog, 11=MainInteractive, 12=Card. Use 0 or omit for all types.");
 
             if (!string.IsNullOrWhiteSpace(formId))
             {
@@ -215,7 +218,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // form_name provided, no form_id
             var nameFilter = formName.Trim();
-            var query = BuildListQuery(entityName, 0, includeFormXml: false);
+            var query = BuildListQuery(entityName, formType, includeFormXml: false);
             var escapedName = nameFilter.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
             query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
 
@@ -223,9 +226,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var forms = result.Entities;
 
             if (forms.Count == 0)
+            {
+                var typeHint = formType > 0 ? $" with type '{MapFormType(formType)}'" : "";
                 return ErrorResult(
-                    $"Error: No form found matching name '{nameFilter}' for entity '{entityName}'.\n" +
+                    $"Error: No form found matching name '{nameFilter}'{typeHint} for entity '{entityName}'.\n" +
                     $"Use manage_form with action='list' and entity_name='{entityName}' to list all available forms.");
+            }
 
             if (forms.Count == 1)
                 return GetFormDetailResult(entityName, forms[0].GetAttributeValue<Guid>("formid"));

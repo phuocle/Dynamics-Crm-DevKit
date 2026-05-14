@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
@@ -107,6 +109,45 @@ public class GetViewsToolTests
         Assert.AreEqual("nameFilter", parameters[1].Name);
         Assert.AreEqual("queryType", parameters[2].Name);
         Assert.AreEqual("includeFetchXml", parameters[3].Name);
+    }
+
+    [TestMethod]
+    public void HandleUpdate_AcceptsViewNameResolutionInputs()
+    {
+        var method = ToolType.GetMethod("HandleUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(method, "HandleUpdate method should exist");
+
+        var parameters = method.GetParameters();
+        Assert.AreEqual("viewId", parameters[1].Name);
+        Assert.AreEqual("viewName", parameters[2].Name);
+        Assert.AreEqual("queryType", parameters[3].Name);
+        Assert.AreEqual("includePersonal", parameters[4].Name);
+    }
+
+    [TestMethod]
+    public void HandleCreate_AcceptsQueryType()
+    {
+        var method = ToolType.GetMethod("HandleCreate", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.IsNotNull(method, "HandleCreate method should exist");
+
+        var parameters = method.GetParameters();
+        Assert.AreEqual("viewName", parameters[1].Name);
+        Assert.AreEqual("queryType", parameters[2].Name);
+    }
+
+    [TestMethod]
+    public void PreferExactViewNameMatches_WhenContainsMatchesInactive_ReturnsExactActive()
+    {
+        var method = ToolType.GetMethod("PreferExactViewNameMatches", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(method, "PreferExactViewNameMatches method should exist");
+
+        var inactive = new Entity("savedquery") { ["name"] = "Inactive Orders" };
+        var active = new Entity("savedquery") { ["name"] = "Active Orders" };
+
+        var result = (List<Entity>)method.Invoke(null, new object[] { new[] { inactive, active }, "Active Orders" })!;
+
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual("Active Orders", result[0].GetAttributeValue<string>("name"));
     }
 
     // ──────────────────────────────────────────────

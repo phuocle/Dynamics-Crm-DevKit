@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "RULES:\n" +
             "- Use this tool for model-driven app metadata and navigation tasks.\n" +
             "- Never use execute_webapi to create or update appmodule, sitemap, or appmodulecomponent records.\n" +
-            "- manage_app never publishes. Mutating actions must return a next step to publish separately.\n\n" +
+            "- update_navigation publishes the app so immediate readback sees the updated navigation. Other mutating actions return a next step to publish separately.\n\n" +
             "NAME RESOLUTION: app, icon_webresource, solution_name, and add_item entity values resolve Display Name contains first, then unique/logical/schema contains.\n\n" +
             "See docs://instructions_for_manage_app for the operation workflow and examples.")]
         public CallToolResult manage_app(
@@ -667,6 +667,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (entityComponentRefs.Count > 0)
                 AddAppComponents(appModule.Id, entityComponentRefs);
 
+            PublishAppModule(appModule.Id);
+
             var validation = ValidateApp(appModule.Id);
             var text = BuildNavigationText(
                 "Updated",
@@ -676,7 +678,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 backupPath,
                 validation,
                 navResult,
-                xsdWarnings);
+                xsdWarnings,
+                published: true);
 
             return StructuredResult(text, new ManageAppResult
             {
@@ -691,11 +694,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ValidationErrors = validation.Errors,
                 ValidationWarnings = MergeWarnings(validation.Warnings, xsdWarnings),
                 BackupPath = backupPath,
-                Published = false,
+                Published = true,
                 OperationsCount = ops.Count,
                 OperationSummaries = navResult.OperationSummaries,
-                AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null,
-                NextStep = PublishAppModuleNextStep(appModule.Id)
+                AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null
             });
         }
 
@@ -1500,7 +1502,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildNavigationText(string verb, Entity appModule, Guid appModuleIdUnique,
             Guid siteMapId, string backupPath, AppValidationResult validation,
-            AppNavigationOperationsResult navResult, List<string> xsdWarnings)
+            AppNavigationOperationsResult navResult, List<string> xsdWarnings, bool published = false)
         {
             var sb = new StringBuilder(512);
             sb.AppendLine($"[ManageAppNavigation] {verb}: {appModule.GetAttributeValue<string>("name")}");
@@ -1519,8 +1521,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"ValidationError: {error}");
             foreach (var warning in MergeWarnings(validation.Warnings, xsdWarnings) ?? [])
                 sb.AppendLine($"ValidationWarning: {warning}");
-            sb.AppendLine("Published: no");
-            sb.AppendLine($"NextStep: {PublishAppModuleNextStep(appModule.Id)}");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            if (!published)
+                sb.AppendLine($"NextStep: {PublishAppModuleNextStep(appModule.Id)}");
             return sb.ToString();
         }
 
@@ -1549,6 +1552,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string PublishAppModuleNextStep(Guid appModuleId)
         {
             return $"Not published. Run publish_customizations(appmodules='{appModuleId:D}') when ready.";
+        }
+
+        private void PublishAppModule(Guid appModuleId)
+        {
+            var parameterXml = $"<importexportxml><appmodules><appmodule>{appModuleId:D}</appmodule></appmodules></importexportxml>";
+            _serviceClient.Execute(new PublishXmlRequest { ParameterXml = parameterXml });
+            MetadataOperationWaitHelper.WaitForPropagation();
         }
 
         private static List<string> MergeWarnings(List<string> validationWarnings, List<string> xsdWarnings)

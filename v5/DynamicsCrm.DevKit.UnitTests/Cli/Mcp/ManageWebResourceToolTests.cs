@@ -184,36 +184,44 @@ public class ManageWebResourceToolTests
     }
 
     [TestMethod]
-    public void ManageWebResource_CreateMissingContent_ReturnsError()
+    public void ManageWebResource_CreateMissingFilePath_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
         var result = tool.manage_webresource(action: "create", name: "test_wr");
 
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
-        Assert.IsTrue(text.Contains("content (base64 encoded) is required"));
+        Assert.IsTrue(text.Contains("file_path is required"));
     }
 
     [TestMethod]
     public void ManageWebResource_CreateMissingType_ReturnsError()
     {
+        var tempFile = System.IO.Path.GetTempFileName();
+        System.IO.File.WriteAllText(tempFile, "test");
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.manage_webresource(action: "create", name: "test_wr", content: "dGVzdA==");
+        var result = tool.manage_webresource(action: "create", name: "test_wr", file_path: tempFile);
 
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("type is required"));
+
+        System.IO.File.Delete(tempFile);
     }
 
     [TestMethod]
     public void ManageWebResource_CreateInvalidType_ReturnsError()
     {
+        var tempFile = System.IO.Path.GetTempFileName();
+        System.IO.File.WriteAllText(tempFile, "test");
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageWebResourceTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.manage_webresource(action: "create", name: "test_wr", content: "dGVzdA==", type: "invalid");
+        var result = tool.manage_webresource(action: "create", name: "test_wr", file_path: tempFile, type: "invalid");
 
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Invalid type"));
+
+        System.IO.File.Delete(tempFile);
     }
 
     [TestMethod]

@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Sanitizes a string for use as a file name.
         /// Null/empty/whitespace → "unknown". Replaces spaces with '_', lowercases, replaces invalid chars with '_'.
         /// </summary>
-        private static string SanitizeFileName(string? name)
+        private static string SanitizeFileName(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return "unknown";
             var invalid = Path.GetInvalidFileNameChars();
@@ -136,7 +136,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// Resolves a SiteMap XML input: if it starts with '&lt;', returns as-is (inline XML).
         /// Otherwise treats it as a file path: reads and returns file content, or null if not found.
         /// </summary>
-        private static string? ResolveSiteMapXmlInput(string? sitemapxml)
+        private static string ResolveSiteMapXmlInput(string sitemapxml)
         {
             if (sitemapxml == null) return null;
 

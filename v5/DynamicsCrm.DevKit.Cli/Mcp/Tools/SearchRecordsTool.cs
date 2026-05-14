@@ -441,7 +441,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static string FormatStatusResults(string statusJson, string? statisticsJson) =>
+        private static string FormatStatusResults(string statusJson, string statisticsJson) =>
             FormatStatusResults(BuildStatusResult(statusJson, statisticsJson));
 
         private static string FormatStatusResults(SearchRecordsResult structured)

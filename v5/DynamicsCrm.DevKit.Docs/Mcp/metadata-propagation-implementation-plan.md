@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-13  
 **Reference:** [metadata-propagation-complete-guide.md](metadata-propagation-complete-guide.md)  
-**Scope:** Fix metadata propagation delays and lock contention in 12 DevKit MCP tools  
+**Scope:** Fix metadata propagation delays and lock contention in 13 DevKit MCP tools  
 **Estimated Effort:** 5-6 days  
 **Status:** Ready to implement
 
@@ -21,7 +21,7 @@
 
 **Changes:**
 - 2 new/enhanced helper classes
-- 11 tool updates
+- 12 tool updates
 - ~130 lines of code across 13 files
 
 ---
@@ -389,6 +389,41 @@ Apply [Complete Guide STEP 9](metadata-propagation-complete-guide.md#step-9-upda
 
 ---
 
+#### Task 3.5: Update ManageAppTool
+**Priority:** HIGH  
+**Effort:** 1 hour  
+**Dependencies:** Task 1.2  
+**Owner:** AI Agent
+
+**Description:**
+Publish app navigation changes before returning success so immediate `manage_app(action='detail')` readback sees the updated sitemap.
+
+**Files:**
+- Edit: `DynamicsCrm.DevKit.Cli/Mcp/Tools/ManageAppTool.cs`
+- Edit: `DynamicsCrm.DevKit.Cli/Mcp/Resources/InstructionResources.cs`
+
+**Implementation:**
+- After `update_navigation` updates sitemap XML and app components, call appmodule-specific `PublishXmlRequest`.
+- Call `MetadataOperationWaitHelper.WaitForPropagation()` after publish.
+- Return `Published=true` and no publish next step for successful navigation updates.
+- Preserve backup, validation, operation summaries, and existing structured result fields.
+- Update `docs://instructions_for_manage_app` to state navigation updates auto-publish while other app mutations still require separate publish.
+
+**Acceptance Criteria:**
+- [ ] Code compiles
+- [ ] `manage_app(action='update_navigation')` publishes app navigation before returning success
+- [ ] Immediate `manage_app(action='detail')` readback shows updated navigation
+- [ ] Output and structured result report `Published=true`
+- [ ] Create/update/undo app metadata behavior remains unchanged
+
+**Verification:**
+```bash
+/claude-build-cli
+# Test: update app navigation -> detail readback shows the new area/group/items
+```
+
+---
+
 #### ✅ Phase 3 Checkpoint: Build & Verify
 
 **After completing all Phase 3 tasks, run:**
@@ -626,7 +661,7 @@ Update tool descriptions to document wait/retry behavior.
 - Add note about operation-specific wait times
 
 **Acceptance Criteria:**
-- [ ] All 11 tool descriptions updated
+- [ ] All 12 tool descriptions updated
 - [ ] Descriptions mention retry behavior
 - [ ] Descriptions mention wait times
 
@@ -731,7 +766,8 @@ Phase 3 (HIGH Tools)                         │
 ├─ Task 3.1 (ManageChoiceTool) ←─────────────┤
 ├─ Task 3.2 (ManageFormTool) ←───────────────┤
 ├─ Task 3.3 (ManageViewTool) ←───────────────┤
-└─ Task 3.4 (ManageWebResourceTool) ←────────┘
+├─ Task 3.4 (ManageWebResourceTool) ←────────┤
+└─ Task 3.5 (ManageAppTool) ←────────────────┘
                                              │
 Phase 4 (MEDIUM Tools)                       │
 ├─ Task 4.1 (ManageCommandTool) ←────────────┤
@@ -803,7 +839,7 @@ Phase 6 (Documentation)                      │
 - [ ] **Zero manual waits required** for sequential metadata operations
 - [ ] **<5% lock contention errors** (down from ~40%)
 - [ ] **<10% manual retries** (down from ~60%)
-- [ ] **All 11 tools updated** with wait/retry logic
+- [ ] **All 12 tools updated** with wait/retry logic
 - [ ] **All unit tests pass** (6/6)
 - [ ] **All integration tests pass** (3/3)
 
