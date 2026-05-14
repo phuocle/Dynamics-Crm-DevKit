@@ -279,6 +279,46 @@ public class ManageFormToolTests
     }
 
     [TestMethod]
+    public void FormXmlOperationsRunner_ManageEventAdd_NormalizesDesignerVisibleOnLoad()
+    {
+        var formXml = RunFormXmlOperations("""
+<form>
+  <tabs />
+  <formLibraries>
+    <Library name="paz_/quotemcp/quote.form.js" libraryUniqueId="{FFAFE559-AF52-4158-AEEC-E8122BD1B932}" />
+  </formLibraries>
+  <events>
+    <event name="OnLoad" application="false" active="true" eventType="ControlEvent">
+      <Handlers>
+        <Handler functionName="QuoteMcp.Quote.OnLoad" libraryName="paz_/quotemcp/quote.form.js" handlerUniqueId="{247ADCCB-2FB7-4243-898E-E1991A3C4BE3}" enabled="true" passExecutionContext="false" />
+      </Handlers>
+    </event>
+  </events>
+</form>
+""", """
+[
+  {
+    "action": "manage_event",
+    "manage_action": "add",
+    "eventName": "OnLoad",
+    "functionName": "QuoteMcp.Quote.OnLoad",
+    "library": "paz_/quotemcp/quote.form.js"
+  }
+]
+""");
+
+        var eventsIndex = formXml.IndexOf("<events>", StringComparison.Ordinal);
+        var librariesIndex = formXml.IndexOf("<formLibraries>", StringComparison.Ordinal);
+
+        Assert.IsTrue(eventsIndex >= 0, "Expected root <events> element.");
+        Assert.IsTrue(librariesIndex >= 0, "Expected root <formLibraries> element.");
+        Assert.IsTrue(eventsIndex < librariesIndex, "FormXML.xsd requires root events before formLibraries.");
+        StringAssert.Contains(formXml, "event name=\"onload\"");
+        StringAssert.Contains(formXml, "passExecutionContext=\"true\"");
+        Assert.AreEqual(1, CountOccurrences(formXml, "functionName=\"QuoteMcp.Quote.OnLoad\""));
+    }
+
+    [TestMethod]
     public void FormFieldEventOperations_AddFields_TargetHeader_AddsHeaderField()
     {
         var formDoc = XDocument.Parse("<form><tabs /></form>");
@@ -399,6 +439,19 @@ public class ManageFormToolTests
             attrMap,
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         })!;
+    }
+
+    private static int CountOccurrences(string value, string search)
+    {
+        var count = 0;
+        var index = 0;
+        while ((index = value.IndexOf(search, index, StringComparison.Ordinal)) >= 0)
+        {
+            count++;
+            index += search.Length;
+        }
+
+        return count;
     }
 
     private static List<JsonElement> ParseOperations(string operationsJson)

@@ -659,8 +659,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         public static string ExecuteAddLibrary(XDocument formDoc, JsonElement op)
         {
-            var libraryName = FormXmlHelpers.GetStringProp(op, "library_name")
-                ?? throw new InvalidOperationException("add_library requires 'library_name'.");
+            var libraryName = GetRequiredStringProp(op, "add_library", "library_name", "library", "libraryName");
 
             var (added, _) = EnsureLibrary(formDoc, libraryName);
             return added
@@ -670,8 +669,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         public static string ExecuteRemoveLibrary(XDocument formDoc, JsonElement op)
         {
-            var libraryName = FormXmlHelpers.GetStringProp(op, "library_name")
-                ?? throw new InvalidOperationException("remove_library requires 'library_name'.");
+            var libraryName = GetRequiredStringProp(op, "remove_library", "library_name", "library", "libraryName");
 
             var formLibraries = formDoc.Root.Element("formLibraries");
             if (formLibraries == null)
@@ -727,16 +725,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         public static string ExecuteAddEvent(XDocument formDoc, JsonElement op)
         {
-            var eventName = FormXmlHelpers.GetStringProp(op, "event_name")
-                ?? throw new InvalidOperationException("add_event requires 'event_name'.");
-            if (!ValidEventNames.Contains(eventName.Trim()))
-                throw new InvalidOperationException(
-                    $"Invalid event_name '{eventName}'. Valid values: {string.Join(", ", ValidEventNames.Order())}");
-            var functionName = FormXmlHelpers.GetStringProp(op, "function_name")
-                ?? throw new InvalidOperationException("add_event requires 'function_name'.");
-            var libraryName = FormXmlHelpers.GetStringProp(op, "library_name")
-                ?? throw new InvalidOperationException("add_event requires 'library_name'.");
-            var passExecutionContext = FormXmlHelpers.GetBoolProp(op, "pass_execution_context", false);
+            var eventName = GetRequiredStringProp(op, "add_event", "event_name", "event", "eventName");
+            eventName = NormalizeEventName(eventName);
+            var functionName = GetRequiredStringProp(op, "add_event", "function_name", "function", "functionName");
+            var libraryName = GetRequiredStringProp(op, "add_event", "library_name", "library", "libraryName");
+            var passExecutionContext = GetBoolProp(op, true, "pass_execution_context", "passExecutionContext");
             var parameters = FormXmlHelpers.GetStringProp(op, "parameters") ?? "";
             var enabled = FormXmlHelpers.GetBoolProp(op, "enabled", true);
             var target = FormXmlHelpers.GetStringProp(op, "target") ?? "form";
@@ -768,17 +761,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 eventType = "ControlEvent";
             }
 
-            var eventsElement = targetElement.Element("events");
-            if (eventsElement == null)
-            {
-                eventsElement = new XElement("events");
-                var insertBefore = targetElement.Element("externaldependencies")
-                    ?? targetElement.Element("formparameters");
-                if (insertBefore != null)
-                    insertBefore.AddBeforeSelf(eventsElement);
-                else
-                    targetElement.Add(eventsElement);
-            }
+            var eventsElement = EnsureEventsElement(formDoc, targetElement);
 
             var eventElement = FormXmlHelpers.FindEvent(eventsElement, eventName, attributeName);
             if (eventElement == null)
@@ -793,6 +776,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                     eventElement.Add(new XAttribute("attribute", attributeName));
 
                 eventsElement.Add(eventElement);
+            }
+            else if (!string.Equals(eventElement.Attribute("name")?.Value, eventName, StringComparison.Ordinal))
+            {
+                eventElement.SetAttributeValue("name", eventName);
             }
 
             var handlersElement = eventElement.Element("Handlers");
@@ -809,8 +796,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             if (existingHandler != null)
             {
+                var updated = UpdateExistingHandler(existingHandler, enabled, passExecutionContext, parameters, libraryUniqueId);
                 var targetDesc = target == "form" ? "form" : target;
-                return $"add_event: handler \"{functionName}\" on \"{eventName}\" ({targetDesc}) already exists (skipped)";
+                return updated
+                    ? $"add_event: handler \"{functionName}\" on \"{eventName}\" ({targetDesc}) already exists (updated)"
+                    : $"add_event: handler \"{functionName}\" on \"{eventName}\" ({targetDesc}) already exists (skipped)";
             }
 
             var handlerUniqueId = FormXmlHelpers.NewGuid();
@@ -836,10 +826,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
         public static string ExecuteRemoveEvent(XDocument formDoc, JsonElement op)
         {
-            var eventName = FormXmlHelpers.GetStringProp(op, "event_name")
-                ?? throw new InvalidOperationException("remove_event requires 'event_name'.");
-            var functionName = FormXmlHelpers.GetStringProp(op, "function_name");
-            var libraryName = FormXmlHelpers.GetStringProp(op, "library_name");
+            var eventName = GetRequiredStringProp(op, "remove_event", "event_name", "event", "eventName");
+            eventName = NormalizeEventName(eventName);
+            var functionName = GetStringProp(op, "function_name", "function", "functionName");
+            var libraryName = GetStringProp(op, "library_name", "library", "libraryName");
             var target = FormXmlHelpers.GetStringProp(op, "target") ?? "form";
 
             XElement targetElement;
@@ -929,8 +919,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             if (formLibraries == null)
             {
                 formLibraries = new XElement("formLibraries");
-                var insertBefore = formDoc.Root.Element("externaldependencies")
-                    ?? formDoc.Root.Element("formparameters");
+                var insertBefore = formDoc.Root.Elements()
+                    .FirstOrDefault(e => IsRootElementAfterFormLibraries(e.Name.LocalName));
                 var insertAfter = formDoc.Root.Element("events")
                     ?? formDoc.Root.Element("footer")
                     ?? formDoc.Root.Element("header")
@@ -942,6 +932,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
                 else
                     formDoc.Root.Add(formLibraries);
             }
+            else
+            {
+                MoveRootFormLibrariesIntoSchemaOrder(formDoc.Root, formLibraries);
+            }
 
             var existingLib = formLibraries.Elements("Library")
                 .FirstOrDefault(lib =>
@@ -949,15 +943,166 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 
             if (existingLib != null)
             {
-                return (false, existingLib.Attribute("libraryUniqueId")?.Value ?? FormXmlHelpers.NewGuid());
+                var existingId = existingLib.Attribute("libraryUniqueId")?.Value;
+                if (string.IsNullOrWhiteSpace(existingId))
+                {
+                    existingId = FormXmlHelpers.NewGuid();
+                    existingLib.SetAttributeValue("libraryUniqueId", existingId);
+                }
+                MoveRootFormLibrariesIntoSchemaOrder(formDoc.Root, formLibraries);
+                return (false, existingId);
             }
 
             var libraryUniqueId = FormXmlHelpers.NewGuid();
             formLibraries.Add(new XElement("Library",
                 new XAttribute("name", libraryName),
                 new XAttribute("libraryUniqueId", libraryUniqueId)));
+            MoveRootFormLibrariesIntoSchemaOrder(formDoc.Root, formLibraries);
 
             return (true, libraryUniqueId);
+        }
+
+        private static XElement EnsureEventsElement(XDocument formDoc, XElement targetElement)
+        {
+            var eventsElement = targetElement.Element("events");
+            if (eventsElement != null)
+            {
+                if (targetElement == formDoc.Root)
+                    MoveRootEventsBeforeFollowingElements(targetElement, eventsElement);
+                return eventsElement;
+            }
+
+            eventsElement = new XElement("events");
+
+            if (targetElement == formDoc.Root)
+            {
+                var insertBefore = targetElement.Elements()
+                    .FirstOrDefault(e => IsRootElementAfterEvents(e.Name.LocalName));
+                if (insertBefore != null)
+                    insertBefore.AddBeforeSelf(eventsElement);
+                else
+                    targetElement.Add(eventsElement);
+                return eventsElement;
+            }
+
+            var childInsertBefore = targetElement.Element("externaldependencies")
+                ?? targetElement.Element("formparameters");
+            if (childInsertBefore != null)
+                childInsertBefore.AddBeforeSelf(eventsElement);
+            else
+                targetElement.Add(eventsElement);
+
+            return eventsElement;
+        }
+
+        private static void MoveRootEventsBeforeFollowingElements(XElement root, XElement eventsElement)
+        {
+            var insertBefore = root.Elements()
+                .FirstOrDefault(e => e != eventsElement && IsRootElementAfterEvents(e.Name.LocalName));
+            if (insertBefore == null || insertBefore.ElementsBeforeSelf().Contains(eventsElement))
+                return;
+
+            eventsElement.Remove();
+            insertBefore.AddBeforeSelf(eventsElement);
+        }
+
+        private static bool IsRootElementAfterEvents(string elementName)
+            => elementName is "formLibraries" or "externaldependencies" or "formparameters" or
+                "clientresources" or "Navigation" or "DisplayConditions";
+
+        private static bool IsRootElementAfterFormLibraries(string elementName)
+            => elementName is "externaldependencies" or "formparameters" or "clientresources" or
+                "Navigation" or "DisplayConditions";
+
+        private static void MoveRootFormLibrariesIntoSchemaOrder(XElement root, XElement formLibraries)
+        {
+            var insertBefore = root.Elements()
+                .FirstOrDefault(e => e != formLibraries && IsRootElementAfterFormLibraries(e.Name.LocalName));
+            if (insertBefore != null && !insertBefore.ElementsBeforeSelf().Contains(formLibraries))
+            {
+                formLibraries.Remove();
+                insertBefore.AddBeforeSelf(formLibraries);
+            }
+
+            var eventsElement = root.Element("events");
+            if (eventsElement == null || formLibraries.ElementsBeforeSelf().Contains(eventsElement))
+                return;
+
+            formLibraries.Remove();
+            eventsElement.AddAfterSelf(formLibraries);
+        }
+
+        private static string NormalizeEventName(string eventName)
+        {
+            var normalized = eventName.Trim().ToLowerInvariant();
+            if (!ValidEventNames.Contains(normalized))
+                throw new InvalidOperationException(
+                    $"Invalid event_name '{eventName}'. Valid values: {string.Join(", ", ValidEventNames.Order())}");
+            return normalized;
+        }
+
+        private static string GetRequiredStringProp(JsonElement op, string actionName, params string[] names)
+            => GetStringProp(op, names)
+               ?? throw new InvalidOperationException($"{actionName} requires '{names[0]}'.");
+
+        private static string GetStringProp(JsonElement op, params string[] names)
+        {
+            foreach (var name in names)
+            {
+                var value = FormXmlHelpers.GetStringProp(op, name);
+                if (!string.IsNullOrWhiteSpace(value))
+                    return value.Trim();
+            }
+
+            return null;
+        }
+
+        private static bool GetBoolProp(JsonElement op, bool defaultValue, params string[] names)
+        {
+            foreach (var name in names)
+            {
+                if (op.TryGetProperty(name, out var prop) &&
+                    (prop.ValueKind == JsonValueKind.True || prop.ValueKind == JsonValueKind.False))
+                    return prop.GetBoolean();
+            }
+
+            return defaultValue;
+        }
+
+        private static bool UpdateExistingHandler(XElement handler, bool enabled, bool passExecutionContext,
+            string parameters, string libraryUniqueId)
+        {
+            var changed = false;
+            changed |= SetAttributeIfDifferent(handler, "enabled", enabled ? "true" : "false");
+            changed |= SetAttributeIfDifferent(handler, "passExecutionContext", passExecutionContext ? "true" : "false");
+
+            if (!string.IsNullOrEmpty(parameters))
+                changed |= SetAttributeIfDifferent(handler, "parameters", parameters);
+
+            var dependencies = handler.Element("dependencies");
+            if (dependencies == null)
+            {
+                handler.Add(new XElement("dependencies",
+                    new XElement("dependency", new XAttribute("id", libraryUniqueId))));
+                return true;
+            }
+
+            var dependency = dependencies.Elements("dependency")
+                .FirstOrDefault(d => string.Equals(d.Attribute("id")?.Value, libraryUniqueId, StringComparison.OrdinalIgnoreCase));
+            if (dependency != null)
+                return changed;
+
+            dependencies.Add(new XElement("dependency", new XAttribute("id", libraryUniqueId)));
+            return true;
+        }
+
+        private static bool SetAttributeIfDifferent(XElement element, string name, string value)
+        {
+            if (string.Equals(element.Attribute(name)?.Value, value, StringComparison.Ordinal))
+                return false;
+
+            element.SetAttributeValue(name, value);
+            return true;
         }
     }
 }

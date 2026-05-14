@@ -372,6 +372,58 @@ Optional: `view_id` (auto-resolves the default active public view), `rows_per_pa
 }
 ```
 
+## manage_library and manage_event Operations
+Use `manage_event` to attach or remove JavaScript handlers. Adding an event automatically ensures the
+referenced library exists in `<formLibraries>`.
+
+The FormXML schema requires root `<events>` to appear before `<formLibraries>`. The tool maintains that
+order automatically.
+
+### Add OnLoad Handler
+```json
+{
+  ""action"": ""manage_event"",
+  ""manage_action"": ""add"",
+  ""event_name"": ""onload"",
+  ""function_name"": ""Namespace.onLoad"",
+  ""library_name"": ""new_/js/account.js"",
+  ""pass_execution_context"": true,
+  ""target"": ""form""
+}
+```
+
+Required for add: `event_name`, `function_name`, `library_name`.
+Optional: `pass_execution_context` (default `true`), `parameters`, `enabled`, `target`.
+
+Valid `event_name` values are `onload`, `onsave`, `onchange`, `ontabstatechange`, `onrecordselect`.
+The tool accepts casing like `OnLoad` but writes the normalized lowercase value used by the form designer.
+
+Accepted aliases: `library`, `libraryName`; `function`, `functionName`; `event`, `eventName`;
+`passExecutionContext`.
+
+### Remove Event Handler
+```json
+{
+  ""action"": ""manage_event"",
+  ""manage_action"": ""remove"",
+  ""event_name"": ""onload"",
+  ""function_name"": ""Namespace.onLoad"",
+  ""library_name"": ""new_/js/account.js"",
+  ""target"": ""form""
+}
+```
+
+Omit `function_name` to remove the entire event entry.
+
+### Add Library Only
+```json
+{
+  ""action"": ""manage_library"",
+  ""manage_action"": ""add"",
+  ""library_name"": ""new_/js/account.js""
+}
+```
+
 ## After Making Changes
 - Use the dedicated manage_form tool to apply changes
 - manage_form auto-handles: backup > validate > update > publish

@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertFormResult)),
         Description(
             "Form definitions for a Dataverse entity. Actions: list (optional form_type/include_formxml); detail (form_id or form_name); update (form_id+operations or form_id+formxml); rename (form_id+form_name); undo (form_id+backup path). Update flow: manage_form(update, operations=[...]) → auto-builds FormXML+backup+validate+import+publish. Operations support manage_tab, manage_section, manage_fields, manage_subgrid, manage_library, manage_event. Safety: auto-backup, XSD validate, backup failure blocks update. See schema://formxml + docs://instructions_for_formxml.\n\n" +
-            "OPERATION JSON: when tool action='update', each item in operations needs action='manage_tab|manage_section|manage_fields|manage_subgrid|manage_library|manage_event' plus manage_action='add|update|rename|move|remove|delete' (availability depends on family). Example: [{\"action\":\"manage_subgrid\",\"manage_action\":\"add\",...}].\n\n" +
+            "OPERATION JSON: when tool action='update', each item in operations needs action='manage_tab|manage_section|manage_fields|manage_subgrid|manage_library|manage_event' plus manage_action='add|update|rename|move|remove|delete' (availability depends on family). For JavaScript events use library_name, event_name, function_name, pass_execution_context. Example: [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"Namespace.onLoad\",\"library_name\":\"new_/js/account.js\",\"pass_execution_context\":true}].\n\n" +
             "WHEN TO USE:\n" +
             "- Inspect existing forms (list, detail) before editing\n" +
             "- Apply operations via action=update (recommended) or provide raw formxml (advanced)\n" +
@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool include_formxml = false,
             [Description("update (advanced/undo): raw FormXML or backup file path (.formxml). Auto-detects. Use 'operations' for recommended flow."
             )] string formxml = "",
-            [Description("update (recommended): JSON array. Example: [{\"action\":\"manage_subgrid\",\"manage_action\":\"add\",...}]. Read docs://instructions_for_formxml."
+            [Description("update (recommended): JSON array. Example: [{\"action\":\"manage_event\",\"manage_action\":\"add\",\"event_name\":\"onload\",\"function_name\":\"Namespace.onLoad\",\"library_name\":\"new_/js/account.js\",\"pass_execution_context\":true}]. Read docs://instructions_for_formxml."
             )] string operations = "",
             [Description("XSD validate before write."
             )] bool validate = true,
