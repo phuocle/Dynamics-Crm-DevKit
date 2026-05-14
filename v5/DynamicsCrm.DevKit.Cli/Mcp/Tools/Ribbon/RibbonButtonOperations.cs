@@ -149,8 +149,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             {
                 if (string.IsNullOrWhiteSpace(labelHint))
                     return ("Error: update_button requires 'button_id' or 'label' to identify the button.", null);
-                var slug = RibbonXmlHelpers.GenerateSlug(labelHint);
-                buttonId = $"devkit.{entityName}.{slug}.Button";
+
+                var labelResolution = ResolveCustomButtonIdByLabel(ribbonDoc, labelHint);
+                if (labelResolution.error != null)
+                    return (labelResolution.error, null);
+
+                buttonId = labelResolution.buttonId;
+                if (string.IsNullOrWhiteSpace(buttonId))
+                {
+                    var slug = RibbonXmlHelpers.GenerateSlug(labelHint);
+                    buttonId = $"devkit.{entityName}.{slug}.Button";
+                }
             }
 
             var buttonEl = ribbonDoc.Root
@@ -261,6 +270,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                         "label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence.", null);
 
             return (null, $"update_button: '{buttonId}' updated [{string.Join(", ", updatedFields)}]");
+        }
+
+        private static (string buttonId, string error) ResolveCustomButtonIdByLabel(XDocument ribbonDoc, string label)
+        {
+            var buttons = ribbonDoc.Root
+                ?.Element("CustomActions")
+                ?.Descendants("Button")
+                .Where(e => ButtonLabelMatches(ribbonDoc, e, label))
+                .Select(e => e.Attribute("Id")?.Value)
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList() ?? [];
+
+            if (buttons.Count == 1)
+                return (buttons[0], null);
+
+            if (buttons.Count > 1)
+                return (null, $"Error: Multiple custom buttons with label '{label}' found in existing RibbonDiffXml. Use 'button_id' to identify the button. Matches: {string.Join(", ", buttons)}");
+
+            return (null, null);
+        }
+
+        private static bool ButtonLabelMatches(XDocument ribbonDoc, XElement buttonEl, string label)
+        {
+            var labelText = buttonEl.Attribute("LabelText")?.Value;
+            if (string.Equals(labelText, label, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            const string locLabelPrefix = "$LocLabels:";
+            if (string.IsNullOrWhiteSpace(labelText) ||
+                !labelText.StartsWith(locLabelPrefix, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var locLabelId = labelText.Substring(locLabelPrefix.Length);
+            return ribbonDoc.Root
+                ?.Element("LocLabels")
+                ?.Elements("LocLabel")
+                .Where(e => string.Equals(e.Attribute("Id")?.Value, locLabelId, StringComparison.OrdinalIgnoreCase))
+                .Elements("Titles")
+                .Elements("Title")
+                .Any(e => string.Equals(e.Attribute("description")?.Value, label, StringComparison.OrdinalIgnoreCase)) == true;
         }
 
         public (string error, string summary) ExecuteHideButton(XDocument ribbonDoc, string entityName, JsonElement op)

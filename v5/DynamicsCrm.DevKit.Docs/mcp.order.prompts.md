@@ -370,137 +370,334 @@ Name-resolution intent: these prompts intentionally use Display Names such as **
    > 🎯 Result: Order web resource was redeployed and the Order main form now runs OrderMcp.Order.OnLoad on load to show Hello Order.
 
 55. Read back the web resource just created (ordermcp/order.form.js) and confirm it has the correct namespace, sync function, and enable function.
+   > ✅ `mcp__devkit_codex__manage_webresource(action="detail", web_resource_id="ordermcp/order.form.js")`
+   >    `mcp__devkit_codex__execute_webapi(method="GET", url="webresourceset?$select=name,displayname,content&$filter=name eq 'devkitv5_/ordermcp/order.form.js'", max_response_lines=100)`
+   > 🎯 Result: JavaScript web resource ordermcp/order.form.js contains the OrderMcp.Order namespace, syncLineStatus function, and canSyncLineStatus enable function.
 
 ---
 
 ## M. Ribbon (Classic Button)
 
 56. View all existing buttons on the form ribbon of the table with display name "Order" before adding a new button.
+   > ✅ `mcp__devkit_codex__manage_ribbon(action="buttons", entity_name="Order")`
+   > 🎯 Result: Order form ribbon contains standard buttons including Save, New, Activate, Deactivate, Delete, and OpenActiveStage.
 
 57. Add a button to the ribbon on the main form of the table with display name "Order", label "Sync Line Status", calling function OrderMcp.Order.syncLineStatus from the web resource created in prompt 54, using OrderMcp.Order.canSyncLineStatus as the enable rule.
+   > ✅ `mcp__devkit_codex__manage_ribbon(action="update", entity_name="Order", backup=true, operations="[{\"operation\":\"add_button\",\"surface\":\"form\",\"label\":\"Sync Line Status\",\"library\":\"devkitv5_/ordermcp/order.form.js\",\"function\":\"OrderMcp.Order.syncLineStatus\",\"enable_library\":\"devkitv5_/ordermcp/order.form.js\",\"enable_function\":\"OrderMcp.Order.canSyncLineStatus\",\"sequence\":85,\"tooltip_title\":\"Sync Line Status\",\"tooltip_description\":\"Sync line status from the current order.\"}]")`
+   >    `mcp__devkit_codex__manage_ribbon(action="update", entity_name="Order", backup=true, operations="[{\"action\":\"add_button\",\"surface\":\"form\",\"label\":\"Sync Line Status\",\"library\":\"devkitv5_/ordermcp/order.form.js\",\"function\":\"OrderMcp.Order.syncLineStatus\",\"enable_library\":\"devkitv5_/ordermcp/order.form.js\",\"enable_function\":\"OrderMcp.Order.canSyncLineStatus\",\"sequence\":85,\"tooltip_title\":\"Sync Line Status\",\"tooltip_description\":\"Sync line status from the current order.\"}]")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="95b41271-414f-f111-bec6-000d3a5ae021")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="95b41271-414f-f111-bec6-000d3a5ae021")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="95b41271-414f-f111-bec6-000d3a5ae021")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="95b41271-414f-f111-bec6-000d3a5ae021")`
+   > 🎯 Result: Sync Line Status button was added to the Order form ribbon and the ribbon publish completed successfully.
 
 58. Hide the Activate and Deactivate button on the classic form ribbon of the table with display name "Order".
+   > ✅ `mcp__devkit_codex__manage_ribbon(action="update", entity_name="Order", backup=true, operations="[{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.devkitv5_order.Activate\"},{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.devkitv5_order.Deactivate\"}]")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="1b999eef-414f-f111-bec6-000d3a5ae021")`
+   > 🎯 Result: Activate and Deactivate were hidden on the classic Order form ribbon and the ribbon publish completed successfully.
 
 59. Create a new webresource file .svg, idea button is "Sync Line Status", save at D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\OrderMcp\button\sync-line-status.svg and deploy it to the solution with display name "Order MCP Solution"
+   > ✅ `mcp__devkit_codex__manage_webresource(action="create", name="devkitv5_/ordermcp/sync-line-status.svg", file_path="D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\OrderMcp\button\sync-line-status.svg", type="svg", solution_name="Order MCP Solution", display_name="ordermcp/sync-line-status.svg")`
+   > 🎯 Result: SVG web resource ordermcp/sync-line-status.svg was created for the Sync Line Status button.
 
 60. Update the ribbon button with label "Sync Line Status" with the button image sync-line-status.svg
+   > ✅ `mcp__devkit_codex__manage_ribbon(action="update", entity_name="Order", backup=true, operations="[{\"action\":\"update_button\",\"label\":\"Sync Line Status\",\"modern_image\":\"devkitv5_/ordermcp/sync-line-status.svg\"}]")`
+   >    `mcp__devkit_codex__manage_ribbon(action="buttons", entity_name="Order")`
+   >    `mcp__devkit_codex__manage_ribbon(action="update", entity_name="Order", backup=true, operations="[{\"action\":\"update_button\",\"button_id\":\"devkit.devkitv5_order.SyncLineStatus.Form.Button\",\"modern_image\":\"devkitv5_/ordermcp/sync-line-status.svg\"}]")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="46241e65-424f-f111-bec6-000d3a5ae021")`
+   >    `mcp__devkit_codex__get_system_jobs(record_id="46241e65-424f-f111-bec6-000d3a5ae021")`
+   > 🎯 Result: Sync Line Status button was updated with the sync-line-status SVG image after fixing label resolution, and the ribbon publish completed successfully.
 
 61. View all existing buttons on the form ribbon of the table with display name "Order" and locate the Activate and Deactivate buttons if present.
+   > ✅ `mcp__devkit_codex__manage_ribbon(action="buttons", entity_name="Order")`
+   > 🎯 Result: Order form ribbon contains Activate and Deactivate, and both are currently hidden.
 
 ---
 
 ## N. Sample Data
 
 62. Create an Account with display name "Customer A" to use as a sample customer for Order.
+   > ✅ `mcp__devkit_codex__manage_record(action="create", entity_name="account", fields_json="{\"name\":\"Customer A\"}")`
+   > 🎯 Result: Account Customer A was created for sample Order data.
 
 63. Create an Order: Order Number ORD-0001, Order Date 2026-04-28, Due Date 2026-05-28, Bill To Account with display name "Customer A", Order Status Draft, Total Amount 500, Tax Amount 50, Grand Total 550, PO Number PO-ORDER-001.
+   > ✅ `mcp__devkit_codex__get_tables(entity_name="Order", filter="devkitv5_")`
+   >    `mcp__devkit_codex__manage_choice(action="detail", optionset_name="Order Status")`
+   >    `mcp__devkit_codex__manage_record(action="create", entity_name="devkitv5_order", fields_json="{\"devkitv5_name\":\"ORD-0001\",\"devkitv5_ordernumber\":\"ORD-0001\",\"devkitv5_orderdate\":\"2026-04-28\",\"devkitv5_duedate\":\"2026-05-28\",\"devkitv5_billto@account\":\"cb819ad3-454f-f111-bec6-000d3a5ae021\",\"devkitv5_orderstatus\":777770000,\"devkitv5_totalamount\":500,\"devkitv5_taxamount\":50,\"devkitv5_grandtotal\":550,\"devkitv5_ponumber\":\"PO-ORDER-001\"}")`
+   > 🎯 Result: Order ORD-0001 was created for Customer A with Draft status and the requested dates and amounts.
 
 64. Create an Order Line as a child of ORD-0001: Line Number 1, Product Name "Consulting Service", Quantity 2, Unit Price 200, Discount Percent 0, Line Total 400, Line Status Draft.
+   > ✅ `mcp__devkit_codex__get_tables(entity_name="Order Line", filter="devkitv5_")`
+   >    `mcp__devkit_codex__manage_record(action="create", entity_name="devkitv5_orderline", fields_json="{\"devkitv5_name\":\"ORD-0001-1\",\"devkitv5_order\":\"9351b2e4-454f-f111-bec6-000d3a5ae021\",\"devkitv5_linenumber\":1,\"devkitv5_productname\":\"Consulting Service\",\"devkitv5_quantity\":2,\"devkitv5_unitprice\":200,\"devkitv5_discountpercent\":0,\"devkitv5_linetotal\":400,\"devkitv5_linestatus\":777770000}")`
+   > 🎯 Result: Order Line 1 was created under ORD-0001 for Consulting Service with Draft status.
 
 65. Read back Order ORD-0001 and Order Line 1, fetching only the important fields to confirm the data is linked correctly.
+   > ✅ `mcp__devkit_codex__execute_fetchxml(fetchxml="<fetch><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_ordernumber\"/><attribute name=\"devkitv5_orderstatus\"/><attribute name=\"devkitv5_grandtotal\"/><filter><condition attribute=\"devkitv5_ordernumber\" operator=\"eq\" value=\"ORD-0001\"/></filter><link-entity name=\"devkitv5_orderline\" from=\"devkitv5_order\" to=\"devkitv5_orderid\" alias=\"line\" link-type=\"outer\"><attribute name=\"devkitv5_linenumber\"/><attribute name=\"devkitv5_productname\"/><attribute name=\"devkitv5_quantity\"/><attribute name=\"devkitv5_linetotal\"/><attribute name=\"devkitv5_linestatus\"/></link-entity></entity></fetch>", get_all=true, max_records=50)`
+   > 🎯 Result: ORD-0001 and Order Line 1 were read back successfully, confirming the line is linked to the order.
 
 65. Read back Order ORD-0001 and Order Line 1, fetching only the important fields to confirm the data is linked correctly.
+   > ✅ `mcp__devkit_codex__execute_fetchxml(fetchxml="<fetch><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_ordernumber\"/><attribute name=\"devkitv5_orderstatus\"/><attribute name=\"devkitv5_grandtotal\"/><filter><condition attribute=\"devkitv5_ordernumber\" operator=\"eq\" value=\"ORD-0001\"/></filter><link-entity name=\"devkitv5_orderline\" from=\"devkitv5_order\" to=\"devkitv5_orderid\" alias=\"line\" link-type=\"outer\"><attribute name=\"devkitv5_linenumber\"/><attribute name=\"devkitv5_productname\"/><attribute name=\"devkitv5_quantity\"/><attribute name=\"devkitv5_linetotal\"/><attribute name=\"devkitv5_linestatus\"/></link-entity></entity></fetch>", get_all=true, max_records=50)`
+   > 🎯 Result: ORD-0001 and Order Line 1 were confirmed again with the expected linked order and line details.
 
 66. Create 2 more Order Lines for ORD-0001: Line Number 2 and 3, each with a different Product Name, Line Status Draft.
+   > ✅ `mcp__devkit_codex__create_records(entity_name="devkitv5_orderline", records_json="[{\"devkitv5_name\":\"ORD-0001-2\",\"devkitv5_order\":\"9351b2e4-454f-f111-bec6-000d3a5ae021\",\"devkitv5_linenumber\":2,\"devkitv5_productname\":\"Implementation Service\",\"devkitv5_quantity\":1,\"devkitv5_unitprice\":100,\"devkitv5_discountpercent\":0,\"devkitv5_linetotal\":100,\"devkitv5_linestatus\":777770000},{\"devkitv5_name\":\"ORD-0001-3\",\"devkitv5_order\":\"9351b2e4-454f-f111-bec6-000d3a5ae021\",\"devkitv5_linenumber\":3,\"devkitv5_productname\":\"Support Package\",\"devkitv5_quantity\":1,\"devkitv5_unitprice\":50,\"devkitv5_discountpercent\":0,\"devkitv5_linetotal\":50,\"devkitv5_linestatus\":777770000}]", max_parallelism=0)`
+   > 🎯 Result: Order Lines 2 and 3 were created under ORD-0001 with different product names and Draft status.
 
 67. Generate 10 sample Order records in the date range 2026-01-01 to 2026-04-28, rotating Order Status through Draft, Confirmed, Shipped, Paid, Cancelled.
+   > ✅ `mcp__devkit_codex__generate_demo_data(entity_name="devkitv5_order", count=10, from_date="2026-01-01", to_date="2026-04-28", fields="devkitv5_name,devkitv5_ordernumber,devkitv5_orderdate,devkitv5_billto,devkitv5_orderstatus,devkitv5_totalamount,devkitv5_taxamount,devkitv5_grandtotal,devkitv5_ponumber", field_overrides="[{\"logicalname\":\"devkitv5_billto@account\",\"operator\":\"eq\",\"values\":[\"cb819ad3-454f-f111-bec6-000d3a5ae021\"]},{\"logicalname\":\"devkitv5_orderstatus\",\"operator\":\"in\",\"values\":[777770000,777770001,777770002,777770003,777770004]}]", seed=1001)`
+   > 🎯 Result: Generated ten sample Order records with Customer A as Bill To and rotating Order Status labels.
 
 68. Import the 10 sample Orders into the environment; if Bill To is required, use Account with display name "Customer A".
+   > ✅ `mcp__devkit_codex__create_records(entity_name="devkitv5_order", records_json=".devkit\\demo_data\\devkitv5_order_20260514_104754_970.json", max_parallelism=0)`
+   > 🎯 Result: Imported ten sample Order records successfully using Customer A where Bill To was required.
 
 ---
 
 ## O. Query & Search
 
 69. Add search columns for the table with display name "Order" and the table with display name "Order Line" to enable Quick Find search.
+   > ✅ `mcp__devkit_codex__manage_view(action="update", entity_name="Order", view_name="Quick Find Active Orders", fetchxml="<fetch version=\"1.0\" mapping=\"logical\"><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_orderid\" /><attribute name=\"devkitv5_name\" /><attribute name=\"devkitv5_ordernumber\" /><attribute name=\"devkitv5_ponumber\" /><attribute name=\"createdon\" /><order attribute=\"devkitv5_name\" descending=\"false\" /><filter type=\"and\"><condition attribute=\"statecode\" operator=\"eq\" value=\"0\" /></filter><filter type=\"or\" isquickfindfields=\"1\"><condition attribute=\"devkitv5_name\" operator=\"like\" value=\"{0}\" /><condition attribute=\"devkitv5_ordernumber\" operator=\"like\" value=\"{0}\" /><condition attribute=\"devkitv5_ponumber\" operator=\"like\" value=\"{0}\" /></filter></entity></fetch>", layoutxml="<grid name=\"resultset\" object=\"10998\" jump=\"devkitv5_name\" select=\"1\" icon=\"1\" preview=\"1\"><row name=\"result\" id=\"devkitv5_orderid\"><cell name=\"devkitv5_name\" width=\"300\" /><cell name=\"devkitv5_ordernumber\" width=\"150\" /><cell name=\"devkitv5_ponumber\" width=\"150\" /><cell name=\"createdon\" width=\"125\" /></row></grid>", validate=true, backup=true)`
+   >    `mcp__devkit_codex__manage_view(action="update", entity_name="Order Line", view_name="Quick Find Active Order Lines", fetchxml="<fetch version=\"1.0\" mapping=\"logical\"><entity name=\"devkitv5_orderline\"><attribute name=\"devkitv5_orderlineid\" /><attribute name=\"devkitv5_name\" /><attribute name=\"devkitv5_productname\" /><attribute name=\"devkitv5_description\" /><attribute name=\"createdon\" /><order attribute=\"devkitv5_name\" descending=\"false\" /><filter type=\"and\"><condition attribute=\"statecode\" operator=\"eq\" value=\"0\" /></filter><filter type=\"or\" isquickfindfields=\"1\"><condition attribute=\"devkitv5_name\" operator=\"like\" value=\"{0}\" /><condition attribute=\"devkitv5_productname\" operator=\"like\" value=\"{0}\" /><condition attribute=\"devkitv5_description\" operator=\"like\" value=\"{0}\" /></filter></entity></fetch>", layoutxml="<grid name=\"resultset\" object=\"10999\" jump=\"devkitv5_name\" select=\"1\" icon=\"1\" preview=\"1\"><row name=\"result\" id=\"devkitv5_orderlineid\"><cell name=\"devkitv5_name\" width=\"300\" /><cell name=\"devkitv5_productname\" width=\"200\" /><cell name=\"devkitv5_description\" width=\"250\" /><cell name=\"createdon\" width=\"125\" /></row></grid>", validate=true, backup=true)`
+   > 🎯 Result: Quick Find search columns were added for Order and Order Line and both Quick Find views were published.
 
 70. Enable Dataverse Search for the table with display name "Order" and the table with display name "Order Line" in the solution with display name "Order MCP Solution".
+   > ✅ `mcp__devkit_codex__upsert_table(entity_name="Order", solution_name="Order MCP Solution", is_search_enabled=true)`
+   >    `mcp__devkit_codex__upsert_table(entity_name="Order Line", solution_name="Order MCP Solution", is_search_enabled=true)`
+   > 🎯 Result: Dataverse Search was enabled and published for Order and Order Line.
 
 71. Query Order ORD-0001 with all child Order Lines, returning Order Number, Order Status, Line Number, Product Name, Quantity, Line Total, Line Status.
+   > ✅ `mcp__devkit_codex__execute_fetchxml(fetchxml="<fetch><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_ordernumber\"/><attribute name=\"devkitv5_orderstatus\"/><filter><condition attribute=\"devkitv5_ordernumber\" operator=\"eq\" value=\"ORD-0001\"/></filter><link-entity name=\"devkitv5_orderline\" from=\"devkitv5_order\" to=\"devkitv5_orderid\" alias=\"line\" link-type=\"outer\"><attribute name=\"devkitv5_linenumber\"/><attribute name=\"devkitv5_productname\"/><attribute name=\"devkitv5_quantity\"/><attribute name=\"devkitv5_linetotal\"/><attribute name=\"devkitv5_linestatus\"/></link-entity></entity></fetch>", get_all=true, max_records=50)`
+   > 🎯 Result: ORD-0001 was returned with three child lines, all currently showing Draft status.
 
 71. Query Order ORD-0001 with all child Order Lines, returning Order Number, Order Status, Line Number, Product Name, Quantity, Line Total, Line Status.
+   > ✅ `mcp__devkit_codex__execute_fetchxml(fetchxml="<fetch><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_ordernumber\"/><attribute name=\"devkitv5_orderstatus\"/><filter><condition attribute=\"devkitv5_ordernumber\" operator=\"eq\" value=\"ORD-0001\"/></filter><link-entity name=\"devkitv5_orderline\" from=\"devkitv5_order\" to=\"devkitv5_orderid\" alias=\"line\" link-type=\"outer\"><attribute name=\"devkitv5_linenumber\"/><attribute name=\"devkitv5_productname\"/><attribute name=\"devkitv5_quantity\"/><attribute name=\"devkitv5_linetotal\"/><attribute name=\"devkitv5_linestatus\"/></link-entity></entity></fetch>", get_all=true, max_records=50)`
+   > 🎯 Result: ORD-0001 was confirmed again with three linked Order Lines and Draft status on the order and lines.
 
 72. Search for keyword ORD-0001 in Dataverse and report which records related to Order or Order Line are found.
+   > ✅ `mcp__devkit_codex__search_records(action="search", search_term="ORD-0001", entities="Order,Order Line", top=100)`
+   >    `mcp__devkit_codex__search_records(action="status")`
+   > 🎯 Result: Dataverse Search found ORD-0001 and its three related Order Lines, and status shows Order and Order Line indexing is complete.
 
 73. Count Order Lines per Order and confirm that ORD-0001 has at least 3 lines.
+   > ✅ `mcp__devkit_codex__execute_fetchxml(fetchxml="<fetch aggregate=\"true\"><entity name=\"devkitv5_orderline\"><attribute name=\"devkitv5_orderlineid\" alias=\"line_count\" aggregate=\"count\"/><link-entity name=\"devkitv5_order\" from=\"devkitv5_orderid\" to=\"devkitv5_order\" alias=\"order\"><attribute name=\"devkitv5_ordernumber\" alias=\"order_number\" groupby=\"true\"/><filter><condition attribute=\"devkitv5_ordernumber\" operator=\"eq\" value=\"ORD-0001\"/></filter></link-entity></entity></fetch>", get_all=true, max_records=50)`
+   > 🎯 Result: ORD-0001 has three Order Lines, meeting the requirement of at least three lines.
 
 ---
 
 ## P. Parse URL & Direct Web API
 
-74. The URL of Order ORD-0001 is provided by the user, parse it to confirm the entity logical name and record GUID.
+74. The URL https://dynamics-crm-devkit-v4.crm.dynamics.com/main.aspx?appid=e24df106-a74e-f111-bec6-000d3a5ae021&pagetype=entityrecord&etn=devkitv5_order&id=9351b2e4-454f-f111-bec6-000d3a5ae021 of Order ORD-0001 is provided by the user, parse it to confirm the entity logical name and record GUID.
+   > ✅ `mcp__devkit_codex__parse_record_url(input="https://dynamics-crm-devkit-v4.crm.dynamics.com/main.aspx?appid=e24df106-a74e-f111-bec6-000d3a5ae021&pagetype=entityrecord&etn=devkitv5_order&id=9351b2e4-454f-f111-bec6-000d3a5ae021")`
+   > 🎯 Result: The provided URL was parsed as an Order record URL.
 
 75. Read Order ORD-0001 directly via Dataverse Web API, fetching only Order Number, Order Status, Grand Total, Modified On; compare the result with the standard record read approach.
+   > ✅ `mcp__devkit_codex__execute_webapi(method="GET", url="devkitv5_orders(9351b2e4-454f-f111-bec6-000d3a5ae021)?$select=devkitv5_ordernumber,devkitv5_orderstatus,devkitv5_grandtotal,modifiedon", headers="{\"Prefer\":\"odata.include-annotations=\\\"OData.Community.Display.V1.FormattedValue\\\"\"}", max_response_lines=100)`
+   >    `mcp__devkit_codex__manage_record(action="read", entity_name="devkitv5_order", record_id="9351b2e4-454f-f111-bec6-000d3a5ae021", columns="devkitv5_ordernumber,devkitv5_orderstatus,devkitv5_grandtotal,modifiedon")`
+   >    `mcp__devkit_codex__execute_fetchxml(fetchxml="<fetch><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_ordernumber\"/><attribute name=\"devkitv5_orderstatus\"/><attribute name=\"devkitv5_grandtotal\"/><attribute name=\"modifiedon\"/><filter><condition attribute=\"devkitv5_ordernumber\" operator=\"eq\" value=\"ORD-0001\"/></filter></entity></fetch>", get_all=true, max_records=10)`
+   > 🎯 Result: Direct Web API and the standard read approach returned matching Order Number, status, total, and modified date.
 
 ---
 
 ## Q. Update Record & Audit
 
 76. Update Order ORD-0001: change Order Status from Draft to Confirmed and set Grand Total to 660.
+   > ✅ `mcp__devkit_codex__manage_record(action="update", entity_name="devkitv5_order", record_id="9351b2e4-454f-f111-bec6-000d3a5ae021", fields_json="{\"devkitv5_orderstatus\":777770001,\"devkitv5_grandtotal\":660}")`
+   > 🎯 Result: ORD-0001 was updated to Confirmed status with Grand Total set to 660.
 
 77. View the audit history of Order ORD-0001 in the last 24 hours, focusing on changes to Order Status and Grand Total.
+   > ✅ `mcp__devkit_codex__get_audit_history(entity_name="Order", record_id="9351b2e4-454f-f111-bec6-000d3a5ae021", minutes_ago=1440, operation="Update", max_records=100)`
+   > 🎯 Result: Audit history shows ORD-0001 changed from Draft to Confirmed and Grand Total changed from 550 to 660.
 
 ---
 
 ## R. Messages, Plugins, Custom API
 
 78. List all Dataverse messages available for the table with display name "Order", especially Create, Update, SetState, and any custom actions.
+   > ✅ `mcp__devkit_codex__get_messages(entity_name="Order", include_custom_actions=true)`
+   > 🎯 Result: Order supports standard messages including Create, Update, SetState, Retrieve, Delete, Assign, access messages, retention messages, and no custom actions were found.
 
 79. Check whether any custom API is bound to the table with display name "Order"; if so, describe its input, output, and the handling plugin.
+   > ✅ `mcp__devkit_codex__get_custom_apis(entity_name="Order", status="all", include_microsoft=false, max_records=500)`
+   > 🎯 Result: No custom API bound to Order was found.
 
 80. Check active plugin steps on the table with display name "Order" for the Update message: assembly, type, stage, mode, and image if any.
+   > ✅ `mcp__devkit_codex__get_plugins(entity_name="Order", message_name="Update", active_only=true, include_images=true, max_records=500)`
+   > 🎯 Result: No active plugin steps for the Update message on Order were found.
 
 81. View plugin trace logs in the last 60 minutes related to the table with display name "Order"; if none exist, state that clearly.
+   > ✅ `mcp__devkit_codex__get_plugin_trace_logs(type_name="Order", minutes_ago=60, max_records=200)`
+   > 🎯 Result: No plugin trace logs related to Order were found in the last 60 minutes.
 
 ---
 
 ## S. System Jobs, Workflows, BPF, Flows
 
 82. View failed system jobs in the last 24 hours related to the table with display name "Order"; if any, summarize the error and key stack trace.
+   > ✅ `mcp__devkit_codex__get_system_jobs(entity_name="Order", status="failed", minutes_ago=1440, max_records=500)`
+   > 🎯 Result: No failed system jobs related to Order were found in the last 24 hours.
 
 83. Check active classic workflows on the table with display name "Order", both background and realtime; summarize trigger fields and mode if any.
+   > ✅ `mcp__devkit_codex__get_workflows(entity_name="Order", active_only=true, max_records=250)`
+   > 🎯 Result: No active classic background or realtime workflows on Order were found.
 
 84. Check which business process flows are associated with the table with display name "Order", listing stages and primary entities.
+   > ✅ `mcp__devkit_codex__get_business_process_flows(entity_name="Order", status="all", include_stages=true, max_records=250)`
+   > 🎯 Result: No business process flows associated with Order were found.
 
 85. Check for cloud flows with names containing "Order MCP"; if found, open detail and view the latest few runs and their status.
+   > ✅ `mcp__devkit_codex__get_flows(name_filter="Order MCP", status="all", max_records=250)`
+   > 🎯 Result: No cloud flows with names containing Order MCP were found.
 
 ---
 
 ## T. Business Rules & Security
 
 86. Check business rules on the table with display name "Order" (both active and draft); if any exist, open the first rule and summarize its conditions and actions.
+   > ✅ `mcp__devkit_codex__get_business_rules(entity_name="Order", max_records=200)`
+   > 🎯 Result: No active or draft business rules on Order were found.
 
 87. Check what permissions the "System Administrator" role has on the table with display name "Order".
+   > ✅ `mcp__devkit_codex__manage_role(action="list", role_name="System Administrator", max_records=250)`
+   >    `mcp__devkit_codex__manage_role(action="detail", role_id="9876ab54-d4a4-f011-bbd3-000d3a311238", entity_name="Order")`
+   > 🎯 Result: System Administrator has organization-level Create, Read, Write, Delete, Append, Append To, Assign, and Share permissions on Order.
 
 88. Check the current user's effective permissions on the table with display name "Order": Create, Read, Write, Delete, Append, Append To.
+   > ✅ `mcp__devkit_codex__whoami(include_token=false)`
+   >    `mcp__devkit_codex__manage_role(action="user", user_id="DEVKIT_1a60a5c2-d04c-4b26-8f86-9d6ce0616799@82131d86-1aa7-f011-8706-00224806e819.com", entity_name="Order")`
+   > 🎯 Result: The current user has organization-level Create, Read, Write, Delete, Append, and Append To permissions on Order through System Administrator.
 
 ---
 
 ## U. Metadata Updates & Publish
 
 89. Add option "Archived" to the global choice with display name "Order Status" with color purple (#7030A0), then read it back to confirm the new option and color are present.
+   > ✅ `mcp__devkit_codex__manage_choice(action="update", optionset_name="Order Status", add_options="Archived", option_colors="Archived:#7030A0", solution_name="Order MCP Solution")`
+   >    `mcp__devkit_codex__manage_choice(action="detail", optionset_name="Order Status")`
+   > 🎯 Result: Order Status now includes Archived with purple color, alongside Draft, Confirmed, Shipped, Paid, and Cancelled.
 
 90. Enable audit and advanced find for the column with display name "Order Status" on the table with display name "Order" if currently disabled.
+   > ✅ `mcp__devkit_codex__upsert_column(entity_name="Order", attribute_name="Order Status", attribute_type="picklist", display_name="Order Status", solution_name="Order MCP Solution", is_audit_enabled=true, is_valid_for_advanced_find=true)`
+   > 🎯 Result: Order Status on Order has audit and advanced find enabled.
 
 91. Update the view with display name "Active Orders" to add the PO Number column; read it back to confirm the layout and query are still in sync.
+   > ✅ `mcp__devkit_codex__manage_view(action="detail", entity_name="Order", view_name="Active Orders", include_fetchxml=true)`
+   >    `mcp__devkit_codex__manage_view(action="update", entity_name="Order", view_name="Active Orders", fetchxml="<fetch><entity name=\"devkitv5_order\"><attribute name=\"devkitv5_ordernumber\" /><attribute name=\"devkitv5_billto\" /><attribute name=\"devkitv5_orderdate\" /><attribute name=\"devkitv5_duedate\" /><attribute name=\"devkitv5_orderstatus\" /><attribute name=\"devkitv5_grandtotal\" /><attribute name=\"devkitv5_ponumber\" /><attribute name=\"ownerid\" /><attribute name=\"modifiedon\" /><filter><condition attribute=\"statecode\" operator=\"eq\" value=\"0\" /></filter><order attribute=\"modifiedon\" descending=\"true\" /></entity></fetch>", layoutxml="<grid name=\"resultset\" jump=\"Order Number\" select=\"1\" icon=\"1\" preview=\"1\" object=\"10998\"><row name=\"result\" id=\"devkitv5_orderid\"><cell name=\"devkitv5_ordernumber\" width=\"150\" /><cell name=\"devkitv5_billto\" width=\"150\" /><cell name=\"devkitv5_orderdate\" width=\"100\" /><cell name=\"devkitv5_duedate\" width=\"100\" /><cell name=\"devkitv5_orderstatus\" width=\"120\" /><cell name=\"devkitv5_grandtotal\" width=\"120\" /><cell name=\"devkitv5_ponumber\" width=\"150\" /><cell name=\"ownerid\" width=\"120\" /><cell name=\"modifiedon\" width=\"140\" /></row></grid>", validate=true, backup=true)`
+   >    `mcp__devkit_codex__manage_view(action="detail", entity_name="Order", view_name="Active Orders", include_fetchxml=true)`
+   > 🎯 Result: Active Orders now includes PO Number and the view layout and query remain in sync.
 
 92. Update the main form of the table with display name "Order" so that PO Number is inside the "Order Information" section; read it back to confirm the correct position.
+   > ✅ `mcp__devkit_codex__manage_form(action="detail", entity_name="Order", form_name="Information", include_formxml=true)`
+   >    `mcp__devkit_codex__manage_form(action="list", entity_name="Order", form_type=2, include_formxml=false)`
+   >    `mcp__devkit_codex__manage_form(action="detail", entity_name="Order", form_id="adfde007-1406-40b3-a5a0-8939ecfd0964", include_formxml=true)`
+   > 🎯 Result: The Order main form already has PO Number inside the Order Information section.
 
 93. Update the web resource created in prompt 54 (ordermcp/order.form.js): add a short comment "// Order MCP v1" at the top of the file; read it back to confirm.
+   > ✅ `mcp__devkit_codex__manage_webresource(action="update", web_resource_id="ordermcp/order.form.js", file_path="D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Tests\OrderMcp\js\order.form.js", display_name="ordermcp/order.form.js")`
+   >    `mcp__devkit_codex__manage_webresource(action="detail", web_resource_id="ordermcp/order.form.js")`
+   >    `mcp__devkit_codex__execute_webapi(method="GET", url="webresourceset?$select=name,displayname,content&$filter=name eq 'devkitv5_/ordermcp/order.form.js'", max_response_lines=100)`
+   > 🎯 Result: The ordermcp/order.form.js web resource was updated and read back with the Order MCP v1 comment at the top.
 
 94. Publish all customizations for the table with display name "Order", the table with display name "Order Line", the global choice with display name "Order Status", and the model-driven app navigation for the app with display name "Order MCP App".
+   > ✅ `mcp__devkit_codex__publish_customizations(entities="Order,Order Line", include_global_optionset=true, appmodules="Order MCP App", include_sitemap=true)`
+   > 🎯 Result: Customizations for Order, Order Line, Order Status, and Order MCP App navigation were published.
 
 ---
 
 ## V. End-of-Session Audit & System Jobs Check
 
 95. View the last 24 hours of audit history for the current user, up to 20 rows, confirming that MCP operations have been recorded.
+   > ✅ `mcp__devkit_codex__get_audit_history(user_filter="DEVKIT_1a60a5c2-d04c-4b26-8f86-9d6ce0616799@82131d86-1aa7-f011-8706-00224806e819.com", minutes_ago=1440, max_records=20)`
+   > 🎯 Result: Audit history confirms the current user's MCP operations were recorded, including Order updates and sample data creation.
 
 96. View publish or customization system jobs in the last 60 minutes, both succeeded and failed, to verify results after metadata creation steps.
+   > ✅ `mcp__devkit_codex__get_system_jobs(operation_type="solution", status="all", minutes_ago=60, max_records=500)`
+   >    `mcp__devkit_codex__get_system_jobs(name_filter="Publish", status="all", minutes_ago=60, max_records=500)`
+   > 🎯 Result: No solution jobs were found, and the recent publish-related app module job succeeded.
 
 ---
 
 ## W. Summary
 
 97. Check the solution with display name "Order MCP Solution" and list all components now inside it: tables, columns, choices, forms, views, web resources, ribbon, commands, model-driven app, sitemap, and environment variables.
+   > ✅ `mcp__devkit_codex__get_solution_components(solution_name="Order MCP Solution", include_active_layers=true)`
+   > 🎯 Result: Order MCP Solution contains Order and Order Line tables, the Order Status choice, Order MCP web resources, sitemap, model-driven app, environment variable, and related Account and Contact components.
 
 98. Summarize the "Order MCP Solution" session: what was created successfully, what was skipped due to environment limitations, and which prompts should be re-run to clean up or start over from scratch.
+   > ✅ `No MCP tool call required; summarized the recorded prompt results in this file.`
+   > 🎯 Result: Order MCP Solution was built with tables, columns, choice, environment variable, forms, views, app navigation, web resources, ribbon updates, sample data, audit checks, security checks, Dataverse Search verification, and publish verification.
+
+# MCP Tool Coverage And Result Analysis
+
+## Execution Status
+
+This file now contains result blocks for every numbered prompt. The prompt count is higher than the visible final number because prompt 54b exists, and prompts 65 and 71 are intentionally duplicated. In total, there are 101 numbered prompt lines and 101 result blocks.
+
+There are no active `BLOCKED` result blocks left in the prompt execution area. The earlier block on prompt 74 was resolved after the Order URL was added and parsed successfully.
+
+No prompt ended with an MCP tool error. Dataverse Search initially lagged while the custom tables were being indexed, but a later recheck showed `search_records(action="search")` successfully returned ORD-0001 and its three related Order Lines, and `search_records(action="status")` showed both custom Order tables as indexed.
+
+## Result Quality
+
+The result lines mostly follow the file's own rule: human-readable summaries, avoiding raw identifiers in the `Result:` text. Tool-call lines still contain GUIDs, option values, FetchXML, URLs, and other machine-readable values because the instruction explicitly requires tool parameters to be recorded exactly as called.
+
+Prompt 92 is a good example of conservative execution: the form already had PO Number inside Order Information, so the result records confirmation instead of creating a duplicate field placement.
+
+Prompt 98 did not call an MCP tool. That is acceptable for a pure summary prompt, but it is marked explicitly as no MCP call required so later readers do not mistake it for a missing execution.
+
+## Tools Used
+
+The prompt suite exercised 32 DevKit MCP tools:
+
+- `whoami`
+- `get_solution_components`
+- `manage_choice`
+- `manage_environment_variable`
+- `upsert_table`
+- `get_tables`
+- `upsert_column`
+- `upsert_relationship`
+- `manage_view`
+- `manage_form`
+- `manage_app`
+- `manage_webresource`
+- `manage_ribbon`
+- `manage_record`
+- `create_records`
+- `generate_demo_data`
+- `execute_fetchxml`
+- `search_records`
+- `parse_record_url`
+- `execute_webapi`
+- `get_audit_history`
+- `get_messages`
+- `get_custom_apis`
+- `get_plugins`
+- `get_plugin_trace_logs`
+- `get_system_jobs`
+- `get_workflows`
+- `get_business_process_flows`
+- `get_flows`
+- `get_business_rules`
+- `manage_role`
+- `publish_customizations`
+
+## Tool Not Used
+
+Only one designed DevKit MCP tool was not used:
+
+- `manage_command`
+
+This is expected because the prompt suite tests the classic ribbon path through `manage_ribbon`. `manage_command` is the modern command bar / Power Fx / appaction tool, and no prompt asked to create, inspect, hide, or update a modern command. If the goal is full tool coverage, add a separate prompt that creates or inspects a modern command bar command for Order MCP App, then reads it back with `manage_command`.
+
+## Coverage Assessment
+
+The suite gives broad end-to-end coverage across the DevKit MCP design:
+
+- Environment and solution inspection are covered by `whoami` and `get_solution_components`.
+- Metadata creation and mutation are covered by `upsert_table`, `upsert_column`, `upsert_relationship`, `manage_choice`, and `manage_environment_variable`.
+- Model-driven UI configuration is covered by `manage_app`, `manage_form`, `manage_view`, `manage_webresource`, and `manage_ribbon`.
+- Data operations are covered by `manage_record`, `create_records`, `generate_demo_data`, `execute_fetchxml`, `search_records`, `parse_record_url`, and `execute_webapi`.
+- Governance and runtime diagnostics are covered by audit, system jobs, messages, custom APIs, plugins, trace logs, workflows, BPFs, flows, business rules, and security-role tools.
+- Publish behavior is covered by `publish_customizations` plus publish-related system-job checks.
+
+The only gap is modern command coverage. The current suite validates classic command customization but does not validate modern command bar behavior. That gap is deliberate based on the prompts, not a failure of the tools.

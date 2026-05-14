@@ -31,7 +31,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public string Operator { get; set; }
 
         [JsonPropertyName("values")]
-        public List<string> Values { get; set; }
+        public List<JsonElement> Values { get; set; }
     }
 
     [McpServerToolType]
@@ -323,8 +323,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var ov in overrides)
             {
                 var fieldInput = ov.LogicalName.Trim();
+                var targetSuffix = "";
+                var fieldToResolve = fieldInput;
+                var atIndex = fieldInput.IndexOf('@');
+                if (atIndex >= 0)
+                {
+                    if (atIndex == 0 || atIndex == fieldInput.Length - 1)
+                        return $"Error: field_override '{fieldInput}' has invalid polymorphic lookup syntax. Use 'field@targetentity'.";
+
+                    fieldToResolve = fieldInput[..atIndex];
+                    targetSuffix = fieldInput[(atIndex + 1)..].Trim();
+                }
+
                 var resolved = DisplayNameFirstResolver.Resolve(
-                    fieldInput,
+                    fieldToResolve,
                     candidates,
                     "[AmbiguousField]",
                     "[NotFoundField]",
@@ -334,7 +346,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!resolved.IsSuccess)
                     return $"Error: field_override '{fieldInput}' could not be resolved: {resolved.Error}";
 
-                ov.LogicalName = resolved.Value.LogicalName;
+                if (targetSuffix.Length > 0)
+                {
+                    if (resolved.Value is not LookupAttributeMetadata lookup)
+                        return $"Error: field_override '{fieldInput}' uses polymorphic syntax, but '{resolved.Value.LogicalName}' is not a lookup field.";
+
+                    var targets = lookup.Targets ?? Array.Empty<string>();
+                    if (!targets.Contains(targetSuffix, StringComparer.OrdinalIgnoreCase))
+                    {
+                        var validTargets = targets.Length == 0 ? "(none)" : string.Join(", ", targets);
+                        return $"Error: field_override '{fieldInput}' target '{targetSuffix}' is not valid for lookup '{resolved.Value.LogicalName}'. Valid targets: {validTargets}.";
+                    }
+
+                    ov.LogicalName = $"{resolved.Value.LogicalName}@{targetSuffix.ToLowerInvariant()}";
+                }
+                else
+                {
+                    ov.LogicalName = resolved.Value.LogicalName;
+                }
             }
 
             return null;
@@ -493,37 +522,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 switch (op)
                 {
                     case "eq":
-                        record[field] = values[0];
+                        SetOverrideValue(record, field, ConvertOverrideValue(values[0]));
                         break;
 
                     case "in":
                     {
-                        var picked = faker.PickRandom(values);
-                        // Try parse as int for picklist fields
-                        if (int.TryParse(picked, out var intVal))
-                            record[field] = intVal;
-                        else
-                            record[field] = picked;
+                        var picked = values[faker.Random.Int(0, values.Count - 1)];
+                        SetOverrideValue(record, field, ConvertOverrideValue(picked, parseNumericStrings: true));
                         break;
                     }
 
                     case "startswith":
                     {
                         var suffix = faker.Random.AlphaNumeric(6);
-                        record[field] = $"{values[0]}{suffix}";
+                        SetOverrideValue(record, field, $"{OverrideValueAsString(values[0])}{suffix}");
                         break;
                     }
 
                     case "endswith":
                     {
                         // If field looks like an email (endswith @domain.com), generate realistic prefix
-                        var ending = values[0];
+                        var ending = OverrideValueAsString(values[0]);
                         string prefix;
                         if (ending.StartsWith("@"))
                             prefix = faker.Internet.UserName();
                         else
                             prefix = faker.Random.AlphaNumeric(6);
-                        record[field] = $"{prefix}{ending}";
+                        SetOverrideValue(record, field, $"{prefix}{ending}");
                         break;
                     }
 
@@ -531,15 +556,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     {
                         var prefix = faker.PickRandom(new[] { "Senior", "Junior", "Lead", "Principal", "Associate" });
                         var suffix = faker.PickRandom(new[] { "I", "II", "III", "" });
-                        var result = $"{prefix} {values[0]}{(suffix.Length > 0 ? " " + suffix : "")}".Trim();
-                        record[field] = result;
+                        var result = $"{prefix} {OverrideValueAsString(values[0])}{(suffix.Length > 0 ? " " + suffix : "")}".Trim();
+                        SetOverrideValue(record, field, result);
                         break;
                     }
 
                     case "regex":
                     {
                         // Map simple regex patterns to Bogus format strings
-                        var pattern = values[0];
+                        var pattern = OverrideValueAsString(values[0]);
                         var bogusFormat = Regex.Replace(pattern, @"\[0-9\]\{(\d+)\}", m =>
                         {
                             var len = int.Parse(m.Groups[1].Value);
@@ -549,7 +574,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         bogusFormat = bogusFormat.TrimStart('^').TrimEnd('$');
                         try
                         {
-                            record[field] = faker.Phone.PhoneNumber(bogusFormat);
+                            SetOverrideValue(record, field, faker.Phone.PhoneNumber(bogusFormat));
                         }
                         catch
                         {
@@ -559,6 +584,60 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     }
                 }
             }
+        }
+
+        private static object ConvertOverrideValue(JsonElement value, bool parseNumericStrings = false)
+        {
+            switch (value.ValueKind)
+            {
+                case JsonValueKind.String:
+                {
+                    var text = value.GetString() ?? "";
+                    return parseNumericStrings && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedIntValue)
+                        ? parsedIntValue
+                        : text;
+                }
+
+                case JsonValueKind.Number:
+                    if (value.TryGetInt32(out var numberIntValue))
+                        return numberIntValue;
+                    if (value.TryGetInt64(out var longValue))
+                        return longValue;
+                    if (value.TryGetDecimal(out var decimalValue))
+                        return decimalValue;
+                    return value.GetDouble();
+
+                case JsonValueKind.True:
+                    return true;
+
+                case JsonValueKind.False:
+                    return false;
+
+                case JsonValueKind.Null:
+                case JsonValueKind.Undefined:
+                    return null;
+
+                default:
+                    return value.GetRawText();
+            }
+        }
+
+        private static string OverrideValueAsString(JsonElement value) =>
+            value.ValueKind == JsonValueKind.String
+                ? value.GetString() ?? ""
+                : value.GetRawText();
+
+        private static void SetOverrideValue(Dictionary<string, object> record, string field, object value)
+        {
+            var atIndex = field.IndexOf('@');
+            if (atIndex > 0)
+            {
+                var polymorphicPrefix = field[..(atIndex + 1)];
+                foreach (var key in record.Keys.Where(k => k.StartsWith(polymorphicPrefix, StringComparison.OrdinalIgnoreCase)).ToList())
+                    record.Remove(key);
+            }
+
+            record[field] = value;
         }
 
         private object GenerateValue(
