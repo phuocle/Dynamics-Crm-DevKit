@@ -34,6 +34,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "CRUD single Dataverse record. Required: entity_name. create: +fields_json (returns GUID). read: +record_id, optional columns. update: +record_id+fields_json (partial supported). delete: +record_id (irreversible, may fail on FK or cascade-delete children). Use get_tables for field names; execute_fetchxml to find lookup GUIDs.\n\n" +
 
+            "READ OUTPUT: action='read' returns selected field values in structuredContent.fields and also in text content. Use execute_webapi only when raw OData JSON, annotations, headers, or entity-set URL behavior is specifically needed.\n\n" +
+
             "LOOKUP / POLYMORPHIC LOOKUP SYNTAX in fields_json:\n" +
             "- Regular lookup (single target): {\"fieldname\": \"guid\"} — target entity resolved from metadata automatically\n" +
             "- Polymorphic lookup (multiple targets, e.g. Customer, Owner, or any custom poly lookup): use 'fieldname@targetentity' key to specify which target entity the GUID belongs to\n" +
@@ -175,7 +177,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Action = "read",
                     Entity = entityName,
                     Id = id.ToString(),
-                    Status = "read"
+                    Status = "read",
+                    Fields = FormatRecordFields(entity)
                 };
                 return new CallToolResult
                 {
@@ -298,13 +301,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"[{entity.LogicalName}] {entity.Id}");
             sb.AppendLine();
 
-            foreach (var attr in entity.Attributes.OrderBy(a => a.Key))
-            {
-                var value = DataverseValueFormatter.FormatValue(entity, attr.Key);
-                sb.AppendLine($"{attr.Key}: {value}");
-            }
+            foreach (var field in FormatRecordFields(entity))
+                sb.AppendLine($"{field.Key}: {field.Value}");
 
             return sb.ToString();
+        }
+
+        private static Dictionary<string, string> FormatRecordFields(Entity entity)
+        {
+            return entity.Attributes
+                .OrderBy(a => a.Key)
+                .ToDictionary(
+                    attr => attr.Key,
+                    attr => DataverseValueFormatter.FormatValue(entity, attr.Key));
         }
 
         private static int CountFields(string fieldsJson)

@@ -111,6 +111,7 @@ public class StructuredResultsTests
         Assert.IsTrue(json.Contains("\"status\":\"Created\""));
         // fieldsUpdated should be omitted (JsonIgnoreCondition.WhenWritingNull)
         Assert.IsFalse(json.Contains("fieldsUpdated"), "fieldsUpdated should be omitted when null");
+        Assert.IsFalse(json.Contains("\"fields\""), "fields should be omitted when null");
     }
 
     [TestMethod]
@@ -125,6 +126,27 @@ public class StructuredResultsTests
         var json = JsonSerializer.Serialize(instance, CrudResultType);
 
         Assert.IsTrue(json.Contains("\"fieldsUpdated\":5"));
+    }
+
+    [TestMethod]
+    public void CrudResult_Fields_IncludedWhenSet()
+    {
+        var instance = Activator.CreateInstance(CrudResultType)!;
+        CrudResultType.GetProperty("Action")!.SetValue(instance, "read");
+        CrudResultType.GetProperty("Entity")!.SetValue(instance, "account");
+        CrudResultType.GetProperty("Id")!.SetValue(instance, "id-789");
+        CrudResultType.GetProperty("Status")!.SetValue(instance, "read");
+        CrudResultType.GetProperty("Fields")!.SetValue(instance, new Dictionary<string, string>
+        {
+            ["name"] = "Customer A",
+            ["revenue"] = "$100.00"
+        });
+
+        var json = JsonSerializer.Serialize(instance, CrudResultType);
+
+        Assert.IsTrue(json.Contains("\"fields\":"));
+        Assert.IsTrue(json.Contains("\"name\":\"Customer A\""));
+        Assert.IsTrue(json.Contains("\"revenue\":\"$100.00\""));
     }
 
     // ──────────────────────────────────────────────

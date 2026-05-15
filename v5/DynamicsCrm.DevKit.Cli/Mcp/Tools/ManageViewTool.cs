@@ -38,6 +38,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse views (savedquery/userquery) — list/detail/create/update/rename/set_default/undo. Required: list (none); detail (view_id OR view_name); create (view_name+layoutxml); update (view_id OR view_name + layoutxml and/or cell_updates_json); rename (view_id+view_name); set_default (view_id OR view_name); undo (view_id+backup path). Auto: backup→XSD+sync validate→update→publish. SYNC RULE: every FetchXML <attribute> MUST have a matching LayoutXML <cell>; mismatch blocks. querytype: 0=Public, 4=QuickFind, 64=SubGrid. See docs://instructions_for_views, schema://layoutxml, schema://fetchxml.\n\n" +
 
+            "QUICK FIND NOTE: for query_type=4, searchable fields are FetchXML <condition> nodes inside <filter isquickfindfields=\"1\">. LayoutXML <cell> only controls displayed columns and does NOT make a field searchable.\n\n" +
+
             "WHEN TO USE:\n" +
             "- Inspect existing views (list, detail) before editing\n" +
             "- Apply layout/fetch changes (action=update)\n" +
@@ -321,6 +323,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             resultSb.AppendLine($"Status: Created successfully");
             resultSb.AppendLine($"Validated: {(validate ? "yes (sync OK)" : "skipped")}");
             resultSb.AppendLine($"Published: {(published ? "yes" : "no")}");
+            var quickFindColumns = AppendQuickFindColumnsSummary(resultSb, effectiveQueryType, newFetchXml);
 
             var status = published ? "created" : "created_publish_failed";
 
@@ -331,7 +334,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     Action = "created", Entity = entityName, ViewId = newViewId.ToString(), ViewName = viewName,
                     Status = status, Validated = validate, Published = published,
-                    CreateMode = SolutionComponentCreateMode.None.ToString()
+                    CreateMode = SolutionComponentCreateMode.None.ToString(),
+                    QuickFindColumns = quickFindColumns
                 })
             };
         }
@@ -379,6 +383,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
             var currentViewName = currentView.GetAttributeValue<string>("name") ?? "";
             var returnedTypeCode = currentView.GetAttributeValue<string>("returnedtypecode") ?? entityName;
+            var currentQueryType = currentView.GetAttributeValue<int>("querytype");
 
             if (newFetchXml != null)
             {
@@ -456,7 +461,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (validate)
             {
                 var validationResult = RunValidation(newLayoutXml, newFetchXml, effectiveFetchXml,
-                    currentView.GetAttributeValue<int>("querytype"), currentFetchXml);
+                    currentQueryType, currentFetchXml);
                 if (validationResult != null)
                 {
                     return BuildValidationBlockedResult("ViewUpdate", entityName, updateId, currentViewName,
@@ -508,6 +513,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var w in cellPatchWarnings)
                         sb.AppendLine($"  - {w}");
                 }
+                var quickFindColumns = AppendQuickFindColumnsSummary(sb, currentQueryType, effectiveFetchXml);
                 sb.AppendLine($"Tip: Call publish with entities='{returnedTypeCode}' to retry");
                 sb.AppendLine();
                 ViewBackupHelper.AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, updateId);
@@ -520,7 +526,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                         Status = "updated_publish_failed", Validated = validate,
                         UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false
+                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = false,
+                        QuickFindColumns = quickFindColumns
                     })
                 };
             }
@@ -534,6 +541,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     foreach (var w in cellPatchWarnings)
                         sb.AppendLine($"  - {w}");
                 }
+                var quickFindColumns = AppendQuickFindColumnsSummary(sb, currentQueryType, effectiveFetchXml);
                 sb.AppendLine();
                 ViewBackupHelper.AppendRollbackInfo(sb, fetchBackupPath, layoutBackupPath, updateId);
 
@@ -545,7 +553,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         Action = "updated", Entity = entityName, ViewId = updateId.ToString(), ViewName = currentViewName,
                         Status = "updated", Validated = validate,
                         UpdatedParts = updatedParts, ValidationWarnings = cellPatchWarnings,
-                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published
+                        FetchXmlBackupPath = fetchBackupPath, LayoutXmlBackupPath = layoutBackupPath, Published = published,
+                        QuickFindColumns = quickFindColumns
                     })
                 };
             }
@@ -993,32 +1002,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             sb.AppendLine();
 
-            if (qt == 4 && !string.IsNullOrEmpty(fetchXml))
-            {
-                try
-                {
-                    var fetchDoc = XDocument.Parse(fetchXml);
-                    var qfFilter = fetchDoc.Descendants("filter")
-                        .FirstOrDefault(f => f.Attribute("isquickfindfields")?.Value == "1");
-
-                    if (qfFilter != null)
-                    {
-                        var findColumns = qfFilter.Elements("condition")
-                            .Select(c => c.Attribute("attribute")?.Value)
-                            .Where(a => a != null)
-                            .ToList();
-
-                        if (findColumns.Count > 0)
-                        {
-                            sb.AppendLine($"[FindColumns] {findColumns.Count} fields (searched when user types in search bar)");
-                            foreach (var col in findColumns)
-                                sb.AppendLine($"  {col}");
-                            sb.AppendLine();
-                        }
-                    }
-                }
-                catch { /* best-effort FetchXML display enrichment — skip on malformed XML */ }
-            }
+            AppendQuickFindColumnsSummary(sb, qt, fetchXml);
 
             if (!string.IsNullOrEmpty(layoutXml))
             {
@@ -1365,6 +1349,48 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
+
+        private static List<string> ExtractQuickFindColumns(string fetchXml)
+        {
+            if (string.IsNullOrWhiteSpace(fetchXml))
+                return [];
+
+            try
+            {
+                var fetchDoc = XDocument.Parse(fetchXml);
+                var qfFilter = fetchDoc.Descendants("filter")
+                    .FirstOrDefault(f => f.Attribute("isquickfindfields")?.Value == "1");
+
+                if (qfFilter == null)
+                    return [];
+
+                return qfFilter.Elements("condition")
+                    .Select(c => c.Attribute("attribute")?.Value)
+                    .Where(a => !string.IsNullOrWhiteSpace(a))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
+        private static List<string> AppendQuickFindColumnsSummary(StringBuilder sb, int queryType, string fetchXml)
+        {
+            if (queryType != 4)
+                return null;
+
+            var findColumns = ExtractQuickFindColumns(fetchXml);
+            sb.AppendLine($"[FindColumns] {findColumns.Count} fields (searched when user types in search bar)");
+            foreach (var col in findColumns)
+                sb.AppendLine($"  {col}");
+            if (findColumns.Count == 0)
+                sb.AppendLine("  (none — LayoutXML cells are displayed columns only and are not searchable)");
+            sb.AppendLine();
+
+            return findColumns.Count > 0 ? findColumns : null;
+        }
 
         private static CallToolResult TextResult(string text) => new()
         {

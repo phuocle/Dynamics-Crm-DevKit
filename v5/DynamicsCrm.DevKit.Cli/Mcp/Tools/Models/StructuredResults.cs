@@ -125,6 +125,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("fieldsUpdated")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? FieldsUpdated { get; set; }
+
+        [JsonPropertyName("fields")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, string> Fields { get; set; }
     }
 
     internal sealed class PublishResult
@@ -410,6 +414,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? OperationsCount { get; set; }
 
+        [JsonPropertyName("navigationChanged")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? NavigationChanged { get; set; }
+
+        [JsonPropertyName("changedOperations")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? ChangedOperations { get; set; }
+
+        [JsonPropertyName("noOpOperations")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? NoOpOperations { get; set; }
+
         [JsonPropertyName("operationSummaries")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> OperationSummaries { get; set; }
@@ -694,6 +710,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("validationWarnings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> ValidationWarnings { get; set; }
+
+        [JsonPropertyName("quickFindColumns")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> QuickFindColumns { get; set; }
 
         [JsonPropertyName("published")]
         public bool Published { get; set; }

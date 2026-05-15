@@ -203,13 +203,13 @@ public class ManageRoleToolTests
     }
 
     [TestMethod]
-    public void ManageRole_DetailWithoutRoleId_ReturnsError()
+    public void ManageRole_DetailWithoutRoleReference_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
         var result = tool.manage_role(action: "detail");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
-        Assert.IsTrue(text.Contains("role_id is required"));
+        Assert.IsTrue(text.Contains("role_id or role_name is required"));
     }
 
     [TestMethod]
@@ -219,6 +219,28 @@ public class ManageRoleToolTests
         var result = tool.manage_role(action: "detail", role_id: "not-a-guid");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
+        Assert.IsTrue(text.Contains("not a valid GUID"));
+    }
+
+    [TestMethod]
+    public void ManageRole_DetailWithRoleName_DoesNotRequireRoleId()
+    {
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var result = tool.manage_role(action: "detail", role_name: "System Administrator");
+        Assert.IsTrue(result.IsError);
+        var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
+        Assert.IsFalse(text.Contains("role_id or role_name is required"));
+        Assert.IsTrue(text.Contains("not a valid GUID"));
+    }
+
+    [TestMethod]
+    public void ManageRole_DetailRoleIdMayCarryName_DoesNotRequireGuidBeforeResolution()
+    {
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageRoleTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var result = tool.manage_role(action: "detail", role_id: "System Administrator");
+        Assert.IsTrue(result.IsError);
+        var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
+        Assert.IsFalse(text.Contains("role_id or role_name is required"));
         Assert.IsTrue(text.Contains("not a valid GUID"));
     }
 

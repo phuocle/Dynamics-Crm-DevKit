@@ -54,6 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Use this tool for model-driven app metadata and navigation tasks.\n" +
             "- Never use execute_webapi to create or update appmodule, sitemap, or appmodulecomponent records.\n" +
             "- update_navigation publishes the app so immediate readback sees the updated navigation. Other mutating actions return a next step to publish separately.\n\n" +
+            "NAVIGATION IDEMPOTENCY: use action='detail' for readback/confirmation. update_navigation mutates. add_area/add_group/add_item are partially idempotent and report no-op operations; if all operations are no-op, the tool skips sitemap update and publish.\n\n" +
             "NAME RESOLUTION: app, icon_webresource, solution_name, and add_item entity values resolve Display Name contains first, then unique/logical/schema contains.\n\n" +
             "See docs://instructions_for_manage_app for the operation workflow and examples.")]
         public CallToolResult manage_app(
@@ -624,6 +625,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ValidationWarnings = xsdWarnings.Count > 0 ? xsdWarnings : null,
                     Published = false,
                     OperationsCount = ops.Count,
+                    NavigationChanged = navResult.HasChanges,
+                    ChangedOperations = navResult.ChangedOperations,
+                    NoOpOperations = navResult.NoOpOperations,
                     OperationSummaries = navResult.OperationSummaries,
                     NextStep = NotPublishedNextStep
                 });
@@ -652,9 +656,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     BackupPath = backupPath,
                     Published = false,
                     OperationsCount = ops.Count,
+                    NavigationChanged = navResult.HasChanges,
+                    ChangedOperations = navResult.ChangedOperations,
+                    NoOpOperations = navResult.NoOpOperations,
                     OperationSummaries = navResult.OperationSummaries,
                     AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null,
                     NextStep = NotPublishedNextStep
+                });
+            }
+
+            if (!navResult.HasChanges)
+            {
+                var noOpText = BuildNavigationText(
+                    "No changes",
+                    appModule,
+                    appModuleIdUnique.Value,
+                    siteMapId.Value,
+                    backupPath,
+                    AppValidationResult.Skipped(),
+                    navResult,
+                    xsdWarnings,
+                    published: false,
+                    includeNextStep: false);
+                noOpText += "No sitemap update or publish was run because every navigation operation was already satisfied.\n";
+                noOpText += "Use manage_app(action='detail') for readback/confirmation.\n";
+
+                return StructuredResult(noOpText, new ManageAppResult
+                {
+                    Action = "update_navigation",
+                    Status = "no_changes",
+                    AppModuleId = appModule.Id.ToString(),
+                    AppModuleIdUnique = appModuleIdUnique.Value.ToString(),
+                    AppName = appModule.GetAttributeValue<string>("name"),
+                    UniqueName = appModule.GetAttributeValue<string>("uniquename"),
+                    SiteMapId = siteMapId.Value.ToString(),
+                    BackupPath = backupPath,
+                    Validated = true,
+                    ValidationWarnings = xsdWarnings.Count > 0 ? xsdWarnings : null,
+                    Published = false,
+                    OperationsCount = ops.Count,
+                    NavigationChanged = false,
+                    ChangedOperations = navResult.ChangedOperations,
+                    NoOpOperations = navResult.NoOpOperations,
+                    OperationSummaries = navResult.OperationSummaries
                 });
             }
 
@@ -696,6 +740,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 BackupPath = backupPath,
                 Published = true,
                 OperationsCount = ops.Count,
+                NavigationChanged = navResult.HasChanges,
+                ChangedOperations = navResult.ChangedOperations,
+                NoOpOperations = navResult.NoOpOperations,
                 OperationSummaries = navResult.OperationSummaries,
                 AddedAppComponents = navResult.AddedEntities.Count > 0 ? navResult.AddedEntities : null
             });
@@ -1502,7 +1549,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildNavigationText(string verb, Entity appModule, Guid appModuleIdUnique,
             Guid siteMapId, string backupPath, AppValidationResult validation,
-            AppNavigationOperationsResult navResult, List<string> xsdWarnings, bool published = false)
+            AppNavigationOperationsResult navResult, List<string> xsdWarnings, bool published = false,
+            bool includeNextStep = true)
         {
             var sb = new StringBuilder(512);
             sb.AppendLine($"[ManageAppNavigation] {verb}: {appModule.GetAttributeValue<string>("name")}");
@@ -1512,6 +1560,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"SiteMapId: {siteMapId}");
             if (!string.IsNullOrWhiteSpace(backupPath)) sb.AppendLine($"Backup: {backupPath}");
             sb.AppendLine($"Operations: {navResult.OperationSummaries.Count}");
+            sb.AppendLine($"NavigationChanged: {(navResult.HasChanges ? "yes" : "no")}");
+            sb.AppendLine($"ChangedOperations: {navResult.ChangedOperations}");
+            sb.AppendLine($"NoOpOperations: {navResult.NoOpOperations}");
             foreach (var summary in navResult.OperationSummaries)
                 sb.AppendLine($"  - {summary}");
             if (navResult.AddedEntities.Count > 0)
@@ -1522,7 +1573,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             foreach (var warning in MergeWarnings(validation.Warnings, xsdWarnings) ?? [])
                 sb.AppendLine($"ValidationWarning: {warning}");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
-            if (!published)
+            if (!published && includeNextStep)
                 sb.AppendLine($"NextStep: {PublishAppModuleNextStep(appModule.Id)}");
             return sb.ToString();
         }

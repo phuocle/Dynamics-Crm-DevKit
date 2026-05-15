@@ -12,6 +12,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
         public string ModifiedSiteMapXml { get; set; }
         public List<string> OperationSummaries { get; set; } = [];
         public List<string> AddedEntities { get; set; } = [];
+        public int ChangedOperations { get; set; }
+        public int NoOpOperations { get; set; }
+        public bool HasChanges => ChangedOperations > 0;
     }
 
     internal sealed class AppNavigationOperationException : Exception
@@ -41,7 +44,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
 
                 try
                 {
-                    result.OperationSummaries.Add(Dispatch(doc, op, action.Trim().ToLowerInvariant(), lcid, result));
+                    var summary = Dispatch(doc, op, action.Trim().ToLowerInvariant(), lcid, result);
+                    result.OperationSummaries.Add(summary);
+                    if (IsNoOpSummary(summary))
+                        result.NoOpOperations++;
+                    else
+                        result.ChangedOperations++;
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -52,6 +60,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.App
             result.ModifiedSiteMapXml = doc.ToString(SaveOptions.None);
             return result;
         }
+
+        private static bool IsNoOpSummary(string summary) =>
+            !string.IsNullOrWhiteSpace(summary) &&
+            summary.IndexOf("no changes made", StringComparison.OrdinalIgnoreCase) >= 0;
 
         private static string Dispatch(XDocument doc, JsonElement op, string action, int lcid, AppNavigationOperationsResult result) =>
             action switch

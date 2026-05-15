@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Security roles — list/detail/user/assign/unassign/create/update/delete/copy.\n" +
             "- list: optional role_name, business_unit_id, max_records\n" +
-            "- detail: role_id (+optional entity_name) → privileges grouped by entity\n" +
+            "- detail: role_id OR role_name (+optional entity_name) → privileges grouped by entity. Resolves role name first (fuzzy), then GUID fallback.\n" +
             "- user: user_id (+optional entity_name) → user's roles + effective privileges\n" +
             "- assign / unassign: role_id + user_id\n" +
             "- create: role_name (+optional business_unit_id)\n" +
@@ -53,9 +53,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string action,
             [Description("Email or GUID. Required: user/assign/unassign."
             )] string user_id = "",
-            [Description("GUID. Required: detail/assign/unassign/update/delete/copy."
+            [Description("Role GUID. For detail only, this may also be a role name; if empty, role_name is used. Required: detail/assign/unassign/update/delete/copy."
             )] string role_id = "",
-            [Description("list: filter (contains). create/update/copy: new name."
+            [Description("list: filter (contains). detail: role display name when role_id is empty. create/update/copy: new name."
             )] string role_name = "",
             [Description("BU GUID. list: filter. create: target BU (empty = root)."
             )] string business_unit_id = "",
@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return normalizedAction switch
                 {
                     "list" => HandleList(role_name?.Trim(), business_unit_id?.Trim(), max_records),
-                    "detail" => HandleDetail(role_id?.Trim(), entity_name?.Trim()),
+                    "detail" => HandleDetail(role_id?.Trim(), role_name?.Trim(), entity_name?.Trim()),
                     "user" => HandleUser(user_id?.Trim(), entity_name?.Trim()),
                     "assign" => HandleAssign(user_id?.Trim(), role_id?.Trim()),
                     "unassign" => HandleUnassign(user_id?.Trim(), role_id?.Trim()),
@@ -152,27 +152,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return TextResult(sb.ToString());
         }
 
-        private CallToolResult HandleDetail(string roleId, string entityFilter)
+        private CallToolResult HandleDetail(string roleId, string roleNameInput, string entityFilter)
         {
-            if (string.IsNullOrWhiteSpace(roleId))
-                return ErrorResult("Error: role_id is required for 'detail' action.");
+            var roleReference = !string.IsNullOrWhiteSpace(roleId) ? roleId : roleNameInput;
+            var resolvedRole = ResolveRoleForDetail(roleReference);
+            if (!string.IsNullOrEmpty(resolvedRole.Error))
+                return ErrorResult(resolvedRole.Error);
 
-            if (!Guid.TryParse(roleId, out var id))
-                return ErrorResult($"Error: '{roleId}' is not a valid GUID.");
-
-            var roleQuery = new QueryExpression("role")
-            {
-                ColumnSet = new ColumnSet(
-                    "roleid", "name", "businessunitid", "ismanaged",
-                    "iscustomizable", "createdon")
-            };
-            roleQuery.Criteria.AddCondition("roleid", ConditionOperator.Equal, id);
-
-            var roleResult = _serviceClient.RetrieveMultiple(roleQuery);
-            if (roleResult.Entities.Count == 0)
-                return ErrorResult($"Error: No security role found with ID '{roleId}'.");
-
-            var role = roleResult.Entities[0];
+            var role = resolvedRole.Role;
+            var id = role.GetAttributeValue<Guid>("roleid");
             var roleName = role.GetAttributeValue<string>("name") ?? "";
             var buRef = role.GetAttributeValue<EntityReference>("businessunitid");
             var isManaged = role.GetAttributeValue<bool>("ismanaged");
@@ -655,6 +643,58 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         #region Dataverse Operations
 
+        private (Entity Role, string Error) ResolveRoleForDetail(string roleReference)
+        {
+            if (string.IsNullOrWhiteSpace(roleReference))
+                return (null, "Error: role_id or role_name is required for 'detail' action.");
+
+            roleReference = roleReference.Trim();
+
+            if (_serviceClient != null)
+            {
+                var nameMatches = FindRootRolesByNameContains(roleReference);
+                if (nameMatches.Count == 1)
+                    return (nameMatches[0], null);
+
+                if (nameMatches.Count > 1)
+                {
+                    var exactMatches = nameMatches
+                        .Where(r => string.Equals(r.GetAttributeValue<string>("name"), roleReference, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                    if (exactMatches.Count == 1)
+                        return (exactMatches[0], null);
+
+                    return (null, FormatMultipleRoles(roleReference, nameMatches));
+                }
+            }
+
+            if (!Guid.TryParse(roleReference, out var id))
+                return (null, $"Error: '{roleReference}' is not a valid GUID.");
+
+            var role = RetrieveRole(id);
+            if (role == null)
+                return (null, $"Error: No security role found with ID '{roleReference}'.");
+
+            return (role, null);
+        }
+
+        private DataCollection<Entity> FindRootRolesByNameContains(string roleName)
+        {
+            var escapedName = roleName.Replace("[", "[[]").Replace("%", "[%]");
+            var query = new QueryExpression("role")
+            {
+                ColumnSet = new ColumnSet(
+                    "roleid", "name", "businessunitid", "ismanaged",
+                    "iscustomizable", "createdon"),
+                TopCount = 50
+            };
+            query.Criteria.AddCondition("parentroleid", ConditionOperator.Null);
+            query.Criteria.AddCondition("name", ConditionOperator.Like, $"%{escapedName}%");
+            query.AddOrder("name", OrderType.Ascending);
+
+            return _serviceClient.RetrieveMultiple(query).Entities;
+        }
+
         private Entity RetrieveRole(Guid roleId)
         {
             var query = new QueryExpression("role")
@@ -877,6 +917,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var buRef = u.GetAttributeValue<EntityReference>("businessunitid");
                 var buName = buRef?.Name ?? "";
                 sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(email)}\t{(disabled ? "Disabled" : "Active")}\t{EscapeTab(buName)}");
+            }
+            return sb.ToString();
+        }
+
+        private static string FormatMultipleRoles(string input, IEnumerable<Entity> roles)
+        {
+            var roleList = roles.ToList();
+            var sb = new StringBuilder(roleList.Count * 120 + 256);
+            sb.AppendLine($"[Multiple Security Roles] {roleList.Count} roles match '{input}'. Re-call with the exact roleid GUID or a more specific role_name:");
+            sb.AppendLine();
+            sb.AppendLine("roleid\tname\tbusinessunit\tmanaged\tcustomizable");
+            foreach (var role in roleList)
+            {
+                var id = role.GetAttributeValue<Guid>("roleid");
+                var name = role.GetAttributeValue<string>("name") ?? "";
+                var buRef = role.GetAttributeValue<EntityReference>("businessunitid");
+                var buName = buRef?.Name ?? "";
+                var isManaged = role.GetAttributeValue<bool>("ismanaged");
+                var isCustomizable = role.GetAttributeValue<BooleanManagedProperty>("iscustomizable")?.Value ?? true;
+                sb.AppendLine($"{id}\t{EscapeTab(name)}\t{EscapeTab(buName)}\t{(isManaged ? "yes" : "no")}\t{(isCustomizable ? "yes" : "no")}");
             }
             return sb.ToString();
         }

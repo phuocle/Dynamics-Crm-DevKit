@@ -162,6 +162,14 @@ public class GetViewsToolTests
         return (string)MapQueryTypeMethod.Invoke(null, new object[] { queryType })!;
     }
 
+    private static readonly MethodInfo ExtractQuickFindColumnsMethod = ToolType
+        .GetMethod("ExtractQuickFindColumns", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static List<string> ExtractQuickFindColumns(string fetchXml)
+    {
+        return (List<string>)ExtractQuickFindColumnsMethod.Invoke(null, new object[] { fetchXml })!;
+    }
+
     [TestMethod]
     public void MapQueryType_0_ReturnsPublic()
     {
@@ -202,6 +210,37 @@ public class GetViewsToolTests
     public void MapQueryType_Unknown_ReturnsOtherWithCode()
     {
         Assert.AreEqual("Other(999)", MapQueryType(999));
+    }
+
+    [TestMethod]
+    public void ExtractQuickFindColumns_ReadsIsQuickFindConditionAttributes()
+    {
+        var fetchXml = "<fetch><entity name='account'><filter isquickfindfields='1'><condition attribute='name' operator='like' value='{0}'/><condition attribute='accountnumber' operator='like' value='{0}'/></filter></entity></fetch>";
+
+        var columns = ExtractQuickFindColumns(fetchXml);
+
+        CollectionAssert.AreEqual(new List<string> { "name", "accountnumber" }, columns);
+    }
+
+    [TestMethod]
+    public void ExtractQuickFindColumns_IgnoresReturnedAttributes()
+    {
+        var fetchXml = "<fetch><entity name='account'><attribute name='name'/><attribute name='accountnumber'/></entity></fetch>";
+
+        var columns = ExtractQuickFindColumns(fetchXml);
+
+        Assert.AreEqual(0, columns.Count);
+    }
+
+    [TestMethod]
+    public void ExtractQuickFindColumns_DeduplicatesConditionAttributes()
+    {
+        var fetchXml = "<fetch><entity name='account'><filter isquickfindfields='1'><condition attribute='name'/><condition attribute='NAME'/></filter></entity></fetch>";
+
+        var columns = ExtractQuickFindColumns(fetchXml);
+
+        Assert.AreEqual(1, columns.Count);
+        Assert.AreEqual("name", columns[0]);
     }
 
     // ──────────────────────────────────────────────

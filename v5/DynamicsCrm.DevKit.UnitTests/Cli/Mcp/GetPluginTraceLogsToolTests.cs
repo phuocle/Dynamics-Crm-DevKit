@@ -35,17 +35,17 @@ public class GetPluginTraceLogsToolTests
     private static readonly MethodInfo BuildTraceListFetchXmlMethod = ToolType
         .GetMethod("BuildListFetchXml", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string BuildTraceListFetchXml(string typeName, int minutesAgo, string correlationId,
+    private static string BuildTraceListFetchXml(string typeName, string primaryEntity, int minutesAgo, string correlationId,
         string messageName, string mode, int maxRecords)
     {
         return (string)BuildTraceListFetchXmlMethod.Invoke(null,
-            new object[] { typeName, minutesAgo, correlationId, messageName, mode, maxRecords })!;
+            new object[] { typeName, primaryEntity, minutesAgo, correlationId, messageName, mode, maxRecords })!;
     }
 
     [TestMethod]
     public void BuildTraceListFetchXml_BasicQuery_ContainsEntityAndAttributes()
     {
-        var result = BuildTraceListFetchXml("", 60, "", "", "", 50);
+        var result = BuildTraceListFetchXml("", "", 60, "", "", "", 50);
 
         Assert.IsTrue(result.Contains("<entity name='plugintracelog'>"));
         Assert.IsTrue(result.Contains("<attribute name='plugintracelogid'/>"));
@@ -58,17 +58,94 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_WithTypeName_AddsLikeFilter()
     {
-        var result = BuildTraceListFetchXml("AccountPlugin", 60, "", "", "", 50);
+        var result = BuildTraceListFetchXml("AccountPlugin", "", 60, "", "", "", 50);
 
         Assert.IsTrue(result.Contains("operator='like'"));
         Assert.IsTrue(result.Contains("%AccountPlugin%"));
     }
 
     [TestMethod]
+    public void BuildTraceListFetchXml_WithPrimaryEntity_AddsPrimaryEntityFilter()
+    {
+        var result = BuildTraceListFetchXml("", "account", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("attribute='primaryentity'"));
+        Assert.IsTrue(result.Contains("operator='eq'"));
+        Assert.IsTrue(result.Contains("value='account'"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithTypeName_DoesNotTreatTypeNameAsPrimaryEntity()
+    {
+        var result = BuildTraceListFetchXml("Quote", "", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("attribute='typename'"));
+        Assert.IsFalse(result.Contains("attribute='primaryentity' operator='eq' value='Quote'"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithPrimaryEntity_EscapesXml()
+    {
+        var result = BuildTraceListFetchXml("", "account'bad", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("account&apos;bad"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithTypeNameAndPrimaryEntity_AddsBothFilters()
+    {
+        var result = BuildTraceListFetchXml("AccountPlugin", "account", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("attribute='typename'"));
+        Assert.IsTrue(result.Contains("attribute='primaryentity'"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithoutPrimaryEntity_SkipsPrimaryEntityFilter()
+    {
+        var result = BuildTraceListFetchXml("", "", 60, "", "", "", 50);
+
+        Assert.IsFalse(result.Contains("attribute='primaryentity' operator='eq'"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithPrimaryEntity_DoesNotUseLike()
+    {
+        var result = BuildTraceListFetchXml("", "account", 60, "", "", "", 50);
+
+        Assert.IsFalse(result.Contains("attribute='primaryentity' operator='like'"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithPrimaryEntity_KeepsPrimaryEntityAttributeColumn()
+    {
+        var result = BuildTraceListFetchXml("", "account", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("<attribute name='primaryentity'/>"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithPrimaryEntity_CombinesWithCreatedOnFilter()
+    {
+        var result = BuildTraceListFetchXml("", "account", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("attribute='createdon'"));
+        Assert.IsTrue(result.Contains("attribute='primaryentity'"));
+    }
+
+    [TestMethod]
+    public void BuildTraceListFetchXml_WithPrimaryEntity_UsesTrimmedValue()
+    {
+        var result = BuildTraceListFetchXml("", " account ", 60, "", "", "", 50);
+
+        Assert.IsTrue(result.Contains("value='account'"));
+    }
+
+    [TestMethod]
     public void BuildTraceListFetchXml_WithCorrelationId_AddsEqFilter()
     {
         var guid = "11111111-2222-3333-4444-555555555555";
-        var result = BuildTraceListFetchXml("", 60, guid, "", "", 50);
+        var result = BuildTraceListFetchXml("", "", 60, guid, "", "", 50);
 
         Assert.IsTrue(result.Contains("attribute='correlationid'"));
         Assert.IsTrue(result.Contains("operator='eq'"));
@@ -78,7 +155,7 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_WithInvalidCorrelationId_SkipsFilter()
     {
-        var result = BuildTraceListFetchXml("", 60, "not-a-guid", "", "", 50);
+        var result = BuildTraceListFetchXml("", "", 60, "not-a-guid", "", "", 50);
 
         // correlationid is always present as an <attribute> column,
         // but should NOT appear as a <condition> filter for invalid GUID
@@ -88,7 +165,7 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_WithMessageName_AddsFilter()
     {
-        var result = BuildTraceListFetchXml("", 60, "", "Create", "", 50);
+        var result = BuildTraceListFetchXml("", "", 60, "", "Create", "", 50);
 
         Assert.IsTrue(result.Contains("attribute='messagename'"));
         Assert.IsTrue(result.Contains("operator='eq'"));
@@ -98,7 +175,7 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_WithSyncMode_AddsModeFilter()
     {
-        var result = BuildTraceListFetchXml("", 60, "", "", "sync", 50);
+        var result = BuildTraceListFetchXml("", "", 60, "", "", "sync", 50);
 
         Assert.IsTrue(result.Contains("attribute='mode'"));
         Assert.IsTrue(result.Contains("value='0'"));
@@ -107,7 +184,7 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_WithAsyncMode_AddsModeFilter()
     {
-        var result = BuildTraceListFetchXml("", 60, "", "", "async", 50);
+        var result = BuildTraceListFetchXml("", "", 60, "", "", "async", 50);
 
         Assert.IsTrue(result.Contains("attribute='mode'"));
         Assert.IsTrue(result.Contains("value='1'"));
@@ -116,7 +193,7 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_WithInvalidMode_SkipsModeFilter()
     {
-        var result = BuildTraceListFetchXml("", 60, "", "", "invalid", 50);
+        var result = BuildTraceListFetchXml("", "", 60, "", "", "invalid", 50);
 
         Assert.IsFalse(result.Contains("attribute='mode'"));
     }
@@ -124,7 +201,7 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void BuildTraceListFetchXml_CustomMaxRecords_UsedInTopAttribute()
     {
-        var result = BuildTraceListFetchXml("", 60, "", "", "", 100);
+        var result = BuildTraceListFetchXml("", "", 60, "", "", "", 100);
 
         Assert.IsTrue(result.Contains("top='100'"));
     }
@@ -136,17 +213,17 @@ public class GetPluginTraceLogsToolTests
     private static readonly MethodInfo FormatTraceNoResultsMethod = ToolType
         .GetMethod("FormatNoResults", BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    private static string FormatTraceNoResults(string typeName, int minutesAgo, string correlationId,
+    private static string FormatTraceNoResults(string typeName, string primaryEntity, int minutesAgo, string correlationId,
         string messageName, string mode)
     {
         return (string)FormatTraceNoResultsMethod.Invoke(null,
-            new object[] { typeName, minutesAgo, correlationId, messageName, mode })!;
+            new object[] { typeName, primaryEntity, minutesAgo, correlationId, messageName, mode })!;
     }
 
     [TestMethod]
     public void FormatTraceNoResults_BasicQuery_ShowsZeroLogs()
     {
-        var result = FormatTraceNoResults("", 60, "", "", "");
+        var result = FormatTraceNoResults("", "", 60, "", "", "");
 
         Assert.IsTrue(result.Contains("[PluginTraceLogs] 0 logs found"));
         Assert.IsTrue(result.Contains("last 60 minutes"));
@@ -156,9 +233,10 @@ public class GetPluginTraceLogsToolTests
     [TestMethod]
     public void FormatTraceNoResults_WithFilters_ShowsFilterDetails()
     {
-        var result = FormatTraceNoResults("MyPlugin", 120, "11111111-1111-1111-1111-111111111111", "Create", "sync");
+        var result = FormatTraceNoResults("MyPlugin", "account", 120, "11111111-1111-1111-1111-111111111111", "Create", "sync");
 
         Assert.IsTrue(result.Contains("typename contains \"MyPlugin\""));
+        Assert.IsTrue(result.Contains("primaryentity = \"account\""));
         Assert.IsTrue(result.Contains("correlationid"));
         Assert.IsTrue(result.Contains("message = \"Create\""));
         Assert.IsTrue(result.Contains("mode = \"sync\""));

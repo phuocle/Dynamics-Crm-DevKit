@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -29,6 +30,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Plugin trace logs for debugging plugin/custom action. record_id empty = list (filtered, default last 60 min). Set = detail (full messageblock + exceptiondetails). Requires Plugin Trace Log enabled (System Settings > Customization).\n\n" +
 
+            "FILTER SEMANTICS: type_name filters plugintracelog.typename (plugin class/type name), NOT the Dataverse table. Use entity_name to filter logs by primary table/entity.\n\n" +
+
             "WHEN TO USE:\n" +
             "- Debug failing plugin (list first → detail with record_id for full trace)\n" +
             "- Trace one request across logs (correlation_id)\n" +
@@ -40,6 +43,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description(
                 "Plugin type name (contains). E.g. 'AccountPlugin'."
             )] string type_name = "",
+            [Description(
+                "Primary table/entity filter, Display Name or logical name. Filters plugintracelog.primaryentity."
+            )] string entity_name = "",
             [Description(
                 "SDK message: Create, Update, Delete, etc."
             )] string message_name = "",
@@ -61,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (!string.IsNullOrWhiteSpace(record_id))
                     return HandleDetail(record_id);
 
-                return HandleList(type_name, minutes_ago, correlation_id, message_name, mode, max_records);
+                return HandleList(type_name, entity_name, minutes_ago, correlation_id, message_name, mode, max_records);
             }
             catch (System.ServiceModel.FaultException<Microsoft.Xrm.Sdk.OrganizationServiceFault> fex)
             {
@@ -73,7 +79,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private CallToolResult HandleList(string typeName, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
+        private CallToolResult HandleList(string typeName, string entityName, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
         {
             if (!string.IsNullOrWhiteSpace(mode))
             {
@@ -90,12 +96,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxRecords <= 0) maxRecords = 50;
             if (maxRecords > 200) maxRecords = 200;
 
-            var fetchXml = BuildListFetchXml(typeName, minutesAgo, correlationId, messageName, mode, maxRecords);
+            var primaryEntity = ResolvePrimaryEntity(entityName);
+            if (!string.IsNullOrEmpty(primaryEntity.Error))
+                return ErrorResult(primaryEntity.Error);
+
+            var fetchXml = BuildListFetchXml(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode, maxRecords);
             var result = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
 
             if (result.Entities.Count == 0)
             {
-                var text = FormatNoResults(typeName, minutesAgo, correlationId, messageName, mode);
+                var text = FormatNoResults(typeName, primaryEntity.LogicalName, minutesAgo, correlationId, messageName, mode);
                 var emptyResult = new GetPluginTraceLogsResult
                 {
                     Mode = "list",
@@ -121,7 +131,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return FormatDetailResult(entity);
         }
 
-        private static string BuildListFetchXml(string typeName, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
+        private (string LogicalName, string Error) ResolvePrimaryEntity(string entityName)
+        {
+            if (string.IsNullOrWhiteSpace(entityName))
+                return (null, null);
+
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityName.Trim(), "get_plugin_trace_logs");
+            if (!resolved.IsSuccess)
+                return (null, $"Error: entity_name '{entityName.Trim()}': {resolved.Error}");
+
+            return (resolved.Value.LogicalName, null);
+        }
+
+        private static string BuildListFetchXml(string typeName, string primaryEntity, int minutesAgo, string correlationId, string messageName, string mode, int maxRecords)
         {
             var sb = new StringBuilder(512);
             sb.Append($"<fetch top='{maxRecords}'>");
@@ -141,6 +163,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(typeName))
                 sb.Append($"<condition attribute='typename' operator='like' value='%{EscapeXml(typeName.Trim())}%'/>");
+
+            if (!string.IsNullOrWhiteSpace(primaryEntity))
+                sb.Append($"<condition attribute='primaryentity' operator='eq' value='{EscapeXml(primaryEntity.Trim())}'/>");
 
             if (!string.IsNullOrWhiteSpace(correlationId) && Guid.TryParse(correlationId.Trim(), out _))
                 sb.Append($"<condition attribute='correlationid' operator='eq' value='{EscapeXml(correlationId.Trim())}'/>");
@@ -167,7 +192,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static string FormatNoResults(string typeName, int minutesAgo, string correlationId, string messageName, string mode)
+        private static string FormatNoResults(string typeName, string primaryEntity, int minutesAgo, string correlationId, string messageName, string mode)
         {
             var sb = new StringBuilder(256);
             sb.AppendLine("[PluginTraceLogs] 0 logs found");
@@ -175,6 +200,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var filters = new List<string>();
             if (!string.IsNullOrWhiteSpace(typeName))
                 filters.Add($"typename contains \"{typeName}\"");
+            if (!string.IsNullOrWhiteSpace(primaryEntity))
+                filters.Add($"primaryentity = \"{primaryEntity}\"");
             if (!string.IsNullOrWhiteSpace(correlationId))
                 filters.Add($"correlationid = \"{correlationId}\"");
             if (!string.IsNullOrWhiteSpace(messageName))
