@@ -160,5 +160,26 @@ public class MyClass
         }
 
         #endregion
+
+        #region Diagnostic Tests - Individual Type Assignments
+
+        [Fact]
+        public async Task Diagnostic_When_RetrieveAttributeRequest_RetrieveAsIfPublished_True()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new Microsoft.Xrm.Sdk.Messages.RetrieveAttributeRequest();
+        [|request.RetrieveAsIfPublished = true|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

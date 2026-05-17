@@ -79,5 +79,29 @@ public class Sample
             var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(); cs.AllColumns = false;");
             await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
         }
+
+        [Fact]
+        public async Task NoDiagnostic_When_NonColumnSet_AllColumns_true()
+        {
+            // Assigning AllColumns=true on a type that is not ColumnSet should not trigger the analyzer
+            var src = @"
+namespace X
+{
+    public class SomeOtherType
+    {
+        public bool AllColumns { get; set; }
+    }
+}
+public class Sample
+{
+    public void Run()
+    {
+        var x = new X.SomeOtherType();
+        x.AllColumns = true;
+    }
+}
+";
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
     }
 }

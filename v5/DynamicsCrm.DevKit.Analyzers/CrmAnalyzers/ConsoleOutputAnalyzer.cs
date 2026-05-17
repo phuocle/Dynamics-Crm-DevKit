@@ -81,8 +81,6 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             {
                 case "Write":
                 case "WriteLine":
-                case "Error":          // Console.Error.Write/WriteLine
-                case "Out":            // Console.Out.Write/WriteLine
                 case "SetOut":
                 case "SetError":
                 case "Beep":

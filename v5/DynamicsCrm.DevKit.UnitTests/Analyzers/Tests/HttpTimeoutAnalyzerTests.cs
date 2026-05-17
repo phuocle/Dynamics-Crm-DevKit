@@ -101,6 +101,23 @@ public class RegularClass
             await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
+        [Fact]
+        public async Task Diagnostic_When_HttpClient_Assigned_To_Field()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    private System.Net.Http.HttpClient _client;
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        _client = [|new System.Net.Http.HttpClient()|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<HttpTimeoutAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
         #endregion
     }
 }

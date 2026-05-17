@@ -152,10 +152,29 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
 {{
     public static string StaticProp {{ get; set; }}
-    
+
     public void Execute(System.IServiceProvider serviceProvider)
     {{
         StaticProp = ""value"";  // OK - static property
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Assigning_To_Readonly_Property_NoSetter()
+        {
+            var src = $@"
+{XrmSdkStub}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public Microsoft.Xrm.Sdk.IPluginExecutionContext Context {{ get; }}
+
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        // Cannot assign to property with no setter - not reported
+        var ctx = Context;
     }}
 }}
 ";

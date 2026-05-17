@@ -84,6 +84,13 @@ public class RegularClass
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ThrowExpression()
+        {
+            var src = WrapInPlugin(@"var x = ""test"" ?? [|throw new System.InvalidOperationException|](""null"");");
+            await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
         #endregion
 
         #region No Diagnostic Tests

@@ -44,6 +44,12 @@ namespace System.IO
     public class BinaryReader { public BinaryReader(System.IO.Stream s) { } }
     public enum FileMode { Open, Create }
     public abstract class Stream { }
+    public static class Directory
+    {
+        public static DirectoryInfo CreateDirectory(string path) => null;
+        public static void Delete(string path) { }
+        public static bool Exists(string path) => false;
+    }
 }
 ";
 
@@ -154,6 +160,75 @@ public class RegularClass
         public async Task Diagnostic_When_Plugin_Uses_NewStreamWriter()
         {
             var src = WrapInPlugin("var sw = [|new System.IO.StreamWriter|](\"test.txt\");");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region BinaryReader Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_NewBinaryReader()
+        {
+            var src = WrapInPlugin("var br = [|new System.IO.BinaryReader|](null);");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region DirectoryInfo Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_NewDirectoryInfo()
+        {
+            var src = WrapInPlugin("var di = [|new System.IO.DirectoryInfo|](\"somepath\");");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Directory Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_DirectoryCreateDirectory()
+        {
+            var src = WrapInPlugin("[|System.IO.Directory.CreateDirectory|](\"path\");");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_DirectoryDelete()
+        {
+            var src = WrapInPlugin("[|System.IO.Directory.Delete|](\"path\");");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_DirectoryExists()
+        {
+            var src = WrapInPlugin("[|System.IO.Directory.Exists|](\"path\");");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region File.ReadAllBytes Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_FileReadAllBytes()
+        {
+            var src = WrapInPlugin("[|System.IO.File.ReadAllBytes|](\"test.txt\");");
+            await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region File.ReadAllLines Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_FileReadAllLines()
+        {
+            var src = WrapInPlugin("[|System.IO.File.ReadAllLines|](\"test.txt\");");
             await CSharpAnalyzerVerifier<FileIOAnalyzer>.VerifyAnalyzerAsync(src);
         }
 

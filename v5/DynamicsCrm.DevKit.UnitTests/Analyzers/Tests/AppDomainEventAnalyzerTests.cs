@@ -15,6 +15,13 @@ namespace Microsoft.Xrm.Sdk
         void Execute(System.IServiceProvider serviceProvider);
     }
 }
+namespace System.Activities
+{
+    public abstract class CodeActivity
+    {
+        protected abstract void Execute(object context);
+    }
+}
 namespace System
 {
     public class AppDomain
@@ -96,6 +103,66 @@ public class RegularClass
     public void Run()
     {{
         System.AppDomain.CurrentDomain.UnhandledException += (s, e) => {{ }};
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Workflow Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Workflow_Subscribes_To_UnhandledException()
+        {
+            var src = $@"
+{Stubs}
+public class TestWorkflow : System.Activities.CodeActivity
+{{
+    protected override void Execute(object context)
+    {{
+        [|System.AppDomain.CurrentDomain.UnhandledException|] += (s, e) => {{ }};
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region DomainUnload Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Subscribes_To_DomainUnload()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        [|System.AppDomain.CurrentDomain.DomainUnload|] += (s, e) => {{ }};
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Unsubscribe Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Unsubscribes_From_AppDomainEvent()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        [|System.AppDomain.CurrentDomain.ProcessExit|] -= (s, e) => {{ }};
     }}
 }}
 ";

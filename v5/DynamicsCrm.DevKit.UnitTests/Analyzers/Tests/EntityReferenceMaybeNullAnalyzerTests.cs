@@ -66,5 +66,21 @@ public class Sample
             var src = WrapInMethod("var x = er.ToString();");
             await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
         }
+
+        [Fact]
+        public async Task Diagnostic_When_Assigning_Id_To_GuidNullable()
+        {
+            // Assigning EntityReference.Id (Guid?) to a variable triggers the NullableTargetTypes check
+            var src = WrapInMethod("System.Guid? id = er.[|Id|];");
+            await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Assigning_LeftSide_Of_Assignment()
+        {
+            // When EntityReference is on the left side of an assignment, it's not dereferenced
+            var src = WrapInMethod("var name = \"test\"; er.Name = name;");
+            await CSharpAnalyzerVerifier<EntityReferenceMaybeNullAnalyzer>.VerifyAnalyzerAsync(src);
+        }
     }
 }

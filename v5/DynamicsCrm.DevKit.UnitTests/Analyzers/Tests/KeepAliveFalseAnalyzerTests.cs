@@ -36,8 +36,8 @@ namespace System.Net.Http
 }
 namespace System.Net
 {
-    public class HttpWebRequest { }
-    public class WebRequest { }
+    public class HttpWebRequest { public bool KeepAlive { get; set; } }
+    public class WebRequest { public bool KeepAlive { get; set; } }
 }
 ";
 
@@ -106,6 +106,34 @@ public class RegularClass
             {
                 client.DefaultRequestHeaders.ConnectionClose = true;
             }
+            ");
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region WebRequest Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_NewWebRequest()
+        {
+            var src = WrapInPlugin("var r = [|new System.Net.WebRequest()|];");
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_NewHttpWebRequest()
+        {
+            var src = WrapInPlugin("var r = [|new System.Net.HttpWebRequest()|];");
+            await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Sets_KeepAlive_False()
+        {
+            var src = WrapInPlugin(@"
+            var request = new System.Net.WebRequest();
+            request.KeepAlive = false;
             ");
             await CSharpAnalyzerVerifier<KeepAliveFalseAnalyzer>.VerifyAnalyzerAsync(src);
         }

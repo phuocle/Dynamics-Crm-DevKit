@@ -145,5 +145,29 @@ public class RegularClass
         }
 
         #endregion
+
+        #region NativeActivity Tests
+
+        [Fact]
+        public async Task Diagnostic_When_ExecuteMultipleRequest_In_NativeActivity()
+        {
+            var src = $@"
+{XrmSdkStub}
+namespace System.Activities
+{{
+    public abstract class NativeActivity : System.Activities.CodeActivity {{ }}
+}}
+public class TestWorkflow : System.Activities.NativeActivity
+{{
+    protected override void Execute(object context)
+    {{
+        var r = [|new Microsoft.Xrm.Sdk.Messages.ExecuteMultipleRequest()|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<BatchRequestInPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

@@ -122,6 +122,17 @@ public class RegularClass
 
         #endregion
 
+        #region TaskFactory.StartNew Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_TaskFactoryStartNew()
+        {
+            var src = WrapInPlugin("[|System.Threading.Tasks.Task.Factory.StartNew|](() => { });");
+            await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
         #region Workflow Tests
 
         [Fact]

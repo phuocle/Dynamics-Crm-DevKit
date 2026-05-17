@@ -123,5 +123,78 @@ public class RegularClass
         }
 
         #endregion
+
+        #region Workflow Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Workflow_Uses_GetAwaiterGetResult()
+        {
+            var src = $@"
+{Stubs}
+namespace System.Activities
+{{
+    public abstract class CodeActivity
+    {{
+        protected abstract void Execute(object context);
+    }}
+}}
+public class TestWorkflow : System.Activities.CodeActivity
+{{
+    protected override void Execute(object context)
+    {{
+        var task = System.Threading.Tasks.Task.Run(() => {{ }});
+        [|task.GetAwaiter().GetResult()|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Workflow_Uses_TaskWait()
+        {
+            var src = $@"
+{Stubs}
+namespace System.Activities
+{{
+    public abstract class CodeActivity
+    {{
+        protected abstract void Execute(object context);
+    }}
+}}
+public class TestWorkflow : System.Activities.CodeActivity
+{{
+    protected override void Execute(object context)
+    {{
+        var task = System.Threading.Tasks.Task.Run(() => {{ }});
+        [|task.Wait()|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Task<T>.Wait Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_Generic_TaskWait()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var task = new System.Threading.Tasks.Task<int>();
+        [|task.Wait()|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

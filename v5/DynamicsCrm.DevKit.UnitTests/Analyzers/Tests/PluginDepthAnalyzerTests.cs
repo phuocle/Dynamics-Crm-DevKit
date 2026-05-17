@@ -137,5 +137,23 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region ExpressionBody Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ExpressionBody()
+        {
+            var src = $@"
+{Stubs}
+public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider) => DoWork();
+    private void DoWork() {{ }}
+}}
+";
+            await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

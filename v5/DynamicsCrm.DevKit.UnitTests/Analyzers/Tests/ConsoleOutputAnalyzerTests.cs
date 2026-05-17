@@ -118,6 +118,60 @@ public class RegularClass
 
         #endregion
 
+        #region Console.SetOut Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ConsoleSetOut()
+        {
+            var src = WrapInPlugin("[|System.Console.SetOut|](null);");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Console.SetError Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ConsoleSetError()
+        {
+            var src = WrapInPlugin("[|System.Console.SetError|](null);");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Console Cursor/Window Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ConsoleSetCursorPosition()
+        {
+            var src = WrapInPlugin("[|System.Console.SetCursorPosition|](0, 0);");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ConsoleSetWindowPosition()
+        {
+            var src = WrapInPlugin("[|System.Console.SetWindowPosition|](0, 0);");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ConsoleSetWindowSize()
+        {
+            var src = WrapInPlugin("[|System.Console.SetWindowSize|](80, 25);");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Uses_ConsoleSetBufferSize()
+        {
+            var src = WrapInPlugin("[|System.Console.SetBufferSize|](80, 300);");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
         #region Workflow Tests
 
         [Fact]

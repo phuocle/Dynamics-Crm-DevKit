@@ -51,6 +51,13 @@ public class Sample
         }
 
         [Fact]
+        public async Task Diagnostic_When_New_ExecuteFetchResponse()
+        {
+            var src = WrapInMethod("var r = [|new Microsoft.Crm.Sdk.Messages.ExecuteFetchResponse()|];");
+            await CSharpAnalyzerVerifier<DeprecatedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_Not_Deprecated_Request()
         {
             var src = WrapInMethod("var r = new Microsoft.Crm.Sdk.Messages.RetrieveRequest();");

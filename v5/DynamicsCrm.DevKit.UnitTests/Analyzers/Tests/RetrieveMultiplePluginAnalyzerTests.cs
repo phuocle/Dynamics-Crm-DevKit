@@ -79,5 +79,18 @@ public class {className} : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region Case-Insensitive Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Registered_On_retrieve_Lowercase()
+        {
+            var src = WrapCode(
+                @"[DynamicsCrm.DevKit.Shared.CrmPluginRegistration([|""retrieve""|], ""account"", DynamicsCrm.DevKit.Shared.StageEnum.PostOperation, DynamicsCrm.DevKit.Shared.ExecutionModeEnum.Synchronous, """", ""Retrieve Account"")]",
+                "RetrievePluginLower");
+            await CSharpAnalyzerVerifier<RetrieveMultiplePluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

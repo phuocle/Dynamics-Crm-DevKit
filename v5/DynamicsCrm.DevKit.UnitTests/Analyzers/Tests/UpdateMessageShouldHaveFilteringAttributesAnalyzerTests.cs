@@ -182,5 +182,23 @@ public class PluginSample
         }
 
         #endregion
+
+        #region Named Argument Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Update_NamedArgs_FilteringAttributes_Empty()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(message: \"update\", [|filteringAttributes: \"\"|])]");
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Create_NamedArgs_FilteringAttributes_Asterisk()
+        {
+            var src = WrapInClass("[CrmPluginRegistration(message: \"create\", [|filteringAttributes: \"*\"|])]");
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

@@ -91,5 +91,25 @@ public class Sample
             var src = WrapWithAttribute(attr);
             await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
         }
+
+        #region Image3 / Image4 Tests
+
+        [Fact]
+        public async Task PreCreate_With_Image3Type_PreImage()
+        {
+            var attr = "[CrmPluginRegistration(\"create\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image3Type = ImageTypeEnum.PreImage|}, Image3Attributes = \"name\")]";
+            var src = WrapWithAttribute(attr);
+            await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task PreDelete_With_Image4Type_PostImage()
+        {
+            var attr = "[CrmPluginRegistration(\"delete\", stage: StageEnum.PreOperation, {|DEVKIT1003:Image4Type = ImageTypeEnum.PostImage|}, Image4Attributes = \"name\")]";
+            var src = WrapWithAttribute(attr);
+            await CSharpAnalyzerVerifier<PluginImageAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }
