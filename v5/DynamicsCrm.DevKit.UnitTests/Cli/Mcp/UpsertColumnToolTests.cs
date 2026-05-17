@@ -455,6 +455,6 @@ public class UpsertColumnToolTests
         CollectionAssert.Contains(paramNames, "is_audit_enabled");
         CollectionAssert.Contains(paramNames, "is_valid_for_advanced_find");
         CollectionAssert.Contains(paramNames, "solution_name");
-        CollectionAssert.Contains(paramNames, "auto_publish");
+        CollectionAssert.Contains(paramNames, "schema_name");
     }
 }

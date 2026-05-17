@@ -411,7 +411,7 @@ public class UpsertRelationshipToolTests
         CollectionAssert.Contains(paramNames, "menu_order");
         CollectionAssert.Contains(paramNames, "lookup_display_name");
         CollectionAssert.Contains(paramNames, "solution_name");
-        CollectionAssert.Contains(paramNames, "auto_publish");
+        CollectionAssert.Contains(paramNames, "is_hierarchical");
     }
 
     [TestMethod]

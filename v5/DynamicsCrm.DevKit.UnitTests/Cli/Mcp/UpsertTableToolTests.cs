@@ -84,12 +84,12 @@ public class UpsertTableToolTests
     }
 
     [TestMethod]
-    public void UpsertTableTool_AutoPublish_DefaultIsTrue()
+    public void UpsertTableTool_IsSearchEnabled_DefaultIsNull()
     {
         var method = ToolType.GetMethod("upsert_table");
-        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "auto_publish");
-        Assert.IsNotNull(param, "auto_publish parameter must exist");
-        Assert.AreEqual(true, param.DefaultValue, "Default auto_publish should be true");
+        var param = System.Array.Find(method!.GetParameters(), p => p.Name == "is_search_enabled");
+        Assert.IsNotNull(param, "is_search_enabled parameter must exist");
+        Assert.IsNull(param.DefaultValue, "Default is_search_enabled should be null");
     }
 
     [TestMethod]

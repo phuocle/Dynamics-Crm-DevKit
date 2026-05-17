@@ -174,7 +174,7 @@ public class ManageEnvironmentVariableToolTests
         // Read the IL or source to verify there's only one DryRun check
         // For unit testing, we verify the method signature accepts all expected params
         var parameters = method.GetParameters();
-        Assert.AreEqual(7, parameters.Length,
-            "HandleUpdate should have 7 params: existingDef, variableName, displayName, defaultValue, currentValue, description, autoPublish");
+        Assert.AreEqual(6, parameters.Length,
+            "HandleUpdate should have 6 params: existingDef, variableName, displayName, defaultValue, currentValue, description");
     }
 }

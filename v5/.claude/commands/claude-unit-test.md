@@ -10,8 +10,8 @@ Run **all** unit tests in `DynamicsCrm.DevKit.UnitTests` (both net48 Analyzer te
 $ProjectRoot = "d:\github\Dynamics-Crm-DevKit\v5"
 
 # Check and install dotnet-coverage
-$toolList = dotnet tool list --global 2>&1
-if ($toolList -notmatch "dotnet-coverage") {
+$toolList = dotnet tool list --global 2>&1 | Out-String
+if ($toolList -notmatch "(?m)^\s*dotnet-coverage\s+") {
     Write-Host "Installing dotnet-coverage..." -ForegroundColor Yellow
     dotnet tool install --global dotnet-coverage
 }
@@ -20,7 +20,7 @@ else {
 }
 
 # Check and install ReportGenerator
-if ($toolList -notmatch "dotnet-reportgenerator-globaltool") {
+if ($toolList -notmatch "(?m)^\s*dotnet-reportgenerator-globaltool\s+") {
     Write-Host "Installing ReportGenerator..." -ForegroundColor Yellow
     dotnet tool install --global dotnet-reportgenerator-globaltool
 }
@@ -89,8 +89,7 @@ if (Test-Path $coverageFileAnalyzer) { $coverageFiles += $coverageFileAnalyzer }
 if (Test-Path $coverageFileCli) { $coverageFiles += $coverageFileCli }
 
 if ($coverageFiles.Count -gt 0) {
-    $inputFiles = $coverageFiles -join " "
-    Invoke-Expression "dotnet-coverage merge -f cobertura -o `"$mergedCoverage`" $inputFiles"
+    dotnet-coverage merge -f cobertura -o "$mergedCoverage" @coverageFiles
     Write-Host "Merged coverage: $mergedCoverage" -ForegroundColor Green
 }
 else {
