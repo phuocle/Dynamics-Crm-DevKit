@@ -181,5 +181,79 @@ public class MyClass
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Non_Metadata_Type()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new Microsoft.Xrm.Sdk.Messages.RetrieveEntityRequest();
+        request.MetadataId = System.Guid.NewGuid();
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_RetrieveAllOptionSets_RetrieveAsIfPublished_True()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new Microsoft.Xrm.Sdk.Messages.RetrieveAllOptionSetsRequest();
+        [|request.RetrieveAsIfPublished = true|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_RetrieveOptionSet_RetrieveAsIfPublished_True()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new Microsoft.Xrm.Sdk.Messages.RetrieveOptionSetRequest();
+        [|request.RetrieveAsIfPublished = true|];
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_RetrieveEntityKey_ObjectInitializer_True()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new Microsoft.Xrm.Sdk.Messages.RetrieveEntityKeyRequest
+        {{
+            [|RetrieveAsIfPublished = true|]
+        }};
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

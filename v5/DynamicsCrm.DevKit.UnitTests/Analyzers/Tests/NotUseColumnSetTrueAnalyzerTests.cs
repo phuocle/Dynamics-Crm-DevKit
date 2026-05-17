@@ -81,27 +81,43 @@ public class Sample
         }
 
         [Fact]
-        public async Task NoDiagnostic_When_NonColumnSet_AllColumns_true()
+        public async Task Diagnostic_When_String_Contains_AllAttributes_Case_Insensitive()
         {
-            // Assigning AllColumns=true on a type that is not ColumnSet should not trigger the analyzer
+            var src = WrapInMethod("var s = \"<fetch><entity><[|ALL-ATTRIBUTES|] /></entity></fetch>\";");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_String_Has_No_AllAttributes()
+        {
+            var src = WrapInMethod("var s = \"<fetch><entity><attribute name='name'/></entity></fetch>\";");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Not_ColumnSet_Constructor_With_True()
+        {
             var src = @"
-namespace X
-{
-    public class SomeOtherType
-    {
-        public bool AllColumns { get; set; }
-    }
-}
 public class Sample
 {
     public void Run()
     {
-        var x = new X.SomeOtherType();
-        x.AllColumns = true;
+        var x = new SomeClass(true);
     }
+}
+public class SomeClass
+{
+    public SomeClass(bool flag) { }
 }
 ";
             await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public void Initialize_WithNullContext_ThrowsArgumentNullException()
+        {
+            var analyzer = new NotUseColumnSetTrueAnalyzer();
+            Assert.Throws<System.ArgumentNullException>(() => analyzer.Initialize(null));
         }
     }
 }

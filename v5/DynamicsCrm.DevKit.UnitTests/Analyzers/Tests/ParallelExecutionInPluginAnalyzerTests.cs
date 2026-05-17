@@ -150,5 +150,23 @@ public class RegularClass
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Not_Parallel_Method_In_Plugin()
+        {
+            var src = WrapInPlugin("System.Console.WriteLine(\"test\");");
+            await CSharpAnalyzerVerifier<ParallelExecutionInPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public void Initialize_WithNullContext_ThrowsArgumentNullException()
+        {
+            var analyzer = new ParallelExecutionInPluginAnalyzer();
+            Assert.Throws<System.ArgumentNullException>(() => analyzer.Initialize(null));
+        }
+
+        #endregion
     }
 }

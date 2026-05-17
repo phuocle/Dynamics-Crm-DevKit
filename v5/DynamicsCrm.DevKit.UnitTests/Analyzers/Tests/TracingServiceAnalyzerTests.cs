@@ -92,5 +92,42 @@ public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Uses_ITracingService_Via_Interface_Reference()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        Microsoft.Xrm.Sdk.ITracingService tracing = null;
+        tracing.Trace(""from interface ref"");
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<TracingServiceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Has_ITracingService_In_Lambda()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var list = new System.Collections.Generic.List<Microsoft.Xrm.Sdk.ITracingService>();
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<TracingServiceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

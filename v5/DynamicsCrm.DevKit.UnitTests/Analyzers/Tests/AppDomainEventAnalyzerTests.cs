@@ -170,5 +170,54 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_NonAppDomain_Event()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var btn = new System.Windows.Forms.Button();
+        btn.Click += (s, e) => {{ }};
+    }}
+}}
+namespace System.Windows.Forms
+{{
+    public class Button
+    {{
+        public event System.EventHandler Click;
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_ProblematicEventName_On_NonAppDomain_Type()
+        {
+            var src = $@"
+{Stubs}
+public class MyAppDomain
+{{
+    public event System.EventHandler ProcessExit;
+}}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var ad = new MyAppDomain();
+        ad.ProcessExit += (s, e) => {{ }};
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<AppDomainEventAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

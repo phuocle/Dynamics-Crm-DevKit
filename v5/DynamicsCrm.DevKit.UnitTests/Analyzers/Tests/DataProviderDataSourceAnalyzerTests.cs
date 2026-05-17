@@ -130,5 +130,108 @@ public class RetrieveDataProviderNamed : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_NonDataProvider_PluginType_With_Empty_DataSource()
+        {
+            var src = WrapCode(
+                @"[DynamicsCrm.DevKit.Shared.CrmPluginRegistration(""MyPlugin"", ""Create"", DynamicsCrm.DevKit.Shared.PluginType.Plugin, DataSource = """")]",
+                "CreatePlugin");
+            await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Not_CrmPluginRegistration()
+        {
+            var src = @"
+namespace Microsoft.Xrm.Sdk
+{
+    public interface IPlugin
+    {
+        void Execute(System.IServiceProvider serviceProvider);
+    }
+}
+namespace DynamicsCrm.DevKit.Shared
+{
+    public enum PluginType { Plugin = 0, CustomAction = 1, CustomApi = 2, Workflow = 3, DataProvider = 4 }
+
+    [System.AttributeUsage(System.AttributeTargets.Class)]
+    public class SomeOtherAttribute : System.Attribute { }
+}
+namespace DynamicsCrm.DevKit.Shared
+{
+    [SomeOtherAttribute]
+    public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+    {
+        public void Execute(System.IServiceProvider serviceProvider) { }
+    }
+}
+";
+            await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_DataSource_Named_Arg_Empty_String()
+        {
+            var src = @"
+namespace Microsoft.Xrm.Sdk
+{
+    public interface IPlugin
+    {
+        void Execute(System.IServiceProvider serviceProvider);
+    }
+}
+namespace DynamicsCrm.DevKit.Shared
+{
+    public enum PluginType { Plugin = 0, CustomAction = 1, CustomApi = 2, Workflow = 3, DataProvider = 4 }
+
+    public class CrmPluginRegistrationAttribute : System.Attribute
+    {
+        public CrmPluginRegistrationAttribute(string name, string message) { }
+        public DynamicsCrm.DevKit.Shared.PluginType PluginType { get; set; }
+        public string DataSource { get; set; }
+    }
+}
+[DynamicsCrm.DevKit.Shared.CrmPluginRegistration(""MyPlugin.Retrieve"", ""Retrieve"", PluginType = DynamicsCrm.DevKit.Shared.PluginType.DataProvider, [|DataSource = """"|])]
+public class RetrieveDataProviderEmptyDS : Microsoft.Xrm.Sdk.IPlugin
+{
+    public void Execute(System.IServiceProvider serviceProvider) { }
+}
+";
+            await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_TooFew_Arguments()
+        {
+            var src = @"
+namespace Microsoft.Xrm.Sdk
+{
+    public interface IPlugin
+    {
+        void Execute(System.IServiceProvider serviceProvider);
+    }
+}
+namespace DynamicsCrm.DevKit.Shared
+{
+    public enum PluginType { Plugin = 0, CustomAction = 1, CustomApi = 2, Workflow = 3, DataProvider = 4 }
+
+    public class CrmPluginRegistrationAttribute : System.Attribute
+    {
+        public CrmPluginRegistrationAttribute(string name) { }
+    }
+}
+[DynamicsCrm.DevKit.Shared.CrmPluginRegistration(""MyPlugin"")]
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{
+    public void Execute(System.IServiceProvider serviceProvider) { }
+}
+";
+            await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

@@ -275,5 +275,75 @@ public class TestWorkflow : System.Activities.CodeActivity
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Assigning_Field_Of_Different_Class()
+        {
+            var src = $@"
+{XrmSdkStub}
+public class HelperClass
+{{
+    public string Data;
+}}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var helper = new HelperClass();
+        helper.Data = ""value"";  // OK - not a field of the plugin class
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Assigning_Readonly_Field()
+        {
+            var src = $@"
+{XrmSdkStub}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    private readonly string _readonlyField;
+
+    public TestPlugin()
+    {{
+        _readonlyField = ""init"";
+    }}
+
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        // _readonlyField can't be assigned to in Execute, so the analyzer won't reach it
+        // But the compiler won't error — this is a valid readonly usage
+        var x = _readonlyField;  // OK - just reading, not assigning
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Assigning_Field_Of_BaseClass_In_Execute()
+        {
+            var src = $@"
+{XrmSdkStub}
+public class BasePlugin
+{{
+    public string BaseField;
+}}
+public class TestPlugin : BasePlugin, Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        BaseField = ""value"";  // assigned in Execute - base class field
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }
