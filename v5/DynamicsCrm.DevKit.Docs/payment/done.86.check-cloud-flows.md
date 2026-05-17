@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.86.check-cloud-flows.md`.
+- Prompt: Check for cloud flows with names containing "Payment MCP"; if found, open detail and view the latest few runs and their status.
+- Tool call: mcp__devkit_codex__.get_flows({"name_filter":"Payment MCP","status":"all","max_records":50})
+- Result: {"totalCount":0,"action":"list","flows":[]}

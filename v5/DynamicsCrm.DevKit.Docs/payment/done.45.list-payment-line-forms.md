@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.45.list-payment-line-forms.md`.
+- Prompt: List the forms of the table with display name "Payment Line" and identify which main form should be used.
+- Tool call: mcp__devkit_codex__.manage_form({"action":"list","entity_name":"Payment Line","form_type":2,"include_formxml":false})
+- Result: Payment Line resolves to entity xyz_paymentline. One main form is available: formid 071d7278-98e2-4f45-8e78-4740124b34d4, name Information, type Main, active, unmanaged, version 0. Use the Information main form 071d7278-98e2-4f45-8e78-4740124b34d4.

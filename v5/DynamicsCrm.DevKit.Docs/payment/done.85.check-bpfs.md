@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.85.check-bpfs.md`.
+- Prompt: Check which business process flows are associated with the table with display name "Payment", listing stages and primary entities.
+- Tool call: mcp__devkit_codex__.get_business_process_flows({"entity_name":"Payment","include_stages":true,"max_records":250,"status":"all"})
+- Result: {"totalCount":0,"bpfs":[]}

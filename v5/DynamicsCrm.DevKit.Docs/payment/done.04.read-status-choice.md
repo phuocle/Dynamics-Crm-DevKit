@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.04.read-status-choice.md`.
+- Prompt: Read back the global choice with display name "Payment Status" just created and list all values as human-readable labels only; do not include integer codes, logical names, GUIDs, or any machine-readable identifiers in the result.
+- Tool call: manage_choice({"action":"detail","optionset_name":"Payment Status"})
+- Result: Draft; Sent; Won; Lost; Expired

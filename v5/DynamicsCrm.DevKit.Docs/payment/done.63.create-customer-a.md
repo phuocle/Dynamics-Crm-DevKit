@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.63.create-customer-a.md`.
+- Prompt: Create an Account with display name "Customer A" to use as a sample customer for Payment.
+- Tool call: manage_record(action="create", entity_name="account", fields_json="{\"name\":\"Customer A\"}")
+- Result: {"action":"create","entity":"account","id":"d73da101-9f51-f111-a824-0022480a530f","status":"created","fieldsUpdated":1}

@@ -1,0 +1,8 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.59.hide-activate-deactivate.md`.
+- Prompt: Hide the Activate and Deactivate button on the classic form ribbon of the table with display name "Payment".
+- Tool call: manage_ribbon({"action":"buttons","entity_name":"Payment"})
+- Tool call: manage_ribbon({"action":"update","entity_name":"Payment","backup":true,"operations":"[{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.xyz_payment.Activate\"},{\"action\":\"hide_button\",\"button_id\":\"Mscrm.Form.xyz_payment.Deactivate\"}]"})
+- Tool call: get_system_jobs({"record_id":"fb37d446-9251-f111-a824-0022480a530f"})
+- Tool call: get_system_jobs({"record_id":"fb37d446-9251-f111-a824-0022480a530f"})
+- Tool call: manage_ribbon({"action":"buttons","entity_name":"Payment"})
+- Result: Hidden classic form ribbon buttons for Payment (entity logical name xyz_payment): Mscrm.Form.xyz_payment.Activate and Mscrm.Form.xyz_payment.Deactivate. PublishAllXml async operation fb37d446-9251-f111-a824-0022480a530f succeeded, and readback confirmed both buttons have isHide=true.

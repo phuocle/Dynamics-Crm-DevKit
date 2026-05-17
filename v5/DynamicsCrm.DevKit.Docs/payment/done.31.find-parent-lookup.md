@@ -1,0 +1,5 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.31.find-parent-lookup.md`.
+- Prompt: Check the metadata of the table with display name "Payment Line" and identify the actual logical name of the lookup field pointing to the parent Payment table.
+- Tool call: mcp__devkit_codex__.get_tables({"filter":"Payment Line","custom_only":false})
+- Tool call: mcp__devkit_codex__.get_tables({"entity_name":"xyz_paymentline"})
+- Result: The table with display name "Payment Line" has logical name "xyz_paymentline". The lookup field pointing to the parent Payment table is "xyz_payment" (display name "Payment", type "Lookup -> xyz_payment"). The many-to-one relationship is "xyz_payment_paymentline", with referencedEntity "xyz_payment", referencingEntity "xyz_paymentline", and referencingAttribute "xyz_payment".

@@ -1,0 +1,5 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.05.update-status-colors.md`.
+- Prompt: Update the colors of the global choice with display name "Payment Status": Draft=gray (#808080), Sent=blue (#0070C0), Won=green (#00B050), Lost=red (#FF0000), Expired=orange (#FF7C00); read it back to confirm the colors were applied correctly.
+- Tool call: manage_choice({"action":"update","optionset_name":"Payment Status","option_colors":"Draft:#808080;Sent:#0070C0;Won:#00B050;Lost:#FF0000;Expired:#FF7C00"})
+- Tool call: manage_choice({"action":"detail","optionset_name":"Payment Status"})
+- Result: Updated global choice `xyz_paymentstatus` ("Payment Status") option colors and confirmed readback: Draft=#808080, Sent=#0070C0, Won=#00B050, Lost=#FF0000, Expired=#FF7C00.

@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.87.check-business-rules.md`.
+- Prompt: Check business rules on the table with display name "Payment" (both active and draft); if any exist, open the first rule and summarize its conditions and actions.
+- Tool call: mcp__devkit_codex__get_business_rules({"entity_name":"Payment","max_records":200})
+- Result: No business rules were found for the Payment table. The resolved entity logical name was xyz_payment, and the returned rule count was 0, so there was no first rule to open or summarize.

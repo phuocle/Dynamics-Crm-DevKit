@@ -1,0 +1,8 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.71.enable-dataverse-search.md`.
+- Prompt: Enable Dataverse Search for the table with display name "Payment" and the table with display name "Payment Line" in the solution with display name "Payment MCP Solution".
+- Tool call: mcp__devkit_codex__.get_solution_components({"solution_name":"Payment MCP Solution"})
+- Tool call: mcp__devkit_codex__.get_tables({"filter":"Payment"})
+- Tool call: mcp__devkit_codex__.upsert_table({"entity_name":"xyz_payment","is_search_enabled":true})
+- Tool call: mcp__devkit_codex__.upsert_table({"entity_name":"xyz_paymentline","is_search_enabled":true})
+- Tool call: mcp__devkit_codex__.publish_customizations({"entities":"xyz_payment,xyz_paymentline"})
+- Result: Enabled Dataverse Search for Payment (xyz_payment) and Payment Line (xyz_paymentline) in Payment MCP Solution, then published both tables. Both tables now report isSearchEnabled=true and syncToExternalSearchIndex=true.

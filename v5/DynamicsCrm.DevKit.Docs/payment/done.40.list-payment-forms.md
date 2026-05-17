@@ -1,0 +1,4 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.40.list-payment-forms.md`.
+- Prompt: List the forms of the table with display name "Payment" and identify which main form should be used for layout editing.
+- Tool call: manage_form({"action":"list","entity_name":"Payment","form_type":0,"include_formxml":false})
+- Result: Found 3 active forms for Payment (logical name xyz_payment): c3c0b997-3c8b-4019-a63f-f481cb2ba7ab named Information, type MainInteractive; 89b9e6fa-9336-4d2c-bbb8-868c8cfb7a04 named Information, type Main; 770d90b5-c904-478f-b904-f93551f5c7e4 named Information, type QuickView. Use the active Main form for layout editing: Information (formid 89b9e6fa-9336-4d2c-bbb8-868c8cfb7a04).

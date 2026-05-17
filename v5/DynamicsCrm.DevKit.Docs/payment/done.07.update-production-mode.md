@@ -1,0 +1,5 @@
+- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.07.update-production-mode.md`.
+- Prompt: Update the current value of the environment variable with display name "Payment Production Mode" to staging, then read it back to confirm.
+- Tool call: mcp__devkit_codex__.manage_environment_variable({"action":"update","variable_name":"Payment Production Mode","value":"staging"})
+- Tool call: mcp__devkit_codex__.manage_environment_variable({"action":"detail","variable_name":"Payment Production Mode"})
+- Result: {"update":{"action":"updated","variableName":"xyz_PaymentProductionMode","displayName":"Payment Production Mode","type":"String","defaultValue":"dev","currentValue":"staging"},"detail":{"action":"detail","variableName":"xyz_PaymentProductionMode","displayName":"Payment Production Mode","type":"String","defaultValue":"dev","currentValue":"staging"}}
