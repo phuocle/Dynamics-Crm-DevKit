@@ -382,6 +382,147 @@ public class ManageFormToolTests
         StringAssert.Contains(message, "{\"action\":\"manage_subgrid\",\"manage_action\":\"add\"");
     }
 
+    [TestMethod]
+    public void FormXmlOperationsRunner_ManageTabAddUpdateMoveRemove_ManipulatesTabs()
+    {
+        var formXml = RunFormXmlOperations("<form><tabs /></form>", """
+[
+  {
+    "action": "manage_tab",
+    "manage_action": "add",
+    "label": "General",
+    "name": "tab_general",
+    "tab_columns": 2,
+    "sections": [
+      { "label": "Summary", "name": "general_sec_summary" },
+      { "label": "Details", "name": "general_sec_details", "tab_column": 2 }
+    ]
+  },
+  {
+    "action": "manage_tab",
+    "manage_action": "add",
+    "label": "Audit",
+    "name": "tab_audit",
+    "position": "first"
+  },
+  {
+    "action": "manage_tab",
+    "manage_action": "update",
+    "tab": "tab_general",
+    "new_name": "tab_general_renamed",
+    "label": "General Renamed",
+    "visible": false,
+    "show_label": false,
+    "hide_on_phone": true,
+    "expanded": false
+  },
+  {
+    "action": "manage_tab",
+    "manage_action": "move",
+    "tab": "tab_general_renamed",
+    "position": "after:tab_audit"
+  },
+  {
+    "action": "manage_tab",
+    "manage_action": "remove",
+    "tab": "tab_general_renamed"
+  }
+]
+""");
+
+        StringAssert.Contains(formXml, "tab name=\"tab_audit\"");
+        Assert.IsFalse(formXml.Contains("tab_general_renamed", StringComparison.Ordinal));
+        Assert.IsFalse(formXml.Contains("General Renamed", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void FormXmlOperationsRunner_ManageSectionAddUpdateMoveRemove_ManipulatesSections()
+    {
+        var formXml = RunFormXmlOperations("""
+<form>
+  <tabs>
+    <tab name="tab_a">
+      <labels><label description="A" languagecode="1033" /></labels>
+      <columns><column width="100%"><sections><section name="a_sec_existing"><labels><label description="Existing" languagecode="1033" /></labels><rows /></section></sections></column></columns>
+    </tab>
+    <tab name="tab_b">
+      <labels><label description="B" languagecode="1033" /></labels>
+      <columns><column width="100%"><sections /></column></columns>
+    </tab>
+  </tabs>
+</form>
+""", """
+[
+  {
+    "action": "manage_section",
+    "manage_action": "add",
+    "tab": "tab_a",
+    "label": "New Section",
+    "name": "a_sec_new",
+    "section_columns": 2,
+    "position": "after:a_sec_existing",
+    "visible": false,
+    "show_label": false,
+    "hide_on_phone": true
+  },
+  {
+    "action": "manage_section",
+    "manage_action": "update",
+    "tab": "tab_a",
+    "section": "a_sec_new",
+    "new_name": "a_sec_new_renamed",
+    "label": "Renamed Section",
+    "visible": true,
+    "show_label": true,
+    "hide_on_phone": false
+  },
+  {
+    "action": "manage_section",
+    "manage_action": "move",
+    "tab": "tab_a",
+    "section": "a_sec_new_renamed",
+    "target_tab": "tab_b",
+    "position": "first"
+  },
+  {
+    "action": "manage_section",
+    "manage_action": "remove",
+    "tab": "tab_b",
+    "section": "a_sec_new_renamed"
+  }
+]
+""");
+
+        StringAssert.Contains(formXml, "section name=\"a_sec_existing\"");
+        Assert.IsFalse(formXml.Contains("a_sec_new_renamed", StringComparison.Ordinal));
+        Assert.IsFalse(formXml.Contains("Renamed Section", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void FormXmlOperationsRunner_ManageTabMoveWithMissingReference_ListsAvailableTabs()
+    {
+        var message = RunFormXmlOperationsError("""
+<form>
+  <tabs>
+    <tab name="tab_general"><labels><label description="General" languagecode="1033" /></labels><columns /></tab>
+    <tab name="tab_other"><labels><label description="Other" languagecode="1033" /></labels><columns /></tab>
+  </tabs>
+</form>
+""", """
+[
+  {
+    "action": "manage_tab",
+    "manage_action": "move",
+    "tab": "tab_general",
+    "position": "before:tab_missing"
+  }
+]
+""");
+
+        StringAssert.Contains(message, "tab_missing");
+        StringAssert.Contains(message, "Available: tab_other");
+    }
+
     private static string RunFormXmlOperations(string formXml, string operationsJson)
     {
         var runnerType = ToolType.Assembly.GetType("DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperationsRunner")!;

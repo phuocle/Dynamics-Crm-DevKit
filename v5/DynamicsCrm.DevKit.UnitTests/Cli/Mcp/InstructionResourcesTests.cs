@@ -129,4 +129,48 @@ public class InstructionResourcesTests
 
         Assert.IsTrue(result.Contains("width"), "Should contain column width guidance");
     }
+
+    [TestMethod]
+    public void ManageAppInstructions_ContainsNavigationWorkflow()
+    {
+        var result = InstructionResources.ManageAppInstructions();
+
+        Assert.IsTrue(result.Length > 0);
+        StringAssert.Contains(result, "Read Before Write Workflow");
+        StringAssert.Contains(result, "update_navigation");
+        StringAssert.Contains(result, "add_area");
+    }
+
+    [TestMethod]
+    public void SchemaToolsGuide_ContainsTableColumnRelationshipGuidance()
+    {
+        var result = InstructionResources.SchemaToolsGuide();
+
+        Assert.IsTrue(result.Length > 0);
+        StringAssert.Contains(result, "upsert_table");
+        StringAssert.Contains(result, "upsert_column");
+        StringAssert.Contains(result, "upsert_relationship");
+    }
+
+    [TestMethod]
+    public void DataOperationsGuide_ContainsBulkAndSingleRecordGuidance()
+    {
+        var result = InstructionResources.DataOperationsGuide();
+
+        Assert.IsTrue(result.Length > 0);
+        StringAssert.Contains(result, "manage_record");
+        StringAssert.Contains(result, "execute_fetchxml");
+        StringAssert.Contains(result, "search_records");
+    }
+
+    [TestMethod]
+    public void ServerLogicGuide_ContainsPluginWorkflowFlowGuidance()
+    {
+        var result = InstructionResources.ServerLogicGuide();
+
+        Assert.IsTrue(result.Length > 0);
+        StringAssert.Contains(result, "get_plugins");
+        StringAssert.Contains(result, "get_workflows");
+        StringAssert.Contains(result, "get_flows");
+    }
 }

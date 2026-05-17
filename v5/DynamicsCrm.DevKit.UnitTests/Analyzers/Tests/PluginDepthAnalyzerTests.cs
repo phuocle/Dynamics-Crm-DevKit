@@ -155,5 +155,39 @@ public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Class_Not_Implementing_IPlugin_Has_Execute()
+        {
+            var src = $@"
+{Stubs}
+public class NotAPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var x = 1;
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Has_Another_Interface()
+        {
+            var src = $@"
+{Stubs}
+public class [|TestPlugin|] : Microsoft.Xrm.Sdk.IPlugin, System.IDisposable
+{{
+    public void Execute(System.IServiceProvider serviceProvider) {{ }}
+    public void Dispose() {{ }}
+}}
+";
+            await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

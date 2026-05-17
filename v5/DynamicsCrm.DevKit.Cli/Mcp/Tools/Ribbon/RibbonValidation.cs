@@ -13,7 +13,13 @@ using System.Xml.Schema;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 {
-    internal sealed class RibbonValidation
+    internal interface IRibbonValidation
+    {
+        string ValidateWebResourceExists(string webResourceName);
+        bool IsOobButton(string entityName, string buttonId);
+    }
+
+    internal sealed class RibbonValidation : IRibbonValidation
     {
         private readonly ServiceClient _serviceClient;
         private static XmlSchemaSet _cachedSchemaSet;

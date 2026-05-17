@@ -196,5 +196,60 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
         }
 
         #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Uses_GetResult_Without_GetAwaiter()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var awaiter = new System.Threading.Tasks.TaskAwaiter();
+        awaiter.GetResult();
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Uses_Result_On_NonGeneric_Task()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var task = new System.Threading.Tasks.Task();
+        var result = task.GetAwaiter();
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Result_Used_In_ToString_Chain()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var task = new System.Threading.Tasks.Task<int>();
+        var x = [|task.Result|].ToString();
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
     }
 }

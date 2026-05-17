@@ -8,10 +8,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 {
     internal sealed class RibbonFlyoutOperations
     {
-        private readonly RibbonValidation _validation;
+        private readonly IRibbonValidation _validation;
         private readonly int _lcid;
 
-        public RibbonFlyoutOperations(RibbonValidation validation, int lcid)
+        public RibbonFlyoutOperations(IRibbonValidation validation, int lcid)
         {
             _validation = validation;
             _lcid = lcid;

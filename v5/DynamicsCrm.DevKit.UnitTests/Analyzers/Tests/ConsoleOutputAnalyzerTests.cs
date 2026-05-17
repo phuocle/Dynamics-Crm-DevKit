@@ -172,6 +172,24 @@ public class RegularClass
 
         #endregion
 
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Uses_NonConsole_Method()
+        {
+            var src = WrapInPlugin("System.Diagnostics.Debug.WriteLine(\"test\");");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Uses_ConsoleOpenStandardOutput()
+        {
+            var src = WrapInPlugin("System.Console.OpenStandardOutput();");
+            await CSharpAnalyzerVerifier<ConsoleOutputAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
         #region Workflow Tests
 
         [Fact]

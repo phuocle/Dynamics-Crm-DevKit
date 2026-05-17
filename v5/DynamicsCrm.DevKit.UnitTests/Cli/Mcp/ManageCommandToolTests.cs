@@ -327,6 +327,128 @@ public class ManageCommandToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
+    public void Validation_HideShowMissingLookupParts_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        Assert.IsTrue(tool.manage_command(action: "hide").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "Open").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "Open", entity_name: "account").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "hide", label: "Open", entity_name: "account", location: "form").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "show").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "show", label: "Open").IsError == true);
+        Assert.IsTrue(tool.manage_command(action: "show", label: "Open", entity_name: "account").IsError == true);
+    }
+
+    [TestMethod]
+    public void Validation_HideShowInvalidGuidAndLocation_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "hide", command_id: "bad-guid")), "not a valid GUID");
+        StringAssert.Contains(GetText(tool.manage_command(action: "show", command_id: "bad-guid")), "not a valid GUID");
+        StringAssert.Contains(GetText(tool.manage_command(action: "hide", label: "Open", entity_name: "account", location: "bad", app_id: "00000000-0000-0000-0000-000000000001")), "Invalid location");
+        StringAssert.Contains(GetText(tool.manage_command(action: "show", label: "Open", entity_name: "account", location: "bad")), "Invalid location");
+    }
+
+    [TestMethod]
+    public void Validation_HideShowDryRun_ReturnBlocked()
+    {
+        var tool = CreateDryRunTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "hide", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+        StringAssert.Contains(GetText(tool.manage_command(action: "show", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+    }
+
+    [TestMethod]
+    public void Validation_AddFlyoutInputs_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout")), "entity_name is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account")), "location is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form")), "label is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More")), "items is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "bad", label: "More", items: "[]")), "Invalid location");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More", items: "{bad")), "Invalid items JSON");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More", items: "{}")), "items must be a JSON array");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More", items: "[]")), "items array must have at least 1 item");
+    }
+
+    [TestMethod]
+    public void Validation_AddFlyoutDryRun_ReturnsBlocked()
+    {
+        var tool = CreateDryRunTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout", entity_name: "account", location: "form", label: "More", items: "[{\"label\":\"One\"}]")), "DRY-RUN");
+    }
+
+    [TestMethod]
+    public void Validation_UpdateFlyoutInputs_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "update_flyout")), "command_id is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "update_flyout", command_id: "bad-guid")), "not a valid GUID");
+        StringAssert.Contains(GetText(CreateDryRunTool().manage_command(action: "update_flyout", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+    }
+
+    [TestMethod]
+    public void Validation_AddSplitButtonInputs_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button")), "entity_name is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account")), "location is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form")), "label is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More")), "items is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "bad", label: "More", items: "[]")), "Invalid location");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", onclick_type: "bad", items: "[]")), "Invalid onclick_type");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", items: "{bad")), "Invalid items JSON");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", items: "{}")), "items must be a JSON array");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", items: "[]")), "items array must have at least 1 item");
+    }
+
+    [TestMethod]
+    public void Validation_AddSplitButtonDryRun_ReturnsBlocked()
+    {
+        var tool = CreateDryRunTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_split_button", entity_name: "account", location: "form", label: "More", items: "[{\"label\":\"One\"}]")), "DRY-RUN");
+    }
+
+    [TestMethod]
+    public void Validation_UpdateSplitButtonInputs_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "update_split_button")), "command_id is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "update_split_button", command_id: "bad-guid")), "not a valid GUID");
+        StringAssert.Contains(GetText(CreateDryRunTool().manage_command(action: "update_split_button", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+    }
+
+    [TestMethod]
+    public void Validation_FlyoutItemInputs_ReturnErrors()
+    {
+        var tool = CreateTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout_item")), "flyout_command_id is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout_item", flyout_command_id: "bad-guid")), "not a valid GUID");
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout_item", flyout_command_id: "00000000-0000-0000-0000-000000000001")), "label is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "remove_flyout_item")), "command_id is required");
+        StringAssert.Contains(GetText(tool.manage_command(action: "remove_flyout_item", command_id: "bad-guid")), "not a valid GUID");
+    }
+
+    [TestMethod]
+    public void Validation_FlyoutItemDryRun_ReturnsBlocked()
+    {
+        var tool = CreateDryRunTool();
+
+        StringAssert.Contains(GetText(tool.manage_command(action: "add_flyout_item", flyout_command_id: "00000000-0000-0000-0000-000000000001", label: "One")), "DRY-RUN");
+        StringAssert.Contains(GetText(tool.manage_command(action: "remove_flyout_item", command_id: "00000000-0000-0000-0000-000000000001")), "DRY-RUN");
+    }
+
+    [TestMethod]
     public void EscapeXml_SpecialChars_Escaped()
     {
         var result = (string)EscapeXmlMethod.Invoke(null, new object[] { "a&b<c>d'e\"f" })!;

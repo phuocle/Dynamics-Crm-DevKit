@@ -49,6 +49,11 @@
 	<ItemGroup>
 	  <Content Include="icon.ico" />
 	</ItemGroup>
+	<ItemGroup>
+	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+	    <_Parameter1>DynamicsCrm.DevKit.UnitTests</_Parameter1>
+	  </AssemblyAttribute>
+	</ItemGroup>
 	<PropertyGroup>
 		<NoWarn>CVSTBLD002;NU1702;NU5100;CA1416;SYSLIB0057</NoWarn>
 	</PropertyGroup>

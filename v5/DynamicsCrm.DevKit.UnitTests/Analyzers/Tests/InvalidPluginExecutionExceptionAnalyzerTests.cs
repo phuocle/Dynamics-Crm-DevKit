@@ -103,6 +103,26 @@ public class RegularClass
         }
 
         [Fact]
+        public async Task NoDiagnostic_When_Plugin_Throws_Subclass_Of_IPEE()
+        {
+            var src = $@"
+{Stubs}
+public class MyCustomException : Microsoft.Xrm.Sdk.InvalidPluginExecutionException
+{{
+    public MyCustomException(string message) : base(message) {{ }}
+}}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        throw new MyCustomException(""custom"");
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_Plugin_Rethrows()
         {
             var src = WrapInPlugin(@"try { } catch { throw; }");
@@ -113,6 +133,17 @@ public class RegularClass
         public async Task NoDiagnostic_When_NonPlugin_Throws_Exception()
         {
             var src = WrapInRegularClass(@"throw new System.Exception(""error"");");
+            await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        #endregion
+
+        #region Edge Case Tests
+
+        [Fact]
+        public async Task Diagnostic_When_Plugin_Throws_Variable()
+        {
+            var src = WrapInPlugin(@"var ex = new System.InvalidOperationException(""test""); throw [|ex|];");
             await CSharpAnalyzerVerifier<InvalidPluginExecutionExceptionAnalyzer>.VerifyAnalyzerAsync(src);
         }
 

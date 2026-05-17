@@ -1,0 +1,193 @@
+using DynamicsCrm.DevKit.Cli.Mcp;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk.Metadata;
+using ModelContextProtocol.Protocol;
+using System;
+using System.Reflection;
+
+namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
+
+[TestClass]
+public class UpsertColumnCreateDryRunTests
+{
+    private static readonly Type ToolType = typeof(UpsertColumnTool);
+
+    private readonly UpsertColumnTool _tool = new(null!, new McpDryRunOptions { DryRun = true });
+
+    [TestMethod]
+    public void CreateStringAttribute_DryRun_BuildsMetadataWithoutServiceCall()
+    {
+        var result = InvokeCreate("CreateStringAttribute",
+            "account", "devkit_text", "devkit_Text", "Text", "Description",
+            AttributeRequiredLevel.Recommended, 9000, "Email", "devkit");
+
+        AssertDryRun(result, "String", "devkit_text");
+    }
+
+    [TestMethod]
+    public void CreateMemoAttribute_DryRun_ClampsLengthAndAcceptsRichText()
+    {
+        var result = InvokeCreate("CreateMemoAttribute",
+            "account", "devkit_notes", "devkit_Notes", "Notes", "Description",
+            AttributeRequiredLevel.None, 2_000_000, "RichText", "devkit");
+
+        AssertDryRun(result, "Memo", "devkit_notes");
+    }
+
+    [TestMethod]
+    public void CreateIntegerAttribute_DryRun_AcceptsBoundsAndFormat()
+    {
+        var result = InvokeCreate("CreateIntegerAttribute",
+            "account", "devkit_duration", "devkit_Duration", "Duration", "",
+            AttributeRequiredLevel.ApplicationRequired, 1d, 90d, "Duration", "devkit");
+
+        AssertDryRun(result, "Integer", "devkit_duration");
+    }
+
+    [TestMethod]
+    public void CreateDecimalAttribute_DryRun_ClampsPrecision()
+    {
+        var result = InvokeCreate("CreateDecimalAttribute",
+            "account", "devkit_ratio", "devkit_Ratio", "Ratio", "",
+            AttributeRequiredLevel.None, 0d, 100d, 99, "devkit");
+
+        AssertDryRun(result, "Decimal", "devkit_ratio");
+    }
+
+    [TestMethod]
+    public void CreateMoneyAttribute_DryRun_AcceptsPrecisionSource()
+    {
+        var result = InvokeCreate("CreateMoneyAttribute",
+            "account", "devkit_budget", "devkit_Budget", "Budget", "",
+            AttributeRequiredLevel.None, 0d, 1_000d, 8, 2, "devkit");
+
+        AssertDryRun(result, "Money", "devkit_budget");
+    }
+
+    [TestMethod]
+    public void CreateFloatAttribute_DryRun_AcceptsPrecision()
+    {
+        var result = InvokeCreate("CreateFloatAttribute",
+            "account", "devkit_score", "devkit_Score", "Score", "",
+            AttributeRequiredLevel.None, -10d, 10d, 12, "devkit");
+
+        AssertDryRun(result, "Double", "devkit_score");
+    }
+
+    [TestMethod]
+    public void CreateBooleanAttribute_DryRun_UsesCustomLabels()
+    {
+        var result = InvokeCreate("CreateBooleanAttribute",
+            "account", "devkit_enabled", "devkit_Enabled", "Enabled", "",
+            AttributeRequiredLevel.None, "Active", "Inactive", "devkit");
+
+        AssertDryRun(result, "Boolean", "devkit_enabled");
+    }
+
+    [TestMethod]
+    public void CreateDateTimeAttribute_DryRun_DateOnlyForcesDateOnlyFormat()
+    {
+        var result = InvokeCreate("CreateDateTimeAttribute",
+            "account", "devkit_effectiveon", "devkit_EffectiveOn", "Effective On", "",
+            AttributeRequiredLevel.None, "DateAndTime", "DateOnly", "devkit");
+
+        AssertDryRun(result, "DateTime", "devkit_effectiveon");
+    }
+
+    [TestMethod]
+    public void CreatePicklistAttribute_DryRun_ParsesLocalOptions()
+    {
+        var result = InvokeCreate("CreatePicklistAttribute",
+            "account", "devkit_priority", "devkit_Priority", "Priority", "",
+            AttributeRequiredLevel.None,
+            """[{"label":"Low","value":100000000,"color":"#00AA00"},{"label":"High","value":100000001}]""",
+            "", false, "devkit");
+
+        AssertDryRun(result, "Picklist", "devkit_priority");
+    }
+
+    [TestMethod]
+    public void CreateMultiSelectPicklistAttribute_DryRun_ParsesLocalOptions()
+    {
+        var result = InvokeCreate("CreatePicklistAttribute",
+            "account", "devkit_tags", "devkit_Tags", "Tags", "",
+            AttributeRequiredLevel.None,
+            """[{"label":"Internal","value":100000000},{"label":"External","value":100000001}]""",
+            "", true, "devkit");
+
+        AssertDryRun(result, "MultiSelectPicklist", "devkit_tags");
+    }
+
+    [TestMethod]
+    public void CreateCustomerAttribute_DryRun_BuildsTwoRelationships()
+    {
+        var result = InvokeCreate("CreateCustomerAttribute",
+            "devkit_order", "devkit_customer", "devkit_Customer", "Customer", "",
+            AttributeRequiredLevel.None, "devkit", "devkit");
+
+        AssertDryRun(result, "customer", "devkit_customer");
+    }
+
+    [TestMethod]
+    public void CreatePolymorphicLookupAttribute_DryRun_BuildsRelationshipMetadata()
+    {
+        var result = InvokeCreate("CreatePolymorphicLookupAttribute",
+            "devkit_order", "devkit_regarding", "devkit_Regarding", "Regarding", "",
+            AttributeRequiredLevel.None, new[] { "account", "contact" }, "devkit", "devkit");
+
+        AssertDryRun(result, "polymorphic lookup", "devkit_regarding");
+    }
+
+    [TestMethod]
+    public void CreateBigIntAttribute_DryRun_BuildsMetadata()
+    {
+        var result = InvokeCreate("CreateBigIntAttribute",
+            "account", "devkit_externalid", "devkit_ExternalId", "External Id", "",
+            AttributeRequiredLevel.None, "devkit");
+
+        AssertDryRun(result, "BigInt", "devkit_externalid");
+    }
+
+    [TestMethod]
+    public void CreateImageAttribute_DryRun_BuildsMetadata()
+    {
+        var result = InvokeCreate("CreateImageAttribute",
+            "account", "devkit_photo", "devkit_Photo", "Photo", "",
+            AttributeRequiredLevel.None, "devkit");
+
+        AssertDryRun(result, "Image", "devkit_photo");
+    }
+
+    [TestMethod]
+    public void CreateFileAttribute_DryRun_ClampsFileSize()
+    {
+        var result = InvokeCreate("CreateFileAttribute",
+            "account", "devkit_attachment", "devkit_Attachment", "Attachment", "",
+            AttributeRequiredLevel.None, 99_999_999, "devkit");
+
+        AssertDryRun(result, "File", "devkit_attachment");
+    }
+
+    private CallToolResult InvokeCreate(string methodName, params object?[] args)
+    {
+        var method = ToolType.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic)!;
+        try
+        {
+            return (CallToolResult)method.Invoke(_tool, args)!;
+        }
+        catch (TargetInvocationException ex) when (ex.InnerException != null)
+        {
+            throw ex.InnerException;
+        }
+    }
+
+    private static void AssertDryRun(CallToolResult result, string expectedType, string expectedLogicalName)
+    {
+        Assert.IsFalse(result.IsError == true);
+        var text = result.GetText();
+        StringAssert.Contains(text, "Would CREATE");
+        StringAssert.Contains(text, expectedType);
+        StringAssert.Contains(text, expectedLogicalName);
+    }
+}
