@@ -204,6 +204,39 @@ public class RetrieveDataProviderEmptyDS : Microsoft.Xrm.Sdk.IPlugin
         }
 
         [Fact]
+        public async Task Diagnostic_When_DataSource_Is_Empty_Constant()
+        {
+            var src = @"
+namespace Microsoft.Xrm.Sdk
+{
+    public interface IPlugin
+    {
+        void Execute(System.IServiceProvider serviceProvider);
+    }
+}
+namespace DynamicsCrm.DevKit.Shared
+{
+    public enum PluginType { Plugin = 0, CustomAction = 1, CustomApi = 2, Workflow = 3, DataProvider = 4 }
+
+    public class CrmPluginRegistrationAttribute : System.Attribute
+    {
+        public CrmPluginRegistrationAttribute(string name, string message) { }
+        public DynamicsCrm.DevKit.Shared.PluginType PluginType { get; set; }
+        public string DataSource { get; set; }
+    }
+}
+public class RetrieveDataProviderConstDS : Microsoft.Xrm.Sdk.IPlugin
+{
+    private const string EmptyDataSource = """";
+
+    [DynamicsCrm.DevKit.Shared.CrmPluginRegistration(""MyPlugin.Retrieve"", ""Retrieve"", PluginType = DynamicsCrm.DevKit.Shared.PluginType.DataProvider, [|DataSource = EmptyDataSource|])]
+    public void Execute(System.IServiceProvider serviceProvider) { }
+}
+";
+            await CSharpAnalyzerVerifier<DataProviderDataSourceAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_TooFew_Arguments()
         {
             var src = @"

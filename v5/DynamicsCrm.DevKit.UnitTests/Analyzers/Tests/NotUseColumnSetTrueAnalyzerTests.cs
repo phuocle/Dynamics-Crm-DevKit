@@ -74,6 +74,13 @@ public class Sample
         }
 
         [Fact]
+        public async Task NoDiagnostic_When_ColumnSet_False_Constructor()
+        {
+            var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(false);");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_AllColumns_false()
         {
             var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(); cs.AllColumns = false;");

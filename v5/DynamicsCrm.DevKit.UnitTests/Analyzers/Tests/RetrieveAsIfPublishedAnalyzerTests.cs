@@ -141,6 +141,46 @@ public class MyClass
         }
 
         [Fact]
+        public async Task NoDiagnostic_When_Assignment_RetrieveAsIfPublished_False()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new Microsoft.Xrm.Sdk.Messages.RetrieveEntityRequest();
+        request.RetrieveAsIfPublished = false;
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_ObjectInitializer_Is_Not_Metadata_Request()
+        {
+            var src = $@"
+{Stubs}
+public class MyClass
+{{
+    public void Test()
+    {{
+        var request = new OtherRequest
+        {{
+            RetrieveAsIfPublished = true
+        }};
+    }}
+}}
+public class OtherRequest
+{{
+    public bool RetrieveAsIfPublished {{ get; set; }}
+}}
+";
+            await CSharpAnalyzerVerifier<RetrieveAsIfPublishedAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_RetrieveAsIfPublished_NotSet()
         {
             var src = $@"

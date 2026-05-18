@@ -199,6 +199,22 @@ public class PluginSample
             await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
         }
 
+        [Fact]
+        public async Task NoDiagnostics_When_Message_Uses_Nameof_Fallback()
+        {
+            var src = $@"
+{AttributeStub}
+public class PluginSample
+{{
+    [CrmPluginRegistration(message: nameof(update), filteringAttributes: """")]
+    public void Execute() {{ }}
+
+    private void update() {{ }}
+}}
+";
+            await CSharpAnalyzerVerifier<UpdateMessageShouldHaveFilteringAttributesAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
         #endregion
     }
 }

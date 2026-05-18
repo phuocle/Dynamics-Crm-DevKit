@@ -217,6 +217,80 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
         }
 
         [Fact]
+        public async Task NoDiagnostic_When_Plugin_Uses_Standalone_GetResult()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        GetResult();
+    }}
+
+    private void GetResult() {{ }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Plugin_Waits_On_NonTask_Type()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var worker = new Worker();
+        worker.Wait();
+    }}
+
+    private sealed class Worker
+    {{
+        public void Wait() {{ }}
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_TaskResult_Is_Outside_Plugin()
+        {
+            var src = $@"
+{Stubs}
+public class RegularClass
+{{
+    public void Run()
+    {{
+        var task = new System.Threading.Tasks.Task<int>();
+        var result = task.Result;
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Result_Is_On_Dynamic_Value()
+        {
+            var src = $@"
+{Stubs}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        dynamic value = null;
+        var result = value.Result;
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<GetAwaiterGetResultAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_Plugin_Uses_Result_On_NonGeneric_Task()
         {
             var src = $@"

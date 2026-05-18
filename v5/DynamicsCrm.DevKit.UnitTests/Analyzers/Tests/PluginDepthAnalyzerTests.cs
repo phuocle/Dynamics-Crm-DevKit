@@ -175,6 +175,43 @@ public class NotAPlugin
         }
 
         [Fact]
+        public async Task NoDiagnostic_When_Plugin_Has_No_Execute_Method()
+        {
+            var src = @"
+namespace Microsoft.Xrm.Sdk
+{
+    public interface IPlugin
+    {
+    }
+}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{
+    public void Run() { }
+}
+";
+            await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_IPlugin_Is_From_Different_Namespace()
+        {
+            var src = @"
+namespace Other
+{
+    public interface IPlugin
+    {
+        void Execute(System.IServiceProvider serviceProvider);
+    }
+}
+public class TestPlugin : Other.IPlugin
+{
+    public void Execute(System.IServiceProvider serviceProvider) { }
+}
+";
+            await CSharpAnalyzerVerifier<PluginDepthAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task Diagnostic_When_Plugin_Has_Another_Interface()
         {
             var src = $@"

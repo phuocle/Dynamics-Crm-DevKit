@@ -300,6 +300,27 @@ public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
         }
 
         [Fact]
+        public async Task NoDiagnostic_When_Assigning_Property_Of_Different_Class()
+        {
+            var src = $@"
+{XrmSdkStub}
+public class HelperClass
+{{
+    public string Data {{ get; set; }}
+}}
+public class TestPlugin : Microsoft.Xrm.Sdk.IPlugin
+{{
+    public void Execute(System.IServiceProvider serviceProvider)
+    {{
+        var helper = new HelperClass();
+        helper.Data = ""value"";  // OK - not a property of the plugin class
+    }}
+}}
+";
+            await CSharpAnalyzerVerifier<StatelessPluginAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
         public async Task NoDiagnostic_When_Assigning_Readonly_Field()
         {
             var src = $@"
