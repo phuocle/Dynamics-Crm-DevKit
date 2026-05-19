@@ -1,23 +1,40 @@
 ---
-description: "Build Release DynamicsCrm.DevKit for all projects"
+description: "Build full DynamicsCrm.DevKit release package"
 ---
 
 > [!IMPORTANT]
 > **AI AGENT INSTRUCTIONS (CRITICAL):**
-> TO AI AGENT: You MUST NOT just print out the steps as text. You MUST USE TOOLS to execute EACH COMMAND one by one on behalf of the user.
-> **VERY IMPORTANT:** The build script (.ps1) takes a long time to complete. You MUST USE TOOLS to check the running command status and WAIT until it finishes 100% (status DONE) BEFORE calling a tool for the next step (especially the Verify steps). If you rush through without waiting, the Verify results will fail completely. You must wait for each command to finish before running the next one!
+> TO AI AGENT: You MUST NOT just print out the steps as text. You MUST USE TOOLS to execute the workflow on behalf of the user.
+> **VERY IMPORTANT:** Run the PowerShell script as the single build command, wait until it finishes 100%, then verify. Do not start verification while the script is still running.
 
+## Runtime rule
 
-1. Record the start time
-2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1`. The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes (such as the running MCP server) before building to avoid file lock access-denied errors. It builds all projects in Release mode using strictly the exact version and exact date/time configuration directly from `DevKit.ReleaseConfig.json`. If any errors occur, stop and fix them, then restart this workflow from the beginning.
-3. Record the end time
-4. Verify the build:
-   - Run `devkit --version`. Expected version format is `x.xx.xx.xx` (from `DevKit.ReleaseConfig.json`) with Build timestamp `30.06.2026 23:59:59` (exact date/time matching `DevKit.ReleaseConfig.json`).
-   - Run `devkit-tool --help`. Expected output shows the `devkit-tool` banner with version `x.xx.xx.xx` and list of available commands.
-5. Verify that all 4 files exist in the `published` folder:
+This workflow is intentionally one full build plus package/install/verify:
+
+- The script restores once, builds only the package projects that need a separate build (`DynamicsCrm.DevKit.Analyzers` and the VSIX project), then packages CLI and Tool.
+- CLI and Tool packages must be created with `dotnet pack --no-restore` inside `Release-DynamicsCrm-DevKit.ps1`. This lets each .NET global tool build exactly once during pack, instead of being built first by a full solution build and rebuilt by pack.
+- Do not use `dotnet pack --no-build` for these global tool packages unless the required publish/run artifacts already exist; it can skip files needed by the tool package.
+- Do not run `/claude-build-cli`, `/claude-build-tool`, extra `dotnet build`, or extra `dotnet pack` after this workflow unless you are fixing a failed build.
+- `nuget.exe pack` for Analyzers is allowed because it packages the analyzer output from the targeted analyzer build.
+- If a `nupkg` or `vsix` is missing, inspect the script output and fix the root cause. Do not compensate by running component build commands manually.
+
+## Steps
+
+1. Record the start time.
+2. Run:
+   ```powershell
+   .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1
+   ```
+   The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes, including a running MCP server, before building to avoid file-lock errors. It builds the release package outputs in Release mode using the exact version and exact date/time configuration from `DevKit.ReleaseConfig.json`.
+3. Wait for the script to finish. If it fails, stop, fix the issue, and restart this workflow from step 1.
+4. Record the end time.
+5. Verify the build:
+   - Use the script's built-in verification output for `devkit --version` and `devkit-tool --help`. If that output was not captured or is unclear, run each command once.
+   - `devkit --version` should show version `x.xx.xx.xx` from `DevKit.ReleaseConfig.json` and Build timestamp `30.06.2026 23:59:59`, exactly matching `DevKit.ReleaseConfig.json`.
+   - `devkit-tool --help` should show the `devkit-tool` banner with version `x.xx.xx.xx` and the command list.
+6. Verify that all 4 files exist in `Published\<version>`:
    - `DynamicsCrm.DevKit.Analyzers.[version].nupkg`
    - `DynamicsCrm.DevKit.Cli.[version].nupkg`
    - `DynamicsCrm.DevKit.Tool.[version].nupkg`
-   - `DynamicsCrm.DevKit.[version].vsix`   
-   If any file is missing, investigate the build output and fix the issue.
-6. Report the total runtime and verified version
+   - `DynamicsCrm.DevKit.[version].vsix`
+7. Report the total runtime, verified version, and whether the optimized targeted-build plus `dotnet pack --no-restore` path was used.

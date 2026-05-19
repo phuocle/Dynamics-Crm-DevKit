@@ -3,7 +3,7 @@
     DynamicsCrm.DevKit Release Build Script
 
 .DESCRIPTION
-    Builds the DynamicsCrm.DevKit solution, creates NuGet packages, and publishes the VSIX.
+    Builds the release package outputs, creates NuGet packages, and publishes the VSIX.
     Updates version and date placeholders in source files before building.
 
     ANNUAL RELEASE: Uses Dec 31 of current year at 23:59:59
@@ -107,10 +107,25 @@ function Update-FileContent {
     if ($content -ne $originalContent) {
         Write-Host "Updating $fullPath..." -ForegroundColor DarkGray
         $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
-        [System.IO.File]::WriteAllText($fullPath, $content, $utf8NoBOM)
+        Write-AllTextWithRetry -FilePath $fullPath -Content $content -Encoding $utf8NoBOM
         return @{ Path = $fullPath; Content = $originalContent }
     }
     return $null
+}
+
+function Write-AllTextWithRetry {
+    param ($FilePath, $Content, $Encoding)
+
+    for ($attempt = 1; $attempt -le 5; $attempt++) {
+        try {
+            [System.IO.File]::WriteAllText($FilePath, $Content, $Encoding)
+            return
+        }
+        catch {
+            if ($attempt -eq 5) { throw }
+            Start-Sleep -Milliseconds (250 * $attempt)
+        }
+    }
 }
 
 function Restore-Files {
@@ -118,7 +133,7 @@ function Restore-Files {
     $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
     foreach ($backup in $Backups) {
         Write-Host "Restoring $($backup.Path)..." -ForegroundColor DarkGray
-        [System.IO.File]::WriteAllText($backup.Path, $backup.Content, $utf8NoBOM)
+        Write-AllTextWithRetry -FilePath $backup.Path -Content $backup.Content -Encoding $utf8NoBOM
     }
 }
 
@@ -203,11 +218,11 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "NuGet restore failed with exit code $LASTEXITCODE" }
     Write-Host "Restore Success." -ForegroundColor Green
 
-    # 4. Build Solution
+    # 4. Build package projects that are not packed by dotnet pack.
     Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
     Get-Process -Name "devkit" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
     $LASTEXITCODE = 0
-    Write-Host "`nBuilding Solution ($Configuration)..." -ForegroundColor Yellow
+    Write-Host "`nBuilding package projects ($Configuration)..." -ForegroundColor Yellow
 
     # Determine Output Directory
     $publishDirName = $Version
@@ -217,8 +232,9 @@ try {
     if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
     New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
-    $buildArgs = @(
-        "$SolutionFile",
+    $analyzerProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj"
+    $analyzerBuildArgs = @(
+        "$analyzerProject",
         "/t:Clean;Build",
         "/p:Configuration=$Configuration",
         "/p:Version=$Version",
@@ -228,34 +244,31 @@ try {
         "/v:m" # Minimal verbosity
     )
 
-    & $msbuild $buildArgs
-    if ($LASTEXITCODE -ne 0) { throw "Build failed with exit code $LASTEXITCODE" }
-    Write-Host "Build Success." -ForegroundColor Green
+    & $msbuild $analyzerBuildArgs
+    if ($LASTEXITCODE -ne 0) { throw "Analyzer build failed with exit code $LASTEXITCODE" }
+    Write-Host "Analyzer build Success." -ForegroundColor Green
 
-    # 4b. Ensure VSIX is built (Workaround for SLNX not building VSIX container)
-    $vsixCheckPath = Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
-    if (-not (Test-Path $vsixCheckPath)) {
-        Write-Host "VSIX not found after solution build. Building VSIX project explicitly..." -ForegroundColor Yellow
-        $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
-        $vsixBuildArgs = @(
-            "$vsixProject",
-            "/t:Build",
-            "/p:Configuration=$Configuration",
-            "/p:Version=$Version",
-            "/p:AssemblyVersion=$Version",
-            "/p:FileVersion=$Version",
-            "/nologo",
-            "/v:m"
-        )
-        & $msbuild $vsixBuildArgs
-        if ($LASTEXITCODE -ne 0) { throw "VSIX Project Build failed with exit code $LASTEXITCODE" }
-        Write-Host "VSIX Project Build Success." -ForegroundColor Green
-    }
+    $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
+    $vsixBuildArgs = @(
+        "$vsixProject",
+        "/t:Clean;Build",
+        "/p:Configuration=$Configuration",
+        "/p:Version=$Version",
+        "/p:AssemblyVersion=$Version",
+        "/p:FileVersion=$Version",
+        "/p:DeployExtension=false",
+        "/nologo",
+        "/v:m"
+    )
+
+    & $msbuild $vsixBuildArgs
+    if ($LASTEXITCODE -ne 0) { throw "VSIX Project Build failed with exit code $LASTEXITCODE" }
+    Write-Host "VSIX Project Build Success." -ForegroundColor Green
 
     # 5. Create NuGet Packages
     Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow
 
-    # --- CLI: Use dotnet pack (.NET global tool) ---
+    # --- CLI: Use dotnet pack (.NET global tool). This builds CLI exactly once. ---
     Write-Host "`nPacking CLI with dotnet pack (.NET tool)..." -ForegroundColor Cyan
     $cliProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
     
@@ -264,6 +277,7 @@ try {
         $cliProject,
         "-c", $Configuration,
         "-o", $publishDir,
+        "--no-restore",
         "/p:Version=$Version",
         "/p:AssemblyVersion=$Version",
         "/p:FileVersion=$Version",
@@ -271,10 +285,11 @@ try {
     )
     
     & dotnet $dotnetPackArgs
-    if ($LASTEXITCODE -ne 0) { throw "dotnet pack failed for CLI" }
+    $cliPackagePath = Join-Path $publishDir "DynamicsCrm.DevKit.Cli.$Version.nupkg"
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $cliPackagePath)) { throw "dotnet pack failed for CLI" }
     Write-Host "CLI package created successfully!" -ForegroundColor Green
 
-    # --- Tool: Use dotnet pack (.NET global tool) ---
+    # --- Tool: Use dotnet pack (.NET global tool). This builds Tool exactly once. ---
     Write-Host "`nPacking Tool with dotnet pack (.NET tool)..." -ForegroundColor Cyan
     $toolProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj"
     
@@ -283,6 +298,7 @@ try {
         $toolProject,
         "-c", $Configuration,
         "-o", $publishDir,
+        "--no-restore",
         "/p:Version=$Version",
         "/p:AssemblyVersion=$Version",
         "/p:FileVersion=$Version",
@@ -290,7 +306,8 @@ try {
     )
     
     & dotnet $dotnetPackToolArgs
-    if ($LASTEXITCODE -ne 0) { throw "dotnet pack failed for Tool" }
+    $toolPackagePath = Join-Path $publishDir "DynamicsCrm.DevKit.Tool.$Version.nupkg"
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $toolPackagePath)) { throw "dotnet pack failed for Tool" }
     Write-Host "Tool package created successfully!" -ForegroundColor Green
 
     # --- Analyzers: Use nuget pack (legacy .nuspec) ---

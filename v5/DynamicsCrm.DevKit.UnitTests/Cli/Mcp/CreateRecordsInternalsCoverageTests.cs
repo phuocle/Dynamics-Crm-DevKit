@@ -36,12 +36,12 @@ public class CreateRecordsInternalsCoverageTests
     {
         var tool = new CreateRecordsTool(null!, new McpDryRunOptions());
         var warnings = new List<string>();
-        var inline = (string)InvokeInstance(tool, "ResolveRecordsInput", "[{\"name\":\"A\"}]", "account", warnings);
+        var inline = (string)InvokeInstance(tool, "ResolveRecordsInput", "[{\"name\":\"A\"}]", "account", warnings)!;
         Assert.AreEqual("[{\"name\":\"A\"}]", inline);
 
         var path = Path.Combine(Path.GetTempPath(), $"records-{Guid.NewGuid():N}.json");
         File.WriteAllText(path, "[{\"name\":\"B\"}]");
-        var fileContent = (string)InvokeInstance(tool, "ResolveRecordsInput", path, "account", warnings);
+        var fileContent = (string)InvokeInstance(tool, "ResolveRecordsInput", path, "account", warnings)!;
         Assert.AreEqual("[{\"name\":\"B\"}]", fileContent);
         Assert.IsFalse(File.Exists(path), "Resolved temp json files are deleted after read.");
 
@@ -79,8 +79,8 @@ public class CreateRecordsInternalsCoverageTests
         AssertValue(tool, new BooleanAttributeMetadata(), "yes", "active", true, warnings, cache);
 
         var dateResult = InvokeConvert(tool, new DateTimeAttributeMetadata(), "2026-05-18", "createdon", warnings, cache);
-        Assert.IsTrue(GetTupleValue(dateResult, "key")?.Equals("createdon") == true);
-        StringAssert.Contains(GetTupleValue(dateResult, "value")!.ToString()!, "2026-05-18");
+        Assert.IsTrue(GetTupleValue(dateResult!, "key")?.Equals("createdon") == true);
+        StringAssert.Contains(GetTupleValue(dateResult!, "value")!.ToString()!, "2026-05-18");
     }
 
     [TestMethod]

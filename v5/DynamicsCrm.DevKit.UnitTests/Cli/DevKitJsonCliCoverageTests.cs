@@ -78,7 +78,7 @@ public class DevKitJsonCliCoverageTests
             ["name"] = "Contoso",
             ["count"] = 7,
             ["enabled"] = true,
-            ["items"] = new List<object> { 1, "two", null }
+            ["items"] = new List<object?> { 1, "two", null }
         };
 
         var parsed = (Dictionary<string, object>)DevKitJson.Deserialize(DevKitJson.Serialize(dictionary));
