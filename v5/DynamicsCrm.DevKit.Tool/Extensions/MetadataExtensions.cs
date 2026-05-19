@@ -90,7 +90,10 @@ namespace DynamicsCrm.DevKit.Tool.Extensions
                 if (attribute.AttributeOf != null) continue;
                 values.Add(attribute);
             }
-            return values.OrderBy(x => x.LogicalName).ToList();
+            return values
+                .OrderBy(x => x.LogicalName, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         private static bool IsIgnoreEndsWith(string logicalName)

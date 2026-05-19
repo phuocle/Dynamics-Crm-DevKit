@@ -30,7 +30,10 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             sb.Append($"{TAB}class {metadata.SchemaName} {{ {NEW_LINE}");
             sb.Append($"{TAB}{TAB}+Guid: {metadata.PrimaryIdAttribute}{NEW_LINE}");
             sb.Append($"{TAB}{TAB}+string: {metadata.PrimaryNameAttribute}{NEW_LINE}");
-            foreach (var lookup in metadata.Attributes.Where(x => x is LookupAttributeMetadata))
+            foreach (var lookup in metadata.Attributes
+                .Where(x => x is LookupAttributeMetadata)
+                .OrderBy(x => x.LogicalName, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase))
             {
                 if (MetadataExtensions.ignoreAttributes.Contains(lookup.LogicalName)) continue;
                 if (MetadataExtensions.ignoreAttributes2.Contains(lookup.LogicalName)) continue;
@@ -42,12 +45,21 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         private static HashSet<string> CollectLookupSchemaNames(EntityMetadata metadata)
         {
             var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var lookup in metadata.Attributes.Where(x => x is LookupAttributeMetadata))
+            foreach (var lookup in metadata.Attributes
+                .Where(x => x is LookupAttributeMetadata)
+                .OrderBy(x => x.LogicalName, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase))
             {
                 if (MetadataExtensions.ignoreAttributes.Contains(lookup.LogicalName)) continue;
                 if (MetadataExtensions.ignoreAttributes2.Contains(lookup.LogicalName)) continue;
-                var rel = metadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == lookup.LogicalName);
-                if (rel != null) set.Add(rel.SchemaName);
+                foreach (var rel in metadata.ManyToOneRelationships
+                    .Where(x => x.ReferencingAttribute == lookup.LogicalName)
+                    .OrderBy(x => x.ReferencingAttribute, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.ReferencedEntity, StringComparer.OrdinalIgnoreCase)
+                    .ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase))
+                {
+                    set.Add(rel.SchemaName);
+                }
             }
             return set;
         }
@@ -55,6 +67,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         private static void AppendErdEdges(StringBuilder sb, EntityMetadata metadata, string referencingSchemaName,
             Dictionary<string, EntityMetadata> metadataDict, HashSet<string> lookupSchemaNames, HashSet<string> edgeTracker)
         {
+            var edges = new List<string>();
             foreach (var relationship in metadata.ManyToOneRelationships)
             {
                 if (BlackList.Contains(relationship.ReferencingEntity) || BlackList.Contains(relationship.ReferencedEntity)) continue;
@@ -66,9 +79,13 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                     var edgeKey = $"{referencingSchemaName}|{referenced.SchemaName}";
                     if (edgeTracker.Add(edgeKey))
                     {
-                        sb.Append($"{TAB}{referencingSchemaName} --* {referenced.SchemaName}{NEW_LINE}");
+                        edges.Add($"{TAB}{referencingSchemaName} --* {referenced.SchemaName}{NEW_LINE}");
                     }
                 }
+            }
+            foreach (var edge in edges.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+            {
+                sb.Append(edge);
             }
         }
 
@@ -129,15 +146,12 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
                 var getEntityMatches = Regex.Matches(xml, @"GetEntityProperty\s+Attribute=""(?<attr>[^""]+)""\s+Entity=""\[InputEntities\(\&quot;(?<ref>[^\&]+)\&");
                 var fieldRefs = new List<string>();
-                var varToField = new Dictionary<string, string>();
-                int varIdx = 1;
+                var constOperands = new List<string>();
                 var constMatches = Regex.Matches(xml, @"WorkflowPropertyType\.(?<type>\w+),\s*""(?<val>[^""]+)""");
                 foreach (Match cm in constMatches)
                 {
                     if (cm.Groups["type"].Value == "Boolean") continue;
-                    var constVar = $"SetAttributeValueStep4_{varIdx}";
-                    varToField[constVar] = cm.Groups["val"].Value;
-                    varIdx++;
+                    constOperands.Add(cm.Groups["val"].Value);
                 }
                 foreach (Match m in getEntityMatches)
                 {
@@ -172,7 +186,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 if (fieldRefs.Count == 1 && operators.Count == 0)
                     return fieldRefs[0];
                 var allOperands = new List<string>();
-                allOperands.AddRange(varToField.Values);
+                allOperands.AddRange(constOperands);
                 allOperands.AddRange(fieldRefs);
                 if (allOperands.Count >= 2 && operators.Count >= 1)
                 {
@@ -364,6 +378,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 AppendErdEdges(sb, metadata, metadata.SchemaName, metadataDict, lookups, globalErdEdges);
             }
 
+            var intersectEdges = new List<string>();
             foreach (var entity in entities)
             {
                 EntityMetadata metadata;
@@ -383,10 +398,14 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                         metadataDict.TryGetValue(referencedEntity.ToLower(), out entity2Metadata);
                         if (entity1Metadata != null && entity2Metadata != null)
                         {
-                            sb.Append($"{TAB}{entity1Metadata.SchemaName} *--* {entity2Metadata.SchemaName}{NEW_LINE}");
+                            intersectEdges.Add($"{TAB}{entity1Metadata.SchemaName} *--* {entity2Metadata.SchemaName}{NEW_LINE}");
                         }
                     }
                 }
+            }
+            foreach (var edge in intersectEdges.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+            {
+                sb.Append(edge);
             }
 
             sb.Append($":::{NEW_LINE}");
@@ -408,11 +427,11 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
         private void DocumentGlobalOptionSet(string file)
         {
             var sb = new StringBuilder();
-            foreach (var attribute in GlobalOptionSet.OrderBy(x => x.OptionSet.Name))
+            foreach (var attribute in GlobalOptionSet.OrderBy(x => x.OptionSet.Name, StringComparer.OrdinalIgnoreCase))
             {
                 var optionset = (EnumAttributeMetadata)attribute;
                 sb.Append($"# {optionset.OptionSet.Name} {NEW_LINE}");
-                foreach (var item in optionset.OptionSet.Options.OrderBy(x => x.Label.ToWikiString()))
+                foreach (var item in optionset.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                     sb.Append($"  * {item.Label.ToWikiString()} [{item.Value}]{NEW_LINE}");
                 sb.Append($"{NEW_LINE}");
             }
@@ -485,7 +504,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             var allAttributes = entity.Attributes.ToWikiAttributes();
             var customColumns = allAttributes.Where(a => a.IsCustomAttribute == true && !a.LogicalName.EndsWith("_base")).ToList();
             var baseColumns = allAttributes.Where(a => a.IsCustomAttribute == true && a.LogicalName.EndsWith("_base")).ToList();
-            var systemColumns = allAttributes.Where(a => a.IsCustomAttribute == false).Concat(baseColumns).OrderBy(a => a.LogicalName).ToList();
+            var systemColumns = allAttributes.Where(a => a.IsCustomAttribute == false).Concat(baseColumns).OrderBy(a => a.LogicalName, StringComparer.OrdinalIgnoreCase).ToList();
 
             sb.Append($"## Custom Columns{NEW_LINE}");
             sb.Append($"|**#**|**Logical Name**|**Schema Name**|**Display Name**|**Type**|**Field Type**|**Required**|**Searchable**|**Audit**|**Description**|**Created On**{NEW_LINE}");
@@ -513,7 +532,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             sb.Append($"{NEW_LINE}> **Total: {systemColumns.Count} system columns**{NEW_LINE}");
             sb.Append(NEW_LINE);
 
-            var calculatedOrRollup = allAttributes.Where(a => (a.SourceType == 1 || a.SourceType == 2) && !a.LogicalName.EndsWith("_base")).ToList();
+            var calculatedOrRollup = allAttributes.Where(a => (a.SourceType == 1 || a.SourceType == 2) && !a.LogicalName.EndsWith("_base")).OrderBy(a => a.LogicalName, StringComparer.OrdinalIgnoreCase).ToList();
             sb.Append($"## Calculated & Rollup Fields{NEW_LINE}");
             if (calculatedOrRollup.Any())
             {
@@ -548,9 +567,9 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             sb.Append($"## Keys{NEW_LINE}");
             sb.Append($"|**#**|**Display Name**|**Logical Name**|**Columns**|**Status**{NEW_LINE}");
             sb.Append($"|:-:|:-|:-|:-|:-{NEW_LINE}");
-            foreach (var key in entity.Keys.OrderBy(x => x.LogicalName).ToList())
+            foreach (var key in entity.Keys.OrderBy(x => x.LogicalName, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.EntityKeyIndexStatus).ToList())
             {
-                var line = $"|{i}|{key.DisplayName.ToWikiString()}|{ConvertToFixed25(key.LogicalName)}|{string.Join(",", key.KeyAttributes.OrderBy(x => x))}|```{key.EntityKeyIndexStatus.ToString()}```";
+                var line = $"|{i}|{key.DisplayName.ToWikiString()}|{ConvertToFixed25(key.LogicalName)}|{string.Join(",", key.KeyAttributes.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))}|```{key.EntityKeyIndexStatus.ToString()}```";
                 sb.Append(line + NEW_LINE);
                 i++;
             }
@@ -560,7 +579,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
             sb.Append($"### 1-N{NEW_LINE}");
             i = 1;
-            var oneToMany = entity.OneToManyRelationships.OrderBy(x => x.ReferencedEntity).ThenBy(x => x.ReferencingEntity)
+            var oneToMany = entity.OneToManyRelationships.OrderBy(x => x.ReferencedEntity, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.ReferencingEntity, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase)
                 .Where(r => !BlackList.Contains(r.ReferencingEntity) && !BlackList.Contains(r.ReferencedEntity) && !BlackList.Contains(r.ReferencedAttribute) && !BlackList.Contains(r.ReferencingAttribute)).ToList();
             if (oneToMany.Any())
             {
@@ -580,7 +599,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
             sb.Append($"### N-1{NEW_LINE}");
             i = 1;
-            var manyToOne = entity.ManyToOneRelationships.OrderBy(x => x.ReferencingEntity).ThenBy(x => x.ReferencedEntity)
+            var manyToOne = entity.ManyToOneRelationships.OrderBy(x => x.ReferencingEntity, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.ReferencedEntity, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase)
                 .Where(r => !BlackList.Contains(r.ReferencingEntity) && !BlackList.Contains(r.ReferencedEntity) && !BlackList.Contains(r.ReferencedAttribute) && !BlackList.Contains(r.ReferencingAttribute)).ToList();
             if (manyToOne.Any())
             {
@@ -600,7 +619,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
 
             sb.Append($"### N-N{NEW_LINE}");
             i = 1;
-            var manyToMany = entity.ManyToManyRelationships.OrderBy(x => x.Entity1LogicalName).ThenBy(x => x.Entity2LogicalName)
+            var manyToMany = entity.ManyToManyRelationships.OrderBy(x => x.Entity1LogicalName, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Entity2LogicalName, StringComparer.OrdinalIgnoreCase).ThenBy(x => x.SchemaName, StringComparer.OrdinalIgnoreCase)
                 .Where(r => !BlackList.Contains(r.Entity1LogicalName) && !BlackList.Contains(r.Entity1IntersectAttribute) && !BlackList.Contains(r.Entity2LogicalName) && !BlackList.Contains(r.Entity2IntersectAttribute)).ToList();
             if (manyToMany.Any())
             {
@@ -625,7 +644,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 sb.Append($"|**#**|**Name**|**Form Type**|**Description**{NEW_LINE}");
                 sb.Append($"|:-:|:-|:-|:-{NEW_LINE}");
                 var fIdx = 1;
-                foreach (var form in forms.OrderBy(f => f.FormType).ThenBy(f => f.Name))
+                foreach (var form in forms.OrderBy(f => f.FormType, StringComparer.OrdinalIgnoreCase).ThenBy(f => f.Name, StringComparer.OrdinalIgnoreCase).ThenBy(f => f.Description, StringComparer.OrdinalIgnoreCase))
                 {
                     sb.Append($"|{fIdx}|{form.Name}|```{form.FormType}```|{form.Description}{NEW_LINE}");
                     fIdx++;
@@ -644,7 +663,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 sb.Append($"|**#**|**Name**|**Default**|**Description**{NEW_LINE}");
                 sb.Append($"|:-:|:-|:-:|:-{NEW_LINE}");
                 var vIdx = 1;
-                foreach (var view in views.OrderBy(v => v.Name))
+                foreach (var view in views.OrderBy(v => v.Name, StringComparer.OrdinalIgnoreCase).ThenByDescending(v => v.IsDefault).ThenBy(v => v.Description, StringComparer.OrdinalIgnoreCase))
                 {
                     sb.Append($"|{vIdx}|{view.Name}|{view.IsDefault.ToWikiBooleanString()}|{view.Description}{NEW_LINE}");
                     vIdx++;
@@ -664,7 +683,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 sb.Append($"|**#**|**Name**|**Scope**|**Status**|**Description**{NEW_LINE}");
                 sb.Append($"|:-:|:-|:-|:-|:-{NEW_LINE}");
                 var brIdx = 1;
-                foreach (var rule in rules.OrderBy(r => r.Name))
+                foreach (var rule in rules.OrderBy(r => r.Name, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Scope, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.StatusCode, StringComparer.OrdinalIgnoreCase).ThenBy(r => r.Description, StringComparer.OrdinalIgnoreCase))
                 {
                     sb.Append($"|{brIdx}|{rule.Name}|{rule.Scope}|```{rule.StatusCode}```|{rule.Description}{NEW_LINE}");
                     brIdx++;
@@ -672,7 +691,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 sb.Append(NEW_LINE);
             }
 
-            var powerFxColumns = allAttributes.Where(a => a.SourceType == 3).OrderBy(a => a.LogicalName).ToList();
+            var powerFxColumns = allAttributes.Where(a => a.SourceType == 3).OrderBy(a => a.LogicalName, StringComparer.OrdinalIgnoreCase).ToList();
             if (powerFxColumns.Any())
             {
                 sb.Append($"### Power Fx{NEW_LINE}");
@@ -714,7 +733,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             if (Directory.Exists(folderDir))
             {
                 var allMdFiles = Directory.GetFiles(folderDir, "*.md", SearchOption.TopDirectoryOnly);
-                foreach (var mdFile in allMdFiles.OrderBy(f => Path.GetFileName(f)))
+                foreach (var mdFile in allMdFiles.OrderBy(f => Path.GetFileName(f), StringComparer.OrdinalIgnoreCase))
                 {
                     var mdFileName = Path.GetFileName(mdFile);
                     if (knownFiles.Contains(mdFileName)) continue;
@@ -786,7 +805,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             sb.Append($"---{NEW_LINE}");
             sb.Append($">Latest entity: ***{entity.LogicalName}*** modified on: ***{entity.ModifiedOn.Value.UtcToUserLocal(userTimeZoneOffset):yyyy-MMM-dd HH:mm:ss}***{NEW_LINE}{NEW_LINE}");
             sb.Append($"{NEW_LINE}");
-            sb.Append($">Latest field: ***{entity.Attributes.OrderByDescending(x => x.ModifiedOn).First().LogicalName}*** modified on: ***{entity.Attributes.OrderByDescending(x => x.ModifiedOn).First().ModifiedOn.Value.UtcToUserLocal(userTimeZoneOffset):yyyy-MMM-dd HH:mm:ss}***{NEW_LINE}");
+            sb.Append($">Latest field: ***{entity.Attributes.OrderByDescending(x => x.ModifiedOn).ThenBy(x => x.LogicalName, StringComparer.OrdinalIgnoreCase).First().LogicalName}*** modified on: ***{entity.Attributes.OrderByDescending(x => x.ModifiedOn).ThenBy(x => x.LogicalName, StringComparer.OrdinalIgnoreCase).First().ModifiedOn.Value.UtcToUserLocal(userTimeZoneOffset):yyyy-MMM-dd HH:mm:ss}***{NEW_LINE}");
             sb.Append($"{NEW_LINE}{NEW_LINE}>This file generated by tool ***{GetToolName()}***{NEW_LINE}");
             sb.Append($"{NEW_LINE}");
             var wiki = sb.ToString();
@@ -879,7 +898,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             EntityMetadata entity;
             metadataDict.TryGetValue(name.ToLower(), out entity);
             name = entity?.SchemaName ?? name;
-            if (File.Exists(Path.Combine(outputFolder, $"{name}.md")))
+            if (entity != null && entities.Contains(entity.LogicalName, StringComparer.OrdinalIgnoreCase))
                 return $"[{name}]({name}.md)";
             return name;
         }
@@ -890,7 +909,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
                 value += "<ul>";
-                foreach (var item in lookup.Targets.OrderBy(x => x))
+                foreach (var item in lookup.Targets.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
                     value += $"<li>{EntityWikiLink(item)}</li>";
                 value += "</ul>";
                 return value;
@@ -899,7 +918,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
                 value += "<ul>";
-                foreach (var item in state.OptionSet.Options.OrderBy(x => x.Label.ToWikiString()))
+                foreach (var item in state.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                     value += $"<li>{item.Label.ToWikiString()} [{item.Value}]</li>";
                 value += "</ul>";
                 return value;
@@ -908,7 +927,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
             {
                 var value = $"{attribute.AttributeType.ToWikiOptionSetString()}";
                 value += "<ul>";
-                foreach (var item in status.OptionSet.Options.OrderBy(x => x.Label.ToWikiString()))
+                foreach (var item in status.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                     value += $"<li>{item.Label.ToWikiString()} [{item.Value}]</li>";
                 value += "</ul>";
                 return value;
@@ -925,7 +944,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 else
                 {
                     value += "<ul>";
-                    foreach (var item in picklist.OptionSet.Options.OrderBy(x => x.Label.ToWikiString()))
+                    foreach (var item in picklist.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                         value += $"<li>{item.Label.ToWikiString()} [{item.Value}]</li>";
                     value += "</ul>";
                 }
@@ -943,7 +962,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
                 else
                 {
                     value += "<ul>";
-                    foreach (var item in picklist2.OptionSet.Options.OrderBy(x => x.Label.ToWikiString()))
+                    foreach (var item in picklist2.OptionSet.Options.OrderBy(x => x.Label.ToWikiString(), StringComparer.OrdinalIgnoreCase).ThenBy(x => x.Value))
                         value += $"<li>{item.Label.ToWikiString()} [{item.Value}]</li>";
                     value += "</ul>";
                 }
@@ -1063,6 +1082,8 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     <attribute name=""objecttypecode"" />
     <attribute name=""type"" />
     <attribute name=""description"" />
+    <order attribute=""objecttypecode"" />
+    <order attribute=""type"" />
     <filter>
       <condition attribute=""formactivationstate"" operator=""eq"" value=""1"" />
     </filter>
@@ -1105,6 +1126,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     <attribute name=""returnedtypecode"" />
     <attribute name=""description"" />
     <attribute name=""isdefault"" />
+    <order attribute=""returnedtypecode"" />
     <filter>
       <condition attribute=""statecode"" operator=""eq"" value=""0"" />
     </filter>
@@ -1148,6 +1170,7 @@ namespace DynamicsCrm.DevKit.Tool.Tasks
     <attribute name=""primaryentity"" />
     <attribute name=""statuscode"" />
     <attribute name=""scope"" />
+    <order attribute=""primaryentity"" />
     <filter>
       <condition attribute=""category"" operator=""eq"" value=""2"" />
     </filter>
