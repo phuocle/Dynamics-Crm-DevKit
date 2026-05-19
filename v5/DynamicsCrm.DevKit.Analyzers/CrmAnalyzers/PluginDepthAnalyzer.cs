@@ -51,10 +51,7 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
             // Check if this class implements IPlugin
             var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken);
-            if (classSymbol == null)
-                return;
-
-            if (!ImplementsIPlugin(classSymbol))
+            if (classSymbol == null || !ImplementsIPlugin(classSymbol))
                 return;
 
             // Find the Execute method

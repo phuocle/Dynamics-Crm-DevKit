@@ -89,12 +89,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 if (propertySymbol.IsStatic)
                     return;
 
-                // Skip if it's not a member of the current class
-                if (!SymbolEqualityComparer.Default.Equals(propertySymbol.ContainingType, classSymbol))
-                    return;
-
-                // Skip if property doesn't have a setter or is init-only
-                if (propertySymbol.SetMethod == null)
+                // Skip if it's not a member of the current class or doesn't have a setter.
+                if (!SymbolEqualityComparer.Default.Equals(propertySymbol.ContainingType, classSymbol) || propertySymbol.SetMethod == null)
                     return;
 
                 // Highlight only the property name (left side) to reduce visual noise
