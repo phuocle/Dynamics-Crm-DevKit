@@ -34,6 +34,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private readonly McpDryRunOptions _options;
         private const string SOLUTION_NAME = "devkit_ribbon";
         private const string SOLUTION_DISPLAY_NAME = "DEVKIT_RIBBON";
+        private static readonly List<int> PublishPollScheduleSeconds = new() { 30, 60, 120 };
+        private const int PublishMaxPollAttempts = 3;
+        private const int PublishMaxWaitSeconds = 210;
+        private const string PublishWaitTimeoutAction = "stop_without_readback";
+        private const string PublishWaitTimeoutInstruction =
+            "After the third get_system_jobs poll, if the PublishAll system job is not Succeeded or no result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.";
 
         public ManageRibbonTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
@@ -69,7 +75,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "update_flyout_static REQUIRED: flyout_id OR label. items[]: item_label REQUIRED\n" +
             "hide_flyout_item / show_flyout_item REQUIRED: flyout_label OR flyout_id + item_label\n\n" +
 
-            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). Starts PublishAll async after update and returns needsWait=true with asyncOperationId; wait with get_system_jobs before readback or next prompt.\n\n" +
+            "WORKFLOW: manage_ribbon(action='update', entity_name=..., operations=[...]). Auto-backup; failure blocks update. Ribbon needs PublishAll (entity-scoped publish doesn't work). Starts PublishAll async after update and returns needsWait=true with asyncOperationId. Wait with get_system_jobs before readback or the next prompt. Poll exactly 3 times using pollScheduleSeconds: 30 seconds, then 60 seconds, then 120 seconds. If the third poll does not report Succeeded or no system-job result is returned, stop waiting, do not call manage_ribbon(buttons/detail), and report the ribbon result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Inspect existing ribbon (list/buttons/detail) before editing\n" +
@@ -216,6 +222,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ? "Ribbon readback is blocked because a solution import/export or PublishAll job is still active."
                     : "Ribbon update/undo is blocked because a solution import/export or PublishAll job is still active.");
                 sb.AppendLine($"Wait first: get_system_jobs(record_id=\"{jobId}\")");
+                AppendPublishWaitGuidance(sb);
 
                 return new CallToolResult
                 {
@@ -229,12 +236,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         AsyncOperationId = jobId,
                         NeedsWait = true,
                         WaitTool = "get_system_jobs",
-                        PollAfterSeconds = 60,
+                        PollAfterSeconds = 30,
+                        PollScheduleSeconds = NewPublishPollScheduleSeconds(),
+                        MaxPollAttempts = PublishMaxPollAttempts,
+                        MaxWaitSeconds = PublishMaxWaitSeconds,
                         ReadbackAllowed = false,
                         NextAllowedActions = new List<string> { "get_system_jobs" },
                         WaitReason = isReadback
                             ? $"Active {operationType} system job is {status}; wait before ribbon readback."
-                            : $"Active {operationType} system job is {status}; wait before another ribbon update or undo."
+                            : $"Active {operationType} system job is {status}; wait before another ribbon update or undo.",
+                        WaitTimeoutAction = PublishWaitTimeoutAction,
+                        WaitTimeoutInstruction = PublishWaitTimeoutInstruction
                     })
                 };
             }
@@ -850,6 +862,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
                 sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
                 sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
+                AppendPublishWaitGuidance(sb);
             }
             else
             {
@@ -873,9 +886,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NeedsWait = asyncJobId.HasValue ? true : null,
                     WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
                     PollAfterSeconds = asyncJobId.HasValue ? 30 : null,
+                    PollScheduleSeconds = asyncJobId.HasValue ? NewPublishPollScheduleSeconds() : null,
+                    MaxPollAttempts = asyncJobId.HasValue ? PublishMaxPollAttempts : null,
+                    MaxWaitSeconds = asyncJobId.HasValue ? PublishMaxWaitSeconds : null,
                     ReadbackAllowed = asyncJobId.HasValue ? false : null,
                     NextAllowedActions = asyncJobId.HasValue ? new List<string> { "get_system_jobs" } : null,
-                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null
+                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null,
+                    WaitTimeoutAction = asyncJobId.HasValue ? PublishWaitTimeoutAction : null,
+                    WaitTimeoutInstruction = asyncJobId.HasValue ? PublishWaitTimeoutInstruction : null
                 })
             };
         }
@@ -1027,6 +1045,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
                 sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
                 sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
+                AppendPublishWaitGuidance(sb);
             }
             else
             {
@@ -1050,9 +1069,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NeedsWait = asyncJobId.HasValue ? true : null,
                     WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
                     PollAfterSeconds = asyncJobId.HasValue ? 30 : null,
+                    PollScheduleSeconds = asyncJobId.HasValue ? NewPublishPollScheduleSeconds() : null,
+                    MaxPollAttempts = asyncJobId.HasValue ? PublishMaxPollAttempts : null,
+                    MaxWaitSeconds = asyncJobId.HasValue ? PublishMaxWaitSeconds : null,
                     ReadbackAllowed = asyncJobId.HasValue ? false : null,
                     NextAllowedActions = asyncJobId.HasValue ? new List<string> { "get_system_jobs" } : null,
-                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null
+                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null,
+                    WaitTimeoutAction = asyncJobId.HasValue ? PublishWaitTimeoutAction : null,
+                    WaitTimeoutInstruction = asyncJobId.HasValue ? PublishWaitTimeoutInstruction : null
                 })
             };
         }
@@ -1105,6 +1129,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 sb.AppendLine($"AsyncOperationId: {asyncJobId.Value}");
                 sb.AppendLine($"Note: Use get_system_jobs(record_id=\"{asyncJobId.Value}\") to check publish status.");
                 sb.AppendLine("Wait: Do not call manage_ribbon(buttons/detail) or run the next prompt until this system job reaches a terminal status.");
+                AppendPublishWaitGuidance(sb);
             }
             else
             {
@@ -1125,9 +1150,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     NeedsWait = asyncJobId.HasValue ? true : null,
                     WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
                     PollAfterSeconds = asyncJobId.HasValue ? 30 : null,
+                    PollScheduleSeconds = asyncJobId.HasValue ? NewPublishPollScheduleSeconds() : null,
+                    MaxPollAttempts = asyncJobId.HasValue ? PublishMaxPollAttempts : null,
+                    MaxWaitSeconds = asyncJobId.HasValue ? PublishMaxWaitSeconds : null,
                     ReadbackAllowed = asyncJobId.HasValue ? false : null,
                     NextAllowedActions = asyncJobId.HasValue ? new List<string> { "get_system_jobs" } : null,
-                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null
+                    WaitReason = asyncJobId.HasValue ? "PublishAll started asynchronously; wait for the system job before ribbon readback or the next prompt." : null,
+                    WaitTimeoutAction = asyncJobId.HasValue ? PublishWaitTimeoutAction : null,
+                    WaitTimeoutInstruction = asyncJobId.HasValue ? PublishWaitTimeoutInstruction : null
                 })
             };
         }
@@ -1428,6 +1458,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return File.ReadAllText(ribbonxml, Encoding.UTF8);
 
             return null;
+        }
+
+        private static List<int> NewPublishPollScheduleSeconds() => new(PublishPollScheduleSeconds);
+
+        private static void AppendPublishWaitGuidance(StringBuilder sb)
+        {
+            sb.AppendLine("Wait schedule: call get_system_jobs after 30 seconds, then after 60 seconds, then after 120 seconds (total wait: 3 minutes 30 seconds).");
+            sb.AppendLine("After the third poll, if the job is not Succeeded or no result is returned, stop waiting, do not read back with manage_ribbon(buttons/detail), and report the result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.");
         }
 
         private (bool Success, Guid? AsyncOperationId) TryPublish(string entityName)

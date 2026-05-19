@@ -47,6 +47,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? PollAfterSeconds { get; set; }
 
+        [JsonPropertyName("pollScheduleSeconds")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<int> PollScheduleSeconds { get; set; }
+
+        [JsonPropertyName("maxPollAttempts")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? MaxPollAttempts { get; set; }
+
+        [JsonPropertyName("maxWaitSeconds")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? MaxWaitSeconds { get; set; }
+
         [JsonPropertyName("readbackAllowed")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ReadbackAllowed { get; set; }
@@ -58,6 +70,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("waitReason")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string WaitReason { get; set; }
+
+        [JsonPropertyName("waitTimeoutAction")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitTimeoutAction { get; set; }
+
+        [JsonPropertyName("waitTimeoutInstruction")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string WaitTimeoutInstruction { get; set; }
 
         [JsonPropertyName("restoredFromBackup")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
