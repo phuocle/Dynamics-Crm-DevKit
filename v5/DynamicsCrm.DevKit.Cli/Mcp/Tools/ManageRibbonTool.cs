@@ -571,9 +571,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             locLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             try
             {
-                var exportReq = new ExportSolutionRequest { SolutionName = SOLUTION_NAME, Managed = false };
-                var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
-                var ribbonDiffXml = ExtractRibbonDiffXml(exportResp.ExportSolutionFile, entityName);
+                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                var ribbonDiffXml = fetcher.FetchExistingRibbonDiffXml(entityName);
                 if (string.IsNullOrWhiteSpace(ribbonDiffXml)) return;
 
                 var doc = XDocument.Parse(ribbonDiffXml);
@@ -740,17 +739,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             string ribbonXml;
             try
             {
-                var exportReq = new ExportSolutionRequest
-                {
-                    SolutionName = SOLUTION_NAME,
-                    Managed = false
-                };
-                var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
-                ribbonXml = ExtractRibbonDiffXml(exportResp.ExportSolutionFile, entityName);
+                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                ribbonXml = fetcher.FetchExistingRibbonDiffXml(entityName);
             }
-            catch
+            catch (Exception ex)
             {
-                ribbonXml = null;
+                return ErrorResult(
+                    $"[Error] Failed to read RibbonDiffXml\n" +
+                    $"Entity: {entityName}\n" +
+                    $"Message: {ex.Message}");
             }
 
             if (ribbonXml == null)
@@ -815,7 +812,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     $"[Error] RibbonXml file not found\nPath: {ribbonxml}\n" +
                     "Tip: Re-run build_ribbon_xml to regenerate the file.");
 
-            // Step 2: Backup current ribbon
+            // Step 2: Preserve existing RibbonDiffXml nodes that are not present in the supplied XML.
+            // Raw ribbonxml updates are treated as patches so adding one button cannot delete siblings.
+            try
+            {
+                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                var existingXml = fetcher.FetchExistingRibbonDiffXml(entityName);
+                var targetDoc = XDocument.Parse(resolvedXml);
+                var existingDoc = XDocument.Parse(existingXml);
+
+                RibbonXmlHelpers.PreserveMissingRibbonDiffElements(targetDoc, existingDoc);
+                resolvedXml = targetDoc.ToString(SaveOptions.None);
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult(
+                    $"[Error] Existing RibbonDiffXml preservation failed - update BLOCKED (fail-safe)\n" +
+                    $"Entity: {entityName}\n" +
+                    $"Message: {ex.Message}");
+            }
+
+            // Step 3: Backup current ribbon
             string backupPath = null;
             if (doBackup)
             {
@@ -836,12 +853,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Step 3: Build solution ZIP from template
+            // Step 4: Build solution ZIP from template
             if (_options.DryRun)
                 return DryRunResult($"Would UPDATE ribbon for entity '{entityName}'.");
-
-            // Step 4: Remove stale solution components before import so import -> publish stays contiguous.
-            CleanupSolutionComponents();
 
             // Step 5: Import solution. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, resolvedXml);
@@ -1011,17 +1025,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (_options.DryRun)
                 return DryRunResult($"Would UPDATE ribbon for entity '{entityName}' with {ops.Count} operations.");
 
-            // Step 9: Remove stale solution components before import so import -> publish stays contiguous.
-            CleanupSolutionComponents();
-
-            // Step 10: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
+            // Step 9: Build solution ZIP + import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, xmlString);
             ImportRibbonSolution(solutionZip);
 
-            // Step 11: Publish immediately after import completes.
+            // Step 10: Publish immediately after import completes.
             var (published, asyncJobId) = TryPublish(entityName);
 
-            // Step 12: Build result
+            // Step 11: Build result
             var newButtonCount = RibbonXmlHelpers.CountExistingButtons(ribbonDoc);
             var sb = new StringBuilder();
             sb.AppendLine($"[ManageRibbon] update — {entityName}");
@@ -1109,9 +1120,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (_options.DryRun)
                 return DryRunResult($"Would RESTORE ribbon for entity '{entityName}' from backup.");
-
-            // Remove stale solution components before import so import -> publish stays contiguous.
-            CleanupSolutionComponents();
 
             // Build and import. Execute returns only after Dataverse finishes the import request.
             var solutionZip = BuildSolutionZip(entityName, restoredXml);
@@ -1324,13 +1332,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             try
             {
-                var exportReq = new ExportSolutionRequest
-                {
-                    SolutionName = SOLUTION_NAME,
-                    Managed = false
-                };
-                var exportResp = (ExportSolutionResponse)_serviceClient.Execute(exportReq);
-                currentXml = ExtractRibbonDiffXml(exportResp.ExportSolutionFile, entityName);
+                var fetcher = new RibbonSolutionFetcher(_serviceClient);
+                currentXml = fetcher.FetchExistingRibbonDiffXml(entityName);
             }
             catch
             {
@@ -1363,53 +1366,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             File.WriteAllText(backupPath, json, Encoding.UTF8);
             return backupPath;
-        }
-
-        // ── Cleanup stale components from solution ───────────────────
-
-        private void CleanupSolutionComponents()
-        {
-            try
-            {
-                var solutionId = GetSolutionId();
-                if (solutionId == null) return;
-
-                var components = _serviceClient.RetrieveMultiple(new QueryExpression("solutioncomponent")
-                {
-                    NoLock = true,
-                    ColumnSet = new ColumnSet("objectid", "componenttype"),
-                    Criteria = new FilterExpression
-                    {
-                        Conditions =
-                        {
-                            new ConditionExpression("solutionid", ConditionOperator.Equal, solutionId.Value)
-                        }
-                    }
-                }).Entities;
-
-                foreach (var comp in components)
-                {
-                    var objectId = comp.GetAttributeValue<Guid>("objectid");
-                    if (objectId == Guid.Empty)
-                        continue;
-
-                    var componentType = comp.GetAttributeValue<OptionSetValue>("componenttype")?.Value;
-                    if (!componentType.HasValue)
-                        continue;
-
-                    try
-                    {
-                        _serviceClient.Execute(new RemoveSolutionComponentRequest
-                        {
-                            ComponentId = objectId,
-                            ComponentType = componentType.Value,
-                            SolutionUniqueName = SOLUTION_NAME
-                        });
-                    }
-                    catch { /* best-effort cleanup; individual component failure does not abort the loop */ }
-                }
-            }
-            catch { /* best-effort solution component cleanup — non-critical */ }
         }
 
         private Guid? GetSolutionId()
