@@ -220,6 +220,12 @@ try {
     $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
     $cliProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
     $toolProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj"
+    $publishDirName = $Version
+    $publishDir = Join-Path $PublishedRoot $publishDirName
+
+    # NuGet.config includes the versioned Published folder as a local source.
+    # It must exist before restore, even before packages have been produced.
+    New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
     Write-Host "`nRestoring package projects..." -ForegroundColor Yellow
     $projectRestoreArgs = @("/t:Restore", "/nologo", "/v:q")
@@ -242,8 +248,6 @@ try {
     $LASTEXITCODE = 0
     Write-Host "`nBuilding package projects ($Configuration)..." -ForegroundColor Yellow
 
-    $publishDirName = $Version
-    $publishDir = Join-Path $PublishedRoot $publishDirName
     if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
     New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
