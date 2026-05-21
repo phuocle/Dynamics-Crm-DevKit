@@ -19,8 +19,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         [CommandOption("--version")]
         [Description("Version number")]
-        [DefaultValue("4.99.99.99")]
-        public string Version { get; set; } = "4.99.99.99";
+        [DefaultValue("4.12.34.56")]
+        public string Version { get; set; } = "4.12.34.56";
 
         [CommandOption("--command")]
         [Description("Others command")]

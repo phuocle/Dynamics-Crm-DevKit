@@ -29,7 +29,7 @@
 		</Project>
 	</TemplateContent>
 	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit, Version=4.99.99.99, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
 		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Report</FullClassName>
 	</WizardExtension>
 </VSTemplate>

@@ -16,5 +16,5 @@ using System.Security;
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 [assembly: ComVisible(false)]
 [assembly: Guid("e9c8fe6a-5dbc-4b04-95c9-bd9d61a198fc")]
-[assembly: AssemblyVersion("4.99.99.99")]
-[assembly: AssemblyFileVersion("4.99.99.99")]
+[assembly: AssemblyVersion("4.12.34.56")]
+[assembly: AssemblyFileVersion("4.12.34.56")]

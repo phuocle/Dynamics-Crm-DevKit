@@ -27,7 +27,7 @@ git status
 > **Warning about placeholder files**
 > AI must check if any file from `DevKit.ReleaseConfig.json` → `files.versionReplacement` or `files.assemblyVersionReplacement` is in the list of changed files.
 > These files get their anchor values replaced at build time:
-> - `4.99.99.99` is the source/debug anchor version. The build script replaces it with `DevKit.ReleaseConfig.json` → `version`.
+> - `4.12.34.56` is the source/debug anchor version. The build script replaces it with `DevKit.ReleaseConfig.json` → `version`.
 > - `xxxx.yy.zz HH.mm.ss` is the source/debug anchor build date.
 > - `.github\prompts\*.prompt.md`, `.vstemplate`, `AssemblyInfo.cs`, `ProjectTemplate.csproj.template`, `NuGet.config`, etc. may contain the anchor version.
 >

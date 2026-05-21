@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PluginAssembly FullName="Dev.DevKit.Legacy.Server2, Version=4.99.99.99, Culture=neutral, PublicKeyToken=4177864cebe071d8" PluginAssemblyId="271edd5c-2106-f111-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<PluginAssembly FullName="Dev.DevKit.Legacy.Server2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=4177864cebe071d8" PluginAssemblyId="271edd5c-2106-f111-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <IsolationMode>2</IsolationMode>
   <SourceType>0</SourceType>
-  <IntroducedVersion>4.99.99.99</IntroducedVersion>
+  <IntroducedVersion>4.12.34.56</IntroducedVersion>
   <ManagedIdentityId>fbee2266-49d1-423e-a921-e761bc2c69a5</ManagedIdentityId>
   <FileName>/PluginAssemblies/DevDevKitLegacyServer2-271EDD5C-2106-F111-8407-000D3A316BDB/DevDevKitLegacyServer2.dll</FileName>
   <PluginTypes>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server2.Plugins.Account.PostAccountUpdateAsynchronous, Dev.DevKit.Legacy.Server2, Version=4.99.99.99, Culture=neutral, PublicKeyToken=4177864cebe071d8" PluginTypeId="2a1edd5c-2106-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server2.Plugins.Account.PostAccountUpdateAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Legacy.Server2.Plugins.Account.PostAccountUpdateAsynchronous, Dev.DevKit.Legacy.Server2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=4177864cebe071d8" PluginTypeId="2a1edd5c-2106-f111-8407-000d3a316bdb" Name="Dev.DevKit.Legacy.Server2.Plugins.Account.PostAccountUpdateAsynchronous">
       <FriendlyName>Dev.DevKit.Legacy.Server2.Plugins.Account.PostAccountUpdateAsynchronous</FriendlyName>
     </PluginType>
   </PluginTypes>

@@ -53,4 +53,4 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
-<!-- v.4.99.99.99 - Build: 31.12.2025 23:59:59 -->
+<!-- v.4.12.34.56 - Build: 31.12.2025 23:59:59 -->

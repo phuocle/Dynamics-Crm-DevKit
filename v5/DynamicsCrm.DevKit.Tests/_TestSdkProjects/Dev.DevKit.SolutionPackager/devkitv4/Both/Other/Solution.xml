@@ -106,10 +106,10 @@
       <RootComponent type="62" schemaName="v4_DEVKITV4" behavior="0" />
       <RootComponent type="80" schemaName="v4_DEVKITV4" behavior="0" />
       <RootComponent type="9" schemaName="v4_v4_category" behavior="0" />
-      <RootComponent type="91" id="{d589a147-d6fc-f011-8407-000d3a316bdb}" schemaName="Dev.DevKit.Package, Version=4.99.99.99, Culture=neutral, PublicKeyToken=null" behavior="0" />
-      <RootComponent type="91" id="{dc319cdb-6f01-f111-8407-000d3a316bdb}" schemaName="Dev.DevKit.Package2, Version=4.99.99.99, Culture=neutral, PublicKeyToken=null" behavior="0" />
-      <RootComponent type="91" id="{6fa02c46-50fb-f011-8407-000d3a316bdb}" schemaName="Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" behavior="0" />
-      <RootComponent type="91" id="{1006952c-d700-f111-8407-000d3a316bdb}" schemaName="Dev.DevKit.Server2, Version=4.99.99.99, Culture=neutral, PublicKeyToken=c2e1dd9d71d83228" behavior="0" />
+      <RootComponent type="91" id="{d589a147-d6fc-f011-8407-000d3a316bdb}" schemaName="Dev.DevKit.Package, Version=4.12.34.56, Culture=neutral, PublicKeyToken=null" behavior="0" />
+      <RootComponent type="91" id="{dc319cdb-6f01-f111-8407-000d3a316bdb}" schemaName="Dev.DevKit.Package2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=null" behavior="0" />
+      <RootComponent type="91" id="{6fa02c46-50fb-f011-8407-000d3a316bdb}" schemaName="Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" behavior="0" />
+      <RootComponent type="91" id="{1006952c-d700-f111-8407-000d3a316bdb}" schemaName="Dev.DevKit.Server2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=c2e1dd9d71d83228" behavior="0" />
       <RootComponent type="92" id="{1706952c-d700-f111-8407-000d3a316bdb}" behavior="0" />
       <RootComponent type="92" id="{30d0cd33-5afb-f011-8407-000d3a316bdb}" behavior="0" />
       <RootComponent type="92" id="{33d0cd33-5afb-f011-8407-000d3a316bdb}" behavior="0" />

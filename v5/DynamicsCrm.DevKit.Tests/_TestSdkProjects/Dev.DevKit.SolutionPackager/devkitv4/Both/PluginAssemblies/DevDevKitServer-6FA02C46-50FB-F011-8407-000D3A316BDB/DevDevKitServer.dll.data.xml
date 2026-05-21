@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PluginAssembly FullName="Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginAssemblyId="6fa02c46-50fb-f011-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<PluginAssembly FullName="Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginAssemblyId="6fa02c46-50fb-f011-8407-000d3a316bdb" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <IsolationMode>2</IsolationMode>
   <SourceType>0</SourceType>
   <IntroducedVersion>1.0.0.4</IntroducedVersion>
   <FileName>/PluginAssemblies/DevDevKitServer-6FA02C46-50FB-F011-8407-000D3A316BDB/DevDevKitServer.dll</FileName>
   <PluginTypes>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="77a02c46-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="77a02c46-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous">
       <FriendlyName>Dev.DevKit.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="7ba02c46-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="7ba02c46-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous">
       <FriendlyName>Dev.DevKit.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomApis.Account.v4_AccountCustomApiRequest, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="7fa02c46-50fb-f011-8407-000d3a316bdb" Name="v4_AccountCustomApiRequest">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomApis.Account.v4_AccountCustomApiRequest, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="7fa02c46-50fb-f011-8407-000d3a316bdb" Name="v4_AccountCustomApiRequest">
       <FriendlyName>Dev.DevKit.Server.CustomApis.Account.v4_AccountCustomApiRequest</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Create, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="0175cb91-52fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Create">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Create, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="0175cb91-52fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Create">
       <FriendlyName>Dev.DevKit.Server.DataProviders.Sql.Create</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Delete, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3bf47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Delete">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Delete, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3bf47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Delete">
       <FriendlyName>Dev.DevKit.Server.DataProviders.Sql.Delete</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Retrieve, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3cf47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Retrieve">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Retrieve, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3cf47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Retrieve">
       <FriendlyName>Dev.DevKit.Server.DataProviders.Sql.Retrieve</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.RetrieveMultiple, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3df47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.RetrieveMultiple">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.RetrieveMultiple, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3df47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.RetrieveMultiple">
       <FriendlyName>Dev.DevKit.Server.DataProviders.Sql.RetrieveMultiple</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Update, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3ef47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Update">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Sql.Update, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="3ef47a4c-50fb-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.DataProviders.Sql.Update">
       <FriendlyName>Dev.DevKit.Server.DataProviders.Sql.Update</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="e831ba49-bffc-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="e831ba49-bffc-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous">
       <FriendlyName>Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="873e69b6-bffc-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="873e69b6-bffc-f011-8407-000d3a316bdb" Name="Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous">
       <FriendlyName>Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Workflows.SendEmailByQueue, Dev.DevKit.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="8e3e69b6-bffc-f011-8407-000d3a316bdb" Name="SendEmailByQueue">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Workflows.SendEmailByQueue, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316" PluginTypeId="8e3e69b6-bffc-f011-8407-000d3a316bdb" Name="SendEmailByQueue">
       <FriendlyName>SendEmailByQueue</FriendlyName>
       <WorkflowActivityGroupName>Dev.DevKit.Server.Workflows</WorkflowActivityGroupName>
     </PluginType>

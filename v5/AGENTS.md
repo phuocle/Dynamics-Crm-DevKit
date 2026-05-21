@@ -77,7 +77,7 @@ Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (leg
 
 ## Watch Out
 
-- `4.99.99.99` is the stable source version. Release/debug scripts replace only the build-date placeholder `xxxx.yy.zz HH.mm.ss`; never commit files while date replacements are still applied.
+- `4.12.34.56` is the stable source version. Release/debug scripts replace only the build-date placeholder `xxxx.yy.zz HH.mm.ss`; never commit files while date replacements are still applied.
 - Editing a single component → run only that component's build, not the full solution
 
 Build workflows and MCP restart procedure: see `.claude/rules/core-rule.md`.

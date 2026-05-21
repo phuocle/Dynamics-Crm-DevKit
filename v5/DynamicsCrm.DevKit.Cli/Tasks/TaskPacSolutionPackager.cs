@@ -206,7 +206,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 </fetch>";
             XrmHelper.COUNT_RetrieveMultipleAsync++;
             var rows = await ServiceClient.RetrieveMultipleAsync(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return "4.99.99.99";
+            if (rows.Entities.Count != 1) return "4.12.34.56";
             var solution = rows.Entities[0];
             return solution.GetAttributeValue<string>("version");
         }
@@ -222,7 +222,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 version = version.Replace("<Version>", string.Empty).Replace("</Version>", string.Empty);
                 return version;
             }
-            return "4.99.99.99";
+            return "4.12.34.56";
         }
 
         private string FormatSolutionVersionString(string solutionName, Version version, string solutionType)

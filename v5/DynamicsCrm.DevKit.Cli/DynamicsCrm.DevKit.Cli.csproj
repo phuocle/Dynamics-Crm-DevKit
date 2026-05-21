@@ -3,15 +3,15 @@
 		<LangVersion>latest</LangVersion>
 		<TargetFramework>net10.0</TargetFramework>
 		<IsPublishable>True</IsPublishable>
-		<AssemblyVersion>4.99.99.99</AssemblyVersion>
-		<FileVersion>4.99.99.99</FileVersion>
+		<AssemblyVersion>4.12.34.56</AssemblyVersion>
+		<FileVersion>4.12.34.56</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
 		<Company>PhuocLe</Company>
 		<Product>DynamicsCrm.DevKit.Cli</Product>
 		<Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
 		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-		<Version>4.99.99.99</Version>
+		<Version>4.12.34.56</Version>
 		<OutputType>Exe</OutputType>
 		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
 		<BaseOutputPath>bin</BaseOutputPath>

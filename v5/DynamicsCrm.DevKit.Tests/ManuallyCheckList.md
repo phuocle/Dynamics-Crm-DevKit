@@ -20,7 +20,7 @@
 
 # DynamicsCrm.DevKit - Manual Test Checklist
 
-> **Version**: `4.99.99.99`
+> **Version**: `4.12.34.56`
 > **Tester**: _______________
 > **Date**: _______________
 > **Environment**: _______________
@@ -53,9 +53,9 @@
 
 ### 1.1 Installation
 
-- ✅ Install VSIX from `Published/4.99.99.99/DynamicsCrm.DevKit.4.99.99.99.vsix`
+- ✅ Install VSIX from `Published/4.12.34.56/DynamicsCrm.DevKit.4.12.34.56.vsix`
 - ✅ Verify extension appears in VS2026 Extensions → Manage Extensions
-- ✅ Verify version number matches `4.99.99.99`
+- ✅ Verify version number matches `4.12.34.56`
 
 ### 1.2 Connections
 
@@ -138,7 +138,7 @@
 
 ### 2.1 Installation & Version
 
-- ✅ Install CLI: `dotnet tool install -g DynamicsCrm.DevKit.Cli --version 4.99.99.99`
+- ✅ Install CLI: `dotnet tool install -g DynamicsCrm.DevKit.Cli --version 4.12.34.56`
 - ✅ Verify: `devkit --version` shows correct version and build date
 - ✅ Verify: `devkit --help` shows all commands
 
@@ -308,7 +308,7 @@
 
 ### 3.1 Installation
 
-- ⬜ Install NuGet: `DynamicsCrm.DevKit.Analyzers` version `4.99.99.99`
+- ⬜ Install NuGet: `DynamicsCrm.DevKit.Analyzers` version `4.12.34.56`
 - ⬜ Verify analyzers appear in VS Error List
 - ⬜ Verify `.editorconfig` severity settings are respected
 
@@ -357,7 +357,7 @@
 
 ### 4.1 Installation & Version
 
-- ⬜ Install Tool: `dotnet tool install -g DynamicsCrm.DevKit.Tool --version 4.99.99.99`
+- ⬜ Install Tool: `dotnet tool install -g DynamicsCrm.DevKit.Tool --version 4.12.34.56`
 - ⬜ Verify: `devkit-tool --version` shows correct version
 - ⬜ Verify: `devkit-tool --help` shows all 6 commands
 

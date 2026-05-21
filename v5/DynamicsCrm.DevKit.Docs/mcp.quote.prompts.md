@@ -107,7 +107,7 @@
 
 2. What components does the solution with display name "Quote MCP Solution" currently contain?
    > ✅ `get_solution_components(solution_name="Quote MCP Solution")`
-   > 🎯 Result: The solution exists (unique name QuoteMCPSolution, version 4.99.99.99, publisher PAZ) but currently contains 0 components — it is empty.
+   > 🎯 Result: The solution exists (unique name QuoteMCPSolution, version 4.12.34.56, publisher PAZ) but currently contains 0 components — it is empty.
 
 ---
 
@@ -610,13 +610,13 @@
 
 98. Check the solution with display name "Quote MCP Solution" and list all components now inside it: tables, columns, choices, forms, views, web resources, ribbon, commands, model-driven app, sitemap, and environment variables.
    > ✅ `get_solution_components(solution_name="Quote MCP Solution")`
-   > 🎯 Result: Solution "Quote MCP Solution" (v4.99.99.99, publisher PAZ) has 10 component entries: 4 Entities (Quote full, Quote Line full, Account partial, Contact partial), 1 Option Set (Quote Status), 2 Web Resources (quote.form.js, sync-line-status.svg), 1 Site Map (Quote MCP App), 1 Model-Driven App (Quote MCP App), and 1 Environment Variable Definition (Quote Production Mode). Columns, forms, views, and ribbon customizations are included as sub-components within the full entities (Quote and Quote Line).
+   > 🎯 Result: Solution "Quote MCP Solution" (v4.12.34.56, publisher PAZ) has 10 component entries: 4 Entities (Quote full, Quote Line full, Account partial, Contact partial), 1 Option Set (Quote Status), 2 Web Resources (quote.form.js, sync-line-status.svg), 1 Site Map (Quote MCP App), 1 Model-Driven App (Quote MCP App), and 1 Environment Variable Definition (Quote Production Mode). Columns, forms, views, and ribbon customizations are included as sub-components within the full entities (Quote and Quote Line).
 
 99. Summarize the "Quote MCP Solution" session: what was created successfully, what was skipped due to environment limitations, and which prompts should be re-run to clean up or start over from scratch.
    > ✅ `get_solution_components(solution_name="Quote MCP Solution")`
    >    `get_plugin_trace_logs(minutes_ago=60)`
    >    `get_system_jobs(status="failed", minutes_ago=1440, max_records=10)`
-   > 🎯 Result: **Session Summary — Quote MCP Solution (v4.99.99.99, Publisher PAZ)**
+   > 🎯 Result: **Session Summary — Quote MCP Solution (v4.12.34.56, Publisher PAZ)**
 
    > **✅ Successfully Created (99 prompts completed):**
    > - 1 Global Choice: Quote Status (Draft, Sent, Won, Lost, Expired, Archived + colors)

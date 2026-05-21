@@ -9,7 +9,7 @@
     version in tracked text files, then updates DevKit.ReleaseConfig.json.
 
 .PARAMETER NewVersion
-    Required. Four-part version, for example 4.99.99.99.
+    Required. Four-part version, for example 4.12.34.56.
 
 .PARAMETER OldVersion
     Optional. Defaults to DevKit.ReleaseConfig.json -> version.
@@ -21,8 +21,8 @@
     Allows running when the git working tree is dirty.
 
 .EXAMPLE
-    .\Change-Version.ps1 -NewVersion 4.99.99.99 -DryRun
-    .\Change-Version.ps1 -NewVersion 4.99.99.99
+    .\Change-Version.ps1 -NewVersion 4.12.34.56 -DryRun
+    .\Change-Version.ps1 -NewVersion 4.12.34.56
 #>
 param (
     [Parameter(Mandatory = $true)]
@@ -44,7 +44,7 @@ function Assert-VersionFormat {
     param ($Version, $Name)
 
     if ($Version -notmatch '^\d+\.\d+\.\d+\.\d+$') {
-        throw "$Name must be a four-part numeric version, for example 4.99.99.99. Actual: $Version"
+        throw "$Name must be a four-part numeric version, for example 4.12.34.56. Actual: $Version"
     }
 }
 
