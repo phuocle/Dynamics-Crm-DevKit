@@ -12,6 +12,7 @@ description: "Build full DynamicsCrm.DevKit release package"
 This workflow is intentionally one full build plus package/install/verify:
 
 - The script restores once, builds only the package projects that need a separate build (`DynamicsCrm.DevKit.Analyzers` and the VSIX project), then packages CLI and Tool.
+- Build-time source replacement is date-only. The version is stable in source and comes from `DevKit.ReleaseConfig.json` for package/MSBuild properties.
 - CLI and Tool packages must be created with `dotnet pack --no-restore` inside `Release-DynamicsCrm-DevKit.ps1`. This lets each .NET global tool build exactly once during pack, instead of being built first by a full solution build and rebuilt by pack.
 - Do not use `dotnet pack --no-build` for these global tool packages unless the required publish/run artifacts already exist; it can skip files needed by the tool package.
 - Do not run `/claude-build-cli`, `/claude-build-tool`, extra `dotnet build`, or extra `dotnet pack` after this workflow unless you are fixing a failed build.
@@ -25,7 +26,7 @@ This workflow is intentionally one full build plus package/install/verify:
    ```powershell
    .\DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1
    ```
-   The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes, including a running MCP server, before building to avoid file-lock errors. It builds the release package outputs in Release mode using the exact version and exact date/time configuration from `DevKit.ReleaseConfig.json`.
+   The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes, including a running MCP server, before building to avoid file-lock errors. It builds the release package outputs in Release mode using the version and release date/time from `DevKit.ReleaseConfig.json`; only the date/time placeholder is replaced during build.
 3. Wait for the script to finish. If it fails, stop, fix the issue, and restart this workflow from step 1.
 4. Record the end time.
 5. Verify the build:

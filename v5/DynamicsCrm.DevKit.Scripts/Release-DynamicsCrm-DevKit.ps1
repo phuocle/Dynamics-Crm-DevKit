@@ -1,56 +1,47 @@
 <#
 .SYNOPSIS
-    DynamicsCrm.DevKit Release Build Script
+    DynamicsCrm.DevKit package build script.
 
 .DESCRIPTION
-    Builds the release package outputs, creates NuGet packages, and publishes the VSIX.
-    Updates version and date placeholders in source files before building.
+    Builds the package outputs, creates NuGet packages, publishes the VSIX, and
+    installs the local CLI/Tool packages for verification.
 
-    ANNUAL RELEASE: Uses Dec 31 of current year at 23:59:59
-    For current date testing, use Release-DynamicsCrm-DevKit-CurrentDate.ps1
+    Build-time source replacement is limited to build date placeholders. Version
+    values are stable in source and are changed only by Change-Version.ps1.
 
 .PARAMETER BuildDate
-    Optional. The build date string to use. Format: "yyyy.MM.dd HH.mm.ss".
-    If not provided, defaults to "31.12.{CurrentYear} 23:59:59" for annual release.
+    Optional build date string. Format: "dd.MM.yyyy HH:mm:ss".
+    If not provided, the release date is derived from DevKit.ReleaseConfig.json.
+
+.PARAMETER Clean
+    Optional. Uses Clean;Build for MSBuild projects. By default the script uses
+    Build to avoid unnecessary rebuild work.
 
 .EXAMPLE
     .\Release-DynamicsCrm-DevKit.ps1
-    .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "2025.12.15 10.00.00"
+    .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "21.05.2026 10:00:00"
+    .\Release-DynamicsCrm-DevKit.ps1 -Clean
 #>
 param (
     [string]$BuildDate,
-    [string]$Configuration = "Release"
+    [string]$Configuration = "Release",
+    [switch]$Clean
 )
 
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = (Resolve-Path "$PSScriptRoot\..").Path
-
-# --- Configuration ---
-# Load configuration from single source of truth
 $ConfigFile = Join-Path $PSScriptRoot "DevKit.ReleaseConfig.json"
 if (-not (Test-Path $ConfigFile)) {
     throw "Configuration file not found: $ConfigFile"
 }
 
 $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-
-# Version - Change this in DevKit.ReleaseConfig.json when releasing a new version
 $Version = $Config.version
-
-$SolutionFile = Join-Path $ProjectRoot $Config.buildConfig.solutionFile
 $PublishedRoot = Join-Path $ProjectRoot $Config.buildConfig.publishedRoot
-
-# Files to update (loaded from config)
-$VersionFiles = $Config.files.versionReplacement
-$AssemblyVersionFiles = $Config.files.assemblyVersionReplacement
-$DateFiles = $Config.files.dateReplacement
-
-# --- Helper Functions ---
+$DateFiles = @($Config.files.dateReplacement)
 
 function Get-MSBuildPath {
-    # User requested only VS 2026 Professional
-    # Note: VS 2026 might be installed in a folder named "18" or "2026"
     $paths = @(
         "C:\Program Files\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\MSBuild.exe",
         "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\MSBuild.exe"
@@ -62,18 +53,40 @@ function Get-MSBuildPath {
         }
     }
 
-    # Try vswhere as a fallback for non-standard install locations, but filter for 2026 or 18
     $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
     if (Test-Path $vswhere) {
         $foundPath = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe -prerelease
         if ($foundPath -and (Test-Path $foundPath)) {
-             if (($foundPath -like "*2026*") -or ($foundPath -like "*\18\*")) {
+            if (($foundPath -like "*2026*") -or ($foundPath -like "*\18\*")) {
                 return $foundPath
-             }
+            }
         }
     }
 
     throw "MSBuild.exe for Visual Studio 2026 Professional not found. Checked paths: $($paths -join ', ')"
+}
+
+function Get-ConfiguredBuildDate {
+    param ($Config)
+
+    $currentYear = (Get-Date).Year
+    $annualConfig = $Config.buildConfig.annualRelease
+    if (-not $annualConfig) {
+        throw "buildConfig.annualRelease is missing from DevKit.ReleaseConfig.json"
+    }
+
+    return "{0:D2}.{1:D2}.$currentYear {2:D2}:{3:D2}:{4:D2}" -f `
+        $annualConfig.day, $annualConfig.month, $annualConfig.hour, $annualConfig.minute, $annualConfig.second
+}
+
+function Assert-ReplacementScope {
+    param ($Files)
+
+    $blockedPattern = '(^|[\\/])(DynamicsCrm\.DevKit\.Tests|DynamicsCrm\.DevKit\.UnitTests|Coverage|bin|obj|Published)([\\/]|$)'
+    $blockedFiles = @($Files | Where-Object { $_ -match $blockedPattern })
+    if ($blockedFiles.Count -gt 0) {
+        throw "Build-time replacement list contains files outside the build scope:`n$($blockedFiles -join "`n")"
+    }
 }
 
 function Assert-ReplacedFilesClean {
@@ -88,94 +101,7 @@ function Assert-ReplacedFilesClean {
     }
 
     if ($dirtyFiles.Count -gt 0) {
-        throw "Release replacement files must be clean before build because the script restores them with git restore after build. Dirty files:`n$($dirtyFiles -join "`n")"
-    }
-}
-
-function Get-GitTrackedFilesContaining {
-    param ($Token, $ProjectRoot)
-
-    if ([string]::IsNullOrWhiteSpace($Token)) {
-        return @()
-    }
-
-    $files = & git -C $ProjectRoot grep -Il --fixed-strings -- $Token -- . ':(exclude)**/bin/**' ':(exclude)**/obj/**' ':(exclude)Published/**' ':(exclude)DynamicsCrm.DevKit.Scripts/DevKit.ReleaseConfig.json' 2>$null
-    if ($LASTEXITCODE -eq 1) {
-        return @()
-    }
-    if ($LASTEXITCODE -ne 0) {
-        throw "git grep failed while searching for '$Token'."
-    }
-
-    return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
-}
-
-function Update-FileContent {
-    param ($FilePath, $Version, $Date, $Config, $ProjectRoot)
-
-    $fullPath = Join-Path $ProjectRoot $FilePath
-    if (-not (Test-Path $fullPath)) {
-        Write-Warning "File not found: $FilePath"
-        return $null
-    }
-
-    # Use .NET to read/write to avoid PowerShell adding newlines
-    $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
-    $originalContent = $content
-
-    if ($Version) {
-        $versionTokens = @(
-            $Config.placeholders.version
-        ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
-
-        foreach ($token in $versionTokens) {
-            $versionPattern = [regex]::Escape($token)
-            $content = $content -replace $versionPattern, $Version
-        }
-    }
-    if ($Date) {
-        $datePattern = [regex]::Escape($Config.placeholders.date)
-        $content = $content -replace $datePattern, $Date
-    }
-
-    if ($content -ne $originalContent) {
-        Write-Host "Updating $fullPath..." -ForegroundColor DarkGray
-        $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
-        Write-AllTextWithRetry -FilePath $fullPath -Content $content -Encoding $utf8NoBOM
-        return $true
-    }
-    return $false
-}
-
-function Assert-VersionContentUpdated {
-    param ($Files, $Version, $Config, $ProjectRoot)
-
-    if ([string]::IsNullOrWhiteSpace($Version)) {
-        return
-    }
-
-    if ($Config.placeholders.version -eq $Version) {
-        return
-    }
-
-    $tokens = @(
-        $Config.placeholders.version
-    )
-
-    $tokens = $tokens | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
-
-    foreach ($file in $Files) {
-        $fullPath = Join-Path $ProjectRoot $file
-        if (-not (Test-Path $fullPath)) {
-            continue
-        }
-
-        $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
-        foreach ($token in $tokens) {
-            if ($content.Contains($token)) {
-                throw "Version replacement incomplete in $file. Found '$token' after replacement; expected '$Version'."
-            }
-        }
+        throw "Build-time replacement files must be clean before build because the script restores them with git restore after build. Dirty files:`n$($dirtyFiles -join "`n")"
     }
 }
 
@@ -194,28 +120,49 @@ function Write-AllTextWithRetry {
     }
 }
 
+function Update-DatePlaceholder {
+    param ($FilePath, $Date, $Config, $ProjectRoot)
+
+    $fullPath = Join-Path $ProjectRoot $FilePath
+    if (-not (Test-Path $fullPath)) {
+        Write-Warning "File not found: $FilePath"
+        return $false
+    }
+
+    $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
+    $originalContent = $content
+    $datePattern = [regex]::Escape($Config.placeholders.date)
+    $content = $content -replace $datePattern, $Date
+
+    if ($content -ne $originalContent) {
+        Write-Host "Updating $FilePath..." -ForegroundColor DarkGray
+        $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+        Write-AllTextWithRetry -FilePath $fullPath -Content $content -Encoding $utf8NoBom
+        return $true
+    }
+
+    return $false
+}
+
 function Restore-ReplacedFilesFromGit {
     param ($Files, $ProjectRoot)
 
-    foreach ($file in $Files) {
-        Write-Host "Restoring $file..." -ForegroundColor DarkGray
-        & git -C $ProjectRoot restore -- $file
-        if ($LASTEXITCODE -ne 0) {
-            throw "git restore failed for $file"
-        }
+    $filesToRestore = @($Files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
+    if ($filesToRestore.Count -eq 0) {
+        return
+    }
+
+    Write-Host "Restoring $($filesToRestore.Count) build-time replacement file(s)..." -ForegroundColor DarkGray
+    & git -C $ProjectRoot restore -- $filesToRestore
+    if ($LASTEXITCODE -ne 0) {
+        throw "git restore failed for build-time replacement files"
     }
 }
 
-# --- Main Logic ---
-
-try {
-    # 0. Kill CLI process (may be running as MCP server, causing file locks)
-    # On .NET 10 framework-dependent tools the actual host is dotnet.exe, NOT devkit.exe.
-    # We must kill by process name AND by dotnet.exe instances whose CommandLine contains devkit/Cli.
+function Stop-DevKitProcesses {
     Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
     $killed = 0
 
-    # Kill by exact process name (self-contained or shim exe)
     foreach ($name in @("DynamicsCrm.DevKit.Cli", "devkit")) {
         $procs = Get-Process -Name $name -ErrorAction SilentlyContinue
         if ($procs) {
@@ -224,7 +171,6 @@ try {
         }
     }
 
-    # Kill dotnet.exe processes that are hosting devkit (framework-dependent on .NET 10)
     Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | ForEach-Object {
         try {
             $cmdline = (Get-CimInstance Win32_Process -Filter "ProcessId=$($_.Id)" -ErrorAction SilentlyContinue).CommandLine
@@ -237,103 +183,90 @@ try {
 
     if ($killed -gt 0) {
         Write-Host "$killed CLI/devkit process(es) killed." -ForegroundColor Green
+        Start-Sleep -Seconds 1
     } else {
         Write-Host "No CLI/devkit processes found." -ForegroundColor DarkGray
     }
-    # Wait for OS to fully release kernel-level directory handles before uninstall
-    Start-Sleep -Seconds 3
+}
 
-    # 1. Determine Build Date
-    # If no BuildDate provided, use Dec 31 of current year (annual release)
+$filesToRestore = @()
+
+try {
+    Stop-DevKitProcesses
+
     if ([string]::IsNullOrWhiteSpace($BuildDate)) {
-        $currentYear = (Get-Date).Year
-        $annualConfig = $Config.buildConfig.annualRelease
-        $BuildDate = "{0:D2}.{1:D2}.$currentYear {2:D2}:{3:D2}:{4:D2}" -f `
-            $annualConfig.day, $annualConfig.month, $annualConfig.hour, $annualConfig.minute, $annualConfig.second
+        $BuildDate = Get-ConfiguredBuildDate -Config $Config
     }
 
     Write-Host "Version:       $Version" -ForegroundColor Cyan
     Write-Host "Date:          $BuildDate" -ForegroundColor Cyan
     Write-Host "Configuration: $Configuration" -ForegroundColor Cyan
+    Write-Host "Clean:         $Clean" -ForegroundColor Cyan
 
-    # 2. Update Placeholders
-    Write-Host "`nUpdating placeholders..." -ForegroundColor Yellow
-    $filesToRestore = @()
+    Write-Host "`nUpdating date placeholders..." -ForegroundColor Yellow
+    $dateFilesToReplace = @($DateFiles | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
+    Assert-ReplacementScope -Files $dateFilesToReplace
+    Assert-ReplacedFilesClean -Files $dateFilesToReplace -ProjectRoot $ProjectRoot
+    $filesToRestore = $dateFilesToReplace
 
-    # Get unique list of files (explicit config + dynamic tracked files containing anchors)
-    $dynamicVersionFiles = Get-GitTrackedFilesContaining -Token $Config.placeholders.version -ProjectRoot $ProjectRoot
-    $dynamicDateFiles = Get-GitTrackedFilesContaining -Token $Config.placeholders.date -ProjectRoot $ProjectRoot
-    $versionFilesToReplace = ($VersionFiles + $AssemblyVersionFiles + $dynamicVersionFiles) |
-        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
-        Select-Object -Unique
-    $dateFilesToReplace = ($DateFiles + $dynamicDateFiles) |
-        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
-        Select-Object -Unique
-    $allFiles = ($versionFilesToReplace + $dateFilesToReplace) |
-        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
-        Select-Object -Unique
-    Assert-ReplacedFilesClean -Files $allFiles -ProjectRoot $ProjectRoot
-    $filesToRestore = $allFiles
-
-    foreach ($file in $allFiles) {
-        $v = if ($versionFilesToReplace -contains $file) { $Version } else { $null }
-        $d = if ($dateFilesToReplace -contains $file) { $BuildDate } else { $null }
-
-        Update-FileContent -FilePath $file -Version $v -Date $d -Config $Config -ProjectRoot $ProjectRoot | Out-Null
+    foreach ($file in $dateFilesToReplace) {
+        Update-DatePlaceholder -FilePath $file -Date $BuildDate -Config $Config -ProjectRoot $ProjectRoot | Out-Null
     }
 
-    Assert-VersionContentUpdated -Files $versionFilesToReplace -Version $Version -Config $Config -ProjectRoot $ProjectRoot
-
-    # 3. Restore NuGet Packages
-    Write-Host "`nRestoring NuGet packages..." -ForegroundColor Yellow
     $msbuild = Get-MSBuildPath
     Write-Host "Using MSBuild: $msbuild" -ForegroundColor DarkGray
 
-    $restoreArgs = @(
-        "$SolutionFile",
-        "/t:Restore",
-        "/nologo",
-        "/v:q" # Quiet verbosity for restore
-    )
+    $analyzerProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj"
+    $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
+    $cliProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
+    $toolProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj"
 
-    & $msbuild $restoreArgs
-    if ($LASTEXITCODE -ne 0) { throw "NuGet restore failed with exit code $LASTEXITCODE" }
+    Write-Host "`nRestoring package projects..." -ForegroundColor Yellow
+    $projectRestoreArgs = @("/t:Restore", "/nologo", "/v:q")
+
+    & $msbuild $analyzerProject $projectRestoreArgs
+    if ($LASTEXITCODE -ne 0) { throw "Analyzer restore failed with exit code $LASTEXITCODE" }
+
+    & $msbuild $vsixProject $projectRestoreArgs
+    if ($LASTEXITCODE -ne 0) { throw "VSIX restore failed with exit code $LASTEXITCODE" }
+
+    & dotnet restore $cliProject --verbosity quiet
+    if ($LASTEXITCODE -ne 0) { throw "CLI restore failed with exit code $LASTEXITCODE" }
+
+    & dotnet restore $toolProject --verbosity quiet
+    if ($LASTEXITCODE -ne 0) { throw "Tool restore failed with exit code $LASTEXITCODE" }
     Write-Host "Restore Success." -ForegroundColor Green
 
-    # 4. Build package projects that are not packed by dotnet pack.
     Get-Process -Name "DynamicsCrm.DevKit.Cli" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
     Get-Process -Name "devkit" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
     $LASTEXITCODE = 0
     Write-Host "`nBuilding package projects ($Configuration)..." -ForegroundColor Yellow
 
-    # Determine Output Directory
     $publishDirName = $Version
     $publishDir = Join-Path $PublishedRoot $publishDirName
-    
-    # Clean published folder
     if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
     New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
 
-    $analyzerProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Analyzers\DynamicsCrm.DevKit.Analyzers.csproj"
+    $buildTarget = if ($Clean) { "Clean;Build" } else { "Build" }
+
     $analyzerBuildArgs = @(
         "$analyzerProject",
-        "/t:Clean;Build",
+        "/t:$buildTarget",
         "/p:Configuration=$Configuration",
         "/p:Version=$Version",
         "/p:AssemblyVersion=$Version",
         "/p:FileVersion=$Version",
         "/nologo",
-        "/v:m" # Minimal verbosity
+        "/v:m"
     )
 
     & $msbuild $analyzerBuildArgs
     if ($LASTEXITCODE -ne 0) { throw "Analyzer build failed with exit code $LASTEXITCODE" }
     Write-Host "Analyzer build Success." -ForegroundColor Green
 
-    $vsixProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit\DynamicsCrm.DevKit.csproj"
     $vsixBuildArgs = @(
         "$vsixProject",
-        "/t:Clean;Build",
+        "/t:$buildTarget",
         "/p:Configuration=$Configuration",
         "/p:Version=$Version",
         "/p:AssemblyVersion=$Version",
@@ -347,13 +280,9 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "VSIX Project Build failed with exit code $LASTEXITCODE" }
     Write-Host "VSIX Project Build Success." -ForegroundColor Green
 
-    # 5. Create NuGet Packages
     Write-Host "`nCreating NuGet Packages..." -ForegroundColor Yellow
 
-    # --- CLI: Use dotnet pack (.NET global tool). This builds CLI exactly once. ---
     Write-Host "`nPacking CLI with dotnet pack (.NET tool)..." -ForegroundColor Cyan
-    $cliProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj"
-    
     $dotnetPackArgs = @(
         "pack",
         $cliProject,
@@ -365,16 +294,13 @@ try {
         "/p:FileVersion=$Version",
         "/p:NoWarn=NU5100%3BNU1702%3BCVSTBLD002"
     )
-    
+
     & dotnet $dotnetPackArgs
     $cliPackagePath = Join-Path $publishDir "DynamicsCrm.DevKit.Cli.$Version.nupkg"
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path $cliPackagePath)) { throw "dotnet pack failed for CLI" }
     Write-Host "CLI package created successfully!" -ForegroundColor Green
 
-    # --- Tool: Use dotnet pack (.NET global tool). This builds Tool exactly once. ---
-    Write-Host "`nPacking Tool with dotnet pack (.NET tool)..." -ForegroundColor Cyan
-    $toolProject = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Tool\DynamicsCrm.DevKit.Tool.csproj"
-    
+    Write-Host "`nPacking Tool with dotnet pack (.NET global tool)..." -ForegroundColor Cyan
     $dotnetPackToolArgs = @(
         "pack",
         $toolProject,
@@ -386,13 +312,12 @@ try {
         "/p:FileVersion=$Version",
         "/p:NoWarn=NU5100%3BSYSLIB0041"
     )
-    
+
     & dotnet $dotnetPackToolArgs
     $toolPackagePath = Join-Path $publishDir "DynamicsCrm.DevKit.Tool.$Version.nupkg"
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path $toolPackagePath)) { throw "dotnet pack failed for Tool" }
     Write-Host "Tool package created successfully!" -ForegroundColor Green
 
-    # --- Analyzers: Use nuget pack (legacy .nuspec) ---
     $nugetExe = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Analyzers\Nuget\nuget.exe"
     if (-not (Test-Path $nugetExe)) {
         Write-Host "NuGet.exe not found. Downloading..." -ForegroundColor Yellow
@@ -414,7 +339,6 @@ try {
 
         Push-Location $dir
         try {
-            # Remove old nupkg files to avoid confusion
             Get-ChildItem -Filter "*.nupkg" | Remove-Item -Force -ErrorAction SilentlyContinue
 
             $packArgs = @(
@@ -434,7 +358,6 @@ try {
         }
     }
 
-    # 6. Copy VSIX
     Write-Host "`nCopying VSIX..." -ForegroundColor Yellow
     $vsixSource = Join-Path $ProjectRoot "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
     if (Test-Path $vsixSource) {
@@ -443,139 +366,122 @@ try {
         Copy-Item $vsixSource $vsixDest -Force
         Write-Host "Copied VSIX to $vsixDest" -ForegroundColor Green
     } else {
-        # Warning only for Debug, Error for Release
         if ($Configuration -eq "Debug") {
             Write-Warning "VSIX file not found at $vsixSource (expected only if VSIX project is built)"
         } else {
-             throw "VSIX file not found at $vsixSource"
+            throw "VSIX file not found at $vsixSource"
         }
     }
-    
-    # 7. Install CLI (Always)
+
     Write-Host "`nInstalling CLI Locally..." -ForegroundColor Yellow
-    $CliToolName = "DynamicsCrm.DevKit.Cli"
-        
-        $NupkgPath = $publishDir
-        
-        # Uninstall existing
-        $existingTool = dotnet tool list -g | Select-String -Pattern $CliToolName
-        if ($existingTool) {
-            Write-Host "Uninstalling existing CLI tool..." -ForegroundColor DarkGray
-             dotnet tool uninstall -g $CliToolName
-        }
+    $cliToolName = "DynamicsCrm.DevKit.Cli"
+    $nupkgPath = $publishDir
 
-        # Force clean the tool store to prevent corruption
-        $toolStorePath = Join-Path $env:USERPROFILE ".dotnet\tools\.store\dynamicscrm.devkit.cli"
-        if (Test-Path $toolStorePath) {
-            Write-Host "Force cleaning tool store at $toolStorePath..." -ForegroundColor DarkGray
-            Remove-Item $toolStorePath -Recurse -Force -ErrorAction SilentlyContinue
-            Start-Sleep -Seconds 1
-        }
-        
-        # Force clean the shim to prevent 'command conflicts'
-        $shimPath = Join-Path $env:USERPROFILE ".dotnet\tools\devkit.exe"
-        if (Test-Path $shimPath) {
-             Write-Host "Force cleaning shim at $shimPath..." -ForegroundColor DarkGray
-             Remove-Item $shimPath -Force -ErrorAction SilentlyContinue
-        }
+    $existingTool = dotnet tool list -g | Select-String -Pattern $cliToolName
+    if ($existingTool) {
+        Write-Host "Uninstalling existing CLI tool..." -ForegroundColor DarkGray
+        dotnet tool uninstall -g $cliToolName
+    }
 
-        # Clear NuGet cache for this version to ensure we get the latest build
-        $nugetCachedPackage = Join-Path $env:USERPROFILE ".nuget\packages\dynamicscrm.devkit.cli\$Version"
-        if (Test-Path $nugetCachedPackage) {
-             Write-Host "Removing cached package at $nugetCachedPackage..." -ForegroundColor DarkGray
-             Remove-Item $nugetCachedPackage -Recurse -Force -ErrorAction SilentlyContinue
-        }
+    $toolStorePath = Join-Path $env:USERPROFILE ".dotnet\tools\.store\dynamicscrm.devkit.cli"
+    if (Test-Path $toolStorePath) {
+        Write-Host "Force cleaning tool store at $toolStorePath..." -ForegroundColor DarkGray
+        Remove-Item $toolStorePath -Recurse -Force -ErrorAction SilentlyContinue
+    }
 
-        # Install new
-        Write-Host "Installing new CLI version..." -ForegroundColor DarkGray
-        $installArgs = @(
-            "tool", "install",
-            "-g", $CliToolName,
-            "--add-source", $NupkgPath,
+    $shimPath = Join-Path $env:USERPROFILE ".dotnet\tools\devkit.exe"
+    if (Test-Path $shimPath) {
+        Write-Host "Force cleaning shim at $shimPath..." -ForegroundColor DarkGray
+        Remove-Item $shimPath -Force -ErrorAction SilentlyContinue
+    }
+
+    $nugetCachedPackage = Join-Path $env:USERPROFILE ".nuget\packages\dynamicscrm.devkit.cli\$Version"
+    if (Test-Path $nugetCachedPackage) {
+        Write-Host "Removing cached package at $nugetCachedPackage..." -ForegroundColor DarkGray
+        Remove-Item $nugetCachedPackage -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "Installing new CLI version..." -ForegroundColor DarkGray
+    $installArgs = @(
+        "tool", "install",
+        "-g", $cliToolName,
+        "--add-source", $nupkgPath,
+        "--version", $Version
+    )
+    & dotnet $installArgs
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Install failed (exit code $LASTEXITCODE), trying update..." -ForegroundColor Yellow
+        $updateArgs = @(
+            "tool", "update",
+            "-g", $cliToolName,
+            "--add-source", $nupkgPath,
             "--version", $Version
         )
-        & dotnet $installArgs
-        if ($LASTEXITCODE -ne 0) { 
-            Write-Host "Install failed (exit code $LASTEXITCODE), trying update..." -ForegroundColor Yellow
-            $updateArgs = @(
-                "tool", "update",
-                "-g", $CliToolName,
-                "--add-source", $NupkgPath,
-                "--version", $Version
-            )
-            & dotnet $updateArgs
-            if ($LASTEXITCODE -ne 0) { 
-               Write-Warning "Failed to install/update CLI tool. Exit code: $LASTEXITCODE" 
-            } else {
-               Write-Host "CLI updated successfully!" -ForegroundColor Green
-            }
-        } else {
-            Write-Host "CLI installed successfully!" -ForegroundColor Green
-        }
-
-    # 8. Install Tool (Always)
-    Write-Host "`nInstalling Tool Locally..." -ForegroundColor Yellow
-    $ToolToolName = "DynamicsCrm.DevKit.Tool"
-
-        # Uninstall existing
-        $existingDevkitTool = dotnet tool list -g | Select-String -Pattern $ToolToolName
-        if ($existingDevkitTool) {
-            Write-Host "Uninstalling existing Tool..." -ForegroundColor DarkGray
-             dotnet tool uninstall -g $ToolToolName
-        }
-
-        # Force clean the tool store to prevent corruption
-        $toolToolStorePath = Join-Path $env:USERPROFILE ".dotnet\tools\.store\dynamicscrm.devkit.tool"
-        if (Test-Path $toolToolStorePath) {
-            Write-Host "Force cleaning tool store at $toolToolStorePath..." -ForegroundColor DarkGray
-            Remove-Item $toolToolStorePath -Recurse -Force -ErrorAction SilentlyContinue
-            Start-Sleep -Seconds 1
-        }
-
-        # Force clean the shim to prevent 'command conflicts'
-        $toolShimPath = Join-Path $env:USERPROFILE ".dotnet\tools\devkit-tool.exe"
-        if (Test-Path $toolShimPath) {
-             Write-Host "Force cleaning shim at $toolShimPath..." -ForegroundColor DarkGray
-             Remove-Item $toolShimPath -Force -ErrorAction SilentlyContinue
-        }
-
-        # Clear NuGet cache for this version to ensure we get the latest build
-        $toolCachedPackage = Join-Path $env:USERPROFILE ".nuget\packages\dynamicscrm.devkit.tool\$Version"
-        if (Test-Path $toolCachedPackage) {
-             Write-Host "Removing cached package at $toolCachedPackage..." -ForegroundColor DarkGray
-             Remove-Item $toolCachedPackage -Recurse -Force -ErrorAction SilentlyContinue
-        }
-
-        # Install new
-        Write-Host "Installing new Tool version..." -ForegroundColor DarkGray
-        $toolInstallArgs = @(
-            "tool", "install",
-            "-g", $ToolToolName,
-            "--add-source", $NupkgPath,
-            "--version", $Version
-        )
-        & dotnet $toolInstallArgs
+        & dotnet $updateArgs
         if ($LASTEXITCODE -ne 0) {
-            Write-Host "Install failed (exit code $LASTEXITCODE), trying update..." -ForegroundColor Yellow
-            $toolUpdateArgs = @(
-                "tool", "update",
-                "-g", $ToolToolName,
-                "--add-source", $NupkgPath,
-                "--version", $Version
-            )
-            & dotnet $toolUpdateArgs
-            if ($LASTEXITCODE -ne 0) {
-               Write-Warning "Failed to install/update Tool. Exit code: $LASTEXITCODE"
-            } else {
-               Write-Host "Tool updated successfully!" -ForegroundColor Green
-            }
+            Write-Warning "Failed to install/update CLI tool. Exit code: $LASTEXITCODE"
         } else {
-            Write-Host "Tool installed successfully!" -ForegroundColor Green
+            Write-Host "CLI updated successfully!" -ForegroundColor Green
         }
+    } else {
+        Write-Host "CLI installed successfully!" -ForegroundColor Green
+    }
+
+    Write-Host "`nInstalling Tool Locally..." -ForegroundColor Yellow
+    $toolToolName = "DynamicsCrm.DevKit.Tool"
+
+    $existingDevkitTool = dotnet tool list -g | Select-String -Pattern $toolToolName
+    if ($existingDevkitTool) {
+        Write-Host "Uninstalling existing Tool..." -ForegroundColor DarkGray
+        dotnet tool uninstall -g $toolToolName
+    }
+
+    $toolToolStorePath = Join-Path $env:USERPROFILE ".dotnet\tools\.store\dynamicscrm.devkit.tool"
+    if (Test-Path $toolToolStorePath) {
+        Write-Host "Force cleaning tool store at $toolToolStorePath..." -ForegroundColor DarkGray
+        Remove-Item $toolToolStorePath -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    $toolShimPath = Join-Path $env:USERPROFILE ".dotnet\tools\devkit-tool.exe"
+    if (Test-Path $toolShimPath) {
+        Write-Host "Force cleaning shim at $toolShimPath..." -ForegroundColor DarkGray
+        Remove-Item $toolShimPath -Force -ErrorAction SilentlyContinue
+    }
+
+    $toolCachedPackage = Join-Path $env:USERPROFILE ".nuget\packages\dynamicscrm.devkit.tool\$Version"
+    if (Test-Path $toolCachedPackage) {
+        Write-Host "Removing cached package at $toolCachedPackage..." -ForegroundColor DarkGray
+        Remove-Item $toolCachedPackage -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "Installing new Tool version..." -ForegroundColor DarkGray
+    $toolInstallArgs = @(
+        "tool", "install",
+        "-g", $toolToolName,
+        "--add-source", $nupkgPath,
+        "--version", $Version
+    )
+    & dotnet $toolInstallArgs
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Install failed (exit code $LASTEXITCODE), trying update..." -ForegroundColor Yellow
+        $toolUpdateArgs = @(
+            "tool", "update",
+            "-g", $toolToolName,
+            "--add-source", $nupkgPath,
+            "--version", $Version
+        )
+        & dotnet $toolUpdateArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "Failed to install/update Tool. Exit code: $LASTEXITCODE"
+        } else {
+            Write-Host "Tool updated successfully!" -ForegroundColor Green
+        }
+    } else {
+        Write-Host "Tool installed successfully!" -ForegroundColor Green
+    }
 
     Write-Host "`nRelease completed successfully!" -ForegroundColor Green
 
-    # Verify installation
     Write-Host "`nVerifying installation:" -ForegroundColor DarkGray
     Write-Host "--- devkit (CLI) ---" -ForegroundColor Cyan
     devkit --version
@@ -589,7 +495,6 @@ catch {
     exit 1
 }
 finally {
-    # 9. Revert build-time replacements.
     if ($filesToRestore.Count -gt 0) {
         Write-Host "`nRestoring build-time replacement files from git..." -ForegroundColor Yellow
         Restore-ReplacedFilesFromGit -Files $filesToRestore -ProjectRoot $ProjectRoot

@@ -6,8 +6,8 @@ Safe code preparation and commit workflow for the DynamicsCrm.DevKit project.
 
 > [!IMPORTANT]
 > **AI AGENT INSTRUCTIONS (CRITICAL):**
-> TO AI AGENT: The user does NOT want you to just guide or list out steps. You are an Agent — you MUST USE TOOLS to execute `git` commands on behalf of the user.
-> When asked to run this workflow, you MUST IMMEDIATELY use a tool to run `git status`, then automatically analyze, check `Const.cs`, select files to add, craft an appropriate commit message, and finally: PROPOSE THE COMMANDS FOR THE USER TO APPROVE AND RUN. Do not make the user chat back again unless truly necessary.
+> TO AI AGENT: The user does NOT want you to just guide or list out steps. You are an Agent, so you MUST USE TOOLS to execute `git` commands on behalf of the user.
+> When asked to run this workflow, you MUST IMMEDIATELY use a tool to run `git status`, then automatically analyze, check build-time date replacement files, select files to add, craft an appropriate commit message, and finally propose the commands for the user to approve and run. Do not make the user chat back again unless truly necessary.
 
 > This project uses PowerShell on Windows. Do not use Bash scripts (`&&` or `<<EOF`).
 
@@ -23,14 +23,13 @@ git status
 **Step 2: Critical Check**
 
 > [!CAUTION]
-> **Warning about placeholder files**
-> AI must check if any file from `DevKit.ReleaseConfig.json` → `files.versionReplacement` or `files.assemblyVersionReplacement` is in the list of changed files.
-> These files get their anchor values replaced at build time:
-> - `4.12.34.56` is the source/debug anchor version. The build script replaces it with `DevKit.ReleaseConfig.json` → `version`.
-> - `xxxx.yy.zz HH.mm.ss` is the source/debug anchor build date.
-> - `.agent\workflows\*.md`, `.vstemplate`, `AssemblyInfo.cs`, `ProjectTemplate.csproj.template`, `NuGet.config`, etc. may contain the anchor version.
+> **Warning about build-time replacement files**
+> AI must check if any file from `DevKit.ReleaseConfig.json` -> `files.dateReplacement` is in the list of changed files.
+> These files get their build date placeholder replaced at build time:
+> - `4.12.34.56` is the stable source version. Build scripts do not replace it.
+> - `xxxx.yy.zz HH.mm.ss` is the source build date placeholder.
 >
-> If any of these files shows a build version different from the anchor (for example `4.88.88.88`), you absolutely **MUST NOT** commit this file. AI must automatically run `git restore "<file>"` or use a tool to revert the file before staging anything.
+> If any of these files shows a real build date where `xxxx.yy.zz HH.mm.ss` should be restored, you absolutely **MUST NOT** commit that build-time replacement. AI must automatically run `git restore "<file>"` or use a tool to revert the file before staging anything.
 
 **Step 3: Carefully select files to stage**
 

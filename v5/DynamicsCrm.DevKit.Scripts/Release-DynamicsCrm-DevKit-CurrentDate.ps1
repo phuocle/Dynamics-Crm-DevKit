@@ -4,7 +4,8 @@
     
 .DESCRIPTION
     Use this script for TESTING releases during development.
-    For official ANNUAL releases, use Release-DynamicsCrm-DevKit.ps1 (uses Dec 31).
+    For official releases, use Release-DynamicsCrm-DevKit.ps1 (uses the date
+    configured in DevKit.ReleaseConfig.json).
 
 .EXAMPLE
     .\Release-DynamicsCrm-DevKit-CurrentDate.ps1

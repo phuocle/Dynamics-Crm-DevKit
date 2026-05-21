@@ -9,7 +9,7 @@ description: Build Release DynamicsCrm.DevKit for all projects
 
 
 1. Record the start time
-2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm.DevKit.ps1`. The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes (such as the running MCP server) before building to avoid file lock access-denied errors. It builds all projects in Release mode using strictly the exact version and exact date/time configuration directly from `DevKit.ReleaseConfig.json`. If any errors occur, stop and fix them, then restart this workflow from the beginning.
+2. Run the PowerShell script: `DynamicsCrm.DevKit.Scripts\Release-DynamicsCrm-DevKit.ps1`. The script explicitly discovers and forcefully kills any running `DynamicsCrm.DevKit.Cli` and `devkit` processes (such as the running MCP server) before building to avoid file lock access-denied errors. It builds package outputs in Release mode using the version and release date/time from `DevKit.ReleaseConfig.json`; only the date/time placeholder is replaced during build. If any errors occur, stop and fix them, then restart this workflow from the beginning.
 3. Record the end time
 4. Verify the build:
    - Run `devkit --version`. Expected version is the value from `DevKit.ReleaseConfig.json` with the annual Build timestamp derived from `DevKit.ReleaseConfig.json`.

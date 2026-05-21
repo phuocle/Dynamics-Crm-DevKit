@@ -17,7 +17,7 @@ if ([string]::IsNullOrWhiteSpace($Version)) {
 }
 
 if ([string]::IsNullOrWhiteSpace($BuildDate)) {
-    $BuildDate = Get-Date -Format "yyyy.MM.dd HH.mm.ss"
+    $BuildDate = Get-Date -Format "dd.MM.yyyy HH:mm:ss"
 }
 
 $ConstFile = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Shared\Const.cs"
@@ -141,10 +141,9 @@ try {
     Stop-DevKitProcesses "before CLI build"
 
     $newContent = $OriginalContent `
-        -replace [regex]::Escape("4.12.34.56"), $Version `
         -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
     [System.IO.File]::WriteAllText($ConstFile, $newContent, $utf8NoBom)
-    Write-Host "Updated Const.cs with version $Version and build date $BuildDate." -ForegroundColor Green
+    Write-Host "Updated Const.cs with build date $BuildDate." -ForegroundColor Green
 
     New-Item -Path $PublishDir -ItemType Directory -Force | Out-Null
 
@@ -235,11 +234,12 @@ try {
 }
 finally {
     [System.IO.File]::WriteAllText($ConstFile, $OriginalContent, $utf8NoBom)
-    Write-Host "Restored Const.cs to source anchors." -ForegroundColor Yellow
+    Write-Host "Restored Const.cs to source values." -ForegroundColor Yellow
 }
 
 $content = Get-Content $ConstFile -Raw
-if ($content -match "4\.12\.34\.56" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
+$versionPattern = [regex]::Escape($Version)
+if ($content -match $versionPattern -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
     Write-Host "[x] Const.cs restored successfully." -ForegroundColor Green
 }
 else {
