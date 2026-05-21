@@ -43,7 +43,7 @@ $PublishedRoot = Join-Path $ProjectRoot $Config.buildConfig.publishedRoot
 
 # Files to update (loaded from config)
 $VersionFiles = $Config.files.versionReplacement
-$CodeVersionFiles = $Config.files.codeVersionReplacement
+$AssemblyVersionFiles = $Config.files.assemblyVersionReplacement
 $DateFiles = $Config.files.dateReplacement
 
 # --- Helper Functions ---
@@ -76,6 +76,40 @@ function Get-MSBuildPath {
     throw "MSBuild.exe for Visual Studio 2026 Professional not found. Checked paths: $($paths -join ', ')"
 }
 
+function Assert-ReplacedFilesClean {
+    param ($Files, $ProjectRoot)
+
+    $dirtyFiles = @()
+    foreach ($file in $Files) {
+        $status = & git -C $ProjectRoot status --porcelain -- $file 2>$null
+        if (-not [string]::IsNullOrWhiteSpace(($status -join "`n"))) {
+            $dirtyFiles += $file
+        }
+    }
+
+    if ($dirtyFiles.Count -gt 0) {
+        throw "Release replacement files must be clean before build because the script restores them with git restore after build. Dirty files:`n$($dirtyFiles -join "`n")"
+    }
+}
+
+function Get-GitTrackedFilesContaining {
+    param ($Token, $ProjectRoot)
+
+    if ([string]::IsNullOrWhiteSpace($Token)) {
+        return @()
+    }
+
+    $files = & git -C $ProjectRoot grep -Il --fixed-strings -- $Token -- . ':(exclude)**/bin/**' ':(exclude)**/obj/**' ':(exclude)Published/**' ':(exclude)DynamicsCrm.DevKit.Scripts/DevKit.ReleaseConfig.json' 2>$null
+    if ($LASTEXITCODE -eq 1) {
+        return @()
+    }
+    if ($LASTEXITCODE -ne 0) {
+        throw "git grep failed while searching for '$Token'."
+    }
+
+    return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+}
+
 function Update-FileContent {
     param ($FilePath, $Version, $Date, $Config, $ProjectRoot)
 
@@ -90,13 +124,13 @@ function Update-FileContent {
     $originalContent = $content
 
     if ($Version) {
-        $versionPattern = [regex]::Escape($Config.placeholders.version)
-        $content = $content -replace $versionPattern, $Version
+        $versionTokens = @(
+            $Config.placeholders.version
+        ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
 
-        # Also replace codeVersion placeholder (1.0.0.0) with actual version
-        if ($Config.placeholders.codeVersion) {
-            $codeVersionPattern = [regex]::Escape($Config.placeholders.codeVersion)
-            $content = $content -replace $codeVersionPattern, $Version
+        foreach ($token in $versionTokens) {
+            $versionPattern = [regex]::Escape($token)
+            $content = $content -replace $versionPattern, $Version
         }
     }
     if ($Date) {
@@ -108,9 +142,41 @@ function Update-FileContent {
         Write-Host "Updating $fullPath..." -ForegroundColor DarkGray
         $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
         Write-AllTextWithRetry -FilePath $fullPath -Content $content -Encoding $utf8NoBOM
-        return @{ Path = $fullPath; Content = $originalContent }
+        return $true
     }
-    return $null
+    return $false
+}
+
+function Assert-VersionContentUpdated {
+    param ($Files, $Version, $Config, $ProjectRoot)
+
+    if ([string]::IsNullOrWhiteSpace($Version)) {
+        return
+    }
+
+    if ($Config.placeholders.version -eq $Version) {
+        return
+    }
+
+    $tokens = @(
+        $Config.placeholders.version
+    )
+
+    $tokens = $tokens | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
+
+    foreach ($file in $Files) {
+        $fullPath = Join-Path $ProjectRoot $file
+        if (-not (Test-Path $fullPath)) {
+            continue
+        }
+
+        $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
+        foreach ($token in $tokens) {
+            if ($content.Contains($token)) {
+                throw "Version replacement incomplete in $file. Found '$token' after replacement; expected '$Version'."
+            }
+        }
+    }
 }
 
 function Write-AllTextWithRetry {
@@ -128,12 +194,15 @@ function Write-AllTextWithRetry {
     }
 }
 
-function Restore-Files {
-    param ($Backups)
-    $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
-    foreach ($backup in $Backups) {
-        Write-Host "Restoring $($backup.Path)..." -ForegroundColor DarkGray
-        Write-AllTextWithRetry -FilePath $backup.Path -Content $backup.Content -Encoding $utf8NoBOM
+function Restore-ReplacedFilesFromGit {
+    param ($Files, $ProjectRoot)
+
+    foreach ($file in $Files) {
+        Write-Host "Restoring $file..." -ForegroundColor DarkGray
+        & git -C $ProjectRoot restore -- $file
+        if ($LASTEXITCODE -ne 0) {
+            throw "git restore failed for $file"
+        }
     }
 }
 
@@ -189,18 +258,31 @@ try {
 
     # 2. Update Placeholders
     Write-Host "`nUpdating placeholders..." -ForegroundColor Yellow
-    $backups = @()
+    $filesToRestore = @()
 
-    # Get unique list of files (version + date + codeVersion)
-    $allFiles = ($VersionFiles + $CodeVersionFiles + $DateFiles) | Select-Object -Unique
+    # Get unique list of files (explicit config + dynamic tracked files containing anchors)
+    $dynamicVersionFiles = Get-GitTrackedFilesContaining -Token $Config.placeholders.version -ProjectRoot $ProjectRoot
+    $dynamicDateFiles = Get-GitTrackedFilesContaining -Token $Config.placeholders.date -ProjectRoot $ProjectRoot
+    $versionFilesToReplace = ($VersionFiles + $AssemblyVersionFiles + $dynamicVersionFiles) |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Select-Object -Unique
+    $dateFilesToReplace = ($DateFiles + $dynamicDateFiles) |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Select-Object -Unique
+    $allFiles = ($versionFilesToReplace + $dateFilesToReplace) |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Select-Object -Unique
+    Assert-ReplacedFilesClean -Files $allFiles -ProjectRoot $ProjectRoot
+    $filesToRestore = $allFiles
 
     foreach ($file in $allFiles) {
-        $v = if (($VersionFiles + $CodeVersionFiles) -contains $file) { $Version } else { $null }
-        $d = if ($DateFiles -contains $file) { $BuildDate } else { $null }
+        $v = if ($versionFilesToReplace -contains $file) { $Version } else { $null }
+        $d = if ($dateFilesToReplace -contains $file) { $BuildDate } else { $null }
 
-        $backup = Update-FileContent -FilePath $file -Version $v -Date $d -Config $Config -ProjectRoot $ProjectRoot
-        if ($backup) { $backups += $backup }
+        Update-FileContent -FilePath $file -Version $v -Date $d -Config $Config -ProjectRoot $ProjectRoot | Out-Null
     }
+
+    Assert-VersionContentUpdated -Files $versionFilesToReplace -Version $Version -Config $Config -ProjectRoot $ProjectRoot
 
     # 3. Restore NuGet Packages
     Write-Host "`nRestoring NuGet packages..." -ForegroundColor Yellow
@@ -507,9 +589,9 @@ catch {
     exit 1
 }
 finally {
-    # 6. Revert Placeholders
-    if ($backups.Count -gt 0) {
-        Write-Host "`nReverting placeholders..." -ForegroundColor Yellow
-        Restore-Files -Backups $backups
+    # 9. Revert build-time replacements.
+    if ($filesToRestore.Count -gt 0) {
+        Write-Host "`nRestoring build-time replacement files from git..." -ForegroundColor Yellow
+        Restore-ReplacedFilesFromGit -Files $filesToRestore -ProjectRoot $ProjectRoot
     }
 }

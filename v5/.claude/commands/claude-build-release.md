@@ -30,8 +30,8 @@ This workflow is intentionally one full build plus package/install/verify:
 4. Record the end time.
 5. Verify the build:
    - Use the script's built-in verification output for `devkit --version` and `devkit-tool --help`. If that output was not captured or is unclear, run each command once.
-   - `devkit --version` should show version `x.xx.xx.xx` from `DevKit.ReleaseConfig.json` and Build timestamp `30.06.2026 23:59:59`, exactly matching `DevKit.ReleaseConfig.json`.
-   - `devkit-tool --help` should show the `devkit-tool` banner with version `x.xx.xx.xx` and the command list.
+   - `devkit --version` should show the version from `DevKit.ReleaseConfig.json` and the annual Build timestamp derived from `DevKit.ReleaseConfig.json`.
+   - `devkit-tool --help` should show the `devkit-tool` banner with the same configured version and the command list.
 6. Verify that all 4 files exist in `Published\<version>`:
    - `DynamicsCrm.DevKit.Analyzers.[version].nupkg`
    - `DynamicsCrm.DevKit.Cli.[version].nupkg`

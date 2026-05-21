@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <savedquery>
     <IsCustomizable>1</IsCustomizable>
@@ -23,7 +23,7 @@
         </entity>
       </fetch>
     </fetchxml>
-    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <IntroducedVersion>4.12.34.56</IntroducedVersion>
     <LocalizedNames>
       <LocalizedName description="SqlServerLegacy Lookup View" languagecode="1033" />
     </LocalizedNames>

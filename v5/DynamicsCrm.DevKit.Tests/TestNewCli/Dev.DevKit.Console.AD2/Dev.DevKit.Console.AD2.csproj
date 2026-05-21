@@ -200,4 +200,4 @@
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
-<!-- v.x.xx.xx.xx - Build: xxxx.yy.zz HH.mm.ss -->
+<!-- v.4.12.34.56 - Build: xxxx.yy.zz HH.mm.ss -->

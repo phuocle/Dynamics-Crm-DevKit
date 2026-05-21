@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.DevKitV4.Server.Plugins.Task.PostTaskCreateMultipleAsynchronous" SdkMessageProcessingStepId="{9a961f19-35bd-f011-bbd2-000d3a36b713}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>eb9990f6-feff-497f-974c-eb457ee0d072</SdkMessageId>
-  <PluginTypeName>Dev.DevKitV4.Server.Plugins.Task.PostTaskCreateMultipleAsynchronous, Dev.DevKitV4.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
+  <PluginTypeName>Dev.DevKitV4.Server.Plugins.Task.PostTaskCreateMultipleAsynchronous, Dev.DevKitV4.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
   <PluginTypeId>99961f19-35bd-f011-bbd2-000d3a36b713</PluginTypeId>
   <PrimaryEntity>task</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>

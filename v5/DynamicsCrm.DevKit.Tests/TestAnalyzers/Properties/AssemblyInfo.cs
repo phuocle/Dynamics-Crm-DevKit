@@ -11,10 +11,10 @@ using System.Security;
 #endif
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Dev.DevKit.Plugin.Territory")]
-[assembly: AssemblyCopyright("Copyright © 2023")]
+[assembly: AssemblyCopyright("Copyright ï¿½ 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 [assembly: ComVisible(false)]
 [assembly: Guid("e9c8fe6a-5dbc-4b04-95c9-bd9d61a198fc")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("4.12.34.56")]
+[assembly: AssemblyFileVersion("4.12.34.56")]

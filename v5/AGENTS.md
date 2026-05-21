@@ -77,7 +77,7 @@ Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (leg
 
 ## Watch Out
 
-- `Const.cs` contains build-time placeholders (`x.xx.xx.xx`, `xxxx.yy.zz HH.mm.ss`) — never commit while placeholders are replaced
+- `4.12.34.56` is the source/debug anchor version and `xxxx.yy.zz HH.mm.ss` is the build-date anchor. Release/debug scripts may replace them with `DevKit.ReleaseConfig.json` values; never commit files while those build-time replacements are still applied.
 - Editing a single component → run only that component's build, not the full solution
 
 Build workflows and MCP restart procedure: see `.claude/rules/core-rule.md`.

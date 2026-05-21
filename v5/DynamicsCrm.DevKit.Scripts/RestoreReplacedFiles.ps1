@@ -25,8 +25,31 @@ if (-not (Test-Path $ConfigFile)) {
 
 $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
 
-# Files that get modified by the release script (from config)
-$FilesToRestore = $Config.files.allModified
+function Get-GitTrackedFilesContaining {
+    param ($Token, $ProjectRoot)
+
+    if ([string]::IsNullOrWhiteSpace($Token)) {
+        return @()
+    }
+
+    $files = & git -C $ProjectRoot grep -Il --fixed-strings -- $Token -- . ':(exclude)**/bin/**' ':(exclude)**/obj/**' ':(exclude)Published/**' ':(exclude)DynamicsCrm.DevKit.Scripts/DevKit.ReleaseConfig.json' 2>$null
+    if ($LASTEXITCODE -eq 1) {
+        return @()
+    }
+    if ($LASTEXITCODE -ne 0) {
+        throw "git grep failed while searching for '$Token'."
+    }
+
+    return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+}
+
+# Files that get modified by the release script (explicit config + dynamic anchor/build-version discovery)
+$FilesToRestore = @(
+    $Config.files.allModified
+    Get-GitTrackedFilesContaining -Token $Config.placeholders.version -ProjectRoot $ProjectRoot
+    Get-GitTrackedFilesContaining -Token $Config.version -ProjectRoot $ProjectRoot
+    Get-GitTrackedFilesContaining -Token $Config.placeholders.date -ProjectRoot $ProjectRoot
+) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
 
 Write-Host "Restoring modified files from git..." -ForegroundColor Yellow
 

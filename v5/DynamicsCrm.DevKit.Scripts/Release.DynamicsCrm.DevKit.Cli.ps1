@@ -141,7 +141,7 @@ try {
     Stop-DevKitProcesses "before CLI build"
 
     $newContent = $OriginalContent `
-        -replace [regex]::Escape("x.xx.xx.xx"), $Version `
+        -replace [regex]::Escape("4.12.34.56"), $Version `
         -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
     [System.IO.File]::WriteAllText($ConstFile, $newContent, $utf8NoBom)
     Write-Host "Updated Const.cs with version $Version and build date $BuildDate." -ForegroundColor Green
@@ -235,11 +235,11 @@ try {
 }
 finally {
     [System.IO.File]::WriteAllText($ConstFile, $OriginalContent, $utf8NoBom)
-    Write-Host "Restored Const.cs to original placeholders." -ForegroundColor Yellow
+    Write-Host "Restored Const.cs to source anchors." -ForegroundColor Yellow
 }
 
 $content = Get-Content $ConstFile -Raw
-if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
+if ($content -match "4\.12\.34\.56" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
     Write-Host "[x] Const.cs restored successfully." -ForegroundColor Green
 }
 else {

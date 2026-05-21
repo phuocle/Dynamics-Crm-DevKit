@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <WebResourceId>{e4a863d0-85ef-f011-8406-000d3a316bdb}</WebResourceId>
   <Name>v4_/entities/Team.js</Name>
   <DisplayName>v4_/entities/Team.js</DisplayName>
-  <Description>1.0.0.0</Description>
+  <Description>4.12.34.56</Description>
   <WebResourceType>3</WebResourceType>
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/Team.form.js" displayName="v4_/entities/Team.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{0b9b9a13-0648-452c-b156-38454ce22716}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/Team.form.js" displayName="v4_/entities/Team.form.js" languagecode="" description="4.12.34.56" libraryUniqueId="{0b9b9a13-0648-452c-b156-38454ce22716}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

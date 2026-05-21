@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<PluginAssembly FullName="Dev.DevKit.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a1d4690dbd63003a" PluginAssemblyId="516f4a15-c2db-f011-8406-00224809b8ea" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a1d4690dbd63003a" PluginAssemblyId="516f4a15-c2db-f011-8406-00224809b8ea" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <IsolationMode>2</IsolationMode>
   <SourceType>0</SourceType>
   <IntroducedVersion>1.0.0.4</IntroducedVersion>
   <FileName>/PluginAssemblies/DevDevKitServer-516F4A15-C2DB-F011-8406-00224809B8EA/DevDevKitServer.dll</FileName>
   <PluginTypes>
-    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.PostContactCreateAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a1d4690dbd63003a" PluginTypeId="546f4a15-c2db-f011-8406-00224809b8ea" Name="Dev.DevKit.Server.PostContactCreateAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.PostContactCreateAsynchronous, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a1d4690dbd63003a" PluginTypeId="546f4a15-c2db-f011-8406-00224809b8ea" Name="Dev.DevKit.Server.PostContactCreateAsynchronous">
       <FriendlyName>Dev.DevKit.Server.PostContactCreateAsynchronous</FriendlyName>
     </PluginType>
   </PluginTypes>

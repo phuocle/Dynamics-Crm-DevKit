@@ -5,15 +5,15 @@
 		<OutputType>Exe</OutputType>
 		<IsPublishable>True</IsPublishable>
 
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
+		<AssemblyVersion>4.12.34.56</AssemblyVersion>
+		<FileVersion>4.12.34.56</FileVersion>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
 		<Company>PhuocLe</Company>
 		<Product>DynamicsCrm.DevKit.Tool</Product>
 		<Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
 		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
-		<Version>1.0.0.0</Version>
+		<Version>4.12.34.56</Version>
 		<AssemblyTitle>DynamicsCrm.DevKit.Tool</AssemblyTitle>
 		<AssemblyDescription>DynamicsCrm.DevKit.Tool</AssemblyDescription>
 		<BaseOutputPath>bin</BaseOutputPath>

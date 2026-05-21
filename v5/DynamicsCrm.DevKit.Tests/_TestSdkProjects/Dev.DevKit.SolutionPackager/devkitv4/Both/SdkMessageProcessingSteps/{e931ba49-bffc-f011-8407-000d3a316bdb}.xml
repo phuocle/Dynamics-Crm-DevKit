@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous" SdkMessageProcessingStepId="{e931ba49-bffc-f011-8407-000d3a316bdb}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
-  <PluginTypeName>Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316</PluginTypeName>
+  <PluginTypeName>Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous, Dev.DevKit.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=6ee94c9d66a8d316</PluginTypeName>
   <PluginTypeId>e831ba49-bffc-f011-8407-000d3a316bdb</PluginTypeId>
   <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>

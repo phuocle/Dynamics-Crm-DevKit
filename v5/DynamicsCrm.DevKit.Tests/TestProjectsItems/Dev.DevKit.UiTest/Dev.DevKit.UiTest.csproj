@@ -306,4 +306,4 @@
   <Import Project="..\packages\MSTest.TestAdapter.4.0.2\build\net462\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.4.0.2\build\net462\MSTest.TestAdapter.targets')" />
   <Import Project="..\packages\Selenium.WebDriver.4.39.0\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.39.0\build\Selenium.WebDriver.targets')" />
 </Project>
-<!-- v.4.00.00.00 - Build: 31.12.2025 23:59:59 -->
+<!-- v.4.12.34.56 - Build: 31.12.2025 23:59:59 -->

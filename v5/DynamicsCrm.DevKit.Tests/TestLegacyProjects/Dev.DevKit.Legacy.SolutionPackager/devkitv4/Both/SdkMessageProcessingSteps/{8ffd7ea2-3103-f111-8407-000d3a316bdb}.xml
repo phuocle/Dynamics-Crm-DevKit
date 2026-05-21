@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.DevKit.Legacy.Package.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous" SdkMessageProcessingStepId="{8ffd7ea2-3103-f111-8407-000d3a316bdb}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>a5fd954b-3194-f011-b4cc-000d3aa25840</SdkMessageId>
   <PluginTypeExportKey>2829472E29F941340548A45478A5C3B087F8D850997DBECC7D145A2819A6A9DC</PluginTypeExportKey>
@@ -13,6 +13,6 @@
   <IsCustomizable>1</IsCustomizable>
   <IsHidden>0</IsHidden>
   <SupportedDeployment>0</SupportedDeployment>
-  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IntroducedVersion>4.12.34.56</IntroducedVersion>
   <SdkMessageProcessingStepImages />
 </SdkMessageProcessingStep>

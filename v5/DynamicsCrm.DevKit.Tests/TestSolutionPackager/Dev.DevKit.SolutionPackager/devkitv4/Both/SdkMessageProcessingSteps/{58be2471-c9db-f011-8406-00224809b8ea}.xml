@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.DevKit.Server.ManagedIdentity.PostTeamCreateAsynchronous" SdkMessageProcessingStepId="{58be2471-c9db-f011-8406-00224809b8ea}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
-  <PluginTypeName>Dev.DevKit.Server.ManagedIdentity.PostTeamCreateAsynchronous, Dev.DevKit.Server.ManagedIdentity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2a5ddbb02e2c2754</PluginTypeName>
+  <PluginTypeName>Dev.DevKit.Server.ManagedIdentity.PostTeamCreateAsynchronous, Dev.DevKit.Server.ManagedIdentity, Version=4.12.34.56, Culture=neutral, PublicKeyToken=2a5ddbb02e2c2754</PluginTypeName>
   <PluginTypeId>57be2471-c9db-f011-8406-00224809b8ea</PluginTypeId>
   <PrimaryEntity>team</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>

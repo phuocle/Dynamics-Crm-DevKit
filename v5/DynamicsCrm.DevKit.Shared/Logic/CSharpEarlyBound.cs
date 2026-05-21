@@ -1,4 +1,4 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.PowerPlatform.Dataverse.ModelBuilderLib;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             var logger = new ConsoleLogger();
             var modelbuilder = new ModelBuilder(logger);
 
-            var tempFolder = Path.Combine("D:\\github\\Dynamics-Crm-DevKit\\test\\4.00.00.00\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities4", "CSharpEarlyBound");
+            var tempFolder = Path.Combine("D:\\github\\Dynamics-Crm-DevKit\\test\\4.12.34.56\\TestAllProjectsV4\\Dev.DevKitV4.Shared\\Entities4", "CSharpEarlyBound");
             Helper.TryDeleteDirectory(tempFolder);
             if (!Directory.Exists(tempFolder)) Directory.CreateDirectory(tempFolder);
             var tempFile = Path.Combine(tempFolder, "Entities", $"{entityMetadata.LogicalName}.cs");

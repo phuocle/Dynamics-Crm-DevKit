@@ -31,13 +31,13 @@ git status
 
 > [!CAUTION]
 > **Warning about placeholder files**
-> AI must check if any file from `DevKit.ReleaseConfig.json` → `files.versionReplacement` or `files.codeVersionReplacement` is in the list of changed files.
-> These files get their placeholders replaced at build time:
-> - `DynamicsCrm.DevKit.Shared\Const.cs` — version placeholder: `x.xx.xx.xx`, date: `xxxx.yy.zz HH.mm.ss`
-> - `DynamicsCrm.DevKit\Properties\AssemblyInfo.cs`, `DynamicsCrm.DevKit.Analyzers\Properties\AssemblyInfo.cs`, `DynamicsCrm.DevKit.Tool\Properties\AssemblyInfo.cs` — code version placeholder: `1.0.0.0`
-> - `.claude\commands\*.md`, `.vstemplate`, `NuGet.config`, etc. — version placeholder: `x.xx.xx.xx`
+> AI must check if any file from `DevKit.ReleaseConfig.json` → `files.versionReplacement` or `files.assemblyVersionReplacement` is in the list of changed files.
+> These files get their anchor values replaced at build time:
+> - `4.12.34.56` is the source/debug anchor version. The build script replaces it with `DevKit.ReleaseConfig.json` → `version`.
+> - `xxxx.yy.zz HH.mm.ss` is the source/debug anchor build date.
+> - `.claude\commands\*.md`, `.vstemplate`, `AssemblyInfo.cs`, `ProjectTemplate.csproj.template`, `NuGet.config`, etc. may contain the anchor version.
 >
-> If any of these files shows a real version number (e.g., `x.xx.xx.xx` → `4.12.34.56`, or `1.0.0.0` → any real version), you absolutely **MUST NOT** commit this file. AI must automatically run `git restore "<file>"` or use a tool to revert the file before staging anything.
+> If any of these files shows a build version different from the anchor (for example `4.88.88.88`), you absolutely **MUST NOT** commit this file. AI must automatically run `git restore "<file>"` or use a tool to revert the file before staging anything.
 
 **Step 3: Carefully select files to stage**
 

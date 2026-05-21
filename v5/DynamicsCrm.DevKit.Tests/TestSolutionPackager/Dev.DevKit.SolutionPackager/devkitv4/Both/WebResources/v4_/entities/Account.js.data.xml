@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <WebResourceId>{1a4b29d7-71e0-f011-8406-000d3a34c759}</WebResourceId>
   <Name>v4_/entities/Account.js</Name>
   <DisplayName>v4_/entities/Account.js</DisplayName>
-  <Description>1.0.0.0</Description>
+  <Description>4.12.34.56</Description>
   <WebResourceType>3</WebResourceType>
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/Account.form.js" displayName="v4_/entities/Account.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{d87cedf6-070a-4f17-a08d-36074a2cd3c8}"/&gt;&lt;Library name="v4_/entities/Account.webapi.js" displayName="v4_/entities/Account.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{130629ee-dfef-4d1a-a2bc-f347fe4b7cf7}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/Account.form.js" displayName="v4_/entities/Account.form.js" languagecode="" description="4.12.34.56" libraryUniqueId="{d87cedf6-070a-4f17-a08d-36074a2cd3c8}"/&gt;&lt;Library name="v4_/entities/Account.webapi.js" displayName="v4_/entities/Account.webapi.js" languagecode="" description="4.12.34.56" libraryUniqueId="{130629ee-dfef-4d1a-a2bc-f347fe4b7cf7}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

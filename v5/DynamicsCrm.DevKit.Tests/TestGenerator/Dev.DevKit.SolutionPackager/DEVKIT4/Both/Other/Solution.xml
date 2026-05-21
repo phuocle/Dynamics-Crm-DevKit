@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ImportExportXml version="9.2.25122.138" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.25122.138" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.25122.00139">
   <SolutionManifest>
     <UniqueName>devkitv4</UniqueName>
@@ -84,10 +84,10 @@
       <RootComponent type="29" id="{a4fd954b-3194-f011-b4cc-000d3aa25840}" behavior="0" />
       <RootComponent type="62" schemaName="v4_DEVKITV4" behavior="0" />
       <RootComponent type="80" schemaName="v4_DEVKITV4" behavior="0" />
-      <RootComponent type="91" id="{859ad7d1-92a9-f011-bbd2-6045bd0979cd}" schemaName="Dev.DevKitV4.Package, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" behavior="0" />
-      <RootComponent type="91" id="{daa44506-1bae-f011-bbd2-6045bd07ae78}" schemaName="Dev.DevKitV4.Package.2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" behavior="0" />
-      <RootComponent type="91" id="{5fcf2dfd-e2a8-f011-bbd2-0022480965a1}" schemaName="Dev.DevKitV4.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a" behavior="0" />
-      <RootComponent type="91" id="{6d6f8ce4-17ae-f011-bbd2-6045bd07ae78}" schemaName="Dev.DevKitV4.Server.2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa786370f5731ec3" behavior="0" />
+      <RootComponent type="91" id="{859ad7d1-92a9-f011-bbd2-6045bd0979cd}" schemaName="Dev.DevKitV4.Package, Version=4.12.34.56, Culture=neutral, PublicKeyToken=null" behavior="0" />
+      <RootComponent type="91" id="{daa44506-1bae-f011-bbd2-6045bd07ae78}" schemaName="Dev.DevKitV4.Package.2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=null" behavior="0" />
+      <RootComponent type="91" id="{5fcf2dfd-e2a8-f011-bbd2-0022480965a1}" schemaName="Dev.DevKitV4.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a" behavior="0" />
+      <RootComponent type="91" id="{6d6f8ce4-17ae-f011-bbd2-6045bd07ae78}" schemaName="Dev.DevKitV4.Server.2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=fa786370f5731ec3" behavior="0" />
       <RootComponent type="92" id="{09a9c910-e3a8-f011-bbd2-0022480965a1}" behavior="0" />
       <RootComponent type="92" id="{0ea9c910-e3a8-f011-bbd2-0022480965a1}" behavior="0" />
       <RootComponent type="92" id="{13a9c910-e3a8-f011-bbd2-0022480965a1}" behavior="0" />

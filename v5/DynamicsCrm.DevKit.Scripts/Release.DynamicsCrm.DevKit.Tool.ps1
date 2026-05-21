@@ -15,7 +15,7 @@ $OriginalContent = [System.IO.File]::ReadAllText($ConstFile, $utf8NoBom)
 
 try {
     # Update Const.cs with Real Values
-    $NewContent = $OriginalContent -replace [regex]::Escape("x.xx.xx.xx"), $Version -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
+    $NewContent = $OriginalContent -replace [regex]::Escape("4.12.34.56"), $Version -replace [regex]::Escape("xxxx.yy.zz HH.mm.ss"), $BuildDate
     [System.IO.File]::WriteAllText($ConstFile, $NewContent, $utf8NoBom)
     Write-Host "Updated Const.cs with version $Version and date $BuildDate" -ForegroundColor Green
 
@@ -53,7 +53,7 @@ try {
 finally {
     # ⚠️ RESTORE Const.cs (QUAN TRỌNG!)
     [System.IO.File]::WriteAllText($ConstFile, $OriginalContent, $utf8NoBom)
-    Write-Host "Restored Const.cs to original placeholders" -ForegroundColor Yellow
+    Write-Host "Restored Const.cs to source anchors" -ForegroundColor Yellow
 }
 
 # Verify Installation
@@ -61,9 +61,9 @@ devkit-tool --help
 
 # Verify Const.cs is Restored
 $content = Get-Content $ConstFile -Raw
-if ($content -match "x\.xx\.xx\.xx" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
+if ($content -match "4\.12\.34\.56" -and $content -match "xxxx\.yy\.zz HH\.mm\.ss") {
     Write-Host "[x] Const.cs restored successfully" -ForegroundColor Green
 } else {
     Write-Host "[!] ERROR: Const.cs NOT restored! Please restore manually!" -ForegroundColor Red
-    Write-Host "Run: git checkout $ConstFile" -ForegroundColor Yellow
+    Write-Host "Run: git restore -- $ConstFile" -ForegroundColor Yellow
 }

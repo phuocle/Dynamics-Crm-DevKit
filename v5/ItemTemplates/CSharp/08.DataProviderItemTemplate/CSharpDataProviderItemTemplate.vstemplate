@@ -21,7 +21,7 @@
 		<ProjectItem ReplaceParameters="true" TargetFileName="Delete.cs">Delete.cs</ProjectItem>
 	</TemplateContent>
 	<WizardExtension>
-		<Assembly>DynamicsCrm.DevKit, Version=x.xx.xx.xx, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
 		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.DataProvider</FullClassName>
 	</WizardExtension>
 </VSTemplate>

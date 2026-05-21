@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Workflow WorkflowId="{6422dc63-3a94-f011-b4cc-000d3aa25840}" Name="CustomAction" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <XamlFileName>/Workflows/CustomAction-6422DC63-3A94-F011-B4CC-000D3AA25840.xaml</XamlFileName>
   <Type>1</Type>
@@ -18,7 +18,7 @@
   <SdkMessageId>{6522dc63-3a94-f011-b4cc-000d3aa25840}</SdkMessageId>
   <UniqueName>CustomAction</UniqueName>
   <IsTransacted>1</IsTransacted>
-  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IntroducedVersion>4.12.34.56</IntroducedVersion>
   <IsCustomizable>1</IsCustomizable>
   <FormId>{00000000-0000-0000-0000-000000000000}</FormId>
   <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>

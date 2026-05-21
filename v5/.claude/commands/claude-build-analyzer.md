@@ -28,7 +28,7 @@ To create the NuGet package manually:
 ```powershell
 cd "d:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Analyzers\Nuget"
 $nugetExe = ".\nuget.exe"
-& $nugetExe pack "DynamicsCrm.DevKit.Analyzers.nuspec" -Version "x.xx.xx.xx" -OutputDirectory "..\..\published\x.xx.xx.xx"
+& $nugetExe pack "DynamicsCrm.DevKit.Analyzers.nuspec" -Version "4.12.34.56" -OutputDirectory "..\..\published\4.12.34.56"
 ```
 
 ## Notes
