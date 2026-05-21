@@ -60,6 +60,7 @@ namespace DynamicsCrm.DevKit.Cli
         }
         public static void WriteHelp()
         {
+            var mcpToolCount = Mcp.McpServerHost.GetToolCount(Mcp.McpServerHost.CategoryLevel["all"]);
             var helpContent =
                 "Usage:\n" +
                 "  devkit generator --profile NAME --json FILE [options]\n" +
@@ -114,7 +115,7 @@ namespace DynamicsCrm.DevKit.Cli
                 "  DEVKIT_PAC_PROFILE   PAC CLI profile name\n" +
                 "  NO_COLOR             Set to any value to enable plain text output\n\n" +
                 "MCP Server (AI Agent Integration):\n" +
-                "  devkit mcp                   36 tools + 9 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, form builder, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, commands, web resources, relationships\n" +
+                $"  devkit mcp                   {mcpToolCount} tools + 10 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, ribbon customizations, web resources, relationships\n" +
                 "  devkit mcp --setup-guide     Setup instructions for all IDEs\n";
 
             if (IsPlain)
@@ -180,7 +181,7 @@ namespace DynamicsCrm.DevKit.Cli
                     "  [cyan]DEVKIT_PAC_PROFILE[/]   PAC CLI profile name\n" +
                     "  [cyan]NO_COLOR[/]             Set to any value to enable plain text output\n\n" +
                     "[green]MCP Server (AI Agent Integration):[/]\n" +
-                    "  devkit [cyan]mcp[/]                  36 tools + 9 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, form builder, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, commands, web resources, relationships\n" +
+                    $"  devkit [cyan]mcp[/]                  {mcpToolCount} tools + 10 resources: metadata, upsert, FetchXML, search, WebAPI, publish, trace logs, URL parser, forms, views, security, audit, sitemap, schema, env vars, business rules, workflows, Custom APIs, cloud flows, BPFs, system jobs, plugins, ribbon customizations, web resources, relationships\n" +
                     "  devkit [cyan]mcp[/] --setup-guide    Setup instructions for all IDEs\n"
 
                 ))

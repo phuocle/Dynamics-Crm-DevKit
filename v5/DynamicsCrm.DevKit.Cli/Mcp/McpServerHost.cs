@@ -132,14 +132,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
                     .SelectMany(t => ToolResourceMap[t]));
 
             var needsCategoryFilter = requestedLevel < 3;
+            var needsToolFilter = needsCategoryFilter || DisabledToolSet.Count > 0;
             var needsResourceFilter = disabledResourceNames.Count > 0;
 
             // Filter tools by category and/or disabled resources after registration
-            if (needsCategoryFilter || needsResourceFilter)
+            if (needsToolFilter || needsResourceFilter)
             {
                 builder.Services.PostConfigure<McpServerOptions>(options =>
                 {
-                    if (needsCategoryFilter && options.ToolCollection != null)
+                    if (needsToolFilter && options.ToolCollection != null)
                     {
                         var toRemove = options.ToolCollection
                             .Where(t => !allowedTypeNames.Contains(t.ProtocolTool.Name))

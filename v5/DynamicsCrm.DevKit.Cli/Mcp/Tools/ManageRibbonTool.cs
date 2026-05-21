@@ -47,13 +47,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _options = options;
         }
 
-        [McpServerTool(Name = "manage_ribbon", Title = "Manage entity ribbon customizations (classic/legacy — DEFAULT for generic button requests)",
+        [McpServerTool(Name = "manage_ribbon", Title = "Manage classic Dataverse ribbon buttons and customizations",
             Destructive = true, ReadOnly = false, Idempotent = true,
             UseStructuredContent = true, OutputSchemaType = typeof(ManageRibbonResult)),
         Description(
             "Classic/legacy RibbonDiffXml for Dataverse entities (via solution import).\n\n" +
 
-            "TOOL SELECTION: DEFAULT FALLBACK for all button requests. Use when: 'ribbon', 'legacy', 'classic', 'button', 'nút', 'custom button', 'action button', 'UI button', 'JavaScript button', 'sub_grid button', 'homepage grid button', generic button. Use manage_command ONLY for 'modern', 'Power Fx', 'appaction', 'new UI', 'command designer'. When in doubt → manage_ribbon.\n\n" +
+            "TOOL SELECTION: Use for Dataverse ribbon/button customization: 'ribbon', 'legacy', 'classic', 'button', 'nút', 'custom button', 'action button', 'UI button', 'JavaScript button', 'sub_grid button', 'homepage grid button', or generic button requests. This MCP server exposes classic RibbonDiffXml operations only. For modern Power Fx command bar customization, use Power Apps command designer outside this MCP server.\n\n" +
 
             "Actions:\n" +
             "- list: entities with ribbon customizations in solution 'devkit-ribbon'\n" +
@@ -82,7 +82,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/update/hide/show ribbon buttons via operations array (action=update)\n" +
             "- Restore from backup (action=undo)\n" +
             "NAME RESOLUTION: entity_name and operation web resource fields (library, enable_library, modern_image) resolve Display Name contains first, then logical/unique/schema contains.\n" +
-            "- For modern Power Fx command bar use manage_command instead")]
+            "- Modern Power Fx command bar customization is not exposed by this MCP server")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
