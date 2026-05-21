@@ -15,7 +15,7 @@
         </entity>
       </fetch>
     </fetchxml>
-    <IntroducedVersion>4.12.34.56</IntroducedVersion>
+    <IntroducedVersion>4.99.99.99</IntroducedVersion>
     <LocalizedNames>
       <LocalizedName description="SqlServerLegacyToDevKits" languagecode="1033" />
     </LocalizedNames>

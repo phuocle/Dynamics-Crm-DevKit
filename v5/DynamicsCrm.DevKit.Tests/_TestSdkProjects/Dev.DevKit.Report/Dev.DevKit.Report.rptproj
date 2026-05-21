@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <FullPath>Debug</FullPath>
@@ -48,4 +48,4 @@
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
-<!-- v.4.12.34.56 - Build: 03.02.2026 17:45:57 -->
+<!-- v.4.99.99.99 - Build: 03.02.2026 17:45:57 -->

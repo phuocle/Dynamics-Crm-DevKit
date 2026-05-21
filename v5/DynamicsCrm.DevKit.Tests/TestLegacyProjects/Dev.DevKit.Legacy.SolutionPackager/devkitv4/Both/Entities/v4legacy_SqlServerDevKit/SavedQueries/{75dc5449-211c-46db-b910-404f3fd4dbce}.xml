@@ -23,7 +23,7 @@
         </entity>
       </fetch>
     </fetchxml>
-    <IntroducedVersion>4.12.34.56</IntroducedVersion>
+    <IntroducedVersion>4.99.99.99</IntroducedVersion>
     <LocalizedNames>
       <LocalizedName description="SqlServereDevKit Associated View" languagecode="1033" />
     </LocalizedNames>

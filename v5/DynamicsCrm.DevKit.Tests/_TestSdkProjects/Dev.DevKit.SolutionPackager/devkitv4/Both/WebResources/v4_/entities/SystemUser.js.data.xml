@@ -3,12 +3,12 @@
   <WebResourceId>{7b15a4a8-84ef-f011-8406-000d3a316bdb}</WebResourceId>
   <Name>v4_/entities/SystemUser.js</Name>
   <DisplayName>v4_/entities/SystemUser.js</DisplayName>
-  <Description>4.12.34.56</Description>
+  <Description>4.99.99.99</Description>
   <WebResourceType>3</WebResourceType>
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/SystemUser.form.js" displayName="v4_/entities/SystemUser.form.js" languagecode="" description="4.12.34.56" libraryUniqueId="{4904b051-c0f2-4a06-97bb-993da35afda2}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/SystemUser.form.js" displayName="v4_/entities/SystemUser.form.js" languagecode="" description="4.99.99.99" libraryUniqueId="{4904b051-c0f2-4a06-97bb-993da35afda2}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

@@ -2,18 +2,18 @@
 
 ## Muc tieu
 
-1. `4.12.34.56` la version neo on dinh trong source.
+1. `4.99.99.99` la version neo on dinh trong source.
 2. Debug build va release build khong replace version moi lan build nua.
 3. Build-time replacement chi con la phan ngay gio build.
 4. Neu sau nay muon doi version, tao rieng mot script/file doi version thu cong, khong nam trong luong build.
 
 ## Version
 
-- Version hien tai trong source la `4.12.34.56`.
+- Version hien tai trong source la `4.99.99.99`.
 - Tat ca file lien quan version cua DevKit, VSIX, CLI, Tool, Analyzer, templates, project templates... dung chung version neo nay.
-- `Debug` khong quan tam version theo nghia build nao cung chap nhan, nhung source van giu `4.12.34.56`.
-- `Release` cung khong tu dong replace `4.12.34.56` thanh version khac trong luc build.
-- Khi can update version tu `4.12.34.56` len version moi, lam bang script rieng, vi du `Change-Version.ps1`.
+- `Debug` khong quan tam version theo nghia build nao cung chap nhan, nhung source van giu `4.99.99.99`.
+- `Release` cung khong tu dong replace `4.99.99.99` thanh version khac trong luc build.
+- Khi can update version tu `4.99.99.99` len version moi, lam bang script rieng, vi du `Change-Version.ps1`.
 - Script doi version chi chay khi minh chu dong goi, khong duoc `Release-DynamicsCrm-DevKit.ps1` hay debug script goi ngam.
 
 ## Build-Time Replacement
@@ -27,7 +27,7 @@ Build chi replace ngay gio build:
 
 Khong replace trong build:
 
-- Khong replace `4.12.34.56`.
+- Khong replace `4.99.99.99`.
 - Khong replace `1.0.0.0`.
 - Khong replace `x.xx.xx.xx`.
 - Khong grep toan bo repository de tim version.
@@ -36,7 +36,7 @@ Khong replace trong build:
 
 `DynamicsCrm.DevKit.Scripts/DevKit.ReleaseConfig.json` nen la single source cho:
 
-- `version`: version neo hien tai, vi du `4.12.34.56`.
+- `version`: version neo hien tai, vi du `4.99.99.99`.
 - release date/time cho release build.
 - danh sach file can replace date trong luc build.
 

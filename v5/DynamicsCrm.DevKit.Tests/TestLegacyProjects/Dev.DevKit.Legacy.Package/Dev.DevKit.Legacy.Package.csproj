@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<TargetFramework>net462</TargetFramework>
 		<PowerAppsTargetsPath>$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\PowerApps</PowerAppsTargetsPath>
-		<AssemblyVersion>4.12.34.56</AssemblyVersion>
-		<FileVersion>4.12.34.56</FileVersion>
+		<AssemblyVersion>4.99.99.99</AssemblyVersion>
+		<FileVersion>4.99.99.99</FileVersion>
 		<ProjectTypeGuids>{4C25E9B5-9FA6-436c-8E19-B395D2A65FAF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
 	</PropertyGroup>
 	<Import Project="$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.props" Condition="Exists('$(PowerAppsTargetsPath)\Microsoft.PowerApps.VisualStudio.Plugin.props')" />

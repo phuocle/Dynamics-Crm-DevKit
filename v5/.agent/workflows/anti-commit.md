@@ -26,7 +26,7 @@ git status
 > **Warning about build-time replacement files**
 > AI must check if any file from `DevKit.ReleaseConfig.json` -> `files.dateReplacement` is in the list of changed files.
 > These files get their build date placeholder replaced at build time:
-> - `4.12.34.56` is the stable source version. Build scripts do not replace it.
+> - `4.99.99.99` is the stable source version. Build scripts do not replace it.
 > - `xxxx.yy.zz HH.mm.ss` is the source build date placeholder.
 >
 > If any of these files shows a real build date where `xxxx.yy.zz HH.mm.ss` should be restored, you absolutely **MUST NOT** commit that build-time replacement. AI must automatically run `git restore "<file>"` or use a tool to revert the file before staging anything.

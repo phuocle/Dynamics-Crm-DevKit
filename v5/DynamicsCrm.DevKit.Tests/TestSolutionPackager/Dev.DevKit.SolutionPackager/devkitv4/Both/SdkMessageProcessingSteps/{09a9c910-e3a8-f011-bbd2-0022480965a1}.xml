@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.DevKitV4.Server.Plugins.Contact.PostContactCreateAsynchronous" SdkMessageProcessingStepId="{09a9c910-e3a8-f011-bbd2-0022480965a1}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>9ebdbb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
-  <PluginTypeName>Dev.DevKitV4.Server.Plugins.Contact.PostContactCreateAsynchronous, Dev.DevKitV4.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
+  <PluginTypeName>Dev.DevKitV4.Server.Plugins.Contact.PostContactCreateAsynchronous, Dev.DevKitV4.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
   <PluginTypeId>3fcdc20a-e3a8-f011-bbd2-0022480965a1</PluginTypeId>
   <PrimaryEntity>contact</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>

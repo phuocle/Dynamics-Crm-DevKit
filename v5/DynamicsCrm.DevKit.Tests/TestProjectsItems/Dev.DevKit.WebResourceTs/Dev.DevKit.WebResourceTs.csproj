@@ -92,4 +92,4 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
-<!-- v.4.12.34.56 - Build: xxxx.yy.zz HH.mm.ss -->
+<!-- v.4.99.99.99 - Build: xxxx.yy.zz HH.mm.ss -->

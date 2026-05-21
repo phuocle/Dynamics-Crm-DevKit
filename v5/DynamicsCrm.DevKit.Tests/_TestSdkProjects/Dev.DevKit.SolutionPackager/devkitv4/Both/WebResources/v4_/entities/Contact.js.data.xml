@@ -3,12 +3,12 @@
   <WebResourceId>{67e897e9-7def-f011-8406-000d3a316bdb}</WebResourceId>
   <Name>v4_/entities/Contact.js</Name>
   <DisplayName>v4_/entities/Contact.js</DisplayName>
-  <Description>4.12.34.56</Description>
+  <Description>4.99.99.99</Description>
   <WebResourceType>3</WebResourceType>
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/Contact.form.js" displayName="v4_/entities/Contact.form.js" languagecode="" description="4.12.34.56" libraryUniqueId="{5a139336-980d-4430-8395-e47060e795db}"/&gt;&lt;Library name="v4_/entities/Contact.webapi.js" displayName="v4_/entities/Contact.webapi.js" languagecode="" description="4.12.34.56" libraryUniqueId="{681d2da3-d241-4497-8fe1-965a443d5577}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="v4_/entities/Contact.form.js" displayName="v4_/entities/Contact.form.js" languagecode="" description="4.99.99.99" libraryUniqueId="{5a139336-980d-4430-8395-e47060e795db}"/&gt;&lt;Library name="v4_/entities/Contact.webapi.js" displayName="v4_/entities/Contact.webapi.js" languagecode="" description="4.99.99.99" libraryUniqueId="{681d2da3-d241-4497-8fe1-965a443d5577}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

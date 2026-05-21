@@ -18,7 +18,7 @@
   <SdkMessageId>{6522dc63-3a94-f011-b4cc-000d3aa25840}</SdkMessageId>
   <UniqueName>CustomAction</UniqueName>
   <IsTransacted>1</IsTransacted>
-  <IntroducedVersion>4.12.34.56</IntroducedVersion>
+  <IntroducedVersion>4.99.99.99</IntroducedVersion>
   <IsCustomizable>1</IsCustomizable>
   <FormId>{00000000-0000-0000-0000-000000000000}</FormId>
   <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>

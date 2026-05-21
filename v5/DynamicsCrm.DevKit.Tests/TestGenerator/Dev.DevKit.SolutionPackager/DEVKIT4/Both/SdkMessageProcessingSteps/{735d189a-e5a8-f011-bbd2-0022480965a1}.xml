@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.DevKitV4.Server.CustomActions.PostNonev4_CustomActionAsynchronous" SdkMessageProcessingStepId="{735d189a-e5a8-f011-bbd2-0022480965a1}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>6522dc63-3a94-f011-b4cc-000d3aa25840</SdkMessageId>
-  <PluginTypeName>Dev.DevKitV4.Server.CustomActions.PostNonev4_CustomActionAsynchronous, Dev.DevKitV4.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
+  <PluginTypeName>Dev.DevKitV4.Server.CustomActions.PostNonev4_CustomActionAsynchronous, Dev.DevKitV4.Server, Version=4.99.99.99, Culture=neutral, PublicKeyToken=35bef6dd61f18c2a</PluginTypeName>
   <PluginTypeId>18795e56-e3a8-f011-bbd2-0022480965a1</PluginTypeId>
   <AsyncAutoDelete>1</AsyncAutoDelete>
   <FilteringAttributes></FilteringAttributes>

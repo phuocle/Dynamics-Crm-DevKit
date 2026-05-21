@@ -12,8 +12,8 @@
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56" />
-		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="4.12.34.56" />
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.99.99.99" />
+		<PackageReference Include="DynamicsCrm.DevKit.Cli" Version="4.99.99.99" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
@@ -25,4 +25,4 @@
 		</None>
 	</ItemGroup>
 </Project>
-<!-- v.4.12.34.56 - Build: 31.12.2025 23:59:59 -->
+<!-- v.4.99.99.99 - Build: 31.12.2025 23:59:59 -->
