@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "add_split_button, update_split_button, add_flyout_static, update_flyout_static, " +
             "hide_flyout_item, show_flyout_item\n\n" +
 
-            "add_button REQUIRED: surface, label, library, function, enable_library, enable_function. OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
+            "add_button REQUIRED: surface, label, library, function, enable_library, enable_function. OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85), selection_min, selection_max. Selection count is off by default; for main_grid/sub_grid only, use selection_min=1 for one-or-more selected rows or selection_min=1+selection_max=1 for exactly one row.\n" +
             "update_button REQUIRED: button_id OR label. OPTIONAL: label, library, function, enable_library, enable_function, modern_image, tooltip_title, tooltip_description, sequence. NOTE: only works on custom buttons\n" +
             "hide_button / show_button REQUIRED: button_id. Supports OOB and custom\n" +
             "add_split_button REQUIRED: surface, label, library, function, enable_library, enable_function, items[](label,library,function,enable_library,enable_function). OPTIONAL: modern_image, tooltip_title, tooltip_description, sequence (default 85)\n" +
@@ -86,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
-            [Description("JSON array of ribbon operations for action='update'. 10 operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item.")] string operations = "",
+            [Description("JSON array of ribbon operations for action='update'. Operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item. add_button optional fields include selection_min and selection_max for main_grid/sub_grid SelectionCountRule; omit both to disable selection count, selection_min=1 means one or more rows, selection_min=1 + selection_max=1 means exactly one row.")] string operations = "",
             [Description("For 'undo': backup file path.")] string ribbonxml = "",
             [Description("Backup before overwrite.")] bool backup = true)
         {

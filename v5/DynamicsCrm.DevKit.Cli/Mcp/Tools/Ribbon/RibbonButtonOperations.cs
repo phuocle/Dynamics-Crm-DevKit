@@ -52,6 +52,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title") ?? label;
             var tooltipDesc = RibbonXmlHelpers.GetJsonString(op, "tooltip_description");
             var sequence = RibbonXmlHelpers.GetJsonInt(op, "sequence", 85);
+            var selectionOptions = ReadSelectionCountOptions(op);
+            if (selectionOptions.error != null)
+                return (selectionOptions.error, null);
+            if (selectionOptions.hasRule && surface == "form")
+                return ("Error: add_button selection_min/selection_max are only supported for main_grid or sub_grid.", null);
 
             if (!string.IsNullOrWhiteSpace(modernImage))
             {
@@ -99,13 +104,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 new XAttribute("Library", $"$webresource:{library}"));
             foreach (var p in crmParams) jsFunctionEl.Add(p);
 
-            var selectionEnableRuleId = surface == "sub_grid" ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.SelectionEnableRule" : null;
+            var selectionEnableRuleIdForCleanup = surface is "main_grid" or "sub_grid"
+                ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.EnableRuleSelectCount"
+                : null;
+            var selectionEnableRuleId = selectionOptions.hasRule ? selectionEnableRuleIdForCleanup : null;
+            var legacySelectionEnableRuleId = surface == "sub_grid"
+                ? $"devkit.{entityName}.{slug}.{btnSurfaceSuffix}.SelectionEnableRule"
+                : null;
 
             var displayRulesInCommand = new XElement("DisplayRules");
-            var enableRulesInCommand = new XElement("EnableRules",
-                new XElement("EnableRule", new XAttribute("Id", enableRuleId)));
+            var enableRulesInCommand = new XElement("EnableRules");
             if (selectionEnableRuleId != null)
-                enableRulesInCommand.Add(new XElement("EnableRule", new XAttribute("Id", selectionEnableRuleId)));
+                enableRulesInCommand.Add(new XElement("EnableRule",
+                    new XAttribute("Id", selectionEnableRuleId),
+                    new XAttribute("Order", "1")));
+            enableRulesInCommand.Add(new XElement("EnableRule",
+                new XAttribute("Id", enableRuleId),
+                selectionEnableRuleId != null ? new XAttribute("Order", "2") : null));
 
             commandDefsEl.Add(new XElement("CommandDefinition",
                 new XAttribute("Id", commandId),
@@ -115,6 +130,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             var ruleDefsEl = RibbonXmlHelpers.GetOrCreateElement(ribbonDoc.Root, "RuleDefinitions");
             RibbonXmlHelpers.RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", enableRuleId);
+            if (selectionEnableRuleIdForCleanup != null)
+                RibbonXmlHelpers.RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", selectionEnableRuleIdForCleanup);
+            if (legacySelectionEnableRuleId != null)
+                RibbonXmlHelpers.RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", legacySelectionEnableRuleId);
             var enableRulesEl = RibbonXmlHelpers.GetOrCreateElement(ruleDefsEl, "EnableRules");
             var enableCustomRuleEl = new XElement("CustomRule",
                 new XAttribute("FunctionName", enableFunction),
@@ -127,9 +146,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (selectionEnableRuleId != null)
             {
                 RibbonXmlHelpers.RemoveByIdInChild(ruleDefsEl, "EnableRules", "EnableRule", selectionEnableRuleId);
+                var countRuleEl = new XElement("SelectionCountRule");
+                if (selectionOptions.min.HasValue)
+                    countRuleEl.Add(new XAttribute("Minimum", selectionOptions.min.Value));
+                if (selectionOptions.max.HasValue)
+                    countRuleEl.Add(new XAttribute("Maximum", selectionOptions.max.Value));
                 enableRulesEl.Add(new XElement("EnableRule",
                     new XAttribute("Id", selectionEnableRuleId),
-                    new XElement("SelectionCountRule", new XAttribute("Minimum", "1"))));
+                    countRuleEl));
             }
 
             RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.LabelText", label);
@@ -290,6 +314,44 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 return (null, $"Error: Multiple custom buttons with label '{label}' found in existing RibbonDiffXml. Use 'button_id' to identify the button. Matches: {string.Join(", ", buttons)}");
 
             return (null, null);
+        }
+
+        private static (bool hasRule, int? min, int? max, string error) ReadSelectionCountOptions(JsonElement op)
+        {
+            var min = ReadOptionalInt(op, "selection_min", out var minError);
+            if (minError != null) return (false, null, null, minError);
+
+            var max = ReadOptionalInt(op, "selection_max", out var maxError);
+            if (maxError != null) return (false, null, null, maxError);
+
+            if (!min.HasValue && !max.HasValue)
+                return (false, null, null, null);
+
+            if (min.HasValue && min.Value < 0)
+                return (false, null, null, "Error: add_button 'selection_min' must be greater than or equal to 0.");
+
+            if (max.HasValue && max.Value < 0)
+                return (false, null, null, "Error: add_button 'selection_max' must be greater than or equal to 0.");
+
+            if (min.HasValue && max.HasValue && min.Value > max.Value)
+                return (false, null, null, "Error: add_button 'selection_min' cannot be greater than 'selection_max'.");
+
+            return (true, min, max, null);
+        }
+
+        private static int? ReadOptionalInt(JsonElement op, string propertyName, out string error)
+        {
+            error = null;
+            if (!op.TryGetProperty(propertyName, out var property) || property.ValueKind == JsonValueKind.Null)
+                return null;
+
+            if (property.ValueKind != JsonValueKind.Number || !property.TryGetInt32(out var value))
+            {
+                error = $"Error: add_button '{propertyName}' must be an integer.";
+                return null;
+            }
+
+            return value;
         }
 
         private static bool ButtonLabelMatches(XDocument ribbonDoc, XElement buttonEl, string label)

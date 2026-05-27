@@ -44,7 +44,7 @@ public class RibbonOperationsTests
     }
 
     [TestMethod]
-    public void ExecuteAddButton_SubGrid_AddsSelectionEnableRuleAndGridParameters()
+    public void ExecuteAddButton_SubGrid_AddsSelectionCountRuleAndGridParameters()
     {
         var doc = EmptyRibbon();
         var ops = new RibbonButtonOperations(_validation, 1033);
@@ -56,14 +56,79 @@ public class RibbonOperationsTests
   "library": "devkit_/bulk.js",
   "function": "Bulk.approve",
   "enable_library": "devkit_/bulk.enable.js",
-  "enable_function": "Bulk.canApprove"
+  "enable_function": "Bulk.canApprove",
+  "selection_min": 1
 }
 """));
 
         Assert.IsNull(error);
-        AssertElement(doc, "EnableRule", "devkit.account.BulkApprove.SubGrid.SelectionEnableRule");
-        StringAssert.Contains(doc.ToString(), "SelectionCountRule");
+        AssertSelectionCountRule(doc, "devkit.account.BulkApprove.SubGrid.EnableRuleSelectCount", "1", null);
+        AssertCommandEnableRuleOrder(
+            doc,
+            "devkit.account.BulkApprove.SubGrid.Command",
+            "devkit.account.BulkApprove.SubGrid.EnableRuleSelectCount",
+            "devkit.account.BulkApprove.SubGrid.EnableRule");
         StringAssert.Contains(doc.ToString(), "SelectedControlSelectedItemIds");
+    }
+
+    [TestMethod]
+    public void ExecuteAddButton_MainGrid_AddsSelectionCountRuleBeforeJavascriptEnableRule()
+    {
+        var doc = EmptyRibbon();
+        var ops = new RibbonButtonOperations(_validation, 1033);
+
+        var (error, _) = ops.ExecuteAddButton(doc, "ab_shipment", Json("""
+{
+  "surface": "main_grid",
+  "label": "Check Invent Sum",
+  "library": "devkit_/shipment.js",
+  "function": "Shipment.checkInventSum",
+  "enable_library": "devkit_/shipment.enable.js",
+  "enable_function": "Shipment.canCheckInventSum",
+  "selection_min": 1,
+  "selection_max": 1
+}
+"""));
+
+        Assert.IsNull(error);
+        AssertSelectionCountRule(doc, "devkit.ab_shipment.CheckInventSum.HomepageGrid.EnableRuleSelectCount", "1", "1");
+        AssertCommandEnableRuleOrder(
+            doc,
+            "devkit.ab_shipment.CheckInventSum.HomepageGrid.Command",
+            "devkit.ab_shipment.CheckInventSum.HomepageGrid.EnableRuleSelectCount",
+            "devkit.ab_shipment.CheckInventSum.HomepageGrid.EnableRule");
+    }
+
+    [TestMethod]
+    public void ExecuteAddButton_MainGrid_DefaultDoesNotAddSelectionCountRule()
+    {
+        var doc = EmptyRibbon();
+        var ops = new RibbonButtonOperations(_validation, 1033);
+
+        var (setupError, _) = ops.ExecuteAddButton(doc, "account", Json("""
+{
+  "surface": "main_grid",
+  "label": "Open Dialog",
+  "library": "devkit_/account.js",
+  "function": "Account.open",
+  "enable_library": "devkit_/account.enable.js",
+  "enable_function": "Account.canOpen",
+  "selection_min": 1
+}
+"""));
+        Assert.IsNull(setupError);
+        AssertSelectionCountRule(doc, "devkit.account.OpenDialog.HomepageGrid.EnableRuleSelectCount", "1", null);
+
+        var (error, _) = ops.ExecuteAddButton(doc, "account", AddButtonJson("main_grid", "Open Dialog"));
+
+        Assert.IsNull(error);
+        AssertNoRuleDefinition(doc, "devkit.account.OpenDialog.HomepageGrid.EnableRuleSelectCount");
+        var enableRules = GetElement(doc, "CommandDefinition", "devkit.account.OpenDialog.HomepageGrid.Command")
+            .Element("EnableRules")!
+            .Elements("EnableRule")
+            .ToList();
+        Assert.AreEqual(1, enableRules.Count);
+        Assert.AreEqual("devkit.account.OpenDialog.HomepageGrid.EnableRule", enableRules[0].Attribute("Id")?.Value);
     }
 
     [TestMethod]
@@ -346,6 +411,48 @@ public class RibbonOperationsTests
     {
         Assert.IsTrue(doc.Descendants(elementName).Any(e =>
             string.Equals(e.Attribute("Id")?.Value, id, StringComparison.OrdinalIgnoreCase)), $"{elementName} '{id}' not found.");
+    }
+
+    private static void AssertSelectionCountRule(XDocument doc, string ruleId, string? min, string? max)
+    {
+        var rule = GetRuleDefinition(doc, ruleId);
+        var countRule = rule.Element("SelectionCountRule");
+
+        Assert.IsNotNull(countRule);
+        Assert.AreEqual(min, countRule.Attribute("Minimum")?.Value);
+        Assert.AreEqual(max, countRule.Attribute("Maximum")?.Value);
+    }
+
+    private static void AssertCommandEnableRuleOrder(XDocument doc, string commandId, string selectRuleId, string jsRuleId)
+    {
+        var enableRules = GetElement(doc, "CommandDefinition", commandId)
+            .Element("EnableRules")!
+            .Elements("EnableRule")
+            .ToList();
+
+        Assert.AreEqual(2, enableRules.Count);
+        Assert.AreEqual(selectRuleId, enableRules[0].Attribute("Id")?.Value);
+        Assert.AreEqual("1", enableRules[0].Attribute("Order")?.Value);
+        Assert.AreEqual(jsRuleId, enableRules[1].Attribute("Id")?.Value);
+        Assert.AreEqual("2", enableRules[1].Attribute("Order")?.Value);
+    }
+
+    private static XElement GetRuleDefinition(XDocument doc, string ruleId)
+    {
+        return doc.Root!
+            .Element("RuleDefinitions")!
+            .Element("EnableRules")!
+            .Elements("EnableRule")
+            .Single(e => string.Equals(e.Attribute("Id")?.Value, ruleId, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static void AssertNoRuleDefinition(XDocument doc, string ruleId)
+    {
+        Assert.IsFalse(doc.Root!
+            .Element("RuleDefinitions")!
+            .Element("EnableRules")!
+            .Elements("EnableRule")
+            .Any(e => string.Equals(e.Attribute("Id")?.Value, ruleId, StringComparison.OrdinalIgnoreCase)));
     }
 
     private sealed class FakeRibbonValidation : IRibbonValidation
