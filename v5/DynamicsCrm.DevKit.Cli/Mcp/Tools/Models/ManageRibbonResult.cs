@@ -86,5 +86,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("buttons")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<RibbonSurfaceButtons> Buttons { get; set; }
+
+        [JsonPropertyName("functionSignatures")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RibbonFunctionSignature> FunctionSignatures { get; set; }
     }
 }

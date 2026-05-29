@@ -48,8 +48,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 new XAttribute("Id", buttonId),
                 new XAttribute("LabelText", $"$LocLabels:{buttonId}.LabelText"),
                 new XAttribute("Sequence", sequence),
-                new XAttribute("TemplateAlias", "isv"),
-                new XAttribute("ToolTipTitle", $"$LocLabels:{buttonId}.ToolTipTitle"));
+                new XAttribute("TemplateAlias", "isv"));
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                el.Add(new XAttribute("ToolTipTitle", $"$LocLabels:{buttonId}.ToolTipTitle"));
 
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 el.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{buttonId}.ToolTipDescription"));

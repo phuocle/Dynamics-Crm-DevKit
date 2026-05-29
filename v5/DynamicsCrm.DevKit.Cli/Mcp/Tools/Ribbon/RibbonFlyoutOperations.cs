@@ -93,7 +93,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             }
 
             var modernImage = RibbonXmlHelpers.GetJsonString(op, "modern_image");
-            var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title") ?? label;
+            var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title");
             var tooltipDesc = RibbonXmlHelpers.GetJsonString(op, "tooltip_description");
             var sequence = RibbonXmlHelpers.GetJsonInt(op, "sequence", 85);
 
@@ -167,8 +167,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                     new XAttribute("Command", itemCmdId),
                     new XAttribute("Id", itemBtnId),
                     new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
-                    new XAttribute("Sequence", itemSeq),
-                    new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
+                    new XAttribute("Sequence", itemSeq));
+
+                var itemTooltipTitle = RibbonXmlHelpers.GetJsonString(item, "tooltip_title");
+                if (!string.IsNullOrWhiteSpace(itemTooltipTitle))
+                    btnEl.Add(new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
 
                 if (!string.IsNullOrWhiteSpace(itemImage))
                 {
@@ -198,8 +201,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 new XAttribute("LabelText", $"$LocLabels:{splitButtonId}.LabelText"),
                 new XAttribute("PopulateOnlyOnce", "true"),
                 new XAttribute("Sequence", sequence),
-                new XAttribute("TemplateAlias", "isv"),
-                new XAttribute("ToolTipTitle", $"$LocLabels:{splitButtonId}.ToolTipTitle"));
+                new XAttribute("TemplateAlias", "isv"));
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                splitButtonEl.Add(new XAttribute("ToolTipTitle", $"$LocLabels:{splitButtonId}.ToolTipTitle"));
 
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 splitButtonEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{splitButtonId}.ToolTipDescription"));
@@ -304,7 +309,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{splitButtonId}.LabelText", label);
             RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{splitButtonId}.Alt", label);
-            RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{splitButtonId}.ToolTipTitle", tooltipTitle);
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{splitButtonId}.ToolTipTitle", tooltipTitle);
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{splitButtonId}.ToolTipDescription", tooltipDesc);
 
@@ -313,11 +319,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 var itemLabel = RibbonXmlHelpers.GetJsonString(item, "label");
                 var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
                 var itemBtnId = $"devkit.{entityName}.{slug}.{surfaceSuffix}.{itemSlug}.Button";
-                var itemTT = RibbonXmlHelpers.GetJsonString(item, "tooltip_title") ?? itemLabel;
+                var itemTT = RibbonXmlHelpers.GetJsonString(item, "tooltip_title");
 
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.LabelText", itemLabel);
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.Alt", itemLabel);
-                RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.ToolTipTitle", itemTT);
+                if (!string.IsNullOrWhiteSpace(itemTT))
+                    RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.ToolTipTitle", itemTT);
             }
 
             var itemLabels = string.Join(", ", items.Select(i => RibbonXmlHelpers.GetJsonString(i, "label")));
@@ -634,7 +641,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             }
 
             var modernImage = RibbonXmlHelpers.GetJsonString(op, "modern_image");
-            var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title") ?? label;
+            var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title");
             var tooltipDesc = RibbonXmlHelpers.GetJsonString(op, "tooltip_description");
             var sequence = RibbonXmlHelpers.GetJsonInt(op, "sequence", 85);
 
@@ -698,15 +705,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 var itemCmdId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Command";
                 var itemSeq = RibbonXmlHelpers.GetJsonInt(item, "sequence", autoSeq);
                 var itemImage = RibbonXmlHelpers.GetJsonString(item, "modern_image");
-                var itemTT = RibbonXmlHelpers.GetJsonString(item, "tooltip_title") ?? itemLabel;
+                var itemTT = RibbonXmlHelpers.GetJsonString(item, "tooltip_title");
 
                 var btnEl = new XElement("Button",
                     new XAttribute("Alt", $"$LocLabels:{itemBtnId}.Alt"),
                     new XAttribute("Command", itemCmdId),
                     new XAttribute("Id", itemBtnId),
                     new XAttribute("LabelText", $"$LocLabels:{itemBtnId}.LabelText"),
-                    new XAttribute("Sequence", itemSeq),
-                    new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
+                    new XAttribute("Sequence", itemSeq));
+
+                if (!string.IsNullOrWhiteSpace(itemTT))
+                    btnEl.Add(new XAttribute("ToolTipTitle", $"$LocLabels:{itemBtnId}.ToolTipTitle"));
 
                 if (!string.IsNullOrWhiteSpace(itemImage))
                 {
@@ -736,8 +745,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 new XAttribute("LabelText", $"$LocLabels:{flyoutAnchorId}.LabelText"),
                 new XAttribute("PopulateOnlyOnce", "true"),
                 new XAttribute("Sequence", sequence),
-                new XAttribute("TemplateAlias", "isv"),
-                new XAttribute("ToolTipTitle", $"$LocLabels:{flyoutAnchorId}.ToolTipTitle"));
+                new XAttribute("TemplateAlias", "isv"));
+
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                flyoutEl.Add(new XAttribute("ToolTipTitle", $"$LocLabels:{flyoutAnchorId}.ToolTipTitle"));
 
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 flyoutEl.Add(new XAttribute("ToolTipDescription", $"$LocLabels:{flyoutAnchorId}.ToolTipDescription"));
@@ -827,7 +838,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
 
             RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{flyoutAnchorId}.LabelText", label);
             RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{flyoutAnchorId}.Alt", label);
-            RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{flyoutAnchorId}.ToolTipTitle", tooltipTitle);
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{flyoutAnchorId}.ToolTipTitle", tooltipTitle);
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{flyoutAnchorId}.ToolTipDescription", tooltipDesc);
 
@@ -836,11 +848,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
                 var itemLabel = RibbonXmlHelpers.GetJsonString(item, "label");
                 var itemSlug = RibbonXmlHelpers.GenerateSlug(itemLabel);
                 var itemBtnId = $"devkit.{entityName}.{flyoutSlug}.{surfaceSuffix}.{itemSlug}.Button";
-                var itemTT = RibbonXmlHelpers.GetJsonString(item, "tooltip_title") ?? itemLabel;
+                var itemTT = RibbonXmlHelpers.GetJsonString(item, "tooltip_title");
 
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.LabelText", itemLabel);
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.Alt", itemLabel);
-                RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.ToolTipTitle", itemTT);
+                if (!string.IsNullOrWhiteSpace(itemTT))
+                    RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{itemBtnId}.ToolTipTitle", itemTT);
             }
 
             var itemLabels = string.Join(", ", items.Select(i => RibbonXmlHelpers.GetJsonString(i, "label")));

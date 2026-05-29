@@ -49,7 +49,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             if (enableLibError != null) return (enableLibError, null);
 
             var modernImage = RibbonXmlHelpers.GetJsonString(op, "modern_image");
-            var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title") ?? label;
+            var tooltipTitle = RibbonXmlHelpers.GetJsonString(op, "tooltip_title");
             var tooltipDesc = RibbonXmlHelpers.GetJsonString(op, "tooltip_description");
             var sequence = RibbonXmlHelpers.GetJsonInt(op, "sequence", 85);
             var selectionOptions = ReadSelectionCountOptions(op);
@@ -157,7 +157,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Ribbon
             }
 
             RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.LabelText", label);
-            RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.ToolTipTitle", tooltipTitle);
+            if (!string.IsNullOrWhiteSpace(tooltipTitle))
+                RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.ToolTipTitle", tooltipTitle);
             if (!string.IsNullOrWhiteSpace(tooltipDesc))
                 RibbonXmlHelpers.UpsertLocLabel(ribbonDoc.Root, _lcid, $"{buttonId}.ToolTipDescription", tooltipDesc);
 

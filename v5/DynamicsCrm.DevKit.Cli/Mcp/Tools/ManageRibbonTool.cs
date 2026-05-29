@@ -863,6 +863,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Step 6: Publish immediately after import completes.
             var (published, asyncJobId) = TryPublish(entityName);
+            var functionSignatures = BuildFunctionSignatures(resolvedXml);
 
             // Step 7: Return result
             var sb = new StringBuilder();
@@ -870,6 +871,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Solution: {SOLUTION_NAME}");
             sb.AppendLine($"Status: Updated successfully");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
+            AppendFunctionSignatures(sb, functionSignatures);
             if (published && asyncJobId.HasValue)
             {
                 sb.AppendLine($"Published: started asynchronously");
@@ -896,6 +898,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = published && asyncJobId.HasValue ? "publish_in_progress" : published ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
                     Published = published,
+                    FunctionSignatures = functionSignatures.Count > 0 ? functionSignatures : null,
                     AsyncOperationId = asyncJobId?.ToString(),
                     NeedsWait = asyncJobId.HasValue ? true : null,
                     WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
@@ -1002,6 +1005,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var (xsdErrors, xsdWarnings) = RibbonValidation.ValidateRibbonXml(xmlString);
             if (xsdErrors.Count > 0)
                 return ErrorResult($"Error: Generated XML failed Ribbon XSD validation:\n{string.Join("\n", xsdErrors)}");
+            var functionSignatures = BuildFunctionSignatures(ribbonDoc);
 
             // Step 8: Backup current ribbon (before applying changes)
             string backupPath = null;
@@ -1040,6 +1044,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Operations: {ops.Count}");
             foreach (var s in summaries)
                 sb.AppendLine($"  ✓ {s}");
+            AppendFunctionSignatures(sb, functionSignatures);
             if (xsdWarnings.Count > 0)
             {
                 sb.AppendLine($"XSD Warnings ({xsdWarnings.Count}):");
@@ -1076,6 +1081,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = published && asyncJobId.HasValue ? "publish_in_progress" : published ? "updated" : "updated_publish_failed",
                     BackupPath = backupPath,
                     Published = published,
+                    FunctionSignatures = functionSignatures.Count > 0 ? functionSignatures : null,
                     AsyncOperationId = asyncJobId?.ToString(),
                     NeedsWait = asyncJobId.HasValue ? true : null,
                     WaitTool = asyncJobId.HasValue ? "get_system_jobs" : null,
@@ -1422,6 +1428,120 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             sb.AppendLine("Wait schedule: call get_system_jobs after 30 seconds, then after 60 seconds, then after 120 seconds (total wait: 3 minutes 30 seconds).");
             sb.AppendLine("After the third poll, if the job is not Succeeded or no result is returned, stop waiting, do not read back with manage_ribbon(buttons/detail), and report the result to the user with a note that Dataverse publish is still running or did not complete successfully and the user must wait/check the job.");
+        }
+
+        private static List<RibbonFunctionSignature> BuildFunctionSignatures(string ribbonXml)
+        {
+            try
+            {
+                return BuildFunctionSignatures(XDocument.Parse(ribbonXml));
+            }
+            catch
+            {
+                return [];
+            }
+        }
+
+        private static List<RibbonFunctionSignature> BuildFunctionSignatures(XDocument ribbonDoc)
+        {
+            var signatures = new List<RibbonFunctionSignature>();
+            if (ribbonDoc?.Root == null)
+                return signatures;
+
+            foreach (var commandDef in ribbonDoc.Root.Element("CommandDefinitions")?.Elements("CommandDefinition") ?? Enumerable.Empty<XElement>())
+            {
+                var commandId = commandDef.Attribute("Id")?.Value ?? "";
+                foreach (var jsFunction in commandDef.Element("Actions")?.Elements("JavaScriptFunction") ?? Enumerable.Empty<XElement>())
+                {
+                    var functionName = jsFunction.Attribute("FunctionName")?.Value;
+                    if (string.IsNullOrWhiteSpace(functionName))
+                        continue;
+
+                    var parameters = GetCrmParameterValues(jsFunction);
+                    signatures.Add(new RibbonFunctionSignature
+                    {
+                        Role = "click",
+                        Surface = InferSignatureSurface(commandId, parameters),
+                        FunctionName = functionName,
+                        Library = jsFunction.Attribute("Library")?.Value,
+                        SourceId = commandId,
+                        ParameterCount = parameters.Count,
+                        Parameters = parameters
+                    });
+                }
+            }
+
+            foreach (var enableRule in ribbonDoc.Root.Element("RuleDefinitions")?.Element("EnableRules")?.Elements("EnableRule") ?? Enumerable.Empty<XElement>())
+            {
+                var customRule = enableRule.Element("CustomRule");
+                if (customRule == null)
+                    continue;
+
+                var functionName = customRule.Attribute("FunctionName")?.Value;
+                if (string.IsNullOrWhiteSpace(functionName))
+                    continue;
+
+                var enableRuleId = enableRule.Attribute("Id")?.Value ?? "";
+                var parameters = GetCrmParameterValues(customRule);
+                signatures.Add(new RibbonFunctionSignature
+                {
+                    Role = "enable",
+                    Surface = InferSignatureSurface(enableRuleId, parameters),
+                    FunctionName = functionName,
+                    Library = customRule.Attribute("Library")?.Value,
+                    SourceId = enableRuleId,
+                    ParameterCount = parameters.Count,
+                    Parameters = parameters,
+                    ExpectedReturn = "boolean"
+                });
+            }
+
+            return signatures
+                .OrderBy(s => s.SourceId, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(s => s.Role, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(s => s.FunctionName, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private static List<string> GetCrmParameterValues(XElement functionElement)
+            => functionElement.Elements("CrmParameter")
+                .Select(e => e.Attribute("Value")?.Value)
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .ToList();
+
+        private static string InferSignatureSurface(string sourceId, List<string> parameters)
+        {
+            if (sourceId.IndexOf(".Form.", StringComparison.OrdinalIgnoreCase) >= 0)
+                return "form";
+            if (sourceId.IndexOf(".HomepageGrid.", StringComparison.OrdinalIgnoreCase) >= 0)
+                return "main_grid";
+            if (sourceId.IndexOf(".SubGrid.", StringComparison.OrdinalIgnoreCase) >= 0)
+                return "sub_grid";
+
+            if (parameters.Any(p => string.Equals(p, "PrimaryControl", StringComparison.OrdinalIgnoreCase)))
+                return "form";
+            if (parameters.Any(p => string.Equals(p, "SelectedControl", StringComparison.OrdinalIgnoreCase)))
+                return "grid";
+
+            return "unknown";
+        }
+
+        private static void AppendFunctionSignatures(StringBuilder sb, List<RibbonFunctionSignature> signatures)
+        {
+            if (signatures == null || signatures.Count == 0)
+                return;
+
+            sb.AppendLine();
+            sb.AppendLine("JavaScript signatures:");
+            foreach (var signature in signatures)
+            {
+                var returnText = string.Equals(signature.Role, "enable", StringComparison.OrdinalIgnoreCase)
+                    ? ", returns boolean"
+                    : "";
+                sb.AppendLine($"  - {signature.Role} {signature.FunctionName} [{signature.Surface}] ({signature.ParameterCount} params{returnText})");
+                for (var i = 0; i < signature.Parameters.Count; i++)
+                    sb.AppendLine($"      {i + 1}. {signature.Parameters[i]}");
+            }
         }
 
         private (bool Success, Guid? AsyncOperationId) TryPublish(string entityName)
