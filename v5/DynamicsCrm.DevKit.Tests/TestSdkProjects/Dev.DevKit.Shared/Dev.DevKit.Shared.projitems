@@ -8,9 +8,10 @@
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />

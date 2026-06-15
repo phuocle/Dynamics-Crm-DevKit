@@ -28,7 +28,7 @@
 	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.60" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="1.*" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.PowerApps.MSBuild.Plugin" Version="2.8.1" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.*" PrivateAssets="All" />
 		<PackageReference Include="Niam.XRM.Framework" Version="9.0.2.27" />
 	</ItemGroup>
