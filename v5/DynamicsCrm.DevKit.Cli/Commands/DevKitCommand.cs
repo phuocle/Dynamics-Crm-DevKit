@@ -94,8 +94,11 @@ namespace DynamicsCrm.DevKit.Cli.Commands
 
             if (settings.IsJsonResolvedBySearch)
             {
-                SpectreLog.ActionWithLevel0("[INFO]", $"--json resolved by searching parent folders: {settings.JsonFile}");
-                SpectreLog.ActionWithLevel0("[INFO]", $"--json resolved folder: {settings.JsonResolvedDirectory}");
+                SpectreLog.WriteTable(new List<string[]>
+                {
+                    new[] { "[INFO]    --json", $"resolved by searching parent folders: {settings.JsonFile}" },
+                    new[] { "[INFO]    --json", $"resolved folder: {settings.JsonResolvedDirectory}" }
+                });
             }
 
             var argRows = new List<string[]>();

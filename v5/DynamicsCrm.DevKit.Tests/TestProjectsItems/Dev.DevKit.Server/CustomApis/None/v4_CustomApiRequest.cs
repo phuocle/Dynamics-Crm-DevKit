@@ -4,16 +4,15 @@ using System;
 
 namespace Dev.DevKit.Server.CustomApis.None
 {
-    [CrmPluginRegistration("v4_AccountCustomApiRequest", "v4_AccountCustomApi", PluginType.CustomApi, EntityLogicalName = "account")]
-    public class v4_AccountCustomApiRequest : IPlugin
+    [CrmPluginRegistration("v4_CustomApiRequest", "v4_CustomApi", PluginType.CustomApi)]
+    public class v4_CustomApiRequest : IPlugin
     {
         /*
         InputParameters:
-            Target                        Microsoft.Xrm.Sdk.EntityReference - require
-            v4_account_request_input      System.String
-            v4_account_request_f          System.String - require
+            v4_request_input      System.String
+            v4_request_f          System.String - require
         OutputParameters:
-            v4_account_response_output    System.String - require
+            v4_response_output    System.String - require
         */
 
         public void Execute(IServiceProvider serviceProvider)
@@ -23,7 +22,7 @@ namespace Dev.DevKit.Server.CustomApis.None
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var serviceAdmin = serviceFactory.CreateOrganizationService(null);
             var service = serviceFactory.CreateOrganizationService(context.UserId);
-            if (context.PrimaryEntityName.ToLower() != "account") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
+
             tracing?.DebugContext(context);
 
             var outputs = ExecuteCustomApi(context, serviceFactory, serviceAdmin, service, tracing);

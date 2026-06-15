@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.DevKit.Server.DataProviders.Cds
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "v4_sql_datasource")]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "devkit_sqlite")]
     public class Retrieve : IPlugin
     {
         /*
