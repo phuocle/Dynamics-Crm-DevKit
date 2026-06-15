@@ -1,16 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>e7a0e927-16c1-4b53-9c65-15263b33b3df</SharedGUID>
+    <SharedGUID>f8531f27-e9c8-4ee1-b0ad-bbaff45a96d7</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
@@ -20,11 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
       <DependentUpon>Contact.cs</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" />
   </ItemGroup>
 </Project>

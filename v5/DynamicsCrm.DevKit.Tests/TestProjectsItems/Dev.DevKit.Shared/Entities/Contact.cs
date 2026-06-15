@@ -3,7 +3,7 @@ using System;
 
 namespace Dev.DevKit.Shared.Entities
 {
-    public partial class Contact
+    internal partial class Contact
     {
         #region --- PROPERTIES ---
 

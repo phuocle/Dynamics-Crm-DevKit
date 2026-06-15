@@ -1,35 +1,35 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 
 namespace Dev.DevKit.Shared
 {
-    public enum ImageType
+    internal enum ImageType
     {
         Pre,
         Post
     }
 
-    public enum ExecutionModeEnum
+    internal enum ExecutionModeEnum
     {
         Synchronous = 0,
         Asynchronous = 1
     }
 
-    public enum ImageTypeEnum
+    internal enum ImageTypeEnum
     {
         PreImage = 0,
         PostImage = 1,
         Both = 2
     }
 
-    public enum IsolationModeEnum
+    internal enum IsolationModeEnum
     {
         None = 0,
         Sandbox = 1,
         External = 2,
     }
 
-    public enum SourceTypeEnum
+    internal enum SourceTypeEnum
     {
         Database = 0,
         Disk = 1,
@@ -38,20 +38,20 @@ namespace Dev.DevKit.Shared
         FileStore = 4
     }
 
-    public enum PluginStepOperationEnum
+    internal enum PluginStepOperationEnum
     {
         Activate = 0,
         Deactivate = 1
     }
 
-    public enum StageEnum
+    internal enum StageEnum
     {
         PreValidation = 10,
         PreOperation = 20,
         PostOperation = 40
     }
 
-    public enum PluginType
+    internal enum PluginType
     {
         Plugin = 0,
         Workflow = 1,
@@ -62,7 +62,7 @@ namespace Dev.DevKit.Shared
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
-    public class CrmPluginRegistrationAttribute : Attribute
+    internal class CrmPluginRegistrationAttribute : Attribute
     {
         public CrmPluginRegistrationAttribute(string message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder, IsolationModeEnum isolationModel)
         {
@@ -133,7 +133,7 @@ namespace Dev.DevKit.Shared
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
+    internal class DynamicsCrmDevKitPluginManagedIdentityAssemblyAttribute : Attribute
     {
         public string TenantId { get; set; }
         public string CertificateFileName { get; set; }
@@ -143,9 +143,11 @@ namespace Dev.DevKit.Shared
 
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
-    public class DynamicsCrmDevKitPluginAssemblyAttribute : Attribute
+    internal class DynamicsCrmDevKitPluginAssemblyAttribute : Attribute
     {
         public IsolationModeEnum IsolationMode { get; set; } = IsolationModeEnum.Sandbox;
         public SourceTypeEnum SourceType { get; set; } = SourceTypeEnum.Database;
     }
 }
+
+
