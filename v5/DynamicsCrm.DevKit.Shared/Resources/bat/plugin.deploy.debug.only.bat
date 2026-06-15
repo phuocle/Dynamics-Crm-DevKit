@@ -19,4 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-devkit server $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "DEBUG" --onlyupdateassembly
+devkit server $CliConnectionArgs$ --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG" --onlyupdateassembly

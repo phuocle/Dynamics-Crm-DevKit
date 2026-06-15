@@ -159,6 +159,23 @@ function Restore-ReplacedFilesFromGit {
     }
 }
 
+function Clear-VsixGeneratedOutputs {
+    param ($ProjectRoot, $Configuration)
+
+    $paths = @(
+        "DynamicsCrm.DevKit\obj\$Configuration\extension.vsixmanifest",
+        "DynamicsCrm.DevKit\bin\$Configuration\extension.vsixmanifest",
+        "DynamicsCrm.DevKit\bin\$Configuration\DynamicsCrm.DevKit.vsix"
+    )
+
+    foreach ($path in $paths) {
+        $fullPath = Join-Path $ProjectRoot $path
+        if (Test-Path $fullPath) {
+            Remove-Item -LiteralPath $fullPath -Force
+        }
+    }
+}
+
 function Stop-DevKitProcesses {
     Write-Host "Killing running CLI/devkit processes (MCP server)..." -ForegroundColor Yellow
     $killed = 0
@@ -267,6 +284,8 @@ try {
     & $msbuild $analyzerBuildArgs
     if ($LASTEXITCODE -ne 0) { throw "Analyzer build failed with exit code $LASTEXITCODE" }
     Write-Host "Analyzer build Success." -ForegroundColor Green
+
+    Clear-VsixGeneratedOutputs -ProjectRoot $ProjectRoot -Configuration $Configuration
 
     $vsixBuildArgs = @(
         "$vsixProject",

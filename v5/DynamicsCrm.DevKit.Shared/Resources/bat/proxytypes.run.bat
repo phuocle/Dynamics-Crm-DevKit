@@ -19,4 +19,4 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-devkit modelbuilder $CliConnectionArgs$ --json "..\DynamicsCrm.DevKit.Cli.json" --profile "ALL"
+devkit modelbuilder $CliConnectionArgs$ --json "DynamicsCrm.DevKit.Cli.json" --profile "ALL"
