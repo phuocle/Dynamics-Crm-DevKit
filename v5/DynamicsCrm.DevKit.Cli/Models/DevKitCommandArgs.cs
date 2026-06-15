@@ -65,14 +65,79 @@ namespace DynamicsCrm.DevKit.Shared.Models
         {
             get
             {
-                if (string.IsNullOrEmpty(Json)) return null;
-                var file = Path.Combine(CurrentDirectory, Json);
-                if (File.Exists(file)) return new FileInfo(file).FullName;
-                return null;
+                return ResolveJsonFile(Json, CurrentDirectory);
+            }
+        }
+
+        public bool IsJsonResolvedBySearch
+        {
+            get
+            {
+                var directFile = GetDirectJsonFile(Json, CurrentDirectory);
+                var jsonFile = JsonFile;
+                return !string.IsNullOrEmpty(directFile)
+                    && !File.Exists(directFile)
+                    && !string.IsNullOrEmpty(jsonFile)
+                    && !string.Equals(directFile, jsonFile, StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        public string JsonResolvedDirectory
+        {
+            get
+            {
+                var jsonFile = JsonFile;
+                return string.IsNullOrEmpty(jsonFile) ? null : Path.GetDirectoryName(jsonFile);
             }
         }
 
         public ServiceClient ServiceClient { get; set; }
+
+        private static string ResolveJsonFile(string json, string currentDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return null;
+
+            try
+            {
+                if (Path.IsPathRooted(json))
+                    return File.Exists(json) ? new FileInfo(json).FullName : null;
+
+                var file = Path.Combine(currentDirectory, json);
+                if (File.Exists(file)) return new FileInfo(file).FullName;
+
+                var fileName = Path.GetFileName(json);
+                if (string.IsNullOrWhiteSpace(fileName)) return null;
+
+                var directory = new DirectoryInfo(currentDirectory);
+                while (directory != null)
+                {
+                    file = Path.Combine(directory.FullName, fileName);
+                    if (File.Exists(file)) return new FileInfo(file).FullName;
+                    directory = directory.Parent;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            return null;
+        }
+
+        private static string GetDirectJsonFile(string json, string currentDirectory)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return null;
+
+            try
+            {
+                if (Path.IsPathRooted(json)) return new FileInfo(json).FullName;
+                return new FileInfo(Path.Combine(currentDirectory, json)).FullName;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Fill empty connection properties from DEVKIT_* environment variables.

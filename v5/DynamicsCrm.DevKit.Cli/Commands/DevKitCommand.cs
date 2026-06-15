@@ -92,6 +92,12 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             };
             SpectreLog.WriteTable(pathRows);
 
+            if (settings.IsJsonResolvedBySearch)
+            {
+                SpectreLog.ActionWithLevel0("[INFO]", $"--json resolved by searching parent folders: {settings.JsonFile}");
+                SpectreLog.ActionWithLevel0("[INFO]", $"--json resolved folder: {settings.JsonResolvedDirectory}");
+            }
+
             var argRows = new List<string[]>();
             var connLog = string.Empty;
             if (!string.IsNullOrEmpty(settings.Connection))
