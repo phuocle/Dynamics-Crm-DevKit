@@ -1,3 +1,4 @@
+using System;
 using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
@@ -30,42 +31,38 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            TrackGeneratedProjectItem(projectItem);
         }
 
         private async Task<bool> IsJsFormExistAsync()
         {
-            var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-            return System.IO.File.Exists(System.IO.Path.Combine(selectedItem.FullPath, $"{ItemName}.form.js"));
+            var container = await VsixHelper.SelectedItem.GetProjectItemsContainerAsync();
+            return System.IO.File.Exists(System.IO.Path.Combine(container?.FolderPath ?? string.Empty, $"{ItemName}.form.js"));
         }
 
         public void RunFinished()
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                var JavascriptWebApiProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.webapi.js");
-                var JavascriptWebApiProjectItemFullPath = JavascriptWebApiProjectItem.FileNames[0];
-                var JavascriptdtsProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.d.ts");
-                var JavascriptdtsProjectItemFullPath = JavascriptdtsProjectItem.FileNames[0];
-                await FileHelper.ForceWriteAllTextAsync(JavascriptWebApiProjectItemFullPath, _JavascriptWebApi_);
-                await FileHelper.ForceWriteAllTextAsync(JavascriptdtsProjectItemFullPath, _Javascriptdts_);
-                var JavascriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.js");
                 try
                 {
-                    JavascriptWebApiProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
-                    JavascriptdtsProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.js";
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    await WriteTargetFileIfChangedAsync($"{ItemName}.webapi.js", _JavascriptWebApi_);
+                    await WriteTargetFileIfChangedAsync($"{ItemName}.d.ts", _Javascriptdts_);
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{ItemName}.webapi.js"), $"{ItemName}.js");
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{ItemName}.d.ts"), $"{ItemName}.js");
+                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.js up to date!!!");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    JavascriptWebApiProjectItem.Remove();
-                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptWebApiProjectItemFullPath);
-                    JavascriptdtsProjectItem.Remove();
-                    JavascriptProjectItem.ProjectItems.AddFromFile(JavascriptdtsProjectItemFullPath);
+                    System.Diagnostics.Debug.WriteLine($"DevKit: JsWebApi.RunFinished failed: {ex.Message}");
                 }
-                await VsixHelper.ExecuteCommandAsync("File.SaveAll");
-                await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.js up to date!!!");
-                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                finally
+                {
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                }
             });
         }
 
@@ -98,22 +95,13 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                switch (filePath)
+                var targetFileName = filePath switch
                 {
-                    case "Javascript.js":
-                        FilePath = $"{ItemName}.js";
-                        break;
-                    case "Javascript.d.ts":
-                        FilePath = $"{ItemName}.d.ts";
-                        break;
-                    default:
-                        FilePath = $"{ItemName}.webapi.js";
-                        break;
-                }
-                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-                FullFilePath = System.IO.Path.Combine(selectedItem.FullPath, FilePath);
-                IsFilePathExist = System.IO.File.Exists(FullFilePath);
-                return !IsFilePathExist;
+                    "Javascript.js" => $"{ItemName}.js",
+                    "Javascript.d.ts" => $"{ItemName}.d.ts",
+                    _ => $"{ItemName}.webapi.js"
+                };
+                return await ShouldAddProjectItemAsync(filePath, targetFileName);
             });
         }
     }

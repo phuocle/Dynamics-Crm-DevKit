@@ -1,3 +1,4 @@
+using System;
 using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
@@ -34,45 +35,33 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            TrackGeneratedProjectItem(projectItem);
         }
 
         public void RunFinished()
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-
-                // 1. Write the generated .dialog.ts file content
-                var dialogProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.dialog.ts");
-                var dialogProjectItemFullPath = dialogProjectItem.FileNames[0];
-                await FileHelper.ForceWriteAllTextAsync(dialogProjectItemFullPath, _TypeScriptDialog_);
-
-                // 2. Handle {DialogClassName}.ts (user code)
-                var dialogTsProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.ts");
-                var dialogTsPath = dialogTsProjectItem.FileNames[0];
-
-                if (!IsDialogTsExisting)
-                {
-                    // Dialog.ts was just created - write initial content
-                    await FileHelper.ForceWriteAllTextAsync(dialogTsPath, _TypeScript_);
-                }
-                // If Dialog.ts already exists, don't touch it - user has customized their code
-
-                // 3. Nest .dialog.ts under Dialog.ts
                 try
                 {
-                    dialogProjectItem.Properties.Item("DependentUpon").Value = $"{DialogClassName}.ts";
-                }
-                catch
-                {
-                    dialogProjectItem.Remove();
-                    dialogTsProjectItem.ProjectItems.AddFromFile(dialogProjectItemFullPath);
-                }
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    await WriteTargetFileIfChangedAsync($"{DialogClassName}.dialog.ts", _TypeScriptDialog_);
+                    if (!IsDialogTsExisting)
+                        await WriteTargetFileIfChangedAsync($"{DialogClassName}.ts", _TypeScript_);
 
-                await VsixHelper.ExecuteCommandAsync("File.SaveAll");
-                await VS.StatusBar.ShowMessageAsync($"{DialogClassName}.dialog.ts up to date!!!");
-                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{DialogClassName}.dialog.ts"), $"{DialogClassName}.ts");
+                    await VS.StatusBar.ShowMessageAsync($"{DialogClassName}.dialog.ts up to date!!!");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"DevKit: TsDialog.RunFinished failed: {ex.Message}");
+                }
+                finally
+                {
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                }
             });
         }
 
@@ -115,26 +104,19 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                switch (filePath)
+                var targetFileName = filePath switch
                 {
-                    case "TypeScript.ts":
-                        FilePath = $"{DialogClassName}.ts";
-                        break;
-                    default:
-                        FilePath = $"{DialogClassName}.dialog.ts";
-                        break;
-                }
-                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-                FullFilePath = Path.Combine(selectedItem.FullPath, FilePath);
-                IsFilePathExist = File.Exists(FullFilePath);
+                    "TypeScript.ts" => $"{DialogClassName}.ts",
+                    _ => $"{DialogClassName}.dialog.ts"
+                };
+                var shouldAdd = await ShouldAddProjectItemAsync(filePath, targetFileName);
                 if (filePath == "TypeScript.ts")
                 {
                     IsDialogTsExisting = IsFilePathExist;
-                    // If {DialogClassName}.ts exists, don't add it (we'll append in RunFinished)
-                    // If {DialogClassName}.ts doesn't exist, add it so template creates it
-                    return !IsFilePathExist;
+                    // If {DialogClassName}.ts exists, preserve it; otherwise let the template create it.
+                    return shouldAdd;
                 }
-                return !IsFilePathExist;
+                return shouldAdd;
             });
         }
     }

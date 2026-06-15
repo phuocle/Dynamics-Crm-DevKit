@@ -1,4 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
@@ -8,6 +8,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,46 +32,40 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            TrackGeneratedProjectItem(projectItem);
         }
 
         public void RunFinished()
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                var TypeScriptWebApiProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.webapi.ts");
-                var TypeScriptWebApiProjectItemFullPath = TypeScriptWebApiProjectItem.FileNames[0];
-                await FileHelper.ForceWriteAllTextAsync(TypeScriptWebApiProjectItemFullPath, _TypeScriptWebApi_);
-                var TypeScriptProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.ts");
                 try
                 {
-                    TypeScriptWebApiProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.ts";
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    await WriteTargetFileIfChangedAsync($"{ItemName}.webapi.ts", _TypeScriptWebApi_);
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{ItemName}.webapi.ts"), $"{ItemName}.ts");
+
+                    // Generate OptionSet.ts
+                    var optionSetFilePath = GetTargetFilePath("OptionSet.ts");
+                    if (!string.IsNullOrWhiteSpace(optionSetFilePath))
+                    {
+                        var existingContent = File.Exists(optionSetFilePath) ? await FileHelper.ReadAllTextAsync(optionSetFilePath) : null;
+                        var optionSetCode = await Task.Run(async () => await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, new List<EntityMetadata> { EntityMetadata }, existingContent));
+                        await WriteTargetFileIfChangedAsync("OptionSet.ts", optionSetCode);
+                        await AddTargetFileToProjectAsync("OptionSet.ts");
+                    }
+                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.ts up to date!!!");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    TypeScriptWebApiProjectItem.Remove();
-                    TypeScriptProjectItem.ProjectItems.AddFromFile(TypeScriptWebApiProjectItemFullPath);
+                    System.Diagnostics.Debug.WriteLine($"DevKit: TsWebApi.RunFinished failed: {ex.Message}");
                 }
-
-                // Generate OptionSet.ts
-                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-                var currentFolder = selectedItem.FullPath;
-                var optionSetFilePath = Path.Combine(currentFolder, "OptionSet.ts");
-                var existingContent = File.Exists(optionSetFilePath) ? await FileHelper.ReadAllTextAsync(optionSetFilePath) : null;
-                var optionSetCode = await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, new List<EntityMetadata> { EntityMetadata }, existingContent);
-                await FileHelper.ForceWriteAllTextAsync(optionSetFilePath, optionSetCode);
-
-                // Add OptionSet.ts to project if new
-                var optionSetProjectItem = await VsixHelper.GetProjectItemAsync("OptionSet.ts");
-                if (optionSetProjectItem == null)
+                finally
                 {
-                    await VsixHelper.SelectedItem.AddFileToProjectAsync(optionSetFilePath);
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
-
-                await VsixHelper.ExecuteCommandAsync("File.SaveAll");
-                await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.ts up to date!!!");
-                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
             });
         }
 
@@ -102,19 +97,12 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                switch (filePath)
+                var targetFileName = filePath switch
                 {
-                    case "TypeScript.ts":
-                        FilePath = $"{ItemName}.ts";
-                        break;
-                    default:
-                        FilePath = $"{ItemName}.webapi.ts";
-                        break;
-                }
-                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-                FullFilePath = System.IO.Path.Combine(selectedItem.FullPath, FilePath);
-                IsFilePathExist = System.IO.File.Exists(FullFilePath);
-                return !IsFilePathExist;
+                    "TypeScript.ts" => $"{ItemName}.ts",
+                    _ => $"{ItemName}.webapi.ts"
+                };
+                return await ShouldAddProjectItemAsync(filePath, targetFileName);
             });
         }
     }

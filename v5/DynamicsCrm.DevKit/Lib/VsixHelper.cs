@@ -19,6 +19,13 @@ namespace DynamicsCrm.DevKit.Lib
 {
     public class VsixHelper
     {
+        internal sealed class ProjectItemsContainer
+        {
+            internal string FolderPath { get; set; }
+            internal ProjectItems ProjectItems { get; set; }
+            internal EnvDTE.Project Project { get; set; }
+        }
+
         public static class SelectedItem
         {
             public static async Task<SolutionItem> GetSolutionItemAsync()
@@ -46,14 +53,70 @@ namespace DynamicsCrm.DevKit.Lib
 
             public static async Task AddFileToProjectAsync(string filePath)
             {
+                var container = await GetProjectItemsContainerAsync();
+                await TryAddProjectItemAsync(container?.ProjectItems, filePath);
+            }
+
+            internal static async Task<ProjectItemsContainer> GetProjectItemsContainerAsync()
+            {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 var dte = await VS.GetServiceAsync<DTE, DTE>();
-                if (dte?.SelectedItems == null || dte.SelectedItems.Count == 0) return;
-                EnvDTE.SelectedItem dteSelectedItem = dte.SelectedItems.Item(1);
-                ProjectItems rootItems = null;
-                if (dteSelectedItem.Project != null) rootItems = dteSelectedItem.Project.ProjectItems;
-                else if (dteSelectedItem.ProjectItem != null) rootItems = dteSelectedItem.ProjectItem.ProjectItems;
-                rootItems?.AddFromFile(filePath);
+                if (dte?.SelectedItems != null && dte.SelectedItems.Count > 0)
+                {
+                    var container = TryGetProjectItemsContainer(dte.SelectedItems.Item(1));
+                    if (container?.ProjectItems != null) return container;
+                }
+
+                var activeProjects = dte?.ActiveSolutionProjects as Array;
+                if (activeProjects?.Length > 0 && activeProjects.GetValue(0) is EnvDTE.Project activeProject)
+                {
+                    return new ProjectItemsContainer
+                    {
+                        FolderPath = NormalizeFolderPath(activeProject.FullName),
+                        ProjectItems = activeProject.ProjectItems,
+                        Project = activeProject
+                    };
+                }
+
+                var selectedItem = await GetSolutionItemAsync();
+                return new ProjectItemsContainer
+                {
+                    FolderPath = NormalizeFolderPath(selectedItem?.FullPath)
+                };
+            }
+
+            private static ProjectItemsContainer TryGetProjectItemsContainer(EnvDTE.SelectedItem selectedItem)
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                if (selectedItem == null) return null;
+
+                if (selectedItem.ProjectItem != null)
+                {
+                    var projectItem = selectedItem.ProjectItem;
+                    var itemPath = TryGetProjectItemFullPath(projectItem);
+                    var isFolder = string.Equals(projectItem.Kind, EnvDTE.Constants.vsProjectItemKindPhysicalFolder, StringComparison.OrdinalIgnoreCase) || IsFolderPath(itemPath);
+                    var folderPath = NormalizeFolderPath(itemPath);
+                    var projectItems = isFolder ? projectItem.ProjectItems : projectItem.Collection;
+
+                    return new ProjectItemsContainer
+                    {
+                        FolderPath = folderPath,
+                        ProjectItems = projectItems,
+                        Project = projectItem.ContainingProject
+                    };
+                }
+
+                if (selectedItem.Project != null)
+                {
+                    return new ProjectItemsContainer
+                    {
+                        FolderPath = NormalizeFolderPath(selectedItem.Project.FullName),
+                        ProjectItems = selectedItem.Project.ProjectItems,
+                        Project = selectedItem.Project
+                    };
+                }
+
+                return null;
             }
         }
 
@@ -428,32 +491,95 @@ namespace DynamicsCrm.DevKit.Lib
             await VS.Commands.ExecuteAsync(command);
         }
 
-        internal static async Task<ProjectItem> GetProjectItemAsync(string projectItemName)
+        internal static string TryGetProjectItemFullPath(ProjectItem projectItem)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (string.IsNullOrWhiteSpace(projectItemName)) return null;
-            var dte = await VS.GetServiceAsync<EnvDTE.DTE, EnvDTE.DTE>();
-            if (dte == null || dte.SelectedItems == null || dte.SelectedItems.Count == 0) return null;
-            EnvDTE.SelectedItem dteSelectedItem = dte.SelectedItems.Item(1);
-            ProjectItems rootItems = null;
-            if (dteSelectedItem.Project != null) rootItems = dteSelectedItem.Project.ProjectItems;
-            else if (dteSelectedItem.ProjectItem != null) rootItems = dteSelectedItem.ProjectItem.ProjectItems;
-            if (rootItems == null) return null;
-            var queue = new Queue<ProjectItems>();
-            queue.Enqueue(rootItems);
-            while (queue.Count > 0)
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (projectItem == null) return null;
+            try
             {
-                var items = queue.Dequeue();
-                foreach (ProjectItem item in items)
+                for (short i = 1; i <= projectItem.FileCount; i++)
                 {
-                    if (item == null) continue;
-                    if (string.Equals(item.Name, projectItemName, StringComparison.OrdinalIgnoreCase))
-                        return item;
-                    if (item.ProjectItems != null && item.ProjectItems.Count > 0)
-                        queue.Enqueue(item.ProjectItems);
+                    var fileName = projectItem.FileNames[i];
+                    if (!string.IsNullOrWhiteSpace(fileName)) return fileName;
                 }
             }
+            catch
+            {
+            }
+
+            try
+            {
+                return projectItem.Properties?.Item("FullPath")?.Value as string;
+            }
+            catch
+            {
+            }
+
             return null;
+        }
+
+        internal static bool TrySetDependentUpon(ProjectItem childItem, string parentFileName)
+        {
+            if (childItem == null || string.IsNullOrWhiteSpace(parentFileName)) return false;
+            try
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                childItem.Properties.Item("DependentUpon").Value = parentFileName;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"DevKit: Unable to set DependentUpon for {childItem.Name}: {ex.Message}");
+                return false;
+            }
+        }
+
+        internal static async Task<ProjectItem> TryAddProjectItemAsync(ProjectItems projectItems, string filePath)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            if (projectItems == null || string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath)) return null;
+
+            try
+            {
+                var existingItem = TryFindProjectItem(projectItems, filePath);
+                if (existingItem != null) return existingItem;
+                return projectItems.AddFromFile(filePath);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"DevKit: Unable to add project item {filePath}: {ex.Message}");
+                return null;
+            }
+        }
+
+        private static ProjectItem TryFindProjectItem(ProjectItems projectItems, string filePath)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (projectItems == null || string.IsNullOrWhiteSpace(filePath)) return null;
+            var fileName = Path.GetFileName(filePath);
+            foreach (ProjectItem item in projectItems)
+            {
+                if (item == null) continue;
+                if (string.Equals(item.Name, fileName, StringComparison.OrdinalIgnoreCase)) return item;
+                var itemPath = TryGetProjectItemFullPath(item);
+                if (string.Equals(itemPath, filePath, StringComparison.OrdinalIgnoreCase)) return item;
+            }
+            return null;
+        }
+
+        private static string NormalizeFolderPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return path;
+            if (IsFolderPath(path)) return path;
+            return Path.GetDirectoryName(path);
+        }
+
+        private static bool IsFolderPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path)) return false;
+            if (Directory.Exists(path)) return true;
+            if (File.Exists(path)) return false;
+            return string.IsNullOrEmpty(Path.GetExtension(path));
         }
 
         public static async Task<bool> IsAddToSharedProjectAsync()

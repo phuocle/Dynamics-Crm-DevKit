@@ -1,3 +1,4 @@
+using System;
 using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
@@ -35,60 +36,35 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            TrackGeneratedProjectItem(projectItem);
         }
 
         public void RunFinished()
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-
-                // 1. Write the generated .dialog.js file content
-                var dialogProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.dialog.js");
-                var dialogProjectItemFullPath = dialogProjectItem.FileNames[0];
-                await FileHelper.ForceWriteAllTextAsync(dialogProjectItemFullPath, _JavaScriptDialog_);
-
-                // 2. Write the generated .dialog.d.ts file content
-                var dtsProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.dialog.d.ts");
-                var dtsProjectItemFullPath = dtsProjectItem.FileNames[0];
-                await FileHelper.ForceWriteAllTextAsync(dtsProjectItemFullPath, _TypeScriptDialog_);
-
-                // 3. Handle {DialogClassName}.js (user code)
-                var jsProjectItem = await VsixHelper.GetProjectItemAsync($"{DialogClassName}.js");
-                var jsPath = jsProjectItem.FileNames[0];
-
-                if (!IsDialogJsExisting)
-                {
-                    // Dialog.js was just created - write initial content
-                    await FileHelper.ForceWriteAllTextAsync(jsPath, _JavaScript_);
-                }
-                // If Dialog.js already exists, don't touch it - user has customized their code
-
-                // 4. Nest .dialog.js and .d.ts under .js
                 try
                 {
-                    dialogProjectItem.Properties.Item("DependentUpon").Value = $"{DialogClassName}.js";
-                }
-                catch
-                {
-                    dialogProjectItem.Remove();
-                    jsProjectItem.ProjectItems.AddFromFile(dialogProjectItemFullPath);
-                }
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    await WriteTargetFileIfChangedAsync($"{DialogClassName}.dialog.js", _JavaScriptDialog_);
+                    await WriteTargetFileIfChangedAsync($"{DialogClassName}.dialog.d.ts", _TypeScriptDialog_);
+                    if (!IsDialogJsExisting)
+                        await WriteTargetFileIfChangedAsync($"{DialogClassName}.js", _JavaScript_);
 
-                try
-                {
-                    dtsProjectItem.Properties.Item("DependentUpon").Value = $"{DialogClassName}.js";
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{DialogClassName}.dialog.js"), $"{DialogClassName}.js");
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{DialogClassName}.dialog.d.ts"), $"{DialogClassName}.js");
+                    await VS.StatusBar.ShowMessageAsync($"{DialogClassName} JS Dialog generated successfully!!!");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    dtsProjectItem.Remove();
-                    jsProjectItem.ProjectItems.AddFromFile(dtsProjectItemFullPath);
+                    System.Diagnostics.Debug.WriteLine($"DevKit: JsDialog.RunFinished failed: {ex.Message}");
                 }
-
-                await VsixHelper.ExecuteCommandAsync("File.SaveAll");
-                await VS.StatusBar.ShowMessageAsync($"{DialogClassName} JS Dialog generated successfully!!!");
-                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                finally
+                {
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                }
             });
         }
 
@@ -134,30 +110,22 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                switch (filePath)
+                var targetFileName = filePath switch
                 {
-                    case "JavaScript.js":
-                        FilePath = $"{DialogClassName}.js";
-                        break;
-                    case "JavaScript.d.ts":
-                        FilePath = $"{DialogClassName}.dialog.d.ts";
-                        break;
-                    default:
-                        FilePath = $"{DialogClassName}.dialog.js";
-                        break;
-                }
-                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-                FullFilePath = Path.Combine(selectedItem.FullPath, FilePath);
-                IsFilePathExist = File.Exists(FullFilePath);
+                    "JavaScript.js" => $"{DialogClassName}.js",
+                    "JavaScript.d.ts" => $"{DialogClassName}.dialog.d.ts",
+                    _ => $"{DialogClassName}.dialog.js"
+                };
+                var shouldAdd = await ShouldAddProjectItemAsync(filePath, targetFileName);
 
                 // For the user script (.js), do not overwrite if exists
                 if (filePath == "JavaScript.js")
                 {
                     IsDialogJsExisting = IsFilePathExist;
-                    return !IsFilePathExist;
+                    return shouldAdd;
                 }
 
-                return !IsFilePathExist;
+                return shouldAdd;
             });
         }
     }

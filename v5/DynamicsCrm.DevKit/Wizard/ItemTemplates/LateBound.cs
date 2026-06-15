@@ -7,6 +7,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,6 +30,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            TrackGeneratedProjectItem(projectItem);
             ProjectItem = projectItem;
         }
 
@@ -36,46 +39,49 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                if (IsFilePathExist)
+                try
                 {
-                    var oldCode = await FileHelper.ReadAllTextFromLine6Async(FullFilePath);
-                    var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
-                    if (!Helper.IsTheSame(oldCode, newCode))
+                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    var generatedFileName = $"{ItemName}.generated.cs";
+                    var generatedPath = GetTargetFilePath(generatedFileName);
+                    if (System.IO.File.Exists(generatedPath))
                     {
-                        await FileHelper.ForceWriteAllTextAsync(FullFilePath, _GeneratedClass_);
+                        var oldCode = await FileHelper.ReadAllTextFromLine6Async(generatedPath);
+                        var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
+                        if (!Helper.IsTheSame(oldCode, newCode))
+                        {
+                            await FileHelper.ForceWriteAllTextAsync(generatedPath, _GeneratedClass_);
+                        }
                     }
+                    else
+                    {
+                        await WriteTargetFileIfChangedAsync(generatedFileName, _GeneratedClass_);
+                    }
+
+                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem(generatedFileName), $"{ItemName}.cs");
+
+                    var customFile = GetTargetFilePath($"{ItemName}.cs");
+                    if (System.IO.File.Exists(customFile))
+                    {
+                        var customContent = System.IO.File.ReadAllText(customFile);
+                        var oldDeclaration = $"public partial class {ItemName}";
+                        if (customContent.Contains(oldDeclaration))
+                        {
+                            var newContent = customContent.Replace(oldDeclaration, $"internal partial class {ItemName}");
+                            System.IO.File.WriteAllText(customFile, newContent);
+                        }
+                    }
+                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
                 }
-                else
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        ProjectItem.Properties.Item("DependentUpon").Value = $"{ItemName}.cs";
-                    }
-                    catch
-                    {
-                        var LateBoundProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.cs");
-                        var LateBoundGeneratedProjectItem = await VsixHelper.GetProjectItemAsync($"{ItemName}.generated.cs");
-                        var LateBoundGeneratedProjectItemFullPath = LateBoundGeneratedProjectItem.FileNames[0];
-                        LateBoundGeneratedProjectItem.Remove();
-                        LateBoundProjectItem.ProjectItems.AddFromFile(LateBoundGeneratedProjectItemFullPath);
-                    }
+                    System.Diagnostics.Debug.WriteLine($"DevKit: LateBound.RunFinished failed: {ex.Message}");
                 }
-                var customFile = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(FullFilePath), $"{ItemName}.cs");
-                if (System.IO.File.Exists(customFile))
+                finally
                 {
-                    var customContent = System.IO.File.ReadAllText(customFile);
-                    var oldDeclaration = $"public partial class {ItemName}";
-                    if (customContent.Contains(oldDeclaration))
-                    {
-                        var newContent = customContent.Replace(oldDeclaration, $"internal partial class {ItemName}");
-                        System.IO.File.WriteAllText(customFile, newContent);
-                    }
+                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
-                await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
-                await VsixHelper.ExecuteCommandAsync("File.SaveAll");
-                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
             });
         }
 
@@ -111,11 +117,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             return ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var selectedItem = await VsixHelper.SelectedItem.GetSolutionItemAsync();
-                FilePath = filePath == "Class.cs" ? $"{ItemName}.cs" : $"{ItemName}.generated.cs";
-                FullFilePath = System.IO.Path.Combine(selectedItem.FullPath, FilePath);
-                IsFilePathExist = System.IO.File.Exists(FullFilePath);
-                return !IsFilePathExist;
+                var targetFileName = filePath == "Class.cs" ? $"{ItemName}.cs" : $"{ItemName}.generated.cs";
+                return await ShouldAddProjectItemAsync(filePath, targetFileName);
             });
         }
     }
