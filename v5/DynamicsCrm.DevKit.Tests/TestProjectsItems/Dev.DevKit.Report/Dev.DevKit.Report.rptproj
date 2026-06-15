@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <FullPath>Debug</FullPath>
@@ -37,6 +37,9 @@
         <Report Include="download.reports.bat">
             <MimeType>application/octet-stream</MimeType>
         </Report>
+		<Report Include="upload.reports.bat">
+			<MimeType>application/octet-stream</MimeType>
+		</Report>
         <Report Include="README.md">
             <MimeType>
             </MimeType>
@@ -45,4 +48,4 @@
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
-<!-- v.4.12.34.56 - Build: 31.12.2025 23:59:59 -->
+<!-- v.4.12.34.56 - Build: 30.06.2026 23:59:59 -->
