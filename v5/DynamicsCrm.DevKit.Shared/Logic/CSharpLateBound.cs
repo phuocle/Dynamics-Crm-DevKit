@@ -6,7 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Security;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared.Logic
 {
@@ -729,6 +732,424 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
         }
 
+        private static string GetFormulaDefinitionXml(AttributeMetadata attribute)
+        {
+            var definition = GetFormulaDefinition(attribute);
+            if (string.IsNullOrWhiteSpace(definition)) return string.Empty;
+
+            if (attribute.SourceType == 3)
+                definition = FormatPowerFx(definition);
+            else if ((attribute.SourceType == 1 || attribute.SourceType == 2) && LooksLikeFormulaXml(definition))
+                definition = ParseFormulaXml(definition, attribute.SourceType ?? 0);
+            else
+                definition = NormalizeFormulaDefinition(definition);
+
+            if (string.IsNullOrWhiteSpace(definition)) return string.Empty;
+
+            var xml = $"{TAB}{TAB}/// <para><strong>Definition</strong>:</para>{NEW_LINE}";
+            xml += $"{TAB}{TAB}/// <code>{NEW_LINE}";
+            foreach (var line in definition.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n'))
+                xml += $"{TAB}{TAB}/// {SecurityElement.Escape(line)}{NEW_LINE}";
+            xml += $"{TAB}{TAB}/// </code>{NEW_LINE}";
+            return xml;
+        }
+
+        private static string GetFormulaDefinition(AttributeMetadata attribute)
+        {
+            try
+            {
+                var propInfo = attribute.GetType().GetProperty("FormulaDefinition");
+                var value = propInfo?.GetValue(attribute, null);
+                return value?.ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private static bool LooksLikeFormulaXml(string definition)
+        {
+            return definition.IndexOf("<?xml", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   definition.IndexOf("<Activity", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private static string NormalizeFormulaDefinition(string definition)
+        {
+            if (string.IsNullOrWhiteSpace(definition)) return string.Empty;
+
+            var normalized = definition
+                .Replace("\r\n", " ")
+                .Replace("\r", " ")
+                .Replace("\n", " ")
+                .Replace("\t", " ")
+                .Trim();
+
+            while (normalized.Contains("  "))
+                normalized = normalized.Replace("  ", " ");
+
+            return normalized;
+        }
+
+        private static string FormatPowerFx(string formula)
+        {
+            formula = WebUtility.HtmlDecode(formula);
+            formula = NormalizePowerFxLine(formula);
+            if (string.IsNullOrWhiteSpace(formula)) return string.Empty;
+
+            var openParen = formula.IndexOf('(');
+            if (openParen <= 0 || !formula.EndsWith(")", StringComparison.Ordinal))
+                return formula;
+
+            var functionName = formula.Substring(0, openParen).Trim();
+            var body = formula.Substring(openParen + 1, formula.Length - openParen - 2);
+            var arguments = SplitTopLevelArguments(body);
+            if (arguments.Count <= 1) return formula;
+
+            var lines = new List<string> { functionName + "(" };
+            for (var i = 0; i < arguments.Count; i++)
+            {
+                var suffix = i == arguments.Count - 1 ? string.Empty : ",";
+                lines.Add($"{TAB}{NormalizePowerFxLine(arguments[i])}{suffix}");
+            }
+            lines.Add(")");
+            return string.Join(NEW_LINE, lines);
+        }
+
+        private static List<string> SplitTopLevelArguments(string text)
+        {
+            var arguments = new List<string>();
+            var start = 0;
+            var depth = 0;
+            var inString = false;
+            for (var i = 0; i < text.Length; i++)
+            {
+                var c = text[i];
+                if (c == '"')
+                {
+                    inString = !inString;
+                    continue;
+                }
+                if (inString) continue;
+                if (c == '(') depth++;
+                else if (c == ')') depth--;
+                else if (c == ',' && depth == 0)
+                {
+                    arguments.Add(text.Substring(start, i - start).Trim());
+                    start = i + 1;
+                }
+            }
+            arguments.Add(text.Substring(start).Trim());
+            return arguments;
+        }
+
+        private static string NormalizePowerFxLine(string formula)
+        {
+            if (string.IsNullOrWhiteSpace(formula)) return string.Empty;
+
+            var normalized = NormalizeFormulaDefinition(formula);
+            const string logicalAndPlaceholder = "__DEVKIT_POWERFX_LOGICAL_AND__";
+            normalized = normalized.Replace("&&", logicalAndPlaceholder);
+            normalized = normalized.Replace(">=", " >= ");
+            normalized = normalized.Replace("<=", " <= ");
+            normalized = normalized.Replace("<>", " <> ");
+            normalized = Regex.Replace(normalized, @"(?<![<>=])=(?![=])", " = ");
+            normalized = Regex.Replace(normalized, @"(?<![<>=])>(?![=])", " > ");
+            normalized = Regex.Replace(normalized, @"(?<![<>=])<(?![=>])", " < ");
+            normalized = Regex.Replace(normalized, @"(?<!&)&(?!&)", " & ");
+            normalized = normalized.Replace(logicalAndPlaceholder, " && ");
+            normalized = Regex.Replace(normalized, @"&\s+&", "&&");
+            normalized = Regex.Replace(normalized, @",(?=\S)", ", ");
+            normalized = Regex.Replace(normalized, @"\s+", " ");
+            return normalized.Trim();
+        }
+
+        private static string ParseFormulaXml(string xml, int sourceType)
+        {
+            try
+            {
+                var document = XDocument.Parse(xml);
+                var translator = new FormulaXmlTranslator(document);
+                if (sourceType == 2) return translator.TranslateRollup();
+                if (sourceType == 1) return translator.TranslateCalculated();
+                return "Formula XML could not be translated";
+            }
+            catch
+            {
+                return "Formula XML could not be translated";
+            }
+        }
+
+        private sealed class FormulaXmlTranslator
+        {
+            private readonly XDocument Document;
+            private readonly Dictionary<string, string> Values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            public FormulaXmlTranslator(XDocument document)
+            {
+                Document = document;
+                BuildValueMap();
+            }
+
+            public string TranslateCalculated()
+            {
+                var branches = Document.Descendants()
+                    .Where(x => IsActivityReference(x) && GetAttribute(x, "AssemblyQualifiedName").Contains("ConditionBranch"))
+                    .ToList();
+                var lines = new List<string>();
+
+                foreach (var branch in branches)
+                {
+                    var condition = Resolve(GetArgumentValue(branch, "Condition"));
+                    var value = Resolve(GetThenSetValue(branch));
+                    if (string.IsNullOrWhiteSpace(value)) continue;
+
+                    if (IsTrue(condition))
+                        lines.Add($"else return {value};");
+                    else
+                        lines.Add($"if ({condition}) return {value};");
+                }
+
+                return lines.Count > 0
+                    ? string.Join(NEW_LINE, lines)
+                    : "Formula XML could not be translated";
+            }
+
+            public string TranslateRollup()
+            {
+                var link = GetRollupLink();
+                var filter = GetRollupFilter();
+                var aggregate = GetRollupAggregate();
+                var lines = new List<string>();
+
+                if (!string.IsNullOrWhiteSpace(link)) lines.Add("Link: " + link);
+                if (!string.IsNullOrWhiteSpace(filter)) lines.Add("Filter: " + filter);
+                if (!string.IsNullOrWhiteSpace(aggregate)) lines.Add("Aggregate: " + aggregate);
+
+                return lines.Count > 0
+                    ? string.Join(NEW_LINE, lines)
+                    : "Formula XML could not be translated";
+            }
+
+            private void BuildValueMap()
+            {
+                foreach (var element in Document.Descendants())
+                {
+                    if (LocalName(element) == "GetEntityProperty")
+                    {
+                        var value = UnwrapReference(GetAttribute(element, "Value"));
+                        if (!string.IsNullOrWhiteSpace(value))
+                            Values[value] = FormatEntityProperty(element);
+                    }
+                    else if (IsActivityReference(element) && GetAttribute(element, "AssemblyQualifiedName").Contains("EvaluateExpression"))
+                    {
+                        var result = UnwrapReference(GetArgumentValue(element, "Result"));
+                        var expressionOperator = GetArgumentValue(element, "ExpressionOperator");
+                        if (string.IsNullOrWhiteSpace(result)) continue;
+
+                        if (expressionOperator.Equals("CreateCrmType", StringComparison.OrdinalIgnoreCase))
+                            Values[result] = ParseCrmTypeValue(GetArgumentValue(element, "Parameters"));
+                        else
+                            Values[result] = FormatExpression(expressionOperator, GetArgumentValue(element, "Parameters"));
+                    }
+                    else if (IsActivityReference(element) && GetAttribute(element, "AssemblyQualifiedName").Contains("EvaluateCondition"))
+                    {
+                        var result = UnwrapReference(GetArgumentValue(element, "Result"));
+                        if (string.IsNullOrWhiteSpace(result)) continue;
+
+                        var left = Resolve(GetArgumentValue(element, "Operand"));
+                        var right = Resolve(ParseFirstObjectParameter(GetArgumentValue(element, "Parameters")));
+                        var op = FormatConditionOperator(GetArgumentValue(element, "ConditionOperator"));
+                        Values[result] = $"{left} {op} {right}";
+                    }
+                    else if (IsActivityReference(element) && GetAttribute(element, "AssemblyQualifiedName").Contains("EvaluateLogicalCondition"))
+                    {
+                        var result = UnwrapReference(GetArgumentValue(element, "Result"));
+                        if (string.IsNullOrWhiteSpace(result)) continue;
+
+                        var left = Resolve(GetArgumentValue(element, "LeftOperand"));
+                        var right = Resolve(GetArgumentValue(element, "RightOperand"));
+                        var op = FormatLogicalOperator(GetArgumentValue(element, "LogicalOperator"));
+                        Values[result] = $"{left} {op} {right}";
+                    }
+                }
+            }
+
+            private string GetRollupLink()
+            {
+                var setAttributeValue = Document.Descendants()
+                    .FirstOrDefault(x => LocalName(x) == "SetAttributeValue" && !string.IsNullOrWhiteSpace(GetAttribute(x, "DisplayName")));
+                if (setAttributeValue == null) return string.Empty;
+
+                var displayName = GetAttribute(setAttributeValue, "DisplayName");
+                var entityRef = UnwrapEntityReference(GetAttribute(setAttributeValue, "Entity"));
+                var parts = entityRef.Split('#');
+                if (parts.Length >= 3)
+                    return $"{EntityMetadata.LogicalName} -> {parts[2]} via {displayName}";
+                return displayName;
+            }
+
+            private string GetRollupFilter()
+            {
+                var target = Document.Descendants()
+                    .FirstOrDefault(x => LocalName(x) == "Sequence" && GetAttribute(x, "DisplayName").Equals("Target", StringComparison.OrdinalIgnoreCase));
+                if (target == null) return string.Empty;
+
+                var conditions = target.Descendants()
+                    .Where(x => IsActivityReference(x) && GetAttribute(x, "AssemblyQualifiedName").Contains("EvaluateCondition"))
+                    .Select(x => Resolve(GetArgumentValue(x, "Result")))
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct()
+                    .ToList();
+                return string.Join(" && ", conditions);
+            }
+
+            private string GetRollupAggregate()
+            {
+                var aggregate = Document.Descendants()
+                    .FirstOrDefault(x => LocalName(x) == "Sequence" && GetAttribute(x, "DisplayName").Equals("Aggregate", StringComparison.OrdinalIgnoreCase));
+                if (aggregate == null) return string.Empty;
+
+                foreach (var element in aggregate.Descendants().Where(IsActivityReference))
+                {
+                    var expressionOperator = GetArgumentValue(element, "ExpressionOperator");
+                    if (string.IsNullOrWhiteSpace(expressionOperator) || expressionOperator.Equals("CreateCrmType", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    var value = FormatExpression(expressionOperator, GetArgumentValue(element, "Parameters"));
+                    if (!string.IsNullOrWhiteSpace(value)) return value;
+                }
+                return string.Empty;
+            }
+
+            private string FormatEntityProperty(XElement element)
+            {
+                var attribute = GetAttribute(element, "Attribute");
+                var entity = GetAttribute(element, "EntityName");
+                return string.IsNullOrWhiteSpace(entity) ? attribute : $"{entity}.{attribute}";
+            }
+
+            private string GetThenSetValue(XElement branch)
+            {
+                var then = branch.Descendants()
+                    .FirstOrDefault(x => IsActivityReference(x) && GetAttribute(x, "x:Key").Equals("Then", StringComparison.OrdinalIgnoreCase));
+                var setEntityProperty = then?.Descendants().FirstOrDefault(x => LocalName(x) == "SetEntityProperty");
+                return setEntityProperty == null ? string.Empty : GetAttribute(setEntityProperty, "Value");
+            }
+
+            private string FormatExpression(string expressionOperator, string parameters)
+            {
+                var firstParameter = Resolve(ParseFirstObjectParameter(parameters));
+                if (string.IsNullOrWhiteSpace(firstParameter)) return string.Empty;
+
+                var op = expressionOperator.ToUpperInvariant();
+                if (op == "AVG") op = "AVERAGE";
+                return $"{op}({firstParameter})";
+            }
+
+            private string ParseCrmTypeValue(string parameters)
+            {
+                var match = Regex.Match(parameters ?? string.Empty, @"WorkflowPropertyType\.(?<type>\w+),\s*""(?<value>[^""]*)""", RegexOptions.IgnoreCase);
+                if (!match.Success) return string.Empty;
+
+                var type = match.Groups["type"].Value;
+                var value = match.Groups["value"].Value;
+                if (type.Equals("String", StringComparison.OrdinalIgnoreCase))
+                    return "\"" + value.Replace("\"", "\\\"") + "\"";
+                if (type.Equals("Boolean", StringComparison.OrdinalIgnoreCase))
+                    return value.Equals("true", StringComparison.OrdinalIgnoreCase) ? "true" : "false";
+                return value;
+            }
+
+            private string ParseFirstObjectParameter(string parameters)
+            {
+                var match = Regex.Match(parameters ?? string.Empty, @"New Object\(\)\s*\{\s*(?<value>[^,\}]+)", RegexOptions.IgnoreCase);
+                return match.Success ? match.Groups["value"].Value.Trim() : string.Empty;
+            }
+
+            private string Resolve(string value)
+            {
+                value = UnwrapReference(value);
+                if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+                return Values.TryGetValue(value, out var resolved) ? resolved : value;
+            }
+
+            private static bool IsTrue(string value)
+            {
+                return value.Equals("true", StringComparison.OrdinalIgnoreCase) ||
+                       value.Equals("True", StringComparison.OrdinalIgnoreCase);
+            }
+
+            private static string FormatConditionOperator(string op)
+            {
+                switch (op)
+                {
+                    case "Equal": return "==";
+                    case "NotEqual": return "!=";
+                    case "GreaterThan": return ">";
+                    case "GreaterEqual": return ">=";
+                    case "LessThan": return "<";
+                    case "LessEqual": return "<=";
+                    case "Null": return "is null";
+                    case "NotNull": return "is not null";
+                    default: return op;
+                }
+            }
+
+            private static string FormatLogicalOperator(string op)
+            {
+                switch (op)
+                {
+                    case "And": return "&&";
+                    case "Or": return "||";
+                    default: return op;
+                }
+            }
+
+            private static string GetArgumentValue(XElement element, string key)
+            {
+                var argument = element.Descendants()
+                    .FirstOrDefault(x => (LocalName(x) == "InArgument" || LocalName(x) == "OutArgument") &&
+                                         GetAttribute(x, "x:Key").Equals(key, StringComparison.OrdinalIgnoreCase));
+                return argument?.Value?.Trim() ?? string.Empty;
+            }
+
+            private static string GetAttribute(XElement element, string name)
+            {
+                if (name.IndexOf(':') >= 0)
+                {
+                    var localName = name.Substring(name.IndexOf(':') + 1);
+                    return element.Attributes().FirstOrDefault(x => x.Name.LocalName == localName)?.Value ?? string.Empty;
+                }
+                return element.Attributes().FirstOrDefault(x => x.Name.LocalName == name)?.Value ?? string.Empty;
+            }
+
+            private static string UnwrapReference(string value)
+            {
+                value = (value ?? string.Empty).Trim();
+                if (value.StartsWith("[", StringComparison.Ordinal) && value.EndsWith("]", StringComparison.Ordinal))
+                    return value.Substring(1, value.Length - 2).Trim();
+                return value;
+            }
+
+            private static string UnwrapEntityReference(string value)
+            {
+                value = UnwrapReference(value);
+                var match = Regex.Match(value, @"CreatedEntities\(""(?<ref>[^""]+)""\)", RegexOptions.IgnoreCase);
+                return match.Success ? match.Groups["ref"].Value : value;
+            }
+
+            private static bool IsActivityReference(XElement element)
+            {
+                return LocalName(element) == "ActivityReference";
+            }
+
+            private static string LocalName(XElement element)
+            {
+                return element.Name.LocalName;
+            }
+        }
+
         private static string GetXml(AttributeMetadata attribute)
         {
             var line1 = string.Empty;
@@ -932,6 +1353,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 else if (attribute.SourceType == 2) line4 = "<strong>Rollup Field</strong>";
                 else if (attribute.SourceType == 3) line4 = "<strong>Power-Fx Field</strong>";
                 xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
+                xml += GetFormulaDefinitionXml(attribute);
             }
             else if (attribute.SchemaName.EndsWith("_rollup_Date") || attribute.SchemaName.EndsWith("_rollup_State")) {
                 line4 = "<strong>Rollup Field</strong>";
