@@ -7,26 +7,38 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 		}
 		interface tab_DETAILS_TAB_Sections {
+			/** BILLING */
 			billing_information: DevKit.Controls.Section;
+			/** CONTACT PREFERENCES */
 			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			/** PERSONAL */
 			PERSONAL_INFORMATION: DevKit.Controls.Section;
+			/** PERSONAL NOTES */
 			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			/** SHIPPING */
 			shipping_information: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB_Sections {
+			/** CONTACT INFORMATION */
 			CONTACT_INFORMATION: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
+			/** SOCIAL PANE */
 			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			/** Assistant */
 			Summary_section_6: DevKit.Controls.Section;
 		}
+		/** Details */
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
+		/** Summary */
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface Tabs {
+			/** Details */
 			DETAILS_TAB: tab_DETAILS_TAB;
+			/** Summary */
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
@@ -92,14 +104,23 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 		interface Navigation {
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Workflows */
 			navAsyncOperations: DevKit.Controls.NavigationItem;
+			/** Invoice */
 			navInvoices: DevKit.Controls.NavigationItem;
+			/** SalesOrder */
 			navOrders: DevKit.Controls.NavigationItem;
+			/** Dialog Sessions */
 			navProcessSessions: DevKit.Controls.NavigationItem;
+			/** Quote */
 			navQuotes: DevKit.Controls.NavigationItem;
+			/** CustomerRelationship */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Contacts */
 			navSubConts: DevKit.Controls.NavigationItem;
 		}
 	}
@@ -127,40 +148,59 @@ declare namespace DevKit {
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_administration_Sections {
+			/** Billing Information */
 			billing_information: DevKit.Controls.Section;
+			/** Contact Methods */
 			contact_methods: DevKit.Controls.Section;
+			/** Internal Information */
 			internal_information: DevKit.Controls.Section;
 		}
 		interface tab_details_Sections {
+			/** Personal Information */
 			personal_information: DevKit.Controls.Section;
+			/** Professional Information */
 			professional_information: DevKit.Controls.Section;
 		}
 		interface tab_general_Sections {
+			/** Address */
 			address: DevKit.Controls.Section;
+			/** Description */
 			description: DevKit.Controls.Section;
+			/** Name */
 			name: DevKit.Controls.Section;
+			/** Shipping Information */
 			shipping_information: DevKit.Controls.Section;
 		}
 		interface tab_notes_and_activities_Sections {
+			/** Activities */
 			activities: DevKit.Controls.Section;
+			/** Notes */
 			notes: DevKit.Controls.Section;
 		}
+		/** Preferences */
 		interface tab_administration extends DevKit.Controls.ITab {
 			Section: tab_administration_Sections;
 		}
+		/** Details */
 		interface tab_details extends DevKit.Controls.ITab {
 			Section: tab_details_Sections;
 		}
+		/** General */
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
 		}
+		/** Notes & Activities */
 		interface tab_notes_and_activities extends DevKit.Controls.ITab {
 			Section: tab_notes_and_activities_Sections;
 		}
 		interface Tabs {
+			/** Preferences */
 			administration: tab_administration;
+			/** Details */
 			details: tab_details;
+			/** General */
 			general: tab_general;
+			/** Notes & Activities */
 			notes_and_activities: tab_notes_and_activities;
 		}
 		interface Body {
@@ -267,6 +307,7 @@ declare namespace DevKit {
 			navSubConts: DevKit.Controls.NavigationItem;
 		}
 		interface Grid {
+			/** Activities */
 			contactactivitiesgrid: DevKit.Controls.Grid;
 		}
 	}
@@ -302,10 +343,15 @@ declare namespace DevKit {
 			Telephone1: DevKit.Controls.String;
 		}
 		interface Navigation {
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Closed Activities */
 			navActivityHistory: DevKit.Controls.NavigationItem;
+			/** More Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Relationships */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Sub-Contacts */
 			navSubConts: DevKit.Controls.NavigationItem;
 		}
 	}
@@ -331,49 +377,73 @@ declare namespace DevKit {
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_administration_Sections {
+			/** Billing Information */
 			billing_information: DevKit.Controls.Section;
+			/** Contact Methods */
 			contact_methods: DevKit.Controls.Section;
+			/** Internal Information */
 			internal_information: DevKit.Controls.Section;
 		}
 		interface tab_details_Sections {
+			/** Personal Information */
 			personal_information: DevKit.Controls.Section;
+			/** Professional Information */
 			professional_information: DevKit.Controls.Section;
 		}
 		interface tab_general_Sections {
+			/** Address */
 			address: DevKit.Controls.Section;
+			/** Web Roles */
 			contact_webrole_section: DevKit.Controls.Section;
+			/** Description */
 			description: DevKit.Controls.Section;
+			/** Name */
 			name: DevKit.Controls.Section;
+			/** Shipping Information */
 			shipping_information: DevKit.Controls.Section;
 		}
 		interface tab_notes_and_activities_Sections {
+			/** Activities */
 			activities: DevKit.Controls.Section;
+			/** Notes */
 			notes: DevKit.Controls.Section;
 		}
 		interface tab_web_authentication_Sections {
+			/** Local Identity */
 			_F0EF7388_9001_DD11_86DA_0003FF48C0DB_SECTION_4: DevKit.Controls.Section;
+			/** External Identities */
 			_F0EF7388_9001_DD11_86DA_0003FF48C0DB_SECTION_5: DevKit.Controls.Section;
 		}
+		/** Preferences */
 		interface tab_administration extends DevKit.Controls.ITab {
 			Section: tab_administration_Sections;
 		}
+		/** Details */
 		interface tab_details extends DevKit.Controls.ITab {
 			Section: tab_details_Sections;
 		}
+		/** General */
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
 		}
+		/** Notes & Activities */
 		interface tab_notes_and_activities extends DevKit.Controls.ITab {
 			Section: tab_notes_and_activities_Sections;
 		}
+		/** Web Authentication */
 		interface tab_web_authentication extends DevKit.Controls.ITab {
 			Section: tab_web_authentication_Sections;
 		}
 		interface Tabs {
+			/** Preferences */
 			administration: tab_administration;
+			/** Details */
 			details: tab_details;
+			/** General */
 			general: tab_general;
+			/** Notes & Activities */
 			notes_and_activities: tab_notes_and_activities;
+			/** Web Authentication */
 			web_authentication: tab_web_authentication;
 		}
 		interface Body {
@@ -424,6 +494,7 @@ declare namespace DevKit {
 			adx_identity_twofactorenabled: DevKit.Controls.Boolean;
 			/** Shows the user identity for local web authentication. */
 			adx_identity_username: DevKit.Controls.String;
+			/** Time Zone */
 			Adx_TimeZone: DevKit.Controls.Integer;
 			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
 			Anniversary: DevKit.Controls.DateOnly;
@@ -494,17 +565,27 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 		interface Navigation {
+			/** Web Roles */
 			nav_adx_webrole_contact: DevKit.Controls.NavigationItem;
+			/** Site Components */
 			nav_powerpagecomponent_mspp_webrole_contact: DevKit.Controls.NavigationItem;
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Closed Activities */
 			navActivityHistory: DevKit.Controls.NavigationItem;
+			/** More Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Relationships */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Sub-Contacts */
 			navSubConts: DevKit.Controls.NavigationItem;
 		}
 		interface Grid {
+			/** External Identities */
 			adx_externalidentity: DevKit.Controls.Grid;
+			/** Activities */
 			contactactivitiesgrid: DevKit.Controls.Grid;
+			/** Web Roles */
 			grid_contact_mspp_webrole: DevKit.Controls.Grid;
 		}
 	}
@@ -528,7 +609,9 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
+			/** Organization Name */
 			Adx_OrganizationName: DevKit.Controls.String;
+			/** Public Profile Copy */
 			adx_PublicProfileCopy: DevKit.Controls.String;
 			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.String;
@@ -550,10 +633,15 @@ declare namespace DevKit {
 			WebSiteUrl: DevKit.Controls.String;
 		}
 		interface Navigation {
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Closed Activities */
 			navActivityHistory: DevKit.Controls.NavigationItem;
+			/** More Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Relationships */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Sub-Contacts */
 			navSubConts: DevKit.Controls.NavigationItem;
 		}
 	}
@@ -573,7 +661,9 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
+			/** Organization Name */
 			Adx_OrganizationName: DevKit.Controls.String;
+			/** Public Profile Copy */
 			adx_PublicProfileCopy: DevKit.Controls.String;
 			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.String;
@@ -599,10 +689,15 @@ declare namespace DevKit {
 			YomiLastName: DevKit.Controls.String;
 		}
 		interface Navigation {
+			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
+			/** Closed Activities */
 			navActivityHistory: DevKit.Controls.NavigationItem;
+			/** More Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
+			/** Relationships */
 			navRelationships: DevKit.Controls.NavigationItem;
+			/** Sub-Contacts */
 			navSubConts: DevKit.Controls.NavigationItem;
 		}
 	}
@@ -620,14 +715,19 @@ declare namespace DevKit {
 	}
 	namespace FormContact_Quick_Create {
 		interface tab_tab_1_Sections {
+			/** Details */
 			tab_1_column_1_section_1: DevKit.Controls.Section;
+			/** Contact Information */
 			tab_1_column_2_section_1: DevKit.Controls.Section;
+			/** Address */
 			tab_1_column_3_section_1: DevKit.Controls.Section;
 		}
+		/** Tab */
 		interface tab_tab_1 extends DevKit.Controls.ITab {
 			Section: tab_tab_1_Sections;
 		}
 		interface Tabs {
+			/** Tab */
 			tab_1: tab_tab_1;
 		}
 		interface Body {

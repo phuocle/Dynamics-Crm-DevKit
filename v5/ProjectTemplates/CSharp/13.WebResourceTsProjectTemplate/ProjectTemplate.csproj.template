@@ -41,7 +41,7 @@
 	<ItemGroup>
 		<Folder Include="html\" />
 		<Folder Include="css\" />
-		<Folder Include="build\" />
+		<Compile Remove="build\**" />
 		<Folder Include="entities\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />

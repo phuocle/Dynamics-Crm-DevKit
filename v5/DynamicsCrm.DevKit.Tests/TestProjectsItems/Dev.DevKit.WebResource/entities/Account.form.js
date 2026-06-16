@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.FormAccount = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -23,7 +24,7 @@ var DevKit;
 			dialog: [],
 			grid: ["Contacts"],
 			header: ["v4_Integer", "v4_Integer1", "v4_OptionSet", "v4_String"],
-			navigation: ["nav_adx_invitation_assigntoaccount", "nav_msa_account_managingpartner", "nav_msa_contact_managingpartner", "navActivities", "navAddresses", "navAsyncOperations", "navAudit", "navCampaignsInSFA", "navConnections", "navContacts", "navProcessSessions", "navRelationships", "navSocialprofiles", "navSubAccts"],
+			navigation: ["navActivities", "navAddresses", "navContacts", "navSubAccts"],
 			quick: ["ContactQuickForm___EMailAddress1", "ContactQuickForm___FirstName", "ContactQuickForm___LastName", "ContactQuickForm___MobilePhone", "ContactQuickForm___ParentCustomerId"],
 			tab: ["TAB_1___TAB_1_SECTION_1", "TAB_1___TAB_1_SECTION_2", "TAB_1___TAB_1_SECTION_3", "TAB_1___TAB_1_SECTION_4", "TAB_2___TAB_2_SECTION_1", "TAB_2___TAB_2_SECTION_2"]
 		};
@@ -68,10 +69,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Account = {
 		AccountCategoryCode: { Preferred_Customer: 1, Standard: 2 },
 		AccountClassificationCode: { Default_Value: 1 },
@@ -100,4 +102,4 @@ var OptionSet;
 		v4_OptionSet: { Category_A: 100000000, Category_B: 100000001, Category_C: 100000002, Category_D: 100000003 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));

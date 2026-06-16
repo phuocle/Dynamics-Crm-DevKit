@@ -5,12 +5,14 @@
       "solution": "???",
       "folder": "bin\\Debug",
       "includefiles": [
-        "Dev.DevKit.Plugin.*.dll",
-        "Dev.DevKit.Plugin.*.nupkg",
-        "Dev.DevKit.CustomAction.*.dll",
-        "Dev.DevKit.Workflow.*.dll",
-        "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll"
+        "???.Server*.dll",
+        "???.Package*.nupkg",
+        "???.Plugin*.dll",
+        "???.Plugin*.nupkg",
+        "???.CustomAction*.dll",
+        "???.Workflow*.dll",
+        "???.CustomApi*.dll",
+        "???.DataProvider*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
@@ -53,15 +55,76 @@
           ]
         }
       ]
+    },
+    {
+      "profile": "DEBUGTS",
+      "solution": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "html\\**.html",
+        "images\\**.png",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [],
+      "dependencies": []
     }
   ],
   "datasources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "solution": "devkitv4",
+      "displayname": "Sqlite",
+      "pluralname": "Sqlites",
+      "name": "Sqlite"
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "type": "CSharp",
+      "rootnamespace": "Dev.DevKit.Shared.Entities",
+      "namespace": "",
+      "rootfolder": "",
+      "entities": "folder"
+    },
+    {
+      "profile": "JS-FORM",
+      "type": "JsForm",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "type": "JsWebApi",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-FORM",
+      "type": "TsForm",
+      "rootfolder": "???",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-WEBAPI",
+      "type": "TsWebApi",
+      "rootfolder": "???",
+      "entities": "folder"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
     }
   ],
   "solutionpackagers": [
@@ -84,62 +147,21 @@
       "mapfile": ""
     }
   ],
-  "generators": [
-    {
-      "profile": "LATEBOUND",
-      "type": "CSharp",
-      "rootnamespace": "???",
-      "namespace": "",
-      "rootfolder": "???",
-      "entities": "folder"
-    },
-    {
-      "profile": "JS-FORM",
-      "type": "JsForm",
-      "rootnamespace": "DevKit",
-      "rootfolder": "",
-      "entities": "Email,Account,Contact,SystemUser,PhoneCall,Task,Team,Fax"
-    },
-    {
-      "profile": "JS-WEBAPI",
-      "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "entities": "folder"
-    },
-    {
-      "profile": "TS-FORM",
-      "type": "TsForm",
-      "rootnamespace": "DevKit",
-      "rootfolder": "",
-      "entities": "Email,Account,Contact,SystemUser,PhoneCall,Task,Team,Fax"
-    }
-  ],
-  "downloadwebresources": [
-    {
-      "profile": "DEBUG",
-      "solution": "???"
-    }
-  ],
-  "downloadreports": [
-    {
-      "profile": "DEBUG",
-      "solution": "???"
-    }
-  ],
-  "proxytypes": [
+  "modelbuilders": [
     {
       "profile": "ALL",
-      "namespace": "???",
+      "namespace": "Dev.DevKit.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "account,contact"
     }
   ],
   "uploadreports": [
     {
       "profile": "DEBUG",
       "solution": "???",
-      "language": [ "???" ]
+      "languages": [
+        "???"
+      ]
     }
   ]
 }

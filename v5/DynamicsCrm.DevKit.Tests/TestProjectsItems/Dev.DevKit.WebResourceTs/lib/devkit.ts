@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------------------
+// --------------------------- SOURCE OF TRUTH ---------------------------------------
+// -----------------------------------------------------------------------------------
+// This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// Do not edit without considering the impact on the entire toolkit.
+// -----------------------------------------------------------------------------------
 /// <reference path="./devkit.d.ts" />
 function getXrm(): typeof Xrm | undefined {
     if (typeof window !== 'undefined' && (window as any).Xrm !== undefined) {
@@ -124,20 +130,22 @@ function findControlFromAttribute(attribute: any, controlName: string): any {
 }
 function loadFields(formContext: any, fields: string[], type?: string): any {
     const body: any = {};
+    const hasGetControl = typeof formContext?.getControl === 'function';
+    const hasGetAttribute = typeof formContext?.getAttribute === 'function';
     fields.forEach(field => {
         body[field] = {};
         const logicalName = type === undefined ? field?.toLowerCase() : (type + field)?.toLowerCase();
-        let control = formContext?.getControl(logicalName) ?? formContext?.getControl(field);
+        let control = hasGetControl ? (formContext.getControl(logicalName) ?? formContext.getControl(field)) : null;
         let attribute: any = null;
         if (type === "header_" && control) {
             attribute = control.getAttribute();
         } else {
-            attribute = formContext?.getAttribute(logicalName);
+            attribute = hasGetAttribute ? formContext.getAttribute(logicalName) : null;
             if (!attribute) {
                 const baseFieldName = field.replace(/\d+$/, '');
                 if (baseFieldName !== field) {
                     const baseLogicalName = type === undefined ? baseFieldName?.toLowerCase() : (type + baseFieldName)?.toLowerCase();
-                    attribute = formContext?.getAttribute(baseLogicalName);
+                    attribute = hasGetAttribute ? formContext.getAttribute(baseLogicalName) : null;
                 }
             }
             if (!attribute && control) {
@@ -307,7 +315,7 @@ function loadGrids(formContext: any, gridItems: string[]): any {
         return obj;
     };
     const loadGrid = (formContext: any, obj: any, grid: string) => {
-        const gridControl = formContext?.getControl(grid);
+        const gridControl = typeof formContext?.getControl === 'function' ? formContext.getControl(grid) : null;
         const createCollectionObject = (getItemsFn: any, processItemFn: any) => {
             const obj: any = {};
             obj.getLength = () => getItemsFn()?.getLength();
@@ -326,14 +334,14 @@ function loadGrids(formContext: any, gridItems: string[]): any {
         getter(obj[grid], 'GridType', () => gridControl?.getGridType());
         getter(obj[grid], 'Relationship', () => gridControl?.getRelationship());
         getter(obj[grid], 'Rows', () => {
-            const gridInstance = formContext?.getControl(grid)?.getGrid();
+            const gridInstance = typeof formContext?.getControl === 'function' ? formContext.getControl(grid)?.getGrid() : null;
             return createCollectionObject(
                 () => gridInstance?.getRows(),
                 (row: any) => loadGridRow(row)
             );
         });
         getter(obj[grid], 'SelectedRows', () => {
-            const gridInstance = formContext?.getControl(grid)?.getGrid();
+            const gridInstance = typeof formContext?.getControl === 'function' ? formContext.getControl(grid)?.getGrid() : null;
             return createCollectionObject(
                 () => gridInstance?.getSelectedRows(),
                 (row: any) => loadGridRow(row?.getData())
@@ -608,147 +616,7 @@ function loadCopilot(): DevKit.ICopilot {
     };
     return obj;
 }
-function loadFormV3<TBody = Record<string, any>, THeader = Record<string, any>, TGrid = Record<string, any>, TNavigation = Record<string, any>, TQuickForm = Record<string, any>, TProcess = any, TDialog = any>(
-    executionContext: any,
-    defaultWebResourceName: string | undefined,
-    formConfig: {
-        body?: string[];
-        header?: string[];
-        tab?: string[];
-        grid?: string[];
-        navigation?: string[];
-        quick?: string[];
-        bpf?: string[];
-        dialog?: string[];
-    }
-): {
-    ExecutionContext: DevKit.IExecutionContext;
-    Body: TBody;
-    Header: THeader;
-    Grid: TGrid;
-    Navigation: TNavigation;
-    QuickForm: TQuickForm;
-    FormId: string;
-    FormLabel: string;
-    FormType: OptionSet.FormType;
-    EntityId: string;
-    EntityName: string;
-    DataIsDirty: boolean;
-    DataIsValid: boolean;
-    Attributes: any;
-    Controls: any;
-    DataXml: string;
-    EntityIsDirty: boolean;
-    EntityIsValid: boolean;
-    EntityReference: any;
-    PrimaryAttributeValue: string;
-    ViewPortHeight: number;
-    ViewPortWidth: number;
-    Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
-    Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
-    Close: () => void;
-    SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
-    ClearFormNotification: (uniqueId: string) => boolean;
-    RefreshRibbon: (refreshAll?: boolean) => void;
-    UiAddLoaded: (callback: (context: any) => void) => void;
-    UiRemoveLoaded: (callback: (context: any) => void) => void;
-    UiAddOnLoad: (callback: (context: any) => void) => void;
-    UiRemoveOnLoad: (callback: (context: any) => void) => void;
-    AddOnPostSave: (callback: (context: any) => void) => void;
-    AddOnSave: (callback: (context: any) => void) => void;
-    RemoveOnPostSave: (callback: (context: any) => void) => void;
-    RemoveOnSave: (callback: (context: any) => void) => void;
-    DataAddOnLoad: (callback: (context: any) => void) => void;
-    DataRemoveOnLoad: (callback: (context: any) => void) => void;
-    FormIsVisible: (formId: string) => boolean;
-    FormNavigateToFormId: (formId: string) => void;
-    FormNavigateToFormLabel: (formLabel: string) => void;
-    FormSetVisible: (formId: string, visible: boolean) => void;
-    SetFormEntityName: (name: string) => void;
-    Process: TProcess;
-    Utility: DevKit.IUtility;
-    SidePanes: DevKit.ISidePanes;
-    WebApi: DevKit.IWebApi;
-    Copilot: DevKit.ICopilot;
-    Dialog: TDialog;
-} {
-    const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
-    const form: any = {};
-    const contextData = formContext?.data;
-    const contextDataEntity = formContext?.data?.entity;
-    const contextUi = formContext?.ui;
-    const contextUiFormSelector = formContext?.ui?.formSelector;
-    const findFormItem = (criteria: any, value: any) => {
-        const length = contextUiFormSelector?.items?.getLength() ?? 0;
-        for (let i = 0; i < length; i++) {
-            const item = contextUiFormSelector?.items?.get(i);
-            if (item && criteria(item) === value) {
-                return item;
-            }
-        }
-        return null;
-    };
-    getter(form, 'Attributes', () => contextDataEntity?.attributes);
-    getter(form, 'Controls', () => contextUi?.controls);
-    getter(form, 'DataIsDirty', () => contextData?.getIsDirty());
-    getter(form, 'DataIsValid', () => contextData?.isValid());
-    getter(form, 'DataXml', () => contextDataEntity?.getDataXml());
-    getter(form, 'EntityId', () => contextDataEntity?.getId());
-    getter(form, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
-    getter(form, 'EntityIsValid', () => contextDataEntity?.isValid());
-    getter(form, 'EntityName', () => contextDataEntity?.getEntityName());
-    getter(form, 'EntityReference', () => contextDataEntity?.getEntityReference());
-    getter(form, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
-    getter(form, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
-    getter(form, 'FormType', () => contextUi?.getFormType());
-    getter(form, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
-    getter(form, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
-    getter(form, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
-    form.AddOnPostSave = (callback: any) => contextDataEntity?.addOnPostSave(callback);
-    form.AddOnSave = (callback: any) => contextDataEntity?.addOnSave(callback);
-    form.ClearFormNotification = (uniqueId: string) => contextUi?.clearFormNotification(uniqueId);
-    form.Close = () => contextUi?.close();
-    form.DataAddOnLoad = (callback: any) => contextData?.addOnLoad(callback);
-    form.DataRemoveOnLoad = (callback: any) => contextData?.removeOnLoad(callback);
-    form.FormIsVisible = (formId: string) => { return findFormItem((item: any) => item.getId(), formId)?.getVisible(); };
-    form.FormNavigateToFormId = (formId: string) => { findFormItem((item: any) => item.getId(), formId)?.navigate(); };
-    form.FormNavigateToFormLabel = (formLabel: string) => { findFormItem((item: any) => item.getLabel(), formLabel)?.navigate(); };
-    form.FormSetVisible = (formId: string, value: boolean) => { findFormItem((item: any) => item.getId(), formId)?.setVisible(value); };
-    form.Refresh = (save?: boolean, successCallback?: any, errorCallback?: any) => {
-        const promise = contextData?.refresh(save);
-        if (successCallback) promise?.then(successCallback, errorCallback);
-        else return promise;
-    };
-    form.RefreshRibbon = (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll);
-    form.RemoveOnPostSave = (callback: any) => contextDataEntity?.removeOnPostSave(callback);
-    form.RemoveOnSave = (callback: any) => contextDataEntity?.removeOnSave(callback);
-    form.Save = (saveOptions?: any, successCallback?: any, errorCallback?: any) => {
-        const promise = contextData?.save(saveOptions);
-        if (successCallback) promise?.then(successCallback, errorCallback);
-        else return promise;
-    };
-    form.SetFormEntityName = (arg: string) => contextUi?.setFormEntityName(arg);
-    form.SetFormNotification = (message: string, level: string, uniqueId: string) => contextUi?.setFormNotification(message, level, uniqueId);
-    form.UiAddLoaded = (callback: any) => contextUi?.addLoaded(callback);
-    form.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
-    form.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
-    form.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
-    const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [] } = formConfig;
-    const bodyObj = body.length > 0 ? loadFields(formContext, body) : {};
-    bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
-    form.Body = bodyObj;
-    form.Header = header.length > 0 ? loadFields(formContext, header, 'header_') : {};
-    form.Process = bpf.length > 0 ? loadProcess(formContext, bpf) : {};
-    form.QuickForm = quick.length > 0 ? loadQuickForms(formContext, quick) : {};
-    form.Grid = grid.length > 0 ? loadGrids(formContext, grid) : {};
-    form.Navigation = navigation.length > 0 ? loadNavigations(formContext, navigation) : {};
-    form.Utility = loadUtility(defaultWebResourceName);
-    form.ExecutionContext = loadExecutionContext(executionContext);
-    form.SidePanes = loadSidePanes();
-    form.WebApi = loadWebApi();
-    form.Copilot = loadCopilot();
-    return form;
-}
+
 function loadProcess(formContext: any, bpf: string[]): any {
     const obj: any = {};
     const bpfFieldNames: string[] = [];
@@ -1061,11 +929,15 @@ function loadUtility(defaultWebResourceName?: string): DevKit.IUtility {
 }
 function loadFormDialog(formContext: any, fields: string[]): any {
     const form: any = {};
+    const hasGetControl = typeof formContext?.getControl === 'function';
     const fieldsLength = fields.length;
     for (let i = 0; i < fieldsLength; i++) {
         const fieldName = fields[i];
-        const attribute = formContext?.data?.entity?.attributes?.get(fieldName);
-        const control = formContext?.getControl(fieldName);
+        let attribute = formContext?.data?.attributes?.get(fieldName);
+        const control = hasGetControl ? formContext.getControl(fieldName) : null;
+        if (!attribute && control) {
+            attribute = control.getAttribute?.();
+        }
         form[fieldName] = {};
         loadField(formContext, form[fieldName], attribute, control);
     }
@@ -1107,328 +979,154 @@ function webApiReturnGet(data: any, type?: DevKit.WebApiFieldType): any {
     const parser = getWebApiTypeParsers()[type];
     return parser ? parser(data) : data;
 }
-/**
- * Base class for all generated Form classes
- * Provides typed access to all form controls, data, and Xrm API wrappers
- * @template TBody The type of the Body property (form body controls)
- * @template THeader The type of the Header property (header controls)
- * @template TGrid The type of the Grid property (subgrid controls)
- * @template TNavigation The type of the Navigation property (navigation items)
- * @template TQuickForm The type of the QuickForm property (quick view controls)
- * @template TProcess The type of the Process property (business process flow controls)
- * @template TDialog The type of the Dialog property (dialog controls)
- */
-export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
-    /** The Body section of the form containing all body controls */
-    public Body: TBody;
-    /** The Header section of the form containing header controls */
-    public Header: THeader;
-    /** The Grid controls collection on the form */
-    public Grid: TGrid;
-    /** The Navigation items collection on the form */
-    public Navigation: TNavigation;
-    /** The QuickForm controls collection on the form */
-    public QuickForm: TQuickForm;
-    /** The Process (Business Process Flow) controls on the form */
-    public Process: TProcess;
-    /** The Dialog controls on the form */
-    public Dialog: TDialog;
-    /**
-     * The execution context for the form event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
-     */
-    public ExecutionContext: DevKit.IExecutionContext;
-    /** Utility methods for common operations */
-    public Utility: any;
-    /**
-     * Provides methods to manage side panes
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
-     */
-    public SidePanes: DevKit.ISidePanes;
-    /**
-     * Provides methods to use Web API to create and manage records and execute Web API actions and functions
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
-     */
-    public WebApi: DevKit.IWebApi;
-    /**
-     * Provides methods to interact with Copilot functionality
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
-     */
-    public Copilot: DevKit.ICopilot;
-    /**
-     * Returns the GUID ID of the current form
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getid
-     */
-    public readonly FormId: string;
-    /**
-     * Returns the label of the current form
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getlabel
-     */
-    public readonly FormLabel: string;
-    /**
-     * Returns the form type (Create=1, Update=2, ReadOnly=3, Disabled=4, BulkEdit=6)
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
-     */
-    public readonly FormType: OptionSet.FormType;
-    /**
-     * Returns the GUID ID of the record
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getid
-     */
-    public readonly EntityId: string;
-    /**
-     * Returns the logical name of the entity
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityname
-     */
-    public readonly EntityName: string;
-    /**
-     * Returns whether any data in the form has been modified
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/getisdirty
-     */
-    public readonly DataIsDirty: boolean;
-    /**
-     * Returns whether all data in the form is valid
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/isvalid
-     */
-    public readonly DataIsValid: boolean;
-    /**
-     * Returns the attributes collection for the record
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
-     */
-    public readonly Attributes: DevKit.Collections<any>;
-    /**
-     * Returns the controls collection for the form
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
-     */
-    public readonly Controls: DevKit.Collections<any>;
-    /**
-     * Returns the entity data as XML
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getdataxml
-     */
-    public readonly DataXml: string;
-    /**
-     * Returns whether any attribute in the entity has been modified
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getisdirty
-     */
-    public readonly EntityIsDirty: boolean;
-    /**
-     * Returns whether all attributes in the entity are valid
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/isvalid
-     */
-    public readonly EntityIsValid: boolean;
-    /**
-     * Returns an entity reference for the record
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
-     */
-    public readonly EntityReference: DevKit.EntityReference;
-    /**
-     * Returns the value of the primary attribute for the entity
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getprimaryattributevalue
-     */
-    public readonly PrimaryAttributeValue: string;
-    /**
-     * Returns the height of the viewport in pixels
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getviewportheight
-     */
-    public readonly ViewPortHeight: number;
-    /**
-     * Returns the width of the viewport in pixels
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getviewportwidth
-     */
-    public readonly ViewPortWidth: number;
-    /**
-     * Saves the record asynchronously with the option to set callback functions
-     * @param saveOptions Options for saving the record
-     * @param successCallback A function to call when the operation succeeds
-     * @param errorCallback A function to call when the operation fails
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
-     */
-    public Save: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
-    /**
-     * Refreshes the data on the form asynchronously
-     * @param save Indicates whether to save any data in the form before refreshing
-     * @param successCallback A function to call when the operation succeeds
-     * @param errorCallback A function to call when the operation fails
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
-     */
-    public Refresh: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
-    /**
-     * Closes the form
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/close
-     */
-    public Close: () => void;
-    /**
-     * Displays a form level notification
-     * @param message The text of the message
-     * @param level The level of the message: ERROR, WARNING, or INFO
-     * @param uniqueId A unique identifier for the message used with ClearFormNotification
-     * @returns true if the notification was successfully set, otherwise false
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
-     */
-    public SetFormNotification: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
-    /**
-     * Clears the form notification with the specified unique ID
-     * @param uniqueId The ID of the notification to clear
-     * @returns true if the notification was successfully cleared, otherwise false
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/clearformnotification
-     */
-    public ClearFormNotification: (uniqueId: string) => boolean;
-    /**
-     * Causes the ribbon to re-evaluate data that controls what is displayed in it
-     * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/refreshribbon
-     */
-    public RefreshRibbon: (refreshAll?: boolean) => void;
-    /**
-     * Adds an event handler to the form Loaded event. This event fires once when the form is fully loaded
-     * @param callback The function to add to the Loaded event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addloaded
-     */
-    public UiAddLoaded: (callback: (context: any) => void) => void;
-    /**
-     * Removes an event handler from the form Loaded event
-     * @param callback The function to remove from the Loaded event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeloaded
-     */
-    public UiRemoveLoaded: (callback: (context: any) => void) => void;
-    /**
-     * Adds an event handler to the OnLoad event
-     * @param callback The function to be executed on the OnLoad event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addonload
-     */
-    public UiAddOnLoad: (callback: (context: any) => void) => void;
-    /**
-     * Removes an event handler from the OnLoad event
-     * @param callback The function to remove from the OnLoad event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeonload
-     */
-    public UiRemoveOnLoad: (callback: (context: any) => void) => void;
-    /**
-     * Adds an event handler to the PostSave event
-     * @param callback The function to be added to the PostSave event after the record is saved with success or failure
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonpostsave
-     */
-    public AddOnPostSave: (callback: (context: any) => void) => void;
-    /**
-     * Adds an event handler to the OnSave event
-     * @param callback The function to be added to the OnSave event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonsave
-     */
-    public AddOnSave: (callback: (context: any) => void) => void;
-    /**
-     * Removes an event handler from the PostSave event
-     * @param callback The function to remove from the PostSave event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonpostsave
-     */
-    public RemoveOnPostSave: (callback: (context: any) => void) => void;
-    /**
-     * Removes an event handler from the OnSave event
-     * @param callback The function to remove from the OnSave event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonsave
-     */
-    public RemoveOnSave: (callback: (context: any) => void) => void;
-    /**
-     * Adds an event handler to the data OnLoad event
-     * @param callback The function to be executed when data onload event occurs
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/addonload
-     */
-    public DataAddOnLoad: (callback: (context: any) => void) => void;
-    /**
-     * Removes an event handler from the data OnLoad event
-     * @param callback The function to remove from the data OnLoad event
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/removeonload
-     */
-    public DataRemoveOnLoad: (callback: (context: any) => void) => void;
-    /**
-     * Returns whether the form with the given ID is visible
-     * @param formId The ID of the form to check visibility
-     * @returns true if the form is visible, otherwise false
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector
-     */
-    public FormIsVisible: (formId: string) => boolean;
-    /**
-     * Navigates to the form with the specified form ID
-     * @param formId The ID of the form to navigate to
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
-     */
-    public FormNavigateToFormId: (formId: string) => void;
-    /**
-     * Navigates to the form with the specified form label
-     * @param formLabel The label of the form to navigate to
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
-     */
-    public FormNavigateToFormLabel: (formLabel: string) => void;
-    /**
-     * Sets the visibility of the form with the given ID
-     * @param formId The ID of the form
-     * @param visible true to make the form visible, false to hide it
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/setvisible
-     */
-    public FormSetVisible: (formId: string, visible: boolean) => void;
-    /**
-     * Sets the name of the entity to be used for the form
-     * @param name The name of the entity
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformentityname
-     */
-    public SetFormEntityName: (name: string) => void;
+export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any>
+    implements DevKit.IFormBase<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess, TDialog> {
+    public Body!: TBody;
+    public Header!: THeader;
+    public Grid!: TGrid;
+    public Navigation!: TNavigation;
+    public QuickForm!: TQuickForm;
+    public Process!: TProcess;
+    public ExecutionContext!: DevKit.IExecutionContext;
+    public Utility!: DevKit.IUtility;
+    public SidePanes!: DevKit.ISidePanes;
+    public WebApi!: DevKit.IWebApi;
+    public Copilot!: DevKit.ICopilot;
+    public readonly FormId!: string;
+    public readonly FormLabel!: string;
+    public readonly FormType!: OptionSet.FormType;
+    public readonly EntityId!: string;
+    public readonly EntityName!: string;
+    public readonly DataIsDirty!: boolean;
+    public readonly DataIsValid!: boolean;
+    public readonly Attributes!: any;
+    public readonly Controls!: any;
+    public readonly DataXml!: string;
+    public readonly EntityIsDirty!: boolean;
+    public readonly EntityIsValid!: boolean;
+    public readonly EntityReference!: DevKit.EntityReference;
+    public readonly PrimaryAttributeValue!: string;
+    public readonly ViewPortHeight!: number;
+    public readonly ViewPortWidth!: number;
+    public Save!: (saveOptions?: any, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    public Refresh!: (save?: boolean, successCallback?: any, errorCallback?: any) => Promise<void> | void;
+    public SetFormNotification!: (message: string, level: OptionSet.FormNotificationLevel, uniqueId: string) => boolean;
+    public ClearFormNotification!: (uniqueId: string) => boolean;
+    public RefreshRibbon!: (refreshAll?: boolean) => void;
+    public UiAddLoaded!: (callback: (context: any) => void) => void;
+    public UiRemoveLoaded!: (callback: (context: any) => void) => void;
+    public UiAddOnLoad!: (callback: (context: any) => void) => void;
+    public UiRemoveOnLoad!: (callback: (context: any) => void) => void;
+    public AddOnPostSave!: (callback: (context: any) => void) => void;
+    public AddOnSave!: (callback: (context: any) => void) => void;
+    public RemoveOnPostSave!: (callback: (context: any) => void) => void;
+    public RemoveOnSave!: (callback: (context: any) => void) => void;
+    public DataAddOnLoad!: (callback: (context: any) => void) => void;
+    public DataRemoveOnLoad!: (callback: (context: any) => void) => void;
+    public FormIsVisible!: (formId: string) => boolean;
+    public FormNavigateToFormId!: (formId: string) => void;
+    public FormNavigateToFormLabel!: (formLabel: string) => void;
+    public FormSetVisible!: (formId: string, visible: boolean) => void;
+    public SetFormEntityName!: (name: string) => void;
+
     constructor(
         executionContext: any,
         defaultWebResourceName: string | undefined,
         formConfig: DevKit.IFormConfig
     ) {
-        const form = loadFormV3<TBody, THeader, TGrid, TNavigation, TQuickForm, TProcess, TDialog>(
-            executionContext,
-            defaultWebResourceName,
-            formConfig
-        );
-        this.Body = form.Body;
-        this.Header = form.Header;
-        this.Grid = form.Grid;
-        this.Navigation = form.Navigation;
-        this.QuickForm = form.QuickForm;
-        this.Process = form.Process;
-        this.ExecutionContext = form.ExecutionContext;
-        this.FormId = form.FormId;
-        this.FormLabel = form.FormLabel;
-        this.FormType = form.FormType;
-        this.EntityId = form.EntityId;
-        this.EntityName = form.EntityName;
-        this.DataIsDirty = form.DataIsDirty;
-        this.DataIsValid = form.DataIsValid;
-        this.Attributes = form.Attributes;
-        this.Controls = form.Controls;
-        this.DataXml = form.DataXml;
-        this.EntityIsDirty = form.EntityIsDirty;
-        this.EntityIsValid = form.EntityIsValid;
-        this.EntityReference = form.EntityReference;
-        this.PrimaryAttributeValue = form.PrimaryAttributeValue;
-        this.ViewPortHeight = form.ViewPortHeight;
-        this.ViewPortWidth = form.ViewPortWidth;
-        this.Save = form.Save;
-        this.Refresh = form.Refresh;
-        this.Close = form.Close;
-        this.SetFormNotification = form.SetFormNotification;
-        this.ClearFormNotification = form.ClearFormNotification;
-        this.RefreshRibbon = form.RefreshRibbon;
-        this.UiAddLoaded = form.UiAddLoaded;
-        this.UiRemoveLoaded = form.UiRemoveLoaded;
-        this.UiAddOnLoad = form.UiAddOnLoad;
-        this.UiRemoveOnLoad = form.UiRemoveOnLoad;
-        this.AddOnPostSave = form.AddOnPostSave;
-        this.AddOnSave = form.AddOnSave;
-        this.RemoveOnPostSave = form.RemoveOnPostSave;
-        this.RemoveOnSave = form.RemoveOnSave;
-        this.DataAddOnLoad = form.DataAddOnLoad;
-        this.DataRemoveOnLoad = form.DataRemoveOnLoad;
-        this.FormIsVisible = form.FormIsVisible;
-        this.FormNavigateToFormId = form.FormNavigateToFormId;
-        this.FormNavigateToFormLabel = form.FormNavigateToFormLabel;
-        this.FormSetVisible = form.FormSetVisible;
-        this.SetFormEntityName = form.SetFormEntityName;
-        this.Utility = form.Utility;
-        this.SidePanes = form.SidePanes;
-        this.WebApi = form.WebApi;
-        this.Copilot = form.Copilot;
-        this.Dialog = form.Dialog;
+        const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+        const contextData = formContext?.data;
+        const contextDataEntity = formContext?.data?.entity;
+        const contextUi = formContext?.ui;
+        const contextUiFormSelector = formContext?.ui?.formSelector;
+        const findFormItem = (criteria: any, value: any) => {
+            const length = contextUiFormSelector?.items?.getLength() ?? 0;
+            for (let i = 0; i < length; i++) {
+                const item = contextUiFormSelector?.items?.get(i);
+                if (item && criteria(item) === value) {
+                    return item;
+                }
+            }
+            return null;
+        };
+        // Readonly properties using getter
+        getter(this, 'Attributes', () => contextDataEntity?.attributes);
+        getter(this, 'Controls', () => contextUi?.controls);
+        getter(this, 'DataIsDirty', () => contextData?.getIsDirty());
+        getter(this, 'DataIsValid', () => contextData?.isValid());
+        getter(this, 'DataXml', () => contextDataEntity?.getDataXml());
+        getter(this, 'EntityId', () => contextDataEntity?.getId());
+        getter(this, 'EntityIsDirty', () => contextDataEntity?.getIsDirty());
+        getter(this, 'EntityIsValid', () => contextDataEntity?.isValid());
+        getter(this, 'EntityName', () => contextDataEntity?.getEntityName());
+        getter(this, 'EntityReference', () => contextDataEntity?.getEntityReference());
+        getter(this, 'FormId', () => contextUiFormSelector?.getCurrentItem()?.getId());
+        getter(this, 'FormLabel', () => contextUiFormSelector?.getCurrentItem()?.getLabel());
+        getter(this, 'FormType', () => contextUi?.getFormType());
+        getter(this, 'PrimaryAttributeValue', () => contextDataEntity?.getPrimaryAttributeValue());
+        getter(this, 'ViewPortHeight', () => contextUi?.getViewPortHeight());
+        getter(this, 'ViewPortWidth', () => contextUi?.getViewPortWidth());
+        // Methods
+        this.AddOnPostSave = (callback: any) => contextDataEntity?.addOnPostSave(callback);
+        this.AddOnSave = (callback: any) => contextDataEntity?.addOnSave(callback);
+        this.ClearFormNotification = (uniqueId: string) => contextUi?.clearFormNotification(uniqueId);
+        this.DataAddOnLoad = (callback: any) => contextData?.addOnLoad(callback);
+        this.DataRemoveOnLoad = (callback: any) => contextData?.removeOnLoad(callback);
+        this.FormIsVisible = (formId: string) => { return findFormItem((item: any) => item.getId(), formId)?.getVisible(); };
+        this.FormNavigateToFormId = (formId: string) => { findFormItem((item: any) => item.getId(), formId)?.navigate(); };
+        this.FormNavigateToFormLabel = (formLabel: string) => { findFormItem((item: any) => item.getLabel(), formLabel)?.navigate(); };
+        this.FormSetVisible = (formId: string, value: boolean) => { findFormItem((item: any) => item.getId(), formId)?.setVisible(value); };
+        this.Refresh = (save?: boolean, successCallback?: any, errorCallback?: any) => {
+            const promise = contextData?.refresh(save);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        this.RefreshRibbon = (refreshAll?: boolean) => contextUi?.refreshRibbon(refreshAll);
+        this.RemoveOnPostSave = (callback: any) => contextDataEntity?.removeOnPostSave(callback);
+        this.RemoveOnSave = (callback: any) => contextDataEntity?.removeOnSave(callback);
+        this.Save = (saveOptions?: any, successCallback?: any, errorCallback?: any) => {
+            const promise = contextData?.save(saveOptions);
+            if (successCallback) promise?.then(successCallback, errorCallback);
+            else return promise;
+        };
+        this.SetFormEntityName = (arg: string) => contextUi?.setFormEntityName(arg);
+        this.SetFormNotification = (message: string, level: string, uniqueId: string) => contextUi?.setFormNotification(message, level, uniqueId);
+        this.UiAddLoaded = (callback: any) => contextUi?.addLoaded(callback);
+        this.UiAddOnLoad = (callback: any) => contextUi?.addOnLoad(callback);
+        this.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
+        this.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
+        // Load form sections
+        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [] } = formConfig;
+        const bodyObj: any = body.length > 0 ? loadFields(formContext, body) : {};
+        bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
+        this.Body = bodyObj as TBody;
+        this.Header = (header.length > 0 ? loadFields(formContext, header, 'header_') : {}) as THeader;
+        this.Process = (bpf.length > 0 ? loadProcess(formContext, bpf) : {}) as TProcess;
+        this.QuickForm = (quick.length > 0 ? loadQuickForms(formContext, quick) : {}) as TQuickForm;
+        this.Grid = (grid.length > 0 ? loadGrids(formContext, grid) : {}) as TGrid;
+        this.Navigation = (navigation.length > 0 ? loadNavigations(formContext, navigation) : {}) as TNavigation;
+        this.Utility = loadUtility(defaultWebResourceName);
+        this.ExecutionContext = loadExecutionContext(executionContext);
+        this.SidePanes = loadSidePanes();
+        this.WebApi = loadWebApi();
+        this.Copilot = loadCopilot();
+    }
+}
+export class DialogFormBase<TDialog = any> implements DevKit.IDialogFormBase<TDialog> {
+    public Dialog!: TDialog;
+    public Utility!: DevKit.IUtility;
+    public Close!: () => void;
+
+    constructor(
+        executionContext: any,
+        dialog: string[],
+        defaultWebResourceName?: string
+    ) {
+        const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
+        const contextUi = formContext?.ui;
+        this.Close = () => contextUi?.close();
+        this.Dialog = (dialog.length > 0 ? loadFormDialog(formContext, dialog) : {}) as TDialog;
+        this.Utility = loadUtility(defaultWebResourceName);
     }
 }
 export function defineWebApiField(obj: any, fieldName: string, entity: Record<string, any>, config: DevKit.IWebApiFieldConfig, upsertEntity: Record<string, any>): void {
@@ -1530,3 +1228,4 @@ export function createWebApiEntity<T extends DevKit.IWebApiEntity>(entity: Recor
     }
     return webApiEntity as T;
 }
+

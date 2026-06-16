@@ -1,245 +1,156 @@
-﻿function Convert-GuidToBase64Url {
+# ============================================================================
+# Plugin Managed Identity Setup Script
+# ============================================================================
+# This script creates the MINIMUM required Azure resources for Dataverse Plugin
+# Managed Identity authentication:
+#   1. App Registration (Azure AD Application)
+#   2. Service Principal
+#   3. Code Signing Certificate (.pfx and .cer)
+#   4. Federated Credential for Power Platform
+#   5. AssemblyInfo2.cs for plugin project
+#
+# It does NOT create Resource Groups, Key Vaults, or other Azure resources.
+# Those are OPTIONAL and depend on what Azure services your plugin needs.
+# ============================================================================
+
+function Convert-GuidToBase64Url {
     param([string]$guid)
     $guidObj = [System.Guid]::Parse($guid)
     $bytes = $guidObj.ToByteArray()
     $base64 = [System.Convert]::ToBase64String($bytes)
     return $base64.Replace('+', '-').Replace('/', '_').TrimEnd('=')
 }
+
+function Get-CredentialName {
+    param([string]$environmentId)
+    # Extract first part of GUID (before first hyphen)
+    $firstPart = $environmentId.Split('-')[0]
+    return "PowerPlatform-$firstPart"
+}
+
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ConfigPath = Join-Path $ScriptDir "Plugin-Managed-Identity-Config.json"
 
+# ============================================================================
+# Validate Configuration File
+# ============================================================================
 if (-not (Test-Path $ConfigPath)) {
     Write-Host "========================================================================================================" -ForegroundColor Red
     Write-Host "[X] Plugin-Managed-Identity-Config.json not found" -ForegroundColor Red
     Write-Host "========================================================================================================`n" -ForegroundColor Red
     exit 1
 }
-else
-{
-    $ConfigContent = Get-Content $ConfigPath -Raw
-    try {
-        $config = $ConfigContent | ConvertFrom-Json
-    } catch {
-        Write-Host "========================================================================================================" -ForegroundColor Red
-        Write-Host "[X] Plugin-Managed-Identity-Config.json is not valid JSON" -ForegroundColor Red
-        Write-Host "========================================================================================================`n" -ForegroundColor Red
-        exit 1
-    }
-    $errors = @()
-    $requiredFields = @(
-        'ResourceGroup', 'Location', 'KeyVaultName', 'SecretName', 'SecretValue', 'CertificateFileName', 'CertificatePassword', 'CertificateValidityYears'
-    )
-    foreach ($field in $requiredFields) {
-        if (-not $config.$field -or $config.$field -eq '' -or $null -eq $config.$field) {
-            $errors += "[X] $field is empty"
-        }
-    }
-    if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
-        $miFields = @(
-            'EnvironmentId', 'AppName'
-        )
-        for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
-            $mi = $config.ManagedIdentities[$i]
-            foreach ($field in $miFields) {
-                if (-not $mi.$field -or $mi.$field -eq '' -or $null -eq $mi.$field) {
-                    $errors += "[X] ManagedIdentities[$i].$field is empty"
-                }
-            }
-        }
-    } else {
-        $errors += "[X] ManagedIdentities array is empty"
-    }
-    if ($errors.Count -gt 0) {
-        Write-Host "========================================================================================================" -ForegroundColor Red
-        Write-Host "[X] Missing Required Configuration" -ForegroundColor Red
-        Write-Host "========================================================================================================`n" -ForegroundColor Red
-        foreach ($err in $errors) {
-            Write-Host $err -ForegroundColor Red
-        }
-        Write-Host "`n========================================================================================================`n" -ForegroundColor Red
-        exit 1
-    }
-}
 
-Write-Host "`n========================================================================================================" -ForegroundColor Cyan
-Write-Host "                          DATAVERSE MANAGED IDENTITY SETUP" -ForegroundColor Green
-Write-Host "========================================================================================================" -ForegroundColor Cyan
-
-$TenantId = (az account show --output json | ConvertFrom-Json).tenantId
-$resourceGroup = $config.ResourceGroup
-$location = $config.Location
-$keyVaultName = $config.KeyVaultName
-$secretName = $config.SecretName
-$secretValue = $config.SecretValue
-
-# ========================================
-# Step 1
-# ========================================
-Write-Host "[1] CHECKING RESOURCE GROUP" -ForegroundColor Blue
-$existingRg = az group show --name $resourceGroup --output json 2>$null | ConvertFrom-Json
-if ($existingRg) {
-    Write-Host "  @ Resource group already exists." -ForegroundColor Yellow
-    $rg = $existingRg
-    Write-Host "  + SUCCESS: found resource group." -ForegroundColor Green
-    Write-Host "    - Resource Group: " -NoNewline -ForegroundColor White
-    Write-Host "$($rg.name)" -ForegroundColor Cyan
-    Write-Host "    - Location: " -NoNewline -ForegroundColor White
-    Write-Host "$($rg.location)" -ForegroundColor Cyan
-} else {
-    Write-Host "  @ Creating new resource group." -ForegroundColor Yellow
-    $rg = az group create `
-        --name $resourceGroup `
-        --location $location `
-        --output json | ConvertFrom-Json
-
-    if ($rg) {
-        Write-Host "  + SUCCESS: Resource group created." -ForegroundColor Green
-        Write-Host "    - Resource Group: " -NoNewline -ForegroundColor White
-        Write-Host "$($rg.name)" -ForegroundColor Cyan
-        Write-Host "    - Location: " -NoNewline -ForegroundColor White
-        Write-Host "$($rg.location)" -ForegroundColor Cyan
-    } else {
-        Write-Host "  x ERROR: Failed to create resource group" -ForegroundColor Red
-        exit 1
-    }
-}
-# ========================================
-# Step 2
-# ========================================
-Write-Host "`n[2] CHECKING KEY VAULT" -ForegroundColor Blue
-$existingKv = az keyvault show --name $keyVaultName --resource-group $resourceGroup --output json 2>$null | ConvertFrom-Json
-if ($existingKv) {
-    Write-Host "  @ Key Vault already exists." -ForegroundColor Yellow
-    $kv = $existingKv
-    Write-Host "  + SUCCESS: found key vault." -ForegroundColor Green
-    Write-Host "    - Location: " -NoNewline -ForegroundColor White
-    Write-Host "$($kv.location)" -ForegroundColor Cyan
-    Write-Host "    - Vault Name: " -NoNewline -ForegroundColor White
-    Write-Host "$($kv.name)" -ForegroundColor Cyan
-    Write-Host "    - Vault URL: " -NoNewline -ForegroundColor White
-    Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
-} else {
-    $softDeletedKv = az keyvault list-deleted --query "[?name=='$keyVaultName']" --output json 2>$null | ConvertFrom-Json
-    if ($null -ne $softDeletedKv -and $softDeletedKv.Count -gt 0) {
-        Write-Host "  @ Found soft-deleted key vault - Recovering." -ForegroundColor Yellow
-        $null = az keyvault recover --name $keyVaultName --output none 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            $kv = az keyvault show --name $keyVaultName --output json 2>$null | ConvertFrom-Json
-            if ($kv) {
-                Write-Host "  + SUCCESS: Key Vault recovered." -ForegroundColor Green
-                Write-Host "    - Location: " -NoNewline -ForegroundColor White
-                Write-Host "$($softDeletedKv[0].location)" -ForegroundColor Cyan
-                Write-Host "    - Vault URL: " -NoNewline -ForegroundColor White
-                Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
-            }
-        } else {
-            Write-Host "  x ERROR: Failed to recover Key Vault" -ForegroundColor Red
-            exit 1
-        }
-    } else {
-        Write-Host "  @ Creating new key vault." -ForegroundColor Yellow
-        $kv = az keyvault create `
-            --name $keyVaultName `
-            --resource-group $resourceGroup `
-            --location $location `
-            --enable-rbac-authorization false `
-            --output json | ConvertFrom-Json
-
-        if ($kv) {
-            Write-Host "  + SUCCESS: Key Vault created." -ForegroundColor Green
-            Write-Host "    - Location: " -NoNewline -ForegroundColor White
-            Write-Host "$($kv.location)" -ForegroundColor Cyan
-            Write-Host "    - Vault Name: " -NoNewline -ForegroundColor White
-            Write-Host "$($kv.name)" -ForegroundColor Cyan
-            Write-Host "    - Vault URL: " -NoNewline -ForegroundColor White
-            Write-Host "$($kv.properties.vaultUri)" -ForegroundColor Cyan
-        } else {
-            Write-Host "  x ERROR: Failed to create Key Vault (name may not be globally unique)" -ForegroundColor Red
-            exit 1
-        }
-    }
-}
-Write-Host "  @ Adding/Updating secret value." -ForegroundColor Yellow
-$null = az keyvault secret show --vault-name $keyVaultName --name $secretName --output json 2>$null | ConvertFrom-Json
-$secret = az keyvault secret set `
-    --vault-name $keyVaultName `
-    --name $secretName `
-    --value $secretValue `
-    --output json | ConvertFrom-Json
-if ($secret) {
-    Write-Host "  + SUCCESS: updated secret value." -ForegroundColor Green
-    Write-Host "    - Name: " -NoNewline -ForegroundColor White
-    Write-Host "$($secret.name)" -ForegroundColor Cyan
-    Write-Host "    - Value: " -NoNewline -ForegroundColor White
-    Write-Host "$($secret.value)" -ForegroundColor Cyan
-} else {
-    Write-Host "  x ERROR: Failed to configure secret" -ForegroundColor Red
+$ConfigContent = Get-Content $ConfigPath -Raw
+try {
+    $config = $ConfigContent | ConvertFrom-Json
+} catch {
+    Write-Host "========================================================================================================" -ForegroundColor Red
+    Write-Host "[X] Plugin-Managed-Identity-Config.json is not valid JSON" -ForegroundColor Red
+    Write-Host "========================================================================================================`n" -ForegroundColor Red
     exit 1
 }
-# ========================================
-# Step 3
-# ========================================
-Write-Host "`n[3] CHECKING AZURE AD APP REGISTRATION" -ForegroundColor Blue
-for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
-    $mi = $config.ManagedIdentities[$i]
-    $appName = $mi.AppName
-    Write-Host "Processing AppName $appName" -ForegroundColor Red
-    Write-Host "`  @ Checking App" -ForegroundColor Yellow
-    $existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
-    if ($null -ne $existingApp -and $existingApp.Count -gt 0) {
-        $appId = $existingApp[0].appId
-        Write-Host "  + SUCCESS: App Registration exists." -ForegroundColor Green
-    } else {
-        $createdApp = az ad app create --display-name $appName --output json | ConvertFrom-Json
-        $appId = $createdApp.appId
-        Write-Host "  + SUCCESS:App Registration created." -ForegroundColor Green
-    }
-    Write-Host "    - App Name: " -NoNewline -ForegroundColor White
-    Write-Host "$($appName)" -ForegroundColor Cyan
-    Write-Host "    - App Id: " -NoNewline -ForegroundColor White
-    Write-Host "$($appId)" -ForegroundColor Cyan
-    $config.ManagedIdentities[$i].AppId = $appId
 
-    Write-Host "  @ Checking Service Principal." -ForegroundColor Yellow
-    $existingSp = az ad sp show --id $appId --output json 2>$null | ConvertFrom-Json
-    if ($existingSp) {
-        Write-Host "  + SUCCESS: Service Principal exists." -ForegroundColor Green
-        $spId = $existingSp.id
-    } else {
-        $createdSp = az ad sp create --id $appId --output json | ConvertFrom-Json
-        $spId = $createdSp.id
-        Write-Host "  + SUCCESS: Service Principal created." -ForegroundColor Green
+$errors = @()
+$requiredFields = @('CertificateFileName', 'CertificatePassword', 'CertificateValidityYears', 'AppName')
+foreach ($field in $requiredFields) {
+    if (-not $config.$field -or $config.$field -eq '' -or $null -eq $config.$field) {
+        $errors += "[X] $field is empty"
     }
-    Write-Host "    - Service Principal Id: " -NoNewline -ForegroundColor White
-    Write-Host "$($spId)" -ForegroundColor Cyan
-
-    Write-Host "  @ Configuring App Access to Key Vault." -ForegroundColor Yellow
-    $existingPolicy = az keyvault show --name $keyVaultName --resource-group $resourceGroup --query "properties.accessPolicies[?objectId=='$spId']" --output json 2>$null | ConvertFrom-Json
-    if ($null -ne $existingPolicy -and $existingPolicy.Count -gt 0) {
-        Write-Host "  + SUCCESS: Access policy exists for Service Principal." -ForegroundColor Green
-    } else {
-        az keyvault set-policy --name $keyVaultName --resource-group $resourceGroup --object-id $spId --secret-permissions get list set --certificate-permissions get list --output none
-        Write-Host "  + SUCCESS: Access policy created for Service Principal." -ForegroundColor Green
-    }
-    Write-Host "    - Permissions: " -NoNewline -ForegroundColor White
-    Write-Host "Get, List (Secrets)" -ForegroundColor Cyan
 }
-# ========================================
-# Step 4
-# ========================================
-Write-Host "`n[4] SIGNING CERTIFICATE GENERATION" -ForegroundColor Blue
+
+if ($config.EnvironmentIds -and $config.EnvironmentIds.Count -gt 0) {
+    for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
+        $envId = $config.EnvironmentIds[$i]
+        if (-not $envId -or $envId -eq '' -or $null -eq $envId) {
+            $errors += "[X] EnvironmentIds[$i] is empty"
+        }
+    }
+} else {
+    $errors += "[X] EnvironmentIds array is empty"
+}
+
+if ($errors.Count -gt 0) {
+    Write-Host "========================================================================================================" -ForegroundColor Red
+    Write-Host "[X] Missing Required Configuration" -ForegroundColor Red
+    Write-Host "========================================================================================================`n" -ForegroundColor Red
+    foreach ($err in $errors) {
+        Write-Host $err -ForegroundColor Red
+    }
+    Write-Host "`n========================================================================================================`n" -ForegroundColor Red
+    exit 1
+}
+
+# ============================================================================
+# Start Script
+# ============================================================================
+Write-Host "`n========================================================================================================" -ForegroundColor Cyan
+Write-Host "                    DATAVERSE PLUGIN MANAGED IDENTITY SETUP" -ForegroundColor Green
+Write-Host "========================================================================================================" -ForegroundColor Cyan
+Write-Host "  This script creates:" -ForegroundColor White
+Write-Host "    - App Registration + Service Principal" -ForegroundColor Gray
+Write-Host "    - Code Signing Certificate (.pfx, .cer)" -ForegroundColor Gray
+Write-Host "    - Power Platform Federated Credential" -ForegroundColor Gray
+Write-Host "    - AssemblyInfo2.cs for your plugin project" -ForegroundColor Gray
+Write-Host "========================================================================================================`n" -ForegroundColor Cyan
+
+$TenantId = (az account show --output json | ConvertFrom-Json).tenantId
+Write-Host "  Tenant ID: $TenantId" -ForegroundColor Cyan
+
+# ============================================================================
+# Step 1: App Registration + Service Principal
+# ============================================================================
+Write-Host "`n[1] AZURE AD APP REGISTRATION + SERVICE PRINCIPAL" -ForegroundColor Blue
+$appName = $config.AppName
+
+Write-Host "`n  Processing: $appName" -ForegroundColor Magenta
+
+# Check/Create App Registration
+Write-Host "  @ Checking App Registration..." -ForegroundColor Yellow
+$existingApp = az ad app list --display-name $appName --output json | ConvertFrom-Json
+if ($null -ne $existingApp -and $existingApp.Count -gt 0) {
+    $appId = $existingApp[0].appId
+    Write-Host "  + SUCCESS: App Registration already exists." -ForegroundColor Green
+} else {
+    $createdApp = az ad app create --display-name $appName --output json | ConvertFrom-Json
+    $appId = $createdApp.appId
+    Write-Host "  + SUCCESS: App Registration created." -ForegroundColor Green
+}
+Write-Host "    - App Name: $appName" -ForegroundColor Cyan
+Write-Host "    - App (Client) ID: $appId" -ForegroundColor Cyan
+$config | Add-Member -NotePropertyName 'AppId' -NotePropertyValue $appId -Force
+
+# Check/Create Service Principal
+Write-Host "  @ Checking Service Principal..." -ForegroundColor Yellow
+$existingSp = az ad sp show --id $appId --output json 2>$null | ConvertFrom-Json
+if ($existingSp) {
+    Write-Host "  + SUCCESS: Service Principal already exists." -ForegroundColor Green
+    $spId = $existingSp.id
+} else {
+    $createdSp = az ad sp create --id $appId --output json | ConvertFrom-Json
+    $spId = $createdSp.id
+    Write-Host "  + SUCCESS: Service Principal created." -ForegroundColor Green
+}
+Write-Host "    - Service Principal Object ID: $spId" -ForegroundColor Cyan
+
+# ============================================================================
+# Step 2: Code Signing Certificate
+# ============================================================================
+Write-Host "`n[2] CODE SIGNING CERTIFICATE" -ForegroundColor Blue
 $certificatePassword = $config.CertificatePassword
 $certificateSubject = "CN=$($config.CertificateFileName)"
 $certificateFileName = $config.CertificateFileName
 $validityYears = $config.CertificateValidityYears
-if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName.cer")) {
-    Write-Host "  @ Found existing .pfx and .cer files, re-using them." -ForegroundColor Yellow
-    Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
-    Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
-    Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
-    Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
+
+$pfxPath = Join-Path $ScriptDir "$certificateFileName.pfx"
+$cerPath = Join-Path $ScriptDir "$certificateFileName.cer"
+
+if ((Test-Path $pfxPath) -and (Test-Path $cerPath)) {
+    Write-Host "  @ Found existing certificate files, re-using them." -ForegroundColor Yellow
+    Write-Host "    - Private Key (.pfx): $pfxPath" -ForegroundColor Cyan
+    Write-Host "    - Public Key (.cer): $cerPath" -ForegroundColor Cyan
 } else {
-    Write-Host "  + CREATING SELF-SIGNED CODE SIGNING CERTIFICATE" -ForegroundColor DarkCyan
+    Write-Host "  @ Creating new self-signed code signing certificate..." -ForegroundColor Yellow
     try {
         $cert = New-SelfSignedCertificate `
             -Subject $certificateSubject `
@@ -249,215 +160,178 @@ if ((Test-Path "$certificateFileName.pfx") -and (Test-Path "$certificateFileName
             -KeyExportPolicy Exportable `
             -KeyLength 2048 `
             -HashAlgorithm SHA256
-        Write-Host "  @ Creating new self-signed certificate." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: self-signed certificate created in certificate store." -ForegroundColor Green
-        Write-Host "    - Subject: " -NoNewline -ForegroundColor White
-        Write-Host "$($cert.Subject)" -ForegroundColor Cyan
-        Write-Host "    - Thumbprint: " -NoNewline -ForegroundColor White
-        Write-Host "$($cert.Thumbprint)" -ForegroundColor Cyan
-        Write-Host "    - Valid Until: " -NoNewline -ForegroundColor White
-        Write-Host "$($cert.NotAfter.ToString('yyyy-MM-dd'))" -ForegroundColor Cyan
+        Write-Host "  + SUCCESS: Certificate created in Windows Certificate Store." -ForegroundColor Green
+        Write-Host "    - Subject: $($cert.Subject)" -ForegroundColor Cyan
+        Write-Host "    - Thumbprint: $($cert.Thumbprint)" -ForegroundColor Cyan
+        Write-Host "    - Valid Until: $($cert.NotAfter.ToString('yyyy-MM-dd'))" -ForegroundColor Cyan
     }
     catch {
-        Write-Host "  x ERROR: Failed to create self-signed certificate: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "  x ERROR: Failed to create certificate: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    Write-Host "  + EXPORTING PRIVATE KEY (.pfx)" -ForegroundColor DarkCyan
+
+    # Export .pfx (private key)
+    Write-Host "  @ Exporting private key (.pfx)..." -ForegroundColor Yellow
     try {
         $securePwd = ConvertTo-SecureString -String $certificatePassword -Force -AsPlainText
-        Export-PfxCertificate `
-            -Cert $cert `
-            -FilePath "$certificateFileName.pfx" `
-            -Password $securePwd `
-            -Force | Out-Null
-        Write-Host "  @ Exporting new private key file." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: exported new private key file." -ForegroundColor Green
-        Write-Host "    - Private Key File: " -NoNewline -ForegroundColor White
-        Write-Host "$certificateFileName.pfx" -ForegroundColor Cyan
+        Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $securePwd -Force | Out-Null
+        Write-Host "  + SUCCESS: Exported $pfxPath" -ForegroundColor Green
     }
     catch {
-        Write-Host "  x ERROR: Failed to create pfx: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "  x ERROR: Failed to export .pfx: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    Write-Host "  + EXPORTING PUBLIC KEY (.cer)" -ForegroundColor DarkCyan
+
+    # Export .cer (public key)
+    Write-Host "  @ Exporting public key (.cer)..." -ForegroundColor Yellow
     try {
-        Export-Certificate `
-            -Cert $cert `
-            -FilePath "$certificateFileName.cer" `
-            -Force | Out-Null
-        Write-Host "  @ Exporting new public key file." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: exported new public key file." -ForegroundColor Green
-        Write-Host "    - Public Key File: " -NoNewline -ForegroundColor White
-        Write-Host "$certificateFileName.cer" -ForegroundColor Cyan
+        Export-Certificate -Cert $cert -FilePath $cerPath -Force | Out-Null
+        Write-Host "  + SUCCESS: Exported $cerPath" -ForegroundColor Green
     }
     catch {
-        Write-Host "  x ERROR: Failed to create cer: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "  x ERROR: Failed to export .cer: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    Write-Host "  + VERIFYING CERTIFICATE" -ForegroundColor DarkCyan
-    try {
-    $pfxPath = Join-Path -Path $PSScriptRoot -ChildPath "$certificateFileName.pfx"
-    $pfxCert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($pfxPath, $certificatePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::Exportable)
-        if ($pfxCert) {
-            Write-Host "  @ Found certificate to verify." -ForegroundColor Yellow
-            Write-Host "  + SUCCESS: certificate verified successfully." -ForegroundColor Green
-            Write-Host "    - Thumbprint: " -NoNewline -ForegroundColor White
-            Write-Host "$($pfxCert.Thumbprint)" -ForegroundColor Cyan
-            Write-Host "    - Has Private Key: " -NoNewline -ForegroundColor White
-            Write-Host "$($pfxCert.HasPrivateKey)" -ForegroundColor Cyan
-        }
-        else {
-            Write-Host "  x ERROR: Failed to verify certificate" -ForegroundColor Red
-            exit 1
-        }
-    }
-    catch {
-        Write-Host " x ERROR: Failed to verify certificate: $($_.Exception.Message)" -ForegroundColor Red
-        exit 1
-    }
-    Write-Host "  + REMOVING CERTIFICATE FROM WINDOWS CERTIFICATE STORE" -ForegroundColor DarkCyan
+
+
+    # Remove from Windows Certificate Store (we have the .pfx file)
+    Write-Host "  @ Removing certificate from Windows Certificate Store..." -ForegroundColor Yellow
     try {
         Remove-Item "Cert:\CurrentUser\My\$($cert.Thumbprint)" -Force
-        Write-Host "  @ Found certificate to remove." -ForegroundColor Yellow
-        Write-Host "  + SUCCESS: certificate removed from store." -ForegroundColor Green
+        Write-Host "  + SUCCESS: Certificate removed from store (kept in .pfx file)." -ForegroundColor Green
     }
     catch {
-        Write-Host "  x ERROR: Could not remove certificate from store" -ForegroundColor Yellow
+        Write-Host "  ! WARNING: Could not remove certificate from store." -ForegroundColor Yellow
     }
-    $config.CertificateThumbprint = $pfxCert.Thumbprint
-    $certBytes = $pfxCert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-    $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
-    $config.CertificateSHA256Hash = $sha256Hash
 }
-# ========================================
-# Step 5
-# ========================================
-Write-Host "`n[5] POWER PLATFORM FEDERATED CREDENTIALS CONFIGURATION" -ForegroundColor Blue
 
-$CertificateThumbprint =  $config.CertificateThumbprint
+# ============================================================================
+# Step 3: Power Platform Federated Credentials
+# ============================================================================
+Write-Host "`n[3] POWER PLATFORM FEDERATED CREDENTIALS" -ForegroundColor Blue
+
 $CertificateFileName = $config.CertificateFileName
 $CertificatePassword = $config.CertificatePassword
+$AppName = $config.AppName
+# Use $appId from Step 1 (already set), not $config.AppId which may not exist
 
-for ($i = 0; $i -lt $config.ManagedIdentities.Count; $i++) {
+for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
+    $EnvironmentId = $config.EnvironmentIds[$i]
+    $CredentialName = Get-CredentialName -environmentId $EnvironmentId
 
-    $mi = $config.ManagedIdentities[$i]
-    $AppName = $mi.AppName
-    $AppId = $mi.AppId
-    $EnvironmentId = $mi.EnvironmentId
-    Write-Host "Processing AppName $AppName" -ForegroundColor Red
-    $resolvedPfx = $null
-    if (Test-Path $CertificateFileName) {
-        $resolvedPfx = (Resolve-Path $CertificateFileName).ProviderPath
-    } elseif (Test-Path (Join-Path -Path $PSScriptRoot -ChildPath $CertificateFileName)) {
-        $resolvedPfx = (Resolve-Path (Join-Path -Path $PSScriptRoot -ChildPath $CertificateFileName)).ProviderPath
-    } elseif (Test-Path (Join-Path -Path $PSScriptRoot -ChildPath "$CertificateFileName.pfx")) {
-        $resolvedPfx = (Resolve-Path (Join-Path -Path $PSScriptRoot -ChildPath "$CertificateFileName.pfx")).ProviderPath
-    } elseif (Test-Path "$CertificateFileName.pfx") {
-        $resolvedPfx = (Resolve-Path "$CertificateFileName.pfx").ProviderPath
+    Write-Host "`n  Processing Environment: $EnvironmentId" -ForegroundColor Magenta
+    Write-Host "    - Credential Name: $CredentialName" -ForegroundColor Cyan
+
+    # Load certificate for SHA256 hash
+    $resolvedPfx = Join-Path $ScriptDir "$CertificateFileName.pfx"
+    if (-not (Test-Path $resolvedPfx)) {
+        $resolvedPfx = "$CertificateFileName.pfx"
     }
-    if (-not $resolvedPfx) {
-        Write-Host "  x ERROR: Could not find certificate file for '$CertificateFileName'. Looked for $CertificateFileName and $CertificateFileName.pfx in script folder and given path." -ForegroundColor Red
-        exit 1
-    }
+
     try {
         $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($resolvedPfx, $CertificatePassword)
-    }
-    catch {
-        Write-Host "  x ERROR: Failed to load certificate file '$resolvedPfx': $($_.Exception.Message)" -ForegroundColor Red
-        exit 1
-    }
-    try {
         $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
         $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-        $sha256Hash = [System.Convert]::ToBase64String($sha256).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+        # Dataverse v1 uses HEX hash
+        $sha256Hash = [BitConverter]::ToString($sha256).Replace("-", "").ToLowerInvariant()
     }
     catch {
-        Write-Host "  x ERROR: Failed to compute certificate hash: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "  x ERROR: Failed to load certificate: $($_.Exception.Message)" -ForegroundColor Red
         exit 1
     }
-    $envIdNoHyphens = $EnvironmentId.Replace("-", "")
-    $envIdPrefix = $envIdNoHyphens.Substring(0, $envIdNoHyphens.Length - 2)
-    $envIdSuffix = $envIdNoHyphens.Substring($envIdNoHyphens.Length - 2)
-    $issuer2 = "https://$envIdPrefix.$envIdSuffix.environment.api.powerplatform.com/sts"
-    $subject2 = "component:pluginassembly,thumbprint:$($CertificateThumbprint),environment:$EnvironmentId"
-    $credName2 = "PowerPlatform-Issuer"
-    Write-Host "  @ Checking credential $credName2" -ForegroundColor Yellow
-    $existingCred2 = az ad app federated-credential list --id $AppId --query "[?name=='$credName2']" | ConvertFrom-Json
-    $newCred2 = @{
-        name = $credName2
-        issuer = $issuer2
-        subject = $subject2
-        description = "Power Platform Issuer - Authentication for Env $EnvironmentId"
+
+    # Build v1 format federated credential
+    $encodedTenantId = Convert-GuidToBase64Url -guid $TenantId
+    $issuer = "https://login.microsoftonline.com/$TenantId/v2.0"
+    $subject = "/eid1/c/pub/t/$encodedTenantId/a/qzXoWDkuqUa3l6zM5mM0Rw/n/plugin/e/$EnvironmentId/h/$sha256Hash"
+
+    Write-Host "  @ Checking federated credential: $CredentialName" -ForegroundColor Yellow
+    $existingCred = az ad app federated-credential list --id $appId --query "[?name=='$CredentialName']" | ConvertFrom-Json
+
+    $newCred = @{
+        name = $CredentialName
+        issuer = $issuer
+        subject = $subject
+        description = "Power Platform v1 - Environment $EnvironmentId"
         audiences = @("api://AzureADTokenExchange")
     }
-    if ($existingCred2) {
-        if ($existingCred2.issuer -eq $issuer2 -and $existingCred2.subject -eq $subject2) {
-            Write-Host "  + SUCCESS: No updates needed for $credName2 (values match)." -ForegroundColor Green
+
+    if ($existingCred) {
+        if ($existingCred.issuer -eq $issuer -and $existingCred.subject -eq $subject) {
+            Write-Host "  + SUCCESS: Federated credential already configured correctly." -ForegroundColor Green
         } else {
-            Write-Host "  @ Updating $credName2 (values different)" -ForegroundColor Yellow
-            Write-Host "    - Old Issuer: $($existingCred2.issuer)" -ForegroundColor DarkGray
-            Write-Host "    - New Issuer: $issuer2" -ForegroundColor White
-            Write-Host "    - Old Subject: $($existingCred2.subject)" -ForegroundColor DarkGray
-            Write-Host "    - New Subject: $subject2" -ForegroundColor White
-            az ad app federated-credential delete --id $AppId --federated-credential-id $existingCred2.id
-            $newCred2 | ConvertTo-Json | Out-File "$credName2.json" -Encoding UTF8
-            az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
-            Remove-Item "$credName2.json" -Force -ErrorAction SilentlyContinue
-            Write-Host "  + SUCCESS: Updated $credName2." -ForegroundColor Green
+            Write-Host "  @ Updating federated credential (values changed)..." -ForegroundColor Yellow
+            az ad app federated-credential delete --id $appId --federated-credential-id $existingCred.id
+            $newCred | ConvertTo-Json | Out-File "$CredentialName.json" -Encoding UTF8
+            az ad app federated-credential create --id $appId --parameters "$CredentialName.json" | Out-Null
+            Remove-Item "$CredentialName.json" -Force -ErrorAction SilentlyContinue
+            Write-Host "  + SUCCESS: Federated credential updated." -ForegroundColor Green
         }
     } else {
-        Write-Host "  @ Creating new credential $credName2" -ForegroundColor Yellow
-        Write-Host "    - Issuer: $issuer2" -ForegroundColor White
-        Write-Host "    - Subject: $subject2" -ForegroundColor White
-        $newCred2 | ConvertTo-Json | Out-File "$credName2.json" -Encoding UTF8
-        az ad app federated-credential create --id $AppId --parameters "$credName2.json" | Out-Null
-        Remove-Item "$credName2.json" -Force -ErrorAction SilentlyContinue
-        Write-Host "  + SUCCESS: Created $credName2." -ForegroundColor Green
+        Write-Host "  @ Creating federated credential..." -ForegroundColor Yellow
+        $newCred | ConvertTo-Json | Out-File "$CredentialName.json" -Encoding UTF8
+        az ad app federated-credential create --id $appId --parameters "$CredentialName.json" | Out-Null
+        Remove-Item "$CredentialName.json" -Force -ErrorAction SilentlyContinue
+        Write-Host "  + SUCCESS: Federated credential created." -ForegroundColor Green
     }
+    Write-Host "    - Issuer: $issuer" -ForegroundColor Gray
+    Write-Host "    - Subject: $subject" -ForegroundColor Gray
 }
-# ========================================
-# Step 6
-# ========================================
-Write-Host "`n[6] GENERATING ASSEMBLYINFO2.CS" -ForegroundColor Blue
+
+# ============================================================================
+# Step 4: Generate AssemblyInfo2.cs
+# ============================================================================
+Write-Host "`n[4] GENERATING ASSEMBLYINFO2.CS" -ForegroundColor Blue
 $assemblyFilePath = Join-Path -Path $ScriptDir -ChildPath "AssemblyInfo2.cs"
-$applicationIds = @()
-if ($config.ManagedIdentities -and $config.ManagedIdentities.Count -gt 0) {
-    foreach ($mi in $config.ManagedIdentities) {
-        if ($mi.AppId) { $applicationIds += $mi.AppId }
-    }
-}
-$applicationIdsString = $applicationIds -join ','
-$certificateFileOut = if ($config.CertificateFileName -and $config.CertificateFileName.ToLower().EndsWith('.pfx')) { $config.CertificateFileName } elseif ($config.CertificateFileName) { "$($config.CertificateFileName).pfx" } else { "" }
-$certificatePasswordOut = if ($config.CertificatePassword) { $config.CertificatePassword } else { "" }
-if (Test-Path $assemblyFilePath) {
-    Write-Host "  @ Overwriting existing file: AssemblyInfo2.cs" -ForegroundColor Yellow
+
+$applicationId = $config.AppId
+
+$certificateFileOut = if ($config.CertificateFileName.ToLower().EndsWith('.pfx')) {
+    $config.CertificateFileName
 } else {
-    Write-Host "  @ Creating file: AssemblyInfo2.cs" -ForegroundColor Yellow
+    "$($config.CertificateFileName).pfx"
 }
+
 $assemblyContent = @"
 [assembly: DynamicsCrmDevKitPluginManagedIdentityAssembly(
     TenantId = "$TenantId",
-    ApplicationIds = "$applicationIdsString",
+    ApplicationIds = "$applicationId",
     CertificateFileName = "$certificateFileOut",
-    CertificatePassword = "$certificatePasswordOut"
+    CertificatePassword = "$($config.CertificatePassword)"
 )]
 "@
+
+if (Test-Path $assemblyFilePath) {
+    Write-Host "  @ Overwriting existing AssemblyInfo2.cs" -ForegroundColor Yellow
+} else {
+    Write-Host "  @ Creating AssemblyInfo2.cs" -ForegroundColor Yellow
+}
+
 $assemblyContent | Out-File -FilePath $assemblyFilePath -Encoding UTF8 -Force
-Write-Host "  + SUCCESS: Saved AssemblyInfo2.cs to: " -NoNewline -ForegroundColor Green
-Write-Host $assemblyFilePath -ForegroundColor Cyan
-# ========================================
-# Step 7
-# ========================================
-Write-Host "`n[7] SAVING DATA" -ForegroundColor Blue
-$config.TenantId = $TenantId
-$config.KeyVaultURL = $kv.properties.vaultUri
-try {
-    $config | ConvertTo-Json -Depth 10 | Out-File -FilePath $ConfigPath -Encoding UTF8
-    Write-Host " + SUCCESS: Saved Plugin-Managed-Identity-Config.json to: " -NoNewline -ForegroundColor Green
-    Write-Host $ConfigPath -ForegroundColor Cyan
-    Write-Host ""
-}
-catch {
-    Write-Host " x ERROR: Failed to save Plugin-Managed-Identity-Config.json: $($_.Exception.Message)" -ForegroundColor Red
-}
+Write-Host "  + SUCCESS: Saved AssemblyInfo2.cs" -ForegroundColor Green
+Write-Host "    - Path: $assemblyFilePath" -ForegroundColor Cyan
+
+# ============================================================================
+# Step 5: Save Configuration (SKIPPED)
+# ============================================================================
+# Config file is NOT updated with AppId/TenantId to avoid changes.
+# These values are stored in AssemblyInfo2.cs
+Write-Host "`n[5] SAVING CONFIGURATION" -ForegroundColor Blue
+Write-Host "  @ Configuration file update specific skipped." -ForegroundColor Yellow
+Write-Host "    - AppId and TenantId are saved in AssemblyInfo2.cs" -ForegroundColor Gray
+
+# ============================================================================
+# Summary
+# ============================================================================
+Write-Host "`n========================================================================================================" -ForegroundColor Cyan
+Write-Host "                              SETUP COMPLETED SUCCESSFULLY!" -ForegroundColor Green
+Write-Host "========================================================================================================" -ForegroundColor Cyan
+Write-Host "`n  Next Steps:" -ForegroundColor White
+Write-Host "  1. Add AssemblyInfo2.cs to your plugin project" -ForegroundColor Gray
+Write-Host "  2. Add $($config.CertificateFileName).pfx to your project (Build Action: None)" -ForegroundColor Gray
+Write-Host "  3. Grant your App Registration access to Azure resources:" -ForegroundColor Gray
+Write-Host "     - Key Vault: Add Access Policy for App ID" -ForegroundColor DarkGray
+Write-Host "     - Storage: Add RBAC role assignment" -ForegroundColor DarkGray
+Write-Host "     - SQL: Add as external user" -ForegroundColor DarkGray
+Write-Host "  4. Build and deploy your plugin using 'devkit server'" -ForegroundColor Gray
+Write-Host "`n========================================================================================================`n" -ForegroundColor Cyan

@@ -1,4 +1,11 @@
-﻿/**
+// -----------------------------------------------------------------------------------
+// --------------------------- SOURCE OF TRUTH ---------------------------------------
+// -----------------------------------------------------------------------------------
+// This file is a Source of Truth for the DynamicsCrm.DevKit project.
+// This is devkit.d.ts for devkit.ts
+// Do not edit without considering the impact on the entire toolkit.
+// -----------------------------------------------------------------------------------
+/**
  * DynamicsCrm.DevKit TypeScript Definitions
  *
  * @version 4.0
@@ -94,7 +101,7 @@ declare namespace DevKit {
 
         /**
          * Returns a value indicating whether the form data is loading for the first time.
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getdataloadstate
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/save-event-arguments#getdataloadstate
          */
         IsInitialLoad(): boolean;
 
@@ -349,24 +356,28 @@ declare namespace DevKit {
 
         /**
          * Interface for String controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface String extends IControlText {
         }
 
         /**
          * Interface for Memo (multiline text) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Memo extends IControlText {
         }
 
         /**
          * Interface for Integer controls (no Precision support)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Integer extends IControlNumber {
         }
 
         /**
          * Interface for Decimal controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Decimal extends IControlNumber {
             /**
@@ -379,6 +390,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Double (floating point) controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Double extends IControlNumber {
             /**
@@ -391,6 +403,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Money controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Money extends IControlNumber {
             /**
@@ -403,6 +416,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Boolean controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface Boolean extends IControl {
             /**
@@ -478,6 +492,7 @@ declare namespace DevKit {
 
         /**
          * Interface for OptionSet controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface OptionSet extends IControlOptionSet {
             /**
@@ -508,6 +523,7 @@ declare namespace DevKit {
 
         /**
          * Interface for MultiOptionSet controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface MultiOptionSet extends IControlOptionSet {
             /**
@@ -538,6 +554,7 @@ declare namespace DevKit {
 
         /**
          * Interface for Lookup controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
         interface Lookup extends IControl {
             /**
@@ -618,6 +635,7 @@ declare namespace DevKit {
 
         /**
          * Interface for DateTime controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface DateTime extends IControl {
             /**
@@ -637,6 +655,7 @@ declare namespace DevKit {
 
         /**
          * Interface for DateOnly controls (without time)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
          */
         interface DateOnly extends IControl {
             /**
@@ -647,6 +666,29 @@ declare namespace DevKit {
             Value: Date | null;
         }
 
+        /**
+         * Interface for File controls
+         * Used for file upload fields on forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface File extends IControl {
+            /**
+             * Get/Set the data value for a file attribute
+             */
+            Value: any;
+        }
+
+        /**
+         * Interface for Image controls
+         * Used for image fields on forms
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        interface Image extends IControl {
+            /**
+             * Get/Set the data value for an image attribute
+             */
+            Value: any;
+        }
 
         /**
          * Interface for EmailEngagement controls
@@ -883,7 +925,7 @@ declare namespace DevKit {
             /** Get/Set whether the column is disabled */
             Disabled: boolean;
             /** Get/Set the required level of the column */
-            RequiredLevel: OptionSet.FieldRequiredLevel;
+            RequiredLevel: string;
             /** Get/Set the value of the column */
             Value: any;
             /** Clear a notification for the column */
@@ -927,94 +969,94 @@ declare namespace DevKit {
             /**
              * Adds an event handler to the OnLoad event
              * @param callback The function to be executed on the OnLoad event
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridonload
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/addonload
              */
             AddOnLoad(callback: (executionContext: any) => void): void;
 
             /**
              * Removes an event handler from the OnLoad event
              * @param callback The function to be removed from the OnLoad event
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/removeonload
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/removeonload
              */
             RemoveOnLoad(callback: (executionContext: any) => void): void;
 
             /**
              * Opens the related grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/openrelatedgrid
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/openrelatedgrid
              */
             OpenRelatedGrid(): void;
 
             /**
              * Refreshes the data displayed in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/refresh
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refresh
              */
             Refresh(): void;
 
             /**
              * Refreshes the ribbon
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/refreshribbon
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refreshribbon
              */
             RefreshRibbon(): void;
 
             /**
              * Returns the URL for the current grid
              * @param client 1=Web, 2=Outlook
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/geturl
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/geturl
              */
             Url(client?: number): string;
 
             /**
              * Get the logical name of the entity data displayed in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getentityname
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
              */
             readonly EntityName: string;
 
             /**
              * Get the FetchXML query that represents the current data in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getfetchxml
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getfetchxml
              */
             readonly FetchXml: string;
 
             /**
              * Get the grid type: 1=HomePageGrid, 2=Subgrid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getgridtype
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
              */
             readonly GridType: OptionSet.GridType;
 
             /**
              * Get the relationship information for the subgrid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrelationship
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
              */
-            readonly Relationship: { attributeName: string; name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
+            readonly Relationship: { name: string; navigationPropertyName: string; relationshipType: OptionSet.FormRelationshipType; roleType: OptionSet.FormRelationshipRoleType };
 
             /**
              * Collection of rows in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getrows
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
              */
             readonly Rows: Collections<GridRow>;
 
             /**
              * Collection of selected rows in the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getselectedrows
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/getselectedrows
              */
             readonly SelectedRows: Collections<GridRow>;
 
             /**
              * Get the total record count (limited to 5000)
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gettotalrecordcount
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
              */
             readonly TotalRecordCount: number;
 
             /**
              * Get the view selector for the grid
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getviewselector
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getviewselector
              */
             readonly ViewSelector: ViewSelector;
 
             /**
              * Get/Set a value that indicates whether the grid is currently visible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/getvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/setvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setvisible
              */
             Visible: boolean;
 
@@ -1057,32 +1099,6 @@ declare namespace DevKit {
              * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/setfocus
              */
             Focus(): void;
-        }
-
-        /**
-         * Interface for Header section controls
-         * Provides access to header visibility properties
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection
-         */
-        interface IHeader {
-            /**
-             * Get/Set the visibility of the body of the header section
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
-             */
-            BodyVisible: boolean;
-            /**
-             * Get/Set the command bar visibility
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
-             */
-            CommandBarVisible: boolean;
-            /**
-             * Get/Set the tab navigator visibility
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
-             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
-             */
-            TabNavigatorVisible: boolean;
         }
 
         /**
@@ -1735,6 +1751,33 @@ declare namespace DevKit {
         }
 
         /**
+         * Interface for Header controls
+
+         */
+        interface IHeader {
+            /**
+             * Get/Set the visibility of header body
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
+             */
+            BodyVisible: boolean;
+
+            /**
+             * Get/Set the command bar visibility
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
+             */
+            CommandBarVisible: boolean;
+
+            /**
+             * Get/Set the tab navigator visibility
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
+             */
+            TabNavigatorVisible: boolean;
+        }
+
+        /**
          * Interface for ActionCards control
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
          */
@@ -2052,6 +2095,370 @@ declare namespace DevKit {
         UiRemoveLoaded(callback: (executionContext: any) => void): void;
     }
 
+    /**
+     * Form configuration for initializing FormBase
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
+     */
+    interface IFormConfig {
+        /** Field names for body controls */
+        body?: string[];
+        /** Field names for header controls */
+        header?: string[];
+        /** Tab and section names in format "TabName___SectionName" */
+        tab?: string[];
+        /** Grid control names */
+        grid?: string[];
+        /** Navigation item names */
+        navigation?: string[];
+        /** Quick view form names in format "QuickFormName___FieldName" */
+        quick?: string[];
+        /** Business process flow names in format "ProcessName___FieldName" */
+        bpf?: string[];
+        /** Dialog field names */
+        dialog?: string[];
+    }
+
+    /**
+     * Base interface for Dialog form class
+     * Used by generated dialog forms to provide typed access to dialog controls only
+     * When typing form. on a dialog form, only Dialog and Close() are available
+     */
+    interface IDialogFormBase<TDialog = any> {
+        /**
+         * The Dialog section containing all dialog controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-navigation/openform
+         */
+        Dialog: TDialog;
+
+        /**
+         * The Utility section providing access to global context and helper methods (e.g. Resource strings)
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+         */
+        Utility: IUtility;
+
+        /**
+         * Closes the dialog form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/close
+         */
+        Close(): void;
+    }
+
+    /**
+     * Base interface for Form class
+     * Used by generated entity forms to provide typed access to form controls
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference
+     */
+    interface IFormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any, TQuickForm = any, TProcess = any, TDialog = any> {
+        /**
+         * The Body section of the form containing all body controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        Body: TBody;
+
+        /**
+         * The Header section of the form containing header controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection
+         */
+        Header: THeader;
+
+        /**
+         * The Grid section containing all subgrid controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids
+         */
+        Grid: TGrid;
+
+        /**
+         * The Navigation section containing navigation items
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-navigation
+         */
+        Navigation: TNavigation;
+
+        /**
+         * The QuickForm section containing quick view form controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms
+         */
+        QuickForm: TQuickForm;
+
+        /**
+         * The Process section for business process flow controls
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process
+         */
+        Process: TProcess;
+
+        /**
+         * The Execution Context passed to the form event handler
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/execution-context
+         */
+        ExecutionContext: IExecutionContext;
+
+        /**
+         * The Utility section providing access to global context and helper methods
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility
+         */
+        Utility: IUtility;
+
+        /**
+         * The SidePanes section for managing side panes
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
+         */
+        SidePanes: ISidePanes;
+
+        /**
+         * The WebApi section for CRUD operations
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi
+         */
+        WebApi: IWebApi;
+
+        /**
+         * The Copilot section for AI-powered features
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-copilot
+         */
+        Copilot: ICopilot;
+
+        /**
+         * Gets the unique identifier of the form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getid
+         */
+        readonly FormId: string;
+
+        /**
+         * Gets the label of the form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getlabel
+         */
+        readonly FormLabel: string;
+
+        /**
+         * Gets the form type: 0=Undefined, 1=Create, 2=Update, 3=Read Only, 4=Disabled, 5=Quick Create, 6=Bulk Edit, 11=Read Optimized
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getformtype
+         */
+        readonly FormType: OptionSet.FormType;
+
+        /**
+         * Gets the unique identifier of the entity record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getid
+         */
+        readonly EntityId: string;
+
+        /**
+         * Gets the logical name of the entity
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityname
+         */
+        readonly EntityName: string;
+
+        /**
+         * Returns a boolean value indicating if any fields in the form have been modified
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/getisdirty
+         */
+        readonly DataIsDirty: boolean;
+
+        /**
+         * Returns a boolean value indicating whether all of the form data is valid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/isvalid
+         */
+        readonly DataIsValid: boolean;
+
+        /**
+         * Provides access to the collection of attributes for the record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/attributes
+         */
+        readonly Attributes: any;
+
+        /**
+         * Provides access to the collection of controls for the form
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+         */
+        readonly Controls: any;
+
+        /**
+         * Returns a string representing the XML that will be sent to the server when the record is saved
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getdataxml
+         */
+        readonly DataXml: string;
+
+        /**
+         * Returns a boolean value indicating if any fields in the entity have been modified
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getisdirty
+         */
+        readonly EntityIsDirty: boolean;
+
+        /**
+         * Returns a boolean value indicating whether all of the entity data is valid
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/isvalid
+         */
+        readonly EntityIsValid: boolean;
+
+        /**
+         * Returns a lookup value that references the record
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getentityreference
+         */
+        readonly EntityReference: EntityReference;
+
+        /**
+         * Gets the value of the primary attribute for the entity
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/getprimaryattributevalue
+         */
+        readonly PrimaryAttributeValue: string;
+
+        /**
+         * Returns the height of the viewport in pixels
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getviewportheight
+         */
+        readonly ViewPortHeight: number;
+
+        /**
+         * Returns the width of the viewport in pixels
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/getviewportwidth
+         */
+        readonly ViewPortWidth: number;
+
+        /**
+         * Saves the record
+         * @param saveOptions Options to control the save behavior
+         * @param successCallback A function to call when the save completes successfully
+         * @param errorCallback A function to call when the save fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/save
+         */
+        Save(saveOptions?: any, successCallback?: any, errorCallback?: any): Promise<void> | void;
+
+        /**
+         * Asynchronously refreshes the data of the form without reloading the page
+         * @param save A boolean value to indicate if data should be saved before it is refreshed
+         * @param successCallback A function to call when the refresh completes successfully
+         * @param errorCallback A function to call when the refresh fails
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/refresh
+         */
+        Refresh(save?: boolean, successCallback?: any, errorCallback?: any): Promise<void> | void;
+
+        /**
+         * Use this method to display form level notifications
+         * @param message The text of the notification message
+         * @param level The level of the notification: ERROR, WARNING, or INFO
+         * @param uniqueId A unique identifier for the message
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformnotification
+         */
+        SetFormNotification(message: string, level: OptionSet.FormNotificationLevel, uniqueId: string): boolean;
+
+        /**
+         * Use this method to remove form level notifications
+         * @param uniqueId A unique identifier for the message to be cleared
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/clearformnotification
+         */
+        ClearFormNotification(uniqueId: string): boolean;
+
+        /**
+         * Causes the ribbon to re-evaluate data that controls what is displayed in it
+         * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/refreshribbon
+         */
+        RefreshRibbon(refreshAll?: boolean): void;
+
+        /**
+         * Adds a handler to be called after the form is loaded
+         * @param callback The function to be executed after the form is loaded
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addloaded
+         */
+        UiAddLoaded(callback: (context: any) => void): void;
+
+        /**
+         * Removes a handler from the Loaded event
+         * @param callback The function to be removed from the Loaded event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeloaded
+         */
+        UiRemoveLoaded(callback: (context: any) => void): void;
+
+        /**
+         * Adds a handler to be called when the form is loaded
+         * @param callback The function to be executed when the form is loaded
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addonload
+         */
+        UiAddOnLoad(callback: (context: any) => void): void;
+
+        /**
+         * Removes a handler from the OnLoad event
+         * @param callback The function to be removed from the OnLoad event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeonload
+         */
+        UiRemoveOnLoad(callback: (context: any) => void): void;
+
+        /**
+         * Adds a function to be called after the OnSave is complete
+         * @param callback The function to be executed after the OnSave event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonpostsave
+         */
+        AddOnPostSave(callback: (context: any) => void): void;
+
+        /**
+         * Adds a function to be called when the OnSave event is triggered
+         * @param callback The function to be executed on the OnSave event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonsave
+         */
+        AddOnSave(callback: (context: any) => void): void;
+
+        /**
+         * Removes a function from the OnPostSave event
+         * @param callback The function to be removed from the OnPostSave event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonpostsave
+         */
+        RemoveOnPostSave(callback: (context: any) => void): void;
+
+        /**
+         * Removes a function from the OnSave event
+         * @param callback The function to be removed from the OnSave event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/removeonsave
+         */
+        RemoveOnSave(callback: (context: any) => void): void;
+
+        /**
+         * Adds a function to be called when the data is loaded
+         * @param callback The function to be executed when data is loaded
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/addonload
+         */
+        DataAddOnLoad(callback: (context: any) => void): void;
+
+        /**
+         * Removes a function from the data OnLoad event
+         * @param callback The function to be removed from the data OnLoad event
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data/removeonload
+         */
+        DataRemoveOnLoad(callback: (context: any) => void): void;
+
+        /**
+         * Checks if a form is visible
+         * @param formId The Id of the form to check
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector
+         */
+        FormIsVisible(formId: string): boolean;
+
+        /**
+         * Navigates to a specific form by Id
+         * @param formId The Id of the form to navigate to
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
+         */
+        FormNavigateToFormId(formId: string): void;
+
+        /**
+         * Navigates to a specific form by label
+         * @param formLabel The label of the form to navigate to
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
+         */
+        FormNavigateToFormLabel(formLabel: string): void;
+
+        /**
+         * Sets the visibility of a form
+         * @param formId The Id of the form
+         * @param visible Whether the form should be visible
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/setvisible
+         */
+        FormSetVisible(formId: string, visible: boolean): void;
+
+        /**
+         * Sets the form entity name
+         * @param name The entity name to set
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformentityname
+         */
+        SetFormEntityName(name: string): void;
+    }
+
     // ============================================================================
     // Process (Business Process Flow) Interface
     // ============================================================================
@@ -2077,7 +2484,7 @@ declare namespace DevKit {
          * Returns the progress of the step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
          */
-        readonly Progress: OptionSet.ProcessProgress;
+        readonly Progress: number;
 
         /**
          * Returns whether the step is required
@@ -2211,30 +2618,50 @@ declare namespace DevKit {
      * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
      */
     interface IDateFormattingInfo {
-        /** First day of the week (0=Sunday, 1=Monday, etc.) */
-        FirstDayOfWeek: number;
-        /** Long date pattern (e.g., "dddd, MMMM d, yyyy") */
-        LongDatePattern: string;
-        /** Month/day pattern (e.g., "MMMM d") */
-        MonthDayPattern: string;
-        /** Time separator (e.g., ":") */
-        TimeSeparator: string;
+        /** The abbreviated day names */
+        readonly AbbreviatedDayNames: Array<string>;
+        /** The abbreviated month names with genitive case */
+        readonly AbbreviatedMonthGenitiveNames: Array<string>;
+        /** The abbreviated month names */
+        readonly AbbreviatedMonthNames: Array<string>;
         /** AM designator (e.g., "AM") */
         AMDesignator: string;
+        /** Calendar type */
+        Calendar: { MinSupportedDateTime: string; MaxSupportedDateTime: string };
+        /** Date separator (e.g., "/") */
+        DateSeparator: string;
+        /** The day names */
+        readonly DayNames: Array<string>;
+        /** First day of the week (0=Sunday, 1=Monday, etc.) */
+        FirstDayOfWeek: number;
+        /** The full date/time pattern */
+        readonly FullDateTimePattern: string;
+        /** Long date pattern (e.g., "dddd, MMMM d, yyyy") */
+        LongDatePattern: string;
+        /** Long time pattern (e.g., "h:mm:ss tt") */
+        LongTimePattern: string;
+        /** Month/day pattern (e.g., "MMMM d") */
+        MonthDayPattern: string;
+        /** The month genitive names */
+        readonly MonthGenitiveNames: Array<string>;
+        /** The month names */
+        readonly MonthNames: Array<string>;
         /** PM designator (e.g., "PM") */
         PMDesignator: string;
         /** Short date pattern (e.g., "M/d/yyyy") */
         ShortDatePattern: string;
+        /** The shortest day names */
+        readonly ShortestDayNames: Array<string>;
         /** Short time pattern (e.g., "h:mm tt") */
         ShortTimePattern: string;
-        /** Long time pattern (e.g., "h:mm:ss tt") */
-        LongTimePattern: string;
-        /** Date separator (e.g., "/") */
-        DateSeparator: string;
+        /** The sortable date/time pattern */
+        readonly SortableDateTimePattern: string;
+        /** Time separator (e.g., ":") */
+        TimeSeparator: string;
+        /** The universal sortable date/time pattern */
+        readonly UniversalSortableDateTimePattern: string;
         /** Year/month pattern (e.g., "MMMM yyyy") */
         YearMonthPattern: string;
-        /** Calendar type */
-        Calendar: { MinSupportedDateTime: string; MaxSupportedDateTime: string };
     }
 
     /**
@@ -3041,7 +3468,7 @@ declare namespace DevKit {
         /**
          * Gets the advanced configuration setting
          * @param setting The setting name
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getadvancedconfigsetting
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
          */
         AdvancedConfigSetting(setting: OptionSet.AdvancedConfigSetting): number;
 
@@ -3133,7 +3560,7 @@ declare namespace DevKit {
         /**
          * Gets a web resource URL
          * @param webResourceName The name of the web resource
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getwebresourceurl
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getwebresourceurl
          */
         WebResourceUrl(webResourceName: string): string;
 
@@ -3158,12 +3585,12 @@ declare namespace DevKit {
 
     /**
      * Interface for Side Panes API
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     interface ISidePanes {
         /**
          * Get/Set the display state of the side panes: 0=Collapsed, 1=Expanded
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes#state
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
          */
         DisplayState: OptionSet.SidePaneState;
 
@@ -3232,7 +3659,7 @@ declare namespace DevKit {
 
     /**
      * Represents a side pane instance
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app/xrm-app-sidepanes
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
      */
     interface ISidePane extends ISidePaneBase {
         /** Closes the side pane and removes it from the side bar. */
@@ -3459,7 +3886,7 @@ declare namespace DevKit {
         /**
          * Returns whether an entity is offline enabled
          * @param entityLogicalName Logical name of the entity. For example: "account"
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/offline/isavailable
+         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-webapi/isavailableoffline
          */
         IsAvailable(entityLogicalName: string): boolean;
     }
@@ -3662,7 +4089,7 @@ declare namespace DevKit {
 
     /**
      * Interface for process object
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/process
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#process-methods
      */
     interface ProcessProcess {
         /**
@@ -3689,7 +4116,7 @@ declare namespace DevKit {
 
     /**
      * Interface for process stage
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#stage-methods
      */
     interface ProcessStage {
         /**
@@ -3732,7 +4159,7 @@ declare namespace DevKit {
 
     /**
      * Interface for process step
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process#step-methods
      */
     interface ProcessStep {
         /**
@@ -3756,7 +4183,7 @@ declare namespace DevKit {
          * Returns the progress of the action step
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/getprogress
          */
-        readonly Progress: OptionSet.ProcessProgress;
+        readonly Progress: number;
         /**
          * Returns a boolean value indicating whether the step is required in the business process flow
          * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/step/isrequired
@@ -4007,100 +4434,6 @@ declare namespace DevKit {
          */
         GetSecurityRolePrivilegesInfo(): Promise<{ [key: string]: SecurityRolePrivilegeInfo }>;
     }
-
-    /**
-     * Interface for SidePane
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/createpane
-     */
-    interface ISidePane {
-        /**
-         * The pane ID
-         */
-        paneId: string;
-        /**
-         * The title of the pane
-         */
-        title: string;
-        /**
-         * The image source of the pane
-         */
-        imageSrc: string;
-        /**
-         * Whether the pane can be closed
-         */
-        canClose: boolean;
-        /**
-         * Whether the pane is initially hidden
-         */
-        hidden: boolean;
-        /**
-         * Whether the pane is always rendered
-         */
-        alwaysRender: boolean;
-        /**
-         * The badge to display on the pane tab
-         */
-        badge: number | string;
-        /**
-         * Whether to keep the badge when the pane is selected
-         */
-        keepBadgeOnSelect: boolean;
-        /**
-         * Closes the side pane
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/close
-         */
-        close(): void;
-        /**
-         * Selects the side pane
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/select
-         */
-        select(): void;
-        /**
-         * Navigates the side pane to a new page
-         * @param pageInput The page input to navigate to
-         * @param navigationOptions The navigation options
-         * @param successCallback The success callback
-         * @param errorCallback The error callback
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/sidepane/navigate
-         */
-        navigate(pageInput: any, navigationOptions?: any, successCallback?: any, errorCallback?: any): void;
-    }
-
-    /**
-     * Interface for SidePanes
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes
-     */
-    interface ISidePanes {
-        /**
-         * The display state of the side canes
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
-         */
-        DisplayState: OptionSet.SidePaneState;
-        /**
-         * Creates a new side pane
-         * @param paneOptions The options for creating the pane
-         * @param successCallback The success callback (returns promise if not provided)
-         * @param errorCallback The error callback
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/createpane
-         */
-        Create(paneOptions: any, successCallback?: (pane: ISidePane) => void, errorCallback?: ErrorCallback): Promise<ISidePane> | void;
-        /**
-         * Gets a side pane by ID
-         * @param paneId The ID of the pane to get
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getpane
-         */
-        Get(paneId: string): ISidePane;
-        /**
-         * Gets all side panes
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getallpanes
-         */
-        GetAll(): Collections<ISidePane>;
-        /**
-         * Gets the currently selected side pane
-         * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/getselectedpane
-         */
-        GetSelected(): ISidePane;
-    }
 }
 
 /** DynamicsCrm.DevKit for namespace OptionSet */
@@ -4273,7 +4606,7 @@ declare namespace OptionSet {
     type GridType = 1 | 2;
     /**
      * Display state of the side pane
-     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes/state
+     * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/xrm-app-sidepanes#state
      */
     type SidePaneState = 0 | 1;
     /**
@@ -4282,3 +4615,5 @@ declare namespace OptionSet {
      */
     type FullNameConventionCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 }
+
+

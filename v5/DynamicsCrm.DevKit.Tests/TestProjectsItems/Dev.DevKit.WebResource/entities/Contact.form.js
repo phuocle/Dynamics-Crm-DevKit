@@ -1,7 +1,8 @@
 ﻿'use strict';
 /** @namespace DevKit */
+// @ts-ignore
 var DevKit;
-(function (DevKit) {
+(function (/** @type {any} */ DevKit) {
 	'use strict';
 	DevKit.FormContact = function(executionContext, defaultWebResourceName) {
 		const form = {
@@ -94,10 +95,11 @@ var DevKit;
 		};
 		return devKit.LoadFormV2(executionContext, defaultWebResourceName, form);
 	};
-})(DevKit || (DevKit = {}));
+})(DevKit || (DevKit = /** @type {any} */ ({})));
 /** @namespace OptionSet */
+// @ts-ignore
 var OptionSet;
-(function (OptionSet) {
+(function (/** @type {any} */ OptionSet) {
 	OptionSet.Contact = {
 		AccountRoleCode: { Decision_Maker: 1, Employee: 2, Influencer: 3 },
 		Address1_AddressTypeCode: { Bill_To: 1, Other: 4, Primary: 3, Ship_To: 2 },
@@ -128,4 +130,4 @@ var OptionSet;
 		TerritoryCode: { Default_Value: 1 },
 		RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 	};
-})(OptionSet || (OptionSet = {}));
+})(OptionSet || (OptionSet = /** @type {any} */ ({})));
