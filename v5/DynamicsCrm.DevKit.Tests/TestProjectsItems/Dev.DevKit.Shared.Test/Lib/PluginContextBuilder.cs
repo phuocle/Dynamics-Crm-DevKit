@@ -39,7 +39,7 @@ namespace Dev.DevKit.Shared.Test
     /// </code>
     /// </example>
     /// </summary>
-    public class PluginContextBuilder
+    internal class PluginContextBuilder
     {
         private readonly IXrmFakedContext _context;
         private readonly XrmFakedPluginExecutionContext _pluginContext;

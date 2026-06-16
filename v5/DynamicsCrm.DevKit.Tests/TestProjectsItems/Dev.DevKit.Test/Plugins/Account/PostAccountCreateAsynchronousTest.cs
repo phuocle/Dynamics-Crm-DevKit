@@ -3,7 +3,7 @@ using Dev.DevKit.Shared.Test;
 using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using Dev.DevKit.Server.Plugins.Account;
+using System.Linq;
 
 namespace Dev.DevKit.Test.Plugins.Account
 {
@@ -13,7 +13,7 @@ namespace Dev.DevKit.Test.Plugins.Account
         private const StageEnum PLUGIN_STAGE = StageEnum.PostOperation;
         private const string PLUGIN_MESSAGE = "???";
         private const string PLUGIN_ENTITY_LOGICAL_NAME = "???";
-        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Synchronous;
+        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;
 
         [TestMethod]
         public void PostAccountCreateAsynchronousTest_00()
@@ -22,32 +22,32 @@ namespace Dev.DevKit.Test.Plugins.Account
 
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith <PostAccountCreateAsynchronous> (pluginContext);
+                _context.ExecutePluginWith <Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous> (pluginContext);
             }, $"Stage does not equals {PLUGIN_STAGE}");
 
             pluginContext.Stage = (int)PLUGIN_STAGE;
             pluginContext.MessageName = string.Empty;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith <PostAccountCreateAsynchronous> (pluginContext);
+                _context.ExecutePluginWith <Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous> (pluginContext);
             }, $"MessageName does not equals {PLUGIN_MESSAGE}");
 
             pluginContext.MessageName = PLUGIN_MESSAGE;
             pluginContext.PrimaryEntityName = string.Empty;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith <PostAccountCreateAsynchronous> (pluginContext);
+                _context.ExecutePluginWith <Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous> (pluginContext);
             }, $"PrimaryEntityName does not equals {PLUGIN_ENTITY_LOGICAL_NAME}");
 
             pluginContext.PrimaryEntityName = PLUGIN_ENTITY_LOGICAL_NAME;
             pluginContext.Mode = -1;
             Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
             {
-                _context.ExecutePluginWith <PostAccountCreateAsynchronous> (pluginContext);
+                _context.ExecutePluginWith <Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous> (pluginContext);
             }, $"Execution does not equals {PLUGIN_EXECUTION_MODE}");
 
             pluginContext.Mode = (int)PLUGIN_EXECUTION_MODE;
-            _context.ExecutePluginWith <PostAccountCreateAsynchronous> (pluginContext);
+            _context.ExecutePluginWith <Dev.DevKit.Server.Plugins.Account.PostAccountCreateAsynchronous> (pluginContext);
             Assert.IsTrue(true);
         }
 
