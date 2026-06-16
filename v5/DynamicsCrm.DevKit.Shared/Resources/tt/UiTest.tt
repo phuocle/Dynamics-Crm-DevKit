@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace <#=Context.PluginNameSpace#>
 {
     [TestClass]
-    public class <#=Context.ClassWithOrder#>
+    public class <#=Context.ClassWithOrder#>Test
     {
         private readonly SecureString _username = System.Configuration.ConfigurationManager.AppSettings["UiTestUserName"].ToSecureString();
         private readonly SecureString _password = System.Configuration.ConfigurationManager.AppSettings["UiTestPassword"].ToSecureString();

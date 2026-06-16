@@ -34,7 +34,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Bogus" Version="35.6.5" />
-		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.0.0">
+		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>

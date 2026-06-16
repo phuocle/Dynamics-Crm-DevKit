@@ -7,7 +7,7 @@ using System.Security;
 namespace Dev.DevKit.UiTest
 {
     [TestClass]
-    public class Login
+    public class LoginTest
     {
         private readonly SecureString _username = System.Configuration.ConfigurationManager.AppSettings["UiTestUserName"].ToSecureString();
         private readonly SecureString _password = System.Configuration.ConfigurationManager.AppSettings["UiTestPassword"].ToSecureString();

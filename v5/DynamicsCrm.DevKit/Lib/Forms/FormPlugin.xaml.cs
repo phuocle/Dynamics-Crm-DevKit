@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
-        public string Class =>  TextboxClass.Text.EndsWith("Test") ? TextboxClass.Text.Substring(0, TextboxClass.Text.Length - 4) : TextboxClass.Text ?? string.Empty;
+        public string Class => GetClassBaseName(TextboxClass.Text);
         public string PluginSchemaName
         {
             get
@@ -135,6 +135,29 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
 
+        private bool IsTestClassItem => ItemType == ItemType.Test || ItemType == ItemType.UiTest;
+
+        private string GetClassBaseName(string className)
+        {
+            var name = className?.Trim() ?? string.Empty;
+            if (IsTestClassItem && name.EndsWith("Test", System.StringComparison.Ordinal))
+                return name.Substring(0, name.Length - 4);
+            return name;
+        }
+
+        private string GetTestClassPreviewName()
+        {
+            var name = TextboxClass.Text?.Trim() ?? string.Empty;
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            return name.EndsWith("Test", System.StringComparison.Ordinal) ? name : $"{name}Test";
+        }
+
+        private void UpdateTestClassPreview()
+        {
+            if (!IsTestClassItem || LabelTestClassPreview == null) return;
+            LabelTestClassPreview.Content = GetTestClassPreviewName();
+        }
+
         private ItemType ItemType
         {
             get => _ItemType;
@@ -205,6 +228,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxEntity.Visibility = System.Windows.Visibility.Collapsed;
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelTestClassPreview.Visibility = System.Windows.Visibility.Visible;
+                    UpdateTestClassPreview();
                 }
                 void TestItem()
                 {
@@ -219,6 +244,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxEntity.Visibility = System.Windows.Visibility.Collapsed;
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelTestClassPreview.Visibility = System.Windows.Visibility.Visible;
+                    UpdateTestClassPreview();
                 }
                 void ResourceStringItem()
                 {
@@ -614,6 +641,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void ComboBoxExecution_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             UpdateClassName();
+        }
+
+        private void TextboxClass_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            UpdateTestClassPreview();
         }
     }
 }

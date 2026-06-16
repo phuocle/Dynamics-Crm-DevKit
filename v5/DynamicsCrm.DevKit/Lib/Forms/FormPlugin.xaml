@@ -44,6 +44,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label x:Name="LabelEntity" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Entity" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxEntity" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxEntity_SelectionChanged" />
@@ -54,7 +55,8 @@
                     <Label x:Name="LabelExecution" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Execution" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxExecution" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxExecution_SelectionChanged" />
                     <Label x:Name="LabelClass" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Class" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox x:Name="TextboxClass" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" />
+                    <TextBox x:Name="TextboxClass" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" TextChanged="TextboxClass_TextChanged" />
+                    <Label x:Name="LabelTestClassPreview" Grid.Row="5" Grid.Column="1" Margin="0,0,0,0" Padding="3,2,3,2" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
             </Border>
             <Grid>
