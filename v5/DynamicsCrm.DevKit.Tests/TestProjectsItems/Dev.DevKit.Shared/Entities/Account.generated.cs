@@ -819,6 +819,12 @@ namespace Dev.DevKit.Shared.Entities
 		public const string EntityPrimaryImageAttribute = "entityimage";
 		public const string EntityPrimaryNameAttribute = "name";
 		public const string EntitySchemaName = "Account";
+		private static void VerifyEntityLogicalName(Entity entity, string parameterName)
+		{
+			if (entity == null) return;
+			if (string.Equals(entity.LogicalName, EntityLogicalName, StringComparison.OrdinalIgnoreCase)) return;
+			throw new InvalidPluginExecutionException($"new Account with {parameterName}.LogicalName = \"{entity.LogicalName}\", expected \"{EntityLogicalName}\"");
+		}
 		/// <summary>
 		/// Instance new late bound class <see cref="Account"/> with empty Guid.
 		/// </summary>
@@ -837,6 +843,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 		/// <summary>
 		/// Instance new late bound class <see cref="Account"/> with alternate key (<paramref name="keyName"/>, <paramref name="keyValue"/>).
+		/// <para>Use this overload for alternate-key targeting, especially upsert. Updating an alternate-key-only instance requires update support in <c>EntityBase.GetUpdateEntity()</c>.</para>
 		/// </summary>
 		public Account(string keyName, object keyValue)
 		{
@@ -846,19 +853,25 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// Instance new late bound class <see cref="Account"/> with <paramref name="targetEntity"/>.
 		/// </summary>
+		/// <exception cref="InvalidPluginExecutionException">when <paramref name="targetEntity"/> LogicalName is not <c>account</c>.</exception>
 		public Account(Entity targetEntity)
 		{
+			VerifyEntityLogicalName(targetEntity, nameof(targetEntity));
 			Entity = targetEntity ?? new Entity(EntityLogicalName, Guid.Empty);
 			PreEntity = CloneThisEntity(Entity);
 		}
 		/// <summary>
 		/// Instance new late bound class <see cref="Account"/> with <paramref name="preEntity"/>. Then copy all attributes from <paramref name="targetEntity"/> to <paramref name="preEntity"/>. Existing attribute will be overwritten.
+		/// <para>After construction, change tracking starts from the merged entity. <c>GetUpdateEntity()</c> returns only changes made after this constructor completes.</para>
 		/// </summary>
 		/// <exception cref="InvalidPluginExecutionException">when <paramref name="targetEntity"/> is null.</exception>
+		/// <exception cref="InvalidPluginExecutionException">when <paramref name="preEntity"/> or <paramref name="targetEntity"/> LogicalName is not <c>account</c>.</exception>
 		public Account(Entity preEntity, Entity targetEntity)
 		{
 			if (targetEntity == null) throw new InvalidPluginExecutionException($"new Account(preEntity, targetEntity) with targetEntity = null");
-			if (preEntity == null) preEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);
+			VerifyEntityLogicalName(preEntity, nameof(preEntity));
+			VerifyEntityLogicalName(targetEntity, nameof(targetEntity));
+			if (preEntity == null) preEntity = new Entity(EntityLogicalName, targetEntity.Id);
 			Entity = CloneThisEntity(preEntity);
 			foreach (var property in targetEntity?.Attributes?.ToList())
 			{
@@ -870,13 +883,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 		/// <summary>
 		/// Instance new late bound class <see cref="Account"/> with <paramref name="preEntity"/>. Then copy all attributes from <paramref name="targetEntity"/> to <paramref name="preEntity"/>. After that copy all attributes from <paramref name="postEntity"/> to the last result. Existing attribute will be overwritten.
+		/// <para>After construction, change tracking starts from the merged entity. <c>GetUpdateEntity()</c> returns only changes made after this constructor completes.</para>
 		/// </summary>
 		/// <exception cref="InvalidPluginExecutionException">when <paramref name="targetEntity"/> is null.</exception>
+		/// <exception cref="InvalidPluginExecutionException">when <paramref name="preEntity"/>, <paramref name="targetEntity"/>, or <paramref name="postEntity"/> LogicalName is not <c>account</c>.</exception>
 		public Account(Entity preEntity, Entity targetEntity, Entity postEntity)
 		{
 			if (targetEntity == null) throw new InvalidPluginExecutionException($"new Account(preEntity, targetEntity, postEntity) with targetEntity = null");
-			if (preEntity == null) preEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);
-			if (postEntity == null) postEntity = new Entity(targetEntity.LogicalName, targetEntity.Id);
+			VerifyEntityLogicalName(preEntity, nameof(preEntity));
+			VerifyEntityLogicalName(targetEntity, nameof(targetEntity));
+			VerifyEntityLogicalName(postEntity, nameof(postEntity));
+			if (preEntity == null) preEntity = new Entity(EntityLogicalName, targetEntity.Id);
+			if (postEntity == null) postEntity = new Entity(EntityLogicalName, targetEntity.Id);
 			Entity = CloneThisEntity(preEntity);
 			foreach (var property in targetEntity?.Attributes?.ToList())
 			{
@@ -894,6 +912,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 		/// <summary>
 		/// Instance new late bound class <see cref="Account"/> with alternate <paramref name="keys"/>.
+		/// <para>Use this overload for alternate-key targeting, especially upsert. Updating an alternate-key-only instance requires update support in <c>EntityBase.GetUpdateEntity()</c>.</para>
 		/// </summary>
 		public Account(KeyAttributeCollection keys)
 		{
