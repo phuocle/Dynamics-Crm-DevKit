@@ -38,7 +38,7 @@
   <ItemGroup>
 		<Folder Include="html\" />
 		<Folder Include="css\" />
-    <Folder Include="js\" />
+		<Folder Include="js\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
 	</ItemGroup>
