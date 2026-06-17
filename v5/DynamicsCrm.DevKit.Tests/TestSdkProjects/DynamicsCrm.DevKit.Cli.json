@@ -2,10 +2,17 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "devkitv4",
+      "solution": "???",
       "folder": "bin\\Debug",
       "includefiles": [
-        "Dev.DevKit.Package*.nupkg"
+        "???.Server*.dll",
+        "???.Package*.nupkg",
+        "???.Plugin*.dll",
+        "???.Plugin*.nupkg",
+        "???.CustomAction*.dll",
+        "???.Workflow*.dll",
+        "???.CustomApi*.dll",
+        "???.DataProvider*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
@@ -65,11 +72,11 @@
   ],
   "datasources": [
     {
-      "profile": "Package-Sqlite",
-      "solution": "devkitv4",
-      "displayname": "Package Sqlite",
-      "pluralname": "Packages Sqlites",
-      "name": "PackageSqlite"
+      "profile": "DEBUG",
+      "solution": "???",
+      "displayname": "???",
+      "pluralname": "???",
+      "name": "???"
     }
   ],
   "generators": [
