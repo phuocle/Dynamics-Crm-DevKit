@@ -1,143 +1,84 @@
-```text
-  ____                              _           ____                  ____             _  ___ _   _____           _
- |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_|_   _|__   ___ | |
- | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __| | |/ _ \ / _ \| |
- | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ _| | (_) | (_) | |
- |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)_|\___/ \___/|_|
-        |___/                   https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: xxxx.yy.zz HH.mm.ss
-```
-# DynamicsCrm.DevKit.Tool
+# 🧰 DynamicsCrm.DevKit Tool
 
-Utility tools for Dynamics 365 / Dataverse development automation.
+DynamicsCrm.DevKit Tool is the `devkit-tool` .NET global tool for Dataverse documentation, server-code documentation, minification, coverage conversion, password decryption, entity scaffolding, and solution layer inspection.
 
-## Installation
+[![NuGet](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Tool?label=NuGet)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/DynamicsCrm.DevKit.Tool)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
 
-Install as a .NET global tool:
+## ✨ Highlights
+
+- Generates Dataverse entity documentation as Markdown from live metadata.
+- Generates server-side code documentation by scanning compiled assemblies for `DocumentMethodAttribute`.
+- Converts Visual Studio coverage files to XML.
+- Minifies HTML, CSS, and JavaScript with NUglify.
+- Creates standard Dataverse entities with forms and supporting attributes.
+- Checks unmanaged active solution layers for selected solutions.
+
+## 📦 Install
 
 ```powershell
-dotnet tool install -g DynamicsCrm.DevKit.Tool
+dotnet tool install --global DynamicsCrm.DevKit.Tool
 ```
 
-After installation, the `devkit-tool` command is available globally.
+Update an existing installation:
 
-## Commands
+```powershell
+dotnet tool update --global DynamicsCrm.DevKit.Tool
+```
 
-| Command | Description |
+## 🧭 Commands
+
+| Command | Purpose |
 |---|---|
-| `documentgenerator` | Generate Dataverse entity documentation (markdown) |
-| `documentcodegenerator` | Generate server-side code documentation from assemblies |
-| `coveragetoxml` | Convert Visual Studio coverage file to XML |
-| `nuglify` | Minify HTML, CSS, or JS files |
-| `decrypt` | Decrypt an encrypted password string |
-| `createentity` | Create a Dataverse entity with standard forms and attributes |
+| `documentgenerator` | Generate Dataverse entity documentation as Markdown. |
+| `documentcodegenerator` | Generate server-side code documentation from compiled assemblies. |
+| `coveragetoxml` | Convert Visual Studio `.coverage` files to XML. |
+| `nuglify` | Minify HTML, CSS, or JavaScript. |
+| `decrypt` | Decrypt an encrypted password string. |
+| `createentity` | Create a Dataverse entity with standard forms and attributes. |
+| `solutionlayer` | Check unmanaged active solution layers in Dataverse solutions. |
 
-## Usage
+## 🚀 Usage
 
-```
-devkit-tool <command> [options]
-```
-
-Use `<command> --help` for details on each command.
-
-### documentgenerator
-
-Generate Dataverse entity documentation as markdown files.
-
-```
-devkit-tool documentgenerator --conn "AuthType=..." --folder ./docs --solution MySolution [--timezone +7]
+```powershell
+devkit-tool documentgenerator --conn "AuthType=..." --folder ".\docs" --solution "MySolution"
+devkit-tool documentcodegenerator --folder ".\bin\Debug" --output ".\docs"
+devkit-tool coveragetoxml --coverage ".\coverage.coverage" --xml ".\coverage.xml" --dlls "a.dll;b.dll"
+devkit-tool nuglify --source ".\app.js" --destination ".\app.min.js"
+devkit-tool decrypt --password "encrypted-string"
+devkit-tool createentity --conn "AuthType=..." --solution "MySolution" --entity "My Entity" --type UserOwned
+devkit-tool solutionlayer --conn "AuthType=..." --solutions "SolutionA,SolutionB" --output ".\layers.md"
 ```
 
-| Option | Required | Description |
+## ⚙️ Command Options
+
+| Command | Required options | Optional options |
 |---|---|---|
-| `--conn` | Yes | Dataverse connection string |
-| `--folder` | Yes | Output folder for generated markdown files |
-| `--solution` | Yes | Dataverse solution unique name |
-| `--timezone` | No | Timezone override (e.g. `+7`, `-6`, `SE Asia Standard Time`). Defaults to WhoAmI user timezone |
+| `documentgenerator` | `--conn`, `--folder`, `--solution` | `--timezone` |
+| `documentcodegenerator` | `--folder`, `--output` | `--devops`, `--org`, `--project` |
+| `coveragetoxml` | `--coverage`, `--xml`, `--dlls` | |
+| `nuglify` | `--source`, `--destination` | |
+| `decrypt` | `--password` | |
+| `createentity` | `--conn`, `--solution`, `--entity`, `--type` | |
+| `solutionlayer` | `--conn`, `--solutions` | `--output` |
 
-### documentcodegenerator
+## 🏗️ Entity Types
 
-Scan compiled assemblies for `DocumentMethodAttribute` and generate server-side code documentation.
+`createentity` supports the following entity types:
 
-```
-devkit-tool documentcodegenerator --folder ./bin/Debug --output ./docs [--devops AzureDevOps --org myorg --project MyProject]
-```
-
-| Option | Required | Description |
-|---|---|---|
-| `--folder` | Yes | Folder containing compiled DLL assemblies to scan |
-| `--output` | Yes | Output folder for generated markdown files |
-| `--devops` | No | DevOps platform: `AzureDevOps`, `GitHub`, `Jira`, `Custom` |
-| `--org` | No | DevOps organization name |
-| `--project` | No | DevOps project name |
-
-### coveragetoxml
-
-Convert Visual Studio coverage file to XML format. Requires [`dotnet-coverage`](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage) to be installed.
-
-```
-devkit-tool coveragetoxml --coverage file.coverage --xml output.xml --dlls "a.dll;b.dll"
-```
-
-| Option | Required | Description |
-|---|---|---|
-| `--coverage` | Yes | Coverage file path |
-| `--xml` | Yes | Output XML file path |
-| `--dlls` | Yes | DLL files separated by `;` |
-
-### nuglify
-
-```
-devkit-tool nuglify --source input.js --destination output.min.js
-```
-
-| Option | Required | Description |
-|---|---|---|
-| `--source` | Yes | Source file path (`.html`, `.css`, `.js`) |
-| `--destination` | Yes | Destination file path |
-
-### decrypt
-
-```
-devkit-tool decrypt --password "encrypted_string"
-```
-
-| Option | Required | Description |
-|---|---|---|
-| `--password` | Yes | The encrypted password string to decrypt |
-
-### createentity
-
-Create a Dataverse entity with standard forms (main, quick view, card) and a debug_context attribute.
-
-```
-devkit-tool createentity --conn "AuthType=..." --solution MySolution --entity "My Entity" --type UserOwned
-```
-
-| Option | Required | Description |
-|---|---|---|
-| `--conn` | Yes | Dataverse connection string |
-| `--solution` | Yes | Dataverse solution unique name |
-| `--entity` | Yes | Entity display name (e.g. `My Entity`) |
-| `--type` | Yes | Entity type: `UserOwned`, `OrganizationOwned`, `Activity`, `Elastic_UserOwned`, `Elastic_OrganizationOwned` |
-
-**Entity types:**
-
-| Type | Description |
+| Type | Purpose |
 |---|---|
-| `UserOwned` | Standard user-owned entity |
-| `OrganizationOwned` | Organization-owned entity |
-| `Activity` | Activity entity (user-owned, with notes and feedback) |
-| `Elastic_UserOwned` | Elastic (Cosmos DB) user-owned entity |
-| `Elastic_OrganizationOwned` | Elastic (Cosmos DB) organization-owned entity |
+| `UserOwned` | Standard user-owned Dataverse table. |
+| `OrganizationOwned` | Organization-owned Dataverse table. |
+| `Activity` | Activity table with activity-specific behavior. |
+| `Elastic_UserOwned` | Elastic user-owned table. |
+| `Elastic_OrganizationOwned` | Elastic organization-owned table. |
 
-## Related Packages
+## 🔗 Links
 
-| Package | Description |
-|---------|-------------|
-| [DynamicsCrm.DevKit.Cli](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli) | .NET global CLI tool for code generation and deployment |
-| [DynamicsCrm.DevKit.Analyzers](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers) | Roslyn analyzers for Dynamics 365 plugin development |
-
-## Links
-
-- [GitHub](https://github.com/phuocle/Dynamics-Crm-DevKit)
+- [Repository README](../../README.md)
+- [NuGet package](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
+- [CLI](../DynamicsCrm.DevKit.Cli/README.md)
+- [Visual Studio extension](../DynamicsCrm.DevKit/README.md)
+- [Analyzers](../DynamicsCrm.DevKit.Analyzers/README.md)
 - [Issues](https://github.com/phuocle/Dynamics-Crm-DevKit/issues)

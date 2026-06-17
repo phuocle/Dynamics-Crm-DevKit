@@ -73,48 +73,52 @@ Upload and download Dataverse SSRS report definitions from the development proje
 
 ![Report Deployment](v5/images/report.gif)
 
-## 🧱 Visual Studio Templates
+## 🧱 Project Templates
 
-The Visual Studio extension packages 13 project templates and 16 item templates. Public template documentation is linked to the GitHub Wiki.
+The template names below match the display names shown by Visual Studio.
+
+| Visual Studio display name | Purpose | Wiki |
+|---|---|---|
+| 01. Shared Project | Shared Dataverse code, generated entity helpers, and reusable project items. | [Shared Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template) |
+| 02. Console Project | .NET Framework console utility project for Dataverse operations. | [Console Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template) |
+| 03. Console Core Project | .NET console utility project using `Microsoft.PowerPlatform.Dataverse.Client`. | [Console Core Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template) |
+| 04. Server Project | Plugins, workflows, custom actions, custom APIs, and data providers. | [Server Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template) |
+| 05. Package Project | Dataverse plugin package project with NuGet dependency support. | [Package Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template) |
+| 06. WebResource Project | JavaScript, HTML, CSS, image, resource, and helper web resources. | [WebResource Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template) |
+| 07. Shared Test Project | Shared test support project with Dataverse test helpers. | [Shared Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template) |
+| 08. ProxyTypes Project | Early-bound proxy type generation project. | [ProxyTypes Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template) |
+| 09. Test Project | Unit test project for Dataverse server-side code. | [Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template) |
+| 10. Ui Test Project | UI automation project using Dataverse UI test patterns. | [Ui Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template) |
+| 11. Solution Packager Project | Dataverse solution extract/pack automation. | [Solution Packager Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template) |
+| 12. Report Project | Dataverse SSRS report project. | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template) |
+| 13. WebResource TypeScript Project | TypeScript web resource project with generated typings and build output. | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
 
 Project template catalog: [Projects Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
 
-| Visual Studio display name | Wiki |
-|---|---|
-| 01. Shared Project | [Shared Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template) |
-| 02. Console Project | [Console Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template) |
-| 03. Console Core Project | [Console Core Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template) |
-| 04. Server Project | [Server Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template) |
-| 05. Package Project | [Package Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template) |
-| 06. WebResource Project | [WebResource Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template) |
-| 07. Shared Test Project | [Shared Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template) |
-| 08. ProxyTypes Project | [ProxyTypes Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template) |
-| 09. Test Project | [Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template) |
-| 10. Ui Test Project | [Ui Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template) |
-| 11. Solution Packager Project | [Solution Packager Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template) |
-| 12. Report Project | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template) |
-| 13. WebResource TypeScript Project | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
+## 🧩 Item Templates
+
+The item template names below match the display names shown by Visual Studio.
+
+| Visual Studio display name | Purpose | Wiki |
+|---|---|---|
+| 01. C# Late Bound Class | Late-bound Dataverse entity class scaffold. | [CSharp Late Bound Class Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template) |
+| 02. Javascript Form | JavaScript form script, typings, and form helper file. | [JavaScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template) |
+| 03. Javascript WebApi | JavaScript Web API script, typings, and Web API helper file. | [JavaScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template) |
+| 04. C# Plugin Class | Dataverse `IPlugin` class scaffold. | [CSharp Plugin Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template) |
+| 05. C# Custom Action Class | Custom action handler scaffold. | [CSharp Custom Action Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template) |
+| 06. C# Custom Api Class | Custom API handler scaffold. | [CSharp Custom Api Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template) |
+| 07. C# Workflow Class | Custom workflow activity scaffold. | [CSharp Workflow Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template) |
+| 08. C# Data Provider Class | Virtual table data provider operations: retrieve, retrieve multiple, create, update, delete. | [CSharp Data Provider Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template) |
+| 09. C# Test Class | Server-side unit test scaffold. | [CSharp Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template) |
+| 10. C# Ui Test Class | UI automation test scaffold. | [CSharp Ui Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template) |
+| 11. Resource String | Dataverse localization resource file. | [Resource String Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template) |
+| 12. DevKit files | DevKit support files, batch files, helpers, and managed identity setup files. | [Bat File Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Bat-File-Item-Template) |
+| 13. TypeScript Form | TypeScript form script with generated form typings. | [TypeScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Form-Item-Template) |
+| 14. TypeScript WebApi | TypeScript Web API script with typed interfaces. | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template) |
+| 15. TypeScript Dialog | TypeScript dialog script with typed dialog interfaces. | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template) |
+| 16. JavaScript Dialog | JavaScript dialog script with typed dialog interfaces. | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
 
 Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
-
-| Visual Studio display name | Wiki |
-|---|---|
-| 01. C# Late Bound Class | [CSharp Late Bound Class Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template) |
-| 02. Javascript Form | [JavaScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template) |
-| 03. Javascript WebApi | [JavaScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template) |
-| 04. C# Plugin Class | [CSharp Plugin Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template) |
-| 05. C# Custom Action Class | [CSharp Custom Action Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template) |
-| 06. C# Custom Api Class | [CSharp Custom Api Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template) |
-| 07. C# Workflow Class | [CSharp Workflow Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template) |
-| 08. C# Data Provider Class | [CSharp Data Provider Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template) |
-| 09. C# Test Class | [CSharp Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template) |
-| 10. C# Ui Test Class | [CSharp Ui Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template) |
-| 11. Resource String | [Resource String Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template) |
-| 12. DevKit files | [Bat File Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Bat-File-Item-Template) |
-| 13. TypeScript Form | [TypeScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Form-Item-Template) |
-| 14. TypeScript WebApi | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template) |
-| 15. TypeScript Dialog | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template) |
-| 16. JavaScript Dialog | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
 
 ## ⚙️ CLI
 
