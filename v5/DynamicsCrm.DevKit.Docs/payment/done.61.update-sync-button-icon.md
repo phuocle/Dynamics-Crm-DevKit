@@ -1,9 +1,0 @@
-- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.61.update-sync-button-icon.md`.
-- Prompt: Update the ribbon button with label "Sync Line Status" with the button image sync-line-status.svg
-- Tool call: mcp__devkit_codex__.manage_ribbon({"action":"buttons","entity_name":"Payment"})
-- Tool call: mcp__devkit_codex__.manage_ribbon({"action":"update","entity_name":"Payment","backup":true,"operations":"[{\"action\":\"update_button\",\"button_id\":\"devkit.xyz_payment.SyncLineStatus.Form.Button\",\"modern_image\":\"xyz_/button/sync-line-status.svg\"}]"})
-- Tool call: mcp__devkit_codex__.get_system_jobs({"record_id":"22a68909-9f51-f111-a824-0022480a530f"})
-- Tool call: mcp__devkit_codex__.get_system_jobs({"record_id":"22a68909-9f51-f111-a824-0022480a530f"})
-- Tool call: mcp__devkit_codex__.get_system_jobs({"record_id":"22a68909-9f51-f111-a824-0022480a530f"})
-- Tool call: mcp__devkit_codex__.manage_ribbon({"action":"detail","entity_name":"Payment"})
-- Result: Updated the Payment classic form ribbon button "Sync Line Status" (button id devkit.xyz_payment.SyncLineStatus.Form.Button) to use $webresource:xyz_/button/sync-line-status.svg for Image16by16, Image32by32, and ModernImage. PublishAllXml async operation 22a68909-9f51-f111-a824-0022480a530f completed successfully with status Succeeded; readback confirmed the image attributes in RibbonDiffXml.

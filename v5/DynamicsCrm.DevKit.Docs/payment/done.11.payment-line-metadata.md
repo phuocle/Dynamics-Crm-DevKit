@@ -1,5 +1,0 @@
-- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.11.payment-line-metadata.md`.
-- Prompt: Check the metadata of the table with display name "Payment Line" just created: actual logical name, primary id field, primary name field, owner field, audit status.
-- Tool call: mcp__devkit_codex__.get_tables({"filter":"Payment Line"})
-- Tool call: mcp__devkit_codex__.get_tables({"entity_name":"xyz_paymentline"})
-- Result: Display name "Payment Line" resolves to logical name `xyz_paymentline`; primary id field `xyz_paymentlineid`; primary name field `xyz_name`; owner field `ownerid`; audit status enabled (`isAuditEnabled`: true).

@@ -1,5 +1,0 @@
-- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.53.check-webresources.md`.
-- Prompt: Check for any JavaScript web resources with names containing "paymentmcp" or "payment" to avoid duplicates.
-- Tool call: mcp__devkit_codex__.manage_webresource({"action":"list","name":"paymentmcp","type_filter":"js","max_records":500})
-- Tool call: mcp__devkit_codex__.manage_webresource({"action":"list","name":"payment","type_filter":"js","max_records":500})
-- Result: No JavaScript web resources were found with names containing "paymentmcp" or "payment". paymentmcp search returned {"action":"list","totalCount":0,"webResources":[]}. payment search returned {"action":"list","totalCount":0,"webResources":[]}.

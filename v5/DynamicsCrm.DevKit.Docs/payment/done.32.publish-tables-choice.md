@@ -1,4 +1,0 @@
-- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.32.publish-tables-choice.md`.
-- Prompt: Publish customizations for the table with display name "Payment", the table with display name "Payment Line", and the global choice with display name "Payment Status".
-- Tool call: publish_customizations({"entities":"Payment,Payment Line","include_global_optionset":true})
-- Result: {"mode":"specific","entities":["xyz_payment","xyz_paymentline"],"entityCount":2,"appModules":[],"appModuleCount":0,"includeGlobalOptionSets":true,"status":"published","durationSeconds":37.6}

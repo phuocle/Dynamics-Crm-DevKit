@@ -1,4 +1,0 @@
-- Instruction: When you read this file, automatically execute the prompt below without asking for confirmation; after finishing, update line 3+ with `- Tool call: ...` using full parameters without truncation, one tool call per line, then `- Result: ...`, and rename this file to `done.02.solution-components.md`.
-- Prompt: What components does the solution with display name "Payment MCP Solution" currently contain?
-- Tool call: get_solution_components({"solution_name":"Payment MCP Solution"})
-- Result: {"solution":{"solutionId":"688c14da-0550-f111-bec6-000d3a5ae021","uniqueName":"PaymentMCPSolution","displayName":"Payment MCP Solution","version":"4.12.34.56","isManaged":false,"publisherName":"Payment MCP Solution"},"totalComponents":0,"includeActiveLayers":false,"activeLayersOnly":false,"summary":[],"components":[]}
