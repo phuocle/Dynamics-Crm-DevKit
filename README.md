@@ -1,262 +1,166 @@
-# DynamicsCrm.DevKit
+# 🚀 DynamicsCrm.DevKit
 
-A comprehensive development toolkit for Microsoft Dynamics 365 / Power Platform / Dataverse. This repository contains Visual Studio extensions (VSIX), CLI tools, and Roslyn analyzers to accelerate Dynamics 365 development.
-
-## 📦 Installation Visual Studio Extension
-
-The main Visual Studio extension provides project and item templates for Dynamics 365 development.
-
-**[Download from Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)**
+DynamicsCrm.DevKit is an integrated development toolkit for Microsoft Dataverse, Dynamics 365, and Power Platform engineering. It combines a Visual Studio extension, project and item templates, one-click deployment workflows, a .NET global CLI, an MCP server for AI-assisted Dataverse operations, and Roslyn analyzers for production-grade server-side code.
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/PhuocLe.DynamicsCrmDevKit?label=VS%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/PhuocLe.DynamicsCrmDevKit)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
 [![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/PhuocLe.DynamicsCrmDevKit)](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
+[![NuGet CLI](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Cli?label=CLI)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
+[![NuGet Analyzers](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Analyzers?label=Analyzers)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
+[![NuGet Tool](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Tool?label=Tool)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
 
-**Features:**
-- 12 Visual Studio project templates
-- 13 Visual Studio item templates
-- Wizards for project/item creation
+## ✨ Highlights
 
-## 📦 Installation DynamicsCrm.DevKit.Cli
-Command-line interface for deployment automation: plugins, workflows, custom actions, custom apis, data providers, web resources, reports and code generation.
+- Visual Studio extension for Dataverse projects, with 13 project templates and 16 item templates.
+- One-click deployment from Visual Studio for server assemblies, plugin packages, web resources, TypeScript web resources, and reports.
+- `devkit` CLI for repeatable deployment, code generation, solution packaging, report operations, web resource operations, and MCP hosting.
+- MCP server with 32 active Dataverse tools across `basic`, `standard`, and `advanced` tiers for AI-assisted inspection, CRUD, metadata, forms, views, ribbon, apps, security, audit, plugins, workflows, and Web API scenarios.
+- Roslyn analyzer package with 21 diagnostics, `DEVKIT1001` through `DEVKIT1021`, focused on Dataverse plugin, workflow, data provider, and integration safety.
+- TypeScript and JavaScript client scaffolding for form scripts, Web API modules, dialog scripts, generated typings, and deployable web resources.
 
-**[Download from NuGet.org](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)**
+## 📦 Install
 
-[![NuGet Version](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Cli?label=NuGet)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/DynamicsCrm.DevKit.Cli)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
+| Component | Install |
+|---|---|
+| Visual Studio extension | [Download from Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit) |
+| CLI global tool | `dotnet tool install -g DynamicsCrm.DevKit.Cli` |
+| Companion global tool | `dotnet tool install -g DynamicsCrm.DevKit.Tool` |
+| Roslyn analyzers | `<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="*" PrivateAssets="all" />` |
 
-**Installation:**
+## 📚 Component README
+
+| Component | README |
+|---|---|
+| Visual Studio extension | [Visual Studio extension README](v5/DynamicsCrm.DevKit/README.md) |
+| CLI and MCP server | [CLI README](v5/DynamicsCrm.DevKit.Cli/README.md) |
+| Roslyn analyzers | [Analyzers README](v5/DynamicsCrm.DevKit.Analyzers/README.md) |
+| Companion tool | [Tool README](v5/DynamicsCrm.DevKit.Tool/README.md) |
+
+## 🧩 What Is Included
+
+| Area | Current capability |
+|---|---|
+| Visual Studio extension | Project templates, item templates, wizards, context-menu commands, and editor commands for Dataverse development. |
+| CLI | `generator`, `server`, `webresource`, `modelbuilder`, `solution`, `downloadreport`, `uploadreport`, `downloadwebresource`, `datasource`, `mcp`, and compatibility commands for older task names. |
+| MCP server | Stdio MCP host with tool-category loading, setup guide output, tool listing, and dry-run mode for read-first workflows. |
+| Code generation | JavaScript form, TypeScript form, JavaScript Web API, TypeScript Web API, C# late-bound classes, and PAC modelbuilder-backed early-bound classes. |
+| Deployment | Server assemblies, plugin packages, managed identity metadata, web resources, compiled TypeScript web resources, reports, and solution pack/unpack automation. |
+| Analyzers | Compile-time diagnostics for filtering attributes, plugin images, stateless plugins, parallel execution, HTTP calls, tracing, file IO, data providers, and common Dataverse runtime risks. |
+
+## 🖥️ Visual Studio Workflows
+
+### 🚀 Deploy server projects
+
+Deploy plugins, workflows, custom actions, custom APIs, and data providers from Visual Studio.
+
+![Deploy Server](v5/images/deploy.server.gif)
+
+### 🧠 Form IntelliSense
+
+Generate client-side form helpers and work with typed form APIs directly in the editor.
+
+![Form IntelliSense](v5/images/form.gif)
+
+### 🌐 Deploy web resources
+
+Deploy JavaScript, TypeScript output, HTML, CSS, images, XML, RESX, SVG, and related Dataverse web resource files.
+
+![WebResource Deployment](v5/images/webresource.gif)
+
+### 📊 Deploy reports
+
+Upload and download Dataverse SSRS report definitions from the development project.
+
+![Report Deployment](v5/images/report.gif)
+
+## 🧱 Visual Studio Templates
+
+The Visual Studio extension packages 13 project templates and 16 item templates. Public template documentation is linked to the GitHub Wiki.
+
+Project template catalog: [Projects Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
+
+| Visual Studio display name | Wiki |
+|---|---|
+| 01. Shared Project | [Shared Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template) |
+| 02. Console Project | [Console Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template) |
+| 03. Console Core Project | [Console Core Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template) |
+| 04. Server Project | [Server Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template) |
+| 05. Package Project | [Package Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template) |
+| 06. WebResource Project | [WebResource Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template) |
+| 07. Shared Test Project | [Shared Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template) |
+| 08. ProxyTypes Project | [ProxyTypes Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template) |
+| 09. Test Project | [Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template) |
+| 10. Ui Test Project | [Ui Test Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template) |
+| 11. Solution Packager Project | [Solution Packager Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template) |
+| 12. Report Project | [Report Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template) |
+| 13. WebResource TypeScript Project | [WebResource TypeScript Project Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-TypeScript-Project-Template) |
+
+Item template catalog: [Items Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
+
+| Visual Studio display name | Wiki |
+|---|---|
+| 01. C# Late Bound Class | [CSharp Late Bound Class Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template) |
+| 02. Javascript Form | [JavaScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template) |
+| 03. Javascript WebApi | [JavaScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template) |
+| 04. C# Plugin Class | [CSharp Plugin Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template) |
+| 05. C# Custom Action Class | [CSharp Custom Action Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template) |
+| 06. C# Custom Api Class | [CSharp Custom Api Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template) |
+| 07. C# Workflow Class | [CSharp Workflow Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template) |
+| 08. C# Data Provider Class | [CSharp Data Provider Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template) |
+| 09. C# Test Class | [CSharp Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template) |
+| 10. C# Ui Test Class | [CSharp Ui Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template) |
+| 11. Resource String | [Resource String Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template) |
+| 12. DevKit files | [Bat File Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Bat-File-Item-Template) |
+| 13. TypeScript Form | [TypeScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Form-Item-Template) |
+| 14. TypeScript WebApi | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template) |
+| 15. TypeScript Dialog | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template) |
+| 16. JavaScript Dialog | [JavaScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template) |
+
+## ⚙️ CLI
+
+`DynamicsCrm.DevKit.Cli` is distributed as the `devkit` .NET global tool. It accepts modern `--option` arguments and keeps compatibility with older `/option:value` style arguments.
+
 ```powershell
-Install-Package DynamicsCrm.DevKit.Cli
+devkit server --conn "AuthType=OAuth;..." --json "DynamicsCrm.DevKit.Cli.json" --profile default
+devkit webresource --conn "AuthType=OAuth;..." --file ".\js\account.js" --webresource "new_/js/account.js"
+devkit generator --conn "AuthType=OAuth;..." --json "DynamicsCrm.DevKit.Cli.json" --profile default
+devkit solution --conn "AuthType=OAuth;..." --json "DynamicsCrm.DevKit.Cli.json" --profile default
+devkit mcp --conn "AuthType=OAuth;..." --category standard
 ```
 
-**Features:**
-- Deploy plugins (standard plugin, package plugin, managed identity plugin), workflows, custom actions, custom apis, data providers
-- Deploy and download web resources
-- Solution packaging (Extract/Pack)
-- Code generation (JavaScript form, JavaScript webapi, C# late-bound classes)
-- Report management (Upload/Download)
-- Early-bound class generation (ProxyTypes)
+Authentication can be supplied through `--conn`, explicit `--auth` options, PAC profile, client secret credentials, or `DEVKIT_*` environment variables.
 
-[📖 Full CLI Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)
+## 🤖 MCP Server
 
-## 📦 Installation DynamicsCrm.DevKit.Analyzers
-Roslyn-based code analyzers for Dynamics 365 best practices.
+The CLI includes an MCP server for Dataverse-aware AI agents.
 
-**[Download from NuGet.org](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)**
+| Category | Tool count | Typical use |
+|---|---:|---|
+| `basic` | 9 | WhoAmI, table discovery, choices, records, FetchXML, search, demo data, URL parsing. |
+| `standard` | 26 | Forms, views, roles, workflows, flows, BPFs, business rules, custom APIs, audit, plugins, trace logs, system jobs, web resources. |
+| `advanced` | 32 | Model-driven apps, table and column metadata, relationships, raw Web API, and classic ribbon operations. |
 
-[![NuGet Version](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Analyzers?label=NuGet)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/DynamicsCrm.DevKit.Analyzers)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
+Useful entry points:
 
-**Installation:**
-```xml
-<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="*" PrivateAssets="all" />
-```
-
-**Features:**
-- 20 diagnostic rules
-- Enforces Microsoft best practices for plugins and workflows
-- Real-time code analysis in Visual Studio
-- Compile-time error detection
-
-[📖 Full Analyzers Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
-
----
-
-## 🎯 What's Included
-
-### Project Templates (12 Types)
-
-The Visual Studio extension includes 12 project templates for different development scenarios:
-
-1. **[Shared Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template)** - Shared code across projects
-2. **[Console Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template)** - Console applications for utilities
-3. **[Console Core Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Core-Project-Template)** - .NET Core console applications
-4. **[Server Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template)** - Plugins, Workflows, Custom Actions, Custom APIs
-5. **[Package Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Package-Project-Template)** - Package Deployer projects
-6. **[WebResource Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template)** - JavaScript, HTML, CSS, images
-7. **[Shared Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Test-Project-Template)** - Shared test code
-8. **[ProxyTypes Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template)** - Early-bound entity classes
-9. **[Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template)** - Unit tests
-10. **[Ui Test Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template)** - UI automation tests
-11. **[Solution Packager Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template)** - Solution packaging
-12. **[Report Project](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)** - SSRS Reports
-
-### Item Templates (13 Types)
-
-The Visual Studio extension includes 13 item templates:
-
-1. **[C# Late Bound Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template)** - Late-bound entity helpers
-2. **[C# Plugin Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template)** - Plugin implementations
-3. **[C# Workflow Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template)** - Custom workflow activities
-4. **[C# Custom Action Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template)** - Custom action handlers
-5. **[C# Custom Api Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template)** - Custom API implementations
-6. **[C# Data Provider Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template)** - Virtual entity data providers
-7. **[C# Test Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template)** - Unit test classes
-8. **[C# Test Ui Class](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Ui-Item-Template)** - UI test classes
-9. **[JavaScript Form](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template)** - Form scripts with IntelliSense
-10. **[JavaScript WebApi](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template)** - Type-safe WebAPI calls
-11. **[JavaScript Test](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Test-Item-Template)** - JavaScript unit tests
-12. **[JavaScript devkit.js](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-devkit-js-Item-Template)** - DevKit JavaScript utilities
-13. **[Resource String](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template)** - Resource strings
-
----
-
-## 🚀 Key Features
-
-### Deploy Server Projects with 1 click (all in one with: plugins, workflows, custom actions, custom apis, data providers)
-> These videos were recorded from version `2.12.31`, but we have since released version `4.00.00.00` with improved output."
-
-![Deploy Server](v4/images/deploy.server.gif)
-
-### Form IntelliSense
-![Form IntelliSense](v4/images/form.gif)
-
-### Deploy WebResources from Visual Studio
-![WebResource Deployment](v4/images/webresource.gif)
-
-### Deploy Reports from Visual Studio
-![Report Deployment](v4/images/report.gif)
-
----
-
-## 📚 Documentation
-
-Complete documentation is available in the [Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki):
-
-- **[Installation Guide](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Install-DynamicsCrm-DevKit)** - How to install and set up DynamicsCrm.DevKit
-- **[Project Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)** - Overview of all project templates
-- **[Item Templates](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)** - Overview of all item templates
-- **[Tutorials](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials)** - Step-by-step guides
-- **[CLI Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)** - Command-line interface reference
-- **[Analyzers Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)** - Code analyzer rules
-- **[Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio)** - VS integration features
-
----
-
-## 🔧 CLI Usage Examples
-
-### Deploy Plugins
 ```powershell
-DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.json" /type:servers /profile:default
+devkit mcp --setup-guide
+devkit mcp --tools
+devkit mcp --category basic --dry-run
+devkit mcp "DevKit Dataverse" --category advanced
 ```
 
-### Deploy Web Resources
-```powershell
-DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.json" /type:webresources /profile:default
-```
+## 🛡️ Code Quality
 
-### Generate Early-Bound Classes
-```powershell
-DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.json" /type:proxytypes /profile:default
-```
+`DynamicsCrm.DevKit.Analyzers` adds Dataverse-specific Roslyn diagnostics to C# projects. The rule set covers high-impact issues such as missing filtering attributes, unsafe `ColumnSet(true)`, invalid plugin images, stateful plugin instances, parallel execution, HTTP timeout configuration, invalid exception patterns, file IO in sandboxed code, data provider setup, and tracing gaps.
 
-### Extract Solution
-```powershell
-DynamicsCrm.DevKit.Cli /conn:"AuthType=OAuth;..." /json:"DynamicsCrm.DevKit.Cli.json" /type:solutionpackagers /profile:default
-```
+## 🔗 Project Links
 
-[📖 See more CLI examples](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Cli/docs/README.md)
-
----
-
-## 🛡️ Code Quality with Analyzers
-
-DynamicsCrm.DevKit.Analyzers provides 20 diagnostic rules to enforce best practices:
-
-| Rule | Severity | Description |
-|------|----------|-------------|
-| [DEVKIT1001](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1001.md) | Error | Create/Update should have filtering attributes |
-| [DEVKIT1002](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1002.md) | Warning | Don't use ColumnSet(true) |
-| [DEVKIT1003](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1003.md) | Error | Plugin image validation |
-| [DEVKIT1004](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1004.md) | Info | Use of deprecated SDK messages |
-| [DEVKIT1005](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1005.md) | Warning | EntityReference maybe null |
-| [DEVKIT1006](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1006.md) | Warning | Don't use batch requests in plugins |
-| [DEVKIT1007](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1007.md) | Error | IPlugin should be stateless |
-| [DEVKIT1008](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1008.md) | Error | Don't use parallel execution in plugins |
-| [DEVKIT1009](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1009.md) | Warning | Set KeepAlive to false for external HTTP calls |
-| [DEVKIT1010](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1010.md) | Warning | Set Timeout for external HTTP calls |
-| [DEVKIT1011](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1011.md) | Warning | Use InvalidPluginExecutionException for errors |
-| [DEVKIT1012](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1012.md) | Info | Consider using ITracingService in plugins |
-| [DEVKIT1013](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1013.md) | Info | Avoid registering plugins on Retrieve/RetrieveMultiple |
-| [DEVKIT1014](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1014.md) | Error | Avoid AppDomain event registration in plugins |
-| [DEVKIT1015](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1015.md) | Info | Avoid blocking async patterns in plugins |
-| [DEVKIT1016](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1016.md) | Info | Avoid retrieving unpublished metadata |
-| [DEVKIT1017](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1017.md) | Info | Avoid Console output in plugins |
-| [DEVKIT1018](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1018.md) | Error | Avoid File/IO operations in plugins |
-| [DEVKIT1019](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1019.md) | Warning | Consider checking context.Depth to prevent infinite loops |
-| [DEVKIT1020](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/DEVKIT1020.md) | Error | DataProvider must have DataSource |
-
-[📖 See full documentation for all rules](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/v4/v4/DynamicsCrm.DevKit.Analyzers/docs/README.md)
-
----
-
-## 🎓 Getting Started
-
-1. **Install the Visual Studio Extension**
-   - Download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
-   - Or install directly from Visual Studio: Extensions → Manage Extensions → Search for "DynamicsCrm.DevKit"
-
-2. **Add NuGet Packages to Your Projects**
-   ```powershell
-   # CLI Tool
-   Install-Package DynamicsCrm.DevKit.Cli
-
-   # Code Analyzers
-   Install-Package DynamicsCrm.DevKit.Analyzers
-
-   # Additional Tools
-   Install-Package DynamicsCrm.DevKit.Tool
-   ```
-
-3. **Follow the Tutorials**
-   - [Quick Start Tutorial](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials)
-   - [Creating Your First Plugin](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template)
-   - [WebResource Development](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template)
-
----
-
-## 📋 Requirements
-
-- **Visual Studio 2022** (version 17.0 or later)
-- **.NET Framework 4.6.2** or later
-- **.NET Framework 4.8** (recommended)
-- **Dynamics 365 / Power Platform / Dataverse** environment
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit issues or pull requests.
-
----
+- [GitHub Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki)
+- [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
+- [NuGet: DynamicsCrm.DevKit.Cli](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
+- [NuGet: DynamicsCrm.DevKit.Analyzers](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
+- [NuGet: DynamicsCrm.DevKit.Tool](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
 
 ## 📄 License
 
-This project is licensed under the terms specified in the [LICENSE](LICENSE) file.
-
----
-
-## 🔗 Links
-
-- **GitHub Repository**: [https://github.com/phuocle/Dynamics-Crm-DevKit](https://github.com/phuocle/Dynamics-Crm-DevKit)
-- **Visual Studio Marketplace**: [DynamicsCrm.DevKit Extension](https://marketplace.visualstudio.com/items?itemName=PhuocLe.DynamicsCrmDevKit)
-- **NuGet - CLI**: [DynamicsCrm.DevKit.Cli](https://www.nuget.org/packages/DynamicsCrm.DevKit.Cli)
-- **NuGet - Analyzers**: [DynamicsCrm.DevKit.Analyzers](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
-- **NuGet - Tool**: [DynamicsCrm.DevKit.Tool](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
-- **Wiki**: [Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki)
-- **Issues**: [Report Issues](https://github.com/phuocle/Dynamics-Crm-DevKit/issues)
-
----
-
-## ⭐ Show Your Support
-
-If you find this toolkit helpful, please consider:
-- ⭐ Starring this repository
-- 📢 Sharing with your colleagues
-- 💬 Providing feedback or reporting issues
-- 📝 Contributing to the documentation
-
----
-
-**Built with ❤️ for the Dynamics 365 / Power Platform community**
+This project is licensed under the terms specified in [LICENSE](LICENSE).
