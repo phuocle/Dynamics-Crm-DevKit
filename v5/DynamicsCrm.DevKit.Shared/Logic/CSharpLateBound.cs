@@ -848,20 +848,66 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             if (string.IsNullOrWhiteSpace(formula)) return string.Empty;
 
             var normalized = NormalizeFormulaDefinition(formula);
-            const string logicalAndPlaceholder = "__DEVKIT_POWERFX_LOGICAL_AND__";
-            normalized = normalized.Replace("&&", logicalAndPlaceholder);
-            normalized = normalized.Replace(">=", " >= ");
-            normalized = normalized.Replace("<=", " <= ");
-            normalized = normalized.Replace("<>", " <> ");
-            normalized = Regex.Replace(normalized, @"(?<![<>=])=(?![=])", " = ");
-            normalized = Regex.Replace(normalized, @"(?<![<>=])>(?![=])", " > ");
-            normalized = Regex.Replace(normalized, @"(?<![<>=])<(?![=>])", " < ");
-            normalized = Regex.Replace(normalized, @"(?<!&)&(?!&)", " & ");
-            normalized = normalized.Replace(logicalAndPlaceholder, " && ");
-            normalized = Regex.Replace(normalized, @"&\s+&", "&&");
+            normalized = FormatPowerFxOutsideStrings(normalized);
             normalized = Regex.Replace(normalized, @",(?=\S)", ", ");
             normalized = Regex.Replace(normalized, @"\s+", " ");
             return normalized.Trim();
+        }
+
+        private static string FormatPowerFxOutsideStrings(string formula)
+        {
+            var parts = new List<string>();
+            var start = 0;
+            var inString = false;
+            for (var i = 0; i < formula.Length; i++)
+            {
+                if (formula[i] != '"') continue;
+
+                if (inString)
+                {
+                    i = ReadPowerFxStringEnd(formula, i);
+                    parts.Add(formula.Substring(start, i - start + 1));
+                    start = i + 1;
+                    inString = false;
+                }
+                else
+                {
+                    if (i > start) parts.Add(FormatPowerFxOperators(formula.Substring(start, i - start)));
+                    start = i;
+                    inString = true;
+                }
+            }
+
+            if (start < formula.Length)
+            {
+                var tail = formula.Substring(start);
+                parts.Add(inString ? tail : FormatPowerFxOperators(tail));
+            }
+
+            return string.Concat(parts);
+        }
+
+        private static int ReadPowerFxStringEnd(string formula, int quoteIndex)
+        {
+            while (quoteIndex + 1 < formula.Length && formula[quoteIndex + 1] == '"')
+                quoteIndex += 2;
+            return quoteIndex;
+        }
+
+        private static string FormatPowerFxOperators(string text)
+        {
+            const string logicalAndPlaceholder = "__DEVKIT_POWERFX_LOGICAL_AND__";
+            text = text.Replace("&&", logicalAndPlaceholder);
+            text = text.Replace(">=", " >= ");
+            text = text.Replace("<=", " <= ");
+            text = text.Replace("<>", " <> ");
+            text = Regex.Replace(text, @"(?<![<>=])=(?![=])", " = ");
+            text = Regex.Replace(text, @"(?<![<>=])>(?![=])", " > ");
+            text = Regex.Replace(text, @"(?<![<>=])<(?![=>])", " < ");
+            text = Regex.Replace(text, @"(?<!&)&(?!&)", " & ");
+            text = text.Replace(logicalAndPlaceholder, " && ");
+            text = Regex.Replace(text, @"&\s+&", "&&");
+            return text;
         }
 
         private static string ParseFormulaXml(string xml, int sourceType)
