@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>14. TypeScript Form</Name>
+		<Name>13. TypeScript Form</Name>
 		<Description>Generates a Dynamics 365 TypeScript form scaffold for early-bound style form coding. Includes .form.ts file with typed interfaces.</Description>
 		<DefaultName>TypeScript.form.ts</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000014</TemplateID>
@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>240</SortOrder>
+		<SortOrder>230</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.form.ts">TypeScript.form.ts</ProjectItem>

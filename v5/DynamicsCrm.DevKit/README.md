@@ -52,12 +52,11 @@ Visual Studio extension (VSIX) for Microsoft Dynamics 365 / Power Platform / Dat
 | 09 | Test | Unit test class |
 | 10 | UiTest | UI test class |
 | 11 | ResourceString | Resource string file |
-| 12 | JsDevkit | DevKit JavaScript helper |
-| 13 | BatFile | Batch file for CLI commands |
-| 14 | TsForm | TypeScript form script |
-| 15 | TsWebApi | TypeScript WebAPI script |
-| 16 | TsDialog | TypeScript dialog script |
-| 17 | JsDialog | JavaScript dialog script |
+| 12 | BatFile / JsDevkit | Batch files for CLI commands and DevKit JavaScript helper |
+| 13 | TsForm | TypeScript form script |
+| 14 | TsWebApi | TypeScript WebAPI script |
+| 15 | TsDialog | TypeScript dialog script |
+| 16 | JsDialog | JavaScript dialog script |
 
 ## Requirements
 

@@ -50,10 +50,6 @@
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />
     </Project>
-    <Project Path="ItemTemplates/CSharp/12.JsDevkitItemTemplate/12.JsDevkitItemTemplate.csproj" Id="ccbd1381-e6a6-4a57-9853-e93a27a33f12">
-      <Platform Solution="*|arm64" Project="arm64" />
-      <Platform Solution="*|x86" Project="x86" />
-    </Project>
     <Project Path="ItemTemplates/CSharp/13.BatFileItemTemplate/13.BatFileItemTemplate.csproj" Id="99dd3cae-6d04-4bda-bb2d-c4d7b28ca1e0">
       <Platform Solution="*|arm64" Project="arm64" />
       <Platform Solution="*|x86" Project="x86" />

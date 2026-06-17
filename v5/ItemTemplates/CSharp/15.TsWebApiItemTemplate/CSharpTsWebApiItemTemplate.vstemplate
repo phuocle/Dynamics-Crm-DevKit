@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>15. TypeScript WebApi</Name>
+		<Name>14. TypeScript WebApi</Name>
 		<Description>Generates a Dynamics 365 TypeScript webapi scaffold for early-bound style form coding. Includes .webapi.ts file with typed interfaces.</Description>
 		<DefaultName>TypeScript.webapi.ts</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000015</TemplateID>
@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>250</SortOrder>
+		<SortOrder>240</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$SchemaName$.webapi.ts">TypeScript.webapi.ts</ProjectItem>

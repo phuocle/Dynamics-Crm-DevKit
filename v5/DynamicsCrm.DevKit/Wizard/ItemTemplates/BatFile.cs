@@ -33,6 +33,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         }
 
         private bool IsPluginManagedIdentity { get; set; } = false;
+        private bool IsDevkitJs { get; set; } = false;
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
@@ -48,6 +49,13 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     replacementsDictionary.Add("$batfilename$", form.BatFileName);
                     switch (form.BatFileName)
                     {
+                        case "devkit.js":
+                            IsDevkitJs = true;
+                            var devkitJs = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.js");
+                            replacementsDictionary.Add("$devkit.js$", devkitJs);
+                            var devkitDts = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.d.ts");
+                            replacementsDictionary.Add("$devkit.d.ts$", devkitDts);
+                            break;
                         case "download.reports.bat":
                             var content = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
                             content = content.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
@@ -93,6 +101,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public bool ShouldAddProjectItem(string filePath)
         {
+            if (filePath == "batfile.bat") return !IsDevkitJs;
+            if (filePath == "devkit.js") return IsDevkitJs;
+            if (filePath == "devkit.d.ts") return IsDevkitJs;
             if (filePath == "Plugin-Managed-Identity-Config.json") return IsPluginManagedIdentity;
             if (filePath == "Plugin-Managed-Identity.md") return IsPluginManagedIdentity;
             return true;

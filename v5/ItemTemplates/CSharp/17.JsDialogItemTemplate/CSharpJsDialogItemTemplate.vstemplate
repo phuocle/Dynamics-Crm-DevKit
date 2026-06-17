@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>17. JavaScript Dialog</Name>
+		<Name>16. JavaScript Dialog</Name>
 		<Description>Generates a Dataverse JavaScript dialog scaffold with typed interfaces for dialog controls.</Description>
 		<DefaultName>JavaScript.dialog.js</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000017</TemplateID>
@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>270</SortOrder>
+		<SortOrder>260</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$DialogName$.js">JavaScript.js</ProjectItem>

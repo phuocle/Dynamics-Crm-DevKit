@@ -275,7 +275,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                     LabelClass.Visibility = System.Windows.Visibility.Collapsed;
                     TextboxClass.Visibility = System.Windows.Visibility.Collapsed;
-                    LabelEntity.Content = "Bat File";
+                    LabelEntity.Content = "File";
                     TemplatePanel.Visibility = System.Windows.Visibility.Hidden;
                 }
                 _ItemType = value;
@@ -496,6 +496,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 var items = new List<XrmEntity>()
                 {
+                    new XrmEntity { SchemaName = "devkit.js", LogicalName = "devkit.js" },
                     new XrmEntity { SchemaName = "download.reports.bat", LogicalName = "download.reports.bat" },
                     new XrmEntity { SchemaName = "upload.reports.bat", LogicalName = "upload.reports.bat" },
                     new XrmEntity { SchemaName = "download.webresources.bat", LogicalName = "download.webresources.bat" },

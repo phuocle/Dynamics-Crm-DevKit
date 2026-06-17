@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
 	<TemplateData>
-		<Name>16. TypeScript Dialog</Name>
+		<Name>15. TypeScript Dialog</Name>
 		<Description>Generates a Dataverse TypeScript dialog scaffold with typed interfaces for dialog controls.</Description>
 		<DefaultName>TypeScript.dialog.ts</DefaultName>
 		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000016</TemplateID>
@@ -11,7 +11,7 @@
 		<AppliesTo>CSharp</AppliesTo>
 		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
 		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-		<SortOrder>260</SortOrder>
+		<SortOrder>250</SortOrder>
 	</TemplateData>
 	<TemplateContent>
 		<ProjectItem ReplaceParameters="true" OpenInEditor="false" TargetFileName="$DialogName$.ts">TypeScript.ts</ProjectItem>
