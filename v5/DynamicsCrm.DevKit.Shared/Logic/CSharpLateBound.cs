@@ -168,12 +168,161 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return names;
         }
 
-        private static string GetGeneratorImageCode(string schemaName, string logicalName)
+        private static string XmlText(string value)
         {
+            return SecurityElement.Escape(value ?? string.Empty) ?? string.Empty;
+        }
+
+        private static string XmlCode(string value)
+        {
+            return $"<c>{XmlText(value)}</c>";
+        }
+
+        private static string XmlPara(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            return $"{TAB}{TAB}/// <para>{value}</para>{NEW_LINE}";
+        }
+
+        private static string XmlPara(string label, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            return $"{TAB}{TAB}/// <para><strong>{label}</strong>: {value}</para>{NEW_LINE}";
+        }
+
+        private static string TrimAndEscape(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            return XmlText(value.TrimNewLine());
+        }
+
+        private static string GetAccessSummary(AttributeMetadata attribute)
+        {
+            var canCreate = attribute.IsValidForCreate ?? false;
+            var canUpdate = attribute.IsValidForUpdate ?? false;
+            var canRead = attribute.IsValidForRead ?? true;
+            if (canCreate && canUpdate && canRead) return string.Empty;
+            if (!canCreate && !canUpdate && canRead) return "ReadOnly";
+
+            var parts = new List<string>();
+            if (!canCreate) parts.Add("Create: No");
+            if (!canUpdate) parts.Add("Update: No");
+            if (!canRead) parts.Add("Read: No");
+            return string.Join(", ", parts);
+        }
+
+        private static string GetRequiredLevelSummary(AttributeMetadata attribute)
+        {
+            var requiredLevel = attribute.RequiredLevel?.Value;
+            if (!requiredLevel.HasValue || requiredLevel.Value == AttributeRequiredLevel.None) return string.Empty;
+            return requiredLevel.Value.ToString();
+        }
+
+        private static string GetFieldSecuritySummary(AttributeMetadata attribute)
+        {
+            return attribute.IsSecured == true ? "Enabled" : string.Empty;
+        }
+
+        private static string GetAdvancedFindSummary(AttributeMetadata attribute)
+        {
+            return attribute.IsValidForAdvancedFind?.Value == false ? "Disabled" : string.Empty;
+        }
+
+        private static string GetAlternateKeySummary(AttributeMetadata attribute)
+        {
+            var keys = EntityMetadata?.Keys?
+                .Where(x => x.KeyAttributes != null && x.KeyAttributes.Any(y => y.Equals(attribute.LogicalName, StringComparison.OrdinalIgnoreCase)))
+                .OrderBy(x => x.SchemaName)
+                .Select(x => XmlCode(x.SchemaName))
+                .ToList();
+            if (keys == null || keys.Count == 0) return string.Empty;
+            return string.Join(", ", keys);
+        }
+
+        private static string GetGlobalChoiceSummary(AttributeMetadata attribute)
+        {
+            var enumAttribute = attribute as EnumAttributeMetadata;
+            if (enumAttribute?.OptionSet == null || enumAttribute.OptionSet.IsGlobal != true || string.IsNullOrWhiteSpace(enumAttribute.OptionSet.Name))
+                return string.Empty;
+            return XmlCode(enumAttribute.OptionSet.Name);
+        }
+
+        private static string GetAttributeIdentityXml(AttributeMetadata attribute)
+        {
+            var xml = string.Empty;
+            var displayName = attribute?.DisplayName?.UserLocalizedLabel?.Label;
+            xml += XmlPara("Display Name", TrimAndEscape(displayName));
+            xml += XmlPara("Logical Name", XmlText(attribute.LogicalName));
+            var description = attribute?.Description?.UserLocalizedLabel?.Label;
+            xml += XmlPara("Description", TrimAndEscape(description));
+            return xml;
+        }
+
+        private static string GetAttributeCodingMetadataXml(AttributeMetadata attribute)
+        {
+            var xml = string.Empty;
+            xml += XmlPara("Access", XmlText(GetAccessSummary(attribute)));
+            xml += XmlPara("Required Level", XmlText(GetRequiredLevelSummary(attribute)));
+            xml += XmlPara("Field Security", XmlText(GetFieldSecuritySummary(attribute)));
+            xml += XmlPara("Advanced Find", XmlText(GetAdvancedFindSummary(attribute)));
+            xml += XmlPara("Alternate Key", GetAlternateKeySummary(attribute));
+            return xml;
+        }
+
+        private static string GetLookupSummary(LookupAttributeMetadata lookup)
+        {
+            var label = "Lookup";
+            if (lookup.AttributeType == AttributeTypeCode.Owner)
+                label = "Owner";
+            else if (lookup.AttributeType == AttributeTypeCode.Customer)
+                label = "Customer";
+            else if (lookup.Targets != null && lookup.Targets.Length > 1)
+                label = "Polymorphic Lookup";
+
+            var summary = $"<strong>{label}</strong>";
+            var targets = lookup.Targets?
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .OrderBy(x => x)
+                .Select(XmlCode)
+                .ToList();
+            if (targets != null && targets.Count > 0)
+                summary += $": {string.Join(", ", targets)}";
+
+            var relationships = GetLookupRelationshipNames(lookup);
+            if (relationships.Count == 1)
+                summary += $" - <strong>Relationship</strong>: {relationships[0]}";
+            else if (relationships.Count > 1)
+                summary += $" - <strong>Relationships</strong>: {string.Join(", ", relationships)}";
+            return summary;
+        }
+
+        private static List<string> GetLookupRelationshipNames(LookupAttributeMetadata lookup)
+        {
+            var targets = new HashSet<string>(lookup.Targets ?? new string[0], StringComparer.OrdinalIgnoreCase);
+            return EntityMetadata?.ManyToOneRelationships?
+                .Where(x => x != null && x.ReferencingAttribute != null && x.ReferencingAttribute.Equals(lookup.LogicalName, StringComparison.OrdinalIgnoreCase))
+                .Where(x => targets.Count == 0 || string.IsNullOrWhiteSpace(x.ReferencedEntity) || targets.Contains(x.ReferencedEntity))
+                .Where(x => !string.IsNullOrWhiteSpace(x.SchemaName))
+                .OrderBy(x => x.SchemaName)
+                .Select(x => XmlCode(x.SchemaName))
+                .Distinct()
+                .ToList() ?? new List<string>();
+        }
+
+        private static string GetGeneratorImageCode(string schemaName, ImageAttributeMetadata image)
+        {
+            var logicalName = image.LogicalName;
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>Image</strong> - byte[] - Thumbnail image data</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
+            code += GetAttributeIdentityXml(image);
+            code += GetAttributeCodingMetadataXml(image);
+            code += $"{TAB}{TAB}/// <para><strong>Image Metadata</strong>: <strong>Primary Image</strong>: {(image.IsPrimaryImage == true ? "Yes" : "No")}";
+            if (image.MaxSizeInKB.HasValue)
+                code += $" - <strong>MaxSizeInKB</strong>: {image.MaxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB";
+            if (image.CanStoreFullImage.HasValue)
+                code += $" - <strong>CanStoreFullImage</strong>: {(image.CanStoreFullImage == true ? "Yes" : "No")}";
+            code += $"</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -182,7 +331,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - Relative URL for the image</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_url</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {XmlText(logicalName)}_url</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Source Field</strong>: {XmlCode(logicalName)}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -190,7 +340,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - long? - Timestamp of last image update</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_timestamp</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {XmlText(logicalName)}_timestamp</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Source Field</strong>: {XmlCode(logicalName)}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public long? {schemaName}Timestamp{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -198,6 +349,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>Download full-size image. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>File Attribute Name</strong>: {XmlCode(logicalName)}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -235,7 +387,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                 {
                     if (image.IsPrimaryImage ?? false)
                     {
-                        code += GetGeneratorImageCode("EntityImage", image.LogicalName);
+                        code += GetGeneratorImageCode("EntityImage", image);
                         existingNames.Add("EntityImage");
                         existingNames.Add("EntityImageUrl");
                         existingNames.Add("EntityImageTimestamp");
@@ -247,7 +399,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                         var safeName = attribute.SchemaName;
                         if (existingNames.Contains(safeName) || existingNames.Contains(safeName + "Url") || existingNames.Contains(safeName + "Timestamp"))
                             safeName = safeName + "_Image";
-                        code += GetGeneratorImageCode(safeName, attribute.LogicalName);
+                        code += GetGeneratorImageCode(safeName, image);
                         existingNames.Add(safeName);
                         existingNames.Add(safeName + "Url");
                         existingNames.Add(safeName + "Timestamp");
@@ -259,14 +411,16 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             return code;
         }
 
-        private static string GetGeneratorFileCode(string safeName, string logicalName, int? maxSizeInKB)
+        private static string GetGeneratorFileCode(string safeName, FileAttributeMetadata file)
         {
+            var logicalName = file.LogicalName;
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - Guid? - File Id. Check if file has been uploaded.</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}</para>{NEW_LINE}";
-            if (maxSizeInKB.HasValue)
-                code += $"{TAB}{TAB}/// <para><strong>File</strong> - <strong>MaxSize</strong>: {maxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
+            code += GetAttributeIdentityXml(file);
+            code += GetAttributeCodingMetadataXml(file);
+            if (file.MaxSizeInKB.HasValue)
+                code += $"{TAB}{TAB}/// <para><strong>File Metadata</strong>: <strong>MaxSizeInKB</strong>: {file.MaxSizeInKB.Value.ToString("#,##0", CultureInfo.InvariantCulture)} KB</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public Guid? {safeName}Id{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -274,7 +428,8 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para><strong>ReadOnly</strong> - string - File name of the uploaded file</para>{NEW_LINE}";
-            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {logicalName}_name</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {XmlText(logicalName)}_name</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>Source Field</strong>: {XmlCode(logicalName)}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public string {safeName}Name{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -282,6 +437,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             code += $"{TAB}{TAB}/// <para>Download file data. Requires <see cref=\"Microsoft.Xrm.Sdk.IOrganizationService\"/>.</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para><strong>File Attribute Name</strong>: {XmlCode(logicalName)}</para>{NEW_LINE}";
             code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {safeName}_Download(Microsoft.Xrm.Sdk.IOrganizationService service){NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
@@ -321,7 +477,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     var safeName = attribute.SchemaName;
                     if (existingNames.Contains(safeName + "Id") || existingNames.Contains(safeName + "Name"))
                         safeName = safeName + "_File";
-                    code += GetGeneratorFileCode(safeName, attribute.LogicalName, file.MaxSizeInKB);
+                    code += GetGeneratorFileCode(safeName, file);
                     existingNames.Add(safeName + "Id");
                     existingNames.Add(safeName + "Name");
                     existingNames.Add(safeName + "_Download");
@@ -353,7 +509,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
                     foreach (var value in values)
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {value.Label?.TrimEnd("\r\n".ToCharArray())}</para>{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {TrimAndEscape(value.Label)}</para>{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// <para><strong>Value</strong>: {int.Parse(value.Value).ToString("#,##0")}</para>{NEW_LINE}";
                         if (value.Name3.Length > 0)
                         {
@@ -1198,20 +1354,13 @@ namespace DynamicsCrm.DevKit.Shared.Logic
 
         private static string GetXml(AttributeMetadata attribute)
         {
-            var line1 = string.Empty;
-            var line2 = string.Empty;
             var line3 = string.Empty;
             var line4 = string.Empty;
-            var readOnly = string.Empty;
-            if (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false))
-                readOnly = "<strong>ReadOnly</strong>";
-            if (readOnly.Length > 0) line3 += readOnly + " - ";
             if (attribute.IsPrimaryId ?? false)
                 if ($"{EntityMetadata.LogicalName}id" == attribute.LogicalName)
                     line3 += "<strong>Primary Key</strong>: ";
             if (attribute.IsPrimaryName ?? false)
                 line3 += "<strong>Primary Name</strong>: ";
-            if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired) line3 += "Required - ";
             if (attribute is DateTimeAttributeMetadata datetime)
             {
                 line3 += "<strong>Date and Time</strong> - ";
@@ -1296,33 +1445,20 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             }
             else if (attribute is LookupAttributeMetadata lookup)
             {
-                if (attribute.AttributeType == AttributeTypeCode.Owner)
-                    line3 += $"<strong>Owner</strong>: ";
-                else if (attribute.AttributeType == AttributeTypeCode.Customer)
-                    line3 += $"<strong>Customer</strong>: ";
-                else if (lookup.Targets != null && lookup.Targets.Length > 1)
-                    line3 += $"<strong>Polymorphic Lookup</strong>: ";
-                else
-                    line3 += $"<strong>Lookup</strong>: ";
-                if (lookup.Targets != null)
-                {
-                    foreach (var target in lookup.Targets)
-                    {
-                        line3 += $"<see cref=\"{target}\"/>, ";
-                    }
-                    line3 = line3.TrimEnd(", ".ToCharArray());
-                }
+                line3 += GetLookupSummary(lookup);
             }
             else if (attribute is BooleanAttributeMetadata boolean)
             {
-                var temp = $"[<strong>{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}</strong>]: true - [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
+                var trueLabel = XmlText(boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label);
+                var falseLabel = XmlText(boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label);
+                var temp = $"[<strong>{trueLabel}</strong>]: true - [<strong>{falseLabel}</strong>]: false";
                 line3 += $"<strong>Two Option</strong> - " + temp;
                 if (boolean.DefaultValue != null)
                 {
                     if (boolean.DefaultValue ?? false)
-                        line4 = $"<strong>Default Value</strong> [<strong>{boolean?.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label}</strong>]: true";
+                        line4 = $"<strong>Default Value</strong> [<strong>{trueLabel}</strong>]: true";
                     else
-                        line4 = $"<strong>Default Value</strong> [<strong>{boolean?.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label}</strong>]: false";
+                        line4 = $"<strong>Default Value</strong> [<strong>{falseLabel}</strong>]: false";
                 }
             }
             else if (attribute is DoubleAttributeMetadata @double)
@@ -1339,7 +1475,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 line3 += "<strong>Whole Number</strong>";
                 if (integer.Format.HasValue && integer.Format.Value != IntegerFormat.None)
-                    line3 += $" - <strong>Format</strong>: {integer.Format.Value}";
+                    line3 += $" - <strong>Format</strong>: {XmlText(integer.Format.Value.ToString())}";
             }
             else if (attribute is MoneyAttributeMetadata money)
             {
@@ -1364,49 +1500,40 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             {
                 line3 += "<strong>Multiple Lines of Text</strong>";
                 if (memo.FormatName?.Value != null && memo.FormatName.Value != "TextArea")
-                    line3 += $" - <strong>Format</strong>: {memo.FormatName.Value}";
+                    line3 += $" - <strong>Format</strong>: {XmlText(memo.FormatName.Value)}";
             }
             else if (attribute is StringAttributeMetadata str)
             {
                 line3 += "<strong>Single Line of Text</strong>";
                 if (str.FormatName?.Value != null && str.FormatName.Value != "Text")
-                    line3 += $" - <strong>Format</strong>: {str.FormatName.Value}";
+                    line3 += $" - <strong>Format</strong>: {XmlText(str.FormatName.Value)}";
             }
             else
-                line3 += "<strong>" + attribute.AttributeType.ToString() + "</strong>";
+                line3 += "<strong>" + XmlText(attribute.AttributeType.ToString()) + "</strong>";
             if (attribute.GetMaxLength().HasValue) line3 += " - <strong>MaxLength</strong>: " + attribute.GetMaxLength().Value.ToString("#,##0", CultureInfo.InvariantCulture);
             if (attribute.GetMinValue().HasValue) line3 += " - <strong>MinValue</strong>: " + attribute.GetMinValue().Value.ToString("#,##0", CultureInfo.InvariantCulture);
             if (attribute.GetMaxValue().HasValue) line3 += " - <strong>MaxValue</strong>: " + attribute.GetMaxValue().Value.ToString("#,##0", CultureInfo.InvariantCulture);
-            if (!string.IsNullOrWhiteSpace(attribute.AutoNumberFormat)) line3 += $" - <strong>AutoNumber</strong>: {attribute.AutoNumberFormat}";
+            if (!string.IsNullOrWhiteSpace(attribute.AutoNumberFormat)) line3 += $" - <strong>AutoNumber</strong>: {XmlText(attribute.AutoNumberFormat)}";
             if (attribute.IsAuditEnabled?.Value == true) line3 += " - <strong>Audit</strong>: Enabled";
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-            line1 = attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine();
-            if (line1 != null && line1.Length > 0)
-            {
-                xml += $"{TAB}{TAB}/// <para><strong>Display Name</strong>: {line1}</para>{NEW_LINE}";
-            }
-            xml += $"{TAB}{TAB}/// <para><strong>Logical Name</strong>: {attribute.LogicalName}</para>{NEW_LINE}";
-            var description = attribute?.Description?.UserLocalizedLabel?.Label;
-            if (!string.IsNullOrWhiteSpace(description))
-            {
-                line2 = SecurityElement.Escape(description.TrimNewLine());
-                xml += $"{TAB}{TAB}/// <para><strong>Description</strong>: {line2}</para>{NEW_LINE}";
-            }
-            xml += $"{TAB}{TAB}/// <para>{line3}</para>{NEW_LINE}";
+            xml += GetAttributeIdentityXml(attribute);
+            xml += GetAttributeCodingMetadataXml(attribute);
+            xml += XmlPara(line3);
+            xml += XmlPara("Global Choice Logical Name", GetGlobalChoiceSummary(attribute));
             if (attribute.SourceType != null && attribute.SourceType != 0)
             {
                 if (attribute.SourceType == 1) line4 = "<strong>Calculated Field</strong>";
                 else if (attribute.SourceType == 2) line4 = "<strong>Rollup Field</strong>";
                 else if (attribute.SourceType == 3) line4 = "<strong>Power-Fx Field</strong>";
-                xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
+                xml += XmlPara(line4);
                 xml += GetFormulaDefinitionXml(attribute);
             }
             else if (attribute.SchemaName.EndsWith("_rollup_Date") || attribute.SchemaName.EndsWith("_rollup_State")) {
                 line4 = "<strong>Rollup Field</strong>";
-                xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
+                xml += XmlPara(line4);
             }
             else if (line4.Length > 0) {
-                xml += $"{TAB}{TAB}/// <para>{line4}</para>{NEW_LINE}";
+                xml += XmlPara(line4);
             }
             xml += $"{TAB}{TAB}/// </summary>\r\n";
             return xml;
