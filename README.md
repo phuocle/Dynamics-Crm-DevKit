@@ -9,7 +9,7 @@ DynamicsCrm.DevKit is an integrated development toolkit for Microsoft Dataverse,
 [![NuGet Analyzers](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Analyzers?label=Analyzers)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Analyzers)
 [![NuGet Tool](https://img.shields.io/nuget/v/DynamicsCrm.DevKit.Tool?label=Tool)](https://www.nuget.org/packages/DynamicsCrm.DevKit.Tool)
 
-## Current Release
+## 📌 Current Release
 
 - Version: `4.12.34.56`
 - Build: `xxxx.yy.zz HH.mm.ss`
