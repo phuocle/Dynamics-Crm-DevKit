@@ -259,13 +259,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                     LabelTestClassPreview.Visibility = System.Windows.Visibility.Visible;
-                    ComboBoxTestMode.DisplayMemberPath = "Name";
-                    ComboBoxTestMode.ItemsSource = new List<NameValue>
-                    {
-                        new NameValue { Name = "Basic Unit Test", Value = "Basic" },
-                        new NameValue { Name = "DevKit Plugin Guard Test", Value = "Guard" }
-                    };
-                    ComboBoxTestMode.SelectedIndex = 0;
                     UpdateTestClassPreview();
                 }
                 void ResourceStringItem()
@@ -461,6 +454,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             LockUi(true);
             var candidates = await PluginTestDiscovery.GetMissingGuardTestsAsync(TestProject);
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ComboBoxTestMode.DisplayMemberPath = "Name";
+            ComboBoxTestMode.ItemsSource = new List<NameValue>
+            {
+                new NameValue { Name = "Basic Unit Test", Value = "Basic" },
+                new NameValue { Name = "DevKit Plugin Guard Test", Value = "Guard" }
+            };
+            ComboBoxTestMode.SelectedIndex = 0;
             ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
             ComboBoxTestPlugin.ItemsSource = candidates;
             ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
