@@ -641,6 +641,7 @@ public class T4TemplateTests
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
         Assert.IsTrue(output.Contains("public class MyWorkflowTest"));
         Assert.IsTrue(output.Contains("ExecuteCodeActivity"));
+        Assert.IsFalse(output.Contains("???"));
     }
 
     [TestMethod]
@@ -652,6 +653,7 @@ public class T4TemplateTests
 
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
         Assert.IsTrue(output.Contains("public class PostAccountdev_MyActionTest"));
+        Assert.IsFalse(output.Contains("???"));
     }
 
     [TestMethod]
@@ -663,6 +665,7 @@ public class T4TemplateTests
 
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
         Assert.IsTrue(output.Contains("public class dev_MyApiTest"));
+        Assert.IsFalse(output.Contains("???"));
     }
 
     #endregion

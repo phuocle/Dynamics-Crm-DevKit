@@ -25,7 +25,7 @@ namespace <#=Context.PluginNameSpace#>
             //var pluginContext = _context.GetDefaultPluginContext();
             //pluginContext.SetXrmFakedContextPlugin(remote);
             ////run
-            //_context.ExecutePluginWith<???> (pluginContext);
+            //_context.ExecutePluginWith<YourCustomApi>(pluginContext);
             ////result
             Assert.IsTrue(true);
         }
