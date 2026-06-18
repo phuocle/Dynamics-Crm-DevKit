@@ -1,3 +1,11 @@
+```text
+  ____                              _           ____                  ____             _  ___ _ __     __   _
+ |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |\ \   / /__(_)_  __
+ | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __\ \ / / __| \ \/ /
+ | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ \ V /\__ \ |>  <
+ |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)_/ |___/_/_/\_\
+        |___/                  https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: xxxx.yy.zz HH.mm.ss
+```
 # 🧩 DynamicsCrm.DevKit Visual Studio Extension
 
 DynamicsCrm.DevKit Visual Studio Extension is the VSIX package for Dataverse, Dynamics 365, and Power Platform development inside Visual Studio. It provides project templates, item templates, guided wizards, and context-menu commands for generating, registering, and deploying Dataverse components without leaving the IDE.

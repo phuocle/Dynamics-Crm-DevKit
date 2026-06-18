@@ -63,6 +63,17 @@
     <Compile Remove="Lib\UnitTestEntity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="CoverageReport\**" />
+    <Compile Remove="TestResults\**" />
+    <EmbeddedResource Remove="CoverageReport\**" />
+    <EmbeddedResource Remove="TestResults\**" />
+    <None Remove="CoverageReport\**" />
+    <None Remove="TestResults\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="DynamicsCrm.DevKit.UnitTests.coverage" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Lib\UnitTestEntity.generated.cs" />
     <None Include="Lib\UnitTestEntity.cs" />
   </ItemGroup>

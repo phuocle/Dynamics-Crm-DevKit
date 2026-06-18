@@ -1,3 +1,11 @@
+```text
+  ____                              _           ____                  ____             _  ___ _   _____           _
+ |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_|_   _|__   ___ | |
+ | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __| | |/ _ \ / _ \| |
+ | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ _| | (_) | (_) | |
+ |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)_|\___/ \___/|_|
+        |___/                   https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: xxxx.yy.zz HH.mm.ss
+```
 # 🧰 DynamicsCrm.DevKit Tool
 
 DynamicsCrm.DevKit Tool is the `devkit-tool` .NET global tool for Dataverse documentation, server-code documentation, minification, coverage conversion, password decryption, entity scaffolding, and solution layer inspection.

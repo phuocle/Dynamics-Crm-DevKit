@@ -1,3 +1,11 @@
+```text
+  ____                              _           ____                  ____             _  ___ _        _                _
+ |  _ \ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \  _____   _| |/ (_) |_     / \   _ __   __ _| |_   _ _______ _ __ ___
+ | | | | | | | '_ \ / _` | '_ ` _ \| |/ __/ __| |   | '__| '_ ` _ \  | | | |/ _ \ \ / / ' /| | __|   / _ \ | '_ \ / _` | | | | |_  / _ \ '__/ __|
+ | |_| | |_| | | | | (_| | | | | | | | (__\__ \ |___| |  | | | | | |_| |_| |  __/\ V /| . \| | |_ _ / ___ \| | | | (_| | | |_| |/ /  __/ |  \__ \
+ |____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|___/\____|_|  |_| |_| |_(_)____/ \___| \_/ |_|\_\_|\__(_)_/   \_\_| |_|\__,_|_|\__, /___\___|_|  |___/
+        |___/                         https://github.com/phuocle/Dynamics-Crm-DevKit 4.12.34.56 Build: xxxx.yy.zz HH.mm.ss|___/
+```
 # 🛡️ DynamicsCrm.DevKit Analyzers
 
 DynamicsCrm.DevKit Analyzers is a Roslyn analyzer package for Dataverse, Dynamics 365, and Power Platform server-side code. It adds compile-time diagnostics for common plugin, workflow, data provider, HTTP, metadata, and sandbox risks before they become runtime failures.
