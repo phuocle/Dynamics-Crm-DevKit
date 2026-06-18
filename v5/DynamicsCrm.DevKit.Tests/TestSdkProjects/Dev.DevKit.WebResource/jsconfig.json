@@ -16,6 +16,7 @@
     },
     "include": [
         "entities/**/*",
+        "dialogs/**/*",
         "lib/**/*",
         "test/**/*"
     ],

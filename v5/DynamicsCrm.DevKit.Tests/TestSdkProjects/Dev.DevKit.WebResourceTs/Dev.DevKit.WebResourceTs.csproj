@@ -59,6 +59,9 @@
 		<None Include="entities\generator.webapi.bat" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Update="dialogs\pl_dataversedialogbuilder_demo.dialog.ts">
+	    <DependentUpon>pl_dataversedialogbuilder_demo.ts</DependentUpon>
+	  </None>
 	  <None Update="entities\Account.webapi.ts">
 	    <DependentUpon>Account.ts</DependentUpon>
 	  </None>
