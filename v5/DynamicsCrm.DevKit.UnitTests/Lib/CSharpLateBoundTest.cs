@@ -371,7 +371,7 @@ public class CSharpLateBoundTest
     [TestMethod]
     public void GetCsCode_RequiredField_HasRequiredComment()
     {
-        Assert.IsTrue(_generatedCode.Contains("Required - "));
+        Assert.IsTrue(_generatedCode.Contains("<strong>Required Level</strong>: ApplicationRequired"));
     }
 
     [TestMethod]
@@ -413,7 +413,7 @@ public class CSharpLateBoundTest
     [TestMethod]
     public void GetCsCode_SingleLookup_HasLookupComment()
     {
-        Assert.IsTrue(_generatedCode.Contains("<strong>Lookup</strong>: <see cref=\"contact\"/>"));
+        Assert.IsTrue(_generatedCode.Contains("<strong>Lookup</strong>: <c>contact</c>"));
     }
 
     [TestMethod]
@@ -633,7 +633,7 @@ public class CSharpLateBoundTest
     [TestMethod]
     public void GetCsCode_FileMaxSize_InComment()
     {
-        Assert.IsTrue(_generatedCode.Contains("<strong>MaxSize</strong>: 32,768 KB"));
+        Assert.IsTrue(_generatedCode.Contains("<strong>MaxSizeInKB</strong>: 32,768 KB"));
     }
 
     [TestMethod]
