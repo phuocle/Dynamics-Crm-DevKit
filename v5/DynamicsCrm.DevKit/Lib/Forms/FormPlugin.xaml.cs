@@ -1,4 +1,5 @@
 using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Services;
@@ -22,11 +23,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
+        private PluginTestCandidate SelectedTestPlugin => ComboBoxTestPlugin?.SelectedItem as PluginTestCandidate;
+        private bool IsGuardTestMode => ComboBoxTestMode?.SelectedItem is NameValue mode && mode.Value == "Guard";
         public string Class => GetClassBaseName(TextboxClass.Text);
         public string PluginSchemaName
         {
             get
             {
+                if (ItemType == ItemType.Test && SelectedTestPlugin != null) return SelectedTestPlugin.EntitySchemaName ?? string.Empty;
                 if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxEntity?.SelectedItem is XrmEntity entity)
                     return entity.SchemaName ?? string.Empty;
@@ -38,6 +42,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ItemType == ItemType.Test && SelectedTestPlugin != null) return SelectedTestPlugin.MessageName ?? string.Empty;
                 if (ComboBoxMessage.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxMessage?.SelectedItem is NameValue message)
                     return message.Name ?? string.Empty;
@@ -48,6 +53,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ItemType == ItemType.Test && SelectedTestPlugin != null) return SelectedTestPlugin.Stage ?? string.Empty;
                 if (ComboBoxStage.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxStage?.SelectedItem is NameValue stage)
                     return stage.Name ?? string.Empty;
@@ -58,6 +64,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ItemType == ItemType.Test && SelectedTestPlugin != null) return SelectedTestPlugin.ExecutionMode ?? string.Empty;
                 if (ComboBoxExecution.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 if (ComboBoxExecution?.SelectedItem is NameValue execution)
                     return execution.Name ?? string.Empty;
@@ -68,6 +75,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             get
             {
+                if (ItemType == ItemType.Test && SelectedTestPlugin != null) return SelectedTestPlugin.EntityLogicalName ?? string.Empty;
                 if (ComboBoxEntity.Visibility == System.Windows.Visibility.Collapsed) return string.Empty;
                 var selected = (XrmEntity)ComboBoxEntity.SelectedItem;
                 return selected.LogicalName ?? string.Empty;
@@ -117,6 +125,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string LanguageCode => PluginLogicalName;
         public string BatFileName => PluginLogicalName;
+        public string TestTargetFullClassName => ItemType == ItemType.Test && IsGuardTestMode ? SelectedTestPlugin?.FullClassName ?? string.Empty : string.Empty;
 
         public int PluginOrder
         {
@@ -236,6 +245,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template");
                     HELP.Inlines.Clear();
                     HELP.Inlines.Add("Test Item Template");
+                    LabelTestPlugin.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxTestPlugin.Visibility = System.Windows.Visibility.Visible;
+                    LabelTestMode.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxTestMode.Visibility = System.Windows.Visibility.Visible;
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
@@ -245,7 +258,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     LabelMessage.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxMessage.Visibility = System.Windows.Visibility.Collapsed;
                     LabelTestClassPreview.Visibility = System.Windows.Visibility.Visible;
+                    ComboBoxTestMode.DisplayMemberPath = "Name";
+                    ComboBoxTestMode.ItemsSource = new List<NameValue>
+                    {
+                        new NameValue { Name = "Basic Unit Test", Value = "Basic" },
+                        new NameValue { Name = "DevKit Plugin Guard Test", Value = "Guard" }
+                    };
+                    ComboBoxTestMode.SelectedIndex = 0;
                     UpdateTestClassPreview();
+                    _ = LoadPluginTestCandidatesAsync();
                 }
                 void ResourceStringItem()
                 {
@@ -400,6 +421,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         bool IsValid()
         {
+            if (ItemType == ItemType.Test && IsGuardTestMode && SelectedTestPlugin == null)
+            {
+                VS.MessageBox.ShowError("Please select Plugin");
+                return false;
+            }
             if (ComboBoxEntity.Visibility == System.Windows.Visibility.Visible && ComboBoxEntity.SelectedItem == null)
             {
                 VS.MessageBox.ShowError($"Please select {LabelEntity.Content}");
@@ -426,6 +452,32 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 return false;
             }
             return true;
+        }
+
+        private async Task LoadPluginTestCandidatesAsync()
+        {
+            if (ItemType != ItemType.Test) return;
+            LockUi(true);
+            var candidates = await PluginTestDiscovery.GetMissingGuardTestsAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
+            ComboBoxTestPlugin.ItemsSource = candidates;
+            ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
+            if (candidates.Count > 0)
+            {
+                ComboBoxTestMode.SelectedItem = ((IEnumerable<NameValue>)ComboBoxTestMode.ItemsSource).FirstOrDefault(x => x.Value == "Guard");
+                ApplySelectedTestPluginToForm();
+            }
+            LockUi(false);
+        }
+
+        private void ApplySelectedTestPluginToForm()
+        {
+            if (ItemType != ItemType.Test) return;
+            var plugin = SelectedTestPlugin;
+            if (plugin == null) return;
+            TextboxClass.Text = plugin.SuggestedTestClassBaseName;
+            UpdateTestClassPreview();
         }
 
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -647,6 +699,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void TextboxClass_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             UpdateTestClassPreview();
+        }
+
+        private void ComboBoxTestPlugin_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            ApplySelectedTestPluginToForm();
+        }
+
+        private void ComboBoxTestMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ItemType != ItemType.Test) return;
+            ComboBoxTestPlugin.IsEnabled = IsGuardTestMode;
         }
     }
 }

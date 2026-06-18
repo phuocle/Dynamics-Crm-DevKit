@@ -278,33 +278,26 @@ namespace Dev.DevKit.Test.Plugins.Task
   - Guard output fill đúng alias/constants/helper.
   - `Plugin.tt` có marker.
 
-Chưa làm trong V1 hiện tại:
+Đã làm thêm ở wizard:
 
-- Wizard chưa scan solution để liệt kê plugin chưa có unit test.
-- Wizard chưa parse marker/heuristic từ source plugin để tự fill `TestTargetFullClassName`.
-- Wizard chưa có UI chọn `Basic Unit Test` / `DevKit Plugin Guard Test`.
+- Test Item wizard scan solution để tìm plugin classes có `[CrmPluginRegistration]` và implement `IPlugin`.
+- Wizard hiển thị dropdown `Plugin` cho các plugin chưa có guard test generated theo pattern mới.
+- Wizard có dropdown `Test Mode`:
+  - `Basic Unit Test`
+  - `DevKit Plugin Guard Test`
+- Khi user chọn plugin:
+  - auto-fill test class base name từ plugin class.
+  - auto-fill `TestTargetFullClassName`.
+  - auto-fill `PluginStage`, `PluginMessage`, `EntityLogicalName`, `PluginExecution` từ registration.
+- Nếu có candidate plugin thiếu guard test, wizard tự chọn `DevKit Plugin Guard Test`.
+- Nếu không có candidate, wizard vẫn cho tạo `Basic Unit Test` compile-ready.
 
-Vì vậy ở trạng thái hiện tại:
+Giới hạn hiện tại:
 
-- Template không còn tạo file lỗi compile.
-- Guard mode đã sẵn sàng ở T4 layer khi wizard truyền đủ context.
-- Để user add item và auto-fill hết, bước tiếp theo là nâng wizard `Test` item để chọn target plugin và set `TestTargetFullClassName`.
-
-## Plan Tiếp Theo Cho Wizard Auto Fill
-
-1. Khi mở Test Item wizard, scan project/solution để tìm plugin classes.
-2. Với mỗi plugin class:
-   - đọc marker `DynamicsCrm.DevKit.Template`
-   - parse `[CrmPluginRegistration]`
-   - parse namespace/class full name
-   - xác định đã có test tương ứng hay chưa
-3. Hiển thị list plugin chưa có test.
-4. Khi user chọn plugin:
-   - auto-fill test class name
-   - auto-fill target plugin full name
-   - auto-fill stage/message/entity/execution từ registration
-5. Nếu marker là `Plugin.tt` và heuristic pass, chọn `DevKit Plugin Guard Test`.
-6. Nếu marker khác hoặc heuristic fail, chọn `Basic Unit Test`.
+- Scanner dùng parser text-based, chưa dùng Roslyn semantic model.
+- `EntitySchemaName` trong guard context hiện lấy bằng logical name nếu không có metadata entity schema từ Dataverse.
+- Dropdown đang ưu tiên "missing guard test" thay vì chỉ "missing any test"; test cũ có `ExecutePluginWith<Plugin>` nhưng chưa dùng `AssertInvalidPluginContext<TargetPlugin>` vẫn được xem là cần guard test mới.
+- User vẫn có thể sửa field `Class` để thêm hậu tố như `Error`, ví dụ tạo lại `PostTaskCreateAsynchronousErrorTest.cs`.
 
 ## Ghi Chú Về Delete Và Regenerate File Test
 

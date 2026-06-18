@@ -51,6 +51,7 @@ namespace DynamicsCrm.DevKit.Lib
                 EntitySetName = form.EntitySetName,
                 EntityTypeCode = form.EntityTypeCode,
                 IsCustomEntity = form.IsCustomEntity,
+                TestTargetFullClassName = form.TestTargetFullClassName,
             };
             return t4Context;
         }

@@ -95,6 +95,8 @@
     <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\PluginTestCandidate.cs" />
+    <Compile Include="Lib\PluginTestDiscovery.cs" />
     <Compile Include="Lib\Replacement.cs" />
     <Compile Include="Lib\SigningHelper.cs" />
     <Compile Include="Lib\T4Callback.cs" />
