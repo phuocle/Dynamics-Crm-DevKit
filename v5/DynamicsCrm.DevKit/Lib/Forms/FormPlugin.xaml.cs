@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string TAB = "\t";
         private const string NEW_LINE = "\r\n";
         public ServiceClient ServiceClient => CONNECTION.ServiceClient;
+        private EnvDTE.Project TestProject { get; }
         private MetadataService _metadataService;
         private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
@@ -335,9 +336,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string PluginNameSpace { get; set; }
 
-        public FormPlugin(ItemType itemType, string nameSpace)
+        public FormPlugin(ItemType itemType, string nameSpace, EnvDTE.Project testProject = null)
         {
             InitializeComponent();
+            TestProject = testProject;
             ItemType = itemType;
             PluginNameSpace = nameSpace;
             LoadComboBoxes();
@@ -458,7 +460,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType != ItemType.Test) return;
             LockUi(true);
-            var candidates = await PluginTestDiscovery.GetMissingGuardTestsAsync();
+            var candidates = await PluginTestDiscovery.GetMissingGuardTestsAsync(TestProject);
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
             ComboBoxTestPlugin.ItemsSource = candidates;

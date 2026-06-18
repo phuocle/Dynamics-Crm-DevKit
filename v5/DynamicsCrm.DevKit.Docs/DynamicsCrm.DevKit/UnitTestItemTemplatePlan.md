@@ -281,6 +281,7 @@ namespace Dev.DevKit.Test.Plugins.Task
 Đã làm thêm ở wizard:
 
 - Test Item wizard scan solution để tìm plugin classes có `[CrmPluginRegistration]` và implement `IPlugin`.
+- Scanner chỉ scan các project đang được Test project hiện tại reference bằng `<ProjectReference>`, không scan toàn bộ server project trong solution.
 - Wizard hiển thị dropdown `Plugin` cho các plugin chưa có guard test generated theo pattern mới.
 - Wizard có dropdown `Test Mode`:
   - `Basic Unit Test`
@@ -295,6 +296,7 @@ namespace Dev.DevKit.Test.Plugins.Task
 Giới hạn hiện tại:
 
 - Scanner dùng parser text-based, chưa dùng Roslyn semantic model.
+- Nếu Test project chưa reference server project chứa plugin, plugin đó không hiện trong dropdown; đây là hành vi đúng để tránh generate test không compile.
 - `EntitySchemaName` trong guard context hiện lấy bằng logical name nếu không có metadata entity schema từ Dataverse.
 - Dropdown đang ưu tiên "missing guard test" thay vì chỉ "missing any test"; test cũ có `ExecutePluginWith<Plugin>` nhưng chưa dùng `AssertInvalidPluginContext<TargetPlugin>` vẫn được xem là cần guard test mới.
 - User vẫn có thể sửa field `Class` để thêm hậu tố như `Error`, ví dụ tạo lại `PostTaskCreateAsynchronousErrorTest.cs`.

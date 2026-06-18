@@ -15,24 +15,26 @@ namespace DynamicsCrm.DevKit.Lib
         private static readonly Regex ClassRegex = new Regex(@"\bclass\s+(?<name>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<bases>[^{]+)", RegexOptions.Compiled);
         private static readonly Regex RegistrationRegex = new Regex(@"\[CrmPluginRegistration\((?<args>[\s\S]*?)\)\]", RegexOptions.Compiled);
 
-        internal static async Task<List<PluginTestCandidate>> GetMissingGuardTestsAsync()
+        internal static async Task<List<PluginTestCandidate>> GetMissingGuardTestsAsync(EnvDTE.Project testProject)
         {
             var solutionFolder = await VsixHelper.GetSolutionFolderAsync();
             if (string.IsNullOrWhiteSpace(solutionFolder) || !Directory.Exists(solutionFolder))
                 return new List<PluginTestCandidate>();
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var projects = await VS.Solutions.GetAllProjectsAsync(ProjectStateFilter.All);
-            var testProjectFolders = projects
-                .Where(project => project?.FullPath != null && project.Name != null && project.Name.EndsWith(".Test", StringComparison.OrdinalIgnoreCase))
-                .Select(project => Path.GetDirectoryName(project.FullPath))
+            var referencedProjectFolders = GetReferencedProjectFolders(testProject);
+            if (referencedProjectFolders.Count == 0)
+                return new List<PluginTestCandidate>();
+
+            var testProjectFolder = testProject?.FullName != null ? Path.GetDirectoryName(testProject.FullName) : null;
+            var testProjectFolders = new[] { testProjectFolder }
                 .Where(path => !string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
             return await Task.Run(() =>
             {
-                var sourceFiles = GetCSharpFiles(solutionFolder);
+                var sourceFiles = referencedProjectFolders.SelectMany(GetCSharpFiles).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
                 var plugins = sourceFiles
                     .SelectMany(ReadPluginCandidates)
                     .OrderBy(candidate => candidate.FullClassName)
@@ -43,6 +45,34 @@ namespace DynamicsCrm.DevKit.Lib
                     .Where(plugin => !HasGuardTest(plugin, testSources))
                     .ToList();
             });
+        }
+
+        private static List<string> GetReferencedProjectFolders(EnvDTE.Project testProject)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var folders = new List<string>();
+            var testProjectFile = testProject?.FullName;
+            if (string.IsNullOrWhiteSpace(testProjectFile) || !File.Exists(testProjectFile))
+                return folders;
+
+            var projectFolder = Path.GetDirectoryName(testProjectFile);
+            try
+            {
+                var content = File.ReadAllText(testProjectFile);
+                foreach (Match match in Regex.Matches(content, @"<ProjectReference\s+Include=""(?<include>[^""]+)""", RegexOptions.IgnoreCase))
+                {
+                    var include = match.Groups["include"].Value;
+                    var projectPath = Path.GetFullPath(Path.Combine(projectFolder, include));
+                    var referencedFolder = Path.GetDirectoryName(projectPath);
+                    if (!string.IsNullOrWhiteSpace(referencedFolder) && Directory.Exists(referencedFolder))
+                        folders.Add(referencedFolder);
+                }
+            }
+            catch
+            {
+            }
+
+            return folders.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
 
         private static IEnumerable<string> GetCSharpFiles(string solutionFolder)

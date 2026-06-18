@@ -36,7 +36,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var form = new FormPlugin(ItemType.Test, replacementsDictionary["$rootnamespace$"]);
+                var container = await VsixHelper.SelectedItem.GetProjectItemsContainerAsync();
+                var form = new FormPlugin(ItemType.Test, replacementsDictionary["$rootnamespace$"], container?.Project);
                 var ok = form.ShowModal() ?? false;
                 if (ok)
                 {
