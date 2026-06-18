@@ -15,7 +15,7 @@
                                           "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
                                           "DynamicsCrm.DevKit\\VSPackage.resx",
                                           "DynamicsCrm.DevKit\\source.extension.cs",
-                                          "README.md",
+                                          "..\\README.md",
                                           "ProjectTemplates\\CSharp\\01.SharedProjectTemplate\\README.md",
                                           "ProjectTemplates\\CSharp\\02.ConsoleProjectTemplate\\README.md",
                                           "ProjectTemplates\\CSharp\\03.ConsoleCoreProjectTemplate\\README.md",
