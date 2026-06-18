@@ -267,7 +267,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     };
                     ComboBoxTestMode.SelectedIndex = 0;
                     UpdateTestClassPreview();
-                    _ = LoadPluginTestCandidatesAsync();
                 }
                 void ResourceStringItem()
                 {
@@ -560,6 +559,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                 ComboBoxEntity.ItemsSource = items;
                 buttonOK.IsEnabled = items.Count > 0;
+            }
+            else if (ItemType == ItemType.Test)
+            {
+                _ = LoadPluginTestCandidatesAsync();
             }
         }
 
