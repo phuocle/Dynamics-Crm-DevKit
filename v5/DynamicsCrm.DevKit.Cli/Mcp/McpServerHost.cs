@@ -55,19 +55,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetPluginsTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
 
-            // advanced (6 additional tools)
+            // advanced (7 additional tools)
             [nameof(ManageAppTool)] = "advanced",
             [nameof(UpsertTableTool)] = "advanced",
             [nameof(UpsertColumnTool)] = "advanced",
             [nameof(UpsertRelationshipTool)] = "advanced",
             [nameof(ExecuteWebApiTool)] = "advanced",
             [nameof(ManageRibbonTool)] = "advanced",
+            [nameof(ManageCommandTool)] = "advanced",
         };
 
         // Tools permanently disabled (set = type names using nameof() for compile-time safety)
         internal static readonly HashSet<string> DisabledToolSet = new()
         {
-            nameof(ManageCommandTool),
         };
 
         // Maps disabled tool type name → associated resource names (Name from [McpServerResource(Name=...)])
