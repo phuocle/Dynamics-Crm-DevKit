@@ -12,7 +12,7 @@ DynamicsCrm.DevKit is an integrated development toolkit for Microsoft Dataverse,
 ## 📌 Current Release
 
 - Version: `4.12.34.56`
-- Build: `xxxx.yy.zz HH.mm.ss`
+- Build: `30.06.2026 23:59:59`
 
 ## ✨ Highlights
 
