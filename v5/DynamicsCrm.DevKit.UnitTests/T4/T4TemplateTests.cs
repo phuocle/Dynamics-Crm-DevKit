@@ -67,6 +67,17 @@ public class T4TemplateTests
     }
 
     [TestMethod]
+    public void PluginTt_ContainsTemplateMarker()
+    {
+        var ctx = CreatePluginContext();
+        var template = LoadTemplate("Plugin.tt");
+        var output = SimpleT4Processor.Process(template, ctx);
+
+        Assert.IsTrue(output.Contains("// DynamicsCrm.DevKit.Template: Plugin.tt"));
+        Assert.IsTrue(output.Contains("// DynamicsCrm.DevKit.TemplateVersion: 1"));
+    }
+
+    [TestMethod]
     public void PluginTt_UpdateMessage_ContainsTargetEntity()
     {
         var ctx = CreatePluginContext(message: "Update");
@@ -108,13 +119,14 @@ public class T4TemplateTests
     }
 
     [TestMethod]
-    public void PluginTt_OtherMessage_ContainsCommentedPlaceholder()
+    public void PluginTt_OtherMessage_ContainsCommentedInputSample()
     {
         var ctx = CreatePluginContext(message: "Assign", stage: "PostOperation");
         var template = LoadTemplate("Plugin.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
-        Assert.IsTrue(output.Contains("//var ??? = context.InputParameterOrDefault<???>(\"???\");"));
+        Assert.IsTrue(output.Contains("//var input = context.InputParameterOrDefault<Entity>(\"Target\");"));
+        Assert.IsFalse(output.Contains("???"));
     }
 
     [TestMethod]
@@ -577,6 +589,46 @@ public class T4TemplateTests
         Assert.IsTrue(output.Contains("public class PostAccountUpdateTest"));
         Assert.IsTrue(output.Contains("PostAccountUpdateTest_00"));
         Assert.IsTrue(output.Contains("PostAccountUpdateTest_01"));
+    }
+
+    [TestMethod]
+    public void TestPluginTt_BasicOutput_IsCompileReady()
+    {
+        var ctx = CreatePluginContext(className: "PostAccountUpdate");
+        var template = LoadTemplate("TestPlugin.tt");
+        var output = SimpleT4Processor.Process(template, ctx);
+
+        Assert.IsFalse(output.Contains("???"));
+        Assert.IsTrue(output.Contains("Assert.IsTrue(true);"));
+        Assert.IsFalse(output.Contains("ExecutePluginWith<???>"));
+        Assert.IsFalse(output.Contains("using TargetPlugin ="));
+    }
+
+    [TestMethod]
+    public void TestPluginTt_GuardOutput_FillsPluginRegistrationConstants()
+    {
+        var ctx = CreatePluginContext(
+            message: "Create",
+            stage: "PostOperation",
+            execution: "Asynchronous",
+            logicalName: "task",
+            schemaName: "Task",
+            ns: "Dev.DevKit.Test.Plugins.Task",
+            className: "PostTaskCreateAsynchronousError");
+        ctx.TestTargetFullClassName = "Dev.DevKit.Server.Plugins.Task.PostTaskCreateAsynchronous";
+
+        var template = LoadTemplate("TestPlugin.tt");
+        var output = SimpleT4Processor.Process(template, ctx);
+
+        Assert.IsFalse(output.Contains("???"));
+        Assert.IsTrue(output.Contains("using TargetPlugin = Dev.DevKit.Server.Plugins.Task.PostTaskCreateAsynchronous;"));
+        Assert.IsTrue(output.Contains("private const StageEnum PLUGIN_STAGE = StageEnum.PostOperation;"));
+        Assert.IsTrue(output.Contains("private const string PLUGIN_MESSAGE = \"Create\";"));
+        Assert.IsTrue(output.Contains("private const string PLUGIN_ENTITY_LOGICAL_NAME = \"task\";"));
+        Assert.IsTrue(output.Contains("private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;"));
+        Assert.IsTrue(output.Contains("AssertInvalidPluginContext<TargetPlugin>("));
+        Assert.IsTrue(output.Contains("CreateExecutablePluginContext("));
+        Assert.IsTrue(output.Contains("postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)"));
     }
 
     [TestMethod]

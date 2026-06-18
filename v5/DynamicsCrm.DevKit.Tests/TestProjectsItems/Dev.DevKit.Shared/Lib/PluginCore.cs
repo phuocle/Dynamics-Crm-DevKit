@@ -3,12 +3,6 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared
 {
-    internal enum ImageType
-    {
-        Pre,
-        Post
-    }
-
     internal enum ExecutionModeEnum
     {
         Synchronous = 0,

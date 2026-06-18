@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string PluginSharedNameSpace { get; set; }
         public string DataSource { get; set; }
         public string ProxyTypes { get; set; }
+        public string TestTargetFullClassName { get; set; }
 
         #region Entity Properties
 
@@ -36,6 +37,13 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string ClassWithOrder => PluginOrder != 1 ? $"{Class}{PluginOrder}" : Class ?? string.Empty;
         public string FullClassName => string.IsNullOrEmpty(PluginNameSpace) ? ClassWithOrder : $"{PluginNameSpace}.{ClassWithOrder}";
         public string RegistrationName => FullClassName;
+        public bool HasTestTarget => !string.IsNullOrWhiteSpace(TestTargetFullClassName);
+        public bool HasPluginTestGuardContext =>
+            HasTestTarget &&
+            !string.IsNullOrWhiteSpace(PluginStage) &&
+            !string.IsNullOrWhiteSpace(PluginMessage) &&
+            !string.IsNullOrWhiteSpace(EntityLogicalName) &&
+            !string.IsNullOrWhiteSpace(PluginExecution);
 
         #endregion
 

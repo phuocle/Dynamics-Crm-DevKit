@@ -47,7 +47,7 @@ namespace <#=Context.PluginNameSpace#>
 <#}else if(Context.IsDeleteMessage){#>
             var targetEntityReference = context.InputParameterOrDefault<EntityReference>("Target");
 <#}else{#>
-            //var ??? = context.InputParameterOrDefault<???>("???");
+            //var input = context.InputParameterOrDefault<Entity>("Target");
 <#}#>
 <#if(Context.HasPreImage){#>
             context.PreEntityImages.TryGetValue("PreImage", out Entity preEntity);

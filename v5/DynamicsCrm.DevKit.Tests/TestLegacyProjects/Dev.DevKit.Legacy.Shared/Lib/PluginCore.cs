@@ -1,14 +1,8 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 
 namespace Dev.DevKit.Legacy.Shared
 {
-    public enum ImageType
-    {
-        Pre,
-        Post
-    }
-
     public enum ExecutionModeEnum
     {
         Synchronous = 0,

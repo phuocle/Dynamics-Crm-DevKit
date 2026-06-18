@@ -4,7 +4,9 @@ using FakeXrmEasy.Abstractions.Middleware;
 using FakeXrmEasy.Middleware;
 using FakeXrmEasy.Middleware.Crud;
 using FakeXrmEasy.Middleware.Messages;
+using FakeXrmEasy.Plugins;
 using $ProjectProxyTypes$;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
@@ -97,6 +99,54 @@ namespace $NameSpace$
         protected void InitializeFromJsonFiles(params string[] filePaths)
         {
             Initialize(TestDataLoader.FromJsonFiles(filePaths));
+        }
+
+        protected XrmFakedPluginExecutionContext CreateValidPluginContext(StageEnum pluginStage, string pluginMessage, string entityLogicalName, ExecutionModeEnum executionMode)
+        {
+            var pluginContext = _context.GetDefaultPluginContext();
+            pluginContext.Stage = (int)pluginStage;
+            pluginContext.MessageName = pluginMessage;
+            pluginContext.PrimaryEntityName = entityLogicalName;
+            pluginContext.Mode = (int)executionMode;
+            return pluginContext;
+        }
+
+        protected XrmFakedPluginExecutionContext CreateExecutablePluginContext(
+            StageEnum pluginStage,
+            string pluginMessage,
+            string entityLogicalName,
+            ExecutionModeEnum executionMode,
+            object target = null,
+            Entity preImage = null,
+            Entity postImage = null,
+            string targetParameterName = "Target",
+            string preImageAlias = "PreImage",
+            string postImageAlias = "PostImage")
+        {
+            var pluginContext = CreateValidPluginContext(pluginStage, pluginMessage, entityLogicalName, executionMode);
+            if (target != null) pluginContext.InputParameters[targetParameterName] = target;
+            if (preImage != null) pluginContext.PreEntityImages[preImageAlias] = preImage;
+            if (postImage != null) pluginContext.PostEntityImages[postImageAlias] = postImage;
+            return pluginContext;
+        }
+
+        protected void AssertInvalidPluginContext<TPlugin>(
+            Action<XrmFakedPluginExecutionContext> changeContext,
+            string expectedMessage,
+            StageEnum pluginStage,
+            string pluginMessage,
+            string entityLogicalName,
+            ExecutionModeEnum executionMode)
+            where TPlugin : IPlugin, new()
+        {
+            var pluginContext = CreateValidPluginContext(pluginStage, pluginMessage, entityLogicalName, executionMode);
+            changeContext(pluginContext);
+
+            var exception = Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
+            {
+                _context.ExecutePluginWith<TPlugin>(pluginContext);
+            });
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
     }
 }

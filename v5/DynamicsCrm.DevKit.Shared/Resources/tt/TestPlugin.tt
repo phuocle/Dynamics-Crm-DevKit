@@ -1,55 +1,103 @@
-﻿using FakeXrmEasy.Plugins;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
-using System.Linq;
 using <#=Context.PluginSharedNameSpace#>;
 using <#=Context.PluginSharedNameSpace#>.Test;
-
+using FakeXrmEasy.Plugins;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+<#if(Context.HasPluginTestGuardContext){#>using TargetPlugin = <#=Context.TestTargetFullClassName#>;
+<#}#>
 namespace <#=Context.PluginNameSpace#>
 {
     [TestClass]
     public class <#=Context.Class#>Test : FakeXrmEasyTestBase
     {
-        private const StageEnum PLUGIN_STAGE = StageEnum.???;
-        private const string PLUGIN_MESSAGE = "???";
-        private const string PLUGIN_ENTITY_LOGICAL_NAME = "???";
-        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.???;
+<#if(Context.HasPluginTestGuardContext){#>
+        private const StageEnum PLUGIN_STAGE = StageEnum.<#=Context.PluginStage#>;
+        private const string PLUGIN_MESSAGE = "<#=Context.PluginMessage#>";
+        private const string PLUGIN_ENTITY_LOGICAL_NAME = "<#=Context.EntityLogicalName#>";
+        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.<#=Context.PluginExecution#>;
 
         [TestMethod]
         public void <#=Context.Class#>Test_00()
         {
-            var pluginContext = _context.GetDefaultPluginContext();
+            AssertInvalidPluginContext<TargetPlugin>(
+                pluginContext => pluginContext.Stage = -1,
+                $"Stage does not equals {PLUGIN_STAGE}",
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE);
 
-            Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
-            {
-                _context.ExecutePluginWith<???>(pluginContext);
-            }, $"Stage does not equals {PLUGIN_STAGE}");
+            AssertInvalidPluginContext<TargetPlugin>(
+                pluginContext => pluginContext.MessageName = string.Empty,
+                $"MessageName does not equals {PLUGIN_MESSAGE}",
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE);
 
-            pluginContext.Stage = (int)PLUGIN_STAGE;
-            pluginContext.MessageName = string.Empty;
-            Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
-            {
-                _context.ExecutePluginWith<???>(pluginContext);
-            }, $"MessageName does not equals {PLUGIN_MESSAGE}");
+            AssertInvalidPluginContext<TargetPlugin>(
+                pluginContext => pluginContext.PrimaryEntityName = string.Empty,
+                $"PrimaryEntityName does not equals {PLUGIN_ENTITY_LOGICAL_NAME}",
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE);
 
-            pluginContext.MessageName = PLUGIN_MESSAGE;
-            pluginContext.PrimaryEntityName = string.Empty;
-            Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
-            {
-                _context.ExecutePluginWith<???>(pluginContext);
-            }, $"PrimaryEntityName does not equals {PLUGIN_ENTITY_LOGICAL_NAME}");
+            AssertInvalidPluginContext<TargetPlugin>(
+                pluginContext => pluginContext.Mode = -1,
+                $"Execution does not equals {PLUGIN_EXECUTION_MODE}",
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE);
 
-            pluginContext.PrimaryEntityName = PLUGIN_ENTITY_LOGICAL_NAME;
-            pluginContext.Mode = -1;
-            Assert.ThrowsExactly<InvalidPluginExecutionException>(() =>
-            {
-                _context.ExecutePluginWith<???>(pluginContext);
-            }, $"Execution does not equals {PLUGIN_EXECUTION_MODE}");
-
-            pluginContext.Mode = (int)PLUGIN_EXECUTION_MODE;
-            _context.ExecutePluginWith<???>(pluginContext);
+<#if(Context.IsCreateMessage || Context.IsUpdateMessage){#>
+            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE,
+                target: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#if(Context.HasPreImage){#>,
+                preImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#><#if(Context.HasPostImage){#>,
+                postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#>));
+<#}else if(Context.IsCreateMultipleMessage || Context.IsUpdateMultipleMessage){#>
+            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE,
+                targetParameterName: "Targets",
+                target: new EntityCollection
+                {
+                    EntityName = PLUGIN_ENTITY_LOGICAL_NAME,
+                    Entities = { new Entity(PLUGIN_ENTITY_LOGICAL_NAME) }
+                }<#if(Context.HasPreImage){#>,
+                preImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#><#if(Context.HasPostImage){#>,
+                postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#>));
+<#}else if(Context.IsDeleteMessage){#>
+            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE,
+                target: new EntityReference(PLUGIN_ENTITY_LOGICAL_NAME, System.Guid.NewGuid())<#if(Context.HasPreImage){#>,
+                preImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#><#if(Context.HasPostImage){#>,
+                postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#>));
+<#}else{#>
+            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
+                PLUGIN_STAGE,
+                PLUGIN_MESSAGE,
+                PLUGIN_ENTITY_LOGICAL_NAME,
+                PLUGIN_EXECUTION_MODE));
+<#}#>
+        }
+<#}else{#>
+        [TestMethod]
+        public void <#=Context.Class#>Test_00()
+        {
             Assert.IsTrue(true);
         }
+<#}#>
 
         [TestMethod]
         public void <#=Context.Class#>Test_01()
@@ -60,9 +108,14 @@ namespace <#=Context.PluginNameSpace#>
             //var pluginContext = _context.GetDefaultPluginContext();
             //pluginContext.SetXrmFakedContextPlugin(remote);
             ////run
-            //_context.ExecutePluginWith<???> (pluginContext);
+<#if(Context.HasPluginTestGuardContext){#>
+            //_context.ExecutePluginWith<TargetPlugin>(pluginContext);
+<#}else{#>
+            //_context.ExecutePluginWith<YourPlugin>(pluginContext);
+<#}#>
             ////result
             Assert.IsTrue(true);
         }
+
     }
 }
