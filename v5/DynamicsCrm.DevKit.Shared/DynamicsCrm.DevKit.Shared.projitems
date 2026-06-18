@@ -82,7 +82,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\CodeGenService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliArgsBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataverseNamer.cs" />
-
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.FromPac.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.DeviceCode.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\cs\consolecore\App.Interactive.cs" />
@@ -168,10 +167,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderRetrieve.tt" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderRetrieveMultiple.tt" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\DataProviderUpdate.tt" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestCustomAction.tt" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestCustomApi.tt" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestPlugin.tt" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\TestWorkflow.tt" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\Test.tt" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\UiTest.tt" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tt\Workflow.tt" />
   </ItemGroup>

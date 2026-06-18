@@ -236,11 +236,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             var selected = (CustomTemplate)ComboBoxTemplate.SelectedItem;
             Textbox.Text = Helper.Decompress(selected?.Body);
-            var isDefault = selected?.Title == "Default" ||
-                            selected?.Title == $"Default - {ItemType.CustomApi}" ||
-                            selected?.Title == $"Default - {ItemType.CustomAction}" ||
-                            selected?.Title == $"Default - {ItemType.Workflow}" ||
-                            selected?.Title == $"Default - {ItemType.Plugin}";
+            var isDefault = selected?.Title != null && Const.DEFAULTS.Contains(selected.Title);
             buttonDefault.IsEnabled = !isDefault;
             buttonSave.IsEnabled = !isDefault;
             buttonSaveAs.IsEnabled = true;

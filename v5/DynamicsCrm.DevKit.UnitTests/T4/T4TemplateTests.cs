@@ -579,10 +579,10 @@ public class T4TemplateTests
     #region Test templates
 
     [TestMethod]
-    public void TestPluginTt_ContainsFakeXrmEasy()
+    public void TestTt_ContainsFakeXrmEasy()
     {
         var ctx = CreatePluginContext(className: "PostAccountUpdate");
-        var template = LoadTemplate("TestPlugin.tt");
+        var template = LoadTemplate("Test.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
@@ -592,10 +592,10 @@ public class T4TemplateTests
     }
 
     [TestMethod]
-    public void TestPluginTt_BasicOutput_IsCompileReady()
+    public void TestTt_BasicOutput_IsCompileReady()
     {
         var ctx = CreatePluginContext(className: "PostAccountUpdate");
-        var template = LoadTemplate("TestPlugin.tt");
+        var template = LoadTemplate("Test.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
         Assert.IsFalse(output.Contains("???"));
@@ -605,7 +605,7 @@ public class T4TemplateTests
     }
 
     [TestMethod]
-    public void TestPluginTt_GuardOutput_FillsPluginRegistrationConstants()
+    public void TestTt_GuardOutput_FillsPluginRegistrationConstants()
     {
         var ctx = CreatePluginContext(
             message: "Create",
@@ -617,7 +617,7 @@ public class T4TemplateTests
             className: "PostTaskCreateAsynchronousError");
         ctx.TestTargetFullClassName = "Dev.DevKit.Server.Plugins.Task.PostTaskCreateAsynchronous";
 
-        var template = LoadTemplate("TestPlugin.tt");
+        var template = LoadTemplate("Test.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
         Assert.IsFalse(output.Contains("???"));
@@ -627,44 +627,48 @@ public class T4TemplateTests
         Assert.IsTrue(output.Contains("private const string PLUGIN_ENTITY_LOGICAL_NAME = \"task\";"));
         Assert.IsTrue(output.Contains("private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;"));
         Assert.IsTrue(output.Contains("AssertInvalidPluginContext<TargetPlugin>("));
-        Assert.IsTrue(output.Contains("CreateExecutablePluginContext("));
-        Assert.IsTrue(output.Contains("postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)"));
+        Assert.IsFalse(output.Contains("CreateExecutablePluginContext("));
     }
 
     [TestMethod]
-    public void TestWorkflowTt_ContainsFakeXrmEasy()
+    public void TestTt_WorkflowStyleBasicOutput_IsCompileReady()
     {
         var ctx = CreatePluginContext(className: "MyWorkflow");
-        var template = LoadTemplate("TestWorkflow.tt");
+        var template = LoadTemplate("Test.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
         Assert.IsTrue(output.Contains("public class MyWorkflowTest"));
-        Assert.IsTrue(output.Contains("ExecuteCodeActivity"));
+        Assert.IsTrue(output.Contains("Assert.IsTrue(true);"));
+        Assert.IsFalse(output.Contains("using TargetPlugin ="));
         Assert.IsFalse(output.Contains("???"));
     }
 
     [TestMethod]
-    public void TestCustomActionTt_ContainsFakeXrmEasy()
+    public void TestTt_CustomActionStyleBasicOutput_IsCompileReady()
     {
         var ctx = CreatePluginContext(className: "PostAccountdev_MyAction");
-        var template = LoadTemplate("TestCustomAction.tt");
+        var template = LoadTemplate("Test.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
         Assert.IsTrue(output.Contains("public class PostAccountdev_MyActionTest"));
+        Assert.IsTrue(output.Contains("Assert.IsTrue(true);"));
+        Assert.IsFalse(output.Contains("using TargetPlugin ="));
         Assert.IsFalse(output.Contains("???"));
     }
 
     [TestMethod]
-    public void TestCustomApiTt_ContainsFakeXrmEasy()
+    public void TestTt_CustomApiStyleBasicOutput_IsCompileReady()
     {
         var ctx = CreatePluginContext(className: "dev_MyApi");
-        var template = LoadTemplate("TestCustomApi.tt");
+        var template = LoadTemplate("Test.tt");
         var output = SimpleT4Processor.Process(template, ctx);
 
         Assert.IsTrue(output.Contains("FakeXrmEasyTestBase"));
         Assert.IsTrue(output.Contains("public class dev_MyApiTest"));
+        Assert.IsTrue(output.Contains("Assert.IsTrue(true);"));
+        Assert.IsFalse(output.Contains("using TargetPlugin ="));
         Assert.IsFalse(output.Contains("???"));
     }
 

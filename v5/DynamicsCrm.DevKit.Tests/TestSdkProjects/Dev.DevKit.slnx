@@ -5,6 +5,7 @@
   </Folder>
   <Project Path="Dev.DevKit.Console/Dev.DevKit.Console.csproj" />
   <Project Path="Dev.DevKit.ConsoleCore/Dev.DevKit.ConsoleCore.csproj" />
+  <Project Path="Dev.DevKit.Package.Test/Dev.DevKit.Package.Test.csproj" />
   <Project Path="Dev.DevKit.Package/Dev.DevKit.Package.csproj" />
   <Project Path="Dev.DevKit.ProxyTypes/Dev.DevKit.ProxyTypes.csproj" />
   <Project Path="Dev.DevKit.Report/Dev.DevKit.Report.rptproj">

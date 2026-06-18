@@ -1,23 +1,23 @@
-﻿using FakeXrmEasy.Plugins;
+﻿using Dev.DevKit.Shared;
+using Dev.DevKit.Shared.Test;
+using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
-using System.Linq;
-using <#=Context.PluginSharedNameSpace#>;
-using <#=Context.PluginSharedNameSpace#>.Test;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.DevKit.Package.Test.CustomActions.Account
 {
     [TestClass]
-    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
+    public class PostAccountv4_AccountCustomActionSynchronousTest : FakeXrmEasyTestBase
     {
+
         [TestMethod]
-        public void <#=Context.Class#>Test_00()
+        public void PostAccountv4_AccountCustomActionSynchronousTest_00()
         {
             Assert.IsTrue(true);
         }
 
+
         [TestMethod]
-        public void <#=Context.Class#>Test_01()
+        public void PostAccountv4_AccountCustomActionSynchronousTest_01()
         {
             ////setup
             //var json = @"";
@@ -25,9 +25,12 @@ namespace <#=Context.PluginNameSpace#>
             //var pluginContext = _context.GetDefaultPluginContext();
             //pluginContext.SetXrmFakedContextPlugin(remote);
             ////run
-            //_context.ExecutePluginWith<YourCustomApi>(pluginContext);
+
+            //_context.ExecutePluginWith<YourPlugin>(pluginContext);
+
             ////result
             Assert.IsTrue(true);
         }
+
     }
 }

@@ -25,7 +25,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
         private PluginTestCandidate SelectedTestPlugin => ComboBoxTestPlugin?.SelectedItem as PluginTestCandidate;
-        private bool IsGuardTestMode => ComboBoxTestMode?.SelectedItem is NameValue mode && mode.Value == "Guard";
         public string Class => GetClassBaseName(TextboxClass.Text);
         public string PluginSchemaName
         {
@@ -126,7 +125,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public string LanguageCode => PluginLogicalName;
         public string BatFileName => PluginLogicalName;
-        public string TestTargetFullClassName => ItemType == ItemType.Test && IsGuardTestMode ? SelectedTestPlugin?.FullClassName ?? string.Empty : string.Empty;
+        public string TestTargetFullClassName => ItemType == ItemType.Test && SelectedTestPlugin?.SupportsGuardTest == true ? SelectedTestPlugin.FullClassName ?? string.Empty : string.Empty;
 
         public int PluginOrder
         {
@@ -248,8 +247,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     HELP.Inlines.Add("Test Item Template");
                     LabelTestPlugin.Visibility = System.Windows.Visibility.Visible;
                     ComboBoxTestPlugin.Visibility = System.Windows.Visibility.Visible;
-                    LabelTestMode.Visibility = System.Windows.Visibility.Visible;
-                    ComboBoxTestMode.Visibility = System.Windows.Visibility.Visible;
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;
@@ -415,7 +412,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         bool IsValid()
         {
-            if (ItemType == ItemType.Test && IsGuardTestMode && SelectedTestPlugin == null)
+            if (ItemType == ItemType.Test && ComboBoxTestPlugin.Items.Count > 0 && SelectedTestPlugin == null)
             {
                 VS.MessageBox.ShowError("Please select Plugin");
                 return false;
@@ -452,23 +449,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (ItemType != ItemType.Test) return;
             LockUi(true);
-            var candidates = await PluginTestDiscovery.GetMissingGuardTestsAsync(TestProject);
+            var candidates = await PluginTestDiscovery.GetTestCandidatesAsync(TestProject);
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            ComboBoxTestMode.DisplayMemberPath = "Name";
-            ComboBoxTestMode.ItemsSource = new List<NameValue>
-            {
-                new NameValue { Name = "Basic Unit Test", Value = "Basic" },
-                new NameValue { Name = "DevKit Plugin Guard Test", Value = "Guard" }
-            };
-            ComboBoxTestMode.SelectedIndex = 0;
             ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
             ComboBoxTestPlugin.ItemsSource = candidates;
             ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
-            if (candidates.Count > 0)
-            {
-                ComboBoxTestMode.SelectedItem = ((IEnumerable<NameValue>)ComboBoxTestMode.ItemsSource).FirstOrDefault(x => x.Value == "Guard");
-                ApplySelectedTestPluginToForm();
-            }
+            ApplySelectedTestPluginToForm();
             LockUi(false);
         }
 
@@ -709,12 +695,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void ComboBoxTestPlugin_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             ApplySelectedTestPluginToForm();
-        }
-
-        private void ComboBoxTestMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ItemType != ItemType.Test) return;
-            ComboBoxTestPlugin.IsEnabled = IsGuardTestMode;
         }
     }
 }

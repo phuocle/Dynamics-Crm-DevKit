@@ -15,6 +15,7 @@ namespace DynamicsCrm.DevKit.Lib
         public string Namespace { get; set; }
         public string SourceFile { get; set; }
         public string Stage { get; set; }
+        public bool SupportsGuardTest { get; set; }
 
         public string SuggestedTestClassBaseName => ClassName ?? string.Empty;
     }

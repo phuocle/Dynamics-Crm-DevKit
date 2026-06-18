@@ -610,10 +610,7 @@ namespace DynamicsCrm.DevKit.Lib
             }
             if (itemType == ItemType.Test)
             {
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomApi}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.CustomApi}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.CustomAction}", Body = await GetDefaultCustomTemplateBodyAsync(itemType,$"{ItemType.CustomAction}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Workflow}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.Workflow}"), IsDefault = false });
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = $"Default - {ItemType.Plugin}", Body = await GetDefaultCustomTemplateBodyAsync(itemType, $"{ItemType.Plugin}"), IsDefault = false });
+                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
             }            
             else
                 customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
@@ -631,16 +628,7 @@ namespace DynamicsCrm.DevKit.Lib
             else if (itemType == ItemType.CustomApi)
                 return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomApi.tt");
             else if (itemType == ItemType.Test)
-            {
-                if (subType == $"{ItemType.Plugin}")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestPlugin.tt");
-                else if (subType == $"{ItemType.Workflow}")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestWorkflow.tt");
-                else if (subType == $"{ItemType.CustomAction}")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomAction.tt");
-                else if (subType == $"{ItemType.CustomApi}")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.TestCustomApi.tt");
-            }
+                return await VsixHelper.ReadEmbeddedResourceAsync("tt.Test.tt");
             else if (itemType == ItemType.UiTest)
                 return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
             else if (itemType == ItemType.DataProvider)

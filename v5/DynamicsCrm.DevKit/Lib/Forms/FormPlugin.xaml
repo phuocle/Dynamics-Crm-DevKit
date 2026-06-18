@@ -50,8 +50,6 @@
                     </Grid.RowDefinitions>
                     <Label x:Name="LabelTestPlugin" Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Plugin" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxTestPlugin" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Visibility="Collapsed" IsEditable="False" SelectionChanged="ComboBoxTestPlugin_SelectionChanged" />
-                    <Label x:Name="LabelTestMode" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Test Mode" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox x:Name="ComboBoxTestMode" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" Visibility="Collapsed" IsEditable="False" SelectionChanged="ComboBoxTestMode_SelectionChanged" />
                     <Label x:Name="LabelEntity" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Entity" HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <ComboBox x:Name="ComboBoxEntity" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" VerticalContentAlignment="Center" IsEditable="False" SelectionChanged="ComboBoxEntity_SelectionChanged" />
                     <Label x:Name="LabelMessage" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Message" HorizontalAlignment="Left" VerticalAlignment="Center" />

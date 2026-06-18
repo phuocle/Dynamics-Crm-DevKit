@@ -2,7 +2,6 @@ using <#=Context.PluginSharedNameSpace#>;
 using <#=Context.PluginSharedNameSpace#>.Test;
 using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
 <#if(Context.HasPluginTestGuardContext){#>using TargetPlugin = <#=Context.TestTargetFullClassName#>;
 <#}#>
 namespace <#=Context.PluginNameSpace#>
@@ -50,46 +49,6 @@ namespace <#=Context.PluginNameSpace#>
                 PLUGIN_MESSAGE,
                 PLUGIN_ENTITY_LOGICAL_NAME,
                 PLUGIN_EXECUTION_MODE);
-
-<#if(Context.IsCreateMessage || Context.IsUpdateMessage){#>
-            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
-                PLUGIN_STAGE,
-                PLUGIN_MESSAGE,
-                PLUGIN_ENTITY_LOGICAL_NAME,
-                PLUGIN_EXECUTION_MODE,
-                target: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#if(Context.HasPreImage){#>,
-                preImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#><#if(Context.HasPostImage){#>,
-                postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#>));
-<#}else if(Context.IsCreateMultipleMessage || Context.IsUpdateMultipleMessage){#>
-            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
-                PLUGIN_STAGE,
-                PLUGIN_MESSAGE,
-                PLUGIN_ENTITY_LOGICAL_NAME,
-                PLUGIN_EXECUTION_MODE,
-                targetParameterName: "Targets",
-                target: new EntityCollection
-                {
-                    EntityName = PLUGIN_ENTITY_LOGICAL_NAME,
-                    Entities = { new Entity(PLUGIN_ENTITY_LOGICAL_NAME) }
-                }<#if(Context.HasPreImage){#>,
-                preImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#><#if(Context.HasPostImage){#>,
-                postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#>));
-<#}else if(Context.IsDeleteMessage){#>
-            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
-                PLUGIN_STAGE,
-                PLUGIN_MESSAGE,
-                PLUGIN_ENTITY_LOGICAL_NAME,
-                PLUGIN_EXECUTION_MODE,
-                target: new EntityReference(PLUGIN_ENTITY_LOGICAL_NAME, System.Guid.NewGuid())<#if(Context.HasPreImage){#>,
-                preImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#><#if(Context.HasPostImage){#>,
-                postImage: new Entity(PLUGIN_ENTITY_LOGICAL_NAME)<#}#>));
-<#}else{#>
-            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
-                PLUGIN_STAGE,
-                PLUGIN_MESSAGE,
-                PLUGIN_ENTITY_LOGICAL_NAME,
-                PLUGIN_EXECUTION_MODE));
-<#}#>
         }
 <#}else{#>
         [TestMethod]

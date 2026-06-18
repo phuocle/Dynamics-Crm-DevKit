@@ -1,22 +1,22 @@
-using <#=Context.PluginSharedNameSpace#>;
-using <#=Context.PluginSharedNameSpace#>.Test;
+﻿using Dev.DevKit.Shared;
+using Dev.DevKit.Shared.Test;
 using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-<#if(Context.HasPluginTestGuardContext){#>using TargetPlugin = <#=Context.TestTargetFullClassName#>;
-<#}#>
-namespace <#=Context.PluginNameSpace#>
+using TargetPlugin = Dev.DevKit.Server.Plugins.Task.PostTaskCreateAsynchronous;
+
+namespace Dev.DevKit.Test.Plugins.Task
 {
     [TestClass]
-    public class <#=Context.Class#>Test : FakeXrmEasyTestBase
+    public class PostTaskCreateAsynchronousTest : FakeXrmEasyTestBase
     {
-<#if(Context.HasPluginTestGuardContext){#>
-        private const StageEnum PLUGIN_STAGE = StageEnum.<#=Context.PluginStage#>;
-        private const string PLUGIN_MESSAGE = "<#=Context.PluginMessage#>";
-        private const string PLUGIN_ENTITY_LOGICAL_NAME = "<#=Context.EntityLogicalName#>";
-        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.<#=Context.PluginExecution#>;
+
+        private const StageEnum PLUGIN_STAGE = StageEnum.PostOperation;
+        private const string PLUGIN_MESSAGE = "Create";
+        private const string PLUGIN_ENTITY_LOGICAL_NAME = "task";
+        private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;
 
         [TestMethod]
-        public void <#=Context.Class#>Test_00()
+        public void PostTaskCreateAsynchronousTest_00()
         {
             AssertInvalidPluginContext<TargetPlugin>(
                 pluginContext => pluginContext.Stage = -1,
@@ -49,23 +49,11 @@ namespace <#=Context.PluginNameSpace#>
                 PLUGIN_MESSAGE,
                 PLUGIN_ENTITY_LOGICAL_NAME,
                 PLUGIN_EXECUTION_MODE);
+        }
 
-            _context.ExecutePluginWith<TargetPlugin>(CreateExecutablePluginContext(
-                PLUGIN_STAGE,
-                PLUGIN_MESSAGE,
-                PLUGIN_ENTITY_LOGICAL_NAME,
-                PLUGIN_EXECUTION_MODE));
-        }
-<#}else{#>
-        [TestMethod]
-        public void <#=Context.Class#>Test_00()
-        {
-            Assert.IsTrue(true);
-        }
-<#}#>
 
         [TestMethod]
-        public void <#=Context.Class#>Test_01()
+        public void PostTaskCreateAsynchronousTest_01()
         {
             ////setup
             //var json = @"";
@@ -73,11 +61,9 @@ namespace <#=Context.PluginNameSpace#>
             //var pluginContext = _context.GetDefaultPluginContext();
             //pluginContext.SetXrmFakedContextPlugin(remote);
             ////run
-<#if(Context.HasPluginTestGuardContext){#>
+
             //_context.ExecutePluginWith<TargetPlugin>(pluginContext);
-<#}else{#>
-            //_context.ExecutePluginWith<YourCustomAction>(pluginContext);
-<#}#>
+
             ////result
             Assert.IsTrue(true);
         }

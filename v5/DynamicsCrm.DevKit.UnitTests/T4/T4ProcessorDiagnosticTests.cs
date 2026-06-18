@@ -10,7 +10,7 @@ public class T4ProcessorDiagnosticTests
         "Plugin.tt", "Plugin.pac.tt",
         "CustomAction.tt", "CustomApi.tt",
         "Workflow.tt", "UiTest.tt",
-        "TestPlugin.tt", "TestWorkflow.tt", "TestCustomAction.tt", "TestCustomApi.tt",
+        "Test.tt",
         "DataProviderCreate.tt", "DataProviderDelete.tt",
         "DataProviderRetrieve.tt", "DataProviderRetrieveMultiple.tt", "DataProviderUpdate.tt",
     };
