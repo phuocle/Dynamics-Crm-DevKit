@@ -37,32 +37,35 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormPlugin(ItemType.ResourceString, replacementsDictionary["$rootnamespace$"]);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    replacementsDictionary.Add("$LanguageCode$", form.LanguageCode);
-                    replacementsDictionary.Add("$Class$", form.Class);
-                    replacementsDictionary.Add("$PluginOrder$", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                    Mouse.OverrideCursor = null;
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                    var form = new FormPlugin(ItemType.ResourceString, replacementsDictionary["$rootnamespace$"]);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var pluginOrder = form.PluginOrder;
+                        replacementsDictionary.Add("$LanguageCode$", form.LanguageCode);
+                        replacementsDictionary.Add("$Class$", form.Class);
+                        replacementsDictionary.Add("$PluginOrder$", pluginOrder == 1 ? string.Empty : $"{pluginOrder}");
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                        Mouse.OverrideCursor = null;
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
-
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            using (TraceShouldAddProjectItem(filePath))
+            {
+                return true;
+            }
         }
     }
 }

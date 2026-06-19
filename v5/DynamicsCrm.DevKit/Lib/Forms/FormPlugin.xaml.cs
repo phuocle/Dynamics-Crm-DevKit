@@ -5,6 +5,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -22,6 +23,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private EnvDTE.Project TestProject { get; }
         private MetadataService _metadataService;
         private MetadataService Metadata => _metadataService ??= new MetadataService(ServiceClient);
+        private static readonly ConcurrentDictionary<string, List<XrmEntity>> ProvisionedLanguagesCache = new ConcurrentDictionary<string, List<XrmEntity>>();
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
         private PluginTestCandidate SelectedTestPlugin => ComboBoxTestPlugin?.SelectedItem as PluginTestCandidate;
@@ -529,7 +531,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 {
                     ThreadHelper.JoinableTaskFactory.Run(async () =>
                     {
-                        var items = await Metadata.GetProvisionedLanguagesAsync();
+                        var cacheKey = ServiceClient?.ConnectedOrgUriActual?.ToString() ?? "default";
+                        if (!ProvisionedLanguagesCache.TryGetValue(cacheKey, out var items))
+                        {
+                            using (ItemTemplateTelemetry.Start(nameof(FormPlugin), _telemetryCorrelationId, "LoadProvisionedLanguages", $"cacheKey={cacheKey}"))
+                            {
+                                items = await Metadata.GetProvisionedLanguagesAsync();
+                                ProvisionedLanguagesCache[cacheKey] = items;
+                            }
+                        }
+                        else
+                        {
+                            ItemTemplateTelemetry.Log(nameof(FormPlugin), _telemetryCorrelationId, "LoadProvisionedLanguages", $"cacheHit cacheKey={cacheKey}; count={items.Count}");
+                        }
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         ComboBoxEntity.DisplayMemberPath = Const.SchemaName;
                         ComboBoxEntity.ItemsSource = items;
