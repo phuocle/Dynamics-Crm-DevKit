@@ -4,5 +4,6 @@
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
   <Project Path="Dev.DevKitV5.Console/Dev.DevKitV5.Console.csproj" />
+  <Project Path="Dev.DevKitV5.ConsoleCore/Dev.DevKitV5.ConsoleCore.csproj" />
   <Project Path="Dev.DevKitV5.Shared/Dev.DevKitV5.Shared.shproj" Id="bc6f8b5e-b31a-4994-9154-a256d09d0afb" />
 </Solution>
