@@ -42,7 +42,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void RunFinished()
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceRunFinished())
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 try
                 {
@@ -65,12 +67,15 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 {
                     await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 }
-            });
+                });
+            }
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceRunStarted())
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var form = new FormItem(ItemType.JsDialog);
                 var ok = form.ShowModal() ?? false;
@@ -103,7 +108,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 {
                     VsixHelper.ThrowWizardCancelledException();
                 }
-            });
+                });
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)

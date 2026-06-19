@@ -1,4 +1,4 @@
-﻿using Community.VisualStudio.Toolkit;
+using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
@@ -34,7 +34,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceRunStarted())
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 var form = new FormPlugin(ItemType.ResourceString, replacementsDictionary["$rootnamespace$"]);
                 var ok = form.ShowModal() ?? false;
@@ -53,7 +55,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 {
                     VsixHelper.ThrowWizardCancelledException();
                 }
-            });
+                });
+            }
 
         }
 

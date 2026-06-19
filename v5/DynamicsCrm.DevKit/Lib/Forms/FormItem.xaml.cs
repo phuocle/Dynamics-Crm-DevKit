@@ -17,6 +17,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         public SystemForm SelectedDialogForm { get; set; }
         public List<SystemForm> DialogForms { get; set; }
+        private readonly string _telemetryCorrelationId = ItemTemplateTelemetry.NewCorrelationId();
+        private readonly System.IDisposable _dialogTelemetryScope;
         public string ItemName
         {
             get
@@ -155,6 +157,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             InitializeComponent();
             ItemType = itemType;
+            _dialogTelemetryScope = ItemTemplateTelemetry.Start(nameof(FormItem), _telemetryCorrelationId, "DialogShown", $"itemType={itemType}");
         }
 
         public string TemplateTitle
@@ -167,6 +170,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            ItemTemplateTelemetry.Log(nameof(FormItem), _telemetryCorrelationId, "DialogCancel", $"itemType={ItemType}");
+            _dialogTelemetryScope?.Dispose();
             DialogResult = false;
         }
 
@@ -174,6 +179,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
+                ItemTemplateTelemetry.Log(nameof(FormItem), _telemetryCorrelationId, "DialogOK", $"itemType={ItemType}; itemName={ItemName}");
+                _dialogTelemetryScope?.Dispose();
                 DialogResult = true;
             }
             bool IsValid()

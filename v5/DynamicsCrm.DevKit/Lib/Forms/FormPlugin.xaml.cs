@@ -25,6 +25,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public CrmConnection CrmConnection => CONNECTION.CrmConnection;
         private List<CustomTemplate> CustomTemplates { get; set; } = new List<CustomTemplate>();
         private PluginTestCandidate SelectedTestPlugin => ComboBoxTestPlugin?.SelectedItem as PluginTestCandidate;
+        private readonly string _telemetryCorrelationId = ItemTemplateTelemetry.NewCorrelationId();
+        private readonly System.IDisposable _dialogTelemetryScope;
         public string Class => GetClassBaseName(TextboxClass.Text);
         public string PluginSchemaName
         {
@@ -331,6 +333,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             TestProject = testProject;
             ItemType = itemType;
             PluginNameSpace = nameSpace;
+            _dialogTelemetryScope = ItemTemplateTelemetry.Start(nameof(FormPlugin), _telemetryCorrelationId, "DialogShown", $"itemType={itemType}");
             LoadComboBoxes();
             _ = LoadCustomTemplatesAsync();
         }
@@ -387,6 +390,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            ItemTemplateTelemetry.Log(nameof(FormPlugin), _telemetryCorrelationId, "DialogCancel", $"itemType={ItemType}");
+            _dialogTelemetryScope?.Dispose();
             DialogResult = false;
         }
 
@@ -471,6 +476,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsValid())
             {
+                ItemTemplateTelemetry.Log(nameof(FormPlugin), _telemetryCorrelationId, "DialogOK", $"itemType={ItemType}; class={Class}; entity={PluginLogicalName}; message={PluginMessage}");
+                _dialogTelemetryScope?.Dispose();
                 DialogResult = true;
             }
         }

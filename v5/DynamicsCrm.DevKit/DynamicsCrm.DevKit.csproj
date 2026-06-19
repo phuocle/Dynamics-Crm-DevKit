@@ -95,6 +95,7 @@
     <Compile Include="Lib\Forms\FormWebResource.xaml.cs">
       <DependentUpon>FormWebResource.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\ItemTemplateTelemetry.cs" />
     <Compile Include="Lib\PluginTestCandidate.cs" />
     <Compile Include="Lib\PluginTestDiscovery.cs" />
     <Compile Include="Lib\Replacement.cs" />

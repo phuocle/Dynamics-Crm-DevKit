@@ -19,22 +19,47 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         protected ProjectItems TargetProjectItems { get; private set; }
         private readonly Dictionary<string, string> _targetFilePaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, ProjectItem> _generatedProjectItems = new Dictionary<string, ProjectItem>(StringComparer.OrdinalIgnoreCase);
+        private readonly string _telemetryCorrelationId = ItemTemplateTelemetry.NewCorrelationId();
+
+        protected IDisposable TraceRunStarted()
+        {
+            return Trace("RunStarted");
+        }
+
+        protected IDisposable TraceRunFinished()
+        {
+            return Trace("RunFinished");
+        }
+
+        protected IDisposable TraceShouldAddProjectItem(string templateFilePath)
+        {
+            return Trace("ShouldAddProjectItem", $"templateFile={templateFilePath}");
+        }
+
+        protected IDisposable Trace(string operation, string details = null)
+        {
+            return ItemTemplateTelemetry.Start(GetType().Name, _telemetryCorrelationId, operation, details);
+        }
 
         protected async Task<bool> ShouldAddProjectItemAsync(string templateFilePath, string targetFileName)
         {
-            if (string.IsNullOrWhiteSpace(TargetFolderPath) || TargetProjectItems == null)
+            using (Trace("ShouldAddProjectItemAsync", $"templateFile={templateFilePath}; targetFile={targetFileName}"))
             {
-                var container = await VsixHelper.SelectedItem.GetProjectItemsContainerAsync();
-                TargetFolderPath = container?.FolderPath;
-                TargetProjectItems = container?.ProjectItems;
-            }
+                if (string.IsNullOrWhiteSpace(TargetFolderPath) || TargetProjectItems == null)
+                {
+                    var container = await VsixHelper.SelectedItem.GetProjectItemsContainerAsync();
+                    TargetFolderPath = container?.FolderPath;
+                    TargetProjectItems = container?.ProjectItems;
+                }
 
-            FilePath = targetFileName;
-            FullFilePath = string.IsNullOrWhiteSpace(TargetFolderPath) ? targetFileName : Path.Combine(TargetFolderPath, targetFileName);
-            IsFilePathExist = File.Exists(FullFilePath);
-            _targetFilePaths[templateFilePath] = FullFilePath;
-            _targetFilePaths[targetFileName] = FullFilePath;
-            return !IsFilePathExist;
+                FilePath = targetFileName;
+                FullFilePath = string.IsNullOrWhiteSpace(TargetFolderPath) ? targetFileName : Path.Combine(TargetFolderPath, targetFileName);
+                IsFilePathExist = File.Exists(FullFilePath);
+                _targetFilePaths[templateFilePath] = FullFilePath;
+                _targetFilePaths[targetFileName] = FullFilePath;
+                ItemTemplateTelemetry.Log(GetType().Name, _telemetryCorrelationId, "ShouldAddProjectItemAsync", $"exists={IsFilePathExist}; fullPath={FullFilePath}");
+                return !IsFilePathExist;
+            }
         }
 
         protected string GetTargetFilePath(string targetFileName)
@@ -62,16 +87,27 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         protected async Task WriteTargetFileIfChangedAsync(string targetFileName, string content)
         {
-            var fullPath = GetTargetFilePath(targetFileName);
-            if (string.IsNullOrWhiteSpace(fullPath)) return;
-            var oldContent = File.Exists(fullPath) ? await FileHelper.ReadAllTextAsync(fullPath) : null;
-            if (string.Equals(oldContent, content, StringComparison.Ordinal)) return;
-            await FileHelper.ForceWriteAllTextAsync(fullPath, content);
+            using (Trace("WriteTargetFileIfChanged", $"targetFile={targetFileName}"))
+            {
+                var fullPath = GetTargetFilePath(targetFileName);
+                if (string.IsNullOrWhiteSpace(fullPath)) return;
+                var oldContent = File.Exists(fullPath) ? await FileHelper.ReadAllTextAsync(fullPath) : null;
+                if (string.Equals(oldContent, content, StringComparison.Ordinal))
+                {
+                    ItemTemplateTelemetry.Log(GetType().Name, _telemetryCorrelationId, "WriteTargetFileIfChanged", $"skipped unchanged; fullPath={fullPath}");
+                    return;
+                }
+                await FileHelper.ForceWriteAllTextAsync(fullPath, content);
+                ItemTemplateTelemetry.Log(GetType().Name, _telemetryCorrelationId, "WriteTargetFileIfChanged", $"written; fullPath={fullPath}");
+            }
         }
 
         protected async Task<ProjectItem> AddTargetFileToProjectAsync(string targetFileName)
         {
-            return await VsixHelper.TryAddProjectItemAsync(TargetProjectItems, GetTargetFilePath(targetFileName));
+            using (Trace("AddTargetFileToProject", $"targetFile={targetFileName}"))
+            {
+                return await VsixHelper.TryAddProjectItemAsync(TargetProjectItems, GetTargetFilePath(targetFileName));
+            }
         }
     }
 }

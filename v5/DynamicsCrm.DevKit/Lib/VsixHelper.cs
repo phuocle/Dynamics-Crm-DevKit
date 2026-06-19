@@ -475,14 +475,17 @@ namespace DynamicsCrm.DevKit.Lib
 
         internal static async Task<string> ReadEmbeddedResourceAsync(string path)
         {
-            try
+            using (ItemTemplateTelemetry.Start("VsixHelper", "vsix", "ReadEmbeddedResource", $"path={path}"))
             {
-                return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
-            }
-            catch
-            {
-                // Resource not found - return null for graceful fallback
-                return null;
+                try
+                {
+                    return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
+                }
+                catch
+                {
+                    // Resource not found - return null for graceful fallback
+                    return null;
+                }
             }
         }
 
@@ -520,35 +523,41 @@ namespace DynamicsCrm.DevKit.Lib
 
         internal static bool TrySetDependentUpon(ProjectItem childItem, string parentFileName)
         {
-            if (childItem == null || string.IsNullOrWhiteSpace(parentFileName)) return false;
-            try
+            using (ItemTemplateTelemetry.Start("VsixHelper", "vsix", "TrySetDependentUpon", $"child={childItem?.Name}; parent={parentFileName}"))
             {
-                ThreadHelper.ThrowIfNotOnUIThread();
-                childItem.Properties.Item("DependentUpon").Value = parentFileName;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"DevKit: Unable to set DependentUpon for {childItem.Name}: {ex.Message}");
-                return false;
+                if (childItem == null || string.IsNullOrWhiteSpace(parentFileName)) return false;
+                try
+                {
+                    ThreadHelper.ThrowIfNotOnUIThread();
+                    childItem.Properties.Item("DependentUpon").Value = parentFileName;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"DevKit: Unable to set DependentUpon for {childItem.Name}: {ex.Message}");
+                    return false;
+                }
             }
         }
 
         internal static async Task<ProjectItem> TryAddProjectItemAsync(ProjectItems projectItems, string filePath)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (projectItems == null || string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath)) return null;
+            using (ItemTemplateTelemetry.Start("VsixHelper", "vsix", "TryAddProjectItem", $"filePath={filePath}"))
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                if (projectItems == null || string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath)) return null;
 
-            try
-            {
-                var existingItem = TryFindProjectItem(projectItems, filePath);
-                if (existingItem != null) return existingItem;
-                return projectItems.AddFromFile(filePath);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"DevKit: Unable to add project item {filePath}: {ex.Message}");
-                return null;
+                try
+                {
+                    var existingItem = TryFindProjectItem(projectItems, filePath);
+                    if (existingItem != null) return existingItem;
+                    return projectItems.AddFromFile(filePath);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"DevKit: Unable to add project item {filePath}: {ex.Message}");
+                    return null;
+                }
             }
         }
 
@@ -601,50 +610,56 @@ namespace DynamicsCrm.DevKit.Lib
         }
         internal static async Task<List<CustomTemplate>> GetCustomTemplatesAsync(ItemType itemType)
         {
-            var customTemplates = new List<CustomTemplate>();
-            var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
-            if (File.Exists(fileName))
+            using (ItemTemplateTelemetry.Start("VsixHelper", "vsix", "GetCustomTemplates", $"itemType={itemType}"))
             {
-                customTemplates = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).CustomTemplates;
-                customTemplates = [.. customTemplates.Where(x => x.Type == $"{itemType}")];
+                var customTemplates = new List<CustomTemplate>();
+                var fileName = await GetDynamicsCrmDevKitConfigJsonFullFileNameAsync();
+                if (File.Exists(fileName))
+                {
+                    customTemplates = JsonHelper.Deserialize<ConfigJson>(await Task.Run(() => File.ReadAllText(fileName))).CustomTemplates;
+                    customTemplates = [.. customTemplates.Where(x => x.Type == $"{itemType}")];
+                }
+                if (itemType == ItemType.Test)
+                {
+                    customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
+                }
+                else
+                    customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
+                return customTemplates;
             }
-            if (itemType == ItemType.Test)
-            {
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
-            }            
-            else
-                customTemplates.Insert(0, new CustomTemplate { Type = $"{itemType}", Title = "Default", Body = await GetDefaultCustomTemplateBodyAsync(itemType), IsDefault = false });
-            return customTemplates;
         }
 
         internal static async Task<string> GetDefaultCustomTemplateBodyAsync(ItemType itemType, string subType = null)
         {
-            if (itemType == ItemType.Plugin)
-                return await VsixHelper.ReadEmbeddedResourceAsync("tt.Plugin.tt");
-            else if (itemType == ItemType.Workflow)
-                return await VsixHelper.ReadEmbeddedResourceAsync("tt.Workflow.tt");
-            else if (itemType == ItemType.CustomAction)
-                return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomAction.tt");
-            else if (itemType == ItemType.CustomApi)
-                return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomApi.tt");
-            else if (itemType == ItemType.Test)
-                return await VsixHelper.ReadEmbeddedResourceAsync("tt.Test.tt");
-            else if (itemType == ItemType.UiTest)
-                return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
-            else if (itemType == ItemType.DataProvider)
+            using (ItemTemplateTelemetry.Start("VsixHelper", "vsix", "GetDefaultCustomTemplateBody", $"itemType={itemType}; subType={subType}"))
             {
-                if (subType == $"Create")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderCreate.tt");
-                else if (subType == $"Update")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderUpdate.tt");
-                else if (subType == $"Delete")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderDelete.tt");
-                else if (subType == $"Retrieve")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderRetrieve.tt");
-                else if (subType == $"RetrieveMultiple")
-                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderRetrieveMultiple.tt");
-            }    
-            return string.Empty;
+                if (itemType == ItemType.Plugin)
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.Plugin.tt");
+                else if (itemType == ItemType.Workflow)
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.Workflow.tt");
+                else if (itemType == ItemType.CustomAction)
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomAction.tt");
+                else if (itemType == ItemType.CustomApi)
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.CustomApi.tt");
+                else if (itemType == ItemType.Test)
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.Test.tt");
+                else if (itemType == ItemType.UiTest)
+                    return await VsixHelper.ReadEmbeddedResourceAsync("tt.UiTest.tt");
+                else if (itemType == ItemType.DataProvider)
+                {
+                    if (subType == $"Create")
+                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderCreate.tt");
+                    else if (subType == $"Update")
+                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderUpdate.tt");
+                    else if (subType == $"Delete")
+                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderDelete.tt");
+                    else if (subType == $"Retrieve")
+                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderRetrieve.tt");
+                    else if (subType == $"RetrieveMultiple")
+                        return await VsixHelper.ReadEmbeddedResourceAsync("tt.DataProviderRetrieveMultiple.tt");
+                }
+                return string.Empty;
+            }
         }
 
         internal static async Task SaveCustomTemplatesAsync(CustomTemplate save)
