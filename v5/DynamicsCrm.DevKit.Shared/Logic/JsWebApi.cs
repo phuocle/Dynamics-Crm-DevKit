@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared.Logic
             EntityMetadata = entityMetadata;
             if (EntityMetadata.Attributes == null) EntityMetadata = await Metadata.FetchEntityMetadataAsync(entityMetadata.LogicalName);
             RootNamespace = rootNamespace;
-            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, entityMetadata, rootNamespace, isJsFormExist, true);
+            var dts = await JsTypeScriptDeclaration.GetCodeAsync(serviceClient, EntityMetadata, rootNamespace, isJsFormExist, true);
             var code = string.Empty;
             var @namespace = Helper.GetNameSpace(RootNamespace);
             var logicalName = Helper.SafeIdentifier(entityMetadata.LogicalName);

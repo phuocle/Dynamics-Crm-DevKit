@@ -46,25 +46,38 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunFinished())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                try
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    await WriteTargetFileIfChangedAsync($"{ItemName}.webapi.js", _JavascriptWebApi_);
-                    await WriteTargetFileIfChangedAsync($"{ItemName}.d.ts", _Javascriptdts_);
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{ItemName}.webapi.js"), $"{ItemName}.js");
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{ItemName}.d.ts"), $"{ItemName}.js");
-                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.webapi.js up to date!!!");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"DevKit: JsWebApi.RunFinished failed: {ex.Message}");
-                }
-                finally
-                {
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
+                    try
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var webApiFileName = $"{ItemName}.webapi.js";
+                        var declarationFileName = $"{ItemName}.d.ts";
+                        var userFileName = $"{ItemName}.js";
+                        var webApiProjectItem = GetGeneratedProjectItem(webApiFileName);
+                        var declarationProjectItem = GetGeneratedProjectItem(declarationFileName);
+                        if (webApiProjectItem == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(webApiFileName, _JavascriptWebApi_);
+                        }
+
+                        if (declarationProjectItem == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(declarationFileName, _Javascriptdts_);
+                        }
+
+                        VsixHelper.TrySetDependentUpon(webApiProjectItem ?? GetGeneratedProjectItem(webApiFileName), userFileName);
+                        VsixHelper.TrySetDependentUpon(declarationProjectItem ?? GetGeneratedProjectItem(declarationFileName), userFileName);
+                        await VS.StatusBar.ShowMessageAsync($"{webApiFileName} up to date!!!");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"DevKit: JsWebApi.RunFinished failed: {ex.Message}");
+                    }
+                    finally
+                    {
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
                 });
             }
         }
@@ -74,41 +87,50 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormItem(ItemType.JsWebApi);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    ItemName = form.ItemName;
-                    EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _Javascript_ = await new CodeGenService(null).GetDefaultWebApiFileAsync(ItemName);
-                    replacementsDictionary["$Javascript$"] = _Javascript_;
-                    (_JavascriptWebApi_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsWebApi.GetJsWebApiCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsFormExistAsync());
-                    await Replacement.SetAsync(replacementsDictionary, form);
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                    var form = new FormItem(ItemType.JsWebApi);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        ItemName = form.ItemName;
+                        EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
+                        using (Trace("GenerateDefaultJavaScript", $"entity={ItemName}"))
+                        {
+                            _Javascript_ = await new CodeGenService(null).GetDefaultWebApiFileAsync(ItemName);
+                        }
+                        replacementsDictionary["$Javascript$"] = _Javascript_;
+                        using (Trace("GenerateWebApiJavaScript", $"entity={ItemName}"))
+                        {
+                            (_JavascriptWebApi_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsWebApi.GetJsWebApiCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsFormExistAsync());
+                        }
+                        await Replacement.SetAsync(replacementsDictionary, form);
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceShouldAddProjectItem(filePath))
             {
-                var targetFileName = filePath switch
+                return ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    "Javascript.js" => $"{ItemName}.js",
-                    "Javascript.d.ts" => $"{ItemName}.d.ts",
-                    _ => $"{ItemName}.webapi.js"
-                };
-                return await ShouldAddProjectItemAsync(filePath, targetFileName);
-            });
+                    var targetFileName = filePath switch
+                    {
+                        "Javascript.js" => $"{ItemName}.js",
+                        "Javascript.d.ts" => $"{ItemName}.d.ts",
+                        _ => $"{ItemName}.webapi.js"
+                    };
+                    return await ShouldAddProjectItemAsync(filePath, targetFileName);
+                });
+            }
         }
     }
 }
