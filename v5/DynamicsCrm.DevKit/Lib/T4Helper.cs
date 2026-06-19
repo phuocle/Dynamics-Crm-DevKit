@@ -64,5 +64,19 @@ namespace DynamicsCrm.DevKit.Lib
                 return t4Context;
             }
         }
+
+        internal static async Task<T4Context> BuildWorkflowContextAsync(FormPlugin form)
+        {
+            using (ItemTemplateTelemetry.Start(form?.GetType().Name, "t4", "BuildWorkflowContext"))
+            {
+                return new T4Context
+                {
+                    PluginNameSpace = form.PluginNameSpace,
+                    PluginOrder = form.PluginOrder,
+                    Class = form.Class,
+                    PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
+                };
+            }
+        }
     }
 }
