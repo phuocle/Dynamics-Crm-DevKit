@@ -8,9 +8,22 @@
     <Import_RootNamespace>Dev.DevKitV5.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
+      <DependentUpon>ActivityParty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
+      <DependentUpon>Contact.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.generated.cs">
+      <DependentUpon>Email.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\**\*.cs" />
     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
     <None Include="$(MSBuildThisFileDirectory)README.md" />

@@ -42,10 +42,8 @@
 		<Folder Include="html\" />
 		<Folder Include="css\" />
 		<Compile Remove="build\**" />
-		<Folder Include="entities\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
-		<Folder Include="resources\" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="deploy.debug.bat" />
@@ -58,6 +56,20 @@
 		<TypeScriptCompile Include="lib\devkit.ts" />
 		<None Include="entities\generator.form.bat" />
 		<None Include="entities\generator.webapi.bat" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="dialogs\pl_dataversedialogbuilder_demo.dialog.ts">
+	    <DependentUpon>pl_dataversedialogbuilder_demo.ts</DependentUpon>
+	  </None>
+	  <None Update="entities\Account.form.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
+	  <None Update="entities\Account.webapi.ts">
+	    <DependentUpon>Account.ts</DependentUpon>
+	  </None>
+	  <None Update="entities\Contact.webapi.ts">
+	    <DependentUpon>Contact.ts</DependentUpon>
+	  </None>
 	</ItemGroup>
 </Project>
 <!-- v.4.12.34.56 - Build: 30.06.2026 23:59:59 -->
