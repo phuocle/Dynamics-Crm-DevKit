@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Parameters for UI tests -->
+  <TestRunParameters>
+    <Parameter name="BrowserType" value="Chrome" />
+    <Parameter name="RemoteBrowserType" value="Chrome" />
+    <Parameter name="RemoteHubServer" value="http://localhost:4444/wd/hub" />
+  </TestRunParameters>
+  <!-- MSTest adapter settings -->
+  <MSTest>
+    <DeploymentEnabled>true</DeploymentEnabled>
+    <SettingsFile>Dev.DevKitV5.UiTest\App.config</SettingsFile>
+    <ForcedLegacyMode>true</ForcedLegacyMode>
+  </MSTest>
+  <!-- Default test timeout -->
+  <RunConfiguration>
+    <TestSessionTimeout>10800000</TestSessionTimeout>
+    <MaxCpuCount>1</MaxCpuCount>
+    <TargetFrameworkVersion>.NETFramework,Version=v4.6.2</TargetFrameworkVersion>
+  </RunConfiguration>
+</RunSettings>
