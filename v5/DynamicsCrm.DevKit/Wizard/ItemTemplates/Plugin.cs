@@ -37,35 +37,40 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormPlugin(ItemType.Plugin, replacementsDictionary["$rootnamespace$"]);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    var t4Code = await T4Helper.GetT4CodeAsync(ItemType.Plugin, form.CustomTemplate);
-                    var t4Context = await T4Helper.BuildContextAsync(form);
-                    var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$plugin$", code);
-                    replacementsDictionary.Add("$Class$", form.Class);
-                    replacementsDictionary.Add("$PluginOrder$", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                    Mouse.OverrideCursor = null;
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                    var form = new FormPlugin(ItemType.Plugin, replacementsDictionary["$rootnamespace$"]);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var templateTitle = form.CustomTemplate;
+                        var t4Code = await T4Helper.GetT4CodeAsync(ItemType.Plugin, templateTitle);
+                        var t4Context = string.Equals(templateTitle, T4Helper.DefaultTemplateTitle, System.StringComparison.Ordinal)
+                            ? await T4Helper.BuildPluginContextAsync(form)
+                            : await T4Helper.BuildContextAsync(form);
+                        var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
+                        replacementsDictionary.Add("$plugin$", code);
+                        replacementsDictionary.Add("$Class$", t4Context.Class);
+                        replacementsDictionary.Add("$PluginOrder$", t4Context.PluginOrder == 1 ? string.Empty : $"{t4Context.PluginOrder}");
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                        Mouse.OverrideCursor = null;
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
-
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            using (TraceShouldAddProjectItem(filePath))
+            {
+                return true;
+            }
         }
     }
 }
