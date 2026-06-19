@@ -45,28 +45,43 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunFinished())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                try
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    await WriteTargetFileIfChangedAsync($"{DialogClassName}.dialog.js", _JavaScriptDialog_);
-                    await WriteTargetFileIfChangedAsync($"{DialogClassName}.dialog.d.ts", _TypeScriptDialog_);
-                    if (!IsDialogJsExisting)
-                        await WriteTargetFileIfChangedAsync($"{DialogClassName}.js", _JavaScript_);
+                    try
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var dialogFileName = $"{DialogClassName}.dialog.js";
+                        var declarationFileName = $"{DialogClassName}.dialog.d.ts";
+                        var userFileName = $"{DialogClassName}.js";
+                        var dialogProjectItem = GetGeneratedProjectItem(dialogFileName);
+                        var declarationProjectItem = GetGeneratedProjectItem(declarationFileName);
+                        if (dialogProjectItem == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(dialogFileName, _JavaScriptDialog_);
+                        }
 
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{DialogClassName}.dialog.js"), $"{DialogClassName}.js");
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{DialogClassName}.dialog.d.ts"), $"{DialogClassName}.js");
-                    await VS.StatusBar.ShowMessageAsync($"{DialogClassName} JS Dialog generated successfully!!!");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"DevKit: JsDialog.RunFinished failed: {ex.Message}");
-                }
-                finally
-                {
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
+                        if (declarationProjectItem == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(declarationFileName, _TypeScriptDialog_);
+                        }
+
+                        if (!IsDialogJsExisting && GetGeneratedProjectItem(userFileName) == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(userFileName, _JavaScript_);
+                        }
+
+                        VsixHelper.TrySetDependentUpon(dialogProjectItem ?? GetGeneratedProjectItem(dialogFileName), userFileName);
+                        VsixHelper.TrySetDependentUpon(declarationProjectItem ?? GetGeneratedProjectItem(declarationFileName), userFileName);
+                        await VS.StatusBar.ShowMessageAsync($"{DialogClassName} JS Dialog generated successfully!!!");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"DevKit: JsDialog.RunFinished failed: {ex.Message}");
+                    }
+                    finally
+                    {
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
                 });
             }
         }
@@ -76,63 +91,68 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormItem(ItemType.JsDialog);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    ItemName = form.ItemName;
-                    ServiceClient = form.ServiceClient;
-                    SelectedDialogForm = form.SelectedDialogForm;
-                    DialogLogicalName = SelectedDialogForm.Name;
-                    DialogClassName = SelectedDialogForm.UniqueName;
+                    var form = new FormItem(ItemType.JsDialog);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        ItemName = form.ItemName;
+                        ServiceClient = form.ServiceClient;
+                        SelectedDialogForm = form.SelectedDialogForm;
+                        DialogLogicalName = SelectedDialogForm.Name;
+                        DialogClassName = SelectedDialogForm.UniqueName;
 
-                    // Generate the .dialog.js and .d.ts content
-                    var result = await Shared.Logic.JsDialog.GetJsDialogCodeAsync(form.ServiceClient, SelectedDialogForm);
-                    _JavaScriptDialog_ = result.code;
-                    _TypeScriptDialog_ = result.dts;
+                        using (Trace("GenerateDialogJavaScript", $"dialog={DialogClassName}"))
+                        {
+                            var result = await Shared.Logic.JsDialog.GetJsDialogCodeAsync(form.ServiceClient, SelectedDialogForm);
+                            _JavaScriptDialog_ = result.code;
+                            _TypeScriptDialog_ = result.dts;
+                        }
 
-                    // Generate user code (.js)
-                    _JavaScript_ = await new CodeGenService(form.ServiceClient).GetDefaultJsDialogFileAsync(SelectedDialogForm, DialogClassName);
+                        using (Trace("GenerateDefaultJavaScript", $"dialog={DialogClassName}"))
+                        {
+                            _JavaScript_ = await new CodeGenService(form.ServiceClient).GetDefaultJsDialogFileAsync(SelectedDialogForm, DialogClassName);
+                        }
 
-                    replacementsDictionary["$JavaScript$"] = _JavaScript_;
-                    replacementsDictionary["$JavaScriptDialog$"] = _JavaScriptDialog_;
-                    replacementsDictionary["$TypeScriptDialog$"] = _TypeScriptDialog_;
-                    replacementsDictionary["$DialogName$"] = DialogClassName;
-                    await Replacement.SetAsync(replacementsDictionary, form);
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                        replacementsDictionary["$JavaScript$"] = _JavaScript_;
+                        replacementsDictionary["$JavaScriptDialog$"] = _JavaScriptDialog_;
+                        replacementsDictionary["$TypeScriptDialog$"] = _TypeScriptDialog_;
+                        replacementsDictionary["$DialogName$"] = DialogClassName;
+                        await Replacement.SetAsync(replacementsDictionary, form);
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceShouldAddProjectItem(filePath))
             {
-                var targetFileName = filePath switch
+                return ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    "JavaScript.js" => $"{DialogClassName}.js",
-                    "JavaScript.d.ts" => $"{DialogClassName}.dialog.d.ts",
-                    _ => $"{DialogClassName}.dialog.js"
-                };
-                var shouldAdd = await ShouldAddProjectItemAsync(filePath, targetFileName);
+                    var targetFileName = filePath switch
+                    {
+                        "JavaScript.js" => $"{DialogClassName}.js",
+                        "JavaScript.d.ts" => $"{DialogClassName}.dialog.d.ts",
+                        _ => $"{DialogClassName}.dialog.js"
+                    };
+                    var shouldAdd = await ShouldAddProjectItemAsync(filePath, targetFileName);
+                    if (filePath == "JavaScript.js")
+                    {
+                        IsDialogJsExisting = IsFilePathExist;
+                        return shouldAdd;
+                    }
 
-                // For the user script (.js), do not overwrite if exists
-                if (filePath == "JavaScript.js")
-                {
-                    IsDialogJsExisting = IsFilePathExist;
                     return shouldAdd;
-                }
-
-                return shouldAdd;
-            });
+                });
+            }
         }
     }
 }
