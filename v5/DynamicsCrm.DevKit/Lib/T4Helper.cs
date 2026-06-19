@@ -4,6 +4,7 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.TextTemplating;
 using Microsoft.VisualStudio.TextTemplating.VSHost;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +12,15 @@ namespace DynamicsCrm.DevKit.Lib
 {
     internal class T4Helper
     {
+        internal const string DefaultTemplateTitle = "Default";
+
         public static async Task<string> GetT4CodeAsync(ItemType itemType, string templateTitle, string subType = null)
         {
             using (ItemTemplateTelemetry.Start(itemType.ToString(), "t4", "GetT4Code", $"title={templateTitle}; subType={subType}"))
             {
+                if (string.Equals(templateTitle, DefaultTemplateTitle, StringComparison.Ordinal))
+                    return await VsixHelper.GetDefaultCustomTemplateBodyAsync(itemType, subType);
+
                 var customTempaltes = await VsixHelper.GetCustomTemplatesAsync(itemType);
                 var found = customTempaltes.FirstOrDefault(x => x.Type == itemType.ToString() && x.Title == templateTitle);
                 if (found == null) return await VsixHelper.GetDefaultCustomTemplateBodyAsync(itemType, subType);
@@ -65,9 +71,9 @@ namespace DynamicsCrm.DevKit.Lib
             }
         }
 
-        internal static async Task<T4Context> BuildWorkflowContextAsync(FormPlugin form)
+        internal static async Task<T4Context> BuildClassContextAsync(FormPlugin form)
         {
-            using (ItemTemplateTelemetry.Start(form?.GetType().Name, "t4", "BuildWorkflowContext"))
+            using (ItemTemplateTelemetry.Start(form?.GetType().Name, "t4", "BuildClassContext"))
             {
                 return new T4Context
                 {

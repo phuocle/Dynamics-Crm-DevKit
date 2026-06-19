@@ -47,8 +47,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
                         var templateTitle = form.CustomTemplate;
                         var t4Code = await T4Helper.GetT4CodeAsync(ItemType.Workflow, templateTitle);
-                        var t4Context = string.Equals(templateTitle, "Default", System.StringComparison.Ordinal)
-                            ? await T4Helper.BuildWorkflowContextAsync(form)
+                        var t4Context = string.Equals(templateTitle, T4Helper.DefaultTemplateTitle, System.StringComparison.Ordinal)
+                            ? await T4Helper.BuildClassContextAsync(form)
                             : await T4Helper.BuildContextAsync(form);
                         var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
                         replacementsDictionary.Add("$workflow$", code);
