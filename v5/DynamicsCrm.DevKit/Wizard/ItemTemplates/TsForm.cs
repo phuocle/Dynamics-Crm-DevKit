@@ -43,33 +43,31 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunFinished())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                try
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    await WriteTargetFileIfChangedAsync($"{ItemName}.form.ts", _TypeScriptForm_);
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{ItemName}.form.ts"), $"{ItemName}.ts");
-
-                    // Generate OptionSet.ts
-                    var optionSetFilePath = GetTargetFilePath("OptionSet.ts");
-                    if (!string.IsNullOrWhiteSpace(optionSetFilePath))
+                    try
                     {
-                        var existingContent = File.Exists(optionSetFilePath) ? await FileHelper.ReadAllTextAsync(optionSetFilePath) : null;
-                        var optionSetCode = await Task.Run(async () => await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, new List<EntityMetadata> { EntityMetadata }, existingContent));
-                        await WriteTargetFileIfChangedAsync("OptionSet.ts", optionSetCode);
-                        await AddTargetFileToProjectAsync("OptionSet.ts");
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var formFileName = $"{ItemName}.form.ts";
+                        var userFileName = $"{ItemName}.ts";
+                        var formProjectItem = GetGeneratedProjectItem(formFileName);
+                        if (formProjectItem == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(formFileName, _TypeScriptForm_);
+                        }
+
+                        VsixHelper.TrySetDependentUpon(formProjectItem ?? GetGeneratedProjectItem(formFileName), userFileName);
+                        await RefreshOptionSetAsync();
+                        await VS.StatusBar.ShowMessageAsync($"{formFileName} up to date!!!");
                     }
-                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.form.ts up to date!!!");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"DevKit: TsForm.RunFinished failed: {ex.Message}");
-                }
-                finally
-                {
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"DevKit: TsForm.RunFinished failed: {ex.Message}");
+                    }
+                    finally
+                    {
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
                 });
             }
         }
@@ -79,41 +77,87 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormItem(ItemType.TsForm);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    ItemName = form.ItemName;
-                    ServiceClient = form.ServiceClient;
-                    EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _TypeScript_ = await new CodeGenService(form.ServiceClient).GetDefaultTsFormFileAsync(EntityMetadata);
-                    replacementsDictionary["$TypeScript$"] = _TypeScript_;
-                    _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata);
-                    await Replacement.SetAsync(replacementsDictionary, form);
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                    var form = new FormItem(ItemType.TsForm);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        ItemName = form.ItemName;
+                        ServiceClient = form.ServiceClient;
+                        EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
+                        await EnsureEntityMetadataAsync();
+                        if (!await TargetFileExistsAsync($"{ItemName}.ts"))
+                        {
+                            using (Trace("GenerateDefaultTypeScript", $"entity={ItemName}"))
+                            {
+                                _TypeScript_ = await new CodeGenService(form.ServiceClient).GetDefaultTsFormFileAsync(EntityMetadata);
+                            }
+                        }
+                        replacementsDictionary["$TypeScript$"] = _TypeScript_;
+                        using (Trace("GenerateFormTypeScript", $"entity={ItemName}"))
+                        {
+                            _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata);
+                        }
+                        await Replacement.SetAsync(replacementsDictionary, form);
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceShouldAddProjectItem(filePath))
             {
-                var targetFileName = filePath switch
+                return ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    "TypeScript.ts" => $"{ItemName}.ts",
-                    _ => $"{ItemName}.form.ts"
-                };
-                return await ShouldAddProjectItemAsync(filePath, targetFileName);
-            });
+                    var targetFileName = filePath switch
+                    {
+                        "TypeScript.ts" => $"{ItemName}.ts",
+                        _ => $"{ItemName}.form.ts"
+                    };
+                    return await ShouldAddProjectItemAsync(filePath, targetFileName);
+                });
+            }
+        }
+
+        private async Task EnsureEntityMetadataAsync()
+        {
+            using (Trace("EnsureEntityMetadata", $"entity={ItemName}"))
+            {
+                if (EntityMetadata?.Attributes != null) return;
+                EntityMetadata = await new MetadataService(ServiceClient).FetchEntityMetadataAsync(EntityMetadata.LogicalName);
+            }
+        }
+
+        private async Task RefreshOptionSetAsync()
+        {
+            using (Trace("RefreshOptionSet", $"entity={ItemName}"))
+            {
+                var optionSetFilePath = GetTargetFilePath("OptionSet.ts");
+                if (string.IsNullOrWhiteSpace(optionSetFilePath)) return;
+
+                var existingContent = File.Exists(optionSetFilePath) ? await FileHelper.ReadAllTextAsync(optionSetFilePath) : null;
+                var optionSetCode = await Task.Run(async () => await TsOptionSet.GetTsOptionSetCodeAsync(ServiceClient, new List<EntityMetadata> { EntityMetadata }, existingContent));
+                await WriteTargetFileIfChangedAsync("OptionSet.ts", optionSetCode);
+                await AddTargetFileToProjectAsync("OptionSet.ts");
+            }
+        }
+
+        private async Task<bool> TargetFileExistsAsync(string targetFileName)
+        {
+            using (Trace("TargetFileExists", $"targetFile={targetFileName}"))
+            {
+                var container = await VsixHelper.SelectedItem.GetProjectItemsContainerAsync();
+                var fullPath = Path.Combine(container?.FolderPath ?? string.Empty, targetFileName);
+                return File.Exists(fullPath);
+            }
         }
     }
 }
