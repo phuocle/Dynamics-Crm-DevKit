@@ -123,5 +123,20 @@ namespace DynamicsCrm.DevKit.Lib
                 };
             }
         }
+
+        internal static async Task<T4Context> BuildDataProviderContextAsync(FormPlugin form)
+        {
+            using (ItemTemplateTelemetry.Start(form?.GetType().Name, "t4", "BuildDataProviderContext"))
+            {
+                return new T4Context
+                {
+                    PluginNameSpace = form.PluginNameSpace,
+                    Class = form.Class,
+                    DataSource = form.DataSource,
+                    PluginOrder = 1,
+                    PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
+                };
+            }
+        }
     }
 }

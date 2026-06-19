@@ -2,11 +2,13 @@ using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
@@ -37,53 +39,51 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormPlugin(ItemType.DataProvider, replacementsDictionary["$rootnamespace$"]);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                    var form = new FormPlugin(ItemType.DataProvider, replacementsDictionary["$rootnamespace$"]);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
 
-                    var t4Code = await VsixHelper.GetDefaultCustomTemplateBodyAsync(ItemType.DataProvider, "Create");
-                    var t4Context = await T4Helper.BuildContextAsync(form);
-                    var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$DataProviderCreate$", code);
+                        var t4Context = await T4Helper.BuildDataProviderContextAsync(form);
+                        await AddDataProviderReplacementAsync(replacementsDictionary, t4Context, "Create", "$DataProviderCreate$");
+                        await AddDataProviderReplacementAsync(replacementsDictionary, t4Context, "Update", "$DataProviderUpdate$");
+                        await AddDataProviderReplacementAsync(replacementsDictionary, t4Context, "Delete", "$DataProviderDelete$");
+                        await AddDataProviderReplacementAsync(replacementsDictionary, t4Context, "Retrieve", "$DataProviderRetrieve$");
+                        await AddDataProviderReplacementAsync(replacementsDictionary, t4Context, "RetrieveMultiple", "$DataProviderRetrieveMultiple$");
 
-                    t4Code = await VsixHelper.GetDefaultCustomTemplateBodyAsync(ItemType.DataProvider, "Update");
-                    code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$DataProviderUpdate$", code);
-
-                    t4Code = await VsixHelper.GetDefaultCustomTemplateBodyAsync(ItemType.DataProvider, "Delete");
-                    code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$DataProviderDelete$", code);
-
-                    t4Code = await VsixHelper.GetDefaultCustomTemplateBodyAsync(ItemType.DataProvider, "Retrieve");
-                    code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$DataProviderRetrieve$", code);
-
-                    t4Code = await VsixHelper.GetDefaultCustomTemplateBodyAsync(ItemType.DataProvider, "RetrieveMultiple");
-                    code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
-                    replacementsDictionary.Add("$DataProviderRetrieveMultiple$", code);
-
-                    replacementsDictionary.Add("$Class$", form.Class);
-                    replacementsDictionary.Add("$PluginOrder$", form.PluginOrder == 1 ? string.Empty : $"{form.PluginOrder}");
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                    Mouse.OverrideCursor = null;
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                        replacementsDictionary.Add("$Class$", t4Context.Class);
+                        replacementsDictionary.Add("$PluginOrder$", string.Empty);
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                        Mouse.OverrideCursor = null;
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
-
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            using (TraceShouldAddProjectItem(filePath))
+            {
+                return true;
+            }
+        }
+
+        private async Task AddDataProviderReplacementAsync(Dictionary<string, string> replacementsDictionary, T4Context t4Context, string subType, string replacementKey)
+        {
+            using (Trace("ProcessDataProviderTemplate", $"subType={subType}"))
+            {
+                var t4Code = await VsixHelper.GetDefaultCustomTemplateBodyAsync(ItemType.DataProvider, subType);
+                var code = await T4Helper.ProcessTemplateAsync(t4Code, t4Context);
+                replacementsDictionary.Add(replacementKey, code);
+            }
         }
     }
 }
