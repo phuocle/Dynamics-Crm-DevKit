@@ -1,5 +1,5 @@
 ---
-description: "Execute a prompt from Mcp.prompts.md, track tool chain, and update the file with results"
+description: Execute a prompt from Mcp.prompts.md, track tool chain, and update the file with results
 ---
 
 Execute a single prompt from `DynamicsCrm.DevKit.Docs/Mcp.prompts.md`, record which MCP tools were called and in what order, then write the result back into the file inline under the prompt.

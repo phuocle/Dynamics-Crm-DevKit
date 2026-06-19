@@ -1,0 +1,33 @@
+{
+  "servers": {
+    "dynamicscrm-devkit": {
+      "type": "stdio",
+      "command": "devkit",
+      "args": ["mcp", "devkit-copilot"],
+      "env": {
+        "DEVKIT_AUTH_TYPE": "${input:devkitAuthType}",
+        "DEVKIT_URL": "${input:devkitUrl}",
+        "DEVKIT_PAC_PROFILE": "${input:devkitPacProfile}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "id": "devkitAuthType",
+      "type": "promptString",
+      "description": "DEVKIT_AUTH_TYPE",
+      "default": "FromPac"
+    },
+    {
+      "id": "devkitUrl",
+      "type": "promptString",
+      "description": "DEVKIT_URL"
+    },
+    {
+      "id": "devkitPacProfile",
+      "type": "promptString",
+      "description": "DEVKIT_PAC_PROFILE",
+      "default": "default"
+    }
+  ]
+}

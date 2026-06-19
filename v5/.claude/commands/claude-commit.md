@@ -7,14 +7,7 @@ Safe code preparation and commit workflow for the DynamicsCrm.DevKit project.
 > [!IMPORTANT]
 > **AI AGENT INSTRUCTIONS (CRITICAL):**
 > TO AI AGENT: The user does NOT want you to just guide or list out steps. You are an Agent, so you MUST USE TOOLS to execute `git` commands on behalf of the user.
-> When the user explicitly invokes this skill, you MUST IMMEDIATELY:
-> 1. Run `git status` to see changed files
-> 2. Check build-time date replacement files and auto-restore them if they contain real build dates
-> 3. Select appropriate files to stage (never use `git add .` or `git add -A`)
-> 4. Craft a concise commit message based on the changes
-> 5. EXECUTE the commit directly without asking for approval
->
-> The user invoking this skill IS the approval. Do not summarize and ask again.
+> When asked to run this workflow, you MUST IMMEDIATELY use a tool to run `git status`, then automatically analyze, check build-time date replacement files, select files to add, craft an appropriate commit message, and finally propose the commands for the user to approve and run. Do not make the user chat back again unless truly necessary.
 
 > This project uses PowerShell on Windows. Do not use Bash scripts (`&&` or `<<EOF`).
 
@@ -48,11 +41,8 @@ git add "path/to/file1.cs" "path/to/file2.cs"
 
 **Step 4: Create the commit using PowerShell**
 
-AI uses its understanding of the added files to infer the intent and craft a concise, appropriate message. Then EXECUTE the commit directly:
+AI uses its understanding of the added files to infer the intent and craft a concise, appropriate message (you may also ask the user or infer if the intent is clear). Then propose running:
 (Use two `-m` flags to separate the title and body)
 ```powershell
 git commit -m "Short concise title (about 50 characters)" -m "Detailed description of what changed and the reasoning behind the design."
 ```
-
-> [!NOTE]
-> When the user explicitly invokes `/claude-commit`, they have already approved the action. Execute the commit without asking for confirmation.

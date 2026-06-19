@@ -2,7 +2,7 @@
 description: "Build DynamicsCrm.DevKit.Cli project in Debug mode"
 ---
 
-Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET tool, and install locally for testing.
+Build **only** the CLI project (faster than `/claude-build-debug`), pack it as a .NET tool, and install locally for testing.
 
 > [!CAUTION]
 > The build process uses the `Release.DynamicsCrm.DevKit.Cli.ps1` script.
@@ -19,4 +19,4 @@ Build **only** the CLI project (faster than `/build-debug`), pack it as a .NET t
 - This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
 - Version is defined in `DevKit.ReleaseConfig.json`
 - No signing keys required for any build configuration
-- For full solution build, use `/build-debug` workflow instead
+- For full solution build, use `/claude-build-debug` workflow instead

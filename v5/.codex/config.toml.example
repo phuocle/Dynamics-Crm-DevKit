@@ -1,0 +1,15 @@
+[mcp_servers.dynamicscrm-devkit]
+command = "devkit"
+args = ["mcp", "devkit-codex"]
+env_vars = [
+  "DEVKIT_AUTH_TYPE",
+  "DEVKIT_URL",
+  "DEVKIT_CLIENT_ID",
+  "DEVKIT_CLIENT_SECRET",
+  "DEVKIT_PAC_PROFILE",
+  "DEVKIT_USERNAME",
+  "DEVKIT_PASSWORD",
+  "DEVKIT_DOMAIN"
+]
+startup_timeout_sec = 20
+tool_timeout_sec = 120

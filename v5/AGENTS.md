@@ -75,9 +75,39 @@ Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (leg
 
 ---
 
+## AI Config Sync
+
+Team AI configuration must stay generated from shared sources:
+
+- Repository rules source: `AGENTS.md`
+- Portable AI rules/workflows source: `.agents/rules/*.md`, `.agents/workflows/*.md`
+- Generated adapters: `CLAUDE.md`, `.claude/**`, `.github/**`, `.agents/**`
+- Generated MCP examples: `.mcp.json.example`, `.codex/config.toml.example`, `.vscode/mcp.json.example`, `.agents/mcp_config.json.example`
+- Local MCP files are ignored and must not be committed: `.mcp.json`, `.codex/config.toml`, `.vscode/mcp.json`, `.agents/mcp_config.json`
+
+After editing any AI source file, run:
+
+```powershell
+.\DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1
+.\DynamicsCrm.DevKit.Scripts\Sync-AI-Config.ps1 -Check
+```
+
+MCP process aliases are fixed by client:
+
+| Client | Alias |
+|---|---|
+| Claude | `devkit-claude` |
+| Codex | `devkit-codex` |
+| GitHub Copilot | `devkit-copilot` |
+| Antigravity | `devkit-antigravity` |
+
+Do not edit generated adapter files directly unless you are also updating `Sync-AI-Config.ps1` and regenerating outputs.
+
+---
+
 ## Watch Out
 
 - `4.12.34.56` is the stable source version. Release/debug scripts replace only the build-date placeholder `xxxx.yy.zz HH.mm.ss`; never commit files while date replacements are still applied.
 - Editing a single component → run only that component's build, not the full solution
 
-Build workflows and MCP restart procedure: see `.claude/rules/core-rule.md`.
+Build workflows and MCP restart procedure: see `.agents/rules/core-rule.md` and generated client adapters.

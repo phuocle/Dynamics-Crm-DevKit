@@ -1,6 +1,6 @@
 ---
-agent: agent
 description: "Build DynamicsCrm.DevKit VSIX project in Debug mode"
+mode: agent
 ---
 
 Build the VSIX project using MSBuild in Debug mode.

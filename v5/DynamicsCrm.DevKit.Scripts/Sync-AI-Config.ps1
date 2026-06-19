@@ -1,23 +1,54 @@
 param(
     [switch]$DryRun,
+    [switch]$Check,
     [switch]$Verbose
 )
 
 Set-StrictMode -Version Latest
-$ErrorActionPreference = "Continue"
+$ErrorActionPreference = "Stop"
 
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$AgentRulesDir = Join-Path $ProjectRoot ".agent\rules"
-$AgentWorkflowsDir = Join-Path $ProjectRoot ".agent\workflows"
-$AgentSkillsDir = Join-Path $ProjectRoot ".agent\skills"
-$ClaudeRulesDir = Join-Path $ProjectRoot ".claude\rules"
-$ClaudeCommandsDir = Join-Path $ProjectRoot ".claude\commands"
-$GithubDir = Join-Path $ProjectRoot ".github"
-$GithubPromptsDir = Join-Path $ProjectRoot ".github\prompts"
+$SourceDir = Join-Path $ProjectRoot "DynamicsCrm.DevKit.Scripts\AI"
+$SourceRulesDir = Join-Path $SourceDir "rules"
+$SourceWorkflowsDir = Join-Path $SourceDir "workflows"
+$SourceSkillsDir = Join-Path $SourceDir "skills"
 
-$ChangesDetected = 0
-$FilesUpdated = 0
-$FilesRemoved = 0
+$AntigravityDir = Join-Path $ProjectRoot ".agents"
+$ClaudeDir = Join-Path $ProjectRoot ".claude"
+$GithubDir = Join-Path $ProjectRoot ".github"
+$CodexDir = Join-Path $ProjectRoot ".codex"
+$VscodeDir = Join-Path $ProjectRoot ".vscode"
+
+$ClaudeRulesDir = Join-Path $ClaudeDir "rules"
+$ClaudeCommandsDir = Join-Path $ClaudeDir "commands"
+$ClaudeSkillsDir = Join-Path $ClaudeDir "skills"
+$GithubPromptsDir = Join-Path $GithubDir "prompts"
+$AntigravityRulesDir = Join-Path $AntigravityDir "rules"
+$AntigravityWorkflowsDir = Join-Path $AntigravityDir "workflows"
+
+$script:FilesChecked = 0
+$script:FilesUpdated = 0
+$script:FilesRemoved = 0
+$script:DriftDetected = 0
+
+$Clients = @{
+    Claude = @{
+        Prefix = "claude"
+        Alias = "devkit-claude"
+    }
+    Copilot = @{
+        Prefix = "copilot"
+        Alias = "devkit-copilot"
+    }
+    Antigravity = @{
+        Prefix = "anti"
+        Alias = "devkit-antigravity"
+    }
+    Codex = @{
+        Prefix = "codex"
+        Alias = "devkit-codex"
+    }
+}
 
 function Write-Status($Message, $Type) {
     switch ($Type) {
@@ -32,23 +63,95 @@ function Write-Status($Message, $Type) {
     }
 }
 
-function Get-AgentRuleBody($FilePath) {
-    $content = [System.IO.File]::ReadAllText($FilePath, [System.Text.Encoding]::UTF8)
+function Read-Utf8($Path) {
+    return [System.IO.File]::ReadAllText($Path, [System.Text.Encoding]::UTF8)
+}
+
+function Normalize-Text($Text) {
+    return (($Text -replace "`r`n", "`n") -replace "`r", "`n").TrimEnd() + "`n"
+}
+
+function Write-Utf8NoBom($Path, $Content) {
+    $dir = Split-Path -Parent $Path
+    if (-not (Test-Path $dir)) {
+        New-Item -Path $dir -ItemType Directory -Force | Out-Null
+    }
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($Path, (Normalize-Text $Content), $utf8NoBom)
+}
+
+function Compare-And-Write($TargetPath, $NewContent) {
+    $script:FilesChecked++
+    $normalizedNew = Normalize-Text $NewContent
+
+    if (Test-Path $TargetPath) {
+        $existing = Normalize-Text (Read-Utf8 $TargetPath)
+        if ($existing -eq $normalizedNew) {
+            if ($Verbose) {
+                Write-Status "No changes: $TargetPath" "SKIP"
+            }
+            return
+        }
+    }
+
+    $script:FilesUpdated++
+    $script:DriftDetected++
+
+    if ($Check) {
+        Write-Status "Out of sync: $TargetPath" "WARN"
+        return
+    }
+
+    if ($DryRun) {
+        Write-Status "Would update: $TargetPath" "SYNC"
+        return
+    }
+
+    Write-Utf8NoBom $TargetPath $normalizedNew
+    Write-Status "Updated: $TargetPath" "SYNC"
+}
+
+function Remove-GeneratedFiles($Dir, $IncludePatterns, $KeepNames) {
+    if (-not (Test-Path $Dir)) { return }
+
+    foreach ($pattern in $IncludePatterns) {
+        Get-ChildItem -Path $Dir -Filter $pattern -File -ErrorAction SilentlyContinue | ForEach-Object {
+            if ($KeepNames -contains $_.Name) { return }
+
+            $script:FilesChecked++
+            $script:FilesRemoved++
+            $script:DriftDetected++
+
+            if ($Check) {
+                Write-Status "Stale generated file: $($_.FullName)" "WARN"
+            } elseif ($DryRun) {
+                Write-Status "Would remove stale file: $($_.FullName)" "DEL"
+            } else {
+                Remove-Item -Path $_.FullName -Force
+                Write-Status "Removed stale file: $($_.FullName)" "DEL"
+            }
+        }
+    }
+}
+
+function Get-BodyWithoutFrontmatter($FilePath) {
+    $content = Read-Utf8 $FilePath
     if ($content -match "(?s)^---\s*\n.*?\n---\s*\n(.*)$") {
         return $Matches[1].TrimStart()
     }
     return $content
 }
 
-function Get-WorkflowBody($FilePath) {
-    $content = [System.IO.File]::ReadAllText($FilePath, [System.Text.Encoding]::UTF8)
-
-    if ($content -match "(?s)^---\s*\n.*?\n---\s*\n(.*)$") {
-        $body = $Matches[1].TrimStart()
-    } else {
-        $body = $content
+function Get-WorkflowDescription($FilePath) {
+    $content = Read-Utf8 $FilePath
+    if ($content -match "(?m)^description:\s*`"?(.*?)`"?\s*$") {
+        return $Matches[1].Trim()
     }
+    return [System.IO.Path]::GetFileNameWithoutExtension($FilePath)
+}
 
+function Get-WorkflowBody($FilePath) {
+    $body = Get-BodyWithoutFrontmatter $FilePath
     $lines = $body -split "`n"
     $filteredLines = @()
     foreach ($line in $lines) {
@@ -58,253 +161,318 @@ function Get-WorkflowBody($FilePath) {
         }
         $filteredLines += $line
     }
-    $body = ($filteredLines -join "`n").TrimStart()
-
-    return $body
+    return (($filteredLines -join "`n").TrimStart())
 }
 
-function Get-WorkflowDescription($FilePath) {
-    $content = [System.IO.File]::ReadAllText($FilePath, [System.Text.Encoding]::UTF8)
-    if ($content -match "(?s)^---\s*\ndescription:\s*(.+?)\n---") {
-        return $Matches[1].Trim()
-    }
-    $baseName = [System.IO.Path]::GetFileNameWithoutExtension($FilePath)
-    return $baseName
+function Render-ForClient($Content, $ClientName) {
+    $prefix = $Clients[$ClientName].Prefix
+    $alias = $Clients[$ClientName].Alias
+    $rendered = $Content -replace "/\*-", "/$prefix-"
+    $rendered = $rendered -replace "\{\{CLIENT\}\}", $ClientName
+    $rendered = $rendered -replace "\{\{PREFIX\}\}", $prefix
+    $rendered = $rendered -replace "\{\{DEVKIT_MCP_ALIAS\}\}", $alias
+    return $rendered
 }
 
-function Compare-And-Write($TargetPath, $NewContent) {
-    $script:ChangesDetected++
+function Add-GeneratedHeader($Source) {
+    return @"
+<!-- AUTO-GENERATED by Sync-AI-Config.ps1 - DO NOT EDIT DIRECTLY -->
+<!-- Source of truth: $Source -->
 
-    if ((Test-Path $TargetPath)) {
-        $existing = [System.IO.File]::ReadAllText($TargetPath, [System.Text.Encoding]::UTF8)
-        $normalizedExisting = $existing -replace "`r`n", "`n"
-        $normalizedNew = $NewContent -replace "`r`n", "`n"
-
-        if ($normalizedExisting -eq $normalizedNew) {
-            if ($Verbose) {
-                Write-Status "No changes: $TargetPath" "SKIP"
-            }
-            return
-        }
-    }
-
-    if ($DryRun) {
-        Write-Status "Would update: $TargetPath" "SYNC"
-    } else {
-        $dir = Split-Path -Parent $TargetPath
-        if (-not (Test-Path $dir)) {
-            New-Item -Path $dir -ItemType Directory -Force | Out-Null
-        }
-        $utf8NoBOM = New-Object System.Text.UTF8Encoding $false
-        [System.IO.File]::WriteAllText($TargetPath, $NewContent, $utf8NoBOM)
-        Write-Status "Updated: $TargetPath" "SYNC"
-    }
-    $script:FilesUpdated++
+"@
 }
 
-# Cleanup old files that don't match the new prefix naming convention
-function Remove-OldFiles($Dir, $Prefix, $Extension, $SourceNames) {
-    if (-not (Test-Path $Dir)) { return }
-    $existingFiles = Get-ChildItem -Path $Dir -Filter "*$Extension" -ErrorAction SilentlyContinue
-    foreach ($file in $existingFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
-        # Skip files that already have the correct prefix
-        if ($baseName.StartsWith($Prefix)) { continue }
-        # Check if this old file corresponds to a source workflow
-        $nameWithoutOldPrefix = $baseName
-        # Remove old prefixes if present (devkit-, or no prefix)
-        if ($nameWithoutOldPrefix.StartsWith("devkit-")) {
-            $nameWithoutOldPrefix = $nameWithoutOldPrefix.Substring(7)
+function ConvertTo-CopilotPrompt($Description, $Body) {
+    return @"
+---
+description: "$Description"
+mode: agent
+---
+
+$Body
+"@
+}
+
+function ConvertTo-ClaudeCommand($Description, $Body) {
+    return @"
+---
+description: "$Description"
+---
+
+$Body
+"@
+}
+
+function ConvertTo-AntigravityWorkflow($Description, $Body) {
+    return @"
+---
+description: $Description
+---
+
+$Body
+"@
+}
+
+function ConvertTo-CopilotInstructions($AgentsContent, $RuleSections) {
+    $header = Add-GeneratedHeader "AGENTS.md + .agents/rules/*.md"
+    $sections = @($AgentsContent.TrimEnd())
+    foreach ($section in $RuleSections) {
+        if ($section.Trim().Length -gt 0) {
+            $sections += $section.TrimEnd()
         }
-        # Also handle .prompt suffix for copilot files
-        $nameWithoutOldPrefix = $nameWithoutOldPrefix -replace "\.prompt$", ""
-        if ($SourceNames -contains $nameWithoutOldPrefix) {
-            if ($DryRun) {
-                Write-Status "Would remove old file: $($file.FullName)" "DEL"
-            } else {
-                Remove-Item $file.FullName -Force
-                Write-Status "Removed old file: $($file.FullName)" "DEL"
-            }
+    }
+    return $header + ($sections -join "`n`n---`n`n")
+}
+
+function Sync-SkillDirectory($TargetSkillsDir) {
+    if (-not (Test-Path $SourceSkillsDir)) { return }
+
+    $sourceSkillDirs = Get-ChildItem -Path $SourceSkillsDir -Directory -ErrorAction SilentlyContinue | Sort-Object Name
+    $keepNames = @()
+
+    foreach ($skillDir in $sourceSkillDirs) {
+        $sourceSkillFile = Join-Path $skillDir.FullName "SKILL.md"
+        if (-not (Test-Path $sourceSkillFile)) { continue }
+
+        $targetDir = Join-Path $TargetSkillsDir $skillDir.Name
+        $targetSkillFile = Join-Path $targetDir "SKILL.md"
+        $keepNames += $skillDir.Name
+        Compare-And-Write $targetSkillFile (Read-Utf8 $sourceSkillFile)
+    }
+
+    if (Test-Path $TargetSkillsDir) {
+        Get-ChildItem -Path $TargetSkillsDir -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+            if ($keepNames -contains $_.Name) { return }
+            $script:FilesChecked++
             $script:FilesRemoved++
+            $script:DriftDetected++
+            if ($Check) {
+                Write-Status "Stale generated skill directory: $($_.FullName)" "WARN"
+            } elseif ($DryRun) {
+                Write-Status "Would remove stale skill directory: $($_.FullName)" "DEL"
+            } else {
+                Remove-Item -Path $_.FullName -Recurse -Force
+                Write-Status "Removed stale skill directory: $($_.FullName)" "DEL"
+            }
         }
     }
+}
+
+function Get-McpJson($Alias, $UseInputs) {
+    if ($UseInputs) {
+        return @"
+{
+  "servers": {
+    "dynamicscrm-devkit": {
+      "type": "stdio",
+      "command": "devkit",
+      "args": ["mcp", "$Alias"],
+      "env": {
+        "DEVKIT_AUTH_TYPE": "`${input:devkitAuthType}",
+        "DEVKIT_URL": "`${input:devkitUrl}",
+        "DEVKIT_PAC_PROFILE": "`${input:devkitPacProfile}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "id": "devkitAuthType",
+      "type": "promptString",
+      "description": "DEVKIT_AUTH_TYPE",
+      "default": "FromPac"
+    },
+    {
+      "id": "devkitUrl",
+      "type": "promptString",
+      "description": "DEVKIT_URL"
+    },
+    {
+      "id": "devkitPacProfile",
+      "type": "promptString",
+      "description": "DEVKIT_PAC_PROFILE",
+      "default": "default"
+    }
+  ]
+}
+"@
+    }
+
+    return @"
+{
+  "mcpServers": {
+    "dynamicscrm-devkit": {
+      "command": "devkit",
+      "args": ["mcp", "$Alias"],
+      "env": {
+        "DEVKIT_AUTH_TYPE": "FromPac",
+        "DEVKIT_PAC_PROFILE": "default"
+      }
+    }
+  }
+}
+"@
+}
+
+function Get-ClaudeMcpJson() {
+    $alias = $Clients.Claude.Alias
+    return @"
+{
+  "mcpServers": {
+    "dynamicscrm-devkit": {
+      "command": "devkit",
+      "args": ["mcp", "$alias"],
+      "env": {
+        "DEVKIT_AUTH_TYPE": "`${DEVKIT_AUTH_TYPE:-FromPac}",
+        "DEVKIT_URL": "`${DEVKIT_URL}",
+        "DEVKIT_PAC_PROFILE": "`${DEVKIT_PAC_PROFILE:-default}"
+      }
+    }
+  }
+}
+"@
+}
+
+function Get-CodexConfigToml() {
+    $alias = $Clients.Codex.Alias
+    return @"
+[mcp_servers.dynamicscrm-devkit]
+command = "devkit"
+args = ["mcp", "$alias"]
+env_vars = [
+  "DEVKIT_AUTH_TYPE",
+  "DEVKIT_URL",
+  "DEVKIT_CLIENT_ID",
+  "DEVKIT_CLIENT_SECRET",
+  "DEVKIT_PAC_PROFILE",
+  "DEVKIT_USERNAME",
+  "DEVKIT_PASSWORD",
+  "DEVKIT_DOMAIN"
+]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+"@
 }
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Sync AI Config (.agent/ -> IDEs)" -ForegroundColor Cyan
+Write-Host "  Sync AI Config (DynamicsCrm.DevKit.Scripts/AI -> adapters)" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
 if ($DryRun) {
     Write-Status "DRY RUN mode - no files will be modified" "WARN"
-    Write-Host ""
+}
+if ($Check) {
+    Write-Status "CHECK mode - exits non-zero if generated files are stale" "WARN"
 }
 
-# Collect source workflow names for cleanup
-$sourceWorkflowNames = @()
-$wfSourceFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($wfSourceFiles) {
-    $sourceWorkflowNames = $wfSourceFiles | ForEach-Object { [System.IO.Path]::GetFileNameWithoutExtension($_.Name) }
+if (-not (Test-Path $SourceDir)) {
+    throw "Source directory not found: $SourceDir"
 }
 
-# ── Cleanup old files (before sync) ──────────────────────────────────────────
-
-Write-Host "--- Cleaning up old files (no prefix / wrong prefix) ---" -ForegroundColor White
+Write-Host ""
+Write-Host "--- Syncing root instruction adapters ---" -ForegroundColor White
 Write-Host ""
 
-Remove-OldFiles $GithubPromptsDir "copilot-" ".md" $sourceWorkflowNames
-Remove-OldFiles $ClaudeCommandsDir "claude-" ".md" $sourceWorkflowNames
-
-# ── Sync Rules → Claude ──────────────────────────────────────────────────────
-
-Write-Host ""
-Write-Host "--- Syncing Rules (.agent/rules/ -> .claude/rules/) ---" -ForegroundColor White
-Write-Host ""
-
-$ruleFiles = Get-ChildItem -Path $AgentRulesDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($ruleFiles) {
-    foreach ($ruleFile in $ruleFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($ruleFile.Name)
-        $targetPath = Join-Path $ClaudeRulesDir "$baseName.md"
-
-        $body = Get-AgentRuleBody $ruleFile.FullName
-        Compare-And-Write $targetPath $body
-    }
-} else {
-    Write-Status "No rule files found in $AgentRulesDir" "WARN"
-}
-
-# ── Sync Skills → Claude (as rule files: skill-{name}.md) ────────────────────
-
-Write-Host ""
-Write-Host "--- Syncing Skills (.agent/skills/ -> .claude/rules/skill-*) ---" -ForegroundColor White
-Write-Host ""
-
-$skillDirs = Get-ChildItem -Path $AgentSkillsDir -Directory -ErrorAction SilentlyContinue
-if ($skillDirs) {
-    foreach ($skillDir in ($skillDirs | Sort-Object Name)) {
-        $skillFile = Join-Path $skillDir.FullName "SKILL.md"
-        if (Test-Path $skillFile) {
-            $skillBody = Get-AgentRuleBody $skillFile
-            if ($skillBody -and $skillBody.Trim().Length -gt 0) {
-                $targetPath = Join-Path $ClaudeRulesDir "skill-$($skillDir.Name).md"
-                Compare-And-Write $targetPath $skillBody
-            }
-        }
-    }
-}
-
-# ── Sync Workflows → Claude (prefix: claude-) ────────────────────────────────
-
-Write-Host ""
-Write-Host "--- Syncing Workflows (.agent/workflows/ -> .claude/commands/claude-*) ---" -ForegroundColor White
-Write-Host ""
-
-$workflowFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($workflowFiles) {
-    foreach ($wfFile in $workflowFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
-        $targetPath = Join-Path $ClaudeCommandsDir "claude-$baseName.md"
-
-        $description = Get-WorkflowDescription $wfFile.FullName
-        $body = Get-WorkflowBody $wfFile.FullName
-        $claudeContent = @"
----
-description: "$description"
----
-
-$body
+$agentsPath = Join-Path $ProjectRoot "AGENTS.md"
+$agentsContent = if (Test-Path $agentsPath) { Read-Utf8 $agentsPath } else { "" }
+Compare-And-Write (Join-Path $ProjectRoot "CLAUDE.md") @"
+<!-- AUTO-GENERATED by Sync-AI-Config.ps1 - DO NOT EDIT DIRECTLY -->
+@AGENTS.md
 "@
-        Compare-And-Write $targetPath $claudeContent
-    }
-} else {
-    Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
+
+Write-Host ""
+Write-Host "--- Syncing rules ---" -ForegroundColor White
+Write-Host ""
+
+$ruleFiles = @(Get-ChildItem -Path $SourceRulesDir -Filter "*.md" -File -ErrorAction SilentlyContinue | Sort-Object Name)
+$claudeRuleKeep = @()
+$antigravityRuleKeep = @()
+$copilotRuleSections = @()
+
+foreach ($ruleFile in $ruleFiles) {
+    $baseName = $ruleFile.Name
+    $body = Get-BodyWithoutFrontmatter $ruleFile.FullName
+
+    $claudeRuleKeep += $baseName
+    Compare-And-Write (Join-Path $ClaudeRulesDir $baseName) ((Add-GeneratedHeader ".agents/rules/$baseName") + (Render-ForClient $body "Claude"))
+
+    $antigravityRuleKeep += $baseName
+    Compare-And-Write (Join-Path $AntigravityRulesDir $baseName) ((Add-GeneratedHeader "DynamicsCrm.DevKit.Scripts/AI/rules/$baseName") + (Render-ForClient $body "Antigravity"))
+
+    $copilotRuleSections += (Render-ForClient $body "Copilot")
 }
 
-# ── Sync Rules → Copilot (merged into copilot-instructions.md) ───────────────
+Compare-And-Write (Join-Path $GithubDir "copilot-instructions.md") (ConvertTo-CopilotInstructions $agentsContent $copilotRuleSections)
+
+Remove-GeneratedFiles $ClaudeRulesDir @("*.md") $claudeRuleKeep
+Remove-GeneratedFiles $AntigravityRulesDir @("*.md") $antigravityRuleKeep
 
 Write-Host ""
-Write-Host "--- Syncing Rules (.agent/rules/ -> .github/copilot-instructions.md) ---" -ForegroundColor White
+Write-Host "--- Syncing workflows ---" -ForegroundColor White
 Write-Host ""
 
-$copilotPath = Join-Path $GithubDir "copilot-instructions.md"
-$ruleFiles = Get-ChildItem -Path $AgentRulesDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($ruleFiles) {
-    $header = @"
-<!-- AUTO-GENERATED by Sync-AI-Config.ps1 — DO NOT EDIT DIRECTLY -->
-<!-- Source of truth: .agent/rules/*.md -->
+$workflowFiles = @(Get-ChildItem -Path $SourceWorkflowsDir -Filter "*.md" -File -ErrorAction SilentlyContinue | Sort-Object Name)
+$claudeCommandKeep = @()
+$copilotPromptKeep = @()
+$antigravityWorkflowKeep = @()
 
-"@
-    $sections = @()
-    foreach ($ruleFile in ($ruleFiles | Sort-Object Name)) {
-        $body = Get-AgentRuleBody $ruleFile.FullName
-        $sections += $body
-    }
+foreach ($wfFile in $workflowFiles) {
+    $name = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
+    $description = Get-WorkflowDescription $wfFile.FullName
+    $body = Get-WorkflowBody $wfFile.FullName
 
-    # Append skills content (VS Code Copilot doesn't support on-demand skills)
-    $skillDirs = Get-ChildItem -Path $AgentSkillsDir -Directory -ErrorAction SilentlyContinue
-    if ($skillDirs) {
-        foreach ($skillDir in ($skillDirs | Sort-Object Name)) {
-            $skillFile = Join-Path $skillDir.FullName "SKILL.md"
-            if (Test-Path $skillFile) {
-                $skillBody = Get-AgentRuleBody $skillFile
-                $sections += "---`n`n<!-- Skill: $($skillDir.Name) -->`n`n$skillBody"
-            }
-        }
-    }
+    $claudeName = "claude-$name.md"
+    $claudeCommandKeep += $claudeName
+    Compare-And-Write (Join-Path $ClaudeCommandsDir $claudeName) (ConvertTo-ClaudeCommand $description (Render-ForClient $body "Claude"))
 
-    $copilotContent = $header + ($sections -join "`n`n---`n`n")
-    Compare-And-Write $copilotPath $copilotContent
-} else {
-    Write-Status "No rule files found in $AgentRulesDir" "WARN"
+    $copilotName = "copilot-$name.prompt.md"
+    $copilotPromptKeep += $copilotName
+    Compare-And-Write (Join-Path $GithubPromptsDir $copilotName) (ConvertTo-CopilotPrompt $description (Render-ForClient $body "Copilot"))
+
+    $antigravityName = "anti-$name.md"
+    $antigravityWorkflowKeep += $antigravityName
+    Compare-And-Write (Join-Path $AntigravityWorkflowsDir $antigravityName) (ConvertTo-AntigravityWorkflow $description (Render-ForClient $body "Antigravity"))
 }
 
-# ── Sync Workflows → Copilot (prefix: copilot-) ──────────────────────────────
+Remove-GeneratedFiles $ClaudeCommandsDir @("claude-*.md") $claudeCommandKeep
+Remove-GeneratedFiles $GithubPromptsDir @("copilot-*.prompt.md") $copilotPromptKeep
+Remove-GeneratedFiles $AntigravityWorkflowsDir @("*.md") $antigravityWorkflowKeep
 
 Write-Host ""
-Write-Host "--- Syncing Workflows (.agent/workflows/ -> .github/prompts/copilot-*) ---" -ForegroundColor White
+Write-Host "--- Syncing skills ---" -ForegroundColor White
 Write-Host ""
 
-$workflowFiles = Get-ChildItem -Path $AgentWorkflowsDir -Filter "*.md" -ErrorAction SilentlyContinue
-if ($workflowFiles) {
-    foreach ($wfFile in $workflowFiles) {
-        $baseName = [System.IO.Path]::GetFileNameWithoutExtension($wfFile.Name)
-        $targetPath = Join-Path $GithubPromptsDir "copilot-$baseName.prompt.md"
+Sync-SkillDirectory $ClaudeSkillsDir
 
-        $description = Get-WorkflowDescription $wfFile.FullName
-        $body = Get-WorkflowBody $wfFile.FullName
-        $promptContent = @"
----
-description: "$description"
-mode: agent
----
+Write-Host ""
+Write-Host "--- Syncing MCP adapters ---" -ForegroundColor White
+Write-Host ""
 
-$body
-"@
-        Compare-And-Write $targetPath $promptContent
-    }
-} else {
-    Write-Status "No workflow files found in $AgentWorkflowsDir" "WARN"
-}
-
-# ── Summary ───────────────────────────────────────────────────────────────────
+Compare-And-Write (Join-Path $ProjectRoot ".mcp.json.example") (Get-ClaudeMcpJson)
+Compare-And-Write (Join-Path $CodexDir "config.toml.example") (Get-CodexConfigToml)
+Compare-And-Write (Join-Path $VscodeDir "mcp.json.example") (Get-McpJson $Clients.Copilot.Alias $true)
+Compare-And-Write (Join-Path $AntigravityDir "mcp_config.json.example") (Get-McpJson $Clients.Antigravity.Alias $false)
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Summary" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Status "Files checked: $ChangesDetected" "INFO"
+Write-Status "Files checked: $FilesChecked" "INFO"
 Write-Status "Files updated: $FilesUpdated" "INFO"
 Write-Status "Files removed: $FilesRemoved" "INFO"
 
-if ($FilesUpdated -eq 0 -and $FilesRemoved -eq 0) {
+if ($DriftDetected -eq 0) {
     Write-Host ""
-    Write-Status "All files are in sync!" "OK"
+    Write-Status "All generated AI config files are in sync." "OK"
+} elseif ($Check) {
+    Write-Host ""
+    Write-Status "AI config is out of sync. Run Sync-AI-Config.ps1 to update generated files." "ERR"
+    exit 1
 } elseif ($DryRun) {
     Write-Host ""
-    Write-Status "$FilesUpdated file(s) would be updated, $FilesRemoved file(s) would be removed. Run without -DryRun to apply." "WARN"
+    Write-Status "$FilesUpdated file(s) would be updated, $FilesRemoved file(s) would be removed." "WARN"
 }
 
 Write-Host ""

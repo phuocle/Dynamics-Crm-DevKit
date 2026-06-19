@@ -1,6 +1,5 @@
 ---
-description: "Build Release DynamicsCrm.DevKit for all projects"
-mode: agent
+description: Build Release DynamicsCrm.DevKit for all projects
 ---
 
 > [!IMPORTANT]

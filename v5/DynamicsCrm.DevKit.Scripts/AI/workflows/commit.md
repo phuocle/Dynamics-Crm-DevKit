@@ -1,6 +1,5 @@
 ---
-description: "Prepare and commit code for DynamicsCrm.DevKit"
-mode: agent
+description: Prepare and commit code for DynamicsCrm.DevKit
 ---
 
 Safe code preparation and commit workflow for the DynamicsCrm.DevKit project.

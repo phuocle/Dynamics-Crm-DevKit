@@ -1,5 +1,5 @@
 ---
-description: "Build Release DynamicsCrm.DevKit for all projects with current timestamp"
+description: Build Release DynamicsCrm.DevKit for all projects with current timestamp
 ---
 
 > [!IMPORTANT]

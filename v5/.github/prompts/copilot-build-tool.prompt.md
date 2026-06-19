@@ -1,6 +1,6 @@
 ---
-agent: agent
 description: "Build DynamicsCrm.DevKit.Tool project in Debug mode"
+mode: agent
 ---
 
 Build **only** the Tool project (faster than `/copilot-build-debug`), pack it as a .NET global tool, and install locally for testing.

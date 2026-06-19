@@ -1,6 +1,6 @@
 ---
-agent: agent
 description: "Run all unit tests with code coverage report"
+mode: agent
 ---
 
 Run **all** unit tests in `DynamicsCrm.DevKit.UnitTests` (both net48 Analyzer tests and net10.0 CLI tests) and generate a unified code coverage report.
