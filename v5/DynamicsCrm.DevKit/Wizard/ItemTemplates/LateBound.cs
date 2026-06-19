@@ -18,7 +18,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         private string _Class_ { get; set; } = string.Empty;
         private string _GeneratedClass_ { get; set; } = string.Empty;
         private EntityMetadata EntityMetadata { get; set; }
-        private ProjectItem ProjectItem { get; set; } = null;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -32,7 +31,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             TrackGeneratedProjectItem(projectItem);
-            ProjectItem = projectItem;
         }
 
         public void RunFinished()
@@ -40,50 +38,34 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunFinished())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                try
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    var generatedFileName = $"{ItemName}.generated.cs";
-                    var generatedPath = GetTargetFilePath(generatedFileName);
-                    if (System.IO.File.Exists(generatedPath))
+                    try
                     {
-                        var oldCode = await FileHelper.ReadAllTextFromLine6Async(generatedPath);
-                        var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
-                        if (!Helper.IsTheSame(oldCode, newCode))
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var generatedFileName = $"{ItemName}.generated.cs";
+                        var generatedProjectItem = GetGeneratedProjectItem(generatedFileName);
+                        if (generatedProjectItem == null)
                         {
-                            await FileHelper.ForceWriteAllTextAsync(generatedPath, _GeneratedClass_);
+                            await UpdateExistingGeneratedFileAsync(generatedFileName);
                         }
-                    }
-                    else
-                    {
-                        await WriteTargetFileIfChangedAsync(generatedFileName, _GeneratedClass_);
-                    }
 
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem(generatedFileName), $"{ItemName}.cs");
+                        VsixHelper.TrySetDependentUpon(generatedProjectItem ?? GetGeneratedProjectItem(generatedFileName), $"{ItemName}.cs");
 
-                    var customFile = GetTargetFilePath($"{ItemName}.cs");
-                    if (System.IO.File.Exists(customFile))
-                    {
-                        var customContent = System.IO.File.ReadAllText(customFile);
-                        var oldDeclaration = $"public partial class {ItemName}";
-                        if (customContent.Contains(oldDeclaration))
+                        if (GetGeneratedProjectItem($"{ItemName}.cs") == null)
                         {
-                            var newContent = customContent.Replace(oldDeclaration, $"internal partial class {ItemName}");
-                            System.IO.File.WriteAllText(customFile, newContent);
+                            await NormalizeExistingCustomFileAsync();
                         }
+                        await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
                     }
-                    await VS.StatusBar.ShowMessageAsync($"{ItemName}.generated.cs up to date!!!");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"DevKit: LateBound.RunFinished failed: {ex.Message}");
-                }
-                finally
-                {
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"DevKit: LateBound.RunFinished failed: {ex.Message}");
+                    }
+                    finally
+                    {
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
                 });
             }
         }
@@ -93,39 +75,83 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormItem(ItemType.LateBound);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    ItemName = form.ItemName;
-                    EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
-                    _Class_ = Helper.GetDefaultFileWithCs(EntityMetadata, replacementsDictionary["$rootnamespace$"]);
-                    var sharedNamespace = await VsixHelper.IsAddToSharedProjectAsync() ? null : await VsixHelper.GetSharedProjectAsync();
-                    _GeneratedClass_ = CSharpLateBound.GetCsCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], sharedNamespace);
-                    replacementsDictionary["$Class$"] = _Class_;
-                    replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
-                    await Replacement.SetAsync(replacementsDictionary, form);
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                    var form = new FormItem(ItemType.LateBound);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        ItemName = form.ItemName;
+                        EntityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.SchemaName == ItemName);
+                        using (Trace("GenerateDefaultClass"))
+                        {
+                            _Class_ = Helper.GetDefaultFileWithCs(EntityMetadata, replacementsDictionary["$rootnamespace$"]);
+                        }
+                        var sharedNamespace = await VsixHelper.IsAddToSharedProjectAsync() ? null : await VsixHelper.GetSharedProjectAsync();
+                        using (Trace("GenerateLateBoundClass"))
+                        {
+                            _GeneratedClass_ = CSharpLateBound.GetCsCode(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], sharedNamespace);
+                        }
+                        replacementsDictionary["$Class$"] = _Class_;
+                        replacementsDictionary["$GeneratedClass$"] = _GeneratedClass_;
+                        await Replacement.SetAsync(replacementsDictionary, form);
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
-
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceShouldAddProjectItem(filePath))
             {
-                var targetFileName = filePath == "Class.cs" ? $"{ItemName}.cs" : $"{ItemName}.generated.cs";
-                return await ShouldAddProjectItemAsync(filePath, targetFileName);
-            });
+                return ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    var targetFileName = filePath == "Class.cs" ? $"{ItemName}.cs" : $"{ItemName}.generated.cs";
+                    return await ShouldAddProjectItemAsync(filePath, targetFileName);
+                });
+            }
+        }
+
+        private async System.Threading.Tasks.Task UpdateExistingGeneratedFileAsync(string generatedFileName)
+        {
+            using (Trace("UpdateExistingGeneratedFile", $"targetFile={generatedFileName}"))
+            {
+                var generatedPath = GetTargetFilePath(generatedFileName);
+                if (System.IO.File.Exists(generatedPath))
+                {
+                    var oldCode = await FileHelper.ReadAllTextFromLine6Async(generatedPath);
+                    var newCode = await Helper.ReadContentFromLine6Async(_GeneratedClass_);
+                    if (!Helper.IsTheSame(oldCode, newCode))
+                    {
+                        await FileHelper.ForceWriteAllTextAsync(generatedPath, _GeneratedClass_);
+                    }
+                    return;
+                }
+
+                await WriteTargetFileIfChangedAsync(generatedFileName, _GeneratedClass_);
+            }
+        }
+
+        private async System.Threading.Tasks.Task NormalizeExistingCustomFileAsync()
+        {
+            using (Trace("NormalizeExistingCustomFile"))
+            {
+                var customFile = GetTargetFilePath($"{ItemName}.cs");
+                if (!System.IO.File.Exists(customFile)) return;
+
+                var customContent = await FileHelper.ReadAllTextAsync(customFile);
+                var oldDeclaration = $"public partial class {ItemName}";
+                if (!customContent.Contains(oldDeclaration)) return;
+
+                var newContent = customContent.Replace(oldDeclaration, $"internal partial class {ItemName}");
+                await FileHelper.ForceWriteAllTextAsync(customFile, newContent);
+            }
         }
     }
 }
