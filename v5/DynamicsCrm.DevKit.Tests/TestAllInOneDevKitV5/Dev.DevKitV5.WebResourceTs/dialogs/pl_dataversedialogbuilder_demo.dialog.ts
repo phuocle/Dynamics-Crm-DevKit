@@ -1,4 +1,4 @@
-﻿/**
+/**
  * pl_dataversedialogbuilder_demo.dialog.ts - Dataverse Dialog Builder Demo Dialog for early-bound style dialog coding
  * Generated file - DO NOT MODIFY MANUALLY
  *
@@ -234,3 +234,4 @@ export namespace DevKitDialog {
 		}
 	}
 }
+

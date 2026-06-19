@@ -100,6 +100,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         {
                             _TypeScriptForm_ = await DynamicsCrm.DevKit.Shared.Logic.TsForm.GetTsFormCodeAsync(form.ServiceClient, EntityMetadata);
                         }
+                        replacementsDictionary["$TypeScriptForm$"] = _TypeScriptForm_;
                         await Replacement.SetAsync(replacementsDictionary, form);
                         await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                     }

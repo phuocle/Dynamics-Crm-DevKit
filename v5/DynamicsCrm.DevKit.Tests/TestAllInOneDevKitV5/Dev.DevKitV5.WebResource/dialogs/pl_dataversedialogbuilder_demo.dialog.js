@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 /** @namespace DevKitDialog */
 var DevKitDialog;
 (function (DevKitDialog) {
@@ -105,3 +105,4 @@ var DevKitDialog;
 		], defaultWebResourceName);
 	};
 })(DevKitDialog || (DevKitDialog = {}));
+

@@ -1,4 +1,4 @@
-﻿/// <reference path="devkit.d.ts" />
+/// <reference path="devkit.d.ts" />
 declare namespace DevKitDialog {
 	export namespace pl_dataversedialogbuilder_demo {
 		interface IDialog {
@@ -203,3 +203,4 @@ declare namespace DevKitDialog {
 		Close(): void;
 	}
 }
+

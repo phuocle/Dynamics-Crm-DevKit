@@ -1,4 +1,4 @@
-﻿import { DevKitDialog as Dialog } from './pl_dataversedialogbuilder_demo.dialog';
+import { DevKitDialog as Dialog } from './pl_dataversedialogbuilder_demo.dialog';
 
 const pl_dataversedialogbuilder_demo = (function () {
 	"use strict";

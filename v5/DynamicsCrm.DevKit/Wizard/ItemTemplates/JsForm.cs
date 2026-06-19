@@ -106,6 +106,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         {
                             (_JavascriptForm_, _Javascriptdts_) = await DynamicsCrm.DevKit.Shared.Logic.JsForm.GetJsFormCodeAsync(form.ServiceClient, EntityMetadata, replacementsDictionary["$rootnamespace$"], await IsJsWebApiExistAsync());
                         }
+                        replacementsDictionary["$Javascript.form.js$"] = _JavascriptForm_;
+                        replacementsDictionary["$Javascript.d.ts$"] = _Javascriptdts_;
                         await Replacement.SetAsync(replacementsDictionary, form);
                         await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                     }

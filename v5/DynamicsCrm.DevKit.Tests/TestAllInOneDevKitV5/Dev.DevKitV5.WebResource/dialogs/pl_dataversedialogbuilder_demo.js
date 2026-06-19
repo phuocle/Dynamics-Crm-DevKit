@@ -1,4 +1,4 @@
-﻿//@ts-check
+//@ts-check
 ///<reference path="pl_dataversedialogbuilder_demo.dialog.d.ts" />
 "use strict";
 var pl_dataversedialogbuilder_demo = (function () {
@@ -21,3 +21,4 @@ var pl_dataversedialogbuilder_demo = (function () {
 		CancelClick: CancelClick
 	};
 })();
+

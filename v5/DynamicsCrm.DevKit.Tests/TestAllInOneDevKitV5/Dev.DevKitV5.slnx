@@ -17,8 +17,8 @@
   <Project Path="Dev.DevKitV5.Server/Dev.DevKitV5.Server.csproj" />
   <Project Path="Dev.DevKitV5.Server2.Test/Dev.DevKitV5.Server2.Test.csproj" />
   <Project Path="Dev.DevKitV5.Server2/Dev.DevKitV5.Server2.csproj" />
-  <Project Path="Dev.DevKitV5.Shared.Test/Dev.DevKitV5.Shared.Test.shproj" Id="2be210bb-478f-4730-ae90-eed56b28a40e" />
-  <Project Path="Dev.DevKitV5.Shared/Dev.DevKitV5.Shared.shproj" Id="bc6f8b5e-b31a-4994-9154-a256d09d0afb" />
+  <Project Path="Dev.DevKitV5.Shared.Test/Dev.DevKitV5.Shared.Test.shproj" Id="87accfd9-138f-4567-a338-5535adcb0f11" />
+  <Project Path="Dev.DevKitV5.Shared/Dev.DevKitV5.Shared.shproj" Id="629508c0-123f-4a3b-af55-34f70d60fc3c" />
   <Project Path="Dev.DevKitV5.SolutionPackager/Dev.DevKitV5.SolutionPackager.csproj" />
   <Project Path="Dev.DevKitV5.UiTest/Dev.DevKitV5.UiTest.csproj" />
   <Project Path="Dev.DevKitV5.WebResource/Dev.DevKitV5.WebResource.csproj" />

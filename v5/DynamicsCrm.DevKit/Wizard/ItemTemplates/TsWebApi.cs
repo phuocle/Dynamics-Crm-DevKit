@@ -91,6 +91,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         {
                             _TypeScriptWebApi_ = await DynamicsCrm.DevKit.Shared.Logic.TsWebApi.GetTsWebApiCodeAsync(form.ServiceClient, EntityMetadata);
                         }
+                        replacementsDictionary["$TypeScriptWebApi$"] = _TypeScriptWebApi_;
                         await Replacement.SetAsync(replacementsDictionary, form);
                         await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                     }
