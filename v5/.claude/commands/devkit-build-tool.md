@@ -1,8 +1,8 @@
 ---
-description: Build DynamicsCrm.DevKit.Tool project in Debug mode
+description: "Build DynamicsCrm.DevKit.Tool project in Debug mode"
 ---
 
-Build **only** the Tool project (faster than `/anti-build-debug`), pack it as a .NET global tool, and install locally for testing.
+Build **only** the Tool project (faster than `/devkit-build-debug`), pack it as a .NET global tool, and install locally for testing.
 
 > [!CAUTION]
 > The build process uses the `Release.DynamicsCrm.DevKit.Tool.ps1` script.
@@ -20,4 +20,4 @@ Build **only** the Tool project (faster than `/anti-build-debug`), pack it as a 
 - Tool is a .NET 10 global tool with command name `devkit-tool`
 - Version is defined in `DevKit.ReleaseConfig.json`
 - No signing keys required for any build configuration
-- For full solution build, use `/anti-build-debug` workflow instead
+- For full solution build, use `/devkit-build-debug` workflow instead

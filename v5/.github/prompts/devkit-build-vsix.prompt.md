@@ -26,4 +26,4 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 
 - VSIX projects MUST use MSBuild, NOT `dotnet build`
 - No signing keys required for any build configuration
-- For full solution build with packaging, use `/copilot-build-debug` workflow instead
+- For full solution build with packaging, use `/devkit-build-debug` workflow instead

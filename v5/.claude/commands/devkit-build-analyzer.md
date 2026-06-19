@@ -1,6 +1,5 @@
 ---
 description: "Build DynamicsCrm.DevKit.Analyzers project in Debug mode"
-mode: agent
 ---
 
 Build the Analyzers project using `dotnet build` in Debug mode.
@@ -37,4 +36,4 @@ $nugetExe = ".\nuget.exe"
 - Analyzers target `netstandard2.0` for Roslyn compatibility
 - No signing keys required for any build configuration
 - **IMPORTANT**: Close and reopen VS after copying DLL - VS caches analyzers aggressively
-- For full solution build with packaging, use `/copilot-build-debug` workflow instead
+- For full solution build with packaging, use `/devkit-build-debug` workflow instead

@@ -87,7 +87,7 @@ Recommended v5 shape:
 ```text
 CLAUDE.md                           # generated thin adapter: @AGENTS.md
 .claude/rules/*.md                  # generated from .agents/rules
-.claude/commands/claude-*.md        # generated legacy slash commands
+.claude/commands/devkit-*.md        # generated legacy slash commands
 .claude/skills/<skill>/SKILL.md     # generated from .agents/skills when needed
 .mcp.json.example                   # generated MCP adapter example
 ```
@@ -171,7 +171,7 @@ Recommended v5 shape:
 
 ```text
 .github/copilot-instructions.md     # generated from AGENTS.md or points strongly to it
-.github/prompts/copilot-*.prompt.md # generated from .agents/workflows
+.github/prompts/devkit-*.prompt.md  # generated from .agents/workflows
 .github/skills/                     # optional; prefer .agents/skills for portability
 .vscode/mcp.json.example            # generated VS Code MCP adapter example
 ```
@@ -214,7 +214,7 @@ Recommended v5 shape:
 
 ```text
 .agents/rules/*.md                  # source for Antigravity and portable rules
-.agents/workflows/anti-*.md         # generated Antigravity workflows
+.agents/workflows/devkit-*.md       # generated Antigravity workflows
 .agents/skills/*.md or */SKILL.md   # source for portable skills
 .agents/mcp_config.json.example     # generated Antigravity CLI MCP adapter example
 ```
@@ -436,7 +436,7 @@ Use source-of-truth by content type:
 |---|---|---|
 | Repo-wide architecture, build, test, safety rules | `AGENTS.md` | `CLAUDE.md`, `.github/copilot-instructions.md` |
 | Always-on modular rules | `DynamicsCrm.DevKit.Scripts/AI/rules/*.md` | `.claude/rules/*.md`, `.agents/rules/*.md` |
-| Reusable task workflows | `DynamicsCrm.DevKit.Scripts/AI/workflows/*.md` | `.claude/commands/claude-*.md`, `.github/prompts/copilot-*.prompt.md`, `.agents/workflows/anti-*.md` |
+| Reusable task workflows | `DynamicsCrm.DevKit.Scripts/AI/workflows/*.md` | `.claude/commands/devkit-*.md`, `.github/prompts/devkit-*.prompt.md`, `.agents/workflows/devkit-*.md` |
 | Portable skills | `.agents/skills/<skill>/SKILL.md` | `.claude/skills/<skill>/SKILL.md`, optional flat Antigravity CLI skill adapters if required |
 | MCP logical definition | `DynamicsCrm.DevKit.Scripts/AI-McpServers.json` or similar | `.mcp.json.example`, `.codex/config.toml.example`, `.vscode/mcp.json.example`, `.agents/mcp_config.json.example` |
 | Tool-specific local settings | User home or ignored local files | Never source of truth |

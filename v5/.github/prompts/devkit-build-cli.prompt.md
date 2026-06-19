@@ -3,7 +3,7 @@ description: "Build DynamicsCrm.DevKit.Cli project in Debug mode"
 mode: agent
 ---
 
-Build **only** the CLI project (faster than `/copilot-build-debug`), pack it as a .NET tool, and install locally for testing.
+Build **only** the CLI project (faster than `/devkit-build-debug`), pack it as a .NET tool, and install locally for testing.
 
 > [!CAUTION]
 > The build process uses the `Release.DynamicsCrm.DevKit.Cli.ps1` script.
@@ -20,4 +20,4 @@ Build **only** the CLI project (faster than `/copilot-build-debug`), pack it as 
 - This workflow builds **only CLI** (not Analyzer, Tool, or VSIX) → much faster
 - Version is defined in `DevKit.ReleaseConfig.json`
 - No signing keys required for any build configuration
-- For full solution build, use `/copilot-build-debug` workflow instead
+- For full solution build, use `/devkit-build-debug` workflow instead

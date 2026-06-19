@@ -1,5 +1,5 @@
 ---
-description: "Build DynamicsCrm.DevKit VSIX project in Debug mode"
+description: Build DynamicsCrm.DevKit VSIX project in Debug mode
 ---
 
 Build the VSIX project using MSBuild in Debug mode.
@@ -25,4 +25,4 @@ $msbuild = "C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Cur
 
 - VSIX projects MUST use MSBuild, NOT `dotnet build`
 - No signing keys required for any build configuration
-- For full solution build with packaging, use `/claude-build-debug` workflow instead
+- For full solution build with packaging, use `/devkit-build-debug` workflow instead

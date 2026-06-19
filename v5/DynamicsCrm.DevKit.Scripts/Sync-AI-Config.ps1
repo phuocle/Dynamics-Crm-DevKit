@@ -33,19 +33,19 @@ $script:DriftDetected = 0
 
 $Clients = @{
     Claude = @{
-        Prefix = "claude"
+        Prefix = "devkit"
         Alias = "devkit-claude"
     }
     Copilot = @{
-        Prefix = "copilot"
+        Prefix = "devkit"
         Alias = "devkit-copilot"
     }
     Antigravity = @{
-        Prefix = "anti"
+        Prefix = "devkit"
         Alias = "devkit-antigravity"
     }
     Codex = @{
-        Prefix = "codex"
+        Prefix = "devkit"
         Alias = "devkit-codex"
     }
 }
@@ -422,22 +422,22 @@ foreach ($wfFile in $workflowFiles) {
     $description = Get-WorkflowDescription $wfFile.FullName
     $body = Get-WorkflowBody $wfFile.FullName
 
-    $claudeName = "claude-$name.md"
+    $claudeName = "devkit-$name.md"
     $claudeCommandKeep += $claudeName
     Compare-And-Write (Join-Path $ClaudeCommandsDir $claudeName) (ConvertTo-ClaudeCommand $description (Render-ForClient $body "Claude"))
 
-    $copilotName = "copilot-$name.prompt.md"
+    $copilotName = "devkit-$name.prompt.md"
     $copilotPromptKeep += $copilotName
     Compare-And-Write (Join-Path $GithubPromptsDir $copilotName) (ConvertTo-CopilotPrompt $description (Render-ForClient $body "Copilot"))
 
-    $antigravityName = "anti-$name.md"
+    $antigravityName = "devkit-$name.md"
     $antigravityWorkflowKeep += $antigravityName
     Compare-And-Write (Join-Path $AntigravityWorkflowsDir $antigravityName) (ConvertTo-AntigravityWorkflow $description (Render-ForClient $body "Antigravity"))
 }
 
-Remove-GeneratedFiles $ClaudeCommandsDir @("claude-*.md") $claudeCommandKeep
-Remove-GeneratedFiles $GithubPromptsDir @("copilot-*.prompt.md") $copilotPromptKeep
-Remove-GeneratedFiles $AntigravityWorkflowsDir @("*.md") $antigravityWorkflowKeep
+Remove-GeneratedFiles $ClaudeCommandsDir @("devkit-*.md", "claude-*.md") $claudeCommandKeep
+Remove-GeneratedFiles $GithubPromptsDir @("devkit-*.prompt.md", "copilot-*.prompt.md") $copilotPromptKeep
+Remove-GeneratedFiles $AntigravityWorkflowsDir @("devkit-*.md", "anti-*.md") $antigravityWorkflowKeep
 
 Write-Host ""
 Write-Host "--- Syncing skills ---" -ForegroundColor White

@@ -1,6 +1,5 @@
 ---
 description: "Execute a prompt from Mcp.prompts.md, track tool chain, and update the file with results"
-mode: agent
 ---
 
 Execute a single prompt from `DynamicsCrm.DevKit.Docs/Mcp.prompts.md`, record which MCP tools were called and in what order, then write the result back into the file inline under the prompt.
@@ -56,7 +55,7 @@ If during execution you discover a bug in a `.cs` file under `DynamicsCrm.DevKit
 
 1. Read the relevant `.cs` file(s) to confirm the bug
 2. Fix the file using Edit tool
-3. Run `/copilot-build-cli` to rebuild and restart MCP
+3. Run `/devkit-build-cli` to rebuild and restart MCP
 4. Kill the running MCP process:
    ```powershell
    Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force

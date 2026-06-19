@@ -55,7 +55,7 @@ If during execution you discover a bug in a `.cs` file under `DynamicsCrm.DevKit
 
 1. Read the relevant `.cs` file(s) to confirm the bug
 2. Fix the file using Edit tool
-3. Run `/anti-build-cli` to rebuild and restart MCP
+3. Run `/devkit-build-cli` to rebuild and restart MCP
 4. Kill the running MCP process:
    ```powershell
    Get-Process | Where-Object { $_.CommandLine -like "*devkit*mcp*" } | Stop-Process -Force

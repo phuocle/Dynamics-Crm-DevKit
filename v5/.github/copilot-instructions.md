@@ -122,38 +122,38 @@ Build workflows and MCP restart procedure: see `.agents/rules/core-rule.md` and 
 
 ## Command Prefixes
 
-When `AGENTS.md` instructs you to use a workflow like `/copilot-build-cli` or `/copilot-commit`, use the prefix generated for your current AI client.
+When `AGENTS.md` instructs you to use a workflow like `/devkit-build-cli` or `/devkit-commit`, use the prefix generated for your current AI client.
 
-- Build Analyzers: `/copilot-build-analyzer`
-- Build CLI: `/copilot-build-cli`
-- Build Tool: `/copilot-build-tool`
-- Build VSIX: `/copilot-build-vsix`
-- Build All Debug: `/copilot-build-debug`
-- Build All Release: `/copilot-build-release`
-- Run Tests: `/copilot-unit-test`
-- Commit code: `/copilot-commit`
+- Build Analyzers: `/devkit-build-analyzer`
+- Build CLI: `/devkit-build-cli`
+- Build Tool: `/devkit-build-tool`
+- Build VSIX: `/devkit-build-vsix`
+- Build All Debug: `/devkit-build-debug`
+- Build All Release: `/devkit-build-release`
+- Run Tests: `/devkit-unit-test`
+- Commit code: `/devkit-commit`
 
 ## Forbidden Actions
 
 > [!CAUTION]
 > - NEVER run workflows that belong to another AI client.
 > - NEVER use raw Git (`git add`, `git commit`, `git push`) locally. Use the generated commit workflow for your current AI client.
-> - NEVER auto-run full debug or release builds. `/copilot-build-debug` and `/copilot-build-release` may run only when the user explicitly invokes them.
+> - NEVER auto-run full debug or release builds. `/devkit-build-debug` and `/devkit-build-release` may run only when the user explicitly invokes them.
 
 ## Build After Editing
 
 | Project Folder | Build Command |
 |---|---|
-| `DynamicsCrm.DevKit.Analyzers\**` | `/copilot-build-analyzer` |
-| `DynamicsCrm.DevKit.Cli\**` | `/copilot-build-cli` |
-| `DynamicsCrm.DevKit.Tool\**` | `/copilot-build-tool` |
-| `DynamicsCrm.DevKit\**` | `/copilot-build-vsix` |
+| `DynamicsCrm.DevKit.Analyzers\**` | `/devkit-build-analyzer` |
+| `DynamicsCrm.DevKit.Cli\**` | `/devkit-build-cli` |
+| `DynamicsCrm.DevKit.Tool\**` | `/devkit-build-tool` |
+| `DynamicsCrm.DevKit\**` | `/devkit-build-vsix` |
 
 ## MCP Restart
 
 After editing any file in `DynamicsCrm.DevKit.Cli\Mcp\*.*`:
 
-1. Run `/copilot-build-cli` to rebuild, pack, install, and kill stale MCP processes.
+1. Run `/devkit-build-cli` to rebuild, pack, install, and kill stale MCP processes.
 2. Restart the MCP connector for the current AI client.
 3. Call MCP `whoami` once so the client starts a fresh `devkit mcp` process.
 4. Verify `structuredContent.devkit.version`, `structuredContent.devkit.build`, and `structuredContent.devkit.processStartTime`.
