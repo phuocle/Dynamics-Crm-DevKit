@@ -44,26 +44,35 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunFinished())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                try
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    await WriteTargetFileIfChangedAsync($"{DialogClassName}.dialog.ts", _TypeScriptDialog_);
-                    if (!IsDialogTsExisting)
-                        await WriteTargetFileIfChangedAsync($"{DialogClassName}.ts", _TypeScript_);
+                    try
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        var dialogFileName = $"{DialogClassName}.dialog.ts";
+                        var userFileName = $"{DialogClassName}.ts";
+                        var dialogProjectItem = GetGeneratedProjectItem(dialogFileName);
+                        if (dialogProjectItem == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(dialogFileName, _TypeScriptDialog_);
+                        }
 
-                    VsixHelper.TrySetDependentUpon(GetGeneratedProjectItem($"{DialogClassName}.dialog.ts"), $"{DialogClassName}.ts");
-                    await VS.StatusBar.ShowMessageAsync($"{DialogClassName}.dialog.ts up to date!!!");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"DevKit: TsDialog.RunFinished failed: {ex.Message}");
-                }
-                finally
-                {
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
+                        if (!IsDialogTsExisting && GetGeneratedProjectItem(userFileName) == null)
+                        {
+                            await WriteTargetFileIfChangedAsync(userFileName, _TypeScript_);
+                        }
+
+                        VsixHelper.TrySetDependentUpon(dialogProjectItem ?? GetGeneratedProjectItem(dialogFileName), userFileName);
+                        await VS.StatusBar.ShowMessageAsync($"{dialogFileName} up to date!!!");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"DevKit: TsDialog.RunFinished failed: {ex.Message}");
+                    }
+                    finally
+                    {
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
                 });
             }
         }
@@ -73,57 +82,63 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             using (TraceRunStarted())
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var form = new FormItem(ItemType.TsDialog);
-                var ok = form.ShowModal() ?? false;
-                if (ok)
                 {
-                    await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-                    ItemName = form.ItemName;
-                    ServiceClient = form.ServiceClient;
-                    SelectedDialogForm = form.SelectedDialogForm;
-                    DialogLogicalName = SelectedDialogForm.Name;
-                    DialogClassName = SelectedDialogForm.UniqueName;
+                    var form = new FormItem(ItemType.TsDialog);
+                    var ok = form.ShowModal() ?? false;
+                    if (ok)
+                    {
+                        await Microsoft.VisualStudio.Shell.ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+                        ItemName = form.ItemName;
+                        ServiceClient = form.ServiceClient;
+                        SelectedDialogForm = form.SelectedDialogForm;
+                        DialogLogicalName = SelectedDialogForm.Name;
+                        DialogClassName = SelectedDialogForm.UniqueName;
 
-                    // Generate the .dialog.ts content
-                    _TypeScriptDialog_ = await Shared.Logic.TsDialog.GetTsDialogCodeAsync(form.ServiceClient, SelectedDialogForm);
+                        using (Trace("GenerateDialogTypeScript", $"dialog={DialogClassName}"))
+                        {
+                            _TypeScriptDialog_ = await Shared.Logic.TsDialog.GetTsDialogCodeAsync(form.ServiceClient, SelectedDialogForm);
+                        }
 
-                    // Generate Dialog.ts user code (IIFE block)
-                    _TypeScript_ = await new CodeGenService(form.ServiceClient).GetDefaultTsDialogFileAsync(SelectedDialogForm, DialogClassName);
+                        using (Trace("GenerateDefaultTypeScript", $"dialog={DialogClassName}"))
+                        {
+                            _TypeScript_ = await new CodeGenService(form.ServiceClient).GetDefaultTsDialogFileAsync(SelectedDialogForm, DialogClassName);
+                        }
 
-                    replacementsDictionary["$TypeScript$"] = _TypeScript_;
-                    replacementsDictionary["$TypeScriptDialog$"] = _TypeScriptDialog_;
-                    replacementsDictionary["$DialogName$"] = DialogClassName;
-                    await Replacement.SetAsync(replacementsDictionary, form);
-                    await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
-                }
-                else
-                {
-                    VsixHelper.ThrowWizardCancelledException();
-                }
+                        replacementsDictionary["$TypeScript$"] = _TypeScript_;
+                        replacementsDictionary["$TypeScriptDialog$"] = _TypeScriptDialog_;
+                        replacementsDictionary["$DialogName$"] = DialogClassName;
+                        await Replacement.SetAsync(replacementsDictionary, form);
+                        await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                    }
+                    else
+                    {
+                        VsixHelper.ThrowWizardCancelledException();
+                    }
                 });
             }
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            using (TraceShouldAddProjectItem(filePath))
             {
-                var targetFileName = filePath switch
+                return ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    "TypeScript.ts" => $"{DialogClassName}.ts",
-                    _ => $"{DialogClassName}.dialog.ts"
-                };
-                var shouldAdd = await ShouldAddProjectItemAsync(filePath, targetFileName);
-                if (filePath == "TypeScript.ts")
-                {
-                    IsDialogTsExisting = IsFilePathExist;
-                    // If {DialogClassName}.ts exists, preserve it; otherwise let the template create it.
+                    var targetFileName = filePath switch
+                    {
+                        "TypeScript.ts" => $"{DialogClassName}.ts",
+                        _ => $"{DialogClassName}.dialog.ts"
+                    };
+                    var shouldAdd = await ShouldAddProjectItemAsync(filePath, targetFileName);
+                    if (filePath == "TypeScript.ts")
+                    {
+                        IsDialogTsExisting = IsFilePathExist;
+                        return shouldAdd;
+                    }
                     return shouldAdd;
-                }
-                return shouldAdd;
-            });
+                });
+            }
         }
     }
 }
