@@ -7,6 +7,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace DynamicsCrm.DevKit.Lib
 {
     public class VsixHelper
     {
+        private static readonly ConcurrentDictionary<string, string> EmbeddedResourceCache = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         internal sealed class ProjectItemsContainer
         {
             internal string FolderPath { get; set; }
@@ -477,9 +480,20 @@ namespace DynamicsCrm.DevKit.Lib
         {
             using (ItemTemplateTelemetry.Start("VsixHelper", "vsix", "ReadEmbeddedResource", $"path={path}"))
             {
+                if (!string.IsNullOrWhiteSpace(path) && EmbeddedResourceCache.TryGetValue(path, out var cached))
+                {
+                    ItemTemplateTelemetry.Log("VsixHelper", "vsix", "ReadEmbeddedResource", $"cacheHit path={path}");
+                    return cached;
+                }
+
                 try
                 {
-                    return await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
+                    var content = await Helper.ReadEmbeddedResourceAsync($"{typeof(DevKitPackage).Assembly.GetName().Name}.Resources.{path}");
+                    if (!string.IsNullOrWhiteSpace(path) && content != null)
+                    {
+                        EmbeddedResourceCache[path] = content;
+                    }
+                    return content;
                 }
                 catch
                 {
