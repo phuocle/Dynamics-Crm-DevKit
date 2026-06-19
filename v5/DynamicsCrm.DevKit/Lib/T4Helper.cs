@@ -84,5 +84,25 @@ namespace DynamicsCrm.DevKit.Lib
                 };
             }
         }
+
+        internal static async Task<T4Context> BuildTestContextAsync(FormPlugin form)
+        {
+            using (ItemTemplateTelemetry.Start(form?.GetType().Name, "t4", "BuildTestContext"))
+            {
+                return new T4Context
+                {
+                    PluginNameSpace = form.PluginNameSpace,
+                    PluginExecution = form.PluginExecution,
+                    PluginMessage = form.PluginMessage,
+                    PluginStage = form.PluginStage,
+                    PluginSchemaName = form.PluginSchemaName,
+                    PluginLogicalName = form.PluginLogicalName,
+                    PluginOrder = form.PluginOrder,
+                    Class = form.Class,
+                    PluginSharedNameSpace = await VsixHelper.GetSharedProjectAsync(),
+                    TestTargetFullClassName = form.TestTargetFullClassName,
+                };
+            }
+        }
     }
 }

@@ -455,14 +455,17 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private async Task LoadPluginTestCandidatesAsync()
         {
             if (ItemType != ItemType.Test) return;
-            LockUi(true);
-            var candidates = await PluginTestDiscovery.GetTestCandidatesAsync(TestProject);
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
-            ComboBoxTestPlugin.ItemsSource = candidates;
-            ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
-            ApplySelectedTestPluginToForm();
-            LockUi(false);
+            using (ItemTemplateTelemetry.Start(nameof(FormPlugin), _telemetryCorrelationId, "LoadPluginTestCandidates"))
+            {
+                LockUi(true);
+                var candidates = await PluginTestDiscovery.GetTestCandidatesAsync(TestProject);
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                ComboBoxTestPlugin.DisplayMemberPath = nameof(PluginTestCandidate.DisplayName);
+                ComboBoxTestPlugin.ItemsSource = candidates;
+                ComboBoxTestPlugin.SelectedItem = candidates.FirstOrDefault();
+                ApplySelectedTestPluginToForm();
+                LockUi(false);
+            }
         }
 
         private void ApplySelectedTestPluginToForm()

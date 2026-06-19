@@ -1,6 +1,7 @@
 using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,37 +15,78 @@ namespace DynamicsCrm.DevKit.Lib
         private static readonly Regex NamespaceRegex = new Regex(@"\bnamespace\s+(?<name>[A-Za-z_][A-Za-z0-9_.]*)", RegexOptions.Compiled);
         private static readonly Regex ClassRegex = new Regex(@"\b(?<modifiers>(?:(?:public|internal|private|protected|abstract|sealed|partial|static)\s+)*)class\s+(?<name>[A-Za-z_][A-Za-z0-9_]*)(?:\s*:\s*(?<bases>[^{]+))?", RegexOptions.Compiled);
         private static readonly Regex RegistrationRegex = new Regex(@"\[CrmPluginRegistration\((?<args>[\s\S]*?)\)\]", RegexOptions.Compiled);
+        private static readonly ConcurrentDictionary<string, List<ClassDeclaration>> ReferencedClassCache = new ConcurrentDictionary<string, List<ClassDeclaration>>();
 
         internal static async Task<List<PluginTestCandidate>> GetTestCandidatesAsync(EnvDTE.Project testProject)
         {
-            var solutionFolder = await VsixHelper.GetSolutionFolderAsync();
-            if (string.IsNullOrWhiteSpace(solutionFolder) || !Directory.Exists(solutionFolder))
-                return new List<PluginTestCandidate>();
-
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var referencedProjectFolders = GetReferencedProjectFolders(testProject);
-            if (referencedProjectFolders.Count == 0)
-                return new List<PluginTestCandidate>();
-            var testProjectFolder = GetProjectFolder(testProject);
-
-            return await Task.Run(() =>
+            using (ItemTemplateTelemetry.Start(nameof(PluginTestDiscovery), "test", "GetTestCandidates"))
             {
-                var sourceFiles = referencedProjectFolders.SelectMany(GetCSharpFiles).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-                var classes = sourceFiles.SelectMany(ReadClassDeclarations).ToList();
-                var testClassNames = GetTestClassNames(testProjectFolder);
-                var classMap = classes
-                    .GroupBy(@class => @class.FullClassName, StringComparer.Ordinal)
-                    .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+                var solutionFolder = await VsixHelper.GetSolutionFolderAsync();
+                if (string.IsNullOrWhiteSpace(solutionFolder) || !Directory.Exists(solutionFolder))
+                    return new List<PluginTestCandidate>();
 
-                return classes
-                    .Where(@class => !@class.IsAbstract)
-                    .Where(@class => InheritsFrom(@class, classMap, "IPlugin", "Microsoft.Xrm.Sdk.IPlugin") ||
-                                     InheritsFrom(@class, classMap, "CodeActivity", "System.Activities.CodeActivity"))
-                    .Select(CreateCandidate)
-                    .Where(candidate => !HasConventionTestClass(candidate, testClassNames))
-                    .OrderBy(candidate => candidate.FullClassName)
-                    .ToList();
-            });
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                var referencedProjectFolders = GetReferencedProjectFolders(testProject);
+                if (referencedProjectFolders.Count == 0)
+                    return new List<PluginTestCandidate>();
+                var testProjectFolder = GetProjectFolder(testProject);
+
+                return await Task.Run(() =>
+                {
+                    var sourceFiles = referencedProjectFolders.SelectMany(GetCSharpFiles).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                    var classes = GetReferencedClasses(sourceFiles);
+                    var testClassNames = GetTestClassNames(testProjectFolder);
+                    var classMap = classes
+                        .GroupBy(@class => @class.FullClassName, StringComparer.Ordinal)
+                        .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
+
+                    return classes
+                        .Where(@class => !@class.IsAbstract)
+                        .Where(@class => InheritsFrom(@class, classMap, "IPlugin", "Microsoft.Xrm.Sdk.IPlugin") ||
+                                         InheritsFrom(@class, classMap, "CodeActivity", "System.Activities.CodeActivity"))
+                        .Select(CreateCandidate)
+                        .Where(candidate => !HasConventionTestClass(candidate, testClassNames))
+                        .OrderBy(candidate => candidate.FullClassName)
+                        .ToList();
+                });
+            }
+        }
+
+        private static List<ClassDeclaration> GetReferencedClasses(List<string> sourceFiles)
+        {
+            using (ItemTemplateTelemetry.Start(nameof(PluginTestDiscovery), "test", "ReadReferencedClasses", $"files={sourceFiles.Count}"))
+            {
+                var cacheKey = GetSourceFilesCacheKey(sourceFiles);
+                if (ReferencedClassCache.TryGetValue(cacheKey, out var cachedClasses))
+                {
+                    ItemTemplateTelemetry.Log(nameof(PluginTestDiscovery), "test", "ReadReferencedClasses", $"cacheHit classes={cachedClasses.Count}");
+                    return cachedClasses;
+                }
+
+                var classes = sourceFiles.SelectMany(ReadClassDeclarations).ToList();
+                ReferencedClassCache[cacheKey] = classes;
+                return classes;
+            }
+        }
+
+        private static string GetSourceFilesCacheKey(List<string> sourceFiles)
+        {
+            long latestWriteUtc = 0;
+            long totalLength = 0;
+            foreach (var sourceFile in sourceFiles)
+            {
+                try
+                {
+                    var info = new FileInfo(sourceFile);
+                    latestWriteUtc = Math.Max(latestWriteUtc, info.LastWriteTimeUtc.Ticks);
+                    totalLength += info.Length;
+                }
+                catch
+                {
+                }
+            }
+
+            return $"{sourceFiles.Count}:{latestWriteUtc}:{totalLength}:{string.Join("|", sourceFiles.OrderBy(path => path, StringComparer.OrdinalIgnoreCase))}";
         }
 
         private static string GetProjectFolder(EnvDTE.Project project)
