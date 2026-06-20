@@ -2,17 +2,11 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv5",
       "folder": "bin\\Debug",
       "includefiles": [
-        "???.Server*.dll",
-        "???.Package*.nupkg",
-        "???.Plugin*.dll",
-        "???.Plugin*.nupkg",
-        "???.CustomAction*.dll",
-        "???.Workflow*.dll",
-        "???.CustomApi*.dll",
-        "???.DataProvider*.dll"
+        "Dev.DevKitV5.Server*.dll",
+        "Dev.DevKitV5.Package*.nupkg"
       ],
       "excludefiles": [
         "Dev.DevKitV5.*.Test.dll"
@@ -22,7 +16,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv5",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -39,26 +33,26 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "devkitv5_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "devkitv5_/entities/[entity].form.js",
+            "devkitv5_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "devkitv5_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "devkitv5_/lib/devkit.js"
           ]
         }
       ]
     },
     {
       "profile": "DEBUGTS",
-      "solution": "???",
+      "solution": "devkitv5",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -73,7 +67,7 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv5",
       "displayname": "???",
       "pluralname": "???",
       "name": "???"
@@ -83,7 +77,7 @@
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "???",
+      "rootnamespace": "Dev.DevKitV5.Shared.Entities",
       "namespace": "",
       "rootfolder": "???",
       "entities": "folder"
@@ -91,58 +85,58 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKitV5",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKitV5",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootfolder": "???",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootfolder": "???",
+      "rootfolder": "",
       "entities": "folder"
     }
   ],
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "???"
+      "solution": "devkitv5"
     }
   ],
   "downloadreports": [
     {
       "profile": "DEBUG",
-      "solution": "???"
+      "solution": "devkitv5"
     }
   ],
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "???",
+      "solution": "devkitv5",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "devkitv5",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "???",
+      "solution": "devkitv5",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "devkitv5",
       "type": "Pack",
       "mapfile": ""
     }
@@ -150,7 +144,7 @@
   "modelbuilders": [
     {
       "profile": "ALL",
-      "namespace": "???.ProxyTypes",
+      "namespace": "Dev.DevKitV5.ProxyTypes",
       "output": "GeneratedCode.cs",
       "entities": "*"
     }
@@ -158,9 +152,9 @@
   "uploadreports": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "devkitv5",
       "languages": [
-        "???"
+        "1033"
       ]
     }
   ]

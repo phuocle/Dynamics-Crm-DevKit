@@ -45,6 +45,14 @@
     <None Include="deploy.debug.only.bat" />
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustomActions\Account\" />
+    <Folder Include="CustomActions\None\" />
+    <Folder Include="CustomApis\" />
+    <Folder Include="Workflows\" />
+    <Folder Include="Plugins\Account\" />
+    <Folder Include="Plugins\Contact\" />
+  </ItemGroup>
   <Import Project="..\Dev.DevKitV5.Shared\Dev.DevKitV5.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKitV5.Shared\Dev.DevKitV5.Shared.projitems')" />
 </Project>
 <!-- v.4.12.34.56 - Build: 30.06.2026 23:59:59 -->
