@@ -49,5 +49,5 @@ Before creating this project, ensure you have:
 
 ## References
 
-* [UI Test Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/UI-Test-Project-Template)
+* [UI Test Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template)
 * [EasyRepro](https://github.com/microsoft/EasyRepro)
