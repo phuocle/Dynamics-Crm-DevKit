@@ -279,9 +279,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 }
                 void BatFileItem()
                 {
-                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Bat-File-Item-Template");
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-File-Item-Template");
                     HELP.Inlines.Clear();
-                    HELP.Inlines.Add("Bat File Item Template");
+                    HELP.Inlines.Add("DevKit File Item Template");
                     LabelExecution.Visibility = System.Windows.Visibility.Collapsed;
                     ComboBoxExecution.Visibility = System.Windows.Visibility.Collapsed;
                     LabelStage.Visibility = System.Windows.Visibility.Collapsed;

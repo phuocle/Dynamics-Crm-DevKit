@@ -67,7 +67,7 @@ The item template names below match the display names shown by Visual Studio.
 | 09. C# Test Class | Server-side unit test scaffold. | [CSharp Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template) |
 | 10. C# Ui Test Class | UI automation test scaffold. | [CSharp Ui Test Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Ui-Test-Item-Template) |
 | 11. Resource String | Dataverse localization resource file. | [Resource String Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template) |
-| 12. DevKit files | DevKit support files, batch files, helpers, and managed identity setup files. | [Bat File Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Bat-File-Item-Template) |
+| 12. DevKit files | DevKit support files, batch files, helpers, and managed identity setup files. | [DevKit File Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/DevKit-File-Item-Template) |
 | 13. TypeScript Form | TypeScript form script with generated form typings. | [TypeScript Form Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Form-Item-Template) |
 | 14. TypeScript WebApi | TypeScript Web API script with typed interfaces. | [TypeScript WebApi Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template) |
 | 15. TypeScript Dialog | TypeScript dialog script with typed dialog interfaces. | [TypeScript Dialog Item Template](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template) |

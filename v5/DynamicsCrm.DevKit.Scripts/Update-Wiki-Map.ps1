@@ -17,15 +17,20 @@ if (-not (Test-Path -LiteralPath $wikiRoot -PathType Container)) {
 }
 
 $wikiMapPath = Join-Path $wikiRoot 'Wiki-Map.md'
-$excludedNames = @('_Sidebar.md', 'Wiki-Map.md')
+$excludedPageSlugs = @(
+    '_Sidebar',
+    'Wiki-Map',
+    'update.prompt'
+)
 
 $links = Get-ChildItem -LiteralPath $wikiRoot -Recurse -File -Filter '*.md' |
-    Where-Object { $excludedNames -notcontains $_.Name } |
     ForEach-Object {
         $slug = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
-        [pscustomobject]@{
-            Slug = $slug
-            Line = "* [$slug]($slug)"
+        if ($excludedPageSlugs -notcontains $slug) {
+            [pscustomobject]@{
+                Slug = $slug
+                Line = "* [$slug]($slug)"
+            }
         }
     } |
     Sort-Object @{ Expression = { $_.Slug.ToLowerInvariant() } }, Slug
