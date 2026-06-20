@@ -117,6 +117,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 endsWith = ".form.ts";
             else if (Json.type.ToLower() == nameof(GeneratorType.jswebapi))
                 endsWith = ".webapi.js";
+            else if (Json.type.ToLower() == nameof(GeneratorType.tswebapi))
+                endsWith = ".webapi.ts";
             if (Json.entities != null && (Json.entities.Trim().ToLower() == "*" || Json.entities.Trim().ToLower() == "all"))
             {
                 SpectreLog.WriteHighLight("Filter by: ", "json.entities", " with values: ", Json.entities.Trim(), ".");
