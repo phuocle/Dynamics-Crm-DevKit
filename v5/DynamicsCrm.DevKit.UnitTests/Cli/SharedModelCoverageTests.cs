@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +52,7 @@ public class SharedModelCoverageTests
     }
 
     [TestMethod]
-    public void CommandArgs_ResolveEnvironmentDefaults_UsesEnvWhenArgsAreEmpty()
+    public void CommandArgs_ResolveMachineEnvironmentDefaults_UsesEnvWhenArgsAreEmpty()
     {
         var args = new CommandLineArgs();
         var vars = new Dictionary<string, string?>
@@ -69,7 +70,7 @@ public class SharedModelCoverageTests
 
         WithEnvironment(vars, () =>
         {
-            args.ResolveEnvironmentDefaults();
+            args.ResolveMachineEnvironmentDefaults();
             Assert.AreEqual("AuthType=ClientSecret;", args.Connection);
             Assert.AreEqual("ClientSecret", args.AuthType);
             Assert.AreEqual("https://contoso.crm.dynamics.com", args.Url);
@@ -83,7 +84,87 @@ public class SharedModelCoverageTests
     }
 
     [TestMethod]
-    public void CommandArgs_ResolveEnvironmentDefaults_DoesNotOverrideExplicitValuesOrDefaultInteractiveClient()
+    public void CommandArgs_ResolveProjectEnvironmentDefaults_UsesProjectEnvWhenArgsAreEmpty()
+    {
+        var originalDirectory = Environment.CurrentDirectory;
+        var directory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"devkit-env-{Guid.NewGuid():N}");
+        System.IO.Directory.CreateDirectory(directory);
+
+        try
+        {
+            System.IO.File.WriteAllLines(System.IO.Path.Combine(directory, ".env"), new[]
+            {
+                "DEVKIT_AUTH_TYPE=ClientSecret",
+                "DEVKIT_URL=https://project.crm.dynamics.com",
+                "DEVKIT_CLIENT_ID=project-client",
+                "DEVKIT_CLIENT_SECRET=project-secret"
+            });
+
+            Environment.CurrentDirectory = directory;
+
+            WithEnvironment(new Dictionary<string, string?>
+            {
+                ["DEVKIT_AUTH_TYPE"] = "FromPac",
+                ["DEVKIT_URL"] = "https://machine.crm.dynamics.com",
+                ["DEVKIT_CLIENT_ID"] = "machine-client",
+                ["DEVKIT_CLIENT_SECRET"] = "machine-secret"
+            }, () =>
+            {
+                var args = new CommandLineArgs();
+                args.ResolveProjectEnvironmentDefaults();
+                Assert.AreEqual("ClientSecret", args.AuthType);
+                Assert.AreEqual("https://project.crm.dynamics.com", args.Url);
+                Assert.AreEqual("project-client", args.ClientId);
+                Assert.AreEqual("project-secret", args.ClientSecret);
+            });
+        }
+        finally
+        {
+            Environment.CurrentDirectory = originalDirectory;
+            if (System.IO.Directory.Exists(directory))
+                System.IO.Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [TestMethod]
+    public void CommandArgs_ResolveProjectEnvironmentDefaults_DoesNotUseMachineEnv()
+    {
+        var args = new CommandLineArgs();
+        var originalDirectory = Environment.CurrentDirectory;
+        var directory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"devkit-no-env-{Guid.NewGuid():N}");
+        System.IO.Directory.CreateDirectory(directory);
+
+        try
+        {
+            Environment.CurrentDirectory = directory;
+
+            WithEnvironment(new Dictionary<string, string?>
+            {
+                ["DEVKIT_CONNECTION"] = "env",
+                ["DEVKIT_AUTH_TYPE"] = "ClientSecret",
+                ["DEVKIT_URL"] = "https://machine.crm.dynamics.com",
+                ["DEVKIT_CLIENT_ID"] = "machine-client",
+                ["DEVKIT_CLIENT_SECRET"] = "machine-secret"
+            }, () =>
+            {
+                args.ResolveProjectEnvironmentDefaults();
+                Assert.AreEqual("", args.Connection);
+                Assert.AreEqual("", args.AuthType);
+                Assert.AreEqual("", args.Url);
+                Assert.AreEqual("", args.ClientId);
+                Assert.AreEqual("", args.ClientSecret);
+            });
+        }
+        finally
+        {
+            Environment.CurrentDirectory = originalDirectory;
+            if (System.IO.Directory.Exists(directory))
+                System.IO.Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [TestMethod]
+    public void CommandArgs_ResolveProjectEnvironmentDefaults_DoesNotOverrideExplicitValuesOrDefaultInteractiveClient()
     {
         var args = new CommandLineArgs
         {
@@ -104,11 +185,50 @@ public class SharedModelCoverageTests
             ["DEVKIT_CLIENT_SECRET"] = "env-secret"
         }, () =>
         {
-            args.ResolveEnvironmentDefaults();
+            args.ResolveProjectEnvironmentDefaults();
             Assert.AreEqual("explicit", args.Connection);
             Assert.AreEqual("", args.ClientId);
             Assert.AreEqual("explicit-secret", args.ClientSecret);
         });
+    }
+
+    [TestMethod]
+    public void ProjectEnvironment_EnsureFile_CreatesEnvExampleAndGitIgnoreEntry()
+    {
+        var root = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"devkit-project-env-{Guid.NewGuid():N}");
+        var child = System.IO.Path.Combine(root, "src", "app");
+        System.IO.Directory.CreateDirectory(child);
+        var gitIgnore = System.IO.Path.Combine(root, ".gitignore");
+        System.IO.File.WriteAllText(gitIgnore, "# existing");
+
+        try
+        {
+            ProjectEnvironment.EnsureFile(child);
+            ProjectEnvironment.EnsureFile(child);
+
+            var envFile = System.IO.Path.Combine(child, ".env");
+            var exampleFile = System.IO.Path.Combine(child, ".env.example");
+            Assert.IsTrue(System.IO.File.Exists(envFile));
+            Assert.IsTrue(System.IO.File.Exists(exampleFile));
+
+            var envText = System.IO.File.ReadAllText(envFile);
+            Assert.IsTrue(envText.Contains("DEVKIT_CLIENT_SECRET="));
+
+            var exampleText = System.IO.File.ReadAllText(exampleFile);
+            Assert.IsTrue(exampleText.Contains("replace-with-client-secret"));
+
+            var expectedGitIgnoreEntry = new System.IO.FileInfo(envFile).FullName.Replace('\\', '/');
+            var gitIgnoreLines = System.IO.File.ReadAllLines(gitIgnore)
+                .Select(line => line.Replace('\\', '/').Trim())
+                .Where(line => string.Equals(line, expectedGitIgnoreEntry, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+            Assert.AreEqual(1, gitIgnoreLines.Length);
+        }
+        finally
+        {
+            if (System.IO.Directory.Exists(root))
+                System.IO.Directory.Delete(root, recursive: true);
+        }
     }
 
     [TestMethod]

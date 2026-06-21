@@ -62,8 +62,8 @@
                                     <RowDefinition Height="Auto"/> <!-- Client ID -->
                                     <RowDefinition Height="Auto"/> <!-- Client Secret (ClientSecret type) -->
                                     <RowDefinition Height="Auto"/> <!-- PAC Profile (FromPac type) -->
-                                    <RowDefinition Height="Auto"/> <!-- Environment variables option -->
-                                    <RowDefinition Height="Auto"/> <!-- Environment variables preview -->
+                                    <RowDefinition Height="Auto"/> <!-- Project .env option -->
+                                    <RowDefinition Height="Auto"/> <!-- Project .env preview -->
                                     <RowDefinition Height="Auto"/> <!-- Check Connection button -->
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -92,8 +92,8 @@
                                 <!-- PAC Profile: visible only for FromPac type -->
                                 <Label x:Name="labelPacProfile" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" Content="PAC Profile" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
                                 <ComboBox x:Name="comboBoxPacProfile" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed"/>
-                                <CheckBox x:Name="checkBoxSaveToEnvVar" Grid.Row="10" Grid.Column="1" Margin="0,0,0,5" Content="Use environment variables" Checked="CheckBoxSaveToEnvVar_Changed" Unchecked="CheckBoxSaveToEnvVar_Changed"/>
-                                <TextBlock x:Name="textBlockEnvVarPreview" Grid.Row="11" Grid.Column="1" Margin="0,0,0,5" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11" Foreground="#555555" Visibility="Collapsed"/>
+                                <CheckBox x:Name="checkBoxUseProjectEnv" Grid.Row="10" Grid.Column="1" Margin="0,0,0,5" Content="Use project .env" Checked="CheckBoxUseProjectEnv_Changed" Unchecked="CheckBoxUseProjectEnv_Changed"/>
+                                <TextBlock x:Name="textBlockProjectEnvPreview" Grid.Row="11" Grid.Column="1" Margin="0,0,0,5" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11" Foreground="#555555" Visibility="Collapsed"/>
                                 <Button x:Name="buttonCheckConnection" Grid.Row="12" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
                             </Grid>
                         </Border>

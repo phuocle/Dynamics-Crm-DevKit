@@ -106,8 +106,9 @@ namespace DynamicsCrm.DevKit.Cli
                 "  devkit server --auth FromPac --pacprofile DEVKITV4 --json cli.json --profile DEBUG\n" +
                 "  devkit server --auth ClientSecret --url URL --clientid ID --clientsecret SEC --json cli.json --profile CI\n" +
                 "  devkit mcp --auth ClientSecret --url URL --clientid ID --clientsecret SEC\n\n" +
-                "Environment Variables (DEVKIT_*):\n" +
-                "  All connection args support env var fallback. Priority: CLI args > env vars > empty.\n" +
+                "Project .env / MCP Environment Variables (DEVKIT_*):\n" +
+                "  Normal commands: CLI args > project .env > validation error.\n" +
+                "  MCP command: CLI args > OS DEVKIT_* environment variables > validation error.\n" +
                 "  DEVKIT_AUTH_TYPE     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                 "  DEVKIT_URL           Environment URL\n" +
                 "  DEVKIT_CLIENT_ID     Azure AD application (client) ID\n" +
@@ -172,8 +173,9 @@ namespace DynamicsCrm.DevKit.Cli
                     "  devkit server --auth [cyan]FromPac[/] --pacprofile [cyan]DEVKITV4[/] --json [cyan]cli.json[/] --profile [cyan]DEBUG[/]\n" +
                     "  devkit server --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/] --json [cyan]cli.json[/] --profile [cyan]CI[/]\n" +
                     "  devkit mcp --auth [cyan]ClientSecret[/] --url [cyan]URL[/] --clientid [cyan]ID[/] --clientsecret [cyan]SEC[/]\n\n" +
-                    "[green]Environment Variables (DEVKIT_*):[/]\n" +
-                    "  All connection args support env var fallback. Priority: CLI args > env vars > empty.\n" +
+                    "[green]Project .env / MCP Environment Variables (DEVKIT_*):[/]\n" +
+                    "  Normal commands: CLI args > project .env > validation error.\n" +
+                    "  MCP command: CLI args > OS DEVKIT_* environment variables > validation error.\n" +
                     "  [cyan]DEVKIT_AUTH_TYPE[/]     Auth type (Interactive, ClientSecret, FromPac, ...)\n" +
                     "  [cyan]DEVKIT_URL[/]           Environment URL\n" +
                     "  [cyan]DEVKIT_CLIENT_ID[/]     Azure AD application (client) ID\n" +

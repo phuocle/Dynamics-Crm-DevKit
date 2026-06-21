@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Password { get; set; }
         public string Type { get; set; } = "OAuth";
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
-        public bool UseEnvironmentVariables { get; set; }
+        public bool UseProjectEnvironment { get; set; }
 
         // ═══════════════════════════════════════════════════════════════════
         // COMMON PROPERTIES (for OAuth, Interactive, DeviceCode, etc.)
@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         public override string ToString()
         {
-            return UseEnvironmentVariables ? $"{Name} [Environment Variables]" : Name;
+            return UseProjectEnvironment ? $"{Name} [Project .env]" : Name;
         }
     }
 }

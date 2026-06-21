@@ -61,3 +61,6 @@ Published/
 .agents/mcp_config.json
 .cursor/mcp.json
 .claude/settings.local.json
+
+# DynamicsCrm.DevKit local project environment
+D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOneEnvVar/.env

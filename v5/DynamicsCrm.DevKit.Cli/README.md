@@ -17,7 +17,7 @@ DynamicsCrm.DevKit CLI is the `devkit` .NET global tool for Dataverse deployment
 
 - One command-line surface for server deployments, web resources, reports, generated code, modelbuilder output, and solution packaging.
 - Modern Spectre.Console CLI with `devkit <command> --option value` syntax and compatibility with legacy `/option:value` arguments.
-- Connection support through `--conn`, explicit auth options, PAC profiles, client secrets, SDK login, and `DEVKIT_*` environment variables.
+- Connection support through `--conn`, explicit auth options, project `.env`, PAC profiles, client secrets, SDK login, and MCP `DEVKIT_*` environment variables.
 - MCP server built into the CLI, exposing 33 Dataverse tools across `basic`, `standard`, and `advanced` categories.
 - Single-file web resource deployment using `--file` and `--webresource`, including TypeScript release output deployment when project build scripts are present.
 
@@ -55,9 +55,9 @@ dotnet tool update --global DynamicsCrm.DevKit.Cli
 
 ## 🔐 Authentication
 
-Connection values can be supplied by command-line options or environment variables. Explicit CLI arguments take priority over environment variables.
+Normal command connection values can be supplied by command-line options or project `.env`. Resolution order is explicit CLI arguments, then project `.env`, then validation error. The `mcp` command is the exception: it resolves explicit CLI arguments, then OS `DEVKIT_*` environment variables, then validation error.
 
-| Option | Environment variable | Purpose |
+| Option | `.env` / MCP environment key | Purpose |
 |---|---|---|
 | `--conn` | `DEVKIT_CONNECTION` | Dataverse connection string. |
 | `--auth` | `DEVKIT_AUTH_TYPE` | `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth`, or `AD`. |
@@ -68,6 +68,8 @@ Connection values can be supplied by command-line options or environment variabl
 | `--username` | `DEVKIT_USERNAME` | Username for legacy auth flows. |
 | `--password` | `DEVKIT_PASSWORD` | Password for legacy auth flows. |
 | `--domain` | `DEVKIT_DOMAIN` | On-premises AD domain. |
+
+For normal CLI commands, DevKit searches for a project `.env` file from the command directory upward. VSIX-created projects also create `.env.example` beside `.env`; commit `.env.example`, but keep `.env` local because it can contain secrets. When DevKit creates `.env`, it adds the absolute `.env` path to the nearest `.gitignore` if one exists.
 
 ## 🚀 Usage
 
@@ -169,7 +171,7 @@ Service-principal configuration:
 
 ### 🔐 MCP Authentication
 
-MCP uses the same authentication model as the rest of the CLI. Explicit command-line arguments override `DEVKIT_*` environment variables.
+MCP resolves connection values from explicit command-line arguments first, then OS `DEVKIT_*` environment variables. MCP does not read project `.env` by default.
 
 | Mode | Required values | Best for |
 |---|---|---|

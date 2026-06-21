@@ -45,7 +45,9 @@ Command → Task mapping:
 
 Deprecated: `plugin`, `workflow`, `dataprovider` → use `server`; `proxytype` → use `modelbuilder`
 
-Auth priority: `--conn` > `--auth/--url/...` > env vars (`DEVKIT_*`) > empty
+Auth priority:
+- Normal CLI commands: `--conn` > `--auth/--url/...` > project `.env` (`DEVKIT_*`) > empty
+- `devkit mcp`: `--conn` > `--auth/--url/...` > OS env vars (`DEVKIT_*`) > empty
 Auth types: `Interactive`, `DeviceCode`, `ClientSecret`, `FromPac`, `OAuth` (legacy), `AD` (on-prem)
 
 ---

@@ -460,7 +460,8 @@ namespace DynamicsCrm.DevKit.Lib
 
         internal static async Task AddDynamicsCrmDevKitCliJsonAsync()
         {
-            if (!File.Exists(await VsixHelper.GetDynamicsCrmDevKitJsonCliJsonFullFileNameAsync()))
+            var cliJsonFile = await VsixHelper.GetDynamicsCrmDevKitJsonCliJsonFullFileNameAsync();
+            if (!File.Exists(cliJsonFile))
             {
                 var solutionName = await VsixHelper.GetSolutionNameAsync();
                 var json = await VsixHelper.ReadEmbeddedResourceAsync(Const.DynamicsCrmDevKitCliJson);
@@ -472,8 +473,10 @@ namespace DynamicsCrm.DevKit.Lib
                         .Replace("???.Workflow.*.dll", $"{solutionName}.Workflow.*.dll")
                         .Replace("???.DataProvider.*.dll", $"{solutionName}.DataProvider.*.dll")
                         .Replace("???.*.Test.dll", $"{solutionName}.*.Test.dll");
-                await FileHelper.ForceWriteAllTextAsync(await VsixHelper.GetDynamicsCrmDevKitJsonCliJsonFullFileNameAsync(), json);
+                await FileHelper.ForceWriteAllTextAsync(cliJsonFile, json);
             }
+
+            ProjectEnvironment.EnsureFile(Path.GetDirectoryName(cliJsonFile));
         }
 
         internal static async Task<string> ReadEmbeddedResourceAsync(string path)

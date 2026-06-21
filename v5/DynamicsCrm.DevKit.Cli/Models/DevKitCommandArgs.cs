@@ -1,3 +1,4 @@
+using DynamicsCrm.DevKit.Shared;
 using Spectre.Console.Cli;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
@@ -140,22 +141,39 @@ namespace DynamicsCrm.DevKit.Shared.Models
         }
 
         /// <summary>
-        /// Fill empty connection properties from DEVKIT_* environment variables.
-        /// Priority: CLI args > Environment variables > empty string.
+        /// Fill empty connection properties from project .env.
+        /// Priority: CLI args > project .env > empty string.
         /// </summary>
-        public void ResolveEnvironmentDefaults()
+        public void ResolveProjectEnvironmentDefaults()
+        {
+            var projectEnvironment = ProjectEnvironment.Read(
+                ProjectEnvironment.ResolveFileFromJsonOrDirectory(JsonFile, CurrentDirectory));
+
+            ResolveDefaults(key => ProjectEnvironment.GetValue(projectEnvironment, key));
+        }
+
+        /// <summary>
+        /// Fill empty connection properties from OS DEVKIT_* environment variables.
+        /// Priority: CLI args > environment variables > empty string.
+        /// </summary>
+        public void ResolveMachineEnvironmentDefaults()
+        {
+            ResolveDefaults(Environment.GetEnvironmentVariable);
+        }
+
+        private void ResolveDefaults(Func<string, string> getValue)
         {
             if (string.IsNullOrEmpty(Connection))
-                Connection = Environment.GetEnvironmentVariable("DEVKIT_CONNECTION") ?? string.Empty;
+                Connection = getValue(ProjectEnvironment.Connection) ?? string.Empty;
 
             if (string.IsNullOrEmpty(AuthType))
-                AuthType = Environment.GetEnvironmentVariable("DEVKIT_AUTH_TYPE") ?? string.Empty;
+                AuthType = getValue(ProjectEnvironment.AuthType) ?? string.Empty;
 
             if (string.IsNullOrEmpty(Url))
-                Url = Environment.GetEnvironmentVariable("DEVKIT_URL") ?? string.Empty;
+                Url = getValue(ProjectEnvironment.Url) ?? string.Empty;
 
             // Interactive/DeviceCode have built-in Microsoft multi-tenant AppId defaults.
-            // Don't inherit DEVKIT_CLIENT_ID from env vars for these types,
+            // Don't inherit DEVKIT_CLIENT_ID from fallback for these types,
             // as it may point to a single-tenant app meant for other auth types (e.g., ClientSecret).
             // The --clientid CLI arg still takes priority if explicitly provided.
             if (string.IsNullOrEmpty(ClientId))
@@ -164,23 +182,23 @@ namespace DynamicsCrm.DevKit.Shared.Models
                     AuthType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
                     AuthType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase);
                 if (!hasDefaultClientId)
-                    ClientId = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_ID") ?? string.Empty;
+                    ClientId = getValue(ProjectEnvironment.ClientId) ?? string.Empty;
             }
 
             if (string.IsNullOrEmpty(ClientSecret))
-                ClientSecret = Environment.GetEnvironmentVariable("DEVKIT_CLIENT_SECRET") ?? string.Empty;
+                ClientSecret = getValue(ProjectEnvironment.ClientSecret) ?? string.Empty;
 
             if (string.IsNullOrEmpty(PacProfile))
-                PacProfile = Environment.GetEnvironmentVariable("DEVKIT_PAC_PROFILE") ?? string.Empty;
+                PacProfile = getValue(ProjectEnvironment.PacProfile) ?? string.Empty;
 
             if (string.IsNullOrEmpty(Username))
-                Username = Environment.GetEnvironmentVariable("DEVKIT_USERNAME") ?? string.Empty;
+                Username = getValue(ProjectEnvironment.Username) ?? string.Empty;
 
             if (string.IsNullOrEmpty(Password))
-                Password = Environment.GetEnvironmentVariable("DEVKIT_PASSWORD") ?? string.Empty;
+                Password = getValue(ProjectEnvironment.Password) ?? string.Empty;
 
             if (string.IsNullOrEmpty(Domain))
-                Domain = Environment.GetEnvironmentVariable("DEVKIT_DOMAIN") ?? string.Empty;
+                Domain = getValue(ProjectEnvironment.Domain) ?? string.Empty;
         }
     }
 }

@@ -278,6 +278,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                             return false;
                         }
                     }
+                    if (ProjectType == ProjectType.UiTest && CrmConnection != null)
+                    {
+                        var connectionType = CrmConnection.Type?.ToUpperInvariant();
+                        if (connectionType != "OAUTH")
+                        {
+                            await VS.MessageBox.ShowErrorAsync(
+                                $"The connection type '{CrmConnection.Type}' is not supported for UI Test project template.\n\n" +
+                                "UI Test uses EasyRepro browser login and requires OAuth username/password credentials.\n\n" +
+                                "Please select an OAuth connection.");
+                            return false;
+                        }
+                    }
                 }
                 return true;
             }

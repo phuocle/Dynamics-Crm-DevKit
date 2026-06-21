@@ -34,7 +34,7 @@ namespace DynamicsCrm.DevKit.Cli.Commands
                     return 0;
                 }
 
-                settings.ResolveEnvironmentDefaults();
+                settings.ResolveMachineEnvironmentDefaults();
                 LogConnectionInfo(settings);
                 var serviceClient = await ConnectAsync(settings);
                 if (serviceClient == null) return 2;

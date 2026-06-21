@@ -171,6 +171,24 @@ namespace DynamicsCrm.DevKit.Lib
 
             // FromPac-specific placeholders
             replacements["$PacProfileValue$"] = crmConnection?.PacProfile ?? string.Empty;
+
+            SetAppConfigComments(replacements, crmConnection);
+        }
+
+        private static void SetAppConfigComments(Dictionary<string, string> replacements, CrmConnection crmConnection)
+        {
+            string Comment(string environmentVariable)
+            {
+                return crmConnection?.UseProjectEnvironment == true
+                    ? $"<!-- Value is read from project .env: {environmentVariable} -->"
+                    : string.Empty;
+            }
+
+            replacements["$UrlConfigComment$"] = Comment(ProjectEnvironment.Url);
+            replacements["$ClientIdConfigComment$"] = Comment(ProjectEnvironment.ClientId);
+            replacements["$ClientSecretConfigComment$"] = Comment(ProjectEnvironment.ClientSecret);
+            replacements["$UserNameConfigComment$"] = Comment(ProjectEnvironment.Username);
+            replacements["$PasswordConfigComment$"] = Comment(ProjectEnvironment.Password);
         }
 
         private static async Task AddCommonReplacementsAsync(Dictionary<string, string> replacements)

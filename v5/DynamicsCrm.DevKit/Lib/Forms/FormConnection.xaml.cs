@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ERROR_ENTER_USERNAME = "Please enter Username";
         private const string ERROR_ENTER_PASSWORD = "Please enter Password";
         private const string ERROR_CONNECTION_FAILED = "Failed to connect to Dataverse. Please check your connection settings.";
+        private const string ERROR_PROJECT_ENV_EXISTS = "This project already has a project .env connection. DevKit currently supports one project .env connection only. Clear the existing project .env connection before creating a new one.";
         private const string ENV_AUTH_TYPE = "DEVKIT_AUTH_TYPE";
         private const string ENV_URL = "DEVKIT_URL";
         private const string ENV_CLIENT_ID = "DEVKIT_CLIENT_ID";
@@ -32,17 +34,18 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ENV_USERNAME = "DEVKIT_USERNAME";
         private const string ENV_PASSWORD = "DEVKIT_PASSWORD";
         private const string ENV_DOMAIN = "DEVKIT_DOMAIN";
+        private string _projectEnvironmentFilePath;
 
         public FormConnection()
         {
             InitializeComponent();
             Loaded += FormConnection_Loaded;
-            textboxName.TextChanged += (_, __) => UpdateEnvVarPreview();
-            textboxUrl.TextChanged += (_, __) => UpdateEnvVarPreview();
-            textboxClientId.TextChanged += (_, __) => UpdateEnvVarPreview();
-            textboxUserName.TextChanged += (_, __) => UpdateEnvVarPreview();
-            textboxClientSecret.PasswordChanged += (_, __) => UpdateEnvVarPreview();
-            textboxPassword.PasswordChanged += (_, __) => UpdateEnvVarPreview();
+            textboxName.TextChanged += (_, __) => UpdateProjectEnvPreview();
+            textboxUrl.TextChanged += (_, __) => UpdateProjectEnvPreview();
+            textboxClientId.TextChanged += (_, __) => UpdateProjectEnvPreview();
+            textboxUserName.TextChanged += (_, __) => UpdateProjectEnvPreview();
+            textboxClientSecret.PasswordChanged += (_, __) => UpdateProjectEnvPreview();
+            textboxPassword.PasswordChanged += (_, __) => UpdateProjectEnvPreview();
         }
 
         private void FormConnection_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -52,6 +55,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task InitializeFormAsync()
         {
+            _projectEnvironmentFilePath = Path.Combine(await VsixHelper.GetSolutionFolderAsync(), ProjectEnvironment.FileName);
             await LoadConnectionTypesAsync();
             await LoadConnectionsAsync();
         }
@@ -88,12 +92,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
                 {
                     var connectionToConnect = selectedConnection;
-                    if (selectedConnection.UseEnvironmentVariables)
+                    if (selectedConnection.UseProjectEnvironment)
                     {
-                        connectionToConnect = CreateCrmConnectionFromEnvironment(selectedConnection, out var missing);
+                        connectionToConnect = CreateCrmConnectionFromProjectEnvironment(selectedConnection, out var missing);
                         if (connectionToConnect == null)
                         {
-                            await VS.MessageBox.ShowErrorAsync($"Connection uses DEVKIT_* environment variables, but {missing} is missing.");
+                            await VS.MessageBox.ShowErrorAsync($"Connection uses project .env DEVKIT_* values, but {missing} is missing.");
                             return;
                         }
                     }
@@ -169,12 +173,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 
                 if (serviceClient?.IsReady == true)
                 {
-                    var savedToEnvironment = crmConnection.UseEnvironmentVariables;
+                    var savedToProjectEnvironment = crmConnection.UseProjectEnvironment;
                     await SaveConnectionAsync(crmConnection);
-                    if (savedToEnvironment)
+                    if (savedToProjectEnvironment)
                     {
                         await VS.MessageBox.ShowAsync(
-                            "DEVKIT_* user environment variables were updated. New terminal sessions will use the updated values.",
+                            "Project .env was updated. Generated .bat files will use this project-local connection.",
                             icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO,
                             buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK,
                             defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
@@ -265,7 +269,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 Type = typeName,
                 Url = textboxUrl.Text,
                 CreatedAt = DateTime.UtcNow,
-                UseEnvironmentVariables = checkBoxSaveToEnvVar.IsChecked == true
+                UseProjectEnvironment = checkBoxUseProjectEnv.IsChecked == true
             };
 
             // Set type-specific fields
@@ -276,16 +280,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     connection.UserName = textboxUserName.Text;
                     connection.Password = !string.IsNullOrEmpty(textboxPassword.Password)
                         ? textboxPassword.Password
-                        : connection.UseEnvironmentVariables
-                            ? Environment.GetEnvironmentVariable(ENV_PASSWORD)
+                        : connection.UseProjectEnvironment
+                            ? GetProjectEnvironmentValue(ENV_PASSWORD)
                             : null;
                     break;
                 case "ClientSecret":
                     connection.ClientId = textboxClientId.Text;
                     connection.ClientSecret = !string.IsNullOrEmpty(textboxClientSecret.Password)
                         ? textboxClientSecret.Password
-                        : connection.UseEnvironmentVariables
-                            ? Environment.GetEnvironmentVariable(ENV_CLIENT_SECRET)
+                        : connection.UseProjectEnvironment
+                            ? GetProjectEnvironmentValue(ENV_CLIENT_SECRET)
                             : null;
                     break;
                 case "Interactive":
@@ -308,10 +312,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
-            if (crmConnection.UseEnvironmentVariables)
+            EnsureProjectEnvironmentFile();
+
+            if (crmConnection.UseProjectEnvironment)
             {
-                SaveEnvironmentVariables(crmConnection);
-                crmConnection = CreateEnvironmentVariableMarker(crmConnection);
+                SaveProjectEnvironment(crmConnection);
+                crmConnection = CreateProjectEnvironmentMarker(crmConnection);
             }
 
             // Clear unused fields based on connection type before saving
@@ -357,7 +363,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "AD":  // AD uses same fields as OAuth
                     existing.UserName = updated.UserName;
                     existing.Password = updated.Password;
-                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
+                    existing.UseProjectEnvironment = updated.UseProjectEnvironment;
                     // Clear ClientSecret fields
                     existing.ClientId = null;
                     existing.ClientSecret = null;
@@ -365,7 +371,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "ClientSecret":
                     existing.ClientId = updated.ClientId;
                     existing.ClientSecret = updated.ClientSecret;
-                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
+                    existing.UseProjectEnvironment = updated.UseProjectEnvironment;
                     // Clear OAuth fields when switching to ClientSecret
                     existing.UserName = null;
                     existing.Password = null;
@@ -378,7 +384,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     existing.ClientId = null;
                     existing.ClientSecret = null;
                     existing.PacProfile = null;
-                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
+                    existing.UseProjectEnvironment = updated.UseProjectEnvironment;
                     break;
                 case "FromPac":
                     existing.PacProfile = updated.PacProfile;
@@ -388,11 +394,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     existing.ClientId = null;
                     existing.ClientSecret = null;
                     existing.Url = updated.Url;
-                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
+                    existing.UseProjectEnvironment = updated.UseProjectEnvironment;
                     break;
             }
 
-            if (updated.UseEnvironmentVariables)
+            if (updated.UseProjectEnvironment)
             {
                 existing.Url = null;
                 existing.UserName = null;
@@ -414,8 +420,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUserName.Text = string.Empty;
             textboxPassword.Password = string.Empty;
             comboBoxPacProfile.SelectedIndex = -1;
-            checkBoxSaveToEnvVar.IsChecked = false;
-            UpdateEnvVarPreview();
+            checkBoxUseProjectEnv.IsChecked = false;
+            UpdateProjectEnvPreview();
             UpdateConnectionInputState();
             UpdateConnectionActionState();
         }
@@ -467,6 +473,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 textboxName.Focus();
                 return false;
             }
+            if (checkBoxUseProjectEnv.IsChecked == true && await ProjectEnvironmentConnectionExistsAsync())
+            {
+                await VS.MessageBox.ShowErrorAsync(ERROR_PROJECT_ENV_EXISTS);
+                return false;
+            }
 
             // URL validation (skip for FromPac - URL comes from profile)
             if (typeName != "FromPac")
@@ -491,7 +502,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         return false;
                     }
                     if (string.IsNullOrWhiteSpace(textboxPassword.Password) &&
-                        !(checkBoxSaveToEnvVar.IsChecked == true && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(ENV_PASSWORD))))
+                        !(checkBoxUseProjectEnv.IsChecked == true && !string.IsNullOrWhiteSpace(GetProjectEnvironmentValue(ENV_PASSWORD))))
                     {
                         await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_PASSWORD);
                         textboxPassword.Focus();
@@ -506,7 +517,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         return false;
                     }
                     if (string.IsNullOrWhiteSpace(textboxClientSecret.Password) &&
-                        !(checkBoxSaveToEnvVar.IsChecked == true && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(ENV_CLIENT_SECRET))))
+                        !(checkBoxUseProjectEnv.IsChecked == true && !string.IsNullOrWhiteSpace(GetProjectEnvironmentValue(ENV_CLIENT_SECRET))))
                     {
                         await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_SECRET);
                         textboxClientSecret.Focus();
@@ -590,14 +601,14 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         break;
                 }
 
-                UpdateEnvVarPreview();
+                UpdateProjectEnvPreview();
                 UpdateConnectionInputState();
             }
         }
 
-        private void CheckBoxSaveToEnvVar_Changed(object sender, System.Windows.RoutedEventArgs e)
+        private void CheckBoxUseProjectEnv_Changed(object sender, System.Windows.RoutedEventArgs e)
         {
-            UpdateEnvVarPreview();
+            UpdateProjectEnvPreview();
         }
 
         private void UpdateConnectionInputState()
@@ -611,16 +622,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxClientId.IsEnabled = hasType;
             textboxClientSecret.IsEnabled = hasType;
             comboBoxPacProfile.IsEnabled = hasType;
-            checkBoxSaveToEnvVar.IsEnabled = hasType;
+            checkBoxUseProjectEnv.IsEnabled = hasType;
 
             if (!hasType)
             {
-                checkBoxSaveToEnvVar.IsChecked = false;
+                checkBoxUseProjectEnv.IsChecked = false;
                 HideAllOptionalFields();
             }
 
             UpdateConnectionActionState();
-            UpdateEnvVarPreview();
+            UpdateProjectEnvPreview();
         }
 
         private void UpdateConnectionActionState()
@@ -770,38 +781,39 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
-        private static CrmConnection CreateEnvironmentVariableMarker(CrmConnection connection)
+        private static CrmConnection CreateProjectEnvironmentMarker(CrmConnection connection)
         {
             return new CrmConnection
             {
                 Name = connection.Name,
                 Type = connection.Type,
-                UseEnvironmentVariables = true,
+                UseProjectEnvironment = true,
                 CreatedAt = connection.CreatedAt,
                 ModifiedAt = DateTime.UtcNow
             };
         }
 
-        private static CrmConnection CreateCrmConnectionFromEnvironment(CrmConnection marker, out string missingVariable)
+        private CrmConnection CreateCrmConnectionFromProjectEnvironment(CrmConnection marker, out string missingVariable)
         {
             missingVariable = null;
             if (marker == null) return null;
 
+            var values = ProjectEnvironment.Read(_projectEnvironmentFilePath);
             var type = marker.Type;
             var connection = new CrmConnection
             {
                 Name = marker.Name,
                 Type = type,
-                UseEnvironmentVariables = true,
-                Url = Environment.GetEnvironmentVariable(ENV_URL),
-                ClientId = Environment.GetEnvironmentVariable(ENV_CLIENT_ID),
-                ClientSecret = Environment.GetEnvironmentVariable(ENV_CLIENT_SECRET),
-                PacProfile = Environment.GetEnvironmentVariable(ENV_PAC_PROFILE),
-                UserName = Environment.GetEnvironmentVariable(ENV_USERNAME),
-                Password = Environment.GetEnvironmentVariable(ENV_PASSWORD)
+                UseProjectEnvironment = true,
+                Url = ProjectEnvironment.GetValue(values, ENV_URL),
+                ClientId = ProjectEnvironment.GetValue(values, ENV_CLIENT_ID),
+                ClientSecret = ProjectEnvironment.GetValue(values, ENV_CLIENT_SECRET),
+                PacProfile = ProjectEnvironment.GetValue(values, ENV_PAC_PROFILE),
+                UserName = ProjectEnvironment.GetValue(values, ENV_USERNAME),
+                Password = ProjectEnvironment.GetValue(values, ENV_PASSWORD)
             };
 
-            var envAuthType = Environment.GetEnvironmentVariable(ENV_AUTH_TYPE);
+            var envAuthType = ProjectEnvironment.GetValue(values, ENV_AUTH_TYPE);
             if (string.IsNullOrWhiteSpace(type))
                 type = envAuthType;
             connection.Type = type;
@@ -841,66 +853,87 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             return connection;
         }
 
-        private static void SaveEnvironmentVariables(CrmConnection connection)
+        private void SaveProjectEnvironment(CrmConnection connection)
         {
-            SetUserEnv(ENV_AUTH_TYPE, connection.Type);
+            EnsureProjectEnvironmentFile();
+            if (ProjectEnvironmentHasConnectionValues())
+                throw new InvalidOperationException(ERROR_PROJECT_ENV_EXISTS);
+
+            var values = new Dictionary<string, string>
+            {
+                [ENV_AUTH_TYPE] = connection.Type
+            };
 
             switch (connection.Type)
             {
                 case "ClientSecret":
-                    SetUserEnv(ENV_URL, connection.Url);
-                    SetUserEnv(ENV_CLIENT_ID, connection.ClientId);
-                    SetUserEnv(ENV_CLIENT_SECRET, connection.ClientSecret);
+                    values[ENV_URL] = connection.Url;
+                    values[ENV_CLIENT_ID] = connection.ClientId;
+                    values[ENV_CLIENT_SECRET] = connection.ClientSecret;
                     break;
                 case "Interactive":
                 case "DeviceCode":
-                    SetUserEnv(ENV_URL, connection.Url);
+                    values[ENV_URL] = connection.Url;
                     if (!string.IsNullOrWhiteSpace(connection.ClientId))
-                        SetUserEnv(ENV_CLIENT_ID, connection.ClientId);
+                        values[ENV_CLIENT_ID] = connection.ClientId;
                     break;
                 case "FromPac":
-                    SetUserEnv(ENV_PAC_PROFILE, connection.PacProfile);
+                    values[ENV_PAC_PROFILE] = connection.PacProfile;
                     break;
                 case "OAuth":
-                    SetUserEnv(ENV_URL, connection.Url);
-                    SetUserEnv(ENV_USERNAME, connection.UserName);
-                    SetUserEnv(ENV_PASSWORD, connection.Password);
+                    values[ENV_URL] = connection.Url;
+                    values[ENV_USERNAME] = connection.UserName;
+                    values[ENV_PASSWORD] = connection.Password;
                     if (!string.IsNullOrWhiteSpace(connection.ClientId))
-                        SetUserEnv(ENV_CLIENT_ID, connection.ClientId);
+                        values[ENV_CLIENT_ID] = connection.ClientId;
                     break;
                 case "AD":
-                    SetUserEnv(ENV_URL, connection.Url);
-                    SetUserEnv(ENV_USERNAME, connection.UserName);
-                    SetUserEnv(ENV_PASSWORD, connection.Password);
+                    values[ENV_URL] = connection.Url;
+                    values[ENV_USERNAME] = connection.UserName;
+                    values[ENV_PASSWORD] = connection.Password;
                     var domain = ExtractDomain(connection.UserName);
                     if (!string.IsNullOrWhiteSpace(domain))
-                        SetUserEnv(ENV_DOMAIN, domain);
+                        values[ENV_DOMAIN] = domain;
                     break;
             }
+
+            ProjectEnvironment.WriteOrUpdate(_projectEnvironmentFilePath, values);
         }
 
-        private static void SetUserEnv(string name, string value)
+        private void EnsureProjectEnvironmentFile()
         {
-            if (string.IsNullOrWhiteSpace(value)) return;
-            Environment.SetEnvironmentVariable(name, value, EnvironmentVariableTarget.User);
-            Environment.SetEnvironmentVariable(name, value, EnvironmentVariableTarget.Process);
+            ProjectEnvironment.EnsureFile(Path.GetDirectoryName(_projectEnvironmentFilePath));
         }
 
-        private void UpdateEnvVarPreview()
+        private bool ProjectEnvironmentHasConnectionValues()
         {
-            if (textBlockEnvVarPreview == null) return;
+            var values = ProjectEnvironment.Read(_projectEnvironmentFilePath);
+            return ProjectEnvironment.ConnectionKeys.Any(key => !string.IsNullOrWhiteSpace(ProjectEnvironment.GetValue(values, key)));
+        }
+
+        private async Task<bool> ProjectEnvironmentConnectionExistsAsync()
+        {
+            var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
+            return devKitConnections.CrmConnections.Any(connection => connection.UseProjectEnvironment)
+                   || ProjectEnvironmentHasConnectionValues();
+        }
+
+        private void UpdateProjectEnvPreview()
+        {
+            if (textBlockProjectEnvPreview == null) return;
 
             var selectedTypeName = GetSelectedTypeName();
-            if (checkBoxSaveToEnvVar?.IsChecked != true || string.IsNullOrWhiteSpace(selectedTypeName))
+            if (checkBoxUseProjectEnv?.IsChecked != true || string.IsNullOrWhiteSpace(selectedTypeName))
             {
-                textBlockEnvVarPreview.Visibility = System.Windows.Visibility.Collapsed;
-                textBlockEnvVarPreview.Text = string.Empty;
+                textBlockProjectEnvPreview.Visibility = System.Windows.Visibility.Collapsed;
+                textBlockProjectEnvPreview.Text = string.Empty;
                 return;
             }
 
-            textBlockEnvVarPreview.Visibility = System.Windows.Visibility.Visible;
+            textBlockProjectEnvPreview.Visibility = System.Windows.Visibility.Visible;
             var preview = new List<string>
             {
+                $".env={_projectEnvironmentFilePath}",
                 $"{ENV_AUTH_TYPE}={selectedTypeName}"
             };
 
@@ -909,7 +942,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "ClientSecret":
                     preview.Add($"{ENV_URL}={textboxUrl.Text}");
                     preview.Add($"{ENV_CLIENT_ID}={textboxClientId.Text}");
-                    preview.Add($"{ENV_CLIENT_SECRET}={(HasValue(textboxClientSecret.Password, ENV_CLIENT_SECRET) ? "[set]" : "[missing]")}");
+                    preview.Add($"{ENV_CLIENT_SECRET}={(HasProjectValue(textboxClientSecret.Password, ENV_CLIENT_SECRET) ? "[set]" : "[missing]")}");
                     break;
                 case "Interactive":
                 case "DeviceCode":
@@ -923,19 +956,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "OAuth":
                     preview.Add($"{ENV_URL}={textboxUrl.Text}");
                     preview.Add($"{ENV_USERNAME}={textboxUserName.Text}");
-                    preview.Add($"{ENV_PASSWORD}={(HasValue(textboxPassword.Password, ENV_PASSWORD) ? "[set]" : "[missing]")}");
+                    preview.Add($"{ENV_PASSWORD}={(HasProjectValue(textboxPassword.Password, ENV_PASSWORD) ? "[set]" : "[missing]")}");
                     break;
                 case "AD":
                     preview.Add($"{ENV_URL}={textboxUrl.Text}");
                     preview.Add($"{ENV_USERNAME}={textboxUserName.Text}");
-                    preview.Add($"{ENV_PASSWORD}={(HasValue(textboxPassword.Password, ENV_PASSWORD) ? "[set]" : "[missing]")}");
+                    preview.Add($"{ENV_PASSWORD}={(HasProjectValue(textboxPassword.Password, ENV_PASSWORD) ? "[set]" : "[missing]")}");
                     var domain = ExtractDomain(textboxUserName.Text);
                     if (!string.IsNullOrWhiteSpace(domain))
                         preview.Add($"{ENV_DOMAIN}={domain}");
                     break;
             }
 
-            textBlockEnvVarPreview.Text = string.Join(Environment.NewLine, preview);
+            textBlockProjectEnvPreview.Text = string.Join(Environment.NewLine, preview);
         }
 
         private string GetSelectedTypeName()
@@ -948,10 +981,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             return comboBoxPacProfile?.SelectedItem is PacProfileInfo profile ? profile.Name : string.Empty;
         }
 
-        private static bool HasValue(string fieldValue, string envName)
+        private bool HasProjectValue(string fieldValue, string envName)
         {
             return !string.IsNullOrWhiteSpace(fieldValue) ||
-                   !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(envName));
+                   !string.IsNullOrWhiteSpace(GetProjectEnvironmentValue(envName));
+        }
+
+        private string GetProjectEnvironmentValue(string name)
+        {
+            return ProjectEnvironment.GetValue(ProjectEnvironment.Read(_projectEnvironmentFilePath), name);
         }
 
         private static string ExtractDomain(string username)

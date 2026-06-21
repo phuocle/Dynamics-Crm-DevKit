@@ -17,15 +17,9 @@ namespace $NameSpace$
                 return _Service;
             }
         }
-        private static string GetAppSettingOrEnvironment(string key, string environmentVariable)
-        {
-            var value = ConfigurationManager.AppSettings[key];
-            return string.IsNullOrWhiteSpace(value) ? Environment.GetEnvironmentVariable(environmentVariable) : value;
-        }
-
-        private static string Url => GetAppSettingOrEnvironment("Url", "DEVKIT_URL");
-        private static string UserName => GetAppSettingOrEnvironment("UserName", "DEVKIT_USERNAME");
-        private static string Password => GetAppSettingOrEnvironment("Password", "DEVKIT_PASSWORD");
+        private static string Url => ConfigurationManager.AppSettings["Url"];
+        private static string UserName => ConfigurationManager.AppSettings["UserName"];
+        private static string Password => ConfigurationManager.AppSettings["Password"];
         private static string ConnectionString => $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
     }
 }
