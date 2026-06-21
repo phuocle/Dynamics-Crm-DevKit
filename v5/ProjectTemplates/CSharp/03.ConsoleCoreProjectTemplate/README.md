@@ -20,6 +20,7 @@ Modern console application template targeting .NET 10.0 with Microsoft.PowerPlat
 * TracingServiceFake for debugging
 * App.cs structure for organized code
 * AppSettings.json for configuration management
+* Empty AppSettings.json connection values can be resolved from the project `.env` file created by DynamicsCrm.DevKit
 * Modern async/await patterns
 
 ## Requirements
@@ -43,6 +44,10 @@ Before creating this project, ensure you have:
 * **Helper.cs** - Utility methods for Dataverse operations
 * **TracingServiceFake.cs** - Mock tracing service for debugging
 * **AppSettings.json** - Configuration file for connection strings
+
+## Connection Configuration
+
+When this project is created from a connection that uses **Use project .env**, private `DEVKIT_*` values are stored in the solution-level `.env` file. Leave the matching `AppSettings.json` values empty to read from `.env`; commit `.env.example`, but keep `.env` local.
 
 ## References
 

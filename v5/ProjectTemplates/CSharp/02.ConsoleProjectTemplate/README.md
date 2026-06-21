@@ -20,6 +20,7 @@ Accelerates Dataverse console application development targeting .NET Framework 4
 * TracingServiceFake for debugging
 * App.cs structure for organized code
 * Connection string configuration via App.config
+* Empty App.config connection values can be resolved from the project `.env` file created by DynamicsCrm.DevKit
 
 ## Requirements
 
@@ -40,6 +41,10 @@ Before creating this project, ensure you have:
 * **App.cs** - Main application logic
 * **Helper.cs** - Utility methods for Dataverse operations
 * **TracingServiceFake.cs** - Mock tracing service for debugging
+
+## Connection Configuration
+
+When this project is created from a connection that uses **Use project .env**, private `DEVKIT_*` values are stored in the solution-level `.env` file. Leave the matching `App.config` values empty to read from `.env`; commit `.env.example`, but keep `.env` local.
 
 ## References
 

@@ -16,6 +16,7 @@ DynamicsCrm.DevKit Visual Studio Extension is the VSIX package for Dataverse, Dy
 
 - 13 Visual Studio project templates for server-side, client-side, ALM, report, test, and utility projects.
 - 16 Visual Studio item templates for plugins, workflows, custom APIs, data providers, JavaScript, TypeScript, dialogs, resources, and support files.
+- Connection dialog supports **Use project .env** so private `DEVKIT_*` values can live in a solution-level `.env` file while `DynamicsCrm.DevKit.json` stores only the connection marker.
 - Wizard-driven project and item creation with Dataverse-specific metadata prompts.
 - Context-menu commands for deploying web resources, new web resources, TypeScript release output, and plugin registration attributes.
 - Connection UI and shared DevKit configuration support for deployment and generation workflows.
