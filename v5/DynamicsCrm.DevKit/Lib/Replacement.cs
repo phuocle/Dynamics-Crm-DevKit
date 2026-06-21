@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Lib
             await AddCommonReplacementsAsync(replacements);
             await AddNuGetAsync(replacements);
             SetConnectionValues(replacements, form.CrmConnection);
-            await SetEmbeddedResourceAsync(replacements, form.CrmConnection.Type);
+            await SetEmbeddedResourceAsync(replacements, form.CrmConnection);
             replacements["$destinationdirectory$"] = $"{replacements?["$solutiondirectory$"]}\\{form.ProjectName}";
             replacements["$ProjectName$"] = form.ProjectName;
             replacements["$LogicalProjectName$"] = form.ProjectName.ToLower();
@@ -31,29 +31,31 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$NameSpace$"] = Helper.SafeNamespace(form.ProjectName);
         }
 
-        private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements, string connectionType = null)
+        private static async Task SetEmbeddedResourceAsync(Dictionary<string, string> replacements, CrmConnection crmConnection = null)
         {
-            replacements["$deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.bat");
-            replacements["$deploy.debug.only.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.only.bat");
-            replacements["$webresource.deploy.debug.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.webresource.deploy.debug.bat");
-            replacements["$webresource.deploy.debug.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.webresource.deploy.debug.ts_bat");
+            var connectionType = crmConnection?.Type;
+
+            replacements["$deploy.debug.bat$"] = await ReadBatResourceAsync("bat.plugin.deploy.debug.bat", crmConnection);
+            replacements["$deploy.debug.only.bat$"] = await ReadBatResourceAsync("bat.plugin.deploy.debug.only.bat", crmConnection);
+            replacements["$webresource.deploy.debug.bat$"] = await ReadBatResourceAsync("bat.webresource.deploy.debug.bat", crmConnection);
+            replacements["$webresource.deploy.debug.ts.bat$"] = await ReadBatResourceAsync("bat.webresource.deploy.debug.ts_bat", crmConnection);
             replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.d.ts");
             replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.js");
             replacements["$devkit.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.ts");
             replacements["$devkitts.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.d.ts");
             replacements["$build.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.build.js");
-            replacements["$generator.form.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.form.bat");
-            replacements["$generator.form.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.form.ts_bat");
-            replacements["$generator.webapi.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.webapi.bat");
-            replacements["$generator.webapi.ts.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.webapi.ts_bat");
+            replacements["$generator.form.bat$"] = await ReadBatResourceAsync("bat.generator.form.bat", crmConnection);
+            replacements["$generator.form.ts.bat$"] = await ReadBatResourceAsync("bat.generator.form.ts_bat", crmConnection);
+            replacements["$generator.webapi.bat$"] = await ReadBatResourceAsync("bat.generator.webapi.bat", crmConnection);
+            replacements["$generator.webapi.ts.bat$"] = await ReadBatResourceAsync("bat.generator.webapi.ts_bat", crmConnection);
             replacements["$package.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.package.json");
             replacements["$jsconfig.json$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.jsconfig.json");
-            replacements["$generator.latebound.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.generator.latebound.bat");
-            replacements["$run.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.proxytypes.run.bat");
-            replacements["$Extract-Both.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.solutionpackager.extract.both.bat");
-            replacements["$Pack-Both.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.solutionpackager.pack.both.bat");
-            replacements["$download.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
-            replacements["$upload.reports.bat$"] = await VsixHelper.ReadEmbeddedResourceAsync("bat.upload.reports.bat");
+            replacements["$generator.latebound.bat$"] = await ReadBatResourceAsync("bat.generator.latebound.bat", crmConnection);
+            replacements["$run.bat$"] = await ReadBatResourceAsync("bat.proxytypes.run.bat", crmConnection);
+            replacements["$Extract-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.extract.both.bat", crmConnection);
+            replacements["$Pack-Both.bat$"] = await ReadBatResourceAsync("bat.solutionpackager.pack.both.bat", crmConnection);
+            replacements["$download.reports.bat$"] = await ReadBatResourceAsync("bat.download.reports.bat", crmConnection);
+            replacements["$upload.reports.bat$"] = await ReadBatResourceAsync("bat.upload.reports.bat", crmConnection);
             replacements["$Helper.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Helper.cs");
             replacements["$Program.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("Program.cs");
             replacements["$TracingServiceFake.cs$"] = await VsixHelper.ReadEmbeddedResourceAsync("TracingServiceFake.cs");
@@ -100,6 +102,27 @@ namespace DynamicsCrm.DevKit.Lib
             }
         }
 
+        internal static async Task<string> ReadBatResourceAsync(string resourcePath, CrmConnection crmConnection)
+        {
+            var content = await VsixHelper.ReadEmbeddedResourceAsync(resourcePath);
+            return ApplyCliConnectionArgs(content, crmConnection);
+        }
+
+        internal static string ApplyCliConnectionArgs(string content, CrmConnection crmConnection)
+        {
+            if (content == null) return null;
+
+            var cliConnectionArgs = CliArgsBuilder.Build(crmConnection, true);
+            if (string.IsNullOrWhiteSpace(cliConnectionArgs))
+            {
+                content = content.Replace(" $CliConnectionArgs$", string.Empty);
+                return content.Replace("$CliConnectionArgs$", string.Empty);
+            }
+
+            content = content.Replace(" $CliConnectionArgs$", $" {cliConnectionArgs}");
+            return content.Replace("$CliConnectionArgs$", cliConnectionArgs);
+        }
+
         private static string ApplyReplacements(string content, Dictionary<string, string> replacements)
         {
             foreach (var kvp in replacements)
@@ -135,19 +158,19 @@ namespace DynamicsCrm.DevKit.Lib
 
         public static void SetConnectionValues(Dictionary<string, string> replacements, CrmConnection crmConnection)
         {
-            replacements["$AuthTypeValue$"] = crmConnection.Type;
-            replacements["$UrlValue$"] = crmConnection.Url;
+            replacements["$AuthTypeValue$"] = crmConnection?.Type ?? string.Empty;
+            replacements["$UrlValue$"] = crmConnection?.Url ?? string.Empty;
 
             // Generic placeholders (for backward compatibility)
-            replacements["$UserNameValue$"] = crmConnection.UserName ?? string.Empty;
-            replacements["$PasswordValue$"] = Helper.DecryptString(crmConnection.Password) ?? string.Empty;
+            replacements["$UserNameValue$"] = crmConnection?.UserName ?? string.Empty;
+            replacements["$PasswordValue$"] = crmConnection == null ? string.Empty : Helper.DecryptString(crmConnection.Password) ?? string.Empty;
 
             // ClientSecret-specific placeholders
-            replacements["$ClientIdValue$"] = crmConnection.ClientId ?? string.Empty;
-            replacements["$ClientSecretValue$"] = Helper.DecryptString(crmConnection.ClientSecret) ?? string.Empty;
+            replacements["$ClientIdValue$"] = crmConnection?.ClientId ?? string.Empty;
+            replacements["$ClientSecretValue$"] = crmConnection == null ? string.Empty : Helper.DecryptString(crmConnection.ClientSecret) ?? string.Empty;
 
             // FromPac-specific placeholders
-            replacements["$PacProfileValue$"] = crmConnection.PacProfile ?? string.Empty;
+            replacements["$PacProfileValue$"] = crmConnection?.PacProfile ?? string.Empty;
         }
 
         private static async Task AddCommonReplacementsAsync(Dictionary<string, string> replacements)

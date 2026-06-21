@@ -26,6 +26,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static string Build(CrmConnection connection, bool encryptSecrets = false)
         {
             if (connection == null) return string.Empty;
+            if (connection.UseEnvironmentVariables) return string.Empty;
 
             var type = connection.Type?.ToUpperInvariant() ?? "OAUTH";
 

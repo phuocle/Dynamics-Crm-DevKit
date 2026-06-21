@@ -17,9 +17,15 @@ namespace $NameSpace$
                 return _Service;
             }
         }
-        private static string Url => ConfigurationManager.AppSettings["Url"];
-        private static string UserName => ConfigurationManager.AppSettings["UserName"];
-        private static string Password => ConfigurationManager.AppSettings["Password"];
+        private static string GetAppSettingOrEnvironment(string key, string environmentVariable)
+        {
+            var value = ConfigurationManager.AppSettings[key];
+            return string.IsNullOrWhiteSpace(value) ? Environment.GetEnvironmentVariable(environmentVariable) : value;
+        }
+
+        private static string Url => GetAppSettingOrEnvironment("Url", "DEVKIT_URL");
+        private static string UserName => GetAppSettingOrEnvironment("UserName", "DEVKIT_USERNAME");
+        private static string Password => GetAppSettingOrEnvironment("Password", "DEVKIT_PASSWORD");
         private static string ConnectionString
         {
             get

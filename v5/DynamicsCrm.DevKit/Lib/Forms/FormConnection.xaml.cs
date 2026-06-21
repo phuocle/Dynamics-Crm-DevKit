@@ -7,6 +7,7 @@ using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,12 +23,26 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ERROR_ENTER_CLIENT_SECRET = "Please enter Client Secret";
         private const string ERROR_ENTER_USERNAME = "Please enter Username";
         private const string ERROR_ENTER_PASSWORD = "Please enter Password";
-        private const string ERROR_CONNECTION_FAILED = "Failed to connect create ServiceClient. Please check your connection settings.";
+        private const string ERROR_CONNECTION_FAILED = "Failed to connect to Dataverse. Please check your connection settings.";
+        private const string ENV_AUTH_TYPE = "DEVKIT_AUTH_TYPE";
+        private const string ENV_URL = "DEVKIT_URL";
+        private const string ENV_CLIENT_ID = "DEVKIT_CLIENT_ID";
+        private const string ENV_CLIENT_SECRET = "DEVKIT_CLIENT_SECRET";
+        private const string ENV_PAC_PROFILE = "DEVKIT_PAC_PROFILE";
+        private const string ENV_USERNAME = "DEVKIT_USERNAME";
+        private const string ENV_PASSWORD = "DEVKIT_PASSWORD";
+        private const string ENV_DOMAIN = "DEVKIT_DOMAIN";
 
         public FormConnection()
         {
             InitializeComponent();
             Loaded += FormConnection_Loaded;
+            textboxName.TextChanged += (_, __) => UpdateEnvVarPreview();
+            textboxUrl.TextChanged += (_, __) => UpdateEnvVarPreview();
+            textboxClientId.TextChanged += (_, __) => UpdateEnvVarPreview();
+            textboxUserName.TextChanged += (_, __) => UpdateEnvVarPreview();
+            textboxClientSecret.PasswordChanged += (_, __) => UpdateEnvVarPreview();
+            textboxPassword.PasswordChanged += (_, __) => UpdateEnvVarPreview();
         }
 
         private void FormConnection_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -46,14 +61,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             // Load connection types from registry (VSIX-supported only)
-            var types = ConnectionTypeRegistry.GetSupportedTypes(vsixOnly: true);
+            var types = new List<IConnectionTypeMetadata> { new EmptyConnectionTypeMetadata() };
+            types.AddRange(ConnectionTypeRegistry.GetSupportedTypes(vsixOnly: true));
             comboBoxType.ItemsSource = types;
-
-            // Select first type (ClientSecret) by default
-            if (types.Count > 0)
-            {
-                comboBoxType.SelectedIndex = 0;
-            }
+            comboBoxType.SelectedIndex = 0;
+            UpdateConnectionInputState();
         }
 
         public ServiceClient ServiceClient { get; set; }
@@ -75,12 +87,23 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             {
                 if (comboBoxSavedConnection.SelectedItem is CrmConnection selectedConnection)
                 {
+                    var connectionToConnect = selectedConnection;
+                    if (selectedConnection.UseEnvironmentVariables)
+                    {
+                        connectionToConnect = CreateCrmConnectionFromEnvironment(selectedConnection, out var missing);
+                        if (connectionToConnect == null)
+                        {
+                            await VS.MessageBox.ShowErrorAsync($"Connection uses DEVKIT_* environment variables, but {missing} is missing.");
+                            return;
+                        }
+                    }
+
                     // Handle DeviceCode specially to allow user copy code
                     Action<string> deviceCodeCallback = null;
-                    if (selectedConnection.Type == "DeviceCode")
+                    if (connectionToConnect.Type == "DeviceCode")
                     {
                         await SetUIBusyStateAsync(true, disableForm: false);
-                        deviceCodeCallback = CreateDeviceCodeCallback(selectedConnection.Type);
+                        deviceCodeCallback = CreateDeviceCodeCallback(connectionToConnect.Type);
                     }
                     else
                     {
@@ -90,7 +113,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     CrmConnection = selectedConnection;
                     await VsixHelper.SaveDefaultCrmConnectionAsync(CrmConnection.Name);
                     
-                    var serviceClient = await Task.Run(() => VsixHelper.CreateServiceClientAsync(selectedConnection, deviceCodeCallback));
+                    var serviceClient = await Task.Run(() => VsixHelper.CreateServiceClientAsync(connectionToConnect, deviceCodeCallback));
                     
                     if (serviceClient?.IsReady == true)
                     {
@@ -116,10 +139,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 comboBoxSavedConnection.IsEnabled = true;
                 comboBoxType.IsEnabled = true;
-                textboxName.IsEnabled = true;
-                textboxUrl.IsEnabled = true;
-                buttonCheckConnection.IsEnabled = true;
-                buttonOK.IsEnabled = true;
+                UpdateConnectionInputState();
+                UpdateConnectionActionState();
                 buttonCancel.IsEnabled = true;
                 
                 await SetUIBusyStateAsync(false);
@@ -148,7 +169,16 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 
                 if (serviceClient?.IsReady == true)
                 {
+                    var savedToEnvironment = crmConnection.UseEnvironmentVariables;
                     await SaveConnectionAsync(crmConnection);
+                    if (savedToEnvironment)
+                    {
+                        await VS.MessageBox.ShowAsync(
+                            "DEVKIT_* user environment variables were updated. New terminal sessions will use the updated values.",
+                            icon: Microsoft.VisualStudio.Shell.Interop.OLEMSGICON.OLEMSGICON_INFO,
+                            buttons: Microsoft.VisualStudio.Shell.Interop.OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                            defaultButton: Microsoft.VisualStudio.Shell.Interop.OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    }
                     await LoadConnectionsAsync();
                     await ClearFormDataAsync();
                 }
@@ -167,10 +197,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 comboBoxSavedConnection.IsEnabled = true;
                 comboBoxType.IsEnabled = true;
-                textboxName.IsEnabled = true;
-                textboxUrl.IsEnabled = true;
-                buttonCheckConnection.IsEnabled = true;
-                buttonOK.IsEnabled = true;
+                UpdateConnectionInputState();
+                UpdateConnectionActionState();
                 buttonCancel.IsEnabled = true;
 
                 await SetUIBusyStateAsync(false);
@@ -229,14 +257,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             // Get selected connection type metadata
             var selectedType = comboBoxType.SelectedItem as IConnectionTypeMetadata;
-            var typeName = selectedType?.Type ?? "ClientSecret";
+            var typeName = selectedType?.Type;
 
             var connection = new CrmConnection
             {
                 Name = textboxName.Text,
                 Type = typeName,
                 Url = textboxUrl.Text,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UseEnvironmentVariables = checkBoxSaveToEnvVar.IsChecked == true
             };
 
             // Set type-specific fields
@@ -245,11 +274,19 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "OAuth":
                 case "AD":  // AD uses same fields as OAuth
                     connection.UserName = textboxUserName.Text;
-                    connection.Password = textboxPassword.Password;
+                    connection.Password = !string.IsNullOrEmpty(textboxPassword.Password)
+                        ? textboxPassword.Password
+                        : connection.UseEnvironmentVariables
+                            ? Environment.GetEnvironmentVariable(ENV_PASSWORD)
+                            : null;
                     break;
                 case "ClientSecret":
                     connection.ClientId = textboxClientId.Text;
-                    connection.ClientSecret = textboxClientSecret.Password;
+                    connection.ClientSecret = !string.IsNullOrEmpty(textboxClientSecret.Password)
+                        ? textboxClientSecret.Password
+                        : connection.UseEnvironmentVariables
+                            ? Environment.GetEnvironmentVariable(ENV_CLIENT_SECRET)
+                            : null;
                     break;
                 case "Interactive":
                 case "DeviceCode":  // DeviceCode uses same logic as Interactive (Url only)
@@ -271,6 +308,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private async Task SaveConnectionAsync(CrmConnection crmConnection)
         {
+            if (crmConnection.UseEnvironmentVariables)
+            {
+                SaveEnvironmentVariables(crmConnection);
+                crmConnection = CreateEnvironmentVariableMarker(crmConnection);
+            }
+
             // Clear unused fields based on connection type before saving
             ClearUnusedFieldsForType(crmConnection);
 
@@ -314,6 +357,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "AD":  // AD uses same fields as OAuth
                     existing.UserName = updated.UserName;
                     existing.Password = updated.Password;
+                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
                     // Clear ClientSecret fields
                     existing.ClientId = null;
                     existing.ClientSecret = null;
@@ -321,6 +365,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 case "ClientSecret":
                     existing.ClientId = updated.ClientId;
                     existing.ClientSecret = updated.ClientSecret;
+                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
                     // Clear OAuth fields when switching to ClientSecret
                     existing.UserName = null;
                     existing.Password = null;
@@ -333,6 +378,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     existing.ClientId = null;
                     existing.ClientSecret = null;
                     existing.PacProfile = null;
+                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
                     break;
                 case "FromPac":
                     existing.PacProfile = updated.PacProfile;
@@ -341,18 +387,26 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     existing.Password = null;
                     existing.ClientId = null;
                     existing.ClientSecret = null;
+                    existing.Url = updated.Url;
+                    existing.UseEnvironmentVariables = updated.UseEnvironmentVariables;
                     break;
+            }
+
+            if (updated.UseEnvironmentVariables)
+            {
+                existing.Url = null;
+                existing.UserName = null;
+                existing.Password = null;
+                existing.ClientId = null;
+                existing.ClientSecret = null;
+                existing.PacProfile = null;
             }
         }
 
         private async Task ClearFormDataAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            // Keep type selected (first one)
-            if (comboBoxType.Items.Count > 0)
-            {
-                comboBoxType.SelectedIndex = 0;
-            }
+            comboBoxType.SelectedIndex = 0;
             textboxName.Text = string.Empty;
             textboxUrl.Text = string.Empty;
             textboxClientId.Text = string.Empty;
@@ -360,6 +414,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUserName.Text = string.Empty;
             textboxPassword.Password = string.Empty;
             comboBoxPacProfile.SelectedIndex = -1;
+            checkBoxSaveToEnvVar.IsChecked = false;
+            UpdateEnvVarPreview();
+            UpdateConnectionInputState();
+            UpdateConnectionActionState();
         }
 
         private async Task LoadConnectionsAsync()
@@ -369,7 +427,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
 
-                comboBoxSavedConnection.DisplayMemberPath = "Name";
+                comboBoxSavedConnection.DisplayMemberPath = null;
                 comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
 
                 if (!string.IsNullOrEmpty(devKitConnections.DefaultCrmConnection))
@@ -378,7 +436,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         .FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
                 }
 
-                buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+                if (comboBoxSavedConnection.SelectedItem == null && comboBoxSavedConnection.Items.Count > 0)
+                {
+                    comboBoxSavedConnection.SelectedIndex = 0;
+                }
+
+                UpdateConnectionActionState();
             }
             catch (Exception ex)
             {
@@ -389,10 +452,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private async Task<bool> IsValidAsync()
         {
             var selectedType = comboBoxType.SelectedItem as IConnectionTypeMetadata;
-            var typeName = selectedType?.Type ?? "ClientSecret";
+            var typeName = selectedType?.Type;
 
             // Common validation rules (Type and Name always required)
-            if (comboBoxType.SelectedItem == null)
+            if (string.IsNullOrWhiteSpace(typeName))
             {
                 await VS.MessageBox.ShowErrorAsync(ERROR_SELECT_TYPE);
                 comboBoxType.Focus();
@@ -427,7 +490,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         textboxUserName.Focus();
                         return false;
                     }
-                    if (string.IsNullOrWhiteSpace(textboxPassword.Password))
+                    if (string.IsNullOrWhiteSpace(textboxPassword.Password) &&
+                        !(checkBoxSaveToEnvVar.IsChecked == true && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(ENV_PASSWORD))))
                     {
                         await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_PASSWORD);
                         textboxPassword.Focus();
@@ -441,7 +505,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         textboxClientId.Focus();
                         return false;
                     }
-                    if (string.IsNullOrWhiteSpace(textboxClientSecret.Password))
+                    if (string.IsNullOrWhiteSpace(textboxClientSecret.Password) &&
+                        !(checkBoxSaveToEnvVar.IsChecked == true && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(ENV_CLIENT_SECRET))))
                     {
                         await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_CLIENT_SECRET);
                         textboxClientSecret.Focus();
@@ -524,7 +589,45 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                         ShowFromPacFields();
                         break;
                 }
+
+                UpdateEnvVarPreview();
+                UpdateConnectionInputState();
             }
+        }
+
+        private void CheckBoxSaveToEnvVar_Changed(object sender, System.Windows.RoutedEventArgs e)
+        {
+            UpdateEnvVarPreview();
+        }
+
+        private void UpdateConnectionInputState()
+        {
+            var hasType = !string.IsNullOrWhiteSpace((comboBoxType?.SelectedItem as IConnectionTypeMetadata)?.Type);
+
+            textboxName.IsEnabled = hasType;
+            textboxUrl.IsEnabled = hasType;
+            textboxUserName.IsEnabled = hasType;
+            textboxPassword.IsEnabled = hasType;
+            textboxClientId.IsEnabled = hasType;
+            textboxClientSecret.IsEnabled = hasType;
+            comboBoxPacProfile.IsEnabled = hasType;
+            checkBoxSaveToEnvVar.IsEnabled = hasType;
+
+            if (!hasType)
+            {
+                checkBoxSaveToEnvVar.IsChecked = false;
+                HideAllOptionalFields();
+            }
+
+            UpdateConnectionActionState();
+            UpdateEnvVarPreview();
+        }
+
+        private void UpdateConnectionActionState()
+        {
+            var hasType = !string.IsNullOrWhiteSpace((comboBoxType?.SelectedItem as IConnectionTypeMetadata)?.Type);
+            buttonCheckConnection.IsEnabled = hasType;
+            buttonOK.IsEnabled = comboBoxSavedConnection?.SelectedItem is CrmConnection;
         }
 
         private void HideAllOptionalFields()
@@ -665,6 +768,206 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     connection.ClientSecret = null;
                     break;
             }
+        }
+
+        private static CrmConnection CreateEnvironmentVariableMarker(CrmConnection connection)
+        {
+            return new CrmConnection
+            {
+                Name = connection.Name,
+                Type = connection.Type,
+                UseEnvironmentVariables = true,
+                CreatedAt = connection.CreatedAt,
+                ModifiedAt = DateTime.UtcNow
+            };
+        }
+
+        private static CrmConnection CreateCrmConnectionFromEnvironment(CrmConnection marker, out string missingVariable)
+        {
+            missingVariable = null;
+            if (marker == null) return null;
+
+            var type = marker.Type;
+            var connection = new CrmConnection
+            {
+                Name = marker.Name,
+                Type = type,
+                UseEnvironmentVariables = true,
+                Url = Environment.GetEnvironmentVariable(ENV_URL),
+                ClientId = Environment.GetEnvironmentVariable(ENV_CLIENT_ID),
+                ClientSecret = Environment.GetEnvironmentVariable(ENV_CLIENT_SECRET),
+                PacProfile = Environment.GetEnvironmentVariable(ENV_PAC_PROFILE),
+                UserName = Environment.GetEnvironmentVariable(ENV_USERNAME),
+                Password = Environment.GetEnvironmentVariable(ENV_PASSWORD)
+            };
+
+            var envAuthType = Environment.GetEnvironmentVariable(ENV_AUTH_TYPE);
+            if (string.IsNullOrWhiteSpace(type))
+                type = envAuthType;
+            connection.Type = type;
+
+            if (string.IsNullOrWhiteSpace(connection.Type))
+            {
+                missingVariable = ENV_AUTH_TYPE;
+                return null;
+            }
+
+            switch (connection.Type)
+            {
+                case "ClientSecret":
+                    if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
+                    if (string.IsNullOrWhiteSpace(connection.ClientId)) { missingVariable = ENV_CLIENT_ID; return null; }
+                    if (string.IsNullOrWhiteSpace(connection.ClientSecret)) { missingVariable = ENV_CLIENT_SECRET; return null; }
+                    break;
+                case "Interactive":
+                case "DeviceCode":
+                    if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
+                    break;
+                case "FromPac":
+                    if (string.IsNullOrWhiteSpace(connection.PacProfile)) { missingVariable = ENV_PAC_PROFILE; return null; }
+                    break;
+                case "OAuth":
+                    if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
+                    if (string.IsNullOrWhiteSpace(connection.UserName)) { missingVariable = ENV_USERNAME; return null; }
+                    if (string.IsNullOrWhiteSpace(connection.Password)) { missingVariable = ENV_PASSWORD; return null; }
+                    break;
+                case "AD":
+                    if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
+                    if (string.IsNullOrWhiteSpace(connection.UserName)) { missingVariable = ENV_USERNAME; return null; }
+                    if (string.IsNullOrWhiteSpace(connection.Password)) { missingVariable = ENV_PASSWORD; return null; }
+                    break;
+            }
+
+            return connection;
+        }
+
+        private static void SaveEnvironmentVariables(CrmConnection connection)
+        {
+            SetUserEnv(ENV_AUTH_TYPE, connection.Type);
+
+            switch (connection.Type)
+            {
+                case "ClientSecret":
+                    SetUserEnv(ENV_URL, connection.Url);
+                    SetUserEnv(ENV_CLIENT_ID, connection.ClientId);
+                    SetUserEnv(ENV_CLIENT_SECRET, connection.ClientSecret);
+                    break;
+                case "Interactive":
+                case "DeviceCode":
+                    SetUserEnv(ENV_URL, connection.Url);
+                    if (!string.IsNullOrWhiteSpace(connection.ClientId))
+                        SetUserEnv(ENV_CLIENT_ID, connection.ClientId);
+                    break;
+                case "FromPac":
+                    SetUserEnv(ENV_PAC_PROFILE, connection.PacProfile);
+                    break;
+                case "OAuth":
+                    SetUserEnv(ENV_URL, connection.Url);
+                    SetUserEnv(ENV_USERNAME, connection.UserName);
+                    SetUserEnv(ENV_PASSWORD, connection.Password);
+                    if (!string.IsNullOrWhiteSpace(connection.ClientId))
+                        SetUserEnv(ENV_CLIENT_ID, connection.ClientId);
+                    break;
+                case "AD":
+                    SetUserEnv(ENV_URL, connection.Url);
+                    SetUserEnv(ENV_USERNAME, connection.UserName);
+                    SetUserEnv(ENV_PASSWORD, connection.Password);
+                    var domain = ExtractDomain(connection.UserName);
+                    if (!string.IsNullOrWhiteSpace(domain))
+                        SetUserEnv(ENV_DOMAIN, domain);
+                    break;
+            }
+        }
+
+        private static void SetUserEnv(string name, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return;
+            Environment.SetEnvironmentVariable(name, value, EnvironmentVariableTarget.User);
+            Environment.SetEnvironmentVariable(name, value, EnvironmentVariableTarget.Process);
+        }
+
+        private void UpdateEnvVarPreview()
+        {
+            if (textBlockEnvVarPreview == null) return;
+
+            var selectedTypeName = GetSelectedTypeName();
+            if (checkBoxSaveToEnvVar?.IsChecked != true || string.IsNullOrWhiteSpace(selectedTypeName))
+            {
+                textBlockEnvVarPreview.Visibility = System.Windows.Visibility.Collapsed;
+                textBlockEnvVarPreview.Text = string.Empty;
+                return;
+            }
+
+            textBlockEnvVarPreview.Visibility = System.Windows.Visibility.Visible;
+            var preview = new List<string>
+            {
+                $"{ENV_AUTH_TYPE}={selectedTypeName}"
+            };
+
+            switch (selectedTypeName)
+            {
+                case "ClientSecret":
+                    preview.Add($"{ENV_URL}={textboxUrl.Text}");
+                    preview.Add($"{ENV_CLIENT_ID}={textboxClientId.Text}");
+                    preview.Add($"{ENV_CLIENT_SECRET}={(HasValue(textboxClientSecret.Password, ENV_CLIENT_SECRET) ? "[set]" : "[missing]")}");
+                    break;
+                case "Interactive":
+                case "DeviceCode":
+                    preview.Add($"{ENV_URL}={textboxUrl.Text}");
+                    if (!string.IsNullOrWhiteSpace(textboxClientId.Text))
+                        preview.Add($"{ENV_CLIENT_ID}={textboxClientId.Text}");
+                    break;
+                case "FromPac":
+                    preview.Add($"{ENV_PAC_PROFILE}={GetSelectedPacProfileName()}");
+                    break;
+                case "OAuth":
+                    preview.Add($"{ENV_URL}={textboxUrl.Text}");
+                    preview.Add($"{ENV_USERNAME}={textboxUserName.Text}");
+                    preview.Add($"{ENV_PASSWORD}={(HasValue(textboxPassword.Password, ENV_PASSWORD) ? "[set]" : "[missing]")}");
+                    break;
+                case "AD":
+                    preview.Add($"{ENV_URL}={textboxUrl.Text}");
+                    preview.Add($"{ENV_USERNAME}={textboxUserName.Text}");
+                    preview.Add($"{ENV_PASSWORD}={(HasValue(textboxPassword.Password, ENV_PASSWORD) ? "[set]" : "[missing]")}");
+                    var domain = ExtractDomain(textboxUserName.Text);
+                    if (!string.IsNullOrWhiteSpace(domain))
+                        preview.Add($"{ENV_DOMAIN}={domain}");
+                    break;
+            }
+
+            textBlockEnvVarPreview.Text = string.Join(Environment.NewLine, preview);
+        }
+
+        private string GetSelectedTypeName()
+        {
+            return (comboBoxType?.SelectedItem as IConnectionTypeMetadata)?.Type;
+        }
+
+        private string GetSelectedPacProfileName()
+        {
+            return comboBoxPacProfile?.SelectedItem is PacProfileInfo profile ? profile.Name : string.Empty;
+        }
+
+        private static bool HasValue(string fieldValue, string envName)
+        {
+            return !string.IsNullOrWhiteSpace(fieldValue) ||
+                   !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(envName));
+        }
+
+        private static string ExtractDomain(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username) || !username.Contains("\\")) return string.Empty;
+            var parts = username.Split('\\');
+            return parts.Length == 2 ? parts[0] : string.Empty;
+        }
+
+        private sealed class EmptyConnectionTypeMetadata : IConnectionTypeMetadata
+        {
+            public string Type => string.Empty;
+            public string DisplayName => string.Empty;
+            public string Description => string.Empty;
+            public bool SupportedInVsix => true;
+            public IReadOnlyList<ConnectionFieldDefinition> Fields => Array.Empty<ConnectionFieldDefinition>();
         }
     }
 }

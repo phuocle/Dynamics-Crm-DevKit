@@ -24,11 +24,11 @@ namespace $NameSpace$
             }
         }
 
-        private static string GetAppSettingValue(string key)
+        private static string GetAppSettingValue(string key, string environmentVariable)
         {
             var settings = Configuration.GetSection("Dataverse");
             var value = settings.GetValue<string>(key);
-            return value ?? string.Empty;
+            return string.IsNullOrWhiteSpace(value) ? Environment.GetEnvironmentVariable(environmentVariable) : value;
         }
 
         private static ServiceClient _Service = null;
@@ -42,7 +42,7 @@ namespace $NameSpace$
                 return _Service;
             }
         }
-        private static string Url => GetAppSettingValue("Url");
+        private static string Url => GetAppSettingValue("Url", "DEVKIT_URL");
         private static string ConnectionString => $"AuthType=OAuth;Url={Url};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=http://localhost;LoginPrompt=Always;";
     }
 }

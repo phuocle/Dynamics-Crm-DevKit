@@ -246,7 +246,7 @@ namespace DynamicsCrm.DevKit.Lib
             }
             catch (Exception ex)
             {
-                await VS.MessageBox.ShowErrorAsync($"Failed to connect: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"DevKit: Failed to create ServiceClient: {ex.Message}");
                 return null;
             }
         }

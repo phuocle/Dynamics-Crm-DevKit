@@ -12,6 +12,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Type { get; set; } = "OAuth";
+        [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault)]
+        public bool UseEnvironmentVariables { get; set; }
 
         // ═══════════════════════════════════════════════════════════════════
         // COMMON PROPERTIES (for OAuth, Interactive, DeviceCode, etc.)
@@ -70,5 +72,10 @@ namespace DynamicsCrm.DevKit.Shared.Models
         /// When the connection was last modified.
         /// </summary>
         public DateTime? ModifiedAt { get; set; }
+
+        public override string ToString()
+        {
+            return UseEnvironmentVariables ? $"{Name} [Environment Variables]" : Name;
+        }
     }
 }

@@ -59,23 +59,19 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                                 replacementsDictionary.Add("$devkit.d.ts$", devkitDts);
                                 break;
                             case "download.reports.bat":
-                                var content = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.reports.bat");
-                                content = content.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
+                                var content = await Replacement.ReadBatResourceAsync("bat.download.reports.bat", form.CrmConnection);
                                 replacementsDictionary.Add("$batfile.bat$", content);
                                 break;
                             case "upload.reports.bat":
-                                var contentUploadReports = await VsixHelper.ReadEmbeddedResourceAsync("bat.upload.reports.bat");
-                                contentUploadReports = contentUploadReports.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
+                                var contentUploadReports = await Replacement.ReadBatResourceAsync("bat.upload.reports.bat", form.CrmConnection);
                                 replacementsDictionary.Add("$batfile.bat$", contentUploadReports);
                                 break;
                             case "download.webresources.bat":
-                                var content2 = await VsixHelper.ReadEmbeddedResourceAsync("bat.download.webresources.bat");
-                                content2 = content2.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
+                                var content2 = await Replacement.ReadBatResourceAsync("bat.download.webresources.bat", form.CrmConnection);
                                 replacementsDictionary.Add("$batfile.bat$", content2);
                                 break;
                             case "deploy.datasource.bat":
-                                var content3 = await VsixHelper.ReadEmbeddedResourceAsync("bat.deploy.datasource.bat");
-                                content3 = content3.Replace("$CliConnectionArgs$", CliArgsBuilder.Build(form.CrmConnection, true));
+                                var content3 = await Replacement.ReadBatResourceAsync("bat.deploy.datasource.bat", form.CrmConnection);
                                 replacementsDictionary.Add("$batfile.bat$", content3);
                                 break;
                             case "Plugin-Managed-Identity.ps1":

@@ -30,11 +30,11 @@ namespace $NameSpace$
             }
         }
 
-        private static string GetAppSettingValue(string key)
+        private static string GetAppSettingValue(string key, string environmentVariable)
         {
             var settings = Configuration.GetSection("Dataverse");
             var value = settings.GetValue<string>(key);
-            return value ?? string.Empty;
+            return string.IsNullOrWhiteSpace(value) ? Environment.GetEnvironmentVariable(environmentVariable) : value;
         }
 
         private static ServiceClient _Service = null;
@@ -49,7 +49,7 @@ namespace $NameSpace$
             }
         }
 
-        private static string PacProfile => GetAppSettingValue("PacProfile");
+        private static string PacProfile => GetAppSettingValue("PacProfile", "DEVKIT_PAC_PROFILE");
 
         private static async Task<ServiceClient> CreateServiceClientAsync()
         {

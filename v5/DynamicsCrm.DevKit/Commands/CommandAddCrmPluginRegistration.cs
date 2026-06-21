@@ -295,14 +295,11 @@ namespace DynamicsCrm.DevKit.Commands
             if (serviceClient == null) return null;
             var crmConnection = CacheHelper.GetCrmConnection();
             if (crmConnection == null) return null;
-            var plugin_deploy_debug_bat = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.bat");
-            var plugin_deploy_debug_only_bat = await VsixHelper.ReadEmbeddedResourceAsync("bat.plugin.deploy.debug.only.bat");
-            var cliConnectionArgs = CliArgsBuilder.Build(crmConnection, true);
+            var plugin_deploy_debug_bat = await Replacement.ReadBatResourceAsync("bat.plugin.deploy.debug.bat", crmConnection);
+            var plugin_deploy_debug_only_bat = await Replacement.ReadBatResourceAsync("bat.plugin.deploy.debug.only.bat", crmConnection);
             plugin_deploy_debug_bat = plugin_deploy_debug_bat
-                .Replace("$CliConnectionArgs$", cliConnectionArgs)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             plugin_deploy_debug_only_bat = plugin_deploy_debug_only_bat
-                .Replace("$CliConnectionArgs$", cliConnectionArgs)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte?.ActiveDocument?.ProjectItem?.ContainingProject?.FullName));
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.bat", plugin_deploy_debug_bat);
             await AddDeployBatFileToProjectAsync(dte, "deploy.debug.only.bat", plugin_deploy_debug_only_bat);
