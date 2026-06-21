@@ -1,0 +1,12 @@
+﻿{
+  "DefaultCrmConnection": "dynamics-crm-devkit-v4",
+  "CrmConnections": [
+    {
+      "Name": "dynamics-crm-devkit-v4",
+      "Type": "ClientSecret",
+      "UseEnvironmentVariables": true,
+      "CreatedAt": "2026-06-21T00:43:21.1906678Z",
+      "ModifiedAt": "2026-06-21T00:43:22.5193606Z"
+    }
+  ]
+}

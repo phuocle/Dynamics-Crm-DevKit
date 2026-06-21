@@ -1,1 +1,10 @@
-<Solution />
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="DynamicsCrm.DevKit.Cli.json" />
+    <File Path="DynamicsCrm.DevKit.json" />
+  </Folder>
+  <Project Path="Dev.DevKitV5.Console/Dev.DevKitV5.Console.csproj" />
+  <Project Path="Dev.DevKitV5.ConsoleCore/Dev.DevKitV5.ConsoleCore.csproj" />
+  <Project Path="Dev.DevKitV5.Server/Dev.DevKitV5.Server.csproj" />
+  <Project Path="Dev.DevKitV5.Shared/Dev.DevKitV5.Shared.shproj" Id="58a5f2e8-aa67-40b4-9dfe-b155d0fa01aa" />
+</Solution>
