@@ -1,26 +1,10 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".env" />
+    <File Path=".env.example" />
     <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
-  <Project Path="Dev.DevKitV5.Console/Dev.DevKitV5.Console.csproj" />
-  <Project Path="Dev.DevKitV5.ConsoleCore/Dev.DevKitV5.ConsoleCore.csproj" />
-  <Project Path="Dev.DevKitV5.Package.Test/Dev.DevKitV5.Package.Test.csproj" />
-  <Project Path="Dev.DevKitV5.Package/Dev.DevKitV5.Package.csproj" />
-  <Project Path="Dev.DevKitV5.Package2.Test/Dev.DevKitV5.Package2.Test.csproj" />
-  <Project Path="Dev.DevKitV5.Package2/Dev.DevKitV5.Package2.csproj" />
-  <Project Path="Dev.DevKitV5.ProxyTypes/Dev.DevKitV5.ProxyTypes.csproj" />
-  <Project Path="Dev.DevKitV5.Report/Dev.DevKitV5.Report.rptproj">
-    <Deploy />
-  </Project>
-  <Project Path="Dev.DevKitV5.Server.Test/Dev.DevKitV5.Server.Test.csproj" />
-  <Project Path="Dev.DevKitV5.Server/Dev.DevKitV5.Server.csproj" />
-  <Project Path="Dev.DevKitV5.Server2.Test/Dev.DevKitV5.Server2.Test.csproj" />
-  <Project Path="Dev.DevKitV5.Server2/Dev.DevKitV5.Server2.csproj" />
-  <Project Path="Dev.DevKitV5.Shared.Test/Dev.DevKitV5.Shared.Test.shproj" Id="87accfd9-138f-4567-a338-5535adcb0f11" />
-  <Project Path="Dev.DevKitV5.Shared/Dev.DevKitV5.Shared.shproj" Id="629508c0-123f-4a3b-af55-34f70d60fc3c" />
-  <Project Path="Dev.DevKitV5.SolutionPackager/Dev.DevKitV5.SolutionPackager.csproj" />
-  <Project Path="Dev.DevKitV5.UiTest/Dev.DevKitV5.UiTest.csproj" />
-  <Project Path="Dev.DevKitV5.WebResource/Dev.DevKitV5.WebResource.csproj" />
-  <Project Path="Dev.DevKitV5.WebResourceTs/Dev.DevKitV5.WebResourceTs.csproj" />
+  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="e6a097ad-c682-40cc-bd19-f44a7149321d" />
+  <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
 </Solution>

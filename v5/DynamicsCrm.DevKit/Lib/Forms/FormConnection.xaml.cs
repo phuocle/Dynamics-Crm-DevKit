@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
@@ -34,7 +36,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ENV_USERNAME = "DEVKIT_USERNAME";
         private const string ENV_PASSWORD = "DEVKIT_PASSWORD";
         private const string ENV_DOMAIN = "DEVKIT_DOMAIN";
+        private const string ICON_SHOW_SECRET = "\uE890";
+        private const string ICON_HIDE_SECRET = "\uED1A";
         private string _projectEnvironmentFilePath;
+        private bool _syncingPasswordText;
+        private bool _syncingClientSecretText;
 
         public FormConnection()
         {
@@ -44,13 +50,105 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUrl.TextChanged += (_, __) => UpdateProjectEnvPreview();
             textboxClientId.TextChanged += (_, __) => UpdateProjectEnvPreview();
             textboxUserName.TextChanged += (_, __) => UpdateProjectEnvPreview();
-            textboxClientSecret.PasswordChanged += (_, __) => UpdateProjectEnvPreview();
-            textboxPassword.PasswordChanged += (_, __) => UpdateProjectEnvPreview();
+            textboxClientSecret.PasswordChanged += (_, __) => SyncClientSecretFromPasswordBox();
+            textboxClientSecretVisible.TextChanged += (_, __) => SyncClientSecretFromVisibleTextBox();
+            textboxPassword.PasswordChanged += (_, __) => SyncPasswordFromPasswordBox();
+            textboxPasswordVisible.TextChanged += (_, __) => SyncPasswordFromVisibleTextBox();
         }
 
         private void FormConnection_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             _ = InitializeFormAsync();
+        }
+
+        private void SyncPasswordFromPasswordBox()
+        {
+            if (!_syncingPasswordText)
+            {
+                _syncingPasswordText = true;
+                textboxPasswordVisible.Text = textboxPassword.Password;
+                _syncingPasswordText = false;
+            }
+
+            UpdateProjectEnvPreview();
+        }
+
+        private void SyncPasswordFromVisibleTextBox()
+        {
+            if (!_syncingPasswordText)
+            {
+                _syncingPasswordText = true;
+                textboxPassword.Password = textboxPasswordVisible.Text;
+                _syncingPasswordText = false;
+            }
+
+            UpdateProjectEnvPreview();
+        }
+
+        private void SyncClientSecretFromPasswordBox()
+        {
+            if (!_syncingClientSecretText)
+            {
+                _syncingClientSecretText = true;
+                textboxClientSecretVisible.Text = textboxClientSecret.Password;
+                _syncingClientSecretText = false;
+            }
+
+            UpdateProjectEnvPreview();
+        }
+
+        private void SyncClientSecretFromVisibleTextBox()
+        {
+            if (!_syncingClientSecretText)
+            {
+                _syncingClientSecretText = true;
+                textboxClientSecret.Password = textboxClientSecretVisible.Text;
+                _syncingClientSecretText = false;
+            }
+
+            UpdateProjectEnvPreview();
+        }
+
+        private void ButtonTogglePassword_Checked(object sender, RoutedEventArgs e)
+        {
+            SetSecretVisibility(textboxPassword, textboxPasswordVisible, iconTogglePassword, buttonTogglePassword, isVisible: true, "password");
+        }
+
+        private void ButtonTogglePassword_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SetSecretVisibility(textboxPassword, textboxPasswordVisible, iconTogglePassword, buttonTogglePassword, isVisible: false, "password");
+        }
+
+        private void ButtonToggleClientSecret_Checked(object sender, RoutedEventArgs e)
+        {
+            SetSecretVisibility(textboxClientSecret, textboxClientSecretVisible, iconToggleClientSecret, buttonToggleClientSecret, isVisible: true, "client secret");
+        }
+
+        private void ButtonToggleClientSecret_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SetSecretVisibility(textboxClientSecret, textboxClientSecretVisible, iconToggleClientSecret, buttonToggleClientSecret, isVisible: false, "client secret");
+        }
+
+        private static void SetSecretVisibility(PasswordBox hiddenTextBox, TextBox visibleTextBox, TextBlock icon, System.Windows.Controls.Primitives.ToggleButton button, bool isVisible, string label)
+        {
+            if (isVisible)
+            {
+                visibleTextBox.Text = hiddenTextBox.Password;
+                visibleTextBox.Visibility = Visibility.Visible;
+                hiddenTextBox.Visibility = Visibility.Collapsed;
+                icon.Text = ICON_SHOW_SECRET;
+                button.ToolTip = $"Hide {label}";
+                visibleTextBox.Focus();
+                visibleTextBox.CaretIndex = visibleTextBox.Text.Length;
+                return;
+            }
+
+            hiddenTextBox.Password = visibleTextBox.Text;
+            visibleTextBox.Visibility = Visibility.Collapsed;
+            hiddenTextBox.Visibility = Visibility.Visible;
+            icon.Text = ICON_HIDE_SECRET;
+            button.ToolTip = $"Show {label}";
+            hiddenTextBox.Focus();
         }
 
         private async Task InitializeFormAsync()
@@ -417,8 +515,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxUrl.Text = string.Empty;
             textboxClientId.Text = string.Empty;
             textboxClientSecret.Password = string.Empty;
+            buttonToggleClientSecret.IsChecked = false;
             textboxUserName.Text = string.Empty;
             textboxPassword.Password = string.Empty;
+            buttonTogglePassword.IsChecked = false;
             comboBoxPacProfile.SelectedIndex = -1;
             checkBoxUseProjectEnv.IsChecked = false;
             UpdateProjectEnvPreview();
@@ -618,8 +718,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             textboxName.IsEnabled = hasType;
             textboxUrl.IsEnabled = hasType;
             textboxUserName.IsEnabled = hasType;
+            gridPassword.IsEnabled = hasType;
             textboxPassword.IsEnabled = hasType;
             textboxClientId.IsEnabled = hasType;
+            gridClientSecret.IsEnabled = hasType;
             textboxClientSecret.IsEnabled = hasType;
             comboBoxPacProfile.IsEnabled = hasType;
             checkBoxUseProjectEnv.IsEnabled = hasType;
@@ -653,13 +755,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             labelUserName.Visibility = System.Windows.Visibility.Collapsed;
             textboxUserName.Visibility = System.Windows.Visibility.Collapsed;
             labelPassword.Visibility = System.Windows.Visibility.Collapsed;
-            textboxPassword.Visibility = System.Windows.Visibility.Collapsed;
+            gridPassword.Visibility = System.Windows.Visibility.Collapsed;
+            buttonTogglePassword.IsChecked = false;
 
             // ClientSecret fields
             labelClientId.Visibility = System.Windows.Visibility.Collapsed;
             textboxClientId.Visibility = System.Windows.Visibility.Collapsed;
             labelClientSecret.Visibility = System.Windows.Visibility.Collapsed;
-            textboxClientSecret.Visibility = System.Windows.Visibility.Collapsed;
+            gridClientSecret.Visibility = System.Windows.Visibility.Collapsed;
+            buttonToggleClientSecret.IsChecked = false;
 
             // PAC Profile fields
             labelPacProfile.Visibility = System.Windows.Visibility.Collapsed;
@@ -675,7 +779,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             labelClientId.Visibility = System.Windows.Visibility.Visible;
             textboxClientId.Visibility = System.Windows.Visibility.Visible;
             labelClientSecret.Visibility = System.Windows.Visibility.Visible;
-            textboxClientSecret.Visibility = System.Windows.Visibility.Visible;
+            gridClientSecret.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void ShowOAuthFields()
@@ -683,7 +787,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             labelUserName.Visibility = System.Windows.Visibility.Visible;
             textboxUserName.Visibility = System.Windows.Visibility.Visible;
             labelPassword.Visibility = System.Windows.Visibility.Visible;
-            textboxPassword.Visibility = System.Windows.Visibility.Visible;
+            gridPassword.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void ShowInteractiveFields()

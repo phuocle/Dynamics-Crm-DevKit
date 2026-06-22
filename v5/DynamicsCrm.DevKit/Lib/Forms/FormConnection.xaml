@@ -82,13 +82,25 @@
                                 <Label x:Name="labelUserName" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
                                 <TextBox x:Name="textboxUserName" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" Visibility="Collapsed"/>
                                 <Label x:Name="labelPassword" Grid.Row="6" Grid.Column="0" Margin="0,0,0,5" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                <PasswordBox x:Name="textboxPassword" Grid.Row="6" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" Visibility="Collapsed"/>
+                                <Grid x:Name="gridPassword" Grid.Row="6" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed">
+                                    <PasswordBox x:Name="textboxPassword" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" PasswordChar="*"/>
+                                    <TextBox x:Name="textboxPasswordVisible" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" Visibility="Collapsed"/>
+                                    <ToggleButton x:Name="buttonTogglePassword" Width="26" Height="26" Margin="0,1,2,1" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="Show password" Checked="ButtonTogglePassword_Checked" Unchecked="ButtonTogglePassword_Unchecked">
+                                        <TextBlock x:Name="iconTogglePassword" FontFamily="Segoe MDL2 Assets" FontSize="14" Text="&#xED1A;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
                                 <!-- ClientId: visible for both ClientSecret and OAuth(optional) -->
                                 <Label x:Name="labelClientId" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" Content="Client ID" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <TextBox x:Name="textboxClientId" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <!-- ClientSecret: visible only for ClientSecret type -->
                                 <Label x:Name="labelClientSecret" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" Content="Client Secret" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <PasswordBox x:Name="textboxClientSecret" Grid.Row="8" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" PasswordChar="*" />
+                                <Grid x:Name="gridClientSecret" Grid.Row="8" Grid.Column="1" Margin="0,0,0,5">
+                                    <PasswordBox x:Name="textboxClientSecret" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" PasswordChar="*" />
+                                    <TextBox x:Name="textboxClientSecretVisible" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" Visibility="Collapsed"/>
+                                    <ToggleButton x:Name="buttonToggleClientSecret" Width="26" Height="26" Margin="0,1,2,1" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="Show client secret" Checked="ButtonToggleClientSecret_Checked" Unchecked="ButtonToggleClientSecret_Unchecked">
+                                        <TextBlock x:Name="iconToggleClientSecret" FontFamily="Segoe MDL2 Assets" FontSize="14" Text="&#xED1A;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
                                 <!-- PAC Profile: visible only for FromPac type -->
                                 <Label x:Name="labelPacProfile" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" Content="PAC Profile" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
                                 <ComboBox x:Name="comboBoxPacProfile" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed"/>
