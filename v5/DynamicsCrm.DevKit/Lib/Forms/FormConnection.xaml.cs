@@ -27,7 +27,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private const string ERROR_ENTER_USERNAME = "Please enter Username";
         private const string ERROR_ENTER_PASSWORD = "Please enter Password";
         private const string ERROR_CONNECTION_FAILED = "Failed to connect to Dataverse. Please check your connection settings.";
-        private const string ERROR_PROJECT_ENV_EXISTS = "This project already has a project .env connection. DevKit currently supports one project .env connection only. Clear the existing project .env connection before creating a new one.";
         private const string ENV_AUTH_TYPE = "DEVKIT_AUTH_TYPE";
         private const string ENV_URL = "DEVKIT_URL";
         private const string ENV_CLIENT_ID = "DEVKIT_CLIENT_ID";
@@ -573,12 +572,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 textboxName.Focus();
                 return false;
             }
-            if (checkBoxUseProjectEnv.IsChecked == true && await ProjectEnvironmentConnectionExistsAsync())
-            {
-                await VS.MessageBox.ShowErrorAsync(ERROR_PROJECT_ENV_EXISTS);
-                return false;
-            }
-
             // URL validation (skip for FromPac - URL comes from profile)
             if (typeName != "FromPac")
             {
@@ -903,7 +896,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (marker == null) return null;
 
             var values = ProjectEnvironment.Read(_projectEnvironmentFilePath);
-            var type = marker.Type;
+            var envAuthType = ProjectEnvironment.GetValue(values, ENV_AUTH_TYPE);
+            var type = !string.IsNullOrWhiteSpace(envAuthType) ? envAuthType : marker.Type;
             var connection = new CrmConnection
             {
                 Name = marker.Name,
@@ -917,9 +911,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 Password = ProjectEnvironment.GetValue(values, ENV_PASSWORD)
             };
 
-            var envAuthType = ProjectEnvironment.GetValue(values, ENV_AUTH_TYPE);
-            if (string.IsNullOrWhiteSpace(type))
-                type = envAuthType;
             connection.Type = type;
 
             if (string.IsNullOrWhiteSpace(connection.Type))
@@ -960,8 +951,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void SaveProjectEnvironment(CrmConnection connection)
         {
             EnsureProjectEnvironmentFile();
-            if (ProjectEnvironmentHasConnectionValues())
-                throw new InvalidOperationException(ERROR_PROJECT_ENV_EXISTS);
 
             var values = new Dictionary<string, string>
             {
@@ -1007,19 +996,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void EnsureProjectEnvironmentFile()
         {
             ProjectEnvironment.EnsureFile(Path.GetDirectoryName(_projectEnvironmentFilePath));
-        }
-
-        private bool ProjectEnvironmentHasConnectionValues()
-        {
-            var values = ProjectEnvironment.Read(_projectEnvironmentFilePath);
-            return ProjectEnvironment.ConnectionKeys.Any(key => !string.IsNullOrWhiteSpace(ProjectEnvironment.GetValue(values, key)));
-        }
-
-        private async Task<bool> ProjectEnvironmentConnectionExistsAsync()
-        {
-            var devKitConnections = await VsixHelper.GetDevKitConnectionsAsync();
-            return devKitConnections.CrmConnections.Any(connection => connection.UseProjectEnvironment)
-                   || ProjectEnvironmentHasConnectionValues();
         }
 
         private void UpdateProjectEnvPreview()

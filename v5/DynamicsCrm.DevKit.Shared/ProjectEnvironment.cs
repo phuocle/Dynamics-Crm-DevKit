@@ -9,6 +9,7 @@ namespace DynamicsCrm.DevKit.Shared
     {
         public const string FileName = ".env";
         public const string ExampleFileName = ".env.example";
+        private const string AuthTypeHelpComment = "# Supported DEVKIT_AUTH_TYPE values: Interactive, DeviceCode, ClientSecret, FromPac, OAuth, AD";
         public const string AuthType = "DEVKIT_AUTH_TYPE";
         public const string Connection = "DEVKIT_CONNECTION";
         public const string Url = "DEVKIT_URL";
@@ -97,11 +98,23 @@ namespace DynamicsCrm.DevKit.Shared
 
             var filePath = Path.Combine(directory, FileName);
             if (!File.Exists(filePath))
+            {
                 File.WriteAllLines(filePath, CreateLocalTemplateLines());
+            }
+            else
+            {
+                EnsureAuthTypeHelpComment(filePath);
+            }
 
             var exampleFilePath = Path.Combine(directory, ExampleFileName);
             if (!File.Exists(exampleFilePath))
+            {
                 File.WriteAllLines(exampleFilePath, CreateExampleTemplateLines());
+            }
+            else
+            {
+                EnsureAuthTypeHelpComment(exampleFilePath);
+            }
 
             AddEnvFileToNearestGitIgnore(filePath);
         }
@@ -136,6 +149,8 @@ namespace DynamicsCrm.DevKit.Shared
                 lines.Add($"{key}={values[key] ?? string.Empty}");
             }
 
+            EnsureAuthTypeHelpComment(lines);
+
             File.WriteAllLines(filePath, lines);
         }
 
@@ -145,6 +160,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 "# DynamicsCrm.DevKit project-level connection values.",
                 "# CLI arguments override these values. MCP uses OS DEVKIT_* variables instead.",
+                AuthTypeHelpComment,
                 $"{AuthType}=",
                 $"{Url}=",
                 $"{ClientId}=",
@@ -162,6 +178,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 "# DynamicsCrm.DevKit project-level connection example.",
                 "# Copy this file to .env and fill local secret values.",
+                AuthTypeHelpComment,
                 $"{AuthType}=ClientSecret",
                 $"{Url}=https://org.crm.dynamics.com",
                 $"{ClientId}=00000000-0000-0000-0000-000000000000",
@@ -210,6 +227,32 @@ namespace DynamicsCrm.DevKit.Shared
             }
 
             return null;
+        }
+
+        private static void EnsureAuthTypeHelpComment(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath)) return;
+
+            var lines = File.ReadAllLines(filePath).ToList();
+            if (EnsureAuthTypeHelpComment(lines))
+                File.WriteAllLines(filePath, lines);
+        }
+
+        private static bool EnsureAuthTypeHelpComment(IList<string> lines)
+        {
+            if (lines == null || lines.Any(line => string.Equals(line.Trim(), AuthTypeHelpComment, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            for (var i = 0; i < lines.Count; i++)
+            {
+                var key = TryGetKey(lines[i]);
+                if (!string.Equals(key, AuthType, StringComparison.OrdinalIgnoreCase)) continue;
+
+                lines.Insert(i, AuthTypeHelpComment);
+                return true;
+            }
+
+            return false;
         }
 
         private static string NormalizePath(string path)

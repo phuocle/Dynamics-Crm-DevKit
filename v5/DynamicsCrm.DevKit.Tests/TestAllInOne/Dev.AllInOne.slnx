@@ -1,10 +1,1 @@
-<Solution>
-  <Folder Name="/Solution Items/">
-    <File Path=".env" />
-    <File Path=".env.example" />
-    <File Path="DynamicsCrm.DevKit.Cli.json" />
-    <File Path="DynamicsCrm.DevKit.json" />
-  </Folder>
-  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="e6a097ad-c682-40cc-bd19-f44a7149321d" />
-  <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
-</Solution>
+<Solution />
