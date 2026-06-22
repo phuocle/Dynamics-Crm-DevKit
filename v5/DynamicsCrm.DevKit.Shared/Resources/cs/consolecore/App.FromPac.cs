@@ -99,7 +99,7 @@ namespace $NameSpace$
             if (string.IsNullOrEmpty(PacProfile))
             {
                 throw new InvalidOperationException(
-                    "PAC CLI profile name is required in AppSettings.json. " +
+                    "PAC CLI profile name or index is required in AppSettings.json. " +
                     "Run 'pac auth list' to see available profiles.");
             }
 
@@ -152,7 +152,7 @@ namespace $NameSpace$
             return serviceClient;
         }
 
-        private static string GetEnvironmentUrlFromPacProfiles(string profileName)
+        private static string GetEnvironmentUrlFromPacProfiles(string profileNameOrIndex)
         {
             // PAC CLI stores profiles at: %LOCALAPPDATA%\Microsoft\PowerAppsCLI\authprofiles_v2.json
             var profilesPath = Path.Combine(
@@ -178,16 +178,39 @@ namespace $NameSpace$
                     "No profiles found in PAC CLI. Please run 'pac auth create' first.");
             }
 
-            var profileData = pacProfiles.Profiles.FirstOrDefault(p =>
-                !string.IsNullOrEmpty(p.Name) &&
-                string.Equals(p.Name, profileName, StringComparison.OrdinalIgnoreCase));
+            PacProfileData profileData = null;
+            if (int.TryParse(profileNameOrIndex, out var profileIndex))
+            {
+                var zeroBasedIndex = profileIndex - 1;
+                if (zeroBasedIndex >= 0 && zeroBasedIndex < pacProfiles.Profiles.Count)
+                {
+                    profileData = pacProfiles.Profiles[zeroBasedIndex];
+                }
+            }
+
+            if (profileData == null)
+            {
+                profileData = pacProfiles.Profiles.FirstOrDefault(p =>
+                    !string.IsNullOrEmpty(p.Name) &&
+                    string.Equals(p.Name, profileNameOrIndex, StringComparison.OrdinalIgnoreCase));
+            }
 
             if (profileData == null)
             {
                 var availableProfiles = string.Join(", ",
-                    pacProfiles.Profiles.Select(p => p.Name ?? "Unnamed"));
+                    pacProfiles.Profiles.Select((p, index) =>
+                    {
+                        var displayName = !string.IsNullOrWhiteSpace(p.Name)
+                            ? p.Name
+                            : !string.IsNullOrWhiteSpace(p.FriendlyName)
+                                ? p.FriendlyName
+                                : !string.IsNullOrWhiteSpace(p.Resource)
+                                    ? p.Resource
+                                    : "Unnamed";
+                        return $"{index + 1}:{displayName}";
+                    }));
                 throw new InvalidOperationException(
-                    $"PAC CLI profile '{profileName}' not found. Available profiles: {availableProfiles}");
+                    $"PAC CLI profile '{profileNameOrIndex}' not found. Available profiles: {availableProfiles}");
             }
 
             var environmentUrl = profileData?.Resource;

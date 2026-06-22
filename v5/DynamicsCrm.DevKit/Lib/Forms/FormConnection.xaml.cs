@@ -397,7 +397,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     // Get selected PAC profile name
                     if (comboBoxPacProfile.SelectedItem is PacProfileInfo selectedProfile)
                     {
-                        connection.PacProfile = selectedProfile.Name;
+                        connection.PacProfile = selectedProfile.Identifier;
                         // Get URL from profile for display purposes
                         connection.Url = selectedProfile.Resource;
                     }
@@ -566,7 +566,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 comboBoxType.Focus();
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(textboxName.Text))
+            if (typeName == "FromPac")
+            {
+                SyncNameFromSelectedPacProfile();
+            }
+            else if (string.IsNullOrWhiteSpace(textboxName.Text))
             {
                 await VS.MessageBox.ShowErrorAsync(ERROR_ENTER_NAME);
                 textboxName.Focus();
@@ -699,6 +703,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
         }
 
+        private void ComboBoxPacProfile_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            SyncNameFromSelectedPacProfile();
+            UpdateProjectEnvPreview();
+        }
+
         private void CheckBoxUseProjectEnv_Changed(object sender, System.Windows.RoutedEventArgs e)
         {
             UpdateProjectEnvPreview();
@@ -707,8 +717,9 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void UpdateConnectionInputState()
         {
             var hasType = !string.IsNullOrWhiteSpace((comboBoxType?.SelectedItem as IConnectionTypeMetadata)?.Type);
+            var isFromPac = string.Equals((comboBoxType?.SelectedItem as IConnectionTypeMetadata)?.Type, "FromPac", StringComparison.Ordinal);
 
-            textboxName.IsEnabled = hasType;
+            textboxName.IsEnabled = hasType && !isFromPac;
             textboxUrl.IsEnabled = hasType;
             textboxUserName.IsEnabled = hasType;
             gridPassword.IsEnabled = hasType;
@@ -762,6 +773,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             labelPacProfile.Visibility = System.Windows.Visibility.Collapsed;
             comboBoxPacProfile.Visibility = System.Windows.Visibility.Collapsed;
 
+            // Name is hidden only for FromPac because the PAC profile name is the connection name.
+            labelName.Visibility = System.Windows.Visibility.Visible;
+            textboxName.Visibility = System.Windows.Visibility.Visible;
+
             // URL field (visible by default, hidden for FromPac)
             labelUrl.Visibility = System.Windows.Visibility.Visible;
             textboxUrl.Visibility = System.Windows.Visibility.Visible;
@@ -810,6 +825,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             // Show PAC Profile ComboBox
             labelPacProfile.Visibility = System.Windows.Visibility.Visible;
             comboBoxPacProfile.Visibility = System.Windows.Visibility.Visible;
+            labelName.Visibility = System.Windows.Visibility.Collapsed;
+            textboxName.Visibility = System.Windows.Visibility.Collapsed;
 
             // Load PAC profiles into ComboBox
             try
@@ -821,6 +838,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     comboBoxPacProfile.ItemsSource = profiles;
                     comboBoxPacProfile.DisplayMemberPath = "DisplayText";
                     comboBoxPacProfile.SelectedIndex = 0;
+                    SyncNameFromSelectedPacProfile();
                 }
                 else
                 {
@@ -896,19 +914,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (marker == null) return null;
 
             var values = ProjectEnvironment.Read(_projectEnvironmentFilePath);
-            var envAuthType = ProjectEnvironment.GetValue(values, ENV_AUTH_TYPE);
-            var type = !string.IsNullOrWhiteSpace(envAuthType) ? envAuthType : marker.Type;
+            var type = ResolveProjectEnvironmentConnectionType(marker, values);
             var connection = new CrmConnection
             {
                 Name = marker.Name,
                 Type = type,
-                UseProjectEnvironment = true,
-                Url = ProjectEnvironment.GetValue(values, ENV_URL),
-                ClientId = ProjectEnvironment.GetValue(values, ENV_CLIENT_ID),
-                ClientSecret = ProjectEnvironment.GetValue(values, ENV_CLIENT_SECRET),
-                PacProfile = ProjectEnvironment.GetValue(values, ENV_PAC_PROFILE),
-                UserName = ProjectEnvironment.GetValue(values, ENV_USERNAME),
-                Password = ProjectEnvironment.GetValue(values, ENV_PASSWORD)
+                UseProjectEnvironment = true
             };
 
             connection.Type = type;
@@ -922,23 +933,34 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             switch (connection.Type)
             {
                 case "ClientSecret":
+                    connection.Url = ProjectEnvironment.GetValue(values, ENV_URL);
+                    connection.ClientId = ProjectEnvironment.GetValue(values, ENV_CLIENT_ID);
+                    connection.ClientSecret = ProjectEnvironment.GetValue(values, ENV_CLIENT_SECRET);
                     if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
                     if (string.IsNullOrWhiteSpace(connection.ClientId)) { missingVariable = ENV_CLIENT_ID; return null; }
                     if (string.IsNullOrWhiteSpace(connection.ClientSecret)) { missingVariable = ENV_CLIENT_SECRET; return null; }
                     break;
                 case "Interactive":
                 case "DeviceCode":
+                    connection.Url = ProjectEnvironment.GetValue(values, ENV_URL);
                     if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
                     break;
                 case "FromPac":
+                    connection.PacProfile = ProjectEnvironment.GetValue(values, ENV_PAC_PROFILE);
                     if (string.IsNullOrWhiteSpace(connection.PacProfile)) { missingVariable = ENV_PAC_PROFILE; return null; }
                     break;
                 case "OAuth":
+                    connection.Url = ProjectEnvironment.GetValue(values, ENV_URL);
+                    connection.UserName = ProjectEnvironment.GetValue(values, ENV_USERNAME);
+                    connection.Password = ProjectEnvironment.GetValue(values, ENV_PASSWORD);
                     if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
                     if (string.IsNullOrWhiteSpace(connection.UserName)) { missingVariable = ENV_USERNAME; return null; }
                     if (string.IsNullOrWhiteSpace(connection.Password)) { missingVariable = ENV_PASSWORD; return null; }
                     break;
                 case "AD":
+                    connection.Url = ProjectEnvironment.GetValue(values, ENV_URL);
+                    connection.UserName = ProjectEnvironment.GetValue(values, ENV_USERNAME);
+                    connection.Password = ProjectEnvironment.GetValue(values, ENV_PASSWORD);
                     if (string.IsNullOrWhiteSpace(connection.Url)) { missingVariable = ENV_URL; return null; }
                     if (string.IsNullOrWhiteSpace(connection.UserName)) { missingVariable = ENV_USERNAME; return null; }
                     if (string.IsNullOrWhiteSpace(connection.Password)) { missingVariable = ENV_PASSWORD; return null; }
@@ -946,6 +968,95 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }
 
             return connection;
+        }
+
+        private static string ResolveProjectEnvironmentConnectionType(CrmConnection marker, IDictionary<string, string> values)
+        {
+            var markerType = NormalizeProjectEnvironmentConnectionType(marker?.Type);
+            if (!string.IsNullOrWhiteSpace(markerType)) return markerType;
+
+            var nameType = ResolveProjectEnvironmentConnectionTypeFromName(marker?.Name);
+            if (!string.IsNullOrWhiteSpace(nameType)) return nameType;
+
+            var envAuthType = NormalizeProjectEnvironmentConnectionType(ProjectEnvironment.GetValue(values, ENV_AUTH_TYPE));
+            if (!string.IsNullOrWhiteSpace(envAuthType)) return envAuthType;
+
+            return InferProjectEnvironmentConnectionType(values);
+        }
+
+        private static string ResolveProjectEnvironmentConnectionTypeFromName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return null;
+
+            var compactName = new string(name.Where(char.IsLetterOrDigit).ToArray()).ToUpperInvariant();
+            if (compactName.Contains("CLIENTSECRET")) return "ClientSecret";
+            if (compactName.Contains("FROMPAC") || HasNameToken(name, "PAC")) return "FromPac";
+            if (HasNameToken(name, "AD")) return "AD";
+            if (compactName.Contains("OAUTH") || HasNameToken(name, "AUTH")) return "OAuth";
+
+            return null;
+        }
+
+        private static string InferProjectEnvironmentConnectionType(IDictionary<string, string> values)
+        {
+            var hasClientSecret = HasProjectEnvironmentValue(values, ENV_URL) &&
+                                  HasProjectEnvironmentValue(values, ENV_CLIENT_ID) &&
+                                  HasProjectEnvironmentValue(values, ENV_CLIENT_SECRET);
+            var hasOAuthOrAd = HasProjectEnvironmentValue(values, ENV_URL) &&
+                               HasProjectEnvironmentValue(values, ENV_USERNAME) &&
+                               HasProjectEnvironmentValue(values, ENV_PASSWORD);
+            var hasFromPac = HasProjectEnvironmentValue(values, ENV_PAC_PROFILE);
+
+            var matches = new List<string>();
+            if (hasClientSecret) matches.Add("ClientSecret");
+            if (hasOAuthOrAd) matches.Add("OAuth");
+            if (hasFromPac) matches.Add("FromPac");
+
+            return matches.Count == 1 ? matches[0] : null;
+        }
+
+        private static string NormalizeProjectEnvironmentConnectionType(string type)
+        {
+            if (string.IsNullOrWhiteSpace(type)) return null;
+
+            switch (type.Trim().ToUpperInvariant())
+            {
+                case "CLIENTSECRET":
+                case "CLIENT_SECRET":
+                case "CLIENT SECRET":
+                    return "ClientSecret";
+                case "OAUTH":
+                case "AUTH":
+                    return "OAuth";
+                case "AD":
+                    return "AD";
+                case "FROMPAC":
+                case "FROM_PAC":
+                case "FROM PAC":
+                case "PAC":
+                    return "FromPac";
+                case "INTERACTIVE":
+                    return "Interactive";
+                case "DEVICECODE":
+                case "DEVICE_CODE":
+                case "DEVICE CODE":
+                    return "DeviceCode";
+                default:
+                    return null;
+            }
+        }
+
+        private static bool HasProjectEnvironmentValue(IDictionary<string, string> values, string name)
+        {
+            return !string.IsNullOrWhiteSpace(ProjectEnvironment.GetValue(values, name));
+        }
+
+        private static bool HasNameToken(string name, params string[] tokens)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return false;
+
+            var parts = name.Split(new[] { ' ', '.', '-', '_', '[', ']', '(', ')', '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            return parts.Any(part => tokens.Any(token => string.Equals(part, token, StringComparison.OrdinalIgnoreCase)));
         }
 
         private void SaveProjectEnvironment(CrmConnection connection)
@@ -1058,7 +1169,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private string GetSelectedPacProfileName()
         {
-            return comboBoxPacProfile?.SelectedItem is PacProfileInfo profile ? profile.Name : string.Empty;
+            return comboBoxPacProfile?.SelectedItem is PacProfileInfo profile ? profile.Identifier : string.Empty;
+        }
+
+        private void SyncNameFromSelectedPacProfile()
+        {
+            if (comboBoxPacProfile?.SelectedItem is PacProfileInfo profile)
+            {
+                textboxName.Text = profile.ConnectionName;
+            }
         }
 
         private bool HasProjectValue(string fieldValue, string envName)

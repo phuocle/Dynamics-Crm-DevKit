@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
@@ -10,6 +11,8 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
     /// </summary>
     public class PacProfileInfo
     {
+        public int Index { get; set; }
+
         /// <summary>
         /// Profile name used for selection.
         /// </summary>
@@ -25,10 +28,20 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
         /// </summary>
         public string Resource { get; set; }
 
+        public string Identifier => !string.IsNullOrWhiteSpace(Name) ? Name : Index.ToString();
+
+        public string ConnectionName => !string.IsNullOrWhiteSpace(Name)
+            ? Name
+            : !string.IsNullOrWhiteSpace(FriendlyName)
+                ? FriendlyName
+                : !string.IsNullOrWhiteSpace(Resource)
+                    ? new Uri(Resource).Host
+                    : $"PAC Profile {Index}";
+
         /// <summary>
         /// Display text for ComboBox.
         /// </summary>
-        public string DisplayText => $"{Name} ({Resource ?? "no env"})";
+        public string DisplayText => $"[{Index}] {ConnectionName} ({Resource ?? "no env"})";
 
         public override string ToString() => DisplayText;
     }
@@ -75,15 +88,18 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
                     return result;
                 }
 
-                foreach (var profile in pacProfiles.Profiles)
+                foreach (var profile in pacProfiles.Profiles.Select((value, index) => new { value, index }))
                 {
-                    if (!string.IsNullOrEmpty(profile.Name))
+                    if (!string.IsNullOrWhiteSpace(profile.value.Name) ||
+                        !string.IsNullOrWhiteSpace(profile.value.Resource) ||
+                        !string.IsNullOrWhiteSpace(profile.value.FriendlyName))
                     {
                         result.Add(new PacProfileInfo
                         {
-                            Name = profile.Name,
-                            FriendlyName = profile.FriendlyName,
-                            Resource = profile.Resource
+                            Index = profile.index + 1,
+                            Name = profile.value.Name,
+                            FriendlyName = profile.value.FriendlyName,
+                            Resource = profile.value.Resource
                         });
                     }
                 }

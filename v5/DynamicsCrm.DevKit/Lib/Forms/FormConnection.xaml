@@ -68,7 +68,7 @@
                                 </Grid.RowDefinitions>
                                 <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" DisplayMemberPath="DisplayName" SelectionChanged="ComboBoxType_SelectionChanged"/>
-                                <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <Label x:Name="labelName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
                                 <Label x:Name="labelUrl" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
@@ -103,7 +103,7 @@
                                 </Grid>
                                 <!-- PAC Profile: visible only for FromPac type -->
                                 <Label x:Name="labelPacProfile" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" Content="PAC Profile" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
-                                <ComboBox x:Name="comboBoxPacProfile" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed"/>
+                                <ComboBox x:Name="comboBoxPacProfile" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed" SelectionChanged="ComboBoxPacProfile_SelectionChanged"/>
                                 <CheckBox x:Name="checkBoxUseProjectEnv" Grid.Row="10" Grid.Column="1" Margin="0,0,0,5" Content="Use project .env" Checked="CheckBoxUseProjectEnv_Changed" Unchecked="CheckBoxUseProjectEnv_Changed"/>
                                 <TextBlock x:Name="textBlockProjectEnvPreview" Grid.Row="11" Grid.Column="1" Margin="0,0,0,5" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11" Foreground="#555555" Visibility="Collapsed"/>
                                 <Button x:Name="buttonCheckConnection" Grid.Row="12" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>

@@ -75,7 +75,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         public override string ToString()
         {
-            return UseProjectEnvironment ? $"{Name} [Project .env]" : Name;
+            return UseProjectEnvironment ? $"{Name} [.env {Type}]" : Name;
         }
     }
 }
