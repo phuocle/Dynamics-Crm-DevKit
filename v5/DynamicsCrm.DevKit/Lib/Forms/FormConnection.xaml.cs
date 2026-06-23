@@ -219,6 +219,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     if (serviceClient?.IsReady == true)
                     {
                         ServiceClient = serviceClient;
+                        UpdateProjectEnvironmentAuthTypeAfterConnect(selectedConnection, connectionToConnect);
                         CloseDialog(true);
                         return;
                     }
@@ -304,6 +305,24 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
                 await SetUIBusyStateAsync(false);
             }
+        }
+
+        private void UpdateProjectEnvironmentAuthTypeAfterConnect(CrmConnection selectedConnection, CrmConnection connectedConnection)
+        {
+            if (selectedConnection?.UseProjectEnvironment != true ||
+                string.IsNullOrWhiteSpace(_projectEnvironmentFilePath) ||
+                !File.Exists(_projectEnvironmentFilePath) ||
+                string.IsNullOrWhiteSpace(connectedConnection?.Type))
+            {
+                return;
+            }
+
+            ProjectEnvironment.WriteOrUpdate(
+                _projectEnvironmentFilePath,
+                new Dictionary<string, string>
+                {
+                    [ENV_AUTH_TYPE] = connectedConnection.Type
+                });
         }
 
         /// <summary>
