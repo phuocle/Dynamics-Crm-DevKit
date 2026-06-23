@@ -36,13 +36,13 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Dynamics365.UIAutomation.Api" Version="$Dynamics365.UIAutomation.Api.Version$" />
+		<PackageReference Include="Dynamics365.UIAutomation.Api" Version="9.2.21084.148" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.Version$" />
-		<PackageReference Include="MSTest.TestAdapter" Version="$MSTest.TestAdapter.Version$" />
-		<PackageReference Include="MSTest.TestFramework" Version="$MSTest.TestFramework.Version$" />
-		<PackageReference Include="Selenium.WebDriver" Version="$Selenium.WebDriver.Version$" />
-		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="$Selenium.WebDriver.ChromeDriver.Version$" />
-		<PackageReference Include="Selenium.Support" Version="$Selenium.Support.Version$" />
+		<PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
+		<PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="149.0.7827.15500" />
+		<PackageReference Include="Selenium.Support" Version="3.141.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="$ProjectName$.runsettings" />

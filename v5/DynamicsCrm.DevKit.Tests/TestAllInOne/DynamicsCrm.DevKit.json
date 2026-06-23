@@ -2,47 +2,11 @@
   "DefaultCrmConnection": "OAuth",
   "CrmConnections": [
     {
-      "Name": "ClientSecret",
-      "Type": "ClientSecret",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-23T02:55:42.705544Z",
-      "ModifiedAt": "2026-06-23T02:55:45.0606172Z"
-    },
-    {
       "Name": "OAuth",
       "Type": "OAuth",
       "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-23T02:56:29.8145173Z",
-      "ModifiedAt": "2026-06-23T02:56:30.8335537Z"
-    },
-    {
-      "Name": "DEVKITV4",
-      "Type": "FromPac",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-23T02:56:41.8282915Z",
-      "ModifiedAt": "2026-06-23T02:56:44.3026472Z"
-    },
-    {
-      "Name": "Interactive",
-      "Type": "Interactive",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-23T02:57:12.355584Z",
-      "ModifiedAt": "2026-06-23T02:57:12.7735354Z"
-    },
-    {
-      "Name": "DeviceCode",
-      "Type": "DeviceCode",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-23T02:57:54.5916561Z",
-      "ModifiedAt": "2026-06-23T02:58:22.0893689Z"
-    },
-    {
-      "Name": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
-      "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
-      "Type": "ClientSecret",
-      "ClientId": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
-      "ClientSecret": "4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ",
-      "CreatedAt": "2026-06-23T02:59:09.4950564Z"
+      "CreatedAt": "2026-06-23T12:24:49.4648081Z",
+      "ModifiedAt": "2026-06-23T12:25:32.547849Z"
     }
   ]
 }

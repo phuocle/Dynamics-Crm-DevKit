@@ -40,9 +40,9 @@
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
 		<PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
 		<PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
-		<PackageReference Include="Selenium.WebDriver" Version="4.45.0" />
+		<PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
 		<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="149.0.7827.15500" />
-		<PackageReference Include="Selenium.Support" Version="4.45.0" />
+		<PackageReference Include="Selenium.Support" Version="3.141.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Dev.AllInOne.UiTest.runsettings" />

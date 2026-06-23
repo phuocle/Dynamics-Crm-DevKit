@@ -2,17 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path=".env" />
     <File Path=".env.example" />
-    <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
-  <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
-  <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
-  <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
-  <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
-  <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
-  <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="894a92b6-1871-4af7-8336-c794660069aa" />
-  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="67421a5e-0a6f-41f8-92ae-5c829a0676fe" />
-  <Project Path="Dev.AllInOne.Test/Dev.AllInOne.Test.csproj" />
   <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
-  <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
 </Solution>

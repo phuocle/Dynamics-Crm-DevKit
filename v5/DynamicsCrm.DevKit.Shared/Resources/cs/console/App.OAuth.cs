@@ -18,12 +18,32 @@ namespace $NameSpace$
                 return _Service;
             }
         }
-        private static string GetAppSettingOrEnvironment(string key, string environmentVariable)
+        public static string GetAppSettingOrEnvironment(string key, string environmentVariable)
         {
             var value = ConfigurationManager.AppSettings[key];
             if (!string.IsNullOrWhiteSpace(value)) return value;
             value = GetProjectEnvironmentValue(environmentVariable);
             return value;
+        }
+
+        public static string GetAppSettingOrEnvironment(string primaryAppSetting, string fallbackAppSetting, string environmentVariable)
+        {
+            var value = ConfigurationManager.AppSettings[primaryAppSetting];
+            if (!string.IsNullOrWhiteSpace(value)) return value;
+
+            if (!string.IsNullOrWhiteSpace(fallbackAppSetting))
+            {
+                value = ConfigurationManager.AppSettings[fallbackAppSetting];
+                if (!string.IsNullOrWhiteSpace(value)) return value;
+            }
+
+            return GetProjectEnvironmentValue(environmentVariable);
+        }
+
+        public static string GetAppSettingOrEnvironment(string primaryAppSetting, string fallbackAppSetting, string environmentVariable, string defaultValue)
+        {
+            var value = GetAppSettingOrEnvironment(primaryAppSetting, fallbackAppSetting, environmentVariable);
+            return string.IsNullOrWhiteSpace(value) ? defaultValue : value;
         }
 
         private static string GetProjectEnvironmentValue(string key)

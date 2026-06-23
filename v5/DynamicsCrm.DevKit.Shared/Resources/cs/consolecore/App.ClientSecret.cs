@@ -24,7 +24,7 @@ namespace $NameSpace$
             }
         }
 
-        private static string GetAppSettingValue(string key, string environmentVariable)
+        public static string GetAppSettingValue(string key, string environmentVariable)
         {
             var settings = Configuration.GetSection("Dataverse");
             var value = settings.GetValue<string>(key);

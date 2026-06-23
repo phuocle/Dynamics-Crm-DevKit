@@ -34,9 +34,9 @@ namespace DynamicsCrm.DevKit.Shared
             ["MSTest.TestFramework"]                        = ("4.1.0",       "net462"),
             ["Dynamics365.UIAutomation.Api"]                = ("9.2.21084.148", "net462"),
             ["Bogus"]                                       = ("35.6.5",      "net462"),
-            ["Selenium.WebDriver"]                          = ("4.41.0",      "net462"),
-            ["Selenium.WebDriver.ChromeDriver"]             = ("146.0.7680.15300", "net462"),
-            ["Selenium.Support"]                            = ("4.41.0",      "net462"),
+            ["Selenium.WebDriver"]                          = ("3.141.0",     "net462"),
+            ["Selenium.WebDriver.ChromeDriver"]             = ("149.0.7827.15500", "net462"),
+            ["Selenium.Support"]                            = ("3.141.0",     "net462"),
         };
 
         /// <summary>
@@ -46,6 +46,11 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static async Task<NuGetVersion> GetLatestVersionAsync(string nuget)
         {
+            if (UseDefaultVersion(nuget) && DefaultVersions.TryGetValue(nuget, out var pinnedVersion))
+            {
+                return NuGetVersion.Parse(pinnedVersion.Version);
+            }
+
             try
             {
                 using var cts = new CancellationTokenSource(NuGetTimeout);
@@ -70,6 +75,11 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static async Task<string> GetTargetFrameworkAsync(string nuget)
         {
+            if (UseDefaultVersion(nuget) && DefaultVersions.TryGetValue(nuget, out var pinnedVersion))
+            {
+                return pinnedVersion.TargetFramework;
+            }
+
             try
             {
                 using var cts = new CancellationTokenSource(NuGetTimeout);
@@ -94,6 +104,12 @@ namespace DynamicsCrm.DevKit.Shared
                 }
             }
             return "net462";
+        }
+
+        private static bool UseDefaultVersion(string nuget)
+        {
+            return nuget.Equals("Selenium.WebDriver", StringComparison.OrdinalIgnoreCase)
+                || nuget.Equals("Selenium.Support", StringComparison.OrdinalIgnoreCase);
         }
 
         internal static async Task SetReplacementAsync(Dictionary<string, string> replacements, string nuget)

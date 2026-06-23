@@ -1,13 +1,13 @@
-using System;
-using System.Security;
-using Microsoft.Dynamics365.UIAutomation.Api.UCI;
+﻿using Microsoft.Dynamics365.UIAutomation.Api.UCI;
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Security;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.AllInOne.UiTest
 {
     [TestClass]
-    public class <#=Context.ClassWithOrder#>Test
+    public class LoginTest
     {
         private readonly SecureString _username = App.GetAppSettingOrEnvironment("UiTestUserName", "UserName", "DEVKIT_USERNAME").ToSecureString();
         private readonly SecureString _password = App.GetAppSettingOrEnvironment("UiTestPassword", "Password", "DEVKIT_PASSWORD").ToSecureString();
