@@ -1,3 +1,28 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".env" />
+    <File Path=".env.example" />
+    <File Path="DynamicsCrm.DevKit.Cli.json" />
+    <File Path="DynamicsCrm.DevKit.json" />
+  </Folder>
+  <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
+  <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
+  <Project Path="Dev.AllInOne.Package.Test/Dev.AllInOne.Package.Test.csproj" />
+  <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
+  <Project Path="Dev.AllInOne.Package2.Test/Dev.AllInOne.Package2.Test.csproj" />
+  <Project Path="Dev.AllInOne.Package2/Dev.AllInOne.Package2.csproj" />
+  <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
+  <Project Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj">
+    <Deploy />
+  </Project>
+  <Project Path="Dev.AllInOne.Server.Test/Dev.AllInOne.Server.Test.csproj" />
+  <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
+  <Project Path="Dev.AllInOne.Server2/Dev.AllInOne.Server2.csproj" />
+  <Project Path="Dev.AllInOne.Shared.Test/Dev.AllInOne.Shared.Test.shproj" Id="e491b2fb-c19d-4f62-836e-478b17811cb7" />
+  <Project Path="Dev.AllInOne.Shared/Dev.AllInOne.Shared.shproj" Id="49fbfdac-8d20-4c29-aae9-503b190fed2e" />
+  <Project Path="Dev.AllInOne.SolutionPackager/Dev.AllInOne.SolutionPackager.csproj" />
+  <Project Path="Dev.AllInOne.Test2.Test/Dev.AllInOne.Test2.Test.csproj" />
   <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
+  <Project Path="Dev.AllInOne.WebResource/Dev.AllInOne.WebResource.csproj" />
+  <Project Path="Dev.AllInOne.WebResourceTs/Dev.AllInOne.WebResourceTs.csproj" />
 </Solution>
