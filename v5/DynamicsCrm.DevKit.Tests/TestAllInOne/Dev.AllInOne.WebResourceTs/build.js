@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Build script - Build entry .ts files
  * Usage:
  *   npm run release           - Build ALL entities (minified)
@@ -330,3 +330,4 @@ build().catch(err => {
     console.error(err);
     process.exit(1);
 });
+

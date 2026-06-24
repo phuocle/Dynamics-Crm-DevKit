@@ -38,10 +38,10 @@ namespace DynamicsCrm.DevKit.Commands
             var url = serviceClient.ConnectedUrl();
             await TypeScriptBuildHelper.ShowStatusAsync(url, "Connected");
 
-            var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+            var sourceFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
 
             // Build TypeScript in Release mode (minified)
-            var (success, deployFilePath, error) = await TypeScriptBuildHelper.ProcessTypeScriptForDeploymentAsync(fullFileName, url, isRelease: true);
+            var (success, deployFilePath, error) = await TypeScriptBuildHelper.ProcessTypeScriptForDeploymentAsync(sourceFileName, url, isRelease: true);
             if (!success)
             {
                 await VS.StatusBar.ClearAsync();
@@ -49,10 +49,14 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
                 return;
             }
-            fullFileName = deployFilePath;
+            var fullFileName = deployFilePath;
 
-            var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
-            var deployWebResourceCache = CacheHelper.GetWebResource(fullFileNameForCrm);
+            var solutionFolder = await VsixHelper.GetSolutionFolderAsync();
+            var fullFileNameForCrmCandidates = TypeScriptBuildHelper.GetWebResourcePathCandidates(sourceFileName, fullFileName, solutionFolder);
+            var fullFileNameForCrm = fullFileNameForCrmCandidates.Count > 0
+                ? fullFileNameForCrmCandidates[0]
+                : fullFileName.Substring(solutionFolder.Length);
+            var deployWebResourceCache = TypeScriptBuildHelper.GetCachedWebResource(fullFileNameForCrmCandidates, out _);
 
             if (deployWebResourceCache != null && deployWebResourceCache.WebResourceId != Guid.Empty)
             {
@@ -61,12 +65,15 @@ namespace DynamicsCrm.DevKit.Commands
             else
             {
                 var deployment = new DeploymentService(serviceClient);
-                var webResources = await deployment.GetWebResourcesAsync(fullFileNameForCrm);
+                var webResources = await TypeScriptBuildHelper.GetWebResourcesAsync(deployment, fullFileNameForCrmCandidates);
                 var form = new FormWebResource(webResources, fullFileNameForCrm);
 
                 if (form.ShowModal() == true)
                 {
-                    CacheHelper.SetWebResourceCache(fullFileNameForCrm, form.SelectedWebResource);
+                    foreach (var candidate in fullFileNameForCrmCandidates)
+                    {
+                        CacheHelper.SetWebResourceCache(candidate, form.SelectedWebResource);
+                    }
                     await VsixHelper.SaveDynamicsCrmDevKitConfigJsonAsync(form.SelectedWebResource);
                     await DeployWebResourceAsync(serviceClient, form.SelectedWebResource, fullFileName);
                 }

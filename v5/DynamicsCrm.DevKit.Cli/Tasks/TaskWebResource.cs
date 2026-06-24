@@ -605,7 +605,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                                 return _webResourceFiles; // return empty
                             }
 
-                            file = Path.Combine(projectRoot, "build", Path.GetFileNameWithoutExtension(file) + ".js");
+                            file = TypeScriptBuildPathHelper.ResolveBuiltJavaScriptFile(file, projectRoot)
+                                ?? Path.Combine(projectRoot, "build", Path.GetFileNameWithoutExtension(file) + ".js");
                         }
                         else
                         {

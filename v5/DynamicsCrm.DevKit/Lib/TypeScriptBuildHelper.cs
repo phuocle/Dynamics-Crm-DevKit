@@ -1,6 +1,11 @@
 using Community.VisualStudio.Toolkit;
 using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.VisualStudio.Shell;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -116,9 +121,8 @@ namespace DynamicsCrm.DevKit.Lib
                     }
                     else
                     {
-                        // The .js file is output to the build folder
-                        jsFilePath = Path.Combine(projectRoot, "build", fileNameWithoutExtension + ".js");
-                        if (File.Exists(jsFilePath))
+                        jsFilePath = TypeScriptBuildPathHelper.ResolveBuiltJavaScriptFile(tsFilePath, projectRoot);
+                        if (!string.IsNullOrEmpty(jsFilePath))
                         {
                             buildSuccess = true;
                             form.BuildComplete(true);
@@ -139,6 +143,46 @@ namespace DynamicsCrm.DevKit.Lib
             await buildTask;
 
             return (buildSuccess, jsFilePath, errorMessage);
+        }
+
+        public static List<string> GetWebResourcePathCandidates(string sourceFilePath, string deployFilePath, string solutionFolder)
+        {
+            return TypeScriptBuildPathHelper.GetWebResourcePathCandidates(sourceFilePath, deployFilePath, solutionFolder);
+        }
+
+        public static DeployWebResource GetCachedWebResource(IEnumerable<string> webResourcePathCandidates, out string matchedPath)
+        {
+            matchedPath = null;
+            if (webResourcePathCandidates == null) return null;
+
+            foreach (var candidate in webResourcePathCandidates)
+            {
+                var cached = CacheHelper.GetWebResource(candidate);
+                if (cached == null || cached.WebResourceId == Guid.Empty) continue;
+
+                matchedPath = candidate;
+                return cached;
+            }
+
+            return null;
+        }
+
+        public static async Task<List<DeployWebResource>> GetWebResourcesAsync(DeploymentService deployment, IEnumerable<string> webResourcePathCandidates)
+        {
+            var webResources = new List<DeployWebResource>();
+            if (deployment == null || webResourcePathCandidates == null) return webResources;
+
+            foreach (var candidate in webResourcePathCandidates)
+            {
+                var matches = await deployment.GetWebResourcesAsync(candidate);
+                foreach (var match in matches)
+                {
+                    if (webResources.Exists(existing => existing.WebResourceId == match.WebResourceId)) continue;
+                    webResources.Add(match);
+                }
+            }
+
+            return webResources;
         }
 
         /// <summary>
@@ -171,20 +215,7 @@ namespace DynamicsCrm.DevKit.Lib
         /// <returns>True if file is a deployable .ts file (not *.form.ts or *.webapi.ts)</returns>
         public static bool IsDeployableTypeScript(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath)) return false;
-            
-            var fileName = Path.GetFileName(filePath).ToLowerInvariant();
-            var extension = Path.GetExtension(filePath).ToLowerInvariant();
-            
-            if (extension != ".ts") return false;
-            
-            // Exclude generated TS files that should not be deployed
-            if (fileName.EndsWith(".form.ts") || fileName.EndsWith(".webapi.ts") || fileName == "optionset.ts")
-            {
-                return false;
-            }
-            
-            return true;
+            return TypeScriptBuildPathHelper.IsDeployableTypeScript(filePath);
         }
 
         /// <summary>

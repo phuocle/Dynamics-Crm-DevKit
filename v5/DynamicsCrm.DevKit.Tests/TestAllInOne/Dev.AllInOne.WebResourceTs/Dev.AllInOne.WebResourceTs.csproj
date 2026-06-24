@@ -72,6 +72,9 @@
 	  <None Update="entities\Contact.webapi.ts">
 	    <DependentUpon>Contact.ts</DependentUpon>
 	  </None>
+	  <None Update="entities\Team.form.ts">
+	    <DependentUpon>Team.ts</DependentUpon>
+	  </None>
 	</ItemGroup>
 </Project>
 <!-- v.4.12.34.56 - Build: 30.06.2026 23:59:59 -->

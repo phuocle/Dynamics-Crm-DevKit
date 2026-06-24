@@ -76,6 +76,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGetVersionCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProjectEnvironment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TypeScriptBuildPathHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RetryHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MetadataService.cs" />

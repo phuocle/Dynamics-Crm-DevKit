@@ -647,6 +647,17 @@ const Contact = {
 	/** Rollup State */
 	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
 } as const;
+/** Team entity OptionSets */
+const Team = {
+	/** Membership Type */
+	MembershipType: { Guests: 3, Members: 1, Members_and_guests: 0, Owners: 2 },
+	/** RegardingObjectTypeCode */
+	RegardingObjectTypeCode: {},
+	/** Team Type */
+	TeamType: { Access: 1, Office_Group: 3, Owner: 0, Security_Group: 2 },
+	/** Rollup State */
+	RollupState: { NotCalculated: 0, Calculated: 1, OverflowError: 2, OtherError: 3, RetryLimitExceeded: 4, HierarchicalRecursionLimitReached: 5, LoopDetected: 6 }
+} as const;
 
 // ============================================================================
 // Export combined OptionSet
@@ -690,6 +701,7 @@ export const OptionSet = {
 	TimerState,
 	// Entity OptionSets
 	Account,
-	Contact
+	Contact,
+	Team
 } as const;
 
