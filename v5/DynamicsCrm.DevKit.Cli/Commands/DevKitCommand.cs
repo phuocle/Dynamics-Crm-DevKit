@@ -112,19 +112,26 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             if (!string.IsNullOrEmpty(settings.AuthType))
             {
                 argRows.Add(new[] { "Arguments: --auth", settings.AuthType });
-                argRows.Add(new[] { "           --url", settings.Url ?? "" });
-                if (!string.IsNullOrEmpty(settings.ClientId))
+                if (!settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
+                {
+                    argRows.Add(new[] { "           --url", settings.Url ?? "" });
+                }
+                if (ShouldLogClientId(settings.AuthType) && !string.IsNullOrEmpty(settings.ClientId))
                 {
                     argRows.Add(new[] { "           --clientid", settings.ClientId });
+                }
+                if (ShouldLogUsername(settings.AuthType) && !string.IsNullOrEmpty(settings.Username))
+                {
+                    argRows.Add(new[] { "           --username", settings.Username });
+                }
+                if (settings.AuthType.Equals("AD", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(settings.Domain))
+                {
+                    argRows.Add(new[] { "           --domain", settings.Domain });
                 }
                 if (settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase))
                 {
                     var profileDisplay = string.IsNullOrEmpty(settings.PacProfile) ? "(active)" : settings.PacProfile;
                     argRows.Add(new[] { "           --pacprofile", profileDisplay });
-                }
-                else if (!string.IsNullOrEmpty(settings.PacProfile))
-                {
-                    argRows.Add(new[] { "           --pacprofile", settings.PacProfile });
                 }
                 if (!string.IsNullOrEmpty(settings.Json))
                 {
@@ -239,6 +246,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             {
                 Name = settings.Profile,
                 Url = settings.Url,
+                UserName = GetConnectionUserName(settings),
+                Password = settings.Password,
                 ClientId = settings.ClientId,
                 ClientSecret = clientSecret,
                 Type = settings.AuthType,
@@ -274,6 +283,33 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             }
 
             return serviceClient;
+        }
+
+        private static bool ShouldLogClientId(string authType)
+        {
+            return authType.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("OAuth", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool ShouldLogUsername(string authType)
+        {
+            return authType.Equals("OAuth", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("AD", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string GetConnectionUserName(T settings)
+        {
+            if (!settings.AuthType.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrEmpty(settings.Domain) ||
+                string.IsNullOrEmpty(settings.Username) ||
+                settings.Username.Contains("\\"))
+            {
+                return settings.Username;
+            }
+
+            return $"{settings.Domain}\\{settings.Username}";
         }
     }
 }

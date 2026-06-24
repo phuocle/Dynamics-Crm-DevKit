@@ -121,6 +121,8 @@ namespace DynamicsCrm.DevKit.Cli.Commands
             {
                 Name = "mcp",
                 Url = settings.Url,
+                UserName = GetConnectionUserName(settings),
+                Password = settings.Password,
                 ClientId = settings.ClientId,
                 ClientSecret = clientSecret,
                 Type = settings.AuthType,
@@ -145,10 +147,43 @@ namespace DynamicsCrm.DevKit.Cli.Commands
         private static void LogConnectionInfo(McpCommandArgs settings)
         {
             LogInfo($"Auth: {(string.IsNullOrEmpty(settings.AuthType) ? "(legacy --conn)" : settings.AuthType)}");
-            if (!string.IsNullOrEmpty(settings.Url))
+            if (!settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(settings.Url))
                 LogInfo($"URL: {settings.Url}");
-            if (!string.IsNullOrEmpty(settings.PacProfile))
+            if (ShouldLogClientId(settings.AuthType) && !string.IsNullOrEmpty(settings.ClientId))
+                LogInfo($"Client ID: {settings.ClientId}");
+            if (ShouldLogUsername(settings.AuthType) && !string.IsNullOrEmpty(settings.Username))
+                LogInfo($"Username: {settings.Username}");
+            if (settings.AuthType.Equals("AD", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(settings.Domain))
+                LogInfo($"Domain: {settings.Domain}");
+            if (settings.AuthType.Equals("FromPac", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(settings.PacProfile))
                 LogInfo($"PAC Profile: {settings.PacProfile}");
+        }
+
+        private static bool ShouldLogClientId(string authType)
+        {
+            return authType.Equals("ClientSecret", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("OAuth", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool ShouldLogUsername(string authType)
+        {
+            return authType.Equals("OAuth", StringComparison.OrdinalIgnoreCase) ||
+                   authType.Equals("AD", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string GetConnectionUserName(McpCommandArgs settings)
+        {
+            if (!settings.AuthType.Equals("AD", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrEmpty(settings.Domain) ||
+                string.IsNullOrEmpty(settings.Username) ||
+                settings.Username.Contains("\\"))
+            {
+                return settings.Username;
+            }
+
+            return $"{settings.Domain}\\{settings.Username}";
         }
 
         private static void LogInfo(string message)
