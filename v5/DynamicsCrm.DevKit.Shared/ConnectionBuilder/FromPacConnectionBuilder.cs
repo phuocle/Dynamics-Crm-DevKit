@@ -1,29 +1,17 @@
+using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Identity.Client;
+using Microsoft.Identity.Client.Extensions.Msal;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Azure.Identity;
-using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.PowerPlatform.Dataverse.Client;
 
 namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 {
     /// <summary>
-    /// PAC CLI integration - leverages existing PAC CLI authentication profiles.
-    /// This allows users to reuse their PAC CLI auth instead of managing credentials separately.
-    ///
-    /// Usage:
-    /// - With --pacprofile "Name": Uses profile by name (required)
-    ///
-    /// Implementation approach (based on Rnwood.Dataverse.Data.PowerShell):
-    /// 1. Read authprofiles_v2.json from %LOCALAPPDATA%\Microsoft\PowerAppsCLI
-    /// 2. Extract environment URL from the selected profile
-    /// 3. Use DefaultAzureCredential which shares tokens with Azure CLI/PAC CLI
-    ///
-    /// Reference: https://github.com/rnwood/Rnwood.Dataverse.Data.PowerShell
+    /// PAC CLI integration - reuses existing PAC CLI authentication profiles.
     /// </summary>
     public class FromPacConnectionBuilder : IConnectionBuilder
     {
@@ -31,57 +19,14 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 
         public async Task<ServiceClient> CreateServiceClientAsync(CrmConnection connection)
         {
-            if (string.IsNullOrEmpty(connection.PacProfile))
-            {
-                throw new InvalidOperationException(
-                    "PAC CLI profile name or index is required. Use --pacprofile \"ProfileName\" or --pacprofile \"1\" to specify a profile. " +
-                    "Run 'pac auth list' to see available profiles.");
-            }
+            var profileData = GetPacProfile(connection.PacProfile);
+            var environmentUrl = profileData.Resource;
 
-            // Get environment URL from PAC CLI profiles JSON file
-            var environmentUrl = GetEnvironmentUrlFromPacProfiles(connection.PacProfile);
-
-            if (string.IsNullOrEmpty(environmentUrl))
-            {
-                throw new InvalidOperationException(
-                    $"PAC CLI profile '{connection.PacProfile}' not found or has no environment URL.");
-            }
-
-            // Use DefaultAzureCredential which includes:
-            // - AzureCliCredential (shares tokens with Azure CLI)
-            // - AzurePowerShellCredential
-            // - EnvironmentCredential
-            // This will use cached tokens from Azure CLI/PAC CLI when available
-            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
-            {
-                // Exclude some credentials that might cause delays or popup dialogs
-                ExcludeInteractiveBrowserCredential = true,
-                ExcludeVisualStudioCredential = true,
-                ExcludeManagedIdentityCredential = true // We're not on Azure
-            });
-
-            // Create ServiceClient using TokenCredential
-            // IMPORTANT: tokenProviderFunction may be called on UI thread later (when token refresh is needed)
-            // so we must use Task.Run + ConfigureAwait(false) to avoid deadlock
             var serviceClient = new ServiceClient(
                 instanceUrl: new Uri(environmentUrl),
-                tokenProviderFunction: async instanceUrl =>
-                {
-                    // Wrap in Task.Run to ensure we're not on UI thread
-                    // This is critical because this callback is called by ServiceClient
-                    // whenever it needs a token, not just during initial connection
-                    return await Task.Run(async () =>
-                    {
-                        var scope = new Uri(new Uri(instanceUrl), "/.default").ToString();
-                        var token = await credential.GetTokenAsync(
-                            new Azure.Core.TokenRequestContext(new[] { scope }))
-                            .ConfigureAwait(false);
-                        return token.Token;
-                    }).ConfigureAwait(false);
-                },
+                tokenProviderFunction: instanceUrl => GetTokenFromPacCacheAsync(profileData, instanceUrl),
                 useUniqueInstance: true);
 
-            // Wait a moment for connection to stabilize
             await Task.Delay(100).ConfigureAwait(false);
 
             if (serviceClient?.IsReady != true)
@@ -93,14 +38,9 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             return serviceClient;
         }
 
-        private string GetEnvironmentUrlFromPacProfiles(string profileNameOrIndex)
+        private static PacProfileData GetPacProfile(string profileNameOrIndex)
         {
-            // PAC CLI stores profiles at: %LOCALAPPDATA%\Microsoft\PowerAppsCLI\authprofiles_v2.json
-            var profilesPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Microsoft",
-                "PowerAppsCLI",
-                "authprofiles_v2.json");
+            var profilesPath = GetProfilesPath();
 
             if (!File.Exists(profilesPath))
             {
@@ -110,12 +50,8 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
                     profilesPath);
             }
 
-            // Read and parse the profiles JSON
             var json = File.ReadAllText(profilesPath);
-            var jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
             PacProfilesData pacProfiles;
             try
@@ -135,16 +71,19 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             }
 
             PacProfileData profileData = null;
-            if (int.TryParse(profileNameOrIndex, out var profileIndex))
+            if (string.IsNullOrWhiteSpace(profileNameOrIndex))
+            {
+                if (pacProfiles.Current != null)
+                    pacProfiles.Current.TryGetValue("UNIVERSAL", out profileData);
+            }
+            else if (int.TryParse(profileNameOrIndex, out var profileIndex))
             {
                 var zeroBasedIndex = profileIndex - 1;
                 if (zeroBasedIndex >= 0 && zeroBasedIndex < pacProfiles.Profiles.Count)
-                {
                     profileData = pacProfiles.Profiles[zeroBasedIndex];
-                }
             }
 
-            if (profileData == null)
+            if (profileData == null && !string.IsNullOrWhiteSpace(profileNameOrIndex))
             {
                 profileData = pacProfiles.Profiles.FirstOrDefault(p =>
                     !string.IsNullOrEmpty(p.Name) &&
@@ -153,7 +92,6 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
 
             if (profileData == null)
             {
-                // Show available profiles
                 var availableProfiles = string.Join(", ",
                     pacProfiles.Profiles.Select((p, index) =>
                     {
@@ -167,43 +105,213 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
                         return $"{index + 1}:{displayName}";
                     }));
                 throw new InvalidOperationException(
-                    $"PAC CLI profile '{profileNameOrIndex}' not found. Available profiles: {availableProfiles}");
+                    string.IsNullOrWhiteSpace(profileNameOrIndex)
+                        ? $"No active PAC CLI profile found. Available profiles: {availableProfiles}"
+                        : $"PAC CLI profile '{profileNameOrIndex}' not found. Available profiles: {availableProfiles}");
             }
 
-            var environmentUrl = profileData?.Resource;
-
-            // PAC CLI may store "https://service.powerapps.com/" as default when no environment is selected
-            if (string.IsNullOrEmpty(environmentUrl) || environmentUrl == "https://service.powerapps.com/")
+            if (string.IsNullOrEmpty(profileData.Resource) || profileData.Resource == "https://service.powerapps.com/")
             {
                 throw new InvalidOperationException(
                     "The selected PAC CLI profile does not have an active environment URL. " +
                     "Please select an environment with 'pac env select'.");
             }
 
-            return environmentUrl;
+            return profileData;
+        }
+
+        private static async Task<string> GetTokenFromPacCacheAsync(PacProfileData profileData, string instanceUrl)
+        {
+            var isApplicationProfile = profileData.ProfileType == 1;
+            if (isApplicationProfile)
+            {
+                return await GetApplicationTokenFromPacSecretAsync(profileData, instanceUrl).ConfigureAwait(false);
+            }
+
+            var userToken = await TryGetUserTokenFromMsalAsync(profileData, instanceUrl).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(userToken)) return userToken;
+
+            var cacheFileName = isApplicationProfile ? "tokencache_spn_msalv3.dat" : "tokencache_msalv3.dat";
+            var cacheBytes = await LoadPacCacheAsync(cacheFileName).ConfigureAwait(false);
+            using var document = JsonDocument.Parse(cacheBytes);
+
+            if (!document.RootElement.TryGetProperty("AccessToken", out var accessTokens))
+                throw new InvalidOperationException("PAC CLI token cache does not contain access tokens.");
+
+            var homeAccountId = isApplicationProfile ? null : GetHomeAccountId(document, profileData);
+            return FindAccessToken(
+                accessTokens,
+                profileData,
+                instanceUrl,
+                homeAccountId,
+                requireClientIdMatch: isApplicationProfile,
+                "No valid PAC CLI access token was found for this profile/environment. Run 'pac auth who' for the selected profile, then run this command again.");
+        }
+
+        private static async Task<string> TryGetUserTokenFromMsalAsync(PacProfileData profileData, string instanceUrl)
+        {
+            var publicClient = PublicClientApplicationBuilder
+                .Create("9cee029c-6210-4654-90bb-17e6e9d36617")
+                .WithAuthority(profileData.Authority)
+                .WithRedirectUri("http://localhost")
+                .Build();
+
+            await RegisterPacCacheAsync(publicClient.UserTokenCache, "tokencache_msalv3.dat").ConfigureAwait(false);
+            var accounts = await publicClient.GetAccountsAsync().ConfigureAwait(false);
+            var account = accounts.FirstOrDefault(a =>
+                string.Equals(a.Username, profileData.User, StringComparison.OrdinalIgnoreCase));
+
+            if (account == null) return null;
+
+            try
+            {
+                var scope = new Uri(new Uri(instanceUrl), "/.default").ToString();
+                var authResult = await publicClient.AcquireTokenSilent(new[] { scope }, account).ExecuteAsync().ConfigureAwait(false);
+                return authResult.AccessToken;
+            }
+            catch (MsalException)
+            {
+                return null;
+            }
+        }
+
+        private static string FindAccessToken(
+            JsonElement accessTokens,
+            PacProfileData profileData,
+            string instanceUrl,
+            string homeAccountId,
+            bool requireClientIdMatch,
+            string errorMessage)
+        {
+            var targetHost = new Uri(instanceUrl).Host;
+            var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+            foreach (var tokenProperty in accessTokens.EnumerateObject())
+            {
+                var token = tokenProperty.Value;
+                var clientId = GetJsonString(token, "client_id");
+                var realm = GetJsonString(token, "realm");
+                var target = GetJsonString(token, "target");
+                var tokenHomeAccountId = GetJsonString(token, "home_account_id");
+                var expiresOn = GetJsonString(token, "expires_on");
+                var secret = GetJsonString(token, "secret");
+
+                if (requireClientIdMatch && !string.Equals(clientId, profileData.User, StringComparison.OrdinalIgnoreCase)) continue;
+                if (!string.Equals(realm, profileData.TenantId, StringComparison.OrdinalIgnoreCase)) continue;
+                if (string.IsNullOrWhiteSpace(target) || !target.Contains(targetHost, StringComparison.OrdinalIgnoreCase)) continue;
+                if (!string.IsNullOrWhiteSpace(homeAccountId) && !string.Equals(tokenHomeAccountId, homeAccountId, StringComparison.OrdinalIgnoreCase)) continue;
+                if (!long.TryParse(expiresOn, out var expiresOnUnix) || expiresOnUnix <= now) continue;
+                if (string.IsNullOrWhiteSpace(secret)) continue;
+
+                return secret;
+            }
+
+            throw new InvalidOperationException(errorMessage);
+        }
+
+        private static string GetHomeAccountId(JsonDocument document, PacProfileData profileData)
+        {
+            if (!document.RootElement.TryGetProperty("Account", out var accounts))
+                return null;
+
+            foreach (var accountProperty in accounts.EnumerateObject())
+            {
+                var account = accountProperty.Value;
+                var username = GetJsonString(account, "username");
+                var realm = GetJsonString(account, "realm");
+                var homeAccountId = GetJsonString(account, "home_account_id");
+
+                if (!string.Equals(username, profileData.User, StringComparison.OrdinalIgnoreCase)) continue;
+                if (!string.Equals(realm, profileData.TenantId, StringComparison.OrdinalIgnoreCase)) continue;
+                return homeAccountId;
+            }
+
+            return null;
+        }
+
+        private static string GetJsonString(JsonElement element, string propertyName)
+        {
+            return element.TryGetProperty(propertyName, out var value) && value.ValueKind == JsonValueKind.String
+                ? value.GetString()
+                : null;
+        }
+
+        private static async Task<string> GetApplicationTokenFromPacSecretAsync(PacProfileData profileData, string instanceUrl)
+        {
+            var clientSecret = await GetPacApplicationClientSecretAsync(profileData).ConfigureAwait(false);
+            var confidentialClient = ConfidentialClientApplicationBuilder
+                .Create(profileData.User)
+                .WithAuthority(profileData.Authority)
+                .WithClientSecret(clientSecret)
+                .Build();
+
+            await RegisterPacCacheAsync(confidentialClient.AppTokenCache, "tokencache_spn_msalv3.dat").ConfigureAwait(false);
+            var scope = new Uri(new Uri(instanceUrl), "/.default").ToString();
+            var authResult = await confidentialClient.AcquireTokenForClient(new[] { scope }).ExecuteAsync().ConfigureAwait(false);
+            return authResult.AccessToken;
+        }
+
+        private static async Task<string> GetPacApplicationClientSecretAsync(PacProfileData profileData)
+        {
+            var cacheBytes = await LoadPacCacheAsync("pac.spn.cache.dat").ConfigureAwait(false);
+            using var document = JsonDocument.Parse(cacheBytes);
+
+            if (document.RootElement.TryGetProperty(profileData.User, out var secretElement) &&
+                secretElement.ValueKind == JsonValueKind.String &&
+                !string.IsNullOrWhiteSpace(secretElement.GetString()))
+            {
+                return secretElement.GetString();
+            }
+
+            throw new InvalidOperationException(
+                "PAC CLI application secret cache does not contain this profile. Run 'pac auth create' for the selected application profile, then run this command again.");
+        }
+
+        private static async Task RegisterPacCacheAsync(ITokenCache tokenCache, string cacheFileName)
+        {
+            var cacheDirectory = GetPacCacheDirectory();
+            var storageProperties = new StorageCreationPropertiesBuilder(cacheFileName, cacheDirectory).Build();
+            var cacheHelper = await MsalCacheHelper.CreateAsync(storageProperties).ConfigureAwait(false);
+            cacheHelper.RegisterCache(tokenCache);
+        }
+
+        private static async Task<byte[]> LoadPacCacheAsync(string cacheFileName)
+        {
+            var cacheDirectory = GetPacCacheDirectory();
+            var cachePath = Path.Combine(cacheDirectory, cacheFileName);
+            if (!File.Exists(cachePath))
+                throw new FileNotFoundException("PAC CLI token cache not found. Run 'pac auth who' first.", cachePath);
+
+            var storageProperties = new StorageCreationPropertiesBuilder(cacheFileName, cacheDirectory).Build();
+            var cacheHelper = await MsalCacheHelper.CreateAsync(storageProperties).ConfigureAwait(false);
+            return cacheHelper.LoadUnencryptedTokenCache();
+        }
+
+        private static string GetProfilesPath()
+        {
+            return Path.Combine(GetPacCacheDirectory(), "authprofiles_v2.json");
+        }
+
+        private static string GetPacCacheDirectory()
+        {
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Microsoft",
+                "PowerAppsCLI");
         }
 
         public string BuildConnectionString(CrmConnection connection, bool shouldMaskPassword = false)
         {
-            // FromPac uses PAC CLI tokens, not traditional connection string
-            // Profile name is required
-            return $"AuthType=FromPac;Profile={connection.PacProfile};";
+            return string.IsNullOrWhiteSpace(connection.PacProfile)
+                ? "AuthType=FromPac;Profile=(active);"
+                : $"AuthType=FromPac;Profile={connection.PacProfile};";
         }
 
         public async Task<(bool isValid, string error)> ValidateAsync(CrmConnection connection)
         {
-            if (string.IsNullOrEmpty(connection.PacProfile))
-            {
-                return (false, "PAC CLI profile name or index is required. Use --pacprofile \"ProfileName\" or --pacprofile \"1\" to specify a profile.");
-            }
-
             try
             {
-                var url = GetEnvironmentUrlFromPacProfiles(connection.PacProfile);
-                if (string.IsNullOrEmpty(url))
-                {
-                    return (false, "No environment URL found in PAC CLI profile.");
-                }
+                GetPacProfile(connection.PacProfile);
                 return (true, null);
             }
             catch (FileNotFoundException ex)
@@ -216,28 +324,22 @@ namespace DynamicsCrm.DevKit.Shared.ConnectionBuilder
             }
         }
 
-        #region PAC Profile JSON Models
-
-        /// <summary>
-        /// Represents a single PAC CLI authentication profile.
-        /// </summary>
         private class PacProfileData
         {
             public string Name { get; set; }
+            public string User { get; set; }
             public string Resource { get; set; }
+            public string TenantId { get; set; }
+            public string Authority { get; set; }
+            public int ProfileType { get; set; }
             public string FriendlyName { get; set; }
             public string OrganizationUniqueName { get; set; }
         }
 
-        /// <summary>
-        /// Represents the PAC CLI profiles file structure.
-        /// </summary>
         private class PacProfilesData
         {
             public System.Collections.Generic.List<PacProfileData> Profiles { get; set; }
             public System.Collections.Generic.Dictionary<string, PacProfileData> Current { get; set; }
         }
-
-        #endregion
     }
 }

@@ -38,6 +38,7 @@
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="$DynamicsCrm.DevKit.Analyzers.Version$" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="$Microsoft.Extensions.Configuration.Version$" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$Microsoft.Extensions.Configuration.Json.Version$" />
+		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="$Microsoft.Identity.Client.Extensions.Msal.Version$" />
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="$Microsoft.PowerPlatform.Dataverse.Client.Version$" />
 		<PackageReference Include="NSubstitute" Version="$NSubstitute.Version$" />
 	</ItemGroup>

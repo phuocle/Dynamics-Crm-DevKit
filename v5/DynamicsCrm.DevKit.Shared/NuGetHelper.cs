@@ -26,6 +26,7 @@ namespace DynamicsCrm.DevKit.Shared
             ["Microsoft.CrmSdk.Workflow"]                   = ("9.0.2.60",    "net462"),
             ["Microsoft.CrmSdk.CoreTools"]                  = ("9.1.0.179",   "net462"),
             ["Microsoft.PowerPlatform.Dataverse.Client"]    = ("1.2.10",      "net462"),
+            ["Microsoft.Identity.Client.Extensions.Msal"]   = ("4.83.1",      "netstandard2.0"),
             ["Azure.Identity"]                              = ("1.19.0",      "net462"),
             ["Microsoft.Extensions.Configuration"]          = ("10.0.5",      "net462"),
             ["Microsoft.Extensions.Configuration.Json"]     = ("10.0.5",      "net462"),

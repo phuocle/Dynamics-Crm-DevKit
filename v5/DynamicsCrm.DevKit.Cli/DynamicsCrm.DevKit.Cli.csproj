@@ -74,6 +74,7 @@
 	  <PackageReference Include="System.CodeDom" Version="10.0.3" />
 	  <!-- Phase 2: Modern Interactive Authentication -->
 	  <!-- Note: Microsoft.Identity.Client is already included via Microsoft.PowerPlatform.Dataverse.Client -->
+	  <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.83.1" />
 	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.3" />
 	  <!-- Phase 3: Azure production authentication -->
 	  <PackageReference Include="Azure.Identity" Version="1.18.0" />
