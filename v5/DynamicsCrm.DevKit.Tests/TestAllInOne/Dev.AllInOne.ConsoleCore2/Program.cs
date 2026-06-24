@@ -16,8 +16,7 @@ namespace Dev.AllInOne.ConsoleCore2
         {
             var UserId = ((WhoAmIResponse)App.Service.Execute(new WhoAmIRequest())).UserId;
             System.Console.WriteLine(UserId);
-            if (!System.Console.IsInputRedirected)
-                System.Console.ReadKey();
+            System.Console.ReadKey();
         }
 
         private static void DebugPlugin()
