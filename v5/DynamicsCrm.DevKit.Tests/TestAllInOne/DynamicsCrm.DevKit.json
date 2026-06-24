@@ -1,5 +1,5 @@
 ﻿{
-  "DefaultCrmConnection": "ClientSecret",
+  "DefaultCrmConnection": "ALL_IN_ONE",
   "CrmConnections": [
     {
       "Name": "OAuth",
@@ -35,6 +35,13 @@
       "UseProjectEnvironment": true,
       "CreatedAt": "2026-06-24T02:28:40.7893937Z",
       "ModifiedAt": "2026-06-24T02:28:42.5805822Z"
+    },
+    {
+      "Name": "ALL_IN_ONE",
+      "Type": "FromPac",
+      "UseProjectEnvironment": true,
+      "CreatedAt": "2026-06-24T03:19:53.6565252Z",
+      "ModifiedAt": "2026-06-24T03:19:55.2809577Z"
     }
   ]
 }

@@ -7,6 +7,7 @@
   </Folder>
   <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />
   <Project Path="Dev.AllInOne.ConsoleCore/Dev.AllInOne.ConsoleCore.csproj" />
+  <Project Path="Dev.AllInOne.ConsoleCore2/Dev.AllInOne.ConsoleCore2.csproj" />
   <Project Path="Dev.AllInOne.Package.Test/Dev.AllInOne.Package.Test.csproj" />
   <Project Path="Dev.AllInOne.Package/Dev.AllInOne.Package.csproj" />
   <Project Path="Dev.AllInOne.Package2.Test/Dev.AllInOne.Package2.Test.csproj" />
