@@ -18,6 +18,7 @@ namespace Dev.AllInOne.UiTest
                 return _Service;
             }
         }
+
         public static string GetAppSettingOrEnvironment(string key, string environmentVariable)
         {
             var value = ConfigurationManager.AppSettings[key];
@@ -93,4 +94,3 @@ namespace Dev.AllInOne.UiTest
         private static string ConnectionString => $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
     }
 }
-

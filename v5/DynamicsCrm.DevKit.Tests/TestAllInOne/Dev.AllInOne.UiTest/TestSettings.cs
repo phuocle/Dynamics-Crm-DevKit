@@ -1,4 +1,4 @@
-﻿using Microsoft.Dynamics365.UIAutomation.Browser;
+using Microsoft.Dynamics365.UIAutomation.Browser;
 using System;
 
 namespace Dev.AllInOne.UiTest
@@ -14,7 +14,7 @@ namespace Dev.AllInOne.UiTest
             BrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), Type),
             PrivateMode = false,
             FireEvents = false,
-            Headless = false,
+            Headless = true,
             UserAgent = false,
             DefaultThinkTime = 2000,
             RemoteBrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), RemoteType),

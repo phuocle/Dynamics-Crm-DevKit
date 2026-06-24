@@ -1,8 +1,3 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path=".env" />
-    <File Path=".env.example" />
-    <File Path="DynamicsCrm.DevKit.json" />
-  </Folder>
   <Project Path="Dev.AllInOne.UiTest/Dev.AllInOne.UiTest.csproj" />
 </Solution>
