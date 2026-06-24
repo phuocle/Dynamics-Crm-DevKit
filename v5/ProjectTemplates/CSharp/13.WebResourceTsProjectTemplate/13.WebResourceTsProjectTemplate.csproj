@@ -77,6 +77,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="deploy.debug.bat" />
+    <None Include="deploy.release.bat" />
     <None Include="generator.form.bat" />
     <None Include="generator.webapi.bat" />
     <None Include="package.json" />

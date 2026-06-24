@@ -42,7 +42,7 @@ if not exist "node_modules" (
     )
 )
 
-call npm run debug -- %*
+call npm run release -- %*
 if %ERRORLEVEL% neq 0 (
     popd
     exit /b %ERRORLEVEL%

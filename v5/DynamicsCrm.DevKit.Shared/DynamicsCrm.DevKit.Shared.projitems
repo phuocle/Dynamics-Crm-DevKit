@@ -140,6 +140,7 @@
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.debug.ts_bat" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\webresource.deploy.release.ts_bat" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\js\devkit.d.ts" />

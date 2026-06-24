@@ -39,6 +39,7 @@ namespace DynamicsCrm.DevKit.Lib
             replacements["$deploy.debug.only.bat$"] = await ReadBatResourceAsync("bat.plugin.deploy.debug.only.bat", crmConnection);
             replacements["$webresource.deploy.debug.bat$"] = await ReadBatResourceAsync("bat.webresource.deploy.debug.bat", crmConnection);
             replacements["$webresource.deploy.debug.ts.bat$"] = await ReadBatResourceAsync("bat.webresource.deploy.debug.ts_bat", crmConnection);
+            replacements["$webresource.deploy.release.ts.bat$"] = await ReadBatResourceAsync("bat.webresource.deploy.release.ts_bat", crmConnection);
             replacements["$devkit.d.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.d.ts");
             replacements["$devkit.js$"] = await VsixHelper.ReadEmbeddedResourceAsync("js.devkit.js");
             replacements["$devkit.ts$"] = await VsixHelper.ReadEmbeddedResourceAsync("ts.devkit.ts");

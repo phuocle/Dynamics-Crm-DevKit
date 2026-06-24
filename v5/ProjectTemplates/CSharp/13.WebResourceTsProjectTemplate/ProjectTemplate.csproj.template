@@ -49,6 +49,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="deploy.debug.bat" />
+		<None Include="deploy.release.bat" />
 		<None Include="package.json" />
 		<None Include=".eslintrc.json" />
 		<None Include="tsconfig.json" />

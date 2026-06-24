@@ -42,7 +42,7 @@ if not exist "node_modules" (
     )
 )
 
-call npm run debug -- %*
+call npm run release -- %*
 if %ERRORLEVEL% neq 0 (
     popd
     exit /b %ERRORLEVEL%
@@ -69,8 +69,9 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
-devkit webresource $CliConnectionArgs$ --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUGTS"
+devkit webresource --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUGTS"
 set EXIT_CODE=%ERRORLEVEL%
 
 popd
 exit /b %EXIT_CODE%
+

@@ -172,7 +172,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
             if (string.IsNullOrEmpty(Url))
                 Url = getValue(ProjectEnvironment.Url) ?? string.Empty;
 
-            // Interactive/DeviceCode have built-in Microsoft multi-tenant AppId defaults.
+            // Interactive/DeviceCode/OAuth have built-in Microsoft multi-tenant AppId defaults.
             // Don't inherit DEVKIT_CLIENT_ID from fallback for these types,
             // as it may point to a single-tenant app meant for other auth types (e.g., ClientSecret).
             // The --clientid CLI arg still takes priority if explicitly provided.
@@ -180,7 +180,8 @@ namespace DynamicsCrm.DevKit.Shared.Models
             {
                 var hasDefaultClientId =
                     AuthType.Equals("Interactive", StringComparison.OrdinalIgnoreCase) ||
-                    AuthType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase);
+                    AuthType.Equals("DeviceCode", StringComparison.OrdinalIgnoreCase) ||
+                    AuthType.Equals("OAuth", StringComparison.OrdinalIgnoreCase);
                 if (!hasDefaultClientId)
                     ClientId = getValue(ProjectEnvironment.ClientId) ?? string.Empty;
             }

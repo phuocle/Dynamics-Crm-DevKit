@@ -58,7 +58,9 @@
         "css\\**.css",
         "html\\**.html",
         "images\\**.png",
-        "resources\\*.resx"
+        "resources\\*.resx",
+        "build\\entities\\*.js",
+        "build\\dialogs\\*.js"
       ],
       "excludefiles": [],
       "dependencies": []
