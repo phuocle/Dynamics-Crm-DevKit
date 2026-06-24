@@ -2,17 +2,11 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "all_in_one",
       "folder": "bin\\Debug",
       "includefiles": [
-        "???.Server*.dll",
-        "???.Package*.nupkg",
-        "???.Plugin*.dll",
-        "???.Plugin*.nupkg",
-        "???.CustomAction*.dll",
-        "???.Workflow*.dll",
-        "???.CustomApi*.dll",
-        "???.DataProvider*.dll"
+        "Dev.AllInOne.Server*.dll",
+        "Dev.AllInOne.Package*.nupkg"
       ],
       "excludefiles": [
         "Dev.AllInOne.*.Test.dll"
@@ -22,7 +16,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "all_in_one",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -39,26 +33,26 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "all_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "all_/entities/[entity].form.js",
+            "all_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "all_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "all_/lib/devkit.js"
           ]
         }
       ]
     },
     {
       "profile": "DEBUGTS",
-      "solution": "???",
+      "solution": "all_in_one",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -73,7 +67,7 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "all_in_one",
       "displayname": "???",
       "pluralname": "???",
       "name": "???"
@@ -83,9 +77,9 @@
     {
       "profile": "LATEBOUND",
       "type": "CSharp",
-      "rootnamespace": "???",
+      "rootnamespace": "Dev.AllInOne.Shared.Entities",
       "namespace": "",
-      "rootfolder": "???",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
