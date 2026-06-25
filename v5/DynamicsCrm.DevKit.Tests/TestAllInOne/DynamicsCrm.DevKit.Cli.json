@@ -114,13 +114,13 @@
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "???"
+      "solution": "all_in_one"
     }
   ],
   "downloadreports": [
     {
       "profile": "DEBUG",
-      "solution": "???"
+      "solution": "all_in_one"
     }
   ],
   "solutionpackagers": [
@@ -154,9 +154,9 @@
   "uploadreports": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "all_in_one",
       "languages": [
-        "???"
+        "English"
       ]
     }
   ]
