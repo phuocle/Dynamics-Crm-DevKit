@@ -60,8 +60,7 @@
       "profile": "DEBUG",
       "solution": "devkitv4",
       "displayname": "Sql3 DataSource",
-      "pluralname": "Sql3 DataSources",
-      "name": "sql3_datasource"
+      "pluralname": "Sql3 DataSources"
     }
   ],
   "solutionpackagers": [
@@ -144,7 +143,9 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "language": [ "???" ]
+      "language": [
+        "???"
+      ]
     }
   ]
 }

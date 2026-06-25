@@ -71,8 +71,7 @@
       "excludefiles": [
         "test\\**.js"
       ],
-      "dependencies": [
-      ]
+      "dependencies": []
     }
   ],
   "datasources": [
@@ -80,15 +79,13 @@
       "profile": "DEBUG",
       "solution": "???",
       "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "pluralname": "???"
     },
     {
       "profile": "Sqlite",
       "solution": "devkitv4",
       "displayname": "Sqlite",
-      "pluralname": "Sqlites",
-      "name": "Sqlite"
+      "pluralname": "Sqlites"
     }
   ],
   "generators": [

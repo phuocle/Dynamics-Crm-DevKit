@@ -255,7 +255,7 @@
     },
     "Dev.AllInOne.Server--DataProviders--Sql--deploy.datasource": {
       "commandName": "Project",
-      "commandLineArgs": "datasource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "commandLineArgs": "datasource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"ServerSql\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server\\DataProviders\\Sql"
     },
     "Dev.AllInOne.Shared--Entities--generator": {

@@ -69,11 +69,10 @@
   ],
   "datasources": [
     {
-      "profile": "DEBUG",
+      "profile": "ServerSql",
       "solution": "all_in_one",
-      "displayname": "???",
-      "pluralname": "???",
-      "name": "???"
+      "displayname": "Server Sql",
+      "pluralname": "Server Sql"
     }
   ],
   "generators": [
@@ -147,9 +146,9 @@
   "modelbuilders": [
     {
       "profile": "ALL",
-      "namespace": "???.ProxyTypes",
+      "namespace": "Dev.AllInOne.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "*"
+      "entities": "account,contact,team,systemuser"
     }
   ],
   "uploadreports": [

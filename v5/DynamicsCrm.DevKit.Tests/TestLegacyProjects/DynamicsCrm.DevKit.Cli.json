@@ -59,43 +59,37 @@
       "profile": "Sqlite-Package-Legacy",
       "solution": "devkitv4_legacy",
       "displayname": "SqlitePackageLegacy",
-      "pluralname": "SqlitePackageLegacies",
-      "name": "SqlitePackageLegacy"
+      "pluralname": "SqlitePackageLegacies"
     },
     {
       "profile": "Sqlite-Package-DevKit",
       "solution": "devkitv4_legacy",
       "displayname": "SqlitePackageDevKit",
-      "pluralname": "SqlitePackageDevKits",
-      "name": "SqlitePackageDevKit"
+      "pluralname": "SqlitePackageDevKits"
     },
     {
       "profile": "Sqlite-Package-Legacy-To-DevKit",
       "solution": "devkitv4_legacy",
       "displayname": "SqlitePackageLegacyToDevKit",
-      "pluralname": "SqlitePackageLegacyToDevKits",
-      "name": "SqlitePackageLegacyToDevKit"
+      "pluralname": "SqlitePackageLegacyToDevKits"
     },
     {
       "profile": "Sql-Server-Legacy",
       "solution": "devkitv4_legacy",
       "displayname": "SqlServerLegacy",
-      "pluralname": "SqlServerLegacies",
-      "name": "SqlServerLegacy"
+      "pluralname": "SqlServerLegacies"
     },
     {
       "profile": "Sql-Server-DevKit",
       "solution": "devkitv4_legacy",
       "displayname": "SqlServereDevKit",
-      "pluralname": "SqlServerDevKits",
-      "name": "SqlServerDevKit"
+      "pluralname": "SqlServerDevKits"
     },
     {
       "profile": "Sql-Server-Legacy-To-DevKit",
       "solution": "devkitv4_legacy",
       "displayname": "SqlServerLegacyToDevKit",
-      "pluralname": "SqlServerLegacyToDevKits",
-      "name": "SqlServerLegacyToDevKit"
+      "pluralname": "SqlServerLegacyToDevKits"
     }
   ],
   "solutionpackagers": [
@@ -166,7 +160,9 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "language": [ "???" ]
+      "language": [
+        "???"
+      ]
     }
   ]
 }

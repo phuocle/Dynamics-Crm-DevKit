@@ -75,8 +75,7 @@
       "profile": "DEBUG",
       "solution": "devkitv4",
       "displayname": "Sqlite",
-      "pluralname": "Sqlites",
-      "name": "Sqlite"
+      "pluralname": "Sqlites"
     }
   ],
   "generators": [

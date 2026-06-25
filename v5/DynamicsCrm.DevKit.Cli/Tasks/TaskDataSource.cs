@@ -23,7 +23,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public bool IsOk { get; set; }
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
-        private string DataSourceName { get; set; }
+        private string DataSourceSchemaName { get; set; }
+        private string DataSourceLogicalName { get; set; }
 
         private DeploymentService _deploymentService;
         private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
@@ -52,11 +53,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError("'pluralname' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (Json.name.Length == 0 || Json.name == "???")
-            {
-                SpectreLog.ActionError("'name' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-                return false;
-            }
             var regex = new Regex("^[a-zA-Z][_a-zA-Z0-9\\s,]*$");
             if (!regex.IsMatch(Json.displayname))
             {
@@ -68,26 +64,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 SpectreLog.ActionError("'pluralname' can only contain alpha-numeric and underscore characters.");
                 return false;
             }
-            if (!regex.IsMatch(Json.name))
-            {
-                SpectreLog.ActionError("'name' can only contain alpha-numeric and underscore characters.");
-                return false;
-            }
-            if (Json.name.Contains(" "))
-            {
-                SpectreLog.ActionError("'name' can cannot contain space character.");
-                return false;
-            }
             (IsOk, SolutionId, SolutionPrefix) = await Deployment.IsExistSolutionAsync(Json.solution);
             if (!IsOk)
             {
                 SpectreLog.ActionError($"solution '{Json.solution}' not exist");
                 return false;
             }
-            DataSourceName = Json.name.ToLower().StartsWith(SolutionPrefix.ToLower()) ? Json.name : $"{SolutionPrefix}{Json.name}";
-            if (await Metadata.IsExistDataSourceAsync(DataSourceName))
+            (DataSourceSchemaName, DataSourceLogicalName) = DataverseNamer.Resolve(Json.displayname, SolutionPrefix.TrimEnd('_'));
+            if (await Metadata.IsExistDataSourceAsync(DataSourceLogicalName))
             {
-                SpectreLog.ActionError($"name '{DataSourceName}' exist");
+                SpectreLog.ActionError($"name '{DataSourceLogicalName}' exist");
                 return false;
             }
             return true;
@@ -99,11 +85,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             SpectreLog.WriteLine();
             if (await IsValidAsync())
             {
-                await SpectreLog.WithStatusAsync($"Creating Data Source: {DataSourceName}", async ctx =>
+                await SpectreLog.WithStatusAsync($"Creating Data Source: {DataSourceLogicalName}", async ctx =>
                 {
                     await RegisterDataSourceAsync();
                 });
-                SpectreLog.ActionWithLevel0(CliAction.CREATED, "Data Source", DataSourceName);
+                SpectreLog.ActionWithLevel0(CliAction.CREATED, "Data Source", DataSourceLogicalName);
             }
             SpectreLog.WriteRequestCounts();
             SpectreLog.WriteLine();
@@ -115,23 +101,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var languageCode = await Metadata.GetLanguageCodeAsync();
             var propertyFalse = new BooleanManagedProperty(false);
             var propertyTrue = new BooleanManagedProperty(true);
+            var primaryAttributeDisplayName = $"{Json.displayname} Name";
 
             var request = new CreateEntityRequest
             {
                 HasActivities = false,
                 PrimaryAttribute = new StringAttributeMetadata
                 {
-                    SchemaName = $"{DataSourceName}Name",
+                    SchemaName = $"{DataSourceSchemaName}Name",
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None),
                     MaxLength = 100,
-                    DisplayName = new Label(Json.displayname, languageCode),
-                    ExternalName = Json.displayname
+                    DisplayName = new Label(primaryAttributeDisplayName, languageCode),
+                    ExternalName = primaryAttributeDisplayName.Replace(" ", string.Empty)
                 },
                 Entity = new EntityMetadata
                 {
                     DataProviderId = new Guid?(new Guid("B2112A7E-B26C-42F7-9B63-9A809A9D716F")),
                     IsActivity = new bool?(false),
-                    SchemaName = DataSourceName,
+                    SchemaName = DataSourceSchemaName,
                     DisplayName = new Label(Json.displayname, languageCode),
                     DisplayCollectionName = new Label(Json.pluralname, languageCode),
                     ExternalCollectionName = Json.pluralname.Replace(" ", string.Empty),
@@ -191,7 +178,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             XrmHelper.COUNT_ExecuteAsync++;
             var attributeMetadataId = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestId)).AttributeMetadata;
-            attributeMetadataId.ExternalName = $"{DataSourceName}Id";
+            attributeMetadataId.ExternalName = $"{DataSourceSchemaName}Id";
             var updateRequestId = new UpdateAttributeRequest()
             {
                 Attribute = attributeMetadataId,
@@ -203,11 +190,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var requestName = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.LogicalName,
-                LogicalName = string.Format("{0}name", DataSourceName.ToLower())
+                LogicalName = string.Format("{0}name", DataSourceLogicalName)
             };
             XrmHelper.COUNT_ExecuteAsync++;
             var attributeMetadataName = ((RetrieveAttributeResponse)await ServiceClient.ExecuteAsync(requestName)).AttributeMetadata;
-            attributeMetadataName.ExternalName = $"{DataSourceName}Name";
+            attributeMetadataName.ExternalName = $"{DataSourceSchemaName}Name";
             var updateRequestName = new UpdateAttributeRequest()
             {
                 Attribute = attributeMetadataName,
