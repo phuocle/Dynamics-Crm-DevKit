@@ -35,6 +35,7 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
+    <Report Include="ContactReport.rdl" />
     <Report Include="download.reports.bat">
       <MimeType>application/octet-stream</MimeType>
     </Report>

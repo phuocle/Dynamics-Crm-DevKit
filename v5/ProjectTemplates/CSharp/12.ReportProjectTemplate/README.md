@@ -50,6 +50,8 @@ Streamlines Dataverse report development using SQL Server Data Tools (SSDT) and 
 
 ## Deployment
 
+For Visual Studio report authoring, the Dynamics 365 Report Authoring Extension is still tied to Visual Studio 2019-era tooling. A lightweight `DynamicsCrm.DevKit.2019` VSIX is available from [GitHub Releases](https://github.com/phuocle/Dynamics-Crm-DevKit/releases) for report upload only. It is not published to Visual Studio Marketplace.
+
 ```bash
 # Upload report to Dataverse
 devkit uploadreport /report:"YourReport.rdl"
@@ -61,5 +63,6 @@ devkit downloadreport /report:"Report Name"
 ## References
 
 * [Report Project Template Wiki](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template)
+* [DynamicsCrm.DevKit GitHub Releases](https://github.com/phuocle/Dynamics-Crm-DevKit/releases)
 * [Add reporting to your model-driven app](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/add-reporting-to-app)
 * [Download Report Authoring Extension](https://www.microsoft.com/en-us/download/details.aspx?id=56973)
