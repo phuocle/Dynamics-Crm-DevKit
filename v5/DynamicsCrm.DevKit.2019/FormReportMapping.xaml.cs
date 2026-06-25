@@ -9,8 +9,9 @@ using System.Linq;
 using System.Security;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
-namespace DynamicsCrm.DevKit._2019
+namespace DynamicsCrm.DevKit2019
 {
     public partial class FormReportMapping : Window
     {
@@ -26,8 +27,18 @@ namespace DynamicsCrm.DevKit._2019
             this.serviceClient = serviceClient;
             this.fullFileName = fullFileName;
             this.cachedMapping = cachedMapping;
+            SetWindowIcon();
             textboxFile.Text = fullFileName;
             LoadReports();
+        }
+
+        private void SetWindowIcon()
+        {
+            var iconFile = Path.Combine(Path.GetDirectoryName(typeof(FormReportMapping).Assembly.Location), "icon32.png");
+            if (File.Exists(iconFile))
+            {
+                Icon = BitmapFrame.Create(new Uri(iconFile, UriKind.Absolute));
+            }
         }
 
         private void LoadReports()

@@ -1,6 +1,6 @@
 using System;
 
-namespace DynamicsCrm.DevKit._2019
+namespace DynamicsCrm.DevKit2019
 {
     internal static class PackageGuids
     {

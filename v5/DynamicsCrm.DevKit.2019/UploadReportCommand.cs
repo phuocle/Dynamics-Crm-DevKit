@@ -7,17 +7,19 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
 using Task = System.Threading.Tasks.Task;
 
-namespace DynamicsCrm.DevKit._2019
+namespace DynamicsCrm.DevKit2019
 {
     internal sealed class UploadReportCommand
     {
         private readonly AsyncPackage package;
         private static CrmServiceClient cachedServiceClient;
         private static string cachedUrl;
+        private static readonly Dictionary<string, DeployReport> cachedReports = new Dictionary<string, DeployReport>(StringComparer.OrdinalIgnoreCase);
 
         private UploadReportCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
@@ -69,15 +71,24 @@ namespace DynamicsCrm.DevKit._2019
             var dte = Package.GetGlobalService(typeof(SDTE)) as DTE2;
             var configFileName = ReportConfigHelper.GetConfigFileName(dte);
             var config = ReportConfigHelper.ReadConfig(configFileName);
-            var report = ReportConfigHelper.GetReport(config, fullFileName);
-            SetStatusBar(dte, "Loading report mapping ...");
+            var report = GetCachedReport(fullFileName);
+            if (report == null)
+            {
+                report = ReportConfigHelper.GetReport(config, fullFileName);
+                SetStatusBar(dte, "Loading report mapping ...");
 
-            var form = new FormReportMapping(serviceClient, fullFileName, report);
-            if (form.ShowDialog() != true) return;
+                var form = new FormReportMapping(serviceClient, fullFileName, report);
+                if (form.ShowDialog() != true) return;
 
-            report = form.SelectedReport;
-            ReportConfigHelper.SaveReport(configFileName, config, report);
-            SetStatusBar(dte, "Report mapping saved.");
+                report = form.SelectedReport;
+                ReportConfigHelper.SaveReport(configFileName, config, report);
+                CacheReport(report);
+                SetStatusBar(dte, "Report mapping saved.");
+            }
+            else
+            {
+                SetStatusBar(dte, "Using cached report mapping ...");
+            }
 
             try
             {
@@ -112,6 +123,17 @@ namespace DynamicsCrm.DevKit._2019
             }
 
             return null;
+        }
+
+        private static DeployReport GetCachedReport(string fullFileName)
+        {
+            return cachedReports.TryGetValue(fullFileName, out var report) ? report : null;
+        }
+
+        private static void CacheReport(DeployReport report)
+        {
+            if (report == null || string.IsNullOrWhiteSpace(report.File)) return;
+            cachedReports[report.File] = report;
         }
 
         private static void LoginForm_ConnectionToCrmCompleted(object sender, EventArgs e)

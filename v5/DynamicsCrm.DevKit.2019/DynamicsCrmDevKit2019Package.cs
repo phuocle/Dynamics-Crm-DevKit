@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
 
-namespace DynamicsCrm.DevKit._2019
+namespace DynamicsCrm.DevKit2019
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -25,13 +25,14 @@ namespace DynamicsCrm.DevKit._2019
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     [Guid(DynamicsCrmDevKit2019Package.PackageGuidString)]
     public sealed class DynamicsCrmDevKit2019Package : AsyncPackage
     {
          /// <summary>
-        /// DynamicsCrm.DevKit._2019Package GUID string.
+        /// DynamicsCrmDevKit2019Package GUID string.
         /// </summary>
         public const string PackageGuidString = "d66070fd-dfdd-4925-874b-399019a0a9f7";
 

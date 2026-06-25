@@ -114,6 +114,18 @@
         }
     ],
     "CustomTemplates": [
-        
+
+    ],
+    "Reports": [
+        {
+            "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Top10Account.rdl",
+            "ReportId": "b110161b-b653-e911-a992-000d3aa0f55c",
+            "ReportName": "Top10Account",
+            "ReportFileName": "Top10Account.rdl",
+            "LanguageCode": 1033,
+            "Language": "English",
+            "IsManaged": false,
+            "DisplayReportName": "Top10Account (Top10Account.rdl) - English"
+        }
     ]
 }

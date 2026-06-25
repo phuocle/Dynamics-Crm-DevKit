@@ -8,7 +8,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public Guid ReportId { get; set; }
         public string ReportName { get; set; }
         public string ReportFileName { get; set; }
-        public string SolutionUniqueName { get; set; }
         public int LanguageCode { get; set; }
         public string Language { get; set; }
         public bool IsManaged { get; set; }
