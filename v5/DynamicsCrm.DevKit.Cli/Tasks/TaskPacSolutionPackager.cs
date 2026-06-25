@@ -1,9 +1,11 @@
+using DynamicsCrm.DevKit.Cli.Commands;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Services;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk.Query;
+using Spectre.Console;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -304,7 +306,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
             }
             SpectreLog.WriteLine();
-            SpectreLog.ActionWithLevel0("", $"pac {args}");
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine($"[white]{Markup.Escape($"pac {args}")}[/]");
+            AnsiConsole.WriteLine();
             SpectreLog.WriteLine();
 
             var process = new Process

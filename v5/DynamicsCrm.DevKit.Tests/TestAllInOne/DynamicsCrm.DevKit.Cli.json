@@ -127,19 +127,19 @@
   "solutionpackagers": [
     {
       "profile": "Extract-Both",
-      "solution": "???",
+      "solution": "all_in_one",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "all_in_one",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Both",
-      "solution": "???",
+      "solution": "all_in_one",
       "rootfolder": "",
       "solutiontype": "Both",
-      "folder": "???",
+      "folder": "all_in_one",
       "type": "Pack",
       "mapfile": ""
     }

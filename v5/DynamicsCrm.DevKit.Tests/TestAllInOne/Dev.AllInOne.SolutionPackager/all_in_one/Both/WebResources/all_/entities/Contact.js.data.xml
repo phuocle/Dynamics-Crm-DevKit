@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{5205b481-2b70-f111-ab0e-0022480a530f}</WebResourceId>
+  <Name>all_/entities/Contact.js</Name>
+  <DisplayName>all_/entities/Contact.js</DisplayName>
+  <Description>4.12.34.56</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="all_/entities/Contact.webapi.js" displayName="all_/entities/Contact.webapi.js" languagecode="" description="4.12.34.56" libraryUniqueId="{f22dc159-6ec2-47c7-bba5-4b536c0e3bbc}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/all_entitiesContactjs5205B481-2B70-F111-AB0E-0022480A530F</FileName>
+</WebResource>
