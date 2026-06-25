@@ -176,16 +176,16 @@ namespace DynamicsCrm.DevKit.Lib
             var found = configJson.WebResources.Where(x => x?.File == deployWebResource?.File).FirstOrDefault();
             if (found != null)
             {
-                if (found.WebResource != deployWebResource.WebResource)
-                    found.WebResource = deployWebResource.WebResource;
-                else
-                    return;                
+                found.WebResource = deployWebResource.WebResource;
+                found.WebResourceId = deployWebResource.WebResourceId;
+                found.IsManaged = deployWebResource.IsManaged;
+                found.SolutionUniqueName = deployWebResource.SolutionUniqueName;
             }
             else
             {   
                 configJson.WebResources.Add(deployWebResource); 
             }
-            configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.WebResource)];
+            configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.File)];
             var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
             await FileHelper.ForceWriteAllTextAsync(fileName, json);
         }

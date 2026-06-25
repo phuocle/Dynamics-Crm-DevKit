@@ -21,6 +21,7 @@
       "includefiles": [
         "css\\**.css",
         "entities\\*.js",
+        "dialogs\\*.js",
         "html\\**.html",
         "images\\**.png",
         "js\\**.js",
@@ -87,15 +88,15 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "AllInOne",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "AllInOne",
+      "rootfolder": "",
       "entities": "folder"
     },
     {

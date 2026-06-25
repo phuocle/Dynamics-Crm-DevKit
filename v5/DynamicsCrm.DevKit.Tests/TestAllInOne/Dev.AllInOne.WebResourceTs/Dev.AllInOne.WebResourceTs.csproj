@@ -52,7 +52,6 @@
 		<Folder Include="css\" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
-		<Folder Include="resources\" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="deploy.debug.bat" />

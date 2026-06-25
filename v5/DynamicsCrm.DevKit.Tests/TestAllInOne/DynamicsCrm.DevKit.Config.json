@@ -31,9 +31,89 @@
             "IsManaged": false,
             "DisplayWebResourceName": "all_/build/entities/Team.js",
             "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\dialogs\\pl_dataversedialogbuilder_demo.dialog.js",
+            "WebResource": "all_/dialogs/pl_dataversedialogbuilder_demo.dialog.js",
+            "WebResourceId": "4305b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/dialogs/pl_dataversedialogbuilder_demo.dialog.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\dialogs\\pl_dataversedialogbuilder_demo.js",
+            "WebResource": "all_/dialogs/pl_dataversedialogbuilder_demo.js",
+            "WebResourceId": "4605b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/dialogs/pl_dataversedialogbuilder_demo.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Account.form.js",
+            "WebResource": "all_/entities/Account.form.js",
+            "WebResourceId": "4905b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Account.form.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Account.js",
+            "WebResource": "all_/entities/Account.js",
+            "WebResourceId": "4c05b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Account.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Account.webapi.js",
+            "WebResource": "all_/entities/Account.webapi.js",
+            "WebResourceId": "4f05b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Account.webapi.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Contact.js",
+            "WebResource": "all_/entities/Contact.js",
+            "WebResourceId": "5205b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Contact.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Contact.webapi.js",
+            "WebResource": "all_/entities/Contact.webapi.js",
+            "WebResourceId": "5605b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Contact.webapi.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\lib\\devkit.js",
+            "WebResource": "all_/lib/devkit.js",
+            "WebResourceId": "5ce8cd87-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/lib/devkit.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\resources\\Resource.1033.resx",
+            "WebResource": "all_/resources/Resource.1033.resx",
+            "WebResourceId": "69e8cd87-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/resources/Resource.1033.resx",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\resources\\ResourceTs.1033.resx",
+            "WebResource": "all_/resources/ResourceTs.1033.resx",
+            "WebResourceId": "1740fb44-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/resources/ResourceTs.1033.resx",
+            "SolutionUniqueName": "all_in_one"
         }
     ],
     "CustomTemplates": [
-
+        
     ]
 }

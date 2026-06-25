@@ -536,7 +536,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 found.SolutionUniqueName = mapping.SolutionUniqueName;
             }
 
-            configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.WebResource)];
+            configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.File)];
             var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
             await FileHelper.ForceWriteAllTextAsync(configFile, json);
             SpectreLog.ActionWithLevel0(CliAction.UPDATED, Const.DynamicsCrmDevKitConfigJson);
