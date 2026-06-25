@@ -1,47 +1,54 @@
 ﻿{
-  "DefaultCrmConnection": "ClientSecret",
-  "CrmConnections": [
-    {
-      "Name": "OAuth",
-      "Type": "OAuth",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-23T13:49:06.6172081Z",
-      "ModifiedAt": "2026-06-23T13:49:09.2010209Z"
-    },
-    {
-      "Name": "ClientSecret",
-      "Type": "ClientSecret",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-24T02:27:57.6670972Z",
-      "ModifiedAt": "2026-06-24T02:27:59.6390948Z"
-    },
-    {
-      "Name": "Interactive",
-      "Type": "Interactive",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-24T02:28:17.6363202Z",
-      "ModifiedAt": "2026-06-24T02:28:18.1027675Z"
-    },
-    {
-      "Name": "DeviceCode",
-      "Type": "DeviceCode",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-24T02:28:31.4766967Z",
-      "ModifiedAt": "2026-06-24T02:28:31.7996976Z"
-    },
-    {
-      "Name": "DEVKITV4",
-      "Type": "FromPac",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-24T02:28:40.7893937Z",
-      "ModifiedAt": "2026-06-24T02:28:42.5805822Z"
-    },
-    {
-      "Name": "ALL_IN_ONE",
-      "Type": "FromPac",
-      "UseProjectEnvironment": true,
-      "CreatedAt": "2026-06-24T03:19:53.6565252Z",
-      "ModifiedAt": "2026-06-24T03:19:55.2809577Z"
-    }
-  ]
+    "DefaultCrmConnection": "AAAAA",
+    "CrmConnections": [
+        {
+            "Name": "OAuth",
+            "Url": null,
+            "UserName": null,
+            "Password": null,
+            "Type": "OAuth"
+        },
+        {
+            "Name": "ClientSecret",
+            "Url": null,
+            "UserName": null,
+            "Password": null,
+            "Type": "ClientSecret"
+        },
+        {
+            "Name": "Interactive",
+            "Url": null,
+            "UserName": null,
+            "Password": null,
+            "Type": "Interactive"
+        },
+        {
+            "Name": "DeviceCode",
+            "Url": null,
+            "UserName": null,
+            "Password": null,
+            "Type": "DeviceCode"
+        },
+        {
+            "Name": "DEVKITV4",
+            "Url": null,
+            "UserName": null,
+            "Password": null,
+            "Type": "FromPac"
+        },
+        {
+            "Name": "ALL_IN_ONE",
+            "Url": null,
+            "UserName": null,
+            "Password": null,
+            "Type": "FromPac"
+        },
+        {
+            "Name": "AAAAA",
+            "Url": "https://dynamics-crm-devkit-v4.crm.dynamics.com",
+            "UserName": "1a60a5c2-d04c-4b26-8f86-9d6ce0616799",
+            "Password": "~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL",
+            "Type": "ClientSecret"
+        }
+    ]
 }

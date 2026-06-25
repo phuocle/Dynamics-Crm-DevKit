@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+
+  <Commands package="Package">
+    <Groups>
+      <Group guid="CommandSet" id="UploadReportGroup" />
+    </Groups>
+
+    <Buttons>
+      <Button guid="CommandSet" id="UploadReportCommand" type="Button" priority="0x0100">
+        <Icon guid="guidImages" id="bmpPic" />
+        <Parent guid="CommandSet" id="UploadReportGroup" />
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>Upload Dynamics 365 Report</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="icon16.png" usedList="bmpPic" />
+    </Bitmaps>
+  </Commands>
+
+  <CommandPlacements>
+    <CommandPlacement guid="CommandSet" id="UploadReportGroup" priority="0xFFFF">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="Package" value="{d66070fd-dfdd-4925-874b-399019a0a9f7}" />
+    <GuidSymbol name="guidImages" value="{68759f95-6f1d-4a77-87ea-192fc8d811f1}">
+      <IDSymbol name="bmpPic" value="1" />
+    </GuidSymbol>
+    <GuidSymbol name="CommandSet" value="{9fcf358f-d3b6-45ec-b9f4-ec07f76d020b}">
+      <IDSymbol name="UploadReportGroup" value="0x1000" />
+      <IDSymbol name="UploadReportCommand" value="0x0100" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
