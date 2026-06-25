@@ -197,6 +197,121 @@
       "commandName": "Project",
       "commandLineArgs": "solution --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"Extract-Both\"",
       "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.SolutionPackager"
+    },
+    "Dev.AllInOne.Package--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package"
+    },
+    "Dev.AllInOne.Package--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package"
+    },
+    "Dev.AllInOne.Package2--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package2"
+    },
+    "Dev.AllInOne.Package2--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package2"
+    },
+    "Dev.AllInOne.ProxyTypes--run": {
+      "commandName": "Project",
+      "commandLineArgs": "modelbuilder --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"ALL\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.ProxyTypes"
+    },
+    "Dev.AllInOne.Report--download.reports": {
+      "commandName": "Project",
+      "commandLineArgs": "downloadreport --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report"
+    },
+    "Dev.AllInOne.Report--upload.reports": {
+      "commandName": "Project",
+      "commandLineArgs": "uploadreport --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report"
+    },
+    "Dev.AllInOne.Server--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server"
+    },
+    "Dev.AllInOne.Server--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server"
+    },
+    "Dev.AllInOne.Server2--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server2"
+    },
+    "Dev.AllInOne.Server2--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server2"
+    },
+    "Dev.AllInOne.Server--DataProviders--Sql--deploy.datasource": {
+      "commandName": "Project",
+      "commandLineArgs": "datasource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server\\DataProviders\\Sql"
+    },
+    "Dev.AllInOne.Shared--Entities--generator": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"LATEBOUND\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Shared\\Entities"
+    },
+    "Dev.AllInOne.SolutionPackager--Extract-Both": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"Extract-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.SolutionPackager"
+    },
+    "Dev.AllInOne.SolutionPackager--Pack-Both": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"Pack-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.SolutionPackager"
+    },
+    "Dev.AllInOne.WebResource--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource"
+    },
+    "Dev.AllInOne.WebResource--download.webresources": {
+      "commandName": "Project",
+      "commandLineArgs": "downloadwebresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource"
+    },
+    "Dev.AllInOne.WebResource--entities--generator.form": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"JS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource\\entities"
+    },
+    "Dev.AllInOne.WebResource--entities--generator.webapi": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"JS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource\\entities"
+    },
+    "Dev.AllInOne.WebResourceTs--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUGTS\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs"
+    },
+    "Dev.AllInOne.WebResourceTs--deploy.release": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUGTS\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs"
+    },
+    "Dev.AllInOne.WebResourceTs--entities--generator.form": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"TS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs\\entities"
+    },
+    "Dev.AllInOne.WebResourceTs--entities--generator.webapi": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"TS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs\\entities"
     }
   }
 }
