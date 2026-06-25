@@ -116,7 +116,7 @@
     "CustomTemplates": [
 
     ],
-    "Reports": [
+        "Reports": [
         {
             "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Top10Account.rdl",
             "ReportId": "b110161b-b653-e911-a992-000d3aa0f55c",
