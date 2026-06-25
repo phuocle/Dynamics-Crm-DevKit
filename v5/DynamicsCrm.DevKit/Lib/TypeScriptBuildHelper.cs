@@ -185,6 +185,30 @@ namespace DynamicsCrm.DevKit.Lib
             return webResources;
         }
 
+        public static async Task<string> GetDefaultNewWebResourceNameAsync(string deployFilePath)
+        {
+            var activeProjectFolder = await VsixHelper.GetActiveProjectFolderAsync();
+            var relativePath = GetUsableRelativePath(activeProjectFolder, deployFilePath);
+            if (!string.IsNullOrEmpty(relativePath)) return relativePath;
+
+            var solutionFolder = await VsixHelper.GetSolutionFolderAsync();
+            relativePath = GetUsableRelativePath(solutionFolder, deployFilePath);
+            return string.IsNullOrEmpty(relativePath) ? deployFilePath : relativePath;
+        }
+
+        private static string GetUsableRelativePath(string rootPath, string filePath)
+        {
+            var relativePath = TypeScriptBuildPathHelper.GetRelativePath(rootPath, filePath);
+            if (string.IsNullOrEmpty(relativePath)) return null;
+            if (relativePath == ".." ||
+                relativePath.StartsWith(".." + Path.DirectorySeparatorChar) ||
+                relativePath.StartsWith(".." + Path.AltDirectorySeparatorChar))
+            {
+                return null;
+            }
+            return relativePath;
+        }
+
         /// <summary>
         /// Show a status message in the Visual Studio status bar
         /// </summary>

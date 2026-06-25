@@ -1,0 +1,39 @@
+﻿{
+    "WebResources": [
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\dialogs\\pl_dataversedialogbuilder_demo.js",
+            "WebResource": "all_/build/dialogs/pl_dataversedialogbuilder_demo.js",
+            "WebResourceId": "b52daa0a-996f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/dialogs/pl_dataversedialogbuilder_demo.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\entities\\Account.js",
+            "WebResource": "all_/build/entities/Account.js",
+            "WebResourceId": "b82daa0a-996f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/entities/Account.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\entities\\Contact.js",
+            "WebResource": "all_/build/entities/Contact.js",
+            "WebResourceId": "bb2daa0a-996f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/entities/Contact.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\entities\\Team.js",
+            "WebResource": "all_/build/entities/Team.js",
+            "WebResourceId": "590c01be-c86f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/entities/Team.js",
+            "SolutionUniqueName": "all_in_one"
+        }
+    ],
+    "CustomTemplates": [
+
+    ]
+}

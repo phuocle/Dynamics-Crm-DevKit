@@ -53,7 +53,8 @@ namespace DynamicsCrm.DevKit.Commands
             fullFileName = deployFilePath;
 
             var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
-            var form = new FormWebResource(true, fullFileNameForCrm, solutions);
+            var defaultNewWebResourceName = await TypeScriptBuildHelper.GetDefaultNewWebResourceNameAsync(fullFileName);
+            var form = new FormWebResource(true, fullFileNameForCrm, solutions, defaultNewWebResourceName);
 
             if (form.ShowModal() == true)
             {

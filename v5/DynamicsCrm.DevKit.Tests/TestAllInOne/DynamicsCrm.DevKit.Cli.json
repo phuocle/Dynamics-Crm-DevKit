@@ -101,13 +101,13 @@
     {
       "profile": "TS-FORM",
       "type": "TsForm",
-      "rootfolder": "???",
+      "rootfolder": "",
       "entities": "folder"
     },
     {
       "profile": "TS-WEBAPI",
       "type": "TsWebApi",
-      "rootfolder": "???",
+      "rootfolder": "",
       "entities": "folder"
     }
   ],

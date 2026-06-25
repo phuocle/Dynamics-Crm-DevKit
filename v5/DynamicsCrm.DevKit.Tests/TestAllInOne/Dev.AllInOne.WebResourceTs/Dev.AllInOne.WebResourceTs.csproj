@@ -33,6 +33,15 @@
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="build\**" />
+	  <Compile Remove="node_modules\**" />
+	  <EmbeddedResource Remove="build\**" />
+	  <EmbeddedResource Remove="node_modules\**" />
+	  <None Remove="build\**" />
+	  <None Remove="node_modules\**" />
+	  <None Remove="package-lock.json" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -41,7 +50,6 @@
 	<ItemGroup>
 		<Folder Include="html\" />
 		<Folder Include="css\" />
-		<Compile Remove="build\**" />
 		<Folder Include="lib\" />
 		<Folder Include="images\" />
 		<Folder Include="resources\" />

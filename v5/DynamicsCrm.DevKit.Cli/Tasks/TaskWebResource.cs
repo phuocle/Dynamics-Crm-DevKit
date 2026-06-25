@@ -25,6 +25,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public Guid SolutionId { get; set; }
         public string SolutionPrefix { get; set; }
         private List<Guid> WebResourcesToPublish { get; } = [];
+        private List<DeployWebResource> DeployedWebResourceMappings { get; } = [];
+        private Dictionary<string, bool> WebResourceManagedState { get; } = [];
 
         private DeploymentService _deploymentService;
         private DeploymentService Deployment => _deploymentService ??= new DeploymentService(ServiceClient);
@@ -124,6 +126,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (WebResourcesToPublish.Count > 0)
                 await PublishWebResourcesAsync();
+
+            await SaveWebResourceMappingsAsync();
         }
 
         private async Task PublishWebResourcesAsync()
@@ -342,6 +346,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     webResourceId = entity.Id;
                     content = entity?["content"]?.ToString();
                     webResourceFile.uniquename = entity.GetAttributeValue<string>("name"); // ensure exact name from server
+                    SetWebResourceManagedState(webResourceFile, ismanaged ?? false);
                 }
                 else
                 {
@@ -360,6 +365,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         }
                         webResourceId = entity.Id;
                         content = entity?["content"]?.ToString();
+                        webResourceFile.uniquename = entity.GetAttributeValue<string>("name");
+                        SetWebResourceManagedState(webResourceFile, ismanaged ?? false);
                         break;
                     }
                 }
@@ -376,6 +383,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         ["webresourceid"] = webResourceId
                     });
                 }
+                AddWebResourceMapping(webResourceFile, webResourceId);
             }
             else
             {
@@ -467,7 +475,99 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     await AddWebResourceToSolutionAsync(webResource);
                 }
+                AddWebResourceMapping(webResourceFile, webResourceId);
             }
+        }
+
+        private void AddWebResourceMapping(WebResourceFile webResourceFile, Guid webResourceId)
+        {
+            if (webResourceId == Guid.Empty) return;
+
+            var mapping = new DeployWebResource
+            {
+                File = GetConfigFileValue(webResourceFile.file),
+                WebResource = webResourceFile.uniquename,
+                WebResourceId = webResourceId,
+                IsManaged = GetWebResourceManagedState(webResourceFile),
+                SolutionUniqueName = string.IsNullOrWhiteSpace(Json?.solution) ? null : Json.solution
+            };
+
+            var found = DeployedWebResourceMappings.FirstOrDefault(x =>
+                string.Equals(x.File, mapping.File, StringComparison.OrdinalIgnoreCase));
+            if (found == null)
+            {
+                DeployedWebResourceMappings.Add(mapping);
+                return;
+            }
+
+            found.WebResource = mapping.WebResource;
+            found.WebResourceId = mapping.WebResourceId;
+            found.IsManaged = mapping.IsManaged;
+            found.SolutionUniqueName = mapping.SolutionUniqueName;
+        }
+
+        private async Task SaveWebResourceMappingsAsync()
+        {
+            if (DeployedWebResourceMappings.Count == 0) return;
+
+            var configFile = Path.Combine(GetConfigDirectory(), Const.DynamicsCrmDevKitConfigJson);
+            var configJson = new ConfigJson();
+            if (File.Exists(configFile))
+            {
+                configJson = JsonHelper.Deserialize<ConfigJson>(await FileHelper.ReadAllTextAsync(configFile)) ?? new ConfigJson();
+            }
+
+            configJson.WebResources ??= [];
+            configJson.CustomTemplates ??= [];
+
+            foreach (var mapping in DeployedWebResourceMappings)
+            {
+                var found = configJson.WebResources.FirstOrDefault(x =>
+                    string.Equals(x?.File, mapping.File, StringComparison.OrdinalIgnoreCase));
+                if (found == null)
+                {
+                    configJson.WebResources.Add(mapping);
+                    continue;
+                }
+
+                found.WebResource = mapping.WebResource;
+                found.WebResourceId = mapping.WebResourceId;
+                found.IsManaged = mapping.IsManaged;
+                found.SolutionUniqueName = mapping.SolutionUniqueName;
+            }
+
+            configJson.WebResources = [.. configJson.WebResources.OrderBy(x => x.WebResource)];
+            var json = JsonHelper.FormatJson(JsonHelper.Serialize(configJson));
+            await FileHelper.ForceWriteAllTextAsync(configFile, json);
+            SpectreLog.ActionWithLevel0(CliAction.UPDATED, Const.DynamicsCrmDevKitConfigJson);
+        }
+
+        private void SetWebResourceManagedState(WebResourceFile webResourceFile, bool isManaged)
+        {
+            WebResourceManagedState[webResourceFile.file] = isManaged;
+        }
+
+        private bool GetWebResourceManagedState(WebResourceFile webResourceFile)
+        {
+            return WebResourceManagedState.TryGetValue(webResourceFile.file, out var isManaged) && isManaged;
+        }
+
+        private string GetConfigDirectory()
+        {
+            return string.IsNullOrEmpty(Arg.JsonResolvedDirectory) ? CurrentDirectory : Arg.JsonResolvedDirectory;
+        }
+
+        private string GetConfigFileValue(string file)
+        {
+            var fullFile = Path.GetFullPath(file);
+            var root = GetConfigDirectory();
+            var relative = Path.GetRelativePath(root, fullFile);
+            if (!relative.StartsWith("..", StringComparison.Ordinal) && !Path.IsPathRooted(relative))
+            {
+                return "\\" + relative.Replace("/", "\\");
+            }
+
+            return fullFile;
         }
 
         private async Task AddWebResourceToSolutionAsync(Entity webResource)

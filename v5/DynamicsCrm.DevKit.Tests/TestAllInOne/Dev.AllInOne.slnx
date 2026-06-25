@@ -3,6 +3,7 @@
     <File Path=".env" />
     <File Path=".env.example" />
     <File Path="DynamicsCrm.DevKit.Cli.json" />
+    <File Path="DynamicsCrm.DevKit.Config.json" />
     <File Path="DynamicsCrm.DevKit.json" />
   </Folder>
   <Project Path="Dev.AllInOne.Console/Dev.AllInOne.Console.csproj" />

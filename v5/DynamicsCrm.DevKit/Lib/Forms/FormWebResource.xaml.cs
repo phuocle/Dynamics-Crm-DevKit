@@ -22,14 +22,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             set 
             {
                 _FullFileName = value;
-                if (IsNew)
-                {
-                    ThreadHelper.JoinableTaskFactory.Run(async () => { 
-                        var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
-                        var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetActiveProjectFolderAsync()).Length);
-                        textboxNewWebResource.Text = fullFileNameForCrm.Replace("\\", "/");
-                    });
-                }
             }
         }
         public DeployWebResource SelectedWebResource
@@ -58,7 +50,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         public bool IsNew { get; set; } = false;
 
-        public FormWebResource(bool isNew, string fullFileName, List<NameValueGuidExtend> solutions)
+        public FormWebResource(bool isNew, string fullFileName, List<NameValueGuidExtend> solutions, string defaultNewWebResourceName = null)
         {
             InitializeComponent();
             IsNew = isNew;
@@ -70,6 +62,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             comboBoxSolutions.DisplayMemberPath = "SolutionUniqueName";
             comboBoxSolutions.ItemsSource = solutions;
             if (solutions.Count > 0) comboBoxSolutions.SelectedIndex = 0;
+            textboxNewWebResource.Text = NormalizeNewWebResourceName(defaultNewWebResourceName ?? fullFileName);
         }
 
         public FormWebResource(List<DeployWebResource> webResources, string fullFileName)
@@ -149,6 +142,13 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             if (comboBox?.SelectedItem == null) return;
             var selected = (NameValueGuidExtend)comboBox.SelectedItem;
             textboxPrefix.Text = selected.SolutionPrefix + "_";
+        }
+
+        private static string NormalizeNewWebResourceName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            var normalized = value.Replace("\\", "/");
+            return normalized.StartsWith("/") ? normalized : "/" + normalized;
         }
     }
 }

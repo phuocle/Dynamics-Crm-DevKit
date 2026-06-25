@@ -60,5 +60,14 @@
 		<None Include="entities\generator.form.bat" />
 		<None Include="entities\generator.webapi.bat" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="build\**" />
+	  <Compile Remove="node_modules\**" />
+	  <EmbeddedResource Remove="build\**" />
+	  <EmbeddedResource Remove="node_modules\**" />
+	  <None Remove="build\**" />
+	  <None Remove="node_modules\**" />
+	  <None Remove="package-lock.json" />
+	</ItemGroup>
 </Project>
 <!-- $DevKitVersion$ -->

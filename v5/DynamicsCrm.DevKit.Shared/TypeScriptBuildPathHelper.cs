@@ -76,7 +76,7 @@ namespace DynamicsCrm.DevKit.Shared
             return candidates;
         }
 
-        private static string GetRelativePath(string rootPath, string filePath)
+        public static string GetRelativePath(string rootPath, string filePath)
         {
             if (string.IsNullOrEmpty(rootPath) || string.IsNullOrEmpty(filePath)) return null;
 
