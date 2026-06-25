@@ -21,7 +21,7 @@ This project must not port the main VSIX feature set. It must not add project te
 - Create a new VSIX project in the existing solution:
   - Target `.NET Framework 4.7.2`.
   - Set `MinimumVisualStudioVersion=16.0`.
-  - Set VSIX manifest install targets to Visual Studio 2019 `[16.0,17.0)` and Visual Studio 2022/2026 amd64 `[17.0,19.0)`.
+  - Set VSIX manifest install targets to Visual Studio 2019 `[16.0,17.0)` only.
   - Use Visual Studio SDK / VSSDK BuildTools `16.x`.
   - Avoid `Community.VisualStudio.Toolkit.17` and other VS2022-only dependencies.
 - Add one command:
@@ -74,7 +74,7 @@ On a second upload of the same `.rdl` in the same Visual Studio session, the cac
 ## Test Plan
 
 - Build the new VSIX project with Visual Studio 2019 / MSBuild 16.x.
-- Confirm the VSIX manifest accepts Visual Studio 2019 targets and Visual Studio 2022/2026 amd64 targets.
+- Confirm the VSIX manifest accepts Visual Studio 2019 targets only.
 - Install or debug the VSIX in Visual Studio Community 2019 `16.11.53`.
 - Verify context menu behavior:
   - Right-click `.rdl` shows `Upload Report`.
