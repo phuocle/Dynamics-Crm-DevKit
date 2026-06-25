@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\CustomTemplate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DataProviderEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Dependency.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DeployReport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DeployWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadFile.cs" />
