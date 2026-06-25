@@ -1,7 +1,10 @@
 using EnvDTE;
 using EnvDTE80;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.ComponentModel.Design;
@@ -53,10 +56,47 @@ namespace DynamicsCrm.DevKit._2019
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (TryUseCachedConnection())
+            var fullFileName = GetSelectedFilePath();
+            if (!IsReportFile(fullFileName)) return;
+
+            var serviceClient = GetServiceClient();
+            if (serviceClient == null)
             {
-                ShowMessage($"Using cached connection: {cachedUrl}");
+                ShowMessage("Connection cancelled or failed.");
                 return;
+            }
+
+            var dte = Package.GetGlobalService(typeof(SDTE)) as DTE2;
+            var configFileName = ReportConfigHelper.GetConfigFileName(dte);
+            var config = ReportConfigHelper.ReadConfig(configFileName);
+            var report = ReportConfigHelper.GetReport(config, fullFileName);
+            SetStatusBar(dte, "Loading report mapping ...");
+
+            var form = new FormReportMapping(serviceClient, fullFileName, report);
+            if (form.ShowDialog() != true) return;
+
+            report = form.SelectedReport;
+            ReportConfigHelper.SaveReport(configFileName, config, report);
+            SetStatusBar(dte, "Report mapping saved.");
+
+            try
+            {
+                SetStatusBar(dte, "Deploying report ...");
+                var deployMessage = DeployReport(serviceClient, report, fullFileName);
+                SetStatusBar(dte, deployMessage);
+            }
+            catch (Exception ex)
+            {
+                SetStatusBar(dte, "Deploy report failed !!!");
+                ShowMessage($"Deploy report failed: {ex.Message}");
+            }
+        }
+
+        private static CrmServiceClient GetServiceClient()
+        {
+            if (cachedServiceClient != null && cachedServiceClient.IsReady)
+            {
+                return cachedServiceClient;
             }
 
             var loginForm = new FormLogin();
@@ -68,16 +108,10 @@ namespace DynamicsCrm.DevKit._2019
             {
                 cachedServiceClient = crmServiceClient;
                 cachedUrl = crmServiceClient.CrmConnectOrgUriActual?.ToString() ?? "Connected";
-                ShowMessage($"Connected: {cachedUrl}");
-                return;
+                return cachedServiceClient;
             }
 
-            ShowMessage("Connection cancelled or failed.");
-        }
-
-        private static bool TryUseCachedConnection()
-        {
-            return cachedServiceClient != null && cachedServiceClient.IsReady;
+            return null;
         }
 
         private static void LoginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
@@ -99,6 +133,31 @@ namespace DynamicsCrm.DevKit._2019
                 OLEMSGICON.OLEMSGICON_INFO,
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        }
+
+        private static string DeployReport(CrmServiceClient serviceClient, DeployReport report, string fullFileName)
+        {
+            var localBodyText = File.ReadAllText(fullFileName);
+            var current = serviceClient.Retrieve("report", report.ReportId, new ColumnSet("bodytext"));
+            var currentBodyText = current.GetAttributeValue<string>("bodytext") ?? string.Empty;
+            if (string.Equals(currentBodyText, localBodyText, StringComparison.Ordinal))
+            {
+                return "Report is already up to date.";
+            }
+
+            var update = new Entity("report", report.ReportId);
+            update["bodytext"] = localBodyText;
+            serviceClient.Update(update);
+            return "Deployed report !!!";
+        }
+
+        private static void SetStatusBar(DTE2 dte, string message)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (dte?.StatusBar != null)
+            {
+                dte.StatusBar.Text = string.IsNullOrWhiteSpace(cachedUrl) ? message : $"[{cachedUrl}] {message}";
+            }
         }
 
         private static bool IsReportFile(string filePath)
