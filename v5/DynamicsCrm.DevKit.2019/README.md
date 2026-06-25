@@ -1,6 +1,6 @@
 # DynamicsCrm.DevKit.2019
 
-DynamicsCrm.DevKit.2019 is a lite Visual Studio 2019 VSIX for Dynamics 365/Dataverse SSRS report deployment.
+DynamicsCrm.DevKit.2019 is a lite Visual Studio 2019/2022/2026 VSIX for Dynamics 365/Dataverse SSRS report deployment.
 
 ## Features
 
@@ -17,4 +17,4 @@ DynamicsCrm.DevKit.2019 is a lite Visual Studio 2019 VSIX for Dynamics 365/Datav
 
 ## Scope
 
-This VSIX is intentionally limited to Visual Studio 2019 report upload support. It does not include the full project templates, item templates, code generation, web resource deployment, or other commands from the main DynamicsCrm.DevKit VSIX.
+This VSIX is intentionally limited to report upload support for Visual Studio 2019/2022/2026. It does not include the full project templates, item templates, code generation, web resource deployment, or other commands from the main DynamicsCrm.DevKit VSIX.
