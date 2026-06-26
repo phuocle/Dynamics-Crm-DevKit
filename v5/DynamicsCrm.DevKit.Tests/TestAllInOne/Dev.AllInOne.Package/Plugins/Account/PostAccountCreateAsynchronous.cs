@@ -6,7 +6,7 @@ using System;
 
 namespace Dev.AllInOne.Package.Plugins.Account
 {
-    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.AllInOne.Package.Plugins.Account.PostAccountCreateAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*")]
+    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.AllInOne.Package.Plugins.Account.PostAccountCreateAsynchronousPackage", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*")]
     public class PostAccountCreateAsynchronousPackage : PluginBase<Entity>, IPlugin
     {
         /*
