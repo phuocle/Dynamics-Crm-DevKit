@@ -5,7 +5,7 @@ using System;
 
 namespace Dev.AllInOne.Server.Plugins.Account
 {
-    [CrmPluginRegistration("IsValidStateTransition", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.AllInOne.Server.Plugins.Account.PostAccountIsValidStateTransitionAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true)]
+    [CrmPluginRegistration("IsValidStateTransition", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "", "Dev.AllInOne.Server.Plugins.Account.PostAccountIsValidStateTransitionAsynchronous", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Unregister = true)]
     public class PostAccountIsValidStateTransitionAsynchronous : IPlugin
     {
         /*

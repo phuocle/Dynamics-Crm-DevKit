@@ -60,6 +60,16 @@ Deploy plugins, workflows, custom actions, custom APIs, and data providers from 
 
 ![Deploy Server](v5/images/deploy.server.gif)
 
+> The animated GIF above shows the older deployment experience. The screenshots below show the current, up-to-date `devkit server` CLI log.
+
+When there are no server-side changes to deploy, DevKit completes the deployment without reporting unnecessary updates.
+
+![Deploy Server - No Changes](v5/images/deployed.server.png)
+
+When any plugin changes are detected, the CLI log clearly shows what changed during deployment. This change-aware output is one of DevKit's practical advantages over many other Dataverse deployment tools: you can see exactly whether a plugin was unchanged or updated, instead of treating every deploy as an opaque publish step.
+
+![Deploy Server - Plugin Changes](v5/images/deployed.server.update.png)
+
 ### 🧠 Form IntelliSense
 
 Generate client-side form helpers and work with typed form APIs directly in the editor.
