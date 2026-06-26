@@ -510,7 +510,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ["subjectscope"] = new OptionSetValue(1),
                     ["managedidentityid"] = Guid.NewGuid(),
                     ["name"] = $"{assemblyName}-{AppId.ToString().ToUpper()}",
-                    ["version"] = 1 // v1 format: uses login.microsoftonline.com issuer
+                    ["version"] = 2
                 };
                 if (rows.Entities.Count == 0)
                 {

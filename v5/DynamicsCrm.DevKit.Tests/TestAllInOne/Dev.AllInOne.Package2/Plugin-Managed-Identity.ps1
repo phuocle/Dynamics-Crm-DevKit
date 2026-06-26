@@ -232,7 +232,7 @@ for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
         $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2($resolvedPfx, $CertificatePassword)
         $certBytes = $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert)
         $sha256 = [System.Security.Cryptography.SHA256]::Create().ComputeHash($certBytes)
-        # Dataverse v1 uses HEX hash
+        # Power Platform managed identity v2 self-signed uses HEX hash.
         $sha256Hash = [BitConverter]::ToString($sha256).Replace("-", "").ToLowerInvariant()
     }
     catch {
@@ -240,7 +240,7 @@ for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
         exit 1
     }
 
-    # Build v1 format federated credential
+    # Build Power Platform managed identity v2 self-signed federated credential.
     $encodedTenantId = Convert-GuidToBase64Url -guid $TenantId
     $issuer = "https://login.microsoftonline.com/$TenantId/v2.0"
     $subject = "/eid1/c/pub/t/$encodedTenantId/a/qzXoWDkuqUa3l6zM5mM0Rw/n/plugin/e/$EnvironmentId/h/$sha256Hash"
@@ -252,7 +252,7 @@ for ($i = 0; $i -lt $config.EnvironmentIds.Count; $i++) {
         name = $CredentialName
         issuer = $issuer
         subject = $subject
-        description = "Power Platform v1 - Environment $EnvironmentId"
+        description = "Power Platform v2 - Environment $EnvironmentId"
         audiences = @("api://AzureADTokenExchange")
     }
 
