@@ -1,3 +1,7 @@
+﻿using Dev.AllInOne.Shared;
+using Microsoft.Xrm.Sdk;
+using Niam.XRM.Framework.Interfaces.Plugin;
+using Niam.XRM.Framework.Plugin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -5,24 +9,28 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using Microsoft.Xrm.Sdk;
-using Niam.XRM.Framework.Interfaces.Plugin;
-using Niam.XRM.Framework.Plugin;
-using <#=Context.PluginSharedNameSpace#>;
 
-namespace <#=Context.PluginNameSpace#>
+namespace Dev.AllInOne.Package2.Plugins.Contact
 {
-    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.EntityLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.RegistrationName#>Package", <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin<#if(Context.IsAsynchronous){#>, DeleteAsyncOperation = true<#}#><#if(Context.HasPreImage){#>, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*"<#}#><#if(Context.HasPostImage){#><#if(Context.HasPreImage){#>, Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*"<#} else {#>, Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "*"<#}#><#}#>)]
-    public class <#=Context.ClassWithOrder#>Package : PluginBase<Entity>, IPlugin
+    [CrmPluginRegistration("Update", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "lastname", "Dev.AllInOne.Package2.Plugins.Contact.PostContactUpdateAsynchronousPackage", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
+    public class PostContactUpdateAsynchronousPackage : PluginBase<Entity>, IPlugin
     {
         private const string KEY_VAULT_SCOPE = "https://vault.azure.net/.default";
-        private const string KEY_VAULT_URL = "https://your-key-vault-name.vault.azure.net/";
-        private const string KEY_VAULT_SECRET_NAME = "your-secret-name";
+        private const string KEY_VAULT_URL = "https://devallinonepackage2.vault.azure.net/";
+        private const string KEY_VAULT_SECRET_NAME = "DevAllInOnePackage2";
 
         /*
-<#=Context.PluginComment#>
+        InputParameters:
+            Target                             Microsoft.Xrm.Sdk.Entity - require
+            SuppressDuplicateDetection         System.Boolean
+            CalculateMatchCodeSynchronously    System.Boolean
+            SolutionUniqueName                 System.String
+            MaintainLegacyAppServerBehavior    System.Boolean
+            ConcurrencyBehavior                Microsoft.Xrm.Sdk.ConcurrencyBehavior
+            ReturnRowVersion                   System.Boolean
+        OutputParameters:
         */
-        public <#=Context.ClassWithOrder#>Package(string unsecure, string secure) : base(unsecure, secure)
+        public PostContactUpdateAsynchronousPackage(string unsecure, string secure) : base(unsecure, secure)
         {
 
         }
@@ -31,7 +39,7 @@ namespace <#=Context.PluginNameSpace#>
             context.TracingService.DebugContext(context.PluginExecutionContext);
 
             var accessToken = AcquireManagedIdentityToken(context);
-            new <#=Context.EntitySchemaName#>Operation(context, accessToken, context.TracingService).Execute();
+            new ContactOperation(context, accessToken, context.TracingService).Execute();
         }
 
         private static string AcquireManagedIdentityToken(IPluginContext<Entity> context)
@@ -115,12 +123,12 @@ namespace <#=Context.PluginNameSpace#>
         }
     }
 
-    public class <#=Context.EntitySchemaName#>Operation : OperationBase
+    public class ContactOperation : OperationBase
     {
         private readonly string _accessToken;
         private readonly ITracingService _tracing;
 
-        public <#=Context.EntitySchemaName#>Operation(ITransactionContext<Entity> context, string accessToken, ITracingService tracing) : base(context)
+        public ContactOperation(ITransactionContext<Entity> context, string accessToken, ITracingService tracing) : base(context)
         {
             _accessToken = accessToken;
             _tracing = tracing;
@@ -136,7 +144,7 @@ namespace <#=Context.PluginNameSpace#>
 
         private string ReadKeyVaultSecret()
         {
-            return <#=Context.ClassWithOrder#>Package.ReadKeyVaultSecret(_tracing, _accessToken);
+            return PostContactUpdateAsynchronousPackage.ReadKeyVaultSecret(_tracing, _accessToken);
         }
     }
 }
