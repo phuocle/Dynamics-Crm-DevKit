@@ -183,7 +183,6 @@ namespace DynamicsCrm.DevKit.Lib
                     ClassName = className,
                     FullClassName = $"{ns}.{className}",
                     IsAbstract = classMatch.Groups["modifiers"].Value.IndexOf("abstract", StringComparison.Ordinal) >= 0,
-                    IsPluginTtTemplate = source.IndexOf("DynamicsCrm.DevKit.Template: Plugin.tt", StringComparison.Ordinal) >= 0,
                     Namespace = ns,
                     RegistrationArgs = FindRegistrationBeforeClass(source, classMatch.Index)?.Groups["args"].Value,
                     SourceFile = sourceFile
@@ -213,7 +212,6 @@ namespace DynamicsCrm.DevKit.Lib
                 FullClassName = @class.FullClassName,
                 HasPostImage = args.IndexOf("ImageTypeEnum.PostImage", StringComparison.Ordinal) >= 0,
                 HasPreImage = args.IndexOf("ImageTypeEnum.PreImage", StringComparison.Ordinal) >= 0,
-                IsPluginTtTemplate = @class.IsPluginTtTemplate,
                 MessageName = message,
                 Namespace = @class.Namespace,
                 SourceFile = @class.SourceFile,
@@ -351,7 +349,6 @@ namespace DynamicsCrm.DevKit.Lib
             public string ClassName { get; set; }
             public string FullClassName { get; set; }
             public bool IsAbstract { get; set; }
-            public bool IsPluginTtTemplate { get; set; }
             public string Namespace { get; set; }
             public string RegistrationArgs { get; set; }
             public string SourceFile { get; set; }

@@ -10,7 +10,6 @@ namespace DynamicsCrm.DevKit.Lib
         public string FullClassName { get; set; }
         public bool HasPostImage { get; set; }
         public bool HasPreImage { get; set; }
-        public bool IsPluginTtTemplate { get; set; }
         public string MessageName { get; set; }
         public string Namespace { get; set; }
         public string SourceFile { get; set; }
