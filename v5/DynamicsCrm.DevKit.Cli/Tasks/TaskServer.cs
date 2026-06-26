@@ -199,7 +199,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var packageArchiveReader = new PackageArchiveReader(file);
             byte[] inArray = File.ReadAllBytes(file);
             var newContent = Convert.ToBase64String(inArray);
-            var name = $"{SolutionPrefix}{packageArchiveReader.NuspecReader.GetId()}";
+            var packageName = packageArchiveReader.NuspecReader.GetId();
+            var name = $"{SolutionPrefix}{packageName}";
             var fetchData = new
             {
                 name
@@ -269,7 +270,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (IS_MANAGED_IDENTITY)
             {
-                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(fetchData.name, Guid.Parse(ManagedIdentityAttribute.TenantId), ManagedIdentityAttribute.ApplicationIds);
+                var (managedIdentityId, applicationId) = await DeployManagedIdentityAsync(packageName, Guid.Parse(ManagedIdentityAttribute.TenantId), ManagedIdentityAttribute.ApplicationIds);
                 if (rows.Entities.Count == 0)
                 {
                     var pluginPackage = new Entity("pluginpackage")
