@@ -52,6 +52,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Dev.AllInOne.ProxyTypes\Dev.AllInOne.ProxyTypes.csproj" />
+		<ProjectReference Include="..\Dev.AllInOne.Server\Dev.AllInOne.Server.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="README.md" />

@@ -51,6 +51,7 @@
 		<PackageReference Include="NSubstitute" Version="5.3.0" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Dev.AllInOne.Package2\Dev.AllInOne.Package2.csproj" />
 		<ProjectReference Include="..\Dev.AllInOne.ProxyTypes\Dev.AllInOne.ProxyTypes.csproj" />
 	</ItemGroup>
 	<ItemGroup>
