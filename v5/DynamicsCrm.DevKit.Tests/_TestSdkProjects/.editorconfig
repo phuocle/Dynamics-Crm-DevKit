@@ -1,4 +1,0 @@
-[*.cs]
-dotnet_diagnostic.DEVKIT1001.severity = none
-dotnet_diagnostic.DEVKIT1002.severity = none
-dotnet_diagnostic.DEVKIT1019.severity = none

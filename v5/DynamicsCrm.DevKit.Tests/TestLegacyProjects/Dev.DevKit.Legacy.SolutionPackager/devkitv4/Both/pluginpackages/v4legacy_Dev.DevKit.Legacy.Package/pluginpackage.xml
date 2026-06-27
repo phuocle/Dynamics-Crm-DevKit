@@ -1,9 +1,0 @@
-<pluginpackage uniquename="v4legacy_Dev.DevKit.Legacy.Package">
-  <exportkeyversion>1</exportkeyversion>
-  <iscustomizable>1</iscustomizable>
-  <name>v4legacy_Dev.DevKit.Legacy.Package</name>
-  <package mimetype="application/octet-stream">v4legacy_Dev.DevKit.Legacy.Package.nupkg</package>
-  <statecode>0</statecode>
-  <statuscode>1</statuscode>
-  <version>1.0.0</version>
-</pluginpackage>
