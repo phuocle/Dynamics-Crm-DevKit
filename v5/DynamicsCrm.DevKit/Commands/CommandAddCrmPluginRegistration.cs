@@ -63,10 +63,10 @@ namespace DynamicsCrm.DevKit.Commands
                 await VS.MessageBox.ShowErrorAsync($"Please add reference {sharedProjectName} Shared project to current project.", $"Thank you !!!");
                 return;
             }
-            if (!(await IsAddPackagesConfigAndInstallAsync(dte)))
+            if (!IsDevKitCliToolInstalled())
             {
-                System.Windows.Clipboard.SetText($"DynamicsCrm.DevKit.Cli");
-                await VS.MessageBox.ShowErrorAsync($"Please install DynamicsCrm.DevKit.Cli from Nuget. DynamicsCrm.DevKit.Cli text have been copied to clipboard.", $"Thank you !!!");
+                System.Windows.Clipboard.SetText("dotnet tool install -g DynamicsCrm.DevKit.Cli");
+                await VS.MessageBox.ShowErrorAsync($"Please install DynamicsCrm.DevKit.Cli as a .NET tool. dotnet tool install -g DynamicsCrm.DevKit.Cli command has been copied to clipboard.", $"Thank you !!!");
                 return;
             }
 
@@ -95,7 +95,17 @@ namespace DynamicsCrm.DevKit.Commands
                         await AddImportSharedProjectIfNeedAsync(dte, sharedProjectName);
                     }
                     else
-                        await VS.MessageBox.ShowErrorAsync($"DynamicsCrm.DevKit not found any plugin step register with this class.", $"Thank you !!!");
+                    {
+                        var addPlaceholder = await VS.MessageBox.ShowConfirmAsync(
+                            "DynamicsCrm.DevKit did not find any plugin step registered with this class.\r\n\r\nDo you want to add a placeholder CrmPluginRegistration attribute so you can configure it manually?",
+                            "Add CrmPluginRegistration?");
+
+                        if (addPlaceholder)
+                        {
+                            @class.AddAttribute("CrmPluginRegistration", GetPlaceholderPluginRegistrationAttribute(currentClass.FullName));
+                            await AddImportSharedProjectIfNeedAsync(dte, sharedProjectName);
+                        }
+                    }
                 }
             }
             else if (VsixHelper.HasImplementedWorkflow(@class))
@@ -124,6 +134,11 @@ namespace DynamicsCrm.DevKit.Commands
                         await VS.MessageBox.ShowErrorAsync($"DynamicsCrm.DevKit not found any workflow step register with this class.", $"Thank you !!!");
                 }
             }
+        }
+
+        private static string GetPlaceholderPluginRegistrationAttribute(string fullName)
+        {
+            return $"\"???\", \"???\", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, \"\", \"{fullName}\", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin";
         }
 
         private static async Task UpdateAttributesWithIdAsync(CodeClass @class, List<string> newAttributes)
@@ -518,23 +533,33 @@ namespace DynamicsCrm.DevKit.Commands
             }
         }
 
-        private static async Task<bool> IsAddPackagesConfigAndInstallAsync(DTE dte)
+        private static bool IsDevKitCliToolInstalled()
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var project = dte?.ActiveDocument?.ProjectItem?.ContainingProject;
-            if (project == null) return false;
-            var projectPath = project.FullName;
-            var package = $"{Path.GetDirectoryName(projectPath)}\\packages.config";
-            if (File.Exists(package))
+            var toolNames = new[] { "devkit.exe", "devkit.cmd", "devkit.bat", "devkit" };
+            var path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            var paths = path.Split(new[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            if (!string.IsNullOrWhiteSpace(userProfile))
             {
-                var context = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(package);
-                return context.IndexOf("DynamicsCrm.DevKit.Cli") > 0;
+                paths.Add(Path.Combine(userProfile, ".dotnet", "tools"));
             }
-            if (File.Exists(projectPath))
+
+            foreach (var pathItem in paths.Distinct(StringComparer.OrdinalIgnoreCase))
             {
-                var context = await DynamicsCrm.DevKit.Shared.FileHelper.ReadAllTextAsync(projectPath);
-                return context.IndexOf("DynamicsCrm.DevKit.Cli") > 0;
+                foreach (var toolName in toolNames)
+                {
+                    try
+                    {
+                        if (File.Exists(Path.Combine(pathItem, toolName)))
+                            return true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
+
             return false;
         }
     }

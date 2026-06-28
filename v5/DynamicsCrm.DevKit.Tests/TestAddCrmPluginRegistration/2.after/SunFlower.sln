@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.7.11919.86 stable
+VisualStudioVersion = 18.7.11919.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountPlugin", "AccountPlugin\AccountPlugin.csproj", "{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}"
 EndProject
@@ -39,6 +39,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SunFlower.Shared\SunFlower.Shared.projitems*{2065a8ea-e72f-4764-8198-c2df2a9a5f5f}*SharedItemsImports = 4
+		SunFlower.Shared\SunFlower.Shared.projitems*{600eb6ae-e8a6-4ac3-9e46-700b25167db4}*SharedItemsImports = 4
 		SunFlower.Shared\SunFlower.Shared.projitems*{927fb3ad-1f0e-4cec-8a0e-474178cc6e84}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

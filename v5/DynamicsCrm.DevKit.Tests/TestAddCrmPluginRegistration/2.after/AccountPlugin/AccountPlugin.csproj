@@ -55,6 +55,8 @@
     <Compile Include="BasePlugin.cs" />
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="PostDeleteAccount.cs" />
+    <None Include="deploy.debug.bat" />
+    <None Include="deploy.debug.only.bat" />
     <None Include="PreCreateAccount.cs" />
     <Compile Include="PostUpdateAccount.cs" />
     <Compile Include="PreAccountMergeSynchronous.cs" />

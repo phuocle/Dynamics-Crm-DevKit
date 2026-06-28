@@ -1,9 +1,11 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using SunFlower.Shared;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
 
 namespace CustomWorkflow
 {
+    [CrmPluginRegistration("SendUsersMailB", "SendUsersMailB", "", "CustomWorkflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow, Id = "b94c7a9a-6442-e911-a82b-000d3a17ce77")]
     public class SendUsersMail : BaseCodeActivity
     {
         [Input("List UserIds")]

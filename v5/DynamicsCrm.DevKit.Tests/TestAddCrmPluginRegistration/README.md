@@ -4,23 +4,24 @@ A step-by-step tutorial demonstrating how to convert an existing Dynamics CRM/CD
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 Before starting this tutorial, ensure you have:
 
-- Visual Studio with DynamicsCrm.DevKit extension installed
+- Visual Studio with the DynamicsCrm.DevKit extension installed
+- .NET SDK with global tool support
 - Access to a Dynamics CRM/CDS development environment
 - Basic understanding of Dynamics CRM plugin development
 
 ---
 
-## 📥 Step 1: Import the Solution
+## Step 1: Import the Solution
 
 Import the solution file from the `0.solution` folder:
 
 **File:** `TestAddCrmPluginRegistration_1_0_0_0.zip`
 
-📝 **Note:** This is an **unmanaged** solution.
+**Note:** This is an **unmanaged** solution.
 
 ### Solution Contents
 
@@ -33,13 +34,13 @@ The imported solution includes:
 
 ---
 
-## 📁 Step 2: Review the Original Source Code
+## Step 2: Review the Original Source Code
 
 The `1.before` folder contains the complete source code of the solution. This is the starting point for the conversion process.
 
 ---
 
-## 🔄 Step 3: Convert to DynamicsCrm.DevKit
+## Step 3: Convert to DynamicsCrm.DevKit
 
 Follow these steps to convert your solution:
 
@@ -53,8 +54,8 @@ Follow these steps to convert your solution:
 
 4. Right-click on `PostDeleteAccount.cs` and select **Add CrmPluginRegistration**
 
-   ⚠️ **Warning:** You'll encounter an error if the shared project is missing:
-   
+   **Warning:** You'll encounter an error if the shared project is missing:
+
    ![Missing Shared Project Error](images/01.png)
 
 5. Add **DynamicsCrm.DevKit Shared Project** to your solution
@@ -65,49 +66,65 @@ Follow these steps to convert your solution:
 
 ### 3.3 Install DynamicsCrm.DevKit.Cli
 
-7. Continue with **Add CrmPluginRegistration**. If DynamicsCrm.DevKit.Cli is not installed, you'll be prompted:
+7. To exercise the missing CLI prompt, uninstall the CLI first:
+
+   ```powershell
+   dotnet tool uninstall -g DynamicsCrm.DevKit.Cli
+   ```
+
+8. Continue with **Add CrmPluginRegistration**. If the `devkit` command is not installed as a .NET global tool, you'll be prompted:
 
    ![Install CLI Prompt](images/03.png)
 
-8. Install the **DynamicsCrm.DevKit.Cli** NuGet package as instructed
+9. The install command is copied to the clipboard. Paste and run it in a terminal:
+
+   ```powershell
+   dotnet tool install -g DynamicsCrm.DevKit.Cli
+   ```
+
+   To verify the install:
+
+   ```powershell
+   devkit --version
+   ```
 
 ### 3.4 Connect to Dynamics CRM/CDS
 
-9. Run **Add CrmPluginRegistration** again. You'll be prompted to sign in:
+10. Run **Add CrmPluginRegistration** again. You'll be prompted to sign in:
 
    ![Sign-in Prompt](images/04.png)
 
-10. After signing in, DynamicsCrm.DevKit detects the existing plugin registration and adds the `CrmPluginRegistration` attribute:
+11. After signing in, DynamicsCrm.DevKit detects the existing plugin registration and adds the `CrmPluginRegistration` attribute:
 
     ![CrmPluginRegistration Added](images/05.png)
 
-💡 **Tip:** See the CrmPluginRegistration documentation for detailed attribute configuration options.
+**Tip:** See the CrmPluginRegistration documentation for detailed attribute configuration options.
 
 ### 3.5 Configure CLI Settings
 
-11. Build the solution and run `deploy.debug.bat`. You'll get an error:
+12. Build the solution and run `deploy.debug.bat`. You'll get an error:
 
     ![Deploy Error](images/06.png)
 
-12. Locate the new files in your solution folder:
+13. Locate the new files in your solution folder:
     - `DynamicsCrm.DevKit.Cli.json`
     - `DynamicsCrm.DevKit.js`
 
-13. Add these files to your solution as **existing items**
+14. Add these files to your solution as **existing items**
 
-14. Open `DynamicsCrm.DevKit.Cli.json` and configure the **plugins** section:
+15. Open `DynamicsCrm.DevKit.Cli.json` and configure the **plugins** section:
 
     ![Configure Plugins Section](images/07.png)
 
 ### 3.6 Deploy Your Plugin
 
-15. Rebuild the solution and run `deploy.debug.bat`. The deployment should now succeed:
+16. Rebuild the solution and run `deploy.debug.bat`. The deployment should now succeed:
 
     ![Successful Deployment](images/08.png)
 
 ### 3.7 Handle Unregistered Steps
 
-16. When running **Add CrmPluginRegistration** on `AccountPlugin.PostUpdateAccount`, you may see:
+17. When running **Add CrmPluginRegistration** on `AccountPlugin.PostUpdateAccount`, you may see:
 
     ![Unregistered Step Error](images/09.png)
 
@@ -117,57 +134,57 @@ Follow these steps to convert your solution:
 
 ### 3.8 Complete Plugin Conversion
 
-17. Use **Add CrmPluginRegistration** for the remaining steps:
+18. Use **Add CrmPluginRegistration** for the remaining steps:
     - `AccountPlugin.PreAccountMergeSynchronous`
     - `AccountPlugin.PreDeleteAccount`
 
-❗ **Important:** Classes with **Build Action = None** (like `PreCreateAccount` or `PreUpdateAccount`) won't show the **Add CrmPluginRegistration** context menu option.
+**Important:** Classes with **Build Action = None** (like `PreCreateAccount` or `PreUpdateAccount`) won't show the **Add CrmPluginRegistration** context menu option.
 
-18. Deploy and verify the results:
+19. Deploy and verify the results:
 
     ![Final Plugin Deployment](images/10.png)
 
 ---
 
-## ⚙️ Step 4: Convert Workflows
+## Step 4: Convert Workflows
 
-19. Open `DynamicsCrm.DevKit.Cli.json` and configure the **workflows** section for the **CustomWorkflow** project:
+20. Open `DynamicsCrm.DevKit.Cli.json` and configure the **workflows** section for the **CustomWorkflow** project:
 
     ![Configure Workflows Section](images/11.png)
 
-20. Run `deploy.debug.bat` to deploy:
+21. Run `deploy.debug.bat` to deploy:
 
     ![Workflow Deployment](images/12.png)
 
 ---
 
-## 🎉 Congratulations!
+## Congratulations!
 
-You have successfully converted all plugin and workflow steps to work with **DynamicsCrm.DevKit**!
+You have successfully converted all plugin and workflow steps to work with **DynamicsCrm.DevKit**.
 
 ### Benefits
 
-- ✅ Automated deployment via batch files
-- ✅ Source-controlled plugin registrations
-- ✅ Consistent development workflow
-- ✅ Easy team collaboration
+- Automated deployment via batch files
+- Source-controlled plugin registrations
+- Consistent development workflow
+- Easy team collaboration
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [DynamicsCrm.DevKit Documentation](https://github.com/phuocle/Dynamics-Crm-DevKit)
 - [CrmPluginRegistration Attribute Reference](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki)
 
 ---
 
-## 📂 Folder Structure
+## Folder Structure
 
-```
+```text
 TestAddCrmPluginRegistration/
-├── 0.solution/          # Solution file to import
-├── 1.before/            # Original source code
-├── 2.after/             # Converted source code
-├── images/              # Tutorial screenshots
-└── README.md            # This guide
+|-- 0.solution/          # Solution file to import
+|-- 1.before/            # Original source code
+|-- 2.after/             # Converted source code
+|-- images/              # Tutorial screenshots
+`-- README.md            # This guide
 ```

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SunFlower.Shared;
+using System;
 using Microsoft.Xrm.Sdk;
 
 namespace AccountPlugin
 {
+    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "AccountPlugin.PostUpdateAccount", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class PostUpdateAccount : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
