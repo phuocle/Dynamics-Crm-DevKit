@@ -2,21 +2,21 @@
 using Dev.AllInOne.Shared.Test;
 using FakeXrmEasy.Plugins;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TargetPlugin = Dev.AllInOne.Package.Plugins.Account.PostAccountCreateAsynchronousPackage;
+using TargetPlugin = Dev.AllInOne.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous;
 
-namespace Dev.AllInOne.Package.Test.Plugins.Account
+namespace Dev.AllInOne.Server.Test.CustomActions.Account
 {
     [TestClass]
-    public class PostAccountCreateAsynchronousPackageTest : FakeXrmEasyTestBase
+    public class PostAccountv4_AccountCustomActionAsynchronousTest : FakeXrmEasyTestBase
     {
 
         private const StageEnum PLUGIN_STAGE = StageEnum.PostOperation;
-        private const string PLUGIN_MESSAGE = "Create";
+        private const string PLUGIN_MESSAGE = "v4_AccountCustomAction";
         private const string PLUGIN_ENTITY_LOGICAL_NAME = "account";
         private const ExecutionModeEnum PLUGIN_EXECUTION_MODE = ExecutionModeEnum.Asynchronous;
 
         [TestMethod]
-        public void PostAccountCreateAsynchronousPackageTest_00()
+        public void PostAccountv4_AccountCustomActionAsynchronousTest_00()
         {
             AssertInvalidPluginContext<TargetPlugin>(
                 pluginContext => pluginContext.Stage = -1,
@@ -53,7 +53,7 @@ namespace Dev.AllInOne.Package.Test.Plugins.Account
 
 
         [TestMethod]
-        public void PostAccountCreateAsynchronousPackageTest_01()
+        public void PostAccountv4_AccountCustomActionAsynchronousTest_01()
         {
             ////setup
             //var json = @"";

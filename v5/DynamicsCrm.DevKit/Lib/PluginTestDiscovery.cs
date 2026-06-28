@@ -183,8 +183,10 @@ namespace DynamicsCrm.DevKit.Lib
                     ClassName = className,
                     FullClassName = $"{ns}.{className}",
                     IsAbstract = classMatch.Groups["modifiers"].Value.IndexOf("abstract", StringComparison.Ordinal) >= 0,
+                    IsPublic = classMatch.Groups["modifiers"].Value.IndexOf("public", StringComparison.Ordinal) >= 0,
                     Namespace = ns,
                     RegistrationArgs = FindRegistrationBeforeClass(source, classMatch.Index)?.Groups["args"].Value,
+                    SourceText = ExtractClassSource(source, classMatch.Index),
                     SourceFile = sourceFile
                 };
             }
@@ -201,7 +203,8 @@ namespace DynamicsCrm.DevKit.Lib
                 !string.IsNullOrWhiteSpace(message) &&
                 !string.IsNullOrWhiteSpace(entityLogicalName) &&
                 !string.IsNullOrWhiteSpace(stage) &&
-                !string.IsNullOrWhiteSpace(executionMode);
+                !string.IsNullOrWhiteSpace(executionMode) &&
+                IsDefaultPluginTemplateClass(@class, stage, message, entityLogicalName, executionMode);
 
             var candidate = new PluginTestCandidate
             {
@@ -222,6 +225,145 @@ namespace DynamicsCrm.DevKit.Lib
                 ? $"{candidate.FullClassName} ({candidate.Stage}, {candidate.MessageName}, {candidate.EntityLogicalName}, {candidate.ExecutionMode})"
                 : candidate.FullClassName;
             return candidate;
+        }
+
+        private static bool IsDefaultPluginTemplateClass(ClassDeclaration @class, string stage, string message, string entityLogicalName, string executionMode)
+        {
+            if (@class == null || string.IsNullOrWhiteSpace(@class.SourceText)) return false;
+
+            var source = RemoveComments(@class.SourceText);
+            return HasPublicParameterlessConstructor(@class, source) &&
+                   Regex.IsMatch(source, @"\bpublic\s+void\s+Execute\s*\(\s*IServiceProvider\s+serviceProvider\s*\)", RegexOptions.Singleline) &&
+                   source.IndexOf($"Stage does not equals {stage}", StringComparison.Ordinal) >= 0 &&
+                   source.IndexOf($"MessageName does not equals {message}", StringComparison.Ordinal) >= 0 &&
+                   source.IndexOf($"PrimaryEntityName does not equals {entityLogicalName}", StringComparison.Ordinal) >= 0 &&
+                   source.IndexOf($"Execution does not equals {executionMode}", StringComparison.Ordinal) >= 0;
+        }
+
+        private static bool HasPublicParameterlessConstructor(ClassDeclaration @class, string source)
+        {
+            var constructors = Regex.Matches(source ?? string.Empty, $@"\b(?<access>public|protected|internal|private)?\s*{Regex.Escape(@class.ClassName)}\s*\((?<parameters>[^)]*)\)");
+            if (constructors.Count == 0)
+                return @class.IsPublic;
+
+            foreach (Match constructor in constructors)
+            {
+                var access = constructor.Groups["access"].Value;
+                var parameters = constructor.Groups["parameters"].Value;
+                if (string.Equals(access, "public", StringComparison.Ordinal) && string.IsNullOrWhiteSpace(parameters))
+                    return true;
+            }
+            return false;
+        }
+
+        private static string ExtractClassSource(string source, int classIndex)
+        {
+            if (string.IsNullOrEmpty(source) || classIndex < 0 || classIndex >= source.Length) return string.Empty;
+            var openBrace = source.IndexOf('{', classIndex);
+            if (openBrace < 0) return source.Substring(classIndex);
+
+            var depth = 0;
+            for (var i = openBrace; i < source.Length; i++)
+            {
+                if (source[i] == '{') depth++;
+                else if (source[i] == '}')
+                {
+                    depth--;
+                    if (depth == 0)
+                        return source.Substring(classIndex, i - classIndex + 1);
+                }
+            }
+            return source.Substring(classIndex);
+        }
+
+        private static string RemoveComments(string source)
+        {
+            if (string.IsNullOrEmpty(source)) return string.Empty;
+
+            var result = new System.Text.StringBuilder(source.Length);
+            var inString = false;
+            var inChar = false;
+            var inVerbatimString = false;
+
+            for (var i = 0; i < source.Length; i++)
+            {
+                var current = source[i];
+                var next = i + 1 < source.Length ? source[i + 1] : '\0';
+
+                if (!inString && !inChar && current == '/' && next == '/')
+                {
+                    while (i < source.Length && source[i] != '\r' && source[i] != '\n') i++;
+                    if (i < source.Length) result.Append(source[i]);
+                    continue;
+                }
+
+                if (!inString && !inChar && current == '/' && next == '*')
+                {
+                    i += 2;
+                    while (i < source.Length - 1 && !(source[i] == '*' && source[i + 1] == '/')) i++;
+                    i++;
+                    continue;
+                }
+
+                result.Append(current);
+
+                if (inString)
+                {
+                    if (inVerbatimString)
+                    {
+                        if (current == '"' && next == '"')
+                        {
+                            result.Append(next);
+                            i++;
+                        }
+                        else if (current == '"')
+                        {
+                            inString = false;
+                            inVerbatimString = false;
+                        }
+                    }
+                    else if (current == '\\' && next != '\0')
+                    {
+                        result.Append(next);
+                        i++;
+                    }
+                    else if (current == '"')
+                    {
+                        inString = false;
+                    }
+                    continue;
+                }
+
+                if (inChar)
+                {
+                    if (current == '\\' && next != '\0')
+                    {
+                        result.Append(next);
+                        i++;
+                    }
+                    else if (current == '\'')
+                    {
+                        inChar = false;
+                    }
+                    continue;
+                }
+
+                if (current == '"' && i > 0 && source[i - 1] == '@')
+                {
+                    inString = true;
+                    inVerbatimString = true;
+                }
+                else if (current == '"')
+                {
+                    inString = true;
+                }
+                else if (current == '\'')
+                {
+                    inChar = true;
+                }
+            }
+
+            return result.ToString();
         }
 
         private static Match FindRegistrationBeforeClass(string source, int classIndex)
@@ -349,8 +491,10 @@ namespace DynamicsCrm.DevKit.Lib
             public string ClassName { get; set; }
             public string FullClassName { get; set; }
             public bool IsAbstract { get; set; }
+            public bool IsPublic { get; set; }
             public string Namespace { get; set; }
             public string RegistrationArgs { get; set; }
+            public string SourceText { get; set; }
             public string SourceFile { get; set; }
         }
     }

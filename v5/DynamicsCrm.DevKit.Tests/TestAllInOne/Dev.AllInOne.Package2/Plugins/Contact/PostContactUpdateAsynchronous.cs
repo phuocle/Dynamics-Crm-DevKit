@@ -13,7 +13,7 @@ using System.Text;
 namespace Dev.AllInOne.Package2.Plugins.Contact
 {
     [CrmPluginRegistration("Update", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "lastname", "Dev.AllInOne.Package2.Plugins.Contact.PostContactUpdateAsynchronousPackage", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "*", Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "*")]
-    public class PostContactUpdateAsynchronousPackage : PluginBase<Entity>, IPlugin
+    public class PostContactUpdateAsynchronous : PluginBase<Entity>, IPlugin
     {
         private const string KEY_VAULT_SCOPE = "https://vault.azure.net/.default";
         private const string KEY_VAULT_URL = "https://devallinonepackage2.vault.azure.net/";
@@ -30,7 +30,7 @@ namespace Dev.AllInOne.Package2.Plugins.Contact
             ReturnRowVersion                   System.Boolean
         OutputParameters:
         */
-        public PostContactUpdateAsynchronousPackage(string unsecure, string secure) : base(unsecure, secure)
+        public PostContactUpdateAsynchronous(string unsecure, string secure) : base(unsecure, secure)
         {
 
         }
@@ -144,7 +144,7 @@ namespace Dev.AllInOne.Package2.Plugins.Contact
 
         private string ReadKeyVaultSecret()
         {
-            return PostContactUpdateAsynchronousPackage.ReadKeyVaultSecret(_tracing, _accessToken);
+            return PostContactUpdateAsynchronous.ReadKeyVaultSecret(_tracing, _accessToken);
         }
     }
 }
