@@ -4,7 +4,7 @@ using Microsoft.Xrm.Sdk;
 
 namespace AccountPlugin
 {
-    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "AccountPlugin.PostUpdateAccount", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "AccountPlugin.PostUpdateAccount", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class PostUpdateAccount : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
