@@ -3,6 +3,7 @@
     <File Path=".editorconfig" />
     <File Path=".env" />
     <File Path=".env.example" />
+    <File Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj" />
     <File Path="DynamicsCrm.DevKit.Cli.json" />
     <File Path="DynamicsCrm.DevKit.Config.json" />
     <File Path="DynamicsCrm.DevKit.json" />
@@ -15,9 +16,6 @@
   <Project Path="Dev.AllInOne.Package2.Test/Dev.AllInOne.Package2.Test.csproj" />
   <Project Path="Dev.AllInOne.Package2/Dev.AllInOne.Package2.csproj" />
   <Project Path="Dev.AllInOne.ProxyTypes/Dev.AllInOne.ProxyTypes.csproj" />
-  <Project Path="Dev.AllInOne.Report/Dev.AllInOne.Report.rptproj">
-    <Deploy />
-  </Project>
   <Project Path="Dev.AllInOne.Server.Test/Dev.AllInOne.Server.Test.csproj" />
   <Project Path="Dev.AllInOne.Server/Dev.AllInOne.Server.csproj" />
   <Project Path="Dev.AllInOne.Server2.Test/Dev.AllInOne.Server2.Test.csproj" />

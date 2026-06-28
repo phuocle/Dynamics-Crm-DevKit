@@ -1140,6 +1140,20 @@ namespace Dev.AllInOne.ProxyTypes
 		_50 = 6,
 	}
 	
+	[System.Runtime.Serialization.DataContractAttribute()]
+	public enum pl_globaloptionset
+	{
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		Item0 = 100000000,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		Item1 = 100000001,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		Item2 = 100000002,
+	}
+	
 	/// <summary>
 	/// Power Pages Languages
 	/// </summary>
@@ -3512,20 +3526,6 @@ namespace Dev.AllInOne.ProxyTypes
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		Low = 192350003,
-	}
-	
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum pl_globaloptionset
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Item0 = 100000000,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Item1 = 100000001,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		Item2 = 100000002,
 	}
 	
 	/// <summary>

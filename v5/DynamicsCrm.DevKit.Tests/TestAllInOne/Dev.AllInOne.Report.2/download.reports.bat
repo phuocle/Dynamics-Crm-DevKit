@@ -1,8 +1,22 @@
 @echo off
-for /f "delims=" %%d in ('dir /a:d /o:-n /s ..\packages\DynamicsCrm.DevKit.Cli.* /b') do (
-    set DynamicsCrmDevKitCli=%%d
-    goto break
+REM Check if devkit is installed
+where devkit >nul 2>nul
+if %ERRORLEVEL% neq 0 (
+    echo.
+    echo ===============================================
+    echo ERROR: DynamicsCrm.DevKit.Cli is not installed
+    echo ===============================================
+    echo.
+    echo Please install the CLI tool first:
+    echo.
+    echo     dotnet tool install -g DynamicsCrm.DevKit.Cli
+    echo.
+    echo The command above has been COPIED to your clipboard.
+    echo Just paste [Ctrl+V] and run it!
+    echo.
+    echo dotnet tool install -g DynamicsCrm.DevKit.Cli | clip
+    pause
+    exit /b 1
 )
-:break
-set CrmConnection="AuthType=ClientSecret;Url=https://dynamics-crm-devkit-v4.crm.dynamics.com;ClientId=1a60a5c2-d04c-4b26-8f86-9d6ce0616799;ClientSecret=~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL;"
-"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"downloadreports" /profile:"DEBUG"
+
+devkit downloadreport --json "DynamicsCrm.DevKit.Cli.json" --profile "DEBUG"
