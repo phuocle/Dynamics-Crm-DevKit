@@ -80,7 +80,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
                         byte[] decode = Convert.FromBase64String(webResourceFile.Content);
                         File.WriteAllBytes(fileName, decode);
-                        SpectreLog.ActionWithLevel1(CliAction.DOWNLOADED, webResourceFile.FileName, " to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
+                        SpectreLog.ActionWithLevel1(CliAction.DOWNLOADED, webResourceFile.FileName, "to:", $"..{fileName.Substring(CurrentDirectory.Length)}");
                         i++;
                     }
                 }

@@ -1,0 +1,3121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dialog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <LocalizedNames>
+    <LocalizedName description="Dataverse Dialog Builder Demo" languagecode="1033" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description description="Show all controls that Dataverse Dialog Builder can create." languagecode="1033" />
+  </Descriptions>
+  <FormId>{68c670ca-b56a-f111-ab0d-0022480a530f}</FormId>
+  <UniqueName>pl_dataversedialogbuilder_demo</UniqueName>
+  <IsCustomizable>1</IsCustomizable>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsTabletEnabled>0</IsTabletEnabled>
+  <CanBeDeleted>1</CanBeDeleted>
+  <FormXml>
+    <forms type="dialog">
+      <form>
+        <formparameters>
+          <querystringparameter name="pl_parameter_input" type="SafeString" />
+          <querystringparameter name="pl_para_fetchxml" type="SafeString" />
+          <querystringparameter name="pl_para_entitylogicalname" type="SafeString" />
+          <querystringparameter name="pl_para_validationerrormessage" type="SafeString" />
+          <querystringparameter name="pl_para_isvalid" type="Boolean" />
+          <querystringparameter name="pl_para_layout_xml" type="SafeString" />
+          <querystringparameter name="pl_para_selected_records" type="SafeString" />
+          <querystringparameter name="pl_para_entity_type" type="SafeString" />
+          <querystringparameter name="pl_para_attachment_file_name" type="SafeString" />
+          <querystringparameter name="pl_para_uploaded_file_size" type="Integer" />
+          <querystringparameter name="pl_para_entity_records" type="SafeString" />
+          <querystringparameter name="pl_para_targetentities" type="SafeString" />
+          <querystringparameter name="pl_para_selectedentities" type="SafeString" />
+          <querystringparameter name="pl_para_isdisabled" type="SafeString" />
+          <querystringparameter name="pl_para_disablemru" type="SafeString" />
+        </formparameters>
+        <events>
+          <event name="onload" application="false" active="false">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnLoad" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{733AD1F1-E27B-4A75-B1AD-C7444630E2B8}" enabled="true" parameters="" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_label_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{F11A9983-72BE-4493-B438-1E251ADB3094}" enabled="true" parameters="'pl_tab_label'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_textbox_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{0AACB430-3B13-4B41-93A1-1F11F15E023B}" enabled="true" parameters="'pl_tab_textbox'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_textbox_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{396F19E4-0394-40AC-ADF1-7C387BC2FF3A}" enabled="true" parameters="'pl_tab_textbox'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_textarea_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{A1C98D5F-B676-474D-A2F2-5056ED6A300E}" enabled="true" parameters="'pl_tab_textarea'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_textarea_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{4487EF97-AB9F-4D3E-B636-8E2115CE1937}" enabled="true" parameters="'pl_tab_textarea'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_datetime_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{37A54881-D2AF-4231-B0A0-404EA6B82B78}" enabled="true" parameters="'pl_tab_datetime'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_datetime_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{3E07FF78-20EF-4706-BA0E-B281C11C5341}" enabled="true" parameters="'pl_tab_datetime'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_number_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{789FD623-2D47-4E53-8493-04C628650061}" enabled="true" parameters="'pl_tab_number'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_number_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{40800DDC-8437-427E-BF00-0C0B2907236A}" enabled="true" parameters="'pl_tab_number'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_lookup_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{56FF5615-8918-4227-AADF-8C6AD4E7CD29}" enabled="true" parameters="'pl_tab_lookup'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_lookup_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{B5C7E2EA-C0B7-43B7-8209-FE08153EF6A0}" enabled="true" parameters="'pl_tab_lookup'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_regarding_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{844FB364-6E98-4A95-A7E5-6D9DB008C761}" enabled="true" parameters="'pl_tab_regarding'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_regarding_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{041150BF-0A1D-40AC-B5A0-5885922308E5}" enabled="true" parameters="'pl_tab_regarding'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_iframe_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{FE871733-768D-4958-8E15-386C7E9C683F}" enabled="true" parameters="'pl_tab_iframe'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_iframe_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{941E54FF-D156-4D09-B7AA-FE661E9FC884}" enabled="true" parameters="'pl_tab_iframe'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_dropdown_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{9DF4D769-67DF-4934-AF8D-849F4AF77959}" enabled="true" parameters="'pl_tab_dropdown'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_dropdown_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{84A7268E-2831-4C15-947F-669F646969AB}" enabled="true" parameters="'pl_tab_dropdown'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_optionset_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{08F0C738-B87C-43FA-8819-A3780609449B}" enabled="true" parameters="'pl_tab_optionset'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_optionset_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{B537D8FD-DC5C-44AB-8860-4834FE276A66}" enabled="true" parameters="'pl_tab_optionset'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_twooptions_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{943CF5E9-44B1-4C54-8714-72003304DECD}" enabled="true" parameters="'pl_tab_twooptions'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_twooptions_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{666DBB07-66A6-4DDD-9A80-45F4D3A16195}" enabled="true" parameters="'pl_tab_twooptions'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_subgrid_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{09400849-2D79-44CA-AC97-C1FD95C959FA}" enabled="true" parameters="'pl_tab_subgrid'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_subgrid_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{5FE5478C-52B7-4D7F-8183-0EF02EDCF028}" enabled="true" parameters="'pl_tab_subgrid'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_chart_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{AB59F3A2-3263-4889-B97A-EA96DA9E9AAE}" enabled="true" parameters="'pl_tab_chart'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_chart_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{24D7F2FF-0290-4E39-ABFE-51952FE93643}" enabled="true" parameters="'pl_tab_chart'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_rtb_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{2DEC675C-91FF-499D-A6D4-63B6E5481E4C}" enabled="true" parameters="'pl_tab_rich_text_box'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_rtb_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{F482272C-C0F5-4AF4-8BDF-086112319BFD}" enabled="true" parameters="'pl_tab_rich_text_box'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_entity_optionset_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{A04D9B6E-9BBF-44FD-9F31-791E265F4D60}" enabled="true" parameters="'pl_tab_entity_optionset'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_entity_optionset_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{0C3BB2A9-53CB-462F-BA49-710EDE3CB77B}" enabled="true" parameters="'pl_tab_entity_optionset'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_advfind_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{CE20C5E3-F5FA-45BB-B92A-07D704F02D0D}" enabled="true" parameters="'pl_tab_advfind'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_advfind_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{2046479C-23AB-4ED4-9A60-B196C8A41598}" enabled="true" parameters="'pl_tab_advfind'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_advfind_result_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{B04ACE64-FBA5-4927-A4B3-756C2653F9BA}" enabled="true" parameters="'pl_tab_advfind_result'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_advfind_result_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{D480CEDB-8E43-43C9-9A69-8CD230F7575F}" enabled="true" parameters="'pl_tab_advfind_result'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_upload_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{F6E59AFE-52FA-4EF6-BAB2-DD01F9FAC521}" enabled="true" parameters="'pl_tab_upload'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_upload_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{22B595DA-39E1-41B5-8A95-C717AB15676D}" enabled="true" parameters="'pl_tab_upload'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_advfind_and_result_previous">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{52242B21-4C35-462E-BEE7-3C8232952A70}" enabled="true" parameters="'pl_tab_advfind_and_result'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_advfind_and_result_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{691087B6-9255-45D8-B117-52135E739C95}" enabled="true" parameters="'pl_tab_advfind_and_result'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+          <event name="onclick" application="false" active="false" attribute="button_multiselect_lookup_next">
+            <Handlers>
+              <Handler functionName="DataverseDialogBuilder_Demo.OnClickMoveTab" libraryName="$webresource:pl_/js/DataverseDialogBuilder2.js" handlerUniqueId="{179E7AD2-983B-43E3-9CC1-33DC022ABA98}" enabled="true" parameters="'pl_tab_multiselect_lookup'" passExecutionContext="true" />
+            </Handlers>
+          </event>
+        </events>
+        <clientresources>
+          <internalresources>
+            <clientincludes>
+              <internaljscriptfile src="$webresource:pl_/js/moment-with-locales.min.js" />
+            </clientincludes>
+          </internalresources>
+        </clientresources>
+        <header id="{42BB57EA-796D-4254-A5A2-C3D34E9863E8}">
+          <rows>
+            <row>
+              <cell id="{7328DD16-372F-41B5-B345-B6A25BAEA527}" visible="true" rowspan="1">
+                <labels>
+                  <label description="Dataverse Dialog Builder" languagecode="1033" />
+                </labels>
+                <control uniqueid="{90785560-2BC6-47BD-9C33-40578FD8B609}" id="pl_header_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                  <parameters>
+                    <IsTitle>true</IsTitle>
+                  </parameters>
+                </control>
+              </cell>
+            </row>
+            <row>
+              <cell id="{2005ADBA-0A2D-4F56-962F-74AA2F6312EB}" visible="true" rowspan="1">
+                <labels>
+                  <label description="v.1.0" languagecode="1033" />
+                </labels>
+                <control uniqueid="{78F59059-095C-4BBD-AC8E-C26604657774}" id="pl_header_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                  <parameters>
+                    <IsTitle>false</IsTitle>
+                  </parameters>
+                </control>
+              </cell>
+            </row>
+          </rows>
+        </header>
+        <tabs>
+          <tab id="{D3EEC020-1B62-479A-A675-FA5BE2C4BCE4}" name="pl_tab_label" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{B7C4FD0A-C096-4B42-BD5B-E981E4A43BA1}">
+              <rows>
+                <row>
+                  <cell id="{91EEB4BD-BA2A-4C68-9634-30AE9E38CA0F}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="LABEL (1/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{80B88D96-FE2F-4B45-905D-484E88D9A52F}" id="tab01_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{A980FD0B-20D1-4057-B9FC-52F155D08EB8}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays LABEL controls that you can add to the HEADER, TABHEADER, or SECTION with the setting 'Title' set to true or false." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{39043D45-B648-499A-B35E-8AE22927D94E}" id="tab01_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{90517BA7-33B2-49D3-86D8-F1E9F971FC45}" name="pl_tab01_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{267E700B-E2D8-4E77-9EE5-8DC3BCBFC891}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  1/20: LABEL" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6E596032-D1A4-4A14-A622-3E638C66A94C}" id="pl_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{D1A50515-01C6-4ADB-8087-E3EC8CE12605}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  2/20: TEXTBOX" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{5E83FB42-8B4B-40A9-9451-5836B2167A03}" id="pl_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{C1803AD7-2D1B-42A4-A5E5-3D123FD86321}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  3/20: TEXTAREA" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{4CA9A41B-86CC-434E-B716-F6D54E003BB5}" id="pl_label3" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{EBE73C3C-54F3-4A44-8B10-A61278850A4C}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  4/20: DATETIME" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{9C24E597-FF8A-4F04-B136-AA07575C0034}" id="pl_label4" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{7905FB4C-2A61-49DF-A2F8-5F30A313758E}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  5/20: NUMBER" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{5E7BD5CE-EBA2-4506-A6FE-25AB21D6309E}" id="pl_label5" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{D2EF154E-35AB-4709-9108-8F3298EDE9F6}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  6/20: LOOKUP" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{39125A6E-6481-4A9B-94A9-1B7EF530B420}" id="pl_label6" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{57E8A107-E21A-445D-997C-CA852EBF2D26}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  7/20: REGARDING" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{9EA7DB55-3667-4078-9719-6D5C1574E437}" id="pl_label7" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{F8D7C280-F170-426B-95EA-12DCC6EF5C69}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  8/20: IFRAME" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{AF3E4C00-2FC0-4E51-A624-E702B60EF247}" id="pl_label8" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{A06EAD57-DA28-4C75-B3D3-A29F3A55E51D}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab  9/20: DROPDOWN" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{2873876F-3625-4303-AB9D-CEB7BBDC5C14}" id="pl_label9" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{8BA014F1-25A4-4270-A840-B92D2BE3DE11}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 10/20: OPTIONSET" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{520C3D21-83AA-4E6F-B99F-CD519BF8E9F8}" id="pl_label10" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{7EE1532F-2F83-47F9-BDE5-1AAF9F91B5E0}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 11/20: TWOOPTIONS" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{45624B86-7D7A-446A-8113-0E3F1290D1CB}" id="pl_label11" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{EF16BD13-5F38-4582-888E-4123189BAB09}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 12/20: SUBGRID" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6CBD788A-E2C9-4FC4-80C9-3B19178AD0E9}" id="pl_label12" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{7F792A41-0D18-4D83-8B72-5B4A0BABD183}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 13/20: CHART" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{0F7FBF81-8DEC-43FE-AB8E-35F8508ABAFB}" id="pl_label13" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{E0C8FA5D-00AC-413A-80C5-9471ECA288DB}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 14/20: RICH TEXT BOX" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{3262F834-5184-41DF-B7BB-0298A58C0BA2}" id="pl_label14" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{F3C005A1-F424-4C4B-8D7E-276A5E0978D7}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 15/20: ENTITY OPTION SET" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{470B0BDF-93A0-4065-B669-4D60C8AF6EE5}" id="pl_label15" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{0728AB60-315F-4024-9DB4-DD9CAB37C53B}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 16/20: ADVANCED FIND" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{47889BA9-2EB4-4101-932E-AD44CF876DBC}" id="pl_label16" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{1FF6C989-6668-4CD0-BF6D-2CD200694241}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 17/20: ADVANCED FIND RESULT" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{53AB3D15-6DA2-4576-B65F-1ED309FC6A9F}" id="pl_label17" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{70199611-46BE-4A60-96CD-66B9BF140F23}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 18/20: UPLOAD" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{40A7B04F-5FF9-4DB9-A570-989222A5AEC3}" id="pl_label18" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{23E874FA-8E29-422A-99E3-8A199949F34B}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 19/20: ADVANCED FIND AND RESULT" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{3DD82186-39A2-4978-8E20-9FDD68559717}" id="pl_label19" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{D0BF5753-854A-4247-8AC4-7C3B9BE25D68}" visible="true" rowspan="1">
+                          <labels>
+                            <label description="Tab 20/20: MULTISELECT LOOKUP" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{F3B919D1-C350-4407-A52C-071CCA7B848B}" id="pl_label20" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{F7535C38-F866-4B0D-99D8-54BE137B02BC}" visible="false" rowspan="1">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{F37DC140-D587-4B00-BB86-4BF08A7138B5}" id="pl_label_hide" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                            <parameters>
+                              <IsTitle>false</IsTitle>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{5306D503-E896-4D98-832C-6FA8756A4728}">
+              <rows>
+                <row>
+                  <cell id="{B1DAA2A2-090A-4528-9863-094F1B29932D}" visible="true">
+                    <labels>
+                      <label description="Next [2] TEXTBOX" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{99FF06B0-4153-4B85-B9AE-8E4F2A57ABA3}" id="button_textbox_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{44E1CFBC-EBAF-45F0-B063-5959A2334BC8}" name="pl_tab_textbox" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{BD91DA38-E8D3-47D0-BE51-085D10B9671E}">
+              <rows>
+                <row>
+                  <cell id="{C586939E-9886-4EAA-A2D3-053DCABE5CDD}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="TEXTBOX (2/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{55CD1FF7-1299-4DC7-92BC-91E7221BB511}" id="tab02_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{3548CB4C-5B0D-4BB9-A220-FD0AAF3E4D8A}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays TEXTBOX controls that you can add to a SECTION. TEXTBOX has five types: Text, Email, URL, Ticker Symbol, and Phone that you can configure." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3EA9F556-A5EA-468F-B165-4E2F9249594D}" id="tab02_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{9005530A-0DF8-4A20-9663-003F4E97A67D}" name="pl_tab02_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{3F2F6E5C-D7AB-4585-91B9-FA84FE8296D4}" visible="true">
+                          <labels>
+                            <label description="Text" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6ADBED17-6963-4CAA-BC6F-7D54F3F07C4A}" id="pl_textbox1" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>20</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{3868AE89-C9CE-4606-9215-0920352BE7FD}" visible="true">
+                          <labels>
+                            <label description="Email" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{709254CF-C324-42FB-B481-5BC891743C8E}" id="pl_textbox2" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>200</MaxLength>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{32F575A7-153B-4871-A15A-A8D46EC63C77}" visible="true">
+                          <labels>
+                            <label description="URL" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{9293A37B-9538-46D4-85BF-4D0F4D41236A}" id="pl_textbox3" classid="{71716B6C-711E-476C-8AB8-5D11542BFB47}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>100</MaxLength>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{7635D744-ED02-4345-BED0-19DBAF37AC10}" visible="true">
+                          <labels>
+                            <label description="Ticker Symbol" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{714B7527-48CE-4B76-9EFD-807E21F4780B}" id="pl_textbox4" classid="{1E1FC551-F7A8-43AF-AC34-A8DC35C7B6D4}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>100</MaxLength>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{CE891AD2-73AF-4D54-87D8-763EAB617BB2}" visible="true">
+                          <labels>
+                            <label description="Phone" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{CD0FC7BF-0A50-4615-9F11-BDBE8B127775}" id="pl_textbox5" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>20</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{64A88BB7-6608-41CB-A9F7-61A72B9BA202}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{8BB1FFDF-A127-48EB-8120-3B35264CA806}" id="pl_textbox_hide" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <MaxLength>10</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{92895682-FF92-4C2F-B31C-8AC88F439A88}">
+              <rows>
+                <row>
+                  <cell id="{15BE78C3-C5E6-450E-B5EF-E310F7E33967}" visible="true">
+                    <labels>
+                      <label description="Previous [1] LABEL" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{FE6088A0-7414-4143-8DBF-92689F54AEA1}" id="button_label_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{EBCB19FE-7FB2-499F-AB0F-0C240BD5AED0}" visible="true">
+                    <labels>
+                      <label description="Next [3] TEXTAREA" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{BFA9DBBE-235A-4230-8B78-A728B6D7A036}" id="button_textarea_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{25193513-0CF6-4D9F-88D5-0C08200B5CBC}" name="pl_tab_textarea" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{533415C1-860C-4124-8855-25E839A4BE69}">
+              <rows>
+                <row>
+                  <cell id="{E0C4EF82-4338-41EC-8B96-06BEB19B7EAB}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="TEXTAREA (3/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{D80D2210-65BE-4FDF-A396-CA39DF8AEBF8}" id="tab03_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{B5207920-B73A-4145-AA69-F6EC04350D67}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays TEXTAREA controls that you can add to a SECTION. By default, they use 3 rows for height control, but you can adjust this as needed." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{DDB3D216-D9EE-46B1-8363-663EAB253532}" id="tab03_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{453E7334-C746-4568-AACD-A3026A305BA4}" name="pl_tab03_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{A9E4C57C-9499-4305-87C3-6F1F0402FA68}" visible="true" rowspan="5">
+                          <labels>
+                            <label description="Text Area" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{048B8F49-5637-434B-8A1B-116486532C4F}" id="pl_textarea1" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>2000</MaxLength>
+                              <Format>TextArea</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{3F1EEB9C-F4CD-40E7-914C-96D0369EF9F4}" visible="false" rowspan="3">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{67E9B4D7-B50C-43BE-A86B-80D06B74A95C}" id="pl_textarea_hide" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <MaxLength>200</MaxLength>
+                              <Format>TextArea</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{067DBDD8-AE67-49B1-8A86-D64C75A9C48D}">
+              <rows>
+                <row>
+                  <cell id="{9169D3BD-F171-4F3B-97B5-7FB5190C5E49}" visible="true">
+                    <labels>
+                      <label description="Previous [2] TEXTBOX" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{FF62E850-30F8-460A-AD7E-6FB371FD556A}" id="button_textbox_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{AF9EDB5D-E536-4C41-BD75-2DC07C49F66B}" visible="true">
+                    <labels>
+                      <label description="Next [4] DATETIME" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{8944BADF-7CEA-42FC-A4A2-AEB2F02C3A11}" id="button_datetime_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{8E6CE1AA-143F-4B68-B3E2-542ECF8EA975}" name="pl_tab_datetime" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{39D92060-D7E5-4D72-83AA-0A74976CD363}">
+              <rows>
+                <row>
+                  <cell id="{23CA7BC5-C410-42A3-85E0-7B48E9D8DC77}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="DATETIME (4/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{650E7AC8-17B5-4ABE-A22E-A370B164519B}" id="tab04_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{463F68B0-6B6C-477E-95D3-CA3DC45B5E2D}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays DATETIME controls that you can add to a SECTION. DATETIME has three types: Date Time, Date, and Time that you can configure." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{C108E41A-B2CF-4D32-B5B3-D5AB0BF159F9}" id="tab04_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{89298212-62B2-4B33-8A46-58A98593CF2E}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="Note: When you configure Time type, make sure to set the Date value for this control during the OnLoad event." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{8FDAC860-C36E-4432-8476-475978302992}" id="tab04_tabheader_label3" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{66347BAD-DB7D-4323-93D3-33149846AFE2}" name="pl_tab04_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{4A5EA3E5-885F-4533-A035-92A06610D2B1}" visible="true">
+                          <labels>
+                            <label description="Date Time" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{3D6D8D77-CAAB-4EC3-A934-3C94B62A3CD0}" id="pl_datetime1" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <Format>DateAndTime</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{C3329E1B-840C-4B68-B7ED-47165268ED64}" visible="true">
+                          <labels>
+                            <label description="Date" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{213A7711-8E39-483D-9D79-C3F6A520B089}" id="pl_datetime2" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <Format>Date</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{7AFF47CC-BCE0-4BA5-9FC4-0D89E9314C7C}" visible="true">
+                          <labels>
+                            <label description="Time" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{9EC18082-A4CF-4F6B-B2F8-0FC95C4647B7}" id="pl_datetime3" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <Format>DateAndTime</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{A4165AF1-8824-4397-8A68-8E67E994A0C4}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{A4D0EE57-26C2-4EB8-B410-0391AD175558}" id="pl_datetime_hide" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <Format>Date</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{F5117A06-77DB-4375-B5FD-37336A4A9222}">
+              <rows>
+                <row>
+                  <cell id="{9E9363F0-DB0B-4A3B-A504-65670812170F}" visible="true">
+                    <labels>
+                      <label description="Previous [3] TEXTAREA" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{7B617587-7F5B-4369-919C-5F0536D4151C}" id="button_textarea_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{BEA06384-F7F1-43FE-AB8F-6E73E3A62024}" visible="true">
+                    <labels>
+                      <label description="Next [5] NUMBER" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{B4F284D3-35DD-4CB3-8334-B08072F5408C}" id="button_number_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{BC946C8E-8B04-4F1B-AC39-878D0E7F60C1}" name="pl_tab_number" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{E970DEA4-4CD8-461C-B6AE-75705CE40B07}">
+              <rows>
+                <row>
+                  <cell id="{5184426E-EE06-4B3E-B329-CDFD17EFDB10}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="NUMBER (5/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{D3C687F5-B4D4-446C-913E-CFE25EFF35DD}" id="tab05_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{4DE24EB2-8E79-4C05-97D0-4931C7774744}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays NUMBER controls that you can add to a SECTION. NUMBER has four types: Whole Number, Decimal Number, Floating Point Number, and Currency that you can configure." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{93D285E4-F2D1-472A-A175-A012AA8A02C1}" id="tab05_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{83EA46C5-332A-45FF-A3D8-B7E0695D6480}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="Note: The symbol of the currency type will be displayed as the base currency. You cannot change it." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{0FD367AA-53BF-4AFB-ABFD-CDDC67BB80DA}" id="tab05_tabheader_label3" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{65329E36-6B8F-4A6E-9F31-C2FFD46379F8}" name="pl_tab05_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{32CCC906-77EF-49A0-BE43-B7F14561ABBC}" visible="true">
+                          <labels>
+                            <label description="Whole Number" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{27B9CA95-CEC1-474E-A0DA-80C62E3280BF}" id="pl_number1" classid="{C6D124CA-7EDA-4A60-AEA9-7FB8D318B68F}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MinValue>1</MinValue>
+                              <MaxValue>100</MaxValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{1D12AE36-A8CC-46D2-962B-5EA0894ECE10}" visible="true">
+                          <labels>
+                            <label description="Decimal Number" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{ABE6F0DC-CE4D-4311-AECF-A955A40D223E}" id="pl_number2" classid="{C3EFE0C3-0EC6-42BE-8349-CBD9079DFD8E}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MinValue>1000</MinValue>
+                              <MaxValue>100000</MaxValue>
+                              <Precision>1</Precision>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{BBF16BB0-E982-48BB-92C9-8389CAC2CFD7}" visible="true">
+                          <labels>
+                            <label description="Floating Point Number" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6261F87A-45F7-436A-973C-38F3BADD0DA2}" id="pl_number3" classid="{0D2C745A-E5A8-4C8F-BA63-C6D3BB604660}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MinValue>-100</MinValue>
+                              <MaxValue>100</MaxValue>
+                              <Precision>2</Precision>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{7EFE0F1B-AFAE-4A83-85C0-A417F1E359B2}" visible="true">
+                          <labels>
+                            <label description="Currency" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{A2421176-F2F0-4602-AE2A-C4A9F4DB7E3D}" id="pl_number4" classid="{533B9E00-756B-4312-95A0-DC888637AC78}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <MinValue>0</MinValue>
+                              <MaxValue>1000</MaxValue>
+                              <Precision>4</Precision>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{0A40A146-4846-4C30-A384-353FC03BAD41}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{B87357AA-4E8B-4321-810B-E45EA5C3BAB3}" id="pl_number_hide" classid="{533B9E00-756B-4312-95A0-DC888637AC78}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <MinValue>0</MinValue>
+                              <MaxValue>1000</MaxValue>
+                              <Precision>4</Precision>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{E1FF1AB9-70E8-4702-BF23-599F0358FD70}">
+              <rows>
+                <row>
+                  <cell id="{1D728A9C-97D4-47CA-8DA1-28DBA19085C8}" visible="true">
+                    <labels>
+                      <label description="Previous [4] DATETIME" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{5005038B-B8CB-4482-91E3-33205C408544}" id="button_datetime_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{FB584B32-2C97-464D-AF23-859E334F0408}" visible="true">
+                    <labels>
+                      <label description="Next [6] LOOKUP" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{62CE58B8-AEF2-4F52-AFF6-9FD25A7F0C70}" id="button_lookup_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{E9E39B55-1BF2-4488-B2FA-3C888BE59577}" name="pl_tab_lookup" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{29129BDA-82CA-454C-989E-926590A8B956}">
+              <rows>
+                <row>
+                  <cell id="{B2AE5F40-D7D5-4A03-95A4-22FC0CF086B5}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="LOOKUP (6/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{FCAFDBDF-04B9-4AEC-9504-439FA2492E97}" id="tab06_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{BF8BE992-F4CA-4164-BF68-93B87E83BD59}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays LOOKUP controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{F7E87E8C-FB61-4833-B769-3B009507AA86}" id="tab06_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{11F27DE4-4616-41B6-9B41-ABBF574F0C44}" name="pl_tab06_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{FA64863C-BA36-4F1E-913D-96DAEF7E6FFC}" visible="true">
+                          <labels>
+                            <label description="Lookup" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{0A94FB1A-15BB-4856-91CA-736C0141523A}" id="pl_lookup1" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <TargetEntities>
+                                <TargetEntity>
+                                  <DefaultViewId>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB}</DefaultViewId>
+                                  <EntityLogicalName>account</EntityLogicalName>
+                                </TargetEntity>
+                              </TargetEntities>
+                              <DisableViewPicker>false</DisableViewPicker>
+                              <DisableQuickFind>false</DisableQuickFind>
+                              <DisableMru>true</DisableMru>
+                              <AutoResolve>true</AutoResolve>
+                              <useMainFormDialogForCreate>true</useMainFormDialogForCreate>
+                              <useMainFormDialogForEdit>true</useMainFormDialogForEdit>
+                              <AvailableViewIds>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB},{00000000-0000-0000-00AA-000010001002}</AvailableViewIds>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{4065A974-9B66-47C4-A45B-1357C46EAC18}" visible="true">
+                          <labels>
+                            <label description="Multiselect Lookup" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{86120DD3-0E77-48E1-816E-99783DF19703}" id="pl_lookup2" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <TargetEntities>
+                                <TargetEntity>
+                                  <DefaultViewId>{E88CA999-0B16-4AE9-B6A9-9EDC840D42D8}</DefaultViewId>
+                                  <EntityLogicalName>systemuser</EntityLogicalName>
+                                </TargetEntity>
+                                <TargetEntity>
+                                  <DefaultViewId>{57E39843-404C-48E5-B1D9-1889098FB65C}</DefaultViewId>
+                                  <EntityLogicalName>team</EntityLogicalName>
+                                </TargetEntity>
+                              </TargetEntities>
+                              <DisableViewPicker>false</DisableViewPicker>
+                              <DisableQuickFind>false</DisableQuickFind>
+                              <DisableMru>true</DisableMru>
+                              <AutoResolve>true</AutoResolve>
+                              <useMainFormDialogForCreate>true</useMainFormDialogForCreate>
+                              <useMainFormDialogForEdit>true</useMainFormDialogForEdit>
+                              <AvailableViewIds>{E88CA999-0B16-4AE9-B6A9-9EDC840D42D8},{00000000-0000-0000-00AA-000010001119}</AvailableViewIds>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{38078A24-3F53-4732-A079-0315D933E887}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{7534C8B9-80D9-41CF-9C6F-DCC69183DBA2}" id="pl_lookup_hide" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <TargetEntities>
+                                <TargetEntity>
+                                  <DefaultViewId>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB}</DefaultViewId>
+                                  <EntityLogicalName>account</EntityLogicalName>
+                                </TargetEntity>
+                              </TargetEntities>
+                              <DisableViewPicker>false</DisableViewPicker>
+                              <DisableQuickFind>false</DisableQuickFind>
+                              <DisableMru>true</DisableMru>
+                              <AutoResolve>true</AutoResolve>
+                              <useMainFormDialogForCreate>true</useMainFormDialogForCreate>
+                              <useMainFormDialogForEdit>true</useMainFormDialogForEdit>
+                              <AvailableViewIds>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB}</AvailableViewIds>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{32D6C871-2D01-4579-AE20-A47E0A156D3E}">
+              <rows>
+                <row>
+                  <cell id="{925B2218-8C51-449D-A3DC-1BBB17C0ECB3}" visible="true">
+                    <labels>
+                      <label description="Previous [5] NUMBER" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{32B73803-B892-4088-9F42-E6806C6DB9F7}" id="button_number_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{86037CFD-CFF0-4A21-9412-E5DEBB0FA636}" visible="true">
+                    <labels>
+                      <label description="Next [7] REGRADING" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{CB65CF01-2606-4921-A397-A4901CBDF69D}" id="button_regarding_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{BDD159D6-747E-400E-822A-678EFFDCE89B}" name="pl_tab_regarding" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{513398D3-98D1-4BC6-8E89-AA341CF4EC9A}">
+              <rows>
+                <row>
+                  <cell id="{AB7D6CE4-B277-47E3-960D-0405C496B02B}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="REGARDING (7/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{38DD2207-7F42-4AF8-BCD9-E0BE10348ED2}" id="tab07_tabheader_label" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{BC5DF687-1ABF-4F34-B9CF-B2BBA5262E58}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays REGARDING controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{55FC21AB-BF2E-42DC-AB32-D5FF2E5227C5}" id="tab07_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{D7E07E99-EAC2-4566-81E1-0EB406374A5A}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="Note: The REGARDING controls are the same as LOOKUP controls, but they select all entities that have the Activity setting set to true." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{AF5213F5-B1DB-4EFF-BF4F-EB25D2A592C0}" id="tab07_tabheader_label3" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{390E2B05-EC2B-4C58-B4A0-7E223B038DB1}" name="pl_tab07_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{1ECD2C8F-D46D-4BC4-A2E8-92D57BDB38D1}" visible="true">
+                          <labels>
+                            <label description="Regarding" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{2907E913-6D20-4DC0-9276-97F009AD142F}" id="pl_regarding1" classid="{F3015350-44A2-4AA0-97B5-00166532B5E9}" disabled="false" isrequired="true" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{284C8F39-D181-4CBB-87A4-2CF3AD018314}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{F13E4546-F970-49AA-BBD2-D0FAC712108E}" id="pl_regarding_hide" classid="{F3015350-44A2-4AA0-97B5-00166532B5E9}" disabled="true" isrequired="true" isunbound="true" />
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{F38645CA-E787-45BC-A45D-2AAB1D00ADEF}">
+              <rows>
+                <row>
+                  <cell id="{1C7551A2-77FC-4856-8D96-4462060B532B}" visible="true">
+                    <labels>
+                      <label description="Previous [6] LOOKUP" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{26155228-E9FC-4219-B5A0-70368F894271}" id="button_lookup_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{726606A6-C093-4533-9ADD-D86FC29CB135}" visible="true">
+                    <labels>
+                      <label description="Next [8] IFRAME" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{BFBEA465-EA93-4869-B802-1BAF4F0B78D8}" id="button_iframe_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{326E41E7-1F50-4871-BBCD-66E5787D28D0}" name="pl_tab_iframe" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{E3EF9F38-7B78-4119-B6AE-221D92416B76}">
+              <rows>
+                <row>
+                  <cell id="{73D1A5AB-C54E-482D-ADAB-F52D8DD5A352}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="IFRAME (8/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{30AF4B2C-B829-4FB5-9D45-B719CE68CA60}" id="tab08_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{84BA990A-A40D-4AC2-AE88-181C57F943B8}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays IFRAME controls that you can add to a SECTION. By default, they use 5 rows for height control, but you can adjust this as needed." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{5BC3C689-88E2-41FF-9AB4-31B3BC2102DC}" id="tab08_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{89A95ACA-20BD-41CB-AD3A-17B9DC00C690}" name="pl_tab08_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{E54168F7-A2C8-4A8E-9F44-9D188F15CD4D}" visible="true" rowspan="5">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{0A8019B6-1449-492B-A5E9-DEFCE1314097}" id="pl_iframe1" classid="{FD2A7985-3187-444E-908D-6624B21F69C0}" isunbound="true">
+                            <parameters>
+                              <Url>pl_/html/WebResource.html</Url>
+                              <PassParameters>false</PassParameters>
+                              <Security>false</Security>
+                              <Scrolling>false</Scrolling>
+                              <Border>false</Border>
+                              <ShowOnMobileClient>false</ShowOnMobileClient>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{3369396F-C106-45B0-922D-AC17B47C2675}" visible="false" rowspan="3">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{4FBC038C-F3E2-424D-8D00-6F6BF9C12B80}" id="pl_iframe_hide" classid="{FD2A7985-3187-444E-908D-6624B21F69C0}" isunbound="true">
+                            <parameters>
+                              <Url>pl_/html/WebResource.html</Url>
+                              <PassParameters>false</PassParameters>
+                              <Security>false</Security>
+                              <Scrolling>false</Scrolling>
+                              <Border>false</Border>
+                              <ShowOnMobileClient>false</ShowOnMobileClient>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{C1DBB361-6737-497A-B9A4-CB84FE69C423}">
+              <rows>
+                <row>
+                  <cell id="{D984BCF1-A415-4C98-BD28-85C4494DDCA8}" visible="true">
+                    <labels>
+                      <label description="Previous [7] REGARDING" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{FA6E1977-18FC-4D41-81F2-449410ECC992}" id="button_regarding_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{6D786100-7C26-468B-8EC3-2B6E771DDCA0}" visible="true">
+                    <labels>
+                      <label description="Next [9] DROPDOWN" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3EFFB706-4A5C-4497-8A43-700EA4D4955A}" id="button_dropdown_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{31719A9D-3875-4E2F-8E8A-CED8691DE9D9}" name="pl_tab_dropdown" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{BA046FC5-383B-4F47-8652-942FE2E98DCC}">
+              <rows>
+                <row>
+                  <cell id="{3AFD3ABB-37C5-4717-BDB5-6F42DB43DCCF}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="DROPDOWN (9/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{4EF7899C-DB4D-4E13-B10D-0D2BF16A2609}" id="tab09_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{5EA1C096-83AA-4ECB-84F7-AADDAA772E1D}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays DROPDOWN controls that you can add to a SECTION. DROPDOWN has three types: Language, Time Zone, and Duration that you can configure." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{60E3A29E-D590-41AB-BA61-D5F05DDF51DA}" id="tab09_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{4259CCF8-B4E9-45A5-A120-B219539FD5A6}" name="pl_tab09_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{242F0745-9617-43B4-918B-0BBA0DEC6497}" visible="true">
+                          <labels>
+                            <label description="Language" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{53B37B0D-6C94-4CAA-9954-16BE7D08FCDB}" id="pl_dropdown1" classid="{671A9387-CA5A-4D1E-8AB7-06E39DDCF6B5}" isrequired="true" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{2413F185-8537-45C9-9793-D48451525CCD}" visible="true">
+                          <labels>
+                            <label description="TimeZone" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6249096A-0DE0-4E3C-ADB9-50FAD84F262C}" id="pl_dropdown2" classid="{7C624A0B-F59E-493D-9583-638D34759266}" isrequired="true" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{B39BA338-C5B5-42D9-BF95-CCE1AE24B51D}" visible="true">
+                          <labels>
+                            <label description="Duration" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{791CAAAD-09D9-41E0-80A9-4ACAC672755D}" id="pl_dropdown3" classid="{AA987274-CE4E-4271-A803-66164311A958}" isrequired="true" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{5B87C4F9-1442-42DC-ABC7-D463FFE6851C}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{1BB608A0-0A40-49C5-A83D-26B4DDF5CABF}" id="pl_dropdown_hide" classid="{671A9387-CA5A-4D1E-8AB7-06E39DDCF6B5}" isrequired="true" disabled="true" isunbound="true" />
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{5A4A333B-FDA7-49E8-9869-BFB9B560B4BB}">
+              <rows>
+                <row>
+                  <cell id="{F6B46060-95EA-4E68-830B-CAA4BF9D0434}" visible="true">
+                    <labels>
+                      <label description="Previous [8] IFRAME" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3B26F815-3877-40FA-BBB7-23A99989EFF3}" id="button_iframe_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{77ED064D-40C2-45E9-BFD9-79E044D54D1E}" visible="true">
+                    <labels>
+                      <label description="Next [10] OPTIONSET" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{696EFA96-95D9-4D0E-A21D-E2A1420BC22A}" id="button_optionset_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{3576D6E4-37C2-49EC-B507-9BA440B89829}" name="pl_tab_optionset" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{12EDC5F1-436C-49C0-ADBC-12CE359135BB}">
+              <rows>
+                <row>
+                  <cell id="{6134857F-0ACE-4D86-8E54-3D1817C6CCE2}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="OPTIONSET (10/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3B14091B-1103-4706-8D9A-67C632E13697}" id="tab10_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{6B9AC97E-05D4-471C-9E12-2A53502BB543}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays OPTIONSET controls that you can add to a SECTION. OPTIONSET have two types: OptionSet, and MultiSelect OptionSet. Each type you can configure as dynamic values, local OptionSet value, or global OptionSet value." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{F1F186B6-A003-4333-81AA-D931CAB3F2E7}" id="tab10_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{4D0DC7C5-D55D-4259-BE61-ABC2E38F6702}" name="pl_tab10_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{2AA2F5EA-2DC7-4FDE-90BA-75DDC7AE9ABE}" visible="true">
+                          <labels>
+                            <label description="OptionSet Dynamic" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{8253800E-8FE2-4FCA-82A6-F6572538ECD7}" id="pl_optionset1" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetId>{00000000-0000-0000-0000-000000000000}</OptionSetId>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{ED1A37DE-0FED-4BAA-86D4-9A3ECD69082F}" visible="true">
+                          <labels>
+                            <label description="OptionSet Local" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{8253800E-8FE2-4FCA-82A6-F6572538ECD7}" id="pl_optionset2" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>account_accountcategorycode</OptionSetName>
+                              <DefaultValue>1</DefaultValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{65F8CFC9-C175-4265-B5AE-368C8E773679}" visible="true">
+                          <labels>
+                            <label description="OptionSet Global" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{A473D663-20F8-40E7-A4C3-6F2BA9773914}" id="pl_optionset3" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>pl_globaloptionset</OptionSetName>
+                              <DefaultValue>100000001</DefaultValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{41D0E35B-1DCD-4626-BDBC-68E63A9D8E82}" visible="true">
+                          <labels>
+                            <label description="MultiSelect OptionSet Dynamic" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{F967A9F1-407A-4531-8F70-A1F6C185406D}" id="pl_optionset4" classid="{4AA28AB7-9C13-4F57-A73D-AD894D048B5F}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetId>{00000000-0000-0000-0000-000000000000}</OptionSetId>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{87ED6A84-BC34-4AFC-A69F-38489B72448A}" visible="true">
+                          <labels>
+                            <label description="MultiSelect OptionSet Local" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{0FA6FD42-F485-4543-9704-F51C23AB54E4}" id="pl_optionset5" classid="{4AA28AB7-9C13-4F57-A73D-AD894D048B5F}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>account_accountcategorycode</OptionSetName>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{B80770A2-4D94-45AD-BFE7-68AB184FE15C}" visible="true">
+                          <labels>
+                            <label description="MultiSelect OptionSet Global" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{DA77AEC5-046B-4AEE-8C19-594227D20E04}" id="pl_optionset6" classid="{4AA28AB7-9C13-4F57-A73D-AD894D048B5F}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>pl_globaloptionset</OptionSetName>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{86B8DAA0-A233-4232-B20B-9954DD7CB88E}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{F1806FCA-3397-4693-AC53-C2E48A9A4A1D}" id="pl_optionset_hide" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <OptionSetId>{00000000-0000-0000-0000-000000000000}</OptionSetId>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{6C00176E-A464-4FA9-89BC-12562E5F2046}">
+              <rows>
+                <row>
+                  <cell id="{209D089E-502B-4FFE-9D80-136E7DEB16F0}" visible="true">
+                    <labels>
+                      <label description="Previous [9] DROPDOWN" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{FD57E048-9F9A-4221-A9E9-4044C4699E8F}" id="button_dropdown_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{C57B071B-798B-40F9-986D-7C86CBE43FC0}" visible="true">
+                    <labels>
+                      <label description="Next [11] TWOOPTIONS" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{E2D4B882-FC56-4C88-BF0C-65B76BAE071E}" id="button_twooptions_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{D5B11293-232E-44DE-AB75-452C937ECBEC}" name="pl_tab_twooptions" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{0B447800-E22A-4C22-AB6C-812D6FF3D572}">
+              <rows>
+                <row>
+                  <cell id="{09CFA011-EA84-4BA7-B93C-6093ECA54CB6}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="TWOOPTIONS (11/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{B39AAFD3-20ED-4529-A6C2-0ED19FC0877A}" id="tab11_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{7CBCD500-3FE6-4F2F-BCA8-D098AC639311}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays TWOOPTIONS controls that you can add to a SECTION. TWOOPTIONS have three types: Dropdown, Checkbox, and Toggle that you can configure." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{CB5C9AEA-DC06-49E5-A30F-A3EA51D15E0D}" id="tab11_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{07C21E5C-D605-4901-B893-2C29F499D2F2}" name="pl_tab11_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{41C909AA-F6D1-48DF-B9F9-BB7000DB4B8D}" visible="true">
+                          <labels>
+                            <label description="TwoOptions Dropdown" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{AB632B8D-1F5E-4FD9-8A36-640ABB09C141}" id="pl_twooptions1" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>contact_donotemail</OptionSetName>
+                              <DefaultValue>0</DefaultValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{FFBB445B-2156-481B-A68A-265ACDF20C2A}" visible="true">
+                          <labels>
+                            <label description="TwoOptions Checkbox" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{115BEC90-6291-46A0-A0A4-63F7DDEE1239}" id="pl_twooptions2" classid="{B0C6723A-8503-4FD7-BB28-C8A06AC933C2}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>contact_donotemail</OptionSetName>
+                              <DefaultValue>1</DefaultValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{01E51A7E-A92A-41B4-A2D8-D58A84717BEB}" visible="true">
+                          <labels>
+                            <label description="TwoOptions Toggle" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{A03B25F2-6CCD-45E0-8B46-E8EEADA56D26}" id="pl_twooptions3" classid="{B0C6723A-8503-4FD7-BB28-C8A06AC933C2}" isrequired="true" disabled="false" isunbound="true">
+                            <parameters>
+                              <OptionSetName>contact_donotemail</OptionSetName>
+                              <DefaultValue>1</DefaultValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{D5DDB878-3831-42CF-AEF1-86E91541060F}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{997417FD-73E4-4EDA-A221-8DA916B9ECB2}" id="pl_twooptions_hide" classid="{B0C6723A-8503-4FD7-BB28-C8A06AC933C2}" isrequired="true" disabled="true" isunbound="true">
+                            <parameters>
+                              <OptionSetName>contact_donotemail</OptionSetName>
+                              <DefaultValue>0</DefaultValue>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{FB730841-50E6-45C0-B5D3-58D5EDAE624C}">
+              <rows>
+                <row>
+                  <cell id="{2CD8BC73-65F9-4801-B5DB-571BA3549812}" visible="true">
+                    <labels>
+                      <label description="Previous [10] OPTIONSET" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{E01392D5-127F-4152-B429-1AABA91F0F90}" id="button_optionset_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{A3C48B51-EC89-48E7-83C2-24CEA095D599}" visible="true">
+                    <labels>
+                      <label description="Next [12] SUBGRID" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{10D26C25-BEC4-4B92-B5B8-9BF2CD516658}" id="button_subgrid_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{0D51EFCD-675A-4B24-B9B4-01EADFDE59AA}" name="pl_tab_subgrid" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{153B6EA3-2C0D-43BE-AC9D-4AA287CA706F}">
+              <rows>
+                <row>
+                  <cell id="{51F15017-9779-4E61-BC81-A139AC43F984}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="SUBGRID (12/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{4F7085F9-5C15-4458-808E-339B54027250}" id="tab12_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{30410C31-D0C0-4C71-A7F5-15E096F545A1}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays SUBGRID controls that you can add to a SECTION. You can configure properties to determine what you want to display." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{DBBDF7EB-51F6-4230-B29B-E7CB75D1DF0F}" id="tab12_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{FEB05A00-99E4-41B3-BB47-19B27D19D9B5}" name="pl_tab12_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{C7985F0F-E046-400F-9892-1D23416C8297}" visible="true" rowspan="5">
+                          <labels>
+                            <label description="Accounts" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{20FED278-F9CB-4F29-8051-007FB850F909}" id="pl_subgrid1" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}" isunbound="true">
+                            <parameters>
+                              <AutoExpand>Auto</AutoExpand>
+                              <ChartGridMode>Grid</ChartGridMode>
+                              <IsUserView>false</IsUserView>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <TargetEntityType>account</TargetEntityType>
+                              <ViewId>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB}</ViewId>
+                              <ViewIds>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB},{00000000-0000-0000-00AA-000010001002}</ViewIds>
+                              <RecordsPerPage>5</RecordsPerPage>
+                              <EnableContextualActions>true</EnableContextualActions>
+                              <EnableQuickFind>true</EnableQuickFind>
+                              <EnableViewPicker>true</EnableViewPicker>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{AED4B22E-D746-4E61-B69A-FE77E77725C4}" visible="false" rowspan="5">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{464A35AA-03D5-45C5-BB39-B383D4E9ACED}" id="pl_subgrid_hide" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}" isunbound="true">
+                            <parameters>
+                              <AutoExpand>Auto</AutoExpand>
+                              <ChartGridMode>Grid</ChartGridMode>
+                              <IsUserView>false</IsUserView>
+                              <EnableJumpBar>false</EnableJumpBar>
+                              <TargetEntityType>account</TargetEntityType>
+                              <ViewId>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB}</ViewId>
+                              <ViewIds>{A9AF0AB8-861D-4CFA-92A5-C6281FED7FAB},{00000000-0000-0000-00AA-000010001002}</ViewIds>
+                              <RecordsPerPage>5</RecordsPerPage>
+                              <EnableContextualActions>false</EnableContextualActions>
+                              <EnableQuickFind>false</EnableQuickFind>
+                              <EnableViewPicker>false</EnableViewPicker>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{B78F3BC2-5234-4A49-9924-A55065A70DC8}">
+              <rows>
+                <row>
+                  <cell id="{F9AF3D57-9137-4AF3-91AC-F4BC127B44F0}" visible="true">
+                    <labels>
+                      <label description="Previous [11] TWOOPTIONS" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3D43F388-BACB-4779-BD76-013D5505325C}" id="button_twooptions_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{D84CCE2D-CCF5-454B-9632-053CCFDE0BDF}" visible="true">
+                    <labels>
+                      <label description="Next [13] CHART" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{8A5E8EF5-63BA-48FD-ACCD-B07FCA327F18}" id="button_chart_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{878B9E98-DF1D-455C-A754-9A6DC77F4544}" name="pl_tab_chart" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{F6FE073E-BD32-4791-9B88-9B6143B75478}">
+              <rows>
+                <row>
+                  <cell id="{14F7EF8A-504D-4FD5-906B-469338284B58}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="CHART (13/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{27417F7C-9853-4BE5-B5D1-A6B0AF0D557A}" id="tab13_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{82234CF1-EB73-4424-916F-57DEB765854B}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays CHART controls that you can add to a SECTION. You can configure properties to determine what you want to display." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{76D61795-AD84-440A-83DC-282D3B129A09}" id="tab13_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{1381D37A-D8BA-4F7A-8903-562B31B138DF}" name="pl_tab13_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{DE795C45-9717-4F99-987D-9323C58A34F5}" visible="true" rowspan="5">
+                          <labels>
+                            <label description="Chart" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{0927ACAE-DE88-49A1-9F0D-68A0F37D433B}" id="pl_chart1" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}" isunbound="true">
+                            <parameters>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <IsUserView>false</IsUserView>
+                              <IsUserChart>false</IsUserChart>
+                              <TargetEntityType>account</TargetEntityType>
+                              <ViewId>{65FFAF9A-E8C5-432D-860B-32F841B00D87}</ViewId>
+                              <ViewIds>{65FFAF9A-E8C5-432D-860B-32F841B00D87},{00000000-0000-0000-00AA-000010001002}</ViewIds>
+                              <VisualizationId>{5B290FFF-355F-DF11-AE90-00155D2E3002}</VisualizationId>
+                              <EnableChartPicker>true</EnableChartPicker>
+                              <EnableViewPicker>true</EnableViewPicker>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{FC6DB8A9-DEF4-4AAC-B14E-F996C1A7FFFD}" visible="false" rowspan="5">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{3DEB98E2-E2C2-447F-B357-7C1EA9AD5EF4}" id="pl_chart_hide" classid="{E7A81278-8635-4D9E-8D4D-59480B391C5B}" isunbound="true">
+                            <parameters>
+                              <AutoExpand>Fixed</AutoExpand>
+                              <ChartGridMode>Chart</ChartGridMode>
+                              <IsUserView>false</IsUserView>
+                              <IsUserChart>false</IsUserChart>
+                              <TargetEntityType>account</TargetEntityType>
+                              <ViewId>{65FFAF9A-E8C5-432D-860B-32F841B00D87}</ViewId>
+                              <ViewIds>{65FFAF9A-E8C5-432D-860B-32F841B00D87},{00000000-0000-0000-00AA-000010001002}</ViewIds>
+                              <VisualizationId>{5B290FFF-355F-DF11-AE90-00155D2E3002}</VisualizationId>
+                              <EnableChartPicker>false</EnableChartPicker>
+                              <EnableViewPicker>false</EnableViewPicker>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{C15CA887-BF28-4639-B0FB-4CE4572A677E}">
+              <rows>
+                <row>
+                  <cell id="{09664873-BCD0-4DC5-8513-FC01D72173A4}" visible="true">
+                    <labels>
+                      <label description="Previous [12] SUBGRID" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{51E158B9-DFE4-4621-B878-23DB9FEEEA7E}" id="button_subgrid_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{BC2D686D-ECB6-4038-8987-C35F483077DD}" visible="true">
+                    <labels>
+                      <label description="Next [14] RICH TEXT BOX" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{CB521335-05C1-41D4-8AD8-3C4B5CF3E256}" id="button_rtb_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{522CF037-1D04-47E6-B40E-0EC9CDFB254D}" name="pl_tab_rich_text_box" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{9B9111F3-EFFE-46CB-8407-14AC72A3A930}">
+              <rows>
+                <row>
+                  <cell id="{96E867E1-0563-48CA-B7B7-5BC8879B3AA3}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="RICH TEXT BOX (14/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{2F6C8728-191C-41E1-8A30-B3E7FBC6E920}" id="tab14_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{0F9E3845-F194-4258-B31E-3216C8CE9C46}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays RICH TEXT BOX controls that you can add to a SECTION. You can configure the RTEGlobalConfiguration.json file to show/hide toolbars." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{561C8820-2846-43F6-9EC2-1BDBF33A880C}" id="tab14_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{9D78B507-6DBB-4A31-8EFC-9D551BFABA1E}" name="pl_tab14_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{98D393EB-8849-429C-A52D-15322353C3EF}" visible="true" rowspan="5">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{7D518270-A1BF-4373-B06D-43D637DC6C8E}" id="pl_rtb1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" isrequired="false" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{EF9C7381-70E9-441E-AA92-61A26F210FAE}" visible="true" rowspan="3">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{472A5A24-36F3-4FA4-B984-8B1FE559994B}" id="pl_rtb2" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" isrequired="false" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{39DD56B9-0058-4CD6-9D4D-EBD289FD6729}" visible="false" rowspan="5">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{51FDA44A-75BA-41C0-B7AE-137F46EB1F56}" id="pl_rtb_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" isrequired="false" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{35688F5D-3503-4CE6-A23D-F62AFF6B732B}">
+              <rows>
+                <row>
+                  <cell id="{6B3D215C-114E-4703-A0F7-073B946482E4}" visible="true">
+                    <labels>
+                      <label description="Previous [13] CHART" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{9DEAC3F4-3A3D-4BE8-B0D4-EBECDC3204D5}" id="button_chart_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{A86E48FD-C553-4C24-96EA-C08936FA85C5}" visible="true">
+                    <labels>
+                      <label description="Next [15] ENTITY OPTIONSET" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{EE30D8EE-9CFC-48C6-AE8C-4444FD2FE433}" id="button_entity_optionset_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{22AD116C-71E8-44D9-8331-7B2572192419}" name="pl_tab_entity_optionset" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{F9D855E1-8EF3-444A-85FC-76818114AAF1}">
+              <rows>
+                <row>
+                  <cell id="{0BBFB20C-FBD8-4B12-9D98-9522E781247C}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="ENTITY OPTIONSET (15/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{9CD6D56E-64C4-4BF0-A954-418A815F5521}" id="tab15_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{55A5D271-0668-4C3C-BB8A-995E2CBDFB21}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays ENTITY OPTIONSET controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{CAE73EA0-AD17-4285-9949-224E0441C5E4}" id="tab15_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{CE355A38-2681-4F2C-BCEC-6FC31D8EA048}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="Note: This control will populate all entities of the current environment to the OPTIONSET control." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{933C88EF-3F97-49A7-BE94-F84541ACF3A2}" id="tab15_tabheader_label3" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{0AFEB504-1780-4B10-AE3A-B6D2163E2FC1}" name="pl_tab15_section1" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{3DF1CB3D-594D-4E70-BC78-7B8B52819972}" visible="true">
+                          <labels>
+                            <label description="Entity OptionSet" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{BB462DC3-FD9F-4B74-87EE-B6ACD31C5C9D}" id="pl_entity_optionset1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isrequired="true" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{A4204837-F285-40BC-B666-5233F70B14AF}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{43910237-161E-4D84-827D-5DF9F820DBE0}" id="pl_entity_optionset_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="true" isrequired="true" isunbound="true" />
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{54E00FF7-3092-4753-B38A-7D0B53C23060}">
+              <rows>
+                <row>
+                  <cell id="{556CCA22-3D5F-4F33-8A91-6527173D0B4D}" visible="true">
+                    <labels>
+                      <label description="Previous [14] RICH TEXT BOX" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{BB37FECB-6A19-4839-BF3A-14B0D96B93B4}" id="button_rtb_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{6977AF20-C982-4DED-8967-4781C63C715C}" visible="true">
+                    <labels>
+                      <label description="Next [16] ADVANCED FIND" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3EDE7C13-0298-4DDB-9833-23743FEBD3B8}" id="button_advfind_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{4F231214-654A-4A1C-90B9-3AFED7671EEB}" name="pl_tab_advfind" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{CE46FE7E-DC39-4B60-A904-D3393A192097}">
+              <rows>
+                <row>
+                  <cell id="{0E875BA8-95DF-4FDA-9C3C-147E78D173DE}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="ADVANCED FIND (16/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{A5FD5D0D-8942-487C-BE6D-827F3D08B1C3}" id="tab16_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{D3FE4FCE-A191-44A0-8CC1-9CF046F3DA72}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays ADVANCED FIND controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{34C02287-1402-4974-8283-AAF2E8BF40FD}" id="tab16_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{1DD6ADD3-5D4A-49C8-BDDA-E28647EF4ACF}" name="pl_tab16_section" labelwidth="200" showlabel="false" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{030BF567-FD0E-4267-9866-5610D1399B39}" visible="true">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6867D8E5-D6F5-4F41-9342-B13D6F4C5849}" id="pl_advfind1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{B58C470F-9A81-4999-A726-FD289FDBCDCB}" visible="false">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{49F01EC9-49EE-43BC-8BDF-49F730F7069E}" id="pl_advfind_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{FE115A2D-641B-4565-80C1-E6CB977CE466}">
+              <rows>
+                <row>
+                  <cell id="{5650288E-20FE-41D5-BDE6-DCB206842986}" visible="true">
+                    <labels>
+                      <label description="Previous [15] ENTITY OPTIONSET" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{122FD270-FFCE-4B8A-8F19-39EFDD25A3BE}" id="button_entity_optionset_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{D912793C-2887-4316-BE4A-45B418EB8DD4}" visible="true">
+                    <labels>
+                      <label description="Next [17] ADVANCED FIND RESULT" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{28FC83EF-226E-482C-ABA9-8C1DAB739ED6}" id="button_advfind_result_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{C96D5EC5-41AE-4982-A2EA-AEFEB5F0647B}" name="pl_tab_advfind_result" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{C83C2C81-E615-4562-883A-853204C88B2B}">
+              <rows>
+                <row>
+                  <cell id="{5F1F4D3F-B0DD-43A5-BF3B-1FC04A523B7C}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="ADVANCED FIND RESULT (17/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{C9D6637B-EC35-4E68-9441-33AAE1E56AD0}" id="tab17_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{FF9E5482-30EB-4526-8359-A96EC0DF9252}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays ADVANCED FIND RESULT controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{16EB9823-15DA-4FDD-83AE-D5282C838BE2}" id="tab17_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{BFA09676-4D93-4620-96F9-3A4EFEBA2365}" name="pl_tab17_section" labelwidth="200" showlabel="true" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="Section ADVANCED FIND RESULT" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{AFC1F2BA-6F56-41E5-92BC-FB0D282E07F8}" visible="true" rowspan="10" auto="true">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{45670B4C-F7ED-4B13-83B8-99651FD3C005}" id="pl_advfind_result1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{4F6AC133-E653-4A77-BFFB-97448379851B}" visible="false" rowspan="5" auto="true">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{552C8555-E78D-431E-B0B3-85CBB3EC8E45}" id="pl_advfind_result_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{6B31F5D7-724B-4242-9BB7-7EA3F01B8E51}">
+              <rows>
+                <row>
+                  <cell id="{B6B34D51-8D63-47DE-93C6-878A32AA5580}" visible="true">
+                    <labels>
+                      <label description="Previous [16] ADVANCED FIND" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{59B3F963-F515-44A8-AD09-1C4580B1D14C}" id="button_advfind_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{664DE359-A188-43C0-A872-2D01ED71CC01}" visible="true">
+                    <labels>
+                      <label description="Next [18] UPLOAD" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{B31ECAB2-5564-4278-962D-63C64866CE1F}" id="button_upload_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{91E8C93D-B1CA-42E3-A82D-8C619E8B1D9A}" name="pl_tab_upload" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{D0652280-32EF-42C0-A08E-E00A285A6D72}">
+              <rows>
+                <row>
+                  <cell id="{FA5835B1-01AD-4D34-AA57-601A8CC02FA3}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="UPLOAD (18/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{72DB9237-B61C-4F64-8A87-3BAF270A375D}" id="tab18_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{081F1DC2-90A2-4074-9DA9-5A3C1D9BC718}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays UPLOAD controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{2B897125-6EA7-47F0-8279-A65EC08DA52E}" id="tab18_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{7AF3C78D-ECE0-498E-885E-C9654F5ED423}" name="pl_tab18_section" labelwidth="200" showlabel="true" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="Section UPLOAD" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{E781B4EE-409D-4519-ACD9-0A91D73BDA68}" visible="true">
+                          <labels>
+                            <label description="Upload File" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6FB17F99-3768-48D7-8D17-0B3AE18AC522}" id="pl_upload1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{3DA8ED86-6BC6-48A4-ADC4-C8F4E78D8BF4}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{6D1B14C4-CAEB-48B4-A411-0DBD39F703DE}" id="pl_upload_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{D10CC076-18D5-4B9D-A715-B775695F7696}">
+              <rows>
+                <row>
+                  <cell id="{F9EA3540-3756-454B-B75E-D47959F78232}" visible="true">
+                    <labels>
+                      <label description="Previous [17] ADVANCED FIND RESULT" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{A592CE4E-74E5-4E2E-884C-1F61EF56EF4C}" id="button_advfind_result_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{6A2CCC1D-CA9E-4DE2-97F7-0D984BC94094}" visible="true">
+                    <labels>
+                      <label description="Next [19] ADVANCED FIND AND RESULT" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{40A7472B-BA06-4129-B561-443B3D84B2EB}" id="button_advfind_and_result_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{AB0426DC-1691-43B2-A1D6-6DD14E153846}" name="pl_tab_advfind_and_result" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{FB4E81AD-F847-470B-800F-62653D9F1104}">
+              <rows>
+                <row>
+                  <cell id="{59465C2F-78D1-415B-9339-B80AFF8F413B}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="ADVANCED FIND AND RESULT (19/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3AC08C94-2F13-4940-B20C-5B3A4B15F02D}" id="tab19_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{6C9C0AA5-0ED4-45DB-8A20-F5FC891A2DAC}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays ADVANCED FIND AND RESULT controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{7DD180EC-3905-4A87-A12F-3FAA68BA86EC}" id="tab19_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{D9E896FF-42F4-4FAC-9CB5-6AA384F57D1D}" name="pl_tab19_section" labelwidth="200" showlabel="true" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="Section ADVANCED FIND AND RESULT" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{53B24655-EB78-4368-B6E0-818D2EC7704B}" visible="true" rowspan="5">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{88C4AAB9-8199-4EE5-AB8F-4F1F64D156F7}" id="pl_advfind_and_result1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                      <row>
+                        <cell id="{8A302096-9C2B-4AC8-808E-961A2B636399}" visible="false" rowspan="5">
+                          <labels>
+                            <label description="" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{F33DF287-E9A0-4AE3-8732-25CE1EC33653}" id="pl_advfind_and_result_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true" />
+                        </cell>
+                      </row>
+                      <row />
+                      <row />
+                      <row />
+                      <row />
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{035C0EF5-CD9A-43D1-92F1-694825F40201}">
+              <rows>
+                <row>
+                  <cell id="{842AA00A-1D1F-4CB1-A48B-F0B5BB08C214}" visible="true">
+                    <labels>
+                      <label description="Previous [18] UPLOAD" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{55C84FE9-BBE3-47EF-B54C-18F95DC51CFC}" id="button_upload_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                  <cell id="{3C67EB06-4B84-4AE4-9ECB-5F9287F59623}" visible="true">
+                    <labels>
+                      <label description="Next [20] MULTISELECT LOOKUP" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{3F7A7F52-7F02-4723-9300-1DB8B0CABCDC}" id="button_multiselect_lookup_next" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+          <tab id="{91B6A2B7-BEBA-428D-BD86-98F2046B6512}" name="pl_tab_multiselect_lookup" visible="true" expanded="true" verticallayout="true" locklevel="0">
+            <labels>
+              <label description="" languagecode="1033" />
+            </labels>
+            <tabheader id="{20165AFA-0C21-47D3-B592-3250C18ACFEE}">
+              <rows>
+                <row>
+                  <cell id="{20CCFF3E-E1DC-49BF-A8F1-FAE3C16E6F3B}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="MULTISELECT LOOKUP (20/20)" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{CCFCA9F9-0736-46A0-874A-A710822AAC0F}" id="tab20_tabheader_label1" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>true</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
+                  <cell id="{BF35F8CE-AE7F-422F-9D7C-C34FEB168ED5}" visible="true" rowspan="1">
+                    <labels>
+                      <label description="This tab displays MULTISELECT LOOKUP controls that you can add to a SECTION." languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{793A7009-3521-4E78-9CA7-A99DA851C92C}" id="tab20_tabheader_label2" classid="{39354E4A-5015-4D74-8031-EA9EB73A1322}" isunbound="true">
+                      <parameters>
+                        <IsTitle>false</IsTitle>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+              </rows>
+            </tabheader>
+            <columns>
+              <column width="100%">
+                <sections>
+                  <section id="{DB4CB63D-F0FC-482A-A5D2-FFE092485591}" name="pl_tab20_section" labelwidth="200" showlabel="true" visible="true" celllabelalignment="Left" celllabelposition="Left">
+                    <labels>
+                      <label description="Section MULTISELECT LOOKUP" languagecode="1033" />
+                    </labels>
+                    <rows>
+                      <row>
+                        <cell id="{3E5C2173-C4AF-4768-9DAE-330D315EF46D}" visible="true">
+                          <labels>
+                            <label description="MULTISELECT LOOKUP" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{73E67F3D-2477-4C05-9070-C5BB3CDE3F9A}" id="pl_multiselect_lookup1" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                      <row>
+                        <cell id="{91262774-614C-44D4-BF5C-A51BBFD89D7F}" visible="false">
+                          <labels>
+                            <label description="HIDE" languagecode="1033" />
+                          </labels>
+                          <control uniqueid="{C01E64C5-F850-4D54-9896-623CFDEE18E8}" id="pl_multiselect_lookup_hide" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" disabled="false" isunbound="true">
+                            <parameters>
+                              <MaxLength>8388608</MaxLength>
+                              <Format>SingleLineOfText</Format>
+                            </parameters>
+                          </control>
+                        </cell>
+                      </row>
+                    </rows>
+                  </section>
+                </sections>
+              </column>
+            </columns>
+            <tabfooter id="{C9C79F60-0721-40A6-A6FA-E348E3F5E77C}">
+              <rows>
+                <row>
+                  <cell id="{4A3C2D61-1A55-4FD6-97EF-87888B30715C}" visible="true">
+                    <labels>
+                      <label description="Previous [19] ADVANCED FIND AND RESULT" languagecode="1033" />
+                    </labels>
+                    <control uniqueid="{D50CA5BD-8521-4B3D-AF2E-17D064817C67}" id="button_advfind_and_result_previous" classid="{00AD73DA-BD4D-49C6-88A8-2F4F4CAD4A20}" disabled="false" isunbound="true" />
+                  </cell>
+                </row>
+              </rows>
+            </tabfooter>
+          </tab>
+        </tabs>
+        <controlDescriptions>
+          <controlDescription forControl="{6867D8E5-D6F5-4F41-9342-B13D6F4C5849}">
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="0">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="1">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="2">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="3">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{49F01EC9-49EE-43BC-8BDF-49F730F7069E}">
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="0">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="1">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="2">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.ConditionBuilder.ConditionBuilderControl" formFactor="3">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <isvalid type="Boolean">pl_para_isvalid</isvalid>
+                <validationerrormessage type="SingleLine.Text">pl_para_validationerrormessage</validationerrormessage>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{88C4AAB9-8199-4EE5-AB8F-4F1F64D156F7}">
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="0">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="1">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="2">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="3">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{F33DF287-E9A0-4AE3-8732-25CE1EC33653}">
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="0">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="1">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="2">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RollupQuery.RollupQueryEditorControl" formFactor="3">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{45670B4C-F7ED-4B13-83B8-99651FD3C005}">
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="0">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="1">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="2">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="3">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{552C8555-E78D-431E-B0B3-85CBB3EC8E45}">
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="0">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="1">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="2">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.Grid.FetchXmlResultsViewer" formFactor="3">
+              <parameters>
+                <entitylogicalname type="SingleLine.Text">pl_para_entitylogicalname</entitylogicalname>
+                <fetchxml type="SingleLine.Text">pl_para_fetchxml</fetchxml>
+                <layoutxml type="SingleLine.Text">pl_para_layout_xml</layoutxml>
+                <selectedrecords type="Multiple">pl_para_selected_records</selectedrecords>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{6FB17F99-3768-48D7-8D17-0B3AE18AC522}">
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="0">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload1</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="1">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload1</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="2">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload1</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="3">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload1</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{6D1B14C4-CAEB-48B4-A411-0DBD39F703DE}">
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="0">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload_hide</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="1">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload_hide</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="2">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload_hide</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.FileUploaderControl" formFactor="3">
+              <parameters>
+                <value type="SingleLine.Text">pl_upload_hide</value>
+                <filename type="SingleLine.Text">pl_para_attachment_file_name</filename>
+                <size type="Whole.None">pl_para_uploaded_file_size</size>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{7D518270-A1BF-4373-B06D-43D637DC6C8E}">
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="0">
+              <parameters>
+                <configUrl static="true" type="SingleLine.URL">pl_/json/RTEGlobalConfiguration.json</configUrl>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="1">
+              <parameters>
+                <configUrl static="true" type="SingleLine.URL">pl_/json/RTEGlobalConfiguration.json</configUrl>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="2">
+              <parameters>
+                <configUrl static="true" type="SingleLine.URL">pl_/json/RTEGlobalConfiguration.json</configUrl>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="3">
+              <parameters>
+                <configUrl static="true" type="SingleLine.URL">pl_/json/RTEGlobalConfiguration.json</configUrl>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{472A5A24-36F3-4FA4-B984-8B1FE559994B}">
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="0"></customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="1"></customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="2"></customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="3"></customControl>
+          </controlDescription>
+          <controlDescription forControl="{51FDA44A-75BA-41C0-B7AE-137F46EB1F56}">
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="0"></customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="1"></customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="2"></customControl>
+            <customControl name="MscrmControls.RichTextEditor.RichTextEditorControl" formFactor="3"></customControl>
+          </controlDescription>
+          <controlDescription forControl="{BB462DC3-FD9F-4B74-87EE-B6ACD31C5C9D}">
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="0">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="1">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="2">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="3">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{43910237-161E-4D84-827D-5DF9F820DBE0}">
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="0">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="1">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="2">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.EntityOptionSetControl" formFactor="3">
+              <parameters>
+                <value type="SingleLine.Text">pl_para_entitylogicalname</value>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{9EC18082-A4CF-4F6B-B2F8-0FC95C4647B7}">
+            <customControl name="MscrmControls.FieldControls.TimeControl" formFactor="0">
+              <parameters>
+                <value type="DateAndTime.DateAndTime">pl_datetime3</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.TimeControl" formFactor="1">
+              <parameters>
+                <value type="DateAndTime.DateAndTime">pl_datetime3</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.TimeControl" formFactor="2">
+              <parameters>
+                <value type="DateAndTime.DateAndTime">pl_datetime3</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.TimeControl" formFactor="3">
+              <parameters>
+                <value type="DateAndTime.DateAndTime">pl_datetime3</value>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{73E67F3D-2477-4C05-9070-C5BB3CDE3F9A}">
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="0">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="1">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="2">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="3">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{C01E64C5-F850-4D54-9896-623CFDEE18E8}">
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="0">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="1">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="2">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.AppCommon.PartyListWrapper" formFactor="3">
+              <parameters>
+                <targetEntities type="SingleLine.Text">pl_para_targetentities</targetEntities>
+                <selectedEntities type="SingleLine.Text">pl_para_selectedentities</selectedEntities>
+                <isDisabled type="SingleLine.Text">pl_para_isdisabled</isDisabled>
+                <disableMru type="SingleLine.Text">pl_para_disablemru</disableMru>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{CD0FC7BF-0A50-4615-9F11-BDBE8B127775}">
+            <customControl name="MscrmControls.FieldControls.PhoneNumberControl" formFactor="0">
+              <parameters>
+                <value type="SingleLine.Phone">pl_textbox5</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.PhoneNumberControl" formFactor="1">
+              <parameters>
+                <value type="SingleLine.Phone">pl_textbox5</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.PhoneNumberControl" formFactor="2">
+              <parameters>
+                <value type="SingleLine.Phone">pl_textbox5</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.PhoneNumberControl" formFactor="3">
+              <parameters>
+                <value type="SingleLine.Phone">pl_textbox5</value>
+              </parameters>
+            </customControl>
+          </controlDescription>
+          <controlDescription forControl="{A03B25F2-6CCD-45E0-8B46-E8EEADA56D26}">
+            <customControl name="MscrmControls.FieldControls.ToggleControl" formFactor="0">
+              <parameters>
+                <value type="TwoOptions">pl_twooptions3</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.ToggleControl" formFactor="1">
+              <parameters>
+                <value type="TwoOptions">pl_twooptions3</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.ToggleControl" formFactor="2">
+              <parameters>
+                <value type="TwoOptions">pl_twooptions3</value>
+              </parameters>
+            </customControl>
+            <customControl name="MscrmControls.FieldControls.ToggleControl" formFactor="3">
+              <parameters>
+                <value type="TwoOptions">pl_twooptions3</value>
+              </parameters>
+            </customControl>
+          </controlDescription>
+        </controlDescriptions>
+      </form>
+    </forms>
+  </FormXml>
+</Dialog>

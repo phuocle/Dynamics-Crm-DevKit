@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDataProvider xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityDataProviderId>{cdca6b2b-0471-f111-ab0e-0022480a530f}</EntityDataProviderId>
+  <Name>all_serversql</Name>
+  <DataSourceLogicalName>all_serversql</DataSourceLogicalName>
+  <IsCustomizable>1</IsCustomizable>
+  <RetrievePluginTypeId>b2ca6b2b-0471-f111-ab0e-0022480a530f</RetrievePluginTypeId>
+  <RetrieveMultiplePluginTypeId>cbca6b2b-0471-f111-ab0e-0022480a530f</RetrieveMultiplePluginTypeId>
+  <CreatePluginTypeId>1bdf8424-0471-f111-ab0e-0022480a530f</CreatePluginTypeId>
+  <UpdatePluginTypeId>ccca6b2b-0471-f111-ab0e-0022480a530f</UpdatePluginTypeId>
+  <DeletePluginTypeId>1cdf8424-0471-f111-ab0e-0022480a530f</DeletePluginTypeId>
+  <LookupExpansionEnabled>0</LookupExpansionEnabled>
+</EntityDataProvider>

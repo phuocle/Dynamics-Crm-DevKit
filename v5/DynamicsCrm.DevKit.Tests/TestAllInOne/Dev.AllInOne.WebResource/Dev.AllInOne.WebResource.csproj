@@ -30,6 +30,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="all_in_one\**" />
+    <EmbeddedResource Remove="all_in_one\**" />
+    <None Remove="all_in_one\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="DynamicsCrm.DevKit.Analyzers" Version="4.12.34.56">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

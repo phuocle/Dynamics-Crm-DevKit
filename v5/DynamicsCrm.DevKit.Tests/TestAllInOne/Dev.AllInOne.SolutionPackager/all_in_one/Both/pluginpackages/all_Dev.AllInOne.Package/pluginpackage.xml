@@ -1,0 +1,9 @@
+<pluginpackage uniquename="all_Dev.AllInOne.Package">
+  <exportkeyversion>1</exportkeyversion>
+  <iscustomizable>1</iscustomizable>
+  <name>all_Dev.AllInOne.Package</name>
+  <package mimetype="application/octet-stream">all_Dev.AllInOne.Package.nupkg</package>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <version>4.12.34.56</version>
+</pluginpackage>

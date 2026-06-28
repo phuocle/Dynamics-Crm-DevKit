@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous" SdkMessageProcessingStepId="{cb59bb1c-0471-f111-ab0e-0022480a530f}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>a5fd954b-3194-f011-b4cc-000d3aa25840</SdkMessageId>
+  <PluginTypeName>Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9</PluginTypeName>
+  <PluginTypeId>ca59bb1c-0471-f111-ab0e-0022480a530f</PluginTypeId>
+  <PrimaryEntity>account</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>20</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>
