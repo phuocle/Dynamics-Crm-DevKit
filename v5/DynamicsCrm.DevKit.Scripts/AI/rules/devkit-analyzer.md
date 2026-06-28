@@ -1,0 +1,102 @@
+---
+trigger: always_on
+---
+
+# DynamicsCrm.DevKit.Analyzers Development Rules
+
+## Project Structure
+
+| Folder | Purpose |
+|-----|---|
+| `DynamicsCrm.DevKit.Analyzers\` | Main analyzer project (netstandard2.0) |
+| `DynamicsCrm.DevKit.Analyzers\CrmAnalyzers\` | Individual analyzer implementations |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\` | Analyzer unit tests with xUnit + Roslyn Test Framework |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\` | Test classes for each analyzer |
+| `DynamicsCrm.DevKit.UnitTests\Analyzers\Verifier\` | `CSharpAnalyzerVerifier<T>` utility |
+| `DynamicsCrm.DevKit.Tests\TestAnalyzers\` | Visual Studio integration tests |
+| `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\` | Documentation for each analyzer |
+
+## Core Files (Must Understand Before Making Changes)
+
+| File | Purpose |
+|------|---------|
+| `DiagnosticIdentifiers.cs` | `Core\` (All 21 analyzer IDs DEVKIT1001-DEVKIT1021) |
+| `DiagnosticDescriptors.cs` | `Core\` (Descriptors with ID, title, message, severity) |
+| `DiagnosticCategories.cs` | Category constants (DynamicsCrm.DevKit) |
+| `BaseDiagnosticAnalyzer.cs` | Base class all analyzers inherit from |
+| `AnalyzerHelper.cs` | Utilities: `IsPluginOrWorkflowClass`, `IsInsidePluginOrWorkflow`, deprecated/batch request lists |
+| `DiagnosticHelpers.cs` | `ReportDiagnostic()` overloads for reporting issues |
+
+## When Changing or Fixing an Analyzer
+
+### Step 1: Read the Requirements and Context
+1. Carefully read the user's request
+2. Identify which analyzer is involved (DEVKIT1001-DEVKIT1021)
+3. Read the core files in `DynamicsCrm.DevKit.Analyzers\`:
+ - `DiagnosticIdentifiers.cs` in `Core\` - review the ID list
+ - `DiagnosticDescriptors.cs` in `Core\` - review descriptors
+ - The corresponding analyzer file in `CrmAnalyzers\`
+
+### Step 2: Verify Unit Tests
+1. Run workflow `/*-build-analyzer` to build and run tests
+2. Unit tests are located at: `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\{AnalyzerName}Tests.cs`
+3. Use the `[|code|]` pattern to mark expected diagnostics:
+   ```csharp
+   var src = WrapInPlugin("[|new ColumnSet(true)|]");
+   await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+   ```
+
+### Step 3: Verify Integration Tests in Visual Studio
+1. Folder: `DynamicsCrm.DevKit.Tests\TestAnalyzers\`
+2. **Ensure the number of `DEVKIT*.cs` files matches the number of supported analyzers**
+   - Currently 21 analyzers: DEVKIT1001 -> DEVKIT1021
+   - Must have 21 files: `DEVKIT1001.cs` -> `DEVKIT1021.cs`
+3. Sample code must trigger the correct diagnostic
+4. **AI cannot test in VS - request the user to test manually**
+
+### Step 4: Verify and Update Documentation
+1. Folder: `DynamicsCrm.DevKit.Docs\DynamicsCrm.DevKit.Analyzers\`
+2. Each analyzer must have a corresponding `DEVKIT{XXXX}.md` file
+3. Use template: `DEVKIT.template.md`
+4. Update `ANALYZERS_ROADMAP.md` if the status changes
+
+## When Adding a New Analyzer
+
+**IMPORTANT**: You must run the `/create-new-analyzer` workflow before starting. This workflow provides step-by-step guidance from A to Z.
+
+## Checklist Verification
+
+- [ ] `DiagnosticIdentifiers.cs` has the new ID (if adding)?
+- [ ] `DiagnosticDescriptors.cs` has the new descriptor (if adding)?
+- [ ] Analyzer file exists in `CrmAnalyzers\`?
+- [ ] Unit test file exists in `DynamicsCrm.DevKit.UnitTests\Analyzers\Tests\`?
+- [ ] Unit tests pass? (run `/*-build-analyzer`)
+- [ ] Integration test file `DEVKIT{XXXX}.cs` exists in `TestAnalyzers\`?
+- [ ] Documentation file `DEVKIT{XXXX}.md` exists?
+- [ ] `ANALYZERS_ROADMAP.md` updated (if needed)?
+
+## Current Analyzers (DEVKIT1001-DEVKIT1021)
+
+| ID | Analyzer | Severity |
+|----|----|----|
+| DEVKIT1001 | UpdateMessageShouldHaveFilteringAttributesAnalyzer | Warning (Create) / Error (Update) |
+| DEVKIT1002 | NotUseColumnSetTrueAnalyzer | Warning |
+| DEVKIT1003 | PluginImageAnalyzer | Error |
+| DEVKIT1004 | DeprecatedAnalyzer | Info |
+| DEVKIT1005 | EntityReferenceMaybeNullAnalyzer | Warning |
+| DEVKIT1006 | BatchRequestInPluginAnalyzer | Warning |
+| DEVKIT1007 | StatelessPluginAnalyzer | Error |
+| DEVKIT1008 | ParallelExecutionInPluginAnalyzer | Error |
+| DEVKIT1009 | KeepAliveFalseAnalyzer | Warning |
+| DEVKIT1010 | HttpTimeoutAnalyzer | Warning |
+| DEVKIT1011 | InvalidPluginExecutionExceptionAnalyzer | Warning |
+| DEVKIT1012 | TracingServiceAnalyzer | Info |
+| DEVKIT1013 | RetrieveMultiplePluginAnalyzer | Info |
+| DEVKIT1014 | AppDomainEventAnalyzer | Error |
+| DEVKIT1015 | GetAwaiterGetResultAnalyzer | Info |
+| DEVKIT1016 | RetrieveAsIfPublishedAnalyzer | Info |
+| DEVKIT1017 | ConsoleOutputAnalyzer | Info |
+| DEVKIT1018 | FileIOAnalyzer | Error |
+| DEVKIT1019 | PluginDepthAnalyzer | Warning |
+| DEVKIT1020 | DataProviderDataSourceAnalyzer | Error |
+| DEVKIT1021 | TracingServiceInCatchAnalyzer | Warning |
