@@ -9,7 +9,7 @@
 /// - New DEVKIT rules do not require changing this file because all warnings are disabled first, then DEVKIT1012 is restored.
 ///
 /// Severity Rules:
-/// - Plugin classes that do not use ITracingService: INFO - use tracing for diagnostics and monitoring
+/// - DEVKIT1012 diagnostics: INFO by default; this test project promotes DEVKIT1012 to WARNING in .editorconfig for visible editor squiggles.
 /// </summary>
 #pragma warning restore DEVKIT1012
 
@@ -24,6 +24,7 @@ namespace TestAnalyzers
     /// The diagnostic appears on the CLASS DECLARATION when ITracingService is NOT used.
     /// </summary>
     [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1012_NoTracing", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
+    // ❌ BAD: Do not implement plugins without ITracingService; retrieve tracing and write useful trace messages for diagnostics.
     public class DEVKIT1012_NoTracing : IPlugin
     {
         // DEVKIT1012: This plugin does NOT use ITracingService - should trigger info on class declaration

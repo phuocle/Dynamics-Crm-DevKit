@@ -9,7 +9,7 @@
 /// - New DEVKIT rules do not require changing this file because all warnings are disabled first, then DEVKIT1017 is restored.
 ///
 /// Severity Rules:
-/// - Console.Write/WriteLine/Error output in plugins/workflows: INFO - use ITracingService instead
+/// - DEVKIT1017 diagnostics: INFO by default; this test project promotes DEVKIT1017 to WARNING in .editorconfig for visible editor squiggles.
 /// </summary>
 #pragma warning restore DEVKIT1017
 
@@ -23,25 +23,24 @@ namespace Dev.DevKit.Plugin.Territory
     /// Test file for DEVKIT1017 - Avoid Console Output in Plug-ins
     /// Console.Write/WriteLine has no effect in the Dataverse sandbox.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name",
-        "PostTerritoryUpdate_ConsoleTest", 1, IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "PostTerritoryUpdate_ConsoleTest", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1017_ConsoleOutput : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
 
-            // ❌ DEVKIT1017: Console.WriteLine has no effect in sandbox
+            // ❌ BAD: Do not use Console.WriteLine in plugins; use ITracingService.Trace instead.
             Console.WriteLine("Plugin started");
 
-            // ❌ DEVKIT1017: Console.Write has no effect in sandbox
+            // ❌ BAD: Do not use Console.Write in plugins; write diagnostic output through ITracingService.
             Console.Write("Processing: ");
             Console.Write(context.MessageName);
 
-            // ❌ DEVKIT1017: Console.WriteLine with format has no effect in sandbox
+            // ❌ BAD: Do not use formatted Console.WriteLine in plugins; use tracing with contextual values instead.
             Console.WriteLine("Message: {0}, Stage: {1}", context.MessageName, context.Stage);
 
-            // ❌ DEVKIT1017: Console.Error has no effect in sandbox
+            // ❌ BAD: Do not use Console.Error in plugins; trace errors through ITracingService.
             Console.Error.WriteLine("Error message");
 
             // This is the correct way - use ITracingService

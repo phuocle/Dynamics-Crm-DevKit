@@ -1,0 +1,16 @@
+root = true
+
+[*.cs]
+# TestAnalyzers is a visual diagnostics sandbox. Promote product-default info
+# diagnostics to warning so Visual Studio shows editor squiggles while sample
+# files are open. The analyzer package keeps its original default severities.
+dotnet_diagnostic.DEVKIT1004.severity = warning
+dotnet_diagnostic.DEVKIT1012.severity = warning
+dotnet_diagnostic.DEVKIT1013.severity = warning
+dotnet_diagnostic.DEVKIT1015.severity = warning
+dotnet_diagnostic.DEVKIT1016.severity = warning
+dotnet_diagnostic.DEVKIT1017.severity = warning
+
+# DEVKIT1014 is already error by product default. Keep it explicit in this
+# sandbox so the visual test intent is obvious in Visual Studio.
+dotnet_diagnostic.DEVKIT1014.severity = error

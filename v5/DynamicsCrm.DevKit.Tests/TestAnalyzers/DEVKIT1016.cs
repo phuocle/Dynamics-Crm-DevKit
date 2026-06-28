@@ -9,7 +9,7 @@
 /// - New DEVKIT rules do not require changing this file because all warnings are disabled first, then DEVKIT1016 is restored.
 ///
 /// Severity Rules:
-/// - RetrieveAsIfPublished = true on metadata requests: INFO - avoid retrieving unpublished metadata unless required
+/// - DEVKIT1016 diagnostics: INFO by default; this test project promotes DEVKIT1016 to WARNING in .editorconfig for visible editor squiggles.
 /// </summary>
 #pragma warning restore DEVKIT1016
 
@@ -27,7 +27,7 @@ namespace TestAnalyzers
     {
         private void Test()
         {
-            // DEVKIT1016: RetrieveEntityRequest with RetrieveAsIfPublished = true - should trigger info
+            // ❌ BAD: Do not set RetrieveAsIfPublished=true for normal metadata reads; retrieve published metadata unless building a metadata editor.
             var request1 = new RetrieveEntityRequest
             {
                 EntityFilters = Microsoft.Xrm.Sdk.Metadata.EntityFilters.All,
@@ -36,7 +36,7 @@ namespace TestAnalyzers
             };
             AppSettings.Service.Execute(request1);
 
-            // DEVKIT1016: RetrieveAllEntitiesRequest with RetrieveAsIfPublished = true - should trigger info
+            // ❌ BAD: Do not retrieve all entities as-if-published for normal runtime logic; use published metadata for better performance.
             var request2 = new RetrieveAllEntitiesRequest
             {
                 EntityFilters = Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity,
@@ -44,7 +44,7 @@ namespace TestAnalyzers
             };
             AppSettings.Service.Execute(request2);
 
-            // DEVKIT1016: RetrieveAttributeRequest with RetrieveAsIfPublished = true - should trigger info
+            // ❌ BAD: Do not retrieve attributes as-if-published unless the user needs unpublished customizations.
             var request3 = new RetrieveAttributeRequest
             {
                 EntityLogicalName = "account",
@@ -53,7 +53,7 @@ namespace TestAnalyzers
             };
             AppSettings.Service.Execute(request3);
 
-            // DEVKIT1016: Assignment after creation - should also trigger info
+            // ❌ BAD: Do not assign RetrieveAsIfPublished=true after request creation; leave it false for normal metadata reads.
             var request4 = new RetrieveOptionSetRequest();
             request4.Name = "my_optionset";
             request4.RetrieveAsIfPublished = true;  // Performance issue

@@ -28,6 +28,7 @@ namespace TestAnalyzers
             var fetchXml = $@"
 <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
   <entity name='account'>
+    <!-- ❌ BAD: Do not retrieve all FetchXML attributes; request only the columns the code actually needs. -->
     <all-attributes/>
   </entity>
 </fetch>
@@ -36,6 +37,7 @@ namespace TestAnalyzers
 
         private void Test2()
         {
+            // ❌ BAD: Do not use ColumnSet(true); create a ColumnSet with explicit column names instead.
             var account = AppSettings.Service.Retrieve("account", Guid.NewGuid(), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
         }
     }

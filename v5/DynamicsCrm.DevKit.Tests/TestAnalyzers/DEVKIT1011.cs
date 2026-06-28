@@ -37,25 +37,25 @@ namespace TestAnalyzers
                 var target = (Entity)context.InputParameters["Target"];
                 if (target == null)
                 {
-                    // DEVKIT1011: Generic Exception - user sees "An error occurred" - should trigger warning
+                    // ❌ BAD: Do not throw generic Exception from plugins; throw InvalidPluginExecutionException with a user-facing message.
                     throw new Exception("Target entity is null");
                 }
 
                 if (!target.Contains("name"))
                 {
-                    // DEVKIT1011: ArgumentException - not properly displayed - should trigger warning
+                    // ❌ BAD: Do not throw ArgumentException from plugins; throw InvalidPluginExecutionException so Dataverse displays the message correctly.
                     throw new ArgumentException("Name is required");
                 }
 
                 if (string.IsNullOrEmpty(target.GetAttributeValue<string>("name")))
                 {
-                    // DEVKIT1011: ArgumentNullException - should trigger warning
+                    // ❌ BAD: Do not throw ArgumentNullException from plugins; throw InvalidPluginExecutionException for validation failures.
                     throw new ArgumentNullException("name", "Name cannot be empty");
                 }
             }
             catch (Exception ex)
             {
-                // DEVKIT1011: Re-throwing wrapped in generic Exception - should trigger warning
+                // ❌ BAD: Do not wrap plugin errors in generic Exception; wrap them in InvalidPluginExecutionException instead.
                 throw new Exception($"Failed to process: {ex.Message}", ex);
             }
         }

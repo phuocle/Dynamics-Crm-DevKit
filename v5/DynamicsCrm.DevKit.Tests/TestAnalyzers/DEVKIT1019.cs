@@ -24,9 +24,8 @@ namespace Dev.DevKit.Plugin.Territory
     /// Plugins should check context.Depth to prevent recursive loops when modifying entities.
     /// </summary>
 
-    // ❌ DEVKIT1019: This plugin does NOT check context.Depth - should trigger warning on class declaration
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name",
-        "PostTerritoryUpdate_NoDepthCheck", 1, IsolationModeEnum.Sandbox)]
+    // ❌ BAD: Do not omit a context.Depth guard in plugins that can update data; exit early when depth is greater than 1.
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "PostTerritoryUpdate_NoDepthCheck", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1019_NoDepthCheck : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
@@ -35,7 +34,7 @@ namespace Dev.DevKit.Plugin.Territory
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            // ❌ No depth check - this can cause infinite loop if Update triggers this plugin again
+            // ❌ BAD: Do not update records without checking context.Depth first; this can recursively trigger the same plugin.
             var target = (Entity)context.InputParameters["Target"];
 
             // This update will trigger the plugin again, causing infinite recursion!

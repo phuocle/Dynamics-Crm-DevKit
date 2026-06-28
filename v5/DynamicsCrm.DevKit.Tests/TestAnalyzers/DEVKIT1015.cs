@@ -9,7 +9,7 @@
 /// - New DEVKIT rules do not require changing this file because all warnings are disabled first, then DEVKIT1015 is restored.
 ///
 /// Severity Rules:
-/// - GetAwaiter().GetResult(), Wait(), and Result in plugins/workflows: INFO - avoid blocking async patterns
+/// - DEVKIT1015 diagnostics: INFO by default; this test project promotes DEVKIT1015 to WARNING in .editorconfig for visible editor squiggles.
 /// </summary>
 #pragma warning restore DEVKIT1015
 
@@ -34,13 +34,13 @@ namespace TestAnalyzers
 
             var task = new Task<int>(() => 42);
 
-            // DEVKIT1015: task.Wait() - should trigger info
+            // ❌ BAD: Do not block plugin execution with Task.Wait(); use synchronous APIs or carefully awaited external code outside the plugin.
             task.Wait();
 
-            // DEVKIT1015: task.Result - should trigger info
+            // ❌ BAD: Do not block plugin execution with Task.Result; use a synchronous flow instead.
             var result = task.Result;
 
-            // DEVKIT1015: GetAwaiter().GetResult() pattern - should trigger info
+            // ❌ BAD: Do not block plugin execution with GetAwaiter().GetResult(); avoid async-over-sync deadlock patterns.
             var task2 = new Task(() => { });
             task2.GetAwaiter().GetResult();
 

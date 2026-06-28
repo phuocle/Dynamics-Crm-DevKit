@@ -24,7 +24,7 @@ namespace TestAnalyzers
     /// The diagnostic appears when a catch block in a plugin or workflow doesn't use ITracingService to log exception details.
     /// </summary>
 
-    // ❌ BAD: Catch block without ITracingService - exception details are lost
+    // ❌ BAD: Do not catch plugin exceptions without tracing; call ITracingService.Trace before throwing.
     [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "TestAnalyzers.DEVKIT1021_NoTracingInCatch", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1021_NoTracingInCatch : IPlugin
     {
@@ -45,15 +45,16 @@ namespace TestAnalyzers
                     throw new InvalidOperationException("Account name is required");
                 }
             }
-            catch (Exception ex) // DEVKIT1021: Should use ITracingService here!
+            // ❌ BAD: Do not enter a catch block without logging exception details through ITracingService.
+            catch (Exception ex)
             {
-                // ❌ Exception details are not logged - debugging will be difficult!
+                // ❌ BAD: Do not throw after swallowing trace details; trace ex.Message and ex.StackTrace first.
                 throw new InvalidPluginExecutionException($"Failed to process account: {ex.Message}");
             }
         }
     }
 
-    // ❌ BAD: Multiple catch blocks, one without tracing
+    // ❌ BAD: Do not leave any catch block untraced; every exception path needs ITracingService.Trace.
     [CrmPluginRegistration("Create", "contact", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1021_PartialTracing", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1021_PartialTracing : IPlugin
     {
@@ -74,9 +75,10 @@ namespace TestAnalyzers
                 tracingService.Trace($"ArgumentNullException: {ex.Message}");
                 throw new InvalidPluginExecutionException("Required argument is missing", ex);
             }
-            catch (InvalidOperationException ex) // DEVKIT1021: This catch needs tracing too!
+            // ❌ BAD: Do not handle InvalidOperationException without tracing; log the exception before wrapping it.
+            catch (InvalidOperationException ex)
             {
-                // ❌ This catch block doesn't use tracing
+                // ❌ BAD: Do not throw a wrapped plugin exception before writing trace details.
                 throw new InvalidPluginExecutionException("Operation failed", ex);
             }
         }

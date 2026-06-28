@@ -9,7 +9,7 @@
 /// - New DEVKIT rules do not require changing this file because all warnings are disabled first, then DEVKIT1013 is restored.
 ///
 /// Severity Rules:
-/// - Plugins registered on Retrieve or RetrieveMultiple messages: INFO - avoid high-frequency registrations when possible
+/// - DEVKIT1013 diagnostics: INFO by default; this test project promotes DEVKIT1013 to WARNING in .editorconfig for visible editor squiggles.
 /// </summary>
 #pragma warning restore DEVKIT1013
 
@@ -24,7 +24,7 @@ namespace TestAnalyzers
     /// The diagnostic appears on the CrmPluginRegistration ATTRIBUTE when message is Retrieve or RetrieveMultiple.
     /// </summary>
 
-    // DEVKIT1013: Plugin on Retrieve - should trigger info on this attribute
+    // ❌ BAD: Do not register plugins on Retrieve unless there is no alternative; prefer views, calculated data, or client-side logic.
     [CrmPluginRegistration("Retrieve", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1013_RetrievePlugin", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1013_RetrievePlugin : IPlugin
     {
@@ -38,7 +38,7 @@ namespace TestAnalyzers
         }
     }
 
-    // DEVKIT1013: Plugin on RetrieveMultiple - should trigger info on this attribute
+    // ❌ BAD: Do not register plugins on RetrieveMultiple for broad queries; prefer query design, views, or dedicated APIs.
     [CrmPluginRegistration("RetrieveMultiple", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1013_RetrieveMultiplePlugin", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1013_RetrieveMultiplePlugin : IPlugin
     {

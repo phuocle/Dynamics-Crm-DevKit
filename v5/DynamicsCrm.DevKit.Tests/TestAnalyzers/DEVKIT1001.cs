@@ -33,6 +33,7 @@ namespace TestAnalyzers
     /// <summary>
     /// DEVKIT1001: Create message with empty filtering attributes - should trigger WARNING
     /// </summary>
+    // ❌ BAD: Do not register Create without filtering attributes; specify the columns that should trigger the plugin.
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1001_CreateWithoutFilteringAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_CreateWithoutFilteringAttributes : IPlugin
     {
@@ -47,6 +48,7 @@ namespace TestAnalyzers
     /// <summary>
     /// DEVKIT1001: Create message with * filtering attributes - should trigger WARNING
     /// </summary>
+    // ❌ BAD: Do not use "*" for filtering attributes; list the specific columns the plugin depends on.
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "*", "TestAnalyzers.DEVKIT1001_CreateWithAllAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_CreateWithAllAttributes : IPlugin
     {
@@ -65,6 +67,7 @@ namespace TestAnalyzers
     /// <summary>
     /// DEVKIT1001: Update message with empty filtering attributes - should trigger ERROR
     /// </summary>
+    // ❌ BAD: Do not register Update without filtering attributes; specify the updated columns that should run this plugin.
     [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "", "TestAnalyzers.DEVKIT1001_UpdateWithoutFilteringAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_UpdateWithoutFilteringAttributes : IPlugin
     {
@@ -93,6 +96,7 @@ namespace TestAnalyzers
     /// <summary>
     /// DEVKIT1001: Update message with * filtering attributes - should trigger ERROR
     /// </summary>
+    // ❌ BAD: Do not use "*" on Update filtering attributes; use explicit column names to avoid unnecessary executions.
     [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "*", "TestAnalyzers.DEVKIT1001_UpdateWithAllAttributes", 1, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin)]
     public class DEVKIT1001_UpdateWithAllAttributes : IPlugin
     {

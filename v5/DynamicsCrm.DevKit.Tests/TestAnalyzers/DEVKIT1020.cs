@@ -24,7 +24,7 @@ namespace TestAnalyzers
     /// The diagnostic appears when CrmPluginRegistration has PluginType.DataProvider but DataSource is empty or missing.
     /// </summary>
 
-    // DEVKIT1020: DataProvider with empty DataSource - should trigger error on DataSource
+    // ❌ BAD: Do not register a DataProvider without DataSource; set DataSource to the configured virtual table data source.
     [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cds.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "")]
     public class DEVKIT1020_EmptyDataSource : IPlugin
     {
@@ -32,7 +32,7 @@ namespace TestAnalyzers
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            
+
             // This DataProvider will fail at runtime because DataSource is empty!
             tracing.Trace("DataProvider executed");
         }
@@ -46,7 +46,7 @@ namespace TestAnalyzers
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            
+
             // This DataProvider works correctly because DataSource is specified
             tracing.Trace("DataProvider executed");
         }

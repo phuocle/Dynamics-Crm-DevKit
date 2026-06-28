@@ -47,6 +47,7 @@ namespace TestAnalyzers
             var t = ReadData(test.ABC?.Id, test.ABC?.Name);
 
             string t1 = $"{entity?.Id} - {test.ABC?.Id}";
+            // ❌ BAD: Do not mix null-conditional access with direct EntityReference dereference; keep the whole chain null-safe.
             var t2 = entity?.Id.ToString() + test.ABC.Id.ToString();
             var a = entity.Id;
             Guid? aa = entity?.Id;

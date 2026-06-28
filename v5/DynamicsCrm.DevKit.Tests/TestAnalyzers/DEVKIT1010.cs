@@ -32,7 +32,7 @@ namespace TestAnalyzers
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-            // DEVKIT1010: Using new HttpClient() without setting Timeout - should trigger warning
+            // ❌ BAD: Do not use HttpClient without an explicit timeout; set client.Timeout to a bounded value before calling external services.
             using (var client = new HttpClient())
             {
                 // Missing: client.Timeout = TimeSpan.FromSeconds(15);

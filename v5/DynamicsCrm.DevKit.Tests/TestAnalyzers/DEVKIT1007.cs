@@ -33,12 +33,14 @@ namespace TestAnalyzers
 
         public void Execute(IServiceProvider serviceProvider)
         {
-            // DEVKIT1007: Assigning to instance fields during execution - should trigger error
+            // ❌ BAD: Do not store execution context in instance fields; keep per-execution state in local variables.
             _context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
 
             var factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            // ❌ BAD: Do not store organization services in instance fields; create and use them within the Execute call.
             _service = factory.CreateOrganizationService(_context.UserId);
 
+            // ❌ BAD: Do not store target records in instance fields; pass them as method parameters instead.
             _target = (Entity)_context.InputParameters["Target"];
 
             ProcessEntity();

@@ -38,26 +38,26 @@ namespace TestAnalyzers
 
             var entities = new List<Entity>();
 
-            // DEVKIT1008: Parallel.ForEach is not supported in plugins - should trigger error
+            // ❌ BAD: Do not use Parallel.ForEach in plugins; process records synchronously or move parallel work outside Dataverse sandbox execution.
             Parallel.ForEach(entities, entity =>
             {
                 service.Update(entity);
             });
 
-            // DEVKIT1008: Task.Run spawns a new thread - should trigger error
+            // ❌ BAD: Do not use Task.Run in plugins; keep plugin execution on the platform-managed thread.
             Task.Run(() => ProcessData());
 
-            // DEVKIT1008: Creating threads directly - should trigger error
+            // ❌ BAD: Do not create Thread instances in plugins; use synchronous plugin logic or an external worker.
             var thread = new Thread(() => DoBackgroundWork());
             thread.Start();
 
-            // DEVKIT1008: Parallel.For - should trigger error
+            // ❌ BAD: Do not use Parallel.For in plugins; avoid multi-threaded sandbox execution.
             Parallel.For(0, 10, i =>
             {
                 tracing.Trace($"Processing {i}");
             });
 
-            // DEVKIT1008: ThreadPool.QueueUserWorkItem - should trigger error
+            // ❌ BAD: Do not queue ThreadPool work from plugins; use async processing outside the plugin pipeline.
             ThreadPool.QueueUserWorkItem(state => DoBackgroundWork());
         }
 

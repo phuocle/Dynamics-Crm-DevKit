@@ -33,16 +33,16 @@ namespace TestAnalyzers
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-            // DEVKIT1014: Memory leak - event handler never removed - should trigger error
+            // ❌ BAD: Do not subscribe to AppDomain.UnhandledException in plugins; use ITracingService and normal exception handling instead.
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
             {
                 tracing.Trace("Unhandled exception occurred");
             };
 
-            // DEVKIT1014: Multiple subscriptions per execution - should trigger error
+            // ❌ BAD: Do not subscribe to AppDomain.AssemblyResolve in plugins; package dependencies with the plugin assembly instead.
             AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
 
-            // DEVKIT1014: First chance exception handler - should trigger error
+            // ❌ BAD: Do not subscribe to AppDomain.FirstChanceException in plugins; trace exceptions in catch blocks instead.
             AppDomain.CurrentDomain.FirstChanceException += (s, e) =>
             {
                 tracing.Trace($"First chance exception: {e.Exception.Message}");

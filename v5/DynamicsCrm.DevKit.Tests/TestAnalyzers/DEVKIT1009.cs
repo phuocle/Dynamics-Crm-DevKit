@@ -32,13 +32,13 @@ namespace TestAnalyzers
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-            // DEVKIT1009: Using new HttpClient() in plugin - should trigger warning on each instantiation
+            // ❌ BAD: Do not make external HTTP calls without closing connections; set ConnectionClose/KeepAlive=false before sending.
             using (var client = new HttpClient())
             {
                 tracing.Trace("Using HttpClient");
             }
 
-            // Another instance
+            // ❌ BAD: Do not create another HttpClient without connection close settings; configure connection handling explicitly.
             var client2 = new HttpClient();
         }
     }

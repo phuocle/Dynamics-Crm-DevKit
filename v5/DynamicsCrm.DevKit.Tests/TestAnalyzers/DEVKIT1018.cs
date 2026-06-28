@@ -24,40 +24,39 @@ namespace Dev.DevKit.Plugin.Territory
     /// Test file for DEVKIT1018 - Avoid File/IO Operations in Plug-ins
     /// System.IO operations are blocked in the Dataverse sandbox.
     /// </summary>
-    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name",
-        "PostTerritoryUpdate_FileIOTest", 1, IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("Update", "territory", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "name", "PostTerritoryUpdate_FileIOTest", 1, IsolationModeEnum.Sandbox)]
     public class DEVKIT1018_FileIO : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
 
-            // ❌ DEVKIT1018: File.ReadAllText is blocked in sandbox
+            // ❌ BAD: Do not read files from plugin sandbox code; store configuration in Dataverse or secure/unsecure plugin configuration.
             var content = File.ReadAllText("config.txt");
 
-            // ❌ DEVKIT1018: File.WriteAllText is blocked in sandbox
+            // ❌ BAD: Do not write files from plugins; use ITracingService or Dataverse records for diagnostics.
             File.WriteAllText("log.txt", "Plugin executed");
 
-            // ❌ DEVKIT1018: File.Exists is blocked in sandbox
+            // ❌ BAD: Do not check file system state in plugins; the sandbox blocks file IO.
             if (File.Exists("test.txt"))
             {
-                // ❌ DEVKIT1018: File.Delete is blocked in sandbox
+                // ❌ BAD: Do not delete files from plugins; move file work to an external service if needed.
                 File.Delete("test.txt");
             }
 
-            // ❌ DEVKIT1018: new FileStream is blocked in sandbox
+            // ❌ BAD: Do not open FileStream in plugins; use Dataverse storage or external services instead.
             using (var stream = new FileStream("data.bin", FileMode.Open))
             {
                 // Read from stream
             }
 
-            // ❌ DEVKIT1018: new StreamReader is blocked in sandbox
+            // ❌ BAD: Do not use StreamReader over local files in plugins; read data from supported platform services instead.
             using (var reader = new StreamReader("input.txt"))
             {
                 var line = reader.ReadLine();
             }
 
-            // ❌ DEVKIT1018: new StreamWriter is blocked in sandbox
+            // ❌ BAD: Do not use StreamWriter over local files in plugins; trace or persist data through supported APIs.
             using (var writer = new StreamWriter("output.txt"))
             {
                 writer.WriteLine("Output data");

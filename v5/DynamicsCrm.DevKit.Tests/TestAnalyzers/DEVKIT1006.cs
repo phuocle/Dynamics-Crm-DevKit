@@ -35,7 +35,7 @@ namespace TestAnalyzers
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-            // DEVKIT1006: Using ExecuteMultipleRequest in plugin - should trigger warning
+            // ❌ BAD: Do not use ExecuteMultipleRequest inside plugins; execute focused service calls or move batching outside the plugin pipeline.
             var executeMultiple = new ExecuteMultipleRequest
             {
                 Requests = new OrganizationRequestCollection(),
@@ -47,7 +47,7 @@ namespace TestAnalyzers
             };
             service.Execute(executeMultiple);
 
-            // DEVKIT1006: Using ExecuteTransactionRequest in plugin - should trigger warning
+            // ❌ BAD: Do not use ExecuteTransactionRequest inside plugins; keep plugin work small and let Dataverse manage the current transaction.
             var executeTransaction = new ExecuteTransactionRequest
             {
                 Requests = new OrganizationRequestCollection()

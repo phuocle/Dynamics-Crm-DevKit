@@ -9,7 +9,7 @@
 /// - New DEVKIT rules do not require changing this file because all warnings are disabled first, then DEVKIT1004 is restored.
 ///
 /// Severity Rules:
-/// - Deprecated request/response types: INFO - use supported Dataverse request types instead
+/// - Deprecated request/response types: INFO by default; this test project promotes DEVKIT1004 to WARNING in .editorconfig for visible editor squiggles.
 /// </summary>
 #pragma warning restore DEVKIT1004
 
@@ -22,6 +22,7 @@ namespace TestAnalyzers
     {
         private void Test1()
         {
+            // ❌ BAD: Do not use deprecated SDK request/response messages; replace them with supported Dataverse messages.
             var request = new AddProductToKitRequest();
             var response = (AddProductToKitResponse)AppSettings.Service.Execute(request);
             var response2 = AppSettings.Service.Execute(request) as AddProductToKitResponse;
