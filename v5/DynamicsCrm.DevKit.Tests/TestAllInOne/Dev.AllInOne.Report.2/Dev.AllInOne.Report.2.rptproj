@@ -35,12 +35,8 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
-    <Report Include="download.reports.bat">
-      <MimeType>application/octet-stream</MimeType>
-    </Report>
-    <Report Include="notes.txt">
-      <MimeType>text/plain</MimeType>
-    </Report>
+    <None Include="download.reports.bat" />
+    <None Include="notes.txt" />
     <Report Include="ReportTemplate.rdl" />
     <Report Include="Top10Account.rdl" />
   </ItemGroup>

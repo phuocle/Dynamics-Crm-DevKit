@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
     <File Path=".env" />
     <File Path=".env.example" />
     <File Path="DynamicsCrm.DevKit.Cli.json" />

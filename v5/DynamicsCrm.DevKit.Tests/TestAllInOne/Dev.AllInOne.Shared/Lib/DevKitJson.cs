@@ -9,7 +9,7 @@ using System.Text;
 namespace Microsoft.Xrm.Sdk
 {
     [DebuggerNonUserCode()]
-    internal static class DevKitJson
+public static class DevKitJson
     {
         private const int BUILDER_CAPACITY = 2000;
         private static readonly char[] EscapeChars = { '"', '\\', '\b', '\f', '\n', '\r', '\t' };

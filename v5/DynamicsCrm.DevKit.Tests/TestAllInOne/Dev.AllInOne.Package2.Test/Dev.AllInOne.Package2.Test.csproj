@@ -58,6 +58,5 @@
 		<None Include="README.md" />
 	</ItemGroup>
 	<Import Project="..\Dev.AllInOne.Shared.Test\Dev.AllInOne.Shared.Test.projitems" Label="Shared" Condition="Exists('..\Dev.AllInOne.Shared.Test\Dev.AllInOne.Shared.Test.projitems')" />
-	<Import Project="..\Dev.AllInOne.Shared\Dev.AllInOne.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.AllInOne.Shared\Dev.AllInOne.Shared.projitems')" />
 </Project>
 <!-- v.4.12.34.56 - Build: 30.06.2026 23:59:59 -->

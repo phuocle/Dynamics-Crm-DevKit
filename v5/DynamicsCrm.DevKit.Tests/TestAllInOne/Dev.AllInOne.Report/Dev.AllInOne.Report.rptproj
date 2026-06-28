@@ -34,16 +34,9 @@
         <Reports>@(Report)</Reports>
     </PropertyGroup>
     <ItemGroup>
-        <Report Include="download.reports.bat">
-            <MimeType>application/octet-stream</MimeType>
-        </Report>
-		<Report Include="upload.reports.bat">
-			<MimeType>application/octet-stream</MimeType>
-		</Report>
-        <Report Include="README.md">
-            <MimeType>
-            </MimeType>
-        </Report>
+        <None Include="download.reports.bat" />
+		<None Include="upload.reports.bat" />
+        <None Include="README.md" />
         <Report Include="ReportTemplate.rdl" />
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
