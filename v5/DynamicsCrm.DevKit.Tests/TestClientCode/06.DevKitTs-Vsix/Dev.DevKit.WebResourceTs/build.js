@@ -1,5 +1,5 @@
 /**
- * Build script - Build entity .ts files
+ * Build script - Build entry .ts files
  * Usage:
  *   npm run release           - Build ALL entities (minified)
  *   npm run release Account   - Build SINGLE entity (minified)
@@ -11,7 +11,7 @@
  *
  * Architecture:
  *   - devkit.ts is pre-compiled to minified code
- *   - Entity files import devkit functions which get bundled with the minified devkit code
+ *   - Entry files import devkit functions which get bundled with the minified devkit code
  */
 
 const esbuild = require('esbuild');
@@ -35,31 +35,55 @@ for (const arg of args) {
 
 const isDebug = mode === 'debug';
 const tsDir = __dirname;
-const entitiesDir = path.join(tsDir, 'entities');
 const libDir = path.join(tsDir, 'lib');
 const buildDir = path.join(tsDir, 'build');
 const devkitPath = path.join(libDir, 'devkit.ts');
+// Default: ['entities']. Add folders here when more TypeScript entry folders are needed.
+const buildFolders = ['entities'];
 
 // Cache for minified devkit code
 let minifiedDevkitCode = null;
 
-function getEntityFiles() {
-    if (!fs.existsSync(entitiesDir)) {
-        console.log('entities folder not found.');
+function getEntryFilesFromFolder(folder) {
+    const dir = path.join(tsDir, folder);
+    if (!fs.existsSync(dir)) {
+        console.log(`${folder} folder not found, skipping.`);
         return [];
     }
 
-    const files = fs.readdirSync(entitiesDir);
-    return files.filter(file => {
-        if (!file.endsWith('.ts')) return false;
-        // Skip .form.ts, .webapi.ts and OptionSet.ts files - they are imported by main .ts files
-        if (file.endsWith('.form.ts')) return false;
-        if (file.endsWith('.webapi.ts')) return false;
-        if (file === 'OptionSet.ts') return false;
-        const filePath = path.join(entitiesDir, file);
-        const stat = fs.statSync(filePath);
-        return stat.isFile();
-    });
+    return getEntryFiles(dir);
+}
+
+function getEntryFiles(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const files = [];
+
+    for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        const relativePath = path.relative(tsDir, fullPath);
+
+        if (entry.isDirectory()) {
+            files.push(...getEntryFiles(fullPath));
+            continue;
+        }
+
+        if (!entry.isFile()) continue;
+        if (!entry.name.endsWith('.ts')) continue;
+        if (entry.name.endsWith('.d.ts')) continue;
+        // Skip generated/import-only files; they are bundled through the main entry .ts files.
+        if (entry.name.endsWith('.form.ts')) continue;
+        if (entry.name.endsWith('.webapi.ts')) continue;
+        if (entry.name.endsWith('.dialog.ts')) continue;
+        if (entry.name === 'OptionSet.ts') continue;
+
+        files.push(relativePath);
+    }
+
+    return files;
+}
+
+function getBuildFiles() {
+    return buildFolders.flatMap(folder => getEntryFilesFromFolder(folder));
 }
 
 /**
@@ -128,7 +152,7 @@ function createDevkitPlugin(minifiedCode) {
  * Check TypeScript errors using tsc --noEmit
  * esbuild doesn't do type checking, so we need to run tsc separately
  * Uses the project's tsconfig.json for proper configuration
- * @param {string} file - The entity file name (e.g., 'Account.ts')
+ * @param {string} file - The entry file path (e.g., 'entities/Account.ts')
  * @returns {boolean} - true if no errors, false if errors found
  */
 function checkTypeScript(file) {
@@ -156,10 +180,11 @@ function checkTypeScript(file) {
     }
 }
 
-async function buildEntity(file, devkitCode) {
+async function buildEntry(file, devkitCode) {
     const name = path.basename(file, '.ts');
-    const entryPoint = path.join(entitiesDir, file);
-    const outFile = path.join(buildDir, `${name}.js`);
+    const entryPoint = path.join(tsDir, file);
+    const relativeOutputFile = file.replace(/\.ts$/i, '.js');
+    const outFile = path.join(buildDir, relativeOutputFile);
     const globalName = `IIFE${name}`;
 
     // Step 1: Check TypeScript errors first (esbuild doesn't do type checking)
@@ -226,7 +251,7 @@ async function buildEntity(file, devkitCode) {
         const sizeKb = (stats.size / 1024).toFixed(1);
         const modeLabel = isDebug ? 'DEBUG' : 'MINIFIED';
         const devkitNote = devkitCode ? ' (devkit: MINIFIED)' : '';
-        console.log(`  ✓ ${name}.js (${sizeKb} KB) [${modeLabel}]${devkitNote}`);
+        console.log(`  ✓ ${relativeOutputFile} (${sizeKb} KB) [${modeLabel}]${devkitNote}`);
         return true;
     } catch (error) {
         console.error(`  ✗ ${name}.ts - Build failed:`, error.message);
@@ -265,36 +290,39 @@ async function build() {
 
     // Step 2: Build entity files
     if (entityName) {
-        // Build single entity
-        const file = `${entityName}.ts`;
-        const entryPoint = path.join(entitiesDir, file);
+        // Build single entry by file name without extension.
+        const file = getBuildFiles().find(entryFile =>
+            path.basename(entryFile, '.ts').toLowerCase() === entityName.toLowerCase()
+        );
 
-        if (!fs.existsSync(entryPoint)) {
-            console.error(`File not found: ${entryPoint}`);
+        if (!file) {
+            console.error(`Entry file not found: ${entityName}.ts`);
             process.exit(1);
         }
 
-        console.log(`Step 2: Building entity: ${entityName}`);
-        const success = await buildEntity(file, minifiedDevkitCode);
+        console.log(`Step 2: Building entry: ${file}`);
+        const success = await buildEntry(file, minifiedDevkitCode);
         cleanupBuildFolder();
         console.log(`\nBuild completed. Output: build/\n`);
         process.exit(success ? 0 : 1);
     } else {
-        // Build all entities
-        const entityFiles = getEntityFiles();
+        // Build all entry files
+        const entryFiles = getBuildFiles();
 
-        if (entityFiles.length === 0) {
-            console.log('No entity .ts files found to build.');
+        if (entryFiles.length === 0) {
+            console.log('No entry .ts files found to build.');
             return;
         }
 
-        console.log(`Step 2: Building ${entityFiles.length} entity file(s):`);
-        for (const file of entityFiles) {
-            await buildEntity(file, minifiedDevkitCode);
+        console.log(`Step 2: Building ${entryFiles.length} entry file(s):`);
+        let success = true;
+        for (const file of entryFiles) {
+            success = await buildEntry(file, minifiedDevkitCode) && success;
         }
 
         cleanupBuildFolder();
         console.log(`\nBuild completed. Output: build/\n`);
+        process.exit(success ? 0 : 1);
     }
 }
 

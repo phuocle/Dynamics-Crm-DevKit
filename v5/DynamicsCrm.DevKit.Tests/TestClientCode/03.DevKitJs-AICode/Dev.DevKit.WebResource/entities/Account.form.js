@@ -24,7 +24,7 @@ var DevKit;
 			dialog: [],
 			grid: ["Contacts"],
 			header: ["v4_Integer", "v4_Integer1", "v4_OptionSet", "v4_String"],
-			navigation: ["nav_adx_invitation_assigntoaccount", "nav_msa_account_managingpartner", "nav_msa_contact_managingpartner", "navActivities", "navAddresses", "navAsyncOperations", "navAudit", "navCampaignsInSFA", "navConnections", "navContacts", "navProcessSessions", "navRelationships", "navSocialprofiles", "navSubAccts"],
+			navigation: ["navActivities", "navAddresses", "navContacts", "navSubAccts"],
 			quick: ["ContactQuickForm___EMailAddress1", "ContactQuickForm___FirstName", "ContactQuickForm___LastName", "ContactQuickForm___MobilePhone", "ContactQuickForm___ParentCustomerId"],
 			tab: ["TAB_1___TAB_1_SECTION_1", "TAB_1___TAB_1_SECTION_2", "TAB_1___TAB_1_SECTION_3", "TAB_1___TAB_1_SECTION_4", "TAB_2___TAB_2_SECTION_1", "TAB_2___TAB_2_SECTION_2"]
 		};

@@ -867,6 +867,66 @@ declare namespace DevKit {
                  */
                 Value: any;
             }
+            /**
+             * Interface for IFrame controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls
+             */
+            interface IFrame extends IControlBase {
+                /**
+                 * Returns the content window that represents an IFRAME
+                 * @param successCallback A function to call when operation is executed successfully
+                 * @param errorCallback A function to call when the operation fails
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+                 */
+                ContentWindow(successCallback: (contentWindow: any) => void, errorCallback?: (error: Error) => void): void;
+                /**
+                 * Returns the content window that represents an IFRAME as a promise
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+                 */
+                ContentWindow(): Promise<any>;
+                /**
+                 * Returns the default URL that an IFRAME control is configured to display
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getinitialurl
+                 */
+                readonly InitialUrl: string;
+                /**
+                 * Returns the object in the form that represents the IFRAME element
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getobject
+                 */
+                readonly Object: any;
+                /**
+                 * Gets or sets the current URL being displayed in the IFRAME
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/controls/getsrc
+                 */
+                Src: string;
+            }
+            /**
+             * Interface for Grid (subgrid/chart) controls in dialogs
+             * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids
+             */
+            interface Grid extends IControlBase {
+                /**
+                 * Refreshes the data displayed in the grid
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refresh
+                 */
+                Refresh(): void;
+                /**
+                 * Gets the logical name of the entity data displayed in the grid
+                 * @link https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
+                 */
+                readonly EntityName: string;
+            }
+            /**
+             * Interface for controls with unknown or unsupported types in dialogs
+             * Used for custom controls like Rich Text Box, Entity OptionSet,
+             * Advanced Find, Upload, Multiselect Lookup, etc.
+             */
+            interface Unknown extends IControlBase {
+                /**
+                 * Gets or sets the data value for the control
+                 */
+                Value: any;
+            }
         }
         /**
          * Represents a tab on a form

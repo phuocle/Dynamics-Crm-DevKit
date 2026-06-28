@@ -160,6 +160,16 @@ export interface IAccountApi extends DevKit.IWebApiEntity {
 	CustomerTypeCode: number | null;
 	/** Type additional information to describe the account, such as an excerpt from the company's website. */
 	Description: string | null;
+	/** Account Health Label */
+	readonly devkit_account_health_label_fx: string | null;
+	/** Account Tier */
+	readonly devkit_account_tier_calculated: string | null;
+	/** Active Contact Count */
+	readonly devkit_active_contact_count_rollup: number | null;
+	/** Last Updated time of rollup field Active Contact Count. */
+	readonly devkit_active_contact_count_rollup_Date_UtcDateAndTime: Date | null;
+	/** State of rollup field Active Contact Count. */
+	readonly devkit_active_contact_count_rollup_State: number | null;
 	/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 	DoNotBulkEMail: boolean | null;
 	/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -418,6 +428,11 @@ const AccountFieldConfig: DevKit.IWebApiFieldConfigMap = {
 	CustomerSizeCode: { logicalName: 'customersizecode', type: 'Integer' },
 	CustomerTypeCode: { logicalName: 'customertypecode', type: 'Integer' },
 	Description: { logicalName: 'description' },
+	devkit_account_health_label_fx: { logicalName: 'devkit_account_health_label_fx', readOnly: true },
+	devkit_account_tier_calculated: { logicalName: 'devkit_account_tier_calculated', readOnly: true },
+	devkit_active_contact_count_rollup: { logicalName: 'devkit_active_contact_count_rollup', readOnly: true, type: 'Integer' },
+	devkit_active_contact_count_rollup_Date_UtcDateAndTime: { logicalName: 'devkit_active_contact_count_rollup_date', readOnly: true, type: 'DateTime' },
+	devkit_active_contact_count_rollup_State: { logicalName: 'devkit_active_contact_count_rollup_state', readOnly: true, type: 'Integer' },
 	DoNotBulkEMail: { logicalName: 'donotbulkemail', type: 'Boolean' },
 	DoNotBulkPostalMail: { logicalName: 'donotbulkpostalmail', type: 'Boolean' },
 	DoNotEMail: { logicalName: 'donotemail', type: 'Boolean' },

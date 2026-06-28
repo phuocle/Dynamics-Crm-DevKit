@@ -13,7 +13,7 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-$cliPath = "D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Cli\bin\Release\net48\DynamicsCrm.DevKit.Cli.exe"
+$cliPath = "D:\github\Dynamics-Crm-DevKit\v5\DynamicsCrm.DevKit.Cli\bin\Release\net10.0\DynamicsCrm.DevKit.Cli.dll"
 
 # Check if CLI exists
 if (-not (Test-Path $cliPath)) {
@@ -42,25 +42,25 @@ $connectionString = "AuthType=ClientSecret;Url=https://dynamics-crm-devkit-v4.cr
 # JS-FORM
 Write-Host "Generating: JS-FORM..." -ForegroundColor Cyan
 Push-Location "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities"
-& $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-FORM"
+& dotnet $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-FORM"
 Pop-Location
 
 # JS-WEBAPI
 Write-Host "Generating: JS-WEBAPI..." -ForegroundColor Cyan
 Push-Location "05.DevKitJs-Vsix\Dev.DevKit.WebResource\entities"
-& $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-WEBAPI"
+& dotnet $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-WEBAPI"
 Pop-Location
 
 # TS-FORM
 Write-Host "Generating: TS-FORM..." -ForegroundColor Cyan
 Push-Location "06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities"
-& $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"TS-FORM"
+& dotnet $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"TS-FORM"
 Pop-Location
 
 # TS-WEBAPI (using same profile as TS-FORM for now)
 Write-Host "Generating: TS-WEBAPI..." -ForegroundColor Cyan
 Push-Location "06.DevKitTs-Vsix\Dev.DevKit.WebResourceTs\entities"
-& $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"TS-WEBAPI"
+& dotnet $cliPath /conn:"$connectionString" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"TS-WEBAPI"
 Pop-Location
 
 Write-Host ""

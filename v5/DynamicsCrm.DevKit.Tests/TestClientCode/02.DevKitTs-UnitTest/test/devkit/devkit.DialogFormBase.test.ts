@@ -108,7 +108,7 @@ describe('DialogFormBase Tests', () => {
     test('should gracefully handle getControl missing', () => {
         const { executionContext } = createDialogContext(['name']);
         // Simulate missing getControl entirely
-        delete executionContext.getFormContext().getControl;
+        (executionContext.getFormContext() as any).getControl = undefined;
 
         const dialog = new DialogFormBase(executionContext, ['name']);
         expect(dialog.Dialog.name.Value).toBe('test_value'); // Can still get from attribute

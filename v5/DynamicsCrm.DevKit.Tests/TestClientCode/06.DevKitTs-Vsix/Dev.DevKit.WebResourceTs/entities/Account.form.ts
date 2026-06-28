@@ -367,32 +367,12 @@ export namespace Account {
 		 * Contains navigation items
 		 */
 		export interface INavigation {
-			/** Invitations */
-			nav_adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			/** Managed Accounts */
-			nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			/** Managed Contacts */
-			nav_msa_contact_managingpartner: DevKit.Controls.NavigationItem;
 			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
 			/** Addresses */
 			navAddresses: DevKit.Controls.NavigationItem;
-			/** Workflows */
-			navAsyncOperations: DevKit.Controls.NavigationItem;
-			/** Audit History */
-			navAudit: DevKit.Controls.NavigationItem;
-			/** Campaigns */
-			navCampaignsInSFA: DevKit.Controls.NavigationItem;
-			/** Connections */
-			navConnections: DevKit.Controls.NavigationItem;
 			/** Contacts2 */
 			navContacts: DevKit.Controls.NavigationItem;
-			/** Dialog Sessions */
-			navProcessSessions: DevKit.Controls.NavigationItem;
-			/** CustomerRelationship */
-			navRelationships: DevKit.Controls.NavigationItem;
-			/** Social Profiles */
-			navSocialprofiles: DevKit.Controls.NavigationItem;
 			/** Accounts */
 			navSubAccts: DevKit.Controls.NavigationItem;
 		}
@@ -472,7 +452,7 @@ export namespace Account {
 				header: ['v4_Integer', 'v4_Integer1', 'v4_OptionSet', 'v4_String'],
 				tab: ['TAB_1___TAB_1_SECTION_1', 'TAB_1___TAB_1_SECTION_2', 'TAB_1___TAB_1_SECTION_3', 'TAB_1___TAB_1_SECTION_4', 'TAB_2___TAB_2_SECTION_1', 'TAB_2___TAB_2_SECTION_2'],
 				grid: ['Contacts'],
-				navigation: ['nav_adx_invitation_assigntoaccount', 'nav_msa_account_managingpartner', 'nav_msa_contact_managingpartner', 'navActivities', 'navAddresses', 'navAsyncOperations', 'navAudit', 'navCampaignsInSFA', 'navConnections', 'navContacts', 'navProcessSessions', 'navRelationships', 'navSocialprofiles', 'navSubAccts'],
+				navigation: ['navActivities', 'navAddresses', 'navContacts', 'navSubAccts'],
 				quick: ['ContactQuickForm___EMailAddress1', 'ContactQuickForm___FirstName', 'ContactQuickForm___LastName', 'ContactQuickForm___MobilePhone', 'ContactQuickForm___ParentCustomerId'],
 				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
 				dialog: []
@@ -1244,12 +1224,6 @@ export namespace Account {
 		 * Aggregate Navigation interface
 		 */
 		export interface INavigation {
-			/** Invitations */
-			nav_adx_invitation_assigntoaccount: DevKit.Controls.NavigationItem;
-			/** Managed Accounts */
-			nav_msa_account_managingpartner: DevKit.Controls.NavigationItem;
-			/** Managed Contacts */
-			nav_msa_contact_managingpartner: DevKit.Controls.NavigationItem;
 			/** Activities */
 			navActivities: DevKit.Controls.NavigationItem;
 			navActivityHistory: DevKit.Controls.NavigationItem;
@@ -1257,20 +1231,14 @@ export namespace Account {
 			navAddresses: DevKit.Controls.NavigationItem;
 			/** Workflows */
 			navAsyncOperations: DevKit.Controls.NavigationItem;
-			/** Audit History */
-			navAudit: DevKit.Controls.NavigationItem;
 			/** Campaigns */
 			navCampaignsInSFA: DevKit.Controls.NavigationItem;
-			/** Connections */
-			navConnections: DevKit.Controls.NavigationItem;
 			/** Contacts2 */
 			navContacts: DevKit.Controls.NavigationItem;
 			/** Dialog Sessions */
 			navProcessSessions: DevKit.Controls.NavigationItem;
 			/** CustomerRelationship */
 			navRelationships: DevKit.Controls.NavigationItem;
-			/** Social Profiles */
-			navSocialprofiles: DevKit.Controls.NavigationItem;
 			/** Accounts */
 			navSubAccts: DevKit.Controls.NavigationItem;
 			navSubAct: DevKit.Controls.NavigationItem;
@@ -1347,7 +1315,7 @@ export namespace Account {
 				header: ['CreditLimit', 'NumberOfEmployees', 'OwnerId', 'PreferredContactMethodCode', 'PrimaryContactId', 'Revenue', 'v4_Integer', 'v4_Integer1', 'v4_OptionSet', 'v4_String'],
 				tab: ['administration___contact methods', 'administration___internal information', 'contacts___contacts', 'details___billing information', 'details___description_2', 'details___professional information', 'DETAILS_TAB___BILLING', 'DETAILS_TAB___ChildAccounts', 'DETAILS_TAB___COMPANY_PROFILE', 'DETAILS_TAB___CONTACT_PREFERENCES', 'DETAILS_TAB___DETAILS_TAB_section_6', 'DETAILS_TAB___SHIPPING', 'general___account information', 'general___address', 'general___description', 'general___shipping information', 'notes and activities___activities', 'notes and activities___notes', 'SUMMARY_TAB___ACCOUNT_INFORMATION', 'SUMMARY_TAB___ADDRESS', 'SUMMARY_TAB___MapSection', 'SUMMARY_TAB___ref_pan_SUMMARY_TAB_section_6', 'SUMMARY_TAB___SOCIAL_PANE_TAB', 'SUMMARY_TAB___Summary_section_6', 'SUMMARY_TAB___SUMMARY_TAB_section_6', 'SUMMARY_TAB___Timeline', 'TAB_1___TAB_1_SECTION_1', 'TAB_1___TAB_1_SECTION_2', 'TAB_1___TAB_1_SECTION_3', 'TAB_1___TAB_1_SECTION_4', 'TAB_2___TAB_2_SECTION_1', 'TAB_2___TAB_2_SECTION_2'],
 				grid: ['accountactivitiesgrid', 'accountContactsGrid', 'ChildAccounts', 'Contacts'],
-				navigation: ['nav_adx_invitation_assigntoaccount', 'nav_msa_account_managingpartner', 'nav_msa_contact_managingpartner', 'navActivities', 'navActivityHistory', 'navAddresses', 'navAsyncOperations', 'navAudit', 'navCampaignsInSFA', 'navConnections', 'navContacts', 'navProcessSessions', 'navRelationships', 'navSocialprofiles', 'navSubAccts', 'navSubAct'],
+				navigation: ['navActivities', 'navActivityHistory', 'navAddresses', 'navAsyncOperations', 'navCampaignsInSFA', 'navContacts', 'navProcessSessions', 'navRelationships', 'navSubAccts', 'navSubAct'],
 				quick: ['contactquickform___EMailAddress1', 'ContactQuickForm___EMailAddress1', 'ContactQuickForm___FirstName', 'ContactQuickForm___LastName', 'ContactQuickForm___MobilePhone', 'ContactQuickForm___ParentCustomerId', 'contactquickform___Telephone1'],
 				bpf: ['AccountBPF___IndustryCode', 'AccountBPF___Name', 'AccountBPF___Name_1', 'AccountBPF___PrimaryContactId', 'AccountBPF___Revenue'],
 				dialog: []

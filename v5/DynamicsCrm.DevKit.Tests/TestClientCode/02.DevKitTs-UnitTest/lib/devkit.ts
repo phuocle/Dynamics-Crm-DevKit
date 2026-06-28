@@ -987,6 +987,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
     public Navigation!: TNavigation;
     public QuickForm!: TQuickForm;
     public Process!: TProcess;
+    public Dialog!: TDialog;
     public ExecutionContext!: DevKit.IExecutionContext;
     public Utility!: DevKit.IUtility;
     public SidePanes!: DevKit.ISidePanes;
@@ -1096,7 +1097,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         this.UiRemoveLoaded = (callback: any) => contextUi?.removeLoaded(callback);
         this.UiRemoveOnLoad = (callback: any) => contextUi?.removeOnLoad(callback);
         // Load form sections
-        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [] } = formConfig;
+        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
         const bodyObj: any = body.length > 0 ? loadFields(formContext, body) : {};
         bodyObj.Tab = tab.length > 0 ? loadTabs(formContext, tab) : {};
         this.Body = bodyObj as TBody;
@@ -1105,6 +1106,7 @@ export class FormBase<TBody = any, THeader = any, TGrid = any, TNavigation = any
         this.QuickForm = (quick.length > 0 ? loadQuickForms(formContext, quick) : {}) as TQuickForm;
         this.Grid = (grid.length > 0 ? loadGrids(formContext, grid) : {}) as TGrid;
         this.Navigation = (navigation.length > 0 ? loadNavigations(formContext, navigation) : {}) as TNavigation;
+        this.Dialog = (dialog.length > 0 ? loadFormDialog(formContext, dialog) : {}) as TDialog;
         this.Utility = loadUtility(defaultWebResourceName);
         this.ExecutionContext = loadExecutionContext(executionContext);
         this.SidePanes = loadSidePanes();

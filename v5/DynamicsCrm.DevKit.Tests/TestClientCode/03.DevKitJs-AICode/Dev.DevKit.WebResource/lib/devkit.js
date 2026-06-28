@@ -435,7 +435,7 @@ const devKit = (function () {
                 obj[quickFormName] = {};
                 quickFormFields[quickFormName] = [];
                 const quick = formContext?.ui?.quickForms?.get(quickFormName);
-                getter(obj[quickFormName], 'Body', () => loadFormDialog(quick, quickFormFields[quickFormName]));
+                getter(obj[quickFormName], 'Body', () => loadFormQuickView(quick, quickFormFields[quickFormName]));
                 getter(obj[quickFormName], 'ControlName', () => quick?.getName());
                 getter(obj[quickFormName], 'ControlParent', () => quick?.getParent());
                 getter(obj[quickFormName], 'ControlType', () => quick?.getControlType());
@@ -964,7 +964,7 @@ const devKit = (function () {
         obj.GetSelected = () => Xrm?.App?.sidePanes?.getSelectedPane();
         return obj;
     }
-    function loadFormDialog(formContext, fields) {
+    function loadFormQuickView(formContext, fields) {
         const obj = {};
         const hasGetControl = typeof formContext?.getControl === 'function';
         const fieldsLength = fields?.length || 0;
@@ -986,7 +986,7 @@ const devKit = (function () {
         const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
         const contextUi = formContext?.ui;
         obj.Close = () => contextUi?.close();
-        obj.Dialog = dialog?.length > 0 ? loadFormDialog(formContext, dialog) : {};
+        obj.Dialog = dialog?.length > 0 ? loadFormQuickView(formContext, dialog) : {};
         obj.Utility = loadUtility(defaultWebResourceName);
         return obj;
     }
@@ -1000,7 +1000,7 @@ const devKit = (function () {
         form.QuickForm = loadQuickForms(formContext, quick);
         form.Grid = loadGrids(formContext, grid);
         form.Navigation = loadNavigations(formContext, navigation);
-        form.Dialog = loadFormDialog(formContext, dialog);
+        form.Dialog = loadFormQuickView(formContext, dialog);
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
         form.SidePanes = loadSidePanes();

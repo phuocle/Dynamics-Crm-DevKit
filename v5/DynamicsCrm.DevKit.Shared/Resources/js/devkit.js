@@ -992,7 +992,7 @@ const devKit = (function () {
     }
     function loadFormV2(executionContext, defaultWebResourceName, formConfig) {
         const formContext = executionContext?.getFormContext?.() ?? executionContext ?? null;
-        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [] } = formConfig;
+        const { body = [], tab = [], header = [], bpf = [], quick = [], grid = [], navigation = [], dialog = [] } = formConfig;
         const form = loadForm(formContext);
         form.Body = loadBody(formContext, body, tab);
         form.Header = loadFields(formContext, header, 'header_');
@@ -1000,6 +1000,7 @@ const devKit = (function () {
         form.QuickForm = loadQuickForms(formContext, quick);
         form.Grid = loadGrids(formContext, grid);
         form.Navigation = loadNavigations(formContext, navigation);
+        form.Dialog = loadFormQuickView(formContext, dialog);
         form.Utility = loadUtility(defaultWebResourceName);
         form.ExecutionContext = loadExecutionContext(executionContext);
         form.SidePanes = loadSidePanes();
