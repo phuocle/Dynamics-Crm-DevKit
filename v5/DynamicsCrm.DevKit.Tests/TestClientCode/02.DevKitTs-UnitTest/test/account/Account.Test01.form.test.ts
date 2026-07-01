@@ -8,6 +8,7 @@
  */
 import { XrmMockGenerator } from 'xrm-mock';
 import { Account } from '../../entities/Account.form';
+import { FormBase } from '../../lib/devkit';
 
 // Global setup
 let mockGlobalContext: any;
@@ -240,6 +241,64 @@ describe('Account.form.ts - Form Class', () => {
             const form = new Account.Account_DevKitV4(executionContext);
 
             expect(form.EntityId).toBe('account-guid');
+        });
+    });
+
+    // =========================================================================
+    // Generated Form Constructor Coverage
+    // =========================================================================
+    describe('Generated form constructors', () => {
+        test('should instantiate every generated Account form class', () => {
+            const formContext = createFormContext();
+            const executionContext = { getFormContext: () => formContext };
+
+            expect(new Account.Account(executionContext)).toBeDefined();
+            expect(new Account.Account_for_Interactive_experience(executionContext)).toBeDefined();
+            expect(new Account.Account_Information(executionContext)).toBeDefined();
+            expect(new Account.Account_Quick_Create(executionContext)).toBeDefined();
+            expect(new Account.AllInOne(executionContext)).toBeDefined();
+        });
+
+        test('FormBase should load dialog controls when dialog config is present', () => {
+            let closed = false;
+            const formContext = createFormContext() as any;
+            formContext.ui.close = () => { closed = true; };
+            formContext.getControl = (name: string) => ({
+                getAttribute: () => ({
+                    getValue: () => `${name}_value`,
+                    setValue: () => { },
+                    getRequiredLevel: () => 'none',
+                    setRequiredLevel: () => { },
+                    getSubmitMode: () => 'dirty',
+                    setSubmitMode: () => { },
+                    getIsDirty: () => false,
+                    addOnChange: () => { },
+                    removeOnChange: () => { }
+                }),
+                getControlType: () => 'standard',
+                getDisabled: () => false,
+                setDisabled: () => { },
+                getLabel: () => name,
+                setLabel: () => { },
+                getVisible: () => true,
+                setVisible: () => { },
+                setFocus: () => { },
+                addNotification: () => { },
+                clearNotification: () => true,
+                setNotification: () => true
+            });
+
+            class DialogCoverageForm extends FormBase<any, any, any, any, any, any, any> {
+                constructor(executionContext: any) {
+                    super(executionContext, undefined, { dialog: ['DialogField'] });
+                }
+            }
+
+            const form = new DialogCoverageForm({ getFormContext: () => formContext });
+
+            expect(form.Dialog.DialogField).toBeDefined();
+            form.Dialog.Close();
+            expect(closed).toBe(true);
         });
     });
 });

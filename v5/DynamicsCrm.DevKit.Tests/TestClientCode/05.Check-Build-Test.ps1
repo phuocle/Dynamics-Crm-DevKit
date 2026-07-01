@@ -46,9 +46,9 @@ foreach ($project in $projects) {
                 npm run check
                 if ($LASTEXITCODE -ne 0) { throw "npm run check failed" }
 
-                Write-Host "Running: npm run release" -ForegroundColor Cyan
-                npm run release
-                if ($LASTEXITCODE -ne 0) { throw "npm run release failed" }
+                Write-Host "Running: npm run release:test" -ForegroundColor Cyan
+                npm run release:test
+                if ($LASTEXITCODE -ne 0) { throw "npm run release:test failed" }
 
                 Write-Host "Running: npm run devkit-test" -ForegroundColor Cyan
                 npm run devkit-test

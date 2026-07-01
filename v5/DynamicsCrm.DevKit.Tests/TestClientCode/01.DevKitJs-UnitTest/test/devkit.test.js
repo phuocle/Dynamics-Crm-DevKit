@@ -4264,5 +4264,47 @@ describe('devKit', () => {
         global.parent = originalParent;
         global.Xrm = originalXrm;
     });
+
+    test("LoadFormDialog Dialog.Close calls formContext.ui.close", () => {
+        let closed = false;
+        const formContext = {
+            ui: { close: function () { closed = true; } },
+            data: { attributes: { get: function () { return null; } } },
+            getControl: function () {
+                return {
+                    getAttribute: function () {
+                        return {
+                            getValue: function () { return "dialog_value"; },
+                            setValue: function () { },
+                            getRequiredLevel: function () { return "none"; },
+                            setRequiredLevel: function () { },
+                            getSubmitMode: function () { return "dirty"; },
+                            setSubmitMode: function () { },
+                            getIsDirty: function () { return false; },
+                            addOnChange: function () { },
+                            removeOnChange: function () { }
+                        };
+                    },
+                    getControlType: function () { return "standard"; },
+                    getDisabled: function () { return false; },
+                    setDisabled: function () { },
+                    getLabel: function () { return "Dialog Field"; },
+                    setLabel: function () { },
+                    getVisible: function () { return true; },
+                    setVisible: function () { },
+                    setFocus: function () { },
+                    addNotification: function () { },
+                    clearNotification: function () { return true; },
+                    setNotification: function () { return true; }
+                };
+            }
+        };
+
+        const form = devKit.LoadFormDialog({ getFormContext: function () { return formContext; } }, ["dialogfield"]);
+
+        expect(form.Dialog.dialogfield).toBeDefined();
+        form.Dialog.Close();
+        expect(closed).toBe(true);
+    });
 });
 
