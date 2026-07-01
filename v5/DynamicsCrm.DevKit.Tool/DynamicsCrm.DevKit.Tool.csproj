@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<IsPublishable>True</IsPublishable>
+
+		<AssemblyVersion>4.12.34.56</AssemblyVersion>
+		<FileVersion>4.12.34.56</FileVersion>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
+		<Company>PhuocLe</Company>
+		<Product>DynamicsCrm.DevKit.Tool</Product>
+		<Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
+		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
+		<Version>4.12.34.56</Version>
+		<AssemblyTitle>DynamicsCrm.DevKit.Tool</AssemblyTitle>
+		<AssemblyDescription>DynamicsCrm.DevKit.Tool</AssemblyDescription>
+		<BaseOutputPath>bin</BaseOutputPath>
+
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<LangVersion>latest</LangVersion>
+
+		<!-- .NET Global Tool Configuration -->
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>devkit-tool</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<PackageId>DynamicsCrm.DevKit.Tool</PackageId>
+		<PackageDescription>Utility tools for DynamicsCrm.DevKit development. Includes documentation generation, JavaScript/CSS minification, coverage conversion, and encryption tools for Dynamics 365/Dataverse projects.</PackageDescription>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>PhuocLe</Authors>
+		<PackageTags>dynamics365;crm;devkit;tool;documentation;minify;coverage</PackageTags>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs" Link="Lib\Const.cs" />
+	  <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs" Link="Lib\Enum.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="README.md" Pack="true" PackagePath="\" />
+	  <None Include="..\images\icon.png" Pack="true" PackagePath="icon.png" />
+	  <None Include="license\LICENSE.txt" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\CreateEntity\*.xml" />
+	</ItemGroup>
+	<PropertyGroup>
+		<NoWarn>SYSLIB0041;NU5100</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
+	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+	  <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	  <PackageReference Include="NUglify" Version="1.21.17" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+	</ItemGroup>
+</Project>

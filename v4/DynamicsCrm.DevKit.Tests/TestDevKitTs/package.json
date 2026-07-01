@@ -19,5 +19,31 @@
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3",
     "xrm-mock": "^3.6.2"
+  },
+  "overrides": {
+    "anymatch": {
+      "picomatch": "2.3.2"
+    },
+    "micromatch": {
+      "picomatch": "2.3.2"
+    },
+    "test-exclude": {
+      "minimatch": "3.1.5"
+    },
+    "minimatch@3": {
+      "brace-expansion": "1.1.13"
+    },
+    "minimatch@9": {
+      "brace-expansion": "2.0.3"
+    },
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "4.2.0"
+    },
+    "ts-jest": {
+      "handlebars": "4.7.9"
+    },
+    "jsdom": {
+      "ws": "8.21.0"
+    }
   }
 }

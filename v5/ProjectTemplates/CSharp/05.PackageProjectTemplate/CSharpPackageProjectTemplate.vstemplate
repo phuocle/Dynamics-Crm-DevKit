@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>05. Package Project</Name>
+    <Description>Project template for building Dataverse package plugins. Easily manage dependencies with NuGet and target .NET Framework for Microsoft Dataverse solutions.</Description>
+    <DefaultName>PackageProject</DefaultName>
+    <TemplateID>DynamicsCrm.DevKit.CSharpPackageProject</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <CreateInPlace>true</CreateInPlace>
+    <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+    <LanguageTag>CSharp</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
+    <SortOrder>140</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj.template" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="README.md">README.md</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.only.bat">deploy.debug.only.bat</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Package</FullClassName>
+  </WizardExtension>
+</VSTemplate>

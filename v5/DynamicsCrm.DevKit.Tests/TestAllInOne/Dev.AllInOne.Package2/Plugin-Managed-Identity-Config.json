@@ -1,0 +1,10 @@
+{
+  "CertificateFileName": "Dev.AllInOne.Package2",
+  "CertificatePassword": "P@ssw0rd-Dev.AllInOne.Package2",
+  "CertificateValidityYears": 10,
+  "AppName": "Dev.AllInOne.Package2",
+  "EnvironmentIds": [
+    "cbba8ce9-ea7c-e440-b083-0b9517496e17",
+    "2f985c04-9487-e70c-aa57-dcd6d08f0886"
+  ]
+}

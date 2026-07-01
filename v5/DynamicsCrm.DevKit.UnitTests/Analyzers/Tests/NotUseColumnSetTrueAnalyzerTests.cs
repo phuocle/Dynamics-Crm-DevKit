@@ -1,0 +1,130 @@
+using System.Threading.Tasks;
+using DynamicsCrm.DevKit.Analyzers.CrmAnalyzers;
+using DynamicsCrm.DevKit.UnitTests.Analyzers.Verifier;
+using Xunit;
+
+namespace DynamicsCrm.DevKit.UnitTests.Analyzers.Tests
+{
+    public class NotUseColumnSetTrueAnalyzerTests
+    {
+        private const string ColumnSetStub = @"
+namespace Microsoft.Xrm.Sdk.Query
+{
+    public class ColumnSet
+    {
+        public bool AllColumns { get; set; }
+        public ColumnSet() { }
+        public ColumnSet(bool allColumns) { AllColumns = allColumns; }
+        public ColumnSet(params string[] columns) { }
+    }
+}
+";
+
+        private static string WrapInMethod(string body) => $@"
+{ColumnSetStub}
+public class Sample
+{{
+    public void Run()
+    {{
+        {body}
+    }}
+}}
+";
+
+        [Fact]
+        public async Task Diagnostic_When_New_ColumnSet_true()
+        {
+            var src = WrapInMethod("var cs = [|new Microsoft.Xrm.Sdk.Query.ColumnSet(true)|];");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Initializer_AllColumns_true()
+        {
+            var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet { [|AllColumns = true|] };");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Assignment_AllColumns_true()
+        {
+            var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(); [|cs.AllColumns = true|];");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_String_Contains_AllAttributes()
+        {
+            var src = WrapInMethod("var s = \"<fetch><entity><[|all-attributes|]/></entity></fetch>\";");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_Interpolated_String_Contains_AllAttributes()
+        {
+            var src = WrapInMethod("var s = $\"prefix <entity><[|all-attributes|]/></entity> suffix\";");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_ColumnSet_Specific_Columns()
+        {
+            var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(\"name\", \"accountnumber\");");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_ColumnSet_False_Constructor()
+        {
+            var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(false);");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_AllColumns_false()
+        {
+            var src = WrapInMethod("var cs = new Microsoft.Xrm.Sdk.Query.ColumnSet(); cs.AllColumns = false;");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task Diagnostic_When_String_Contains_AllAttributes_Case_Insensitive()
+        {
+            var src = WrapInMethod("var s = \"<fetch><entity><[|ALL-ATTRIBUTES|] /></entity></fetch>\";");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_String_Has_No_AllAttributes()
+        {
+            var src = WrapInMethod("var s = \"<fetch><entity><attribute name='name'/></entity></fetch>\";");
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public async Task NoDiagnostic_When_Not_ColumnSet_Constructor_With_True()
+        {
+            var src = @"
+public class Sample
+{
+    public void Run()
+    {
+        var x = new SomeClass(true);
+    }
+}
+public class SomeClass
+{
+    public SomeClass(bool flag) { }
+}
+";
+            await CSharpAnalyzerVerifier<NotUseColumnSetTrueAnalyzer>.VerifyAnalyzerAsync(src);
+        }
+
+        [Fact]
+        public void Initialize_WithNullContext_ThrowsArgumentNullException()
+        {
+            var analyzer = new NotUseColumnSetTrueAnalyzer();
+            Assert.Throws<System.ArgumentNullException>(() => analyzer.Initialize(null));
+        }
+    }
+}

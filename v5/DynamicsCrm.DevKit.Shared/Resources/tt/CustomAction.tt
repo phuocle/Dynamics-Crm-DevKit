@@ -1,0 +1,54 @@
+using System;
+using Microsoft.Xrm.Sdk;
+using <#=Context.PluginSharedNameSpace#>;
+
+namespace <#=Context.PluginNameSpace#>
+{
+    [CrmPluginRegistration("<#=Context.PluginMessage#>", "<#=Context.EntityLogicalName#>", StageEnum.<#=Context.PluginStage#>, ExecutionModeEnum.<#=Context.PluginExecution#>, "", "<#=Context.RegistrationName#>", <#=Context.PluginOrder#>, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction<#if(Context.IsAsynchronous){#>, DeleteAsyncOperation = true<#}#>)]
+    public class <#=Context.ClassWithOrder#> : IPlugin
+    {
+        /*
+<#=Context.PluginComment#>
+        */
+
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
+        //public <#=Context.ClassWithOrder#>(string unSecureConfiguration, string secureConfiguration)
+        //{
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
+        //}
+
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            if (!int.Equals(context.Stage, (int)StageEnum.<#=Context.PluginStage#>)) throw new InvalidPluginExecutionException("Stage does not equals <#=Context.PluginStage#>");
+            if (!string.Equals(context.MessageName, "<#=Context.PluginMessage#>", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("MessageName does not equals <#=Context.PluginMessage#>");
+            if (!string.Equals(context.PrimaryEntityName, "<#=Context.EntityLogicalName#>", StringComparison.OrdinalIgnoreCase)) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals <#=Context.EntityLogicalName#>");
+            if (!int.Equals(context.Mode, (int)ExecutionModeEnum.<#=Context.PluginExecution#>)) throw new InvalidPluginExecutionException("Execution does not equals <#=Context.PluginExecution#>");
+            var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            var serviceAdmin = serviceFactory.CreateOrganizationService(null);
+            var service = serviceFactory.CreateOrganizationService(context.UserId);
+
+            tracing?.DebugContext(context);
+
+            var outputs = ExecuteCustomAction(context, serviceFactory, serviceAdmin, service, tracing);
+            foreach (var output in outputs)
+            {
+                if (context.OutputParameters.Contains(output.Key))
+                {
+                    context.OutputParameters[output.Key] = output.Value;
+                }
+            }
+        }
+
+        private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService serviceAdmin, IOrganizationService service, ITracingService tracing)
+        {
+            var outputs = new ParameterCollection();
+            //YOUR CUSTOM ACTION BEGIN HERE
+
+            return outputs;
+        }
+    }
+}

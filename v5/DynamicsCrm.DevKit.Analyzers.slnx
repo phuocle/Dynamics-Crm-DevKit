@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DynamicsCrm.DevKit.UnitTests/DynamicsCrm.DevKit.UnitTests.csproj" />
+  <Project Path="DynamicsCrm.DevKit.Analyzers/DynamicsCrm.DevKit.Analyzers.csproj" />
+</Solution>

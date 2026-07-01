@@ -1,0 +1,1 @@
+$generator.form.bat$

@@ -1,0 +1,259 @@
+using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Shell;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace DynamicsCrm.DevKit.Lib.Forms
+{
+    public partial class FormItem : BaseDialogWindow
+    {       
+        
+        public ServiceClient ServiceClient => CONNECTION.ServiceClient;
+        public CrmConnection CrmConnection => CONNECTION.CrmConnection;
+        public SystemForm SelectedDialogForm { get; set; }
+        public List<SystemForm> DialogForms { get; set; }
+        private readonly string _telemetryCorrelationId = ItemTemplateTelemetry.NewCorrelationId();
+        private readonly System.IDisposable _dialogTelemetryScope;
+        public string ItemName
+        {
+            get
+            {
+                if (ItemType == ItemType.TsDialog || ItemType == ItemType.JsDialog)
+                {
+                    var index = ComboBox.SelectedIndex;
+                    if (index >= 0 && DialogForms != null && index < DialogForms.Count)
+                    {
+                        SelectedDialogForm = DialogForms[index];
+                        return SelectedDialogForm.Name;
+                    }
+                    return LabelItemNameLatest.Content?.ToString();
+                }
+                return ((XrmEntity)ComboBox.SelectedItem)?.SchemaName ?? LabelItemNameLatest.Content?.ToString();
+            }
+        }
+        
+        private ItemType _ItemType = DynamicsCrm.DevKit.Shared.ItemType.None;
+        private ItemType ItemType
+        {
+            get => _ItemType;
+            set
+            {
+                void LateBoundItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("Late Bound Class Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
+                void JsFormItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript Form Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
+                void TsFormItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Form-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript Form Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
+                void JsWebApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript WebApi Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
+                void TsWebApiItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-WebApi-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript WebApi Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Entity";
+                }
+                void TsDialogItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/TypeScript-Dialog-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("TypeScript Dialog Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Dialog";
+                }
+                void JsDialogItem()
+                {
+                    HELP.NavigateUri = new System.Uri("https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Dialog-Item-Template");
+                    HELP.Inlines.Clear();
+                    HELP.Inlines.Add("JavaScript Dialog Item Template");
+                    ComboBox.Visibility = System.Windows.Visibility.Visible;
+                    ComboBox.IsEditable = false;
+                    Textbox.Visibility = System.Windows.Visibility.Hidden;
+                    LabelItemNameLatest.Visibility = System.Windows.Visibility.Collapsed;
+                    LabelItemName.Content = "Dialog";
+                }
+                _ItemType = value;
+                switch (_ItemType)
+                {
+                    case ItemType.LateBound:
+                        LateBoundItem();
+                        break;
+                    case ItemType.JsForm:
+                        JsFormItem();
+                        break;
+                    case ItemType.JsWebApi:
+                        JsWebApiItem();
+                        break;
+                    case ItemType.TsForm:
+                        TsFormItem();
+                        break;
+                    case ItemType.TsWebApi:
+                        TsWebApiItem();
+                        break;
+                    case ItemType.TsDialog:
+                        TsDialogItem();
+                        break;
+                    case ItemType.JsDialog:
+                        JsDialogItem();
+                        break;
+                }
+            }
+        }
+
+        private void ButtonCustom_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            
+        }        
+
+        public FormItem(ItemType itemType)
+        {
+            InitializeComponent();
+            ItemType = itemType;
+            _dialogTelemetryScope = ItemTemplateTelemetry.Start(nameof(FormItem), _telemetryCorrelationId, "DialogShown", $"itemType={itemType}");
+        }
+
+        public string TemplateTitle
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }        
+
+        private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ItemTemplateTelemetry.Log(nameof(FormItem), _telemetryCorrelationId, "DialogCancel", $"itemType={ItemType}");
+            _dialogTelemetryScope?.Dispose();
+            DialogResult = false;
+        }
+
+        private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (IsValid())
+            {
+                ItemTemplateTelemetry.Log(nameof(FormItem), _telemetryCorrelationId, "DialogOK", $"itemType={ItemType}; itemName={ItemName}");
+                _dialogTelemetryScope?.Dispose();
+                DialogResult = true;
+            }
+            bool IsValid()
+            {                
+                return true;
+            }
+        }
+
+        private void Connection_Connected(object sender, System.EventArgs e)
+        {
+            if (
+                ItemType == ItemType.LateBound ||
+                ItemType == ItemType.JsForm ||
+                ItemType == ItemType.JsWebApi ||
+                ItemType == ItemType.TsForm ||
+                ItemType == ItemType.TsWebApi
+                )
+            {
+                StackPanelMain.IsEnabled = false;
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                CONNECTION.SetIsEnabledButtonConnection(false);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        var metadata = new MetadataService(ServiceClient);
+                        await metadata.ReadEntitiesMetadataAsync(Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity);
+                        var items = MetadataService.GetListXrmEntity(XrmHelper.EntitiesMetadata);
+                        items = items.OrderBy(x => x.LogicalName).ToList();
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBox.DisplayMemberPath = Const.SchemaName;
+                        ComboBox.ItemsSource = items;
+                        buttonOK.IsEnabled = items.Count > 0;
+                        StackPanelMain.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        CONNECTION.SetIsEnabledButtonConnection(true);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }
+            else if (ItemType == ItemType.TsDialog || ItemType == ItemType.JsDialog)
+            {
+                StackPanelMain.IsEnabled = false;
+                progressBar.Visibility = System.Windows.Visibility.Visible;
+                CONNECTION.SetIsEnabledButtonConnection(false);
+                _ = Task.Factory.StartNew(() =>
+                {
+                    ThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        var metadata = new MetadataService(ServiceClient);
+                        DialogForms = await metadata.GetEntityDialogFormsAsync();
+                        var displayNames = DialogForms.Select(x => x.Name).ToList();
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        ComboBox.DisplayMemberPath = null;
+                        ComboBox.ItemsSource = displayNames;
+                        buttonOK.IsEnabled = displayNames.Count > 0;
+                        StackPanelMain.IsEnabled = true;
+                        progressBar.Visibility = System.Windows.Visibility.Hidden;
+                        CONNECTION.SetIsEnabledButtonConnection(true);
+                    });
+                }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
+            }            
+        }
+
+        private void TextboxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {            
+        }
+
+        private void ComboBoxProject_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {            
+        }
+
+        private void ComboBoxProject_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {            
+        }
+    }
+}

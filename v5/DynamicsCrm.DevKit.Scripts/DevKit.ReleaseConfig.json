@@ -1,0 +1,43 @@
+{
+    "$schema":  "https://json-schema.org/draft-07/schema#",
+    "description":  "Single source of truth for DynamicsCrm.DevKit release configuration",
+    "version":  "4.12.34.56",
+    "placeholders":  {
+                         "date":  "xxxx.yy.zz HH.mm.ss"
+                     },
+    "files":  {
+                  "dateReplacement":  [
+                                          "DynamicsCrm.DevKit.Cli\\README.md",
+                                          "DynamicsCrm.DevKit.Analyzers\\README.md",
+                                          "DynamicsCrm.DevKit\\README.md",
+                                          "DynamicsCrm.DevKit.Tool\\README.md",
+                                          "DynamicsCrm.DevKit.Shared\\Const.cs",
+                                          "DynamicsCrm.DevKit\\source.extension.vsixmanifest",
+                                          "DynamicsCrm.DevKit\\VSPackage.resx",
+                                          "DynamicsCrm.DevKit\\source.extension.cs",
+                                          "ProjectTemplates\\CSharp\\01.SharedProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\02.ConsoleProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\03.ConsoleCoreProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\04.ServerProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\05.PackageProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\06.WebResourceProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\07.SharedTestProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\08.ProxyTypesProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\09.TestProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\10.TestUiProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\11.SolutionPackagerProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\12.ReportProjectTemplate\\README.md",
+                                          "ProjectTemplates\\CSharp\\13.WebResourceTsProjectTemplate\\README.md"
+                                      ]
+              },
+    "buildConfig":  {
+                        "publishedRoot":  "Published",
+                        "annualRelease":  {
+                                              "month":  6,
+                                              "day":  30,
+                                              "hour":  23,
+                                              "minute":  59,
+                                              "second":  59
+                                          }
+                    }
+}

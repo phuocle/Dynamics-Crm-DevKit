@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xs:schema attributeFormDefault='unqualified'
+           elementFormDefault='qualified'
+           xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+  <xs:element name='datadefinition'>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name='fetchcollection'>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs='unbounded'
+                          name='fetch'>
+                <xs:annotation>
+                  <!--FetchXML goes here-->
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name='categorycollection'>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name='category'
+                          type='CategoryType'
+                          minOccurs='1'
+                          maxOccurs='unbounded' />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name ='CategoryType'>
+    <xs:sequence>
+      <xs:element minOccurs='1'
+                  maxOccurs='unbounded'
+                  name='measurecollection'>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs='1'
+                        maxOccurs='unbounded'
+                        name='measure'>
+              <xs:complexType>
+                <xs:attribute name='alias'
+                              type='xs:string'
+                              use='required' />
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name='alias'
+                  type='xs:string'
+                  use='optional' />
+  </xs:complexType>
+</xs:schema>

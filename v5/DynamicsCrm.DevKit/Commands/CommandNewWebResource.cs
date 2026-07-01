@@ -1,0 +1,142 @@
+using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib;
+using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Shared.Services;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.VisualStudio.Shell;
+using System;
+using System.Threading.Tasks;
+
+namespace DynamicsCrm.DevKit.Commands
+{
+    [Command(PackageIds.CommandDeployNewWebResource)]
+    public class CommandNewWebResource : BaseCommand<CommandNewWebResource>
+    {
+        protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
+        {
+            // Save current document before processing (equivalent to Ctrl+S)
+            await VsixHelper.ExecuteCommandAsync("File.Save");
+
+            await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+            var serviceClient = await CacheHelper.GetServiceClientAsync();
+
+            if (serviceClient == null)
+            {
+                await VS.StatusBar.ClearAsync();
+                await VS.MessageBox.ShowErrorAsync("Connection cancelled by user");
+                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                return;
+            }
+
+            var url = serviceClient.ConnectedUrl();
+            await TypeScriptBuildHelper.ShowStatusAsync(url, "Connected");
+
+            var deployment = new DeploymentService(serviceClient);
+            var solutions = await deployment.GetSolutionsAsync();
+            var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+
+            // Handle TypeScript files: build first, then deploy the resulting .js file
+            var (success, deployFilePath, error) = await TypeScriptBuildHelper.ProcessTypeScriptForDeploymentAsync(fullFileName, url);
+            if (!success)
+            {
+                await VS.StatusBar.ClearAsync();
+                await TypeScriptBuildHelper.ShowStatusAsync(url, error);
+                await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+                return;
+            }
+            fullFileName = deployFilePath;
+
+            var fullFileNameForCrm = fullFileName.Substring((await VsixHelper.GetSolutionFolderAsync()).Length);
+            var defaultNewWebResourceName = await TypeScriptBuildHelper.GetDefaultNewWebResourceNameAsync(fullFileName);
+            var form = new FormWebResource(true, fullFileNameForCrm, solutions, defaultNewWebResourceName);
+
+            if (form.ShowModal() == true)
+            {
+                var webResourceId = await DeployNewWebResourceAsync(serviceClient, form.SelectedNewWebResource, fullFileName);
+                var update = form.SelectedNewWebResource;
+                update.WebResourceId = webResourceId;
+                CacheHelper.SetWebResourceCache(fullFileNameForCrm, update);
+                await VsixHelper.SaveDynamicsCrmDevKitConfigJsonAsync(update);
+            }
+            else
+            {
+                await VS.StatusBar.ClearAsync();
+                await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, "No web resource selected for deployment");
+            }
+
+            await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
+        }
+
+        private static async Task<Guid> DeployNewWebResourceAsync(ServiceClient serviceClient, DeployWebResource deployWebResource, string fullFileName)
+        {
+            const int wait = 2;
+            var url = serviceClient.ConnectedUrl();
+
+            var deployment = new DeploymentService(serviceClient);
+
+            await TypeScriptBuildHelper.ShowStatusAsync(url, "Deploying ...");
+            var (webResouceId, message) = await deployment.DeployNewWebResourceAsync(fullFileName, deployWebResource.WebResource);
+
+            if (webResouceId != Guid.Empty)
+            {
+                await TypeScriptBuildHelper.ShowStatusAsync(url, "Deployed");
+                await Helper.DelayAsync(wait);
+                await TypeScriptBuildHelper.ShowStatusAsync(url, "Adding to solution ...");
+                await Helper.DelayAsync(wait);
+                await deployment.AddWebResourceToSolutionAsync(webResouceId, deployWebResource.SolutionUniqueName);
+                await Helper.DelayAsync(wait);
+                await TypeScriptBuildHelper.ShowStatusAsync(url, "Added to solution");
+                await Helper.DelayAsync(wait);
+                await TypeScriptBuildHelper.ShowStatusAsync(url, "Publishing ...");
+
+                var (ok2, message2) = await deployment.PublishWebResourceAsync(webResouceId);
+                if (ok2)
+                {
+                    await TypeScriptBuildHelper.ShowStatusAsync(url, $"[{fullFileName}] published to: [{deployWebResource.WebResource}]");
+                }
+                else
+                {
+                    await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, $"Publishing Failed with message: {message2}");
+                }
+            }
+            else
+            {
+                await TypeScriptBuildHelper.ShowStatusAndErrorAsync(url, $"Deploying Failed with message: {message}");
+            }
+            return webResouceId;
+        }
+
+        protected override void BeforeQueryStatus(EventArgs e)
+        {
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                var extension = await VsixHelper.SelectedItem.GetExtensionAsync();
+                var fullFileName = await VsixHelper.SelectedItem.GetFullFileNameAsync();
+                
+                // Check if file is a valid web resource extension
+                var isVisible = Helper.IsWebResourceExtension(extension);
+                
+                // For .ts files, exclude *.form.ts and *.webapi.ts (generated files, not deployable)
+                if (isVisible && extension.Equals(".ts", StringComparison.OrdinalIgnoreCase))
+                {
+                    isVisible = TypeScriptBuildHelper.IsDeployableTypeScript(fullFileName);
+                }
+                
+                this.Command.Visible = isVisible;
+                
+                // Change label for deployable TypeScript files to indicate Debug mode
+                if (TypeScriptBuildHelper.IsDeployableTypeScript(fullFileName))
+                {
+                    this.Command.Text = "Deploy New WebResource (Debug)";
+                }
+                else
+                {
+                    this.Command.Text = "Deploy New WebResource";
+                }
+            });
+        }
+    }
+}
+

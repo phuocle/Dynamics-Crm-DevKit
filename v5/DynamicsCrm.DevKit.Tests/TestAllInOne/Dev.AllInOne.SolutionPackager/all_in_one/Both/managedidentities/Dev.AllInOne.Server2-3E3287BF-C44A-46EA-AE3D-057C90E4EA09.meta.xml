@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<managedidentity managedidentityid="eedb4616-9c52-4b08-adec-30d72d35743a" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <applicationid>{3e3287bf-c44a-46ea-ae3d-057c90e4ea09}</applicationid>
+  <credentialsource>2</credentialsource>
+  <identitytype>0</identitytype>
+  <iscustomizable>1</iscustomizable>
+  <name>Dev.AllInOne.Server2-3E3287BF-C44A-46EA-AE3D-057C90E4EA09</name>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <subjectscope>1</subjectscope>
+  <tenantid>{49528483-b79b-4b88-b86e-7d882ba68911}</tenantid>
+  <version>2</version>
+</managedidentity>

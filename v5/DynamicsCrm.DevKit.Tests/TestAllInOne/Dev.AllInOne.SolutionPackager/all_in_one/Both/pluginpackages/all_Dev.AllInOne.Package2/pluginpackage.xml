@@ -1,0 +1,12 @@
+<pluginpackage uniquename="all_Dev.AllInOne.Package2">
+  <exportkeyversion>1</exportkeyversion>
+  <iscustomizable>1</iscustomizable>
+  <managedidentityid>
+    <managedidentityid>0397dc6f-57c9-4808-b05b-c4fca1511d41</managedidentityid>
+  </managedidentityid>
+  <name>all_Dev.AllInOne.Package2</name>
+  <package mimetype="application/octet-stream">all_Dev.AllInOne.Package2.nupkg</package>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <version>4.12.34.56</version>
+</pluginpackage>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>12. DevKit files</Name>
+		<Description>Create DevKit support files including JavaScript helper files, CLI batch files, and managed identity setup scripts.</Description>
+		<Icon>icon.png</Icon>
+		<TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000011</TemplateID>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>Visual C#</ProjectSubType>
+		<AppliesTo>CSharp</AppliesTo>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+		<DefaultName>batfile.bat</DefaultName>
+		<SortOrder>220</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$batfilename$">batfile.bat</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="devkit.js">devkit.js</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="devkit.d.ts">devkit.d.ts</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Plugin-Managed-Identity-Config.json">Plugin-Managed-Identity-Config.json</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Plugin-Managed-Identity.md">Plugin-Managed-Identity.md</ProjectItem>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.BatFile</FullClassName>
+	</WizardExtension>
+</VSTemplate>

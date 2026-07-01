@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>12. Report Project</Name>
+		<Description>A project for designing Microsoft Dataverse (Dynamics 365) SSRS reports.</Description>
+		<DefaultName>ReportProject</DefaultName>
+		<TemplateID>DynamicsCrm.DevKit.CSharpReportProject</TemplateID>
+		<TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+		<Icon>icon.png</Icon>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<CreateNewFolder>false</CreateNewFolder>
+		<ProvideDefaultName>false</ProvideDefaultName>
+		<LocationField>Disabled</LocationField>
+		<EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+		<EnableEditOfLocationField>false</EnableEditOfLocationField>
+		<CreateInPlace>true</CreateInPlace>
+		<ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+		<LanguageTag>CSharp</LanguageTag>
+		<PlatformTag>Windows</PlatformTag>
+		<SortOrder>210</SortOrder>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="$SafeProjectName$.csproj" File="ProjectTemplate.csproj" ReplaceParameters="true">
+			<ProjectItem ReplaceParameters="true" TargetFileName="README.md">README.md</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="ReportTemplate.rdl">ReportTemplate.rdl</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="download.reports.bat">download.reports.bat</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="upload.reports.bat">upload.reports.bat</ProjectItem>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>DynamicsCrm.DevKit, Version=4.12.34.56, Culture=Neutral, PublicKeyToken=null</Assembly>
+		<FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Report</FullClassName>
+	</WizardExtension>
+</VSTemplate>

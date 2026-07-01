@@ -1,0 +1,163 @@
+﻿{
+  "servers": [
+    {
+      "profile": "DEBUG",
+      "solution": "all_in_one",
+      "folder": "bin\\Debug",
+      "includefiles": [
+        "Dev.AllInOne.Server*.dll",
+        "Dev.AllInOne.Package*.nupkg"
+      ],
+      "excludefiles": [
+        "Dev.AllInOne.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "all_in_one",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "dialogs\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "all_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "all_/entities/[entity].form.js",
+            "all_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "all_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "all_/lib/devkit.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "DEBUGTS",
+      "solution": "all_in_one",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "html\\**.html",
+        "images\\**.png",
+        "resources\\*.resx",
+        "build\\entities\\*.js",
+        "build\\dialogs\\*.js"
+      ],
+      "excludefiles": [],
+      "dependencies": []
+    }
+  ],
+  "datasources": [
+    {
+      "profile": "ServerSql",
+      "solution": "all_in_one",
+      "displayname": "Server Sql",
+      "pluralname": "Server Sql"
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "type": "CSharp",
+      "rootnamespace": "Dev.AllInOne.Shared.Entities",
+      "namespace": "",
+      "rootfolder": "",
+      "entities": "folder"
+    },
+    {
+      "profile": "JS-FORM",
+      "type": "JsForm",
+      "rootnamespace": "AllInOne",
+      "rootfolder": "",
+      "entities": "folder"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "type": "JsWebApi",
+      "rootnamespace": "AllInOne",
+      "rootfolder": "",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-FORM",
+      "type": "TsForm",
+      "rootfolder": "",
+      "entities": "folder"
+    },
+    {
+      "profile": "TS-WEBAPI",
+      "type": "TsWebApi",
+      "rootfolder": "",
+      "entities": "folder"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "all_in_one"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "all_in_one"
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "solution": "all_in_one",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "all_in_one",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "solution": "all_in_one",
+      "rootfolder": "",
+      "solutiontype": "Both",
+      "folder": "all_in_one",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "modelbuilders": [
+    {
+      "profile": "ALL",
+      "namespace": "Dev.AllInOne.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "account,contact,team,systemuser"
+    }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "all_in_one",
+      "languages": [
+        "English"
+      ]
+    }
+  ]
+}

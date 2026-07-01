@@ -1,0 +1,72 @@
+# Code coverage reports
+**/CoverageReport/
+**/ReportGenerator_Summary/
+**/coverage/
+*.coverage
+*.cobertura.xml
+*.coveragexml
+coverage.json
+lcov.info
+*.opencover.xml
+
+# Test results
+**/TestResults/
+
+# Dependencies
+**/node_modules/
+**/package-lock.json
+
+# Build output
+**/build/
+**/bin/
+**/obj/
+**/nupkg/
+
+# DevKit MCP working directory
+.devkit/
+
+# Tool test data
+DynamicsCrm.DevKit.Tool/Test/
+
+# Environment secrets
+.env
+
+# IDE
+**/.vscode/*
+!.vscode/mcp.json
+**/.idea/
+
+# MCP config with credentials (each dev has their own)
+.cursor/mcp.json
+.gemini/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output / release packages
+Published/
+
+# Shared generated AI/MCP examples (tracked); local actual configs stay ignored
+!.codex/
+!.codex/*.example
+!.vscode/mcp.json.example
+!.mcp.json.example
+!.agents/mcp_config.json.example
+
+# Local MCP config with credentials or per-user settings
+.codex/config.toml
+.vscode/mcp.json
+.mcp.json
+.agents/mcp_config.json
+.cursor/mcp.json
+.claude/settings.local.json
+
+# DynamicsCrm.DevKit local project environment
+D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOneEnvVar/.env
+
+# DynamicsCrm.DevKit local project environment
+D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAllInOne/.env
+
+# DynamicsCrm.DevKit local project environment
+D:/github/Dynamics-Crm-DevKit/v5/DynamicsCrm.DevKit.Tests/TestAddCrmPluginRegistration/2.after/.env

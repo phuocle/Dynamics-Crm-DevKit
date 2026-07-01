@@ -1,0 +1,120 @@
+using System;
+using System.Reflection;
+using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Tool.Commands;
+using Spectre.Console;
+using Spectre.Console.Cli;
+
+namespace DynamicsCrm.DevKit.Tool
+{
+    class Program
+    {
+        static int Main(string[] args)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            if (args == null || args.Length == 0 ||
+                (args.Length == 1 && (args[0] == "--help" || args[0] == "-h" || args[0] == "/?")))
+            {
+                WriteBanner();
+                WriteHelp();
+                return 0;
+            }
+
+            if (args.Length == 1 && (args[0] == "--version" || args[0] == "-v"))
+            {
+                var ver = Assembly.GetExecutingAssembly().GetName().Version;
+                Console.WriteLine($"{ver} Build: {Const.Build}");
+                return 0;
+            }
+
+            WriteBanner();
+
+            var app = new CommandApp();
+            app.Configure(config =>
+            {
+                config.SetApplicationName("devkit-tool");
+                var version = Assembly.GetExecutingAssembly().GetName().Version;
+                config.SetApplicationVersion($"{version} Build: {Const.Build}");
+
+                config.AddCommand<DocumentGeneratorCommand>("documentgenerator")
+                      .WithDescription("Generate Dataverse entity documentation (markdown)");
+
+                config.AddCommand<DocumentCodeGeneratorCommand>("documentcodegenerator")
+                      .WithDescription("Generate server-side code documentation from assemblies");
+
+                config.AddCommand<CoverageToXmlCommand>("coveragetoxml")
+                      .WithDescription("Convert Visual Studio coverage file to XML");
+
+                config.AddCommand<NUglifyCommand>("nuglify")
+                      .WithDescription("Minify HTML, CSS, or JS files");
+
+                config.AddCommand<DecryptCommand>("decrypt")
+                      .WithDescription("Decrypt an encrypted password string");
+
+                config.AddCommand<CreateEntityCommand>("createentity")
+                      .WithDescription("Create a Dataverse entity with standard forms and attributes");
+
+                config.AddCommand<SolutionLayerCommand>("solutionlayer")
+                      .WithDescription("Check unmanaged active solution layers in Dataverse solutions");
+            });
+
+            return app.Run(args);
+        }
+
+        internal static void WriteBanner()
+        {
+            var width = 119;
+            var colorBox = "green";
+            var colorText = "white";
+            AnsiConsole.MarkupLine($"[{colorBox}]╔{new string('═', width)}╗[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]  ____                              _           ____                  ____             _  ___ _   _____           _ [/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_|_   _|__   ___ | |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __| | |/ _ \\ / _ \\| |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ _| | (_) | (_) | |[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}] |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)_|\\___/ \\___/|_|[/][{colorBox}]  ║[/]");
+            var part1 = "        |___/                   ";
+            var part2 = "https://github.com/phuocle/Dynamics-Crm-DevKit ";
+            var part3 = $"{Const.Version} [green]Build:[/] {Const.Build}";
+            var part3Len = $"{Const.Version} Build: {Const.Build}".Length;
+            var currentLen = part1.Length + part2.Length + part3Len;
+            var padding = new string(' ', 116 - currentLen);
+            AnsiConsole.MarkupLine($"[{colorBox}]║ [/][{colorText}]{part1}[/][green]{part2}[/][{colorText}]{part3}{padding}[/][{colorBox}]  ║[/]");
+            AnsiConsole.MarkupLine($"[{colorBox}]╚{new string('═', width)}╝[/]");
+        }
+
+        private static void WriteHelp()
+        {
+            var panel = new Panel(
+                new Markup(
+                    "[green]Usage:[/]\n" +
+                    "  devkit-tool [cyan]<command>[/] [dim][[options]][/]\n\n" +
+                    "[green]Commands:[/]\n" +
+                    "  [cyan]documentgenerator[/]      Generate Dataverse entity documentation (markdown)\n" +
+                    "  [cyan]documentcodegenerator[/]  Generate server-side code documentation from assemblies\n" +
+                    "  [cyan]coveragetoxml[/]          Convert Visual Studio coverage file to XML\n" +
+                    "  [cyan]nuglify[/]                Minify HTML, CSS, or JS files\n" +
+                    "  [cyan]decrypt[/]                Decrypt an encrypted password string\n" +
+                    "  [cyan]createentity[/]           Create a Dataverse entity with standard forms\n" +
+                    "  [cyan]solutionlayer[/]          Check unmanaged active solution layers\n\n" +
+                    "[green]Examples:[/]\n" +
+                    "  devkit-tool [cyan]documentgenerator[/] --conn [yellow]\"...\"[/] --solution [yellow]HsapCustomize[/] --folder [yellow]./docs[/]\n" +
+                    "  devkit-tool [cyan]documentcodegenerator[/] --folder [yellow]./bin/Debug[/] --output [yellow]./docs[/] --devops [yellow]AzureDevOps[/]\n" +
+                    "  devkit-tool [cyan]coveragetoxml[/] --coverage [yellow]file.coverage[/] --xml [yellow]output.xml[/] --dlls [yellow]\"a.dll;b.dll\"[/]\n" +
+                    "  devkit-tool [cyan]nuglify[/] --source [yellow]input.js[/] --destination [yellow]output.min.js[/]\n" +
+                    "  devkit-tool [cyan]decrypt[/] --password [yellow]\"encrypted_string\"[/]\n" +
+                    "  devkit-tool [cyan]createentity[/] --conn [yellow]\"...\"[/] --solution [yellow]MySolution[/] --entity [yellow]\"My Entity\"[/] --type [yellow]UserOwned[/]\n" +
+                    "  devkit-tool [cyan]solutionlayer[/] --conn [yellow]\"...\"[/] --solutions [yellow]\"Core,Client\"[/] --output [yellow]./report.txt[/]\n\n" +
+                    "[dim]Use[/] [cyan]<command> --help[/] [dim]for more details on each command.[/]"
+                ))
+            {
+                Border = BoxBorder.Double,
+                BorderStyle = new Style(Color.Green),
+                Header = new PanelHeader(" [bold] DynamicsCrm.DevKit.Tool Help [/] ", Justify.Left),
+                Padding = new Padding(2, 1),
+                Width = 121
+            };
+            AnsiConsole.Write(panel);
+        }
+    }
+}

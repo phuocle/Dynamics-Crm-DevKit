@@ -1,0 +1,317 @@
+{
+  "profiles": {
+    "01-Help": {
+      "commandName": "Project"
+    },
+    "02-TestClientCode-JS-FORM": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\..\\DynamicsCrm.DevKit.Cli.json\" --profile \"JS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestClientCode\\05.DevKitJs-Vsix\\Dev.DevKit.WebResource\\entities"
+    },
+    "03-TestClientCode-JS-WEBAPI": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\..\\DynamicsCrm.DevKit.Cli.json\" --profile \"JS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestClientCode\\05.DevKitJs-Vsix\\Dev.DevKit.WebResource\\entities"
+    },
+    "04-TestClientCode-TS-FORM": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\..\\DynamicsCrm.DevKit.Cli.json\" --profile \"TS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestClientCode\\06.DevKitTs-Vsix\\Dev.DevKit.WebResourceTs\\entities"
+    },
+    "05-TestClientCode-TS-WEBAPI": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\..\\DynamicsCrm.DevKit.Cli.json\" --profile \"TS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestClientCode\\06.DevKitTs-Vsix\\Dev.DevKit.WebResourceTs\\entities"
+    },
+    "07-DEVKITV4.Server": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "08-DEVKITV4.Server.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "09-DEVKITV4.Server.Package": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginPackage\\Dev.DevKit.Package"
+    },
+    "10-DEVKITV4.Server.Package.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginPackage\\Dev.DevKit.Package"
+    },
+    "11-DEVKITV4.Server.ManagedIdentity": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServerManagedIdentity\\Dev.DevKit.Server.ManagedIdentity"
+    },
+    "12-DEVKITV4.Server.ManagedIdentity.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServerManagedIdentity\\Dev.DevKit.Server.ManagedIdentity"
+    },
+    "13-DEVKITV4.Package.ManagedIdentity": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginPackageManagedIdentity\\Dev.DevKit.Package.ManagedIdentity"
+    },
+    "14-DEVKITV4.Package.ManagedIdentity.OnlyUpdateAssembly": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginPackageManagedIdentity\\Dev.DevKit.Package.ManagedIdentity"
+    },
+    "15.TestWebResource-JS": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestWebResource\\TestJavaScript\\Dev.DevKit.WebResource"
+    },
+    "15A.TestWebResource-JS-Single": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --file \"entities\\Account.js\" --webresource \"Account.js\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestWebResource\\TestJavaScript\\Dev.DevKit.WebResource"
+    },
+    "15B.TestWebResource-JS-Single": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --file \"entities\\Account.js\" --webresource \"v4_/entities/Account.js\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestWebResource\\TestJavaScript\\Dev.DevKit.WebResource"
+    },
+    "15C.TestWebResource-JS-Single-BUG-NoConfig": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --file \"entities\\Account.js\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestWebResource\\TestJavaScript\\Dev.DevKit.WebResource"
+    },
+    "17.TestProxyTypes": {
+      "commandName": "Project",
+      "commandLineArgs": "proxytype --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"ALL\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestProxyTypes\\Dev.DevKit.ProxyTypes"
+    },
+    "18.TestSolutionPackager-Extract": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"Extract-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestSolutionPackager\\Dev.DevKit.SolutionPackager"
+    },
+    "19.TestSolutionPackager-Pack": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"Pack-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestSolutionPackager\\Dev.DevKit.SolutionPackager"
+    },
+    "20.TestReports-Download": {
+      "commandName": "Project",
+      "commandLineArgs": "downloadreport --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestReports\\Dev.DevKit.Report"
+    },
+    "21.TestReports-Upload": {
+      "commandName": "Project",
+      "commandLineArgs": "uploadreport --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestReports\\Dev.DevKit.Report"
+    },
+    "22.DownloadWebResources": {
+      "commandName": "Project",
+      "commandLineArgs": "downloadwebresource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestWebResource\\TestDownloadWebResources\\Dev.DevKit.WebResource"
+    },
+    "23-DEVKITV4.DataSource": {
+      "commandName": "Project",
+      "commandLineArgs": "datasource --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestDataSource\\Dev.DevKit.Server"
+    },
+    "24-DEVKITV4.Interactive": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth Interactive --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "25-DEVKITV4.DeviceCode": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth DeviceCode --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "26-DEVKITV4.ClientCertificate": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientCertificate --clientid \"YOUR-CLIENT-ID\" --cert \"C:\\path\\to\\cert.pfx\" --certpass \"password\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "27-DEVKITV4.ManagedIdentity": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ManagedIdentity --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "28-DEVKITV4.DefaultAzureCredential": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth DefaultAzureCredential --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "29-DEVKITV4.ClientSecret.PlainText": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"~je8Q~4DL221zUgKOaHq-EWMlowkpl3KEbZItccL\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "30-DEVKITV4.ClientSecret.Encrypted": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth ClientSecret --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "31-DEVKITV4.OAuth": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --auth OAuth --username \"user@domain.onmicrosoft.com\" --password \"PASSWORD_HERE\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "32-DEVKITV4.AD": {
+      "commandName": "Project",
+      "commandLineArgs": "server --url \"https://your-onpremise-crm.domain.com\" --auth AD --username \"DOMAIN\\\\username\" --password \"PASSWORD_HERE\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "33-DEVKITV4.FromPac": {
+      "commandName": "Project",
+      "commandLineArgs": "server --auth FromPac --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "34-DEVKITV4.FromPac.NamedProfile": {
+      "commandName": "Project",
+      "commandLineArgs": "server --auth FromPac --pacprofile \"DEVKITV4\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "35-DEVKITV4.FromPac.Index": {
+      "commandName": "Project",
+      "commandLineArgs": "server --auth FromPac --pacprofile \"11\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestServerCode\\TestPluginServer\\Dev.DevKit.Server"
+    },
+    "DEBUG": {
+      "commandName": "Project",
+      "commandLineArgs": "server --auth ClientSecret --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestSdkProjects\\Dev.DevKit.Server"
+    },
+    "DEBUG2": {
+      "commandName": "Project",
+      "commandLineArgs": "server --auth ClientSecret --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestSdkProjects\\Dev.DevKit.Package"
+    },
+    "TestSdkProjects\\Dev.DevKit.Server4": {
+      "commandName": "Project",
+      "commandLineArgs": "server --auth ClientSecret --url \"https://dynamics-crm-devkit-v4.crm.dynamics.com\" --clientid \"1a60a5c2-d04c-4b26-8f86-9d6ce0616799\" --clientsecret \"4Y11hDyKJYQTqXC9cRDXnoJ2DytZDs/jYI1byYwKli57mRfjHcCPu6Qx5sxgtCWQ\" --json \"..\\DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestSdkProjects\\Dev.DevKit.Server4"
+    },
+    "devkit.solution.Extract-Both": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"Extract-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.SolutionPackager"
+    },
+    "Dev.AllInOne.Package--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package"
+    },
+    "Dev.AllInOne.Package--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package"
+    },
+    "Dev.AllInOne.Package2--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package2"
+    },
+    "Dev.AllInOne.Package2--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Package2"
+    },
+    "Dev.AllInOne.ProxyTypes--run": {
+      "commandName": "Project",
+      "commandLineArgs": "modelbuilder --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"ALL\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.ProxyTypes"
+    },
+    "Dev.AllInOne.Report--download.reports": {
+      "commandName": "Project",
+      "commandLineArgs": "downloadreport --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report"
+    },
+    "Dev.AllInOne.Report--upload.reports": {
+      "commandName": "Project",
+      "commandLineArgs": "uploadreport --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report"
+    },
+    "Dev.AllInOne.Server--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server"
+    },
+    "Dev.AllInOne.Server--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server"
+    },
+    "Dev.AllInOne.Server2--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server2"
+    },
+    "Dev.AllInOne.Server2--deploy.debug.only": {
+      "commandName": "Project",
+      "commandLineArgs": "server --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\" --onlyupdateassembly",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server2"
+    },
+    "Dev.AllInOne.Server--DataProviders--Sql--deploy.datasource": {
+      "commandName": "Project",
+      "commandLineArgs": "datasource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"ServerSql\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Server\\DataProviders\\Sql"
+    },
+    "Dev.AllInOne.Shared--Entities--generator": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"LATEBOUND\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Shared\\Entities"
+    },
+    "Dev.AllInOne.SolutionPackager--Extract-Both": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"Extract-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.SolutionPackager"
+    },
+    "Dev.AllInOne.SolutionPackager--Pack-Both": {
+      "commandName": "Project",
+      "commandLineArgs": "solution --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"Pack-Both\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.SolutionPackager"
+    },
+    "Dev.AllInOne.WebResource--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource"
+    },
+    "Dev.AllInOne.WebResource--download.webresources": {
+      "commandName": "Project",
+      "commandLineArgs": "downloadwebresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUG\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource"
+    },
+    "Dev.AllInOne.WebResource--entities--generator.form": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"JS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource\\entities"
+    },
+    "Dev.AllInOne.WebResource--entities--generator.webapi": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"JS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResource\\entities"
+    },
+    "Dev.AllInOne.WebResourceTs--deploy.debug": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUGTS\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs"
+    },
+    "Dev.AllInOne.WebResourceTs--deploy.release": {
+      "commandName": "Project",
+      "commandLineArgs": "webresource --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"DEBUGTS\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs"
+    },
+    "Dev.AllInOne.WebResourceTs--entities--generator.form": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"TS-FORM\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs\\entities"
+    },
+    "Dev.AllInOne.WebResourceTs--entities--generator.webapi": {
+      "commandName": "Project",
+      "commandLineArgs": "generator --json \"DynamicsCrm.DevKit.Cli.json\" --profile \"TS-WEBAPI\"",
+      "workingDirectory": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.WebResourceTs\\entities"
+    }
+  }
+}

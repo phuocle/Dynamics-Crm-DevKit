@@ -1,0 +1,125 @@
+﻿<forms:BaseDialogWindow  xmlns:forms="clr-namespace:DynamicsCrm.DevKit.Lib.Forms"
+        x:Class="DynamicsCrm.DevKit.Lib.Forms.FormConnection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" SizeToContent="Height" SnapsToDevicePixels="True" UseLayoutRounding="True">
+    <forms:BaseDialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </forms:BaseDialogWindow.Resources>
+
+    <!-- Use Grid layout (like FormPlugin) so we can pin the progress bar at the bottom regardless of content height -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header row -->
+            <RowDefinition Height="*"/>    <!-- Main form content grows -->
+            <RowDefinition Height="5"/>    <!-- Fixed progress bar height -->
+        </Grid.RowDefinitions>
+
+        <!-- Header / Help link -->
+        <TextBlock Grid.Row="0" Padding="10,5,10,5" Background="Green">
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Connection" Foreground="White">WIKI: Connection</wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+
+        <!-- Main form area wrapped in StackPanel so existing code-behind (stackPanelForm) continues to work -->
+        <StackPanel Grid.Row="1" x:Name="stackPanelForm">
+            <!-- Connection string section (was stackPanelConnectionString) -->
+            <StackPanel x:Name="stackPanelConnectionString" Margin="10" IsEnabled="{Binding IsChecked, ElementName=radioButtonConnection}">
+                <Border BorderThickness="1">
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Saved Connections" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <ComboBox x:Name="comboBoxSavedConnection" Grid.Row="0" Grid.Column="1" Margin="0,0,5,0" />
+                        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Use Auto rows for natural height (prevents height clipping in different DPI) -->
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/> <!-- Type -->
+                                    <RowDefinition Height="Auto"/> <!-- Name -->
+                                    <RowDefinition Height="Auto"/> <!-- Url -->
+                                    <RowDefinition Height="Auto"/> <!-- Device URL readonly display -->
+                                    <RowDefinition Height="Auto"/> <!-- Device Code readonly display -->
+                                    <RowDefinition Height="Auto"/> <!-- UserName (OAuth) -->
+                                    <RowDefinition Height="Auto"/> <!-- Password (OAuth) -->
+                                    <RowDefinition Height="Auto"/> <!-- Client ID -->
+                                    <RowDefinition Height="Auto"/> <!-- Client Secret (ClientSecret type) -->
+                                    <RowDefinition Height="Auto"/> <!-- PAC Profile (FromPac type) -->
+                                    <RowDefinition Height="Auto"/> <!-- Project .env option -->
+                                    <RowDefinition Height="Auto"/> <!-- Project .env preview -->
+                                    <RowDefinition Height="Auto"/> <!-- Check Connection button -->
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" DisplayMemberPath="DisplayName" SelectionChanged="ComboBoxType_SelectionChanged"/>
+                                <Label x:Name="labelName" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
+                                <Label x:Name="labelUrl" Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
+                                <!-- Device URL readonly display field (for copy to browser) -->
+                                <Label x:Name="labelDeviceUrl" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="Open URL" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <TextBox x:Name="textboxDeviceUrl" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" IsReadOnly="True" Background="#F0F0F0" Visibility="Collapsed"/>
+                                <!-- DeviceCode readonly display field -->
+                                <Label x:Name="labelDeviceCode" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Enter Code" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <TextBox x:Name="textboxDeviceCode" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" IsReadOnly="True" Background="#F0F0F0" Visibility="Collapsed"/>
+                                <!-- OAuth fields: UserName and Password -->
+                                <Label x:Name="labelUserName" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <TextBox x:Name="textboxUserName" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" Visibility="Collapsed"/>
+                                <Label x:Name="labelPassword" Grid.Row="6" Grid.Column="0" Margin="0,0,0,5" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <Grid x:Name="gridPassword" Grid.Row="6" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed">
+                                    <PasswordBox x:Name="textboxPassword" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" PasswordChar="*"/>
+                                    <TextBox x:Name="textboxPasswordVisible" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" Visibility="Collapsed"/>
+                                    <ToggleButton x:Name="buttonTogglePassword" Width="26" Height="26" Margin="0,1,2,1" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="Show password" Checked="ButtonTogglePassword_Checked" Unchecked="ButtonTogglePassword_Unchecked">
+                                        <TextBlock x:Name="iconTogglePassword" FontFamily="Segoe MDL2 Assets" FontSize="14" Text="&#xED1A;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                                <!-- ClientId: visible for both ClientSecret and OAuth(optional) -->
+                                <Label x:Name="labelClientId" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" Content="Client ID" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <TextBox x:Name="textboxClientId" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5" />
+                                <!-- ClientSecret: visible only for ClientSecret type -->
+                                <Label x:Name="labelClientSecret" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" Content="Client Secret" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <Grid x:Name="gridClientSecret" Grid.Row="8" Grid.Column="1" Margin="0,0,0,5">
+                                    <PasswordBox x:Name="textboxClientSecret" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" PasswordChar="*" />
+                                    <TextBox x:Name="textboxClientSecretVisible" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="0,5,30,5" Visibility="Collapsed"/>
+                                    <ToggleButton x:Name="buttonToggleClientSecret" Width="26" Height="26" Margin="0,1,2,1" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="Show client secret" Checked="ButtonToggleClientSecret_Checked" Unchecked="ButtonToggleClientSecret_Unchecked">
+                                        <TextBlock x:Name="iconToggleClientSecret" FontFamily="Segoe MDL2 Assets" FontSize="14" Text="&#xED1A;" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                                <!-- PAC Profile: visible only for FromPac type -->
+                                <Label x:Name="labelPacProfile" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" Content="PAC Profile" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                <ComboBox x:Name="comboBoxPacProfile" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" Visibility="Collapsed" SelectionChanged="ComboBoxPacProfile_SelectionChanged"/>
+                                <CheckBox x:Name="checkBoxUseProjectEnv" Grid.Row="10" Grid.Column="1" Margin="0,0,0,5" Content="Use project .env" Checked="CheckBoxUseProjectEnv_Changed" Unchecked="CheckBoxUseProjectEnv_Changed"/>
+                                <TextBlock x:Name="textBlockProjectEnvPreview" Grid.Row="11" Grid.Column="1" Margin="0,0,0,5" TextWrapping="Wrap" FontFamily="Consolas" FontSize="11" Foreground="#555555" Visibility="Collapsed"/>
+                                <Button x:Name="buttonCheckConnection" Grid.Row="12" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </StackPanel>
+            <!-- Buttons -->
+            <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
+                <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click" />
+                <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <!-- Progress bar is in its own fixed-height row so it always sticks to the bottom of the window -->
+        <ProgressBar Grid.Row="2" x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" HorizontalAlignment="Stretch"/>
+    </Grid>
+</forms:BaseDialogWindow>

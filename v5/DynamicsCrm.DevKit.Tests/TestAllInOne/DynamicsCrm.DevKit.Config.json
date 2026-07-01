@@ -1,0 +1,142 @@
+﻿{
+    "WebResources": [
+        {
+            "File": "\\Dev.AllInOne.WebResource\\dialogs\\pl_dataversedialogbuilder_demo.dialog.js",
+            "WebResource": "all_/dialogs/pl_dataversedialogbuilder_demo.dialog.js",
+            "WebResourceId": "4305b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/dialogs/pl_dataversedialogbuilder_demo.dialog.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\dialogs\\pl_dataversedialogbuilder_demo.js",
+            "WebResource": "all_/dialogs/pl_dataversedialogbuilder_demo.js",
+            "WebResourceId": "4605b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/dialogs/pl_dataversedialogbuilder_demo.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Account.form.js",
+            "WebResource": "all_/entities/Account.form.js",
+            "WebResourceId": "4905b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Account.form.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Account.js",
+            "WebResource": "all_/entities/Account.js",
+            "WebResourceId": "4c05b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Account.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Account.webapi.js",
+            "WebResource": "all_/entities/Account.webapi.js",
+            "WebResourceId": "4f05b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Account.webapi.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Contact.js",
+            "WebResource": "all_/entities/Contact.js",
+            "WebResourceId": "5205b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Contact.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\entities\\Contact.webapi.js",
+            "WebResource": "all_/entities/Contact.webapi.js",
+            "WebResourceId": "5605b481-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/entities/Contact.webapi.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\lib\\devkit.js",
+            "WebResource": "all_/lib/devkit.js",
+            "WebResourceId": "5ce8cd87-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/lib/devkit.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResource\\resources\\Resource.1033.resx",
+            "WebResource": "all_/resources/Resource.1033.resx",
+            "WebResourceId": "69e8cd87-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/resources/Resource.1033.resx",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\dialogs\\pl_dataversedialogbuilder_demo.js",
+            "WebResource": "all_/build/dialogs/pl_dataversedialogbuilder_demo.js",
+            "WebResourceId": "b52daa0a-996f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/dialogs/pl_dataversedialogbuilder_demo.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\entities\\Account.js",
+            "WebResource": "all_/build/entities/Account.js",
+            "WebResourceId": "b82daa0a-996f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/entities/Account.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\entities\\Contact.js",
+            "WebResource": "all_/build/entities/Contact.js",
+            "WebResourceId": "bb2daa0a-996f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/entities/Contact.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\build\\entities\\Team.js",
+            "WebResource": "all_/build/entities/Team.js",
+            "WebResourceId": "590c01be-c86f-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/build/entities/Team.js",
+            "SolutionUniqueName": "all_in_one"
+        },
+        {
+            "File": "\\Dev.AllInOne.WebResourceTs\\resources\\ResourceTs.1033.resx",
+            "WebResource": "all_/resources/ResourceTs.1033.resx",
+            "WebResourceId": "1740fb44-2b70-f111-ab0e-0022480a530f",
+            "IsManaged": false,
+            "DisplayWebResourceName": "all_/resources/ResourceTs.1033.resx",
+            "SolutionUniqueName": "all_in_one"
+        }
+    ],
+    "Reports": [
+        {
+            "File": "D:\\github\\Dynamics-Crm-DevKit\\v5\\DynamicsCrm.DevKit.Tests\\TestAllInOne\\Dev.AllInOne.Report.2\\Top10Account.rdl",
+            "ReportId": "b110161b-b653-e911-a992-000d3aa0f55c",
+            "ReportName": "Top10Account",
+            "ReportFileName": "Top10Account.rdl",
+            "LanguageCode": 1033,
+            "Language": "English",
+            "IsManaged": false,
+            "DisplayReportName": "Top10Account (Top10Account.rdl) - English"
+        }
+    ],
+    "CustomTemplates": [
+        {
+            "Type": "Plugin",
+            "Title": "Niam.XRM.Framework",
+            "Body": "jVTBbuIwEL0j8Q8WuQTEBtHjLkXqUrZFKgWRVtvVag/GmYLVxEa20xZV/fe1YztJCVTNJXHmzZvn5xnnkrINivdSQfaj3cqL5ZwSwSV/VNGDyKI4eSojtxRn0cNqHv0SOIMXLp6iGVMgHjEBGS3TfEPZZ\u002BADxCg4n3Cd/6pcbrzFApJbzR3vNGUw1mTtFtNradaokVCDtltv7RbSz9\u002BJyGyhFWyoVAIrylnYaSTPQUq80VU6fVSPTpmian/DN5Tg1FQoELHS2CnLs6hBVISCcR9NX4HkptqcJyewJcTgOweV64Jt4SUmT7quxjWqLkQCwrDMJE\u002BLPZZVY8ySNX/tI\u002BvD3X4H6Ly2cHaPAvoY\u002BhOYyQu5Z2QrOOO57L4Z5ktIQUHxf7EDa6QmUiKHUfAejD8QXGO5FDDLtFybXXwOzT50TsfH9FZs4CKlWB6NOL0FzHwXrvv8Ml0pQde5goKjpw/wmCAuVanoC2rPSrU\u002B0cs9q\u002BQ2Qsf1epgTfHbRFIwglYAKqw/M8sm\u002B/PB0\u002BeGXyg\u002BPlDcHqE3r/rODs8vXKSWIpFjKertNzI/fVG1dx7meRN9dR/3EEkZ2aEw32p6zlG4kzVgOeu1Wo4cnPMuAqWBs4QbXG1TfTlEt7YSWUI\u002B5uclyJvUECugj98Muu1rrWqsMa/EC161qaanV4r363AmugChIEH8GIWgC6JnTxM06lJdN6Dbu5skbgoi94T5WMhv1jwNEdwITvYcYxDMlEF3COt84stBjrLflHeLCXX1NejbzZvBSPz97NDHZQobtrVIOsyfuRpYTwjqXc0G/LP\u002BpBvmkgDa\u002BLGb6xBLV2qJ5xJ\u002BwhTNtEpOYmDvWbb5htD9r59lx479wwNf6Ek2h9KWyuKbeuD0Y/Fncr9Dy5v5qdvttsricoqsFup6upt43g6q8fP8P",
+            "IsDefault": false
+        },
+        {
+            "Type": "Plugin",
+            "Title": "Niam.XRM.Framework.Managed-Identity",
+            "Body": "zVhbb9vGEn434P\u002BwlQOESm0KDgocIMcXuLIaq7EsQ5KTFkFgrKmRzZoi1d2lYkXQfz8zeyFXFOU6p32oYFhacnbu8\u002B3s5DJO79lwIRVM/7u7k3vLsJ0lCUQqzlIZvocURBxVSbr96pMrUNVHgzxV8RTCIXLgSfyNE8sXEYW/yk3KETyVInpxJDKZTVT4m5iGw/Fjwfcq5tPwt0Ev/EXwKXzNxGPYTRWICY9AhtdJfh\u002BXStQQVyiO9o7bGe5/Unbv8IELGF8h7\u002BEMWe6doOTdnRTXktZsY4NHuruz3N1h\u002BPncFlMjaAD3sVRC\u002ByZobGzugZT8HqU09pn/toOuVYvL7D6OeEISNMVQIW0nzafhBiP9au9kn3WeIMopEr1svIW2ICH6RkWyr7ARfM2jR5SLdBtS\u002B2IMgrh0ZZZoGwupQ56O77KnfWb8MFrMgB17C\u002Bvuo714ErgIdOWZXKTRg8jSLJfNJXE\u002BhwQU6Of9GRhHIiMlcjjaW\u002B2drDG44PJaQHeK6prd\u002Buch2YF7Gu4dmmJenCUxl7VvrL6ajH5rr7v9xXalRHyXK9A83mAA6xTKpCo0eoG2bwtt3Uan7ttS3Y1X9fo6Mqvw27NNhRkkEph2dcVZbrMTf7hd/OGLxB/WiKcAotOaX0zhzPK7JI5YlHAp/XRr04NPsXqwGWdzkr2zGfUzl3Bkioay0eScYWlLkspyJuI5V8AihD7FsCwJJD90fr/9eHZzObodtvvXHcqGB6Vm8l2rNed5okL\u002BLRcQpqBa4Rgm9KiBmED86PMXPG8Glz7HRZaLg0dYHGjWBykmZliV8h3ch532oDO6vTrrab01dwmRAKVZE6dS09ab3Z2NCm5n0ymkau\u002BkpHvTKn/beHjbtkQisN7MU5SP/tp37jXLJkbqDmMUeO81XbOUhYEqF6vy50xkCs8rGLNsDkLEY2DzLB5bpIMCagMbdosmLh0o2oTv65JM8Mx/SxCOBI8wI/A8m8cRhOdwl99bZoGjMZlVIKh93VxzNHGdc8F4hEeSHGWPkGIOnEV/5rGAHk8RncbdMXodIV6/ddyJja9YCl/9IjD5PYweYMoNNBeI6Djs\u002B0L3nekVy5qh0R8CXyB6vJTusloqRPXIxfI5E/5f55OjMKTaGdbz6KygW/GTfdV0cbDra5HNcbfARkbZR4FCuM4mWzn4NpOz4wkLNhQ4ZmmeJF7KuLAoPJy\u002BMgpMN51j1zOuJETnKYIZHb9Bw1rAXKiZNInFYsnSTDE\u002B53HC7xIIGy/Jn4qOoQ2GSSBS6BIbjSNThidsuYFrqzrDDXnYlVdobl98eoiV6XsCL3mb/7AfDGumdGGgM2A6U4s6JyCO5SL1U9orkLV8jakFTHmCmeon7AD4\u002BAMsPhJoDzUuBt31KsdGQhd9gVe\u002B3WU9IDa5DKBvqxgmXYV7wc1js\u002B\u002BFAo8Df\u002Bnhtx\u002BdNdPqS3FT9HcYVhiLJ5H2zY1Iimfm/CB88cJesZ9q5t\u002BdOs9r6Nn9N5Mb48\u002B0Cxmd9M8l8/MaeV733O5y7jtQp1TIsGTUYzyrGCFwmokpotk3KMoFUwJx2HNU2EnHugULGi1sCYe6e8L2YcZFjNe5EDuzGCuwyU79XXjuezzYjww3e0VMBpJ8o6uR\u002BaqxrFVnZYhka3kj4rAjIz6Dc6640STwPLg65bP4AJsFiUB8/J/wp/VGiITaQj3VRyMErxoEFbodLAJq/fd6WXJevWYTkU3Z6y0avq5DMbJPwJ85YM\u002BJJ9sFNpef4G5gnjTLn2FbAHan1hD0hQ8JpLNlEvZAPWRj5NV43xlVvemIPgDMsGGf08VnwrHHr3jd0Y3wCp/lWjME0SYt8eKb4vU6m/bilC43wWEzHGWKJ704SWL0RoaZsIXdBboR/f6ZrLQmmkfhWY5aCzsm\u002BIJavWr8DHjXFmzpgeWqLlSLdfStgBG5xgw4AuNqOcP\u002BnuwufW0eNZ3RiJ4DvM8TWVAHADXsMMuAT5GpsBup5XBMzMtaVjXKksJl0iPLc8DWQM9Q4Ajr1zuunICTwIk1oqqpQSzpUwMyHTpdbVKdhh95kkOdyWY/FsbLG5wzuhixEnDMqYh9Ok/NmW7LGo1FoXWlUQg1h3BZjVXW9bWIERkzmes2e4INjG0iHFf/257Yho/xQiWDidq7ddQsI66iBxZgxRZdHoOnClzXxLuSlfAUurAynD4UeGDysUYrCqrFK/bD1s60RjDZYDcWOLfFs9qVE2xIYfyOLQOEglOsFqPSaYjTJZXLNk6UVmxZfYzZG4lYN70rE2SSW/1U9ShdSLMDlIluwYqiRdAMf8FoUguy0q1xlRett/OzMzXD0i5ezgdNjR7ZCBPSKqUf6HU9k0rOaN1eXEOvGtV44A03E38nBHg2Y1JW0shT8rnmcrQGRaOTwKKe1ODnZXol2QyaWQgTiGh0H6Gzme7H6EpFA1\u002B8nxmME\u002B6KNmpW9bRlGoyaBSIKrBY\u002B7t/9gTMAajoRhf1da\u002BZ89mV\u002BKU\u002BNoocGjglux0v1SFtuqtioefdgegcioNREKxsa2BpueOXS1A5NUFdqKDTi4n3sHifoCIj4bz0YtKswYtv865mrP3ZYxRiAxmDGAE95ZzyVeJYmC3ebv/WOXS9dNsirF4tbW3q4p3TW5qDoGZX1JSyVmBfYn9kRSnVcU9xHPC1xskeFWM5oHAoU4yU7Htieqb7RGEGPuecCComzEolKe\u002BkFfbwIbptOXeD8O4Fi0FJ6yosMsWq1fu/fDNj15c377tVBu3/eYe/77KIz6JRbDF3ZMpiUOmZUGOtZrCc65cYir4iDC6zNy7rN5c6KlrYu/3oOqIu1opNz5T7zvV8pYtIQ1cW//wE=",
+            "IsDefault": false
+        }
+    ]
+}

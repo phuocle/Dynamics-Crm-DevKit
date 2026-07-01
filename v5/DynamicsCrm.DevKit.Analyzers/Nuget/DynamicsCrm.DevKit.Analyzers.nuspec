@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DynamicsCrm.DevKit.Analyzers</id>
+    <version>4.12.34.56</version>
+    <title>DynamicsCrm.DevKit.Analyzers</title>
+    <authors>PhuocLe</authors>
+    <license type="file">license\LICENSE.txt</license>
+    <icon>images\icon.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
+    <repository type="git" url="https://github.com/phuocle/Dynamics-Crm-DevKit.git" branch="main" />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A collection of Roslyn-based code analyzers for Microsoft Dynamics 365 / Power Platform development. Provides 21 compile-time diagnostics (DEVKIT1001-DEVKIT1021) to help developers follow best practices and avoid common pitfalls when building plugins and custom workflows.</description>
+    <releaseNotes>Version 4.12.34.56:
+- 21 diagnostic rules covering plugin best practices
+- DEVKIT1001-DEVKIT1021 analyzers for common Dynamics 365 pitfalls
+- Support for filtering attributes, ColumnSet validation, image validation
+- Detection of deprecated SDK messages, parallel execution, and file I/O operations
+- Recommendations for ITracingService usage and context.Depth checks
+- DEVKIT1021: Use ITracingService in catch blocks</releaseNotes>
+    <language>en-US</language>
+    <tags>Dynamics Dynamics365 DynamicsCrm Crm DevKit Analyzer Dataverse Roslyn Plugin CodeAnalysis BestPractices</tags>
+  </metadata>
+  <files>
+    <file src="..\bin\$configuration$\netstandard2.0\DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <file src="..\tools\*.ps1" target="tools\" />
+    <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
+	<file src="..\README.md" target="README.md" />
+    <file src="..\..\images\icon.png" target="images\icon.png" />
+  </files>
+</package>

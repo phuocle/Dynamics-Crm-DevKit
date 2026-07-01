@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<TargetFramework>net10.0</TargetFramework>
+		<IsPublishable>True</IsPublishable>
+		<AssemblyVersion>4.12.34.56</AssemblyVersion>
+		<FileVersion>4.12.34.56</FileVersion>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<RepositoryUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</RepositoryUrl>
+		<Company>PhuocLe</Company>
+		<Product>DynamicsCrm.DevKit.Cli</Product>
+		<Copyright>Copyright © PhuocLe 2016 - 2036</Copyright>
+		<PackageProjectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</PackageProjectUrl>
+		<Version>4.12.34.56</Version>
+		<OutputType>Exe</OutputType>
+		<StartupObject>DynamicsCrm.DevKit.Cli.Program</StartupObject>
+		<BaseOutputPath>bin</BaseOutputPath>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<!-- .NET Global Tool Configuration -->
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>devkit</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<PackageId>DynamicsCrm.DevKit.Cli</PackageId>
+		<PackageDescription>CLI tool for DynamicsCrm.DevKit - Generate form, webapi, plugin code and deploy to Dynamics 365</PackageDescription>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Authors>PhuocLe</Authors>
+		<PackageTags>dynamics365;crm;devkit;cli;codegen</PackageTags>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Nuget\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Include="..\ProjectTemplates\CSharp\01.SharedProjectTemplate\DevKitJson.cs" Link="Mcp\DevKitJson.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="DynamicsCrm.DevKit.Cli.code-workspace" />
+	  <None Remove="DynamicsCrm.DevKit.Cli.TsForm.code-workspace" />
+	  <None Include="README.md" Pack="true" PackagePath="\" />
+	  <None Include="..\images\icon.png" Pack="true" PackagePath="icon.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+	    <_Parameter1>DynamicsCrm.DevKit.UnitTests</_Parameter1>
+	  </AssemblyAttribute>
+	</ItemGroup>
+	<PropertyGroup>
+		<NoWarn>CVSTBLD002;NU1702;NU5100;CA1416;SYSLIB0057</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <!-- CLI Framework - Spectre.Console -->
+	  <PackageReference Include="Spectre.Console" Version="0.54.0" />
+	  <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
+	  <!-- Dynamics 365 SDK - .NET 6+ compatible versions -->
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.10" />
+	  <!-- ModelBuilder Library for early-bound entity generation -->
+	  <PackageReference Include="Microsoft.PowerPlatform.Dataverse.ModelBuilderLib" Version="2.0.16" />
+	  <!-- NuGet for package operations -->
+	  <PackageReference Include="NuGet.Packaging" Version="7.3.1" />
+	  <PackageReference Include="NuGet.Protocol" Version="7.3.1" />
+	  <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+	  <!-- CodeDom for .NET 10 compatibility -->
+	  <PackageReference Include="System.CodeDom" Version="10.0.3" />
+	  <!-- Phase 2: Modern Interactive Authentication -->
+	  <!-- Note: Microsoft.Identity.Client is already included via Microsoft.PowerPlatform.Dataverse.Client -->
+	  <PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.83.1" />
+	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.3" />
+	  <!-- Phase 3: Azure production authentication -->
+	  <PackageReference Include="Azure.Identity" Version="1.18.0" />
+	  <!-- Fake data generation for generate_demo_data tool -->
+	  <PackageReference Include="Bogus" Version="35.6.1" />
+	  <!-- MCP Server Support -->
+	  <PackageReference Include="ModelContextProtocol" Version="1.2.0" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
+	  <!-- T4 Template Processing (standalone, no VS dependency) -->
+	  <PackageReference Include="Mono.TextTemplating" Version="3.0.0" />
+	</ItemGroup>
+	<Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
+</Project>

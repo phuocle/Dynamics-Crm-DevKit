@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report>
+  <name>ContactReport</name>
+  <defaultfilter>
+    <ReportFilter>
+      <ReportEntity paramname="CRM_FilteredAccount" donotconvert="1">
+        <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+          <entity name="account">
+            <all-attributes />
+            <filter type="and">
+              <condition attribute="accountid" operator="not-null" />
+            </filter>
+          </entity>
+        </fetch>
+      </ReportEntity>
+    </ReportFilter>
+  </defaultfilter>
+  <iscustomreport>0</iscustomreport>
+  <filename>ContactReport.rdl</filename>
+  <languagecode>1033</languagecode>
+  <reportid>{91ad4fcc-28cb-eb11-bacc-000d3a807100}</reportid>
+  <reporttypecode>1</reporttypecode>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <createdinmajorversion>9</createdinmajorversion>
+  <iscustomizable>1</iscustomizable>
+  <ExportedFileName>/Reports/ContactReportrdl91ad4fcc-28cb-eb11-bacc-000d3a807100</ExportedFileName>
+  <ReportCategories />
+  <ReportVisibilities>
+    <ReportVisbility>1</ReportVisbility>
+  </ReportVisibilities>
+  <ReportEntities />
+</Report>
