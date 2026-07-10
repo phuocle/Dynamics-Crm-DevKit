@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="PL.DynamicsCrm.DevKit.2019.c4b2a3cd-da50-41bc-a208-d267a9a7dae5" Version="4.12.34.56" Language="en-US" Publisher="PhuocLe" />
+    <Identity Id="PL.DynamicsCrm.DevKit.2019.c4b2a3cd-da50-41bc-a208-d267a9a7dae5" Version="4.44.44.44" Language="en-US" Publisher="PhuocLe" />
     <DisplayName>DynamicsCrm.DevKit.2019</DisplayName>
-    <Description xml:space="preserve">DynamicsCrm.DevKit.2019 Lite VSIX for uploading Dynamics 365/Dataverse SSRS reports from Visual Studio 2019 (Build: 30.06.2026 23.59.59)</Description>
+    <Description xml:space="preserve">DynamicsCrm.DevKit.2019 Lite VSIX for uploading Dynamics 365/Dataverse SSRS reports from Visual Studio 2019 (Build: 31.12.2026 23.59.59)</Description>
     <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
     <License>License.txt</License>
     <Icon>icon32.png</Icon>

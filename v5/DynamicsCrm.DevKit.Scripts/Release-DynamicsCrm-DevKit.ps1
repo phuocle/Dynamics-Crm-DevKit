@@ -10,7 +10,7 @@
     values are stable in source and are changed only by Change-Version.ps1.
 
 .PARAMETER BuildDate
-    Optional build date string. Format: "dd.MM.yyyy HH:mm:ss".
+    Optional build date string. Format: "dd.MM.yyyy HH.mm.ss".
     If not provided, the release date is derived from DevKit.ReleaseConfig.json.
 
 .PARAMETER Clean
@@ -19,7 +19,7 @@
 
 .EXAMPLE
     .\Release-DynamicsCrm-DevKit.ps1
-    .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "21.05.2026 10:00:00"
+    .\Release-DynamicsCrm-DevKit.ps1 -BuildDate "21.05.2026 10.00.00"
     .\Release-DynamicsCrm-DevKit.ps1 -Clean
 #>
 param (
@@ -75,7 +75,7 @@ function Get-ConfiguredBuildDate {
         throw "buildConfig.annualRelease is missing from DevKit.ReleaseConfig.json"
     }
 
-    return "{0:D2}.{1:D2}.$currentYear {2:D2}:{3:D2}:{4:D2}" -f `
+    return "{0:D2}.{1:D2}.$currentYear {2:D2}.{3:D2}.{4:D2}" -f `
         $annualConfig.day, $annualConfig.month, $annualConfig.hour, $annualConfig.minute, $annualConfig.second
 }
 
@@ -86,22 +86,6 @@ function Assert-ReplacementScope {
     $blockedFiles = @($Files | Where-Object { $_ -match $blockedPattern })
     if ($blockedFiles.Count -gt 0) {
         throw "Build-time replacement list contains files outside the build scope:`n$($blockedFiles -join "`n")"
-    }
-}
-
-function Assert-ReplacedFilesClean {
-    param ($Files, $ProjectRoot)
-
-    $dirtyFiles = @()
-    foreach ($file in $Files) {
-        $status = & git -C $ProjectRoot status --porcelain -- $file 2>$null
-        if (-not [string]::IsNullOrWhiteSpace(($status -join "`n"))) {
-            $dirtyFiles += $file
-        }
-    }
-
-    if ($dirtyFiles.Count -gt 0) {
-        throw "Build-time replacement files must be clean before build because the script restores them with git restore after build. Dirty files:`n$($dirtyFiles -join "`n")"
     }
 }
 
@@ -120,6 +104,22 @@ function Write-AllTextWithRetry {
     }
 }
 
+function Get-TextEncoding {
+    param ($FilePath)
+
+    $bytes = [System.IO.File]::ReadAllBytes($FilePath)
+    if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+        return New-Object System.Text.UTF8Encoding $true
+    }
+    if ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) {
+        return [System.Text.Encoding]::Unicode
+    }
+    if ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFE -and $bytes[1] -eq 0xFF) {
+        return [System.Text.Encoding]::BigEndianUnicode
+    }
+    return New-Object System.Text.UTF8Encoding $false
+}
+
 function Update-DatePlaceholder {
     param ($FilePath, $Date, $Config, $ProjectRoot)
 
@@ -129,33 +129,31 @@ function Update-DatePlaceholder {
         return $false
     }
 
-    $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
+    $encoding = Get-TextEncoding -FilePath $fullPath
+    $content = [System.IO.File]::ReadAllText($fullPath, $encoding)
     $originalContent = $content
     $datePattern = [regex]::Escape($Config.placeholders.date)
     $content = $content -replace $datePattern, $Date
 
     if ($content -ne $originalContent) {
         Write-Host "Updating $FilePath..." -ForegroundColor DarkGray
-        $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-        Write-AllTextWithRetry -FilePath $fullPath -Content $content -Encoding $utf8NoBom
+        Write-AllTextWithRetry -FilePath $fullPath -Content $content -Encoding $encoding
         return $true
     }
 
     return $false
 }
 
-function Restore-ReplacedFilesFromGit {
-    param ($Files, $ProjectRoot)
+function Restore-ReplacedFilesFromBackup {
+    param ($Backups)
 
-    $filesToRestore = @($Files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
-    if ($filesToRestore.Count -eq 0) {
+    if ($Backups.Count -eq 0) {
         return
     }
 
-    Write-Host "Restoring $($filesToRestore.Count) build-time replacement file(s)..." -ForegroundColor DarkGray
-    & git -C $ProjectRoot restore -- $filesToRestore
-    if ($LASTEXITCODE -ne 0) {
-        throw "git restore failed for build-time replacement files"
+    Write-Host "Restoring $($Backups.Count) build-time replacement file(s)..." -ForegroundColor DarkGray
+    foreach ($entry in $Backups.GetEnumerator()) {
+        Write-AllTextWithRetry -FilePath $entry.Key -Content $entry.Value.Content -Encoding $entry.Value.Encoding
     }
 }
 
@@ -206,7 +204,7 @@ function Stop-DevKitProcesses {
     }
 }
 
-$filesToRestore = @()
+$replacementBackups = @{}
 
 try {
     Stop-DevKitProcesses
@@ -223,10 +221,15 @@ try {
     Write-Host "`nUpdating date placeholders..." -ForegroundColor Yellow
     $dateFilesToReplace = @($DateFiles | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
     Assert-ReplacementScope -Files $dateFilesToReplace
-    Assert-ReplacedFilesClean -Files $dateFilesToReplace -ProjectRoot $ProjectRoot
-    $filesToRestore = $dateFilesToReplace
-
     foreach ($file in $dateFilesToReplace) {
+        $fullPath = Join-Path $ProjectRoot $file
+        if (Test-Path $fullPath) {
+            $encoding = Get-TextEncoding -FilePath $fullPath
+            $replacementBackups[$fullPath] = @{
+                Content = [System.IO.File]::ReadAllText($fullPath, $encoding)
+                Encoding = $encoding
+            }
+        }
         Update-DatePlaceholder -FilePath $file -Date $BuildDate -Config $Config -ProjectRoot $ProjectRoot | Out-Null
     }
 
@@ -265,8 +268,18 @@ try {
     $LASTEXITCODE = 0
     Write-Host "`nBuilding package projects ($Configuration)..." -ForegroundColor Yellow
 
-    if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
     New-Item -Path $publishDir -ItemType Directory -Force | Out-Null
+    $ownedArtifacts = @(
+        (Join-Path $publishDir "DynamicsCrm.DevKit.Analyzers.$Version.nupkg"),
+        (Join-Path $publishDir "DynamicsCrm.DevKit.Cli.$Version.nupkg"),
+        (Join-Path $publishDir "DynamicsCrm.DevKit.Tool.$Version.nupkg"),
+        (Join-Path $publishDir "DynamicsCrm.DevKit.$Version.vsix")
+    )
+    foreach ($artifact in $ownedArtifacts) {
+        if (Test-Path $artifact) {
+            Remove-Item -LiteralPath $artifact -Force
+        }
+    }
 
     $buildTarget = if ($Clean) { "Clean;Build" } else { "Build" }
 
@@ -518,8 +531,8 @@ catch {
     exit 1
 }
 finally {
-    if ($filesToRestore.Count -gt 0) {
-        Write-Host "`nRestoring build-time replacement files from git..." -ForegroundColor Yellow
-        Restore-ReplacedFilesFromGit -Files $filesToRestore -ProjectRoot $ProjectRoot
+    if ($replacementBackups.Count -gt 0) {
+        Write-Host "`nRestoring build-time replacement files from memory..." -ForegroundColor Yellow
+        Restore-ReplacedFilesFromBackup -Backups $replacementBackups
     }
 }

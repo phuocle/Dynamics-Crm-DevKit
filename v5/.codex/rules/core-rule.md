@@ -27,7 +27,7 @@ The 13 executable project recipes are stored in `.codex/workflows/`. When the us
 - Never stage, commit, or push unless the user explicitly requests it.
 - Preserve unrelated working-tree changes.
 - Never use `git add .` or `git add -A`.
-- `4.12.34.56` is the stable source version. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify that placeholder is restored afterward.
+- `4.44.44.44` is the stable source version. Build scripts may replace only `xxxx.yy.zz HH.mm.ss`; verify that placeholder is restored afterward.
 
 ## MCP changes
 

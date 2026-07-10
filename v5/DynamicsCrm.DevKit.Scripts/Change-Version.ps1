@@ -9,7 +9,7 @@
     version in tracked text files, then updates DevKit.ReleaseConfig.json.
 
 .PARAMETER NewVersion
-    Required. Four-part version, for example 4.12.34.56.
+    Required. Four-part version, for example 4.44.44.44.
 
 .PARAMETER OldVersion
     Optional. Defaults to DevKit.ReleaseConfig.json -> version.
@@ -21,8 +21,8 @@
     Allows running when the git working tree is dirty.
 
 .EXAMPLE
-    .\Change-Version.ps1 -NewVersion 4.12.34.56 -DryRun
-    .\Change-Version.ps1 -NewVersion 4.12.34.56
+    .\Change-Version.ps1 -NewVersion 4.44.44.44 -DryRun
+    .\Change-Version.ps1 -NewVersion 4.44.44.44
 #>
 param (
     [Parameter(Mandatory = $true)]
@@ -44,15 +44,30 @@ function Assert-VersionFormat {
     param ($Version, $Name)
 
     if ($Version -notmatch '^\d+\.\d+\.\d+\.\d+$') {
-        throw "$Name must be a four-part numeric version, for example 4.12.34.56. Actual: $Version"
+        throw "$Name must be a four-part numeric version, for example 4.44.44.44. Actual: $Version"
     }
 }
 
-function Write-Utf8NoBom {
-    param ($Path, $Content)
+function Get-TextEncoding {
+    param ($Path)
 
-    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
-    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+    $bytes = [System.IO.File]::ReadAllBytes($Path)
+    if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+        return New-Object System.Text.UTF8Encoding $true
+    }
+    if ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) {
+        return [System.Text.Encoding]::Unicode
+    }
+    if ($bytes.Length -ge 2 -and $bytes[0] -eq 0xFE -and $bytes[1] -eq 0xFF) {
+        return [System.Text.Encoding]::BigEndianUnicode
+    }
+    return New-Object System.Text.UTF8Encoding $false
+}
+
+function Write-TextPreservingEncoding {
+    param ($Path, $Content, $Encoding)
+
+    [System.IO.File]::WriteAllText($Path, $Content, $Encoding)
 }
 
 $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
@@ -108,17 +123,19 @@ foreach ($file in $files) {
         continue
     }
 
-    $content = [System.IO.File]::ReadAllText($fullPath, [System.Text.Encoding]::UTF8)
+    $encoding = Get-TextEncoding -Path $fullPath
+    $content = [System.IO.File]::ReadAllText($fullPath, $encoding)
     $newContent = $content -replace $oldPattern, $NewVersion
     if ($newContent -ne $content) {
-        Write-Utf8NoBom -Path $fullPath -Content $newContent
+        Write-TextPreservingEncoding -Path $fullPath -Content $newContent -Encoding $encoding
         Write-Host "Updated $file" -ForegroundColor DarkGray
     }
 }
 
 $Config.version = $NewVersion
 $configJson = $Config | ConvertTo-Json -Depth 20
-Write-Utf8NoBom -Path $ConfigFile -Content ($configJson + [Environment]::NewLine)
+$configEncoding = Get-TextEncoding -Path $ConfigFile
+Write-TextPreservingEncoding -Path $ConfigFile -Content ($configJson + [Environment]::NewLine) -Encoding $configEncoding
 Write-Host "Updated $configRelativePath" -ForegroundColor DarkGray
 
 Write-Host "Version changed from $OldVersion to $NewVersion." -ForegroundColor Green

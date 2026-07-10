@@ -12,8 +12,8 @@ DynamicsCrm.DevKit.2019 is a lite Visual Studio 2019 VSIX for Dynamics 365/Datav
 
 ## Version
 
-- Version: `4.12.34.56`
-- Build: `30.06.2026 23.59.59`
+- Version: `4.44.44.44`
+- Build: `31.12.2026 23.59.59`
 
 ## Scope
 

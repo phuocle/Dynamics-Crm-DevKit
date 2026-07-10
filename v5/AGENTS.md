@@ -125,5 +125,5 @@ Never stage, commit, or push unless the user explicitly requests it.
 
 ## Watch Out
 
-- `4.12.34.56` is the stable source version. Release/debug scripts replace only the build-date placeholder `xxxx.yy.zz HH.mm.ss`; never commit files while date replacements are still applied.
+- `4.44.44.44` is the stable source version. Release/debug scripts replace only the build-date placeholder `xxxx.yy.zz HH.mm.ss`; never commit files while date replacements are still applied.
 - Editing a single component → run only that component's build, not the full solution

@@ -99,10 +99,10 @@
       <RootComponent type="61" schemaName="all_/resources/ResourceTs.1033.resx" behavior="0" />
       <RootComponent type="62" schemaName="all_ALLINONE" behavior="0" />
       <RootComponent type="80" schemaName="all_ALLINONE" behavior="0" />
-      <RootComponent type="91" id="{479e85e7-6571-f111-ab0d-0022480a530f}" schemaName="Dev.AllInOne.Package, Version=4.12.34.56, Culture=neutral, PublicKeyToken=null" behavior="0" />
-      <RootComponent type="91" id="{77710841-6771-f111-ab0d-0022480a530f}" schemaName="Dev.AllInOne.Package2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=null" behavior="0" />
-      <RootComponent type="91" id="{fb296d16-0471-f111-ab0e-0022480a530f}" schemaName="Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" behavior="0" />
-      <RootComponent type="91" id="{4540cb2e-6771-f111-ab0d-0022480a530f}" schemaName="Dev.AllInOne.Server2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=866204116e78ce0d" behavior="0" />
+      <RootComponent type="91" id="{479e85e7-6571-f111-ab0d-0022480a530f}" schemaName="Dev.AllInOne.Package, Version=4.44.44.44, Culture=neutral, PublicKeyToken=null" behavior="0" />
+      <RootComponent type="91" id="{77710841-6771-f111-ab0d-0022480a530f}" schemaName="Dev.AllInOne.Package2, Version=4.44.44.44, Culture=neutral, PublicKeyToken=null" behavior="0" />
+      <RootComponent type="91" id="{fb296d16-0471-f111-ab0e-0022480a530f}" schemaName="Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" behavior="0" />
+      <RootComponent type="91" id="{4540cb2e-6771-f111-ab0d-0022480a530f}" schemaName="Dev.AllInOne.Server2, Version=4.44.44.44, Culture=neutral, PublicKeyToken=866204116e78ce0d" behavior="0" />
       <RootComponent type="92" id="{2bea5d0b-2272-f111-ab0d-70a8a59b9425}" behavior="0" />
       <RootComponent type="92" id="{bffd5722-8e72-f111-ab0d-70a8a59b9425}" behavior="0" />
       <RootComponent type="92" id="{c1e0ceb8-8d72-f111-ab0d-70a8a59b9425}" behavior="0" />

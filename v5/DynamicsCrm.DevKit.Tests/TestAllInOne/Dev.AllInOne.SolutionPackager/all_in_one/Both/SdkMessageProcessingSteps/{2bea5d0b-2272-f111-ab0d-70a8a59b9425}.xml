@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SdkMessageProcessingStep Name="Dev.AllInOne.Server2.Plugins.Contact.PostContactUpdateAsynchronous" SdkMessageProcessingStepId="{2bea5d0b-2272-f111-ab0d-70a8a59b9425}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SdkMessageId>20bebb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
-  <PluginTypeName>Dev.AllInOne.Server2.Plugins.Contact.PostContactUpdateAsynchronous, Dev.AllInOne.Server2, Version=4.12.34.56, Culture=neutral, PublicKeyToken=866204116e78ce0d</PluginTypeName>
+  <PluginTypeName>Dev.AllInOne.Server2.Plugins.Contact.PostContactUpdateAsynchronous, Dev.AllInOne.Server2, Version=4.44.44.44, Culture=neutral, PublicKeyToken=866204116e78ce0d</PluginTypeName>
   <PluginTypeId>49f24c04-2272-f111-ab0d-70a8a59b9425</PluginTypeId>
   <PrimaryEntity>contact</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>

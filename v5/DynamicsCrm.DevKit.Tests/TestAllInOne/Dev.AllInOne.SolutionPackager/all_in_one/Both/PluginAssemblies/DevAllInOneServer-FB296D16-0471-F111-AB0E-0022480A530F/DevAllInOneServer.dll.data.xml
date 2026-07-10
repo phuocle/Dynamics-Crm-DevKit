@@ -1,47 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<PluginAssembly FullName="Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginAssemblyId="fb296d16-0471-f111-ab0e-0022480a530f" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<PluginAssembly FullName="Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginAssemblyId="fb296d16-0471-f111-ab0e-0022480a530f" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <IsolationMode>2</IsolationMode>
   <SourceType>0</SourceType>
   <IntroducedVersion>1.0.0.0</IntroducedVersion>
   <FileName>/PluginAssemblies/DevAllInOneServer-FB296D16-0471-F111-AB0E-0022480A530F/DevAllInOneServer.dll</FileName>
   <PluginTypes>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="c659bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="c659bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous">
       <FriendlyName>Dev.AllInOne.Server.CustomActions.Account.PostAccountv4_AccountCustomActionAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="ca59bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="ca59bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous">
       <FriendlyName>Dev.AllInOne.Server.CustomActions.Account.PreAccountv4_AccountCustomActionSynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="ce59bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="ce59bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous">
       <FriendlyName>Dev.AllInOne.Server.CustomActions.None.PostNonev4_CustomActionAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomApis.Account.v4_AccountCustomApiRequest, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="d259bb1c-0471-f111-ab0e-0022480a530f" Name="v4_AccountCustomApiRequest">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomApis.Account.v4_AccountCustomApiRequest, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="d259bb1c-0471-f111-ab0e-0022480a530f" Name="v4_AccountCustomApiRequest">
       <FriendlyName>Dev.AllInOne.Server.CustomApis.Account.v4_AccountCustomApiRequest</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomApis.None.v4_CustomApiRequest, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="18df8424-0471-f111-ab0e-0022480a530f" Name="v4_CustomApiRequest">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.CustomApis.None.v4_CustomApiRequest, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="18df8424-0471-f111-ab0e-0022480a530f" Name="v4_CustomApiRequest">
       <FriendlyName>Dev.AllInOne.Server.CustomApis.None.v4_CustomApiRequest</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Create, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="1bdf8424-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Create">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Create, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="1bdf8424-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Create">
       <FriendlyName>Dev.AllInOne.Server.DataProviders.Sql.Create</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Delete, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="1cdf8424-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Delete">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Delete, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="1cdf8424-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Delete">
       <FriendlyName>Dev.AllInOne.Server.DataProviders.Sql.Delete</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Retrieve, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="b2ca6b2b-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Retrieve">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Retrieve, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="b2ca6b2b-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Retrieve">
       <FriendlyName>Dev.AllInOne.Server.DataProviders.Sql.Retrieve</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.RetrieveMultiple, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="cbca6b2b-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.RetrieveMultiple">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.RetrieveMultiple, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="cbca6b2b-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.RetrieveMultiple">
       <FriendlyName>Dev.AllInOne.Server.DataProviders.Sql.RetrieveMultiple</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Update, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="ccca6b2b-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Update">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.DataProviders.Sql.Update, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="ccca6b2b-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.DataProviders.Sql.Update">
       <FriendlyName>Dev.AllInOne.Server.DataProviders.Sql.Update</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.Plugins.Contact.PostContactCreateAsynchronous, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="c159bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.Plugins.Contact.PostContactCreateAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.Plugins.Contact.PostContactCreateAsynchronous, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="c159bb1c-0471-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.Plugins.Contact.PostContactCreateAsynchronous">
       <FriendlyName>Dev.AllInOne.Server.Plugins.Contact.PostContactCreateAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.Plugins.Contact.PostContactUpdateAsynchronous, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="fb175c5d-0571-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.Plugins.Contact.PostContactUpdateAsynchronous">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.Plugins.Contact.PostContactUpdateAsynchronous, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="fb175c5d-0571-f111-ab0e-0022480a530f" Name="Dev.AllInOne.Server.Plugins.Contact.PostContactUpdateAsynchronous">
       <FriendlyName>Dev.AllInOne.Server.Plugins.Contact.PostContactUpdateAsynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.Workflows.GetDataFromUrl, Dev.AllInOne.Server, Version=4.12.34.56, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="1adf8424-0471-f111-ab0e-0022480a530f" Name="GetDataFromUrl">
+    <PluginType AssemblyQualifiedName="Dev.AllInOne.Server.Workflows.GetDataFromUrl, Dev.AllInOne.Server, Version=4.44.44.44, Culture=neutral, PublicKeyToken=a3414680ce2957b9" PluginTypeId="1adf8424-0471-f111-ab0e-0022480a530f" Name="GetDataFromUrl">
       <FriendlyName>GetDataFromUrl</FriendlyName>
       <WorkflowActivityGroupName>Dev.AllInOne.Server.Workflows</WorkflowActivityGroupName>
     </PluginType>

@@ -14,8 +14,8 @@ param (
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = (Resolve-Path "$PSScriptRoot\..").Path
-$Version = "4.12.34.56"
-$BuildDate = "30.06.2026 23.59.59"
+$Version = "4.44.44.44"
+$BuildDate = "31.12.2026 23.59.59"
 $PublishedRoot = Join-Path $ProjectRoot "Published"
 $PublishDir = Join-Path $PublishedRoot $Version
 $SolutionFile = Join-Path $ProjectRoot "DynamicsCrm.DevKit.2019.sln"
@@ -70,6 +70,10 @@ $buildArgs = @(
 )
 
 Write-Host "`nBuilding VSIX 2019..." -ForegroundColor Yellow
+New-Item -Path $PublishDir -ItemType Directory -Force | Out-Null
+if (Test-Path $VsixDest) {
+    Remove-Item -LiteralPath $VsixDest -Force
+}
 & $msbuild $buildArgs
 if ($LASTEXITCODE -ne 0) {
     throw "DynamicsCrm.DevKit.2019 build failed with exit code $LASTEXITCODE"
@@ -79,7 +83,6 @@ if (-not (Test-Path $VsixSource)) {
     throw "VSIX file not found: $VsixSource"
 }
 
-New-Item -Path $PublishDir -ItemType Directory -Force | Out-Null
 Copy-Item -LiteralPath $VsixSource -Destination $VsixDest -Force
 
 Write-Host "`nCopied VSIX to $VsixDest" -ForegroundColor Green
