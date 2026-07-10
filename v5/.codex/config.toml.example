@@ -1,0 +1,9 @@
+[mcp_servers.dynamicscrm-devkit]
+command = "devkit"
+args = ["mcp", "devkit-codex"]
+
+[mcp_servers.dynamicscrm-devkit.env]
+DEVKIT_AUTH_TYPE = "ClientSecret"
+DEVKIT_CLIENT_ID = "???"
+DEVKIT_CLIENT_SECRET = "???"
+DEVKIT_URL = "???"

@@ -1922,10 +1922,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             return true;
         }
-        private List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributes(TypeInfo type)
+        internal static List<CrmPluginRegistrationAttribute> GetCrmPluginRegistrationAttributes(TypeInfo type)
         {
             var list = new List<CrmPluginRegistrationAttribute>();
-            var attributes = type.GetCustomAttributesData();
+            var attributes = type.GetCustomAttributesData()
+                .Where(attribute => attribute.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name);
             foreach (var attribute in attributes)
                 list.Add(Helper.ConvertAttributeToCrmPluginRegistration(attribute));
             return list;
