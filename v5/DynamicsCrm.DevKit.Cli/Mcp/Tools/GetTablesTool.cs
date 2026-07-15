@@ -211,6 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static TableAttributeEntry BuildAttribute(AttributeMetadata attribute) => new()
         {
             LogicalName = attribute.LogicalName,
+            SchemaName = attribute.SchemaName,
             Type = FormatAttributeType(attribute),
             RequiredLevel = attribute.RequiredLevel?.Value switch
             {

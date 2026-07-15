@@ -237,10 +237,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             sb.AppendLine($"[Attributes] {attrs.Length}" +
                 (hasPrefix ? $" (filtered: {prefix}*)" : " total"));
             sb.AppendLine();
-            sb.AppendLine("LogicalName\tType\tRequired\tCreate\tUpdate\tConstraints\tDisplayName");
+            sb.AppendLine("LogicalName\tSchemaName\tType\tRequired\tCreate\tUpdate\tConstraints\tDisplayName");
 
             foreach (var a in attrs)
             {
+                var schemaName = a.SchemaName ?? "";
                 var type = FormatAttributeType(a);
                 var required = a.RequiredLevel?.Value switch
                 {
@@ -261,7 +262,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 var constraints = FormatConstraints(a);
                 var display = a.DisplayName?.UserLocalizedLabel?.Label ?? "";
 
-                sb.AppendLine($"{a.LogicalName}\t{type}\t{required}\t{createCol}\t{updateCol}\t{constraints}\t{display}");
+                sb.AppendLine($"{a.LogicalName}\t{schemaName}\t{type}\t{required}\t{createCol}\t{updateCol}\t{constraints}\t{display}");
             }
 
             sb.AppendLine();
