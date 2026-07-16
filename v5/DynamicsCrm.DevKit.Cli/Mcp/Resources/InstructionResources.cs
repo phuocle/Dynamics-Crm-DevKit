@@ -673,10 +673,16 @@ Reference for `upsert_table`, `upsert_column`, and `upsert_relationship`.
 
 ## upsert_table
 
+### Three-Field Name Model
+- **display_name** / **display_collection_name** -- human labels (required for CREATE; mutable on UPDATE)
+- **logical_name** -- lowercase logical name with publisher prefix; identifies an existing table for UPDATE; optional CREATE override (must be the lowercase form of schema_name)
+- **schema_name** -- PascalCase schema name with publisher prefix; optional CREATE-only override of SchemaName (ignored on UPDATE)
+- If schema_name/logical_name are omitted on CREATE, SchemaName is auto-derived from display_name via DataverseNamer and the logical name derives from it.
+- Publisher prefix comes from solution_name (validated by confirmed_prefix). There is NO entity_name parameter.
+
 ### Create Mode
 - display_name, display_collection_name, solution_name are REQUIRED
-- entity_name MUST include publisher prefix (e.g., 'new_project')
-- If no prefix (no underscore), prefix auto-resolved from solution_name's publisher
+- Optional schema_name and/or logical_name override the auto-derived names (must start with the publisher prefix)
 - Auto-creates primary name attribute (default: 'Name', max 100 chars)
 
 ### Create-Only Properties (Immutable After Creation)
@@ -690,7 +696,7 @@ Reference for `upsert_table`, `upsert_column`, and `upsert_relationship`.
 | primary_attribute_display_name | 'Name' | Display name of primary field |
 
 ### Update Mode
-- Only entity_name required to identify the entity
+- Pass logical_name to identify the existing table
 - Only provided params are updated; omitted ones keep current values
 - Immutable properties are IGNORED with warnings if passed during update
 
@@ -708,11 +714,19 @@ These CANNOT be turned off once enabled.
 
 ## upsert_column
 
+### Three-Field Name Model (same convention as upsert_table)
+- **display_name** -- human label (required for CREATE; mutable on UPDATE)
+- **logical_name** -- lowercase logical name with publisher prefix; identifies an existing attribute for UPDATE; optional CREATE override (must be the lowercase form of schema_name)
+- **schema_name** -- PascalCase schema name with publisher prefix; optional CREATE-only override of SchemaName (ignored on UPDATE)
+- If schema_name/logical_name are omitted on CREATE, SchemaName is auto-derived from display_name via DataverseNamer and the logical name derives from it.
+- Publisher prefix comes from solution_name (validated by confirmed_prefix). When solution_name is omitted, the prefix may be inherited from a prefixed schema_name/logical_name.
+- There is NO attribute_name parameter. The column's technical names come ONLY from logical_name / schema_name (or are auto-derived from display_name).
+
 ### Attribute Type Matrix
 
 | Type | Required Params (Create) | Optional Params | Defaults |
 |------|-------------------------|-----------------|----------|
-| string | entity_name, attribute_name, attribute_type, display_name | max_length, format, required_level | max_length=100, format='Text' |
+| string | entity_name, logical_name, attribute_type, display_name | max_length, format, required_level | max_length=100, format='Text' |
 | memo | same | max_length, format | max_length=2000 |
 | integer | same | min_value, max_value, format | format='None' |
 | bigint | same | -- | No range limits |

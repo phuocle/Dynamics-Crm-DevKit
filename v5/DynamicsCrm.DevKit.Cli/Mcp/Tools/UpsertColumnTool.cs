@@ -36,16 +36,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
+            "UPDATE (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current.\n\n" +
+
             "CREATE (no attribute): need attribute_type + display_name.\n" +
-            "- schema_name: if provided, used as-is as SchemaName (skip auto-derive from display_name)\n" +
+            "- schema_name: if provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Must start with the publisher prefix (e.g. 'devkit_InvoiceLineId'). Create only — ignored on update.\n" +
+            "- logical_name: if provided, used AS-IS as the lowercase logical name. Must start with the publisher prefix and be the lowercase form of schema_name (e.g. 'devkit_invoicelineid'). Create only — ignored on update.\n" +
+            "- If both omitted: SchemaName is auto-derived from display_name via DataverseNamer, logical name derives from schemaName.ToLowerInvariant().\n" +
             "- lookup: needs lookup_target (auto-creates 1:N)\n" +
             "- customer: polymorphic (account+contact), no lookup_target\n" +
             "- picklist/multipicklist: options JSON or global_optionset_name\n" +
             "- formula column (PowerFx/Calculated/Rollup): pass formula_definition (+ formula_source_type). Works on string/memo/integer/decimal/money/float/boolean/datetime. Clone from get_tables `formulaDefinition` verbatim.\n\n" +
 
-            "UPDATE (exists): attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current.\n\n" +
-
-            "attribute_name needs publisher prefix or solution_name to auto-resolve.\n\n" +
+            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix when supplied. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n\n" +
 
             "WHEN TO USE:\n" +
             "- Create new attribute on an existing table (need attribute_type + display_name)\n" +
@@ -54,13 +56,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "FUZZY/AMBIGUITY:\n" +
             "- entity_name resolves Display Name contains first, then logical/schema name contains. Ambiguity returns IsError=true with candidates.\n" +
-            "- attribute_name, lookup_target, global_optionset_name, and solution_name follow the same Display Name first rule where applicable.")]
+            "- logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, solution_name where applicable.")]
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
-            [Description("With prefix ('new_priority') or just name + solution_name to auto-resolve.")] string attribute_name,
+            [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name,
             [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. (immutable on update)")] string attribute_type,
             [Description("Required: create.")] string display_name,
-            [Description("Auto-resolve prefix when attribute_name has no prefix.")] string solution_name = "",
+            [Description("Required for CREATE when schema_name/logical_name have no prefix. Resolves publisher prefix and adds the attribute to the solution.")] string solution_name = "",
+            [Description("Optional prefix validation. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
             [Description("")] string description = "",
             [Description("None/Recommended/Required. [update: omit=keep]")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
@@ -81,18 +84,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
             [Description("[update only]")] bool? is_audit_enabled = null,
             [Description("[update only]")] bool? is_valid_for_advanced_find = null,
-            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used as-is. Create only — ignored on update.")] string schema_name = "",
+            [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
+            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Formula column (PowerFx/Calculated/Rollup). Create only. Pass the value from get_tables `formulaDefinition` verbatim (may be 'gz:'-prefixed gzip+base64; decompressed automatically). For Power Fx use plain Power Fx text. Clones the field's computed/rollup definition.")] string formula_definition = "",
-            [Description("Formula kind for formula_definition: 'powerfx' (default), 'calculated', 'rollup'. Required when formula_definition is a Calculated/Rollup XAML payload copied from get_tables. Ignored without formula_definition.")] string formula_source_type = "")
+            [Description("Formula kind for formula_definition: 'powerfx' (default), 'calculated', 'rollup'. Required when formula_definition is a Calculated/Rollup XAML payload copied from get_tables. Ignored without formula_definition.")] string formula_source_type = "",
+            [Description("Source (owner) entity logical name when cloning a Calculated/Rollup formula column from another entity (e.g. when copying field 40/41 from all_in_one to all_allinoneclone3). Recommended: Dataverse embeds the source entity in the formula XAML relationship key (relatedlinked_<owner>_<Rel>) and SetAttributeValue DisplayName; providing the explicit source entity name avoids ambiguity when the owner name itself contains underscores (e.g. 'all_in_one'). When empty, the source is discovered from the XAML. Only used for calculated/rollup formula clones; ignored otherwise.")] string source_entity_name = "")
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
-            if (string.IsNullOrWhiteSpace(attribute_name))
-                return ErrorResult("Error: attribute_name is required.");
 
             entity_name = entity_name.Trim();
-            attribute_name = attribute_name.Trim();
+            logical_name = logical_name?.Trim() ?? "";
+            schema_name = schema_name?.Trim() ?? "";
+            display_name = display_name?.Trim() ?? "";
+            solution_name = solution_name?.Trim() ?? "";
+            confirmed_prefix = confirmed_prefix?.Trim() ?? "";
+            default_value = default_value?.Trim() ?? "";
 
             // --- Early validation: attribute_type, required_level, format, behavior ---
             // Validate these before touching Dataverse so errors return fast even in DryRun mode.
@@ -146,53 +154,74 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Early check: if no underscore and no solution_name, flag error for create mode (update would have a prefix already)
-            {
-                var earlyUscIdx = attribute_name.IndexOf('_');
-                var earlyHasPrefix = earlyUscIdx >= 1 && earlyUscIdx < attribute_name.Length - 1;
-                if (!earlyHasPrefix && string.IsNullOrWhiteSpace(solution_name) && !string.IsNullOrWhiteSpace(attribute_type))
-                    return ErrorResult(
-                        $"Error: attribute_name must include a publisher prefix (e.g., 'new_priority').\n" +
-                        $"Received: '{attribute_name}' on entity '{entity_name}'.\n" +
-                        $"Tip: Either include the prefix in attribute_name (e.g., 'new_priority') or provide solution_name to auto-resolve the prefix.");
-            }
-
             // --- Resolve entity_name: Display Name first, then logical/schema contains ---
             var (resolvedEntity, entityError) = ResolveEntityName(_serviceClient, entity_name);
             if (entityError != null)
                 return ErrorResult(entityError);
             entity_name = resolvedEntity;
 
-            // --- Try to retrieve existing attribute to decide create vs update ---
+            // ===== Resolve publisher prefix from solution (needed when schema_name/logical_name lack one) =====
+            string resolvedPrefix = null;
+            string resolvedSolutionUniqueName = null;
+            if (!string.IsNullOrWhiteSpace(solution_name))
+            {
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name);
+                if (!solResult.IsSuccess)
+                    return ErrorResult(
+                        $"[Error] {solResult.Error}\n" +
+                        $"Tip: Use get_solution_components to find valid solution names.");
+                resolvedPrefix = solResult.Prefix;
+                resolvedSolutionUniqueName = solResult.UniqueName;
+            }
+
+            // Inherit prefix from an explicitly-provided schema_name/logical_name when solution_name is absent.
+            // This lets CREATE work with schema_name='devkit_InvoiceLineId' even without solution_name.
+            if (string.IsNullOrWhiteSpace(resolvedPrefix) &&
+                (!string.IsNullOrWhiteSpace(schema_name) || !string.IsNullOrWhiteSpace(logical_name)))
+            {
+                var source = !string.IsNullOrWhiteSpace(schema_name) ? schema_name : logical_name;
+                var idx = source.IndexOf('_');
+                if (idx >= 1 && idx < source.Length - 1)
+                    resolvedPrefix = source.Substring(0, idx);
+            }
+
+            // ===== UPDATE MODE: logical_name identifies an existing attribute =====
+            // - logical_name provided → resolve existing attribute → UPDATE.
+            // - logical_name omitted → CREATE intent (caller must supply attribute_type + display_name).
             AttributeMetadata existingMetadata = null;
-            var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attribute_name, "upsert_column");
-            if (attributeResolve.IsSuccess)
+            if (!string.IsNullOrWhiteSpace(logical_name))
             {
-                existingMetadata = attributeResolve.Value;
-                attribute_name = existingMetadata.LogicalName;
+                var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, logical_name, "upsert_column");
+                if (attributeResolve.IsSuccess)
+                {
+                    existingMetadata = attributeResolve.Value;
+                    logical_name = existingMetadata.LogicalName;
+                }
+                else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
+                {
+                    return ErrorResult($"Error: {attributeResolve.Error}");
+                }
+                // NotFound → fall through to CREATE if create fields are present, else error below.
             }
-            else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
+            else if (!string.IsNullOrWhiteSpace(display_name))
             {
-                return ErrorResult($"Error: {attributeResolve.Error}");
-            }
-            else if (!string.IsNullOrWhiteSpace(display_name) &&
-                     !display_name.Trim().Equals(attribute_name, StringComparison.OrdinalIgnoreCase))
-            {
+                // No explicit logical_name but display_name given → try resolving by display_name (convenience).
                 var displayNameResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, display_name, "upsert_column");
                 if (displayNameResolve.IsSuccess)
                 {
-                    var label = displayNameResolve.Value.DisplayName?.UserLocalizedLabel?.Label ?? "";
-                    return ErrorResult(
-                        $"[ConflictField] attribute_name '{attribute_name}' did not resolve, but display_name '{display_name.Trim()}' resolves existing field '{displayNameResolve.Value.LogicalName}' ({label}).\n" +
-                        $"Re-call upsert_column with attribute_name='{displayNameResolve.Value.LogicalName}' to update it, or choose a different display_name to create a new field.");
+                    existingMetadata = displayNameResolve.Value;
+                    logical_name = existingMetadata.LogicalName;
                 }
-                if (displayNameResolve.Status == ResolveStatus.Ambiguous || displayNameResolve.Status == ResolveStatus.Error)
+                else if (displayNameResolve.Status == ResolveStatus.Ambiguous || displayNameResolve.Status == ResolveStatus.Error)
+                {
                     return ErrorResult($"Error: {displayNameResolve.Error}");
+                }
             }
+
             if (existingMetadata != null)
             {
                 // --- UPDATE MODE ---
-                return UpdateExistingAttribute(entity_name, attribute_name, existingMetadata,
+                return UpdateExistingAttribute(entity_name, logical_name, existingMetadata,
                     display_name, description, required_level, max_length, min_value, max_value,
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
@@ -201,56 +230,47 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // --- CREATE MODE ---
             if (string.IsNullOrWhiteSpace(attribute_type))
-                return ErrorResult("Error: attribute_type is required when creating a new attribute.");
+            {
+                if (string.IsNullOrWhiteSpace(logical_name))
+                    return ErrorResult(
+                        "Error: logical_name is required to update an existing column, or attribute_type + display_name to create a new one.\n" +
+                        "To UPDATE: pass logical_name (e.g. 'new_priority'). To CREATE: pass attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name).");
+                return ErrorResult(
+                    $"[Error] No existing column found for logical_name '{logical_name}' on entity '{entity_name}'.\n" +
+                    "To CREATE a new column, also provide attribute_type + display_name (+ solution_name or a prefixed schema_name/logical_name). To UPDATE, double-check the logical name (use get_tables to list attributes).");
+            }
             if (string.IsNullOrWhiteSpace(display_name))
                 return ErrorResult("Error: display_name is required when creating a new attribute.");
 
             attribute_type = attribute_type.Trim().ToLowerInvariant();
 
-            // Resolve publisher prefix:
-            // Priority: confirmed_prefix > extract from attribute_name > resolve from solution_name
-            string resolvedPrefix = null;
-            string resolvedSolutionUniqueName = null;
-
-            var underscoreIndex = attribute_name.IndexOf('_');
-            var hasPrefix = underscoreIndex >= 1 && underscoreIndex < attribute_name.Length - 1;
-
-            if (!string.IsNullOrWhiteSpace(solution_name))
-            {
-                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solution_name.Trim());
-                if (!solResult.IsSuccess)
-                    return ErrorResult(
-                        $"[Error] {solResult.Error}\n" +
-                        $"Tip: Use get_solution_components to find valid solution names.");
-                resolvedPrefix = solResult.Prefix;
-                resolvedSolutionUniqueName = solResult.UniqueName;
-
-                // Add the solution prefix only when the user did not provide an explicit prefix.
-                // If the user typed a different prefix, keep it and let Dataverse validation decide.
-                if (!hasPrefix)
-                {
-                    attribute_name = $"{resolvedPrefix}_{attribute_name}";
-                    underscoreIndex = attribute_name.IndexOf('_');
-                    hasPrefix = true;
-                }
-            }
-            else if (!hasPrefix)
-            {
+            // A publisher prefix must be known by now (from solution_name or inherited from a prefixed schema_name/logical_name).
+            if (string.IsNullOrWhiteSpace(resolvedPrefix))
                 return ErrorResult(
-                    $"Error: attribute_name must include a publisher prefix (e.g., 'new_priority').\n" +
-                    $"Received: '{attribute_name}' on entity '{entity_name}'.\n" +
-                    $"Tip: Either include the prefix in attribute_name (e.g., 'new_priority') or provide solution_name to auto-resolve the prefix.");
-            }
+                    "Error: A publisher prefix is required to create a column. Either:\n" +
+                    "- provide solution_name (resolves the publisher prefix and adds the column to the solution), or\n" +
+                    "- provide schema_name or logical_name with a publisher prefix (e.g. 'devkit_InvoiceLineId' / 'devkit_invoicelineid').");
 
-            var prefix = attribute_name.Substring(0, underscoreIndex);
+            var prefix = resolvedPrefix;
+            if (!string.IsNullOrWhiteSpace(confirmed_prefix) &&
+                !confirmed_prefix.Equals(prefix, StringComparison.OrdinalIgnoreCase))
+                return ErrorResult(
+                    $"[Error] confirmed_prefix '{confirmed_prefix}' does not match solution '{resolvedSolutionUniqueName ?? solution_name}' publisher prefix '{prefix}'.\n" +
+                    "Use the solution publisher prefix or omit confirmed_prefix.");
 
-            // Determine SchemaName:
-            // - schema_name provided → use as-is (user takes responsibility for correctness)
-            // - otherwise derive via DataverseNamer (portal-style, preserving display_name casing)
+            var prefixWithUnderscore = prefix + "_";
+
+            // Determine SchemaName (CREATE-only override):
+            // - schema_name provided → use AS-IS (must start with publisher prefix).
+            // - otherwise derive via DataverseNamer from display_name (portal-style, preserving casing).
             string schemaName;
             if (!string.IsNullOrWhiteSpace(schema_name))
             {
-                schemaName = schema_name.Trim();
+                schemaName = schema_name;
+                if (!schemaName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                    return ErrorResult(
+                        $"[Error] schema_name '{schemaName}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').\n" +
+                        "Tip: Prepend the publisher prefix, e.g. 'devkit_InvoiceLineId' instead of 'InvoiceLineId'.");
             }
             else
             {
@@ -260,10 +280,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 catch
                 {
-                    schemaName = $"{prefix}_{display_name.Trim().Replace(" ", "")}";
+                    schemaName = $"{prefixWithUnderscore}{display_name.Trim().Replace(" ", "")}";
                 }
             }
-            attribute_name = schemaName.ToLowerInvariant();
+
+            // Determine the attribute logical name (CREATE-only override):
+            // - logical_name provided → use AS-IS (lowercased; must start with publisher prefix).
+            // - otherwise derive from schemaName.ToLowerInvariant() to stay in sync with Dataverse.
+            string attributeName;
+            if (!string.IsNullOrWhiteSpace(logical_name))
+            {
+                attributeName = logical_name.ToLowerInvariant();
+                if (!attributeName.StartsWith(prefixWithUnderscore, StringComparison.OrdinalIgnoreCase))
+                    return ErrorResult(
+                        $"[Error] logical_name '{logical_name}' must start with the publisher prefix '{prefixWithUnderscore}' (resolved from solution '{resolvedSolutionUniqueName ?? solution_name}').\n" +
+                        "Tip: Prepend the publisher prefix, e.g. 'devkit_invoicelineid' instead of 'invoicelineid'.");
+                if (!attributeName.Equals(schemaName.ToLowerInvariant(), StringComparison.OrdinalIgnoreCase))
+                    return ErrorResult(
+                        $"[Error] logical_name '{logical_name}' must be the lowercase form of schema_name '{schemaName}'.\n" +
+                        $"Expected '{schemaName.ToLowerInvariant()}'.");
+            }
+            else
+            {
+                attributeName = schemaName.ToLowerInvariant();
+            }
+            logical_name = attributeName;
+
+            // Anti-collision: if logical_name was NOT explicitly provided and the derived attribute already exists,
+            // refuse to silently overwrite — the caller must pass an explicit logical_name to target it for update,
+            // or pick a different display_name.
+            if (string.IsNullOrWhiteSpace(logical_name))
+            {
+                var collisionResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, attributeName, "upsert_column");
+                if (collisionResolve.IsSuccess)
+                    return ErrorResult(
+                        $"[Error] Cannot create column '{display_name}' because derived logical name '{attributeName}' already exists on entity '{entity_name}'.\n" +
+                        "Re-call upsert_column with an explicit logical_name to update the existing column, or choose a different display_name.");
+                if (collisionResolve.Status == ResolveStatus.Ambiguous || collisionResolve.Status == ResolveStatus.Error)
+                    return ErrorResult($"Error: {collisionResolve.Error}");
+            }
 
             // Parse required level
             var reqLevel = ParseRequiredLevel(required_level);
@@ -289,6 +344,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
                 if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
 
+                // For Calculated (and Rollup) the XAML embeds the source entity name in
+                // EntityName="..." attributes. When cloning to a different entity, those
+                // references must be rewritten to the target entity or Dataverse stores
+                // the formula verbatim and the Power Apps editor can no longer resolve
+                // the return branches (UI shows only the if/condition step). Power Fx
+                // plain text has no entity reference, so it is used as-is.
+                if (kind == "calculated" || kind == "rollup")
+                {
+                    // When cloning a Calculated/Rollup formula XAML across entities, the
+                    // source (owner) entity name embedded in the XAML must be rewritten to
+                    // the target entity. Pass an explicit source_entity_name when the caller
+                    // knows it — this is unambiguous and the recommended path (the XAML
+                    // relationship-key split is ambiguous when the owner name itself contains
+                    // underscores). When omitted, the helper discovers the source from the
+                    // XAML as a fallback.
+                    var sourceEntity = string.IsNullOrWhiteSpace(source_entity_name)
+                        ? null
+                        : source_entity_name.Trim();
+                    var rewritten = FormulaCompressionHelper.RewriteFormulaEntityReferences(
+                        resolvedFormula, sourceEntity, entity_name, out var didRewrite);
+                    if (didRewrite)
+                        resolvedFormula = rewritten;
+                }
+
                 formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
             }
             else if (!string.IsNullOrWhiteSpace(formula_source_type))
@@ -298,41 +377,41 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     "formula_source_type is only meaningful together with formula_definition.");
             }
 
-            try
+            CallToolResult CreateTypedColumn(AttributeMetadata _ = null)
             {
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec);
+                        return CreateStringAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec);
                     case "memo":
-                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, formulaSpec);
+                        return CreateMemoAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, formulaSpec);
                     case "integer":
-                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName, formulaSpec);
+                        return CreateIntegerAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName, formulaSpec);
                     case "bigint":
-                        return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
+                        return CreateBigIntAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
                     case "decimal":
-                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
+                        return CreateDecimalAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName, formulaSpec);
+                        return CreateMoneyAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName, formulaSpec);
                     case "float":
                     case "double":
-                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
+                        return CreateFloatAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
                     case "boolean":
-                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName, formulaSpec);
+                        return CreateBooleanAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName, formulaSpec, default_value);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName, formulaSpec);
+                        return CreateDateTimeAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName, formulaSpec);
                     case "lookup":
-                        return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName);
+                        return CreateLookupAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName);
                     case "customer":
-                        return CreateCustomerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, prefix, effectiveSolutionName);
+                        return CreateCustomerAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, prefix, effectiveSolutionName);
                     case "picklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, effectiveSolutionName);
+                        return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, effectiveSolutionName, default_value);
                     case "multipicklist":
-                        return CreatePicklistAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, effectiveSolutionName);
+                        return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, effectiveSolutionName, default_value);
                     case "image":
-                        return CreateImageAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
+                        return CreateImageAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
                     case "file":
-                        return CreateFileAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, effectiveSolutionName);
+                        return CreateFileAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, effectiveSolutionName);
                     default:
                         return ErrorResult(
                             $"Error: Unknown attribute_type '{attribute_type}'.\n" +
@@ -340,9 +419,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                             $"Read docs://schema_tools_guide for column type matrix and usage per type.");
                 }
             }
+
+            try
+            {
+                return CreateTypedColumn();
+            }
             catch (Exception ex)
             {
-                return HandleException(ex, entity_name, attribute_name, effectiveSolutionName);
+                // Calculated/Rollup formula clone fallback: if attaching the formula XAML
+                // caused Dataverse to reject the create (e.g. entity reference rewrite was
+                // not enough, or the XAML references attributes/relationships that do not
+                // exist on the target entity), retry the create with an EMPTY formula — the
+                // column is still created as a Calculated/Rollup field, but with an empty
+                // body so the end-user can open the Power Apps editor and define the formula
+                // themselves. Without this fallback the whole column create would fail.
+                if (formulaSpec != null && (formulaSpec.KindName == "calculated" || formulaSpec.KindName == "rollup"))
+                {
+                    var fallbackSpec = new FormulaColumnSpec(formulaSpec.SourceType, null, formulaSpec.KindName);
+                    formulaSpec = fallbackSpec;
+                    try
+                    {
+                        var fallbackResult = CreateTypedColumn();
+                    // Surface the original error to the caller as a warning so they know
+                    // the formula did not round-trip and must be redefined in the UI.
+                    var kindLabel = formulaSpec.SourceType == 1 ? "Calculated" : "Rollup";
+                    return AppendFormulaCloneWarning(fallbackResult,
+                        $"Calculated/Rollup formula did not round-trip cleanly to entity '{entity_name}' (Dataverse rejected the rewritten XAML). " +
+                        $"Column was created as an empty {kindLabel} field. " +
+                        "Open the column in the Power Apps editor and define the formula manually. " +
+                        $"Original error: {ex.Message}");
+                    }
+                    catch (Exception innerEx)
+                    {
+                        // Even the empty-formula fallback failed — defer to the generic handler.
+                        return HandleException(innerEx is not null ? innerEx : ex, entity_name, logical_name, effectiveSolutionName);
+                    }
+                }
+                return HandleException(ex, entity_name, logical_name, effectiveSolutionName);
             }
         }
 
@@ -744,7 +857,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- Boolean ---
         private CallToolResult CreateBooleanAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string trueLabel, string falseLabel, string solutionName, FormulaColumnSpec formula = null)
+            string trueLabel, string falseLabel, string solutionName, FormulaColumnSpec formula = null, string defaultValue = null)
         {
             if (string.IsNullOrWhiteSpace(trueLabel)) trueLabel = "Yes";
             if (string.IsNullOrWhiteSpace(falseLabel)) falseLabel = "No";
@@ -762,6 +875,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+
+            // Apply default value: accepts 'true'/'false' or '1'/'0'. false is the Dataverse convention for unchecked.
+            if (!string.IsNullOrWhiteSpace(defaultValue))
+            {
+                var dv = defaultValue.Trim().ToLowerInvariant();
+                if (dv == "true" || dv == "1")
+                    attr.DefaultValue = true;
+                else if (dv == "false" || dv == "0")
+                    attr.DefaultValue = false;
+                else
+                    return ErrorResult(
+                        $"Error: Invalid default_value '{defaultValue.Trim()}' for boolean. " +
+                        "Expected 'true', 'false', '1', or '0'.");
+            }
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -1225,7 +1352,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult CreatePicklistAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
             string optionsJson, string globalOptionSetName, bool isMultiSelect,
-            string solutionName)
+            string solutionName, string defaultValue)
         {
             var typeName = isMultiSelect ? "MultiSelectPicklist" : "Picklist";
 
@@ -1264,6 +1391,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     };
                 }
                 optionLabels.Add($"GlobalOptionSet: {globalOptionSetName.Trim()}");
+                var defaultErr = ApplyPicklistDefaultValue(attr, defaultValue, isMultiSelect, knownOptionValues: null);
+                if (defaultErr != null) return ErrorResult(defaultErr);
             }
             else
             {
@@ -1312,6 +1441,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         OptionSet = optionSet
                     };
                 }
+
+                // Validate + apply default value (local option set — options known here).
+                var defaultErr = ApplyPicklistDefaultValue(attr, defaultValue, isMultiSelect, knownOptionValues: parsedOptions.Select(o => o.Value).ToList());
+                if (defaultErr != null) return ErrorResult(defaultErr);
             }
 
             if (!string.IsNullOrWhiteSpace(description))
@@ -1653,6 +1786,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             if (formula == null) return;
             var preview = formula.FormulaDefinition;
+            // Fallback path creates a FormulaColumnSpec with null FormulaDefinition (empty
+            // Calculated/Rollup body that the end-user must define in the editor).
+            if (string.IsNullOrEmpty(preview))
+            {
+                sb.AppendLine($"Formula: {formula.KindName} (empty - define in editor)");
+                return;
+            }
             // For Power Fx the definition is short, readable Power Fx text → show it.
             // For Calculated/Rollup it is XAML → just report the kind + length to avoid
             // dumping a multi-KB XML blob into the tool output.
@@ -1785,6 +1925,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 return (null, $"Invalid JSON: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Applies a default option value to a single-select Picklist column.
+        /// MultiSelectPicklist (multipicklist) does NOT support a default value in the Power Apps UI,
+        /// so this method returns an error if default_value is supplied for a multi-select attribute.
+        /// For local option sets the caller passes the known option values so we can validate membership.
+        /// For global option sets the membership check is deferred to Dataverse (knownOptionValues = null).
+        /// </summary>
+        /// <returns>null on success (or when no default was supplied); an error message string otherwise.</returns>
+        private static string ApplyPicklistDefaultValue(AttributeMetadata attr, string defaultValue, bool isMultiSelect, List<int?> knownOptionValues)
+        {
+            if (string.IsNullOrWhiteSpace(defaultValue))
+                return null; // nothing to do
+
+            if (isMultiSelect)
+            {
+                return
+                    "Error: default_value is not supported for multipicklist columns. " +
+                    "Multi-select option sets do not support a default value in the Power Apps UI. " +
+                    "Omit default_value for multipicklist.";
+            }
+
+            // Parse the requested default value (single integer for single-select Picklist).
+            if (!int.TryParse(defaultValue.Trim(), out var dv))
+                return $"Error: Invalid default_value '{defaultValue.Trim()}'. Expected an integer option value (e.g. 100000002).";
+
+            // Validate membership when the caller supplied the local option values.
+            if (knownOptionValues != null && knownOptionValues.Count > 0)
+            {
+                var match = knownOptionValues.Any(v => v.HasValue && v.Value == dv);
+                if (!match)
+                    return
+                        $"Error: default_value '{dv}' does not match any option in the local option set. " +
+                        "default_value must equal one of the option values provided in 'options'.";
+            }
+
+            if (attr is PicklistAttributeMetadata plm)
+                plm.DefaultFormValue = dv;
+            else
+                return "Error: default_value can only be applied to a Picklist (single-select) attribute.";
+
+            return null;
         }
 
         private static CallToolResult HandleException(Exception ex, string entityName, string attributeName, string solutionName)
@@ -2278,5 +2461,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         {
             Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
+
+        /// <summary>
+        /// Append a clone warning preamble to a successful <see cref="CallToolResult"/> (used
+        /// when a Calculated/Rollup formula XAML failed to round-trip and the column was
+        /// re-created with an empty body). The original result text and structured content
+        /// are preserved; the warning is prepended so the caller sees it before the success
+        /// summary. The structured result <c>Status</c> is left as returned by the create
+        /// (typically "created") and a new <c>warnings</c> field is added when feasible.
+        /// </summary>
+        private static CallToolResult AppendFormulaCloneWarning(CallToolResult result, string warning)
+        {
+            if (result == null) return result;
+            // Prepend warning to the first text content block.
+            if (result.Content != null && result.Content.Count > 0 && result.Content[0] is TextContentBlock tb)
+            {
+                var newText = $"[FormulaCloneWarning] {warning}\n\n{tb.Text}";
+                result.Content[0] = new TextContentBlock { Text = newText };
+            }
+            return result;
+        }
     }
 }
