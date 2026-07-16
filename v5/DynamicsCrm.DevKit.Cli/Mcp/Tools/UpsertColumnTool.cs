@@ -40,7 +40,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- schema_name: if provided, used as-is as SchemaName (skip auto-derive from display_name)\n" +
             "- lookup: needs lookup_target (auto-creates 1:N)\n" +
             "- customer: polymorphic (account+contact), no lookup_target\n" +
-            "- picklist/multipicklist: options JSON or global_optionset_name\n\n" +
+            "- picklist/multipicklist: options JSON or global_optionset_name\n" +
+            "- formula column (PowerFx/Calculated/Rollup): pass formula_definition (+ formula_source_type). Works on string/memo/integer/decimal/money/float/boolean/datetime. Clone from get_tables `formulaDefinition` verbatim.\n\n" +
 
             "UPDATE (exists): attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current.\n\n" +
 
@@ -80,7 +81,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
             [Description("[update only]")] bool? is_audit_enabled = null,
             [Description("[update only]")] bool? is_valid_for_advanced_find = null,
-            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used as-is. Create only — ignored on update.")] string schema_name = "")
+            [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used as-is. Create only — ignored on update.")] string schema_name = "",
+            [Description("Formula column (PowerFx/Calculated/Rollup). Create only. Pass the value from get_tables `formulaDefinition` verbatim (may be 'gz:'-prefixed gzip+base64; decompressed automatically). For Power Fx use plain Power Fx text. Clones the field's computed/rollup definition.")] string formula_definition = "",
+            [Description("Formula kind for formula_definition: 'powerfx' (default), 'calculated', 'rollup'. Required when formula_definition is a Calculated/Rollup XAML payload copied from get_tables. Ignored without formula_definition.")] string formula_source_type = "")
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -271,29 +274,53 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
+            // --- Resolve formula column (Power Fx / Calculated / Rollup) ---
+            // formula_definition may be a 'gz:'-prefixed gzip+base64 payload copied verbatim
+            // from get_tables `formulaDefinition`; decompress it. Plain text (Power Fx) is
+            // used directly. Only supported on a subset of attribute types (see validation).
+            FormulaColumnSpec formulaSpec = null;
+            if (!string.IsNullOrWhiteSpace(formula_definition))
+            {
+                var resolvedFormula = FormulaCompressionHelper.Decompress(formula_definition.Trim());
+                var kind = string.IsNullOrWhiteSpace(formula_source_type) ? "powerfx" : formula_source_type.Trim().ToLowerInvariant();
+                var (sourceTypeVal, kindErr) = ParseFormulaSourceType(kind);
+                if (kindErr != null) return ErrorResult(kindErr);
+
+                var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
+                if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
+
+                formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
+            }
+            else if (!string.IsNullOrWhiteSpace(formula_source_type))
+            {
+                return ErrorResult(
+                    "Error: formula_source_type was provided without formula_definition.\n" +
+                    "formula_source_type is only meaningful together with formula_definition.");
+            }
+
             try
             {
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName);
+                        return CreateStringAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec);
                     case "memo":
-                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName);
+                        return CreateMemoAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, formulaSpec);
                     case "integer":
-                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName);
+                        return CreateIntegerAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName, formulaSpec);
                     case "bigint":
                         return CreateBigIntAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
                     case "decimal":
-                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName);
+                        return CreateDecimalAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName);
+                        return CreateMoneyAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName, formulaSpec);
                     case "float":
                     case "double":
-                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName);
+                        return CreateFloatAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
                     case "boolean":
-                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName);
+                        return CreateBooleanAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName, formulaSpec);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName);
+                        return CreateDateTimeAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName, formulaSpec);
                     case "lookup":
                         return CreateLookupAttribute(entity_name, attribute_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName);
                     case "customer":
@@ -322,7 +349,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // --- String ---
         private CallToolResult CreateStringAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxLength, string format, string solutionName)
+            int maxLength, string format, string solutionName, FormulaColumnSpec formula = null)
         {
             if (maxLength < 1) maxLength = 100;
             if (maxLength > 4000) maxLength = 4000;
@@ -342,6 +369,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -367,6 +395,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "String", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
             sb.AppendLine($"Format: {attr.FormatName?.Value ?? "Text"}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -378,13 +407,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "String", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() }, { "format", attr.FormatName?.Value ?? "Text" } });
+                extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() }, { "format", attr.FormatName?.Value ?? "Text" } },
+                description: description);
         }
 
         // --- Memo ---
         private CallToolResult CreateMemoAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxLength, string format, string solutionName)
+            int maxLength, string format, string solutionName, FormulaColumnSpec formula = null)
         {
             if (maxLength < 1) maxLength = 2000;
             if (maxLength > 1048576) maxLength = 1048576;
@@ -403,6 +433,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -427,6 +458,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = FormatHeader(entityName, logicalName, "Memo", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -438,13 +470,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "Memo", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() } });
+                extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() } },
+                description: description);
         }
 
         // --- Integer ---
         private CallToolResult CreateIntegerAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, string format, string solutionName)
+            double? minValue, double? maxValue, string format, string solutionName, FormulaColumnSpec formula = null)
         {
             var resolvedFormat = ResolveIntegerFormat(format, out var formatError);
             if (formatError != null) return ErrorResult(formatError);
@@ -462,6 +495,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxValue.HasValue) attr.MaxValue = (int)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -487,6 +521,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "Integer", displayName, reqLevel);
             if (minValue.HasValue) sb.AppendLine($"MinValue: {(int)minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {(int)maxValue.Value}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -500,13 +535,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string>();
             if (minValue.HasValue) extra["minValue"] = ((int)minValue.Value).ToString();
             if (maxValue.HasValue) extra["maxValue"] = ((int)maxValue.Value).ToString();
-            return BuildResult(sb, entityName, logicalName, schemaName, "Integer", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Integer", displayName, reqLevel, metadataId, solutionName, published, extra,
+                description: description);
         }
 
         // --- Decimal ---
         private CallToolResult CreateDecimalAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName)
+            double? minValue, double? maxValue, int precision, string solutionName, FormulaColumnSpec formula = null)
         {
             if (precision < 0) precision = 2;
             if (precision > 10) precision = 10;
@@ -524,6 +560,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxValue.HasValue) attr.MaxValue = (decimal)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -550,6 +587,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Precision: {precision}");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -563,13 +601,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, schemaName, "Decimal", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Decimal", displayName, reqLevel, metadataId, solutionName, published, extra,
+                description: description);
         }
 
         // --- Money ---
         private CallToolResult CreateMoneyAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName)
+            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName, FormulaColumnSpec formula = null)
         {
             if (precision < 0) precision = 2;
             if (precision > 4) precision = 4;
@@ -589,6 +628,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -617,6 +657,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"PrecisionSource: {precisionSource} ({precisionSourceLabel})");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -630,13 +671,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() }, { "precisionSource", precisionSource.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, schemaName, "Money", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Money", displayName, reqLevel, metadataId, solutionName, published, extra,
+                description: description);
         }
 
         // --- Float/Double ---
         private CallToolResult CreateFloatAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName)
+            double? minValue, double? maxValue, int precision, string solutionName, FormulaColumnSpec formula = null)
         {
             if (precision < 0) precision = 2;
             if (precision > 10) precision = 10;
@@ -654,6 +696,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -680,6 +723,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Precision: {precision}");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -693,13 +737,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, schemaName, "Float", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Float", displayName, reqLevel, metadataId, solutionName, published, extra,
+                description: description);
         }
 
         // --- Boolean ---
         private CallToolResult CreateBooleanAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string trueLabel, string falseLabel, string solutionName)
+            string trueLabel, string falseLabel, string solutionName, FormulaColumnSpec formula = null)
         {
             if (string.IsNullOrWhiteSpace(trueLabel)) trueLabel = "Yes";
             if (string.IsNullOrWhiteSpace(falseLabel)) falseLabel = "No";
@@ -717,6 +762,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -742,6 +788,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "Boolean", displayName, reqLevel);
             sb.AppendLine($"TrueLabel: {trueLabel.Trim()}");
             sb.AppendLine($"FalseLabel: {falseLabel.Trim()}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -753,13 +800,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "Boolean", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "trueLabel", trueLabel.Trim() }, { "falseLabel", falseLabel.Trim() } });
+                extra: new Dictionary<string, string> { { "trueLabel", trueLabel.Trim() }, { "falseLabel", falseLabel.Trim() } },
+                description: description);
         }
 
         // --- DateTime ---
         private CallToolResult CreateDateTimeAttribute(string entityName, string logicalName, string schemaName,
             string displayName, string description, AttributeRequiredLevel reqLevel,
-            string format, string behavior, string solutionName)
+            string format, string behavior, string solutionName, FormulaColumnSpec formula = null)
         {
             var dtBehavior = ResolveDateTimeBehavior(behavior, out var behaviorError);
             if (behaviorError != null) return ErrorResult(behaviorError);
@@ -782,6 +830,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -808,6 +857,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "DateTime", displayName, reqLevel);
             sb.AppendLine($"Format: {dateFormat}");
             sb.AppendLine($"Behavior: {behaviorName}");
+            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -819,7 +869,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "DateTime", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", behaviorName } });
+                extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", behaviorName } },
+                description: description);
         }
 
         private static DateTimeBehavior ResolveDateTimeBehavior(string behavior, out string error)
@@ -950,7 +1001,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "Lookup", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "lookupTarget", singleTarget }, { "relationshipName", relationshipName } });
+                extra: new Dictionary<string, string> { { "lookupTarget", singleTarget }, { "relationshipName", relationshipName } },
+                description: description);
         }
 
         // --- Polymorphic Lookup (multiple targets) ---
@@ -1048,7 +1100,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             for (int i = 0; i < targets.Length; i++)
                 extra[$"relationship_{targets[i]}"] = relNames[i];
 
-            return BuildResult(sb, entityName, logicalName, schemaName, "PolymorphicLookup", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "PolymorphicLookup", displayName, reqLevel, metadataId, solutionName, published, extra,
+                description: description);
         }
 
         // --- Customer (polymorphic lookup: account + contact) ---
@@ -1164,7 +1217,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     { "targets", "account, contact" },
                     { "accountRelationship", accountRelName },
                     { "contactRelationship", contactRelName }
-                });
+                },
+                description: description);
         }
 
         // --- Picklist / MultiSelectPicklist ---
@@ -1297,7 +1351,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, typeName, displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "options", string.Join(", ", optionLabels) } });
+                extra: new Dictionary<string, string> { { "options", string.Join(", ", optionLabels) } },
+                description: description);
         }
 
         // --- BigInt ---
@@ -1348,7 +1403,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, schemaName, "BigInt", displayName, reqLevel, metadataId, solutionName, published);
+            return BuildResult(sb, entityName, logicalName, schemaName, "BigInt", displayName, reqLevel, metadataId, solutionName, published,
+                description: description);
         }
 
         // --- Image ---
@@ -1400,7 +1456,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, schemaName, "Image", displayName, reqLevel, metadataId, solutionName, published);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Image", displayName, reqLevel, metadataId, solutionName, published,
+                description: description);
         }
 
         // --- File ---
@@ -1457,7 +1514,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AppendFooter(sb, solutionName, published, metadataId);
 
             return BuildResult(sb, entityName, logicalName, schemaName, "File", displayName, reqLevel, metadataId, solutionName, published,
-                extra: new Dictionary<string, string> { { "maxSizeInKB", maxSizeInKB.ToString() } });
+                extra: new Dictionary<string, string> { { "maxSizeInKB", maxSizeInKB.ToString() } },
+                description: description);
         }
 
         // ========== Helpers ==========
@@ -1517,7 +1575,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private CallToolResult BuildResult(StringBuilder sb, string entityName, string logicalName, string schemaName, string typeName,
             string displayName, AttributeRequiredLevel reqLevel, Guid metadataId, string solutionName, bool published,
-            Dictionary<string, string> extra = null)
+            Dictionary<string, string> extra = null, string description = null)
         {
             var actualLogicalName = ResolveCreatedAttributeLogicalName(entityName, metadataId, logicalName);
             if (!string.Equals(actualLogicalName, logicalName, StringComparison.OrdinalIgnoreCase))
@@ -1531,6 +1589,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 AttributeType = typeName,
                 DisplayName = displayName.Trim(),
+                Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim(),
                 RequiredLevel = reqLevel.ToString(),
                 MetadataId = metadataId.ToString(),
                 SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
@@ -1582,6 +1641,69 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "recommended" => AttributeRequiredLevel.Recommended,
                 _ => null
             };
+        }
+
+        // ── Formula column helpers (Power Fx / Calculated / Rollup) ──
+
+        /// <summary>
+        /// Append a short, non-leaky formula descriptor to the result log. The actual
+        /// formula payload (which can be a large XAML) is NOT echoed back.
+        /// </summary>
+        private static void AppendFormulaLine(StringBuilder sb, FormulaColumnSpec formula)
+        {
+            if (formula == null) return;
+            var preview = formula.FormulaDefinition;
+            // For Power Fx the definition is short, readable Power Fx text → show it.
+            // For Calculated/Rollup it is XAML → just report the kind + length to avoid
+            // dumping a multi-KB XML blob into the tool output.
+            if (formula.SourceType == 3)
+            {
+                var oneLine = preview.Replace("\r", " ").Replace("\n", " ");
+                if (oneLine.Length > 120) oneLine = oneLine.Substring(0, 117) + "...";
+                sb.AppendLine($"Formula: PowerFx = {oneLine}");
+            }
+            else
+            {
+                sb.AppendLine($"Formula: {formula.KindName} (XAML, {preview.Length} chars)");
+            }
+        }
+
+        /// <summary>
+        /// Map a <c>formula_source_type</c> string to the numeric <c>AttributeMetadata.SourceType</c>.
+        /// Defaults to Power Fx (3). Returns null value + error message on invalid input.
+        /// </summary>
+        private static (int sourceType, string error) ParseFormulaSourceType(string kind)
+        {
+            return kind switch
+            {
+                "" or "powerfx" or "power fx" => (3, null),
+                "calculated" or "calc" => (1, null),
+                "rollup" => (2, null),
+                _ => (0, $"Error: Invalid formula_source_type '{kind}'.\nValid values: 'powerfx' (default), 'calculated', 'rollup'.")
+            };
+        }
+
+        /// <summary>
+        /// Validate that the requested formula kind is supported on the given attribute_type.
+        /// Formula columns (Power Fx / Calculated / Rollup) are supported on: string, memo,
+        /// integer, decimal, money, float, double, boolean, datetime. Not on bigint, lookup,
+        /// customer, picklist, multipicklist, image, file.
+        /// </summary>
+        private static string ValidateFormulaAttributeType(string attributeType, string kind)
+        {
+            var formulaSupported = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "string", "memo", "integer", "decimal", "money",
+                "float", "double", "boolean", "datetime"
+            };
+            if (!formulaSupported.Contains(attributeType))
+            {
+                return
+                    $"Error: formula_definition ({kind}) is not supported on attribute_type '{attributeType}'.\n" +
+                    $"Formula columns (Power Fx/Calculated/Rollup) only work on: string, memo, integer, decimal, money, float, double, boolean, datetime.\n" +
+                    $"Remove formula_definition/formula_source_type for '{attributeType}' columns.";
+            }
+            return null;
         }
 
         private static StringFormatName ResolveStringFormat(string format, out string error)

@@ -26,6 +26,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DisplayName { get; set; }
 
+        [JsonPropertyName("description")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Description { get; set; }
+
         [JsonPropertyName("requiredLevel")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string RequiredLevel { get; set; }

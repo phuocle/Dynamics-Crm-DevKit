@@ -1,950 +1,1187 @@
-﻿# Raw MCP get_tables output
-# 
-# Tool: mcp_devkit_vscode.get_tables
-# Entity: all_in_one
-# Date: 2026-07-16
-# CLI version: 4.44.44.44 (build 16.07.2026 10:20:07)
-# Environment: DEVKITV4 (https://dynamics-crm-devkit-v4.crm.dynamics.com)
-# Solution: ALL-IN-ONE (Publisher: ALL IN ONE, Prefix: all_)
-# 
 {
-  "mode": "detail",
-  "count": 1,
-  "entityName": "all_in_one",
-  "table": {
-    "logicalName": "all_in_one",
-    "displayName": "All In One",
-    "ownershipType": "UserOwned",
-    "isCustom": true,
-    "isActivity": false,
-    "isAuditEnabled": true,
-    "primaryIdAttribute": "all_in_oneid",
-    "primaryNameAttribute": "all_name",
-    "entitySetName": "all_in_ones",
-    "logicalCollectionName": "all_in_ones",
-    "objectTypeCode": 11025,
-    "attributes": [
-      {
-        "logicalName": "all_01stringtext",
-        "schemaName": "all_01StringText",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "01.String - Text",
-        "maxLength": 100,
-        "format": "Text",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_02stringtextarea",
-        "schemaName": "all_02StringTextArea",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "02.String - TextArea",
-        "maxLength": 500,
-        "format": "TextArea",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_03stringemail",
-        "schemaName": "all_03StringEmail",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "03.String - Email",
-        "maxLength": 100,
-        "format": "Email",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_04stringurl",
-        "schemaName": "all_04StringUrl",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "04.String - Url",
-        "maxLength": 200,
-        "format": "Url",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_05stringphone",
-        "schemaName": "all_05StringPhone",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "05.String - Phone",
-        "maxLength": 50,
-        "format": "Phone",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_06stringtickersymbol",
-        "schemaName": "all_06StringTickerSymbol",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "06.String - TickerSymbol",
-        "maxLength": 10,
-        "format": "TickerSymbol",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_07stringrichtext",
-        "schemaName": "all_07StringRichText",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "07.String - RichText",
-        "maxLength": 2000,
-        "format": "RichText",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_08memotext",
-        "schemaName": "all_08MemoText",
-        "type": "Memo",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "08.Memo - Text",
-        "maxLength": 2000,
-        "format": "Text",
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "all_09memorichtext",
-        "schemaName": "all_09MemoRichText",
-        "type": "Memo",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "09.Memo - RichText",
-        "maxLength": 10000,
-        "format": "Text",
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "all_10integernone",
-        "schemaName": "all_10IntegerNone",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "10.Integer - None",
-        "minValue": -2147483648,
-        "maxValue": 2147483647,
-        "format": "None",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_11integerduration",
-        "schemaName": "all_11IntegerDuration",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "11.Integer - Duration",
-        "minValue": 0,
-        "maxValue": 2147483647,
-        "format": "Duration",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_12integertimezone",
-        "schemaName": "all_12IntegerTimeZone",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "12.Integer - TimeZone",
-        "minValue": -1500,
-        "maxValue": 1500,
-        "format": "TimeZone",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_13integerlanguage",
-        "schemaName": "all_13IntegerLanguage",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "13.Integer - Language",
-        "minValue": 0,
-        "maxValue": 2147483647,
-        "format": "Language",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_14integerlocale",
-        "schemaName": "all_14IntegerLocale",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "14.Integer - Locale",
-        "minValue": 0,
-        "maxValue": 2147483647,
-        "format": "Locale",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_15bigint",
-        "schemaName": "all_15BigInt",
-        "type": "BigInt",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "15.BigInt",
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "all_16decimal",
-        "schemaName": "all_16Decimal",
-        "type": "Decimal",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "16.Decimal",
-        "minValue": 0,
-        "maxValue": 100,
-        "precision": 4,
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_17float",
-        "schemaName": "all_17Float",
-        "type": "Double",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "17.Float",
-        "minValue": 0,
-        "maxValue": 1000000,
-        "precision": 5,
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_18moneyattribute",
-        "schemaName": "all_18MoneyAttribute",
-        "type": "Money",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "18.Money - Attribute precision",
-        "minValue": 0,
-        "maxValue": 1000000,
-        "precision": 2,
-        "precisionSource": 0,
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_19moneyorganization",
-        "schemaName": "all_19MoneyOrganization",
-        "type": "Money",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "19.Money - Organization precision",
-        "minValue": 0,
-        "maxValue": 9999999,
-        "precision": 4,
-        "precisionSource": 1,
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_20moneycurrency",
-        "schemaName": "all_20MoneyCurrency",
-        "type": "Money",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "20.Money - Currency precision",
-        "minValue": 0,
-        "maxValue": 5000000,
-        "precision": 2,
-        "precisionSource": 2,
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_21boolean",
-        "schemaName": "all_21Boolean",
-        "type": "Boolean",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "21.Boolean",
-        "trueLabel": "Yes",
-        "falseLabel": "No",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_22datetimeuserlocaldateonly",
-        "schemaName": "all_22DateTimeUserLocalDateOnly",
-        "type": "DateTime",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "22.DateTime - UserLocal + DateOnly",
-        "format": "DateOnly",
-        "behavior": "UserLocal",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_23datetimeuserlocaldateandtime",
-        "schemaName": "all_23DateTimeUserLocalDateAndTime",
-        "type": "DateTime",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "23.DateTime - UserLocal + DateAndTime",
-        "format": "DateAndTime",
-        "behavior": "UserLocal",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_24datetimedateonlydateonly",
-        "schemaName": "all_24DateTimeDateOnlyDateOnly",
-        "type": "DateTime",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "24.DateTime - DateOnly + DateOnly",
-        "format": "DateOnly",
-        "behavior": "DateOnly",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_25datetimetimezoneindependentdateandtime",
-        "schemaName": "all_25DateTimeTimeZoneIndependentDateAndTime",
-        "type": "DateTime",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "25.DateTime - TimeZoneIndependent + DateAndTime",
-        "format": "DateAndTime",
-        "behavior": "TimeZoneIndependent",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_26datetimetimezoneindependentdateonly",
-        "schemaName": "all_26DateTimeTimeZoneIndependentDateOnly",
-        "type": "DateTime",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "26.DateTime - TimeZoneIndependent + DateOnly",
-        "format": "DateOnly",
-        "behavior": "TimeZoneIndependent",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_27picklistlocal",
-        "schemaName": "all_27PicklistLocal",
-        "type": "Picklist",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "27.Picklist - Local",
-        "isGlobalOptionSet": false,
-        "options": [
-          {
-            "value": 100000000,
-            "label": "Low"
-          },
-          {
-            "value": 100000001,
-            "label": "Medium"
-          },
-          {
-            "value": 100000002,
-            "label": "High"
-          }
-        ],
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_28picklistglobal",
-        "schemaName": "all_28PicklistGlobal",
-        "type": "Picklist",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "28.Picklist - Global",
-        "globalOptionSetName": "v4_v4_category",
-        "isGlobalOptionSet": true,
-        "options": [
-          {
-            "value": 100000000,
-            "label": "Category_A"
-          },
-          {
-            "value": 100000001,
-            "label": "Category_B"
-          },
-          {
-            "value": 100000002,
-            "label": "Category_C"
-          },
-          {
-            "value": 100000003,
-            "label": "Category_D"
-          }
-        ],
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_29multipicklistlocal",
-        "schemaName": "all_29MultiPicklistLocal",
-        "type": "MultiSelect",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "29.MultiPicklist - Local",
-        "isGlobalOptionSet": false,
-        "options": [
-          {
-            "value": 100000000,
-            "label": "Red"
-          },
-          {
-            "value": 100000001,
-            "label": "Green"
-          },
-          {
-            "value": 100000002,
-            "label": "Blue"
-          }
-        ],
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "all_32lookupaccount",
-        "schemaName": "all_32LookupAccount",
-        "type": "Lookup -> account",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "32.Lookup - account",
-        "lookupTargets": [
-          "account"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "all_33customeraccountcontact",
-        "schemaName": "all_33CustomerAccountContact",
-        "type": "Lookup -> account, contact",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "33.Customer - account,contact",
-        "lookupTargets": [
-          "account",
-          "contact"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "all_35polymorphiccontactteam",
-        "schemaName": "all_35PolymorphicContactTeam",
-        "type": "Lookup -> contact, team",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "35.Polymorphic - contact,team",
-        "lookupTargets": [
-          "contact",
-          "team"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "all_36file",
-        "schemaName": "all_36File",
-        "type": "File",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "36.File",
-        "maxLength": 32768,
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "all_37image",
-        "schemaName": "all_37Image",
-        "type": "Image",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "37.Image",
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "all_37imageid",
-        "schemaName": "all_37ImageId",
-        "type": "Uniqueidentifier",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "",
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "all_in_oneid",
-        "schemaName": "all_In_OneId",
-        "type": "Uniqueidentifier",
-        "isValidForCreate": true,
-        "isValidForUpdate": false,
-        "displayName": "38.Id",
-        "description": "Unique identifier for entity instances",
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "all_name",
-        "schemaName": "all_Name",
-        "type": "String",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "Name",
-        "maxLength": 850,
-        "format": "Text",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "createdby",
-        "schemaName": "CreatedBy",
-        "type": "Lookup -> systemuser",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Created By",
-        "description": "Unique identifier of the user who created the record.",
-        "lookupTargets": [
-          "systemuser"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "createdon",
-        "schemaName": "CreatedOn",
-        "type": "DateTime",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Created On",
-        "description": "Date and time when the record was created.",
-        "format": "DateAndTime",
-        "behavior": "UserLocal",
-        "isAuditEnabled": false,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "createdonbehalfby",
-        "schemaName": "CreatedOnBehalfBy",
-        "type": "Lookup -> systemuser",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Created By (Delegate)",
-        "description": "Unique identifier of the delegate user who created the record.",
-        "lookupTargets": [
-          "systemuser"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "exchangerate",
-        "schemaName": "ExchangeRate",
-        "type": "Decimal",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Exchange Rate",
-        "description": "Exchange rate for the currency associated with the entity with respect to the base currency.",
-        "minValue": 1e-10,
-        "maxValue": 100000000000,
-        "precision": 12,
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "importsequencenumber",
-        "schemaName": "ImportSequenceNumber",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": false,
-        "displayName": "Import Sequence Number",
-        "description": "Sequence number of the import that created this record.",
-        "minValue": -2147483648,
-        "maxValue": 2147483647,
-        "format": "None",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "modifiedby",
-        "schemaName": "ModifiedBy",
-        "type": "Lookup -> systemuser",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Modified By",
-        "description": "Unique identifier of the user who modified the record.",
-        "lookupTargets": [
-          "systemuser"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "modifiedon",
-        "schemaName": "ModifiedOn",
-        "type": "DateTime",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Modified On",
-        "description": "Date and time when the record was modified.",
-        "format": "DateAndTime",
-        "behavior": "UserLocal",
-        "isAuditEnabled": false,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "modifiedonbehalfby",
-        "schemaName": "ModifiedOnBehalfBy",
-        "type": "Lookup -> systemuser",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Modified By (Delegate)",
-        "description": "Unique identifier of the delegate user who modified the record.",
-        "lookupTargets": [
-          "systemuser"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "overriddencreatedon",
-        "schemaName": "OverriddenCreatedOn",
-        "type": "DateTime",
-        "isValidForCreate": true,
-        "isValidForUpdate": false,
-        "displayName": "Record Created On",
-        "description": "Date and time that the record was migrated.",
-        "format": "DateOnly",
-        "behavior": "UserLocal",
-        "isAuditEnabled": true,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "ownerid",
-        "schemaName": "OwnerId",
-        "type": "Lookup -> systemuser, team",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "34.Owner",
-        "description": "Owner Id",
-        "lookupTargets": [
-          "systemuser",
-          "team"
-        ],
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "owningbusinessunit",
-        "schemaName": "OwningBusinessUnit",
-        "type": "Lookup -> businessunit",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Owning Business Unit",
-        "description": "Unique identifier for the business unit that owns the record",
-        "lookupTargets": [
-          "businessunit"
-        ],
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "owningteam",
-        "schemaName": "OwningTeam",
-        "type": "Lookup -> team",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Owning Team",
-        "description": "Unique identifier for the team that owns the record.",
-        "lookupTargets": [
-          "team"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "owninguser",
-        "schemaName": "OwningUser",
-        "type": "Lookup -> systemuser",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Owning User",
-        "description": "Unique identifier for the user that owns the record.",
-        "lookupTargets": [
-          "systemuser"
-        ],
-        "isAuditEnabled": false
-      },
-      {
-        "logicalName": "statecode",
-        "schemaName": "statecode",
-        "type": "State",
-        "isValidForCreate": false,
-        "isValidForUpdate": true,
-        "displayName": "30.State",
-        "description": "Status of the All In One",
-        "isGlobalOptionSet": false,
-        "options": [
-          {
-            "value": 0,
-            "label": "Active"
-          },
-          {
-            "value": 1,
-            "label": "Inactive"
-          }
-        ],
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "statuscode",
-        "schemaName": "statuscode",
-        "type": "Status",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "31.Status",
-        "description": "Reason for the status of the All In One",
-        "isGlobalOptionSet": false,
-        "options": [
-          {
-            "value": 1,
-            "label": "Active"
-          },
-          {
-            "value": 2,
-            "label": "Inactive"
-          }
-        ],
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "timezoneruleversionnumber",
-        "schemaName": "TimeZoneRuleVersionNumber",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "Time Zone Rule Version Number",
-        "description": "For internal use only.",
-        "minValue": -1,
-        "maxValue": 2147483647,
-        "format": "None",
-        "isAuditEnabled": false,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "transactioncurrencyid",
-        "schemaName": "TransactionCurrencyId",
-        "type": "Lookup -> transactioncurrency",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "Currency",
-        "description": "Unique identifier of the currency associated with the entity.",
-        "lookupTargets": [
-          "transactioncurrency"
-        ],
-        "isAuditEnabled": true
-      },
-      {
-        "logicalName": "utcconversiontimezonecode",
-        "schemaName": "UTCConversionTimeZoneCode",
-        "type": "Integer",
-        "isValidForCreate": true,
-        "isValidForUpdate": true,
-        "displayName": "UTC Conversion Time Zone Code",
-        "description": "Time zone code that was in use when the record was created.",
-        "minValue": -1,
-        "maxValue": 2147483647,
-        "format": "None",
-        "isAuditEnabled": false,
-        "sourceType": "Simple"
-      },
-      {
-        "logicalName": "versionnumber",
-        "schemaName": "VersionNumber",
-        "type": "BigInt",
-        "isValidForCreate": false,
-        "isValidForUpdate": false,
-        "displayName": "Version Number",
-        "description": "Version Number",
-        "isAuditEnabled": false
-      }
-    ],
-    "oneToManyRelationships": [
-      {
-        "schemaName": "all_in_one_AsyncOperations",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "asyncoperation",
-        "referencingAttribute": "regardingobjectid"
-      },
-      {
-        "schemaName": "all_in_one_BulkDeleteFailures",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "bulkdeletefailure",
-        "referencingAttribute": "regardingobjectid"
-      },
-      {
-        "schemaName": "all_in_one_DeletedItemReferences",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "deleteditemreference",
-        "referencingAttribute": "deletedobject"
-      },
-      {
-        "schemaName": "all_in_one_DuplicateBaseRecord",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "duplicaterecord",
-        "referencingAttribute": "baserecordid"
-      },
-      {
-        "schemaName": "all_in_one_DuplicateMatchingRecord",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "duplicaterecord",
-        "referencingAttribute": "duplicaterecordid"
-      },
-      {
-        "schemaName": "all_in_one_FileAttachments",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "fileattachment",
-        "referencingAttribute": "objectid"
-      },
-      {
-        "schemaName": "all_in_one_MailboxTrackingFolders",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "mailboxtrackingfolder",
-        "referencingAttribute": "regardingobjectid"
-      },
-      {
-        "schemaName": "all_in_one_PrincipalObjectAttributeAccesses",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "principalobjectattributeaccess",
-        "referencingAttribute": "objectid"
-      },
-      {
-        "schemaName": "all_in_one_ProcessSession",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "processsession",
-        "referencingAttribute": "regardingobjectid"
-      },
-      {
-        "schemaName": "all_in_one_SyncErrors",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "syncerror",
-        "referencingAttribute": "regardingobjectid"
-      },
-      {
-        "schemaName": "all_in_one_UserEntityInstanceDatas",
-        "referencedEntity": "all_in_one",
-        "referencingEntity": "userentityinstancedata",
-        "referencingAttribute": "objectid"
-      }
-    ],
-    "manyToOneRelationships": [
-      {
-        "schemaName": "all_account_all_in_one_all_33customeraccountcontact",
-        "referencedEntity": "account",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_33customeraccountcontact"
-      },
-      {
-        "schemaName": "all_account_all_in_one_all_32lookupaccount",
-        "referencedEntity": "account",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_32lookupaccount"
-      },
-      {
-        "schemaName": "business_unit_all_in_one",
-        "referencedEntity": "businessunit",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "owningbusinessunit"
-      },
-      {
-        "schemaName": "all_contact_all_in_one_all_35polymorphiccontactteam",
-        "referencedEntity": "contact",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_35polymorphiccontactteam"
-      },
-      {
-        "schemaName": "all_contact_all_in_one_all_33customeraccountcontact",
-        "referencedEntity": "contact",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_33customeraccountcontact"
-      },
-      {
-        "schemaName": "FileAttachment_all_In_One_all_36File",
-        "referencedEntity": "fileattachment",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_36file"
-      },
-      {
-        "schemaName": "ImageDescriptor_all_In_One_all_37Image",
-        "referencedEntity": "imagedescriptor",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_37imageid"
-      },
-      {
-        "schemaName": "owner_all_in_one",
-        "referencedEntity": "owner",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "ownerid"
-      },
-      {
-        "schemaName": "lk_all_in_one_modifiedonbehalfby",
-        "referencedEntity": "systemuser",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "modifiedonbehalfby"
-      },
-      {
-        "schemaName": "lk_all_in_one_modifiedby",
-        "referencedEntity": "systemuser",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "modifiedby"
-      },
-      {
-        "schemaName": "lk_all_in_one_createdby",
-        "referencedEntity": "systemuser",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "createdby"
-      },
-      {
-        "schemaName": "lk_all_in_one_createdonbehalfby",
-        "referencedEntity": "systemuser",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "createdonbehalfby"
-      },
-      {
-        "schemaName": "user_all_in_one",
-        "referencedEntity": "systemuser",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "owninguser"
-      },
-      {
-        "schemaName": "all_team_all_in_one_all_35polymorphiccontactteam",
-        "referencedEntity": "team",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "all_35polymorphiccontactteam"
-      },
-      {
-        "schemaName": "team_all_in_one",
-        "referencedEntity": "team",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "owningteam"
-      },
-      {
-        "schemaName": "TransactionCurrency_all_In_One",
-        "referencedEntity": "transactioncurrency",
-        "referencingEntity": "all_in_one",
-        "referencingAttribute": "transactioncurrencyid"
-      }
-    ],
-    "manyToManyRelationships": [],
-    "alternateKeys": []
-  }
+    "mode":  "detail",
+    "count":  1,
+    "entityName":  "all_in_one",
+    "table":  {
+                  "logicalName":  "all_in_one",
+                  "schemaName":  "all_In_One",
+                  "displayName":  "All In One",
+                  "ownershipType":  "UserOwned",
+                  "isCustom":  true,
+                  "isActivity":  false,
+                  "isAuditEnabled":  true,
+                  "primaryIdAttribute":  "all_in_oneid",
+                  "primaryNameAttribute":  "all_name",
+                  "entitySetName":  "all_in_ones",
+                  "logicalCollectionName":  "all_in_ones",
+                  "objectTypeCode":  11025,
+                  "attributes":  [
+                                     {
+                                         "logicalName":  "all_01stringtext",
+                                         "schemaName":  "all_01StringText",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "01.String - Text",
+                                         "maxLength":  100,
+                                         "format":  "Text",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_02stringtextarea",
+                                         "schemaName":  "all_02StringTextArea",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "02.String - TextArea",
+                                         "maxLength":  500,
+                                         "format":  "TextArea",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_03stringemail",
+                                         "schemaName":  "all_03StringEmail",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "03.String - Email",
+                                         "maxLength":  100,
+                                         "format":  "Email",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_04stringurl",
+                                         "schemaName":  "all_04StringUrl",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "04.String - Url",
+                                         "maxLength":  200,
+                                         "format":  "Url",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_05stringphone",
+                                         "schemaName":  "all_05StringPhone",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "05.String - Phone",
+                                         "maxLength":  50,
+                                         "format":  "Phone",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_06stringtickersymbol",
+                                         "schemaName":  "all_06StringTickerSymbol",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "06.String - TickerSymbol",
+                                         "maxLength":  10,
+                                         "format":  "TickerSymbol",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_07stringrichtext",
+                                         "schemaName":  "all_07StringRichText",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "07.String - RichText",
+                                         "maxLength":  2000,
+                                         "format":  "RichText",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_08memotext",
+                                         "schemaName":  "all_08MemoText",
+                                         "type":  "Memo",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "08.Memo - Text",
+                                         "maxLength":  2000,
+                                         "format":  "Text",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_09memorichtext",
+                                         "schemaName":  "all_09MemoRichText",
+                                         "type":  "Memo",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "09.Memo - RichText",
+                                         "maxLength":  10000,
+                                         "format":  "Text",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_10integernone",
+                                         "schemaName":  "all_10IntegerNone",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "10.Integer - None",
+                                         "minValue":  -2147483648,
+                                         "maxValue":  2147483647,
+                                         "format":  "None",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_11integerduration",
+                                         "schemaName":  "all_11IntegerDuration",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "11.Integer - Duration",
+                                         "minValue":  0,
+                                         "maxValue":  2147483647,
+                                         "format":  "Duration",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_12integertimezone",
+                                         "schemaName":  "all_12IntegerTimeZone",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "12.Integer - TimeZone",
+                                         "minValue":  -1500,
+                                         "maxValue":  1500,
+                                         "format":  "TimeZone",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_13integerlanguage",
+                                         "schemaName":  "all_13IntegerLanguage",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "13.Integer - Language",
+                                         "minValue":  0,
+                                         "maxValue":  2147483647,
+                                         "format":  "Language",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_14integerlocale",
+                                         "schemaName":  "all_14IntegerLocale",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "14.Integer - Locale",
+                                         "minValue":  0,
+                                         "maxValue":  2147483647,
+                                         "format":  "Locale",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_15bigint",
+                                         "schemaName":  "all_15BigInt",
+                                         "type":  "BigInt",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "15.BigInt",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_16decimal",
+                                         "schemaName":  "all_16Decimal",
+                                         "type":  "Decimal",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "16.Decimal",
+                                         "minValue":  0,
+                                         "maxValue":  100,
+                                         "precision":  4,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_17float",
+                                         "schemaName":  "all_17Float",
+                                         "type":  "Double",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "17.Float",
+                                         "minValue":  0,
+                                         "maxValue":  1000000,
+                                         "precision":  5,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_18moneyattribute",
+                                         "schemaName":  "all_18MoneyAttribute",
+                                         "type":  "Money",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "18.Money - Attribute precision",
+                                         "minValue":  0,
+                                         "maxValue":  1000000,
+                                         "precision":  2,
+                                         "precisionSource":  0,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_19moneyorganization",
+                                         "schemaName":  "all_19MoneyOrganization",
+                                         "type":  "Money",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "19.Money - Organization precision",
+                                         "minValue":  0,
+                                         "maxValue":  9999999,
+                                         "precision":  4,
+                                         "precisionSource":  1,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_20moneycurrency",
+                                         "schemaName":  "all_20MoneyCurrency",
+                                         "type":  "Money",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "20.Money - Currency precision",
+                                         "minValue":  0,
+                                         "maxValue":  5000000,
+                                         "precision":  2,
+                                         "precisionSource":  2,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_21boolean",
+                                         "schemaName":  "all_21Boolean",
+                                         "type":  "Boolean",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "21.Boolean",
+                                         "trueLabel":  "Yes",
+                                         "falseLabel":  "No",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple",
+                                         "defaultValue":  false
+                                     },
+                                     {
+                                         "logicalName":  "all_22datetimeuserlocaldateonly",
+                                         "schemaName":  "all_22DateTimeUserLocalDateOnly",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "22.DateTime - UserLocal + DateOnly",
+                                         "format":  "DateOnly",
+                                         "behavior":  "UserLocal",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_23datetimeuserlocaldateandtime",
+                                         "schemaName":  "all_23DateTimeUserLocalDateAndTime",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "23.DateTime - UserLocal + DateAndTime",
+                                         "format":  "DateAndTime",
+                                         "behavior":  "UserLocal",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_24datetimedateonlydateonly",
+                                         "schemaName":  "all_24DateTimeDateOnlyDateOnly",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "24.DateTime - DateOnly + DateOnly",
+                                         "format":  "DateOnly",
+                                         "behavior":  "DateOnly",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_25datetimetimezoneindependentdateandtime",
+                                         "schemaName":  "all_25DateTimeTimeZoneIndependentDateAndTime",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "25.DateTime - TimeZoneIndependent + DateAndTime",
+                                         "format":  "DateAndTime",
+                                         "behavior":  "TimeZoneIndependent",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_26datetimetimezoneindependentdateonly",
+                                         "schemaName":  "all_26DateTimeTimeZoneIndependentDateOnly",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "26.DateTime - TimeZoneIndependent + DateOnly",
+                                         "format":  "DateOnly",
+                                         "behavior":  "TimeZoneIndependent",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_27picklistlocal",
+                                         "schemaName":  "all_27PicklistLocal",
+                                         "type":  "Picklist",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "27.Picklist - Local",
+                                         "isGlobalOptionSet":  false,
+                                         "options":  [
+                                                         {
+                                                             "value":  100000000,
+                                                             "label":  "Low"
+                                                         },
+                                                         {
+                                                             "value":  100000001,
+                                                             "label":  "Medium"
+                                                         },
+                                                         {
+                                                             "value":  100000002,
+                                                             "label":  "High"
+                                                         }
+                                                     ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple",
+                                         "defaultValue":  100000002
+                                     },
+                                     {
+                                         "logicalName":  "all_28picklistglobal",
+                                         "schemaName":  "all_28PicklistGlobal",
+                                         "type":  "Picklist",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "28.Picklist - Global",
+                                         "globalOptionSetName":  "v4_v4_category",
+                                         "isGlobalOptionSet":  true,
+                                         "options":  [
+                                                         {
+                                                             "value":  100000000,
+                                                             "label":  "Category_A"
+                                                         },
+                                                         {
+                                                             "value":  100000001,
+                                                             "label":  "Category_B"
+                                                         },
+                                                         {
+                                                             "value":  100000002,
+                                                             "label":  "Category_C"
+                                                         },
+                                                         {
+                                                             "value":  100000003,
+                                                             "label":  "Category_D"
+                                                         }
+                                                     ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_29multipicklistlocal",
+                                         "schemaName":  "all_29MultiPicklistLocal",
+                                         "type":  "MultiSelect",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "29.MultiPicklist - Local",
+                                         "isGlobalOptionSet":  false,
+                                         "options":  [
+                                                         {
+                                                             "value":  100000000,
+                                                             "label":  "Red"
+                                                         },
+                                                         {
+                                                             "value":  100000001,
+                                                             "label":  "Green"
+                                                         },
+                                                         {
+                                                             "value":  100000002,
+                                                             "label":  "Blue"
+                                                         }
+                                                     ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_32lookupaccount",
+                                         "schemaName":  "all_32LookupAccount",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "32.Lookup - account",
+                                         "lookupTargets":  [
+                                                               "account"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_33customeraccountcontact",
+                                         "schemaName":  "all_33CustomerAccountContact",
+                                         "type":  "Customer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "33.Customer - account,contact",
+                                         "lookupTargets":  [
+                                                               "account",
+                                                               "contact"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_35polymorphiccontactteam",
+                                         "schemaName":  "all_35PolymorphicContactTeam",
+                                         "type":  "Polymorphic",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "35.Polymorphic - contact,team",
+                                         "lookupTargets":  [
+                                                               "contact",
+                                                               "team"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_36file",
+                                         "schemaName":  "all_36File",
+                                         "type":  "File",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "36.File",
+                                         "maxLength":  32768,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_37image",
+                                         "schemaName":  "all_37Image",
+                                         "type":  "Image",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "37.Image",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_37imageid",
+                                         "schemaName":  "all_37ImageId",
+                                         "type":  "Uniqueidentifier",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_39powerfx",
+                                         "schemaName":  "all_39PowerFx",
+                                         "type":  "String",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "39.Power Fx",
+                                         "maxLength":  4000,
+                                         "format":  "Text",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "PowerFx",
+                                         "formulaDefinition":  "gz:H4sIAAAAAAAACkvMyYk3MCwuKcrMSy9JrShRUFNIBAmZQoQKMvLzUhXUFJRCXINDlAAPbF4BLQAAAA=="
+                                     },
+                                     {
+                                         "logicalName":  "all_40calculated",
+                                         "schemaName":  "all_40Calculated",
+                                         "type":  "String",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "40.Calculated",
+                                         "maxLength":  4000,
+                                         "format":  "Text",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Calculated",
+                                         "formulaDefinition":  "gz:H4sIAAAAAAAACu1aaW/bOBD9KwQXWCSAK9nxkUa1VKROWhQ90sZBWiAICloe29xSlEJSibyL/e8LSZbkQ/JRW0nbdfLFlsnhG86bi1T7ZeAwdA9CUpebuKZVMQJuu33Khyb21eBZrYVfWu1TW9F7qsYoMDqMSGnir8L54orvA+Y+VFf8YRQ4jEsTj5TyDF2X9ggcIjWH2sKV7kBptuvoHNQg0I+q1RM9IA7TSbwkBTmZbzj2g21im4lnnDggPWKD8SGV0RGOliDSOowCVxPUFOQLIiU4PTY28ydU0PVkD060avhfQR2fKV+AycFXgrAK+uT3GLXfwfjK/Q7crNd6g/rzZov0660G1JspyntSDPKaSp+wV0RSW8tD1x1LBc7UTxmwxtbAAlkM7KtwtG7/e94+TX7a5RYF8m4lFO2zD2L8aIAeyGpEKb2WE2t++A6BLlgwJkyGwpG2Kxjt/QBvesfHpGk3W7WTegOqz0/SNe1h/qpax2UMbEVdLrU3wEFQu2Qk7hpILnp/ga0+uH1g5aIRBdbQLn2uqANaFwQljP5NQmALTp47aof41IguAEx+C1YE4wfK42DcioIxttqB8QGcHggZfvwkXA+EGqOPxAETv+Wer865mkTrq7EXPTwVQ98Brg6kPTTentHIPkSMDwKjqwTlwwpyAmlEE8eHhxjpObI7AoiC/m6k61NahNtjbJDFtBktrXaGAAVGCCr5Kk28FqQY0bYwNp4/t6FPp8gCEOeeGNMJsgtKUT6U1unEc5CAAQjgNkhEeB9Rx3OFgj5KCS7RwBWIcgWCExYOYBCqEvlWWy9coR1lACPBnnxPyp7LZF2UQPnsE0YHFPoxSwvKkCxPaB2X92mIogt3fiiqgkosRc6o9BgZT1woXVqBV8OFymmp4ZeTIjBeuS4DwjEKjHcwNvEXQhW2XhMmoa1nU622vsZSRUMmgSCihrRdI4vxi5CuiaCkxyBFlDyQ2Gonn5dqcgYD4jNl4kgLjOa27pUg3B6FG3j0zU4eRsTftfTaSqlxglsq5GgXQuql6NfYBbTmLoS0ttXvSviwPZDWxOT6LMlXkz5xmZT0WbhJnfwNxLlinKbVU6UE7fkKTCwVUWC7fcAoHmTim5n0cvDnne+qF56gDhHjeEz86PA2mRPrRRj7Rvk3lwNG14T5YOKbfGbeFmPTrogYggrVXJGWogepoDRmvKcKBGFLJgTGR5+xaLvz51q5AWw51KJBJaSR83vCfKLgPPAEyDBNPF4eWVx7F7kkLihSDmfCLzwQRLkCW3Gl0BFOOHnWPstZEvvezW0q/RMRxAEFQmLr5iM8oHjEwSH6By3p95IPiWHDhbQLL07nKuJ7BeEqriDcDX0Ko39vN8EZkTPBmDFrc4InvhdWZ7P44hAzDenCV8vsksStCapLkD5T2Mr36vptW5+St17iLxpTotuk4B/fa9Klt3ea8PzESOWlfpKYavEX6/zOJ6w0z8mnxEY+sMC3CDvvFxHu6HYjMs8XrMvZXCuDzSszsS8fORU396l4n4p/z1RcS1KxL/93ubi1z8X7XDxHiVJzcbPMXNz4Rdj83h1Sm7AnLDDnEeyozpyIXagy559bp7y/CcfmafAeBmoF0cK67McXuKTD0aoVGmVSOT03/MkpPQf+CQ6qp3atjOPqKRdZbakyjrOLTJZUHSPgeBv7OZ4rqYKf1nI7OtoPy6jtDkmTy5hZbbqg0t4sKthCfRpTw7UUwyZnv/lik9PfPNmnUtJhjlLZ5RtGV27Y383epeU1i39cgeNlHWPSGYaVdzxgMilrH7PBejEUabzxaf/HYGhv+1NI1m1341n6Wn11qEy1JqO+RkGgyumuiwz7lP11Ai7r6vQyjra7q3a/UbUJs30W8mJq9zcn7PZG6P68RlgOrWiQ1Q5fiTMWNF8rmpVhC32DkLWB/6WnWBsDnQ6sOTds+joJqrjymlwmJccl0c2gPv/4DKQtaNT/x3i2W3N/o/T73ihN6tQKwiq6WX7ig6upwrm886pWOaftv2k71Cq7HQpfadg3PaXY51dseo7LaXqO901P2U1PM256vFFUmD1a13O873qevuuZMcK+65kOZ/uu55fsevT5zi2tYqaKGEUolyGeOB+nLySnY7eHMf+auJ4Msv4Df/l+EEo3AAA="
+                                     },
+                                     {
+                                         "logicalName":  "all_41rollup",
+                                         "schemaName":  "all_41Rollup",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "41.Rollup",
+                                         "minValue":  -2147483648,
+                                         "maxValue":  2147483647,
+                                         "format":  "None",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Rollup",
+                                         "formulaDefinition":  "gz:H4sIAAAAAAAACsVXa2/bNhT9KwQDDAmQSnbzaKNaLrIk6IKuSWYHWYHACGjp2ubCh0peJtKG/fdBkiU/5SxputlfZPI+zj338IrufEylIA9gLNcqpG2vRQmoSMdcjUPqcPSmfUg/djvHEfIHjhlJgxPBrA3pVyN/1+Z+JPRj64kPJakUyoZ0gpgEvm+jCUhmPckjo60eoRdp6SvAUeq/bbWO/JRJ4bMyJQc79Q9k9BiFNBLmjWISbMIiCL7UMU6M9CpE3ongoHCKmoP9wKwFORRZuN5hl9xMOTjyWvl3l5w4gc5AqMChYWKXXLmh4NFnyK71Pahwrz0c7b0/OGTx3uE+7B3UKB9YM8gbbh0TPzPLI28dun5mEeTc1gzY/ncDS20zsK9Gev34fh1P063XpCi1jxtImiacdXNzH5fNXxHoCmFlf2YopI20EXz4gjYN371jB9HBYftobx9a74/qnNF4fVbvRAsBEXKtrPcJFBge/VgkpqF+r+cUcgleHwxngv/JclArKl5r9Yr4cMJXAFZ76RPT5pGrctocFtOGdjtp8AXkEIzNH6+MTsBgRi6YhJCeq8ThmcLpOLrOkmLx2IydBIXbNhoH56e86A0z2XYa9NFwNd4lMrVB4Zjt7FDir4l9YoAhxK8T3Z+rIqcneMaY9haq7HZmCEga5KCqnzak/wpSieh7YTzbf4nQ/6+QFSDygQXzb4A+IHI1tt3j6ckhBkZgQEVgCVMx4TLRBiEmtcAtGWlDuEIwioncQEBeSnG2On5jhk4xc4MKe7fTh28uT0ROuU0Ey0ox9rQQLuk5AX2EpE2b7PramQjmtr0bZjgbirzM6nGV7YpdSk5hxJzAkN5eaJxwNR7Q6Xn4hYNhJprwiIkeiKIwO+FJvls2Yl3OerEJ8TUzY0Da7eS3iKAPeIxo+NAh3DDhloxjEIAQcwRZd8SbLurhHxChx4S44+pOK7g7LTfOEWSv7h8lpXhCerukg+2fvjmNH0xeG8SCq3uI754Kt7WQfWsdwK1rkEkZe2dQpW+uZ5HLJtqOx2MDY4Yv6fVlgbXq65K07toFgJf7v20WQ6n1T1BOkaweuHXLQ4oamTAQaRPPt2ph9kwblRgumclKm+fwWwgrpLcryAe0EaNX6jTn4onBVSzUgWql/MoRDBMbHNLgwglRkLfet9vxZ5lrq81Qm4wqfNUfiDoXqWbeb44JPuIQl1Q2XOhnV0Dv7IEJxxDO0sSAza8Su+QH3uoXjsNqbtpYoVeTv7mTs6GYBp8hC+ks+GUChqE2tNt3crErm7VRHp3bQR3zihkmAcFY2r29gEdSWmzvkL/Iij7J34PnJCt0VSWaieK/0Oalw03EVhNkiq0H1gmk3ZUT2R50/LlQdfaNPW2yWZiq84/Lr2C/cu3+A8JA6nKHDwAA"
+                                     },
+                                     {
+                                         "logicalName":  "all_in_oneid",
+                                         "schemaName":  "all_In_OneId",
+                                         "type":  "Uniqueidentifier",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "38.Id",
+                                         "description":  "Unique identifier for entity instances",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "all_name",
+                                         "schemaName":  "all_Name",
+                                         "type":  "String",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "Name",
+                                         "maxLength":  850,
+                                         "format":  "Text",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "createdby",
+                                         "schemaName":  "CreatedBy",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Created By",
+                                         "description":  "Unique identifier of the user who created the record.",
+                                         "lookupTargets":  [
+                                                               "systemuser"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "createdon",
+                                         "schemaName":  "CreatedOn",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Created On",
+                                         "description":  "Date and time when the record was created.",
+                                         "format":  "DateAndTime",
+                                         "behavior":  "UserLocal",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "createdonbehalfby",
+                                         "schemaName":  "CreatedOnBehalfBy",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Created By (Delegate)",
+                                         "description":  "Unique identifier of the delegate user who created the record.",
+                                         "lookupTargets":  [
+                                                               "systemuser"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "exchangerate",
+                                         "schemaName":  "ExchangeRate",
+                                         "type":  "Decimal",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Exchange Rate",
+                                         "description":  "Exchange rate for the currency associated with the entity with respect to the base currency.",
+                                         "minValue":  1E-10,
+                                         "maxValue":  100000000000,
+                                         "precision":  12,
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "importsequencenumber",
+                                         "schemaName":  "ImportSequenceNumber",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Import Sequence Number",
+                                         "description":  "Sequence number of the import that created this record.",
+                                         "minValue":  -2147483648,
+                                         "maxValue":  2147483647,
+                                         "format":  "None",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "modifiedby",
+                                         "schemaName":  "ModifiedBy",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Modified By",
+                                         "description":  "Unique identifier of the user who modified the record.",
+                                         "lookupTargets":  [
+                                                               "systemuser"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "modifiedon",
+                                         "schemaName":  "ModifiedOn",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Modified On",
+                                         "description":  "Date and time when the record was modified.",
+                                         "format":  "DateAndTime",
+                                         "behavior":  "UserLocal",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "modifiedonbehalfby",
+                                         "schemaName":  "ModifiedOnBehalfBy",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Modified By (Delegate)",
+                                         "description":  "Unique identifier of the delegate user who modified the record.",
+                                         "lookupTargets":  [
+                                                               "systemuser"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "overriddencreatedon",
+                                         "schemaName":  "OverriddenCreatedOn",
+                                         "type":  "DateTime",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Record Created On",
+                                         "description":  "Date and time that the record was migrated.",
+                                         "format":  "DateOnly",
+                                         "behavior":  "UserLocal",
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "ownerid",
+                                         "schemaName":  "OwnerId",
+                                         "type":  "Polymorphic",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "34.Owner",
+                                         "description":  "Owner Id",
+                                         "lookupTargets":  [
+                                                               "systemuser",
+                                                               "team"
+                                                           ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "owningbusinessunit",
+                                         "schemaName":  "OwningBusinessUnit",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Owning Business Unit",
+                                         "description":  "Unique identifier for the business unit that owns the record",
+                                         "lookupTargets":  [
+                                                               "businessunit"
+                                                           ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "owningteam",
+                                         "schemaName":  "OwningTeam",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Owning Team",
+                                         "description":  "Unique identifier for the team that owns the record.",
+                                         "lookupTargets":  [
+                                                               "team"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "owninguser",
+                                         "schemaName":  "OwningUser",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Owning User",
+                                         "description":  "Unique identifier for the user that owns the record.",
+                                         "lookupTargets":  [
+                                                               "systemuser"
+                                                           ],
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "statecode",
+                                         "schemaName":  "statecode",
+                                         "type":  "State",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "30.State",
+                                         "description":  "Status of the All In One",
+                                         "isGlobalOptionSet":  false,
+                                         "options":  [
+                                                         {
+                                                             "value":  0,
+                                                             "label":  "Active"
+                                                         },
+                                                         {
+                                                             "value":  1,
+                                                             "label":  "Inactive"
+                                                         }
+                                                     ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "statuscode",
+                                         "schemaName":  "statuscode",
+                                         "type":  "Status",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "31.Status",
+                                         "description":  "Reason for the status of the All In One",
+                                         "isGlobalOptionSet":  false,
+                                         "options":  [
+                                                         {
+                                                             "value":  1,
+                                                             "label":  "Active"
+                                                         },
+                                                         {
+                                                             "value":  2,
+                                                             "label":  "Inactive"
+                                                         }
+                                                     ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "timezoneruleversionnumber",
+                                         "schemaName":  "TimeZoneRuleVersionNumber",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "Time Zone Rule Version Number",
+                                         "description":  "For internal use only.",
+                                         "minValue":  -1,
+                                         "maxValue":  2147483647,
+                                         "format":  "None",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "transactioncurrencyid",
+                                         "schemaName":  "TransactionCurrencyId",
+                                         "type":  "Lookup",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "Currency",
+                                         "description":  "Unique identifier of the currency associated with the entity.",
+                                         "lookupTargets":  [
+                                                               "transactioncurrency"
+                                                           ],
+                                         "isAuditEnabled":  true,
+                                         "isValidForAdvancedFind":  true,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "utcconversiontimezonecode",
+                                         "schemaName":  "UTCConversionTimeZoneCode",
+                                         "type":  "Integer",
+                                         "isValidForCreate":  true,
+                                         "isValidForUpdate":  true,
+                                         "displayName":  "UTC Conversion Time Zone Code",
+                                         "description":  "Time zone code that was in use when the record was created.",
+                                         "minValue":  -1,
+                                         "maxValue":  2147483647,
+                                         "format":  "None",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     },
+                                     {
+                                         "logicalName":  "versionnumber",
+                                         "schemaName":  "VersionNumber",
+                                         "type":  "BigInt",
+                                         "isValidForCreate":  false,
+                                         "isValidForUpdate":  false,
+                                         "displayName":  "Version Number",
+                                         "description":  "Version Number",
+                                         "isAuditEnabled":  false,
+                                         "isValidForAdvancedFind":  false,
+                                         "isSecured":  false,
+                                         "isSortable":  false,
+                                         "sourceType":  "Simple"
+                                     }
+                                 ],
+                  "oneToManyRelationships":  [
+                                                 {
+                                                     "schemaName":  "all_in_one_AsyncOperations",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "asyncoperation",
+                                                     "referencingAttribute":  "regardingobjectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_BulkDeleteFailures",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "bulkdeletefailure",
+                                                     "referencingAttribute":  "regardingobjectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_DeletedItemReferences",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "deleteditemreference",
+                                                     "referencingAttribute":  "deletedobject"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_DuplicateBaseRecord",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "duplicaterecord",
+                                                     "referencingAttribute":  "baserecordid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_DuplicateMatchingRecord",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "duplicaterecord",
+                                                     "referencingAttribute":  "duplicaterecordid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_FileAttachments",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "fileattachment",
+                                                     "referencingAttribute":  "objectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_MailboxTrackingFolders",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "mailboxtrackingfolder",
+                                                     "referencingAttribute":  "regardingobjectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_PrincipalObjectAttributeAccesses",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "principalobjectattributeaccess",
+                                                     "referencingAttribute":  "objectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_ProcessSession",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "processsession",
+                                                     "referencingAttribute":  "regardingobjectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_SyncErrors",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "syncerror",
+                                                     "referencingAttribute":  "regardingobjectid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_in_one_UserEntityInstanceDatas",
+                                                     "referencedEntity":  "all_in_one",
+                                                     "referencingEntity":  "userentityinstancedata",
+                                                     "referencingAttribute":  "objectid"
+                                                 }
+                                             ],
+                  "manyToOneRelationships":  [
+                                                 {
+                                                     "schemaName":  "all_account_all_in_one_all_33customeraccountcontact",
+                                                     "referencedEntity":  "account",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_33customeraccountcontact"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_account_all_in_one_all_32lookupaccount",
+                                                     "referencedEntity":  "account",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_32lookupaccount"
+                                                 },
+                                                 {
+                                                     "schemaName":  "business_unit_all_in_one",
+                                                     "referencedEntity":  "businessunit",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "owningbusinessunit"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_contact_all_in_one_all_35polymorphiccontactteam",
+                                                     "referencedEntity":  "contact",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_35polymorphiccontactteam"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_contact_all_in_one_all_33customeraccountcontact",
+                                                     "referencedEntity":  "contact",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_33customeraccountcontact"
+                                                 },
+                                                 {
+                                                     "schemaName":  "FileAttachment_all_In_One_all_36File",
+                                                     "referencedEntity":  "fileattachment",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_36file"
+                                                 },
+                                                 {
+                                                     "schemaName":  "ImageDescriptor_all_In_One_all_37Image",
+                                                     "referencedEntity":  "imagedescriptor",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_37imageid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "owner_all_in_one",
+                                                     "referencedEntity":  "owner",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "ownerid"
+                                                 },
+                                                 {
+                                                     "schemaName":  "lk_all_in_one_modifiedonbehalfby",
+                                                     "referencedEntity":  "systemuser",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "modifiedonbehalfby"
+                                                 },
+                                                 {
+                                                     "schemaName":  "lk_all_in_one_modifiedby",
+                                                     "referencedEntity":  "systemuser",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "modifiedby"
+                                                 },
+                                                 {
+                                                     "schemaName":  "lk_all_in_one_createdby",
+                                                     "referencedEntity":  "systemuser",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "createdby"
+                                                 },
+                                                 {
+                                                     "schemaName":  "lk_all_in_one_createdonbehalfby",
+                                                     "referencedEntity":  "systemuser",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "createdonbehalfby"
+                                                 },
+                                                 {
+                                                     "schemaName":  "user_all_in_one",
+                                                     "referencedEntity":  "systemuser",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "owninguser"
+                                                 },
+                                                 {
+                                                     "schemaName":  "all_team_all_in_one_all_35polymorphiccontactteam",
+                                                     "referencedEntity":  "team",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "all_35polymorphiccontactteam"
+                                                 },
+                                                 {
+                                                     "schemaName":  "team_all_in_one",
+                                                     "referencedEntity":  "team",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "owningteam"
+                                                 },
+                                                 {
+                                                     "schemaName":  "TransactionCurrency_all_In_One",
+                                                     "referencedEntity":  "transactioncurrency",
+                                                     "referencingEntity":  "all_in_one",
+                                                     "referencingAttribute":  "transactioncurrencyid"
+                                                 }
+                                             ],
+                  "manyToManyRelationships":  [
+
+                                              ],
+                  "alternateKeys":  [
+
+                                    ]
+              }
 }

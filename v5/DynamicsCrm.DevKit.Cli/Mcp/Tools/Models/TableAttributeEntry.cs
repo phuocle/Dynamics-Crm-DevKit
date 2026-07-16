@@ -90,6 +90,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? IsAuditEnabled { get; set; }
 
+        /// <summary>
+        /// Whether the attribute appears in Advanced Find (SDK
+        /// <c>IsValidForAdvancedFind</c>, a BooleanManagedProperty — emits its inner Value).
+        /// Toggled by the "Searchable"/"Enable for Advanced Find" checkbox in Power Apps UI.
+        /// </summary>
+        [JsonPropertyName("isValidForAdvancedFind")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsValidForAdvancedFind { get; set; }
+
+        /// <summary>
+        /// Whether field-level security is enabled on the attribute (SDK <c>IsSecured</c>).
+        /// </summary>
+        [JsonPropertyName("isSecured")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsSecured { get; set; }
+
+        /// <summary>
+        /// Whether the attribute is enabled for sorting in views (SDK
+        /// <c>IsSortableEnabled</c>, a BooleanManagedProperty — emits its inner Value).
+        /// Toggled by the "Sortable" checkbox in Power Apps column UI.
+        /// </summary>
+        [JsonPropertyName("isSortable")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? IsSortable { get; set; }
+
         [JsonPropertyName("imeMode")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ImeMode { get; set; }
@@ -100,8 +125,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string SourceType { get; set; }
 
-        [JsonPropertyName("formula")]
+        /// <summary>
+        /// Default value emitted ONLY when the attribute actually has one. Applies to
+        /// the three Dataverse attribute kinds that expose a default-value property:
+        /// - Boolean  → <c>true</c>/<c>false</c> (from <c>BooleanAttributeMetadata.DefaultValue</c>)
+        /// - Picklist  → option integer value (from <c>PicklistAttributeMetadata.DefaultFormValue</c>)
+        /// - Status    → option integer value (from <c>StatusAttributeMetadata.DefaultFormValue</c>)
+        /// No default configured (or non-applicable kinds like State / MultiSelect /
+        /// string / lookup / …) → the property is omitted entirely from the JSON.
+        /// </summary>
+        [JsonPropertyName("defaultValue")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Formula { get; set; }
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// RAW FormulaDefinition exactly as Dataverse stores it. For Power Fx columns
+        /// (sourceType=PowerFx) this is the plain Power Fx text and can be fed straight
+        /// back to upsert_column's <c>formula_definition</c> to clone the column.
+        /// For Calculated/Rollup columns it is the underlying XAML (XML workflow
+        /// definition) — large but authoritative; not directly re-creatable by AI.
+        /// </summary>
+        [JsonPropertyName("formulaDefinition")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FormulaDefinition { get; set; }
     }
 }

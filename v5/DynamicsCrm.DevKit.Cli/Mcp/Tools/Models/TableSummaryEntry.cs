@@ -8,6 +8,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("logicalName")]
         public string LogicalName { get; set; }
 
+        [JsonPropertyName("schemaName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SchemaName { get; set; }
+
         [JsonPropertyName("displayName")]
         public string DisplayName { get; set; }
 

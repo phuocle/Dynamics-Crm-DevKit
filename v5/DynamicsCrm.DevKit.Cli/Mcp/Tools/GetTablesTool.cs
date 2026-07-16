@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
@@ -146,6 +145,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static TableSummaryEntry BuildTableSummary(EntityMetadata metadata) => new()
         {
             LogicalName = metadata.LogicalName,
+            SchemaName = metadata.SchemaName,
             DisplayName = metadata.DisplayName?.UserLocalizedLabel?.Label ?? "",
             OwnershipType = metadata.OwnershipType?.ToString() ?? "",
             IsCustom = metadata.IsCustomEntity == true,
@@ -160,6 +160,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return new TableDetailEntry
             {
                 LogicalName = summary.LogicalName,
+                SchemaName = summary.SchemaName,
                 DisplayName = summary.DisplayName,
                 OwnershipType = summary.OwnershipType,
                 IsCustom = summary.IsCustom,
@@ -294,8 +295,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsValidForCreate = attribute.IsValidForCreate == true,
                 IsValidForUpdate = attribute.IsValidForUpdate == true,
                 DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
-                Description = attribute.Description?.UserLocalizedLabel?.Label,
+                // Treat empty/whitespace description as null so WhenWritingNull omits it
+                // (Dataverse often returns "" for unset descriptions).
+                Description = Norm(attribute.Description?.UserLocalizedLabel?.Label),
                 IsAuditEnabled = attribute.IsAuditEnabled?.Value,
+                // Clone-relevant flags exposed on the AttributeMetadata base for every
+                // attribute kind (verified on live Dataverse for String/Lookup/etc.):
+                // - IsValidForAdvancedFind / IsSortableEnabled are BooleanManagedProperty
+                //   (compound { Value, CanBeChanged }) → emit the inner bool (.Value), or
+                //   null when the managed property is unset (rare/system attrs).
+                // - IsSecured is a plain bool (field-level security enablement).
+                IsValidForAdvancedFind = attribute.IsValidForAdvancedFind?.Value,
+                IsSecured = attribute.IsSecured,
+                IsSortable = attribute.IsSortableEnabled?.Value,
                 SourceType = ResolveSourceTypeInfo(attribute)
             };
 
@@ -306,42 +318,43 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string ResolveSourceTypeInfo(AttributeMetadata attribute)
         {
-            // AttributeMetadata.SourceType: null/0 = Simple, 1 = Calculated, 2 = Rollup, 3 = Power Fx
+            // AttributeMetadata.SourceType: 0/null = Simple, 1 = Calculated, 2 = Rollup, 3 = Power Fx.
+            // Dataverse sets SourceType=null on system/legacy attributes (Memo, BigInt, Lookup,
+            // File, Image, State, Status, ...). Treat null the same as 0 → "Simple" so the
+            // `sourceType` property is ALWAYS present for every attribute (clients/AI rely on
+            // it to know whether a field is plain or formula-driven; missing = ambiguous).
             return attribute.SourceType switch
             {
                 1 => "Calculated",
                 2 => "Rollup",
                 3 => "PowerFx",
                 0 => "Simple",
-                null => null,
+                null => "Simple",
                 _ => $"SourceType{attribute.SourceType}"
             };
         }
 
         private static void PopulateFormulaInfo(TableAttributeEntry entry, AttributeMetadata attribute)
         {
+            // Only Calculated (1), Rollup (2), Power Fx (3) carry a formula.
             if (attribute.SourceType != 1 && attribute.SourceType != 2 && attribute.SourceType != 3)
                 return;
 
+            // Compress the RAW FormulaDefinition (gzip+base64 with "gz:" marker) so the
+            // structured output stays small even for Calculated/Rollup columns whose
+            // formula is a multi-KB XAML workflow definition. Power Fx formulas are small
+            // plain text but are compressed too for a consistent, opaque property.
+            //
+            // upsert_column transparently decompresses a "gz:"-prefixed value before
+            // creating the column, so AI can copy this property verbatim into
+            // upsert_column's `formula_definition` to clone the field.
             var propInfo = attribute.GetType().GetProperty("FormulaDefinition");
             if (propInfo == null) return;
 
             var val = propInfo.GetValue(attribute, null);
             if (val == null) return;
 
-            var raw = val.ToString();
-            if (string.IsNullOrWhiteSpace(raw)) return;
-
-            // Calculated/Rollup formulas are stored as XAML (XML workflow definition).
-            // Power Fx formulas are stored as plain Power Fx text.
-            if (attribute.SourceType == 3 || (!raw.Contains("<?xml") && !raw.Contains("<Activity")))
-            {
-                entry.Formula = raw.Replace("\r\n", " ").Replace("\n", " ").Replace("  ", " ").Trim();
-            }
-            else
-            {
-                entry.Formula = ParseFormulaXml(raw, attribute.SourceType ?? 0);
-            }
+            entry.FormulaDefinition = FormulaCompressionHelper.Compress(val.ToString());
         }
 
         private static void PopulateAttributeDetails(TableAttributeEntry entry, AttributeMetadata attribute)
@@ -390,6 +403,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 case BooleanAttributeMetadata b:
                     entry.TrueLabel = b.OptionSet?.TrueOption?.Label?.UserLocalizedLabel?.Label;
                     entry.FalseLabel = b.OptionSet?.FalseOption?.Label?.UserLocalizedLabel?.Label;
+                    // Boolean default: emitted only when DefaultValue is set (null → omitted).
+                    entry.DefaultValue = b.DefaultValue.HasValue ? (object)b.DefaultValue.Value : null;
                     break;
 
                 case DateTimeAttributeMetadata dt:
@@ -403,18 +418,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 case PicklistAttributeMetadata pk:
                     PopulatePicklistDetails(entry, pk.OptionSet);
+                    // Picklist default (DefaultFormValue): emitted only when set (null → omitted).
+                    entry.DefaultValue = pk.DefaultFormValue.HasValue ? (object)pk.DefaultFormValue.Value : null;
                     break;
 
                 case MultiSelectPicklistAttributeMetadata mp:
                     PopulatePicklistDetails(entry, mp.OptionSet);
+                    // MultiSelectPicklistAttributeMetadata exposes no default value property.
                     break;
 
                 case StatusAttributeMetadata st:
                     PopulatePicklistDetails(entry, st.OptionSet);
+                    // Status default (DefaultFormValue): emitted only when set (null → omitted).
+                    entry.DefaultValue = st.DefaultFormValue.HasValue ? (object)st.DefaultFormValue.Value : null;
                     break;
 
                 case StateAttributeMetadata sa:
                     PopulatePicklistDetails(entry, sa.OptionSet);
+                    // State (statecode) is system-managed; Dataverse exposes no default
+                    // value property on StateAttributeMetadata.
                     break;
 
                 case ImageAttributeMetadata img:
@@ -457,7 +479,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string FormatAttributeType(AttributeMetadata attribute) => attribute switch
         {
-            LookupAttributeMetadata lookup => $"Lookup -> {string.Join(", ", lookup.Targets ?? [])}",
+            LookupAttributeMetadata lookup => FormatLookupType(lookup),
             PicklistAttributeMetadata => "Picklist",
             StatusAttributeMetadata => "Status",
             StateAttributeMetadata => "State",
@@ -467,88 +489,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             _ => attribute.AttributeType?.ToString() ?? "Unknown"
         };
 
-        private static string ParseFormulaXml(string xml, int sourceType)
+        // Distinguish single Lookup vs Customer vs Polymorphic so the type string
+        // matches upsert_column's `attribute_type` enum and AI can clone the column
+        // back without guessing. Targets detail is exposed via TableAttributeEntry.LookupTargets.
+        private static string FormatLookupType(LookupAttributeMetadata lookup)
         {
-            try
-            {
-                if (sourceType == 2)
-                {
-                    var aggMatch = Regex.Match(xml, @"ExpressionOperator""\>(?<op>Sum|Count|Min|Max|Avg)\<");
-                    var aggOp = aggMatch.Success ? aggMatch.Groups["op"].Value.ToUpper() : "AGGREGATE";
-                    var targetMatch = Regex.Match(xml, @"DisplayName=""(?<rel>[^""]+)""\s+Entity=""\[CreatedEntities");
-                    var relatedEntity = "";
-                    if (targetMatch.Success)
-                    {
-                        var parts = targetMatch.Groups["rel"].Value.Split('.');
-                        if (parts.Length > 0) relatedEntity = parts[0];
-                    }
-                    var srcAttrMatch = Regex.Match(xml, @"Aggregate.*?GetEntityProperty\s+Attribute=""(?<attr>[^""]+)"".*?EntityName=""(?<ent>[^""]+)""", RegexOptions.Singleline);
-                    var srcAttr = srcAttrMatch.Success ? srcAttrMatch.Groups["attr"].Value : "?";
-                    var srcEnt = srcAttrMatch.Success ? srcAttrMatch.Groups["ent"].Value : relatedEntity;
-                    if (!string.IsNullOrEmpty(srcEnt))
-                        return $"{aggOp}({srcEnt}.{srcAttr})";
-                    return $"{aggOp}({srcAttr})";
-                }
-
-                var getEntityMatches = Regex.Matches(xml, @"GetEntityProperty\s+Attribute=""(?<attr>[^""]+)""\s+Entity=""\[InputEntities\(\&quot;(?<ref>[^\&]+)\&");
-                var fieldRefs = new List<string>();
-                var constOperands = new List<string>();
-                var constMatches = Regex.Matches(xml, @"WorkflowPropertyType\.(?<type>\w+),\s*""(?<val>[^""]+)""");
-                foreach (Match cm in constMatches)
-                {
-                    if (cm.Groups["type"].Value == "Boolean") continue;
-                    constOperands.Add(cm.Groups["val"].Value);
-                }
-                foreach (Match m in getEntityMatches)
-                {
-                    var attrName = m.Groups["attr"].Value;
-                    var entityRef = m.Groups["ref"].Value;
-                    if (entityRef.StartsWith("related_"))
-                    {
-                        var relParts = entityRef.Replace("related_", "").Split('#');
-                        var lookupField = relParts.Length > 0 ? relParts[0] : "?";
-                        var relEntity = relParts.Length > 1 ? relParts[1] : "?";
-                        fieldRefs.Add($"{relEntity}({lookupField}).{attrName}");
-                    }
-                    else
-                    {
-                        fieldRefs.Add(attrName);
-                    }
-                }
-                var opMatches = Regex.Matches(xml, @"ExpressionOperator""\>(?<op>Multiply|Add|Subtract|Divide)\<");
-                var operators = new List<string>();
-                foreach (Match om in opMatches)
-                {
-                    var op = om.Groups["op"].Value;
-                    switch (op)
-                    {
-                        case "Multiply": operators.Add("*"); break;
-                        case "Add": operators.Add("+"); break;
-                        case "Subtract": operators.Add("-"); break;
-                        case "Divide": operators.Add("/"); break;
-                        default: operators.Add(op); break;
-                    }
-                }
-                if (fieldRefs.Count == 1 && operators.Count == 0)
-                    return fieldRefs[0];
-                var allOperands = new List<string>();
-                allOperands.AddRange(constOperands);
-                allOperands.AddRange(fieldRefs);
-                if (allOperands.Count >= 2 && operators.Count >= 1)
-                {
-                    var expr = allOperands[0];
-                    for (int opIdx = 0; opIdx < operators.Count && opIdx + 1 < allOperands.Count; opIdx++)
-                        expr += $" {operators[opIdx]} {allOperands[opIdx + 1]}";
-                    return expr;
-                }
-                if (allOperands.Count > 0)
-                    return string.Join(", ", allOperands);
-                return "See Dataverse UI";
-            }
-            catch
-            {
-                return "See Dataverse UI";
-            }
+            var typeName = lookup.AttributeTypeName?.Value;
+            if (string.Equals(typeName, "CustomerType", StringComparison.OrdinalIgnoreCase))
+                return "Customer";
+            var targets = lookup.Targets ?? [];
+            if (targets.Length > 1)
+                return "Polymorphic";
+            return "Lookup";
         }
 
         private static CallToolResult StructuredResult(string text, GetTablesResult structured) => new()
@@ -562,5 +514,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Content = [new TextContentBlock { Text = message }],
             IsError = true
         };
+
+        /// <summary>
+        /// Normalize an SDK label string for JSON output: empty or whitespace-only
+        /// values become <c>null</c> so <c>[JsonIgnore(WhenWritingNull)]</c> drops
+        /// the property entirely. Dataverse frequently returns "" for unset
+        /// labels/descriptions, which would otherwise serialize as "".
+        /// </summary>
+        private static string Norm(string value) => string.IsNullOrWhiteSpace(value) ? null : value;
     }
 }

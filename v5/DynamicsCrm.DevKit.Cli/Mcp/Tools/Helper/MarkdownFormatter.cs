@@ -265,8 +265,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         private static string FormatAttributeType(AttributeMetadata attr) => attr switch
         {
-            LookupAttributeMetadata lk =>
-                $"Lookup -> {string.Join(", ", lk.Targets ?? [])}",
+            LookupAttributeMetadata lk => FormatLookupType(lk),
             PicklistAttributeMetadata { OptionSet.Options: not null } pk =>
                 $"Picklist ({string.Join("; ", pk.OptionSet.Options.Take(10).Select(FormatOption))})",
             StatusAttributeMetadata { OptionSet.Options: not null } st =>
@@ -277,6 +276,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 $"MultiSelect ({string.Join("; ", mp.OptionSet.Options.Take(10).Select(FormatOption))})",
             _ => attr.AttributeType?.ToString() ?? "Unknown"
         };
+
+        // Distinguish single Lookup vs Customer vs Polymorphic so the type string
+        // matches upsert_column's `attribute_type` enum and AI can clone the column
+        // back without guessing. Targets detail is exposed via TableAttributeEntry.LookupTargets.
+        private static string FormatLookupType(LookupAttributeMetadata lk)
+        {
+            var typeName = lk.AttributeTypeName?.Value;
+            if (string.Equals(typeName, "CustomerType", StringComparison.OrdinalIgnoreCase))
+                return "Customer";
+            var targets = lk.Targets ?? [];
+            if (targets.Length > 1)
+                return "Polymorphic";
+            return "Lookup";
+        }
 
         private static string FormatConstraints(AttributeMetadata attr) => attr switch
         {
