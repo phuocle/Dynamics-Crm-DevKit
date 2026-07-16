@@ -11,6 +11,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonPropertyName("attributeName")]
         public string AttributeName { get; set; }
 
+        [JsonPropertyName("logicalName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LogicalName { get; set; }
+
+        [JsonPropertyName("schemaName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string SchemaName { get; set; }
+
         [JsonPropertyName("attributeType")]
         public string AttributeType { get; set; }
 

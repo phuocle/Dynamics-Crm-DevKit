@@ -377,7 +377,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "String", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "String", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() }, { "format", attr.FormatName?.Value ?? "Text" } });
         }
 
@@ -437,7 +437,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Memo", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "Memo", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "maxLength", maxLength.ToString() } });
         }
 
@@ -500,7 +500,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string>();
             if (minValue.HasValue) extra["minValue"] = ((int)minValue.Value).ToString();
             if (maxValue.HasValue) extra["maxValue"] = ((int)maxValue.Value).ToString();
-            return BuildResult(sb, entityName, logicalName, "Integer", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Integer", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Decimal ---
@@ -563,7 +563,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, "Decimal", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Decimal", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Money ---
@@ -630,7 +630,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() }, { "precisionSource", precisionSource.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, "Money", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Money", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Float/Double ---
@@ -693,7 +693,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var extra = new Dictionary<string, string> { { "precision", precision.ToString() } };
             if (minValue.HasValue) extra["minValue"] = minValue.Value.ToString(CultureInfo.InvariantCulture);
             if (maxValue.HasValue) extra["maxValue"] = maxValue.Value.ToString(CultureInfo.InvariantCulture);
-            return BuildResult(sb, entityName, logicalName, "Float", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Float", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Boolean ---
@@ -752,7 +752,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Boolean", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "Boolean", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "trueLabel", trueLabel.Trim() }, { "falseLabel", falseLabel.Trim() } });
         }
 
@@ -818,7 +818,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "DateTime", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "DateTime", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "format", dateFormat.ToString() }, { "behavior", behaviorName } });
         }
 
@@ -949,7 +949,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Relationship: {relationshipName}");
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Lookup", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "Lookup", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "lookupTarget", singleTarget }, { "relationshipName", relationshipName } });
         }
 
@@ -1048,7 +1048,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             for (int i = 0; i < targets.Length; i++)
                 extra[$"relationship_{targets[i]}"] = relNames[i];
 
-            return BuildResult(sb, entityName, logicalName, "PolymorphicLookup", displayName, reqLevel, metadataId, solutionName, published, extra);
+            return BuildResult(sb, entityName, logicalName, schemaName, "PolymorphicLookup", displayName, reqLevel, metadataId, solutionName, published, extra);
         }
 
         // --- Customer (polymorphic lookup: account + contact) ---
@@ -1158,7 +1158,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"ContactRelationship: {contactRelName}");
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Customer", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "Customer", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string>
                 {
                     { "targets", "account, contact" },
@@ -1296,7 +1296,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, typeName, displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, typeName, displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "options", string.Join(", ", optionLabels) } });
         }
 
@@ -1348,7 +1348,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "BigInt", displayName, reqLevel, metadataId, solutionName, published);
+            return BuildResult(sb, entityName, logicalName, schemaName, "BigInt", displayName, reqLevel, metadataId, solutionName, published);
         }
 
         // --- Image ---
@@ -1400,7 +1400,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "Image", displayName, reqLevel, metadataId, solutionName, published);
+            return BuildResult(sb, entityName, logicalName, schemaName, "Image", displayName, reqLevel, metadataId, solutionName, published);
         }
 
         // --- File ---
@@ -1456,7 +1456,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             AppendFooter(sb, solutionName, published, metadataId);
 
-            return BuildResult(sb, entityName, logicalName, "File", displayName, reqLevel, metadataId, solutionName, published,
+            return BuildResult(sb, entityName, logicalName, schemaName, "File", displayName, reqLevel, metadataId, solutionName, published,
                 extra: new Dictionary<string, string> { { "maxSizeInKB", maxSizeInKB.ToString() } });
         }
 
@@ -1515,7 +1515,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"MetadataId: {metadataId}");
         }
 
-        private CallToolResult BuildResult(StringBuilder sb, string entityName, string logicalName, string typeName,
+        private CallToolResult BuildResult(StringBuilder sb, string entityName, string logicalName, string schemaName, string typeName,
             string displayName, AttributeRequiredLevel reqLevel, Guid metadataId, string solutionName, bool published,
             Dictionary<string, string> extra = null)
         {
@@ -1527,6 +1527,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 EntityName = entityName,
                 AttributeName = actualLogicalName,
+                LogicalName = actualLogicalName,
+                SchemaName = schemaName,
                 AttributeType = typeName,
                 DisplayName = displayName.Trim(),
                 RequiredLevel = reqLevel.ToString(),

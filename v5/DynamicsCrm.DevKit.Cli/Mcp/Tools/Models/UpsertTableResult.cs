@@ -5,9 +5,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 {
     internal sealed class UpsertTableResult
     {
-        [JsonPropertyName("entityName")]
-        public string EntityName { get; set; }
-
         [JsonPropertyName("displayName")]
         public string DisplayName { get; set; }
 
@@ -16,6 +13,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
 
         [JsonPropertyName("schemaName")]
         public string SchemaName { get; set; }
+
+        [JsonPropertyName("logicalName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string LogicalName { get; set; }
 
         [JsonPropertyName("ownershipType")]
         public string OwnershipType { get; set; }

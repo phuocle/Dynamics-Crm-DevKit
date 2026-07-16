@@ -165,13 +165,13 @@ public class McpToolBasicCoverageTests
     }
 
     [TestMethod]
-    public void UpsertTable_MissingEntityName_ReturnsError()
+    public void UpsertTable_NoLogicalNameNoCreateFields_ReturnsError()
     {
         var tool = new UpsertTableTool(null!, DryRunOptions());
 
-        var result = tool.upsert_table(entity_name: "");
+        var result = tool.upsert_table();
 
         Assert.IsTrue(result.IsError);
-        StringAssert.Contains(result.GetText(), "entity_name is required");
+        StringAssert.Contains(result.GetText(), "logical_name is required");
     }
 }
