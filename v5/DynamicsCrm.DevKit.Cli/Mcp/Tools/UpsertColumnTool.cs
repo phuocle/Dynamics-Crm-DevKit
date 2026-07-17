@@ -45,7 +45,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- lookup: needs lookup_target (auto-creates 1:N)\n" +
             "- customer: polymorphic (account+contact), no lookup_target\n" +
             "- picklist/multipicklist: options JSON or global_optionset_name\n" +
-            "- formula column (PowerFx/Calculated/Rollup): pass formula_definition (+ formula_source_type). Works on string/memo/integer/decimal/money/float/boolean/datetime. Clone from get_tables `formulaDefinition` verbatim.\n\n" +
+            "- formula column (PowerFx/Calculated/Rollup): pass formula_definition (+ formula_source_type). Works on string/memo/integer/decimal/money/float/boolean/datetime. Clone from get_tables `formulaDefinition` verbatim.\n" +
+            "- 5 create flags (so a column can be cloned from another entity in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — always set on create; default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when the attribute type supports sorting). On CREATE, pass any of these to override the default; on UPDATE, omit=null to keep current.\n\n" +
 
             "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix when supplied. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n\n" +
 
@@ -65,7 +66,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Required for CREATE when schema_name/logical_name have no prefix. Resolves publisher prefix and adds the attribute to the solution.")] string solution_name = "",
             [Description("Optional prefix validation. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
             [Description("")] string description = "",
-            [Description("None/Recommended/Required. [update: omit=keep]")] string required_level = "",
+            [Description("Required level for the column. CREATE: always applied (None when omitted — NOT a Dataverse default). UPDATE: omit=keep current.")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
             [Description("Numeric types: minimum value.")] double? min_value = null,
             [Description("Numeric types: maximum value.")] double? max_value = null,
@@ -82,10 +83,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist update: JSON array — options to add. Optional 'color' field: {\"label\":\"New\",\"value\":100000003,\"color\":\"#FF0000\"}.")] string add_options = "",
             [Description("picklist update: JSON array — options to rename. Optional 'color' field: {\"label\":\"NewLabel\",\"value\":100000000,\"color\":\"#FF0000\"}.")] string update_options = "",
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
-            [Description("[update only] Enable audit on this column.")] bool? is_audit_enabled = null,
-            [Description("[update only] Show column in Advanced Find.")] bool? is_valid_for_advanced_find = null,
-            [Description("[update only] Enable field-level security.")] bool? is_secured = null,
-            [Description("[update only] Make column sortable in views.")] bool? is_sortable = null,
+            [Description("Enable audit on this column. CREATE: pass to override Dataverse default (true). UPDATE: omit=null keeps current.")] bool? is_audit_enabled = null,
+            [Description("Show column in Advanced Find. CREATE: pass to override Dataverse default (true). UPDATE: omit=null keeps current.)")] bool? is_valid_for_advanced_find = null,
+            [Description("Enable field-level security. CREATE: pass to override Dataverse default (false). UPDATE: omit=null keeps current.")] bool? is_secured = null,
+            [Description("Make column sortable in views. CREATE: pass to override Dataverse default (true, when supported by the attribute type). UPDATE: omit=null keeps current.")] bool? is_sortable = null,
             [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Formula column (PowerFx/Calculated/Rollup). Create only. Pass the value from get_tables `formulaDefinition` verbatim (may be 'gz:'-prefixed gzip+base64; decompressed automatically). For Power Fx use plain Power Fx text. Clones the field's computed/rollup definition.")] string formula_definition = "",
@@ -381,39 +382,55 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             CallToolResult CreateTypedColumn(AttributeMetadata _ = null)
             {
+                // Create-time flag overrides. The dispatcher has already parsed
+                // required_level into reqLevel (None when the caller omitted it), so
+                // RequiredLevel here is a concrete value that Apply always writes —
+                // a created column always gets an explicit required level rather than
+                // inheriting whatever Dataverse would have defaulted to.
+                //
+                // For the four boolean flags (is_audit_enabled / is_valid_for_advanced_find
+                // / is_secured / is_sortable): when null (caller omitted), Apply skips
+                // the property and Dataverse keeps its per-attribute-type create default
+                // (audit=true, advanced find=true, sortable=true [when supported],
+                // field security=false). When provided, only that flag overrides the
+                // default. This lets a clone of a column match the source's flags in a
+                // SINGLE create call (no follow-up update), and a normal create still
+                // gets sensible Dataverse defaults.
+                var createFlags = new ColumnCreateFlags(reqLevel.Value, is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable);
+
                 switch (attribute_type)
                 {
                     case "string":
-                        return CreateStringAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec);
+                        return CreateStringAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 100 : max_length, format, effectiveSolutionName, formulaSpec, createFlags);
                     case "memo":
-                        return CreateMemoAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, formulaSpec);
+                        return CreateMemoAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 2000 : max_length, format, effectiveSolutionName, formulaSpec, createFlags);
                     case "integer":
-                        return CreateIntegerAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, format, effectiveSolutionName, formulaSpec);
+                        return CreateIntegerAttribute(entity_name, logical_name, schemaName, display_name, description, min_value, max_value, format, effectiveSolutionName, formulaSpec, createFlags);
                     case "bigint":
-                        return CreateBigIntAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
+                        return CreateBigIntAttribute(entity_name, logical_name, schemaName, display_name, description, effectiveSolutionName, createFlags);
                     case "decimal":
-                        return CreateDecimalAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
+                        return CreateDecimalAttribute(entity_name, logical_name, schemaName, display_name, description, min_value, max_value, precision, effectiveSolutionName, formulaSpec, createFlags);
                     case "money":
-                        return CreateMoneyAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, precision_source, effectiveSolutionName, formulaSpec);
+                        return CreateMoneyAttribute(entity_name, logical_name, schemaName, display_name, description, min_value, max_value, precision, precision_source, effectiveSolutionName, formulaSpec, createFlags);
                     case "float":
                     case "double":
-                        return CreateFloatAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, min_value, max_value, precision, effectiveSolutionName, formulaSpec);
+                        return CreateFloatAttribute(entity_name, logical_name, schemaName, display_name, description, min_value, max_value, precision, effectiveSolutionName, formulaSpec, createFlags);
                     case "boolean":
-                        return CreateBooleanAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, true_label, false_label, effectiveSolutionName, formulaSpec, default_value);
+                        return CreateBooleanAttribute(entity_name, logical_name, schemaName, display_name, description, true_label, false_label, effectiveSolutionName, formulaSpec, default_value, createFlags);
                     case "datetime":
-                        return CreateDateTimeAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, format, behavior, effectiveSolutionName, formulaSpec);
+                        return CreateDateTimeAttribute(entity_name, logical_name, schemaName, display_name, description, format, behavior, effectiveSolutionName, formulaSpec, createFlags);
                     case "lookup":
-                        return CreateLookupAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName);
+                        return CreateLookupAttribute(entity_name, logical_name, schemaName, display_name, description, lookup_target, lookup_relationship_name, prefix, effectiveSolutionName, createFlags);
                     case "customer":
-                        return CreateCustomerAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, prefix, effectiveSolutionName);
+                        return CreateCustomerAttribute(entity_name, logical_name, schemaName, display_name, description, prefix, effectiveSolutionName, createFlags);
                     case "picklist":
-                        return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, false, effectiveSolutionName, default_value);
+                        return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, options, global_optionset_name, false, effectiveSolutionName, default_value, createFlags);
                     case "multipicklist":
-                        return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, options, global_optionset_name, true, effectiveSolutionName, default_value);
+                        return CreatePicklistAttribute(entity_name, logical_name, schemaName, display_name, description, options, global_optionset_name, true, effectiveSolutionName, default_value, createFlags);
                     case "image":
-                        return CreateImageAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, effectiveSolutionName);
+                        return CreateImageAttribute(entity_name, logical_name, schemaName, display_name, description, effectiveSolutionName, createFlags);
                     case "file":
-                        return CreateFileAttribute(entity_name, logical_name, schemaName, display_name, description, reqLevel.Value, max_length == 0 ? 32768 : max_length, effectiveSolutionName);
+                        return CreateFileAttribute(entity_name, logical_name, schemaName, display_name, description, max_length == 0 ? 32768 : max_length, effectiveSolutionName, createFlags);
                     default:
                         return ErrorResult(
                             $"Error: Unknown attribute_type '{attribute_type}'.\n" +
@@ -463,9 +480,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- String ---
         private CallToolResult CreateStringAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxLength, string format, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            int maxLength, string format, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (maxLength < 1) maxLength = 100;
             if (maxLength > 4000) maxLength = 4000;
 
@@ -477,13 +496,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 MaxLength = maxLength,
-                FormatName = resolvedFormat,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                FormatName = resolvedFormat
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            // When createFlags is null or a flag is null, the property is left unset and
+            // Dataverse falls back to its per-attribute-type create default
+            // (audit=true, advfind=true, sortable=true, security=false).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -528,9 +550,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Memo ---
         private CallToolResult CreateMemoAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxLength, string format, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            int maxLength, string format, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (maxLength < 1) maxLength = 2000;
             if (maxLength > 1048576) maxLength = 1048576;
 
@@ -541,13 +565,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 MaxLength = maxLength,
-                FormatName = memoFormat,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                FormatName = memoFormat
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -591,9 +615,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Integer ---
         private CallToolResult CreateIntegerAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, string format, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            double? minValue, double? maxValue, string format, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var resolvedFormat = ResolveIntegerFormat(format, out var formatError);
             if (formatError != null) return ErrorResult(formatError);
 
@@ -602,14 +628,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                Format = resolvedFormat,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                Format = resolvedFormat
             };
             if (minValue.HasValue) attr.MinValue = (int)minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = (int)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -656,9 +682,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Decimal ---
         private CallToolResult CreateDecimalAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            double? minValue, double? maxValue, int precision, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (precision < 0) precision = 2;
             if (precision > 10) precision = 10;
 
@@ -667,14 +695,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                Precision = precision,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                Precision = precision
             };
             if (minValue.HasValue) attr.MinValue = (decimal)minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = (decimal)maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -722,9 +750,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Money ---
         private CallToolResult CreateMoneyAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            double? minValue, double? maxValue, int precision, int precisionSource, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (precision < 0) precision = 2;
             if (precision > 4) precision = 4;
             if (precisionSource < 0 || precisionSource > 2) precisionSource = 0;
@@ -734,15 +764,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Precision = precision,
-                PrecisionSource = precisionSource,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                PrecisionSource = precisionSource
             };
             if (minValue.HasValue) attr.MinValue = minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -792,9 +822,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Float/Double ---
         private CallToolResult CreateFloatAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            double? minValue, double? maxValue, int precision, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            double? minValue, double? maxValue, int precision, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (precision < 0) precision = 2;
             if (precision > 10) precision = 10;
 
@@ -803,14 +835,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                Precision = precision,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                Precision = precision
             };
             if (minValue.HasValue) attr.MinValue = minValue.Value;
             if (maxValue.HasValue) attr.MaxValue = maxValue.Value;
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -858,9 +890,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Boolean ---
         private CallToolResult CreateBooleanAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string trueLabel, string falseLabel, string solutionName, FormulaColumnSpec formula = null, string defaultValue = null)
+            string displayName, string description,
+            string trueLabel, string falseLabel, string solutionName, FormulaColumnSpec formula = null, string defaultValue = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (string.IsNullOrWhiteSpace(trueLabel)) trueLabel = "Yes";
             if (string.IsNullOrWhiteSpace(falseLabel)) falseLabel = "No";
 
@@ -869,11 +903,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 OptionSet = new BooleanOptionSetMetadata(
                     new OptionMetadata(new Label(trueLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 1),
-                    new OptionMetadata(new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 0)),
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                    new OptionMetadata(new Label(falseLabel.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)), 0))
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
@@ -891,6 +923,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Error: Invalid default_value '{defaultValue.Trim()}' for boolean. " +
                         "Expected 'true', 'false', '1', or '0'.");
             }
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -935,9 +969,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- DateTime ---
         private CallToolResult CreateDateTimeAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string format, string behavior, string solutionName, FormulaColumnSpec formula = null)
+            string displayName, string description,
+            string format, string behavior, string solutionName, FormulaColumnSpec formula = null,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var dtBehavior = ResolveDateTimeBehavior(behavior, out var behaviorError);
             if (behaviorError != null) return ErrorResult(behaviorError);
             var dateFormat = DateTimeFormat.DateAndTime;
@@ -952,13 +988,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                 Format = dateFormat,
-                DateTimeBehavior = dtBehavior,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                DateTimeBehavior = dtBehavior
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
             formula?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
@@ -1021,9 +1057,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Lookup (single target) or Polymorphic Lookup (multiple targets) ---
         private CallToolResult CreateLookupAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string lookupTarget, string relationshipName, string prefix, string solutionName)
+            string displayName, string description,
+            string lookupTarget, string relationshipName, string prefix, string solutionName,
+            ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (string.IsNullOrWhiteSpace(lookupTarget))
                 return ErrorResult(
                     $"Error: lookup_target is required for lookup type.\n" +
@@ -1049,7 +1087,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             // Multiple targets → Polymorphic Lookup
             if (targets.Count > 1)
-                return CreatePolymorphicLookupAttribute(entityName, logicalName, schemaName, displayName, description, reqLevel, targets.ToArray(), prefix, solutionName);
+                return CreatePolymorphicLookupAttribute(entityName, logicalName, schemaName, displayName, description, targets.ToArray(), prefix, solutionName, createFlags);
 
             // Single target → Regular Lookup
             var singleTarget = targets[0];
@@ -1086,13 +1124,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     SchemaName = schemaName,
                     LogicalName = logicalName,
-                    DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                    RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                    IsAuditEnabled = new BooleanManagedProperty(true)
+                    DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
                 }
             };
             if (!string.IsNullOrWhiteSpace(description))
                 request.Lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(request.Lookup);
             SolutionComponentCreateHelper.ApplySolutionUniqueName(request, solutionName);
 
             if (_options.DryRun) return DryRunResult($"Would CREATE lookup column '{logicalName}' on entity '{entityName}'.");
@@ -1136,9 +1174,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Polymorphic Lookup (multiple targets) ---
         private CallToolResult CreatePolymorphicLookupAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string[] targets, string prefix, string solutionName)
+            string displayName, string description,
+            string[] targets, string prefix, string solutionName, ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var relationships = new OneToManyRelationshipMetadata[targets.Length];
             var relNames = new string[targets.Length];
             for (int i = 0; i < targets.Length; i++)
@@ -1174,12 +1213,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
             };
             if (!string.IsNullOrWhiteSpace(description))
                 lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(lookup);
 
             // Use OrganizationRequest since CreatePolymorphicLookupAttributeRequest
             // is not available in the Microsoft.PowerPlatform.Dataverse.Client SDK
@@ -1235,9 +1274,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Customer (polymorphic lookup: account + contact) ---
         private CallToolResult CreateCustomerAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string prefix, string solutionName)
+            string displayName, string description,
+            string prefix, string solutionName, ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var accountRelName = $"{prefix}_account_{entityName}_{logicalName}";
             var contactRelName = $"{prefix}_contact_{entityName}_{logicalName}";
             if (accountRelName.Length > 100) accountRelName = accountRelName[..100];
@@ -1247,12 +1287,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
             };
             if (!string.IsNullOrWhiteSpace(description))
                 lookup.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(lookup);
 
             var request = new CreateCustomerRelationshipsRequest
             {
@@ -1352,10 +1392,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Picklist / MultiSelectPicklist ---
         private CallToolResult CreatePicklistAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
+            string displayName, string description,
             string optionsJson, string globalOptionSetName, bool isMultiSelect,
-            string solutionName, string defaultValue)
+            string solutionName, string defaultValue, ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var typeName = isMultiSelect ? "MultiSelectPicklist" : "Picklist";
 
             // Build the attribute metadata
@@ -1377,7 +1418,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         SchemaName = schemaName,
                         LogicalName = logicalName,
                         DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                        RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = new OptionSetMetadata { IsGlobal = true, Name = globalOptionSetName.Trim() }
                     };
                 }
@@ -1388,7 +1428,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         SchemaName = schemaName,
                         LogicalName = logicalName,
                         DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                        RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = new OptionSetMetadata { IsGlobal = true, Name = globalOptionSetName.Trim() }
                     };
                 }
@@ -1428,7 +1467,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         SchemaName = schemaName,
                         LogicalName = logicalName,
                         DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                        RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = optionSet
                     };
                 }
@@ -1439,7 +1477,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         SchemaName = schemaName,
                         LogicalName = logicalName,
                         DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                        RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
                         OptionSet = optionSet
                     };
                 }
@@ -1451,6 +1488,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -1492,19 +1531,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- BigInt ---
         private CallToolResult CreateBigIntAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string solutionName)
+            string displayName, string description,
+            string solutionName, ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var attr = new BigIntAttributeMetadata
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
-                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient))
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (required / audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -1544,20 +1584,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- Image ---
         private CallToolResult CreateImageAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            string solutionName)
+            string displayName, string description,
+            string solutionName, ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             var attr = new ImageAttributeMetadata
             {
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                IsAuditEnabled = new BooleanManagedProperty(true),
                 IsPrimaryImage = false
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (required / audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;
@@ -1597,9 +1638,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // --- File ---
         private CallToolResult CreateFileAttribute(string entityName, string logicalName, string schemaName,
-            string displayName, string description, AttributeRequiredLevel reqLevel,
-            int maxSizeInKB, string solutionName)
+            string displayName, string description,
+            int maxSizeInKB, string solutionName, ColumnCreateFlags createFlags = null)
         {
+            var reqLevel = createFlags?.RequiredLevel ?? AttributeRequiredLevel.None;
             if (maxSizeInKB < 1) maxSizeInKB = 32768;
             if (maxSizeInKB > 10485760) maxSizeInKB = 10485760; // 10 GB max
 
@@ -1608,12 +1650,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 SchemaName = schemaName,
                 LogicalName = logicalName,
                 DisplayName = new Label(displayName.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient)),
-                RequiredLevel = new AttributeRequiredLevelManagedProperty(reqLevel),
-                MaxSizeInKB = maxSizeInKB,
-                IsAuditEnabled = new BooleanManagedProperty(true)
+                MaxSizeInKB = maxSizeInKB
             };
             if (!string.IsNullOrWhiteSpace(description))
                 attr.Description = new Label(description.Trim(), McpHelper.GetBaseLanguageCode(_serviceClient));
+            // Apply create-time flag overrides (required / audit / advanced find / field security / sort).
+            createFlags?.Apply(attr);
 
             // Wrap create in retry to handle lock contention
             Guid metadataId = Guid.Empty;

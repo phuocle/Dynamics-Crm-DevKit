@@ -88,8 +88,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         /// <list type="number">
         /// <item>Decompresses the <paramref name="formulaDefinition"/> (or treats it as plain XML if not gz:-prefixed).</item>
         /// <item>Detects the source entity name from the first <c>EntityName="..."</c> occurrence.</item>
-        /// <item>If the detected source differs from <paramref name="targetEntityName"/>, replaces every
-        /// <c>EntityName="&lt;source&gt;"</c> with <c>EntityName="&lt;target&gt;"</c>.</item>
+        /// <item>If the detected source differs from <paramref name="targetEntityName"/>, rewrites FOUR kinds of host-entity references:
+        ///   <list type="bullet">
+        ///   <item><c>relatedlinked_&lt;source&gt;_...</c> keys (Rollup CreatedEntities / InputEntities).</item>
+        ///   <item><c>.&lt;source&gt;_&lt;rel&gt;</c> dotted suffix in SetAttributeValue DisplayName (Rollup).</item>
+        ///   <item><c>EntityName="&lt;source&gt;"</c> XML attributes (Calculated owner).</item>
+        ///   <item><c>New Entity(&quot;&lt;source&gt;&quot;)</c> VB-expression literals in
+        ///     <c>Assign Value="[New Entity(&quot;...&quot;)]"</c> nodes that seed
+        ///     <c>CreatedEntities("primaryEntity#Temp")</c> (Calculated). These were previously
+        ///     missed and made Dataverse reject the rewritten XAML with the empty-formula fallback,
+        ///     which surfaced as "recompute entity references failed" when cloning a Calculated
+        ///     column to another entity.</item>
+        ///   </list>
+        /// </item>
         /// <item>Re-compresses (or returns plain XML) and returns the rewritten payload.</item>
         /// </list>
         ///
@@ -170,6 +181,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     newXml,
                     $@"EntityName=""{escapedSource}""",
                     $@"EntityName=""{targetEntityName}""",
+                    System.Text.RegularExpressions.RegexOptions.Compiled);
+
+                // Rewrite (4): VB expression literals like [New Entity(&quot;<source>&quot;)]
+                // that seed CreatedEntities("primaryEntity#Temp") in a Calculated formula.
+                // These appear in Assign Value="[New Entity(&quot;all_in_one&quot;)]" nodes and
+                // are NOT plain XML attributes (so rewrite (3) does not touch them). Dataverse
+                // validates this literal against the owning entity: when the column is being
+                // created on a different entity, an unrewritten New Entity("<source>") makes
+                // the CreatedEntities record mismatch the owner EntityName and Dataverse
+                // rejects the XAML, causing the empty-formula fallback path to fire. Match
+                // both the XML-escaped &quot; (as stored in the XAML) and a plain " quote so
+                // the rule is robust regardless of how the caller serialised the payload.
+                newXml = System.Text.RegularExpressions.Regex.Replace(
+                    newXml,
+                    $@"New Entity\((?:&quot;|""){escapedSource}(?:&quot;|"")\)",
+                    $@"New Entity(&quot;{targetEntityName}&quot;)",
                     System.Text.RegularExpressions.RegexOptions.Compiled);
 
                 if (string.Equals(newXml, decompressed, StringComparison.Ordinal))
