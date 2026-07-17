@@ -62,8 +62,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name,
-            [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. (immutable on update)")] string attribute_type,
-            [Description("Required: create.")] string display_name,
+            [Description("string/memo/integer/bigint/decimal/money/float/boolean/datetime/lookup/customer/picklist/multipicklist/image/file. Required for CREATE. Ignored on UPDATE (immutable).")] string attribute_type = "",
+            [Description("Required for CREATE. Optional on UPDATE — pass only to rename the display label.")] string display_name = "",
             [Description("Required for CREATE when schema_name/logical_name have no prefix. Resolves publisher prefix and adds the attribute to the solution.")] string solution_name = "",
             [Description("Optional prefix validation. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
             [Description("")] string description = "",
