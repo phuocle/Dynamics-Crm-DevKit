@@ -82,8 +82,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist update: JSON array — options to add. Optional 'color' field: {\"label\":\"New\",\"value\":100000003,\"color\":\"#FF0000\"}.")] string add_options = "",
             [Description("picklist update: JSON array — options to rename. Optional 'color' field: {\"label\":\"NewLabel\",\"value\":100000000,\"color\":\"#FF0000\"}.")] string update_options = "",
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
-            [Description("[update only]")] bool? is_audit_enabled = null,
-            [Description("[update only]")] bool? is_valid_for_advanced_find = null,
+            [Description("[update only] Enable audit on this column.")] bool? is_audit_enabled = null,
+            [Description("[update only] Show column in Advanced Find.")] bool? is_valid_for_advanced_find = null,
+            [Description("[update only] Enable field-level security.")] bool? is_secured = null,
+            [Description("[update only] Make column sortable in views.")] bool? is_sortable = null,
             [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("Formula column (PowerFx/Calculated/Rollup). Create only. Pass the value from get_tables `formulaDefinition` verbatim (may be 'gz:'-prefixed gzip+base64; decompressed automatically). For Power Fx use plain Power Fx text. Clones the field's computed/rollup definition.")] string formula_definition = "",
@@ -225,7 +227,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     display_name, description, required_level, max_length, min_value, max_value,
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
-                    is_audit_enabled, is_valid_for_advanced_find, behavior, precision_source);
+                    is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, behavior, precision_source);
             }
 
             // --- CREATE MODE ---
@@ -2013,7 +2015,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel,
             string addOptions, string updateOptions, string deleteOptions,
-            bool? isAuditEnabled, bool? isValidForAdvancedFind, string behavior, int precisionSource)
+            bool? isAuditEnabled, bool? isValidForAdvancedFind, bool? isSecured, bool? isSortable, string behavior, int precisionSource)
         {
             try
             {
@@ -2072,6 +2074,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     structuredChanges["isValidForAdvancedFind"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isValidForAdvancedFind.Value.ToString().ToLowerInvariant() };
                 }
 
+                if (isSecured.HasValue)
+                {
+                    var oldVal = metadata.IsSecured == true ? "true" : "false";
+                    metadata.IsSecured = isSecured.Value;
+                    changes.Add($"IsSecured: {oldVal} -> {isSecured.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isSecured"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isSecured.Value.ToString().ToLowerInvariant() };
+                }
+
+                if (isSortable.HasValue)
+                {
+                    var oldVal = metadata.IsSortableEnabled?.Value == true ? "true" : "false";
+                    metadata.IsSortableEnabled = new BooleanManagedProperty(isSortable.Value);
+                    changes.Add($"IsSortable: {oldVal} -> {isSortable.Value.ToString().ToLowerInvariant()}");
+                    structuredChanges["isSortable"] = new UpdateAttributeChange { OldValue = oldVal, NewValue = isSortable.Value.ToString().ToLowerInvariant() };
+                }
+
                 // --- Type-specific property updates ---
                 var typeError = ApplyTypeSpecificUpdates(metadata, maxLength, minValue, maxValue, precision, format,
                     trueLabel, falseLabel, behavior, precisionSource, changes, structuredChanges);
@@ -2103,7 +2121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (changes.Count == 0 && optionResults.Count == 0)
                     return ErrorResult(
                         $"Error: No changes specified for '{entityName}.{attributeName}'.\n" +
-                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find.");
+                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable.");
 
                 // --- Publish ---
                 var published = PublishIfNeeded(entityName);
