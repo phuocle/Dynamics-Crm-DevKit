@@ -422,19 +422,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
                 case PicklistAttributeMetadata pk:
                     PopulatePicklistDetails(entry, pk.OptionSet);
-                    // Picklist default (DefaultFormValue): emitted only when set (null → omitted).
-                    entry.DefaultValue = pk.DefaultFormValue.HasValue ? (object)pk.DefaultFormValue.Value : null;
+                    // Picklist default (DefaultFormValue): Dataverse uses -1 as the
+                    // "no default" sentinel (Maker Portal assigns it on create).
+                    // Normalize -1 → null so clone comparisons don't report false diffs.
+                    entry.DefaultValue = pk.DefaultFormValue.HasValue && pk.DefaultFormValue.Value != -1
+                        ? (object)pk.DefaultFormValue.Value : null;
                     break;
 
                 case MultiSelectPicklistAttributeMetadata mp:
                     PopulatePicklistDetails(entry, mp.OptionSet);
-                    // MultiSelectPicklistAttributeMetadata exposes no default value property.
+                    // MultiSelectPicklist has no user-settable default value in the
+                    // Power Apps UI; Dataverse always reports -1 (no default sentinel).
                     break;
 
                 case StatusAttributeMetadata st:
                     PopulatePicklistDetails(entry, st.OptionSet);
-                    // Status default (DefaultFormValue): emitted only when set (null → omitted).
-                    entry.DefaultValue = st.DefaultFormValue.HasValue ? (object)st.DefaultFormValue.Value : null;
+                    // Status (statuscode) is system-managed; Dataverse exposes no
+                    // user-settable default value (DefaultFormValue is always null).
                     break;
 
                 case StateAttributeMetadata sa:
