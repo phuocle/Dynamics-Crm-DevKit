@@ -36,7 +36,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Audit settings on a set of entities (use names= with solution entity list)\n\n" +
 
             "MODE/CONVENTION:\n" +
-            "- names= filters by exact logical-name list; filter= uses contains (list) or prefix (detail).")]
+            "- names= filters by exact logical-name list; filter= uses contains (list) or prefix (detail).\n\n" +
+
+            "FORMULA CLONE (Calculated/Rollup/PowerFx columns — all three treated identically):\n" +
+            "- Each formula column exposes a `formulaDefinition` property that always begins with `gz:` (gzip+base64-compressed), regardless of kind. It is an OPAQUE payload — do NOT decompress, base64-decode, unzip, parse, hand-write, or modify it for ANY of the three kinds.\n" +
+            "- To clone the column, copy the exact `formulaDefinition` string and pass it verbatim into upsert_column's `formula_definition`, with `formula_source_type` matching the `sourceType` label also reported here ('Calculated', 'Rollup', or 'PowerFx' — lowercased on the upsert side). upsert_column decodes the `gz:` payload internally; any AI-side attempt to extract or reconstruct the definition is lossy and will fail.\n")]
         public async Task<CallToolResult> get_tables(
             [Description("Logical name → detail mode. Empty = list mode."
             )] string entity_name = "",

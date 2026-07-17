@@ -15,6 +15,8 @@ namespace Dev.AllInOne.Console
                 if (_Service != null) return _Service;
                 _Service = new ServiceClient(ConnectionString);
                 ServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+                // Force SOAP/OrganizationService path (not internal Web API).
+                _Service.UseWebApi = false;
                 return _Service;
             }
         }

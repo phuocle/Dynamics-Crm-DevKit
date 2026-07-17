@@ -139,11 +139,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public object DefaultValue { get; set; }
 
         /// <summary>
-        /// RAW FormulaDefinition exactly as Dataverse stores it. For Power Fx columns
-        /// (sourceType=PowerFx) this is the plain Power Fx text and can be fed straight
-        /// back to upsert_column's <c>formula_definition</c> to clone the column.
-        /// For Calculated/Rollup columns it is the underlying XAML (XML workflow
-        /// definition) — large but authoritative; not directly re-creatable by AI.
+        /// FormulaDefinition wrapped through <c>FormulaCompressionHelper.Compress</c>:
+        /// the JSON property always begins with the <c>gz:</c> marker (gzip+base64),
+        /// and this holds for ALL three formula kinds (Calculated, Rollup, PowerFx)
+        /// identically — there is no kind whose value is plain writable text. Treat this
+        /// as an OPAQUE payload: to clone the column, copy the exact string into
+        /// upsert_column's <c>formula_definition</c> VERBATIM — do NOT decompress,
+        /// base64-decode, unzip, parse the definition, hand-write, or rebuild it.
+        /// upsert_column decodes <c>gz:</c> internally; reconstructing the underlying
+        /// definition by hand is lossy and never accurate.
         /// </summary>
         [JsonPropertyName("formulaDefinition")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
