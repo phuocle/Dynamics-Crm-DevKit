@@ -65,6 +65,40 @@ The source formula referenced `all_01stringtext`, `all_05stringphone`, `all_07st
   var optionSet = new OptionSetMetadata(optionsCollection) { ... };
   ```
 
+## Rollup column clone (field display name starts with `41`)
+
+### Verified result
+
+```
+Source column: all_41rollup (display: 41.Rollup, type: Integer, sourceType: 2)
+Found rollup relationship in formula: all_contact_all_in_one_id_all_in_one, lookup: all_all_in_one_id, related entity: contact
+Source relationship: all_contact_all_in_one_id_all_in_one, referencing entity: contact, referencing attribute: all_all_in_one_id, referenced entity: all_in_one
+Target relationship: all_contact_all_in_one_clone_2_id_all_allinoneclone, referencing attribute: all_all_in_one_clone_2_id
+Relationship mapping: all_contact_all_in_one_id_all_in_one -> all_contact_all_in_one_clone_2_id_all_allinoneclone
+Lookup attribute mapping: all_all_in_one_id -> all_all_in_one_clone_2_id
+SUCCESS: Created rollup column all_41rollup_clone with id 04db35e5-5d82-f111-8075-70a8a5b16a37
+```
+
+### Key differences from calculated columns
+
+1. **Rollup formulas contain a 1:N relationship reference**, not just entity/attribute names.
+2. The relationship name and lookup attribute on the target entity are **different** from the source, so they must be discovered at runtime.
+3. Discovery approach:
+   - Parse the formula XAML for the `relatedlinked_<relationshipName>#<lookupAttribute>#<relatedEntity>#` pattern.
+   - Retrieve `OneToManyRelationships` for both source and target entities.
+   - Match the target relationship by `ReferencingEntity == sourceRelationship.ReferencingEntity` and `ReferencedEntity == targetEntity`.
+4. Rewrite both the relationship name and the lookup attribute name in the XAML.
+
+### Rollup formula rewrite rules
+
+| Pattern in source XAML                 | Rewritten for target                                  |
+| -------------------------------------- | ----------------------------------------------------- |
+| `EntityName="all_in_one"`              | `EntityName="all_allinoneclone"`                      |
+| `New Entity("all_in_one")`             | `New Entity("all_allinoneclone")`                     |
+| `Attribute="all_41rollup"`             | `Attribute="all_41rollup_clone"`                      |
+| `all_contact_all_in_one_id_all_in_one` | `all_contact_all_in_one_clone_2_id_all_allinoneclone` |
+| `all_all_in_one_id`                    | `all_all_in_one_clone_2_id`                           |
+
 ## Reference implementation location
 
 `Program.cs` in this folder contains the full working implementation:
@@ -72,5 +106,7 @@ The source formula referenced `all_01stringtext`, `all_05stringphone`, `all_07st
 - `FindEntityByDisplayName`
 - `FindAttributeByDisplayNamePrefix`
 - `RewriteFormulaReferences`
+- `RewriteRollupFormulaReferences`
+- `FindRollupRelationshipMapping`
 - `CloneAttribute`
 - `CreateAttributeRequest` execution

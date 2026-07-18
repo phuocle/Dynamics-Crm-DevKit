@@ -15,7 +15,8 @@ namespace Dev.AllInOne.Console
         {
             try
             {
-                CloneCalculated();
+                //CloneCalculated();
+                CloneRollup();
             }
             catch (Exception ex)
             {
@@ -204,6 +205,24 @@ namespace Dev.AllInOne.Console
             return result;
         }
 
+        private static string RewriteRollupFormulaReferences(string xaml, string sourceEntity, string targetEntity, string sourceAttribute, string targetAttribute, RelationshipMapping mapping)
+        {
+            var result = xaml;
+
+            // Entity rewrites
+            result = Regex.Replace(result, $@"EntityName=""{Regex.Escape(sourceEntity)}""", $@"EntityName=""{targetEntity}""");
+            result = Regex.Replace(result, $@"New Entity\(&quot;{Regex.Escape(sourceEntity)}&quot;\)", $@"New Entity(&quot;{targetEntity}&quot;)");
+
+            // Self attribute rewrite
+            result = Regex.Replace(result, $@"Attribute=""{Regex.Escape(sourceAttribute)}""", $@"Attribute=""{targetAttribute}""");
+
+            // Relationship and lookup attribute rewrites
+            result = result.Replace(mapping.SourceRelationshipName, mapping.TargetRelationshipName);
+            result = result.Replace(mapping.SourceLookupAttribute, mapping.TargetLookupAttribute);
+
+            return result;
+        }
+
         private static AttributeMetadata CloneAttribute(AttributeMetadata source, string newSchemaName, string newLogicalName)
         {
             AttributeMetadata clone;
@@ -332,6 +351,165 @@ namespace Dev.AllInOne.Console
                 Description = source.Description,
                 IsCustomOptionSet = true,
                 OptionSetType = source.OptionSetType
+            };
+        }
+
+        private static void CloneRollup()
+        {
+            var service = App.Service;
+            System.Console.WriteLine("--- Rollup clone ---");
+
+            var sourceEntity = FindEntityByDisplayName(service, "All In One");
+            if (sourceEntity == null)
+            {
+                System.Console.WriteLine("ERROR: Source table 'All In One' not found.");
+                return;
+            }
+            System.Console.WriteLine($"Source table: {sourceEntity.LogicalName} ({GetLocalizedLabel(sourceEntity.DisplayName)})");
+
+            var targetEntity = FindEntityByDisplayName(service, "All In One Clone");
+            if (targetEntity == null)
+            {
+                System.Console.WriteLine("ERROR: Target table 'All In One Clone' not found.");
+                return;
+            }
+            System.Console.WriteLine($"Target table: {targetEntity.LogicalName} ({GetLocalizedLabel(targetEntity.DisplayName)})");
+
+            var sourceAttribute = FindAttributeByDisplayNamePrefix(service, sourceEntity.LogicalName, "41");
+            if (sourceAttribute == null)
+            {
+                System.Console.WriteLine("ERROR: No column with display name starting with '41' found on source table.");
+                return;
+            }
+
+            var displayName = GetLocalizedLabel(sourceAttribute.DisplayName);
+            System.Console.WriteLine($"Source column: {sourceAttribute.LogicalName} (display: {displayName}, type: {sourceAttribute.AttributeType}, sourceType: {sourceAttribute.SourceType})");
+
+            if (sourceAttribute.SourceType != 2)
+            {
+                System.Console.WriteLine("ERROR: Source column is not a Rollup column (SourceType != 2).");
+                return;
+            }
+
+            var formulaXml = GetFormulaDefinition(sourceAttribute);
+            if (string.IsNullOrEmpty(formulaXml))
+            {
+                System.Console.WriteLine("ERROR: Could not read FormulaDefinition from source column.");
+                return;
+            }
+
+            var relationshipMapping = FindRollupRelationshipMapping(service, formulaXml, sourceEntity.LogicalName, targetEntity.LogicalName);
+            if (relationshipMapping == null)
+            {
+                System.Console.WriteLine("ERROR: Could not map rollup relationship to target entity.");
+                return;
+            }
+            System.Console.WriteLine($"Relationship mapping: {relationshipMapping.SourceRelationshipName} -> {relationshipMapping.TargetRelationshipName}");
+            System.Console.WriteLine($"Lookup attribute mapping: {relationshipMapping.SourceLookupAttribute} -> {relationshipMapping.TargetLookupAttribute}");
+
+            var newLogicalName = GenerateUniqueAttributeName(service, targetEntity.LogicalName, sourceAttribute.LogicalName);
+            var newSchemaName = ToSchemaName(newLogicalName);
+
+            var rewrittenXml = RewriteRollupFormulaReferences(formulaXml, sourceEntity.LogicalName, targetEntity.LogicalName, sourceAttribute.LogicalName, newLogicalName, relationshipMapping);
+            System.IO.File.WriteAllText("D:\\rollup_formula_rewritten.xml", rewrittenXml);
+            System.Console.WriteLine("Saved rewritten rollup formula XML to D:\\rollup_formula_rewritten.xml");
+
+            var clone = CloneAttribute(sourceAttribute, newSchemaName, newLogicalName);
+            SetFormulaDefinition(clone, rewrittenXml);
+            clone.SourceType = 2;
+
+            System.Console.WriteLine($"Creating cloned rollup column: {clone.LogicalName} (schema: {clone.SchemaName}) on {targetEntity.LogicalName}");
+
+            var request = new CreateAttributeRequest
+            {
+                EntityName = targetEntity.LogicalName,
+                Attribute = clone
+            };
+
+            var response = (CreateAttributeResponse)service.Execute(request);
+            System.Console.WriteLine($"SUCCESS: Created rollup column {clone.LogicalName} with id {response.AttributeId}");
+        }
+
+        private class RelationshipMapping
+        {
+            public string SourceRelationshipName { get; set; }
+            public string TargetRelationshipName { get; set; }
+            public string SourceLookupAttribute { get; set; }
+            public string TargetLookupAttribute { get; set; }
+        }
+
+        private static RelationshipMapping FindRollupRelationshipMapping(ServiceClient service, string formulaXml, string sourceEntity, string targetEntity)
+        {
+            var match = Regex.Match(formulaXml, $@"relatedlinked_(?<rel>[^#]+)#(?<lookup>[^#]+)#(?<relatedEntity>[^#]+)#");
+            if (!match.Success)
+            {
+                System.Console.WriteLine("WARNING: Could not find relatedlinked pattern in formula XML.");
+                return null;
+            }
+
+            var sourceRelationshipName = match.Groups["rel"].Value;
+            var sourceLookupAttribute = match.Groups["lookup"].Value;
+            var relatedEntity = match.Groups["relatedEntity"].Value;
+
+            System.Console.WriteLine($"Found rollup relationship in formula: {sourceRelationshipName}, lookup: {sourceLookupAttribute}, related entity: {relatedEntity}");
+
+            var sourceRelationships = ((RetrieveEntityResponse)service.Execute(new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Relationships,
+                LogicalName = sourceEntity,
+                RetrieveAsIfPublished = true
+            })).EntityMetadata;
+
+            var targetRelationships = ((RetrieveEntityResponse)service.Execute(new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Relationships,
+                LogicalName = targetEntity,
+                RetrieveAsIfPublished = true
+            })).EntityMetadata;
+
+            OneToManyRelationshipMetadata sourceRel = null;
+            foreach (var rel in sourceRelationships.OneToManyRelationships)
+            {
+                if (rel.SchemaName == sourceRelationshipName)
+                {
+                    sourceRel = rel;
+                    break;
+                }
+            }
+
+            if (sourceRel == null)
+            {
+                System.Console.WriteLine($"ERROR: Source relationship {sourceRelationshipName} not found on {sourceEntity}.");
+                return null;
+            }
+
+            System.Console.WriteLine($"Source relationship: {sourceRel.SchemaName}, referencing entity: {sourceRel.ReferencingEntity}, referencing attribute: {sourceRel.ReferencingAttribute}, referenced entity: {sourceRel.ReferencedEntity}");
+
+            OneToManyRelationshipMetadata targetRel = null;
+            foreach (var rel in targetRelationships.OneToManyRelationships)
+            {
+                if (rel.ReferencingEntity == sourceRel.ReferencingEntity &&
+                    rel.ReferencedEntity == targetEntity)
+                {
+                    targetRel = rel;
+                    break;
+                }
+            }
+
+            if (targetRel == null)
+            {
+                System.Console.WriteLine($"ERROR: No matching relationship found on {targetEntity} from {sourceRel.ReferencingEntity}.");
+                return null;
+            }
+
+            System.Console.WriteLine($"Target relationship: {targetRel.SchemaName}, referencing attribute: {targetRel.ReferencingAttribute}");
+
+            return new RelationshipMapping
+            {
+                SourceRelationshipName = sourceRelationshipName,
+                TargetRelationshipName = targetRel.SchemaName,
+                SourceLookupAttribute = sourceLookupAttribute,
+                TargetLookupAttribute = targetRel.ReferencingAttribute
             };
         }
     }
