@@ -14,38 +14,29 @@ public class UpsertColumnToolTests
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool);
 
     [TestMethod]
-    public void FormulaCompression_RoundTripsOpaquePayload()
-    {
-        const string raw = "<Workflow EntityName=\"source_entity\" />";
-
-        var compressed = FormulaCompressionHelper.Compress(raw);
-        var success = FormulaCompressionHelper.TryDecompress(compressed, out var decoded, out var error);
-
-        Assert.IsTrue(success, error);
-        Assert.AreEqual(raw, decoded);
-    }
-
-    [TestMethod]
-    public void FormulaCompression_RejectsPlainAndMalformedPayloads()
-    {
-        Assert.IsFalse(FormulaCompressionHelper.TryDecompress("1 + 1", out _, out var plainError));
-        StringAssert.Contains(plainError, "gz:");
-
-        Assert.IsFalse(FormulaCompressionHelper.TryDecompress("gz:not-base64", out _, out var malformedError));
-        StringAssert.Contains(malformedError, "Base64");
-    }
-
-    [TestMethod]
     public void RewriteFormulaReferences_RewritesCalculatedOwnerAndTargetAttribute()
     {
         const string raw = "EntityName=\"source_entity\" Value=\"[New Entity(&quot;source_entity&quot;)]\" Attribute=\"source_total\"";
 
-        var rewritten = FormulaCompressionHelper.RewriteFormulaReferences(
+        var rewritten = FormulaReferenceHelper.RewriteFormulaReferences(
             raw, "source_entity", "target_entity", "source_total", "target_total", null);
 
         StringAssert.Contains(rewritten, "EntityName=\"target_entity\"");
         StringAssert.Contains(rewritten, "New Entity(&quot;target_entity&quot;)");
         StringAssert.Contains(rewritten, "Attribute=\"target_total\"");
+    }
+
+    [TestMethod]
+    public void RewriteFormulaReferences_RewritesToDerivedTargetAttribute()
+    {
+        const string raw = "EntityName=\"source_entity\" Attribute=\"source_total\"";
+        const string derivedTargetAttribute = "publisher_40a";
+
+        var rewritten = FormulaReferenceHelper.RewriteFormulaReferences(
+            raw, "source_entity", "target_entity", "source_total", derivedTargetAttribute, null);
+
+        StringAssert.Contains(rewritten, $"Attribute=\"{derivedTargetAttribute}\"");
+        Assert.IsFalse(rewritten.Contains("Attribute=\"\""));
     }
 
     [TestMethod]
@@ -55,7 +46,7 @@ public class UpsertColumnToolTests
         var mapping = new FormulaRelationshipMapping(
             "SourceRelationship", "TargetRelationship", "source_lookup", "target_lookup");
 
-        var rewritten = FormulaCompressionHelper.RewriteFormulaReferences(
+        var rewritten = FormulaReferenceHelper.RewriteFormulaReferences(
             raw, "source_entity", "target_entity", "source_total", "target_total", mapping);
 
         StringAssert.Contains(rewritten, "relatedlinked_target_entity_TargetRelationship#target_lookup#child#");
@@ -489,7 +480,7 @@ public class UpsertColumnToolTests
         CollectionAssert.Contains(paramNames, "schema_name");
         CollectionAssert.Contains(paramNames, "formula_definition");
         CollectionAssert.Contains(paramNames, "formula_source_type");
-        CollectionAssert.Contains(paramNames, "source_entity_name");
-        CollectionAssert.Contains(paramNames, "source_attribute_name");
+        CollectionAssert.DoesNotContain(paramNames, "source_entity_name");
+        CollectionAssert.DoesNotContain(paramNames, "source_attribute_name");
     }
 }

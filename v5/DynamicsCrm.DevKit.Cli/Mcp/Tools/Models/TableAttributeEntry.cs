@@ -139,15 +139,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public object DefaultValue { get; set; }
 
         /// <summary>
-        /// FormulaDefinition wrapped through <c>FormulaCompressionHelper.Compress</c>:
-        /// the JSON property always begins with the <c>gz:</c> marker (gzip+base64),
-        /// and this holds for ALL three formula kinds (Calculated, Rollup, PowerFx)
-        /// identically — there is no kind whose value is plain writable text. Treat this
-        /// as an OPAQUE payload: to clone the column, copy the exact string into
-        /// upsert_column's <c>formula_definition</c> VERBATIM — do NOT decompress,
-        /// base64-decode, unzip, parse the definition, hand-write, or rebuild it.
-        /// upsert_column decodes <c>gz:</c> internally; reconstructing the underlying
-        /// definition by hand is lossy and never accurate.
+        /// Source reference for cloning a formula column, formatted as
+        /// <c>entityLogicalName:attributeLogicalName</c>. Raw formula XML/text is not
+        /// transported. Pass this reference unchanged to upsert_column's
+        /// <c>formula_definition</c>; the server retrieves and rewrites it directly.
         /// </summary>
         [JsonPropertyName("formulaDefinition")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

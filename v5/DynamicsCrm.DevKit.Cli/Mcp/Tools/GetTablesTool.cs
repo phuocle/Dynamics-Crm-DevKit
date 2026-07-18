@@ -38,9 +38,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "MODE/CONVENTION:\n" +
             "- names= filters by exact logical-name list; filter= uses contains (list) or prefix (detail).\n\n" +
 
-            "FORMULA CLONE (Calculated/Rollup/PowerFx columns — all three treated identically):\n" +
-            "- Each formula column exposes a `formulaDefinition` property that always begins with `gz:` (gzip+base64-compressed), regardless of kind. It is an OPAQUE payload — do NOT decompress, base64-decode, unzip, parse, hand-write, or modify it for ANY of the three kinds.\n" +
-            "- To clone the column, copy the exact `formulaDefinition` string and pass it verbatim into upsert_column's `formula_definition`, with `formula_source_type` matching the `sourceType` label also reported here ('Calculated', 'Rollup', or 'PowerFx' — lowercased on the upsert side). upsert_column decodes the `gz:` payload internally; any AI-side attempt to extract or reconstruct the definition is lossy and will fail.\n")]
+            "FORMULA CLONE (Calculated/Rollup/PowerFx):\n" +
+            "- Formula columns expose `formulaDefinition` as `table_logical_name:column_logical_name`; raw formula XML/text is never returned.\n" +
+            "- Pass this reference unchanged to upsert_column's `formula_definition`. The server retrieves the source formula and kind directly from Dataverse and rewrites them for the target column. Do not parse or construct formula content.\n" +
+            "- `formula_source_type` is only needed when intentionally creating an empty formula column without `formula_definition`.\n")]
         public async Task<CallToolResult> get_tables(
             [Description("Logical name → detail mode. Empty = list mode."
             )] string entity_name = "",
@@ -177,7 +178,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 ObjectTypeCode = metadata.ObjectTypeCode,
                 Attributes = FilterAttributesForOutput(metadata.Attributes, prefixFilter, hasPrefix)
                     .OrderBy(a => a.LogicalName)
-                    .Select(BuildAttribute)
+                    .Select(attribute => BuildAttribute(metadata.LogicalName, attribute))
                     .ToList(),
                 OneToManyRelationships = (metadata.OneToManyRelationships ?? [])
                     .Where(r => !hasPrefix || r.ReferencingEntity.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase))
@@ -283,7 +284,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return false;
         }
 
-        private static TableAttributeEntry BuildAttribute(AttributeMetadata attribute)
+        private static TableAttributeEntry BuildAttribute(string entityLogicalName, AttributeMetadata attribute)
         {
             var entry = new TableAttributeEntry
             {
@@ -316,7 +317,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
 
             PopulateAttributeDetails(entry, attribute);
-            PopulateFormulaInfo(entry, attribute);
+            PopulateFormulaInfo(entry, entityLogicalName, attribute);
             return entry;
         }
 
@@ -338,27 +339,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static void PopulateFormulaInfo(TableAttributeEntry entry, AttributeMetadata attribute)
+        private static void PopulateFormulaInfo(TableAttributeEntry entry, string entityLogicalName, AttributeMetadata attribute)
         {
             // Only Calculated (1), Rollup (2), Power Fx (3) carry a formula.
             if (attribute.SourceType != 1 && attribute.SourceType != 2 && attribute.SourceType != 3)
                 return;
 
-            // Compress the RAW FormulaDefinition (gzip+base64 with "gz:" marker) so the
-            // structured output stays small even for Calculated/Rollup columns whose
-            // formula is a multi-KB XAML workflow definition. Power Fx formulas are small
-            // plain text but are compressed too for a consistent, opaque property.
-            //
-            // upsert_column transparently decompresses a "gz:"-prefixed value before
-            // creating the column, so AI can copy this property verbatim into
-            // upsert_column's `formula_definition` to clone the field.
-            var propInfo = attribute.GetType().GetProperty("FormulaDefinition");
-            if (propInfo == null) return;
+            if (string.IsNullOrWhiteSpace(entityLogicalName) || string.IsNullOrWhiteSpace(attribute.LogicalName))
+                return;
 
-            var val = propInfo.GetValue(attribute, null);
-            if (val == null) return;
-
-            entry.FormulaDefinition = FormulaCompressionHelper.Compress(val.ToString());
+            // Keep raw SDK FormulaDefinition server-side. upsert_column resolves this
+            // compact source reference when the caller requests a clone.
+            entry.FormulaDefinition = $"{entityLogicalName}:{attribute.LogicalName}";
         }
 
         private static void PopulateAttributeDetails(TableAttributeEntry entry, AttributeMetadata attribute)

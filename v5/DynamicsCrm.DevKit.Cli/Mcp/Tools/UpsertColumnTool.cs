@@ -46,12 +46,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- lookup: needs lookup_target (auto-creates 1:N)\n" +
             "- customer: polymorphic (account+contact), no lookup_target\n" +
             "- picklist/multipicklist: options JSON or global_optionset_name\n" +
-            "- formula column (PowerFx/Calculated/Rollup): pass formula_definition + matching formula_source_type. Supported underlying types: string/memo/integer/decimal/money/float/boolean/datetime.\n" +
-            "- formula_definition ONLY accepts the complete opaque `gz:` formulaDefinition returned by get_tables. Copy it verbatim; never decode, decompress, parse, edit, or hand-write it. The tool decodes it internally and sets the raw SDK FormulaDefinition during CREATE.\n" +
-            "- formula_source_type must match get_tables sourceType: powerfx, calculated, or rollup. All three kinds use the same `gz:` transport contract.\n" +
-            "- source_attribute_name: pass the source column logical name when cloning under a different logical_name; the tool rewrites Attribute=\"source\" to the new target attribute.\n" +
-            "- source_entity_name: recommended for Calculated and required for Rollup. Rollup uses it to resolve and rewrite the matching target relationship and lookup attribute.\n" +
-            "- Formula metadata is attached before CreateAttributeRequest. If Dataverse rejects a formula, the tool retries CREATE once with the same SourceType and an empty FormulaDefinition, then warns that the formula must be defined manually.\n" +
+            "- formula clone (PowerFx/Calculated/Rollup): pass only get_tables' `formulaDefinition` reference into formula_definition. Format: `source_table_logical_name:source_column_logical_name`. Pass it unchanged; never provide formula content directly.\n" +
+            "- The server retrieves the raw source formula and kind directly from Dataverse, then rewrites entity/column/relationship references for the target. Supported underlying types: string/memo/integer/decimal/money/float/boolean/datetime.\n" +
+            "- To intentionally create an empty formula column, omit formula_definition and pass formula_source_type as powerfx, calculated, or rollup.\n" +
             "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n\n" +
 
             "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n\n" +
@@ -96,10 +93,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Make column sortable in views. CREATE: pass to override Dataverse default (true, when supported by the attribute type). UPDATE: omit=null keeps current.")] bool? is_sortable = null,
             [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
-            [Description("VERBATIM clone payload — do NOT transform. The ONLY supported source is the `formulaDefinition` string returned by get_tables (it always begins with 'gz:'). This is the SAME contract for all three formula kinds (Calculated, Rollup, PowerFx) — there is NO kind that takes hand-written text. Copy that exact string and pass it here unchanged. Do NOT decompress, base64-decode, unzip, parse the definition, hand-write a formula, extract operands, or rebuild the payload — the tool decodes and applies it internally and AI-side reconstruction is never accurate. Create only.")] string formula_definition = "",
-            [Description("Create only. Formula kind for formula_definition: 'powerfx' (default), 'calculated', 'rollup'. Must match the `sourceType` label returned by get_tables for the column you are cloning (get_tables exposes `sourceType` as 'Calculated', 'Rollup', or 'PowerFx' — pass the lowercased form here). All three kinds take the same kind of `gz:` payload, so always pair formula_definition with its matching formula_source_type. Ignored without formula_definition.")] string formula_source_type = "",
-            [Description("Create only. Source (owner) entity logical name when cloning a Calculated/Rollup formula column from another entity. Required for Rollup relationship mapping; recommended for Calculated cloning.")] string source_entity_name = "",
-            [Description("Create only. Source attribute logical name. Used to rewrite Attribute=\"<source>\" references to the new target attribute name; required for reliable cloning when names differ.")] string source_attribute_name = "")
+            [Description("Create-only formula clone reference returned by get_tables, exactly `source_table_logical_name:source_column_logical_name` (for example `account:new_total`). Pass it unchanged; the server retrieves and rewrites the source formula directly. Omit it and pass formula_source_type only to create an empty formula column.")] string formula_definition = "",
+            [Description("Create only. Use powerfx, calculated, or rollup only when creating an empty formula column without formula_definition. Clone mode derives the kind from the referenced source column.")] string formula_source_type = "")
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -241,13 +236,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 // --- UPDATE MODE ---
                 if (!string.IsNullOrWhiteSpace(formula_definition) ||
-                    !string.IsNullOrWhiteSpace(formula_source_type) ||
-                    !string.IsNullOrWhiteSpace(source_entity_name) ||
-                    !string.IsNullOrWhiteSpace(source_attribute_name))
+                    !string.IsNullOrWhiteSpace(formula_source_type))
                 {
                     return ErrorResult(
                         "Error: Formula clone parameters are create-only and cannot update an existing column.\n" +
-                        "Read the source column with get_tables, then create a new column with formula_definition and formula_source_type.");
+                        "Read the source column with get_tables, then create a new column with its formulaDefinition reference.");
                 }
                 return UpdateExistingAttribute(entity_name, logical_name, existingMetadata,
                     display_name, description, required_level, max_length, min_value, max_value,
@@ -358,50 +351,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
             // --- Resolve formula column (Power Fx / Calculated / Rollup) ---
-            // formula_definition is the opaque 'gz:' transport payload returned by get_tables.
-            // Decode it exactly once here; metadata and CreateAttributeRequest receive the raw
-            // SDK FormulaDefinition, matching the verified direct-SDK create flow.
+            // formula_definition is the table:column reference returned by get_tables.
+            // Raw SDK FormulaDefinition stays inside the server process.
             FormulaColumnSpec formulaSpec = null;
             if (!string.IsNullOrWhiteSpace(formula_definition))
             {
-                if (!FormulaCompressionHelper.TryDecompress(formula_definition.Trim(), out var resolvedFormula, out var decodeError))
-                    return ErrorResult($"Error: Invalid formula_definition. {decodeError}\nCopy the complete `gz:` formulaDefinition value from get_tables without modifying it.");
+                if (!TryResolveFormulaCloneSource(formula_definition, out var resolvedFormula, out var sourceTypeVal,
+                    out var kind, out var sourceEntity, out var sourceAttribute, out var sourceError))
+                    return ErrorResult(sourceError);
 
-                var kind = string.IsNullOrWhiteSpace(formula_source_type) ? "powerfx" : formula_source_type.Trim().ToLowerInvariant();
+                if (!string.IsNullOrWhiteSpace(formula_source_type))
+                {
+                    var (requestedSourceType, requestedKindError) = ParseFormulaSourceType(formula_source_type.Trim().ToLowerInvariant());
+                    if (requestedKindError != null) return ErrorResult(requestedKindError);
+                    if (requestedSourceType != sourceTypeVal)
+                        return ErrorResult($"Error: formula_source_type does not match source column '{sourceEntity}:{sourceAttribute}'. Omit it in clone mode; the server derives '{kind}' from Dataverse.");
+                }
+
+                var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
+                if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
+
+                FormulaRelationshipMapping relationshipMapping = null;
+                if (kind == "rollup")
+                {
+                    var mappingError = TryResolveRollupRelationshipMapping(
+                        resolvedFormula, sourceEntity, entity_name, out relationshipMapping);
+                    if (mappingError != null) return ErrorResult(mappingError);
+                }
+
+                resolvedFormula = FormulaReferenceHelper.RewriteFormulaReferences(
+                    resolvedFormula, sourceEntity, entity_name, sourceAttribute, attributeName, relationshipMapping);
+
+                formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
+            }
+            else if (!string.IsNullOrWhiteSpace(formula_source_type))
+            {
+                var kind = formula_source_type.Trim().ToLowerInvariant();
                 var (sourceTypeVal, kindErr) = ParseFormulaSourceType(kind);
                 if (kindErr != null) return ErrorResult(kindErr);
 
                 var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
                 if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
 
-                var sourceEntity = string.IsNullOrWhiteSpace(source_entity_name)
-                    ? null
-                    : source_entity_name.Trim();
-                var sourceAttribute = string.IsNullOrWhiteSpace(source_attribute_name)
-                    ? null
-                    : source_attribute_name.Trim();
-
-                FormulaRelationshipMapping relationshipMapping = null;
-                if (kind == "rollup")
-                {
-                    if (string.IsNullOrWhiteSpace(sourceEntity))
-                        return ErrorResult("Error: source_entity_name is required when cloning a Rollup column so its relationship can be mapped to the target table.");
-
-                    var mappingError = TryResolveRollupRelationshipMapping(
-                        resolvedFormula, sourceEntity, entity_name, out relationshipMapping);
-                    if (mappingError != null) return ErrorResult(mappingError);
-                }
-
-                resolvedFormula = FormulaCompressionHelper.RewriteFormulaReferences(
-                    resolvedFormula, sourceEntity, entity_name, sourceAttribute, logical_name, relationshipMapping);
-
-                formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
-            }
-            else if (!string.IsNullOrWhiteSpace(formula_source_type))
-            {
-                return ErrorResult(
-                    "Error: formula_source_type was provided without formula_definition.\n" +
-                    "formula_source_type is only meaningful together with formula_definition.");
+                formulaSpec = new FormulaColumnSpec(sourceTypeVal, null, kind);
             }
 
             CallToolResult CreateTypedColumn(AttributeMetadata _ = null)
@@ -554,7 +546,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "String", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
             sb.AppendLine($"Format: {attr.FormatName?.Value ?? "Text"}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -619,7 +610,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var sb = FormatHeader(entityName, logicalName, "Memo", displayName, reqLevel);
             sb.AppendLine($"MaxLength: {maxLength}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -684,7 +674,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "Integer", displayName, reqLevel);
             if (minValue.HasValue) sb.AppendLine($"MinValue: {(int)minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {(int)maxValue.Value}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -752,7 +741,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Precision: {precision}");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -824,7 +812,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"PrecisionSource: {precisionSource} ({precisionSourceLabel})");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -892,7 +879,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"Precision: {precision}");
             if (minValue.HasValue) sb.AppendLine($"MinValue: {minValue.Value}");
             if (maxValue.HasValue) sb.AppendLine($"MaxValue: {maxValue.Value}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -973,7 +959,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "Boolean", displayName, reqLevel);
             sb.AppendLine($"TrueLabel: {trueLabel.Trim()}");
             sb.AppendLine($"FalseLabel: {falseLabel.Trim()}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -1044,7 +1029,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var sb = FormatHeader(entityName, logicalName, "DateTime", displayName, reqLevel);
             sb.AppendLine($"Format: {dateFormat}");
             sb.AppendLine($"Behavior: {behaviorName}");
-            AppendFormulaLine(sb, formula);
             var published = PublishIfNeeded(entityName);
 
             // Wait for column metadata to propagate
@@ -1891,39 +1875,84 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         // ── Formula column helpers (Power Fx / Calculated / Rollup) ──
 
         /// <summary>
-        /// Append a short, non-leaky formula descriptor to the result log. The actual
-        /// formula payload (which can be a large XAML) is NOT echoed back.
-        /// </summary>
-        private static void AppendFormulaLine(StringBuilder sb, FormulaColumnSpec formula)
-        {
-            if (formula == null) return;
-            var preview = formula.FormulaDefinition;
-            // Fallback path creates a FormulaColumnSpec with null FormulaDefinition (empty
-            // Calculated/Rollup body that the end-user must define in the editor).
-            if (string.IsNullOrEmpty(preview))
-            {
-                sb.AppendLine($"Formula: {formula.KindName} (empty - define in editor)");
-                return;
-            }
-            // For Power Fx the definition is short, readable Power Fx text → show it.
-            // For Calculated/Rollup it is XAML → just report the kind + length to avoid
-            // dumping a multi-KB XML blob into the tool output.
-            if (formula.SourceType == 3)
-            {
-                var oneLine = preview.Replace("\r", " ").Replace("\n", " ");
-                if (oneLine.Length > 120) oneLine = oneLine.Substring(0, 117) + "...";
-                sb.AppendLine($"Formula: PowerFx = {oneLine}");
-            }
-            else
-            {
-                sb.AppendLine($"Formula: {formula.KindName} (XAML, {preview.Length} chars)");
-            }
-        }
-
-        /// <summary>
         /// Map a <c>formula_source_type</c> string to the numeric <c>AttributeMetadata.SourceType</c>.
         /// Defaults to Power Fx (3). Returns null value + error message on invalid input.
         /// </summary>
+        private bool TryResolveFormulaCloneSource(string reference, out string formulaDefinition,
+            out int sourceType, out string kind, out string sourceEntity, out string sourceAttribute,
+            out string error)
+        {
+            formulaDefinition = null;
+            sourceType = 0;
+            kind = null;
+            sourceEntity = null;
+            sourceAttribute = null;
+            error = null;
+
+            var parts = (reference ?? "").Trim().Split(':');
+            if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
+            {
+                error = "Error: Invalid formula_definition. Pass the exact `table_logical_name:column_logical_name` reference returned by get_tables.";
+                return false;
+            }
+
+            sourceEntity = parts[0].Trim();
+            sourceAttribute = parts[1].Trim();
+            if (!IsLogicalName(sourceEntity) || !IsLogicalName(sourceAttribute))
+            {
+                error = "Error: Invalid formula_definition. Table and column must be lowercase Dataverse logical names separated by one colon.";
+                return false;
+            }
+
+            AttributeMetadata metadata;
+            try
+            {
+                var response = (RetrieveAttributeResponse)_serviceClient.Execute(new RetrieveAttributeRequest
+                {
+                    EntityLogicalName = sourceEntity,
+                    LogicalName = sourceAttribute,
+                    RetrieveAsIfPublished = true
+                });
+                metadata = response.AttributeMetadata;
+            }
+            catch (Exception ex)
+            {
+                error = $"Error: Cannot resolve formula source '{sourceEntity}:{sourceAttribute}'. {ex.Message}";
+                return false;
+            }
+
+            sourceType = metadata.SourceType ?? 0;
+            kind = sourceType switch
+            {
+                1 => "calculated",
+                2 => "rollup",
+                3 => "powerfx",
+                _ => null
+            };
+            if (kind == null)
+            {
+                error = $"Error: Source column '{sourceEntity}:{sourceAttribute}' is not a Calculated, Rollup, or PowerFx column.";
+                return false;
+            }
+
+            var formulaProperty = metadata.GetType().GetProperty("FormulaDefinition");
+            formulaDefinition = formulaProperty?.GetValue(metadata, null)?.ToString();
+            if (string.IsNullOrWhiteSpace(formulaDefinition))
+            {
+                error = $"Error: Source column '{sourceEntity}:{sourceAttribute}' has an empty FormulaDefinition and cannot be cloned.";
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsLogicalName(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value) || value != value.ToLowerInvariant()) return false;
+            if (!(char.IsLetter(value[0]) || value[0] == '_')) return false;
+            return value.All(ch => char.IsLetterOrDigit(ch) || ch == '_');
+        }
+
         private static (int sourceType, string error) ParseFormulaSourceType(string kind)
         {
             return kind switch
