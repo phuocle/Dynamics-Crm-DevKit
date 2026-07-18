@@ -41,15 +41,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         }
 
         /// <summary>
-        /// Inverse of <see cref="Compress"/>. If <paramref name="value"/> carries the
-        /// <c>"gz:"</c> marker the remainder is base64-decoded then gzip-inflated.
-        /// Any other value is returned unchanged (plain-text Power Fx formula, raw
-        /// XAML, empty string). Returns <c>null</c> only for null input.
+        /// Decode the opaque transport value emitted by <c>get_tables</c>.
         /// </summary>
-        public static string Decompress(string value)
+        public static bool TryDecompress(string value, out string raw, out string error)
         {
-            if (value == null) return null;
-            if (!value.StartsWith(GzipMarker, StringComparison.Ordinal)) return value;
+            raw = null;
+            error = null;
+            if (string.IsNullOrWhiteSpace(value) || !value.StartsWith(GzipMarker, StringComparison.Ordinal))
+            {
+                error = "Expected a `gz:` payload returned by get_tables.";
+                return false;
+            }
 
             var b64 = value.Substring(GzipMarker.Length);
             try
@@ -59,23 +61,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 using var gzip = new GZipStream(input, CompressionMode.Decompress);
                 using var output = new MemoryStream();
                 gzip.CopyTo(output);
-                return Encoding.UTF8.GetString(output.ToArray());
+                raw = Encoding.UTF8.GetString(output.ToArray());
+                if (string.IsNullOrWhiteSpace(raw))
+                {
+                    error = "The decoded formula is empty.";
+                    return false;
+                }
+                return true;
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
-                // Not actually base64 despite the marker — return as-is rather than throw,
-                // so a malformed/partial payload never breaks a column create.
-                return value;
+                error = $"The payload is not valid Base64: {ex.Message}";
+                return false;
             }
-            catch (InvalidDataException)
+            catch (InvalidDataException ex)
             {
-                return value;
+                error = $"The payload is not valid gzip data: {ex.Message}";
+                return false;
             }
         }
 
         /// <summary>
-        /// Attempt to rewrite the host-entity references inside a Calculated (or Rollup)
-        /// formula XAML payload so it can be cloned into a different entity.
+        /// Rewrite the decoded SDK formula before creating the destination column.
         ///
         /// Calculated/Rollup XAML embeds the source entity name in <c>EntityName="&lt;name&gt;"</c>
         /// attributes (e.g. <c>EntityName="all_in_one"</c>). Dataverse stores the formula as-is
@@ -86,7 +93,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         ///
         /// This helper:
         /// <list type="number">
-        /// <item>Decompresses the <paramref name="formulaDefinition"/> (or treats it as plain XML if not gz:-prefixed).</item>
         /// <item>Detects the source entity name from the first <c>EntityName="..."</c> occurrence.</item>
         /// <item>If the detected source differs from <paramref name="targetEntityName"/>, rewrites FOUR kinds of host-entity references:
         ///   <list type="bullet">
@@ -101,31 +107,30 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
         ///     column to another entity.</item>
         ///   </list>
         /// </item>
-        /// <item>Re-compresses (or returns plain XML) and returns the rewritten payload.</item>
+        /// <item>Rewrites the destination attribute and Rollup relationship/lookup references when supplied.</item>
         /// </list>
         ///
         /// If parsing/rewrite fails for any reason, the original <paramref name="formulaDefinition"/>
         /// is returned unchanged so callers can fall back to the empty-formula path themselves.
         /// </summary>
-        /// <param name="formulaDefinition">Possibly <c>gz:</c>-prefixed formula payload (XAML for Calculated/Rollup; plain text for Power Fx).</param>
+        /// <param name="formulaDefinition">Raw SDK formula text decoded from the MCP <c>gz:</c> transport payload.</param>
         /// <param name="sourceEntityName">Logical name of the source (owning) entity the formula was originally defined on.
         /// When provided and non-empty, it is used directly for rewriting — this is the recommended path because the XAML
         /// relationship key (<c>relatedlinked_&lt;owner&gt;_&lt;RelName&gt;</c>) is ambiguous to parse when the owner entity
         /// name itself contains underscores (e.g. <c>all_in_one</c>). When empty/whitespace, the owner is discovered from
         /// the XAML via <see cref="DiscoverSourceEntityFromFormulaXaml"/> as a fallback.</param>
         /// <param name="targetEntityName">Logical name of the entity the column is being created on (the new owner of the formula).</param>
-        /// <param name="rewritten">True when a replacement actually happened (source ≠ target); false when payload was already correct or no EntityName refs were found.</param>
         /// <returns>The (possibly rewritten) formula payload, ready to be handed to Dataverse.</returns>
-        public static string RewriteFormulaEntityReferences(string formulaDefinition, string sourceEntityName, string targetEntityName, out bool rewritten)
+        public static string RewriteFormulaReferences(string formulaDefinition, string sourceEntityName,
+            string targetEntityName, string sourceAttributeName, string targetAttributeName,
+            Models.FormulaRelationshipMapping relationshipMapping)
         {
-            rewritten = false;
             if (string.IsNullOrWhiteSpace(formulaDefinition) || string.IsNullOrWhiteSpace(targetEntityName))
                 return formulaDefinition;
 
             try
             {
-                var decompressed = Decompress(formulaDefinition);
-                if (string.IsNullOrWhiteSpace(decompressed)) return formulaDefinition;
+                var decompressed = formulaDefinition;
 
                 // ===== Resolve the source (owner) entity embedded in the XAML =====
                 // Prefer an explicitly-provided sourceEntityName (caller knows it from the
@@ -144,14 +149,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 string sourceEntity = sourceEntityName;
                 if (string.IsNullOrWhiteSpace(sourceEntity))
                     sourceEntity = DiscoverSourceEntityFromFormulaXaml(decompressed);
-                if (string.IsNullOrEmpty(sourceEntity))
-                    return formulaDefinition; // no owner reference could be detected
-
-                if (string.Equals(sourceEntity, targetEntityName, StringComparison.Ordinal))
-                    return formulaDefinition; // already correct, no rewrite needed
-
-                var escapedSource = System.Text.RegularExpressions.Regex.Escape(sourceEntity);
                 string newXml = decompressed;
+                if (!string.IsNullOrWhiteSpace(sourceEntity) &&
+                    !string.Equals(sourceEntity, targetEntityName, StringComparison.Ordinal))
+                {
+                var escapedSource = System.Text.RegularExpressions.Regex.Escape(sourceEntity);
 
                 // Rewrite (1): CreatedEntities("relatedlinked_<source>_<rel>...") keys.
                 // Also covers GetEntityCollectionProperty / InputEntities expressions that use
@@ -199,18 +201,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     $@"New Entity(&quot;{targetEntityName}&quot;)",
                     System.Text.RegularExpressions.RegexOptions.Compiled);
 
+                }
+
+                if (!string.IsNullOrWhiteSpace(sourceAttributeName) &&
+                    !string.IsNullOrWhiteSpace(targetAttributeName) &&
+                    !string.Equals(sourceAttributeName, targetAttributeName, StringComparison.OrdinalIgnoreCase))
+                {
+                    newXml = System.Text.RegularExpressions.Regex.Replace(
+                        newXml,
+                        $@"Attribute=""{System.Text.RegularExpressions.Regex.Escape(sourceAttributeName)}""",
+                        $@"Attribute=""{targetAttributeName}""",
+                        System.Text.RegularExpressions.RegexOptions.Compiled);
+                }
+
+                if (relationshipMapping != null)
+                {
+                    newXml = newXml.Replace(relationshipMapping.SourceRelationshipName,
+                        relationshipMapping.TargetRelationshipName, StringComparison.Ordinal);
+                    newXml = newXml.Replace(relationshipMapping.SourceLookupAttribute,
+                        relationshipMapping.TargetLookupAttribute, StringComparison.Ordinal);
+                }
+
                 if (string.Equals(newXml, decompressed, StringComparison.Ordinal))
                     return formulaDefinition; // nothing changed
 
-                // Re-compress to same format as input (gz: or plain).
-                var wasCompressed = formulaDefinition.StartsWith(GzipMarker, StringComparison.Ordinal);
-                rewritten = true;
-                return wasCompressed ? Compress(newXml) : newXml;
+                return newXml;
             }
             catch
             {
-                // Any parsing/rewrite failure: return original payload untouched.
-                // Caller decides whether to drop the formula entirely.
                 return formulaDefinition;
             }
         }

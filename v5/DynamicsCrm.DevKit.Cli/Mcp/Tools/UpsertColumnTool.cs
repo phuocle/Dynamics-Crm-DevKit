@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
-            "UPDATE (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current.\n\n" +
+            "UPDATE (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current. Formula clone parameters are CREATE-only; if any are passed for an existing column, the tool returns an error and does not update the formula.\n\n" +
 
             "CREATE (no attribute): need attribute_type + display_name.\n" +
             "- schema_name: if provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Must start with the publisher prefix (e.g. 'devkit_InvoiceLineId'). Create only — ignored on update.\n" +
@@ -46,19 +46,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- lookup: needs lookup_target (auto-creates 1:N)\n" +
             "- customer: polymorphic (account+contact), no lookup_target\n" +
             "- picklist/multipicklist: options JSON or global_optionset_name\n" +
-            "- formula column (Calculated/Rollup/PowerFx): pass formula_definition (+ formula_source_type). Works on string/memo/integer/decimal/money/float/boolean/datetime. CRITICAL: the three kinds are treated IDENTICALLY — formula_definition ONLY accepts the `gz:`-prefixed `formulaDefinition` value returned by get_tables, for ALL of them. Copy that exact string and pass it VERBATIM. Do NOT decompress, base64-decode, unzip, parse, regex, hand-write, or modify the payload in any way regardless of kind; the tool decodes and applies it internally and AI-side extraction/reconstruction is never accurate (all three payloads are opaque `gz:` blobs).\n" +
-            "- 5 create flags (so a column can be cloned from another entity in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — always set on create; default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when the attribute type supports sorting). On CREATE, pass any of these to override the default; on UPDATE, omit=null to keep current.\n\n" +
+            "- formula column (PowerFx/Calculated/Rollup): pass formula_definition + matching formula_source_type. Supported underlying types: string/memo/integer/decimal/money/float/boolean/datetime.\n" +
+            "- formula_definition ONLY accepts the complete opaque `gz:` formulaDefinition returned by get_tables. Copy it verbatim; never decode, decompress, parse, edit, or hand-write it. The tool decodes it internally and sets the raw SDK FormulaDefinition during CREATE.\n" +
+            "- formula_source_type must match get_tables sourceType: powerfx, calculated, or rollup. All three kinds use the same `gz:` transport contract.\n" +
+            "- source_attribute_name: pass the source column logical name when cloning under a different logical_name; the tool rewrites Attribute=\"source\" to the new target attribute.\n" +
+            "- source_entity_name: recommended for Calculated and required for Rollup. Rollup uses it to resolve and rewrite the matching target relationship and lookup attribute.\n" +
+            "- Formula metadata is attached before CreateAttributeRequest. If Dataverse rejects a formula, the tool retries CREATE once with the same SourceType and an empty FormulaDefinition, then warns that the formula must be defined manually.\n" +
+            "- 5 create flags (so a column can be cloned in a SINGLE create call, no follow-up update): required_level (None/Recommended/Required — default None), is_audit_enabled (default true), is_valid_for_advanced_find (default true), is_secured (default false), is_sortable (default true when supported). On UPDATE, omit=null to keep current.\n\n" +
 
-            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix when supplied. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n\n" +
+            "CREATE uses the publisher prefix from solution_name directly. confirmed_prefix is optional and only validates the resolved prefix. Either solution_name or an explicit prefixed schema_name/logical_name must be supplied so the publisher prefix is known.\n\n" +
 
             "WHEN TO USE:\n" +
-            "- Create new attribute on an existing table (need attribute_type + display_name)\n" +
-            "- Update mutable metadata, format, required_level, picklist options\n" +
+            "- Create a new attribute on an existing table (need attribute_type + display_name)\n" +
+            "- Clone a PowerFx, Calculated, or Rollup column read by get_tables (CREATE only)\n" +
+            "- Update mutable metadata, format, required_level, and picklist options\n" +
             "- Add/rename/remove options on an existing picklist via add_options/update_options/delete_options\n\n" +
 
             "FUZZY/AMBIGUITY:\n" +
             "- entity_name resolves Display Name contains first, then logical/schema name contains. Ambiguity returns IsError=true with candidates.\n" +
-            "- logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, solution_name where applicable.")]
+            "- logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.")]
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name,
@@ -66,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Required for CREATE. Optional on UPDATE — pass only to rename the display label.")] string display_name = "",
             [Description("Required for CREATE when schema_name/logical_name have no prefix. Resolves publisher prefix and adds the attribute to the solution.")] string solution_name = "",
             [Description("Optional prefix validation. If supplied, it must match the solution publisher prefix.")] string confirmed_prefix = "",
-            [Description("")] string description = "",
+            [Description("Optional column description.")] string description = "",
             [Description("Required level for the column. CREATE: always applied (None when omitted — NOT a Dataverse default). UPDATE: omit=keep current.")] string required_level = "",
             [Description("string 1-4000 (def 100); memo 1-1048576 (def 2000); file KB (def 32768).")] int max_length = 0,
             [Description("Numeric types: minimum value.")] double? min_value = null,
@@ -91,8 +97,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("picklist/boolean create: default option value. Picklist: single integer value (e.g. 100000002) — must match one of the options. Boolean: 'true'/'false' or '1'/'0'. Not supported on multipicklist.")] string default_value = "",
             [Description("SchemaName for the new column (e.g. 'devkit_InvoiceLineId'). If provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Create only — ignored on update. Must start with the publisher prefix.")] string schema_name = "",
             [Description("VERBATIM clone payload — do NOT transform. The ONLY supported source is the `formulaDefinition` string returned by get_tables (it always begins with 'gz:'). This is the SAME contract for all three formula kinds (Calculated, Rollup, PowerFx) — there is NO kind that takes hand-written text. Copy that exact string and pass it here unchanged. Do NOT decompress, base64-decode, unzip, parse the definition, hand-write a formula, extract operands, or rebuild the payload — the tool decodes and applies it internally and AI-side reconstruction is never accurate. Create only.")] string formula_definition = "",
-            [Description("Formula kind for formula_definition: 'powerfx' (default), 'calculated', 'rollup'. Must match the `sourceType` label returned by get_tables for the column you are cloning (get_tables exposes `sourceType` as 'Calculated', 'Rollup', or 'PowerFx' — pass the lowercased form here). All three kinds take the same kind of `gz:` payload, so always pair formula_definition with its matching formula_source_type. Ignored without formula_definition.")] string formula_source_type = "",
-            [Description("Source (owner) entity logical name when cloning a Calculated/Rollup formula column from another entity (e.g. when copying field 40/41 from all_in_one to all_allinoneclone3). Recommended: Dataverse embeds the source entity in the formula XAML relationship key (relatedlinked_<owner>_<Rel>) and SetAttributeValue DisplayName; providing the explicit source entity name avoids ambiguity when the owner name itself contains underscores (e.g. 'all_in_one'). When empty, the source is discovered from the XAML. Only used for calculated/rollup formula clones; ignored otherwise.")] string source_entity_name = "")
+            [Description("Create only. Formula kind for formula_definition: 'powerfx' (default), 'calculated', 'rollup'. Must match the `sourceType` label returned by get_tables for the column you are cloning (get_tables exposes `sourceType` as 'Calculated', 'Rollup', or 'PowerFx' — pass the lowercased form here). All three kinds take the same kind of `gz:` payload, so always pair formula_definition with its matching formula_source_type. Ignored without formula_definition.")] string formula_source_type = "",
+            [Description("Create only. Source (owner) entity logical name when cloning a Calculated/Rollup formula column from another entity. Required for Rollup relationship mapping; recommended for Calculated cloning.")] string source_entity_name = "",
+            [Description("Create only. Source attribute logical name. Used to rewrite Attribute=\"<source>\" references to the new target attribute name; required for reliable cloning when names differ.")] string source_attribute_name = "")
         {
             // --- Validate required parameters ---
             if (string.IsNullOrWhiteSpace(entity_name))
@@ -195,11 +202,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             AttributeMetadata existingMetadata = null;
             if (!string.IsNullOrWhiteSpace(logical_name))
             {
+                var requestedLogicalName = logical_name;
                 var attributeResolve = DisplayNameFirstResolver.ResolveAttribute(_serviceClient, entity_name, logical_name, "upsert_column");
                 if (attributeResolve.IsSuccess)
                 {
-                    existingMetadata = attributeResolve.Value;
-                    logical_name = existingMetadata.LogicalName;
+                    var hasFormulaCreateIntent = !string.IsNullOrWhiteSpace(formula_definition) &&
+                        !string.IsNullOrWhiteSpace(attribute_type) &&
+                        !string.IsNullOrWhiteSpace(display_name);
+                    if (!hasFormulaCreateIntent || string.Equals(
+                        attributeResolve.Value.LogicalName, requestedLogicalName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        existingMetadata = attributeResolve.Value;
+                        logical_name = existingMetadata.LogicalName;
+                    }
                 }
                 else if (attributeResolve.Status == ResolveStatus.Ambiguous || attributeResolve.Status == ResolveStatus.Error)
                 {
@@ -225,6 +240,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (existingMetadata != null)
             {
                 // --- UPDATE MODE ---
+                if (!string.IsNullOrWhiteSpace(formula_definition) ||
+                    !string.IsNullOrWhiteSpace(formula_source_type) ||
+                    !string.IsNullOrWhiteSpace(source_entity_name) ||
+                    !string.IsNullOrWhiteSpace(source_attribute_name))
+                {
+                    return ErrorResult(
+                        "Error: Formula clone parameters are create-only and cannot update an existing column.\n" +
+                        "Read the source column with get_tables, then create a new column with formula_definition and formula_source_type.");
+                }
                 return UpdateExistingAttribute(entity_name, logical_name, existingMetadata,
                     display_name, description, required_level, max_length, min_value, max_value,
                     precision, format, true_label, false_label,
@@ -334,13 +358,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var effectiveSolutionName = resolvedSolutionUniqueName ?? solution_name;
 
             // --- Resolve formula column (Power Fx / Calculated / Rollup) ---
-            // formula_definition may be a 'gz:'-prefixed gzip+base64 payload copied verbatim
-            // from get_tables `formulaDefinition`; decompress it. Plain text (Power Fx) is
-            // used directly. Only supported on a subset of attribute types (see validation).
+            // formula_definition is the opaque 'gz:' transport payload returned by get_tables.
+            // Decode it exactly once here; metadata and CreateAttributeRequest receive the raw
+            // SDK FormulaDefinition, matching the verified direct-SDK create flow.
             FormulaColumnSpec formulaSpec = null;
             if (!string.IsNullOrWhiteSpace(formula_definition))
             {
-                var resolvedFormula = FormulaCompressionHelper.Decompress(formula_definition.Trim());
+                if (!FormulaCompressionHelper.TryDecompress(formula_definition.Trim(), out var resolvedFormula, out var decodeError))
+                    return ErrorResult($"Error: Invalid formula_definition. {decodeError}\nCopy the complete `gz:` formulaDefinition value from get_tables without modifying it.");
+
                 var kind = string.IsNullOrWhiteSpace(formula_source_type) ? "powerfx" : formula_source_type.Trim().ToLowerInvariant();
                 var (sourceTypeVal, kindErr) = ParseFormulaSourceType(kind);
                 if (kindErr != null) return ErrorResult(kindErr);
@@ -348,29 +374,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var formulaCompatErr = ValidateFormulaAttributeType(attribute_type, kind);
                 if (formulaCompatErr != null) return ErrorResult(formulaCompatErr);
 
-                // For Calculated (and Rollup) the XAML embeds the source entity name in
-                // EntityName="..." attributes. When cloning to a different entity, those
-                // references must be rewritten to the target entity or Dataverse stores
-                // the formula verbatim and the Power Apps editor can no longer resolve
-                // the return branches (UI shows only the if/condition step). Power Fx
-                // plain text has no entity reference, so it is used as-is.
-                if (kind == "calculated" || kind == "rollup")
+                var sourceEntity = string.IsNullOrWhiteSpace(source_entity_name)
+                    ? null
+                    : source_entity_name.Trim();
+                var sourceAttribute = string.IsNullOrWhiteSpace(source_attribute_name)
+                    ? null
+                    : source_attribute_name.Trim();
+
+                FormulaRelationshipMapping relationshipMapping = null;
+                if (kind == "rollup")
                 {
-                    // When cloning a Calculated/Rollup formula XAML across entities, the
-                    // source (owner) entity name embedded in the XAML must be rewritten to
-                    // the target entity. Pass an explicit source_entity_name when the caller
-                    // knows it — this is unambiguous and the recommended path (the XAML
-                    // relationship-key split is ambiguous when the owner name itself contains
-                    // underscores). When omitted, the helper discovers the source from the
-                    // XAML as a fallback.
-                    var sourceEntity = string.IsNullOrWhiteSpace(source_entity_name)
-                        ? null
-                        : source_entity_name.Trim();
-                    var rewritten = FormulaCompressionHelper.RewriteFormulaEntityReferences(
-                        resolvedFormula, sourceEntity, entity_name, out var didRewrite);
-                    if (didRewrite)
-                        resolvedFormula = rewritten;
+                    if (string.IsNullOrWhiteSpace(sourceEntity))
+                        return ErrorResult("Error: source_entity_name is required when cloning a Rollup column so its relationship can be mapped to the target table.");
+
+                    var mappingError = TryResolveRollupRelationshipMapping(
+                        resolvedFormula, sourceEntity, entity_name, out relationshipMapping);
+                    if (mappingError != null) return ErrorResult(mappingError);
                 }
+
+                resolvedFormula = FormulaCompressionHelper.RewriteFormulaReferences(
+                    resolvedFormula, sourceEntity, entity_name, sourceAttribute, logical_name, relationshipMapping);
 
                 formulaSpec = new FormulaColumnSpec(sourceTypeVal, resolvedFormula, kind);
             }
@@ -455,33 +478,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
             catch (Exception ex)
             {
-                // Calculated/Rollup formula clone fallback: if attaching the formula XAML
-                // caused Dataverse to reject the create (e.g. entity reference rewrite was
-                // not enough, or the XAML references attributes/relationships that do not
-                // exist on the target entity), retry the create with an EMPTY formula — the
-                // column is still created as a Calculated/Rollup field, but with an empty
-                // body so the end-user can open the Power Apps editor and define the formula
-                // themselves. Without this fallback the whole column create would fail.
-                if (formulaSpec != null && (formulaSpec.KindName == "calculated" || formulaSpec.KindName == "rollup"))
+                if (formulaSpec != null)
                 {
-                    var fallbackSpec = new FormulaColumnSpec(formulaSpec.SourceType, null, formulaSpec.KindName);
-                    formulaSpec = fallbackSpec;
+                    var originalFormulaSpec = formulaSpec;
+                    formulaSpec = new FormulaColumnSpec(
+                        originalFormulaSpec.SourceType, null, originalFormulaSpec.KindName);
                     try
                     {
                         var fallbackResult = CreateTypedColumn();
-                    // Surface the original error to the caller as a warning so they know
-                    // the formula did not round-trip and must be redefined in the UI.
-                    var kindLabel = formulaSpec.SourceType == 1 ? "Calculated" : "Rollup";
-                    return AppendFormulaCloneWarning(fallbackResult,
-                        $"Calculated/Rollup formula did not round-trip cleanly to entity '{entity_name}' (Dataverse rejected the rewritten XAML). " +
-                        $"Column was created as an empty {kindLabel} field. " +
-                        "Open the column in the Power Apps editor and define the formula manually. " +
-                        $"Original error: {ex.Message}");
+                        return AppendFormulaCloneWarning(fallbackResult,
+                            $"Dataverse rejected the cloned {originalFormulaSpec.KindName} formula. " +
+                            "The column was created with the same SourceType and an empty FormulaDefinition. " +
+                            $"Define the formula manually. Original error: {ex.Message}");
                     }
-                    catch (Exception innerEx)
+                    catch (Exception fallbackException)
                     {
-                        // Even the empty-formula fallback failed — defer to the generic handler.
-                        return HandleException(innerEx is not null ? innerEx : ex, entity_name, logical_name, effectiveSolutionName);
+                        return HandleException(fallbackException, entity_name, logical_name, effectiveSolutionName);
                     }
                 }
                 return HandleException(ex, entity_name, logical_name, effectiveSolutionName);
@@ -1722,6 +1734,52 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return response.AttributeId;
         }
 
+        private string TryResolveRollupRelationshipMapping(string formulaDefinition, string sourceEntityName,
+            string targetEntityName, out FormulaRelationshipMapping mapping)
+        {
+            mapping = null;
+            var match = System.Text.RegularExpressions.Regex.Match(
+                formulaDefinition ?? "",
+                @"relatedlinked_(?<relationship>[^#]+)#(?<lookup>[^#]+)#(?<relatedEntity>[^#]+)#");
+            if (!match.Success)
+                return "Error: Could not find the Rollup relationship reference in formula_definition.";
+
+            var sourceRelationshipName = match.Groups["relationship"].Value;
+            var sourceLookupAttribute = match.Groups["lookup"].Value;
+
+            var sourceMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Relationships,
+                LogicalName = sourceEntityName,
+                RetrieveAsIfPublished = true
+            })).EntityMetadata;
+            var targetMetadata = ((RetrieveEntityResponse)_serviceClient.Execute(new RetrieveEntityRequest
+            {
+                EntityFilters = EntityFilters.Relationships,
+                LogicalName = targetEntityName,
+                RetrieveAsIfPublished = true
+            })).EntityMetadata;
+
+            var sourceRelationship = sourceMetadata.OneToManyRelationships?.FirstOrDefault(
+                relationship => string.Equals(relationship.SchemaName, sourceRelationshipName, StringComparison.Ordinal));
+            if (sourceRelationship == null)
+                return $"Error: Rollup source relationship '{sourceRelationshipName}' was not found on table '{sourceEntityName}'.";
+
+            var targetRelationship = targetMetadata.OneToManyRelationships?.FirstOrDefault(
+                relationship =>
+                    string.Equals(relationship.ReferencingEntity, sourceRelationship.ReferencingEntity, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(relationship.ReferencedEntity, targetEntityName, StringComparison.OrdinalIgnoreCase));
+            if (targetRelationship == null)
+                return $"Error: No matching Rollup relationship from '{sourceRelationship.ReferencingEntity}' to target table '{targetEntityName}' was found.";
+
+            mapping = new FormulaRelationshipMapping(
+                sourceRelationshipName,
+                targetRelationship.SchemaName,
+                sourceLookupAttribute,
+                targetRelationship.ReferencingAttribute);
+            return null;
+        }
+
         private bool PublishIfNeeded(string entityName)
         {
             try
@@ -2550,24 +2608,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
         };
 
-        /// <summary>
-        /// Append a clone warning preamble to a successful <see cref="CallToolResult"/> (used
-        /// when a Calculated/Rollup formula XAML failed to round-trip and the column was
-        /// re-created with an empty body). The original result text and structured content
-        /// are preserved; the warning is prepended so the caller sees it before the success
-        /// summary. The structured result <c>Status</c> is left as returned by the create
-        /// (typically "created") and a new <c>warnings</c> field is added when feasible.
-        /// </summary>
         private static CallToolResult AppendFormulaCloneWarning(CallToolResult result, string warning)
         {
-            if (result == null) return result;
-            // Prepend warning to the first text content block.
-            if (result.Content != null && result.Content.Count > 0 && result.Content[0] is TextContentBlock tb)
+            if (result?.Content != null && result.Content.Count > 0 && result.Content[0] is TextContentBlock text)
             {
-                var newText = $"[FormulaCloneWarning] {warning}\n\n{tb.Text}";
-                result.Content[0] = new TextContentBlock { Text = newText };
+                result.Content[0] = new TextContentBlock
+                {
+                    Text = $"[FormulaCloneWarning] {warning}\n\n{text.Text}"
+                };
             }
             return result;
         }
+
     }
 }

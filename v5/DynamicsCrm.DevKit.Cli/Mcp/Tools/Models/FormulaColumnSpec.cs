@@ -44,10 +44,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
             var propInfo = attribute.GetType().GetProperty(
                 "FormulaDefinition",
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (propInfo != null && propInfo.CanWrite)
-            {
-                propInfo.SetValue(attribute, FormulaDefinition);
-            }
+            if (propInfo == null || !propInfo.CanWrite)
+                throw new InvalidOperationException(
+                    $"Cannot set FormulaDefinition on attribute metadata type '{attribute.GetType().FullName}'.");
+
+            propInfo.SetValue(attribute, FormulaDefinition);
         }
     }
 }

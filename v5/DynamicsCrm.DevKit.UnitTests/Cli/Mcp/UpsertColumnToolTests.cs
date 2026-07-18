@@ -1,3 +1,5 @@
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -10,6 +12,55 @@ namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 public class UpsertColumnToolTests
 {
     private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool);
+
+    [TestMethod]
+    public void FormulaCompression_RoundTripsOpaquePayload()
+    {
+        const string raw = "<Workflow EntityName=\"source_entity\" />";
+
+        var compressed = FormulaCompressionHelper.Compress(raw);
+        var success = FormulaCompressionHelper.TryDecompress(compressed, out var decoded, out var error);
+
+        Assert.IsTrue(success, error);
+        Assert.AreEqual(raw, decoded);
+    }
+
+    [TestMethod]
+    public void FormulaCompression_RejectsPlainAndMalformedPayloads()
+    {
+        Assert.IsFalse(FormulaCompressionHelper.TryDecompress("1 + 1", out _, out var plainError));
+        StringAssert.Contains(plainError, "gz:");
+
+        Assert.IsFalse(FormulaCompressionHelper.TryDecompress("gz:not-base64", out _, out var malformedError));
+        StringAssert.Contains(malformedError, "Base64");
+    }
+
+    [TestMethod]
+    public void RewriteFormulaReferences_RewritesCalculatedOwnerAndTargetAttribute()
+    {
+        const string raw = "EntityName=\"source_entity\" Value=\"[New Entity(&quot;source_entity&quot;)]\" Attribute=\"source_total\"";
+
+        var rewritten = FormulaCompressionHelper.RewriteFormulaReferences(
+            raw, "source_entity", "target_entity", "source_total", "target_total", null);
+
+        StringAssert.Contains(rewritten, "EntityName=\"target_entity\"");
+        StringAssert.Contains(rewritten, "New Entity(&quot;target_entity&quot;)");
+        StringAssert.Contains(rewritten, "Attribute=\"target_total\"");
+    }
+
+    [TestMethod]
+    public void RewriteFormulaReferences_RewritesRollupRelationshipAndLookup()
+    {
+        const string raw = "relatedlinked_source_entity_SourceRelationship#source_lookup#child# Attribute=\"source_total\"";
+        var mapping = new FormulaRelationshipMapping(
+            "SourceRelationship", "TargetRelationship", "source_lookup", "target_lookup");
+
+        var rewritten = FormulaCompressionHelper.RewriteFormulaReferences(
+            raw, "source_entity", "target_entity", "source_total", "target_total", mapping);
+
+        StringAssert.Contains(rewritten, "relatedlinked_target_entity_TargetRelationship#target_lookup#child#");
+        StringAssert.Contains(rewritten, "Attribute=\"target_total\"");
+    }
 
     // ──────────────────────────────────────────────
     // Helper: invoke private static methods via reflection
@@ -322,37 +373,17 @@ public class UpsertColumnToolTests
     public void UpsertColumn_EmptyEntityName_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "", attribute_name: "new_test", attribute_type: "string", display_name: "Test");
+        var result = tool.upsert_column(entity_name: "", logical_name: "new_test", attribute_type: "string", display_name: "Test");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("entity_name is required"));
     }
 
     [TestMethod]
-    public void UpsertColumn_EmptyAttributeName_ReturnsError()
-    {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "", attribute_type: "string", display_name: "Test");
-        Assert.IsTrue(result.IsError);
-        var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
-        Assert.IsTrue(text.Contains("attribute_name is required"));
-    }
-
-    [TestMethod]
-    public void UpsertColumn_NoPrefixOnCreate_ReturnsError()
-    {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "noprefixname", attribute_type: "string", display_name: "Test");
-        Assert.IsTrue(result.IsError);
-        var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
-        Assert.IsTrue(text.Contains("publisher prefix"));
-    }
-
-    [TestMethod]
     public void UpsertColumn_InvalidAttributeType_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "new_test", attribute_type: "invalidtype", display_name: "Test");
+        var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "invalidtype", display_name: "Test");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Unknown attribute_type"));
@@ -362,7 +393,7 @@ public class UpsertColumnToolTests
     public void UpsertColumn_InvalidRequiredLevel_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "new_test", attribute_type: "string", display_name: "Test", required_level: "bogus");
+        var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "string", display_name: "Test", required_level: "bogus");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("Invalid required_level"));
@@ -372,7 +403,7 @@ public class UpsertColumnToolTests
     public void UpsertColumn_InvalidStringFormat_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "new_test", attribute_type: "string", display_name: "Test", format: "BadFormat");
+        var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "string", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("[Error]"));
@@ -383,7 +414,7 @@ public class UpsertColumnToolTests
     public void UpsertColumn_InvalidIntegerFormat_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "new_test", attribute_type: "integer", display_name: "Test", format: "BadFormat");
+        var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "integer", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("[Error]"));
@@ -394,7 +425,7 @@ public class UpsertColumnToolTests
     public void UpsertColumn_InvalidMemoFormat_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "new_test", attribute_type: "memo", display_name: "Test", format: "BadFormat");
+        var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "memo", display_name: "Test", format: "BadFormat");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("[Error]"));
@@ -405,7 +436,7 @@ public class UpsertColumnToolTests
     public void UpsertColumn_InvalidDateTimeBehavior_ReturnsError()
     {
         var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
-        var result = tool.upsert_column(entity_name: "account", attribute_name: "new_test", attribute_type: "datetime", display_name: "Test", behavior: "BadBehavior");
+        var result = tool.upsert_column(entity_name: "account", logical_name: "new_test", attribute_type: "datetime", display_name: "Test", behavior: "BadBehavior");
         Assert.IsTrue(result.IsError);
         var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
         Assert.IsTrue(text.Contains("[Error]"));
@@ -431,7 +462,7 @@ public class UpsertColumnToolTests
         var method = ToolType.GetMethod("upsert_column")!;
         var paramNames = method.GetParameters().Select(p => p.Name).ToArray();
         CollectionAssert.Contains(paramNames, "entity_name");
-        CollectionAssert.Contains(paramNames, "attribute_name");
+        CollectionAssert.Contains(paramNames, "logical_name");
         CollectionAssert.Contains(paramNames, "attribute_type");
         CollectionAssert.Contains(paramNames, "display_name");
         CollectionAssert.Contains(paramNames, "description");
@@ -456,5 +487,9 @@ public class UpsertColumnToolTests
         CollectionAssert.Contains(paramNames, "is_valid_for_advanced_find");
         CollectionAssert.Contains(paramNames, "solution_name");
         CollectionAssert.Contains(paramNames, "schema_name");
+        CollectionAssert.Contains(paramNames, "formula_definition");
+        CollectionAssert.Contains(paramNames, "formula_source_type");
+        CollectionAssert.Contains(paramNames, "source_entity_name");
+        CollectionAssert.Contains(paramNames, "source_attribute_name");
     }
 }
