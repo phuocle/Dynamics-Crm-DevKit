@@ -99,6 +99,31 @@ SUCCESS: Created rollup column all_41rollup_clone with id 04db35e5-5d82-f111-807
 | `all_contact_all_in_one_id_all_in_one` | `all_contact_all_in_one_clone_2_id_all_allinoneclone` |
 | `all_all_in_one_id`                    | `all_all_in_one_clone_2_id`                           |
 
+## Power Fx column clone (field display name starts with `39`)
+
+### Verified result
+
+```
+Source column: all_39powerfx (display: 39.Power Fx, type: String, sourceType: 3)
+SUCCESS: Created Power Fx column all_39powerfx_clone with id 5c71ac1b-5f82-f111-8075-70a8a5b16a37
+```
+
+### Key findings
+
+1. **Power Fx `FormulaDefinition` is a plain text expression**, not XAML.
+   - Example: `all_01stringtext & all_05stringphone & "TEST"`
+2. Because the expression references other columns by logical name, it will work on the target entity **only if those referenced columns exist with the same logical names**.
+3. No entity/relationship rewrite was required for this specific formula, but the same `RewritePowerFxFormulaReferences` helper is kept for cases where the formula text contains entity or attribute names that differ on the target.
+4. `SourceType = 3` is used when creating the cloned attribute.
+
+### Power Fx formula rewrite rules (defensive)
+
+| Pattern in source formula   | Rewritten for target              |
+| --------------------------- | --------------------------------- |
+| `EntityName="all_in_one"`   | `EntityName="all_allinoneclone"`  |
+| `New Entity("all_in_one")`  | `New Entity("all_allinoneclone")` |
+| `Attribute="all_39powerfx"` | `Attribute="all_39powerfx_clone"` |
+
 ## Reference implementation location
 
 `Program.cs` in this folder contains the full working implementation:
@@ -107,6 +132,7 @@ SUCCESS: Created rollup column all_41rollup_clone with id 04db35e5-5d82-f111-807
 - `FindAttributeByDisplayNamePrefix`
 - `RewriteFormulaReferences`
 - `RewriteRollupFormulaReferences`
+- `RewritePowerFxFormulaReferences`
 - `FindRollupRelationshipMapping`
 - `CloneAttribute`
 - `CreateAttributeRequest` execution

@@ -16,7 +16,8 @@ namespace Dev.AllInOne.Console
             try
             {
                 //CloneCalculated();
-                CloneRollup();
+                //CloneRollup();
+                ClonePowerFx();
             }
             catch (Exception ex)
             {
@@ -219,6 +220,20 @@ namespace Dev.AllInOne.Console
             // Relationship and lookup attribute rewrites
             result = result.Replace(mapping.SourceRelationshipName, mapping.TargetRelationshipName);
             result = result.Replace(mapping.SourceLookupAttribute, mapping.TargetLookupAttribute);
+
+            return result;
+        }
+
+        private static string RewritePowerFxFormulaReferences(string xaml, string sourceEntity, string targetEntity, string sourceAttribute, string targetAttribute)
+        {
+            var result = xaml;
+
+            // Entity rewrites
+            result = Regex.Replace(result, $@"EntityName=""{Regex.Escape(sourceEntity)}""", $@"EntityName=""{targetEntity}""");
+            result = Regex.Replace(result, $@"New Entity\(&quot;{Regex.Escape(sourceEntity)}&quot;\)", $@"New Entity(&quot;{targetEntity}&quot;)");
+
+            // Self attribute rewrite
+            result = Regex.Replace(result, $@"Attribute=""{Regex.Escape(sourceAttribute)}""", $@"Attribute=""{targetAttribute}""");
 
             return result;
         }
@@ -428,6 +443,71 @@ namespace Dev.AllInOne.Console
 
             var response = (CreateAttributeResponse)service.Execute(request);
             System.Console.WriteLine($"SUCCESS: Created rollup column {clone.LogicalName} with id {response.AttributeId}");
+        }
+
+        private static void ClonePowerFx()
+        {
+            var service = App.Service;
+            System.Console.WriteLine("--- Power Fx clone ---");
+
+            var sourceEntity = FindEntityByDisplayName(service, "All In One");
+            if (sourceEntity == null)
+            {
+                System.Console.WriteLine("ERROR: Source table 'All In One' not found.");
+                return;
+            }
+            System.Console.WriteLine($"Source table: {sourceEntity.LogicalName} ({GetLocalizedLabel(sourceEntity.DisplayName)})");
+
+            var targetEntity = FindEntityByDisplayName(service, "All In One Clone");
+            if (targetEntity == null)
+            {
+                System.Console.WriteLine("ERROR: Target table 'All In One Clone' not found.");
+                return;
+            }
+            System.Console.WriteLine($"Target table: {targetEntity.LogicalName} ({GetLocalizedLabel(targetEntity.DisplayName)})");
+
+            var sourceAttribute = FindAttributeByDisplayNamePrefix(service, sourceEntity.LogicalName, "39");
+            if (sourceAttribute == null)
+            {
+                System.Console.WriteLine("ERROR: No column with display name starting with '39' found on source table.");
+                return;
+            }
+
+            var displayName = GetLocalizedLabel(sourceAttribute.DisplayName);
+            System.Console.WriteLine($"Source column: {sourceAttribute.LogicalName} (display: {displayName}, type: {sourceAttribute.AttributeType}, sourceType: {sourceAttribute.SourceType})");
+
+            if (sourceAttribute.SourceType != 3)
+            {
+                System.Console.WriteLine("ERROR: Source column is not a Power Fx column (SourceType != 3).");
+                return;
+            }
+
+            var formulaXml = GetFormulaDefinition(sourceAttribute);
+            if (string.IsNullOrEmpty(formulaXml))
+            {
+                System.Console.WriteLine("ERROR: Could not read FormulaDefinition from source column.");
+                return;
+            }
+
+            var newLogicalName = GenerateUniqueAttributeName(service, targetEntity.LogicalName, sourceAttribute.LogicalName);
+            var newSchemaName = ToSchemaName(newLogicalName);
+
+            var rewrittenXml = RewritePowerFxFormulaReferences(formulaXml, sourceEntity.LogicalName, targetEntity.LogicalName, sourceAttribute.LogicalName, newLogicalName);
+
+            var clone = CloneAttribute(sourceAttribute, newSchemaName, newLogicalName);
+            SetFormulaDefinition(clone, rewrittenXml);
+            clone.SourceType = 3;
+
+            System.Console.WriteLine($"Creating cloned Power Fx column: {clone.LogicalName} (schema: {clone.SchemaName}) on {targetEntity.LogicalName}");
+
+            var request = new CreateAttributeRequest
+            {
+                EntityName = targetEntity.LogicalName,
+                Attribute = clone
+            };
+
+            var response = (CreateAttributeResponse)service.Execute(request);
+            System.Console.WriteLine($"SUCCESS: Created Power Fx column {clone.LogicalName} with id {response.AttributeId}");
         }
 
         private class RelationshipMapping
