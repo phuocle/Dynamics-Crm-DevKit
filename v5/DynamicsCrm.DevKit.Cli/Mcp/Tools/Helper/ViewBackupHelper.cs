@@ -7,9 +7,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
     internal static class ViewBackupHelper
     {
         public static (string FetchBackupPath, string LayoutBackupPath) SaveBackup(
-            string entityName, Guid viewId, string viewName, string currentFetchXml, string currentLayoutXml)
+            string entityName, Guid viewId, string viewName, string currentFetchXml, string currentLayoutXml, string workspaceFolder = "")
         {
-            var workingDir = Directory.GetCurrentDirectory();
+            var workingDir = string.IsNullOrWhiteSpace(workspaceFolder) ? Directory.GetCurrentDirectory() : workspaceFolder;
             var backupDir = Path.Combine(workingDir, ".devkit", "backups", "views");
             Directory.CreateDirectory(backupDir);
 

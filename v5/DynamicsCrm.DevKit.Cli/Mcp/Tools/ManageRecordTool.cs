@@ -63,20 +63,29 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string fields_json = "",
             [Description(
                 "Read only. Comma-separated columns. Empty = all."
-            )] string columns = "")
+            )] string columns = "",
+            [Description(
+                "Related Entity Name for associate/disassociate."
+            )] string related_entity_name = "",
+            [Description(
+                "Related Record GUID for associate/disassociate."
+            )] string related_record_id = "",
+            [Description(
+                "N:N Relationship Name for associate/disassociate."
+            )] string relationship_name = "")
         {
             if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'create', 'read', 'update', 'delete'.");
+                return ErrorResult("Error: action is required. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
 
             if (string.IsNullOrWhiteSpace(entity_name))
                 return ErrorResult("Error: entity_name is required.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
-            if (normalizedAction is not ("create" or "read" or "update" or "delete"))
-                return ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete'.");
+            if (normalizedAction is not ("create" or "read" or "update" or "delete" or "associate" or "disassociate"))
+                return ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
 
             // Validate record_id early before entity resolution (which requires network)
-            if (normalizedAction is "read" or "update" or "delete")
+            if (normalizedAction is "read" or "update" or "delete" or "associate" or "disassociate")
             {
                 if (string.IsNullOrWhiteSpace(record_id))
                     return ErrorResult($"Error: record_id is required for '{normalizedAction}'.");
@@ -90,6 +99,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                         $"Error: fields_json is required for '{normalizedAction}'.\n" +
                         "Required: JSON object with field logical names as keys.\n" +
                         "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
+            }
+            if (normalizedAction is "associate" or "disassociate")
+            {
+                if (string.IsNullOrWhiteSpace(related_entity_name))
+                    return ErrorResult($"Error: related_entity_name is required for '{normalizedAction}'.");
+                if (string.IsNullOrWhiteSpace(related_record_id))
+                    return ErrorResult($"Error: related_record_id is required for '{normalizedAction}'.");
+                if (string.IsNullOrWhiteSpace(relationship_name))
+                    return ErrorResult($"Error: relationship_name is required for '{normalizedAction}'.");
             }
             if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
                 return ErrorResult("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
@@ -113,7 +131,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "read" => HandleRead(entityName, record_id, columns),
                 "update" => HandleUpdate(entityName, record_id, fields_json),
                 "delete" => HandleDelete(entityName, record_id),
-                _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete'.")
+                "associate" => HandleAssociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
+                "disassociate" => HandleDisassociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
+                _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")
             };
         }
 
@@ -262,6 +282,68 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 return ErrorResult($"Error: Delete failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
+            }
+        }
+
+        private CallToolResult HandleAssociate(string entityName, string recordId, string relatedEntityName, string relatedRecordId, string relationshipName)
+        {
+            if (!Guid.TryParse(recordId.Trim(), out var id1)) return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return ErrorResult($"Error: '{relatedRecordId}' is not a valid GUID.");
+
+            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
+            if (!relatedEntityResult.IsSuccess) return ErrorResult($"Error: {relatedEntityResult.Error}");
+            string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
+
+            if (_options.DryRun)
+                return DryRunResult($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}");
+
+            try
+            {
+                var relationship = new Relationship(relationshipName.Trim());
+                var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
+                _serviceClient.Associate(entityName, id1, relationship, relatedEntities);
+
+                var structured = new CrudResult { Action = "associate", Entity = entityName, Id = id1.ToString(), Status = "associated" };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = $"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}" }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Associate failed: {ex.Message}");
+            }
+        }
+
+        private CallToolResult HandleDisassociate(string entityName, string recordId, string relatedEntityName, string relatedRecordId, string relationshipName)
+        {
+            if (!Guid.TryParse(recordId.Trim(), out var id1)) return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return ErrorResult($"Error: '{relatedRecordId}' is not a valid GUID.");
+
+            var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
+            if (!relatedEntityResult.IsSuccess) return ErrorResult($"Error: {relatedEntityResult.Error}");
+            string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
+
+            if (_options.DryRun)
+                return DryRunResult($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}");
+
+            try
+            {
+                var relationship = new Relationship(relationshipName.Trim());
+                var relatedEntities = new EntityReferenceCollection { new EntityReference(resolvedRelatedEntity, id2) };
+                _serviceClient.Disassociate(entityName, id1, relationship, relatedEntities);
+
+                var structured = new CrudResult { Action = "disassociate", Entity = entityName, Id = id1.ToString(), Status = "disassociated" };
+                return new CallToolResult
+                {
+                    Content = [new TextContentBlock { Text = $"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}" }],
+                    StructuredContent = JsonSerializer.SerializeToElement(structured)
+                };
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Disassociate failed: {ex.Message}");
             }
         }
 

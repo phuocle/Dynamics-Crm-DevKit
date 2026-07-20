@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static readonly object _schemaLock = new();
 
         private readonly McpDryRunOptions _options;
+        private string _workspaceFolder;
 
         public ManageFormTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
@@ -50,7 +51,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Apply operations via action=update (recommended) or provide raw formxml (advanced)\n" +
             "- Rename a form, restore from backup (undo)\n\n" +
             "NAME RESOLUTION: entity_name and operation field references accept Display Name or logical/schema name. Display Name contains is resolved first, then logical/schema contains.\n\n" +
-
+            "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n\n" +
             "Fuzzy on form_name (contains): 0/multi → tool returns disambiguation list and stops; AI must ask user. 1 → auto-detail.")]
         public CallToolResult manage_form(
             [Description("'list', 'detail', 'update', 'rename', 'undo'."
@@ -72,8 +73,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("XSD validate before write."
             )] bool validate = true,
             [Description("Backup before overwrite. Failure blocks update."
-            )] bool backup = true)
+            )] bool backup = true,
+            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
         {
+            _workspaceFolder = workspace_folder;
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'update', 'rename', 'undo'.");
 
@@ -1253,9 +1256,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result.Entities.Count > 0 ? result.Entities[0] : null;
         }
 
-        private static string SaveBackup(string entityName, Guid formId, string formName, string currentFormXml)
+        private string SaveBackup(string entityName, Guid formId, string formName, string currentFormXml)
         {
-            var workingDir = Directory.GetCurrentDirectory();
+            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
             var backupDir = Path.Combine(workingDir, ".devkit", "backups", "forms");
             Directory.CreateDirectory(backupDir);
 

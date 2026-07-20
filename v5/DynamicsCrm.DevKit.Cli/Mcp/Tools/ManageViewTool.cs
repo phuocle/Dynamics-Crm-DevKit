@@ -23,8 +23,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     [McpServerToolType]
     public class ManageViewTool
     {
+        private static readonly object _schemaLock = new();
+
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private string _workspaceFolder;
 
         public ManageViewTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
@@ -45,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Apply layout/fetch changes (action=update)\n" +
             "- Patch cell attributes only via cell_updates_json (no full LayoutXML rebuild)\n\n" +
             "NAME RESOLUTION: entity_name, FetchXML field/entity references, LayoutXML cell names, and cell_updates_json cell_name values accept Display Name or logical/schema name. Display Name contains is resolved first, then logical/schema contains.\n\n" +
-
+            "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n\n" +
             "FUZZY/AMBIGUITY:\n" +
             "- view_name is contains match. Exactly 1 → auto-detail; multiple → tool returns candidates, use view_id to disambiguate.\n\n" +
 
@@ -75,8 +78,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Backup before overwrite."
             )] bool backup = true,
             [Description("JSON array of {cell_name, set_attributes, remove_attributes}. Patch cell attrs (imageproviderwebresource, imageproviderfunctionname, ishidden, …) without rebuilding LayoutXML."
-            )] string cell_updates_json = "")
+            )] string cell_updates_json = "",
+            [Description("Optional project/workspace folder path to save backups in."
+            )] string workspace_folder = "")
         {
+            _workspaceFolder = workspace_folder;
             if (string.IsNullOrWhiteSpace(action))
                 return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
 
@@ -446,7 +452,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 try
                 {
-                    (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml);
+                    (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, updateId, currentViewName, currentFetchXml, currentLayoutXml, _workspaceFolder);
                 }
                 catch (Exception ex)
                 {
@@ -619,7 +625,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 {
                     var currentFetchXml = currentView.GetAttributeValue<string>("fetchxml") ?? "";
                     var currentLayoutXml = currentView.GetAttributeValue<string>("layoutxml") ?? "";
-                    (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml);
+                    (fetchBackupPath, layoutBackupPath) = ViewBackupHelper.SaveBackup(entityName, renameId, oldName, currentFetchXml, currentLayoutXml, _workspaceFolder);
                 }
                 catch (Exception ex)
                 {

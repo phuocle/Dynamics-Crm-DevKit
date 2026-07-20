@@ -37,6 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private string _workspaceFolder;
 
         public ManageAppTool(ServiceClient serviceClient, McpDryRunOptions options)
         {
@@ -56,6 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- update_navigation publishes the app so immediate readback sees the updated navigation. Other mutating actions return a next step to publish separately.\n\n" +
             "NAVIGATION IDEMPOTENCY: use action='detail' for readback/confirmation. update_navigation mutates. add_area/add_group/add_item are partially idempotent and report no-op operations; if all operations are no-op, the tool skips sitemap update and publish.\n\n" +
             "NAME RESOLUTION: app, icon_webresource, solution_name, and add_item entity values resolve Display Name contains first, then unique/logical/schema contains.\n\n" +
+            "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n\n" +
             "See docs://instructions_for_manage_app for the operation workflow and examples.")]
         public CallToolResult manage_app(
             [Description("'list', 'detail', 'create', 'update', 'update_navigation', 'validate', or 'undo'.")] string action = "detail",
@@ -68,8 +70,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("Optional app icon web resource name or GUID.")] string icon_webresource = "",
             [Description("JSON array for update_navigation, or backup file path for undo.")] string operations = "",
             [Description("Backup current app snapshot before update/update_navigation/undo when implemented.")] bool backup = true,
+            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "",
             [Description("list only. 1-500.")] int max_records = 100)
         {
+            _workspaceFolder = workspace_folder;
             var normalizedAction = (action ?? "detail").Trim().ToLowerInvariant();
 
             try
@@ -1479,7 +1483,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var siteMapXml = siteMapId.HasValue ? RetrieveSiteMapXml(siteMapId.Value) : null;
             var components = appModuleIdUnique.HasValue ? GetAppComponents(appModuleIdUnique.Value) : [];
 
-            var backupDir = Path.Combine(Directory.GetCurrentDirectory(), ".devkit", "backups", "apps");
+            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
+            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "apps");
             Directory.CreateDirectory(backupDir);
 
             var safeName = SanitizeFileName(appModule.GetAttributeValue<string>("name") ?? appModule.GetAttributeValue<string>("uniquename") ?? "app");

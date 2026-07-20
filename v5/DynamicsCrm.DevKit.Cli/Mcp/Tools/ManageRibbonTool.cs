@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
+        private string _workspaceFolder;
         private const string SOLUTION_NAME = "devkit_ribbon";
         private const string SOLUTION_DISPLAY_NAME = "DEVKIT_RIBBON";
         private static readonly List<int> PublishPollScheduleSeconds = new() { 30, 60, 120 };
@@ -82,14 +83,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "- Add/update/hide/show ribbon buttons via operations array (action=update)\n" +
             "- Restore from backup (action=undo)\n" +
             "NAME RESOLUTION: entity_name and operation web resource fields (library, enable_library, modern_image) resolve Display Name contains first, then logical/unique/schema contains.\n" +
+            "The AI should pass its current workspace directory to workspace_folder to ensure backups are saved to the user's project.\n" +
             "- Modern Power Fx command bar customization is not exposed by this MCP server")]
         public CallToolResult manage_ribbon(
             [Description("'list', 'buttons', 'detail', 'update', or 'undo'.")] string action,
             [Description("Entity Display Name or logical name. Required: detail/update/undo/buttons.")] string entity_name = "",
             [Description("JSON array of ribbon operations for action='update'. Operations: add_button, update_button, hide_button, show_button, add_split_button, update_split_button, add_flyout_static, update_flyout_static, hide_flyout_item, show_flyout_item. add_button optional fields include selection_min and selection_max for main_grid/sub_grid SelectionCountRule; omit both to disable selection count, selection_min=1 means one or more rows, selection_min=1 + selection_max=1 means exactly one row.")] string operations = "",
             [Description("For 'undo': backup file path.")] string ribbonxml = "",
-            [Description("Backup before overwrite.")] bool backup = true)
+            [Description("Backup before overwrite.")] bool backup = true,
+            [Description("Optional project/workspace folder path to save backups in.")] string workspace_folder = "")
         {
+            _workspaceFolder = workspace_folder;
             var actionName = (action ?? "").Trim().ToLowerInvariant();
 
             if (string.IsNullOrWhiteSpace(actionName))
@@ -1349,7 +1353,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(currentXml))
                 return null; // Nothing to backup
 
-            var workingDir = Directory.GetCurrentDirectory();
+            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
             var backupDir = Path.Combine(workingDir, ".devkit", "backups", "ribbons");
             Directory.CreateDirectory(backupDir);
 
