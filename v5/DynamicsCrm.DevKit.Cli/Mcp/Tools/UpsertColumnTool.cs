@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Dataverse column (attribute) — auto-detect create vs update. Types: string, memo, integer, bigint, decimal, money, float, boolean, datetime, lookup, customer, picklist, multipicklist, image, file.\n\n" +
 
-            "UPDATE (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options. Omit params to keep current. Formula clone parameters are CREATE-only; if any are passed for an existing column, the tool returns an error and does not update the formula.\n\n" +
+            "UPDATE (column exists): pass logical_name that matches an existing attribute. attribute_type ignored (immutable). picklist: use add/update/delete_options; use default_value to change the DefaultFormValue (single integer, e.g. 100000001) — omit to keep current; not supported on multipicklist. boolean: use default_value ('true'/'false' or '1'/'0') to flip the DefaultValue — omit to keep current. Omit params to keep current. Formula clone parameters are CREATE-only; if any are passed for an existing column, the tool returns an error and does not update the formula.\n\n" +
 
             "CREATE (no attribute): need attribute_type + display_name.\n" +
             "- schema_name: if provided, used AS-IS as SchemaName (skip auto-derive from display_name). Caller responsible for casing. Must start with the publisher prefix (e.g. 'devkit_InvoiceLineId'). Create only — ignored on update.\n" +
@@ -246,7 +246,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     display_name, description, required_level, max_length, min_value, max_value,
                     precision, format, true_label, false_label,
                     add_options, update_options, delete_options,
-                    is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, behavior, precision_source);
+                    is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, behavior, precision_source,
+                    default_value);
             }
 
             // --- CREATE MODE ---
@@ -2154,7 +2155,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             int maxLength, double? minValue, double? maxValue, int precision, string format,
             string trueLabel, string falseLabel,
             string addOptions, string updateOptions, string deleteOptions,
-            bool? isAuditEnabled, bool? isValidForAdvancedFind, bool? isSecured, bool? isSortable, string behavior, int precisionSource)
+            bool? isAuditEnabled, bool? isValidForAdvancedFind, bool? isSecured, bool? isSortable, string behavior, int precisionSource,
+            string defaultValue = "")
         {
             try
             {
@@ -2219,6 +2221,53 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (typeError != null)
                     return ErrorResult(typeError);
 
+                // --- Picklist / Boolean default value update ---
+                if (!string.IsNullOrWhiteSpace(defaultValue))
+                {
+                    if (metadata is PicklistAttributeMetadata plmUpdate)
+                    {
+                        if (!int.TryParse(defaultValue.Trim(), out var dvInt))
+                            return ErrorResult($"Error: Invalid default_value '{defaultValue.Trim()}'. Expected an integer option value (e.g. 100000001).");
+                        var oldDv = plmUpdate.DefaultFormValue?.ToString() ?? "(none)";
+                        if (plmUpdate.DefaultFormValue != dvInt)
+                        {
+                            plmUpdate.DefaultFormValue = dvInt;
+                            changes.Add($"DefaultFormValue: {oldDv} -> {dvInt}");
+                            structuredChanges["defaultFormValue"] = new UpdateAttributeChange { OldValue = oldDv, NewValue = dvInt.ToString() };
+                        }
+                    }
+                    else if (metadata is BooleanAttributeMetadata boolDefaultMeta)
+                    {
+                        var dv = defaultValue.Trim().ToLowerInvariant();
+                        bool newBoolDefault;
+                        if (dv == "true" || dv == "1")       newBoolDefault = true;
+                        else if (dv == "false" || dv == "0") newBoolDefault = false;
+                        else
+                            return ErrorResult(
+                                $"Error: Invalid default_value '{defaultValue.Trim()}' for boolean. " +
+                                "Expected 'true', 'false', '1', or '0'.");
+                        var oldBoolDv = boolDefaultMeta.DefaultValue?.ToString()?.ToLowerInvariant() ?? "(none)";
+                        if (boolDefaultMeta.DefaultValue != newBoolDefault)
+                        {
+                            boolDefaultMeta.DefaultValue = newBoolDefault;
+                            changes.Add($"DefaultValue: {oldBoolDv} -> {newBoolDefault.ToString().ToLowerInvariant()}");
+                            structuredChanges["defaultValue"] = new UpdateAttributeChange { OldValue = oldBoolDv, NewValue = newBoolDefault.ToString().ToLowerInvariant() };
+                        }
+                    }
+                    else if (metadata is MultiSelectPicklistAttributeMetadata)
+                    {
+                        return ErrorResult(
+                            "Error: default_value is not supported for multipicklist columns. " +
+                            "Multi-select option sets do not support a default value in the Power Apps UI. " +
+                            "Omit default_value for multipicklist.");
+                    }
+                    else
+                    {
+                        return ErrorResult(
+                            $"Error: default_value is only supported for Picklist (integer) and Boolean ('true'/'false') columns, but '{attributeName}' is {GetAttributeTypeName(metadata)}.");
+                    }
+                }
+
                 // --- Execute metadata update (if any generic/type-specific changes) ---
                 if (changes.Count > 0)
                 {
@@ -2278,7 +2327,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (changes.Count == 0 && optionResults.Count == 0)
                     return ErrorResult(
                         $"Error: No changes specified for '{entityName}.{attributeName}'.\n" +
-                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable.");
+                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable.");
 
                 // --- Publish ---
                 var published = PublishIfNeeded(entityName);
