@@ -118,6 +118,15 @@ namespace DynamicsCrm.DevKit.Shared
             return data;
         }
 
+        public static string ReadEmbeddedResource(string path)
+        {
+            var assembly = typeof(Helper).Assembly;
+            using var resourceStream = assembly.GetManifestResourceStream(path);
+            if (resourceStream == null) return null;
+            using var reader = new StreamReader(resourceStream, Encoding.UTF8);
+            return reader.ReadToEnd();
+        }
+
         public static string GetSchemaNameFromFile(string file, string endsWith)
         {
             var fileName = Path.GetFileName(file);

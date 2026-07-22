@@ -1,0 +1,15 @@
+﻿<Chart>
+  <Series>
+    <Series Name="Series1" ChartType="Funnel" ChartArea="Default" IsValueShownAsLabel="True" Font="Segoe UI, 9.5pt" CustomProperties="FunnelNeckHeight=20, FunnelPointGap=1, FunnelNeckWidth=30, FunnelStyle=YIsHeight, FunnelLabelStyle=Inside" />
+  </Series>
+  <ChartAreas>
+    <ChartArea Name="Default">
+      <AxisY>
+        <LabelStyle ForeColor="59, 59, 59" />
+      </AxisY>
+      <AxisX>
+        <LabelStyle ForeColor="59, 59, 59" />
+      </AxisX>
+    </ChartArea>
+  </ChartAreas>
+</Chart>

@@ -1,0 +1,907 @@
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.PowerPlatform.Dataverse.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using ModelContextProtocol.Protocol;
+using ModelContextProtocol.Server;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml;
+using System.Xml.Linq;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
+using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
+using DynamicsCrm.DevKit.Cli.Mcp;
+
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
+{
+    [McpServerToolType]
+    public class ManageChartTool
+    {
+        private static readonly HashSet<string> SupportedChartTypes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "Column", "Bar", "Line", "Pie", "Doughnut", "Donut", "Funnel", "Area", "Bubble", "Radar"
+        };
+
+        private readonly ServiceClient _serviceClient;
+        private readonly McpDryRunOptions _options;
+        private string _workspaceFolder;
+
+        public ManageChartTool(ServiceClient serviceClient, McpDryRunOptions options)
+        {
+            _serviceClient = serviceClient;
+            _options = options;
+        }
+
+        [McpServerTool(Name = "manage_chart", Title = "Manage Dataverse system charts",
+            Destructive = true, ReadOnly = false, Idempotent = false,
+            UseStructuredContent = true, OutputSchemaType = typeof(UpsertChartResult)),
+        Description(
+            "Dataverse system charts (savedqueryvisualization) — list/detail/create/update/rename/set_default/undo. " +
+            "Creates or updates system charts by binding to a View (view_name). FetchXML is automatically constructed from the View schema — no manual FetchXML required! " +
+            "Core params for create: entity_name, view_name, chart_name, chart_type (Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar). " +
+            "Optional: group_by_column (X-axis field), aggregate_column (Y-axis field), aggregate_type (count/sum/avg/min/max), solution_name.")]
+        public CallToolResult manage_chart(
+            [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
+            )] string action,
+            [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create."
+            )] string entity_name = "",
+            [Description("View Name (savedquery) to derive chart data schema and fields from (e.g. 'Active Accounts')."
+            )] string view_name = "",
+            [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart)."
+            )] string chart_id = "",
+            [Description("Chart name. Used for detail/update/rename lookup or create."
+            )] string chart_name = "",
+            [Description("OOB Chart Type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar."
+            )] string chart_type = "",
+            [Description("Attribute logical name or display name for category group by (X-axis). Auto-derived from View if omitted."
+            )] string group_by_column = "",
+            [Description("Attribute logical name or display name for measure aggregation (Y-axis). Defaults to primary key count if omitted."
+            )] string aggregate_column = "",
+            [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'."
+            )] string aggregate_type = "count",
+            [Description("Optional custom Chart XML presentation description override."
+            )] string presentationdescription = "",
+            [Description("Chart description text."
+            )] string description = "",
+            [Description("Solution unique name to add the chart component to."
+            )] string solution_name = "",
+            [Description("Validate XML syntax and chart types before saving."
+            )] bool validate = true,
+            [Description("Backup before overwrite."
+            )] bool backup = true,
+            [Description("Optional project/workspace folder path to save backups in."
+            )] string workspace_folder = "")
+        {
+            _workspaceFolder = workspace_folder;
+
+            if (string.IsNullOrWhiteSpace(action))
+                return ErrorResult("Error: action is required. Valid values: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.");
+
+            var normalizedAction = action.Trim().ToLowerInvariant();
+
+            if (!string.IsNullOrWhiteSpace(chart_id) && !Guid.TryParse(chart_id.Trim(), out _))
+                return ErrorResult($"Error: '{chart_id}' is not a valid GUID.");
+
+            return normalizedAction switch
+            {
+                "list" => HandleList(entity_name),
+                "detail" => HandleDetail(entity_name, chart_id, chart_name),
+                "create" => HandleCreate(entity_name, view_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate),
+                "update" => HandleUpdate(entity_name, view_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, backup),
+                "rename" => HandleRename(entity_name, chart_id, chart_name, solution_name),
+                "set_default" => HandleSetDefault(entity_name, chart_id, chart_name),
+                "undo" => HandleUndo(chart_id, presentationdescription, solution_name),
+                _ => ErrorResult($"Error: Unknown action '{action}'. Valid actions: 'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'.")
+            };
+        }
+
+        private CallToolResult HandleList(string entityNameInput)
+        {
+            var entityName = ResolveEntityLogicalName(entityNameInput);
+            const string table = "savedqueryvisualization";
+            const string idCol = "savedqueryvisualizationid";
+
+            var query = new QueryExpression(table)
+            {
+                ColumnSet = new ColumnSet(idCol, "name", "description", "isdefault", "primaryentitytypecode")
+            };
+
+            if (!string.IsNullOrWhiteSpace(entityName))
+                query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, entityName);
+
+            var result = _serviceClient.RetrieveMultiple(query);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartList] {(string.IsNullOrEmpty(entityName) ? "All Entities" : entityName)} (System Charts)");
+            sb.AppendLine($"Found: {result.Entities.Count} chart(s)\n");
+
+            foreach (var entity in result.Entities)
+            {
+                var id = entity.GetAttributeValue<Guid>(idCol);
+                var name = entity.GetAttributeValue<string>("name");
+                var desc = entity.GetAttributeValue<string>("description");
+                var isDefault = entity.GetAttributeValue<bool?>("isdefault") ?? false;
+                var targetEntity = entity.GetAttributeValue<string>("primaryentitytypecode");
+
+                sb.AppendLine($"- {name} (ID: {id})");
+                sb.AppendLine($"  Entity: {targetEntity} | Default: {(isDefault ? "Yes" : "No")}");
+                if (!string.IsNullOrWhiteSpace(desc))
+                    sb.AppendLine($"  Description: {desc}");
+            }
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "list",
+                Entity = entityName,
+                Status = "success"
+            });
+        }
+
+        private CallToolResult HandleDetail(string entityNameInput, string chartIdInput, string chartNameInput)
+        {
+            var entity = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
+            if (error != null) return ErrorResult(error);
+
+            const string idCol = "savedqueryvisualizationid";
+            var id = entity.GetAttributeValue<Guid>(idCol);
+            var name = entity.GetAttributeValue<string>("name");
+            var desc = entity.GetAttributeValue<string>("description");
+            var primaryEntity = entity.GetAttributeValue<string>("primaryentitytypecode");
+            var dataXml = entity.GetAttributeValue<string>("datadescription");
+            var presXml = entity.GetAttributeValue<string>("presentationdescription");
+            var isDefault = entity.GetAttributeValue<bool?>("isdefault") ?? false;
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartDetail] {name}");
+            sb.AppendLine($"ID: {id}");
+            sb.AppendLine($"Entity: {primaryEntity}");
+            sb.AppendLine($"Type: System Chart (savedqueryvisualization)");
+            sb.AppendLine($"Default: {(isDefault ? "Yes" : "No")}");
+            if (!string.IsNullOrWhiteSpace(desc))
+                sb.AppendLine($"Description: {desc}");
+
+            sb.AppendLine("\n--- Data Description (FetchXML) ---");
+            sb.AppendLine(PrettyPrintXml(dataXml));
+
+            sb.AppendLine("\n--- Presentation Description (Chart XML) ---");
+            sb.AppendLine(PrettyPrintXml(presXml));
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "detail",
+                Entity = primaryEntity,
+                ChartId = id.ToString(),
+                ChartName = name,
+                Status = "success"
+            });
+        }
+
+        private CallToolResult HandleCreate(
+            string entityNameInput, string viewNameInput, string chartName, string chartTypeInput,
+            string groupByColInput, string aggregateColInput, string aggregateTypeInput,
+            string presXmlInput, string description, string solutionName, bool validate)
+        {
+            if (string.IsNullOrWhiteSpace(entityNameInput))
+                return ErrorResult("Error: entity_name is required for action='create'.");
+
+            if (string.IsNullOrWhiteSpace(chartName))
+                return ErrorResult("Error: chart_name is required for action='create'.");
+
+            if (string.IsNullOrWhiteSpace(viewNameInput) && string.IsNullOrWhiteSpace(presXmlInput))
+                return ErrorResult("Error: view_name is required for action='create' to derive chart data schema from view.");
+
+            var entityName = ResolveEntityLogicalName(entityNameInput);
+            if (string.IsNullOrEmpty(entityName))
+                return ErrorResult($"Error: Could not resolve entity '{entityNameInput}'.");
+
+            var chartType = string.IsNullOrWhiteSpace(chartTypeInput) ? "Column" : chartTypeInput.Trim();
+
+            // Build datadescription automatically from View
+            var (dataXml, aggregateAlias, dataError) = BuildDataDescriptionFromView(entityName, viewNameInput, groupByColInput, aggregateColInput, aggregateTypeInput);
+            if (dataError != null) return ErrorResult(dataError);
+
+            // Build presentationdescription automatically from chart_type or use presXmlInput
+            var presXml = string.IsNullOrWhiteSpace(presXmlInput)
+                ? BuildPresentationDescription(chartType, chartName, aggregateAlias)
+                : ResolveXmlInput(presXmlInput);
+
+            var (valErrors, valWarnings) = validate
+                ? ValidateChartXmls(dataXml, presXml)
+                : (new List<string>(), new List<string>());
+
+            if (valErrors.Count > 0)
+            {
+                var errSb = new StringBuilder();
+                errSb.AppendLine($"[ChartCreate] Validation failed for new chart '{chartName}':");
+                foreach (var err in valErrors) errSb.AppendLine($"  - {err}");
+                return ErrorResult(errSb.ToString());
+            }
+
+            if (_options.DryRun)
+                return DryRunResult($"Would CREATE system chart '{chartName}' ({chartType}) for entity '{entityName}' derived from View '{viewNameInput}'.");
+
+            const string table = "savedqueryvisualization";
+            var chartRecord = new Entity(table)
+            {
+                ["name"] = chartName.Trim(),
+                ["primaryentitytypecode"] = entityName,
+                ["datadescription"] = dataXml,
+                ["presentationdescription"] = presXml
+            };
+            if (!string.IsNullOrWhiteSpace(description)) chartRecord["description"] = description;
+
+            var newId = _serviceClient.Create(chartRecord);
+
+            // Solution assignment via SDK message
+            var addedToSolution = AddToSolutionIfRequested(newId, solutionName);
+
+            var published = PublishIfNeeded(entityName);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartCreate] Chart '{chartName}' created successfully");
+            sb.AppendLine($"ID: {newId}");
+            sb.AppendLine($"Entity: {entityName}");
+            sb.AppendLine($"ChartType: {chartType}");
+            sb.AppendLine($"Derived from View: {viewNameInput}");
+            if (addedToSolution) sb.AppendLine($"Solution: Added to '{solutionName}'");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "create",
+                Entity = entityName,
+                ChartId = newId.ToString(),
+                ChartName = chartName,
+                Status = "created",
+                Validated = validate,
+                ValidationWarnings = valWarnings.Count > 0 ? valWarnings : null,
+                Published = published
+            });
+        }
+
+        private CallToolResult HandleUpdate(
+            string entityNameInput, string viewNameInput, string chartIdInput, string chartNameInput,
+            string chartTypeInput, string groupByColInput, string aggregateColInput, string aggregateTypeInput,
+            string presXmlInput, string description, string solutionName,
+            bool validate, bool backup)
+        {
+            var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
+            if (error != null) return ErrorResult(error);
+
+            const string table = "savedqueryvisualization";
+            const string idCol = "savedqueryvisualizationid";
+            var chartId = chartRecord.GetAttributeValue<Guid>(idCol);
+            var chartName = chartRecord.GetAttributeValue<string>("name");
+            var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
+
+            var currentDataXml = chartRecord.GetAttributeValue<string>("datadescription");
+            var currentPresXml = chartRecord.GetAttributeValue<string>("presentationdescription");
+
+            var newDataXml = currentDataXml;
+            string aggregateAlias = null;
+            if (!string.IsNullOrWhiteSpace(viewNameInput))
+            {
+                var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromView(primaryEntity, viewNameInput, groupByColInput, aggregateColInput, aggregateTypeInput);
+                if (dataErr != null) return ErrorResult(dataErr);
+                newDataXml = derivedDataXml;
+                aggregateAlias = alias;
+            }
+
+            var newPresXml = currentPresXml;
+            if (!string.IsNullOrWhiteSpace(chartTypeInput))
+            {
+                newPresXml = BuildPresentationDescription(chartTypeInput.Trim(), chartName, aggregateAlias);
+            }
+            else if (!string.IsNullOrWhiteSpace(presXmlInput))
+            {
+                newPresXml = ResolveXmlInput(presXmlInput);
+            }
+
+            var (valErrors, valWarnings) = validate
+                ? ValidateChartXmls(newDataXml, newPresXml)
+                : (new List<string>(), new List<string>());
+
+            if (valErrors.Count > 0)
+            {
+                var errSb = new StringBuilder();
+                errSb.AppendLine($"[ChartUpdate] Validation failed for chart '{chartName}' ({chartId}):");
+                foreach (var err in valErrors) errSb.AppendLine($"  - {err}");
+                return ErrorResult(errSb.ToString());
+            }
+
+            string backupPath = null;
+            if (backup)
+            {
+                backupPath = SaveBackup(primaryEntity, chartId, chartName, currentDataXml, currentPresXml);
+            }
+
+            if (_options.DryRun)
+                return DryRunResult($"Would UPDATE chart '{chartName}' ({chartId}). Backup: {backupPath ?? "none"}.");
+
+            var updateRecord = new Entity(table, chartId)
+            {
+                ["datadescription"] = newDataXml,
+                ["presentationdescription"] = newPresXml
+            };
+            if (description != null && description != "") updateRecord["description"] = description;
+
+            _serviceClient.Update(updateRecord);
+
+            var addedToSolution = AddToSolutionIfRequested(chartId, solutionName);
+            var published = PublishIfNeeded(primaryEntity);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartUpdate] {primaryEntity} — {chartName}");
+            sb.AppendLine($"ChartId: {chartId}");
+            sb.AppendLine($"Status: Updated successfully");
+            if (addedToSolution) sb.AppendLine($"Solution: Added to '{solutionName}'");
+            sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
+            sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "update",
+                Entity = primaryEntity,
+                ChartId = chartId.ToString(),
+                ChartName = chartName,
+                Status = "updated",
+                Validated = validate,
+                ValidationWarnings = valWarnings.Count > 0 ? valWarnings : null,
+                BackupPath = backupPath,
+                Published = published
+            });
+        }
+
+        private CallToolResult HandleRename(string entityNameInput, string chartIdInput, string chartNameInput, string solutionName)
+        {
+            if (string.IsNullOrWhiteSpace(chartNameInput))
+                return ErrorResult("Error: chart_name is required for action='rename'.");
+
+            var chartRecord = FindChart(entityNameInput, chartIdInput, null, out var error);
+            if (error != null) return ErrorResult(error);
+
+            const string table = "savedqueryvisualization";
+            const string idCol = "savedqueryvisualizationid";
+            var chartId = chartRecord.GetAttributeValue<Guid>(idCol);
+            var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
+
+            if (_options.DryRun)
+                return DryRunResult($"Would RENAME chart {chartId} to '{chartNameInput}'.");
+
+            var updateRecord = new Entity(table, chartId)
+            {
+                ["name"] = chartNameInput.Trim()
+            };
+            _serviceClient.Update(updateRecord);
+
+            AddToSolutionIfRequested(chartId, solutionName);
+            var published = PublishIfNeeded(primaryEntity);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartRename] Chart {chartId} renamed to '{chartNameInput}'");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "rename",
+                Entity = primaryEntity,
+                ChartId = chartId.ToString(),
+                ChartName = chartNameInput.Trim(),
+                Status = "renamed",
+                Published = published
+            });
+        }
+
+        private CallToolResult HandleSetDefault(string entityNameInput, string chartIdInput, string chartNameInput)
+        {
+            var chartRecord = FindChart(entityNameInput, chartIdInput, chartNameInput, out var error);
+            if (error != null) return ErrorResult(error);
+
+            var chartId = chartRecord.GetAttributeValue<Guid>("savedqueryvisualizationid");
+            var chartName = chartRecord.GetAttributeValue<string>("name");
+            var primaryEntity = chartRecord.GetAttributeValue<string>("primaryentitytypecode");
+
+            if (_options.DryRun)
+                return DryRunResult($"Would SET chart '{chartName}' ({chartId}) as DEFAULT for entity '{primaryEntity}'.");
+
+            var query = new QueryExpression("savedqueryvisualization")
+            {
+                ColumnSet = new ColumnSet("savedqueryvisualizationid", "isdefault")
+            };
+            query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, primaryEntity);
+            query.Criteria.AddCondition("isdefault", ConditionOperator.Equal, true);
+
+            var existingDefaults = _serviceClient.RetrieveMultiple(query);
+            foreach (var existing in existingDefaults.Entities)
+            {
+                if (existing.Id == chartId) continue;
+                _serviceClient.Update(new Entity("savedqueryvisualization", existing.Id) { ["isdefault"] = false });
+            }
+
+            _serviceClient.Update(new Entity("savedqueryvisualization", chartId) { ["isdefault"] = true });
+
+            var published = PublishIfNeeded(primaryEntity);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartSetDefault] Chart '{chartName}' ({chartId}) set as DEFAULT for '{primaryEntity}'");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "set_default",
+                Entity = primaryEntity,
+                ChartId = chartId.ToString(),
+                ChartName = chartName,
+                Status = "default_set",
+                Published = published
+            });
+        }
+
+        private CallToolResult HandleUndo(string chartIdInput, string backupPathInput, string solutionName)
+        {
+            if (string.IsNullOrWhiteSpace(backupPathInput))
+                return ErrorResult("Error: backup path is required for action='undo'.");
+
+            if (!File.Exists(backupPathInput))
+                return ErrorResult($"Error: Backup file not found at '{backupPathInput}'.");
+
+            ChartBackup backupData;
+            try
+            {
+                var json = File.ReadAllText(backupPathInput, Encoding.UTF8);
+                backupData = JsonSerializer.Deserialize<ChartBackup>(json);
+            }
+            catch (Exception ex)
+            {
+                return ErrorResult($"Error: Failed to parse backup file: {ex.Message}");
+            }
+
+            if (backupData == null || string.IsNullOrWhiteSpace(backupData.ChartId))
+                return ErrorResult("Error: Backup file does not contain valid chart data.");
+
+            var chartId = Guid.Parse(backupData.ChartId);
+
+            if (_options.DryRun)
+                return DryRunResult($"Would UNDO chart {chartId} using backup from '{backupPathInput}'.");
+
+            const string table = "savedqueryvisualization";
+            var updateRecord = new Entity(table, chartId);
+            if (backupData.DataDescription != null) updateRecord["datadescription"] = backupData.DataDescription;
+            if (backupData.PresentationDescription != null) updateRecord["presentationdescription"] = backupData.PresentationDescription;
+
+            _serviceClient.Update(updateRecord);
+
+            AddToSolutionIfRequested(chartId, solutionName);
+
+            var published = false;
+            if (!string.IsNullOrEmpty(backupData.Entity))
+                published = PublishIfNeeded(backupData.Entity);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"[ChartUndo] Chart {chartId} restored from backup");
+            sb.AppendLine($"Restored File: {backupPathInput}");
+            sb.AppendLine($"Published: {(published ? "yes" : "no")}");
+
+            return SuccessResult(sb.ToString(), new UpsertChartResult
+            {
+                Action = "undo",
+                Entity = backupData.Entity,
+                ChartId = chartId.ToString(),
+                ChartName = backupData.ChartName,
+                Status = "restored",
+                RestoredFromBackup = backupPathInput,
+                Published = published
+            });
+        }
+
+        // ── View-Based DataDescription Builder ─────────────────────────────
+
+        private (string Xml, string AggregateAlias, string Error) BuildDataDescriptionFromView(
+            string entityName, string viewName, string groupByColInput, string aggregateColInput, string aggregateTypeInput)
+        {
+            if (string.IsNullOrWhiteSpace(viewName))
+                return (null, null, "Error: view_name is required to derive chart data specification.");
+
+            var viewQuery = new QueryExpression("savedquery")
+            {
+                ColumnSet = new ColumnSet("savedqueryid", "name", "fetchxml", "returnedtypecode"),
+                TopCount = 1
+            };
+            viewQuery.Criteria.AddCondition("name", ConditionOperator.Equal, viewName.Trim());
+            viewQuery.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
+
+            var viewResults = _serviceClient.RetrieveMultiple(viewQuery);
+            if (viewResults.Entities.Count == 0)
+            {
+                // Fallback search without returnedtypecode if empty
+                viewQuery.Criteria.Conditions.Clear();
+                viewQuery.Criteria.AddCondition("name", ConditionOperator.Equal, viewName.Trim());
+                viewResults = _serviceClient.RetrieveMultiple(viewQuery);
+            }
+
+            if (viewResults.Entities.Count == 0)
+                return (null, null, $"Error: View '{viewName}' not found for entity '{entityName}'. Use manage_view(action='list', entity_name='{entityName}') to check valid view names.");
+
+            var viewEntity = viewResults.Entities[0];
+            var fetchXmlStr = viewEntity.GetAttributeValue<string>("fetchxml");
+            if (string.IsNullOrWhiteSpace(fetchXmlStr))
+                return (null, null, $"Error: View '{viewName}' has empty FetchXML definition.");
+
+            XDocument viewDoc;
+            try { viewDoc = XDocument.Parse(fetchXmlStr); }
+            catch (Exception ex) { return (null, null, $"Error parsing FetchXML from View '{viewName}': {ex.Message}"); }
+
+            var entityElem = viewDoc.Descendants("entity").FirstOrDefault();
+            var targetEntity = entityElem?.Attribute("name")?.Value ?? entityName;
+
+            // Resolve attributes from View
+            var viewAttributes = entityElem?.Elements("attribute")
+                .Select(a => a.Attribute("name")?.Value)
+                .Where(n => !string.IsNullOrEmpty(n))
+                .ToList() ?? new List<string>();
+
+            // Resolve Primary Key
+            var primaryKey = $"{targetEntity}id";
+
+            // Resolve GroupBy Column (X-axis)
+            string groupByCol = null;
+            if (!string.IsNullOrWhiteSpace(groupByColInput))
+            {
+                groupByCol = groupByColInput.Trim().ToLowerInvariant();
+            }
+            else
+            {
+                // Pick first non-primary key column from View attributes, or fallback to first attribute
+                groupByCol = viewAttributes.FirstOrDefault(a => !a.Equals(primaryKey, StringComparison.OrdinalIgnoreCase))
+                    ?? viewAttributes.FirstOrDefault()
+                    ?? primaryKey;
+            }
+
+            // Resolve Aggregate Column (Y-axis)
+            // OOB pie charts typically count the primary key (e.g. contactid/kbarticleid).
+            // Non-pie OOB charts often count the primary name attribute (e.g. fullname).
+            string aggregateCol = null;
+            if (!string.IsNullOrWhiteSpace(aggregateColInput))
+            {
+                aggregateCol = aggregateColInput.Trim().ToLowerInvariant();
+            }
+            else
+            {
+                aggregateCol = ResolvePrimaryNameAttribute(targetEntity) ?? primaryKey;
+            }
+
+            var aggType = string.IsNullOrWhiteSpace(aggregateTypeInput) ? "count" : aggregateTypeInput.Trim().ToLowerInvariant();
+
+            // Keep aliases stable and portal-compatible.
+            const string groupByAlias = "groupby_column";
+            const string aggregateAlias = "aggregate_column";
+
+            // OOB pie charts use a slightly different datadescription shape than column/bar:
+            // - aggregate attribute first, then groupby attribute
+            // - <category> WITHOUT alias="groupby_column"
+            // NOTE: category alias is the critical runtime difference that causes Errors.LoadChartDataFailed
+            // for pie charts when present. OOB pie charts omit it. Non-pie OOB charts include it.
+            // We omit category alias always because measure alias is enough for binding and is
+            // compatible with both pie and non-pie OOB samples inspected in this org.
+            var sb = new StringBuilder();
+            sb.Append("<datadefinition>");
+            sb.Append("<fetchcollection>");
+            sb.Append("<fetch mapping=\"logical\" aggregate=\"true\">");
+            sb.Append($"<entity name=\"{targetEntity}\">");
+            // Match OOB pie attribute order: aggregate then groupby. Harmless for other chart types.
+            sb.Append($"<attribute alias=\"{aggregateAlias}\" name=\"{aggregateCol}\" aggregate=\"{aggType}\" />");
+            sb.Append($"<attribute groupby=\"true\" alias=\"{groupByAlias}\" name=\"{groupByCol}\" />");
+            sb.Append("</entity>");
+            sb.Append("</fetch>");
+            sb.Append("</fetchcollection>");
+            sb.Append("<categorycollection>");
+            sb.Append("<category>");
+            sb.Append("<measurecollection>");
+            sb.Append($"<measure alias=\"{aggregateAlias}\" />");
+            sb.Append("</measurecollection>");
+            sb.Append("</category>");
+            sb.Append("</categorycollection>");
+            sb.Append("</datadefinition>");
+
+            return (sb.ToString(), aggregateAlias, null);
+        }
+
+        // ── Automatic PresentationDescription Builder ──────────────────────
+
+        private static string BuildPresentationDescription(string chartType, string chartName, string aggregateAlias = null)
+        {
+            var validChartType = SupportedChartTypes.FirstOrDefault(t => t.Equals(chartType, StringComparison.OrdinalIgnoreCase)) ?? "Column";
+            var resourceName = validChartType.Equals("Donut", StringComparison.OrdinalIgnoreCase) ? "Doughnut" : validChartType;
+
+            // Shared project embeds as DynamicsCrm.DevKit.Cli.Resources.charts.<Type>.xml
+            // because CLI imports Shared.projitems and uses CLI root namespace.
+            var chartXml = ReadChartTemplateXml(resourceName);
+
+            if (string.IsNullOrWhiteSpace(chartXml))
+            {
+                throw new InvalidOperationException(
+                    $"Chart XML resource template for '{validChartType}' could not be found in embedded resources. Expected resource ending with 'Resources.charts.{resourceName}.xml'.");
+            }
+
+            // Dynamic Binding: set Series Name to measure alias when template has a Series element.
+            // For Pie, portal XML does not require Series Name; keep template as-is if no Series found.
+            if (!string.IsNullOrWhiteSpace(aggregateAlias))
+            {
+                try
+                {
+                    var doc = XDocument.Parse(chartXml);
+                    var seriesElem = doc.Descendants("Series")
+                        .FirstOrDefault(s => s.Attribute("ChartType") != null || s.Attribute("Name") != null || s.Attribute("IsValueShownAsLabel") != null);
+                    if (seriesElem != null && seriesElem.Attribute("Name") != null)
+                    {
+                        seriesElem.SetAttributeValue("Name", aggregateAlias);
+                        chartXml = doc.ToString(SaveOptions.DisableFormatting);
+                    }
+                }
+                catch
+                {
+                    // Fallback to raw XML if parsing fails
+                }
+            }
+
+            // Dataverse stores presentationdescription as raw <Chart>...</Chart> (no wrapper).
+            return chartXml.Trim();
+        }
+
+        private static string ReadChartTemplateXml(string resourceName)
+        {
+            var assembly = typeof(ManageChartTool).Assembly;
+            var suffix = $"Resources.charts.{resourceName}.xml";
+            var resourcePath = assembly.GetManifestResourceNames()
+                .FirstOrDefault(n => n.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
+            if (resourcePath == null) return null;
+
+            using var stream = assembly.GetManifestResourceStream(resourcePath);
+            if (stream == null) return null;
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            return reader.ReadToEnd();
+        }
+
+        private string ResolvePrimaryNameAttribute(string entityLogicalName)
+        {
+            if (string.IsNullOrWhiteSpace(entityLogicalName)) return null;
+            try
+            {
+                var request = new Microsoft.Xrm.Sdk.Messages.RetrieveEntityRequest
+                {
+                    LogicalName = entityLogicalName,
+                    EntityFilters = Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity
+                };
+                var response = (Microsoft.Xrm.Sdk.Messages.RetrieveEntityResponse)_serviceClient.Execute(request);
+                return response.EntityMetadata?.PrimaryNameAttribute;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // ── Solution Component Helper (SDK Request) ─────────────────────────
+
+        private bool AddToSolutionIfRequested(Guid chartId, string solutionName)
+        {
+            if (string.IsNullOrWhiteSpace(solutionName)) return false;
+            try
+            {
+                var request = new AddSolutionComponentRequest
+                {
+                    ComponentId = chartId,
+                    ComponentType = 59, // SavedQueryVisualization (System Chart)
+                    SolutionUniqueName = solutionName.Trim(),
+                    AddRequiredComponents = false
+                };
+                _serviceClient.Execute(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // ── Shared Helpers ──────────────────────────────────────────────────
+
+        private Entity FindChart(string entityNameInput, string chartIdInput, string chartNameInput, out string error)
+        {
+            error = null;
+            const string table = "savedqueryvisualization";
+            const string idCol = "savedqueryvisualizationid";
+
+            if (!string.IsNullOrWhiteSpace(chartIdInput))
+            {
+                if (!Guid.TryParse(chartIdInput.Trim(), out var guid))
+                {
+                    error = $"Error: '{chartIdInput}' is not a valid GUID.";
+                    return null;
+                }
+                var entity = _serviceClient.Retrieve(table, guid, new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode"));
+                if (entity == null)
+                    error = $"Error: Chart with ID '{chartIdInput}' not found.";
+                return entity;
+            }
+
+            if (!string.IsNullOrWhiteSpace(chartNameInput))
+            {
+                var query = new QueryExpression(table)
+                {
+                    ColumnSet = new ColumnSet(idCol, "name", "description", "datadescription", "presentationdescription", "isdefault", "primaryentitytypecode")
+                };
+                query.Criteria.AddCondition("name", ConditionOperator.Equal, chartNameInput.Trim());
+
+                if (!string.IsNullOrWhiteSpace(entityNameInput))
+                {
+                    var logicalName = ResolveEntityLogicalName(entityNameInput);
+                    if (!string.IsNullOrEmpty(logicalName))
+                        query.Criteria.AddCondition("primaryentitytypecode", ConditionOperator.Equal, logicalName);
+                }
+
+                var res = _serviceClient.RetrieveMultiple(query);
+                if (res.Entities.Count == 0)
+                {
+                    error = $"Error: No chart found matching name '{chartNameInput}'.";
+                    return null;
+                }
+                return res.Entities[0];
+            }
+
+            error = "Error: Either chart_id or chart_name must be provided.";
+            return null;
+        }
+
+        private string ResolveEntityLogicalName(string entityNameInput)
+        {
+            if (string.IsNullOrWhiteSpace(entityNameInput)) return "";
+            var resolved = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityNameInput.Trim(), "manage_chart");
+            return resolved.IsSuccess ? resolved.Value.LogicalName : entityNameInput.Trim().ToLowerInvariant();
+        }
+
+        private string SaveBackup(string entityName, Guid chartId, string chartName, string dataXml, string presXml)
+        {
+            var workingDir = string.IsNullOrWhiteSpace(_workspaceFolder) ? Directory.GetCurrentDirectory() : _workspaceFolder;
+            var backupDir = Path.Combine(workingDir, ".devkit", "backups", "charts");
+            Directory.CreateDirectory(backupDir);
+
+            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var backupFile = $"{entityName}_{chartId:N}_{timestamp}.chart.json";
+            var backupPath = Path.Combine(backupDir, backupFile);
+
+            var backupData = new ChartBackup
+            {
+                Entity = entityName,
+                ChartId = chartId.ToString(),
+                ChartName = chartName,
+                Timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
+                DataDescription = dataXml,
+                PresentationDescription = presXml
+            };
+
+            var json = JsonSerializer.Serialize(backupData, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            });
+
+            File.WriteAllText(backupPath, json, Encoding.UTF8);
+            return backupPath;
+        }
+
+        private bool PublishIfNeeded(string entityName)
+        {
+            if (string.IsNullOrWhiteSpace(entityName)) return false;
+            try
+            {
+                var pubTool = new PublishCustomizationsTool(_serviceClient, _options);
+                pubTool.publish_customizations(entities: entityName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static (List<string> Errors, List<string> Warnings) ValidateChartXmls(string dataXml, string presXml)
+        {
+            var errors = new List<string>();
+            var warnings = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(dataXml))
+            {
+                try { XDocument.Parse(dataXml); }
+                catch (XmlException ex) { errors.Add($"datadescription XML Syntax Error: {ex.Message}"); }
+            }
+
+            if (!string.IsNullOrWhiteSpace(presXml))
+            {
+                try
+                {
+                    var doc = XDocument.Parse(presXml);
+                    var seriesElements = doc.Descendants("Series");
+                    foreach (var series in seriesElements)
+                    {
+                        var chartTypeAttr = series.Attribute("ChartType")?.Value;
+                        if (!string.IsNullOrWhiteSpace(chartTypeAttr) && !SupportedChartTypes.Contains(chartTypeAttr))
+                        {
+                            errors.Add($"Unsupported ChartType '{chartTypeAttr}'. Supported OOB chart types: Column, Bar, Line, Pie, Doughnut (Donut), Funnel, Area, Bubble, Radar.");
+                        }
+                    }
+                }
+                catch (XmlException ex) { errors.Add($"presentationdescription XML Syntax Error: {ex.Message}"); }
+            }
+
+            return (errors, warnings);
+        }
+
+        private static string ResolveXmlInput(string xmlOrPath)
+        {
+            if (string.IsNullOrWhiteSpace(xmlOrPath)) return xmlOrPath;
+            if (!xmlOrPath.TrimStart().StartsWith("<") && File.Exists(xmlOrPath))
+                return File.ReadAllText(xmlOrPath, Encoding.UTF8).Trim();
+            return xmlOrPath;
+        }
+
+        private static string PrettyPrintXml(string xml)
+        {
+            if (string.IsNullOrWhiteSpace(xml)) return "(empty)";
+            try
+            {
+                var doc = XDocument.Parse(xml);
+                return doc.ToString();
+            }
+            catch
+            {
+                return xml;
+            }
+        }
+
+        private static CallToolResult ErrorResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = message }],
+            IsError = true
+        };
+
+        private static CallToolResult SuccessResult(string text, UpsertChartResult structured) => new()
+        {
+            Content = [new TextContentBlock { Text = text }],
+            StructuredContent = JsonSerializer.SerializeToElement(structured)
+        };
+
+        private static CallToolResult DryRunResult(string message) => new()
+        {
+            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
+        };
+
+        private sealed class ChartBackup
+        {
+            [JsonPropertyName("entity")]
+            public string Entity { get; set; }
+
+            [JsonPropertyName("chartId")]
+            public string ChartId { get; set; }
+
+            [JsonPropertyName("chartName")]
+            public string ChartName { get; set; }
+
+            [JsonPropertyName("timestamp")]
+            public string Timestamp { get; set; }
+
+            [JsonPropertyName("dataDescription")]
+            public string DataDescription { get; set; }
+
+            [JsonPropertyName("presentationDescription")]
+            public string PresentationDescription { get; set; }
+        }
+    }
+}

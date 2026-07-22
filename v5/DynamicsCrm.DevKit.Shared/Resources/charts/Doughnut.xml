@@ -1,0 +1,15 @@
+﻿<Chart>
+  <Series>
+    <Series Name="Series1" ChartType="Doughnut" ChartArea="Default" IsValueShownAsLabel="True" Font="Segoe UI, 9.5pt" CustomProperties="DoughnutRadius=60, PieLabelStyle=Outside" />
+  </Series>
+  <ChartAreas>
+    <ChartArea Name="Default">
+      <AxisY>
+        <LabelStyle ForeColor="59, 59, 59" />
+      </AxisY>
+      <AxisX>
+        <LabelStyle ForeColor="59, 59, 59" />
+      </AxisX>
+    </ChartArea>
+  </ChartAreas>
+</Chart>

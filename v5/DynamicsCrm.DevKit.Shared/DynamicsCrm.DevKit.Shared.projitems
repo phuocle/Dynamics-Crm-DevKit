@@ -133,6 +133,17 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xsd\LayoutXml.xsd" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Area.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Bar.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Bubble.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Column.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Doughnut.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Funnel.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Line.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Pie.xml" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\charts\Radar.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\plugin.deploy.debug.bat" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\bat\plugin.deploy.debug.only.bat" />
   </ItemGroup>

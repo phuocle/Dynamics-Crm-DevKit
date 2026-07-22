@@ -54,6 +54,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp
             [nameof(GetSystemJobsTool)] = "standard",
             [nameof(GetPluginsTool)] = "standard",
             [nameof(ManageWebResourceTool)] = "standard",
+            [nameof(ManageChartTool)] = "standard",
 
             // advanced (7 additional tools)
             [nameof(ManageAppTool)] = "advanced",

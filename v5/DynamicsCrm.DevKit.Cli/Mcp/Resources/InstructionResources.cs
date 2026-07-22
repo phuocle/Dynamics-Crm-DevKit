@@ -788,6 +788,38 @@ delete_options: [100000001]
 
 ---
 
+## manage_chart
+
+Manage Dataverse System Charts (`savedqueryvisualization`).
+
+### Overview
+Charts are bound to a View (`view_name`). FetchXML (`datadescription`) is automatically derived from the target View by `manage_chart` — no manual FetchXML is needed!
+
+### Supported OOB Chart Types
+Column, Bar, Line, Pie, Doughnut (Donut), Funnel, Area, Bubble, Radar.
+
+### User Interaction Pattern (Chart Creation)
+When a user prompts to create a chart, the 4 core initial inputs expected are:
+1. `entity_name` (e.g. Account)
+2. `view_name` (e.g. Active Accounts)
+3. `chart_name` (e.g. Account by Industry)
+4. `chart_type` (e.g. Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar)
+
+Workflow:
+1. Pass `entity_name`, `view_name`, `chart_name`, `chart_type` to `manage_chart(action='create', ...)`.
+2. `manage_chart` automatically reads the View's `fetchxml`, derives the `<datadescription>` aggregate XML, builds the `<presentationdescription>` Chart XML for `chart_type`, creates the system chart, adds it to `solution_name` (if provided), and publishes entity customizations.
+
+### Actions
+- `list`: List system charts for an entity (`entity_name`).
+- `detail`: Get full chart definition by `chart_id` or `chart_name`.
+- `create`: Create a system chart (`entity_name`, `view_name`, `chart_name`, `chart_type`, `group_by_column`, `aggregate_column`, `aggregate_type`, `solution_name`).
+- `update`: Update chart view binding/type/description by `chart_id` or `chart_name`.
+- `rename`: Change chart display name.
+- `set_default`: Set a system chart as the default view chart for an entity.
+- `undo`: Rollback chart state from a `.chart.json` backup file path.
+
+---
+
 ## upsert_relationship
 
 ### Actions

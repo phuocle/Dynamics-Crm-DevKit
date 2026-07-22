@@ -285,6 +285,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // ── Data endpoints with dedicated tools ──
             ("webresources", "manage_webresource",
                 "Creating web resources requires base64 encoding and type codes. Use manage_webresource for safe creation with solution assignment."),
+            ("savedqueryvisualizations", "manage_chart",
+                "System charts require XML validation and solution management. Use manage_chart for system chart creation, updates, and backups."),
             ("roles", "manage_role",
                 "Creating security roles requires proper business unit assignment. Use manage_role for safe role management."),
 
