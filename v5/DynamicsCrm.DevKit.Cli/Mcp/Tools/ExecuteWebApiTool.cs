@@ -275,6 +275,12 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Updating option value labels requires merge label handling. Use manage_choice (global) or upsert_column (local)."),
             ("deleteoptionvalue", "manage_choice or upsert_column",
                 "Deleting option values is irreversible. Use manage_choice (global) or upsert_column (local) for safe deletion."),
+            ("insertstatusvalue", "upsert_column",
+                "Inserting statuscode values requires linking to a statecode. Use upsert_column with logical_name='statuscode' and add_options JSON including a 'state' field for the linked statecode value."),
+            ("updatestatusvalue", "upsert_column",
+                "Updating statuscode value labels requires merge label handling. Use upsert_column with logical_name='statuscode' and update_options."),
+            ("deletestatusvalue", "upsert_column",
+                "Deleting statuscode values is irreversible. Use upsert_column with logical_name='statuscode' and delete_options."),
 
             // ── Data endpoints with dedicated tools ──
             ("webresources", "manage_webresource",

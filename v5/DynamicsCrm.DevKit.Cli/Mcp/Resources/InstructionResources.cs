@@ -772,6 +772,20 @@ JSON array: [{""label"": ""Low"", ""value"": 100000000}, {""label"": ""Medium"",
 - lookup_target -- target entity fixed
 - global_optionset_name -- option set binding fixed
 
+### StatusType (statuscode) Options
+`statuscode` is a system attribute of type StatusType. Use `upsert_column` with
+`logical_name='statuscode'` and `add_options`/`update_options`/`delete_options`.
+
+Each option in `add_options` can include a `""state""` field (integer) that links the
+status to a `statecode` value (0=Active, 1=Inactive by default). Defaults to 0 if omitted.
+
+add_options:    [{""label"":""Under Review"",""value"":100000001,""state"":0}]
+update_options: [{""label"":""Renamed Status"",""value"":100000001}]
+delete_options: [100000001]
+
+`state` is required to control which statecode the new status appears under.
+`statecode` column itself is read-only and cannot be managed via `upsert_column`.
+
 ---
 
 ## upsert_relationship

@@ -482,5 +482,45 @@ public class UpsertColumnToolTests
         CollectionAssert.Contains(paramNames, "formula_source_type");
         CollectionAssert.DoesNotContain(paramNames, "source_entity_name");
         CollectionAssert.DoesNotContain(paramNames, "source_attribute_name");
+        // 'state' is inside the add_options JSON payload, not a top-level parameter
+        CollectionAssert.DoesNotContain(paramNames, "state");
+    }
+
+    // ──────────────────────────────────────────────
+    // StatusCode (statuscode) support
+    // ──────────────────────────────────────────────
+
+    [TestMethod]
+    public void UpsertColumn_StatusCode_NoOptionParams_ReturnsNoChangesError()
+    {
+        // Pass logical_name="statuscode" with no option params and no other changes.
+        // The tool resolves entity_name before reaching Dataverse (null serviceClient
+        // causes the resolve to fail with entity_name error), so we verify early-exit.
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.UpsertColumnTool(null!, new DynamicsCrm.DevKit.Cli.Mcp.McpDryRunOptions());
+        var result = tool.upsert_column(entity_name: "", logical_name: "statuscode");
+        Assert.IsTrue(result.IsError);
+        var text = ((ModelContextProtocol.Protocol.TextContentBlock)result.Content[0]).Text;
+        // entity_name is the first guard — empty entity_name is caught before any Dataverse call
+        Assert.IsTrue(text.Contains("entity_name is required"));
+    }
+
+    [TestMethod]
+    public void UpsertColumn_StatusCode_DescriptionMentionsStatecode()
+    {
+        var method = ToolType.GetMethod("upsert_column")!;
+        var desc = method.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
+        StringAssert.Contains(desc, "statuscode");
+        StringAssert.Contains(desc, "state");
+        StringAssert.Contains(desc, "statecode");
+    }
+
+    [TestMethod]
+    public void UpsertColumn_AddOptions_DescriptionMentionsStateField()
+    {
+        var method = ToolType.GetMethod("upsert_column")!;
+        var addOptionsParam = method.GetParameters().First(p => p.Name == "add_options");
+        var desc = addOptionsParam.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? "";
+        StringAssert.Contains(desc, "state");
+        StringAssert.Contains(desc, "StatusType");
     }
 }

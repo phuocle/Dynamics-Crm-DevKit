@@ -61,7 +61,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             "FUZZY/AMBIGUITY:\n" +
             "- entity_name resolves Display Name contains first, then logical/schema name contains. Ambiguity returns IsError=true with candidates.\n" +
-            "- logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.")]
+            "- logical_name (UPDATE) follows the same Display Name first rule. lookup_target, global_optionset_name, and solution_name use their shared resolvers.\n\n" +
+            "STATUSCODE (statuscode / StatusType): pass logical_name='statuscode' and use add_options/update_options/delete_options.\n" +
+            "add_options: JSON array with optional 'state' field (linked statecode value, default 0): [{\"label\":\"Under Review\",\"value\":100000001,\"state\":0}].\n" +
+            "update_options: rename by value (no 'state' needed). delete_options: JSON array of integer values. statecode column is read-only.")]
         public CallToolResult upsert_column(
             [Description("Logical name (e.g. 'account').")] string entity_name,
             [Description("Logical name of the existing attribute to update (e.g. 'new_priority'). For CREATE: optional lowercase override of logical name; if omitted derives from schema_name/display_name. Must start with publisher prefix.")] string logical_name,
@@ -84,7 +87,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("lookup: schema name. Auto if empty.")] string lookup_relationship_name = "",
             [Description("boolean true label (def 'Yes'). [update: omit=keep]")] string true_label = "",
             [Description("boolean false label (def 'No'). [update: omit=keep]")] string false_label = "",
-            [Description("picklist update: JSON array — options to add. Optional 'color' field: {\"label\":\"New\",\"value\":100000003,\"color\":\"#FF0000\"}.")] string add_options = "",
+            [Description("picklist update: JSON array — options to add. Optional 'color' field: {\"label\":\"New\",\"value\":100000003,\"color\":\"#FF0000\"}. StatusType (statuscode): include 'state' field (statecode value, default 0): {\"label\":\"Under Review\",\"value\":100000001,\"state\":0}.")] string add_options = "",
             [Description("picklist update: JSON array — options to rename. Optional 'color' field: {\"label\":\"NewLabel\",\"value\":100000000,\"color\":\"#FF0000\"}.")] string update_options = "",
             [Description("picklist update: JSON array of integer values to remove.")] string delete_options = "",
             [Description("Enable audit on this column. CREATE: pass to override Dataverse default (true). UPDATE: omit=null keeps current.")] bool? is_audit_enabled = null,
@@ -2049,6 +2052,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             public string Label { get; set; }
             public int? Value { get; set; }
             public string Color { get; set; }
+            public int? State { get; set; }
         }
 
         private static (List<OptionItem> Items, string Error) ParseOptions(string optionsJson)
@@ -2324,10 +2328,18 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var optionResults = ManagePicklistOptions(entityName, attributeName, metadata,
                     addOptions, updateOptions, deleteOptions);
 
+                // --- StatusCode (statuscode / StatusType) option management ---
+                if (metadata is StatusAttributeMetadata)
+                {
+                    var statusResults = ManageStatusCodeOptions(entityName, attributeName, metadata,
+                        addOptions, updateOptions, deleteOptions);
+                    optionResults.AddRange(statusResults);
+                }
+
                 if (changes.Count == 0 && optionResults.Count == 0)
                     return ErrorResult(
                         $"Error: No changes specified for '{entityName}.{attributeName}'.\n" +
-                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable.");
+                        $"Provide at least one updatable parameter: display_name, description, required_level, max_length, min_value, max_value, precision, format, behavior, true_label, false_label, add_options, update_options, delete_options, default_value (picklist/boolean), is_audit_enabled, is_valid_for_advanced_find, is_secured, is_sortable, or statuscode add/update/delete_options (for statuscode attribute).");
 
                 // --- Publish ---
                 var published = PublishIfNeeded(entityName);
@@ -2537,8 +2549,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var isPicklist = metadata is PicklistAttributeMetadata || metadata is MultiSelectPicklistAttributeMetadata;
             if (!isPicklist)
             {
-                if (!string.IsNullOrWhiteSpace(addOptionsJson) || !string.IsNullOrWhiteSpace(updateOptionsJson) || !string.IsNullOrWhiteSpace(deleteOptionsJson))
-                    results.Add($"[Warning] Option management ignored — attribute type is {GetAttributeTypeName(metadata)}, not Picklist/MultiSelectPicklist");
+                // StatusAttributeMetadata (statuscode) is handled by ManageStatusCodeOptions — skip silently here.
+                if (metadata is not StatusAttributeMetadata &&
+                    (!string.IsNullOrWhiteSpace(addOptionsJson) || !string.IsNullOrWhiteSpace(updateOptionsJson) || !string.IsNullOrWhiteSpace(deleteOptionsJson)))
+                    results.Add($"[Warning] Option management ignored — attribute type is {GetAttributeTypeName(metadata)}, not Picklist/MultiSelectPicklist/Status");
                 return results;
             }
 
@@ -2639,6 +2653,92 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return results;
         }
 
+        // ========== StatusCode Option Management ==========
+
+        private List<string> ManageStatusCodeOptions(string entityName, string attributeName,
+            AttributeMetadata metadata, string addOptionsJson, string updateOptionsJson, string deleteOptionsJson)
+        {
+            var results = new List<string>();
+            if (metadata is not StatusAttributeMetadata)
+                return results;
+
+            if (_options.DryRun)
+            {
+                var opsSummary = new List<string>();
+                if (!string.IsNullOrWhiteSpace(addOptionsJson)) opsSummary.Add("add status options");
+                if (!string.IsNullOrWhiteSpace(updateOptionsJson)) opsSummary.Add("update status options");
+                if (!string.IsNullOrWhiteSpace(deleteOptionsJson)) opsSummary.Add("delete status options");
+                if (opsSummary.Count > 0)
+                    results.Add($"[DRY-RUN] Would manage statuscode options on '{entityName}.{attributeName}': {string.Join(", ", opsSummary)}.");
+                return results;
+            }
+
+            if (!string.IsNullOrWhiteSpace(addOptionsJson))
+            {
+                var (opts, parseError) = ParseOptions(addOptionsJson);
+                if (parseError != null)
+                    results.Add($"[Error] add_options: {parseError}");
+                else if (opts != null)
+                    foreach (var opt in opts)
+                    {
+                        var stateValue = opt.State ?? 0;
+                        var req = new InsertStatusValueRequest
+                        {
+                            EntityLogicalName = entityName,
+                            AttributeLogicalName = attributeName,
+                            Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)),
+                            StateCode = stateValue
+                        };
+                        if (opt.Value.HasValue) req.Value = opt.Value.Value;
+                        var resp = (InsertStatusValueResponse)_serviceClient.Execute(req);
+                        results.Add($"OptionsAdded: {opt.Label} ({resp.NewOptionValue}) [state={stateValue}]");
+                    }
+            }
+
+            if (!string.IsNullOrWhiteSpace(updateOptionsJson))
+            {
+                var (opts, parseError) = ParseOptions(updateOptionsJson);
+                if (parseError != null)
+                    results.Add($"[Error] update_options: {parseError}");
+                else if (opts != null)
+                    foreach (var opt in opts)
+                    {
+                        if (!opt.Value.HasValue) continue;
+                        var req = new UpdateOptionValueRequest
+                        {
+                            EntityLogicalName = entityName,
+                            AttributeLogicalName = attributeName,
+                            Value = opt.Value.Value,
+                            Label = new Label(opt.Label, McpHelper.GetBaseLanguageCode(_serviceClient)),
+                            MergeLabels = true
+                        };
+                        _serviceClient.Execute(req);
+                        results.Add($"OptionsRenamed: {opt.Value.Value} -> \"{opt.Label}\"");
+                    }
+            }
+
+            if (!string.IsNullOrWhiteSpace(deleteOptionsJson))
+            {
+                var (values, parseError) = ParseDeleteValues(deleteOptionsJson);
+                if (parseError != null)
+                    results.Add($"[Error] delete_options: {parseError}");
+                else if (values != null)
+                    foreach (var val in values)
+                    {
+                        var req = new DeleteOptionValueRequest
+                        {
+                            EntityLogicalName = entityName,
+                            AttributeLogicalName = attributeName,
+                            Value = val
+                        };
+                        _serviceClient.Execute(req);
+                        results.Add($"OptionsDeleted: {val}");
+                    }
+            }
+
+            return results;
+        }
+
         private static string GetAttributeTypeName(AttributeMetadata metadata) => metadata switch
         {
             StringAttributeMetadata => "String",
@@ -2655,6 +2755,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             MultiSelectPicklistAttributeMetadata => "MultiSelectPicklist",
             ImageAttributeMetadata => "Image",
             FileAttributeMetadata => "File",
+            StatusAttributeMetadata => "Status",
             _ => metadata.AttributeTypeName?.Value ?? metadata.AttributeType?.ToString() ?? "Unknown"
         };
 
