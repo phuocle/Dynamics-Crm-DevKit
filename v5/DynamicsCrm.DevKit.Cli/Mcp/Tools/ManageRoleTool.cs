@@ -16,7 +16,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageRoleTool
+    public class ManageRoleTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -941,27 +941,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
-        private static CallToolResult TextResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }]
-        };
+        private CallToolResult TextResult(string message) => Success(message, null);
 
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
+        private CallToolResult DryRunResult(string message) => DryRun(message);
 
-        private static CallToolResult StructuredResult(string text, ManageRoleResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+        private CallToolResult StructuredResult(string text, ManageRoleResult structured) => Success(text, structured);
 
         #endregion
 

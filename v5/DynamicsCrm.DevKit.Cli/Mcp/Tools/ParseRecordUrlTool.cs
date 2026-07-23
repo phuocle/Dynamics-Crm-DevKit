@@ -7,7 +7,6 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
@@ -15,7 +14,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ParseRecordUrlTool
+    public class ParseRecordUrlTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -40,7 +39,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                return ErrorResult("Error: input is required.\n" +
+                return Error("Error: input is required.\n" +
                        "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
 
             var decoded = Uri.UnescapeDataString(input.Trim());
@@ -53,10 +52,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                       ?? TryParseRawGuid(decoded);
 
             if (result == null)
-                return ErrorResult("[ParsedUrl] Error: No GUID found in input.\n" +
+                return Error("[ParsedUrl] Error: No GUID found in input.\n" +
                        "Valid input: Dynamics 365 record URL, Web API URL, maker portal URL, or raw GUID.");
 
-            return StructuredResult(result);
+            return Success(FormatText(result), result);
         }
 
         // ── Priority 1: Model-Driven App URLs (main.aspx) ─────────────────────────
@@ -333,18 +332,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 FlowId = flowId
             };
         }
-
-        private static CallToolResult StructuredResult(ParsedRecordUrlResult result) => new()
-        {
-            Content = [new TextContentBlock { Text = FormatText(result) }],
-            StructuredContent = JsonSerializer.SerializeToElement(result)
-        };
-
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
 
         private static string FormatText(ParsedRecordUrlResult result)
         {

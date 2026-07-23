@@ -18,7 +18,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageChoiceTool
+    public class ManageChoiceTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -1335,27 +1335,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return result;
         }
 
-        private static CallToolResult StructuredResult(string text, ManageChoiceResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+        private CallToolResult StructuredResult(string text, ManageChoiceResult structured) => Success(text, structured);
 
-        private static CallToolResult SuccessResult(string text) => new()
-        {
-            Content = [new TextContentBlock { Text = text }]
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
-
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
+        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         #endregion
     }

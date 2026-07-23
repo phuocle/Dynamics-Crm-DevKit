@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
-    public class FormXmlOperations
+    public class FormXmlOperations : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -36,15 +36,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             )] string operations)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return Error("Error: entity_name is required.");
 
             // Validate form_id — strip optional braces
             var rawFormId = form_id?.Trim().Trim('{', '}');
             if (!Guid.TryParse(rawFormId, out var parsedFormId))
-                return ErrorResult($"Error: '{form_id}' is not a valid GUID.");
+                return Error($"Error: '{form_id}' is not a valid GUID.");
 
             if (string.IsNullOrWhiteSpace(operations))
-                return ErrorResult("Error: operations is required.");
+                return Error("Error: operations is required.");
 
             // Validate JSON
             JsonDocument doc;
@@ -54,32 +54,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
             }
             catch
             {
-                return ErrorResult("Error: Invalid operations JSON. Expected a JSON array of operation objects.");
+                return Error("Error: Invalid operations JSON. Expected a JSON array of operation objects.");
             }
 
             if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
-                return ErrorResult("Error: operations must be a non-empty JSON array.");
+                return Error("Error: operations must be a non-empty JSON array.");
 
             // Attempt Dataverse call
             try
             {
                 var form = _serviceClient.Retrieve("systemform", parsedFormId,
                     new ColumnSet("formxml", "name", "objecttypecode"));
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"[BuildFormXML] Form '{form?.GetAttributeValue<string>("name")}' updated successfully." }]
-                };
+                return Success($"[BuildFormXML] Form '{form?.GetAttributeValue<string>("name")}' updated successfully.", null);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: {ex.Message}");
+                return Error($"Error: {ex.Message}");
             }
         }
-
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
     }
 }

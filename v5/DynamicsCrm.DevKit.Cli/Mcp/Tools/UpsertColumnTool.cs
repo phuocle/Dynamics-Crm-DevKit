@@ -20,7 +20,7 @@ using DynamicsCrm.DevKit.Shared;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class UpsertColumnTool
+    public class UpsertColumnTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -2116,7 +2116,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return null;
         }
 
-        private static CallToolResult HandleException(Exception ex, string entityName, string attributeName, string solutionName)
+        private CallToolResult HandleException(Exception ex, string entityName, string attributeName, string solutionName)
         {
             var msg = ex.Message;
 
@@ -2776,16 +2776,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
+        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         private static CallToolResult AppendFormulaCloneWarning(CallToolResult result, string warning)
         {

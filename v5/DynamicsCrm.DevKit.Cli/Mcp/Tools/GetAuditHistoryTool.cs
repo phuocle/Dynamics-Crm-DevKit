@@ -19,7 +19,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetAuditHistoryTool
+    public class GetAuditHistoryTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -723,10 +723,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;")
                  .Replace("'", "&apos;").Replace("\"", "&quot;");
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }

@@ -12,13 +12,12 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class WhoAmITool
+    public class WhoAmITool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -83,19 +82,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 // Build compact text
                 var text = BuildCompactText(structured);
 
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success(text, structured);
             }
             catch (Exception ex)
             {
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"Error: Failed to execute WhoAmI: {ex.Message}" }],
-                    IsError = true
-                };
+                return Error(
+                    $"Error: Failed to execute WhoAmI: {ex.Message}",
+                    "Verify the Dataverse connection and that the current user has organization read access. If the connection is valid, retry the request.",
+                    new { exceptionType = ex.GetType().Name });
             }
         }
 

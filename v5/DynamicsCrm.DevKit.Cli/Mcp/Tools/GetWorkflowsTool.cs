@@ -17,7 +17,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetWorkflowsTool
+    public class GetWorkflowsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -492,10 +492,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }

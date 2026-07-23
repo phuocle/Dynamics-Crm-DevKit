@@ -21,7 +21,7 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageViewTool
+    public class ManageViewTool : McpToolBase
     {
         private static readonly object _schemaLock = new();
 
@@ -1398,21 +1398,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return findColumns.Count > 0 ? findColumns : null;
         }
 
-        private static CallToolResult TextResult(string text) => new()
-        {
-            Content = [new TextContentBlock { Text = text }]
-        };
+        private CallToolResult TextResult(string text) => Success(text, null);
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
+        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         // ── Shared Validation Helpers ─────────────────────────────────────
 

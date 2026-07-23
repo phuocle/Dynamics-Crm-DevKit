@@ -14,7 +14,7 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ExecuteWebApiTool
+    public class ExecuteWebApiTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -51,35 +51,35 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] int max_response_lines = 200)
         {
             if (string.IsNullOrWhiteSpace(method))
-                return ErrorResult(
+                return Error(
                     "Error: method is required.\n" +
                     "Valid values: GET, POST, PUT, PATCH, DELETE.");
 
             if (string.IsNullOrWhiteSpace(url))
-                return ErrorResult(
+                return Error(
                     "Error: url is required.\n" +
                     "Provide a relative URL path, e.g., 'accounts', 'contacts?$select=name', '$metadata'.");
 
             var httpMethod = ParseHttpMethod(method.Trim().ToUpperInvariant());
             if (httpMethod == null)
-                return ErrorResult($"Error: Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
+                return Error($"Error: Invalid HTTP method '{method}'. Use GET, POST, PUT, PATCH, or DELETE.");
 
             if (max_response_lines <= 0)
                 max_response_lines = 200;
 
             var blockedReason = GetBlockedReason(httpMethod, url.Trim());
             if (blockedReason != null)
-                return ErrorResult(blockedReason);
+                return Error(blockedReason);
 
             if (_options.DryRun && httpMethod != HttpMethod.Get)
-                return DryRunResult($"Would execute {httpMethod.Method} {url.Trim()}" +
+                return DryRun($"Would execute {httpMethod.Method} {url.Trim()}" +
                     (!string.IsNullOrWhiteSpace(body) ? $" with body ({body.Trim().Length} chars)" : "") + ".");
 
             try
             {
                 var customHeaders = ParseHeaders(headers, out var headersError);
                 if (headersError != null)
-                    return ErrorResult(headersError);
+                    return Error(headersError);
                 var requestBody = string.IsNullOrWhiteSpace(body) ? null : body.Trim();
                 var trimmedUrl = url.Trim();
                 HttpResponseMessage response;
@@ -152,11 +152,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     ResponseBody = structuredBody
                 };
 
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = sb.ToString() }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success(sb.ToString(), structured);
             }
             catch (Exception ex)
             {
@@ -175,7 +171,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 if (ex is HttpRequestException httpEx && httpEx.StatusCode.HasValue)
                     detail.AppendLine($"StatusCode: {(int)httpEx.StatusCode.Value} {httpEx.StatusCode.Value}");
-                return ErrorResult(detail.ToString().TrimEnd());
+                return Error(detail.ToString().TrimEnd());
             }
         }
 
@@ -448,15 +444,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
-
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
     }
 }

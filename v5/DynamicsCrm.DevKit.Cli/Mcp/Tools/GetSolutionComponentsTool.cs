@@ -18,7 +18,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetSolutionComponentsTool
+    public class GetSolutionComponentsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -512,17 +512,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             };
         }
 
-        private static CallToolResult StructuredResult(string text, GetSolutionComponentsResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+        private CallToolResult StructuredResult(string text, GetSolutionComponentsResult structured) => Success(text, structured);
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
         private Dictionary<Guid, string> BuildNameMap(List<Entity> components, Dictionary<Guid, string> fullEntityNames)
         {

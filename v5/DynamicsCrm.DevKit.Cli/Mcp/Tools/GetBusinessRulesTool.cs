@@ -18,7 +18,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetBusinessRulesTool
+    public class GetBusinessRulesTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -421,17 +421,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return sb.ToString();
         }
 
-        private static CallToolResult StructuredResult(string text, GetBusinessRulesResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+        private CallToolResult StructuredResult(string text, GetBusinessRulesResult structured) => Success(text, structured);
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
         private sealed class XamlParseResult
         {

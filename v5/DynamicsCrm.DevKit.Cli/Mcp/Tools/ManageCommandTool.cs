@@ -19,7 +19,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageCommandTool
+    public class ManageCommandTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -2617,10 +2617,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             MetadataOperationWaitHelper.WaitAfterFormView();
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }

@@ -7,14 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.Json;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper;
 using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ExecuteFetchXmlTool
+    public class ExecuteFetchXmlTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private const int DataversePageLimit = 5000;
@@ -45,11 +44,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] bool get_all = false)
         {
             if (string.IsNullOrWhiteSpace(fetchxml))
-                return ErrorResult("Error: fetchxml is required.\n" +
+                return Error("Error: fetchxml is required.\n" +
                        "Read schema://fetchxml for FetchXML query structure and examples.");
 
             if (max_records <= 0)
-                return ErrorResult("Error: max_records must be a positive integer (1-5000).");
+                return Error("Error: max_records must be a positive integer (1-5000).");
             if (max_records > DataversePageLimit)
                 max_records = DataversePageLimit;
 
@@ -60,11 +59,13 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     : ExecuteSinglePage(fetchxml, max_records);
                 structured.GetAll = get_all;
                 structured.MaxRecords = max_records;
-                return StructuredResult(structured);
+                return Success(
+                    CompactFormatter.FormatFetchXmlResults(structured.Records, structured.TotalReturned, structured.HasMore),
+                    structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to execute FetchXML: {ex.Message}\n" +
+                return Error($"Error: Failed to execute FetchXML: {ex.Message}\n" +
                        "Hint: Use get_tables to verify logical names and available columns.\n" +
                        "Read schema://fetchxml for valid FetchXML syntax.");
             }
@@ -147,19 +148,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return entities.Count == 1 ? entities[0] : null;
         }
 
-        private static CallToolResult StructuredResult(FetchXmlResult structured) => new()
-        {
-            Content = [new TextContentBlock
-            {
-                Text = CompactFormatter.FormatFetchXmlResults(structured.Records, structured.TotalReturned, structured.HasMore)
-            }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
-
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
     }
 }

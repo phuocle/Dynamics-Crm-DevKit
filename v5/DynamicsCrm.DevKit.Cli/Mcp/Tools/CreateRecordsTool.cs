@@ -22,7 +22,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class CreateRecordsTool
+    public class CreateRecordsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -70,14 +70,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] int max_parallelism = 0)
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return Error("Error: entity_name is required.");
 
             if (string.IsNullOrWhiteSpace(records_json))
-                return ErrorResult("Error: records_json is required. Provide a JSON array, .json file path, or .csv file path.");
+                return Error("Error: records_json is required. Provide a JSON array, .json file path, or .csv file path.");
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "create_records");
             if (!entityResult.IsSuccess)
-                return ErrorResult($"Error: {entityResult.Error}");
+                return Error($"Error: {entityResult.Error}");
             var entityName = entityResult.Value.LogicalName;
 
             var csvWarnings = new List<string>();
@@ -86,8 +86,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var trimmed = records_json.Trim();
                 if (trimmed.EndsWith(".csv", StringComparison.OrdinalIgnoreCase) || trimmed.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-                    return ErrorResult($"Error: File not found: {trimmed}");
-                return ErrorResult(
+                    return Error($"Error: File not found: {trimmed}");
+                return Error(
                     "Error: Failed to resolve records_json input.\n" +
                     "Valid formats: inline JSON array, .json file path, or .csv file path.");
             }
@@ -97,22 +97,22 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 var doc = JsonDocument.Parse(resolved);
                 if (doc.RootElement.ValueKind != JsonValueKind.Array)
-                    return ErrorResult("Error: records_json must be a JSON array.");
+                    return Error("Error: records_json must be a JSON array.");
 
                 elements = doc.RootElement.EnumerateArray().ToArray();
             }
             catch (JsonException ex)
             {
-                return ErrorResult(
+                return Error(
                     $"Error: Invalid JSON in records_json: {ex.Message}\n" +
                     "Read docs://data_operations_guide for field type format examples.");
             }
 
             if (elements.Length == 0)
-                return ErrorResult("Error: records_json array is empty.");
+                return Error("Error: records_json array is empty.");
 
             if (elements.Length > MaxRecords)
-                return ErrorResult($"Error: records_json has {elements.Length} elements. Max is {MaxRecords}.");
+                return Error($"Error: records_json has {elements.Length} elements. Max is {MaxRecords}.");
 
             var usedDefault = max_parallelism <= 0;
             var parallelism = usedDefault
@@ -121,7 +121,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             parallelism = Math.Clamp(parallelism, 1, MaxParallelism);
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).");
+                return DryRun($"Would CREATE {elements.Length} '{entityName}' records (parallelism={parallelism}).");
 
             var parsedItems = new (int index, Entity entity, string error)[elements.Length];
 
@@ -225,11 +225,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine($"  [{item.Index}] {item.Error}");
             }
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(sb.ToString(), structured);
         }
 
         // ── Input resolution ────────────────────────────────────────────
@@ -587,15 +583,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         // ── Helpers ─────────────────────────────────────────────────────
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
-
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
     }
 }

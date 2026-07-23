@@ -17,7 +17,7 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageRecordTool
+    public class ManageRecordTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
@@ -84,27 +84,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string relationship_name = "")
         {
             if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
+                return Error("Error: action is required. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
 
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return Error("Error: entity_name is required.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
             if (normalizedAction is not ("create" or "read" or "update" or "delete" or "associate" or "disassociate"))
-                return ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
+                return Error($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.");
 
             // Validate record_id early before entity resolution (which requires network)
             if (normalizedAction is "read" or "update" or "delete" or "associate" or "disassociate")
             {
                 if (string.IsNullOrWhiteSpace(record_id))
-                    return ErrorResult($"Error: record_id is required for '{normalizedAction}'.");
+                    return Error($"Error: record_id is required for '{normalizedAction}'.");
                 if (!Guid.TryParse(record_id.Trim(), out _))
-                    return ErrorResult($"Error: '{record_id}' is not a valid GUID.");
+                    return Error($"Error: '{record_id}' is not a valid GUID.");
             }
             if (normalizedAction is "create" or "update")
             {
                 if (string.IsNullOrWhiteSpace(fields_json))
-                    return ErrorResult(
+                    return Error(
                         $"Error: fields_json is required for '{normalizedAction}'.\n" +
                         "Required: JSON object with field logical names as keys.\n" +
                         "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
@@ -112,26 +112,26 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (normalizedAction is "associate" or "disassociate")
             {
                 if (string.IsNullOrWhiteSpace(related_entity_name))
-                    return ErrorResult($"Error: related_entity_name is required for '{normalizedAction}'.");
+                    return Error($"Error: related_entity_name is required for '{normalizedAction}'.");
                 if (string.IsNullOrWhiteSpace(related_record_id))
-                    return ErrorResult($"Error: related_record_id is required for '{normalizedAction}'.");
+                    return Error($"Error: related_record_id is required for '{normalizedAction}'.");
                 if (string.IsNullOrWhiteSpace(relationship_name))
-                    return ErrorResult($"Error: relationship_name is required for '{normalizedAction}'.");
+                    return Error($"Error: relationship_name is required for '{normalizedAction}'.");
             }
             if (normalizedAction == "create" && !string.IsNullOrWhiteSpace(record_id))
-                return ErrorResult("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
+                return Error("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
 
             string entityName;
             try
             {
                 var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "manage_record");
                 if (!entityResult.IsSuccess)
-                    return ErrorResult($"Error: {entityResult.Error}");
+                    return Error($"Error: {entityResult.Error}");
                 entityName = entityResult.Value.LogicalName;
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to resolve entity '{entity_name}': {ex.Message}");
+                return Error($"Error: Failed to resolve entity '{entity_name}': {ex.Message}");
             }
 
             return normalizedAction switch
@@ -142,17 +142,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "delete" => HandleDelete(entityName, record_id),
                 "associate" => HandleAssociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
                 "disassociate" => HandleDisassociate(entityName, record_id, related_entity_name, related_record_id, relationship_name),
-                _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")
+                _ => Error($"Error: Invalid action '{action}'. Valid values: 'create', 'read', 'update', 'delete', 'associate', 'disassociate'.")
             };
         }
 
         private CallToolResult HandleCreate(string entityName, string fieldsJson, string recordId)
         {
             if (!string.IsNullOrWhiteSpace(recordId))
-                return ErrorResult("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
+                return Error("Error: record_id must be empty for 'create'. Use 'update' to modify an existing record.");
 
             if (string.IsNullOrWhiteSpace(fieldsJson))
-                return ErrorResult(
+                return Error(
                     "Error: fields_json is required for 'create'.\n" +
                     "Required: JSON object with field logical names as keys.\n" +
                     "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
@@ -160,7 +160,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             var fieldCount = CountFields(fieldsJson);
 
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE a '{entityName}' record with {fieldCount} fields.");
+                return DryRun($"Would CREATE a '{entityName}' record with {fieldCount} fields.");
 
             try
             {
@@ -175,25 +175,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "created",
                     FieldsUpdated = fieldCount
                 };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"Created {entityName} {newId} ({fieldCount} fields)" }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success($"Created {entityName} {newId} ({fieldCount} fields)", structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
+                return Error($"Error: Create failed for {entityName}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
             }
         }
 
         private CallToolResult HandleRead(string entityName, string recordId, string columns)
         {
             if (string.IsNullOrWhiteSpace(recordId))
-                return ErrorResult("Error: record_id is required for 'read'.");
+                return Error("Error: record_id is required for 'read'.");
 
             if (!Guid.TryParse(recordId.Trim(), out var id))
-                return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+                return Error($"Error: '{recordId}' is not a valid GUID.");
 
             try
             {
@@ -209,15 +205,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "read",
                     Fields = FormatRecordFields(entity)
                 };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = text }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success(text, structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Failed to retrieve record: {ex.Message}\n" +
+                return Error($"Error: Failed to retrieve record: {ex.Message}\n" +
                     "Hint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
             }
         }
@@ -225,21 +217,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private CallToolResult HandleUpdate(string entityName, string recordId, string fieldsJson)
         {
             if (string.IsNullOrWhiteSpace(recordId))
-                return ErrorResult("Error: record_id is required for 'update'.");
+                return Error("Error: record_id is required for 'update'.");
 
             if (string.IsNullOrWhiteSpace(fieldsJson))
-                return ErrorResult(
+                return Error(
                     "Error: fields_json is required for 'update'.\n" +
                     "Required: JSON object with field logical names as keys.\n" +
                     "Read docs://data_operations_guide for field type formats and polymorphic lookup syntax.");
 
             if (!Guid.TryParse(recordId.Trim(), out var id))
-                return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+                return Error($"Error: '{recordId}' is not a valid GUID.");
 
             var fieldCount = CountFields(fieldsJson);
 
             if (_options.DryRun)
-                return DryRunResult($"Would UPDATE '{entityName}' record {id} with {fieldCount} fields.");
+                return DryRun($"Would UPDATE '{entityName}' record {id} with {fieldCount} fields.");
 
             try
             {
@@ -254,57 +246,49 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     Status = "updated",
                     FieldsUpdated = fieldCount
                 };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"Updated {entityName} {id} ({fieldCount} fields)" }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success($"Updated {entityName} {id} ({fieldCount} fields)", structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Update failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
+                return Error($"Error: Update failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Use get_tables to verify field names and types.");
             }
         }
 
         private CallToolResult HandleDelete(string entityName, string recordId)
         {
             if (string.IsNullOrWhiteSpace(recordId))
-                return ErrorResult("Error: record_id is required for 'delete'.");
+                return Error("Error: record_id is required for 'delete'.");
 
             if (!Guid.TryParse(recordId.Trim(), out var id))
-                return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
+                return Error($"Error: '{recordId}' is not a valid GUID.");
 
             if (_options.DryRun)
-                return DryRunResult($"Would DELETE '{entityName}' record {id}.");
+                return DryRun($"Would DELETE '{entityName}' record {id}.");
 
             try
             {
                 _serviceClient.Delete(entityName, id);
 
                 var structured = new CrudResult { Action = "delete", Entity = entityName, Id = id.ToString(), Status = "deleted" };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"Deleted {entityName} {id}" }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success($"Deleted {entityName} {id}", structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Delete failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
+                return Error($"Error: Delete failed for {entityName} {recordId}\nMessage: {ex.Message}\nHint: Verify the record_id using execute_fetchxml or manage_record with action='read'.");
             }
         }
 
         private CallToolResult HandleAssociate(string entityName, string recordId, string relatedEntityName, string relatedRecordId, string relationshipName)
         {
-            if (!Guid.TryParse(recordId.Trim(), out var id1)) return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
-            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return ErrorResult($"Error: '{relatedRecordId}' is not a valid GUID.");
+            if (!Guid.TryParse(recordId.Trim(), out var id1)) return Error($"Error: '{recordId}' is not a valid GUID.");
+            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return Error($"Error: '{relatedRecordId}' is not a valid GUID.");
 
             var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
-            if (!relatedEntityResult.IsSuccess) return ErrorResult($"Error: {relatedEntityResult.Error}");
+            if (!relatedEntityResult.IsSuccess) return Error($"Error: {relatedEntityResult.Error}");
             string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
-                return DryRunResult($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}");
+                return DryRun($"Would ASSOCIATE {entityName}({id1}) with {resolvedRelatedEntity}({id2}) via {relationshipName}");
 
             try
             {
@@ -313,29 +297,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _serviceClient.Associate(entityName, id1, relationship, relatedEntities);
 
                 var structured = new CrudResult { Action = "associate", Entity = entityName, Id = id1.ToString(), Status = "associated" };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}" }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success($"Associated {entityName} {id1} with {resolvedRelatedEntity} {id2}", structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Associate failed: {ex.Message}");
+                return Error($"Error: Associate failed: {ex.Message}");
             }
         }
 
         private CallToolResult HandleDisassociate(string entityName, string recordId, string relatedEntityName, string relatedRecordId, string relationshipName)
         {
-            if (!Guid.TryParse(recordId.Trim(), out var id1)) return ErrorResult($"Error: '{recordId}' is not a valid GUID.");
-            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return ErrorResult($"Error: '{relatedRecordId}' is not a valid GUID.");
+            if (!Guid.TryParse(recordId.Trim(), out var id1)) return Error($"Error: '{recordId}' is not a valid GUID.");
+            if (!Guid.TryParse(relatedRecordId.Trim(), out var id2)) return Error($"Error: '{relatedRecordId}' is not a valid GUID.");
 
             var relatedEntityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, relatedEntityName.Trim(), "manage_record");
-            if (!relatedEntityResult.IsSuccess) return ErrorResult($"Error: {relatedEntityResult.Error}");
+            if (!relatedEntityResult.IsSuccess) return Error($"Error: {relatedEntityResult.Error}");
             string resolvedRelatedEntity = relatedEntityResult.Value.LogicalName;
 
             if (_options.DryRun)
-                return DryRunResult($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}");
+                return DryRun($"Would DISASSOCIATE {entityName}({id1}) from {resolvedRelatedEntity}({id2}) via {relationshipName}");
 
             try
             {
@@ -344,15 +324,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 _serviceClient.Disassociate(entityName, id1, relationship, relatedEntities);
 
                 var structured = new CrudResult { Action = "disassociate", Entity = entityName, Id = id1.ToString(), Status = "disassociated" };
-                return new CallToolResult
-                {
-                    Content = [new TextContentBlock { Text = $"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}" }],
-                    StructuredContent = JsonSerializer.SerializeToElement(structured)
-                };
+                return Success($"Disassociated {entityName} {id1} from {resolvedRelatedEntity} {id2}", structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult($"Error: Disassociate failed: {ex.Message}");
+                return Error($"Error: Disassociate failed: {ex.Message}");
             }
         }
 
@@ -423,15 +399,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
-
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
     }
 }

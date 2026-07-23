@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
     }
 
     [McpServerToolType]
-    public class GenerateDemoDataTool
+    public class GenerateDemoDataTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -78,34 +78,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("JSON array of {logicalname, operator, values[]}. Operators (see description). Example: [{\"logicalname\":\"jobtitle\",\"operator\":\"in\",\"values\":[\"CEO\",\"CFO\",\"CTO\"]}].")] string field_overrides = "")
         {
             if (string.IsNullOrWhiteSpace(entity_name))
-                return ErrorResult("Error: entity_name is required.");
+                return Error("Error: entity_name is required.");
 
             if (string.IsNullOrWhiteSpace(from_date) || string.IsNullOrWhiteSpace(to_date))
-                return ErrorResult("Error: from_date and to_date are required. DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
+                return Error("Error: from_date and to_date are required. DO NOT infer or assume these values — ask the user explicitly before calling this tool.");
 
             if (!DateTime.TryParse(from_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDt))
-                return ErrorResult($"Error: from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
+                return Error($"Error: from_date '{from_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-01-01'.");
 
             if (!DateTime.TryParse(to_date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var toDt))
-                return ErrorResult($"Error: to_date '{to_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-04-30'.");
+                return Error($"Error: to_date '{to_date}' is not a valid date. Use ISO 8601 format, e.g. '2026-04-30'.");
 
             if (toDt < fromDt)
-                return ErrorResult($"Error: to_date '{to_date}' must be >= from_date '{from_date}'.");
+                return Error($"Error: to_date '{to_date}' must be >= from_date '{from_date}'.");
 
             if (count > MaxCount)
-                return ErrorResult($"Error: count {count} exceeds maximum {MaxCount}.");
+                return Error($"Error: count {count} exceeds maximum {MaxCount}.");
 
             count = Math.Max(1, count);
 
             var entityResult = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entity_name.Trim(), "generate_demo_data");
             if (!entityResult.IsSuccess)
-                return ErrorResult($"Error: {entityResult.Error}");
+                return Error($"Error: {entityResult.Error}");
             var entityName = entityResult.Value.LogicalName;
 
             // Load metadata
             var metadata = LoadEntityMetadata(entityName);
             if (metadata == null)
-                return ErrorResult(
+                return Error(
                     $"Error: Entity '{entityName}' not found or metadata could not be loaded.\n" +
                     "Use get_tables to verify the entity logical name.");
 
@@ -114,7 +114,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             // Select fields
             var selectedAttrs = SelectFields(metadata, fields, entityName, warnings);
             if (selectedAttrs.Count == 0)
-                return ErrorResult($"Error: No valid fields found for entity '{entityName}'. Check entity name or specify fields explicitly.");
+                return Error($"Error: No valid fields found for entity '{entityName}'. Check entity name or specify fields explicitly.");
 
             // Pre-fetch lookup pools
             var lookupPools = new Dictionary<string, List<Guid>>(StringComparer.OrdinalIgnoreCase);
@@ -155,23 +155,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
                 catch (Exception ex)
                 {
-                    return ErrorResult($"Error: field_overrides is not valid JSON. {ex.Message}");
+                    return Error($"Error: field_overrides is not valid JSON. {ex.Message}");
                 }
 
                 foreach (var ov in overrides)
                 {
                     if (string.IsNullOrWhiteSpace(ov.LogicalName))
-                        return ErrorResult("Error: each field_override must have a non-empty 'logicalname'.");
+                        return Error("Error: each field_override must have a non-empty 'logicalname'.");
                     var op = ov.Operator?.ToLowerInvariant();
                     if (op is not ("eq" or "in" or "startswith" or "endswith" or "contains" or "regex"))
-                        return ErrorResult($"Error: unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'. Supported: eq, in, startswith, endswith, contains, regex.");
+                        return Error($"Error: unsupported operator '{ov.Operator}' for field '{ov.LogicalName}'. Supported: eq, in, startswith, endswith, contains, regex.");
                     if (ov.Values == null || ov.Values.Count == 0)
-                        return ErrorResult($"Error: field_override for '{ov.LogicalName}' must have at least one value.");
+                        return Error($"Error: field_override for '{ov.LogicalName}' must have at least one value.");
                 }
 
                 var overrideError = NormalizeOverrides(metadata, overrides, entityName);
                 if (overrideError != null)
-                    return ErrorResult(overrideError);
+                    return Error(overrideError);
             }
 
             // Generate records
@@ -234,11 +234,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     sb.AppendLine($"  {w}");
             }
 
-            return new CallToolResult
-            {
-                Content = [new TextContentBlock { Text = sb.ToString() }],
-                StructuredContent = JsonSerializer.SerializeToElement(structured)
-            };
+            return Success(sb.ToString(), structured);
         }
 
         // ── Field selection ──────────────────────────────────────────────
@@ -857,11 +853,5 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         // ── Helpers ──────────────────────────────────────────────────────
-
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
     }
 }

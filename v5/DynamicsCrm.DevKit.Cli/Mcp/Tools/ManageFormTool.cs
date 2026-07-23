@@ -25,7 +25,7 @@ using DynamicsCrm.DevKit.Cli.Mcp;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageFormTool
+    public class ManageFormTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
         private static XmlSchemaSet _cachedSchemaSet;
@@ -1181,21 +1181,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
 
-        private static CallToolResult TextResult(string text) => new()
-        {
-            Content = [new TextContentBlock { Text = text }]
-        };
+        private CallToolResult TextResult(string text) => Success(text, null);
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
-        private static CallToolResult DryRunResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = $"[DRY-RUN] {message}\nNo changes were made." }]
-        };
+        private CallToolResult DryRunResult(string message) => DryRun(message);
 
         // ── Shared Helpers (write actions) ────────────────────────────────
 

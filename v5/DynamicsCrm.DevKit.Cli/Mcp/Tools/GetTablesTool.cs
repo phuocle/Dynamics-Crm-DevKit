@@ -9,13 +9,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetTablesTool
+    public class GetTablesTool : McpToolBase
     {
         private readonly MetadataService _metadataService;
 
@@ -82,7 +81,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             catch (Exception ex)
             {
                 var target = string.IsNullOrWhiteSpace(entity_name) ? "entities metadata" : $"metadata for '{entity_name}'";
-                return ErrorResult($"Error: Failed to load {target}: {ex.Message}");
+                return Error(
+                    $"Error: Failed to load {target}: {ex.Message}",
+                    "Verify the entity name with get_tables (no entity_name) and check that the connection is active.");
             }
         }
 
@@ -108,7 +109,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "entity_name");
 
             if (!resolved.IsSuccess)
-                return ErrorResult($"Error: {resolved.Error}");
+                return Error($"Error: {resolved.Error}");
 
             var logicalName = resolved.Value.LogicalName;
             var metadata = await _metadataService.FetchEntityMetadataAsync(logicalName);
@@ -132,7 +133,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 else
                     summary += $"\nHint: filter '{attributeFilter}' matched no attributes. Try a broader filter or omit filter to list all attributes.";
             }
-            return StructuredResult(summary, structured);
+            return Success(summary, structured);
         }
 
         private async Task<CallToolResult> ListAllEntities(string filter, bool customOnly, bool includeIntersect, string names)
@@ -175,7 +176,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Count = sorted.Count,
                 Tables = sorted.Select(BuildTableSummary).ToList()
             };
-            return StructuredResult($"{sorted.Count} entities returned", structured);
+            return Success($"{sorted.Count} entities returned", structured);
         }
 
         private static TableSummaryEntry BuildTableSummary(EntityMetadata metadata) => new()
@@ -698,18 +699,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return "Polymorphic";
             return "Lookup";
         }
-
-        private static CallToolResult StructuredResult(string text, GetTablesResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
-
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
 
         /// <summary>
         /// Normalize an SDK label string for JSON output: empty or whitespace-only

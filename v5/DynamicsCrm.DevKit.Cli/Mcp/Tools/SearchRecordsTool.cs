@@ -15,7 +15,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class SearchRecordsTool
+    public class SearchRecordsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -52,7 +52,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string filter = "")
         {
             if (string.IsNullOrWhiteSpace(action))
-                return ErrorResult("Error: action is required. Valid values: 'search', 'status'.");
+                return Error("Error: action is required. Valid values: 'search', 'status'.");
 
             var normalizedAction = action.Trim().ToLowerInvariant();
 
@@ -60,20 +60,20 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 "search" => HandleSearch(search_term, entities, top, filter),
                 "status" => HandleStatus(),
-                _ => ErrorResult($"Error: Invalid action '{action}'. Valid values: 'search', 'status'.")
+                _ => Error($"Error: Invalid action '{action}'. Valid values: 'search', 'status'.")
             };
         }
 
         private CallToolResult HandleSearch(string searchTerm, string entities, int top, string filter)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
-                return ErrorResult("Error: search_term is required when action='search'.");
+                return Error("Error: search_term is required when action='search'.");
 
             if (searchTerm.Trim().Length > 100)
-                return ErrorResult("Error: search_term must be 100 characters or less.");
+                return Error("Error: search_term must be 100 characters or less.");
 
             if (top <= 0)
-                return ErrorResult("Error: top must be a positive number (1-100).");
+                return Error("Error: top must be a positive number (1-100).");
             if (top > 100) top = 100;
 
             try
@@ -86,19 +86,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                 if (!response.IsSuccessStatusCode)
-                    return ErrorResult($"Error: Search API returned {(int)response.StatusCode} {response.ReasonPhrase}.\n{jsonResponse}");
+                    return Error($"Error: Search API returned {(int)response.StatusCode} {response.ReasonPhrase}.\n{jsonResponse}");
 
                 // Web API wraps result in { "response": "..." }
                 var wrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(jsonResponse, _jsonOptions);
                 if (wrapper?.Response == null)
-                    return ErrorResult("Error: Unexpected response format from search API.");
+                    return Error("Error: Unexpected response format from search API.");
 
                 var structured = BuildSearchResult(wrapper.Response, searchTerm.Trim());
-                return StructuredResult(FormatSearchResults(structured), structured);
+                return Success(FormatSearchResults(structured), structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult(HandleSearchException(ex));
+                return Error(HandleSearchException(ex));
             }
         }
 
@@ -112,11 +112,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 var statusJson = statusResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                 if (!statusResponse.IsSuccessStatusCode)
-                    return ErrorResult($"Error: searchstatus API returned {(int)statusResponse.StatusCode} {statusResponse.ReasonPhrase}.\n{statusJson}");
+                    return Error($"Error: searchstatus API returned {(int)statusResponse.StatusCode} {statusResponse.ReasonPhrase}.\n{statusJson}");
 
                 var statusWrapper = JsonSerializer.Deserialize<SearchResponseWrapper>(statusJson, _jsonOptions);
                 if (statusWrapper?.Response == null)
-                    return ErrorResult("Error: Unexpected response format from searchstatus API.");
+                    return Error("Error: Unexpected response format from searchstatus API.");
 
                 string statisticsInner = null;
                 try
@@ -137,11 +137,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
 
                 var structured = BuildStatusResult(statusWrapper.Response, statisticsInner);
-                return StructuredResult(FormatStatusResults(structured), structured);
+                return Success(FormatStatusResults(structured), structured);
             }
             catch (Exception ex)
             {
-                return ErrorResult(HandleSearchException(ex));
+                return Error(HandleSearchException(ex));
             }
         }
 
@@ -546,18 +546,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string EscapePipe(string value) =>
             value.Replace("|", "\\|").Replace("\n", " ").Replace("\r", "");
-
-        private static CallToolResult StructuredResult(string text, SearchRecordsResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
-
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
 
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {

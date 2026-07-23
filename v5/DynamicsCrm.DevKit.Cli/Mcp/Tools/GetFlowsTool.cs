@@ -14,7 +14,7 @@ using DynamicsCrm.DevKit.Cli.Mcp.Tools.Models;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class GetFlowsTool
+    public class GetFlowsTool : McpToolBase
     {
         private readonly ServiceClient _serviceClient;
 
@@ -516,10 +516,6 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         private static string EscapeTab(string value) =>
             value.Replace("\t", " ").Replace("\n", " ").Replace("\r", "");
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
     }
 }

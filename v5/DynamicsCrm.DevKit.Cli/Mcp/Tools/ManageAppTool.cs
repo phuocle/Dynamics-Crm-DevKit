@@ -27,7 +27,7 @@ using System.Xml.Schema;
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 {
     [McpServerToolType]
-    public class ManageAppTool
+    public class ManageAppTool : McpToolBase
     {
         private const string NotPublishedNextStep =
             "Not published. Run publish_customizations(appmodules='<AppModuleId>') when ready.";
@@ -1682,17 +1682,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 : $"{ex.Message} InnerException: {ex.InnerException.Message}";
         }
 
-        private static CallToolResult ErrorResult(string message) => new()
-        {
-            Content = [new TextContentBlock { Text = message }],
-            IsError = true
-        };
+        private CallToolResult ErrorResult(string message) => Error(message);
 
-        private static CallToolResult StructuredResult(string text, ManageAppResult structured) => new()
-        {
-            Content = [new TextContentBlock { Text = text }],
-            StructuredContent = JsonSerializer.SerializeToElement(structured)
-        };
+        private CallToolResult StructuredResult(string text, ManageAppResult structured) => Success(text, structured);
 
         private sealed class AppValidationResult
         {
