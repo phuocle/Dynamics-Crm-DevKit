@@ -118,13 +118,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
 
         private static object ConvertValue(AttributeMetadata attrMeta, JsonElement jsonVal, string fieldName, string targetEntityOverride)
         {
+            // PartyList attributes are returned as LookupAttributeMetadata with AttributeType=PartyList.
+            // Must handle PartyList before the LookupAttributeMetadata arm, otherwise array JSON
+            // is treated as a GUID string and throws "requires String, target is Array".
+            if (attrMeta.AttributeType == AttributeTypeCode.PartyList)
+                return BuildActivityPartyCollection(jsonVal, fieldName);
+
             return attrMeta switch
             {
                 LookupAttributeMetadata lookup => BuildEntityReference(lookup, jsonVal, fieldName, targetEntityOverride),
-
-                // PartyList: to, from, cc, bcc, requiredattendees, optionalattendees, organizer, etc.
-                _ when attrMeta.AttributeType == AttributeTypeCode.PartyList
-                    => BuildActivityPartyCollection(jsonVal, fieldName),
 
                 PicklistAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
                 StateAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
