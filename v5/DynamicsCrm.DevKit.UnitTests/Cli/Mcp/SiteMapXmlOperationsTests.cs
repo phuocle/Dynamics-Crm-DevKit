@@ -7,9 +7,9 @@ using System.Text;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class ManageSiteMapToolTests
+public class SiteMapXmlOperationsTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.ManageSiteMapTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap.SiteMapXmlOperations);
 
     private static readonly MethodInfo StripXmlDeclarationMethod =
         ToolType.GetMethod("StripXmlDeclaration", BindingFlags.NonPublic | BindingFlags.Static)!;

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text.Json;
 using System.Xml.Linq;
 
-namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
 {
     /// <summary>
     /// Utility class for building SiteMap XML elements.
     /// Provides helper methods for constructing and inserting SiteMap SubArea elements.
     /// </summary>
-    public static class BuildSiteMapXmlTool
+    public static class SiteMapXmlBuilder
     {
         /// <summary>
         /// Gets a trimmed string property from a JsonElement.

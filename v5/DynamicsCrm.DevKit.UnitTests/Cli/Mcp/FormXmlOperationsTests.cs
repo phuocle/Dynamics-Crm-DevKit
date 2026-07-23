@@ -7,9 +7,9 @@ using System.Reflection;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class BuildFormXMLToolTests
+public class FormXmlOperationsTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations);
 
     // ──────────────────────────────────────────────
     // Finding 1: Operations parameter description lists fewer actions than code supports
@@ -70,7 +70,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_EmptyEntityName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "",
             form_id: "38c60f9f-e1db-f011-8406-0022480b95a5",
@@ -83,7 +83,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_WhitespaceEntityName_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "   ",
             form_id: "38c60f9f-e1db-f011-8406-0022480b95a5",
@@ -96,7 +96,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_InvalidGuid_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "account",
             form_id: "not-a-guid",
@@ -109,7 +109,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_EmptyOperations_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "account",
             form_id: "38c60f9f-e1db-f011-8406-0022480b95a5",
@@ -122,7 +122,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_InvalidJson_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "account",
             form_id: "38c60f9f-e1db-f011-8406-0022480b95a5",
@@ -135,7 +135,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_EmptyArray_ReturnsError()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "account",
             form_id: "38c60f9f-e1db-f011-8406-0022480b95a5",
@@ -148,7 +148,7 @@ public class BuildFormXMLToolTests
     [TestMethod]
     public void BuildFormXml_GuidWithBraces_ParsesCorrectly()
     {
-        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildFormXMLTool(null!);
+        var tool = new DynamicsCrm.DevKit.Cli.Mcp.Tools.Form.FormXmlOperations(null!);
         var result = tool.build_form_xml(
             entity_name: "account",
             form_id: "{38c60f9f-e1db-f011-8406-0022480b95a5}",

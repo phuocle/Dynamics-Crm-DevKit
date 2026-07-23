@@ -8,13 +8,13 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
-namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap
 {
     /// <summary>
     /// Utility class for managing SiteMap XML operations.
     /// Provides helpers for validation, formatting, and file resolution.
     /// </summary>
-    public static class ManageSiteMapTool
+    public static class SiteMapXmlOperations
     {
         private static XmlSchemaSet _cachedSchemaSet;
         private static readonly object _schemaLock = new();

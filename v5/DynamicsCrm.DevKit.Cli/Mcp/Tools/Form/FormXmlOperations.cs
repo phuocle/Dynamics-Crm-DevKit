@@ -5,13 +5,13 @@ using System;
 using System.ComponentModel;
 using System.Text.Json;
 
-namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
+namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Form
 {
-    public class BuildFormXMLTool
+    public class FormXmlOperations
     {
         private readonly ServiceClient _serviceClient;
 
-        public BuildFormXMLTool(ServiceClient serviceClient)
+        public FormXmlOperations(ServiceClient serviceClient)
         {
             _serviceClient = serviceClient;
         }

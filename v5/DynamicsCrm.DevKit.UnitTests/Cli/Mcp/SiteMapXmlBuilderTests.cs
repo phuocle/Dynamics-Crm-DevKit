@@ -7,9 +7,9 @@ using System.Xml.Linq;
 namespace DynamicsCrm.DevKit.UnitTests.Cli.Mcp;
 
 [TestClass]
-public class BuildSiteMapXmlToolTests
+public class SiteMapXmlBuilderTests
 {
-    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.BuildSiteMapXmlTool);
+    private static readonly Type ToolType = typeof(DynamicsCrm.DevKit.Cli.Mcp.Tools.SiteMap.SiteMapXmlBuilder);
 
     private static readonly MethodInfo GetStringPropMethod = ToolType.GetMethod("GetStringProp", BindingFlags.NonPublic | BindingFlags.Static)!;
     private static readonly MethodInfo NormalizeBoolPropMethod = ToolType.GetMethod("NormalizeBoolProp", BindingFlags.NonPublic | BindingFlags.Static)!;
