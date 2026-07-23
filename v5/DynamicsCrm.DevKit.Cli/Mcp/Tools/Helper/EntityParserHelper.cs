@@ -122,6 +122,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
             {
                 LookupAttributeMetadata lookup => BuildEntityReference(lookup, jsonVal, fieldName, targetEntityOverride),
 
+                // PartyList: to, from, cc, bcc, requiredattendees, optionalattendees, organizer, etc.
+                _ when attrMeta.AttributeType == AttributeTypeCode.PartyList
+                    => BuildActivityPartyCollection(jsonVal, fieldName),
+
                 PicklistAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
                 StateAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
                 StatusAttributeMetadata => new OptionSetValue(jsonVal.GetInt32()),
@@ -158,6 +162,78 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                     "Use 'fieldname@targetentity' syntax (e.g. 'customerid@account') for polymorphic lookups.");
 
             return new EntityReference(target, guid);
+        }
+
+        /// <summary>
+        /// Converts a JSON array (or single object) of party entries into an EntityCollection
+        /// of activityparty entities that Dataverse expects for PartyList fields.
+        ///
+        /// Accepted JSON formats:
+        ///   Array:  [{"id":"guid","type":"entity"}, {"id":"guid","type":"entity","addressused":"email"}]
+        ///   Single: {"id":"guid","type":"entity"}  (auto-wrapped into array)
+        ///
+        /// participationtypemask is NOT required — Dataverse sets it automatically from the field name.
+        /// </summary>
+        private static EntityCollection BuildActivityPartyCollection(JsonElement jsonVal, string fieldName)
+        {
+            var parties = new List<Entity>();
+
+            // Auto-wrap single object into array
+            IEnumerable<JsonElement> elements;
+            if (jsonVal.ValueKind == JsonValueKind.Array)
+                elements = jsonVal.EnumerateArray();
+            else if (jsonVal.ValueKind == JsonValueKind.Object)
+                elements = new[] { jsonVal };
+            else
+                throw new ArgumentException(
+                    $"PartyList field '{fieldName}' requires a JSON array of party objects " +
+                    "(or a single party object). Each object: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. " +
+                    "Optional: \"addressused\":\"email@example.com\".");
+
+            foreach (var elem in elements)
+            {
+                if (elem.ValueKind != JsonValueKind.Object)
+                    throw new ArgumentException(
+                        $"PartyList field '{fieldName}': each element must be an object " +
+                        "with {\"id\":\"<guid>\",\"type\":\"<entity>\"}.");
+
+                if (!elem.TryGetProperty("id", out var idProp) || idProp.ValueKind != JsonValueKind.String)
+                    throw new ArgumentException(
+                        $"PartyList field '{fieldName}': missing required \"id\" (GUID string) in party object.");
+
+                if (!Guid.TryParse(idProp.GetString(), out var partyGuid))
+                    throw new ArgumentException(
+                        $"PartyList field '{fieldName}': \"{idProp.GetString()}\" is not a valid GUID.");
+
+                if (!elem.TryGetProperty("type", out var typeProp) || typeProp.ValueKind != JsonValueKind.String)
+                    throw new ArgumentException(
+                        $"PartyList field '{fieldName}': missing required \"type\" (entity logical name) in party object. " +
+                        "Example: \"type\":\"contact\" or \"type\":\"systemuser\".");
+
+                var targetEntity = typeProp.GetString();
+                if (string.IsNullOrWhiteSpace(targetEntity))
+                    throw new ArgumentException(
+                        $"PartyList field '{fieldName}': \"type\" cannot be empty.");
+
+                var party = new Entity("activityparty");
+                party["partyid"] = new EntityReference(targetEntity, partyGuid);
+
+                // Optional: addressused (email/phone/fax override)
+                if (elem.TryGetProperty("addressused", out var addrProp)
+                    && addrProp.ValueKind == JsonValueKind.String
+                    && !string.IsNullOrWhiteSpace(addrProp.GetString()))
+                {
+                    party["addressused"] = addrProp.GetString();
+                }
+
+                parties.Add(party);
+            }
+
+            if (parties.Count == 0)
+                throw new ArgumentException(
+                    $"PartyList field '{fieldName}': at least one party object is required.");
+
+            return new EntityCollection(parties);
         }
 
         private static object FallbackConvert(JsonElement jsonVal)

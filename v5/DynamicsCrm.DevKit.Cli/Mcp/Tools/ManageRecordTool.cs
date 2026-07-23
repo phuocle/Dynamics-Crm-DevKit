@@ -43,6 +43,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "  Examples: {\"v5_billto@account\": \"<guid>\"}, {\"v5_billto@contact\": \"<guid>\"}, {\"ownerid@systemuser\": \"<guid>\"}, {\"v5_ref@devkit_custom1\": \"<guid>\"}\n" +
             "- Never use @odata.bind format — use the fieldname@targetentity syntax above\n\n" +
 
+            "ACTIVITY PARTY FIELDS (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources):\n" +
+            "These fields require a JSON array of party objects (or single object for one participant).\n" +
+            "Format: [{\"id\":\"<guid>\",\"type\":\"<entity_logical_name>\"}]\n" +
+            "Optional addressused: [{\"id\":\"<guid>\",\"type\":\"contact\",\"addressused\":\"alt@email.com\"}]\n" +
+            "Examples:\n" +
+            "  \"to\": [{\"id\":\"<guid>\",\"type\":\"contact\"},{\"id\":\"<guid>\",\"type\":\"account\"}]\n" +
+            "  \"from\": {\"id\":\"<guid>\",\"type\":\"systemuser\"} (single object auto-wrapped to array)\n" +
+            "Do NOT set participationtypemask — Dataverse sets it automatically from the field name.\n\n" +
+
             "WHEN TO USE:\n" +
             "- Create / read / update / delete a single record by GUID\n" +
             "- Partial-update specific fields without rewriting whole record\n" +
@@ -59,7 +68,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "GUID. Required: read/update/delete. Empty: create."
             )] string record_id = "",
             [Description(
-                "JSON object of field values. Required: create/update. Polymorphic lookup (multiple targets): 'fieldname@targetentity' key to specify target. Examples: {\"v5_billto@account\": \"<guid>\"}, {\"ownerid@systemuser\": \"<guid>\"}, {\"v5_ref@devkit_custom1\": \"<guid>\"}. Regular lookup (single target): {\"fieldname\": \"guid\"}."
+                "JSON object of field values. Required: create/update. Polymorphic lookup: 'fieldname@targetentity' key. Activity party fields (to/from/cc/bcc/requiredattendees/optionalattendees): JSON array of {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Single party auto-wrapped: {\"id\":\"<guid>\",\"type\":\"<entity>\"}. Optional: \"addressused\":\"email\". Regular lookup: {\"fieldname\": \"guid\"}."
             )] string fields_json = "",
             [Description(
                 "Read only. Comma-separated columns. Empty = all."

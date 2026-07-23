@@ -793,29 +793,42 @@ delete_options: [100000001]
 Manage Dataverse System Charts (`savedqueryvisualization`).
 
 ### Overview
-Charts are bound to a View (`view_name`). FetchXML (`datadescription`) is automatically derived from the target View by `manage_chart` — no manual FetchXML is needed!
+Charts are **not** bound to a View. FetchXML (`datadescription`) is built from the resolved entity logical name. No `view_name` parameter.
 
 ### Supported OOB Chart Types
 Column, Bar, Line, Pie, Doughnut (Donut), Funnel, Area, Bubble, Radar.
 
-### User Interaction Pattern (Chart Creation)
-When a user prompts to create a chart, the 4 core initial inputs expected are:
-1. `entity_name` (e.g. Account)
-2. `view_name` (e.g. Active Accounts)
-3. `chart_name` (e.g. Account by Industry)
-4. `chart_type` (e.g. Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar)
+### Defaults
+- `chart_type` omitted → **Pie**
+- Pie category (`group_by_column`) omitted → **statecode**
+- Pie legend (`aggregate_column`) omitted → **importsequencenumber** + aggregate **count**
+
+### User Interaction Pattern (Pie Chart Creation)
+Required from user (error if missing):
+1. `entity_name` (Display Name or logical name; resolved like other tools)
+2. `chart_name`
+
+Optional:
+- `chart_type` (default Pie)
+- `group_by_column` / category (default statecode)
+- `aggregate_column` / legend (default importsequencenumber)
+- `aggregate_type` (default count)
+- `solution_name` (optional; null-check before add)
 
 Workflow:
-1. Pass `entity_name`, `view_name`, `chart_name`, `chart_type` to `manage_chart(action='create', ...)`.
-2. `manage_chart` automatically reads the View's `fetchxml`, derives the `<datadescription>` aggregate XML, builds the `<presentationdescription>` Chart XML for `chart_type`, creates the system chart, adds it to `solution_name` (if provided), and publishes entity customizations.
+1. Call `manage_chart(action='create', entity_name=..., chart_name=..., ...)` with `confirmed=false` (default).
+2. Tool returns `status=needs_confirmation` + full proposed plan (including defaults). **Do not create yet.**
+3. Show the plan to the user. If they want different category/legend, re-call with updated fields and `confirmed=false` again.
+4. After user approves, re-call the same create with `confirmed=true`.
+5. Tool builds entity-based aggregate FetchXML, presentation XML, creates chart, adds to solution when `solution_name` is non-empty, and publishes.
 
 ### Actions
 - `list`: List system charts for an entity (`entity_name`).
 - `detail`: Get full chart definition by `chart_id` or `chart_name`.
-- `create`: Create a system chart (`entity_name`, `view_name`, `chart_name`, `chart_type`, `group_by_column`, `aggregate_column`, `aggregate_type`, `solution_name`).
-- `update`: Update chart view binding/type/description by `chart_id` or `chart_name`.
+- `create`: Create a system chart (`entity_name`, `chart_name`, optional `chart_type`/`group_by_column`/`aggregate_column`/`aggregate_type`/`solution_name`, `confirmed` for pie).
+- `update`: Update chart type/data fields/description by `chart_id` or `chart_name`.
 - `rename`: Change chart display name.
-- `set_default`: Set a system chart as the default view chart for an entity.
+- `set_default`: Set a system chart as the default chart for an entity.
 - `undo`: Rollback chart state from a `.chart.json` backup file path.
 
 ---

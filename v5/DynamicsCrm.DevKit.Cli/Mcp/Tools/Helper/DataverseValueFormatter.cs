@@ -1,5 +1,6 @@
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
@@ -26,6 +27,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 AliasedValue av => FormatAliased(av),
                 Guid g => g.ToString(),
                 byte[] bytes => $"[{bytes.Length} bytes]",
+                EntityCollection ec => FormatEntityCollection(ec),
                 _ => raw.ToString()
             };
         }
@@ -47,5 +49,34 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Helper
                 _ => av.Value.ToString()
             };
         }
+
+        private static string FormatEntityCollection(EntityCollection ec)
+        {
+            if (ec?.Entities == null || ec.Entities.Count == 0)
+                return "[]";
+
+            var parts = new List<string>(ec.Entities.Count);
+            foreach (var e in ec.Entities)
+            {
+                if (e.Contains("partyid") && e["partyid"] is EntityReference partyRef)
+                {
+                    var name = string.IsNullOrWhiteSpace(partyRef.Name) ? "" : partyRef.Name;
+                    var addr = e.Contains("addressused") ? e["addressused"]?.ToString() : null;
+
+                    if (!string.IsNullOrWhiteSpace(addr))
+                        parts.Add($"{name} ({partyRef.LogicalName}:{partyRef.Id}) <{addr}>");
+                    else if (!string.IsNullOrEmpty(name))
+                        parts.Add($"{name} ({partyRef.LogicalName}:{partyRef.Id})");
+                    else
+                        parts.Add($"{partyRef.LogicalName}:{partyRef.Id}");
+                }
+                else
+                {
+                    parts.Add(e.Id != Guid.Empty ? $"{e.LogicalName}:{e.Id}" : e.LogicalName);
+                }
+            }
+            return string.Join("; ", parts);
+        }
     }
 }
+

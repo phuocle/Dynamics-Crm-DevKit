@@ -42,6 +42,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         Description(
             "Bulk create Dataverse records in parallel (data migration). Partial failures reported per-item; successes still committed. Input: inline JSON array, .json (from generate_demo_data), or .csv with Display Name headers (lookups resolved by Name: 1 match=GUID, 0/2+=skipped). Polymorphic lookup: 'field@targetentity'. Max 5000 records/call.\n\n" +
 
+            "ACTIVITY PARTY FIELDS (to, from, cc, bcc, requiredattendees, optionalattendees, organizer, customers, resources):\n" +
+            "These fields require a JSON array of party objects (or single object for one participant).\n" +
+            "Format: [{\"id\":\"<guid>\",\"type\":\"<entity_logical_name>\"}]\n" +
+            "Optional addressused: [{\"id\":\"<guid>\",\"type\":\"contact\",\"addressused\":\"alt@email.com\"}]\n" +
+            "Examples:\n" +
+            "  \"to\": [{\"id\":\"<guid>\",\"type\":\"contact\"},{\"id\":\"<guid>\",\"type\":\"account\"}]\n" +
+            "  \"from\": {\"id\":\"<guid>\",\"type\":\"systemuser\"} (single object auto-wrapped to array)\n" +
+            "Do NOT set participationtypemask — Dataverse sets it automatically from the field name.\n\n" +
+
             "WHEN TO USE:\n" +
             "- Bulk insert > 1 records of the same entity (data migration, demo seeding)\n" +
             "- Pipe demo data: generate_demo_data → create_records\n" +

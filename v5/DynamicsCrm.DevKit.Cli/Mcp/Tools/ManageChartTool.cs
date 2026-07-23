@@ -28,6 +28,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             "Column", "Bar", "Line", "Pie", "Doughnut", "Donut", "Funnel", "Area", "Bubble", "Radar"
         };
 
+        private const string DefaultChartType = "Pie";
+        private const string DefaultPieCategoryColumn = "statecode";
+        private const string DefaultPieLegendColumn = "importsequencenumber";
+        private const string DefaultPieAggregateType = "count";
+
         private readonly ServiceClient _serviceClient;
         private readonly McpDryRunOptions _options;
         private string _workspaceFolder;
@@ -43,25 +48,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             UseStructuredContent = true, OutputSchemaType = typeof(UpsertChartResult)),
         Description(
             "Dataverse system charts (savedqueryvisualization) — list/detail/create/update/rename/set_default/undo. " +
-            "Creates or updates system charts by binding to a View (view_name). FetchXML is automatically constructed from the View schema — no manual FetchXML required! " +
-            "Core params for create: entity_name, view_name, chart_name, chart_type (Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar). " +
-            "Optional: group_by_column (X-axis field), aggregate_column (Y-axis field), aggregate_type (count/sum/avg/min/max), solution_name.")]
+            "Creates or updates system charts from entity metadata. FetchXML (datadescription) is built from the resolved entity logical name — no view binding. " +
+            "Core params for create: entity_name, chart_name. chart_type defaults to Pie when omitted. " +
+            "Pie create defaults: category/group_by_column=statecode, legend/aggregate_column=importsequencenumber + count. " +
+            "Pie create requires user confirmation: first call returns needs_confirmation summary; re-call with confirmed=true after user approves. " +
+            "Optional: group_by_column (category), aggregate_column (legend/measure), aggregate_type (count/sum/avg/min/max), solution_name.")]
         public CallToolResult manage_chart(
             [Description("'list', 'detail', 'create', 'update', 'rename', 'set_default', 'undo'."
             )] string action,
             [Description("Entity Display Name or logical name (e.g. 'Account' or 'account'). Required for list/create."
             )] string entity_name = "",
-            [Description("View Name (savedquery) to derive chart data schema and fields from (e.g. 'Active Accounts')."
-            )] string view_name = "",
             [Description("Chart GUID. Required for detail/update/rename/set_default/undo (unless chart_name uniquely identifies chart)."
             )] string chart_id = "",
-            [Description("Chart name. Used for detail/update/rename lookup or create."
+            [Description("Chart name. Used for detail/update/rename lookup or create. Required for create."
             )] string chart_name = "",
-            [Description("OOB Chart Type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar."
+            [Description("OOB Chart Type: Column, Bar, Line, Pie, Doughnut, Funnel, Area, Bubble, Radar. Default: Pie when omitted on create."
             )] string chart_type = "",
-            [Description("Attribute logical name or display name for category group by (X-axis). Auto-derived from View if omitted."
+            [Description("Category / group-by attribute logical name or display name. Pie default: statecode."
             )] string group_by_column = "",
-            [Description("Attribute logical name or display name for measure aggregation (Y-axis). Defaults to primary key count if omitted."
+            [Description("Legend / measure attribute logical name or display name. Pie default: importsequencenumber."
             )] string aggregate_column = "",
             [Description("Aggregation type: 'count' (default), 'sum', 'avg', 'min', 'max'."
             )] string aggregate_type = "count",
@@ -69,12 +74,14 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             )] string presentationdescription = "",
             [Description("Chart description text."
             )] string description = "",
-            [Description("Solution unique name to add the chart component to."
+            [Description("Optional solution unique/display name. When provided and non-empty, chart is added to the solution after create/update."
             )] string solution_name = "",
             [Description("Validate XML syntax and chart types before saving."
             )] bool validate = true,
             [Description("Backup before overwrite."
             )] bool backup = true,
+            [Description("Pie create only: set true only after user approved the confirmation summary. Default false returns needs_confirmation without creating."
+            )] bool confirmed = false,
             [Description("Optional project/workspace folder path to save backups in."
             )] string workspace_folder = "")
         {
@@ -92,8 +99,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             {
                 "list" => HandleList(entity_name),
                 "detail" => HandleDetail(entity_name, chart_id, chart_name),
-                "create" => HandleCreate(entity_name, view_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate),
-                "update" => HandleUpdate(entity_name, view_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, backup),
+                "create" => HandleCreate(entity_name, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, confirmed),
+                "update" => HandleUpdate(entity_name, chart_id, chart_name, chart_type, group_by_column, aggregate_column, aggregate_type, presentationdescription, description, solution_name, validate, backup),
                 "rename" => HandleRename(entity_name, chart_id, chart_name, solution_name),
                 "set_default" => HandleSetDefault(entity_name, chart_id, chart_name),
                 "undo" => HandleUndo(chart_id, presentationdescription, solution_name),
@@ -183,9 +190,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleCreate(
-            string entityNameInput, string viewNameInput, string chartName, string chartTypeInput,
+            string entityNameInput, string chartName, string chartTypeInput,
             string groupByColInput, string aggregateColInput, string aggregateTypeInput,
-            string presXmlInput, string description, string solutionName, bool validate)
+            string presXmlInput, string description, string solutionName, bool validate, bool confirmed)
         {
             if (string.IsNullOrWhiteSpace(entityNameInput))
                 return ErrorResult("Error: entity_name is required for action='create'.");
@@ -193,20 +200,119 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             if (string.IsNullOrWhiteSpace(chartName))
                 return ErrorResult("Error: chart_name is required for action='create'.");
 
-            if (string.IsNullOrWhiteSpace(viewNameInput) && string.IsNullOrWhiteSpace(presXmlInput))
-                return ErrorResult("Error: view_name is required for action='create' to derive chart data schema from view.");
+            var entityResolve = DisplayNameFirstResolver.ResolveEntity(_serviceClient, entityNameInput.Trim(), "manage_chart");
+            if (!entityResolve.IsSuccess)
+                return ErrorResult($"Error: {entityResolve.Error}");
 
-            var entityName = ResolveEntityLogicalName(entityNameInput);
-            if (string.IsNullOrEmpty(entityName))
-                return ErrorResult($"Error: Could not resolve entity '{entityNameInput}'.");
+            var entityName = entityResolve.Value.LogicalName;
+            var chartType = ResolveChartType(chartTypeInput, out var chartTypeDefaulted);
+            var isPie = chartType.Equals("Pie", StringComparison.OrdinalIgnoreCase);
 
-            var chartType = string.IsNullOrWhiteSpace(chartTypeInput) ? "Column" : chartTypeInput.Trim();
+            string groupByCol;
+            string aggregateCol;
+            string aggregateType;
+            var defaultsApplied = new List<string>();
 
-            // Build datadescription automatically from View
-            var (dataXml, aggregateAlias, dataError) = BuildDataDescriptionFromView(entityName, viewNameInput, groupByColInput, aggregateColInput, aggregateTypeInput);
+            if (isPie)
+            {
+                if (chartTypeDefaulted)
+                    defaultsApplied.Add("chart_type=Pie");
+
+                groupByCol = string.IsNullOrWhiteSpace(groupByColInput)
+                    ? DefaultPieCategoryColumn
+                    : groupByColInput.Trim().ToLowerInvariant();
+                if (string.IsNullOrWhiteSpace(groupByColInput))
+                    defaultsApplied.Add($"category/group_by_column={DefaultPieCategoryColumn}");
+
+                aggregateCol = string.IsNullOrWhiteSpace(aggregateColInput)
+                    ? DefaultPieLegendColumn
+                    : aggregateColInput.Trim().ToLowerInvariant();
+                if (string.IsNullOrWhiteSpace(aggregateColInput))
+                    defaultsApplied.Add($"legend/aggregate_column={DefaultPieLegendColumn}");
+
+                aggregateType = string.IsNullOrWhiteSpace(aggregateTypeInput)
+                    ? DefaultPieAggregateType
+                    : aggregateTypeInput.Trim().ToLowerInvariant();
+                if (string.IsNullOrWhiteSpace(aggregateTypeInput) ||
+                    aggregateType.Equals(DefaultPieAggregateType, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(aggregateTypeInput))
+                        defaultsApplied.Add($"aggregate_type={DefaultPieAggregateType}");
+                }
+
+                if (!confirmed)
+                {
+                    var confirmSb = new StringBuilder();
+                    confirmSb.AppendLine("[ChartCreate] Confirmation required before creating pie chart.");
+                    confirmSb.AppendLine("No chart was created. Ask the user to approve the plan below, then re-call manage_chart(action='create', confirmed=true, ...) with the same values.");
+                    confirmSb.AppendLine();
+                    confirmSb.AppendLine("Proposed chart:");
+                    confirmSb.AppendLine($"  Chart Type : {chartType}{(chartTypeDefaulted ? " (default)" : "")}");
+                    confirmSb.AppendLine($"  Entity     : {entityName}");
+                    confirmSb.AppendLine($"  Chart Name : {chartName.Trim()}");
+                    confirmSb.AppendLine($"  Category   : {groupByCol}{(string.IsNullOrWhiteSpace(groupByColInput) ? " (default)" : "")}");
+                    confirmSb.AppendLine($"  Legend     : {aggregateCol} / {aggregateType}{(string.IsNullOrWhiteSpace(aggregateColInput) ? " (default)" : "")}");
+                    if (!string.IsNullOrWhiteSpace(solutionName))
+                        confirmSb.AppendLine($"  Solution   : {solutionName.Trim()}");
+                    else
+                        confirmSb.AppendLine("  Solution   : (none)");
+                    confirmSb.AppendLine();
+                    if (defaultsApplied.Count > 0)
+                    {
+                        confirmSb.AppendLine("Defaults applied:");
+                        foreach (var item in defaultsApplied)
+                            confirmSb.AppendLine($"  - {item}");
+                        confirmSb.AppendLine();
+                    }
+                    if (string.IsNullOrWhiteSpace(aggregateColInput))
+                    {
+                        confirmSb.AppendLine(
+                            $"Legend default is '{DefaultPieLegendColumn}' with aggregate '{DefaultPieAggregateType}' (field exists on every entity). " +
+                            "If the user wants a different measure, change aggregate_column/aggregate_type and confirm again.");
+                        confirmSb.AppendLine();
+                    }
+                    if (string.IsNullOrWhiteSpace(groupByColInput))
+                    {
+                        confirmSb.AppendLine(
+                            $"Category default is '{DefaultPieCategoryColumn}'. If the user wants a different slice field, change group_by_column and confirm again.");
+                        confirmSb.AppendLine();
+                    }
+                    confirmSb.AppendLine("After user approval, re-call with confirmed=true.");
+
+                    return SuccessResult(confirmSb.ToString(), new UpsertChartResult
+                    {
+                        Action = "create",
+                        Entity = entityName,
+                        ChartName = chartName.Trim(),
+                        ChartType = chartType,
+                        Category = groupByCol,
+                        Legend = aggregateCol,
+                        AggregateType = aggregateType,
+                        SolutionName = string.IsNullOrWhiteSpace(solutionName) ? null : solutionName.Trim(),
+                        Status = "needs_confirmation",
+                        NeedsConfirmation = true,
+                        DefaultsApplied = defaultsApplied.Count > 0 ? defaultsApplied : null
+                    });
+                }
+            }
+            else
+            {
+                // Non-pie rules will be tightened later; keep entity-based defaults for now.
+                groupByCol = string.IsNullOrWhiteSpace(groupByColInput)
+                    ? DefaultPieCategoryColumn
+                    : groupByColInput.Trim().ToLowerInvariant();
+                aggregateCol = string.IsNullOrWhiteSpace(aggregateColInput)
+                    ? DefaultPieLegendColumn
+                    : aggregateColInput.Trim().ToLowerInvariant();
+                aggregateType = string.IsNullOrWhiteSpace(aggregateTypeInput)
+                    ? DefaultPieAggregateType
+                    : aggregateTypeInput.Trim().ToLowerInvariant();
+            }
+
+            var (dataXml, aggregateAlias, dataError) = BuildDataDescriptionFromEntity(
+                entityName, groupByCol, aggregateCol, aggregateType);
             if (dataError != null) return ErrorResult(dataError);
 
-            // Build presentationdescription automatically from chart_type or use presXmlInput
             var presXml = string.IsNullOrWhiteSpace(presXmlInput)
                 ? BuildPresentationDescription(chartType, chartName, aggregateAlias)
                 : ResolveXmlInput(presXmlInput);
@@ -223,8 +329,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(errSb.ToString());
             }
 
+            string resolvedSolutionUniqueName = null;
+            if (!string.IsNullOrWhiteSpace(solutionName))
+            {
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                if (!solResult.IsSuccess)
+                    return ErrorResult($"Error: {solResult.Error}");
+                if (string.IsNullOrWhiteSpace(solResult.UniqueName))
+                    return ErrorResult($"Error: Solution '{solutionName}' resolved but unique name is null/empty. Chart was not created.");
+                resolvedSolutionUniqueName = solResult.UniqueName;
+            }
+
             if (_options.DryRun)
-                return DryRunResult($"Would CREATE system chart '{chartName}' ({chartType}) for entity '{entityName}' derived from View '{viewNameInput}'.");
+            {
+                var dryMsg = $"Would CREATE system chart '{chartName}' ({chartType}) for entity '{entityName}' " +
+                             $"(category={groupByCol}, legend={aggregateCol}/{aggregateType}" +
+                             (resolvedSolutionUniqueName != null ? $", solution={resolvedSolutionUniqueName}" : "") +
+                             ").";
+                return DryRunResult(dryMsg);
+            }
 
             const string table = "savedqueryvisualization";
             var chartRecord = new Entity(table)
@@ -238,8 +361,9 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newId = _serviceClient.Create(chartRecord);
 
-            // Solution assignment via SDK message
-            var addedToSolution = AddToSolutionIfRequested(newId, solutionName);
+            var addedToSolution = false;
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                addedToSolution = AddToSolutionIfRequested(newId, resolvedSolutionUniqueName);
 
             var published = PublishIfNeeded(entityName);
 
@@ -248,8 +372,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.AppendLine($"ID: {newId}");
             sb.AppendLine($"Entity: {entityName}");
             sb.AppendLine($"ChartType: {chartType}");
-            sb.AppendLine($"Derived from View: {viewNameInput}");
-            if (addedToSolution) sb.AppendLine($"Solution: Added to '{solutionName}'");
+            sb.AppendLine($"Category: {groupByCol}");
+            sb.AppendLine($"Legend: {aggregateCol} / {aggregateType}");
+            if (addedToSolution) sb.AppendLine($"Solution: Added to '{resolvedSolutionUniqueName}'");
+            else if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                sb.AppendLine($"Solution: Failed to add to '{resolvedSolutionUniqueName}'");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
 
             return SuccessResult(sb.ToString(), new UpsertChartResult
@@ -257,8 +384,15 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Action = "create",
                 Entity = entityName,
                 ChartId = newId.ToString(),
-                ChartName = chartName,
+                ChartName = chartName.Trim(),
+                ChartType = chartType,
+                Category = groupByCol,
+                Legend = aggregateCol,
+                AggregateType = aggregateType,
+                SolutionName = resolvedSolutionUniqueName,
                 Status = "created",
+                NeedsConfirmation = false,
+                DefaultsApplied = defaultsApplied.Count > 0 ? defaultsApplied : null,
                 Validated = validate,
                 ValidationWarnings = valWarnings.Count > 0 ? valWarnings : null,
                 Published = published
@@ -266,7 +400,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         }
 
         private CallToolResult HandleUpdate(
-            string entityNameInput, string viewNameInput, string chartIdInput, string chartNameInput,
+            string entityNameInput, string chartIdInput, string chartNameInput,
             string chartTypeInput, string groupByColInput, string aggregateColInput, string aggregateTypeInput,
             string presXmlInput, string description, string solutionName,
             bool validate, bool backup)
@@ -285,9 +419,25 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var newDataXml = currentDataXml;
             string aggregateAlias = null;
-            if (!string.IsNullOrWhiteSpace(viewNameInput))
+            var shouldRebuildData =
+                !string.IsNullOrWhiteSpace(groupByColInput) ||
+                !string.IsNullOrWhiteSpace(aggregateColInput) ||
+                !string.IsNullOrWhiteSpace(aggregateTypeInput);
+
+            if (shouldRebuildData)
             {
-                var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromView(primaryEntity, viewNameInput, groupByColInput, aggregateColInput, aggregateTypeInput);
+                var groupByCol = string.IsNullOrWhiteSpace(groupByColInput)
+                    ? DefaultPieCategoryColumn
+                    : groupByColInput.Trim().ToLowerInvariant();
+                var aggregateCol = string.IsNullOrWhiteSpace(aggregateColInput)
+                    ? DefaultPieLegendColumn
+                    : aggregateColInput.Trim().ToLowerInvariant();
+                var aggregateType = string.IsNullOrWhiteSpace(aggregateTypeInput)
+                    ? DefaultPieAggregateType
+                    : aggregateTypeInput.Trim().ToLowerInvariant();
+
+                var (derivedDataXml, alias, dataErr) = BuildDataDescriptionFromEntity(
+                    primaryEntity, groupByCol, aggregateCol, aggregateType);
                 if (dataErr != null) return ErrorResult(dataErr);
                 newDataXml = derivedDataXml;
                 aggregateAlias = alias;
@@ -315,6 +465,17 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 return ErrorResult(errSb.ToString());
             }
 
+            string resolvedSolutionUniqueName = null;
+            if (!string.IsNullOrWhiteSpace(solutionName))
+            {
+                var solResult = SolutionResolverHelper.Resolve(_serviceClient, solutionName.Trim());
+                if (!solResult.IsSuccess)
+                    return ErrorResult($"Error: {solResult.Error}");
+                if (string.IsNullOrWhiteSpace(solResult.UniqueName))
+                    return ErrorResult($"Error: Solution '{solutionName}' resolved but unique name is null/empty.");
+                resolvedSolutionUniqueName = solResult.UniqueName;
+            }
+
             string backupPath = null;
             if (backup)
             {
@@ -333,14 +494,19 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             _serviceClient.Update(updateRecord);
 
-            var addedToSolution = AddToSolutionIfRequested(chartId, solutionName);
+            var addedToSolution = false;
+            if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                addedToSolution = AddToSolutionIfRequested(chartId, resolvedSolutionUniqueName);
+
             var published = PublishIfNeeded(primaryEntity);
 
             var sb = new StringBuilder();
             sb.AppendLine($"[ChartUpdate] {primaryEntity} — {chartName}");
             sb.AppendLine($"ChartId: {chartId}");
             sb.AppendLine($"Status: Updated successfully");
-            if (addedToSolution) sb.AppendLine($"Solution: Added to '{solutionName}'");
+            if (addedToSolution) sb.AppendLine($"Solution: Added to '{resolvedSolutionUniqueName}'");
+            else if (!string.IsNullOrWhiteSpace(resolvedSolutionUniqueName))
+                sb.AppendLine($"Solution: Failed to add to '{resolvedSolutionUniqueName}'");
             sb.AppendLine($"Validated: {(validate ? "yes" : "skipped")}");
             sb.AppendLine($"Backup: {backupPath ?? "skipped"}");
             sb.AppendLine($"Published: {(published ? "yes" : "no")}");
@@ -351,6 +517,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Entity = primaryEntity,
                 ChartId = chartId.ToString(),
                 ChartName = chartName,
+                SolutionName = resolvedSolutionUniqueName,
                 Status = "updated",
                 Validated = validate,
                 ValidationWarnings = valWarnings.Count > 0 ? valWarnings : null,
@@ -501,83 +668,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             });
         }
 
-        // ── View-Based DataDescription Builder ─────────────────────────────
+        // ── Entity-Based DataDescription Builder ───────────────────────────
 
-        private (string Xml, string AggregateAlias, string Error) BuildDataDescriptionFromView(
-            string entityName, string viewName, string groupByColInput, string aggregateColInput, string aggregateTypeInput)
+        private static (string Xml, string AggregateAlias, string Error) BuildDataDescriptionFromEntity(
+            string entityName, string groupByCol, string aggregateCol, string aggregateType)
         {
-            if (string.IsNullOrWhiteSpace(viewName))
-                return (null, null, "Error: view_name is required to derive chart data specification.");
+            if (string.IsNullOrWhiteSpace(entityName))
+                return (null, null, "Error: entity logical name is required to build chart data specification.");
+            if (string.IsNullOrWhiteSpace(groupByCol))
+                return (null, null, "Error: category/group_by_column is required to build chart data specification.");
+            if (string.IsNullOrWhiteSpace(aggregateCol))
+                return (null, null, "Error: legend/aggregate_column is required to build chart data specification.");
 
-            var viewQuery = new QueryExpression("savedquery")
-            {
-                ColumnSet = new ColumnSet("savedqueryid", "name", "fetchxml", "returnedtypecode"),
-                TopCount = 1
-            };
-            viewQuery.Criteria.AddCondition("name", ConditionOperator.Equal, viewName.Trim());
-            viewQuery.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-
-            var viewResults = _serviceClient.RetrieveMultiple(viewQuery);
-            if (viewResults.Entities.Count == 0)
-            {
-                // Fallback search without returnedtypecode if empty
-                viewQuery.Criteria.Conditions.Clear();
-                viewQuery.Criteria.AddCondition("name", ConditionOperator.Equal, viewName.Trim());
-                viewResults = _serviceClient.RetrieveMultiple(viewQuery);
-            }
-
-            if (viewResults.Entities.Count == 0)
-                return (null, null, $"Error: View '{viewName}' not found for entity '{entityName}'. Use manage_view(action='list', entity_name='{entityName}') to check valid view names.");
-
-            var viewEntity = viewResults.Entities[0];
-            var fetchXmlStr = viewEntity.GetAttributeValue<string>("fetchxml");
-            if (string.IsNullOrWhiteSpace(fetchXmlStr))
-                return (null, null, $"Error: View '{viewName}' has empty FetchXML definition.");
-
-            XDocument viewDoc;
-            try { viewDoc = XDocument.Parse(fetchXmlStr); }
-            catch (Exception ex) { return (null, null, $"Error parsing FetchXML from View '{viewName}': {ex.Message}"); }
-
-            var entityElem = viewDoc.Descendants("entity").FirstOrDefault();
-            var targetEntity = entityElem?.Attribute("name")?.Value ?? entityName;
-
-            // Resolve attributes from View
-            var viewAttributes = entityElem?.Elements("attribute")
-                .Select(a => a.Attribute("name")?.Value)
-                .Where(n => !string.IsNullOrEmpty(n))
-                .ToList() ?? new List<string>();
-
-            // Resolve Primary Key
-            var primaryKey = $"{targetEntity}id";
-
-            // Resolve GroupBy Column (X-axis)
-            string groupByCol = null;
-            if (!string.IsNullOrWhiteSpace(groupByColInput))
-            {
-                groupByCol = groupByColInput.Trim().ToLowerInvariant();
-            }
-            else
-            {
-                // Pick first non-primary key column from View attributes, or fallback to first attribute
-                groupByCol = viewAttributes.FirstOrDefault(a => !a.Equals(primaryKey, StringComparison.OrdinalIgnoreCase))
-                    ?? viewAttributes.FirstOrDefault()
-                    ?? primaryKey;
-            }
-
-            // Resolve Aggregate Column (Y-axis)
-            // OOB pie charts typically count the primary key (e.g. contactid/kbarticleid).
-            // Non-pie OOB charts often count the primary name attribute (e.g. fullname).
-            string aggregateCol = null;
-            if (!string.IsNullOrWhiteSpace(aggregateColInput))
-            {
-                aggregateCol = aggregateColInput.Trim().ToLowerInvariant();
-            }
-            else
-            {
-                aggregateCol = ResolvePrimaryNameAttribute(targetEntity) ?? primaryKey;
-            }
-
-            var aggType = string.IsNullOrWhiteSpace(aggregateTypeInput) ? "count" : aggregateTypeInput.Trim().ToLowerInvariant();
+            var targetEntity = entityName.Trim().ToLowerInvariant();
+            var resolvedGroupBy = groupByCol.Trim().ToLowerInvariant();
+            var resolvedAggregate = aggregateCol.Trim().ToLowerInvariant();
+            var aggType = string.IsNullOrWhiteSpace(aggregateType)
+                ? DefaultPieAggregateType
+                : aggregateType.Trim().ToLowerInvariant();
 
             // Keep aliases stable and portal-compatible.
             const string groupByAlias = "groupby_column";
@@ -596,8 +704,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.Append("<fetch mapping=\"logical\" aggregate=\"true\">");
             sb.Append($"<entity name=\"{targetEntity}\">");
             // Match OOB pie attribute order: aggregate then groupby. Harmless for other chart types.
-            sb.Append($"<attribute alias=\"{aggregateAlias}\" name=\"{aggregateCol}\" aggregate=\"{aggType}\" />");
-            sb.Append($"<attribute groupby=\"true\" alias=\"{groupByAlias}\" name=\"{groupByCol}\" />");
+            sb.Append($"<attribute alias=\"{aggregateAlias}\" name=\"{resolvedAggregate}\" aggregate=\"{aggType}\" />");
+            sb.Append($"<attribute groupby=\"true\" alias=\"{groupByAlias}\" name=\"{resolvedGroupBy}\" />");
             sb.Append("</entity>");
             sb.Append("</fetch>");
             sb.Append("</fetchcollection>");
@@ -611,6 +719,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             sb.Append("</datadefinition>");
 
             return (sb.ToString(), aggregateAlias, null);
+        }
+
+        private static string ResolveChartType(string chartTypeInput, out bool defaulted)
+        {
+            if (string.IsNullOrWhiteSpace(chartTypeInput))
+            {
+                defaulted = true;
+                return DefaultChartType;
+            }
+
+            defaulted = false;
+            var match = SupportedChartTypes.FirstOrDefault(t => t.Equals(chartTypeInput.Trim(), StringComparison.OrdinalIgnoreCase));
+            if (match == null)
+                return chartTypeInput.Trim();
+
+            // Normalize Donut -> Doughnut for template lookup, keep Pie casing from supported set.
+            return match.Equals("Donut", StringComparison.OrdinalIgnoreCase) ? "Doughnut" : match;
         }
 
         // ── Automatic PresentationDescription Builder ──────────────────────
@@ -669,29 +794,11 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return reader.ReadToEnd();
         }
 
-        private string ResolvePrimaryNameAttribute(string entityLogicalName)
-        {
-            if (string.IsNullOrWhiteSpace(entityLogicalName)) return null;
-            try
-            {
-                var request = new Microsoft.Xrm.Sdk.Messages.RetrieveEntityRequest
-                {
-                    LogicalName = entityLogicalName,
-                    EntityFilters = Microsoft.Xrm.Sdk.Metadata.EntityFilters.Entity
-                };
-                var response = (Microsoft.Xrm.Sdk.Messages.RetrieveEntityResponse)_serviceClient.Execute(request);
-                return response.EntityMetadata?.PrimaryNameAttribute;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
         // ── Solution Component Helper (SDK Request) ─────────────────────────
 
         private bool AddToSolutionIfRequested(Guid chartId, string solutionName)
         {
+            // Caller must null-check solutionName before calling when solution is optional.
             if (string.IsNullOrWhiteSpace(solutionName)) return false;
             try
             {

@@ -65,7 +65,7 @@ public class ManageChartToolTests
     public void ManageChart_CreateAction_EmptyEntityName_ReturnsErrorResult()
     {
         var tool = new ManageChartTool(null!, new McpDryRunOptions());
-        var result = tool.manage_chart(action: "create", entity_name: "", chart_name: "Test Chart", view_name: "Active Accounts");
+        var result = tool.manage_chart(action: "create", entity_name: "", chart_name: "Test Chart");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
         StringAssert.Contains(text, "entity_name is required");
@@ -75,20 +75,48 @@ public class ManageChartToolTests
     public void ManageChart_CreateAction_EmptyChartName_ReturnsErrorResult()
     {
         var tool = new ManageChartTool(null!, new McpDryRunOptions());
-        var result = tool.manage_chart(action: "create", entity_name: "account", chart_name: "", view_name: "Active Accounts");
+        var result = tool.manage_chart(action: "create", entity_name: "account", chart_name: "");
         Assert.IsTrue(result.IsError);
         var text = ((TextContentBlock)result.Content[0]).Text;
         StringAssert.Contains(text, "chart_name is required");
     }
 
     [TestMethod]
-    public void ManageChart_CreateAction_EmptyViewName_ReturnsErrorResult()
+    public void ManageChart_CreateAction_HasNoViewNameParameter()
     {
-        var tool = new ManageChartTool(null!, new McpDryRunOptions());
-        var result = tool.manage_chart(action: "create", entity_name: "account", chart_name: "Test Chart", view_name: "");
-        Assert.IsTrue(result.IsError);
-        var text = ((TextContentBlock)result.Content[0]).Text;
-        StringAssert.Contains(text, "view_name is required");
+        var method = ToolType.GetMethod("manage_chart");
+        Assert.IsNotNull(method);
+        var names = method!.GetParameters().Select(p => p.Name).ToArray();
+        CollectionAssert.DoesNotContain(names, "view_name");
+        CollectionAssert.Contains(names, "confirmed");
+    }
+
+    [TestMethod]
+    public void ManageChart_BuildDataDescriptionFromEntity_UsesProvidedCategoryAndLegend()
+    {
+        var method = ToolType.GetMethod("BuildDataDescriptionFromEntity", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(method);
+
+        var result = method!.Invoke(null, new object?[] { "contact", "statecode", "importsequencenumber", "count" });
+        Assert.IsNotNull(result);
+        var tuple = ((string Xml, string AggregateAlias, string Error))result!;
+        Assert.IsNull(tuple.Error);
+        Assert.AreEqual("aggregate_column", tuple.AggregateAlias);
+        StringAssert.Contains(tuple.Xml, "entity name=\"contact\"");
+        StringAssert.Contains(tuple.Xml, "name=\"importsequencenumber\" aggregate=\"count\"");
+        StringAssert.Contains(tuple.Xml, "groupby=\"true\" alias=\"groupby_column\" name=\"statecode\"");
+    }
+
+    [TestMethod]
+    public void ManageChart_ResolveChartType_DefaultsToPieWhenMissing()
+    {
+        var method = ToolType.GetMethod("ResolveChartType", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.IsNotNull(method);
+
+        var args = new object?[] { "", false };
+        var chartType = method!.Invoke(null, args) as string;
+        Assert.AreEqual("Pie", chartType);
+        Assert.IsTrue((bool)args[1]!);
     }
 
     [TestMethod]
