@@ -256,6 +256,45 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 "Connection references link flows/apps to external services. Manage via Power Apps UI or solution import.")
         ];
 
+        // GET endpoints that are redirected to dedicated MCP tools rather than raw Web API.
+        // Keep this array data-driven so future metadata endpoints only need one entry here.
+        private static readonly (string UrlPattern, string RedirectTool, string Message)[] RedirectedGetEndpoints =
+        [
+            ("entitydefinitions", "get_tables",
+                "REDIRECT: Use get_tables instead of GET EntityDefinitions/AttributeDefinitions.\n" +
+                "get_tables provides filtered, tiered metadata (compact/standard/full) optimized for AI consumption.\n\n" +
+                "Examples:\n" +
+                "  get_tables(entity_name='account') → standard detail with attributes & relationships\n" +
+                "  get_tables(entity_name='account', detail_level='compact') → names & types only\n" +
+                "  get_tables(entity_name='account', detail_level='full') → all metadata including audit, formula, security\n" +
+                "  get_tables(entity_name='email', filter='to,from,cc,bcc,subject,description') → filtered attributes\n" +
+                "  get_tables(filter='account') → list entities matching keyword"),
+
+            ("attributedefinitions", "get_tables",
+                "REDIRECT: Use get_tables instead of GET AttributeDefinitions.\n" +
+                "get_tables(entity_name='...') returns attributes with filtering, detail levels, and relationships."),
+
+            ("relationshipdefinitions", "get_tables or upsert_relationship",
+                "REDIRECT: Use get_tables for relationship discovery or upsert_relationship for changes.\n\n" +
+                "Examples:\n" +
+                "  get_tables(entity_name='account') → includes 1:N, N:1, N:N relationships\n" +
+                "  upsert_relationship(action='create_1n', referenced_entity='account', referencing_entity='contact', ...) → create relationship"),
+
+            ("globaloptionsetdefinitions", "manage_choice",
+                "REDIRECT: Use manage_choice for option sets instead of GET GlobalOptionSetDefinitions.\n\n" +
+                "Examples:\n" +
+                "  manage_choice(action='list') → list global option sets\n" +
+                "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
+                "  upsert_column for local picklists on an entity"),
+
+            ("optionsetdefinitions", "manage_choice",
+                "REDIRECT: Use manage_choice for option sets instead of GET OptionSetDefinitions.\n\n" +
+                "Examples:\n" +
+                "  manage_choice(action='list') → list global option sets\n" +
+                "  manage_choice(action='detail', optionset_name='...') → inspect options\n" +
+                "  upsert_column for local picklists on an entity")
+        ];
+
         private static readonly (string UrlPattern, string RedirectTool, string Reason)[] BlockedPostEndpoints =
         [
             // ── Publish ──
@@ -318,11 +357,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 }
             }
 
-            // Phase 2: GET is always safe — allow all reads
+            // Phase 2: Redirect GET metadata endpoints to dedicated tools
+            if (method == HttpMethod.Get)
+            {
+                foreach (var (pattern, tool, message) in RedirectedGetEndpoints)
+                {
+                    if (urlLower.Contains(pattern))
+                        return $"{message}\n\nUSE INSTEAD: {tool}";
+                }
+            }
+
+            // Phase 3: GET is always safe for non-metadata reads
             if (method == HttpMethod.Get || method == HttpMethod.Post)
                 return null;
 
-            // Phase 3: Block PATCH/PUT/DELETE on metadata/system/config endpoints
+            // Phase 4: Block PATCH/PUT/DELETE on metadata/system/config endpoints
             foreach (var (pattern, tool, reason) in BlockedEndpoints)
             {
                 if (urlLower.Contains(pattern.ToLowerInvariant()))

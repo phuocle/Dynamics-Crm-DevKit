@@ -28,15 +28,28 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(GetTablesResult)),
         Description(
-            "Dataverse entity metadata. entity_name empty = list (filter by keyword/custom_only/names; includes IsAuditEnabled). Set = detail (attributes, relationships, alternate keys).\n\n" +
+            "Dataverse entity metadata. entity_name empty = list. Set = detail (attributes, relationships, alternate keys). Returns structured JSON in structuredContent — AI parses and displays to user.\n\n" +
+
+            "DETAIL LEVELS (detail_level, detail mode only):\n" +
+            "- compact: Display Name, Schema Name, Logical Name, Type only (~2KB for 50 attrs)\n" +
+            "- standard (default): + requiredLevel, isValidForCreate/Update, constraints, lookup targets, picklist options (no option colors, no audit/security/sortable flags, no formula/default details) (~8KB)\n" +
+            "- full: all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior (~40KB)\n\n" +
+
+            "FILTER (detail mode):\n" +
+            "- Single value: prefix match on attribute logical names (e.g. 'v5_' matches v5_name, v5_code)\n" +
+            "- Multi-value (comma/pipe/semicolon separated): word-boundary match on logical name + exact match on display name (e.g. 'regarding,direction' matches regardingobjectid, directioncode; 'to' does NOT match attachmentopencount)\n\n" +
 
             "WHEN TO USE:\n" +
             "- Discover entity/attribute names before building FetchXML\n" +
             "- Find join columns, picklist options, required fields, primary key\n" +
-            "- Audit settings on a set of entities (use names= with solution entity list)\n\n" +
+            "- Audit settings on a set of entities (use names= with solution entity list, detail_level='full')\n" +
+            "- Clone or copy a column from one entity to another (detail_level='full' required)\n" +
+            "- AI MUST use get_tables for entity/attribute metadata — do NOT use execute_webapi with EntityDefinitions\n\n" +
 
-            "MODE/CONVENTION:\n" +
-            "- names= filters by exact logical-name list; filter= uses contains (list) or prefix (detail).\n\n" +
+            "CLONE / COPY COLUMNS:\n" +
+            "- To clone or copy a column from entity B to entity C, AI MUST read the source column with detail_level='full' first.\n" +
+            "- Full mode returns all metadata required by upsert_column: type, length, precision, picklist options, lookup targets, formula definition, default value, audit/security/sortable flags, etc.\n" +
+            "- Compact and standard modes do NOT include enough metadata for safe cloning.\n\n" +
 
             "FORMULA CLONE (Calculated/Rollup/PowerFx):\n" +
             "- Formula columns expose `formulaDefinition` as `table_logical_name:column_logical_name`; raw formula XML/text is never returned.\n" +
@@ -45,18 +58,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         public async Task<CallToolResult> get_tables(
             [Description("Logical name → detail mode. Empty = list mode."
             )] string entity_name = "",
-            [Description("LIST: keyword filter on entity. DETAIL: prefix filter on attributes/relationships."
+            [Description("LIST: keyword filter on entity. DETAIL: single value = prefix match on logical names; comma/pipe/semicolon-separated = word-boundary match on logical name + exact match on display name."
             )] string filter = "",
             [Description("LIST: only custom entities.")] bool custom_only = false,
             [Description("LIST: include N:N intersect entities.")] bool include_intersect = false,
             [Description("LIST: comma-separated logical names. Overrides filter/custom_only."
-            )] string names = "")
+            )] string names = "",
+            [Description("DETAIL: 'compact' (Display Name, Schema Name, Logical Name, Type only), 'standard' (default, + requiredLevel, isValidForCreate/Update, constraints, lookup targets, picklist options), 'full' (all metadata including audit, formula, security, default values, option colors, description, min/max/precision/behavior)."
+            )] string detail_level = "standard")
         {
             try
             {
                 var trimmedFilter = string.IsNullOrWhiteSpace(filter) ? "" : filter.Trim();
+                var detailLevel = (detail_level ?? "standard").Trim().ToLowerInvariant();
+                if (detailLevel is not ("compact" or "standard" or "full"))
+                    detailLevel = "standard";
+
                 if (!string.IsNullOrWhiteSpace(entity_name))
-                    return await GetEntityDetail(entity_name.Trim(), trimmedFilter);
+                    return await GetEntityDetail(entity_name.Trim(), trimmedFilter, detailLevel);
 
                 return await ListAllEntities(trimmedFilter, custom_only, include_intersect, names);
             }
@@ -67,7 +86,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             }
         }
 
-        private async Task<CallToolResult> GetEntityDetail(string entityName, string attributePrefix)
+        private async Task<CallToolResult> GetEntityDetail(string entityName, string attributeFilter, string detailLevel)
         {
             var entities = await _metadataService.GetEntitiesMetadataAsync(EntityFilters.Entity);
             var candidates = entities.Select(e => new DisplayNameFirstCandidate<EntityMetadata>
@@ -93,15 +112,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             var logicalName = resolved.Value.LogicalName;
             var metadata = await _metadataService.FetchEntityMetadataAsync(logicalName);
+            var filterInfo = ParseDetailFilter(attributeFilter);
             var structured = new GetTablesResult
             {
                 Mode = "detail",
                 EntityName = logicalName,
-                Filter = string.IsNullOrWhiteSpace(attributePrefix) ? null : attributePrefix,
+                Filter = string.IsNullOrWhiteSpace(attributeFilter) ? null : attributeFilter,
+                DetailLevel = detailLevel,
                 Count = 1,
-                Table = BuildTableDetail(metadata, attributePrefix)
+                Table = BuildTableDetail(metadata, filterInfo, detailLevel)
             };
-            return StructuredResult(CompactFormatter.FormatEntityDetail(metadata, attributePrefix), structured);
+            var attrCount = structured.Table?.Attributes?.Count ?? 0;
+            var summary = $"{attrCount} attributes returned for '{logicalName}' (detail={detailLevel})";
+            if (attrCount == 0 && filterInfo.HasFilter)
+            {
+                var suggestions = FindClosestAttributeMatches(metadata.Attributes, filterInfo, 5);
+                if (suggestions.Count > 0)
+                    summary += $"\nHint: filter '{attributeFilter}' matched no attributes. Did you mean: {string.Join(", ", suggestions)}?";
+                else
+                    summary += $"\nHint: filter '{attributeFilter}' matched no attributes. Try a broader filter or omit filter to list all attributes.";
+            }
+            return StructuredResult(summary, structured);
         }
 
         private async Task<CallToolResult> ListAllEntities(string filter, bool customOnly, bool includeIntersect, string names)
@@ -144,7 +175,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 Count = sorted.Count,
                 Tables = sorted.Select(BuildTableSummary).ToList()
             };
-            return StructuredResult(CompactFormatter.FormatEntitySummaryTable(sorted), structured);
+            return StructuredResult($"{sorted.Count} entities returned", structured);
         }
 
         private static TableSummaryEntry BuildTableSummary(EntityMetadata metadata) => new()
@@ -158,11 +189,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             IsAuditEnabled = metadata.IsAuditEnabled?.Value == true
         };
 
-        private static TableDetailEntry BuildTableDetail(EntityMetadata metadata, string prefixFilter)
+        private static TableDetailEntry BuildTableDetail(EntityMetadata metadata, DetailFilterInfo filterInfo, string detailLevel)
         {
-            var hasPrefix = !string.IsNullOrEmpty(prefixFilter);
             var summary = BuildTableSummary(metadata);
-            return new TableDetailEntry
+            var detail = new TableDetailEntry
             {
                 LogicalName = summary.LogicalName,
                 SchemaName = summary.SchemaName,
@@ -176,24 +206,24 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 EntitySetName = metadata.EntitySetName,
                 LogicalCollectionName = metadata.LogicalCollectionName,
                 ObjectTypeCode = metadata.ObjectTypeCode,
-                Attributes = FilterAttributesForOutput(metadata.Attributes, prefixFilter, hasPrefix)
+                Attributes = FilterAttributesForOutput(metadata.Attributes, filterInfo)
                     .OrderBy(a => a.LogicalName)
-                    .Select(attribute => BuildAttribute(metadata.LogicalName, attribute))
+                    .Select(attribute => BuildAttribute(metadata.LogicalName, attribute, detailLevel))
                     .ToList(),
                 OneToManyRelationships = (metadata.OneToManyRelationships ?? [])
-                    .Where(r => !hasPrefix || r.ReferencingEntity.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase))
+                    .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencingEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
                     .OrderBy(r => r.ReferencingEntity)
                     .Select(BuildRelationship)
                     .ToList(),
                 ManyToOneRelationships = (metadata.ManyToOneRelationships ?? [])
-                    .Where(r => !hasPrefix || r.ReferencedEntity.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase))
+                    .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue || r.ReferencedEntity.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
                     .OrderBy(r => r.ReferencedEntity)
                     .Select(BuildRelationship)
                     .ToList(),
                 ManyToManyRelationships = (metadata.ManyToManyRelationships ?? [])
-                    .Where(r => !hasPrefix ||
-                        r.Entity1LogicalName.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase) ||
-                        r.Entity2LogicalName.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase))
+                    .Where(r => !filterInfo.HasFilter || filterInfo.IsMultiValue ||
+                        r.Entity1LogicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase) ||
+                        r.Entity2LogicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase))
                     .OrderBy(r => r.IntersectEntityName)
                     .Select(r => new TableManyToManyRelationshipEntry
                     {
@@ -213,6 +243,27 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                     })
                     .ToList()
             };
+
+            // Apply tier-based stripping to reduce payload
+            if (detailLevel == "compact")
+            {
+                detail.EntitySetName = null;
+                detail.LogicalCollectionName = null;
+                detail.ObjectTypeCode = null;
+                detail.OneToManyRelationships = null;
+                detail.ManyToOneRelationships = null;
+                detail.ManyToManyRelationships = null;
+                detail.AlternateKeys = null;
+            }
+            else if (detailLevel == "standard")
+            {
+                detail.EntitySetName = null;
+                detail.LogicalCollectionName = null;
+                detail.ObjectTypeCode = null;
+                detail.AlternateKeys = null;
+            }
+
+            return detail;
         }
 
         /// <summary>
@@ -225,7 +276,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
         /// - Applies the optional logical-name prefix filter.
         /// </summary>
         private static IEnumerable<AttributeMetadata> FilterAttributesForOutput(
-            AttributeMetadata[] attributes, string prefixFilter, bool hasPrefix)
+            AttributeMetadata[] attributes, DetailFilterInfo filterInfo)
         {
             var logicalNames = new HashSet<string>(
                 attributes.Select(a => a.LogicalName ?? ""),
@@ -246,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 if (a.AttributeOf != null && a is not ImageAttributeMetadata)
                     continue;
 
-                if (hasPrefix && !a.LogicalName.StartsWith(prefixFilter, StringComparison.OrdinalIgnoreCase))
+                if (filterInfo.HasFilter && !MatchesDetailFilter(a, filterInfo))
                     continue;
 
                 yield return a;
@@ -284,8 +335,136 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             return false;
         }
 
-        private static TableAttributeEntry BuildAttribute(string entityLogicalName, AttributeMetadata attribute)
+        // ── Detail filter helpers ────────────────────────────────────────
+
+        private sealed record DetailFilterInfo(bool HasFilter, bool IsMultiValue, string PrefixFilter, HashSet<string> ExactValues);
+
+        private static DetailFilterInfo ParseDetailFilter(string filter)
         {
+            if (string.IsNullOrEmpty(filter))
+                return new(false, false, "", null);
+
+            if (filter.IndexOfAny([',', '|', ';']) >= 0)
+            {
+                var values = filter.Split([',', '|', ';'], StringSplitOptions.RemoveEmptyEntries)
+                    .Select(v => v.Trim().ToLowerInvariant())
+                    .Where(v => v.Length > 0)
+                    .ToHashSet();
+                return new(values.Count > 0, true, filter, values);
+            }
+
+            return new(true, false, filter, null);
+        }
+
+        private static bool MatchesDetailFilter(AttributeMetadata attribute, DetailFilterInfo filterInfo)
+        {
+            if (!filterInfo.HasFilter) return true;
+
+            var logicalName = attribute.LogicalName ?? "";
+            var schemaName = attribute.SchemaName ?? "";
+            var displayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "";
+
+            if (filterInfo.IsMultiValue)
+            {
+                // Multi-value: word-boundary match on logical name, exact match on display name.
+                // This lets callers use familiar fragments like "regarding" to find "regardingobjectid",
+                // or "direction" to find "directioncode", without short tokens like "to" or "cc"
+                // accidentally matching inside unrelated names such as "attachmentopencount" or
+                // "acceptingentityid". Display name is exact-only to avoid false positives like
+                // "Correlated subject changed" matching "subject".
+                foreach (var value in filterInfo.ExactValues!)
+                {
+                    if (IsWordBoundaryMatch(logicalName, value)) return true;
+                    if (displayName.Equals(value, StringComparison.OrdinalIgnoreCase)) return true;
+                }
+                return false;
+            }
+
+            // Single value: prefix match on logical name (e.g. "v5_" matches custom fields).
+            return logicalName.StartsWith(filterInfo.PrefixFilter, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static List<string> FindClosestAttributeMatches(AttributeMetadata[] attributes, DetailFilterInfo filterInfo, int maxSuggestions)
+        {
+            if (attributes == null || !filterInfo.HasFilter) return [];
+
+            var filterValues = filterInfo.IsMultiValue
+                ? filterInfo.ExactValues!.ToList()
+                : new List<string> { filterInfo.PrefixFilter.ToLowerInvariant() };
+
+            var scored = attributes
+                .Where(a => !string.IsNullOrEmpty(a.LogicalName))
+                .Select(a =>
+                {
+                    var logicalName = a.LogicalName.ToLowerInvariant();
+                    var schemaName = (a.SchemaName ?? "").ToLowerInvariant();
+                    var displayName = (a.DisplayName?.UserLocalizedLabel?.Label ?? "").ToLowerInvariant();
+
+                    var bestScore = filterValues.Min(value =>
+                    {
+                        if (logicalName.Equals(value, StringComparison.OrdinalIgnoreCase)
+                            || displayName.Equals(value, StringComparison.OrdinalIgnoreCase)) return 0;
+                        if (IsWordBoundaryMatch(logicalName, value)) return 1;
+                        return int.MaxValue;
+                    });
+
+                    return new { a.LogicalName, Score = bestScore };
+                })
+                .Where(x => x.Score < int.MaxValue)
+                .OrderBy(x => x.Score)
+                .ThenBy(x => x.LogicalName)
+                .Take(maxSuggestions)
+                .Select(x => x.LogicalName)
+                .ToList();
+
+            return scored;
+        }
+
+        private static bool IsWordBoundaryMatch(string name, string value)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(value)) return false;
+            if (name.Equals(value, StringComparison.OrdinalIgnoreCase)) return true;
+
+            var lowerName = name.ToLowerInvariant();
+            var lowerValue = value.ToLowerInvariant();
+
+            for (var i = 0; i <= lowerName.Length - lowerValue.Length; i++)
+            {
+                if (!lowerName.Substring(i, lowerValue.Length).Equals(lowerValue, StringComparison.Ordinal))
+                    continue;
+
+                // Left boundary: start of string, after '_'/' ', or camelCase boundary (lowercase → uppercase).
+                if (i > 0)
+                {
+                    var prev = name[i - 1];
+                    var current = name[i];
+                    if (prev != '_' && prev != ' ' && !(char.IsLower(prev) && char.IsUpper(current)))
+                        continue;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        // ── Attribute building with detail-level tiers ───────────────────
+
+        private static TableAttributeEntry BuildAttribute(string entityLogicalName, AttributeMetadata attribute, string detailLevel)
+        {
+            // Compact: only identity + type
+            if (detailLevel == "compact")
+            {
+                return new TableAttributeEntry
+                {
+                    LogicalName = attribute.LogicalName,
+                    SchemaName = attribute.SchemaName,
+                    Type = FormatAttributeType(attribute),
+                    DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
+                };
+            }
+
+            // Standard and Full: build full entry first
             var entry = new TableAttributeEntry
             {
                 LogicalName = attribute.LogicalName,
@@ -300,16 +479,8 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
                 IsValidForCreate = attribute.IsValidForCreate == true,
                 IsValidForUpdate = attribute.IsValidForUpdate == true,
                 DisplayName = attribute.DisplayName?.UserLocalizedLabel?.Label ?? "",
-                // Treat empty/whitespace description as null so WhenWritingNull omits it
-                // (Dataverse often returns "" for unset descriptions).
                 Description = Norm(attribute.Description?.UserLocalizedLabel?.Label),
                 IsAuditEnabled = attribute.IsAuditEnabled?.Value,
-                // Clone-relevant flags exposed on the AttributeMetadata base for every
-                // attribute kind (verified on live Dataverse for String/Lookup/etc.):
-                // - IsValidForAdvancedFind / IsSortableEnabled are BooleanManagedProperty
-                //   (compound { Value, CanBeChanged }) → emit the inner bool (.Value), or
-                //   null when the managed property is unset (rare/system attrs).
-                // - IsSecured is a plain bool (field-level security enablement).
                 IsValidForAdvancedFind = attribute.IsValidForAdvancedFind?.Value,
                 IsSecured = attribute.IsSecured,
                 IsSortable = attribute.IsSortableEnabled?.Value,
@@ -318,6 +489,31 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
             PopulateAttributeDetails(entry, attribute);
             PopulateFormulaInfo(entry, entityLogicalName, attribute);
+
+            // Standard: strip full-only fields to reduce payload
+            if (detailLevel == "standard")
+            {
+                entry.Description = null;
+                entry.IsAuditEnabled = null;
+                entry.IsValidForAdvancedFind = null;
+                entry.IsSecured = null;
+                entry.IsSortable = null;
+                entry.SourceType = null;
+                entry.DefaultValue = null;
+                entry.FormulaDefinition = null;
+                entry.MinValue = null;
+                entry.MaxValue = null;
+                entry.Precision = null;
+                entry.PrecisionSource = null;
+                entry.Behavior = null;
+                entry.TrueLabel = null;
+                entry.FalseLabel = null;
+                entry.IsGlobal = null;
+                entry.GlobalOptionSetName = null;
+                if (entry.Options != null)
+                    foreach (var o in entry.Options) o.Color = null;
+            }
+
             return entry;
         }
 

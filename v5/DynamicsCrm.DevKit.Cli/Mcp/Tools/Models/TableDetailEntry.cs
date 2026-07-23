@@ -35,6 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public string PrimaryNameAttribute { get; set; }
 
         [JsonPropertyName("entitySetName")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string EntitySetName { get; set; }
 
         [JsonPropertyName("logicalCollectionName")]
@@ -46,18 +47,23 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         public int? ObjectTypeCode { get; set; }
 
         [JsonPropertyName("attributes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableAttributeEntry> Attributes { get; set; } = [];
 
         [JsonPropertyName("oneToManyRelationships")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableRelationshipEntry> OneToManyRelationships { get; set; } = [];
 
         [JsonPropertyName("manyToOneRelationships")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableRelationshipEntry> ManyToOneRelationships { get; set; } = [];
 
         [JsonPropertyName("manyToManyRelationships")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableManyToManyRelationshipEntry> ManyToManyRelationships { get; set; } = [];
 
         [JsonPropertyName("alternateKeys")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableKeyEntry> AlternateKeys { get; set; } = [];
     }
 }

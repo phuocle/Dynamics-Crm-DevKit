@@ -550,19 +550,54 @@ public class ExecuteWebApiToolTests
         Assert.IsNull(GetBlockedReason(HttpMethod.Delete, "cr_mytable(00000000-0000-0000-0000-000000000001)"));
     }
 
-    // ── GET is always safe — allow all reads ──
+    // ── GET metadata endpoints are redirected to dedicated tools ──
 
     [TestMethod]
-    public void GetBlockedReason_GET_EntityDefinitions_Allowed()
+    public void GetBlockedReason_GET_EntityDefinitions_Redirected()
     {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "EntityDefinitions"));
+        var result = GetBlockedReason(HttpMethod.Get, "EntityDefinitions");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("get_tables"));
     }
 
     [TestMethod]
-    public void GetBlockedReason_GET_GlobalOptionSetDefinitions_Allowed()
+    public void GetBlockedReason_GET_AttributeDefinitions_Redirected()
     {
-        Assert.IsNull(GetBlockedReason(HttpMethod.Get, "GlobalOptionSetDefinitions"));
+        var result = GetBlockedReason(HttpMethod.Get, "AttributeDefinitions");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("get_tables"));
     }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_RelationshipDefinitions_Redirected()
+    {
+        var result = GetBlockedReason(HttpMethod.Get, "RelationshipDefinitions");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("get_tables") || result.Contains("upsert_relationship"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_GlobalOptionSetDefinitions_Redirected()
+    {
+        var result = GetBlockedReason(HttpMethod.Get, "GlobalOptionSetDefinitions");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("manage_choice"));
+    }
+
+    [TestMethod]
+    public void GetBlockedReason_GET_OptionSetDefinitions_Redirected()
+    {
+        var result = GetBlockedReason(HttpMethod.Get, "OptionSetDefinitions");
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result.Contains("REDIRECT"));
+        Assert.IsTrue(result.Contains("manage_choice"));
+    }
+
+    // ── GET data endpoints remain allowed ──
 
     [TestMethod]
     public void GetBlockedReason_GET_Roles_Allowed()

@@ -19,6 +19,10 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Filter { get; set; }
 
+        [JsonPropertyName("detailLevel")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string DetailLevel { get; set; }
+
         [JsonPropertyName("tables")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<TableSummaryEntry> Tables { get; set; }
