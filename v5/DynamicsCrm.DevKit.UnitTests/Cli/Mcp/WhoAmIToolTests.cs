@@ -144,7 +144,7 @@ public class WhoAmIToolTests
     }
 
     [TestMethod]
-    public void BuildCompactText_FullResult_AllSectionsPresent()
+    public void BuildCompactText_FullResult_ShortSummary()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id-123");
@@ -169,26 +169,22 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.Contains("[User]"));
-        Assert.IsTrue(text.Contains("UserId: user-id-123"));
-        Assert.IsTrue(text.Contains("FullName: John Doe"));
-        Assert.IsTrue(text.Contains("Email: john@contoso.com"));
+        Assert.IsTrue(text.StartsWith("Connected to "));
+        Assert.IsTrue(text.Contains("SANDBOX"));
+        Assert.IsTrue(text.Contains("https://org.crm.dynamics.com"));
+        Assert.IsTrue(text.Contains("as John Doe"));
+        Assert.IsTrue(text.Contains("Dataverse 9.2.26032.168"));
+        Assert.IsTrue(text.Contains("2 security role(s)"));
 
-        Assert.IsTrue(text.Contains("[Environment]"));
-        Assert.IsTrue(text.Contains("Url: https://org.crm.dynamics.com"));
-        Assert.IsTrue(text.Contains("Version: 9.2.26032.168"));
-        Assert.IsTrue(text.Contains("OrgName: SANDBOX (sandbox123)"));
-        Assert.IsTrue(text.Contains("Language: 1033 (English)"));
-        Assert.IsTrue(text.Contains("Currency: US Dollar"));
-        Assert.IsTrue(text.Contains("AuditEnabled: Yes"));
-
-        Assert.IsTrue(text.Contains("[Roles] 2 total"));
-        Assert.IsTrue(text.Contains("- System Administrator (role-id-1)"));
-        Assert.IsTrue(text.Contains("- Custom Role (role-id-2)"));
+        // Detailed fields must live in StructuredContent, not in the text summary.
+        Assert.IsFalse(text.Contains("UserId:"));
+        Assert.IsFalse(text.Contains("TenantId:"));
+        Assert.IsFalse(text.Contains("EnvironmentId:"));
+        Assert.IsFalse(text.Contains("[Roles]"));
     }
 
     [TestMethod]
-    public void BuildCompactText_EmptyOptionals_OmitsFields()
+    public void BuildCompactText_EmptyOptionals_FallsBackToUserId()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id");
@@ -202,15 +198,14 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.Contains("[User]"));
-        Assert.IsFalse(text.Contains("FullName:"));
-        Assert.IsFalse(text.Contains("DomainName:"));
-        Assert.IsFalse(text.Contains("Email:"));
-        Assert.IsFalse(text.Contains("[Roles]"), "Roles section should be omitted when empty");
+        Assert.IsTrue(text.StartsWith("Connected to "));
+        Assert.IsTrue(text.Contains("as user-id"));
+        Assert.IsFalse(text.Contains("security role"));
+        Assert.IsFalse(text.Contains("warning"));
     }
 
     [TestMethod]
-    public void BuildCompactText_NoRoles_OmitsRolesSection()
+    public void BuildCompactText_NoRoles_OmitsRoleCount()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id");
@@ -224,11 +219,11 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsFalse(text.Contains("[Roles]"));
+        Assert.IsFalse(text.Contains("role"));
     }
 
     [TestMethod]
-    public void BuildCompactText_WithAccessToken_ShowsToken()
+    public void BuildCompactText_WithAccessToken_DoesNotExposeTokenInText()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id");
@@ -242,11 +237,12 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.Contains("AccessToken: eyJ0eXAiOiJKV1Q..."));
+        Assert.IsFalse(text.Contains("AccessToken"));
+        Assert.IsFalse(text.Contains("eyJ0eXAiOiJKV1Q"));
     }
 
     [TestMethod]
-    public void BuildCompactText_AuditDisabled_ShowsNo()
+    public void BuildCompactText_AuditDisabled_NotInTextSummary()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id");
@@ -260,7 +256,7 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.Contains("AuditEnabled: No"));
+        Assert.IsFalse(text.Contains("AuditEnabled"));
     }
 
     // ──────────────────────────────────────────────
@@ -291,7 +287,7 @@ public class WhoAmIToolTests
     // ──────────────────────────────────────────────
 
     [TestMethod]
-    public void BuildCompactText_WithWarnings_ShowsWarningsSection()
+    public void BuildCompactText_WithWarnings_ShowsWarningCount()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id");
@@ -307,12 +303,13 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsTrue(text.Contains("[Warnings] 1 total"));
-        Assert.IsTrue(text.Contains("- Failed to retrieve access token: timeout"));
+        Assert.IsTrue(text.Contains("1 warning(s)"));
+        // Warning details remain in StructuredContent only.
+        Assert.IsFalse(text.Contains("Failed to retrieve access token"));
     }
 
     [TestMethod]
-    public void BuildCompactText_NullWarnings_OmitsWarningsSection()
+    public void BuildCompactText_NullWarnings_OmitsWarningCount()
     {
         var r = CreateWhoAmIResult();
         SetProperty(r, "UserId", "user-id");
@@ -326,6 +323,6 @@ public class WhoAmIToolTests
 
         var text = BuildCompactText(r);
 
-        Assert.IsFalse(text.Contains("[Warnings]"));
+        Assert.IsFalse(text.Contains("warning"));
     }
 }

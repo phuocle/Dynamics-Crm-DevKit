@@ -190,59 +190,33 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private static string BuildCompactText(WhoAmIResult r)
         {
-            var sb = new StringBuilder(1024);
+            var sb = new StringBuilder(256);
 
-            sb.AppendLine("[User]");
-            sb.AppendLine($"UserId: {r.UserId}");
-            sb.AppendLine($"BusinessUnitId: {r.BusinessUnitId}");
-            sb.AppendLine($"OrganizationId: {r.OrganizationId}");
-            if (!string.IsNullOrEmpty(r.FullName)) sb.AppendLine($"FullName: {r.FullName}");
-            if (!string.IsNullOrEmpty(r.DomainName)) sb.AppendLine($"DomainName: {r.DomainName}");
-            if (!string.IsNullOrEmpty(r.Email)) sb.AppendLine($"Email: {r.Email}");
-            sb.AppendLine();
+            var identity = !string.IsNullOrEmpty(r.FullName)
+                ? r.FullName
+                : (!string.IsNullOrEmpty(r.DomainName) ? r.DomainName : r.UserId);
 
-            sb.AppendLine("[Environment]");
-            if (!string.IsNullOrEmpty(r.EnvironmentUrl)) sb.AppendLine($"Url: {r.EnvironmentUrl}");
-            if (!string.IsNullOrEmpty(r.Version)) sb.AppendLine($"Version: {r.Version}");
-            sb.AppendLine($"OrgName: {r.OrgFriendlyName} ({r.OrgUniqueName})");
-            sb.AppendLine($"TenantId: {r.TenantId}");
-            sb.AppendLine($"EnvironmentId: {r.EnvironmentId}");
-            if (!string.IsNullOrEmpty(r.AccessToken)) sb.AppendLine($"AccessToken: {r.AccessToken}");
-            if (!string.IsNullOrEmpty(r.Language)) sb.AppendLine($"Language: {r.Language}");
-            if (!string.IsNullOrEmpty(r.Currency)) sb.AppendLine($"Currency: {r.Currency}");
-            if (!string.IsNullOrEmpty(r.FiscalStart)) sb.AppendLine($"FiscalStart: {r.FiscalStart}");
-            if (r.AuditEnabled.HasValue) sb.AppendLine($"AuditEnabled: {(r.AuditEnabled.Value ? "Yes" : "No")}");
-            sb.AppendLine();
+            var org = !string.IsNullOrEmpty(r.OrgFriendlyName)
+                ? r.OrgFriendlyName
+                : r.OrgUniqueName;
 
-            if (r.DevKit != null)
+            sb.Append($"Connected to {org}");
+            if (!string.IsNullOrEmpty(r.EnvironmentUrl))
+                sb.Append($" at {r.EnvironmentUrl}");
+            sb.Append($" as {identity}");
+            if (!string.IsNullOrEmpty(r.Version))
+                sb.Append($". Dataverse {r.Version}");
+            if (r.DevKit != null && !string.IsNullOrEmpty(r.DevKit.Version))
             {
-                sb.AppendLine("[DevKit Runtime]");
-                if (!string.IsNullOrEmpty(r.DevKit.Version)) sb.AppendLine($"Version: {r.DevKit.Version}");
-                if (!string.IsNullOrEmpty(r.DevKit.Build)) sb.AppendLine($"Build: {r.DevKit.Build}");
-                if (!string.IsNullOrEmpty(r.DevKit.AssemblyVersion)) sb.AppendLine($"AssemblyVersion: {r.DevKit.AssemblyVersion}");
-                if (!string.IsNullOrEmpty(r.DevKit.FileVersion)) sb.AppendLine($"FileVersion: {r.DevKit.FileVersion}");
-                if (!string.IsNullOrEmpty(r.DevKit.InformationalVersion)) sb.AppendLine($"InformationalVersion: {r.DevKit.InformationalVersion}");
-                sb.AppendLine($"ProcessId: {r.DevKit.ProcessId}");
-                if (!string.IsNullOrEmpty(r.DevKit.ProcessStartTime)) sb.AppendLine($"ProcessStartTime: {r.DevKit.ProcessStartTime}");
-                if (!string.IsNullOrEmpty(r.DevKit.AssemblyPath)) sb.AppendLine($"AssemblyPath: {r.DevKit.AssemblyPath}");
-                if (!string.IsNullOrEmpty(r.DevKit.AssemblySha256)) sb.AppendLine($"AssemblySha256: {r.DevKit.AssemblySha256}");
-                sb.AppendLine();
+                sb.Append($". DevKit {r.DevKit.Version}");
+                if (!string.IsNullOrEmpty(r.DevKit.Build))
+                    sb.Append($" build {r.DevKit.Build}");
             }
-
             if (r.Roles.Count > 0)
-            {
-                sb.AppendLine($"[Roles] {r.Roles.Count} total");
-                foreach (var role in r.Roles)
-                    sb.AppendLine($"- {role.Name} ({role.RoleId})");
-            }
-
+                sb.Append($". {r.Roles.Count} security role(s)");
             if (r.Warnings is { Count: > 0 })
-            {
-                sb.AppendLine();
-                sb.AppendLine($"[Warnings] {r.Warnings.Count} total");
-                foreach (var warning in r.Warnings)
-                    sb.AppendLine($"- {warning}");
-            }
+                sb.Append($". {r.Warnings.Count} warning(s)");
+            sb.Append('.');
 
             return sb.ToString();
         }
