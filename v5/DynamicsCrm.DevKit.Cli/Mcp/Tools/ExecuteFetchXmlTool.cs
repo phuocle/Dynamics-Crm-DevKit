@@ -27,7 +27,16 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(FetchXmlResult)),
         Description(
-            "Run FetchXML query → markdown table. Max 5000 records, auto-paging supported. Lowercase logical names (use get_tables to verify). Don't use top/count/page in <fetch>; use max_records. See schema://fetchxml for syntax.\n\n" +
+            "Run FetchXML query and return structured records. Default max_records is 5000 when omitted. Auto-paging supported. Lowercase logical names (use get_tables to verify). Don't use top/count/page in <fetch>; use max_records. See schema://fetchxml for syntax.\n\n" +
+
+            "PARAMETERS:\n" +
+            "- fetchxml: FetchXML starting with <fetch>. Lowercase logical names.\n" +
+            "- max_records: 1-5000. Defaults to 5000 if not provided. Use smaller values (10-100) for samples.\n" +
+            "- get_all: true = auto-page until max_records. false = first page only (default).\n\n" +
+
+            "OUTPUT:\n" +
+            "- Structured JSON with records, totalReturned, hasMore, singleEntity.\n" +
+            "- Each record includes _entity (logical name) and _id (primary key).\n\n" +
 
             "WHEN TO USE:\n" +
             "- Precise filtering / joins / aggregation across entities\n" +
@@ -37,31 +46,32 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             [Description("FetchXML starting with <fetch>. Lowercase logical names."
             )] string fetchxml,
             [Description(
-                "1–5000. Smaller (10–100) for samples."
+                "1-5000. Defaults to 5000 if not provided. Use smaller values (10-100) for samples."
             )] int max_records = 5000,
             [Description(
-                "true = auto-page till max_records. false = first page only."
+                "true = auto-page until max_records. false = first page only (default)."
             )] bool get_all = false)
         {
-            if (string.IsNullOrWhiteSpace(fetchxml))
-                return Error("Error: fetchxml is required.\n" +
-                       "Read schema://fetchxml for FetchXML query structure and examples.");
-
-            if (max_records <= 0)
-                return Error("Error: max_records must be a positive integer (1-5000).");
-            if (max_records > DataversePageLimit)
-                max_records = DataversePageLimit;
-
             try
             {
+                if (string.IsNullOrWhiteSpace(fetchxml))
+                    return Error("Error: fetchxml is required.\n" +
+                           "Read schema://fetchxml for FetchXML query structure and examples.");
+
+                if (max_records <= 0)
+                    return Error("Error: max_records must be a positive integer (1-5000).");
+                if (max_records > DataversePageLimit)
+                    max_records = DataversePageLimit;
+
                 var structured = get_all
                     ? ExecuteAllPages(fetchxml, max_records)
                     : ExecuteSinglePage(fetchxml, max_records);
                 structured.GetAll = get_all;
                 structured.MaxRecords = max_records;
-                return Success(
-                    CompactFormatter.FormatFetchXmlResults(structured.Records, structured.TotalReturned, structured.HasMore),
-                    structured);
+
+                var summary = $"{structured.TotalReturned} record(s) returned" +
+                    (structured.HasMore ? " (more records available)" : "");
+                return Success(summary, structured);
             }
             catch (Exception ex)
             {
