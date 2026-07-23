@@ -30,10 +30,21 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
             Idempotent = true, Destructive = false, ReadOnly = true,
             UseStructuredContent = true, OutputSchemaType = typeof(WhoAmIResult)),
         Description(
-            "Current user + environment: user (ID, name, email, roles), org (URL, version, friendly/unique name), tenant/env IDs, language, currency, fiscal/audit settings.\n\n" +
+            "Get current user and environment information. Returns structured JSON including user identity, organization details, security roles, and DevKit runtime version.\n\n" +
+
+            "OUTPUT:\n" +
+            "- User: ID, full name, domain name, email.\n" +
+            "- Organization: URL, version, friendly name, unique name, tenant/env IDs.\n" +
+            "- Settings: language, currency, fiscal start, audit enabled.\n" +
+            "- Roles: list of security roles assigned to the current user.\n" +
+            "- DevKit runtime: version, build, assembly SHA, process info.\n\n" +
+
+            "PARAMETERS:\n" +
+            "- include_token: include OAuth access token in the response (default false).\n\n" +
 
             "WHEN TO USE:\n" +
             "- Confirm connected user/environment.\n" +
+            "- Verify the DevKit CLI build/runtime after installation or restart.\n" +
             "- Troubleshoot security roles.\n" +
             "- Get user ID for FetchXML owner filters.")]
         public CallToolResult whoami(
@@ -95,90 +106,66 @@ namespace DynamicsCrm.DevKit.Cli.Mcp.Tools
 
         private void PopulateUserDetails(WhoAmIResult result, Guid userId)
         {
-            try
-            {
-                var user = _serviceClient.Retrieve("systemuser", userId,
-                    new ColumnSet("fullname", "domainname", "internalemailaddress"));
-                result.FullName = user.GetAttributeValue<string>("fullname") ?? "";
-                result.DomainName = user.GetAttributeValue<string>("domainname") ?? "";
-                result.Email = user.GetAttributeValue<string>("internalemailaddress") ?? "";
-            }
-            catch (Exception ex)
-            {
-                result.Warnings ??= [];
-                result.Warnings.Add($"Failed to retrieve user details: {ex.Message}");
-            }
+            var user = _serviceClient.Retrieve("systemuser", userId,
+                new ColumnSet("fullname", "domainname", "internalemailaddress"));
+            result.FullName = user.GetAttributeValue<string>("fullname") ?? "";
+            result.DomainName = user.GetAttributeValue<string>("domainname") ?? "";
+            result.Email = user.GetAttributeValue<string>("internalemailaddress") ?? "";
         }
 
         private void PopulateOrgDetails(WhoAmIResult result)
         {
-            try
+            var query = new QueryExpression("organization")
             {
-                var query = new QueryExpression("organization")
-                {
-                    ColumnSet = new ColumnSet(
-                        "name", "languagecode", "basecurrencyid",
-                        "fiscalcalendarstart", "isauditenabled"),
-                    TopCount = 1
-                };
+                ColumnSet = new ColumnSet(
+                    "name", "languagecode", "basecurrencyid",
+                    "fiscalcalendarstart", "isauditenabled"),
+                TopCount = 1
+            };
 
-                var qResult = _serviceClient.RetrieveMultiple(query);
-                if (qResult.Entities.Count == 0) return;
+            var qResult = _serviceClient.RetrieveMultiple(query);
+            if (qResult.Entities.Count == 0) return;
 
-                var org = qResult.Entities[0];
+            var org = qResult.Entities[0];
 
-                var languageCode = org.GetAttributeValue<int?>("languagecode");
-                if (languageCode.HasValue)
-                    result.Language = $"{languageCode} ({GetLanguageName(languageCode.Value)})";
+            var languageCode = org.GetAttributeValue<int?>("languagecode");
+            if (languageCode.HasValue)
+                result.Language = $"{languageCode} ({GetLanguageName(languageCode.Value)})";
 
-                var currency = org.GetAttributeValue<EntityReference>("basecurrencyid");
-                if (currency != null)
-                    result.Currency = currency.Name ?? currency.Id.ToString();
+            var currency = org.GetAttributeValue<EntityReference>("basecurrencyid");
+            if (currency != null)
+                result.Currency = currency.Name ?? currency.Id.ToString();
 
-                var fiscalStart = org.GetAttributeValue<DateTime?>("fiscalcalendarstart");
-                if (fiscalStart.HasValue)
-                    result.FiscalStart = fiscalStart.Value.ToString("yyyy-MM-dd");
+            var fiscalStart = org.GetAttributeValue<DateTime?>("fiscalcalendarstart");
+            if (fiscalStart.HasValue)
+                result.FiscalStart = fiscalStart.Value.ToString("yyyy-MM-dd");
 
-                result.AuditEnabled = org.GetAttributeValue<bool?>("isauditenabled");
-            }
-            catch (Exception ex)
-            {
-                result.Warnings ??= [];
-                result.Warnings.Add($"Failed to retrieve organization details: {ex.Message}");
-            }
+            result.AuditEnabled = org.GetAttributeValue<bool?>("isauditenabled");
         }
 
         private void PopulateRoles(WhoAmIResult result, Guid userId)
         {
-            try
-            {
-                var fetchXml = $@"
-                    <fetch>
-                        <entity name='role'>
-                            <attribute name='name'/>
-                            <attribute name='roleid'/>
-                            <link-entity name='systemuserroles' from='roleid' to='roleid'>
-                                <filter>
-                                    <condition attribute='systemuserid' operator='eq' value='{userId}'/>
-                                </filter>
-                            </link-entity>
-                            <order attribute='name'/>
-                        </entity>
-                    </fetch>";
+            var fetchXml = $@"
+                <fetch>
+                    <entity name='role'>
+                        <attribute name='name'/>
+                        <attribute name='roleid'/>
+                        <link-entity name='systemuserroles' from='roleid' to='roleid'>
+                            <filter>
+                                <condition attribute='systemuserid' operator='eq' value='{userId}'/>
+                            </filter>
+                        </link-entity>
+                        <order attribute='name'/>
+                    </entity>
+                </fetch>";
 
-                var qResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                foreach (var role in qResult.Entities)
-                {
-                    var name = role.GetAttributeValue<string>("name") ?? "";
-                    var roleId = role.GetAttributeValue<Guid>("roleid");
-                    if (!string.IsNullOrEmpty(name))
-                        result.Roles.Add(new Models.RoleInfo { Name = name, RoleId = roleId.ToString() });
-                }
-            }
-            catch (Exception ex)
+            var qResult = _serviceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            foreach (var role in qResult.Entities)
             {
-                result.Warnings ??= [];
-                result.Warnings.Add($"Failed to retrieve security roles: {ex.Message}");
+                var name = role.GetAttributeValue<string>("name") ?? "";
+                var roleId = role.GetAttributeValue<Guid>("roleid");
+                if (!string.IsNullOrEmpty(name))
+                    result.Roles.Add(new Models.RoleInfo { Name = name, RoleId = roleId.ToString() });
             }
         }
 
